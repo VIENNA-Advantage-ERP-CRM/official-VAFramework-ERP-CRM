@@ -29,9 +29,9 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             int VAB_Contract_ID = 0;
-            String Sql = "Select C_OrderLine_ID from C_OrderLine where C_Order_ID=" + orderID;
+            String Sql = "Select VAB_OrderLine_ID from VAB_OrderLine where VAB_Order_ID=" + orderID;
             dr = DB.ExecuteReader(Sql);
-            VAdvantage.Model.X_C_Order order = new VAdvantage.Model.X_C_Order(GetCtx(), orderID, null);
+            VAdvantage.Model.X_VAB_Order order = new VAdvantage.Model.X_VAB_Order(GetCtx(), orderID, null);
             string DocStatus = order.GetDocStatus();
             if (DocStatus != "CO")
             {
@@ -40,7 +40,7 @@ namespace VAdvantage.Process
 
             while (dr.Read())
             {
-                VAdvantage.Model.X_C_OrderLine line = new VAdvantage.Model.X_C_OrderLine(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                VAdvantage.Model.X_VAB_OrderLine line = new VAdvantage.Model.X_VAB_OrderLine(GetCtx(), Util.GetValueOfInt(dr[0]), null);
                 if (line.IsContract() && line.GetVAB_Contract_ID()==0)
                 {
 
@@ -80,8 +80,8 @@ namespace VAdvantage.Process
 
 
                     contact.SetDescription(order.GetDescription());
-                    contact.SetC_Order_ID(order.GetC_Order_ID());
-                    contact.SetC_OrderLine_ID(line.GetC_OrderLine_ID());
+                    contact.SetVAB_Order_ID(order.GetVAB_Order_ID());
+                    contact.SetVAB_OrderLine_ID(line.GetVAB_OrderLine_ID());
                     contact.SetStartDate(line.GetStartDate());
                     contact.SetEndDate(line.GetEndDate());
 
@@ -92,7 +92,7 @@ namespace VAdvantage.Process
 
                     contact.SetVAB_Currency_ID(line.GetVAB_Currency_ID());
                     contact.SetVAB_CurrencyType_ID(order.GetVAB_CurrencyType_ID());
-                    contact.SetC_PaymentTerm_ID(order.GetC_PaymentTerm_ID());
+                    contact.SetVAB_PaymentTerm_ID(order.GetVAB_PaymentTerm_ID());
                     contact.SetM_PriceList_ID(order.GetM_PriceList_ID());
                     contact.SetVAB_Frequency_ID(line.GetVAB_Frequency_ID());
 
@@ -117,18 +117,18 @@ namespace VAdvantage.Process
                     contact.SetTotalInvoice(line.GetNoofCycle());
 
                     //invoice Count end
-                    contact.SetC_Project_ID(order.GetC_Project_ID());
+                    contact.SetVAB_Project_ID(order.GetVAB_Project_ID());
                     // contact.SetPriceList(line.GetPriceList());
                     //contact.SetPriceActual(line.GetPriceActual());
-                    contact.SetC_UOM_ID(line.GetC_UOM_ID());
+                    contact.SetVAB_UOM_ID(line.GetVAB_UOM_ID());
                     contact.SetM_Product_ID(line.GetM_Product_ID());
                     // contact.SetPriceEntered(line.GetPriceEntered());
                     //contact.SetQtyEntered(line.GetQtyEntered());
                     // contact.SetDiscount(line.GetDiscount());
-                    contact.SetC_Tax_ID(line.GetC_Tax_ID());
+                    contact.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
                     contact.SetVAB_Promotion_ID(order.GetVAB_Promotion_ID());
 
-                    sql = "select rate from c_tax where c_tax_id = " + line.GetC_Tax_ID();
+                    sql = "select rate from VAB_TaxRate where VAB_TaxRate_id = " + line.GetVAB_TaxRate_ID();
                     Decimal? rate = Util.GetNullableDecimal(DB.ExecuteScalar(sql, null, null));
 
                     Decimal? amt = Decimal.Multiply(pp.GetPriceStd(),(Decimal.Divide(rate.Value, 100)));
@@ -202,7 +202,7 @@ namespace VAdvantage.Process
                 }
                 mTab.SetValue("VAB_Currency_ID", System.Convert.ToInt32(pp.GetVAB_Currency_ID()));
                 mTab.SetValue("Discount", pp.GetDiscount());
-                mTab.SetValue("C_UOM_ID", System.Convert.ToInt32(pp.GetC_UOM_ID()));
+                mTab.SetValue("VAB_UOM_ID", System.Convert.ToInt32(pp.GetVAB_UOM_ID()));
                 mTab.SetValue("QtyOrdered", mTab.GetValue("QtyEntered"));
                 ctx.SetContext(WindowNo, "EnforcePriceLimit", pp.IsEnforcePriceLimit() ? "Y" : "N");
                 ctx.SetContext(WindowNo, "DiscountSchema", pp.IsDiscountSchema() ? "Y" : "N");

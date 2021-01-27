@@ -495,7 +495,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
         public bool CloseIt()
         {
             if (_document != null 	//	orders can be closed any time
-                && _document.Get_Table_ID() == X_C_Order.Table_ID)
+                && _document.Get_Table_ID() == X_VAB_Order.Table_ID)
             {
             }
             else if (!IsValidAction(ACTION_CLOSE))

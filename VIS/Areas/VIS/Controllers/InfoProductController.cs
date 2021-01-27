@@ -44,7 +44,7 @@ namespace VIS.Controllers
         }
 
         [HttpPost]
-        public JsonResult Save(int id, string keyColumn, string prod, string C_UOM_ID, string listAst, string qty, int locatorTo, int lineID, string InvCountID, string ReferenceNo, int Locator_ID, int WindowID, int ContainerID, int ContainerToID)
+        public JsonResult Save(int id, string keyColumn, string prod, string VAB_UOM_ID, string listAst, string qty, int locatorTo, int lineID, string InvCountID, string ReferenceNo, int Locator_ID, int WindowID, int ContainerID, int ContainerToID)
         {
             List<string> prodID = new List<string>();
             if (prod != null && prod.Trim().Length > 0)
@@ -52,9 +52,9 @@ namespace VIS.Controllers
                 prodID = JsonConvert.DeserializeObject<List<string>>(prod);
             }
             List<string> uomID = new List<string>();
-            if (C_UOM_ID != null && C_UOM_ID.Trim().Length > 0)
+            if (VAB_UOM_ID != null && VAB_UOM_ID.Trim().Length > 0)
             {
-                uomID = JsonConvert.DeserializeObject<List<string>>(C_UOM_ID);
+                uomID = JsonConvert.DeserializeObject<List<string>>(VAB_UOM_ID);
             }
             List<string> Attributes = new List<string>();
             if (listAst != null && listAst.Trim().Length > 0)
@@ -82,7 +82,7 @@ namespace VIS.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveStockTfr(int id, string keyColumn, int VAF_TableView_ID, string prod, string C_UOM_ID, string listAst, string qty, string listLoc, int locatorTo, string astID, int lineID, int ContainerID)
+        public JsonResult SaveStockTfr(int id, string keyColumn, int VAF_TableView_ID, string prod, string VAB_UOM_ID, string listAst, string qty, string listLoc, int locatorTo, string astID, int lineID, int ContainerID)
         {
             List<string> prodID = new List<string>();
             if (prod != null && prod.Trim().Length > 0)
@@ -90,9 +90,9 @@ namespace VIS.Controllers
                 prodID = JsonConvert.DeserializeObject<List<string>>(prod);
             }
             List<string> uomID = new List<string>();
-            if (C_UOM_ID != null && C_UOM_ID.Trim().Length > 0)
+            if (VAB_UOM_ID != null && VAB_UOM_ID.Trim().Length > 0)
             {
-                uomID = JsonConvert.DeserializeObject<List<string>>(C_UOM_ID);
+                uomID = JsonConvert.DeserializeObject<List<string>>(VAB_UOM_ID);
             }
             List<string> Attributes = new List<string>();
             if (listAst != null && listAst.Trim().Length > 0)

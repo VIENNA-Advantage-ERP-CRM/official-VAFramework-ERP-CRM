@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_ProjectType
+ * Class Used     : X_VAB_ProjectType
  * Chronological Development
  * Veena Pandey     19-June-2009
  ******************************************************/
@@ -18,25 +18,25 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectType : X_C_ProjectType
+    public class MProjectType : X_VAB_ProjectType
     {
         /**	Cache						*/
         private static CCache<int, MProjectType> _cache
-            = new CCache<int, MProjectType>("C_ProjectType", 20);
+            = new CCache<int, MProjectType>("VAB_ProjectType", 20);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ProjectType_ID">id</param>
+        /// <param name="VAB_ProjectType_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectType(Ctx ctx, int C_ProjectType_ID, Trx trxName)
-            : base(ctx, C_ProjectType_ID, trxName)
+        public MProjectType(Ctx ctx, int VAB_ProjectType_ID, Trx trxName)
+            : base(ctx, VAB_ProjectType_ID, trxName)
         {
             /**
-            if (C_ProjectType_ID == 0)
+            if (VAB_ProjectType_ID == 0)
             {
-                setC_ProjectType_ID (0);
+                setVAB_ProjectType_ID (0);
                 setName (null);
             }
             **/
@@ -57,15 +57,15 @@ namespace VAdvantage.Model
         /// Get MProjectType from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ProjectType_ID">id</param>
+        /// <param name="VAB_ProjectType_ID">id</param>
         /// <returns>MProjectType</returns>
-        public static MProjectType Get(Ctx ctx, int C_ProjectType_ID)
+        public static MProjectType Get(Ctx ctx, int VAB_ProjectType_ID)
         {
-            int key = C_ProjectType_ID;
+            int key = VAB_ProjectType_ID;
             MProjectType retValue = (MProjectType)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MProjectType(ctx, C_ProjectType_ID, null);
+            retValue = new MProjectType(ctx, VAB_ProjectType_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -78,7 +78,7 @@ namespace VAdvantage.Model
         public MProjectTypePhase[] GetPhases()
         {
             List<MProjectTypePhase> list = new List<MProjectTypePhase>();
-            String sql = "SELECT * FROM C_Phase WHERE C_ProjectType_ID=" + GetC_ProjectType_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAB_Std_Stage WHERE VAB_ProjectType_ID=" + GetVAB_ProjectType_ID() + " ORDER BY SeqNo";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
@@ -106,23 +106,23 @@ namespace VAdvantage.Model
         /// <param name="restrictions">restrictions</param>
         /// <param name="measureDisplay">display</param>
         /// <param name="date">date</param>
-        /// <param name="C_Phase_ID">phase</param>
+        /// <param name="VAB_Std_Stage_ID">phase</param>
         /// <param name="role">role</param>
         /// <returns>query</returns>
         public Query GetQuery(MGoalRestriction[] restrictions,
-            String measureDisplay, DateTime? date, int C_Phase_ID, MRole role)
+            String measureDisplay, DateTime? date, int VAB_Std_Stage_ID, MRole role)
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
             String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = null;
             //
-            Query query = new Query("C_Project");
-            query.AddRangeRestriction("C_ProjectType_ID", "=", GetC_ProjectType_ID());
+            Query query = new Query("VAB_Project");
+            query.AddRangeRestriction("VAB_ProjectType_ID", "=", GetVAB_ProjectType_ID());
             //
             String where = null;
-            if (C_Phase_ID != 0)
-                where = "C_Phase_ID=" + C_Phase_ID;
+            if (VAB_Std_Stage_ID != 0)
+                where = "VAB_Std_Stage_ID=" + VAB_Std_Stage_ID;
             else
             {
                 String trunc = "D";
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
             }
             String sql = MMeasureCalc.AddRestrictions(where + " AND Processed<>'Y' ",
                 true, restrictions, role,
-                "C_Project", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAB_Project", orgColumn, bpColumn, pColumn,GetCtx());
             query.AddRestriction(sql);
             query.SetRecordCount(1);
             return query;
@@ -185,18 +185,18 @@ namespace VAdvantage.Model
                 orderBy = "TRUNC(" + dateColumn + ",'" + trunc + "')";
                 groupBy = orderBy + ", 0 ";
                 sb.Append(groupBy)
-                    .Append("FROM C_Project ");
+                    .Append("FROM VAB_Project ");
             }
             else
             {
                 orderBy = "p.SeqNo";
-                groupBy = "COALESCE(p.Name,TO_NCHAR('-')), p.C_Phase_ID, p.SeqNo ";
+                groupBy = "COALESCE(p.Name,TO_NCHAR('-')), p.VAB_Std_Stage_ID, p.SeqNo ";
                 sb.Append(groupBy)
-                    .Append("FROM C_Project LEFT OUTER JOIN C_Phase p ON (C_Project.C_Phase_ID=p.C_Phase_ID) ");
+                    .Append("FROM VAB_Project LEFT OUTER JOIN VAB_Std_Stage p ON (VAB_Project.VAB_Std_Stage_ID=p.VAB_Std_Stage_ID) ");
             }
             //	Where
-            sb.Append("WHERE C_Project.C_ProjectType_ID=").Append(GetC_ProjectType_ID())
-                .Append(" AND C_Project.Processed<>'Y'");
+            sb.Append("WHERE VAB_Project.VAB_ProjectType_ID=").Append(GetVAB_ProjectType_ID())
+                .Append(" AND VAB_Project.Processed<>'Y'");
             //	Date Restriction
             if (startDate != null
                 && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
@@ -207,7 +207,7 @@ namespace VAdvantage.Model
             }	//	date
             //
             String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
-                "C_Project", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAB_Project", orgColumn, bpColumn, pColumn,GetCtx());
             if (groupBy != null)
                 sql += " GROUP BY " + groupBy + " ORDER BY " + orderBy;
             //
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
             String pColumn = null;
             //	PlannedAmt -> PlannedQty -> Count
             StringBuilder sb = new StringBuilder("SELECT COALESCE(SUM(PlannedAmt),COALESCE(SUM(PlannedQty),COUNT(*))) "
-                + "FROM C_Project WHERE C_ProjectType_ID=" + GetC_ProjectType_ID()
+                + "FROM VAB_Project WHERE VAB_ProjectType_ID=" + GetVAB_ProjectType_ID()
                 + " AND Processed<>'Y')");
             //	Date Restriction
 
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
             }	//	date
             //
             String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
-                "C_Project", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAB_Project", orgColumn, bpColumn, pColumn,GetCtx());
 
             log.Fine(sql);
             return sql;

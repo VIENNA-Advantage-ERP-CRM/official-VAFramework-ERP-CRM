@@ -1,34 +1,34 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_ProfitLossLines
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_ProfitLossLines
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ProfitLossLines : PO{public X_C_ProfitLossLines (Context ctx, int C_ProfitLossLines_ID, Trx trxName) : base (ctx, C_ProfitLossLines_ID, trxName){/** if (C_ProfitLossLines_ID == 0){SetVAB_AccountBook_ID (0);SetC_ProfitLossLines_ID (0);SetC_ProfitLoss_ID (0);SetPostingType (null);} */
-}public X_C_ProfitLossLines (Ctx ctx, int C_ProfitLossLines_ID, Trx trxName) : base (ctx, C_ProfitLossLines_ID, trxName){/** if (C_ProfitLossLines_ID == 0){SetVAB_AccountBook_ID (0);SetC_ProfitLossLines_ID (0);SetC_ProfitLoss_ID (0);SetPostingType (null);} */
+public class X_VAB_ProfitLossLines : PO{public X_VAB_ProfitLossLines (Context ctx, int VAB_ProfitLossLines_ID, Trx trxName) : base (ctx, VAB_ProfitLossLines_ID, trxName){/** if (VAB_ProfitLossLines_ID == 0){SetVAB_AccountBook_ID (0);SetVAB_ProfitLossLines_ID (0);SetVAB_ProfitLoss_ID (0);SetPostingType (null);} */
+}public X_VAB_ProfitLossLines (Ctx ctx, int VAB_ProfitLossLines_ID, Trx trxName) : base (ctx, VAB_ProfitLossLines_ID, trxName){/** if (VAB_ProfitLossLines_ID == 0){SetVAB_AccountBook_ID (0);SetVAB_ProfitLossLines_ID (0);SetVAB_ProfitLoss_ID (0);SetPostingType (null);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProfitLossLines (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_ProfitLossLines (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProfitLossLines (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_ProfitLossLines (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProfitLossLines (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_ProfitLossLines (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ProfitLossLines(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_ProfitLossLines(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27764013083488L;/** Last Updated Timestamp 12/16/2016 4:59:30 PM */
 public static long updatedMS = 1481887766699L;/** VAF_TableView_ID=1000457 */
 public static int Table_ID; // =1000457;
-/** TableName=C_ProfitLossLines */
-public static String Table_Name="C_ProfitLossLines";
+/** TableName=VAB_ProfitLossLines */
+public static String Table_Name="VAB_ProfitLossLines";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -43,7 +43,7 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_ProfitLossLines[").Append(Get_ID()).Append("]");return sb.ToString();}
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_ProfitLossLines[").Append(Get_ID()).Append("]");return sb.ToString();}
 /** VAF_OrgTrx_ID VAF_Control_Ref_ID=276 */
 public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID=276;/** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
@@ -99,53 +99,53 @@ public void SetC_LocTo_ID (int C_LocTo_ID){if (C_LocTo_ID <= 0) Set_Value ("C_Lo
 Set_Value ("C_LocTo_ID", C_LocTo_ID);}/** Get Location To.
 @return Location that inventory was moved to */
 public int GetC_LocTo_ID() {Object ii = Get_Value("C_LocTo_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Profit Dimension.
-@param C_ProfitAndLoss_ID Profit Dimension */
-public void SetC_ProfitAndLoss_ID (int C_ProfitAndLoss_ID){if (C_ProfitAndLoss_ID <= 0) Set_Value ("C_ProfitAndLoss_ID", null);else
-Set_Value ("C_ProfitAndLoss_ID", C_ProfitAndLoss_ID);}/** Get Profit Dimension.
+@param VAB_ProfitAndLoss_ID Profit Dimension */
+public void SetVAB_ProfitAndLoss_ID (int VAB_ProfitAndLoss_ID){if (VAB_ProfitAndLoss_ID <= 0) Set_Value ("VAB_ProfitAndLoss_ID", null);else
+Set_Value ("VAB_ProfitAndLoss_ID", VAB_ProfitAndLoss_ID);}/** Get Profit Dimension.
 @return Profit Dimension */
-public int GetC_ProfitAndLoss_ID() {Object ii = Get_Value("C_ProfitAndLoss_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Profit Loss Line.
-@param C_ProfitLossLines_ID Profit Loss Line */
-public void SetC_ProfitLossLines_ID (int C_ProfitLossLines_ID){if (C_ProfitLossLines_ID < 1) throw new ArgumentException ("C_ProfitLossLines_ID is mandatory.");Set_ValueNoCheck ("C_ProfitLossLines_ID", C_ProfitLossLines_ID);}/** Get Profit Loss Line.
+public int GetVAB_ProfitAndLoss_ID() {Object ii = Get_Value("VAB_ProfitAndLoss_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Profit Loss Line.
+@param VAB_ProfitLossLines_ID Profit Loss Line */
+public void SetVAB_ProfitLossLines_ID (int VAB_ProfitLossLines_ID){if (VAB_ProfitLossLines_ID < 1) throw new ArgumentException ("VAB_ProfitLossLines_ID is mandatory.");Set_ValueNoCheck ("VAB_ProfitLossLines_ID", VAB_ProfitLossLines_ID);}/** Get Profit Loss Line.
 @return Profit Loss Line */
-public int GetC_ProfitLossLines_ID() {Object ii = Get_Value("C_ProfitLossLines_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Profit Loss.
-@param C_ProfitLoss_ID Profit Loss */
-public void SetC_ProfitLoss_ID (int C_ProfitLoss_ID){if (C_ProfitLoss_ID < 1) throw new ArgumentException ("C_ProfitLoss_ID is mandatory.");Set_ValueNoCheck ("C_ProfitLoss_ID", C_ProfitLoss_ID);}/** Get Profit Loss.
+public int GetVAB_ProfitLossLines_ID() {Object ii = Get_Value("VAB_ProfitLossLines_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Profit Loss.
+@param VAB_ProfitLoss_ID Profit Loss */
+public void SetVAB_ProfitLoss_ID (int VAB_ProfitLoss_ID){if (VAB_ProfitLoss_ID < 1) throw new ArgumentException ("VAB_ProfitLoss_ID is mandatory.");Set_ValueNoCheck ("VAB_ProfitLoss_ID", VAB_ProfitLoss_ID);}/** Get Profit Loss.
 @return Profit Loss */
-public int GetC_ProfitLoss_ID() {Object ii = Get_Value("C_ProfitLoss_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Project Phase.
-@param C_ProjectPhase_ID Phase of a Project */
-public void SetC_ProjectPhase_ID (int C_ProjectPhase_ID){if (C_ProjectPhase_ID <= 0) Set_Value ("C_ProjectPhase_ID", null);else
-Set_Value ("C_ProjectPhase_ID", C_ProjectPhase_ID);}/** Get Project Phase.
+public int GetVAB_ProfitLoss_ID() {Object ii = Get_Value("VAB_ProfitLoss_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Project Phase.
+@param VAB_ProjectStage_ID Phase of a Project */
+public void SetVAB_ProjectStage_ID (int VAB_ProjectStage_ID){if (VAB_ProjectStage_ID <= 0) Set_Value ("VAB_ProjectStage_ID", null);else
+Set_Value ("VAB_ProjectStage_ID", VAB_ProjectStage_ID);}/** Get Project Phase.
 @return Phase of a Project */
-public int GetC_ProjectPhase_ID() {Object ii = Get_Value("C_ProjectPhase_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Project Task.
-@param C_ProjectTask_ID Actual Plan Task in a Phase */
-public void SetC_ProjectTask_ID (int C_ProjectTask_ID){if (C_ProjectTask_ID <= 0) Set_Value ("C_ProjectTask_ID", null);else
-Set_Value ("C_ProjectTask_ID", C_ProjectTask_ID);}/** Get Project Task.
+public int GetVAB_ProjectStage_ID() {Object ii = Get_Value("VAB_ProjectStage_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Project Task.
+@param VAB_ProjectJob_ID Actual Plan Task in a Phase */
+public void SetVAB_ProjectJob_ID (int VAB_ProjectJob_ID){if (VAB_ProjectJob_ID <= 0) Set_Value ("VAB_ProjectJob_ID", null);else
+Set_Value ("VAB_ProjectJob_ID", VAB_ProjectJob_ID);}/** Get Project Task.
 @return Actual Plan Task in a Phase */
-public int GetC_ProjectTask_ID() {Object ii = Get_Value("C_ProjectTask_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-public void SetC_Project_ID (int C_Project_ID){if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);else
-Set_Value ("C_Project_ID", C_Project_ID);}/** Get Opportunity.
+public int GetVAB_ProjectJob_ID() {Object ii = Get_Value("VAB_ProjectJob_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+public void SetVAB_Project_ID (int VAB_Project_ID){if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);else
+Set_Value ("VAB_Project_ID", VAB_Project_ID);}/** Get Opportunity.
 @return Business Opportunity */
-public int GetC_Project_ID() {Object ii = Get_Value("C_Project_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID){if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);}/** Get Sales Region.
+public int GetVAB_Project_ID() {Object ii = Get_Value("VAB_Project_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Sales Region.
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID){if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);else
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);}/** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() {Object ii = Get_Value("C_SalesRegion_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Sub Account.
-@param C_SubAcct_ID Sub account for Element Value */
-public void SetC_SubAcct_ID (int C_SubAcct_ID){if (C_SubAcct_ID <= 0) Set_Value ("C_SubAcct_ID", null);else
-Set_Value ("C_SubAcct_ID", C_SubAcct_ID);}/** Get Sub Account.
+public int GetVAB_SalesRegionState_ID() {Object ii = Get_Value("VAB_SalesRegionState_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Sub Account.
+@param VAB_SubAcct_ID Sub account for Element Value */
+public void SetVAB_SubAcct_ID (int VAB_SubAcct_ID){if (VAB_SubAcct_ID <= 0) Set_Value ("VAB_SubAcct_ID", null);else
+Set_Value ("VAB_SubAcct_ID", VAB_SubAcct_ID);}/** Get Sub Account.
 @return Sub account for Element Value */
-public int GetC_SubAcct_ID() {Object ii = Get_Value("C_SubAcct_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
+public int GetVAB_SubAcct_ID() {Object ii = Get_Value("VAB_SubAcct_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Export.
 @param Export_ID Export */
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
 @return Export */
 public String GetExport_ID() {return (String)Get_Value("Export_ID");}/** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-public void SetGL_Budget_ID (int GL_Budget_ID){if (GL_Budget_ID <= 0) Set_Value ("GL_Budget_ID", null);else
-Set_Value ("GL_Budget_ID", GL_Budget_ID);}/** Get Budget.
+@param VAGL_Budget_ID General Ledger Budget */
+public void SetVAGL_Budget_ID (int VAGL_Budget_ID){if (VAGL_Budget_ID <= 0) Set_Value ("VAGL_Budget_ID", null);else
+Set_Value ("VAGL_Budget_ID", VAGL_Budget_ID);}/** Get Budget.
 @return General Ledger Budget */
-public int GetGL_Budget_ID() {Object ii = Get_Value("GL_Budget_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Ledger Code.
+public int GetVAGL_Budget_ID() {Object ii = Get_Value("VAGL_Budget_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Ledger Code.
 @param LedgerCode Ledger Code */
 public void SetLedgerCode (String LedgerCode){if (LedgerCode != null && LedgerCode.Length > 20){log.Warning("Length > 20 - truncated");LedgerCode = LedgerCode.Substring(0,20);}Set_Value ("LedgerCode", LedgerCode);}/** Get Ledger Code.
 @return Ledger Code */

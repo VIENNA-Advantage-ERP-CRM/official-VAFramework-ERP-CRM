@@ -11,16 +11,16 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_SalesRegion
+/** Generated Model for VAB_SalesRegionState
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_SalesRegion : PO
+public class X_VAB_SalesRegionState : PO
 {
-public X_C_SalesRegion (Context ctx, int C_SalesRegion_ID, Trx trxName) : base (ctx, C_SalesRegion_ID, trxName)
+public X_VAB_SalesRegionState (Context ctx, int VAB_SalesRegionState_ID, Trx trxName) : base (ctx, VAB_SalesRegionState_ID, trxName)
 {
-/** if (C_SalesRegion_ID == 0)
+/** if (VAB_SalesRegionState_ID == 0)
 {
-SetC_SalesRegion_ID (0);
+SetVAB_SalesRegionState_ID (0);
 SetIsDefault (false);
 SetIsSummary (false);
 SetName (null);
@@ -28,11 +28,11 @@ SetValue (null);
 }
  */
 }
-public X_C_SalesRegion (Ctx ctx, int C_SalesRegion_ID, Trx trxName) : base (ctx, C_SalesRegion_ID, trxName)
+public X_VAB_SalesRegionState (Ctx ctx, int VAB_SalesRegionState_ID, Trx trxName) : base (ctx, VAB_SalesRegionState_ID, trxName)
 {
-/** if (C_SalesRegion_ID == 0)
+/** if (VAB_SalesRegionState_ID == 0)
 {
-SetC_SalesRegion_ID (0);
+SetVAB_SalesRegionState_ID (0);
 SetIsDefault (false);
 SetIsSummary (false);
 SetName (null);
@@ -45,7 +45,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesRegion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SalesRegionState (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_SalesRegion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesRegion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SalesRegionState (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_SalesRegion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesRegion (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_SalesRegionState (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_SalesRegion()
+static X_VAB_SalesRegionState()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389058313L;
 public static int Table_ID;
  // =230;
 
-/** TableName=C_SalesRegion */
-public static String Table_Name="C_SalesRegion";
+/** TableName=VAB_SalesRegionState */
+public static String Table_Name="VAB_SalesRegionState";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,21 +115,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_SalesRegion[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SalesRegionState[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID < 1) throw new ArgumentException ("C_SalesRegion_ID is mandatory.");
-Set_ValueNoCheck ("C_SalesRegion_ID", C_SalesRegion_ID);
+if (VAB_SalesRegionState_ID < 1) throw new ArgumentException ("VAB_SalesRegionState_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

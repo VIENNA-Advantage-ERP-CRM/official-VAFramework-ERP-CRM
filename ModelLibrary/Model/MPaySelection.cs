@@ -16,19 +16,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelection : X_C_PaySelection
+    public class MPaySelection : X_VAB_PaymentOption
     {
         /**
          * 	Default Constructor
          *	@param ctx context
-         *	@param C_PaySelection_ID id
+         *	@param VAB_PaymentOption_ID id
          *	@param trxName transaction
          */
-        public MPaySelection(Ctx ctx, int C_PaySelection_ID, Trx trxName):
-            base(ctx, C_PaySelection_ID, trxName)
+        public MPaySelection(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName):
+            base(ctx, VAB_PaymentOption_ID, trxName)
         {
             
-            if (C_PaySelection_ID == 0)
+            if (VAB_PaymentOption_ID == 0)
             {
                 //	SetVAB_Bank_Acct_ID (0);
                 //	SetName (null);	// @#Date@
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
             if (_lines != null && !requery)
                 return _lines;
             List<MPaySelectionLine> list = new List<MPaySelectionLine>();
-            String sql = "SELECT * FROM C_PaySelectionLine WHERE C_PaySelection_ID=" + GetC_PaySelection_ID() + " ORDER BY Line";
+            String sql = "SELECT * FROM VAB_PaymentOptionLine WHERE VAB_PaymentOption_ID=" + GetVAB_PaymentOption_ID() + " ORDER BY Line";
             DataTable dt;
             IDataReader idr = null;
             try

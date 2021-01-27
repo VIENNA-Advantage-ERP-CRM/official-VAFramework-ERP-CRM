@@ -89,8 +89,8 @@ namespace ViennaAdvantageServer.Process
 
                         New = new X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                         New.SetRefContract(contact.GetDocumentNo());
-                        New.SetC_Order_ID(contact.GetC_Order_ID());
-                        New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
+                        New.SetVAB_Order_ID(contact.GetVAB_Order_ID());
+                        New.SetVAB_OrderLine_ID(contact.GetVAB_OrderLine_ID());
                         OldStart = (DateTime)(contact.GetStartDate());
                         Start = (DateTime)(contact.GetEndDate());
                         New.SetStartDate(Start.AddDays(1));
@@ -99,7 +99,7 @@ namespace ViennaAdvantageServer.Process
                         New.SetBill_User_ID(contact.GetBill_User_ID());
                         New.SetSalesRep_ID(contact.GetSalesRep_ID());
                         New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
-                        New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
+                        New.SetVAB_PaymentTerm_ID(contact.GetVAB_PaymentTerm_ID());
 
                         frequency = contact.GetVAB_Frequency_ID();
                         New.SetVAB_Frequency_ID(frequency);
@@ -156,14 +156,14 @@ namespace ViennaAdvantageServer.Process
                             New.SetPriceList(contact.GetPriceList());
                         }
                         New.SetVAB_Currency_ID(priceList.GetVAB_Currency_ID());
-                        New.SetC_UOM_ID(contact.GetC_UOM_ID());
+                        New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
                         New.SetM_Product_ID(contact.GetM_Product_ID());
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
                         New.SetQtyEntered(contact.GetQtyEntered());
-                        New.SetC_Tax_ID(contact.GetC_Tax_ID());
+                        New.SetVAB_TaxRate_ID(contact.GetVAB_TaxRate_ID());
                         New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
                         New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
-                        New.SetC_Project_ID(contact.GetC_Project_ID());
+                        New.SetVAB_Project_ID(contact.GetVAB_Project_ID());
                         New.SetDescription(contact.GetDescription());
                         //New.SetTaxAmt(contact.GetTaxAmt());
                         New.SetCancelBeforeDays(contact.GetCancelBeforeDays());
@@ -174,7 +174,7 @@ namespace ViennaAdvantageServer.Process
                         New.SetRenewalType("M");
                         New.SetLineNetAmt(Decimal.Multiply(New.GetPriceEntered(), New.GetQtyEntered()));
 
-                        //String sqltax = "SELECT Rate FROM C_Tax WHERE C_Tax_ID=" + contact.GetC_Tax_ID();
+                        //String sqltax = "SELECT Rate FROM VAB_TaxRate WHERE VAB_TaxRate_ID=" + contact.GetVAB_TaxRate_ID();
                         //Decimal? Rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sqltax, null, Get_TrxName()));                       
 
                         //Decimal? TotalRate = Util.GetValueOfDecimal((Util.GetValueOfDecimal(New.GetLineNetAmt()) * Util.GetValueOfDecimal(Rate)) / 100);
@@ -193,7 +193,7 @@ namespace ViennaAdvantageServer.Process
                         else
                         {
                             // Calculate Tax Amount
-                            tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
+                            tax = MTax.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
                             TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
                             New.SetTaxAmt(TotalRate);
                         }
@@ -269,8 +269,8 @@ namespace ViennaAdvantageServer.Process
 
                         New = new X_VAB_Contract(GetCtx(), 0, Get_TrxName());
                         New.SetRefContract(contact.GetDocumentNo());
-                        New.SetC_Order_ID(contact.GetC_Order_ID());
-                        New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
+                        New.SetVAB_Order_ID(contact.GetVAB_Order_ID());
+                        New.SetVAB_OrderLine_ID(contact.GetVAB_OrderLine_ID());
                         OldStart = (DateTime)(contact.GetStartDate());
                         Start = (DateTime)(contact.GetEndDate());
                         New.SetStartDate(Start.AddDays(1));
@@ -290,7 +290,7 @@ namespace ViennaAdvantageServer.Process
                         New.SetBill_User_ID(contact.GetBill_User_ID());
                         New.SetSalesRep_ID(contact.GetSalesRep_ID());
                         New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
-                        New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
+                        New.SetVAB_PaymentTerm_ID(contact.GetVAB_PaymentTerm_ID());
                         New.SetVAB_Frequency_ID(frequency);
 
                         // invoice Count Start                       
@@ -349,14 +349,14 @@ namespace ViennaAdvantageServer.Process
                         }
                         New.SetTotalInvoice(contact.GetCycles());
                         New.SetVAB_Currency_ID(priceList.GetVAB_Currency_ID());
-                        New.SetC_UOM_ID(contact.GetC_UOM_ID());
+                        New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
                         New.SetM_Product_ID(contact.GetM_Product_ID());
                         New.SetM_AttributeSetInstance_ID(contact.GetM_AttributeSetInstance_ID());
                         New.SetQtyEntered(contact.GetQtyEntered());
-                        New.SetC_Tax_ID(contact.GetC_Tax_ID());
+                        New.SetVAB_TaxRate_ID(contact.GetVAB_TaxRate_ID());
                         New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
                         New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
-                        New.SetC_Project_ID(contact.GetC_Project_ID());
+                        New.SetVAB_Project_ID(contact.GetVAB_Project_ID());
                         New.SetDescription(contact.GetDescription());
                         New.SetCancelBeforeDays(contact.GetCancelBeforeDays());
                         New.SetCycles(contact.GetCycles());
@@ -367,7 +367,7 @@ namespace ViennaAdvantageServer.Process
                         New.SetLineNetAmt(Decimal.Multiply(New.GetPriceEntered(), New.GetQtyEntered()));
 
                         // Calculate Tax Amount
-                        tax = MTax.Get(GetCtx(), contact.GetC_Tax_ID());
+                        tax = MTax.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
 
                         // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
                         if (New.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
@@ -535,7 +535,7 @@ namespace ViennaAdvantageServer.Process
                         CSchedule.SetSurchargeAmt(contract.GetSurchargeAmt());
                     }
 
-                    CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
+                    CSchedule.SetVAB_UOM_ID(contract.GetVAB_UOM_ID());
                     CSchedule.SetPriceEntered(contract.GetPriceEntered());
                     CSchedule.SetProcessed(true);
                     if (!CSchedule.Save())

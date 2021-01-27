@@ -141,9 +141,9 @@ namespace ViennaAdvantage.Process
 
             // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
             // JID_0976 - For conversion Type
-            if (ship.GetC_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  c_order.m_pricelist_id) +  count(distinct c_order.c_paymentterm_id) + count(distinct COALESCE( c_order.VAB_CurrencyType_ID , " + MConversionType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
-                            FROM m_inoutline INNER JOIN c_orderline ON m_inoutline.c_orderline_id = c_orderline.c_orderline_id
-                            INNER JOIN c_order ON c_order.c_order_id = c_orderline.c_order_id
+            if (ship.GetVAB_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  VAB_Order.m_pricelist_id) +  count(distinct VAB_Order.VAB_Paymentterm_id) + count(distinct COALESCE( VAB_Order.VAB_CurrencyType_ID , " + MConversionType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
+                            FROM m_inoutline INNER JOIN VAB_Orderline ON m_inoutline.VAB_Orderline_id = VAB_Orderline.VAB_Orderline_id
+                            INNER JOIN VAB_Order ON VAB_Order.VAB_Order_id = VAB_Orderline.VAB_Order_id
                             WHERE m_inoutline.m_inout_id = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 3)
             {
                 if (ship.IsSOTrx())
@@ -169,7 +169,7 @@ namespace ViennaAdvantage.Process
 
             if (_CountVA009 > 0)
             {
-                int _PaymentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA009_PaymentMethod_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                int _PaymentMethod_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA009_PaymentMethod_ID From VAB_Order Where VAB_Order_ID=" + ship.GetVAB_Order_ID(), null, Get_Trx()));
 
                 // during consolidation, payment method need to set that is defined on selected business partner. 
                 // If not defined on BP then it will set from order
@@ -190,7 +190,7 @@ namespace ViennaAdvantage.Process
             int _CountVA026 = Env.IsModuleInstalled("VA026_") ? 1 : 0;
             if (_CountVA026 > 0)
             {
-                int VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA026_LCDetail_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                int VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VA026_LCDetail_ID From VAB_Order Where VAB_Order_ID=" + ship.GetVAB_Order_ID(), null, Get_Trx()));
                 if (VA026_LCDetail_ID > 0)
                 {
                     invoice.SetVA026_LCDetail_ID(VA026_LCDetail_ID);
@@ -237,9 +237,9 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        if (ship.GetC_Order_ID() >= 0)
+                        if (ship.GetVAB_Order_ID() >= 0)
                         {
-                            int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAB_DocTypes_ID From C_Order Where C_Order_ID=" + ship.GetC_Order_ID(), null, Get_Trx()));
+                            int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAB_DocTypes_ID From VAB_Order Where VAB_Order_ID=" + ship.GetVAB_Order_ID(), null, Get_Trx()));
                             MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
                             if (dt.GetVAB_DocTypesInvoice_ID() != 0)
                                 invoice.SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), true);
@@ -536,18 +536,18 @@ namespace ViennaAdvantage.Process
             if (_GenerateCharges && count > 0)
             {
                 StringBuilder OrderSql = new StringBuilder();
-                OrderSql.Append("   SELECT CO.C_ORDER_ID,                    "
+                OrderSql.Append("   SELECT CO.VAB_ORDER_ID,                    "
                                + "      SUM(ML.QTYENTERED) AS MRLINEQTY,     "
                                + "      SUM(OL.QTYENTERED) AS ORDERQTY       "
                                + "  FROM M_INOUTLINE ML                      "
-                               + "  INNER JOIN C_ORDERLINE OL                "
-                               + "  ON OL.C_ORDERLINE_ID = ML.C_ORDERLINE_ID "
-                               + " INNER JOIN C_ORDER CO                     "
-                               + " ON CO.C_ORDER_ID     = OL.C_ORDER_ID      "
+                               + "  INNER JOIN VAB_ORDERLINE OL                "
+                               + "  ON OL.VAB_ORDERLINE_ID = ML.VAB_ORDERLINE_ID "
+                               + " INNER JOIN VAB_ORDER CO                     "
+                               + " ON CO.VAB_ORDER_ID     = OL.VAB_ORDER_ID      "
                                + " WHERE ML.M_INOUT_ID  = " + _M_InOut_ID
                                + " AND (OL.VAB_CHARGE_ID IS NULL               "
                                + " OR OL.VAB_CHARGE_ID    = 0)                 "
-                               + " GROUP BY CO.C_ORDER_ID                    ");
+                               + " GROUP BY CO.VAB_ORDER_ID                    ");
 
                 DataSet OrderDS = DB.ExecuteDataset(OrderSql.ToString(), null, Get_Trx());
 
@@ -559,19 +559,19 @@ namespace ViennaAdvantage.Process
                         ds = null;
                         ChargesSql.Clear();
                         ChargesSql.Append(" SELECT VAB_CHARGE_ID,                                             "
-                                 + "   C_ORDERLINE_ID,                                                      "
-                                 + "   C_ORDER_ID,                                                          "
+                                 + "   VAB_ORDERLINE_ID,                                                      "
+                                 + "   VAB_ORDER_ID,                                                          "
                                  + "   VAB_CURRENCY_ID,                                                       "
                                  + "   PRICEENTERED,                                                        "
                                  + "   PRICEACTUAL,                                                         "
                                  + "   LINENETAMT,                                                          "
                                  + "   QTYENTERED,                                                          "
-                                 + "   C_UOM_ID,                                                            "
-                                 + "   C_Tax_ID,                                                            "
+                                 + "   VAB_UOM_ID,                                                            "
+                                 + "   VAB_TaxRate_ID,                                                            "
                                  + "   IsDropShip                                                           "
-                                 + " FROM C_ORDERLINE                                                       "
-                                 + " WHERE C_ORDER_ID IN                                                    "
-                                 + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["C_ORDER_ID"])
+                                 + " FROM VAB_ORDERLINE                                                       "
+                                 + " WHERE VAB_ORDER_ID IN                                                    "
+                                 + "   ( " + Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["VAB_ORDER_ID"])
                                  + "   )                                                                    "
                                  + " AND VAB_CHARGE_ID IS NOT NULL                                            "
                                  + " AND VAB_CHARGE_ID  > 0                                                   ");
@@ -587,10 +587,10 @@ namespace ViennaAdvantage.Process
                                 line.SetQty(1);
                                 line.SetQtyEntered(1);
                                 line.SetQtyInvoiced(1);
-                                line.SetOrderLine(new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ORDERLINE_ID"]), Get_Trx()));
+                                line.SetOrderLine(new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ORDERLINE_ID"]), Get_Trx()));
                                 line.SetVAB_Charge_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CHARGE_ID"]));
-                                line.SetC_UOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_UOM_ID"]));
-                                line.SetC_Tax_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_TAX_ID"]));
+                                line.SetVAB_UOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_UOM_ID"]));
+                                line.SetVAB_TaxRate_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_TAXRATE_ID"]));
 
                                 decimal SumOfQty = 0;
                                 if (Util.GetValueOfInt(OrderDS.Tables[0].Rows[index]["ORDERQTY"]) == 0)

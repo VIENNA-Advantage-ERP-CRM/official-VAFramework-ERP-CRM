@@ -9,40 +9,40 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_RevenueRecognition_Run
+    using System.Data;/** Generated Model for VAB_Rev_RecognitionRun
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_RevenueRecognition_Run : PO
+    public class X_VAB_Rev_RecognitionRun : PO
     {
-        public X_C_RevenueRecognition_Run(Context ctx, int C_RevenueRecognition_Run_ID, Trx trxName) : base(ctx, C_RevenueRecognition_Run_ID, trxName)
-        {/** if (C_RevenueRecognition_Run_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetC_RevenueRecognition_Run_ID (0);SetGL_Journal_ID (0);SetRecognizedAmt (0.0);} */
+        public X_VAB_Rev_RecognitionRun(Context ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName) : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
+        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
         }
-        public X_C_RevenueRecognition_Run(Ctx ctx, int C_RevenueRecognition_Run_ID, Trx trxName) : base(ctx, C_RevenueRecognition_Run_ID, trxName)
-        {/** if (C_RevenueRecognition_Run_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetC_RevenueRecognition_Run_ID (0);SetGL_Journal_ID (0);SetRecognizedAmt (0.0);} */
+        public X_VAB_Rev_RecognitionRun(Ctx ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName) : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
+        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RevenueRecognition_Run(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Rev_RecognitionRun(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RevenueRecognition_Run(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Rev_RecognitionRun(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RevenueRecognition_Run(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_Rev_RecognitionRun(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_RevenueRecognition_Run() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_Rev_RecognitionRun() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27889642906645L;/** Last Updated Timestamp 12/9/2020 12:39:49 PM */
         public static long updatedMS = 1607517589856L;/** VAF_TableView_ID=444 */
         public static int Table_ID; // =444;
-        /** TableName=C_RevenueRecognition_Run */
-        public static String Table_Name = "C_RevenueRecognition_Run";
+        /** TableName=VAB_Rev_RecognitionRun */
+        public static String Table_Name = "VAB_Rev_RecognitionRun";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -57,25 +57,25 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_RevenueRecognition_Run[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Revenue Recognition Plan.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_Rev_RecognitionRun[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Revenue Recognition Plan.
 @param C_RevenueRecognition_Plan_ID Plan for recognizing or recording revenue */
         public void SetC_RevenueRecognition_Plan_ID(int C_RevenueRecognition_Plan_ID) { if (C_RevenueRecognition_Plan_ID < 1) throw new ArgumentException("C_RevenueRecognition_Plan_ID is mandatory."); Set_ValueNoCheck("C_RevenueRecognition_Plan_ID", C_RevenueRecognition_Plan_ID); }/** Get Revenue Recognition Plan.
 @return Plan for recognizing or recording revenue */
         public int GetC_RevenueRecognition_Plan_ID() { Object ii = Get_Value("C_RevenueRecognition_Plan_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetC_RevenueRecognition_Plan_ID().ToString()); }/** Set Revenue Recognition Run.
-@param C_RevenueRecognition_Run_ID Revenue Recognition Run or Process */
-        public void SetC_RevenueRecognition_Run_ID(int C_RevenueRecognition_Run_ID) { if (C_RevenueRecognition_Run_ID < 1) throw new ArgumentException("C_RevenueRecognition_Run_ID is mandatory."); Set_ValueNoCheck("C_RevenueRecognition_Run_ID", C_RevenueRecognition_Run_ID); }/** Get Revenue Recognition Run.
+@param VAB_Rev_RecognitionRun_ID Revenue Recognition Run or Process */
+        public void SetVAB_Rev_RecognitionRun_ID(int VAB_Rev_RecognitionRun_ID) { if (VAB_Rev_RecognitionRun_ID < 1) throw new ArgumentException("VAB_Rev_RecognitionRun_ID is mandatory."); Set_ValueNoCheck("VAB_Rev_RecognitionRun_ID", VAB_Rev_RecognitionRun_ID); }/** Get Revenue Recognition Run.
 @return Revenue Recognition Run or Process */
-        public int GetC_RevenueRecognition_Run_ID() { Object ii = Get_Value("C_RevenueRecognition_Run_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAB_Rev_RecognitionRun_ID() { Object ii = Get_Value("VAB_Rev_RecognitionRun_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_ValueNoCheck("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Journal.
-@param GL_Journal_ID General Ledger Journal */
-        public void SetGL_Journal_ID(int GL_Journal_ID) { if (GL_Journal_ID < 1) throw new ArgumentException("GL_Journal_ID is mandatory."); Set_ValueNoCheck("GL_Journal_ID", GL_Journal_ID); }/** Get Journal.
+@param VAGL_JRNL_ID General Ledger Journal */
+        public void SetVAGL_JRNL_ID(int VAGL_JRNL_ID) { if (VAGL_JRNL_ID < 1) throw new ArgumentException("VAGL_JRNL_ID is mandatory."); Set_ValueNoCheck("VAGL_JRNL_ID", VAGL_JRNL_ID); }/** Get Journal.
 @return General Ledger Journal */
-        public int GetGL_Journal_ID() { Object ii = Get_Value("GL_Journal_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Recognition Date.
+        public int GetVAGL_JRNL_ID() { Object ii = Get_Value("VAGL_JRNL_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Recognition Date.
 @param RecognitionDate Recognition Date */
         public void SetRecognitionDate(DateTime? RecognitionDate) { Set_Value("RecognitionDate", (DateTime?)RecognitionDate); }/** Get Recognition Date.
 @return Recognition Date */

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PeriodControl
+/** Generated Model for VAB_YearPeriodControl
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PeriodControl : PO
+public class X_VAB_YearPeriodControl : PO
 {
-public X_C_PeriodControl (Context ctx, int C_PeriodControl_ID, Trx trxName) : base (ctx, C_PeriodControl_ID, trxName)
+public X_VAB_YearPeriodControl (Context ctx, int VAB_YearPeriodControl_ID, Trx trxName) : base (ctx, VAB_YearPeriodControl_ID, trxName)
 {
-/** if (C_PeriodControl_ID == 0)
+/** if (VAB_YearPeriodControl_ID == 0)
 {
-SetC_PeriodControl_ID (0);
-SetC_Period_ID (0);
+SetVAB_YearPeriodControl_ID (0);
+SetVAB_YearPeriod_ID (0);
 SetDocBaseType (null);
 SetPeriodAction (null);	// N
 }
  */
 }
-public X_C_PeriodControl (Ctx ctx, int C_PeriodControl_ID, Trx trxName) : base (ctx, C_PeriodControl_ID, trxName)
+public X_VAB_YearPeriodControl (Ctx ctx, int VAB_YearPeriodControl_ID, Trx trxName) : base (ctx, VAB_YearPeriodControl_ID, trxName)
 {
-/** if (C_PeriodControl_ID == 0)
+/** if (VAB_YearPeriodControl_ID == 0)
 {
-SetC_PeriodControl_ID (0);
-SetC_Period_ID (0);
+SetVAB_YearPeriodControl_ID (0);
+SetVAB_YearPeriod_ID (0);
 SetDocBaseType (null);
 SetPeriodAction (null);	// N
 }
@@ -43,7 +43,7 @@ SetPeriodAction (null);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PeriodControl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_YearPeriodControl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_PeriodControl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PeriodControl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_YearPeriodControl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_PeriodControl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PeriodControl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_YearPeriodControl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PeriodControl()
+static X_VAB_YearPeriodControl()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389057295L;
 public static int Table_ID;
  // =229;
 
-/** TableName=C_PeriodControl */
-public static String Table_Name="C_PeriodControl";
+/** TableName=VAB_YearPeriodControl */
+public static String Table_Name="VAB_YearPeriodControl";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PeriodControl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_YearPeriodControl[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Period Control.
-@param C_PeriodControl_ID Period Control */
-public void SetC_PeriodControl_ID (int C_PeriodControl_ID)
+@param VAB_YearPeriodControl_ID Period Control */
+public void SetVAB_YearPeriodControl_ID (int VAB_YearPeriodControl_ID)
 {
-if (C_PeriodControl_ID < 1) throw new ArgumentException ("C_PeriodControl_ID is mandatory.");
-Set_ValueNoCheck ("C_PeriodControl_ID", C_PeriodControl_ID);
+if (VAB_YearPeriodControl_ID < 1) throw new ArgumentException ("VAB_YearPeriodControl_ID is mandatory.");
+Set_ValueNoCheck ("VAB_YearPeriodControl_ID", VAB_YearPeriodControl_ID);
 }
 /** Get Period Control.
 @return Period Control */
-public int GetC_PeriodControl_ID() 
+public int GetVAB_YearPeriodControl_ID() 
 {
-Object ii = Get_Value("C_PeriodControl_ID");
+Object ii = Get_Value("VAB_YearPeriodControl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -135,20 +135,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_PeriodControl_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_YearPeriodControl_ID().ToString());
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID < 1) throw new ArgumentException ("C_Period_ID is mandatory.");
-Set_ValueNoCheck ("C_Period_ID", C_Period_ID);
+if (VAB_YearPeriod_ID < 1) throw new ArgumentException ("VAB_YearPeriod_ID is mandatory.");
+Set_ValueNoCheck ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

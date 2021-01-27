@@ -78,9 +78,9 @@ namespace ViennaAdvantageServer.Process
                     int id = Util.GetValueOfInt(MainDr[0]);
                     VAdvantage.Model.X_VAB_PromotionTargetList MCapTarget = new VAdvantage.Model.X_VAB_PromotionTargetList(GetCtx(), id, null);
 
-                    if (MCapTarget.GetC_MasterTargetList_ID() != 0)
+                    if (MCapTarget.GetVAB_MasterTargetList_ID() != 0)
                     {
-                        query = "Select VAB_BusinessPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and VAB_BusinessPartner_ID is not null";
+                        query = "Select VAB_BusinessPartner_ID from C_TargetList where VAB_MasterTargetList_ID=" + MCapTarget.GetVAB_MasterTargetList_ID() + " and VAB_BusinessPartner_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
@@ -89,7 +89,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         dr.Close();
 
-                        query = "Select Ref_BPartner_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and Ref_BPartner_ID is not null";
+                        query = "Select Ref_BPartner_ID from C_TargetList where VAB_MasterTargetList_ID=" + MCapTarget.GetVAB_MasterTargetList_ID() + " and Ref_BPartner_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
@@ -98,15 +98,15 @@ namespace ViennaAdvantageServer.Process
                         }
                         dr.Close();
 
-                        query = "Select C_Lead_ID from C_TargetList where C_MasterTargetList_ID=" + MCapTarget.GetC_MasterTargetList_ID() + " and C_Lead_ID is not null";
+                        query = "Select VAB_Lead_ID from C_TargetList where VAB_MasterTargetList_ID=" + MCapTarget.GetVAB_MasterTargetList_ID() + " and VAB_Lead_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
-                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where VAB_Lead_id=" + Util.GetValueOfInt(dr[0]);
                             object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
                             if (Util.GetValueOfInt(Leadid) == 0)
                             {
-                                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
+                                VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
                                 if (lead.GetVAB_BusinessPartner_ID() != 0)
                                 {
                                     invitee(lead.GetVAB_BusinessPartner_ID());
@@ -127,12 +127,12 @@ namespace ViennaAdvantageServer.Process
                                     Invt.SetName(lead.GetContactName());
                                     Invt.SetEMail(lead.GetEMail());
                                     Invt.SetPhone(lead.GetPhone());
-                                    Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
+                                    Invt.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
                                     Invt.SetAddress1(lead.GetAddress1());
                                     Invt.SetAddress1(lead.GetAddress2());
                                     Invt.SetVAB_City_ID(lead.GetVAB_City_ID());
                                     Invt.SetCity(lead.GetCity());
-                                    Invt.SetC_Region_ID(lead.GetC_Region_ID());
+                                    Invt.SetVAB_RegionState_ID(lead.GetVAB_RegionState_ID());
                                     Invt.SetRegionName(lead.GetRegionName());
                                     Invt.SetVAB_Country_ID(lead.GetVAB_Country_ID());
                                     Invt.SetPostal(lead.GetPostal());
@@ -174,7 +174,7 @@ namespace ViennaAdvantageServer.Process
                     if (MCapTarget.GetR_InterestArea_ID() != 0)
                     {
 
-                        query = "Select VAB_BusinessPartner_ID from R_ContactInterest where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_BusinessPartner_ID is not null";
+                        query = "Select VAB_BusinessPartner_ID from VAR_InterestedUser where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_BusinessPartner_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
@@ -192,17 +192,17 @@ namespace ViennaAdvantageServer.Process
                         //}
                         //dr.Close();
 
-                        query = "Select C_Lead_ID from vss_lead_interestarea where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and C_Lead_ID is not null";
+                        query = "Select VAB_Lead_ID from vss_lead_interestarea where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_Lead_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
 
-                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where C_Lead_id=" + Util.GetValueOfInt(dr[0]);
+                            string sql = "Select VAB_InviteeList_id from VAB_InviteeList where VAB_Lead_id=" + Util.GetValueOfInt(dr[0]);
                             object Leadid = DB.ExecuteScalar(sql, null, Get_Trx());
                             if (Util.GetValueOfInt(Leadid) == 0)
                             {
 
-                                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
+                                VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), Get_Trx());
                                 if (lead.GetVAB_BusinessPartner_ID() != 0)
                                 {
                                     invitee(lead.GetVAB_BusinessPartner_ID());
@@ -222,12 +222,12 @@ namespace ViennaAdvantageServer.Process
                                     Invt.SetName(lead.GetContactName());
                                     Invt.SetEMail(lead.GetEMail());
                                     Invt.SetPhone(lead.GetPhone());
-                                    Invt.SetC_Lead_ID(lead.GetC_Lead_ID());
+                                    Invt.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
                                     Invt.SetAddress1(lead.GetAddress1());
                                     Invt.SetAddress1(lead.GetAddress2());
                                     Invt.SetVAB_City_ID(lead.GetVAB_City_ID());
                                     Invt.SetCity(lead.GetCity());
-                                    Invt.SetC_Region_ID(lead.GetC_Region_ID());
+                                    Invt.SetVAB_RegionState_ID(lead.GetVAB_RegionState_ID());
                                     Invt.SetRegionName(lead.GetRegionName());
                                     Invt.SetVAB_Country_ID(lead.GetVAB_Country_ID());
                                     Invt.SetPostal(lead.GetPostal());
@@ -306,19 +306,19 @@ namespace ViennaAdvantageServer.Process
                 Invt.SetVAF_UserContact_ID(AD_Id);
             }
             // code added by Anuj 22/12/2015
-            String query1 = "Select C_location_ID from VAB_BPart_Location where VAB_BusinessPartner_id=" + bpid;
+            String query1 = "Select VAB_Address_ID from VAB_BPart_Location where VAB_BusinessPartner_id=" + bpid;
             int _location = Util.GetValueOfInt(DB.ExecuteScalar(query1, null, Get_Trx()));
             if (_location != 0)
             {
-                Invt.SetC_Location_ID(_location);
+                Invt.SetVAB_Address_ID(_location);
             }
             VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), AD_Id, Get_Trx());
             // Commented By Anuj 22/12/2015
             //int BpLoc = user.GetVAB_BPart_Location_ID();
             //if (BpLoc != 0)
             //{
-            //    String Sql = "Select C_Location_ID From VAB_BPart_Location where VAB_BPart_Location_id=" + BpLoc;
-            //    Invt.SetC_Location_ID(Util.GetValueOfInt(DB.ExecuteScalar(Sql)));
+            //    String Sql = "Select VAB_Address_ID From VAB_BPart_Location where VAB_BPart_Location_id=" + BpLoc;
+            //    Invt.SetVAB_Address_ID(Util.GetValueOfInt(DB.ExecuteScalar(Sql)));
             //}
             Invt.SetVAB_Promotion_ID(GetRecord_ID());
             Invt.SetName(user.GetName());

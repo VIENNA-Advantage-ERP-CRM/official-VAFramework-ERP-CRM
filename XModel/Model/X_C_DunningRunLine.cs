@@ -70,11 +70,11 @@ Set_Value ("VAB_Invoice_ID", VAB_Invoice_ID);}/** Get Invoice.
 public int GetVAB_Invoice_ID() {Object ii = Get_Value("VAB_Invoice_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());}/** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID){if (C_Payment_ID <= 0) Set_Value ("C_Payment_ID", null);else
-Set_Value ("C_Payment_ID", C_Payment_ID);}/** Get Payment.
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID){if (VAB_Payment_ID <= 0) Set_Value ("VAB_Payment_ID", null);else
+Set_Value ("VAB_Payment_ID", VAB_Payment_ID);}/** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() {Object ii = Get_Value("C_Payment_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Converted Amount.
+public int GetVAB_Payment_ID() {Object ii = Get_Value("VAB_Payment_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Converted Amount.
 @param ConvertedAmt Converted Amount */
 public void SetConvertedAmt (Decimal? ConvertedAmt){if (ConvertedAmt == null) throw new ArgumentException ("ConvertedAmt is mandatory.");Set_Value ("ConvertedAmt", (Decimal?)ConvertedAmt);}/** Get Converted Amount.
 @return Converted Amount */

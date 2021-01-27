@@ -119,7 +119,7 @@ namespace VAdvantage.Acct
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
             SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
-            MProject project = new MProject(GetCtx(), _issue.GetC_Project_ID(), null);
+            MProject project = new MProject(GetCtx(), _issue.GetVAB_Project_ID(), null);
             String ProjectCategory = project.GetProjectCategory();
             MProduct product = MProduct.Get(GetCtx(), _issue.GetM_Product_ID());
 
@@ -177,9 +177,9 @@ namespace VAdvantage.Acct
             Decimal? retValue = null;
             //	Uses PO Date
             String sql = "SELECT currencyConvert(ol.PriceActual, o.VAB_Currency_ID, @param1, o.DateOrdered, o.VAB_CurrencyType_ID, @param2, @param3) "
-                + "FROM C_OrderLine ol"
-                + " INNER JOIN M_InOutLine iol ON (iol.C_OrderLine_ID=ol.C_OrderLine_ID)"
-                + " INNER JOIN C_Order o ON (o.C_Order_ID=ol.C_Order_ID) "
+                + "FROM VAB_OrderLine ol"
+                + " INNER JOIN M_InOutLine iol ON (iol.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
+                + " INNER JOIN VAB_Order o ON (o.VAB_Order_ID=ol.VAB_Order_ID) "
                 + "WHERE iol.M_InOutLine_ID=@param4";
             IDataReader idr = null;
             try

@@ -18,10 +18,10 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 namespace VAdvantage.Model
 {
-    public class MProfitLossLines:X_C_ProfitLossLines,DocAction
+    public class MProfitLossLines:X_VAB_ProfitLossLines,DocAction
     {
-         public MProfitLossLines(Ctx ctx, int C_ProfitLossLines_ID, Trx trxName)
-            : base(ctx, C_ProfitLossLines_ID, trxName)
+         public MProfitLossLines(Ctx ctx, int VAB_ProfitLossLines_ID, Trx trxName)
+            : base(ctx, VAB_ProfitLossLines_ID, trxName)
         {
 
         }

@@ -17,20 +17,20 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelectionCheck : X_C_PaySelectionCheck
+    public class MPaySelectionCheck : X_VAB_PaymentOptionCheck
     {
 
         /**
          * 	Get Check for Payment
          *	@param ctx context
-         *	@param C_Payment_ID id
+         *	@param VAB_Payment_ID id
          *	@param trxName transaction
          *	@return pay selection check for payment or null
          */
-        public static MPaySelectionCheck GetOfPayment(Ctx ctx, int C_Payment_ID, Trx trxName)
+        public static MPaySelectionCheck GetOfPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
         {
             MPaySelectionCheck retValue = null;
-            String sql = "SELECT * FROM C_PaySelectionCheck WHERE C_Payment_ID=" + C_Payment_ID;
+            String sql = "SELECT * FROM VAB_PaymentOptionCheck WHERE VAB_Payment_ID=" + VAB_Payment_ID;
             int count = 0;
             DataTable dt = null;
             IDataReader idr = null;
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
             }
             if (count > 1)
             {
-                _log.Warning("More then one for C_Payment_ID=" + C_Payment_ID);
+                _log.Warning("More then one for VAB_Payment_ID=" + VAB_Payment_ID);
             }
             return retValue;
         }
@@ -78,22 +78,22 @@ namespace VAdvantage.Model
         /**
          * 	Create Check for Payment
          *	@param ctx context
-         *	@param C_Payment_ID id
+         *	@param VAB_Payment_ID id
          *	@param trxName transaction
          *	@return pay selection check for payment or null
          */
-        public static MPaySelectionCheck CreateForPayment(Ctx ctx, int C_Payment_ID, Trx trxName)
+        public static MPaySelectionCheck CreateForPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
         {
-            if (C_Payment_ID == 0)
+            if (VAB_Payment_ID == 0)
                 return null;
-            MPayment payment = new MPayment(ctx, C_Payment_ID, null);
+            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
             //	Map Payment Rule <- Tender Type
             String PaymentRule = PAYMENTRULE_Check;
-            if (payment.GetTenderType().Equals(X_C_Payment.TENDERTYPE_CreditCard))
+            if (payment.GetTenderType().Equals(X_VAB_Payment.TENDERTYPE_CreditCard))
                 PaymentRule = PAYMENTRULE_CreditCard;
-            else if (payment.GetTenderType().Equals(X_C_Payment.TENDERTYPE_DirectDebit))
+            else if (payment.GetTenderType().Equals(X_VAB_Payment.TENDERTYPE_DirectDebit))
                 PaymentRule = PAYMENTRULE_DirectDebit;
-            else if (payment.GetTenderType().Equals(X_C_Payment.TENDERTYPE_DirectDeposit))
+            else if (payment.GetTenderType().Equals(X_VAB_Payment.TENDERTYPE_DirectDeposit))
                 PaymentRule = PAYMENTRULE_DirectDeposit;
             //	else if (payment.GetTenderType().Equals(MPayment.TENDERTYPE_Check))
             //		PaymentRule = MPaySelectionCheck.PAYMENTRULE_Check;
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
             //	Create new PaySelection
             MPaySelection ps = new MPaySelection(ctx, 0, trxName);
             ps.SetVAB_Bank_Acct_ID(payment.GetVAB_Bank_Acct_ID());
-            ps.SetName(Msg.Translate(ctx, "C_Payment_ID") + ": " + payment.GetDocumentNo());
+            ps.SetName(Msg.Translate(ctx, "VAB_Payment_ID") + ": " + payment.GetDocumentNo());
             ps.SetDescription(payment.GetDescription());
             ps.SetPayDate(payment.GetDateTrx());
             ps.SetTotalAmt(payment.GetPayAmt());
@@ -125,7 +125,7 @@ namespace VAdvantage.Model
             //	Create new PaySelection Check
             MPaySelectionCheck psc = new MPaySelectionCheck(ps, PaymentRule);
             psc.SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
-            psc.SetC_Payment_ID(payment.GetC_Payment_ID());
+            psc.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
             psc.SetIsReceipt(payment.IsReceipt());
             psc.SetPayAmt(payment.GetPayAmt());
             psc.SetDiscountAmt(payment.GetDiscountAmt());
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             //	Update optional Line
             if (psl != null)
             {
-                psl.SetC_PaySelectionCheck_ID(psc.GetC_PaySelectionCheck_ID());
+                psl.SetVAB_PaymentOptionCheck_ID(psc.GetVAB_PaymentOptionCheck_ID());
                 psl.SetProcessed(true);
                 psl.Save();
             }
@@ -151,22 +151,22 @@ namespace VAdvantage.Model
         /**
          *  Get Checks of Payment Selection
          *
-         *  @param C_PaySelection_ID Payment Selection
+         *  @param VAB_PaymentOption_ID Payment Selection
          *  @param PaymentRule Payment Rule
          *  @param startDocumentNo start document no
          *	@param trxName transaction
          *  @return array of checks
          */
-        static public MPaySelectionCheck[] Get(int C_PaySelection_ID,
+        static public MPaySelectionCheck[] Get(int VAB_PaymentOption_ID,
             String PaymentRule, int startDocumentNo, Trx trxName)
         {
-            _log.Fine("C_PaySelection_ID=" + C_PaySelection_ID
+            _log.Fine("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID
                 + ", PaymentRule=" + PaymentRule + ", startDocumentNo=" + startDocumentNo);
             List<MPaySelectionCheck> list = new List<MPaySelectionCheck>();
 
             int docNo = startDocumentNo;
-            String sql = "SELECT * FROM C_PaySelectionCheck "
-                + "WHERE C_PaySelection_ID=" + C_PaySelection_ID + " AND PaymentRule='"
+            String sql = "SELECT * FROM VAB_PaymentOptionCheck "
+                + "WHERE VAB_PaymentOption_ID=" + VAB_PaymentOption_ID + " AND PaymentRule='"
                 + PaymentRule + "'";
             DataTable dt;
             IDataReader idr = null;
@@ -350,19 +350,19 @@ namespace VAdvantage.Model
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, VAB_Address a, VAB_RegionState r, VAB_Country cc "
                 + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
                 + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
                 + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
-                + " AND l.C_Location_ID=a.C_Location_ID"
-                + " AND a.C_Region_ID=r.C_Region_ID(+)"
+                + " AND l.VAB_Address_ID=a.VAB_Address_ID"
+                + " AND a.VAB_RegionState_ID=r.VAB_RegionState_ID(+)"
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BusinessPartner bp "
                 + "LEFT OUTER JOIN VAF_UserContact c ON (bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
                 + "INNER JOIN VAB_BPart_Location l ON (bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID) "
-                + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
-                + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
+                + "INNER JOIN VAB_Address a ON (l.VAB_Address_ID=a.VAB_Address_ID) "
+                + "LEFT OUTER JOIN VAB_RegionState r ON (a.VAB_RegionState_ID=r.VAB_RegionState_ID) "
                 + "INNER JOIN VAB_Country cc ON (a.VAB_Country_ID=cc.VAB_Country_ID) "
                 + "WHERE bp.VAB_BusinessPartner_ID= " + VAB_BusinessPartner_ID          // #1
                 + " ORDER BY l.IsBillTo DESC";
@@ -453,12 +453,12 @@ namespace VAdvantage.Model
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, VAB_Address a, VAB_RegionState r, VAB_Country cc "
                 + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
                 + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
                 + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
-                + " AND l.C_Location_ID=a.C_Location_ID"
-                + " AND a.C_Region_ID=r.C_Region_ID(+)"
+                + " AND l.VAB_Address_ID=a.VAB_Address_ID"
+                + " AND a.VAB_RegionState_ID=r.VAB_RegionState_ID(+)"
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BPart_Bank_Acct bpba "
@@ -530,10 +530,10 @@ namespace VAdvantage.Model
             for (int i = 0; i < checks.Length; i++)
             {
                 check = checks[i];
-                payment = new MPayment(check.GetCtx(), check.GetC_Payment_ID(), null);
+                payment = new MPayment(check.GetCtx(), check.GetVAB_Payment_ID(), null);
 
                 //	Existing Payment
-                if (check.GetC_Payment_ID() != 0)
+                if (check.GetVAB_Payment_ID() != 0)
                 {
                     //	Update check number
                     if (check.GetPaymentRule().Equals(PAYMENTRULE_Check))
@@ -568,7 +568,7 @@ namespace VAdvantage.Model
                             payment.SetCheckDate(check.GetParent().GetPayDate());               // Set Check date from Payment selection date
                         }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
-                            payment.SetTenderType(X_C_Payment.TENDERTYPE_CreditCard);
+                            payment.SetTenderType(X_VAB_Payment.TENDERTYPE_CreditCard);
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_DirectDeposit)
                             || check.GetPaymentRule().Equals(PAYMENTRULE_DirectDebit))
                             payment.SetBankACH(check);
@@ -577,7 +577,7 @@ namespace VAdvantage.Model
                             _log.Log(Level.SEVERE, "Unsupported Payment Rule=" + check.GetPaymentRule());
                             continue;
                         }
-                        payment.SetTrxType(X_C_Payment.TRXTYPE_CreditPayment);
+                        payment.SetTrxType(X_VAB_Payment.TRXTYPE_CreditPayment);
                         payment.SetAmount(check.GetParent().GetVAB_Currency_ID(), check.GetPayAmt());
                         payment.SetDiscountAmt(check.GetDiscountAmt());
                         payment.SetDateTrx(check.GetParent().GetPayDate());
@@ -599,9 +599,9 @@ namespace VAdvantage.Model
                         //	Link to Batch
                         if (batch != null)
                         {
-                            if (batch.GetC_PaymentBatch_ID() == 0)
+                            if (batch.GetVAB_PaymentBatch_ID() == 0)
                                 batch.Save();	//	new
-                            payment.SetC_PaymentBatch_ID(batch.GetC_PaymentBatch_ID());
+                            payment.SetVAB_PaymentBatch_ID(batch.GetVAB_PaymentBatch_ID());
                         }
 
                         //	Link to Invoice
@@ -664,7 +664,7 @@ namespace VAdvantage.Model
                                 for (int j = 0; j < psls.Length; j++)
                                 {
                                     MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
-                                    PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
+                                    PayAlocate.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                                     PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
                                     PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
@@ -691,14 +691,14 @@ namespace VAdvantage.Model
                             #endregion
                         }
                         //
-                        int C_Payment_ID = payment.Get_ID();
-                        if (C_Payment_ID < 1)
+                        int VAB_Payment_ID = payment.Get_ID();
+                        if (VAB_Payment_ID < 1)
                         {
                             _log.Log(Level.SEVERE, "Payment not created=" + check);
                         }
                         else
                         {
-                            check.SetC_Payment_ID(C_Payment_ID);
+                            check.SetVAB_Payment_ID(VAB_Payment_ID);
                             check.Save();	//	Payment process needs it
                             //	Should start WF
                             payment.ProcessIt(DocActionVariables.ACTION_COMPLETE);
@@ -728,7 +728,7 @@ namespace VAdvantage.Model
                             payment.SetCheckDate(check.GetParent().GetPayDate());                   // Set Check date from Payment selection date
                         }
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_CreditCard))
-                            payment.SetTenderType(X_C_Payment.TENDERTYPE_CreditCard);
+                            payment.SetTenderType(X_VAB_Payment.TENDERTYPE_CreditCard);
                         else if (check.GetPaymentRule().Equals(PAYMENTRULE_DirectDeposit)
                             || check.GetPaymentRule().Equals(PAYMENTRULE_DirectDebit))
                             payment.SetBankACH(check);
@@ -737,7 +737,7 @@ namespace VAdvantage.Model
                             _log.Log(Level.SEVERE, "Unsupported Payment Rule=" + check.GetPaymentRule());
                             continue;
                         }
-                        payment.SetTrxType(X_C_Payment.TRXTYPE_CreditPayment);
+                        payment.SetTrxType(X_VAB_Payment.TRXTYPE_CreditPayment);
                         payment.SetAmount(check.GetParent().GetVAB_Currency_ID(), check.GetPayAmt());
                         payment.SetDiscountAmt(check.GetDiscountAmt());
                         payment.SetDateTrx(check.GetParent().GetPayDate());
@@ -745,9 +745,9 @@ namespace VAdvantage.Model
                         //	Link to Batch
                         if (batch != null)
                         {
-                            if (batch.GetC_PaymentBatch_ID() == 0)
+                            if (batch.GetVAB_PaymentBatch_ID() == 0)
                                 batch.Save();	//	new
-                            payment.SetC_PaymentBatch_ID(batch.GetC_PaymentBatch_ID());
+                            payment.SetVAB_PaymentBatch_ID(batch.GetVAB_PaymentBatch_ID());
                         }
                         //	Link to Invoice
                         psls = check.GetPaySelectionLines(false);
@@ -787,7 +787,7 @@ namespace VAdvantage.Model
                                 for (int j = 0; j < psls.Length; j++)
                                 {
                                     MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
-                                    PayAlocate.SetC_Payment_ID(payment.GetC_Payment_ID());
+                                    PayAlocate.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                                     PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
                                     PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
                                     PayAlocate.SetDiscountAmt(psls[j].GetDiscountAmt());
@@ -814,14 +814,14 @@ namespace VAdvantage.Model
                             #endregion
                         }
                         //
-                        int C_Payment_ID = payment.Get_ID();
-                        if (C_Payment_ID < 1)
+                        int VAB_Payment_ID = payment.Get_ID();
+                        if (VAB_Payment_ID < 1)
                         {
                             _log.Log(Level.SEVERE, "Payment not created=" + check);
                         }
                         else
                         {
-                            check.SetC_Payment_ID(C_Payment_ID);
+                            check.SetVAB_Payment_ID(VAB_Payment_ID);
                             check.Save();	//	Payment process needs it
                             //	Should start WF
                             payment.ProcessIt(DocActionVariables.ACTION_COMPLETE);
@@ -891,15 +891,15 @@ namespace VAdvantage.Model
         /**
          *	Constructor
          *  @param ctx context
-         *  @param C_PaySelectionCheck_ID C_PaySelectionCheck_ID
+         *  @param VAB_PaymentOptionCheck_ID VAB_PaymentOptionCheck_ID
          *	@param trxName transaction
          */
-        public MPaySelectionCheck(Ctx ctx, int C_PaySelectionCheck_ID, Trx trxName) :
-            base(ctx, C_PaySelectionCheck_ID, trxName)
+        public MPaySelectionCheck(Ctx ctx, int VAB_PaymentOptionCheck_ID, Trx trxName) :
+            base(ctx, VAB_PaymentOptionCheck_ID, trxName)
         {
-            if (C_PaySelectionCheck_ID == 0)
+            if (VAB_PaymentOptionCheck_ID == 0)
             {
-                //	SetC_PaySelection_ID (0);
+                //	SetVAB_PaymentOption_ID (0);
                 //	SetVAB_BusinessPartner_ID (0);
                 //	SetPaymentRule (null);
                 SetPayAmt(Env.ZERO);
@@ -930,11 +930,11 @@ namespace VAdvantage.Model
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
             SetClientOrg(line);
-            SetC_PaySelection_ID(line.GetC_PaySelection_ID());
+            SetVAB_PaymentOption_ID(line.GetVAB_PaymentOption_ID());
             int VAB_BusinessPartner_ID = line.GetInvoice().GetVAB_BusinessPartner_ID();
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             //
-            if (X_C_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
+            if (X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
             {
                 MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
                     }
                 }
             }
-            else if (X_C_Order.PAYMENTRULE_DirectDeposit.Equals(PaymentRule))
+            else if (X_VAB_Order.PAYMENTRULE_DirectDeposit.Equals(PaymentRule))
             {
                 MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
@@ -977,7 +977,7 @@ namespace VAdvantage.Model
             : this(ps.GetCtx(), 0, ps.Get_TrxName())
         {
             SetClientOrg(ps);
-            SetC_PaySelection_ID(ps.GetC_PaySelection_ID());
+            SetVAB_PaymentOption_ID(ps.GetVAB_PaymentOption_ID());
             SetPaymentRule(PaymentRule);
         }
 
@@ -1017,7 +1017,7 @@ namespace VAdvantage.Model
         public MPaySelection GetParent()
         {
             if (_parent == null)
-                _parent = new MPaySelection(GetCtx(), GetC_PaySelection_ID(), Get_TrxName());
+                _parent = new MPaySelection(GetCtx(), GetVAB_PaymentOption_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -1038,8 +1038,8 @@ namespace VAdvantage.Model
          */
         public Boolean IsDirect()
         {
-            return (X_C_Order.PAYMENTRULE_DirectDeposit.Equals(GetPaymentRule())
-                || X_C_Order.PAYMENTRULE_DirectDebit.Equals(GetPaymentRule()));
+            return (X_VAB_Order.PAYMENTRULE_DirectDeposit.Equals(GetPaymentRule())
+                || X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(GetPaymentRule()));
         }
 
         /**
@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
             if (_lines != null && !requery)
                 return _lines;
             List<MPaySelectionLine> list = new List<MPaySelectionLine>();
-            String sql = "SELECT * FROM C_PaySelectionLine WHERE C_PaySelectionCheck_ID=" + GetC_PaySelectionCheck_ID() + " ORDER BY Line";
+            String sql = "SELECT * FROM VAB_PaymentOptionLine WHERE VAB_PaymentOptionCheck_ID=" + GetVAB_PaymentOptionCheck_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -1108,7 +1108,7 @@ namespace VAdvantage.Model
         //public MPaySelectionLine[] GetPaySelectionLinesAgainsPaySelection()
         //{
         //    List<MPaySelectionLine> list = new List<MPaySelectionLine>();
-        //    String sql = "SELECT * FROM C_PaySelectionLine WHERE C_PaySelection_ID=" + GetC_PaySelection_ID() + " ORDER BY Line";
+        //    String sql = "SELECT * FROM VAB_PaymentOptionLine WHERE VAB_PaymentOption_ID=" + GetVAB_PaymentOption_ID() + " ORDER BY Line";
         //    DataTable dt = null;
         //    IDataReader idr = null;
         //    try

@@ -9,40 +9,40 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_Withholding
+    using System.Data;/** Generated Model for VAB_Withholding
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Withholding : PO
+    public class X_VAB_Withholding : PO
     {
-        public X_C_Withholding(Context ctx, int C_Withholding_ID, Trx trxName) : base(ctx, C_Withholding_ID, trxName)
-        {/** if (C_Withholding_ID == 0){SetC_PaymentTerm_ID (0);SetC_Withholding_ID (0);SetIsPaidTo3Party (false);SetIsPercentWithholding (false);SetIsTaxProrated (false);SetIsTaxWithholding (false);SetName (null);} */
+        public X_VAB_Withholding(Context ctx, int VAB_Withholding_ID, Trx trxName) : base(ctx, VAB_Withholding_ID, trxName)
+        {/** if (VAB_Withholding_ID == 0){SetVAB_PaymentTerm_ID (0);SetVAB_Withholding_ID (0);SetIsPaidTo3Party (false);SetIsPercentWithholding (false);SetIsTaxProrated (false);SetIsTaxWithholding (false);SetName (null);} */
         }
-        public X_C_Withholding(Ctx ctx, int C_Withholding_ID, Trx trxName) : base(ctx, C_Withholding_ID, trxName)
-        {/** if (C_Withholding_ID == 0){SetC_PaymentTerm_ID (0);SetC_Withholding_ID (0);SetIsPaidTo3Party (false);SetIsPercentWithholding (false);SetIsTaxProrated (false);SetIsTaxWithholding (false);SetName (null);} */
+        public X_VAB_Withholding(Ctx ctx, int VAB_Withholding_ID, Trx trxName) : base(ctx, VAB_Withholding_ID, trxName)
+        {/** if (VAB_Withholding_ID == 0){SetVAB_PaymentTerm_ID (0);SetVAB_Withholding_ID (0);SetIsPaidTo3Party (false);SetIsPercentWithholding (false);SetIsTaxProrated (false);SetIsTaxWithholding (false);SetName (null);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Withholding(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Withholding(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Withholding(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Withholding(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Withholding(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_Withholding(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_Withholding() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_Withholding() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27866464672807L;/** Last Updated Timestamp 3/16/2020 11:45:56 AM */
         public static long updatedMS = 1584339356018L;/** VAF_TableView_ID=304 */
         public static int Table_ID; // =304;
-                                    /** TableName=C_Withholding */
-        public static String Table_Name = "C_Withholding";
+                                    /** TableName=VAB_Withholding */
+        public static String Table_Name = "VAB_Withholding";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Withholding[").Append(Get_ID()).Append("]"); return sb.ToString(); }
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_Withholding[").Append(Get_ID()).Append("]"); return sb.ToString(); }
         /** Beneficiary_ID VAF_Control_Ref_ID=138 */
         public static int BENEFICIARY_ID_VAF_Control_Ref_ID = 138;/** Set Beneficiary.
 @param Beneficiary_ID Business Partner to whom payment is made */
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         }/** Get Beneficiary.
 @return Business Partner to whom payment is made */
         public int GetBeneficiary_ID() { Object ii = Get_Value("Beneficiary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment Term.
-@param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID) { if (C_PaymentTerm_ID < 1) throw new ArgumentException("C_PaymentTerm_ID is mandatory."); Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID); }/** Get Payment Term.
+@param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID) { if (VAB_PaymentTerm_ID < 1) throw new ArgumentException("VAB_PaymentTerm_ID is mandatory."); Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID); }/** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID() { Object ii = Get_Value("C_PaymentTerm_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Withholding.
-@param C_Withholding_ID Withholding type defined */
-        public void SetC_Withholding_ID(int C_Withholding_ID) { if (C_Withholding_ID < 1) throw new ArgumentException("C_Withholding_ID is mandatory."); Set_ValueNoCheck("C_Withholding_ID", C_Withholding_ID); }/** Get Withholding.
+        public int GetVAB_PaymentTerm_ID() { Object ii = Get_Value("VAB_PaymentTerm_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Withholding.
+@param VAB_Withholding_ID Withholding type defined */
+        public void SetVAB_Withholding_ID(int VAB_Withholding_ID) { if (VAB_Withholding_ID < 1) throw new ArgumentException("VAB_Withholding_ID is mandatory."); Set_ValueNoCheck("VAB_Withholding_ID", VAB_Withholding_ID); }/** Get Withholding.
 @return Withholding type defined */
-        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
+        public int GetVAB_Withholding_ID() { Object ii = Get_Value("VAB_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
 @param Description Optional short description of the record */
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
@@ -206,15 +206,15 @@ namespace VAdvantage.Model
         public String GetTransactionType() { return (String)Get_Value("TransactionType"); }
 
         /** Set Withholding Category.
-@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
-        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+@param VAB_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetVAB_WithholdingCategory_ID(int VAB_WithholdingCategory_ID)
         {
-            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            if (VAB_WithholdingCategory_ID <= 0) Set_Value("VAB_WithholdingCategory_ID", null);
             else
-                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+                Set_Value("VAB_WithholdingCategory_ID", VAB_WithholdingCategory_ID);
         }/** Get Withholding Category.
 @return This field represents the withholding category linked with respective withholding tax. */
-        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_WithholdingCategory_ID() { Object ii = Get_Value("VAB_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Country.
 @param VAB_Country_ID Country  */
@@ -228,15 +228,15 @@ namespace VAdvantage.Model
         public int GetVAB_Country_ID() { Object ii = Get_Value("VAB_Country_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Region.
-@param C_Region_ID Identifies a geographical Region */
-        public void SetC_Region_ID(int C_Region_ID)
+@param VAB_RegionState_ID Identifies a geographical Region */
+        public void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            if (VAB_RegionState_ID <= 0) Set_Value("VAB_RegionState_ID", null);
             else
-                Set_Value("C_Region_ID", C_Region_ID);
+                Set_Value("VAB_RegionState_ID", VAB_RegionState_ID);
         }/** Get Region.
 @return Identifies a geographical Region */
-        public int GetC_Region_ID() { Object ii = Get_Value("C_Region_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_RegionState_ID() { Object ii = Get_Value("VAB_RegionState_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
     }

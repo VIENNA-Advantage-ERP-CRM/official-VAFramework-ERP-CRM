@@ -1328,7 +1328,7 @@ namespace VAdvantage.Model
             /**********************************/
             else if (colName.Equals("Orig_Order_ID"))
             {
-                refColName = "C_Order_ID";
+                refColName = "VAB_Order_ID";
             }
             else if (colName.Equals("Orig_InOut_ID"))
             {
@@ -1765,7 +1765,7 @@ namespace VAdvantage.Model
             /**
              * Load Order Type from VAB_DocTypesTarget_ID
              */
-            if (_vo.TableName.Equals("C_Order"))
+            if (_vo.TableName.Equals("VAB_Order"))
             {
                 int C_DocTyp_ID = 0;
                 //int target = (Integer)GetValue("VAB_DocTypesTarget_ID");
@@ -3036,20 +3036,20 @@ namespace VAdvantage.Model
             }
 
             ////	Order || Invoice
-            else if (_vo.TableName.StartsWith("C_Order") || _vo.TableName.StartsWith("VAB_Invoice"))
+            else if (_vo.TableName.StartsWith("VAB_Order") || _vo.TableName.StartsWith("VAB_Invoice"))
             {
                 int Record_ID;
-                bool isOrder = _vo.TableName.StartsWith("C_Order");
+                bool isOrder = _vo.TableName.StartsWith("VAB_Order");
                 //
                 StringBuilder sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
                     + "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.VAB_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) AS ConvAmt ");
                 if (isOrder)
                 {
-                    Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "C_Order_ID");
-                    sql.Append("FROM C_Order o"
+                    Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "VAB_Order_ID");
+                    sql.Append("FROM VAB_Order o"
                         + " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
-                        + " INNER JOIN C_OrderLine l ON (o.C_Order_ID=l.C_Order_ID) "
-                        + "WHERE o.C_Order_ID=" + Record_ID);
+                        + " INNER JOIN VAB_OrderLine l ON (o.VAB_Order_ID=l.VAB_Order_ID) "
+                        + "WHERE o.VAB_Order_ID=" + Record_ID);
                 }
                 else
                 {

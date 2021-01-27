@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //Send RfQ				
         private bool _IsSendRfQ = false;
         //	RfQ						
-        private int _C_RfQ_ID = 0;
+        private int _VAB_RFQ_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -54,7 +54,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_RfQ_ID = GetRecord_ID();
+            _VAB_RFQ_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (translated text)</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _C_RfQ_ID, Get_TrxName());
+            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             log.Info("doIt - " + rfq + ", Send=" + _IsSendRfQ);
             ////ErrorLog.FillErrorLog("", "", "doIt - " + rfq + ", Send=" + _IsSendRfQ, VAdvantage.Framework.Message.MessageType.INFORMATION);
             String error = rfq.CheckQuoteTotalAmtOnly();
@@ -80,7 +80,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MRfQResponse[] responses = rfq.GetResponses(false, false);
 
             //	Topic
-            MRfQTopic topic = new MRfQTopic(GetCtx(), rfq.GetC_RfQ_Topic_ID(), Get_TrxName());
+            MRfQTopic topic = new MRfQTopic(GetCtx(), rfq.GetVAB_RFQ_Subject_ID(), Get_TrxName());
             MRfQTopicSubscriber[] subscribers = topic.GetSubscribers();
             for (int i = 0; i < subscribers.Length; i++)
             {

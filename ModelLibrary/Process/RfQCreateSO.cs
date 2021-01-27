@@ -28,7 +28,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class RfQCreateSO : ProcessEngine.SvrProcess
     {
         //	RfQ 			
-        private int _C_RfQ_ID = 0;
+        private int _VAB_RFQ_ID = 0;
         private int _VAB_DocTypes_ID = 0;
         //Variable Declaration
         private int VA009_PaymentMethod_ID = 0;
@@ -59,7 +59,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            _C_RfQ_ID = GetRecord_ID();
+            _VAB_RFQ_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _C_RfQ_ID, Get_TrxName());
+            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -138,7 +138,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         MOrderLine ol = new MOrderLine(order);
                         ol.SetM_Product_ID(line.GetM_Product_ID(),
-                            qty.GetC_UOM_ID());
+                            qty.GetVAB_UOM_ID());
                         ol.SetDescription(line.GetDescription());
                         ol.SetQty(qty.GetQty());
                         //
@@ -171,7 +171,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }	//	Offer Qty
                 }	//	All Qtys
             }	//	All Lines
-            rfq.SetC_Order_ID(order.GetC_Order_ID());
+            rfq.SetVAB_Order_ID(order.GetVAB_Order_ID());
             rfq.Save();
             return order.GetDocumentNo();
         }

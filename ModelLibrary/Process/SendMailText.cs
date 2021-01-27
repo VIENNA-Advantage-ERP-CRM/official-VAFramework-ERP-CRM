@@ -170,7 +170,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //
             String sql = "SELECT u.Name, u.EMail, u.VAF_UserContact_ID "
-                + "FROM R_ContactInterest ci"
+                + "FROM VAR_InterestedUser ci"
                 + " INNER JOIN VAF_UserContact u ON (ci.VAF_UserContact_ID=u.VAF_UserContact_ID) "
                 + "WHERE ci.IsActive='Y' AND u.IsActive='Y'"
                 + " AND ci.OptOutDate IS NULL"

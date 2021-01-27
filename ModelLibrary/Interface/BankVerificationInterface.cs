@@ -61,7 +61,7 @@ namespace VAdvantage.Model
          * 	Validate Credit Card Number.
          * 	(not used at the moment)
          *	@param creditCardNumber credit card number
-         *	@param creditCardType credit card type X_C_Payment.CREDITCARDTYPE_
+         *	@param creditCardType credit card type X_VAB_Payment.CREDITCARDTYPE_
          *	@return error message or null
          */
         String ValidateCreditCardNumber(String creditCardNumber, String creditCardType);

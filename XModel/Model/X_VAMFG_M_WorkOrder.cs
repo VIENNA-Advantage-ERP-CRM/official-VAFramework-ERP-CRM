@@ -21,7 +21,7 @@ public X_VAMFG_M_WorkOrder (Context ctx, int VAMFG_M_WorkOrder_ID, Trx trxName) 
 /** if (VAMFG_M_WorkOrder_ID == 0)
 {
 SetVAB_DocTypes_ID (0);
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetDocAction (null);	// PR
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
@@ -49,7 +49,7 @@ public X_VAMFG_M_WorkOrder (Ctx ctx, int VAMFG_M_WorkOrder_ID, Trx trxName) : ba
 /** if (VAMFG_M_WorkOrder_ID == 0)
 {
 SetVAB_DocTypes_ID (0);
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetDocAction (null);	// PR
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
@@ -266,65 +266,65 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order Line.
-@param C_OrderLine_ID Order Line */
-public void SetC_OrderLine_ID (int C_OrderLine_ID)
+@param VAB_OrderLine_ID Order Line */
+public void SetVAB_OrderLine_ID (int VAB_OrderLine_ID)
 {
-if (C_OrderLine_ID <= 0) Set_Value ("C_OrderLine_ID", null);
+if (VAB_OrderLine_ID <= 0) Set_Value ("VAB_OrderLine_ID", null);
 else
-Set_Value ("C_OrderLine_ID", C_OrderLine_ID);
+Set_Value ("VAB_OrderLine_ID", VAB_OrderLine_ID);
 }
 /** Get Order Line.
 @return Order Line */
-public int GetC_OrderLine_ID() 
+public int GetVAB_OrderLine_ID() 
 {
-Object ii = Get_Value("C_OrderLine_ID");
+Object ii = Get_Value("VAB_OrderLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order.
-@param C_Order_ID Sales Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Sales Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_Value ("VAB_Order_ID", null);
 else
-Set_Value ("C_Order_ID", C_Order_ID);
+Set_Value ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Sales Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Business Opportunity */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Opportunity.
 @return Business Opportunity */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_Value ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

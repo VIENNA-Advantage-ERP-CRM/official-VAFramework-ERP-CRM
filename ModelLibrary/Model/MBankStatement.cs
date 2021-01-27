@@ -466,7 +466,7 @@ namespace VAdvantage.Model
         public String CompleteIt()
         {
             //added by shubham (JID_1472) To check payment is complete or close
-            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(c_payment_id) FROM c_payment WHERE c_payment_id in ((SELECT c_payment_id from VAB_BankingJRNLline WHERE VAB_BankingJRNL_id =" + GetVAB_BankingJRNL_ID() + " AND c_payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
+            int docStatus = Util.GetValueOfInt(DB.ExecuteScalar("SELECT count(VAB_Payment_id) FROM VAB_Payment WHERE VAB_Payment_id in ((SELECT VAB_Payment_id from VAB_BankingJRNLline WHERE VAB_BankingJRNL_id =" + GetVAB_BankingJRNL_ID() + " AND VAB_Payment_id > 0)) AND docstatus NOT IN ('CO' , 'CL')", null, Get_Trx()));
             if (docStatus != 0)
             {
                 m_processMsg = Msg.GetMsg(GetCtx(), "paymentnotcompleted");
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
             foreach (MBankStatementLine line in lines)
             {
                 // if Transaction amount exist but no payment reference or Charge amount exist with no Charge then give message for Unmatched lines
-                if ((line.GetTrxAmt() != Env.ZERO && line.GetC_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetVAB_Charge_ID() == 0))
+                if ((line.GetTrxAmt() != Env.ZERO && line.GetVAB_Payment_ID() == 0) || (line.GetChargeAmt() != Env.ZERO && line.GetVAB_Charge_ID() == 0))
                 {
                     m_processMsg = Msg.GetMsg(Env.GetCtx(), "LinesNotMatchedYet");
                     return DocActionVariables.STATUS_INVALID;
@@ -511,9 +511,9 @@ namespace VAdvantage.Model
             {
                 MBankStatementLine line = lines[i];
                 transactionAmt += line.GetTrxAmt();
-                if (line.GetC_Payment_ID() != 0)
+                if (line.GetVAB_Payment_ID() != 0)
                 {
-                    MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
+                    MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                     payment.SetIsReconciled(true);
                     if (_CountVA034 > 0)
                         payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
@@ -550,9 +550,9 @@ namespace VAdvantage.Model
                 for (int i = 0; i < STlines.Length; i++)
                 {
                     MBankStatementLine line = STlines[i];
-                    if (line.GetC_Payment_ID() != 0)
+                    if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
+                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         payment.SetVA009_ExecutionStatus("R");
                         if (_CountVA034 > 0)
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
@@ -565,7 +565,7 @@ namespace VAdvantage.Model
                         // update execution status as received on Invoice Schedule -  for those payment which are completed or closed
                         if (payment.GetDocStatus() == DOCSTATUS_Closed || payment.GetDocStatus() == DOCSTATUS_Completed)
                         {
-                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment SET VA009_ExecutionStatus = 'R' WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                            int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment SET VA009_ExecutionStatus = 'R' WHERE VAB_Payment_ID = " + line.GetVAB_Payment_ID(), null, Get_Trx()));
                         }
                     }
                 }
@@ -664,9 +664,9 @@ namespace VAdvantage.Model
                     line.SetChargeAmt(Env.ZERO);
                     line.SetInterestAmt(Env.ZERO);
                     line.Save(Get_TrxName());
-                    if (line.GetC_Payment_ID() != 0)
+                    if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
+                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         payment.SetIsReconciled(false);
                         payment.Save(Get_TrxName());
                     }
@@ -685,9 +685,9 @@ namespace VAdvantage.Model
                 for (int i = 0; i < STlines.Length; i++)
                 {
                     MBankStatementLine line = STlines[i];
-                    if (line.GetC_Payment_ID() != 0)
+                    if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_TrxName());
+                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         string _paymentMethod = Util.GetValueOfString(DB.ExecuteScalar("Select va009_paymentbaseType from va009_paymentmethod where va009_paymentmethod_id=" + payment.GetVA009_PaymentMethod_ID() + " And IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (_paymentMethod == "S") // Check
                             status = "B"; // Bounced
@@ -706,7 +706,7 @@ namespace VAdvantage.Model
                         {
                             int no = Util.GetValueOfInt(DB.ExecuteQuery(@"UPDATE VAB_sched_InvoicePayment
                                                                           SET VA009_ExecutionStatus = '" + payment.GetVA009_ExecutionStatus() + @"'  
-                                                                          WHERE C_Payment_ID = " + line.GetC_Payment_ID(), null, Get_Trx()));
+                                                                          WHERE VAB_Payment_ID = " + line.GetVAB_Payment_ID(), null, Get_Trx()));
                         }
                     }
                 }

@@ -26,8 +26,8 @@ namespace VIS.Models
             projID = Util.GetValueOfInt(paramValue[2].ToString());
             ProductID = Util.GetValueOfInt(paramValue[3].ToString());
             Dictionary<string, object> result = null;
-            string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID IN (SELECT C_ProjectPhase_ID FROM" +
-                    " C_ProjectTask WHERE C_ProjectTask_ID = " + TaskID + ")";
+            string Sql = "SELECT VAB_Project_ID FROM VAB_ProjectStage WHERE VAB_ProjectStage_ID IN (SELECT VAB_ProjectStage_ID FROM" +
+                    " VAB_ProjectJob WHERE VAB_ProjectJob_ID = " + TaskID + ")";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
             if (id > 0)
             {
@@ -35,7 +35,7 @@ namespace VIS.Models
             }
             else
             {
-                Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID = " + phaseID;
+                Sql = "SELECT VAB_Project_ID FROM VAB_ProjectStage WHERE VAB_ProjectStage_ID = " + phaseID;
                 id = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
                 if (id > 0)
                 {
@@ -44,7 +44,7 @@ namespace VIS.Models
             }
             //Issue ID= SI_0468 Reported by Ankita Work Done by Manjot 
             //To get the actual value from the right field
-            Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM C_Project c WHERE c.C_Project_ID = "
+            Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM VAB_Project c WHERE c.VAB_Project_ID = "
                 + projID + ")  AND M_Product_ID=" + ProductID;
             DataSet ds = DB.ExecuteDataset(Sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -65,15 +65,15 @@ namespace VIS.Models
             TaskID = Util.GetValueOfInt(paramValue[0].ToString());
             projID = Util.GetValueOfInt(paramValue[1].ToString());
             ProductID = Util.GetValueOfInt(paramValue[2].ToString());
-            string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID IN (SELECT C_ProjectPhase_ID FROM" +
-                    " C_ProjectTask WHERE C_ProjectTask_ID = " + TaskID + ")";
+            string Sql = "SELECT VAB_Project_ID FROM VAB_ProjectStage WHERE VAB_ProjectStage_ID IN (SELECT VAB_ProjectStage_ID FROM" +
+                    " VAB_ProjectJob WHERE VAB_ProjectJob_ID = " + TaskID + ")";
             int id = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
             if (id > 0)
             {
                 projID = id;
             }
 
-            Sql = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM  C_Project c WHERE c.C_Project_ID = "
+            Sql = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM  VAB_Project c WHERE c.VAB_Project_ID = "
                 + projID + ")  AND M_Product_ID=" + ProductID;
             Decimal PriceLimit = Util.GetValueOfDecimal(DB.ExecuteScalar(Sql, null, null));
             return PriceLimit;

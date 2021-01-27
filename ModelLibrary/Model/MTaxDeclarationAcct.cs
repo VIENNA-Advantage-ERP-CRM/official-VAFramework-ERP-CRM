@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTaxDeclarationAcct
  * Purpose        : Tax Tax Declaration Accounting Model
- * Class Used     : X_C_TaxDeclarationAcct
+ * Class Used     : X_VAB_TaxComputationAcct
  * Chronological    Development
  * Deepak           20-Nov-2009
   ******************************************************/
@@ -22,17 +22,17 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxDeclarationAcct : X_C_TaxDeclarationAcct
+    public class MTaxDeclarationAcct : X_VAB_TaxComputationAcct
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="C_TaxDeclarationAcct_ID">id</param>
+        /// <param name="VAB_TaxComputationAcct_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclarationAcct(Context ctx, int C_TaxDeclarationAcct_ID, Trx trxName):base(ctx, C_TaxDeclarationAcct_ID, trxName)
+        public MTaxDeclarationAcct(Context ctx, int VAB_TaxComputationAcct_ID, Trx trxName):base(ctx, VAB_TaxComputationAcct_ID, trxName)
         {
-           // super(ctx, C_TaxDeclarationAcct_ID, trxName);
+           // super(ctx, VAB_TaxComputationAcct_ID, trxName);
         }	//	MTaxDeclarationAcct
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace VAdvantage.Model
         {
             //super(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(fact);
-            SetC_TaxDeclaration_ID(parent.GetC_TaxDeclaration_ID());
+            SetVAVAB_TaxRateComputation_ID(parent.GetVAVAB_TaxRateComputation_ID());
             //
-            SetFact_Acct_ID(fact.GetFact_Acct_ID());
+            SetActual_Acct_Detail_ID(fact.GetActual_Acct_Detail_ID());
             SetVAB_AccountBook_ID(fact.GetVAB_AccountBook_ID());
         }	//	MTaxDeclarationAcct
 

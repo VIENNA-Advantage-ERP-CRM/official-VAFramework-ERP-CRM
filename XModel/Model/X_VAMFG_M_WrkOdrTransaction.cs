@@ -21,7 +21,7 @@ public X_VAMFG_M_WrkOdrTransaction (Context ctx, int VAMFG_M_WrkOdrTransaction_I
 /** if (VAMFG_M_WrkOdrTransaction_ID == 0)
 {
 SetVAB_DocTypes_ID (0);
-SetC_UOM_ID (0);	// @#C_UOM_ID@
+SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
 SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
@@ -48,7 +48,7 @@ public X_VAMFG_M_WrkOdrTransaction (Ctx ctx, int VAMFG_M_WrkOdrTransaction_ID, T
 /** if (VAMFG_M_WrkOdrTransaction_ID == 0)
 {
 SetVAB_DocTypes_ID (0);
-SetC_UOM_ID (0);	// @#C_UOM_ID@
+SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
 SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
@@ -266,33 +266,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Business Opportunity */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Opportunity.
 @return Business Opportunity */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_Value ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

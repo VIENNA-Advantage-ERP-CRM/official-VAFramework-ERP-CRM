@@ -67,19 +67,19 @@
                 m_where += " OR VAB_BusinessPartner_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 259) {// MOrder.Table_ID){
-                m_where += " OR C_Order_ID=" + Record_ID;
+                m_where += " OR VAB_Order_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 318) {//MInvoice.Table_ID){
                 m_where += " OR VAB_Invoice_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 335) {// MPayment.Table_ID){
-                m_where += " OR C_Payment_ID=" + Record_ID;
+                m_where += " OR VAB_Payment_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 208) {//MProduct.Table_ID){
                 m_where += " OR M_Product_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 203) {//MProject.Table_ID){
-                m_where += " OR C_Project_ID=" + Record_ID;
+                m_where += " OR VAB_Project_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 539) {// MAsset.Table_ID){
                 m_where += " OR VAA_Asset_ID=" + Record_ID;
@@ -171,19 +171,19 @@
                         tab.setValue("VAF_UserContact_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 203)// MProject.Table_ID)
-                        tab.setValue("C_Project_ID", Record_ID);
+                        tab.setValue("VAB_Project_ID", Record_ID);
                     else if (VAF_TableView_ID == 539)// MAsset.Table_ID)
                         tab.setValue("VAA_Asset_ID", Record_ID);
 
                     else if (VAF_TableView_ID == 259)
-                        tab.setValue("C_Order_ID", Record_ID);
+                        tab.setValue("VAB_Order_ID", Record_ID);
                     else if (VAF_TableView_ID == 318)//MInvoice.Table_ID)
                         tab.setValue("VAB_Invoice_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 208)//MProduct.Table_ID)
                         tab.setValue("M_Product_ID", Record_ID);
                     else if (VAF_TableView_ID == 335)//MPayment.Table_ID)
-                        tab.setValue("C_Payment_ID", Record_ID);
+                        tab.setValue("VAB_Payment_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 319)// MInOut.Table_ID)
                         tab.setValue("M_InOut_ID", Record_ID);

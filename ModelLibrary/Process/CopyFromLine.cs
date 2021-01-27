@@ -10,7 +10,7 @@ namespace VAdvantage.Process
 {
    public class CopyFromLine : SvrProcess
     {
-        private int _GL_Journal_ID = 0;
+        private int _VAGL_JRNL_ID = 0;
 
         protected override void Prepare()
         {
@@ -22,9 +22,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("GL_Journal_ID"))
+                else if (name.Equals("VAGL_JRNL_ID"))
                 {
-                    _GL_Journal_ID = Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAGL_JRNL_ID = Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else
                 {
@@ -35,18 +35,18 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            int To_GL_Journal_ID = GetRecord_ID();
-            log.Info("doIt - From GL_JournalBatch_ID=" + _GL_Journal_ID + " to " + To_GL_Journal_ID);
-            if (To_GL_Journal_ID == 0)
+            int To_VAGL_JRNL_ID = GetRecord_ID();
+            log.Info("doIt - From VAGL_BatchJRNL_ID=" + _VAGL_JRNL_ID + " to " + To_VAGL_JRNL_ID);
+            if (To_VAGL_JRNL_ID == 0)
             {
-                throw new ArgumentException("Target GL_JournalBatch_ID == 0");
+                throw new ArgumentException("Target VAGL_BatchJRNL_ID == 0");
             }
-            if (_GL_Journal_ID == 0)
+            if (_VAGL_JRNL_ID == 0)
             {
-                throw new ArgumentException("Source GL_JournalBatch_ID == 0");
+                throw new ArgumentException("Source VAGL_BatchJRNL_ID == 0");
             }
-            VAdvantage.Model.MJournal from = new VAdvantage.Model.MJournal(GetCtx(), _GL_Journal_ID, Get_Trx());
-            VAdvantage.Model.MJournal to = new VAdvantage.Model.MJournal(GetCtx(), To_GL_Journal_ID, Get_Trx());
+            VAdvantage.Model.MJournal from = new VAdvantage.Model.MJournal(GetCtx(), _VAGL_JRNL_ID, Get_Trx());
+            VAdvantage.Model.MJournal to = new VAdvantage.Model.MJournal(GetCtx(), To_VAGL_JRNL_ID, Get_Trx());
             //
             int no = to.CopyLines(from, 'x');
             //

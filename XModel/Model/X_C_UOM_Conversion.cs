@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_UOM_Conversion
+/** Generated Model for VAB_UOM_Conversion
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_UOM_Conversion : PO
+public class X_VAB_UOM_Conversion : PO
 {
-public X_C_UOM_Conversion (Context ctx, int C_UOM_Conversion_ID, Trx trxName) : base (ctx, C_UOM_Conversion_ID, trxName)
+public X_VAB_UOM_Conversion (Context ctx, int VAB_UOM_Conversion_ID, Trx trxName) : base (ctx, VAB_UOM_Conversion_ID, trxName)
 {
-/** if (C_UOM_Conversion_ID == 0)
+/** if (VAB_UOM_Conversion_ID == 0)
 {
-SetC_UOM_Conversion_ID (0);
-SetC_UOM_ID (0);
-SetC_UOM_To_ID (0);
+SetVAB_UOM_Conversion_ID (0);
+SetVAB_UOM_ID (0);
+SetVAB_UOM_To_ID (0);
 SetDivideRate (0.0);
 SetMultiplyRate (0.0);
 }
  */
 }
-public X_C_UOM_Conversion (Ctx ctx, int C_UOM_Conversion_ID, Trx trxName) : base (ctx, C_UOM_Conversion_ID, trxName)
+public X_VAB_UOM_Conversion (Ctx ctx, int VAB_UOM_Conversion_ID, Trx trxName) : base (ctx, VAB_UOM_Conversion_ID, trxName)
 {
-/** if (C_UOM_Conversion_ID == 0)
+/** if (VAB_UOM_Conversion_ID == 0)
 {
-SetC_UOM_Conversion_ID (0);
-SetC_UOM_ID (0);
-SetC_UOM_To_ID (0);
+SetVAB_UOM_Conversion_ID (0);
+SetVAB_UOM_ID (0);
+SetVAB_UOM_To_ID (0);
 SetDivideRate (0.0);
 SetMultiplyRate (0.0);
 }
@@ -45,7 +45,7 @@ SetMultiplyRate (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Conversion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_UOM_Conversion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_UOM_Conversion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Conversion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_UOM_Conversion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_UOM_Conversion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Conversion (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_UOM_Conversion (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_UOM_Conversion()
+static X_VAB_UOM_Conversion()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389059019L;
 public static int Table_ID;
  // =175;
 
-/** TableName=C_UOM_Conversion */
-public static String Table_Name="C_UOM_Conversion";
+/** TableName=VAB_UOM_Conversion */
+public static String Table_Name="VAB_UOM_Conversion";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -115,21 +115,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_UOM_Conversion[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_UOM_Conversion[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set UOM Conversion.
-@param C_UOM_Conversion_ID Unit of Measure Conversion */
-public void SetC_UOM_Conversion_ID (int C_UOM_Conversion_ID)
+@param VAB_UOM_Conversion_ID Unit of Measure Conversion */
+public void SetVAB_UOM_Conversion_ID (int VAB_UOM_Conversion_ID)
 {
-if (C_UOM_Conversion_ID < 1) throw new ArgumentException ("C_UOM_Conversion_ID is mandatory.");
-Set_ValueNoCheck ("C_UOM_Conversion_ID", C_UOM_Conversion_ID);
+if (VAB_UOM_Conversion_ID < 1) throw new ArgumentException ("VAB_UOM_Conversion_ID is mandatory.");
+Set_ValueNoCheck ("VAB_UOM_Conversion_ID", VAB_UOM_Conversion_ID);
 }
 /** Get UOM Conversion.
 @return Unit of Measure Conversion */
-public int GetC_UOM_Conversion_ID() 
+public int GetVAB_UOM_Conversion_ID() 
 {
-Object ii = Get_Value("C_UOM_Conversion_ID");
+Object ii = Get_Value("VAB_UOM_Conversion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -137,41 +137,41 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_UOM_Conversion_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_UOM_Conversion_ID().ToString());
 }
 
-/** C_UOM_ID VAF_Control_Ref_ID=114 */
-public static int C_UOM_ID_VAF_Control_Ref_ID=114;
+/** VAB_UOM_ID VAF_Control_Ref_ID=114 */
+public static int VAB_UOM_ID_VAF_Control_Ref_ID=114;
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_Value ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_UOM_To_ID VAF_Control_Ref_ID=114 */
-public static int C_UOM_TO_ID_VAF_Control_Ref_ID=114;
+/** VAB_UOM_To_ID VAF_Control_Ref_ID=114 */
+public static int VAB_UOM_TO_ID_VAF_Control_Ref_ID=114;
 /** Set UoM To.
-@param C_UOM_To_ID Target or destination Unit of Measure */
-public void SetC_UOM_To_ID (int C_UOM_To_ID)
+@param VAB_UOM_To_ID Target or destination Unit of Measure */
+public void SetVAB_UOM_To_ID (int VAB_UOM_To_ID)
 {
-if (C_UOM_To_ID < 1) throw new ArgumentException ("C_UOM_To_ID is mandatory.");
-Set_Value ("C_UOM_To_ID", C_UOM_To_ID);
+if (VAB_UOM_To_ID < 1) throw new ArgumentException ("VAB_UOM_To_ID is mandatory.");
+Set_Value ("VAB_UOM_To_ID", VAB_UOM_To_ID);
 }
 /** Get UoM To.
 @return Target or destination Unit of Measure */
-public int GetC_UOM_To_ID() 
+public int GetVAB_UOM_To_ID() 
 {
-Object ii = Get_Value("C_UOM_To_ID");
+Object ii = Get_Value("VAB_UOM_To_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

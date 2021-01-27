@@ -142,19 +142,19 @@ Object ii = Get_Value("VAB_Promotion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set C_MasterTargetList_ID.
-@param C_MasterTargetList_ID C_MasterTargetList_ID */
-public void SetC_MasterTargetList_ID (int C_MasterTargetList_ID)
+/** Set VAB_MasterTargetList_ID.
+@param VAB_MasterTargetList_ID VAB_MasterTargetList_ID */
+public void SetVAB_MasterTargetList_ID (int VAB_MasterTargetList_ID)
 {
-if (C_MasterTargetList_ID <= 0) Set_Value ("C_MasterTargetList_ID", null);
+if (VAB_MasterTargetList_ID <= 0) Set_Value ("VAB_MasterTargetList_ID", null);
 else
-Set_Value ("C_MasterTargetList_ID", C_MasterTargetList_ID);
+Set_Value ("VAB_MasterTargetList_ID", VAB_MasterTargetList_ID);
 }
-/** Get C_MasterTargetList_ID.
-@return C_MasterTargetList_ID */
-public int GetC_MasterTargetList_ID() 
+/** Get VAB_MasterTargetList_ID.
+@return VAB_MasterTargetList_ID */
+public int GetVAB_MasterTargetList_ID() 
 {
-Object ii = Get_Value("C_MasterTargetList_ID");
+Object ii = Get_Value("VAB_MasterTargetList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

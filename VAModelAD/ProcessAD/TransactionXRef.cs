@@ -66,7 +66,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>info</returns>
 	protected override String DoIt() 
 	{
-		log.Info("M_InOut_ID=" + _Search_InOut_ID + ", C_Order_ID=" + _Search_Order_ID
+		log.Info("M_InOut_ID=" + _Search_InOut_ID + ", VAB_Order_ID=" + _Search_Order_ID
 			+ ", VAB_Invoice_ID=" + _Search_Invoice_ID);
 		//
         if (_Search_InOut_ID != 0)
@@ -85,7 +85,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "FROM M_InOutLine iol"
                 + " LEFT OUTER JOIN M_InOutLineMA ma ON (iol.M_InOutLine_ID=ma.M_InOutLine_ID) "
                 + " INNER JOIN M_InOut io ON (iol.M_InOut_ID=io.M_InOut_ID)"
-                + "WHERE io.C_Order_ID=" + _Search_Order_ID
+                + "WHERE io.VAB_Order_ID=" + _Search_Order_ID
                 );
         }
         else if (_Search_Invoice_ID != 0)
@@ -120,7 +120,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			+ " M_InOutLine_ID, M_InOut_ID,"
 			+ " M_MovementLine_ID, M_Movement_ID,"
 			+ " M_InventoryLine_ID, M_Inventory_ID, "
-			+ " C_ProjectIssue_ID, C_Project_ID, "
+			+ " VAB_ProjectSupply_ID, VAB_Project_ID, "
 			+ " M_ProductionLine_ID, M_Production_ID ";
 
         if (_Search_Order_ID != 0)
@@ -148,7 +148,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			+ " M_InOutLine_ID, M_InOut_ID, "
 			+ " M_MovementLine_ID, M_Movement_ID,"
 			+ " M_InventoryLine_ID, M_Inventory_ID, "
-			+ " C_ProjectIssue_ID, C_Project_ID, "
+			+ " VAB_ProjectSupply_ID, VAB_Project_ID, "
 			+ " M_ProductionLine_ID, M_Production_ID ";
 		
 			//	Parameter

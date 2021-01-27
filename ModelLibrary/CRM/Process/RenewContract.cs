@@ -76,8 +76,8 @@ namespace VAdvantage.Process
                     }
                     VAdvantage.Model.X_VAB_Contract New = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, null);
                     New.SetRefContract(contact.GetDocumentNo());
-                    New.SetC_Order_ID(contact.GetC_Order_ID());
-                    New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
+                    New.SetVAB_Order_ID(contact.GetVAB_Order_ID());
+                    New.SetVAB_OrderLine_ID(contact.GetVAB_OrderLine_ID());
                     DateTime OldStart = (DateTime)(contact.GetStartDate());
                     DateTime Start = (DateTime)(contact.GetEndDate());
                     int duration = (Start - OldStart).Days;
@@ -90,7 +90,7 @@ namespace VAdvantage.Process
                     New.SetSalesRep_ID(contact.GetSalesRep_ID());
                     New.SetVAB_Currency_ID(contact.GetVAB_Currency_ID());
                     New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
-                    New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
+                    New.SetVAB_PaymentTerm_ID(contact.GetVAB_PaymentTerm_ID());
 
                     New.SetVAB_Frequency_ID(contact.GetVAB_Frequency_ID());
                     // invoice Count Start
@@ -137,16 +137,16 @@ namespace VAdvantage.Process
                         New.SetPriceActual(contact.GetPriceActual());
                         New.SetPriceList(contact.GetPriceList());
                     }
-                    New.SetC_UOM_ID(contact.GetC_UOM_ID());
+                    New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
                     New.SetM_Product_ID(contact.GetM_Product_ID());
                     // New.SetLineNetAmt(contact.GetLineNetAmt());
 
                     New.SetQtyEntered(contact.GetQtyEntered());
                     // New.SetDiscount(contact.GetDiscount());
-                    New.SetC_Tax_ID(contact.GetC_Tax_ID());
+                    New.SetVAB_TaxRate_ID(contact.GetVAB_TaxRate_ID());
                     New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
                     New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
-                    New.SetC_Project_ID(contact.GetC_Project_ID());
+                    New.SetVAB_Project_ID(contact.GetVAB_Project_ID());
                     New.SetDescription(contact.GetDescription());
                     //  New.SetLineNetAmt(contact.GetLineNetAmt());
                     //  New.SetGrandTotal(contact.GetGrandTotal());
@@ -158,7 +158,7 @@ namespace VAdvantage.Process
                     New.SetDocStatus("DR");
                     New.SetRenewalType("M");
 
-                    String sqltax = "select rate from c_tax WHERE c_tax_id=" + contact.GetC_Tax_ID() + "";
+                    String sqltax = "select rate from VAB_TaxRate WHERE VAB_TaxRate_id=" + contact.GetVAB_TaxRate_ID() + "";
                     Decimal? Rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sqltax, null, null));
 
 
@@ -202,8 +202,8 @@ namespace VAdvantage.Process
                     }
                     VAdvantage.Model.X_VAB_Contract New = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, null);
                     New.SetRefContract(contact.GetDocumentNo());
-                    New.SetC_Order_ID(contact.GetC_Order_ID());
-                    New.SetC_OrderLine_ID(contact.GetC_OrderLine_ID());
+                    New.SetVAB_Order_ID(contact.GetVAB_Order_ID());
+                    New.SetVAB_OrderLine_ID(contact.GetVAB_OrderLine_ID());
                     DateTime OldStart = (DateTime)(contact.GetStartDate());
                     DateTime Start = (DateTime)(contact.GetEndDate());
                     int duration = (Start - OldStart).Days;
@@ -227,7 +227,7 @@ namespace VAdvantage.Process
                     New.SetSalesRep_ID(contact.GetSalesRep_ID());
                     New.SetVAB_Currency_ID(contact.GetVAB_Currency_ID());
                     New.SetVAB_CurrencyType_ID(contact.GetVAB_CurrencyType_ID());
-                    New.SetC_PaymentTerm_ID(contact.GetC_PaymentTerm_ID());
+                    New.SetVAB_PaymentTerm_ID(contact.GetVAB_PaymentTerm_ID());
 
                     New.SetVAB_Frequency_ID(contact.GetVAB_Frequency_ID());
                     // invoice Count Start
@@ -277,16 +277,16 @@ namespace VAdvantage.Process
                     New.SetTotalInvoice(contact.GetCycles());
                     //invoice Count end
 
-                    New.SetC_UOM_ID(contact.GetC_UOM_ID());
+                    New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
                     New.SetM_Product_ID(contact.GetM_Product_ID());
                     // New.SetLineNetAmt(contact.GetLineNetAmt());
 
                     New.SetQtyEntered(contact.GetQtyEntered());
                     New.SetDiscount(contact.GetDiscount());
-                    New.SetC_Tax_ID(contact.GetC_Tax_ID());
+                    New.SetVAB_TaxRate_ID(contact.GetVAB_TaxRate_ID());
                     New.SetVAB_Promotion_ID(contact.GetVAB_Promotion_ID());
                     New.SetRef_Contract_ID(contact.GetVAB_Contract_ID());
-                    New.SetC_Project_ID(contact.GetC_Project_ID());
+                    New.SetVAB_Project_ID(contact.GetVAB_Project_ID());
                     New.SetDescription(contact.GetDescription());
                     New.SetLineNetAmt(contact.GetLineNetAmt());
                     New.SetGrandTotal(contact.GetGrandTotal());
@@ -383,7 +383,7 @@ namespace VAdvantage.Process
                     CSchedule.SetTotalAmt(contract.GetLineNetAmt());
                     CSchedule.SetGrandTotal(contract.GetGrandTotal());
                     CSchedule.SetTaxAmt(contract.GetTaxAmt());
-                    CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
+                    CSchedule.SetVAB_UOM_ID(contract.GetVAB_UOM_ID());
                     CSchedule.SetPriceEntered(contract.GetPriceEntered());
                     CSchedule.SetProcessed(true);
                     if (CSchedule.Save())

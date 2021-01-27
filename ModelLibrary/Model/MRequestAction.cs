@@ -81,7 +81,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder();
             GetChangeHTML(sb, "Priority");
             GetChangeHTML(sb, "PriorityUser");
-            GetChangeHTML(sb, "R_Category_ID");
+            GetChangeHTML(sb, "VAR_Category_ID");
             GetChangeHTML(sb, "R_Group_ID");
             GetChangeHTML(sb, "R_RequestType_ID");
             GetChangeHTML(sb, "R_Resolution_ID");
@@ -95,9 +95,9 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "VAB_BillingCode_ID");
             GetChangeHTML(sb, "VAB_BusinessPartner_ID");
             GetChangeHTML(sb, "VAB_Invoice_ID");
-            GetChangeHTML(sb, "C_Order_ID");
-            GetChangeHTML(sb, "C_Payment_ID");
-            GetChangeHTML(sb, "C_Project_ID");
+            GetChangeHTML(sb, "VAB_Order_ID");
+            GetChangeHTML(sb, "VAB_Payment_ID");
+            GetChangeHTML(sb, "VAB_Project_ID");
             GetChangeHTML(sb, "DateNextAction");
 
             GetChangeHTML(sb, "IsEscalated");

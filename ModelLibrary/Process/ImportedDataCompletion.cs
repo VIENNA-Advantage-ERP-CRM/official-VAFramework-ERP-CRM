@@ -45,7 +45,7 @@ namespace VAdvantage.Process
 
                 #region complete Order Record
                 sql.Clear();
-                sql.Append("SELECT * FROM C_Order WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY dateacct");
+                sql.Append("SELECT * FROM VAB_Order WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY dateacct");
                 dsRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "dateacct");
@@ -56,7 +56,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            order = new MOrder(GetCtx(), Util.GetValueOfInt(dataRow[i]["C_Order_ID"]), Get_Trx());
+                            order = new MOrder(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Order_ID"]), Get_Trx());
                             order.CompleteIt();
                             if (order.GetDocAction() == "CL")
                             {
@@ -66,7 +66,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Order Record ID = " + order.GetC_Order_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + order.GetVAB_Order_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -76,7 +76,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Order not completed for this Record ID = " + order.GetC_Order_ID());
+                                _log.Info("Order not completed for this Record ID = " + order.GetVAB_Order_ID());
                             }
                         }
                         catch { }
@@ -144,7 +144,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -257,7 +257,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -293,7 +293,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving C_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else

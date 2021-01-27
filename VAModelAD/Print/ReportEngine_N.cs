@@ -632,9 +632,9 @@ namespace VAdvantage.Print
         /******************Manufacturing**************/
 
         private static String[] DOC_TABLES = new String[] {
-		"C_Order_Header_v", "M_InOut_Header_v", "VAB_Invoice_Target_v", "C_Project_Header_v",
-		"C_RfQResponse_v",
-		"C_PaySelection_Check_v", "C_PaySelection_Check_v",  
+		"VAB_Order_Hdr_v", "M_InOut_Header_v", "VAB_Invoice_Target_v", "VAB_Project_Hdr_v",
+        "VAB_RFQReply_v",
+		"VAB_PaymentOptionCheck_vt", "VAB_PaymentOptionCheck_vt",  
 		"VAB_DunningExeEntry_v", "M_Movement", "M_Inventory" ,
         /******************Manufacturing**************/
         "M_WorkOrder_Header_v", "M_TaskList",
@@ -642,9 +642,9 @@ namespace VAdvantage.Print
         /******************Manufacturing**************/
         };
         private static String[] DOC_BASETABLES = new String[] {
-		"C_Order", "M_InOut", "VAB_Invoice", "C_Project",
-		"C_RfQResponse",
-		"C_PaySelectionCheck", "C_PaySelectionCheck", 
+		"VAB_Order", "M_InOut", "VAB_Invoice", "VAB_Project",
+		"VAB_RFQReply",
+		"VAB_PaymentOptionCheck", "VAB_PaymentOptionCheck", 
 		"VAB_DunningExeEntry", "M_Movement", "M_Inventory" ,
         /******************Manufacturing**************/
          "M_WorkOrder", "M_TaskList",
@@ -653,9 +653,9 @@ namespace VAdvantage.Print
         
         };
         private static String[] DOC_IDS = new String[] {
-		"C_Order_ID", "M_InOut_ID", "VAB_Invoice_ID", "C_Project_ID",
-		"C_RfQResponse_ID",
-		"C_PaySelectionCheck_ID", "C_PaySelectionCheck_ID", 
+		"VAB_Order_ID", "M_InOut_ID", "VAB_Invoice_ID", "VAB_Project_ID",
+		"VAB_RFQReply_ID",
+		"VAB_PaymentOptionCheck_ID", "VAB_PaymentOptionCheck_ID", 
 		"VAB_DunningExeEntry_ID", "M_Movement_ID",  "M_Inventory_ID" ,
          /******************Manufacturing**************/
           "M_WorkOrder_ID", "M_TaskList_ID",
@@ -664,9 +664,9 @@ namespace VAdvantage.Print
         
         };
         private static int[] DOC_TABLE_ID = new int[] {
-		X_C_Order.Table_ID, X_M_InOut.Table_ID, X_VAB_Invoice.Table_ID, X_C_Project.Table_ID,
-		X_C_RfQResponse.Table_ID,
-		X_C_PaySelectionCheck.Table_ID, X_C_PaySelectionCheck.Table_ID, 
+		X_VAB_Order.Table_ID, X_M_InOut.Table_ID, X_VAB_Invoice.Table_ID, X_VAB_Project.Table_ID,
+		X_VAB_RFQReply.Table_ID,
+		X_VAB_PaymentOptionCheck.Table_ID, X_VAB_PaymentOptionCheck.Table_ID, 
 		X_VAB_DunningExeEntry.Table_ID, X_M_Movement.Table_ID, X_M_Inventory.Table_ID ,
         /******************Manufacturing**************/
          X_M_WorkOrder.Table_ID, X_M_TaskList.Table_ID,
@@ -833,18 +833,18 @@ namespace VAdvantage.Print
         /// <summary>
         /// Gets the document according to order id
         /// </summary>
-        /// <param name="C_Order_ID">order id</param>
+        /// <param name="VAB_Order_ID">order id</param>
         /// <returns>array of int</returns>
-        private static int[] GetDocumentWhat(int C_Order_ID)
+        private static int[] GetDocumentWhat(int VAB_Order_ID)
         {
             int[] what = new int[2];
             what[0] = ORDER;
-            what[1] = C_Order_ID;
+            what[1] = VAB_Order_ID;
             //
             String sql = "SELECT dt.DocSubTypeSO "
-                + "FROM VAB_DocTypes dt, C_Order o "
+                + "FROM VAB_DocTypes dt, VAB_Order o "
                 + "WHERE o.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
-                + " AND o.C_Order_ID='" + C_Order_ID + "'";
+                + " AND o.VAB_Order_ID='" + VAB_Order_ID + "'";
             String DocSubTypeSO = null;
             IDataReader dr = null;
             try
@@ -880,10 +880,10 @@ namespace VAdvantage.Print
 
             //	Get Record_ID of Invoice/Receipt
             if (what[0] == INVOICE)
-                sql = "SELECT VAB_Invoice_ID REC FROM VAB_Invoice WHERE C_Order_ID='" + C_Order_ID + "'"	//	1
+                sql = "SELECT VAB_Invoice_ID REC FROM VAB_Invoice WHERE VAB_Order_ID='" + VAB_Order_ID + "'"	//	1
                     + " ORDER BY VAB_Invoice_ID DESC";
             else
-                sql = "SELECT M_InOut_ID REC FROM M_InOut WHERE C_Order_ID='" + C_Order_ID + "'" 	//	1
+                sql = "SELECT M_InOut_ID REC FROM M_InOut WHERE VAB_Order_ID='" + VAB_Order_ID + "'" 	//	1
                     + " ORDER BY M_InOut_ID DESC";
             IDataReader idr = null;
             try
@@ -958,12 +958,12 @@ namespace VAdvantage.Print
             if (type == CHECK)
                 sql = "SELECT bad.Check_PrintFormat_ID,"								//	1
                     + "	c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.DocumentNo "		//	2..5
-                    + "FROM C_PaySelectionCheck d"
-                    + " INNER JOIN C_PaySelection ps ON (d.C_PaySelection_ID=ps.C_PaySelection_ID)"
+                    + "FROM VAB_PaymentOptionCheck d"
+                    + " INNER JOIN VAB_PaymentOption ps ON (d.VAB_PaymentOption_ID=ps.VAB_PaymentOption_ID)"
                     + " INNER JOIN VAB_Bank_AcctDoc bad ON (ps.VAB_Bank_Acct_ID=bad.VAB_Bank_Acct_ID AND d.PaymentRule=bad.PaymentRule)"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
-                    + "WHERE d.C_PaySelectionCheck_ID=@recordid";		//	info from BankAccount
+                    + "WHERE d.VAB_PaymentOptionCheck_ID=@recordid";		//	info from BankAccount
             else if (type == DUNNING)
                 sql = "SELECT dl.Dunning_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,dr.DunningDate "
@@ -976,33 +976,33 @@ namespace VAdvantage.Print
             else if (type == REMITTANCE)
                 sql = "SELECT pf.Remittance_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.DocumentNo "
-                    + "FROM C_PaySelectionCheck d"
+                    + "FROM VAB_PaymentOptionCheck d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
                     + " INNER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
-                    + "WHERE d.C_PaySelectionCheck_ID=@recordid"		//	info from PrintForm
+                    + "WHERE d.VAB_PaymentOptionCheck_ID=@recordid"		//	info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == PROJECT)
                 sql = "SELECT pf.Project_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,d.Value "
-                    + "FROM C_Project d"
+                    + "FROM VAB_Project d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (c.VAF_Client_ID=pf.VAF_Client_ID)"
                     + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (d.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
-                    + "WHERE d.C_Project_ID=@recordid"					//	info from PrintForm
+                    + "WHERE d.VAB_Project_ID=@recordid"					//	info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) ORDER BY pf.VAF_Org_ID DESC";
             else if (type == RFQ)
                 sql = "SELECT COALESCE(t.VAF_Print_Rpt_Layout_ID, pf.VAF_Print_Rpt_Layout_ID),"
                     + " c.IsMultiLingualDocument,bp.VAF_Language,bp.VAB_BusinessPartner_ID,rr.Name "
-                    + "FROM C_RfQResponse rr"
-                    + " INNER JOIN C_RfQ r ON (rr.C_RfQ_ID=r.C_RfQ_ID)"
-                    + " INNER JOIN C_RfQ_Topic t ON (r.C_RfQ_Topic_ID=t.C_RfQ_Topic_ID)"
+                    + "FROM VAB_RFQReply rr"
+                    + " INNER JOIN VAB_RFQ r ON (rr.VAB_RFQ_ID=r.VAB_RFQ_ID)"
+                    + " INNER JOIN VAB_RFQ_Subject t ON (r.VAB_RFQ_Subject_ID=t.VAB_RFQ_Subject_ID)"
                     + " INNER JOIN VAF_Client c ON (rr.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAB_BusinessPartner bp ON (rr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID),"
                     + " VAF_Print_Rpt_Layout pf "
                     + "WHERE pf.VAF_Client_ID IN (0,rr.VAF_Client_ID)"
                     + " AND pf.VAF_TableView_ID=725 AND pf.IsTableBased='N'"	//	from RfQ PrintFormat
-                    + " AND rr.C_RfQResponse_ID=@recordid "				//	Info from RfQTopic
+                    + " AND rr.VAB_RFQReply_ID=@recordid "				//	Info from RfQTopic
                     + "ORDER BY t.VAF_Print_Rpt_Layout_ID, pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == MOVEMENT)
                 sql = "SELECT pf.Movement_PrintFormat_ID,"

@@ -18,9 +18,9 @@
         // Start Acct Date          
         var _DateAcct = null;
         // Start Payment Term       
-        var _C_PaymentTerm_ID = 0;
+        var _VAB_PaymentTerm_ID = 0;
         // Start Payment            
-        var _C_Payment_ID = 0;
+        var _VAB_Payment_ID = 0;
         var _VAB_CashJRNLLine_ID = 0;
         // Start CashBook           
         var _VAB_CashBook_ID = 0;
@@ -400,7 +400,7 @@
 
             //**************On Credit************************/
             // On Credit     
-            lblPTermLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'C_PaymentTerm_ID') + '</label>');
+            lblPTermLabel = $('<label class="vis-payment-span"> ' + VIS.Msg.translate(ctx, 'VAB_PaymentTerm_ID') + '</label>');
 
             pPanel = $('<table  class="vis-payment-table"></table>');
             var pPanelTr = $('<tr></tr>');
@@ -573,11 +573,11 @@
             _VAB_Currency_ID = parseInt(mTab.getValue("VAB_Currency_ID"));//.intValue();
             _DateAcct = mTab.getValue("DateAcct");
 
-            if (mTab.getValue("C_PaymentTerm_ID") != null || mTab.getValue("C_PaymentTerm_ID") != {}) {
-                _C_PaymentTerm_ID = parseInt(mTab.getValue("C_PaymentTerm_ID"));//.intValue();
+            if (mTab.getValue("VAB_PaymentTerm_ID") != null || mTab.getValue("VAB_PaymentTerm_ID") != {}) {
+                _VAB_PaymentTerm_ID = parseInt(mTab.getValue("VAB_PaymentTerm_ID"));//.intValue();
             }
-            if (mTab.getValue("C_Payment_ID") != null && mTab.getValue("C_Payment_ID") != {}) {
-                _C_Payment_ID = parseInt(mTab.getValue("C_Payment_ID"));//.intValue();
+            if (mTab.getValue("VAB_Payment_ID") != null && mTab.getValue("VAB_Payment_ID") != {}) {
+                _VAB_Payment_ID = parseInt(mTab.getValue("VAB_Payment_ID"));//.intValue();
             }
             if (mTab.getValue("VAB_CashJRNLLine_ID") != null && mTab.getValue("VAB_CashJRNLLine_ID") != {}) {
                 _VAB_CashJRNLLine_ID = parseInt(mTab.getValue("VAB_CashJRNLLine_ID"));//.intValue();
@@ -585,7 +585,7 @@
 
             inputProperties = {
                 _DocStatus: _DocStatus, _isSOTrx: _isSOTrx, _VAF_Client_ID: _VAF_Client_ID, _VAF_Org_ID: _VAF_Org_ID, _VAB_BusinessPartner_ID: _VAB_BusinessPartner_ID, _PaymentRule: _PaymentRule, _VAB_Currency_ID: _VAB_Currency_ID,
-                _DateAcct: _DateAcct, _C_PaymentTerm_ID: _C_PaymentTerm_ID, _C_Payment_ID: _C_Payment_ID, _VAB_CashJRNLLine_ID: _VAB_CashJRNLLine_ID, values: JSON.stringify(values), _Amount: _Amount
+                _DateAcct: _DateAcct, _VAB_PaymentTerm_ID: _VAB_PaymentTerm_ID, _VAB_Payment_ID: _VAB_Payment_ID, _VAB_CashJRNLLine_ID: _VAB_CashJRNLLine_ID, values: JSON.stringify(values), _Amount: _Amount
             };
 
             $.ajax({
@@ -712,8 +712,8 @@
                         });
 
                         //	Set Selection
-                        if (_C_PaymentTerm_ID != null && _C_PaymentTerm_ID != undefined) {
-                            cmbPTerm.val(_C_PaymentTerm_ID);
+                        if (_VAB_PaymentTerm_ID != null && _VAB_PaymentTerm_ID != undefined) {
+                            cmbPTerm.val(_VAB_PaymentTerm_ID);
                         }
                     }
 
@@ -867,7 +867,7 @@
             var pp = cmbPayment.val();
             if (pp != null) {
                 var s = pp.toLower();
-                //if (X_C_Order.PAYMENTRULE_DirectDebit.equalsIgnoreCase(s))
+                //if (X_VAB_Order.PAYMENTRULE_DirectDebit.equalsIgnoreCase(s))
                 if (PAYMENTRULE_DirectDebit == s.toLower() || PAYMENTRULE_DirectDebit == s.toUpper()) {
                     s = PAYMENTRULE_DirectDeposit.toLower();
                 }
@@ -1002,7 +1002,7 @@
             }
 
 
-            inputProperties['C_Order_ID'] = ctx.getContextAsInt(windowNo, "C_Order_ID");
+            inputProperties['VAB_Order_ID'] = ctx.getContextAsInt(windowNo, "VAB_Order_ID");
             inputProperties['VAB_Invoice_ID'] = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
 
 
@@ -1039,16 +1039,16 @@
                         mTab.setValue("DateAcct", result.newDateAcct);
                     }
                     //
-                    if (result.newC_PaymentTerm_ID != _C_PaymentTerm_ID && result.newC_PaymentTerm_ID > 0) {
-                        mTab.setValue("C_PaymentTerm_ID", result.newC_PaymentTerm_ID);
+                    if (result.newVAB_PaymentTerm_ID != _VAB_PaymentTerm_ID && result.newVAB_PaymentTerm_ID > 0) {
+                        mTab.setValue("VAB_PaymentTerm_ID", result.newVAB_PaymentTerm_ID);
                     }
                     //	Set Payment
-                    if (result._C_Payment_ID != _C_Payment_ID) {
-                        if (result._C_Payment_ID == 0) {
-                            mTab.setValue("C_Payment_ID", null);
+                    if (result._VAB_Payment_ID != _VAB_Payment_ID) {
+                        if (result._VAB_Payment_ID == 0) {
+                            mTab.setValue("VAB_Payment_ID", null);
                         }
                         else {
-                            mTab.setValue("C_Payment_ID", result._C_Payment_ID);
+                            mTab.setValue("VAB_Payment_ID", result._VAB_Payment_ID);
                         }
                     }
                     //	Set Cash
@@ -1095,7 +1095,7 @@
                 }
 
                 var DateAcct = _DateAcct;
-                var C_PaymentTerm_ID = _C_PaymentTerm_ID;
+                var VAB_PaymentTerm_ID = _VAB_PaymentTerm_ID;
                 var VAB_CashBook_ID = _VAB_CashBook_ID;
                 var CCType = _CCType;
                 //
@@ -1171,9 +1171,9 @@
 
                     //	P (PaymentTerm)	PaymentTerm
                 else if (PaymentRule.equals(PAYMENTRULE_OnCredit)) {
-                    C_PaymentTerm_ID = cmbPTerm.val();
+                    VAB_PaymentTerm_ID = cmbPTerm.val();
                     if (kp != null) {
-                        C_PaymentTerm_ID = kp;
+                        VAB_PaymentTerm_ID = kp;
                     }
                 }
 

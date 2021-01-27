@@ -215,7 +215,7 @@ namespace VAdvantage.Model
                 //	setName (null);
                 //	setPrintName (null);
                 //	setDocBaseType (null);
-                //	setGL_Category_ID (0);
+                //	setVAGL_Group_ID (0);
                 SetDocumentCopies(0);
                 SetHasCharges(false);
                 SetIsDefault(false);
@@ -257,23 +257,23 @@ namespace VAdvantage.Model
             SetDocBaseType(docBaseType);
             SetName(name);
             SetPrintName(name);
-            SetGL_Category_ID();
+            SetVAGL_Group_ID();
         }
 
         /// <summary>
         /// Set Default GL Category
         /// </summary>
-        public void SetGL_Category_ID()
+        public void SetVAGL_Group_ID()
         {
-            String sql = "SELECT * FROM GL_Category WHERE VAF_Client_ID=" + GetVAF_Client_ID() + "AND IsDefault='Y'";
+            String sql = "SELECT * FROM VAGL_Group WHERE VAF_Client_ID=" + GetVAF_Client_ID() + "AND IsDefault='Y'";
 
-            int GL_Category_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql);
-            if (GL_Category_ID == 0)
+            int VAGL_Group_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql);
+            if (VAGL_Group_ID == 0)
             {
-                sql = "SELECT * FROM GL_Category WHERE VAF_Client_ID=@param1";
-                GL_Category_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAF_Client_ID());
+                sql = "SELECT * FROM VAGL_Group WHERE VAF_Client_ID=@param1";
+                VAGL_Group_ID = CoreLibrary.DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAF_Client_ID());
             }
-            SetGL_Category_ID(GL_Category_ID);
+            SetVAGL_Group_ID(VAGL_Group_ID);
         }
 
         /// <summary>

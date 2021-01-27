@@ -444,7 +444,7 @@ namespace VAdvantage.Model
 
         public void InsertReceipeItem(Ctx ctx, MInventoryLine ol, int M_Product_ID, string NoModifier)
         {
-            string sql = @"SELECT pb.M_Product_ID, pb.C_UOM_ID, pb.BOMQTY, pb.M_ProductBOM_ID, p.name, p.IsStocked, p.VA019_ItemType FROM M_Product_BOM pb 
+            string sql = @"SELECT pb.M_Product_ID, pb.VAB_UOM_ID, pb.BOMQTY, pb.M_ProductBOM_ID, p.name, p.IsStocked, p.VA019_ItemType FROM M_Product_BOM pb 
                         INNER JOIN M_Product p ON (p.M_Product_ID = pb.M_ProductBOM_ID) WHERE pb.IsActive = 'Y' AND pb.M_Product_ID = " + M_Product_ID;
             DataSet dsIngre = null;
             try
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                     {
                         //if (!checkNoModifier(NoModifier, Convert.ToInt32(dsIngre.Tables[0].Rows[i]["M_ProductBOM_ID"])))
                         //   {
-                        InsertUsedItem(ctx, ol, Util.GetValueOfInt(dsIngre.Tables[0].Rows[i]["M_ProductBOM_ID"]), "I", Util.GetValueOfDecimal(ol.GetQtyInternalUse()), Util.GetValueOfDecimal(dsIngre.Tables[0].Rows[i]["BOMQty"]), Util.GetValueOfInt(dsIngre.Tables[0].Rows[i]["C_UOM_ID"]));
+                        InsertUsedItem(ctx, ol, Util.GetValueOfInt(dsIngre.Tables[0].Rows[i]["M_ProductBOM_ID"]), "I", Util.GetValueOfDecimal(ol.GetQtyInternalUse()), Util.GetValueOfDecimal(dsIngre.Tables[0].Rows[i]["BOMQty"]), Util.GetValueOfInt(dsIngre.Tables[0].Rows[i]["VAB_UOM_ID"]));
                         //  }
                     }
                     else
@@ -474,7 +474,7 @@ namespace VAdvantage.Model
             }
         }
 
-        public bool InsertUsedItem(Ctx ctx, MInventoryLine ol, int M_Product_ID, String ItemType, Decimal? olQty, Decimal? Qty, int C_UOM_ID, Decimal? usedQty = 1)
+        public bool InsertUsedItem(Ctx ctx, MInventoryLine ol, int M_Product_ID, String ItemType, Decimal? olQty, Decimal? Qty, int VAB_UOM_ID, Decimal? usedQty = 1)
         {
             object Tbl = DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where tablename='VA019_UsedItem_Quantity'");
             if (Tbl != null)
@@ -510,7 +510,7 @@ namespace VAdvantage.Model
                     po.Set_Value("VA019_ItemType", ItemType);
                 }
                 po.Set_Value("QtyCalculated", Qty * olQty * usedQty);
-                po.Set_Value("C_UOM_ID", C_UOM_ID);
+                po.Set_Value("VAB_UOM_ID", VAB_UOM_ID);
                 if (!po.Save())
                 {
                     return false;
@@ -526,14 +526,14 @@ namespace VAdvantage.Model
         public void Add_UsedItemQuantity(MInventoryLine InventoryLine)
         {
 
-            DataSet dsProds = DB.ExecuteDataset("SELECT IsStocked, VA019_IsRecipe, VA019_ItemType,c_UOM_ID FROM m_Product WHERE M_Product_ID = " + InventoryLine.GetM_Product_ID());
+            DataSet dsProds = DB.ExecuteDataset("SELECT IsStocked, VA019_IsRecipe, VA019_ItemType,VAB_UOM_ID FROM m_Product WHERE M_Product_ID = " + InventoryLine.GetM_Product_ID());
 
             if (dsProds.Tables.Count > 0)
             {
                 DataRow drProd = dsProds.Tables[0].Rows[0];
                 if (Util.GetValueOfString(drProd["IsStocked"]) == "Y")
                 {
-                    InsertUsedItem(GetCtx(), InventoryLine, InventoryLine.GetM_Product_ID(), "P", Util.GetValueOfDecimal(InventoryLine.GetQtyInternalUse()), 1, Util.GetValueOfInt(drProd["c_UOM_ID"]));
+                    InsertUsedItem(GetCtx(), InventoryLine, InventoryLine.GetM_Product_ID(), "P", Util.GetValueOfDecimal(InventoryLine.GetQtyInternalUse()), 1, Util.GetValueOfInt(drProd["VAB_UOM_ID"]));
                 }
                 else
                 {

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for GL_Budget
+/** Generated Model for VAGL_Budget
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_Budget : PO
+public class X_VAGL_Budget : PO
 {
-public X_GL_Budget (Context ctx, int GL_Budget_ID, Trx trxName) : base (ctx, GL_Budget_ID, trxName)
+public X_VAGL_Budget (Context ctx, int VAGL_Budget_ID, Trx trxName) : base (ctx, VAGL_Budget_ID, trxName)
 {
-/** if (GL_Budget_ID == 0)
+/** if (VAGL_Budget_ID == 0)
 {
-SetGL_Budget_ID (0);
+SetVAGL_Budget_ID (0);
 SetIsPrimary (false);
 SetName (null);
 }
  */
 }
-public X_GL_Budget (Ctx ctx, int GL_Budget_ID, Trx trxName) : base (ctx, GL_Budget_ID, trxName)
+public X_VAGL_Budget (Ctx ctx, int VAGL_Budget_ID, Trx trxName) : base (ctx, VAGL_Budget_ID, trxName)
 {
-/** if (GL_Budget_ID == 0)
+/** if (VAGL_Budget_ID == 0)
 {
-SetGL_Budget_ID (0);
+SetVAGL_Budget_ID (0);
 SetIsPrimary (false);
 SetName (null);
 }
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Budget (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Budget (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_GL_Budget (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Budget (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Budget (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_GL_Budget (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Budget (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_Budget (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_Budget()
+static X_VAGL_Budget()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389059473L;
 public static int Table_ID;
  // =271;
 
-/** TableName=GL_Budget */
-public static String Table_Name="GL_Budget";
+/** TableName=VAGL_Budget */
+public static String Table_Name="VAGL_Budget";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_GL_Budget[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_Budget[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -165,17 +165,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-public void SetGL_Budget_ID (int GL_Budget_ID)
+@param VAGL_Budget_ID General Ledger Budget */
+public void SetVAGL_Budget_ID (int VAGL_Budget_ID)
 {
-if (GL_Budget_ID < 1) throw new ArgumentException ("GL_Budget_ID is mandatory.");
-Set_ValueNoCheck ("GL_Budget_ID", GL_Budget_ID);
+if (VAGL_Budget_ID < 1) throw new ArgumentException ("VAGL_Budget_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_Budget_ID", VAGL_Budget_ID);
 }
 /** Get Budget.
 @return General Ledger Budget */
-public int GetGL_Budget_ID() 
+public int GetVAGL_Budget_ID() 
 {
-Object ii = Get_Value("GL_Budget_ID");
+Object ii = Get_Value("VAGL_Budget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

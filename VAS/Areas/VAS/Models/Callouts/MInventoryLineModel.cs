@@ -46,7 +46,7 @@ namespace VIS.Models
         public string GetproductUOM(Ctx ctx, string field)
         {
             MProduct Product = new MProduct(ctx, Util.GetValueOfInt(field), null);
-            return Product.GetC_UOM_ID().ToString();
+            return Product.GetVAB_UOM_ID().ToString();
         }
 
         /// <summary>

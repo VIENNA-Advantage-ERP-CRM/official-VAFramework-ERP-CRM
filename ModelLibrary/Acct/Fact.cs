@@ -45,17 +45,17 @@ namespace VAdvantage.Acct
         private String _postingType = null;
 
         // Actual Balance Type 
-        public static String POST_Actual = X_Fact_Acct.POSTINGTYPE_Actual;
+        public static String POST_Actual = X_Actual_Acct_Detail.POSTINGTYPE_Actual;
         // Budget Balance Type 
-        public static String POST_Budget = X_Fact_Acct.POSTINGTYPE_Budget;
+        public static String POST_Budget = X_Actual_Acct_Detail.POSTINGTYPE_Budget;
         // Commitment Posting 
-        public static String POST_Commitment = X_Fact_Acct.POSTINGTYPE_Commitment;
+        public static String POST_Commitment = X_Actual_Acct_Detail.POSTINGTYPE_Commitment;
         // Reservation Posting 
-        public static String POST_Reservation = X_Fact_Acct.POSTINGTYPE_Reservation;
+        public static String POST_Reservation = X_Actual_Acct_Detail.POSTINGTYPE_Reservation;
         /** Statistical = S */
-        public static String POSTINGTYPE_Statistical = X_Fact_Acct.POSTINGTYPE_Statistical;
+        public static String POSTINGTYPE_Statistical = X_Actual_Acct_Detail.POSTINGTYPE_Statistical;
         /** Virtual = V */
-        public static String POSTINGTYPE_Virtual = X_Fact_Acct.POSTINGTYPE_Virtual;
+        public static String POSTINGTYPE_Virtual = X_Actual_Acct_Detail.POSTINGTYPE_Virtual;
 
         // Is Converted
         private bool _converted = false;

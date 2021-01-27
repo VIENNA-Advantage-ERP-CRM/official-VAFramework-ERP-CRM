@@ -51,7 +51,7 @@ namespace ModelLibrary.Classes
                         int upd = DB.ExecuteQuery(sql.ToString(), null, _trx);
 
                         sql.Clear();
-                        sql.Append("UPDATE C_OrderLine SET BudgetViolationAmount = 0 WHERE " + tableName + "_ID = " + _Record_ID);
+                        sql.Append("UPDATE VAB_OrderLine SET BudgetViolationAmount = 0 WHERE " + tableName + "_ID = " + _Record_ID);
                         upd = DB.ExecuteQuery(sql.ToString(), null, _trx);
                     }
                     return "";
@@ -114,11 +114,11 @@ namespace ModelLibrary.Classes
                 if (controlBasis.Equals("A"))
                 {
                     sql.Clear();
-                    sql.Append(@" SELECT PeriodNo, StartDate , EndDate FROM C_Period WHERE C_Year_ID = (SELECT cy.C_Year_ID FROM C_Period cp inner join  C_Year cy
-     ON (cy.c_year_id = cp.c_Year_id) WHERE cy.IsActive = 'Y' AND cy.VAF_Client_ID = " + _VAF_Client_ID + @" AND StartDate   <= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @"
+                    sql.Append(@" SELECT PeriodNo, StartDate , EndDate FROM VAB_YearPeriod WHERE VAB_Year_ID = (SELECT cy.VAB_Year_ID FROM VAB_YearPeriod cp inner join  VAB_Year cy
+     ON (cy.VAB_Year_id = cp.VAB_Year_id) WHERE cy.IsActive = 'Y' AND cy.VAF_Client_ID = " + _VAF_Client_ID + @" AND StartDate   <= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @"
   AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @"
   AND cy.VAB_Calender_id = (SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE VAF_ClientDetail.vaf_client_id = " + _VAF_Client_ID + @")) AND PeriodNo IN (1,12)");
-                    // sql.Append("SELECT  PeriodNo, StartDate, EndDate FROM C_Period WHERE C_Year_ID = (SELECT C_Year_ID FROM C_Period WHERE IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID + " AND StartDate <= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + " AND EndDate >= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + ") AND PeriodNo IN (1,12)");
+                    // sql.Append("SELECT  PeriodNo, StartDate, EndDate FROM VAB_YearPeriod WHERE VAB_Year_ID = (SELECT VAB_Year_ID FROM VAB_YearPeriod WHERE IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID + " AND StartDate <= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + " AND EndDate >= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + ") AND PeriodNo IN (1,12)");
                     DataSet dsPer = DB.ExecuteDataset(sql.ToString(), null, null);
                     if (dsPer != null)
                     {
@@ -147,12 +147,12 @@ namespace ModelLibrary.Classes
                 else if (controlBasis.Equals("P"))
                 {
                     sql.Clear();
-                    sql.Append(@" SELECT PeriodNo, StartDate , EndDate FROM C_Period cp INNER JOIN C_Year cy ON (cy.c_year_id = cp.c_Year_id) WHERE cy.IsActive = 'Y'
+                    sql.Append(@" SELECT PeriodNo, StartDate , EndDate FROM VAB_YearPeriod cp INNER JOIN VAB_Year cy ON (cy.VAB_Year_id = cp.VAB_Year_id) WHERE cy.IsActive = 'Y'
 AND cy.VAF_Client_ID = " + _VAF_Client_ID + @" AND StartDate   <= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @"
 AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" AND cy.VAB_Calender_id  = (SELECT VAB_Calender_ID FROM VAF_ClientDetail
       WHERE VAF_ClientDetail.vaf_client_id = " + _VAF_Client_ID + @")");
 
-                    //sql.Append("SELECT  PeriodNo, StartDate, EndDate FROM C_Period WHERE IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID + " AND StartDate <= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + " AND EndDate >= " + GlobalVariable.TO_DATE(System.DateTime.Now, false));
+                    //sql.Append("SELECT  PeriodNo, StartDate, EndDate FROM VAB_YearPeriod WHERE IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID + " AND StartDate <= " + GlobalVariable.TO_DATE(System.DateTime.Now, false) + " AND EndDate >= " + GlobalVariable.TO_DATE(System.DateTime.Now, false));
                     DataSet dsPer = DB.ExecuteDataset(sql.ToString(), null, null);
                     if (dsPer != null)
                     {
@@ -169,7 +169,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                     dsPer.Dispose();
                 }
                 sql.Clear();
-                sql.Append("SELECT * FROM C_OrderLine WHERE C_Order_ID = " + _Record_ID + " AND IsActive ='Y'");
+                sql.Append("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID = " + _Record_ID + " AND IsActive ='Y'");
                 DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
                 if (ds != null)
                 {
@@ -179,7 +179,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
                         // Amount = 0;
 
-                        VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]), _trx);
+                        VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]), _trx);
                         M_Product_ID = ol.GetM_Product_ID();
                         int Account_ID = 0;
                         if (M_Product_ID > 0)
@@ -199,9 +199,9 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                         {
                             Decimal? lineAmount = GetLineAmount(ord.GetVAB_Currency_ID(), ol.GetLineNetAmt());
                             int BudgetID = 0;
-                            //if (ord.GetC_Project_ID() > 0)
+                            //if (ord.GetVAB_Project_ID() > 0)
                             //{
-                            //    BudgetID = GetProjectBudget(ord.GetC_Project_ID());
+                            //    BudgetID = GetProjectBudget(ord.GetVAB_Project_ID());
                             //}
                             //if (BudgetID <= 0)
                             //{
@@ -221,7 +221,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                                     {
 
                                     }
-                                    //sql.Append("UPDATE C_OrderLine SET BudgetViolationAmount = " + amt + " WHERE C_OrderLine_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_OrderLine_ID"]));
+                                    //sql.Append("UPDATE VAB_OrderLine SET BudgetViolationAmount = " + amt + " WHERE VAB_OrderLine_ID = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]));
                                     //int res = Util.GetValueOfInt(DB.ExecuteQuery(sql.ToString(), null, null));
                                 }
                             }
@@ -383,7 +383,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         {
             Decimal? amt = 0;
             sql.Clear();
-            sql.Append(" SELECT SUM(fa.AmtAcctDr) FROM Fact_Acct fa " + whereClause);
+            sql.Append(" SELECT SUM(fa.AmtAcctDr) FROM Actual_Acct_Detail fa " + whereClause);
             Decimal? accBudget = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
             if (bgtAmount < Decimal.Add(accBudget.Value, lineAmt.Value))
             {
@@ -408,7 +408,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         {
             string commType = "'A',";
             sql.Clear();
-            sql.Append("SELECT CommitmentType FROM GL_BudgetControl WHERE GL_Budget_ID = " + BudgetID + " AND IsActive = 'Y'");
+            sql.Append("SELECT CommitmentType FROM VAVAGL_BudgetActivation WHERE VAGL_Budget_ID = " + BudgetID + " AND IsActive = 'Y'");
             IDataReader idr = null;
             try
             {
@@ -436,14 +436,14 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         private int GetOrgBudget()
         {
             sql.Clear();
-            sql.Append("SELECT GL_Budget_ID FROM VAF_Org WHERE VAF_Org_ID = " + _VAF_Org_ID);
+            sql.Append("SELECT VAGL_Budget_ID FROM VAF_Org WHERE VAF_Org_ID = " + _VAF_Org_ID);
             return Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
         }
 
         private int GetProjectBudget(int Project_ID)
         {
             sql.Clear();
-            sql.Append("SELECT GL_Budget_ID FROM C_Project WHERE C_Project_ID = " + Project_ID);
+            sql.Append("SELECT VAGL_Budget_ID FROM VAB_Project WHERE VAB_Project_ID = " + Project_ID);
             return Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
         }
 
@@ -454,24 +454,24 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             int budget_ID = 0;
             bgtAmount = 0;
             sql.Clear();
-            int C_Project_ID = Util.GetValueOfInt(ord.GetC_Project_ID());
+            int VAB_Project_ID = Util.GetValueOfInt(ord.GetVAB_Project_ID());
             int VAB_Promotion_ID = Util.GetValueOfInt(ord.GetVAB_Promotion_ID());
             int VAB_BillingCode_ID = Util.GetValueOfInt(ord.GetVAB_BillingCode_ID());
             IDataReader idr = null;
 
-            if (C_Project_ID != 0 && VAB_Promotion_ID != 0 && VAB_BillingCode_ID != 0)
+            if (VAB_Project_ID != 0 && VAB_Promotion_ID != 0 && VAB_BillingCode_ID != 0)
             {
                 // find Budget against all three Parameters
-                budget_ID = GetBudgetAgainstProjectCampaignActivity(AccID, startDate, endDate, C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID);
+                budget_ID = GetBudgetAgainstProjectCampaignActivity(AccID, startDate, endDate, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID);
                 // if not found then find against Project and Campaign
                 if (budget_ID == 0)
                 {
-                    budget_ID = GetBudgetAgainstProjectCampaign(AccID, startDate, endDate, C_Project_ID, VAB_Promotion_ID);
+                    budget_ID = GetBudgetAgainstProjectCampaign(AccID, startDate, endDate, VAB_Project_ID, VAB_Promotion_ID);
                 }
                 // Then Against Project and Activity
                 if (budget_ID == 0)
                 {
-                    budget_ID = GetBudgetAgainstProjectActivity(AccID, startDate, endDate, C_Project_ID, VAB_BillingCode_ID);
+                    budget_ID = GetBudgetAgainstProjectActivity(AccID, startDate, endDate, VAB_Project_ID, VAB_BillingCode_ID);
                 }
                 // Then Against Campaign and Activity
                 if (budget_ID == 0)
@@ -481,7 +481,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                 // Against Project
                 if (budget_ID == 0)
                 {
-                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, C_Project_ID);
+                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, VAB_Project_ID);
                 }
                 // Against Project
                 if (budget_ID == 0)
@@ -494,12 +494,12 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                     budget_ID = GetBudgetAgainstActivity(AccID, startDate, endDate, VAB_BillingCode_ID);
                 }
             }
-            else if (C_Project_ID != 0 && VAB_Promotion_ID != 0)
+            else if (VAB_Project_ID != 0 && VAB_Promotion_ID != 0)
             {
-                budget_ID = GetBudgetAgainstProjectCampaign(AccID, startDate, endDate, C_Project_ID, VAB_Promotion_ID);
+                budget_ID = GetBudgetAgainstProjectCampaign(AccID, startDate, endDate, VAB_Project_ID, VAB_Promotion_ID);
                 if (budget_ID == 0)
                 {
-                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, C_Project_ID);
+                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, VAB_Project_ID);
                 }
                 if (budget_ID == 0)
                 {
@@ -518,21 +518,21 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                     budget_ID = GetBudgetAgainstActivity(AccID, startDate, endDate, VAB_BillingCode_ID);
                 }
             }
-            else if (C_Project_ID != 0 && VAB_BillingCode_ID != 0)
+            else if (VAB_Project_ID != 0 && VAB_BillingCode_ID != 0)
             {
-                budget_ID = GetBudgetAgainstProjectActivity(AccID, startDate, endDate, C_Project_ID, VAB_BillingCode_ID);
+                budget_ID = GetBudgetAgainstProjectActivity(AccID, startDate, endDate, VAB_Project_ID, VAB_BillingCode_ID);
                 if (budget_ID == 0)
                 {
-                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, C_Project_ID);
+                    budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, VAB_Project_ID);
                 }
                 if (budget_ID == 0)
                 {
                     budget_ID = GetBudgetAgainstActivity(AccID, startDate, endDate, VAB_BillingCode_ID);
                 }
             }
-            else if (C_Project_ID != 0)
+            else if (VAB_Project_ID != 0)
             {
-                budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, C_Project_ID);
+                budget_ID = GetBudgetAgainstProject(AccID, startDate, endDate, VAB_Project_ID);
             }
             else if (VAB_Promotion_ID != 0)
             {
@@ -549,7 +549,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                 try
                 {
                     sql.Clear();
-                    sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                    sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                     idr = DB.ExecuteReader(sql.ToString(), null, null);
                     while (idr.Read())
                     {
@@ -593,16 +593,16 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             //    {
             //        finalWhereClause.Append(" AND fa.VAB_BillingCode_ID is null ");
             //    }
-            //    if (ord.GetC_Project_ID() != 0)
+            //    if (ord.GetVAB_Project_ID() != 0)
             //    {
-            //        finalWhereClause.Append(" AND fa.C_Project_ID = " + ord.GetC_Project_ID());
+            //        finalWhereClause.Append(" AND fa.VAB_Project_ID = " + ord.GetVAB_Project_ID());
             //    }
             //    else
             //    {
-            //        finalWhereClause.Append(" AND fa.C_Project_ID is null ");
+            //        finalWhereClause.Append(" AND fa.VAB_Project_ID is null ");
             //    }
 
-            //    sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) " + whereClause + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.DateAcct DESC");
+            //    sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) " + whereClause + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.DateAcct DESC");
             //    // IDataReader idr = null;
             //    try
             //    {
@@ -628,7 +628,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             //        //if (budget_ID.Equals(0))
             //        //{
             //        //    sql.Clear();
-            //        //    sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' AND RowNum = 1 ORDER BY fa.dateacct DESC");
+            //        //    sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' AND RowNum = 1 ORDER BY fa.dateacct DESC");
             //        //    idr = DB.ExecuteReader(sql.ToString(), null, null);
             //        //    while (idr.Read())
             //        //    {
@@ -649,11 +649,11 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
             //}
 
-            //sql.Append("SELECT GL_Budget_ID FROM GL_Budget WHERE " + GlobalVariable.TO_DATE(dateAcct, false) + " >= FromDate AND " + GlobalVariable.TO_DATE(dateAcct, false) + " <= ToDate AND IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID);
-            // sql.Append("SELECT GL_Budget_ID FROM GL_Budget WHERE VAF_Client_ID = " + _VAF_Client_ID + " AND BudgetControlBasis = '" + controlBasis + "'");
-            // int GL_Budget_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
+            //sql.Append("SELECT VAGL_Budget_ID FROM VAGL_Budget WHERE " + GlobalVariable.TO_DATE(dateAcct, false) + " >= FromDate AND " + GlobalVariable.TO_DATE(dateAcct, false) + " <= ToDate AND IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID);
+            // sql.Append("SELECT VAGL_Budget_ID FROM VAGL_Budget WHERE VAF_Client_ID = " + _VAF_Client_ID + " AND BudgetControlBasis = '" + controlBasis + "'");
+            // int VAGL_Budget_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
             // sql.Clear();
-            //sql.Append("SELECT GL_Budget_ID FROM GL_Budget WHERE " + GlobalVariable.TO_DATE(dateAcct, false) + " >= FromDate AND " + GlobalVariable.TO_DATE(dateAcct, false) + " <= ToDate AND IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID);
+            //sql.Append("SELECT VAGL_Budget_ID FROM VAGL_Budget WHERE " + GlobalVariable.TO_DATE(dateAcct, false) + " >= FromDate AND " + GlobalVariable.TO_DATE(dateAcct, false) + " <= ToDate AND IsActive = 'Y' AND VAF_Client_ID = " + _VAF_Client_ID);
             #endregion
             return budget_ID;
         }
@@ -665,11 +665,11 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="AccID"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="C_Project_ID"></param>
+        /// <param name="VAB_Project_ID"></param>
         /// <param name="VAB_Promotion_ID"></param>
         /// <param name="VAB_BillingCode_ID"></param>
         /// <returns></returns>
-        private int GetBudgetAgainstProjectCampaignActivity(int AccID, DateTime? startDate, DateTime? endDate, int C_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID)
+        private int GetBudgetAgainstProjectCampaignActivity(int AccID, DateTime? startDate, DateTime? endDate, int VAB_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID)
         {
             int B_ID = 0;
             int budget_ID = 0;
@@ -678,7 +678,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.C_Project_ID = " + C_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -702,7 +702,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             if (budget_ID > 0)
             {
-                whereClause.Append(" AND fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.C_Project_ID = " + C_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID);
+                whereClause.Append(" AND fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID);
             }
             return budget_ID;
         }
@@ -714,10 +714,10 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="AccID"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="C_Project_ID"></param>
+        /// <param name="VAB_Project_ID"></param>
         /// <param name="VAB_Promotion_ID"></param>
         /// <returns></returns>
-        private int GetBudgetAgainstProjectCampaign(int AccID, DateTime? startDate, DateTime? endDate, int C_Project_ID, int VAB_Promotion_ID)
+        private int GetBudgetAgainstProjectCampaign(int AccID, DateTime? startDate, DateTime? endDate, int VAB_Project_ID, int VAB_Promotion_ID)
         {
             int B_ID = 0;
             int budget_ID = 0;
@@ -726,7 +726,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.C_Project_ID = " + C_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -750,7 +750,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             if (budget_ID > 0)
             {
-                whereClause.Append(" AND fa.C_Project_ID = " + C_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID);
+                whereClause.Append(" AND fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID);
             }
             return budget_ID;
         }
@@ -774,7 +774,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -810,10 +810,10 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="AccID"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="C_Project_ID"></param>
+        /// <param name="VAB_Project_ID"></param>
         /// <param name="VAB_BillingCode_ID"></param>
         /// <returns></returns>
-        private int GetBudgetAgainstProjectActivity(int AccID, DateTime? startDate, DateTime? endDate, int C_Project_ID, int VAB_BillingCode_ID)
+        private int GetBudgetAgainstProjectActivity(int AccID, DateTime? startDate, DateTime? endDate, int VAB_Project_ID, int VAB_BillingCode_ID)
         {
             int B_ID = 0;
             int budget_ID = 0;
@@ -822,7 +822,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.C_Project_ID = " + C_Project_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -846,7 +846,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             if (budget_ID > 0)
             {
-                whereClause.Append(" AND fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.C_Project_ID = " + C_Project_ID);
+                whereClause.Append(" AND fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.VAB_Project_ID = " + VAB_Project_ID);
             }
             return budget_ID;
         }
@@ -858,9 +858,9 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         /// <param name="AccID"></param>
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
-        /// <param name="C_Project_ID"></param>
+        /// <param name="VAB_Project_ID"></param>
         /// <returns></returns>
-        private int GetBudgetAgainstProject(int AccID, DateTime? startDate, DateTime? endDate, int C_Project_ID)
+        private int GetBudgetAgainstProject(int AccID, DateTime? startDate, DateTime? endDate, int VAB_Project_ID)
         {
             int B_ID = 0;
             int budget_ID = 0;
@@ -869,7 +869,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.C_Project_ID = " + C_Project_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_Project_ID = " + VAB_Project_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -893,7 +893,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             if (budget_ID > 0)
             {
-                whereClause.Append(" AND fa.C_Project_ID = " + C_Project_ID);
+                whereClause.Append(" AND fa.VAB_Project_ID = " + VAB_Project_ID);
             }
             return budget_ID;
         }
@@ -916,7 +916,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_Promotion_ID = " + VAB_Promotion_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -963,7 +963,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             try
             {
                 sql.Clear();
-                sql.Append("SELECT fa.AmtAcctDr, b.GL_Budget_ID FROM Fact_Acct fa inner join GL_Budget b ON (b.GL_Budget_ID = fa.GL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.GL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
+                sql.Append("SELECT fa.AmtAcctDr, b.VAGL_Budget_ID FROM Actual_Acct_Detail fa inner join VAGL_Budget b ON (b.VAGL_Budget_ID = fa.VAGL_Budget_ID) WHERE fa.VAB_BillingCode_ID = " + VAB_BillingCode_ID + " AND fa.Account_ID = " + AccID + " AND fa.DateAcct >= " + GlobalVariable.TO_DATE(startDate, false) + " AND fa.DateAcct <= " + GlobalVariable.TO_DATE(endDate, false) + " AND fa.VAF_Org_ID = " + _VAF_Org_ID + " AND fa.VAF_Client_ID = " + _VAF_Client_ID + " AND fa.VAGL_Budget_ID IS Not null AND b.BudgetControlBasis = '" + controlBasis + "' ORDER BY fa.dateacct DESC");
                 idr = DB.ExecuteReader(sql.ToString(), null, null);
                 while (idr.Read())
                 {
@@ -1019,13 +1019,13 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             {
                 whereClause.Append(" AND fa.VAB_BillingCode_ID is null ");
             }
-            if (ord.GetC_Project_ID() != 0)
+            if (ord.GetVAB_Project_ID() != 0)
             {
-                whereClause.Append(" AND fa.C_Project_ID = " + ord.GetC_Project_ID());
+                whereClause.Append(" AND fa.VAB_Project_ID = " + ord.GetVAB_Project_ID());
             }
             else
             {
-                whereClause.Append(" AND fa.C_Project_ID is null ");
+                whereClause.Append(" AND fa.VAB_Project_ID is null ");
             }
             //if (ord.GetUser1_ID() != 0)
             //{
@@ -1071,11 +1071,11 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             sql.Clear();
             if (M_Product_ID > 0)
             {
-                sql.Append("SELECT Account_ID FROM C_ValidCombination WHERE C_ValidCombination_ID = (SELECT P_Expense_Acct FROM M_Product_Acct WHERE VAB_AccountBook_ID = " + VAB_AccountBook_ID + " AND M_Product_ID = " + M_Product_ID + ")");
+                sql.Append("SELECT Account_ID FROM VAB_Acct_ValidParameter WHERE VAB_Acct_ValidParameter_ID = (SELECT P_Expense_Acct FROM M_Product_Acct WHERE VAB_AccountBook_ID = " + VAB_AccountBook_ID + " AND M_Product_ID = " + M_Product_ID + ")");
             }
             else
             {
-                sql.Append("SELECT Account_ID FROM C_ValidCombination WHERE C_ValidCombination_ID = (SELECT ch_expense_acct FROM VAB_Charge_Acct WHERE VAB_AccountBook_ID = " + VAB_AccountBook_ID + " AND VAB_Charge_ID = " + VAB_Charge_ID + ")");
+                sql.Append("SELECT Account_ID FROM VAB_Acct_ValidParameter WHERE VAB_Acct_ValidParameter_ID = (SELECT ch_expense_acct FROM VAB_Charge_Acct WHERE VAB_AccountBook_ID = " + VAB_AccountBook_ID + " AND VAB_Charge_ID = " + VAB_Charge_ID + ")");
             }
             int Account_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
             return Account_ID;
@@ -1174,41 +1174,41 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         public DataSet GetBudgetDimension(String BudgetControlIds)
         {
             DataSet dsBudgetControl = null;
-            String sql = @"SELECT DISTINCT GL_BudgetControl.GL_Budget_ID, GL_BudgetControl.GL_BudgetControl_ID, GL_BudgetControlDimension.ElementType, 
-                            /* CASE   WHEN GL_BudgetControlDimension.ElementType = 'OO' THEN 'VAF_Org_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'BP' THEN 'VAB_BusinessPartner_ID' 
-                                   WHEN GL_BudgetControlDimension.ElementType = 'AY' THEN 'VAB_BillingCode_ID'
-                                   WHEN (GL_BudgetControlDimension.ElementType = 'LF' OR GL_BudgetControlDimension.ElementType = 'LT') THEN 'C_Location_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'MC' THEN 'VAB_Promotion_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'OT' THEN 'VAF_OrgTrx_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'PJ' THEN 'C_Project_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'PR' THEN 'M_Product_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'SR' THEN 'C_SalesRegion_ID'
+            String sql = @"SELECT DISTINCT VAVAGL_BudgetActivation.VAGL_Budget_ID, VAVAGL_BudgetActivation.VAVAGL_BudgetActivation_ID, VAVAVAGL_BudgetActivationDim.ElementType, 
+                            /* CASE   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'OO' THEN 'VAF_Org_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'BP' THEN 'VAB_BusinessPartner_ID' 
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'AY' THEN 'VAB_BillingCode_ID'
+                                   WHEN (VAVAVAGL_BudgetActivationDim.ElementType = 'LF' OR VAVAVAGL_BudgetActivationDim.ElementType = 'LT') THEN 'VAB_Address_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'MC' THEN 'VAB_Promotion_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'OT' THEN 'VAF_OrgTrx_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'PJ' THEN 'VAB_Project_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'PR' THEN 'M_Product_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'SR' THEN 'VAB_SalesRegionState_ID'
                                 ELSE CAST(VAF_Column.ColumnName AS varchar(100)) END AS ColumnName, */
-                                 CASE  WHEN GL_BudgetControlDimension.ElementType = 'OO' THEN 'VAF_Org_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'BP' THEN 'VAB_BusinessPartner_ID' 
-                                   WHEN GL_BudgetControlDimension.ElementType = 'AY' THEN 'VAB_BillingCode_ID'
-                                   WHEN (GL_BudgetControlDimension.ElementType = 'LF' OR GL_BudgetControlDimension.ElementType = 'LT') THEN 'C_Location_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'MC' THEN 'VAB_Promotion_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'OT' THEN 'VAF_OrgTrx_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'PJ' THEN 'C_Project_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'PR' THEN 'M_Product_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'SR' THEN 'C_SalesRegion_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X1' THEN 'UserElement1_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X2' THEN 'UserElement2_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X3' THEN 'UserElement3_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X4' THEN 'UserElement4_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X5' THEN 'UserElement5_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X6' THEN 'UserElement6_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X7' THEN 'UserElement7_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X8' THEN 'UserElement8_ID'
-                                   WHEN GL_BudgetControlDimension.ElementType = 'X9' THEN 'UserElement9_ID' END AS ElementName
-                           FROM GL_BudgetControl INNER JOIN GL_BudgetControlDimension ON GL_BudgetControlDimension.GL_BudgetControl_ID = GL_BudgetControl.GL_BudgetControl_ID 
-                           INNER JOIN VAB_AccountBook_Element ON (GL_BudgetControl.VAB_AccountBook_ID = VAB_AccountBook_Element.VAB_AccountBook_ID AND
-                           VAB_AccountBook_Element.ElementType = GL_BudgetControlDimension.ElementType) 
+                                 CASE  WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'OO' THEN 'VAF_Org_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'BP' THEN 'VAB_BusinessPartner_ID' 
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'AY' THEN 'VAB_BillingCode_ID'
+                                   WHEN (VAVAVAGL_BudgetActivationDim.ElementType = 'LF' OR VAVAVAGL_BudgetActivationDim.ElementType = 'LT') THEN 'VAB_Address_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'MC' THEN 'VAB_Promotion_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'OT' THEN 'VAF_OrgTrx_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'PJ' THEN 'VAB_Project_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'PR' THEN 'M_Product_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'SR' THEN 'VAB_SalesRegionState_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X1' THEN 'UserElement1_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X2' THEN 'UserElement2_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X3' THEN 'UserElement3_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X4' THEN 'UserElement4_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X5' THEN 'UserElement5_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X6' THEN 'UserElement6_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X7' THEN 'UserElement7_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X8' THEN 'UserElement8_ID'
+                                   WHEN VAVAVAGL_BudgetActivationDim.ElementType = 'X9' THEN 'UserElement9_ID' END AS ElementName
+                           FROM VAVAGL_BudgetActivation INNER JOIN VAVAVAGL_BudgetActivationDim ON VAVAVAGL_BudgetActivationDim.VAVAGL_BudgetActivation_ID = VAVAGL_BudgetActivation.VAVAGL_BudgetActivation_ID 
+                           INNER JOIN VAB_AccountBook_Element ON (VAVAGL_BudgetActivation.VAB_AccountBook_ID = VAB_AccountBook_Element.VAB_AccountBook_ID AND
+                           VAB_AccountBook_Element.ElementType = VAVAVAGL_BudgetActivationDim.ElementType) 
                            LEFT JOIN VAF_Column ON VAF_Column.VAF_Column_ID = VAB_AccountBook_Element.VAF_Column_ID 
-                           WHERE GL_BudgetControl.IsActive = 'Y' AND GL_BudgetControlDimension.IsActive = 'Y' AND VAB_AccountBook_Element.IsActive = 'Y' 
-                                 AND GL_BudgetControl.GL_BudgetControl_ID IN (" + BudgetControlIds + ")";
+                           WHERE VAVAGL_BudgetActivation.IsActive = 'Y' AND VAVAVAGL_BudgetActivationDim.IsActive = 'Y' AND VAB_AccountBook_Element.IsActive = 'Y' 
+                                 AND VAVAGL_BudgetActivation.VAVAGL_BudgetActivation_ID IN (" + BudgetControlIds + ")";
             dsBudgetControl = DB.ExecuteDataset(sql, null, null);
             return dsBudgetControl;
         }
@@ -1234,18 +1234,18 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
             String Where = " Account_ID = " + Util.GetValueOfInt(drDataRecord["Account_ID"])
                    + " AND VAB_AccountBook_ID = " + Util.GetValueOfInt(drBUdgetControl["VAB_AccountBook_ID"]);
-            if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_GL_BudgetControl.BUDGETCONTROLSCOPE_PeriodOnly))
+            if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_VAVAGL_BudgetActivation.BUDGETCONTROLSCOPE_PeriodOnly))
             {
-                Where += " AND C_Period_ID = " + Util.GetValueOfInt(drBUdgetControl["C_Period_ID"]);
+                Where += " AND VAB_YearPeriod_ID = " + Util.GetValueOfInt(drBUdgetControl["VAB_YearPeriod_ID"]);
             }
-            else if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_GL_BudgetControl.BUDGETCONTROLSCOPE_Total))
+            else if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_VAVAGL_BudgetActivation.BUDGETCONTROLSCOPE_Total))
             {
-                Where += " AND C_Period_ID IN (SELECT C_Period_ID FROM C_Period WHERE IsActive = 'Y' AND C_Year_ID =  " + Util.GetValueOfInt(drBUdgetControl["C_Year_ID"]) + " ) ";
+                Where += " AND VAB_YearPeriod_ID IN (SELECT VAB_YearPeriod_ID FROM VAB_YearPeriod WHERE IsActive = 'Y' AND VAB_Year_ID =  " + Util.GetValueOfInt(drBUdgetControl["VAB_Year_ID"]) + " ) ";
             }
-            else if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_GL_BudgetControl.BUDGETCONTROLSCOPE_YearToDate))
+            else if (Util.GetValueOfString(drBUdgetControl["BudgetControlScope"]).Equals(X_VAVAGL_BudgetActivation.BUDGETCONTROLSCOPE_YearToDate))
             {
-                Where += @" AND DateAcct Between (SELECT StartDate FROM C_Period WHERE PeriodNo = 1 AND IsActive = 'Y' 
-                            AND C_Year_ID =  " + Util.GetValueOfInt(drBUdgetControl["C_Year_ID"]) + " )  AND " + GlobalVariable.TO_DATE(date, true);
+                Where += @" AND DateAcct Between (SELECT StartDate FROM VAB_YearPeriod WHERE PeriodNo = 1 AND IsActive = 'Y' 
+                            AND VAB_Year_ID =  " + Util.GetValueOfInt(drBUdgetControl["VAB_Year_ID"]) + " )  AND " + GlobalVariable.TO_DATE(date, true);
             }
 
             String sql = @"SELECT SUM(AmtAcctDr) AS ControlledAmount, ";
@@ -1262,34 +1262,34 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             //Where += GetNonSelectedDimension(selectedDimension);
 
             // check budget already checked or not
-            if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
-                                               (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+            if (_listBudgetControl.Exists(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
+                                               (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
                                                (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))))
             {
                 return _listBudgetControl;
             }
 
-            sql += groupBy + " FROM Fact_Acct WHERE GL_Budget_ID = " + Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"]) + " AND " + Where + " GROUP BY " + groupBy;
+            sql += groupBy + " FROM Actual_Acct_Detail WHERE VAGL_Budget_ID = " + Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"]) + " AND " + Where + " GROUP BY " + groupBy;
             DataSet dsBudgetControlAmount = DB.ExecuteDataset(sql, null, null);
             if (dsBudgetControlAmount != null && dsBudgetControlAmount.Tables.Count > 0)
             {
                 for (int i = 0; i < dsBudgetControlAmount.Tables[0].Rows.Count; i++)
                 {
                     budgetControl = new BudgetControl();
-                    budgetControl.GL_Budget_ID = Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"]);
-                    budgetControl.GL_BudgetControl_ID = Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"]);
+                    budgetControl.VAGL_Budget_ID = Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"]);
+                    budgetControl.VAVAGL_BudgetActivation_ID = Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"]);
                     budgetControl.VAB_AccountBook_ID = Util.GetValueOfInt(drBUdgetControl["VAB_AccountBook_ID"]);
                     budgetControl.Account_ID = Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["Account_id"]);
                     budgetControl.VAF_Org_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAF_Org_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAF_Org_ID"]) : 0;
                     budgetControl.M_Product_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("M_Product_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["M_Product_ID"]) : 0;
                     budgetControl.VAB_BusinessPartner_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAB_BusinessPartner_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAB_BusinessPartner_ID"]) : 0;
                     budgetControl.VAB_BillingCode_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAB_BillingCode_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAB_BillingCode_ID"]) : 0;
-                    budgetControl.C_LocationFrom_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_LocFrom_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_LocFrom_ID"]) : 0;
-                    budgetControl.C_LocationTo_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_LocTo_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_LocTo_ID"]) : 0;
+                    budgetControl.VAB_AddressFrom_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_LocFrom_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_LocFrom_ID"]) : 0;
+                    budgetControl.VAB_AddressTo_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_LocTo_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_LocTo_ID"]) : 0;
                     budgetControl.VAB_Promotion_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAB_Promotion_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAB_Promotion_ID"]) : 0;
                     budgetControl.VAF_OrgTrx_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAF_OrgTrx_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAF_OrgTrx_ID"]) : 0;
-                    budgetControl.C_Project_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_Project_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_Project_ID"]) : 0;
-                    budgetControl.C_SalesRegion_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("C_SalesRegion_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["C_SalesRegion_ID"]) : 0;
+                    budgetControl.VAB_Project_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAB_Project_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAB_Project_ID"]) : 0;
+                    budgetControl.VAB_SalesRegionState_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("VAB_SalesRegionState_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["VAB_SalesRegionState_ID"]) : 0;
                     budgetControl.UserList1_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("UserList1_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["UserList1_ID"]) : 0;
                     budgetControl.UserList2_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("UserList2_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["UserList2_ID"]) : 0;
                     budgetControl.UserElement1_ID = dsBudgetControlAmount.Tables[0].Columns.Contains("UserElement1_ID") ? Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["UserElement1_ID"]) : 0;
@@ -1308,29 +1308,29 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
                 //for (int i = 0; i < dsBudgetControlAmount.Tables[0].Rows.Count; i++)
                 //{
-                //    CheckOrCreateDefault(Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"]),
-                //    Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"]), Util.GetValueOfInt(drBUdgetControl["VAB_AccountBook_ID"]),
+                //    CheckOrCreateDefault(Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"]),
+                //    Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"]), Util.GetValueOfInt(drBUdgetControl["VAB_AccountBook_ID"]),
                 //    Util.GetValueOfInt(dsBudgetControlAmount.Tables[0].Rows[i]["Account_id"]));
                 //}
 
             }
 
             // Reduce Amount (Budget - Actual - Commitment - Reservation) from respective budget, AlreadyControlledAmount = Actual + Commitment + Reservation
-            String query = "SELECT SUM(AmtAcctDr - AmtAcctCr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
+            String query = "SELECT SUM(AmtAcctDr - AmtAcctCr) AS AlreadyControlledAmount FROM Actual_Acct_Detail WHERE PostingType IN ('A' , 'E', 'R') AND " + Where + whereDimension;
             Decimal AlreadyControlledAmount = Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, trxName));
 
 
-            if (order.Equals('O') && Util.GetValueOfString(drBUdgetControl["CommitmentType"]).Equals(X_GL_BudgetControl.COMMITMENTTYPE_CommitmentReservation))
+            if (order.Equals('O') && Util.GetValueOfString(drBUdgetControl["CommitmentType"]).Equals(X_VAVAGL_BudgetActivation.COMMITMENTTYPE_CommitmentReservation))
             {
-                query = @"SELECT DISTINCT M_Requisition_ID AS Col1 FROM M_RequisitionLine WHERE C_OrderLine_ID IN ( 
-                            SELECT DISTINCT C_OrderLine_ID FROM C_OrderLine WHERE M_RequisitionLine_ID > 0 AND  C_Order_ID = " + OrderId + ")";
+                query = @"SELECT DISTINCT M_Requisition_ID AS Col1 FROM M_RequisitionLine WHERE VAB_OrderLine_ID IN ( 
+                            SELECT DISTINCT VAB_OrderLine_ID FROM VAB_OrderLine WHERE M_RequisitionLine_ID > 0 AND  VAB_Order_ID = " + OrderId + ")";
                 DataSet ds = DB.ExecuteDataset(query, null, trxName);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     object[] requisitionIds = ds.Tables[0].AsEnumerable().Select(r => r.Field<object>("COL1")).ToArray();
                     string result = string.Join(",", requisitionIds);
 
-                    query = "SELECT SUM(AmtAcctDr) AS AlreadyControlledAmount FROM Fact_Acct WHERE PostingType IN ('R') AND " + Where + whereDimension +
+                    query = "SELECT SUM(AmtAcctDr) AS AlreadyControlledAmount FROM Actual_Acct_Detail WHERE PostingType IN ('R') AND " + Where + whereDimension +
                         @" AND Record_ID IN (" + result + " ) ";
                     AlreadyControlledAmount -= Util.GetValueOfDecimal(DB.ExecuteScalar(query, null, trxName));
                 }
@@ -1369,19 +1369,19 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                 }
             }
 
-            if (_listBudgetControl.Exists(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
-                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+            if (_listBudgetControl.Exists(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
+                                              (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
                                               (x.VAF_Org_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.VAB_BusinessPartner_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["VAB_BusinessPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.VAB_BillingCode_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["VAB_BillingCode_ID"]) : 0)) &&
-                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
-                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.VAB_AddressFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["VAB_AddressFrom_ID"]) : 0)) &&
+                                              (x.VAB_AddressTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["VAB_AddressTo_ID"]) : 0)) &&
                                               (x.VAB_Promotion_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["VAB_Promotion_ID"]) : 0)) &&
                                               (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
-                                              (x.C_Project_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
-                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.VAB_Project_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["VAB_Project_ID"]) : 0)) &&
+                                              (x.VAB_SalesRegionState_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["VAB_SalesRegionState_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
                                               (x.UserList2_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
                                               (x.UserElement1_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&
@@ -1395,19 +1395,19 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                                               (x.UserElement9_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement9) ? Util.GetValueOfInt(drDataRecord["UserElement9_ID"]) : 0))
                                              ))
             {
-                _budgetControl = _listBudgetControl.Find(x => (x.GL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["GL_Budget_ID"])) &&
-                                              (x.GL_BudgetControl_ID == Util.GetValueOfInt(drBUdgetControl["GL_BudgetControl_ID"])) &&
+                _budgetControl = _listBudgetControl.Find(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
+                                              (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
                                               (x.VAF_Org_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.VAB_BusinessPartner_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["VAB_BusinessPartner_ID"]) : 0)) &&
                                               (x.M_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
                                               (x.VAB_BillingCode_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["VAB_BillingCode_ID"]) : 0)) &&
-                                              (x.C_LocationFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["C_LocationFrom_ID"]) : 0)) &&
-                                              (x.C_LocationTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["C_LocationTo_ID"]) : 0)) &&
+                                              (x.VAB_AddressFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["VAB_AddressFrom_ID"]) : 0)) &&
+                                              (x.VAB_AddressTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["VAB_AddressTo_ID"]) : 0)) &&
                                               (x.VAB_Promotion_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign) ? Util.GetValueOfInt(drDataRecord["VAB_Promotion_ID"]) : 0)) &&
                                               (x.VAF_OrgTrx_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_OrgTrx) ? Util.GetValueOfInt(drDataRecord["VAF_OrgTrx_ID"]) : 0)) &&
-                                              (x.C_Project_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["C_Project_ID"]) : 0)) &&
-                                              (x.C_SalesRegion_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["C_SalesRegion_ID"]) : 0)) &&
+                                              (x.VAB_Project_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Project) ? Util.GetValueOfInt(drDataRecord["VAB_Project_ID"]) : 0)) &&
+                                              (x.VAB_SalesRegionState_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_SalesRegion) ? Util.GetValueOfInt(drDataRecord["VAB_SalesRegionState_ID"]) : 0)) &&
                                               (x.UserList1_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserList1) ? Util.GetValueOfInt(drDataRecord["UserList1_ID"]) : 0)) &&
                                               (x.UserList2_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserList2) ? Util.GetValueOfInt(drDataRecord["UserList2_ID"]) : 0)) &&
                                               (x.UserElement1_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement1) ? Util.GetValueOfInt(drDataRecord["UserElement1_ID"]) : 0)) &&

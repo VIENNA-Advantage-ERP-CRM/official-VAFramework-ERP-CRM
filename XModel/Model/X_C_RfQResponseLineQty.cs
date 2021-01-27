@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_RfQResponseLineQty
+/** Generated Model for VAB_RFQReplyLineQty
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RfQResponseLineQty : PO
+public class X_VAB_RFQReplyLineQty : PO
 {
-public X_C_RfQResponseLineQty (Context ctx, int C_RfQResponseLineQty_ID, Trx trxName) : base (ctx, C_RfQResponseLineQty_ID, trxName)
+public X_VAB_RFQReplyLineQty (Context ctx, int VAB_RFQReplyLineQty_ID, Trx trxName) : base (ctx, VAB_RFQReplyLineQty_ID, trxName)
 {
-/** if (C_RfQResponseLineQty_ID == 0)
+/** if (VAB_RFQReplyLineQty_ID == 0)
 {
-SetC_RfQLineQty_ID (0);
-SetC_RfQResponseLineQty_ID (0);
-SetC_RfQResponseLine_ID (0);
+SetVAB_RFQLine_Qty_ID (0);
+SetVAB_RFQReplyLineQty_ID (0);
+SetVAB_RFQReplyLine_ID (0);
 SetPrice (0.0);
 }
  */
 }
-public X_C_RfQResponseLineQty (Ctx ctx, int C_RfQResponseLineQty_ID, Trx trxName) : base (ctx, C_RfQResponseLineQty_ID, trxName)
+public X_VAB_RFQReplyLineQty (Ctx ctx, int VAB_RFQReplyLineQty_ID, Trx trxName) : base (ctx, VAB_RFQReplyLineQty_ID, trxName)
 {
-/** if (C_RfQResponseLineQty_ID == 0)
+/** if (VAB_RFQReplyLineQty_ID == 0)
 {
-SetC_RfQLineQty_ID (0);
-SetC_RfQResponseLineQty_ID (0);
-SetC_RfQResponseLine_ID (0);
+SetVAB_RFQLine_Qty_ID (0);
+SetVAB_RFQReplyLineQty_ID (0);
+SetVAB_RFQReplyLine_ID (0);
 SetPrice (0.0);
 }
  */
@@ -43,7 +43,7 @@ SetPrice (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQResponseLineQty (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQReplyLineQty (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_RfQResponseLineQty (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQResponseLineQty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQReplyLineQty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_RfQResponseLineQty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQResponseLineQty (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_RFQReplyLineQty (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RfQResponseLineQty()
+static X_VAB_RFQReplyLineQty()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389058219L;
 public static int Table_ID;
  // =672;
 
-/** TableName=C_RfQResponseLineQty */
-public static String Table_Name="C_RfQResponseLineQty";
+/** TableName=VAB_RFQReplyLineQty */
+public static String Table_Name="VAB_RFQReplyLineQty";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -113,51 +113,51 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_RfQResponseLineQty[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_RFQReplyLineQty[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set RfQ Line Quantity.
-@param C_RfQLineQty_ID Request for Quotation Line Quantity */
-public void SetC_RfQLineQty_ID (int C_RfQLineQty_ID)
+@param VAB_RFQLine_Qty_ID Request for Quotation Line Quantity */
+public void SetVAB_RFQLine_Qty_ID (int VAB_RFQLine_Qty_ID)
 {
-if (C_RfQLineQty_ID < 1) throw new ArgumentException ("C_RfQLineQty_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQLineQty_ID", C_RfQLineQty_ID);
+if (VAB_RFQLine_Qty_ID < 1) throw new ArgumentException ("VAB_RFQLine_Qty_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQLine_Qty_ID", VAB_RFQLine_Qty_ID);
 }
 /** Get RfQ Line Quantity.
 @return Request for Quotation Line Quantity */
-public int GetC_RfQLineQty_ID() 
+public int GetVAB_RFQLine_Qty_ID() 
 {
-Object ii = Get_Value("C_RfQLineQty_ID");
+Object ii = Get_Value("VAB_RFQLine_Qty_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Response Line Qty.
-@param C_RfQResponseLineQty_ID Request for Quotation Response Line Quantity */
-public void SetC_RfQResponseLineQty_ID (int C_RfQResponseLineQty_ID)
+@param VAB_RFQReplyLineQty_ID Request for Quotation Response Line Quantity */
+public void SetVAB_RFQReplyLineQty_ID (int VAB_RFQReplyLineQty_ID)
 {
-if (C_RfQResponseLineQty_ID < 1) throw new ArgumentException ("C_RfQResponseLineQty_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQResponseLineQty_ID", C_RfQResponseLineQty_ID);
+if (VAB_RFQReplyLineQty_ID < 1) throw new ArgumentException ("VAB_RFQReplyLineQty_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQReplyLineQty_ID", VAB_RFQReplyLineQty_ID);
 }
 /** Get RfQ Response Line Qty.
 @return Request for Quotation Response Line Quantity */
-public int GetC_RfQResponseLineQty_ID() 
+public int GetVAB_RFQReplyLineQty_ID() 
 {
-Object ii = Get_Value("C_RfQResponseLineQty_ID");
+Object ii = Get_Value("VAB_RFQReplyLineQty_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Response Line.
-@param C_RfQResponseLine_ID Request for Quotation Response Line */
-public void SetC_RfQResponseLine_ID (int C_RfQResponseLine_ID)
+@param VAB_RFQReplyLine_ID Request for Quotation Response Line */
+public void SetVAB_RFQReplyLine_ID (int VAB_RFQReplyLine_ID)
 {
-if (C_RfQResponseLine_ID < 1) throw new ArgumentException ("C_RfQResponseLine_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQResponseLine_ID", C_RfQResponseLine_ID);
+if (VAB_RFQReplyLine_ID < 1) throw new ArgumentException ("VAB_RFQReplyLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQReplyLine_ID", VAB_RFQReplyLine_ID);
 }
 /** Get RfQ Response Line.
 @return Request for Quotation Response Line */
-public int GetC_RfQResponseLine_ID() 
+public int GetVAB_RFQReplyLine_ID() 
 {
-Object ii = Get_Value("C_RfQResponseLine_ID");
+Object ii = Get_Value("VAB_RFQReplyLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -165,7 +165,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_RfQResponseLine_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_RFQReplyLine_ID().ToString());
 }
 /** Set Discount %.
 @param Discount Discount in percent */

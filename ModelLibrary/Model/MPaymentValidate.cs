@@ -209,27 +209,27 @@ namespace VAdvantage.Model
             String ccStartList = "";    //  comma separated list of starting numbers
             String ccLengthList = "";   //  comma separated list of lengths
             //
-            if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_MasterCard))
+            if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_MasterCard))
             {
                 ccStartList = "51,52,53,54,55";
                 ccLengthList = "16";
             }
-            else if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Visa))
+            else if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Visa))
             {
                 ccStartList = "4";
                 ccLengthList = "13,16";
             }
-            else if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Amex))
+            else if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Amex))
             {
                 ccStartList = "34,37";
                 ccLengthList = "15";
             }
-            else if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Discover))
+            else if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Discover))
             {
                 ccStartList = "6011";
                 ccLengthList = "16";
             }
-            else if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Diners))
+            else if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Diners))
             {
                 ccStartList = "300,301,302,303,304,305,36,38";
                 ccLengthList = "14";
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
             int length = CheckNumeric(creditCardVV).Length;
 
             //	Amex = 4 digits
-            if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Amex))
+            if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Amex))
             {
                 if (length == 4)
                 {
@@ -354,8 +354,8 @@ namespace VAdvantage.Model
                 return "CreditCardVVError";
             }
             //	Visa & MasterCard - 3 digits
-            if (creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_Visa)
-                || creditCardType.Equals(X_C_Payment.CREDITCARDTYPE_MasterCard))
+            if (creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_Visa)
+                || creditCardType.Equals(X_VAB_Payment.CREDITCARDTYPE_MasterCard))
             {
                 if (length == 3)
                 {

@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_RatioElement
+/** Generated Model for VAPA_RatioElement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_RatioElement : PO
+public class X_VAPA_RatioElement : PO
 {
-public X_PA_RatioElement (Context ctx, int PA_RatioElement_ID, Trx trxName) : base (ctx, PA_RatioElement_ID, trxName)
+public X_VAPA_RatioElement (Context ctx, int VAPA_RatioElement_ID, Trx trxName) : base (ctx, VAPA_RatioElement_ID, trxName)
 {
-/** if (PA_RatioElement_ID == 0)
+/** if (VAPA_RatioElement_ID == 0)
 {
 SetName (null);
-SetPA_RatioElement_ID (0);
-SetPA_Ratio_ID (0);
+SetVAPA_RatioElement_ID (0);
+SetVAPA_Ratio_ID (0);
 SetRatioElementType (null);
 SetRatioOperand (null);	// P
 SetSeqNo (0);
 }
  */
 }
-public X_PA_RatioElement (Ctx ctx, int PA_RatioElement_ID, Trx trxName) : base (ctx, PA_RatioElement_ID, trxName)
+public X_VAPA_RatioElement (Ctx ctx, int VAPA_RatioElement_ID, Trx trxName) : base (ctx, VAPA_RatioElement_ID, trxName)
 {
-/** if (PA_RatioElement_ID == 0)
+/** if (VAPA_RatioElement_ID == 0)
 {
 SetName (null);
-SetPA_RatioElement_ID (0);
-SetPA_Ratio_ID (0);
+SetVAPA_RatioElement_ID (0);
+SetVAPA_Ratio_ID (0);
 SetRatioElementType (null);
 SetRatioOperand (null);	// P
 SetSeqNo (0);
@@ -47,7 +47,7 @@ SetSeqNo (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_RatioElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_RatioElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_PA_RatioElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_RatioElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_RatioElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_PA_RatioElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_RatioElement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_RatioElement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_RatioElement()
+static X_VAPA_RatioElement()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389065225L;
 public static int Table_ID;
  // =836;
 
-/** TableName=PA_RatioElement */
-public static String Table_Name="PA_RatioElement";
+/** TableName=VAPA_RatioElement */
+public static String Table_Name="VAPA_RatioElement";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_RatioElement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_RatioElement[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -189,67 +189,67 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 /** Set Measure Calculation.
-@param PA_MeasureCalc_ID Calculation method for measuring performance */
-public void SetPA_MeasureCalc_ID (int PA_MeasureCalc_ID)
+@param VAPA_EvaluateCalc_ID Calculation method for measuring performance */
+public void SetVAPA_EvaluateCalc_ID (int VAPA_EvaluateCalc_ID)
 {
-if (PA_MeasureCalc_ID <= 0) Set_Value ("PA_MeasureCalc_ID", null);
+if (VAPA_EvaluateCalc_ID <= 0) Set_Value ("VAPA_EvaluateCalc_ID", null);
 else
-Set_Value ("PA_MeasureCalc_ID", PA_MeasureCalc_ID);
+Set_Value ("VAPA_EvaluateCalc_ID", VAPA_EvaluateCalc_ID);
 }
 /** Get Measure Calculation.
 @return Calculation method for measuring performance */
-public int GetPA_MeasureCalc_ID() 
+public int GetVAPA_EvaluateCalc_ID() 
 {
-Object ii = Get_Value("PA_MeasureCalc_ID");
+Object ii = Get_Value("VAPA_EvaluateCalc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Ratio Element.
-@param PA_RatioElement_ID Performance Ratio Element */
-public void SetPA_RatioElement_ID (int PA_RatioElement_ID)
+@param VAPA_RatioElement_ID Performance Ratio Element */
+public void SetVAPA_RatioElement_ID (int VAPA_RatioElement_ID)
 {
-if (PA_RatioElement_ID < 1) throw new ArgumentException ("PA_RatioElement_ID is mandatory.");
-Set_ValueNoCheck ("PA_RatioElement_ID", PA_RatioElement_ID);
+if (VAPA_RatioElement_ID < 1) throw new ArgumentException ("VAPA_RatioElement_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_RatioElement_ID", VAPA_RatioElement_ID);
 }
 /** Get Ratio Element.
 @return Performance Ratio Element */
-public int GetPA_RatioElement_ID() 
+public int GetVAPA_RatioElement_ID() 
 {
-Object ii = Get_Value("PA_RatioElement_ID");
+Object ii = Get_Value("VAPA_RatioElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PA_RatioUsed_ID VAF_Control_Ref_ID=371 */
-public static int PA_RATIOUSED_ID_VAF_Control_Ref_ID=371;
+/** VAPA_RatioUsed_ID VAF_Control_Ref_ID=371 */
+public static int VAPA_RATIOUSED_ID_VAF_Control_Ref_ID=371;
 /** Set Ratio Used.
-@param PA_RatioUsed_ID Performace Ratio Used */
-public void SetPA_RatioUsed_ID (int PA_RatioUsed_ID)
+@param VAPA_RatioUsed_ID Performace Ratio Used */
+public void SetVAPA_RatioUsed_ID (int VAPA_RatioUsed_ID)
 {
-if (PA_RatioUsed_ID <= 0) Set_Value ("PA_RatioUsed_ID", null);
+if (VAPA_RatioUsed_ID <= 0) Set_Value ("VAPA_RatioUsed_ID", null);
 else
-Set_Value ("PA_RatioUsed_ID", PA_RatioUsed_ID);
+Set_Value ("VAPA_RatioUsed_ID", VAPA_RatioUsed_ID);
 }
 /** Get Ratio Used.
 @return Performace Ratio Used */
-public int GetPA_RatioUsed_ID() 
+public int GetVAPA_RatioUsed_ID() 
 {
-Object ii = Get_Value("PA_RatioUsed_ID");
+Object ii = Get_Value("VAPA_RatioUsed_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Ratio.
-@param PA_Ratio_ID Performace Ratio */
-public void SetPA_Ratio_ID (int PA_Ratio_ID)
+@param VAPA_Ratio_ID Performace Ratio */
+public void SetVAPA_Ratio_ID (int VAPA_Ratio_ID)
 {
-if (PA_Ratio_ID < 1) throw new ArgumentException ("PA_Ratio_ID is mandatory.");
-Set_ValueNoCheck ("PA_Ratio_ID", PA_Ratio_ID);
+if (VAPA_Ratio_ID < 1) throw new ArgumentException ("VAPA_Ratio_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Ratio_ID", VAPA_Ratio_ID);
 }
 /** Get Ratio.
 @return Performace Ratio */
-public int GetPA_Ratio_ID() 
+public int GetVAPA_Ratio_ID() 
 {
-Object ii = Get_Value("PA_Ratio_ID");
+Object ii = Get_Value("VAPA_Ratio_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

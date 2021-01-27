@@ -37,7 +37,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }	//	ReportColumnSet_Copy
 
         /**	Source Line Set					*/
-        private int _PA_ReportColumnSet_ID = 0;
+        private int _VAPA_FR_ColumnSet_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -52,9 +52,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("PA_ReportColumnSet_ID"))
+                else if (name.Equals("VAPA_FR_ColumnSet_ID"))
                 {
-                    _PA_ReportColumnSet_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAPA_FR_ColumnSet_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else
                 {
@@ -70,14 +70,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             int to_ID = base.GetRecord_ID();
-            log.Info("From PA_ReportColumnSet_ID=" + _PA_ReportColumnSet_ID + ", To=" + to_ID);
+            log.Info("From VAPA_FR_ColumnSet_ID=" + _VAPA_FR_ColumnSet_ID + ", To=" + to_ID);
             if (to_ID < 1)
             {
                 throw new Exception(msgSaveErrorRowNotFound);
             }
             //
             //MReportColumnSet to = new MReportColumnSet(GetCtx(), to_ID, Get_TrxName());
-            //MReportColumnSet rcSet = new MReportColumnSet(GetCtx(), _PA_ReportColumnSet_ID, Get_TrxName());
+            //MReportColumnSet rcSet = new MReportColumnSet(GetCtx(), _VAPA_FR_ColumnSet_ID, Get_TrxName());
             //MReportColumn[] rcs = rcSet.GetColumns();
             //for (int i = 0; i < rcs.Length; i++)
             //{

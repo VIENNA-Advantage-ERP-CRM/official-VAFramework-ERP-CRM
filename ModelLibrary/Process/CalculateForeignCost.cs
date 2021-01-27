@@ -84,10 +84,10 @@ namespace VAdvantage.Process
                 }
 
                 // Calculate Foriegn Cost for Average PO
-                sql = @"SELECT i.m_inout_id ,  il.m_inoutline_id , il.c_orderline_id
+                sql = @"SELECT i.m_inout_id ,  il.m_inoutline_id , il.VAB_Orderline_id
                         FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
                         WHERE il.isactive = 'Y' AND il.isfuturecostcalculated = 'N' AND i.isfuturecostcalculated  = 'N'
-                         AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.c_orderline_ID , 0) <> 0
+                         AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.VAB_Orderline_ID , 0) <> 0
                         ORDER BY i.m_inout_id ASC";
                 ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -97,8 +97,8 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            orderLine = new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_orderline_id"]), Get_Trx());
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                            orderLine = new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                             inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_inoutline_id"]), Get_Trx());
                             if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
                             {

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Project_Acct
+/** Generated Model for VAB_Project_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Project_Acct : PO
+public class X_VAB_Project_Acct : PO
 {
-public X_C_Project_Acct (Context ctx, int C_Project_Acct_ID, Trx trxName) : base (ctx, C_Project_Acct_ID, trxName)
+public X_VAB_Project_Acct (Context ctx, int VAB_Project_Acct_ID, Trx trxName) : base (ctx, VAB_Project_Acct_ID, trxName)
 {
-/** if (C_Project_Acct_ID == 0)
+/** if (VAB_Project_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetC_Project_ID (0);
+SetVAB_Project_ID (0);
 SetPJ_Asset_Acct (0);
 SetPJ_WIP_Acct (0);
 }
  */
 }
-public X_C_Project_Acct (Ctx ctx, int C_Project_Acct_ID, Trx trxName) : base (ctx, C_Project_Acct_ID, trxName)
+public X_VAB_Project_Acct (Ctx ctx, int VAB_Project_Acct_ID, Trx trxName) : base (ctx, VAB_Project_Acct_ID, trxName)
 {
-/** if (C_Project_Acct_ID == 0)
+/** if (VAB_Project_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetC_Project_ID (0);
+SetVAB_Project_ID (0);
 SetPJ_Asset_Acct (0);
 SetPJ_WIP_Acct (0);
 }
@@ -43,7 +43,7 @@ SetPJ_WIP_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Project_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Project_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_Project_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Project_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Project_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_Project_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Project_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Project_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Project_Acct()
+static X_VAB_Project_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389057608L;
 public static int Table_ID;
  // =204;
 
-/** TableName=C_Project_Acct */
-public static String Table_Name="C_Project_Acct";
+/** TableName=VAB_Project_Acct */
+public static String Table_Name="VAB_Project_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Project_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Project_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -138,17 +138,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID < 1) throw new ArgumentException ("C_Project_ID is mandatory.");
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+if (VAB_Project_ID < 1) throw new ArgumentException ("VAB_Project_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

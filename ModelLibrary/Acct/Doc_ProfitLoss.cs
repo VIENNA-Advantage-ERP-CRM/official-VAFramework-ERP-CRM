@@ -60,12 +60,12 @@ namespace ModelLibrary.Acct
             {
                 MProfitLossLines line = lines[i];
                 DocLine docLine = new DocLine(line, this);
-                docLine.SetAmount(line.GetC_ProfitAndLoss_ID() != 0 ? line.GetAccountDebit() : Math.Abs(line.GetAccountDebit()),
-                                line.GetC_ProfitAndLoss_ID() != 0 ? line.GetAccountCredit() : Math.Abs(line.GetAccountCredit()));
+                docLine.SetAmount(line.GetVAB_ProfitAndLoss_ID() != 0 ? line.GetAccountDebit() : Math.Abs(line.GetAccountDebit()),
+                                line.GetVAB_ProfitAndLoss_ID() != 0 ? line.GetAccountCredit() : Math.Abs(line.GetAccountCredit()));
                 //docLine.SetConvertedAmt(line.GetVAB_AccountBook_ID(), line.GetAccountDebit(), line.GetAccountCredit());
 
                 // set primary key value 
-                docLine.SetPrimaryKeyValue(line.GetC_ProfitLossLines_ID());
+                docLine.SetPrimaryKeyValue(line.GetVAB_ProfitLossLines_ID());
                 // set GL journal line table ID
                 docLine.SetLineTable_ID(line.Get_Table_ID());
                 //
@@ -151,7 +151,7 @@ namespace ModelLibrary.Acct
                 //Change By mohit 
                 // Get Assigned Accounting Schemas based on organization                
                 MProfitLossLines PLossline = new MProfitLossLines(GetCtx(), _lines[0].Get_ID(), null);
-                MProfitLoss PLoss = new MProfitLoss(GetCtx(), PLossline.GetC_ProfitLoss_ID(), null);
+                MProfitLoss PLoss = new MProfitLoss(GetCtx(), PLossline.GetVAB_ProfitLoss_ID(), null);
                 MAcctSchema HeaderAcctSchema = new MAcctSchema(GetCtx(), Util.GetValueOfInt(PLoss.Get_Value("VAB_AccountBook_ID")), null);
                 List<int> _ListAcctSch = new List<int>();
                 // Profit & Loss account shall be posted only in accounting schema selected on header (By Ashish - discussed with Mukesh sir)
@@ -205,8 +205,8 @@ namespace ModelLibrary.Acct
                             }
 
                             //	Account
-                            MAccount expense = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetC_SubAcct_ID(), line.GetM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
-                                line.GetC_LocFrom_ID(), line.GetC_LocTo_ID(), line.GetC_SalesRegion_ID(), line.GetC_Project_ID(), line.GetVAB_Promotion_ID(), line.GetVAB_BillingCode_ID(), line.GetUser1_ID(), line.GetUser2_ID(), line.GetUserElement1_ID(), line.GetUserElement2_ID(),
+                            MAccount expense = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetVAB_SubAcct_ID(), line.GetM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
+                                line.GetC_LocFrom_ID(), line.GetC_LocTo_ID(), line.GetVAB_SalesRegionState_ID(), line.GetVAB_Project_ID(), line.GetVAB_Promotion_ID(), line.GetVAB_BillingCode_ID(), line.GetUser1_ID(), line.GetUser2_ID(), line.GetUserElement1_ID(), line.GetUserElement2_ID(),
                                 line.GetUserElement3_ID(), line.GetUserElement4_ID(), line.GetUserElement5_ID(), line.GetUserElement6_ID(), line.GetUserElement7_ID(), line.GetUserElement8_ID(), line.GetUserElement9_ID());
 
                             fact.CreateLine(dline, expense, GetCurrency(AccountingSchema.GetVAB_AccountBook_ID()), debit, credit);
@@ -220,7 +220,7 @@ namespace ModelLibrary.Acct
                         }
                         //if (TotalCurrLoss != Env.ZERO)
                         //{
-                        //    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
+                        //    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                         //    MAccount acct = MAccount.Get(GetCtx(), validComID);
                         //    TotalCurrLoss = MConversionRate.Convert(GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         //    fact.CreateLine(null, acct,

@@ -26,7 +26,7 @@ namespace VAdvantage.Model
         private int _S_Resource_ID;
         private bool _isAvailable = true;
         private int _S_ResourceType_ID = 0;
-        private int _C_UOM_ID = 0;
+        private int _VAB_UOM_ID = 0;
 
         private DateTime? _startDate = null;
         private DateTime? _endDate = null;
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
 		_startDate = start_Date;
 		_endDate = end_Date;
 		if (_endDate == null)
-			_endDate = MUOMConversion.GetEndDate(_ctx, _startDate, _C_UOM_ID, qty);
+			_endDate = MUOMConversion.GetEndDate(_ctx, _startDate, _VAB_UOM_ID, qty);
 		log.Fine( "- EndDate=" + _endDate);
 
 
@@ -153,9 +153,9 @@ namespace VAdvantage.Model
 		//	"WHERE TRUNC(Date1) BETWEEN TRUNC(?) AND TRUNC(?)"   causes
 		//	ORA-00932: inconsistent datatypes: expected NUMBER got TIMESTAMP
 		sql = MRole.GetDefault(_ctx, false).AddAccessSQL (
-			"SELECT Name, Date1 FROM C_NonBusinessDay "
+			"SELECT Name, Date1 FROM VAB_NonBusinessDay "
 			+ "WHERE TRUNC(Date1,'DD') BETWEEN @1 AND @2",
-			"C_NonBusinessDay", false, false);	// not qualified - RO
+			"VAB_NonBusinessDay", false, false);	// not qualified - RO
 		try
 		{
 			 DateTime? startDay = TimeUtil.GetDay(_startDate);
@@ -574,7 +574,7 @@ namespace VAdvantage.Model
             //	Resource is Active and Available
             String sql = MRole.GetDefault(_ctx, false).AddAccessSQL(
                 "SELECT r.IsActive,r.IsAvailable,NULL,"	//	r.IsSingleAssignment,"
-                + "r.S_ResourceType_ID,rt.C_UOM_ID "
+                + "r.S_ResourceType_ID,rt.VAB_UOM_ID "
                 + "FROM S_Resource r, S_ResourceType rt "
                 + "WHERE r.S_Resource_ID=" + S_Resource_ID + " "
                 + " AND r.S_ResourceType_ID=rt.S_ResourceType_ID",
@@ -593,7 +593,7 @@ namespace VAdvantage.Model
                         _isAvailable = false;
                     //
                     _S_ResourceType_ID = Utility.Util.GetValueOfInt(dr[3]);
-                    _C_UOM_ID = Utility.Util.GetValueOfInt(dr[4]);
+                    _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[4]);
                     //	log.fine( "- Resource_ID=" + m_S_ResourceType_ID + ",IsAvailable=" + m_isAvailable);
                 }
                 else
@@ -795,8 +795,8 @@ namespace VAdvantage.Model
                 throw new ArgumentNullException("ResourceTypeName not set");
 
             List<MAssignmentSlot> list = new List<MAssignmentSlot>();
-            MUOM.Get(_ctx, _C_UOM_ID);
-            int minutes = MUOMConversion.ConvertToMinutes(_ctx, _C_UOM_ID, Env.ONE);
+            MUOM.Get(_ctx, _VAB_UOM_ID);
+            int minutes = MUOMConversion.ConvertToMinutes(_ctx, _VAB_UOM_ID, Env.ONE);
             log.Config("Minutes=" + minutes);
             //
             if (minutes > 0 && minutes < 60 * 24)

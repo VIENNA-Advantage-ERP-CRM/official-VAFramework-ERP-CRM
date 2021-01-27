@@ -214,7 +214,7 @@
         var bprelation = "";
         var bplocation = "";
         var lookup = new VIS.MLocationLookup(VIS.context.ctx, self.windowNo);
-        txtLoc = new VIS.Controls.VLocation("C_Location_ID", true, false, true, VIS.DisplayType.Location, lookup);
+        txtLoc = new VIS.Controls.VLocation("VAB_Address_ID", true, false, true, VIS.DisplayType.Location, lookup);
         var count = txtLoc.getBtnCount();
         $addBPartnerRoot = $("<div id='divBPartner_" + self.windowNo + "' style='width:auto;height:auto;margin-right:5px'> <img src='/ViennaAdvantageWeb1/Areas/VIS/Images/busy.gif' style=' margin-top: 120px; margin-left: 327px; z-index:9999;position:absolute;visibility:collapse'>");
 
@@ -435,7 +435,7 @@
             var bprelation = "";
             var bplocation = "";
             var lookup = new VIS.MLocationLookup(VIS.context.ctx, windowNo);
-            txtLoc = new VIS.Controls.VLocation("C_Location_ID", true, false, true, VIS.DisplayType.Location, lookup);
+            txtLoc = new VIS.Controls.VLocation("VAB_Address_ID", true, false, true, VIS.DisplayType.Location, lookup);
             var count = txtLoc.getBtnCount();
             $addBPartnerRoot = $("<div id='divBPartner_" + windowNo + "' style='width:auto;height:auto;margin-right:5px'> <img src='/ViennaAdvantageWeb1/Areas/VIS/Images/busy.gif' style=' margin-top: 120px; margin-left: 327px; z-index:9999;position:absolute;visibility:collapse'>");
 

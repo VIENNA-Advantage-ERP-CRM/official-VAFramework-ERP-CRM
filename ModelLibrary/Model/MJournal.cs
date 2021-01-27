@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Class Name     : MJournal
  * Purpose        : GL Journal Model
- * Class Used     : X_GL_Journal,DocAction 
+ * Class Used     : X_VAGL_JRNL,DocAction 
  * Chronological    Development
  * Deepak           21-Nov-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {
-    public class MJournal : X_GL_Journal, DocAction
+    public class MJournal : X_VAGL_JRNL, DocAction
     {
 
         /** Is record save from GL Voucher form **/
@@ -39,19 +39,19 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="GL_Journal_ID">id</param>
+        /// <param name="VAGL_JRNL_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MJournal(Ctx ctx, int GL_Journal_ID, Trx trxName)
-            : base(ctx, GL_Journal_ID, trxName)
+        public MJournal(Ctx ctx, int VAGL_JRNL_ID, Trx trxName)
+            : base(ctx, VAGL_JRNL_ID, trxName)
         {
-            //super (ctx, GL_Journal_ID, trxName);
-            if (GL_Journal_ID == 0)
+            //super (ctx, VAGL_JRNL_ID, trxName);
+            if (VAGL_JRNL_ID == 0)
             {
-                //	setGL_Journal_ID (0);		//	PK
+                //	setVAGL_JRNL_ID (0);		//	PK
                 //	setVAB_AccountBook_ID (0);
                 //	setVAB_Currency_ID (0);
                 //	setVAB_DocTypes_ID (0);
-                //	setC_Period_ID (0);
+                //	setVAB_YearPeriod_ID (0);
                 //
                 SetCurrencyRate(Env.ONE);
                 //	setVAB_CurrencyType_ID(0);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
                 SetDocAction(DOCACTION_Complete);
                 SetDocStatus(DOCSTATUS_Drafted);
                 //	setDocumentNo (null);
-                //	setGL_Category_ID (0);
+                //	setVAGL_Group_ID (0);
                 SetPostingType(POSTINGTYPE_Actual);
                 SetTotalCr(Env.ZERO);
                 SetTotalDr(Env.ZERO);
@@ -100,12 +100,12 @@ namespace VAdvantage.Model
         {
             //this (parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
-            SetGL_JournalBatch_ID(parent.GetGL_JournalBatch_ID());
+            SetVAGL_BatchJRNL_ID(parent.GetVAGL_BatchJRNL_ID());
             SetVAB_DocTypes_ID(parent.GetVAB_DocTypes_ID());
             SetPostingType(parent.GetPostingType());
             //
             SetDateDoc(parent.GetDateDoc());
-            SetC_Period_ID(parent.GetC_Period_ID());
+            SetVAB_YearPeriod_ID(parent.GetVAB_YearPeriod_ID());
             SetDateAcct(parent.GetDateAcct());
             SetVAB_Currency_ID(parent.GetVAB_Currency_ID());
         }	//	MJournal
@@ -119,11 +119,11 @@ namespace VAdvantage.Model
         {
             //this (original.GetCtx(), 0, original.get_TrxName())
             SetClientOrg(original);
-            SetGL_JournalBatch_ID(original.GetGL_JournalBatch_ID());
+            SetVAGL_BatchJRNL_ID(original.GetVAGL_BatchJRNL_ID());
             //
             SetVAB_AccountBook_ID(original.GetVAB_AccountBook_ID());
-            SetGL_Budget_ID(original.GetGL_Budget_ID());
-            SetGL_Category_ID(original.GetGL_Category_ID());
+            SetVAGL_Budget_ID(original.GetVAGL_Budget_ID());
+            SetVAGL_Group_ID(original.GetVAGL_Group_ID());
             SetPostingType(original.GetPostingType());
             SetDescription(original.GetDescription());
             SetVAB_DocTypes_ID(original.GetVAB_DocTypes_ID());
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
 
             //	setDateDoc(original.getDateDoc());
             //	setDateAcct(original.getDateAcct());
-            //	setC_Period_ID(original.getC_Period_ID());
+            //	setVAB_YearPeriod_ID(original.getVAB_YearPeriod_ID());
         }	//	MJournal
 
 
@@ -156,10 +156,10 @@ namespace VAdvantage.Model
         /// <returns>period or null</returns>
         public MPeriod GetPeriod()
         {
-            int C_Period_ID = GetC_Period_ID();
-            if (C_Period_ID != 0)
+            int VAB_YearPeriod_ID = GetVAB_YearPeriod_ID();
+            if (VAB_YearPeriod_ID != 0)
             {
-                return MPeriod.Get(GetCtx(), C_Period_ID);
+                return MPeriod.Get(GetCtx(), VAB_YearPeriod_ID);
             }
             return null;
         }	//	getPeriod
@@ -210,23 +210,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Period - Callout.Set Acct Date if required
         /// </summary>
-        /// <param name="oldC_Period_ID">old</param>
-        /// <param name="newC_Period_ID">new</param>
+        /// <param name="oldVAB_YearPeriod_ID">old</param>
+        /// <param name="newVAB_YearPeriod_ID">new</param>
         /// <param name="windowNo">window no</param>
-        public void SetC_Period_ID(String oldC_Period_ID,
-               String newC_Period_ID, int windowNo)
+        public void SetVAB_YearPeriod_ID(String oldVAB_YearPeriod_ID,
+               String newVAB_YearPeriod_ID, int windowNo)
         {
-            if (newC_Period_ID == null || newC_Period_ID.Length == 0)
+            if (newVAB_YearPeriod_ID == null || newVAB_YearPeriod_ID.Length == 0)
             {
                 return;
             }
-            int C_Period_ID = Utility.Util.GetValueOfInt(newC_Period_ID);
-            if (C_Period_ID == 0)
+            int VAB_YearPeriod_ID = Utility.Util.GetValueOfInt(newVAB_YearPeriod_ID);
+            if (VAB_YearPeriod_ID == 0)
             {
                 return;
             }
-            SetC_Period_ID(C_Period_ID);
-        }	//	setC_Period_ID
+            SetVAB_YearPeriod_ID(VAB_YearPeriod_ID);
+        }	//	setVAB_YearPeriod_ID
 
         /// <summary>
         /// Set Accounting Date.Set also Period if not set earlier
@@ -236,19 +236,19 @@ namespace VAdvantage.Model
         {
             //super.setDateAcct(DateAcct);
             base.SetDateAcct(DateAcct);
-            if (GetC_Period_ID() != 0)	//	previously set
+            if (GetVAB_YearPeriod_ID() != 0)	//	previously set
             {
                 SetRate();
                 return;
             }
-            int C_Period_ID = MPeriod.GetC_Period_ID(GetCtx(), DateAcct);
-            if (C_Period_ID == 0)
+            int VAB_YearPeriod_ID = MPeriod.GetVAB_YearPeriod_ID(GetCtx(), DateAcct);
+            if (VAB_YearPeriod_ID == 0)
             {
                 log.Warning("Period not found");
             }
             else
             {
-                base.SetC_Period_ID(C_Period_ID);
+                base.SetVAB_YearPeriod_ID(VAB_YearPeriod_ID);
                 SetRate();
             }
         }	//	setDateAcct
@@ -256,12 +256,12 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Period
         /// </summary>
-        /// <param name="C_Period_ID">period</param>
-        public new void SetC_Period_ID(int C_Period_ID)
+        /// <param name="VAB_YearPeriod_ID">period</param>
+        public new void SetVAB_YearPeriod_ID(int VAB_YearPeriod_ID)
         {
-            //super.setC_Period_ID(C_Period_ID);
-            base.SetC_Period_ID(C_Period_ID);
-            if (C_Period_ID == 0)
+            //super.setVAB_YearPeriod_ID(VAB_YearPeriod_ID);
+            base.SetVAB_YearPeriod_ID(VAB_YearPeriod_ID);
+            if (VAB_YearPeriod_ID == 0)
             {
                 return;
             }
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
                     && !period.IsInPeriod(dateAcct))
                     base.SetDateAcct(period.GetEndDate());
             }
-        }	//	setC_Period_ID
+        }	//	setVAB_YearPeriod_ID
 
 
         /// <summary>
@@ -386,7 +386,7 @@ namespace VAdvantage.Model
         {
             //ArrayList<MJournalLine> list = new ArrayList<MJournalLine>();
             List<MJournalLine> list = new List<MJournalLine>();
-            String sql = "SELECT * FROM GL_JournalLine WHERE GL_Journal_ID=@Param1 ORDER BY Line";
+            String sql = "SELECT * FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID=@Param1 ORDER BY Line";
             //PreparedStatement pstmt = null;
             SqlParameter[] Param = new SqlParameter[1];
             IDataReader idr = null;
@@ -394,8 +394,8 @@ namespace VAdvantage.Model
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                //pstmt.setInt(1, getGL_Journal_ID());
-                Param[0] = new SqlParameter("@Param1", GetGL_Journal_ID());
+                //pstmt.setInt(1, getVAGL_JRNL_ID());
+                Param[0] = new SqlParameter("@Param1", GetVAGL_JRNL_ID());
 
                 idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
                 dt = new DataTable();
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
-                toLine.SetGL_Journal_ID(GetGL_Journal_ID());
+                toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 //
                 if (dateAcct != null)
                 {
@@ -474,14 +474,14 @@ namespace VAdvantage.Model
                 {
                     if (toLine.Get_ColumnIndex("ReversalDoc_ID") > 0)
                     {
-                        toLine.SetReversalDoc_ID(fromLines[i].GetGL_JournalLine_ID());
+                        toLine.SetReversalDoc_ID(fromLines[i].GetVAGL_JRNLLine_ID());
                     }
                 }
 
                 if (toLine.Save())
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID(), typeCR);
+                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetVAGL_JRNLLine_ID(), typeCR);
                 }
             }
             if (fromLines.Length != count)
@@ -509,7 +509,7 @@ namespace VAdvantage.Model
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
-                toLine.SetGL_Journal_ID(GetGL_Journal_ID());
+                toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 //
                 //if (dateAcct != null)
                 //{
@@ -539,7 +539,7 @@ namespace VAdvantage.Model
                 if (toLine.Save(fromJournal.Get_TrxName()))
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
+                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetVAGL_JRNLLine_ID());
                 }
             }
             if (fromLines.Length != count)
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             {
                 MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
-                toLine.SetGL_Journal_ID(GetGL_Journal_ID());
+                toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 if (dateAcct != null)
                 {
                     toLine.SetDateAcct(dateAcct);
@@ -587,7 +587,7 @@ namespace VAdvantage.Model
                 if (toLine.Save(fromJournal.Get_TrxName()))
                 {
                     count++;
-                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetGL_JournalLine_ID());
+                    lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetVAGL_JRNLLine_ID());
                 }
             }
             if (fromLines.Length != count)
@@ -612,9 +612,9 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            String sql = "UPDATE GL_JournalLine SET Processed='"
+            String sql = "UPDATE VAGL_JRNLLine SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE GL_Journal_ID=" + GetGL_Journal_ID();
+                + "' WHERE VAGL_JRNL_ID=" + GetVAGL_JRNL_ID();
             int noLine = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Fine(processed + " - Lines=" + noLine);
         }	//	setProcessed
@@ -712,7 +712,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                     assignAcctSchema = new MAssignAcctSchema(GetCtx(), 0, Get_Trx());
                     assignAcctSchema.SetVAF_Client_ID(GetVAF_Client_ID());
                     assignAcctSchema.SetVAF_Org_ID(GetVAF_Org_ID());
-                    assignAcctSchema.SetGL_Journal_ID(GetGL_Journal_ID());
+                    assignAcctSchema.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                     assignAcctSchema.SetVAB_AccountBook_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ACCOUNTBOOK_ID"]));
                     assignAcctSchema.SetVAB_Currency_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Currency_ID"]));
                     assignAcctSchema.SetVAB_CurrencyType_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CurrencyType_ID"]));
@@ -765,8 +765,8 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// <returns>true if ok</returns>
         private Boolean UpdateBatch()
         {
-            // Manish 18/7/2016 ..  check gl_journalbatch_id is in window or not.
-            string sqlquery = @"SELECT gl_journalbatch_id FROM gl_journal WHERE gl_journal_id =" + GetGL_Journal_ID();
+            // Manish 18/7/2016 ..  check VAGL_BatchJRNL_id is in window or not.
+            string sqlquery = @"SELECT VAGL_BatchJRNL_id FROM VAGL_JRNL WHERE VAGL_JRNL_id =" + GetVAGL_JRNL_ID();
             int nooo = Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sqlquery, null, null));
             if (nooo <= 0)
             {
@@ -774,10 +774,10 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             }
             // end 18/7/2016
 
-            String sql = "UPDATE GL_JournalBatch jb"
+            String sql = "UPDATE VAGL_BatchJRNL jb"
                 + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)" //jz hard coded ", "
-                    + " FROM GL_Journal j WHERE j.IsActive='Y' AND jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
-                + "WHERE GL_JournalBatch_ID=" + GetGL_JournalBatch_ID();
+                    + " FROM VAGL_JRNL j WHERE j.IsActive='Y' AND jb.VAGL_BatchJRNL_ID=j.VAGL_BatchJRNL_ID) "
+                + "WHERE VAGL_BatchJRNL_ID=" + GetVAGL_BatchJRNL_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
@@ -863,7 +863,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
 
             //Manish 18/7/2016 .. Because if line dimention (Amount) column sum is not equals to debit or credit value complete process will not done. 
             Decimal journalDRAndCR = 0;
-            string getlinevalues = "SELECT NVL(ElementType,null) AS ElementType,AmtSourceDr,AmtAcctCr,AmtSourceCr,GL_JournalLine_ID FROM GL_JournalLine where GL_Journal_ID=" + Get_Value("GL_Journal_ID");
+            string getlinevalues = "SELECT NVL(ElementType,null) AS ElementType,AmtSourceDr,AmtAcctCr,AmtSourceCr,VAGL_JRNLLine_ID FROM VAGL_JRNLLine where VAGL_JRNL_ID=" + Get_Value("VAGL_JRNL_ID");
             DataSet dts = DB.ExecuteDataset(getlinevalues, null, null);
 
             if (dts != null && dts.Tables[0].Rows.Count > 0)
@@ -889,7 +889,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                         }
                     }
 
-                    string getlineval = "SELECT SUM(amount) FROM gl_linedimension where GL_JournalLine_ID=" + Convert.ToInt32(dts.Tables[0].Rows[i]["GL_JournalLine_ID"]);
+                    string getlineval = "SELECT SUM(amount) FROM VAGL_LineDimension where VAGL_JRNLLine_ID=" + Convert.ToInt32(dts.Tables[0].Rows[i]["VAGL_JRNLLine_ID"]);
                     Decimal count = Util.GetValueOfDecimal(DB.ExecuteScalar(getlineval));
 
                     if (journalDRAndCR != count)
@@ -1071,17 +1071,17 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 || DOCSTATUS_Invalid.Equals(GetDocStatus()))
             {
                 //Bug 124 in Devops :  set Amount as ZERO on GL journal , 
-                DB.ExecuteQuery(@"Update GL_Journal SET TotalDr = 0, TotalCr = 0
-                                    WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"Update VAGL_JRNL SET TotalDr = 0, TotalCr = 0
+                                    WHERE VAGL_JRNL_ID =  " + GetVAGL_JRNL_ID(), null, Get_Trx());
 
                 //Bug 124 in Devops :  set Amount as ZERO on GL journal Line, 
-                DB.ExecuteQuery(@"Update GL_JournalLine SET AmtSourceDr = 0, AmtSourceCr = 0, AmtAcctDr = 0, AmtAcctCr = 0 
-                                    WHERE GL_Journal_ID =  " + GetGL_Journal_ID(), null, Get_Trx());
+                DB.ExecuteQuery(@"Update VAGL_JRNLLine SET AmtSourceDr = 0, AmtSourceCr = 0, AmtAcctDr = 0, AmtAcctCr = 0 
+                                    WHERE VAGL_JRNL_ID =  " + GetVAGL_JRNL_ID(), null, Get_Trx());
 
                 //Bug 124 in Devops :  set Amount as ZERO on GL journal Line, 
-                DB.ExecuteQuery(@"Update GL_LineDimension  SET Amount = 0
-                                    WHERE GL_JournalLine_ID IN (SELECT GL_JournalLine_ID FROM GL_JournalLine 
-                                    WHERE GL_Journal_ID =   " + GetGL_Journal_ID() + ") ", null, Get_Trx());
+                DB.ExecuteQuery(@"Update VAGL_LineDimension  SET Amount = 0
+                                    WHERE VAGL_JRNLLine_ID IN (SELECT VAGL_JRNLLine_ID FROM VAGL_JRNLLine 
+                                    WHERE VAGL_JRNL_ID =   " + GetVAGL_JRNL_ID() + ") ", null, Get_Trx());
 
                 SetProcessed(true);
                 SetDocAction(DOCACTION_None);
@@ -1112,19 +1112,19 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// <returns> true if success </returns>
         public Boolean ReverseCorrectIt()
         {
-            return ReverseCorrectIt(GetGL_JournalBatch_ID()) != null;
+            return ReverseCorrectIt(GetVAGL_BatchJRNL_ID()) != null;
         }	//	reverseCorrectIt
 
         /// <summary>
         /// Reverse Correction.As if nothing happened - same date
         /// </summary>
-        /// <param name="GL_JournalBatch_ID">batch</param>
+        /// <param name="VAGL_BatchJRNL_ID">batch</param>
         /// <returns>reversed journal or null</returns>
-        public MJournal ReverseCorrectIt(int GL_JournalBatch_ID)
+        public MJournal ReverseCorrectIt(int VAGL_BatchJRNL_ID)
         {
             log.Info(ToString());
             //If any journal line is allocated then the Journal will not Reverted
-            string sql = "SELECT Count(IsAllocated) AS IsAllocated FROM GL_JournalLine WHERE GL_Journal_ID = " + GetGL_Journal_ID() + " AND IsAllocated = 'Y'";
+            string sql = "SELECT Count(IsAllocated) AS IsAllocated FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID = " + GetVAGL_JRNL_ID() + " AND IsAllocated = 'Y'";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx())) > 0)
             {
                 m_processMsg = Msg.GetMsg(GetCtx(), "DeleteAllowcationFirst");
@@ -1132,9 +1132,9 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             }
             //	Journal
             MJournal reverse = new MJournal(this);
-            reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);
+            reverse.SetVAGL_BatchJRNL_ID(VAGL_BatchJRNL_ID);
             reverse.SetDateDoc(GetDateDoc());
-            reverse.SetC_Period_ID(GetC_Period_ID());
+            reverse.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
             reverse.SetDateAcct(GetDateAcct());
             reverse.SetIsFormData(true);
             //	Reverse indicator
@@ -1154,7 +1154,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 // set Reversal property for identifying, record is reversal or not during saving or for other actions
                 reverse.SetIsReversal(true);
                 // Set Orignal Document Reference
-                reverse.SetReversalDoc_ID(GetGL_Journal_ID());
+                reverse.SetReversalDoc_ID(GetVAGL_JRNL_ID());
             }
 
             // for reversal document set Temp Document No to empty
@@ -1170,7 +1170,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             else
             {
                 // Create record on Assign Accounting Schema Tab if any
-                _processMsg = CopyAssignAccountingSchema(GetGL_Journal_ID(), reverse.GetGL_Journal_ID(), reverse.Get_TrxName());
+                _processMsg = CopyAssignAccountingSchema(GetVAGL_JRNL_ID(), reverse.GetVAGL_JRNL_ID(), reverse.Get_TrxName());
                 if (!String.IsNullOrEmpty(_processMsg))
                 {
                     return null;
@@ -1216,7 +1216,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             {
                 MAssignAcctSchema toAssignAcctSchemaLine = new MAssignAcctSchema(GetCtx(), 0, trxName);
                 PO.CopyValues(fromLines[i], toAssignAcctSchemaLine, GetVAF_Client_ID(), GetVAF_Org_ID());
-                toAssignAcctSchemaLine.SetGL_Journal_ID(newJournal_Id);
+                toAssignAcctSchemaLine.SetVAGL_JRNL_ID(newJournal_Id);
                 if (!toAssignAcctSchemaLine.Save())
                 {
                     pp = VLogger.RetrieveError();
@@ -1237,13 +1237,13 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         public MAssignAcctSchema[] GetAssignAcctSchemaLines()
         {
             List<MAssignAcctSchema> list = new List<MAssignAcctSchema>();
-            String sql = "SELECT * FROM GL_AssignAcctSchema WHERE GL_Journal_ID=@Param1";
+            String sql = "SELECT * FROM VAGL_AssignAcctSchema WHERE VAGL_JRNL_ID=@Param1";
             SqlParameter[] Param = new SqlParameter[1];
             IDataReader idr = null;
             DataTable dt = null;
             try
             {
-                Param[0] = new SqlParameter("@Param1", GetGL_Journal_ID());
+                Param[0] = new SqlParameter("@Param1", GetVAGL_JRNL_ID());
 
                 idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
                 dt = new DataTable();
@@ -1279,22 +1279,22 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// <returns> true if success </returns>
         public Boolean ReverseAccrualIt()
         {
-            return ReverseAccrualIt(GetGL_JournalBatch_ID()) != null;
+            return ReverseAccrualIt(GetVAGL_BatchJRNL_ID()) != null;
         }	//	reverseAccrualIt
 
         /// <summary>
         ///	Reverse Accrual.	Flip Dr/Cr - Use Today's date
         /// </summary>
-        /// <param name="GL_JournalBatch_ID">reversal batch</param>
+        /// <param name="VAGL_BatchJRNL_ID">reversal batch</param>
         /// <returns> journal or null </returns>
-        public MJournal ReverseAccrualIt(int GL_JournalBatch_ID)
+        public MJournal ReverseAccrualIt(int VAGL_BatchJRNL_ID)
         {
             log.Info(ToString());
             //	Journal
             MJournal reverse = new MJournal(this);
-            reverse.SetGL_JournalBatch_ID(GL_JournalBatch_ID);
+            reverse.SetVAGL_BatchJRNL_ID(VAGL_BatchJRNL_ID);
             reverse.SetDateDoc(DateTime.Now);
-            reverse.Set_ValueNoCheck("C_Period_ID", null);		//	reset
+            reverse.Set_ValueNoCheck("VAB_YearPeriod_ID", null);		//	reset
             reverse.SetDateAcct(reverse.GetDateDoc());
             //	Reverse indicator
             String description = reverse.GetDescription();
@@ -1471,18 +1471,18 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
 
         #endregion
         //Added by Arpit on 15th Dec,2016
-        public static MJournal CopyFrom(Ctx ctx, int GL_Journal_ID, DateTime? dateDoc, Trx trxName)
+        public static MJournal CopyFrom(Ctx ctx, int VAGL_JRNL_ID, DateTime? dateDoc, Trx trxName)
         {
-            MJournal from = new MJournal(ctx, GL_Journal_ID, trxName);
-            if (from.GetGL_Journal_ID() == 0)
+            MJournal from = new MJournal(ctx, VAGL_JRNL_ID, trxName);
+            if (from.GetVAGL_JRNL_ID() == 0)
             {
-                throw new ArgumentException("From Journal Batch not found GL_JournalBatch_ID=" + GL_Journal_ID);
+                throw new ArgumentException("From Journal Batch not found VAGL_BatchJRNL_ID=" + VAGL_JRNL_ID);
             }
             //
             MJournal to = new MJournal(ctx, 0, trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("DocumentNo", null);
-            // to.Set_ValueNoCheck("C_Period_ID", null);
+            // to.Set_ValueNoCheck("VAB_YearPeriod_ID", null);
             to.SetDateAcct(dateDoc);
             to.SetDateDoc(dateDoc);
             to.SetDocStatus(DOCSTATUS_Drafted);

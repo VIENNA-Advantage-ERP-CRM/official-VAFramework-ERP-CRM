@@ -14,10 +14,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MMasterForecastLine : X_C_MasterForecastLine
+    public class MMasterForecastLine : X_VAB_MasterForecastLine
     {
-        public MMasterForecastLine(Ctx ctx, int C_MasterForecastLine_ID, Trx trxName) :
-            base(ctx, C_MasterForecastLine_ID, null)
+        public MMasterForecastLine(Ctx ctx, int VAB_MasterForecastLine_ID, Trx trxName) :
+            base(ctx, VAB_MasterForecastLine_ID, null)
         {
 
         }
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
          {
              if (!success)
                  return success;
-             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+             string sql = "update VAB_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM VAB_MasterForecastLine WHERE isactive = 'Y' and VAB_MasterForecast_ID= " + GetVAB_MasterForecast_ID() + ") where VAB_MasterForecast_ID = " + GetVAB_MasterForecast_ID();
              int count = DB.ExecuteQuery(sql,null, null);
              return true;
              //return base.AfterSave(newRecord, success);
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
          {
              if (!success)
                  return success;
-             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+             string sql = "update VAB_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM VAB_MasterForecastLine WHERE isactive = 'Y' and VAB_MasterForecast_ID= " + GetVAB_MasterForecast_ID() + ") where VAB_MasterForecast_ID = " + GetVAB_MasterForecast_ID();
              int count = DB.ExecuteQuery(sql, null, null);
              return true;
             // return base.AfterDelete(success);

@@ -130,7 +130,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 invoiceLine.SetVAB_Charge_ID(line.GetVAB_Charge_ID());
                 invoiceLine.SetQty(line.GetQtyEntered());	// Entered/Invoiced
                 invoiceLine.SetPrice(line.GetPriceEntered());
-                invoiceLine.SetC_Tax_ID(line.GetC_Tax_ID());
+                invoiceLine.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
                 invoiceLine.SetTaxAmt(line.GetTaxAmt());
                 invoiceLine.SetLineNetAmt(line.GetLineNetAmt());
                 invoiceLine.SetLineTotalAmt(line.GetLineTotalAmt());

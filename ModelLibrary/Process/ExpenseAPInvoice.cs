@@ -241,7 +241,7 @@ namespace VAdvantage.Process
                                 }
                                 else
                                 {
-                                    invoice.SetC_PaymentTerm_ID(payterm);
+                                    invoice.SetVAB_PaymentTerm_ID(payterm);
 
                                 }
 
@@ -250,9 +250,9 @@ namespace VAdvantage.Process
                             else
                             {
                                 //JID_1783_1 if active paymentTerm not found ,then dont create the invoice.
-                                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_PaymentTerm WHERE C_PaymentTerm_ID=" + bp.GetPO_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
+                                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAB_PaymentTerm WHERE VAB_PaymentTerm_ID=" + bp.GetPO_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
                                 {
-                                    invoice.SetC_PaymentTerm_ID(bp.GetPO_PaymentTerm_ID());
+                                    invoice.SetVAB_PaymentTerm_ID(bp.GetPO_PaymentTerm_ID());
                                 }
                                 else
                                 {
@@ -353,9 +353,9 @@ namespace VAdvantage.Process
                             {
                                 invoice.SetVAB_Promotion_ID(line.GetVAB_Promotion_ID());
                             }
-                            if (line.GetC_Project_ID() != 0 && line.GetC_Project_ID() != invoice.GetC_Project_ID())
+                            if (line.GetVAB_Project_ID() != 0 && line.GetVAB_Project_ID() != invoice.GetVAB_Project_ID())
                             {
-                                invoice.SetC_Project_ID(line.GetC_Project_ID());
+                                invoice.SetVAB_Project_ID(line.GetVAB_Project_ID());
                             }
                             if (!invoice.Save())
                             {
@@ -379,15 +379,15 @@ namespace VAdvantage.Process
                             il.SetQty(line.GetQtyReimbursed());     //	Entered/Invoiced
                             il.SetDescription(line.GetDescription());
                             //
-                            il.SetC_Project_ID(line.GetC_Project_ID());
-                            il.SetC_ProjectPhase_ID(line.GetC_ProjectPhase_ID());
-                            il.SetC_ProjectTask_ID(line.GetC_ProjectTask_ID());
+                            il.SetVAB_Project_ID(line.GetVAB_Project_ID());
+                            il.SetVAB_ProjectStage_ID(line.GetVAB_ProjectStage_ID());
+                            il.SetVAB_ProjectJob_ID(line.GetVAB_ProjectJob_ID());
                             il.SetVAB_BillingCode_ID(line.GetVAB_BillingCode_ID());
                             il.SetVAB_Promotion_ID(line.GetVAB_Promotion_ID());
                             //
                             //	il.setPrice();	//	not really a list/limit price for reimbursements
                             il.SetPrice(line.GetPriceReimbursed()); //
-                            il.SetC_UOM_ID(line.GetC_UOM_ID());
+                            il.SetVAB_UOM_ID(line.GetVAB_UOM_ID());
 
                             // JID_0868
                             // chanegs done by Bharat on 12 September 2018 to set the Amount in List price column.
@@ -489,7 +489,7 @@ namespace VAdvantage.Process
         public int GetPaymentTerm(MTimeExpense te)
         {
             //JID_1783_1 add isActive Check
-            sqlqry1 = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Client_ID= " + te.GetVAF_Client_ID() + "  AND VAF_Org_ID IN(0, " + te.GetVAF_Org_ID() + " ) AND IsActive='Y' ORDER BY VAF_Org_ID DESC, C_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
+            sqlqry1 = "SELECT VAB_PaymentTerm_ID FROM VAB_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Client_ID= " + te.GetVAF_Client_ID() + "  AND VAF_Org_ID IN(0, " + te.GetVAF_Org_ID() + " ) AND IsActive='Y' ORDER BY VAF_Org_ID DESC, VAB_PaymentTerm_ID DESC FETCH NEXT 1 ROWS ONLY";
             pt = Util.GetValueOfInt(DB.ExecuteScalar(sqlqry1));
             return pt;
         }

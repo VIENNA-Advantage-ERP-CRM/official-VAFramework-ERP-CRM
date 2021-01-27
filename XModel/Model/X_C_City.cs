@@ -161,21 +161,21 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Region_ID VAF_Control_Ref_ID=157 */
-public static int C_REGION_ID_VAF_Control_Ref_ID=157;
+/** VAB_RegionState_ID VAF_Control_Ref_ID=157 */
+public static int VAB_REGIONSTATE_ID_VAF_Control_Ref_ID=157;
 /** Set Region.
-@param C_Region_ID Identifies a geographical Region */
-public void SetC_Region_ID (int C_Region_ID)
+@param VAB_RegionState_ID Identifies a geographical Region */
+public void SetVAB_RegionState_ID (int VAB_RegionState_ID)
 {
-if (C_Region_ID <= 0) Set_Value ("C_Region_ID", null);
+if (VAB_RegionState_ID <= 0) Set_Value ("VAB_RegionState_ID", null);
 else
-Set_Value ("C_Region_ID", C_Region_ID);
+Set_Value ("VAB_RegionState_ID", VAB_RegionState_ID);
 }
 /** Get Region.
 @return Identifies a geographical Region */
-public int GetC_Region_ID() 
+public int GetVAB_RegionState_ID() 
 {
-Object ii = Get_Value("C_Region_ID");
+Object ii = Get_Value("VAB_RegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

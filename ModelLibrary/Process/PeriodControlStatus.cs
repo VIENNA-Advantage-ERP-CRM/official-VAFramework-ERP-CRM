@@ -28,7 +28,7 @@ namespace VAdvantage.Process
     public class PeriodControlStatus : ProcessEngine.SvrProcess
     {
         // Period Control				
-        private int _C_PeriodControl_ID = 0;
+        private int _VAB_YearPeriodControl_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -48,7 +48,7 @@ namespace VAdvantage.Process
                     //log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_PeriodControl_ID = GetRecord_ID();
+            _VAB_YearPeriodControl_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -57,11 +57,11 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            //log.info("C_PeriodControl_ID=" + _C_PeriodControl_ID);
-            MPeriodControl pc = new MPeriodControl(GetCtx(), _C_PeriodControl_ID, Get_TrxName());
+            //log.info("VAB_YearPeriodControl_ID=" + _VAB_YearPeriodControl_ID);
+            MPeriodControl pc = new MPeriodControl(GetCtx(), _VAB_YearPeriodControl_ID, Get_TrxName());
             if (pc.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@  @C_PeriodControl_ID@=" + _C_PeriodControl_ID);
+                throw new Exception("@NotFound@  @VAB_YearPeriodControl_ID@=" + _VAB_YearPeriodControl_ID);
             }
             //	Permanently closed
             if (MPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(pc.GetPeriodStatus()))
@@ -91,8 +91,8 @@ namespace VAdvantage.Process
             pc.SetPeriodAction(MPeriodControl.PERIODACTION_NoAction);
             Boolean ok = pc.Save();
             //	Reset Cache
-            CacheMgt.Get().Reset("C_PeriodControl", 0);
-            CacheMgt.Get().Reset("C_Period", pc.GetC_Period_ID());
+            CacheMgt.Get().Reset("VAB_YearPeriodControl", 0);
+            CacheMgt.Get().Reset("VAB_YearPeriod", pc.GetVAB_YearPeriod_ID());
             if (!ok)
                 return "@Error@";
             return "@OK@";

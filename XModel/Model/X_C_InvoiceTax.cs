@@ -21,7 +21,7 @@ public X_VAB_Tax_Invoice (Context ctx, int VAB_Tax_Invoice_ID, Trx trxName) : ba
 /** if (VAB_Tax_Invoice_ID == 0)
 {
 SetVAB_Invoice_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
 SetTaxAmt (0.0);
@@ -34,7 +34,7 @@ public X_VAB_Tax_Invoice (Ctx ctx, int VAB_Tax_Invoice_ID, Trx trxName) : base (
 /** if (VAB_Tax_Invoice_ID == 0)
 {
 SetVAB_Invoice_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
 SetTaxAmt (0.0);
@@ -142,17 +142,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

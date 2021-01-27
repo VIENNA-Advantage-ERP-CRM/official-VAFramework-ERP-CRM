@@ -33,7 +33,7 @@ namespace VIS.Models
 
             MOrderLine orderline = new MOrderLine(ctx, id, null);
 
-            retDic["C_Tax_ID"] = Util.GetValueOfString(orderline.GetC_Tax_ID());
+            retDic["VAB_TaxRate_ID"] = Util.GetValueOfString(orderline.GetVAB_TaxRate_ID());
             retDic["PriceList"] = Util.GetValueOfString(orderline.GetPriceList());
             retDic["PriceLimit"] = Util.GetValueOfString(orderline.GetPriceLimit());
             retDic["PriceActual"] = Util.GetValueOfString(orderline.GetPriceActual());
@@ -46,7 +46,7 @@ namespace VIS.Models
             // when order line contains charge, it will be selected on Shipment Line on selection of Order Line
             retDic["VAB_Charge_ID"] = Util.GetValueOfString(orderline.GetVAB_Charge_ID());
             retDic["Qty"] = Util.GetValueOfString(orderline.GetQtyEntered());
-            retDic["C_UOM_ID"] = Util.GetValueOfString(orderline.GetC_UOM_ID());
+            retDic["VAB_UOM_ID"] = Util.GetValueOfString(orderline.GetVAB_UOM_ID());
             retDic["VAB_BusinessPartner_ID"] = Util.GetValueOfString(orderline.GetVAB_BusinessPartner_ID());
             retDic["PlannedHours"] = Util.GetValueOfString(orderline.GetQtyOrdered());
             retDic["M_AttributeSetInstance_ID"] = Util.GetValueOfString(orderline.GetM_AttributeSetInstance_ID());
@@ -55,9 +55,9 @@ namespace VIS.Models
             retDic["QtyEntered"] = Util.GetValueOfString(orderline.GetQtyEntered());
             retDic["VAB_BillingCode_ID"] = Util.GetValueOfString(orderline.GetVAB_BillingCode_ID());
             retDic["VAB_Promotion_ID"] = Util.GetValueOfString(orderline.GetVAB_Promotion_ID());
-            retDic["C_Project_ID"] = Util.GetValueOfString(orderline.GetC_Project_ID());
-            retDic["C_ProjectPhase_ID"] = Util.GetValueOfString(orderline.GetC_ProjectPhase_ID());
-            retDic["C_ProjectTask_ID"] = Util.GetValueOfString(orderline.GetC_ProjectTask_ID());
+            retDic["VAB_Project_ID"] = Util.GetValueOfString(orderline.GetVAB_Project_ID());
+            retDic["VAB_ProjectStage_ID"] = Util.GetValueOfString(orderline.GetVAB_ProjectStage_ID());
+            retDic["VAB_ProjectJob_ID"] = Util.GetValueOfString(orderline.GetVAB_ProjectJob_ID());
             retDic["VAF_OrgTrx_ID"] = Util.GetValueOfString(orderline.GetVAF_OrgTrx_ID());
             retDic["User1_ID"] = Util.GetValueOfString(orderline.GetUser1_ID());
             retDic["User2_ID"] = Util.GetValueOfString(orderline.GetUser2_ID());
@@ -84,9 +84,9 @@ namespace VIS.Models
             int M_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int M_AttributeSetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
-            int C_OrderLine_ID = Util.GetValueOfInt(paramValue[3].ToString());
+            int VAB_OrderLine_ID = Util.GetValueOfInt(paramValue[3].ToString());
             //End Assign parameter value
-            return MOrderLine.GetNotReserved(ctx, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, C_OrderLine_ID);
+            return MOrderLine.GetNotReserved(ctx, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, VAB_OrderLine_ID);
 
         }
         /// <summary>
@@ -99,33 +99,33 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int C_Tax_ID = 0;
-            int C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_TaxRate_ID = 0;
+            int VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || C_Order_ID == 0)
+            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Order_ID == 0)
             {
-                return C_Tax_ID;
+                return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MOrder inv = new MOrder(ctx, C_Order_ID, null);
+            MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
             MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
-                C_Tax_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
-                return C_Tax_ID;
+                VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
+                return VAB_TaxRate_ID;
             }
             if (M_Product_ID > 0)
             {
                 MProduct prod = new MProduct(ctx, M_Product_ID, null);
-                taxCategory = Util.GetValueOfInt(prod.GetC_TaxCategory_ID());
+                taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
             {
                 MCharge chrg = new MCharge(ctx, VAB_Charge_ID, null);
-                taxCategory = Util.GetValueOfInt(chrg.GetC_TaxCategory_ID());
+                taxCategory = Util.GetValueOfInt(chrg.GetVAB_TaxCategory_ID());
             }
             if (taxCategory > 0)
             {
@@ -135,12 +135,12 @@ namespace VIS.Models
 
                 if (taxCat.GetVATAX_Location() == "I")
                 {
-                    sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc INNER JOIN VAB_BPart_Location bpl ON loc.C_Location_ID = bpl.C_Location_ID WHERE bpl.VAB_BPart_Location_ID ="
+                    sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="
                         + inv.GetBill_Location_ID() + " AND bpl.IsActive = 'Y'";
                 }
                 else
                 {
-                    sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc INNER JOIN VAB_BPart_Location bpl ON loc.C_Location_ID = bpl.C_Location_ID WHERE bpl.VAB_BPart_Location_ID ="
+                    sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="
                         + inv.GetVAB_BPart_Location_ID() + " AND bpl.IsActive = 'Y'";
                 }
                 dsLoc = DB.ExecuteDataset(sql, null, null);
@@ -157,7 +157,7 @@ namespace VIS.Models
                     }
                 }
                 dsLoc = null;
-                sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgDetail org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
+                sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc LEFT JOIN VAF_OrgDetail org ON loc.VAB_Address_ID = org.VAB_Address_ID WHERE org.VAF_Org_ID ="
                         + inv.GetVAF_Org_ID() + " AND org.IsActive = 'Y'";
                 dsLoc = DB.ExecuteDataset(sql, null, null);
                 if (dsLoc != null)
@@ -186,10 +186,10 @@ namespace VIS.Models
                         {
                             if (taxCat.GetVATAX_Preference2() == "L")
                             {
-                                C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                                 else
                                 {
@@ -198,7 +198,7 @@ namespace VIS.Models
                                         if (Country_ID > 0)
                                         {
                                             dsLoc = null;
-                                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                                                 " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                                             dsLoc = DB.ExecuteDataset(sql, null, null);
                                             if (dsLoc != null)
@@ -209,28 +209,28 @@ namespace VIS.Models
                                                 }
                                                 else
                                                 {
-                                                    C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                                    if (C_Tax_ID > 0)
+                                                    VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                                    if (VAB_TaxRate_ID > 0)
                                                     {
-                                                        return C_Tax_ID;
+                                                        return VAB_TaxRate_ID;
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                                if (C_Tax_ID > 0)
+                                                VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                                if (VAB_TaxRate_ID > 0)
                                                 {
-                                                    return C_Tax_ID;
+                                                    return VAB_TaxRate_ID;
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                            if (C_Tax_ID > 0)
+                                            VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                            if (VAB_TaxRate_ID > 0)
                                             {
-                                                return C_Tax_ID;
+                                                return VAB_TaxRate_ID;
                                             }
                                         }
                                     }
@@ -241,7 +241,7 @@ namespace VIS.Models
                                 if (Country_ID > 0)
                                 {
                                     dsLoc = null;
-                                    sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                                    sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                                         " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                                     dsLoc = DB.ExecuteDataset(sql, null, null);
                                     if (dsLoc != null)
@@ -252,36 +252,36 @@ namespace VIS.Models
                                         }
                                         else
                                         {
-                                            C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                            if (C_Tax_ID > 0)
+                                            VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                            if (VAB_TaxRate_ID > 0)
                                             {
-                                                return C_Tax_ID;
+                                                return VAB_TaxRate_ID;
                                             }
                                         }
                                     }
                                     else
                                     {
-                                        C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                        if (C_Tax_ID > 0)
+                                        VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                        if (VAB_TaxRate_ID > 0)
                                         {
-                                            return C_Tax_ID;
+                                            return VAB_TaxRate_ID;
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                                 if (taxCat.GetVATAX_Preference3() == "L")
                                 {
-                                    C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                             }
@@ -289,22 +289,22 @@ namespace VIS.Models
                     }
                     if (taxType > 0)
                     {
-                        sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID  WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                        sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID  WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                             " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                        if (C_Tax_ID > 0)
+                        VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                     }
                 }
                 // if Tax Preference 1 is Location
                 else if (taxCat.GetVATAX_Preference1() == "L")
                 {
-                    C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                    if (C_Tax_ID > 0)
+                    VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                    if (VAB_TaxRate_ID > 0)
                     {
-                        return C_Tax_ID;
+                        return VAB_TaxRate_ID;
                     }
                     else
                     {
@@ -324,7 +324,7 @@ namespace VIS.Models
                                         if (Country_ID > 0)
                                         {
                                             dsLoc = null;
-                                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                                                 " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                                             dsLoc = DB.ExecuteDataset(sql, null, null);
                                             if (dsLoc != null)
@@ -335,28 +335,28 @@ namespace VIS.Models
                                                 }
                                                 else
                                                 {
-                                                    C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                                    if (C_Tax_ID > 0)
+                                                    VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                                    if (VAB_TaxRate_ID > 0)
                                                     {
-                                                        return C_Tax_ID;
+                                                        return VAB_TaxRate_ID;
                                                     }
                                                 }
                                             }
                                             else
                                             {
-                                                C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                                if (C_Tax_ID > 0)
+                                                VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                                if (VAB_TaxRate_ID > 0)
                                                 {
-                                                    return C_Tax_ID;
+                                                    return VAB_TaxRate_ID;
                                                 }
                                             }
                                         }
                                         else
                                         {
-                                            C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                            if (C_Tax_ID > 0)
+                                            VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                            if (VAB_TaxRate_ID > 0)
                                             {
-                                                return C_Tax_ID;
+                                                return VAB_TaxRate_ID;
                                             }
                                         }
                                     }
@@ -364,12 +364,12 @@ namespace VIS.Models
                             }
                             if (taxType > 0)
                             {
-                                sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                                sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                     " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                             }
                         }
@@ -378,7 +378,7 @@ namespace VIS.Models
                             if (Country_ID > 0)
                             {
                                 dsLoc = null;
-                                sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                                sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                                     " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                                 dsLoc = DB.ExecuteDataset(sql, null, null);
                                 if (dsLoc != null)
@@ -389,28 +389,28 @@ namespace VIS.Models
                                     }
                                     else
                                     {
-                                        C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                        if (C_Tax_ID > 0)
+                                        VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                        if (VAB_TaxRate_ID > 0)
                                         {
-                                            return C_Tax_ID;
+                                            return VAB_TaxRate_ID;
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                             }
                             else
                             {
-                                C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                             }
                             if (taxCat.GetVATAX_Preference3() == "T")
@@ -425,12 +425,12 @@ namespace VIS.Models
                                 }
                                 if (taxType > 0)
                                 {
-                                    sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                                    sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                         " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                                    C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                             }
@@ -443,7 +443,7 @@ namespace VIS.Models
                     if (Country_ID > 0)
                     {
                         dsLoc = null;
-                        sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                        sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                             " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                         dsLoc = DB.ExecuteDataset(sql, null, null);
                         if (dsLoc != null)
@@ -454,28 +454,28 @@ namespace VIS.Models
                             }
                             else
                             {
-                                C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                             }
                         }
                         else
                         {
-                            C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                            if (C_Tax_ID > 0)
+                            VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                            if (VAB_TaxRate_ID > 0)
                             {
-                                return C_Tax_ID;
+                                return VAB_TaxRate_ID;
                             }
                         }
                     }
                     else
                     {
-                        C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                        if (C_Tax_ID > 0)
+                        VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                     }
                     if (taxCat.GetVATAX_Preference2() == "T")
@@ -491,31 +491,31 @@ namespace VIS.Models
                             {
                                 if (taxCat.GetVATAX_Preference3() == "L")
                                 {
-                                    C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                             }
                         }
                         if (taxType > 0)
                         {
-                            sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                            sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                 " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                            if (C_Tax_ID > 0)
+                            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                            if (VAB_TaxRate_ID > 0)
                             {
-                                return C_Tax_ID;
+                                return VAB_TaxRate_ID;
                             }
                         }
                     }
                     else if (taxCat.GetVATAX_Preference2() == "L")
                     {
-                        C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                        if (C_Tax_ID > 0)
+                        VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                         if (taxCat.GetVATAX_Preference3() == "T")
                         {
@@ -529,12 +529,12 @@ namespace VIS.Models
                             }
                             if (taxType > 0)
                             {
-                                sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                                sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                     " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                             }
                         }
@@ -542,19 +542,19 @@ namespace VIS.Models
                 }
                 if (taxCat.GetVATAX_Preference1() == "R" || taxCat.GetVATAX_Preference2() == "R" || taxCat.GetVATAX_Preference3() == "R")
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxRegion tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.IsDefault = 'Y' AND tcr.IsActive = 'Y' 
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxRegion tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.IsDefault = 'Y' AND tcr.IsActive = 'Y' 
                     AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "') ORDER BY tcr.Updated";
-                    C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (C_Tax_ID > 0)
+                    VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    if (VAB_TaxRate_ID > 0)
                     {
-                        return C_Tax_ID;
+                        return VAB_TaxRate_ID;
                     }
                 }
-                sql = @"SELECT tcr.C_Tax_ID FROM C_TaxCategory tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory + " AND tcr.IsActive = 'Y'";
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                return C_Tax_ID;
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VAB_TaxCategory tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory + " AND tcr.IsActive = 'Y'";
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                return VAB_TaxRate_ID;
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         /// <summary>
@@ -567,33 +567,33 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int C_Tax_ID = 0;
-            int C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_TaxRate_ID = 0;
+            int VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || C_Order_ID == 0)
+            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Order_ID == 0)
             {
-                return C_Tax_ID;
+                return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MOrder inv = new MOrder(ctx, C_Order_ID, null);
+            MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
             MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
-                C_Tax_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
-                return C_Tax_ID;
+                VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
+                return VAB_TaxRate_ID;
             }
             if (M_Product_ID > 0)
             {
                 MProduct prod = new MProduct(ctx, M_Product_ID, null);
-                taxCategory = Util.GetValueOfInt(prod.GetC_TaxCategory_ID());
+                taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
             {
                 MCharge chrg = new MCharge(ctx, VAB_Charge_ID, null);
-                taxCategory = Util.GetValueOfInt(chrg.GetC_TaxCategory_ID());
+                taxCategory = Util.GetValueOfInt(chrg.GetVAB_TaxCategory_ID());
             }
             if (taxCategory > 0)
             {
@@ -603,12 +603,12 @@ namespace VIS.Models
 
                 if (taxCat.GetVATAX_Location() == "I")
                 {
-                    sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc INNER JOIN VAB_BPart_Location bpl ON loc.C_Location_ID = bpl.C_Location_ID WHERE bpl.VAB_BPart_Location_ID ="
+                    sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="
                         + inv.GetBill_Location_ID() + " AND bpl.IsActive = 'Y'";
                 }
                 else
                 {
-                    sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc INNER JOIN VAB_BPart_Location bpl ON loc.C_Location_ID = bpl.C_Location_ID WHERE bpl.VAB_BPart_Location_ID ="
+                    sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="
                         + inv.GetVAB_BPart_Location_ID() + " AND bpl.IsActive = 'Y'";
                 }
                 dsLoc = DB.ExecuteDataset(sql, null, null);
@@ -625,7 +625,7 @@ namespace VIS.Models
                     }
                 }
                 dsLoc = null;
-                sql = @"SELECT loc.VAB_Country_ID,loc.C_Region_ID,loc.Postal FROM C_Location loc LEFT JOIN VAF_OrgDetail org ON loc.C_Location_ID = org.C_Location_ID WHERE org.VAF_Org_ID ="
+                sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc LEFT JOIN VAF_OrgDetail org ON loc.VAB_Address_ID = org.VAB_Address_ID WHERE org.VAF_Org_ID ="
                         + inv.GetVAF_Org_ID() + " AND org.IsActive = 'Y'";
                 dsLoc = DB.ExecuteDataset(sql, null, null);
                 if (dsLoc != null)
@@ -667,22 +667,22 @@ namespace VIS.Models
                         }
                         if (taxType > 0)
                         {
-                            sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID  WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                            sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID  WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                 " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxBase = 'T' AND tcr.VATAX_TaxType_ID =" + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                            if (C_Tax_ID > 0)
+                            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                            if (VAB_TaxRate_ID > 0)
                             {
-                                return C_Tax_ID;
+                                return VAB_TaxRate_ID;
                             }
                         }
                     }
                     // if Tax Preference is Location
                     else if (pref == "L")
                     {
-                        C_Tax_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                        if (C_Tax_ID > 0)
+                        VAB_TaxRate_ID = GetTaxFromLocation(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                     }
                     // if Tax Preference is Tax Region
@@ -691,7 +691,7 @@ namespace VIS.Models
                         if (Country_ID > 0)
                         {
                             dsLoc = null;
-                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE C_TaxCategory_ID = " + taxCategory +
+                            sql = @"SELECT VATAX_TaxRegion_ID FROM VATAX_TaxCatRate  WHERE VAB_TaxCategory_ID = " + taxCategory +
                                 " AND VATAX_TaxBase = 'R' AND VATAX_DiffCountry = 'Y' AND IsActive = 'Y' AND VAB_Country_ID = " + Country_ID;
                             dsLoc = DB.ExecuteDataset(sql, null, null);
                             if (dsLoc != null)
@@ -702,28 +702,28 @@ namespace VIS.Models
                                 }
                                 else
                                 {
-                                    C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                    if (C_Tax_ID > 0)
+                                    VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                    if (VAB_TaxRate_ID > 0)
                                     {
-                                        return C_Tax_ID;
+                                        return VAB_TaxRate_ID;
                                     }
                                 }
                             }
                             else
                             {
-                                C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                                if (C_Tax_ID > 0)
+                                VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                                if (VAB_TaxRate_ID > 0)
                                 {
-                                    return C_Tax_ID;
+                                    return VAB_TaxRate_ID;
                                 }
                             }
                         }
                         else
                         {
-                            C_Tax_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
-                            if (C_Tax_ID > 0)
+                            VAB_TaxRate_ID = GetTaxFromRegion(inv.IsSOTrx(), taxCategory, Country_ID, Region_ID, Postal);
+                            if (VAB_TaxRate_ID > 0)
                             {
-                                return C_Tax_ID;
+                                return VAB_TaxRate_ID;
                             }
                         }
                     }
@@ -736,40 +736,40 @@ namespace VIS.Models
 
                         if (taxType > 0)
                         {
-                            sql = "SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID  WHERE tcr.C_TaxCategory_ID = " + taxCategory +
+                            sql = "SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID  WHERE tcr.VAB_TaxCategory_ID = " + taxCategory +
                                 " AND tcr.IsActive ='Y' AND tcr.VATAX_TaxBase = 'T' AND tcr.VATAX_TaxType_ID = " + taxType + " AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "')";
-                            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                            if (C_Tax_ID > 0)
+                            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                            if (VAB_TaxRate_ID > 0)
                             {
-                                return C_Tax_ID;
+                                return VAB_TaxRate_ID;
                             }
                         }
                     }
                 }
                 if (taxCat.GetVATAX_Preference1() == "R" || taxCat.GetVATAX_Preference2() == "R" || taxCat.GetVATAX_Preference3() == "R")
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxRegion tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.IsDefault = 'Y' AND tcr.IsActive = 'Y' 
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxRegion tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.IsDefault = 'Y' AND tcr.IsActive = 'Y' 
                     AND tx.SOPOType IN ('B','" + (inv.IsSOTrx() ? 'S' : 'P') + "') ORDER BY tcr.Updated";
-                    C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    if (C_Tax_ID > 0)
+                    VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                    if (VAB_TaxRate_ID > 0)
                     {
-                        return C_Tax_ID;
+                        return VAB_TaxRate_ID;
                     }
                 }
-                sql = @"SELECT tcr.C_Tax_ID FROM C_TaxCategory tcr WHERE tcr.C_TaxCategory_ID = " + taxCategory + " AND tcr.IsActive = 'Y'";
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                return C_Tax_ID;
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VAB_TaxCategory tcr WHERE tcr.VAB_TaxCategory_ID = " + taxCategory + " AND tcr.IsActive = 'Y'";
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                return VAB_TaxRate_ID;
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         // Return Exempted Tax Fro the Organization
         VLogger log = VLogger.GetVLogger("Tax");
         private int GetExemptTax(Ctx ctx, int VAF_Org_ID)
         {
-            int C_Tax_ID = 0;
-            String sql = "SELECT t.C_Tax_ID "
-                + "FROM C_Tax t"
+            int VAB_TaxRate_ID = 0;
+            String sql = "SELECT t.VAB_TaxRate_ID "
+                + "FROM VAB_TaxRate t"
                 + " INNER JOIN VAF_Org o ON (t.VAF_Client_ID=o.VAF_Client_ID) "
                 + "WHERE t.IsActive='Y' AND t.IsTaxExempt='Y' AND o.VAF_Org_ID= " + VAF_Org_ID
                 + "ORDER BY t.Rate DESC";
@@ -780,7 +780,7 @@ namespace VIS.Models
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = pstmt.Tables[0].Rows[i];
-                    C_Tax_ID = Util.GetValueOfInt(dr[0]);
+                    VAB_TaxRate_ID = Util.GetValueOfInt(dr[0]);
                     found = true;
                 }
             }
@@ -788,193 +788,193 @@ namespace VIS.Models
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            log.Fine("TaxExempt=Y - C_Tax_ID=" + C_Tax_ID);
-            if (C_Tax_ID == 0)
+            log.Fine("TaxExempt=Y - VAB_TaxRate_ID=" + VAB_TaxRate_ID);
+            if (VAB_TaxRate_ID == 0)
             {
                 log.SaveError("TaxCriteriaNotFound", Msg.GetMsg(ctx, "TaxNoExemptFound")
                     + (found ? "" : " (Tax/Org=" + VAF_Org_ID + " not found)"));
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         private int GetTaxFromLocation(bool isSoTrx, int taxCategory, int Country_ID, int Region_ID, string Postal)
         {
             string sql = "";
-            int C_Tax_ID = 0;
+            int VAB_TaxRate_ID = 0;
             if (String.IsNullOrEmpty(Postal))
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                    " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND NVL(tcr.C_Region_ID,0) = " + Region_ID +
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory +
+                    " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND NVL(tcr.VAB_RegionState_ID,0) = " + Region_ID +
                     " AND tcr.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             else
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                    " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND NVL(tcr.C_Region_ID,0) = " + Region_ID +
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory +
+                    " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND NVL(tcr.VAB_RegionState_ID,0) = " + Region_ID +
                     " AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" +
                     " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            if (C_Tax_ID > 0)
+            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            if (VAB_TaxRate_ID > 0)
             {
-                return C_Tax_ID;
+                return VAB_TaxRate_ID;
             }
             else
             {
                 if (String.IsNullOrEmpty(Postal))
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND tcr.Postal IS NULL AND tx.SOPOType IN ('B','"
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory +
+                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND tcr.VAB_RegionState_ID IS NULL AND tcr.Postal IS NULL AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 else
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal +
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory +
+                        " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID = " + Country_ID + " AND tcr.VAB_RegionState_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '" + Postal +
                         "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2" + " END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                         + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                if (C_Tax_ID > 0)
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (VAB_TaxRate_ID > 0)
                 {
-                    return C_Tax_ID;
+                    return VAB_TaxRate_ID;
                 }
                 else
                 {
                     if (!String.IsNullOrEmpty(Postal))
                     {
-                        sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID =" + taxCategory +
-                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID IS NULL " + " AND tcr.C_Region_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '"
+                        sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID =" + taxCategory +
+                            " AND tcr.IsActive = 'Y' AND tcr.VATAX_TaxBase = 'L' AND tcr.VAB_Country_ID IS NULL " + " AND tcr.VAB_RegionState_ID IS NULL AND (CASE WHEN (tcr.vatax_ispostal = 'Y') THEN CASE WHEN tcr.postal <= '"
                             + Postal + "' AND tcr.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN tcr.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','"
                             + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     }
-                    if (C_Tax_ID > 0)
+                    if (VAB_TaxRate_ID > 0)
                     {
-                        return C_Tax_ID;
+                        return VAB_TaxRate_ID;
                     }
                 }
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         private int GetTaxFromRegion(bool isSoTrx, int taxCategory, int Country_ID, int Region_ID, string Postal)
         {
             string sql = "";
-            int C_Tax_ID = 0;
+            int VAB_TaxRate_ID = 0;
             if (String.IsNullOrEmpty(Postal))
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND NVL(trl.C_Region_ID,0) = " + Region_ID +
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND NVL(trl.VAB_RegionState_ID,0) = " + Region_ID +
                 " AND trl.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             else
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND NVL(trl.C_Region_ID,0) = " + Region_ID +
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND NVL(trl.VAB_RegionState_ID,0) = " + Region_ID +
                 " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '"
                 + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            if (C_Tax_ID > 0)
+            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            if (VAB_TaxRate_ID > 0)
             {
-                return C_Tax_ID;
+                return VAB_TaxRate_ID;
             }
             else
             {
                 if (String.IsNullOrEmpty(Postal))
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND trl.Postal IS NULL AND tx.SOPOType IN ('B','"
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.VAB_RegionState_ID IS NULL AND trl.Postal IS NULL AND tx.SOPOType IN ('B','"
                     + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 else
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                    + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.VAB_RegionState_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
                     + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                if (C_Tax_ID > 0)
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (VAB_TaxRate_ID > 0)
                 {
-                    return C_Tax_ID;
+                    return VAB_TaxRate_ID;
                 }
                 else
                 {
                     if (!String.IsNullOrEmpty(Postal))
                     {
-                        sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                        sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                        + taxCategory + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID IS NULL AND trl.VAB_RegionState_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
                         + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                        if (C_Tax_ID > 0)
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                     }
                 }
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         private int GetTaxFromRegion(bool isSoTrx, int taxCategory, int Country_ID, int Region_ID, string Postal, int taxRegion, int toCountry)
         {
             string sql = "";
-            int C_Tax_ID = 0;
+            int VAB_TaxRate_ID = 0;
             if (String.IsNullOrEmpty(Postal))
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID +
-                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND trl.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                " AND NVL(trl.VAB_RegionState_ID,0) = " + Region_ID + " AND trl.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
             else
             {
-                sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
+                sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
                 + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID +
-                " AND NVL(trl.C_Region_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal +
+                " AND NVL(trl.VAB_RegionState_ID,0) = " + Region_ID + " AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '" + Postal + "' AND trl.postal_to >= '" + Postal +
                 "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
             }
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            if (C_Tax_ID > 0)
+            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            if (VAB_TaxRate_ID > 0)
             {
-                return C_Tax_ID;
+                return VAB_TaxRate_ID;
             }
             else
             {
                 if (String.IsNullOrEmpty(Postal))
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
                     + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID +
-                    " AND trl.C_Region_ID IS NULL AND trl.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
+                    " AND trl.VAB_RegionState_ID IS NULL AND trl.Postal IS NULL AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
                 else
                 {
-                    sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                    sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                    + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID = " + Country_ID + " AND trl.VAB_RegionState_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
                     + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
                 }
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                if (C_Tax_ID > 0)
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                if (VAB_TaxRate_ID > 0)
                 {
-                    return C_Tax_ID;
+                    return VAB_TaxRate_ID;
                 }
                 else
                 {
                     if (!String.IsNullOrEmpty(Postal))
                     {
-                        sql = @"SELECT tcr.C_Tax_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN C_Tax tx ON tcr.C_Tax_ID = tx.C_Tax_ID WHERE tcr.C_TaxCategory_ID = "
-                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID IS NULL AND trl.C_Region_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
+                        sql = @"SELECT tcr.VAB_TaxRate_ID FROM VATAX_TaxCatRate tcr LEFT JOIN VATAX_TaxRegionLine trl ON tcr.VATAX_TaxRegion_ID = trl.VATAX_TaxRegion_ID LEFT JOIN VAB_TaxRate tx ON tcr.VAB_TaxRate_ID = tx.VAB_TaxRate_ID WHERE tcr.VAB_TaxCategory_ID = "
+                        + taxCategory + " AND tcr.VATAX_DiffCountry = 'Y' AND tcr.VAB_Country_ID = " + toCountry + " AND tcr.VATAX_TaxRegion_ID = " + taxRegion + " AND tcr.VATAX_TaxBase = 'R' AND tcr.IsActive = 'Y' AND trl.VAB_Country_ID IS NULL AND trl.VAB_RegionState_ID IS NULL AND (CASE WHEN (trl.vatax_ispostal = 'Y') THEN CASE WHEN trl.postal <= '"
                         + Postal + "' AND trl.postal_to >= '" + Postal + "' THEN 1 ELSE 2 END ELSE  CASE WHEN trl.postal = '" + Postal + "' THEN 1 ELSE 2 END END) = 1 AND tx.SOPOType IN ('B','" + (isSoTrx ? 'S' : 'P') + "') ORDER BY tx.SOPOType DESC";
-                        C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                        if (C_Tax_ID > 0)
+                        VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                        if (VAB_TaxRate_ID > 0)
                         {
-                            return C_Tax_ID;
+                            return VAB_TaxRate_ID;
                         }
                     }
                 }
             }
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         /// <summary>
@@ -992,9 +992,9 @@ namespace VIS.Models
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
             //int _priceListVersion_Id = Util.GetValueOfInt(paramValue[1].ToString());
-            int _C_Order_Id = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Order_Id = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
-            int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
+            int _VAB_UOM_Id = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _VAB_BusinessPartner_Id = Util.GetValueOfInt(paramValue[5].ToString());
             //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
@@ -1021,7 +1021,7 @@ namespace VIS.Models
             if (countEd011 > 0)
             {
                 MOrderModel objOrder = new MOrderModel();
-                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
+                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _VAB_Order_Id.ToString());
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
@@ -1037,14 +1037,14 @@ namespace VIS.Models
                     sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                      + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                      + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                     + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                     + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 else
                 {
                     sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                    + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                    + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                   + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                   + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 int countrecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                 if (countrecord > 0)
@@ -1056,14 +1056,14 @@ namespace VIS.Models
                         sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                     + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                     + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                    + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                    + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                     else
                     {
                         sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                   + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                   + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                  + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                  + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                     DataSet ds = DB.ExecuteDataset(sql.ToString());
                     if (ds != null && ds.Tables.Count > 0)
@@ -1084,7 +1084,7 @@ namespace VIS.Models
                     sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                 + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                 + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     DataSet ds1 = DB.ExecuteDataset(sql.ToString());
                     if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                     {
@@ -1099,21 +1099,21 @@ namespace VIS.Models
                         // get uom from product
                         var paramStr = _m_Product_Id.ToString();
                         MProductModel objProduct = new MProductModel();
-                        var prodC_UOM_ID = objProduct.GetC_UOM_ID(ctx, paramStr);
+                        var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                         sql.Clear();
                         if (_m_AttributeSetInstance_Id > 0)
                         {
                             sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                         + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                         + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                        + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                        + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                         else
                         {
                             sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                       + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                      + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                      + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                         DataSet ds = DB.ExecuteDataset(sql.ToString());
                         if (ds != null && ds.Tables.Count > 0)
@@ -1132,7 +1132,7 @@ namespace VIS.Models
                                 sql.Append("SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                             + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                             + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                            + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                            + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                                 DataSet ds2 = DB.ExecuteDataset(sql.ToString());
                                 if (ds2 != null && ds.Tables.Count > 0)
                                 {
@@ -1148,15 +1148,15 @@ namespace VIS.Models
                             }
                         }
                         sql.Clear();
-                        sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                        sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                                    " AND con.M_Product_ID = " + _m_Product_Id +
-                                                   " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                                                   " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id);
                         var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                         if (rate == 0)
                         {
                             sql.Clear();
-                            sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                                  " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                            sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                                  " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id);
                             rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                         }
                         if (rate == 0)
@@ -1190,9 +1190,9 @@ namespace VIS.Models
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
             //int _priceListVersion_Id = Util.GetValueOfInt(paramValue[1].ToString());
-            int _c_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
-            int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
+            int _VAB_UOM_Id = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
             //decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
@@ -1212,7 +1212,7 @@ namespace VIS.Models
             decimal _flatDiscount = 0;
 
             MOrderModel objOrder = new MOrderModel();
-            _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
+            _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _VAB_Order_ID.ToString());
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
             _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
@@ -1229,14 +1229,14 @@ namespace VIS.Models
                     sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                      + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                      + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                     + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                     + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 else
                 {
                     sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                    + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                    + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                   + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                   + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
             }
             else if (countVAPRC > 0)
@@ -1266,14 +1266,14 @@ namespace VIS.Models
                         sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                     + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                     + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                    + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                    + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                     else
                     {
                         sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                   + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                   + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                  + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                  + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                 }
                 else if (countVAPRC > 0)
@@ -1313,7 +1313,7 @@ namespace VIS.Models
                     sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                 + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                 + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 else if (countVAPRC > 0)
                 {
@@ -1336,7 +1336,7 @@ namespace VIS.Models
                     // get uom from product
                     var paramStr = _m_Product_Id.ToString();
                     MProductModel objProduct = new MProductModel();
-                    var prodC_UOM_ID = objProduct.GetC_UOM_ID(ctx, paramStr);
+                    var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                     sql.Clear();
                     if (countEd011 > 0)
                     {
@@ -1345,14 +1345,14 @@ namespace VIS.Models
                             sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                         + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                         + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                        + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                        + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                         else
                         {
                             sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                       + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                      + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                      + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                     }
                     else if (countVAPRC > 0)
@@ -1390,7 +1390,7 @@ namespace VIS.Models
                                 sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                             + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                             + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                            + "  AND C_UOM_ID=" + prodC_UOM_ID);
+                                            + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                             }
                             else if (countVAPRC > 0)
                             {
@@ -1415,15 +1415,15 @@ namespace VIS.Models
                     }
 
                     sql.Clear();
-                    sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                    sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                                " AND con.M_Product_ID = " + _m_Product_Id +
-                                               " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                                               " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id);
                     var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (rate == 0)
                     {
                         sql.Clear();
-                        sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                              " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id);
+                        sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                              " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id);
                         rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                     }
 
@@ -1454,18 +1454,18 @@ namespace VIS.Models
 
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
-            int _c_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
-            int _c_Uom_Id = Util.GetValueOfInt(paramValue[3].ToString());
+            int _VAB_UOM_Id = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
             decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[7].ToString());
-            int prodC_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
+            int prodVAB_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
             //End Assign parameter value
 
             MOrderModel objOrder = new MOrderModel();
-            int _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
+            int _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _VAB_Order_ID.ToString());
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
             int _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
@@ -1479,14 +1479,14 @@ namespace VIS.Models
                 sql = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                             + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                             + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                            + "  AND C_UOM_ID=" + prodC_UOM_ID;
+                            + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID;
             }
             else
             {
                 sql = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                           + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                           + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                          + "  AND C_UOM_ID=" + prodC_UOM_ID;
+                          + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID;
             }
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0)
@@ -1504,7 +1504,7 @@ namespace VIS.Models
                     sql = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                 + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                 + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                + "  AND C_UOM_ID=" + prodC_UOM_ID;
+                                + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID;
                     DataSet ds2 = DB.ExecuteDataset(sql);
                     if (ds2 != null && ds.Tables.Count > 0)
                     {
@@ -1520,14 +1520,14 @@ namespace VIS.Models
                 }
             }
 
-            sql = "SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+            sql = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                        " AND con.M_Product_ID = " + _m_Product_Id +
-                                       " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id;
+                                       " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id;
             var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
             if (rate == 0)
             {
-                sql = "SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                      " AND con.C_UOM_ID = " + prodC_UOM_ID + " AND con.C_UOM_To_ID = " + _c_Uom_Id;
+                sql = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                      " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id;
                 rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
             }
             PriceEntered = PriceEntered * rate;
@@ -1553,9 +1553,9 @@ namespace VIS.Models
 
             //Assign parameter value
             int _VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int _c_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Order_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
-            int _c_UOM_To_ID = Util.GetValueOfInt(paramValue[3].ToString());
+            int _VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _m_Product_Id = Util.GetValueOfInt(paramValue[5].ToString());
             decimal _qtyEntered = Util.GetValueOfDecimal(paramValue[6].ToString());
@@ -1578,7 +1578,7 @@ namespace VIS.Models
                 Dictionary<String, String> bpartner = objBPartner.GetBPartner(ctx, _VAB_BusinessPartner_ID.ToString());
 
                 MOrderModel objOrder = new MOrderModel();
-                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
+                _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _VAB_Order_ID.ToString());
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
                 _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
@@ -1586,7 +1586,7 @@ namespace VIS.Models
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                       + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
-                                      + "  AND C_UOM_ID=" + _c_UOM_To_ID;
+                                      + "  AND VAB_UOM_ID=" + _VAB_UOM_To_ID;
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -1602,7 +1602,7 @@ namespace VIS.Models
                 {
                     sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                      + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) AND C_UOM_ID=" + _c_UOM_To_ID;
+                                      + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) AND VAB_UOM_ID=" + _VAB_UOM_To_ID;
                     ds = DB.ExecuteDataset(sql, null, null);
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                     {
@@ -1643,7 +1643,7 @@ namespace VIS.Models
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[1].ToString());
-            int _C_Order_Id = Util.GetValueOfInt(paramValue[2].ToString());
+            int _VAB_Order_Id = Util.GetValueOfInt(paramValue[2].ToString());
             int _VAB_BusinessPartner_Id = Util.GetValueOfInt(paramValue[3].ToString());
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[4].ToString());
             int purchasingUom = Util.GetValueOfInt(paramValue[5].ToString());
@@ -1656,22 +1656,22 @@ namespace VIS.Models
             decimal QtyOrdered = 0;
             int _m_DiscountSchema_ID = 0;
             decimal _flatDiscount = 0;
-            int _c_Uom_Id = 0;
+            int _VAB_UOM_Id = 0;
             int _priceListVersion_Id = 0;
             int _m_PriceList_ID = 0;
             int _standardPrecision = 0;
 
             MProductModel objProduct = new MProductModel();
-            _c_Uom_Id = objProduct.GetC_UOM_ID(ctx, _m_Product_Id.ToString());
+            _VAB_UOM_Id = objProduct.GetVAB_UOM_ID(ctx, _m_Product_Id.ToString());
 
             MOrderModel objOrder = new MOrderModel();
-            _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
+            _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _VAB_Order_Id.ToString());
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
             _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
 
             MUOMModel objUOM = new MUOMModel();
-            _standardPrecision = objUOM.GetPrecision(ctx, _c_Uom_Id.ToString());
+            _standardPrecision = objUOM.GetPrecision(ctx, _VAB_UOM_Id.ToString());
 
             MBPartnerModel objBPartner = new MBPartnerModel();
             Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _VAB_BusinessPartner_Id.ToString());
@@ -1681,7 +1681,7 @@ namespace VIS.Models
             sql.Append("SELECT PriceStd , PriceList , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                       + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                      + "  AND C_UOM_ID=" + purchasingUom);
+                      + "  AND VAB_UOM_ID=" + purchasingUom);
             DataSet ds = DB.ExecuteDataset(sql.ToString());
             if (ds != null && ds.Tables.Count > 0)
             {
@@ -1696,18 +1696,18 @@ namespace VIS.Models
 
                     //set Conversion Ordered Qty
                     sql.Clear();
-                    sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                    sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                       " AND con.M_Product_ID = " + _m_Product_Id +
-                                      " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                                      " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                     var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (rate == 0)
                     {
                         sql.Clear();
-                        sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                              " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                        sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                              " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                         rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                     }
-                    if ((_c_Uom_Id == purchasingUom) && (rate == 0))
+                    if ((_VAB_UOM_Id == purchasingUom) && (rate == 0))
                     {
                         rate = 1;
                     }
@@ -1719,7 +1719,7 @@ namespace VIS.Models
                     sql.Append("SELECT PriceStd , PriceList , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                 + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
                                 + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
-                                + "  AND C_UOM_ID=" + _c_Uom_Id);
+                                + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     DataSet ds2 = DB.ExecuteDataset(sql.ToString());
                     if (ds2 != null && ds.Tables.Count > 0)
                     {
@@ -1732,15 +1732,15 @@ namespace VIS.Models
 
                             //set Conversion Ordered Qty
                             sql.Clear();
-                            sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                            sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                               " AND con.M_Product_ID = " + _m_Product_Id +
-                                              " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                                              " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                             var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                             if (rate == 0)
                             {
                                 sql.Clear();
-                                sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                                      " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                                sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                                      " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                                 rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                             }
 
@@ -1758,15 +1758,15 @@ namespace VIS.Models
                         {
                             //set Conversion Ordered Qty
                             sql.Clear();
-                            sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y' " +
+                            sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                                               " AND con.M_Product_ID = " + _m_Product_Id +
-                                              " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                                              " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                             var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                             if (rate == 0)
                             {
                                 sql.Clear();
-                                sql.Append("SELECT con.DivideRate FROM C_UOM_Conversion con INNER JOIN C_UOM uom ON con.C_UOM_ID = uom.C_UOM_ID WHERE con.IsActive = 'Y'" +
-                                      " AND con.C_UOM_ID = " + _c_Uom_Id + " AND con.C_UOM_To_ID = " + purchasingUom);
+                                sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
+                                      " AND con.VAB_UOM_ID = " + _VAB_UOM_Id + " AND con.VAB_UOM_To_ID = " + purchasingUom);
                                 rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                             }
                             if (rate == 0)
@@ -1806,12 +1806,12 @@ namespace VIS.Models
             int countEd011 = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["countEd011"] = Convert.ToString(countEd011);
 
-            sql = "SELECT C_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = " + _VAB_BusinessPartner_Id +
+            sql = "SELECT VAB_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = " + _VAB_BusinessPartner_Id +
                     " AND M_Product_ID = " + _m_Product_Id;
             int purchasingUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["purchasingUom"] = Convert.ToString(purchasingUom);
 
-            sql = "SELECT C_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
+            sql = "SELECT VAB_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + _m_Product_Id;
             int headerUom = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             retDic["headerUom"] = Convert.ToString(headerUom);
 
@@ -1991,7 +1991,7 @@ namespace VIS.Models
 
             //Assign parameter value
             int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
-            int _c_Order_Id = Util.GetValueOfInt(paramValue[1].ToString());
+            int _VAB_Order_Id = Util.GetValueOfInt(paramValue[1].ToString());
             int _VAB_Charge_Id = Util.GetValueOfInt(paramValue[2].ToString());
             //End Assign parameter value
 
@@ -2006,7 +2006,7 @@ namespace VIS.Models
             retDic["_CountVATAX"] = _CountVATAX.ToString();
 
             MOrderModel objOrder = new MOrderModel();
-            Dictionary<String, object> order = objOrder.GetOrder(ctx, _c_Order_Id.ToString());
+            Dictionary<String, object> order = objOrder.GetOrder(ctx, _VAB_Order_Id.ToString());
             _VAB_BusinessPartner_Id = Util.GetValueOfInt(order["VAB_BusinessPartner_ID"]);
             _c_Bill_Location_Id = Util.GetValueOfInt(order["Bill_Location_ID"]);
 
@@ -2020,10 +2020,10 @@ namespace VIS.Models
                 string taxRule = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
                 retDic["taxRule"] = taxRule.ToString();
 
-                sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'C_Tax_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'C_TaxCategory')";
+                sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'VAB_TaxRate_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'VAB_TaxCategory')";
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
                 {
-                    var paramString = (_c_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_VAB_Charge_Id).ToString();
+                    var paramString = (_VAB_Order_Id).ToString() + "," + (_m_Product_Id).ToString() + "," + (_VAB_Charge_Id).ToString();
 
                     taxId = GetTax(ctx, paramString);
                 }
@@ -2040,7 +2040,7 @@ namespace VIS.Models
 
                     MProductModel objProduct = new MProductModel();
                     var prodtaxCategory = objProduct.GetTaxCategory(ctx, _m_Product_Id.ToString());
-                    sql = "SELECT C_Tax_ID FROM VATAX_TaxCatRate WHERE C_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
+                    sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 }
             }
@@ -2105,7 +2105,7 @@ namespace VIS.Models
                                           " AND M_PriceList_Version_ID = " + Util.GetValueOfInt(paramString[1]);
                 if (Util.GetValueOfInt(paramString[2]) > 0)
                 {
-                    _sql = _sql + " AND C_UOM_ID =" + Util.GetValueOfInt(paramString[2]);
+                    _sql = _sql + " AND VAB_UOM_ID =" + Util.GetValueOfInt(paramString[2]);
                 }
                 if (Util.GetValueOfInt(paramString[3]) > 0)
                 {

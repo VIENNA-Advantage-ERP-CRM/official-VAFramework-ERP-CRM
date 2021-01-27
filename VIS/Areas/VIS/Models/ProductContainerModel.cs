@@ -334,18 +334,18 @@ namespace VIS.Models
             List<MoveContainer> moveContainer = new List<MoveContainer>();
 
             string sql = @"SELECT * FROM (
-                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
                              First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty, 
                             (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
-                            INNER JOIN C_UOM u ON u.C_UOM_ID = p.C_UOM_ID
+                            INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
                                AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
                           //AND t.VAF_Org_ID  = " + VAF_Org_ID +
-                          //@" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          //@" GROUP BY p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
 
 
@@ -353,18 +353,18 @@ namespace VIS.Models
             if (page == 1)
             {
                 string sql1 = @"SELECT COUNT(*) FROM (
-                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
                             First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty,  
                             (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
-                            INNER JOIN C_UOM u ON u.C_UOM_ID = p.C_UOM_ID
+                            INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                                AND t.M_Locator_ID  = " + locator + @"
                                AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
                           //AND t.VAF_Org_ID  = " + VAF_Org_ID +
-                          // @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          // @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
             }
@@ -379,7 +379,7 @@ namespace VIS.Models
                         M_Product_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_PRODUCT_ID"]),
                         M_AttributeSetInstance_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_ATTRIBUTESETINSTANCE_ID"]),
                         M_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]),
-                        C_Uom_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_UOM_ID"]),
+                        VAB_UOM_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_UOM_ID"]),
                         ProductName = Util.GetValueOfString(ds.Tables[0].Rows[i]["NAME"]),
                         ContainerQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"]),
                         UomName = Util.GetValueOfString(ds.Tables[0].Rows[i]["UomName"]),
@@ -485,7 +485,7 @@ namespace VIS.Models
                         moveline.SetLine(lineNo);
                         moveline.SetM_Product_ID(Util.GetValueOfInt(mData[i]["M_Product_ID"]));
                         moveline.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(mData[i]["M_AttributeSetInstance_ID"]));
-                        moveline.SetC_UOM_ID(Util.GetValueOfInt(mData[i]["C_UOM_ID"]));
+                        moveline.SetVAB_UOM_ID(Util.GetValueOfInt(mData[i]["VAB_UOM_ID"]));
                         moveline.SetM_Locator_ID(Util.GetValueOfInt(mData[i]["FromLocator"]));
                         moveline.SetM_LocatorTo_ID(Util.GetValueOfInt(mData[i]["ToLocator"]));
                         moveline.SetM_ProductContainer_ID(Util.GetValueOfInt(mData[i]["FromContainer"]));
@@ -647,11 +647,11 @@ namespace VIS.Models
 
             // Get All records of Parent Container and child container
             sql = @"SELECT * FROM (
-                            SELECT Distinct p.M_PRODUCT_ID, p.NAME, p.C_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
+                            SELECT Distinct p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
                             First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
                             FROM M_Transaction t
                             INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
-                            INNER JOIN C_UOM u ON u.C_UOM_ID = p.C_UOM_ID
+                            INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
                             WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) IN ( " + childContainerId +
                            @" ) AND t.MovementDate <=" + GlobalVariable.TO_DATE(movement.GetMovementDate(), true) + @" 
                                AND t.M_Locator_ID  = " + fromLocatorId + @"
@@ -693,7 +693,7 @@ namespace VIS.Models
                         moveline.SetLine(lineNo);
                         moveline.SetM_Product_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_Product_ID"]));
                         moveline.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
-                        moveline.SetC_UOM_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["C_UOM_ID"]));
+                        moveline.SetVAB_UOM_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAB_UOM_ID"]));
                         moveline.SetM_Locator_ID(fromLocatorId);
                         moveline.SetM_LocatorTo_ID(toLocatorId);
                         moveline.SetM_ProductContainer_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_ProductContainer_ID"]));
@@ -929,7 +929,7 @@ namespace VIS.Models
         public int M_Product_ID { get; set; }
         public int M_AttributeSetInstance_ID { get; set; }
         public int M_ProductContainer_ID { get; set; }
-        public int C_Uom_ID { get; set; }
+        public int VAB_UOM_ID { get; set; }
         public String ProductName { get; set; }
         public Decimal ContainerQty { get; set; }
         public String UomName { get; set; }

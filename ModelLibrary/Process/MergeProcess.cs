@@ -246,7 +246,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "FROM VAF_TableView t"
                 + " INNER JOIN VAF_Column c ON (t.VAF_TableView_ID=c.VAF_TableView_ID) "
                 + "WHERE t.IsView='N'"
-                    + " AND t.TableName NOT IN ('C_TaxDeclarationAcct')"
+                    + " AND t.TableName NOT IN ('VAB_TaxComputationAcct')"
                     + " AND c.ColumnSQL is NULL AND ("              // No Virtual Column
                     + "(c.ColumnName=@param1 AND c.IsKey='N')"		//	#1 - direct
                 + " OR "

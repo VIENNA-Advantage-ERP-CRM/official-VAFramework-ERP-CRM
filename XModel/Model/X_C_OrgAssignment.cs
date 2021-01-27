@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_OrgAssignment
+/** Generated Model for VAB_AssignOrg
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_OrgAssignment : PO
+public class X_VAB_AssignOrg : PO
 {
-public X_C_OrgAssignment (Context ctx, int C_OrgAssignment_ID, Trx trxName) : base (ctx, C_OrgAssignment_ID, trxName)
+public X_VAB_AssignOrg (Context ctx, int VAB_AssignOrg_ID, Trx trxName) : base (ctx, VAB_AssignOrg_ID, trxName)
 {
-/** if (C_OrgAssignment_ID == 0)
+/** if (VAB_AssignOrg_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_OrgAssignment_ID (0);
+SetVAB_AssignOrg_ID (0);
 SetOrgAssignmentType (null);
 SetValidFrom (DateTime.Now);
 SetValidTo (DateTime.Now);
 }
  */
 }
-public X_C_OrgAssignment (Ctx ctx, int C_OrgAssignment_ID, Trx trxName) : base (ctx, C_OrgAssignment_ID, trxName)
+public X_VAB_AssignOrg (Ctx ctx, int VAB_AssignOrg_ID, Trx trxName) : base (ctx, VAB_AssignOrg_ID, trxName)
 {
-/** if (C_OrgAssignment_ID == 0)
+/** if (VAB_AssignOrg_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_OrgAssignment_ID (0);
+SetVAB_AssignOrg_ID (0);
 SetOrgAssignmentType (null);
 SetValidFrom (DateTime.Now);
 SetValidTo (DateTime.Now);
@@ -45,7 +45,7 @@ SetValidTo (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrgAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AssignOrg (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_OrgAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrgAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_AssignOrg (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_OrgAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrgAssignment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_AssignOrg (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_OrgAssignment()
+static X_VAB_AssignOrg()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389056652L;
 public static int Table_ID;
  // =585;
 
-/** TableName=C_OrgAssignment */
-public static String Table_Name="C_OrgAssignment";
+/** TableName=VAB_AssignOrg */
+public static String Table_Name="VAB_AssignOrg";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_OrgAssignment[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_AssignOrg[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -134,17 +134,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Org Assignment.
-@param C_OrgAssignment_ID Assigment to (transaction) Organization */
-public void SetC_OrgAssignment_ID (int C_OrgAssignment_ID)
+@param VAB_AssignOrg_ID Assigment to (transaction) Organization */
+public void SetVAB_AssignOrg_ID (int VAB_AssignOrg_ID)
 {
-if (C_OrgAssignment_ID < 1) throw new ArgumentException ("C_OrgAssignment_ID is mandatory.");
-Set_ValueNoCheck ("C_OrgAssignment_ID", C_OrgAssignment_ID);
+if (VAB_AssignOrg_ID < 1) throw new ArgumentException ("VAB_AssignOrg_ID is mandatory.");
+Set_ValueNoCheck ("VAB_AssignOrg_ID", VAB_AssignOrg_ID);
 }
 /** Get Org Assignment.
 @return Assigment to (transaction) Organization */
-public int GetC_OrgAssignment_ID() 
+public int GetVAB_AssignOrg_ID() 
 {
-Object ii = Get_Value("C_OrgAssignment_ID");
+Object ii = Get_Value("VAB_AssignOrg_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

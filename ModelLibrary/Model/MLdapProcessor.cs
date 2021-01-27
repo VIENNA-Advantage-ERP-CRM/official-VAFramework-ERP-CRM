@@ -458,7 +458,7 @@ namespace VAdvantage.Model
             bool found = false;
             bool isActive = false;
             String sql = "SELECT IsActive, OptOutDate "
-                + "FROM R_ContactInterest "
+                + "FROM VAR_InterestedUser "
                 + "WHERE R_InterestArea_ID=@param1 AND VAF_UserContact_ID=@param2";
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[2];

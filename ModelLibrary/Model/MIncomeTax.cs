@@ -170,12 +170,12 @@ namespace VAdvantage.Model
             //	Mandatory Product Attribute Set Instance
             //String mandatoryType = "='Y'";	//	IN ('Y','S')
             //String sql = "SELECT COUNT(*) "
-            //    + "FROM C_OrderLine ol"
+            //    + "FROM VAB_OrderLine ol"
             //    + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
             //    + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
             //    + "WHERE pas.MandatoryType" + mandatoryType
             //    + " AND ol.M_AttributeSetInstance_ID IS NULL"
-            //    + " AND ol.C_Order_ID=" + GetC_Order_ID();
+            //    + " AND ol.VAB_Order_ID=" + GetVAB_Order_ID();
             //int no = DataBase.DB.GetSQLValue(Get_TrxName(), sql);
             //if (no != 0)
             //{
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
                 //    //	Waiting Payment - until we have a payment
                 //    if (!_forceCreation
                 //        && MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO)
-                //        && GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
+                //        && GetVAB_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
                 //    {
                 //        SetProcessed(true);
                 //        return DocActionVariables.STATUS_WAITINGPAYMENT;
@@ -457,7 +457,7 @@ namespace VAdvantage.Model
 
             //************* Changed ***************************
             // Set Status at Order to Rejected if it is Sales Order 
-            //MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+            //MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
             //if (IsSOTrx())
             //{
             //    ord.SetStatusCode("R");
@@ -710,7 +710,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *RMAs*
-                Info.Append("@C_Order_ID@:");
+                Info.Append("@VAB_Order_ID@:");
                 //MOrder[] rmas = GetRMAs();
                 //for (int i = 0; i < rmas.Length; i++)
                 //{

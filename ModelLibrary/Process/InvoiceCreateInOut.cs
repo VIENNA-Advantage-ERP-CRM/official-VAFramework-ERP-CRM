@@ -100,7 +100,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //*****************************Vikas  1 Dec 2015  *********************************
             //Case Msg Not Showing Proper
             MInOut ship = null;
-            MOrder ord = new MOrder(GetCtx(), invoice.GetC_Order_ID(), null);
+            MOrder ord = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
             if (ord.GetVAB_BusinessPartner_ID() > 0)
             {
                 ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);
@@ -144,17 +144,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MInOutLine sLine = new MInOutLine(ship);
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
                  decimal movementqty = 0;
-                if (invoiceLine.GetC_OrderLine_ID() != 0)
+                if (invoiceLine.GetVAB_OrderLine_ID() != 0)
                 {
                     decimal? res = 0;
-                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from C_OrderLine ol Inner join M_InOutLine il on il.C_orderline_ID= ol.C_Orderline_Id "
-                             + " WHERE il.C_OrderLine_ID =" + invoiceLine.GetC_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
+                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from VAB_OrderLine ol Inner join M_InOutLine il on il.VAB_Orderline_ID= ol.VAB_Orderline_Id "
+                             + " WHERE il.VAB_OrderLine_ID =" + invoiceLine.GetVAB_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
                     // in case of partial receipt
                     if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
                     {
-                        if (product.GetC_UOM_ID() != invoiceLine.GetC_UOM_ID())
+                        if (product.GetVAB_UOM_ID() != invoiceLine.GetVAB_UOM_ID())
                         {
-                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetC_UOM_ID(), movementqty);
+                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetVAB_UOM_ID(), movementqty);
                         }
                         sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
                             invoice.IsSOTrx() ? (movementqty) : Env.ZERO);

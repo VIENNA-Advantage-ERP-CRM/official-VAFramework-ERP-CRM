@@ -28,22 +28,22 @@ namespace VAdvantage.Report
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="C_Period_ID">period</param>
+        /// <param name="VAB_YearPeriod_ID">period</param>
         /// <param name="Name">name</param>
         /// <param name="StartDate">period start date</param>
         /// <param name="EndDate">period end date</param>
         /// <param name="YearStartDate">YearStartDate year start date</param>
-        public FinReportPeriod(int C_Period_ID, String Name, DateTime? StartDate, DateTime? EndDate,
+        public FinReportPeriod(int VAB_YearPeriod_ID, String Name, DateTime? StartDate, DateTime? EndDate,
             DateTime? YearStartDate)
         {
-            _C_Period_ID = C_Period_ID;
+            _VAB_YearPeriod_ID = VAB_YearPeriod_ID;
             _Name = Name;
             _StartDate = StartDate;
             _EndDate = EndDate;
             _YearStartDate = YearStartDate;
         }	//
 
-        private int _C_Period_ID;
+        private int _VAB_YearPeriod_ID;
         private String _Name;
         private DateTime? _StartDate;
         private DateTime? _EndDate;
@@ -118,12 +118,12 @@ namespace VAdvantage.Report
             return _Name;
         }
         /// <summary>
-        ///	Get C_Period_ID
+        ///	Get VAB_YearPeriod_ID
         /// </summary>
         /// <returns>period</returns>
-        public int GetC_Period_ID()
+        public int GetVAB_YearPeriod_ID()
         {
-            return _C_Period_ID;
+            return _VAB_YearPeriod_ID;
         }
         /// <summary>
         ///	Get End Date

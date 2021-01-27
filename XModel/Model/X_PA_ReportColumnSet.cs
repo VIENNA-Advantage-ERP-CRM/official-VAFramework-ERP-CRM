@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_ReportColumnSet
+/** Generated Model for VAPA_FR_ColumnSet
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_ReportColumnSet : PO
+public class X_VAPA_FR_ColumnSet : PO
 {
-public X_PA_ReportColumnSet (Context ctx, int PA_ReportColumnSet_ID, Trx trxName) : base (ctx, PA_ReportColumnSet_ID, trxName)
+public X_VAPA_FR_ColumnSet (Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName) : base (ctx, VAPA_FR_ColumnSet_ID, trxName)
 {
-/** if (PA_ReportColumnSet_ID == 0)
+/** if (VAPA_FR_ColumnSet_ID == 0)
 {
 SetName (null);
-SetPA_ReportColumnSet_ID (0);
+SetVAPA_FR_ColumnSet_ID (0);
 SetProcessing (false);	// N
 }
  */
 }
-public X_PA_ReportColumnSet (Ctx ctx, int PA_ReportColumnSet_ID, Trx trxName) : base (ctx, PA_ReportColumnSet_ID, trxName)
+public X_VAPA_FR_ColumnSet (Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName) : base (ctx, VAPA_FR_ColumnSet_ID, trxName)
 {
-/** if (PA_ReportColumnSet_ID == 0)
+/** if (VAPA_FR_ColumnSet_ID == 0)
 {
 SetName (null);
-SetPA_ReportColumnSet_ID (0);
+SetVAPA_FR_ColumnSet_ID (0);
 SetProcessing (false);	// N
 }
  */
@@ -41,7 +41,7 @@ SetProcessing (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportColumnSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_FR_ColumnSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_PA_ReportColumnSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportColumnSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_FR_ColumnSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_PA_ReportColumnSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportColumnSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_FR_ColumnSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_ReportColumnSet()
+static X_VAPA_FR_ColumnSet()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065382L;
 public static int Table_ID;
  // =447;
 
-/** TableName=PA_ReportColumnSet */
-public static String Table_Name="PA_ReportColumnSet";
+/** TableName=VAPA_FR_ColumnSet */
+public static String Table_Name="VAPA_FR_ColumnSet";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_ReportColumnSet[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_FR_ColumnSet[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -156,17 +156,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Report Column Set.
-@param PA_ReportColumnSet_ID Collection of Columns for Report */
-public void SetPA_ReportColumnSet_ID (int PA_ReportColumnSet_ID)
+@param VAPA_FR_ColumnSet_ID Collection of Columns for Report */
+public void SetVAPA_FR_ColumnSet_ID (int VAPA_FR_ColumnSet_ID)
 {
-if (PA_ReportColumnSet_ID < 1) throw new ArgumentException ("PA_ReportColumnSet_ID is mandatory.");
-Set_ValueNoCheck ("PA_ReportColumnSet_ID", PA_ReportColumnSet_ID);
+if (VAPA_FR_ColumnSet_ID < 1) throw new ArgumentException ("VAPA_FR_ColumnSet_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID);
 }
 /** Get Report Column Set.
 @return Collection of Columns for Report */
-public int GetPA_ReportColumnSet_ID() 
+public int GetVAPA_FR_ColumnSet_ID() 
 {
-Object ii = Get_Value("PA_ReportColumnSet_ID");
+Object ii = Get_Value("VAPA_FR_ColumnSet_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -263,7 +263,7 @@ namespace VAdvantage.Model
                         }
 
                         foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
-                        foreignCost.SetC_Order_ID(order.GetC_Order_ID());
+                        foreignCost.SetVAB_Order_ID(order.GetVAB_Order_ID());
                         foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), inoutLine.GetMovementQty()));
                         foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(),
                                          Decimal.Multiply(Decimal.Divide(orderLine.GetLineNetAmt(), orderLine.GetQtyOrdered()), inoutLine.GetMovementQty())));
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
                             _log.Severe("Error occured during updating M_Cost_ForeignCurrency. Error name : " + pp.GetName() +
-                                " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + orderLine.GetC_OrderLine_ID() +
+                                " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + orderLine.GetVAB_OrderLine_ID() +
                                 " , AND vaf_client_ID : " + orderLine.GetVAF_Client_ID());
                             return false;
                         }
@@ -415,7 +415,7 @@ namespace VAdvantage.Model
             MOrder order = null;
             try
             {
-                order = new MOrder(ctx, orderLine.GetC_Order_ID(), trx);
+                order = new MOrder(ctx, orderLine.GetVAB_Order_ID(), trx);
 
                 if (!order.IsSOTrx() && !order.IsReturnTrx())
                 {
@@ -461,7 +461,7 @@ namespace VAdvantage.Model
                             }
 
                             foreignCost = MCostForeignCurrency.Get(product, M_ASI_ID, VAF_Org_ID, M_CostElement_ID, order.GetVAB_BusinessPartner_ID(), order.GetVAB_Currency_ID());
-                            foreignCost.SetC_Order_ID(order.GetC_Order_ID());
+                            foreignCost.SetVAB_Order_ID(order.GetVAB_Order_ID());
                             foreignCost.SetCumulatedQty(Decimal.Add(foreignCost.GetCumulatedQty(), matchQty));
                             foreignCost.SetCumulatedAmt(Decimal.Add(foreignCost.GetCumulatedAmt(), Decimal.Multiply(orderLine.GetPriceActual(), matchQty)));
                             if (foreignCost.GetCumulatedQty() != 0)
@@ -476,7 +476,7 @@ namespace VAdvantage.Model
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 _log.Severe("Error occured during updating M_Cost_ForeignCurrency. Error name : " + pp.GetName() +
-                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + orderLine.GetC_OrderLine_ID() +
+                                    " AND Error Value : " + pp.GetValue() + " , For Invoice line : " + orderLine.GetVAB_OrderLine_ID() +
                                     " , AND vaf_client_ID : " + orderLine.GetVAF_Client_ID());
                                 return false;
                             }

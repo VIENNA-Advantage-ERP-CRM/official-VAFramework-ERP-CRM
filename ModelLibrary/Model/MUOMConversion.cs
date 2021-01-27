@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUOMConversion : X_C_UOM_Conversion
+    public class MUOMConversion : X_VAB_UOM_Conversion
     {
         // Static Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MUOMConversion).FullName);
@@ -35,27 +35,27 @@ namespace VAdvantage.Model
         //	Conversion Map: Key=Point(from,to) Value=Decimal	
         private static CCache<Point, Decimal> _conversions = null;
         // Product Conversion Map					
-        private static CCache<int, MUOMConversion[]> _conversionProduct = new CCache<int, MUOMConversion[]>("C_UOMConversion", 20);
+        private static CCache<int, MUOMConversion[]> _conversionProduct = new CCache<int, MUOMConversion[]>("VAB_UOMConversion", 20);
 
 
         /// <summary>
         /// Convert qty to target UOM and round.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID">from UOM</param>
-        /// <param name="C_UOM_To_ID">to UOM</param>
+        /// <param name="VAB_UOM_ID">from UOM</param>
+        /// <param name="VAB_UOM_To_ID">to UOM</param>
         /// <param name="qty"></param>
         /// <returns>converted qty (std precision)</returns>
-        static public Decimal? Convert(Ctx ctx, int C_UOM_ID, int C_UOM_To_ID, Decimal? qty)
+        static public Decimal? Convert(Ctx ctx, int VAB_UOM_ID, int VAB_UOM_To_ID, Decimal? qty)
         {
-            if (qty == null || qty.Equals(Env.ZERO) || C_UOM_ID == C_UOM_To_ID)
+            if (qty == null || qty.Equals(Env.ZERO) || VAB_UOM_ID == VAB_UOM_To_ID)
             {
                 return qty;
             }
-            Decimal? retValue = GetRate(ctx, C_UOM_ID, C_UOM_To_ID);
+            Decimal? retValue = GetRate(ctx, VAB_UOM_ID, VAB_UOM_To_ID);
             if (retValue != null)
             {
-                MUOM uom = MUOM.Get(ctx, C_UOM_To_ID);
+                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(retValue.Value, qty.Value), true);
@@ -69,18 +69,18 @@ namespace VAdvantage.Model
         /// Get Multiplier Rate to target UOM
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
-        /// <param name="C_UOM_To_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
+        /// <param name="VAB_UOM_To_ID"></param>
         /// <returns>multiplier</returns>
-        static public Decimal GetRate(Ctx ctx, int C_UOM_ID, int C_UOM_To_ID)
+        static public Decimal GetRate(Ctx ctx, int VAB_UOM_ID, int VAB_UOM_To_ID)
         {
             //	nothing to do
-            if (C_UOM_ID == C_UOM_To_ID)
+            if (VAB_UOM_ID == VAB_UOM_To_ID)
             {
                 return Env.ONE;
             }
             //
-            Point p = new Point(C_UOM_ID, C_UOM_To_ID);
+            Point p = new Point(VAB_UOM_ID, VAB_UOM_To_ID);
             //	get conversion
             Decimal retValue = GetRate(ctx, p);
             return retValue;
@@ -91,22 +91,22 @@ namespace VAdvantage.Model
         /// Convert qty to target UOM and round.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <param name="qty"></param>
         /// <returns>minutes - 0 if not found</returns>
-        static public int ConvertToMinutes(Ctx ctx, int C_UOM_ID, Decimal? qty)
+        static public int ConvertToMinutes(Ctx ctx, int VAB_UOM_ID, Decimal? qty)
         {
             if (qty == null)
             {
                 return 0;
             }
-            int C_UOM_To_ID = MUOM.GetMinute_UOM_ID(ctx);
-            if (C_UOM_ID == C_UOM_To_ID)
+            int VAB_UOM_To_ID = MUOM.GetMinute_UOM_ID(ctx);
+            if (VAB_UOM_ID == VAB_UOM_To_ID)
             {
                 return Decimal.ToInt32(qty.Value);
             }
 
-            Decimal? result = (Decimal?)Convert(ctx, C_UOM_ID, C_UOM_To_ID, qty);
+            Decimal? result = (Decimal?)Convert(ctx, VAB_UOM_ID, VAB_UOM_To_ID, qty);
             if (result == null)
             {
                 return 0;
@@ -119,16 +119,16 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="startDate"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <param name="qty"></param>
         /// <returns>end date</returns>
-        public static DateTime? GetEndDate(Ctx ctx, DateTime? startDate, int C_UOM_ID, Decimal? qty)
+        public static DateTime? GetEndDate(Ctx ctx, DateTime? startDate, int VAB_UOM_ID, Decimal? qty)
         {
             //GregorianCalendar endDate = new GregorianCalendar();
             DateTime? endDate = new DateTime();
             //endDate.setTime(startDate);
             endDate = startDate;
-            int minutes = MUOMConversion.ConvertToMinutes(ctx, C_UOM_ID, qty);
+            int minutes = MUOMConversion.ConvertToMinutes(ctx, VAB_UOM_ID, qty);
             //endDate.add(Calendar.MINUTE, minutes);
             //endDate.AddMinutes((Double)minutes);
             endDate = endDate.Value.AddMinutes(minutes);
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
         /// Get Conversion Multiplier Rate, try to derive it if not found directly
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="p">Point with from(x) - to(y) C_UOM_ID</param>
+        /// <param name="p">Point with from(x) - to(y) VAB_UOM_ID</param>
         /// <returns>conversion multiplier or null</returns>
         static private Decimal GetRate(Ctx ctx, Point p)
         {
@@ -180,13 +180,13 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         private static void CreateRates(Ctx ctx)
         {
-            _conversions = new CCache<Point, Decimal>("C_UOMConversion", 20);
+            _conversions = new CCache<Point, Decimal>("VAB_UOMConversion", 20);
             //
             String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
-                "SELECT C_UOM_ID, C_UOM_To_ID, MultiplyRate, DivideRate "
-                + "FROM C_UOM_Conversion "
+                "SELECT VAB_UOM_ID, VAB_UOM_To_ID, MultiplyRate, DivideRate "
+                + "FROM VAB_UOM_Conversion "
                 + "WHERE IsActive='Y' AND M_Product_ID IS NULL",
-                "C_UOM_Conversion", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_UOM_Conversion", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -240,18 +240,18 @@ namespace VAdvantage.Model
         /// Derive Standard Conversions
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
-        /// <param name="C_UOM_To_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
+        /// <param name="VAB_UOM_To_ID"></param>
         /// <returns>Conversion or null</returns>
-        public static Decimal? DeriveRate(Ctx ctx, int C_UOM_ID, int C_UOM_To_ID)
+        public static Decimal? DeriveRate(Ctx ctx, int VAB_UOM_ID, int VAB_UOM_To_ID)
         {
-            if (C_UOM_ID == C_UOM_To_ID)
+            if (VAB_UOM_ID == VAB_UOM_To_ID)
             {
                 return Env.ONE;
             }
             //	get Info
-            MUOM from = MUOM.Get(ctx, C_UOM_ID);
-            MUOM to = MUOM.Get(ctx, C_UOM_To_ID);
+            MUOM from = MUOM.Get(ctx, VAB_UOM_ID);
+            MUOM to = MUOM.Get(ctx, VAB_UOM_To_ID);
             if (from == null || to == null)
             {
                 return null;
@@ -436,26 +436,26 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Conversion Multiplier Rate from Server
         /// </summary>
-        /// <param name="C_UOM_ID"></param>
-        /// <param name="C_UOM_To_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
+        /// <param name="VAB_UOM_To_ID"></param>
         /// <returns>conversion multiplier or null</returns>
-        public static Decimal GetRate(int C_UOM_ID, int C_UOM_To_ID)
+        public static Decimal GetRate(int VAB_UOM_ID, int VAB_UOM_To_ID)
         {
-            return (Decimal)Convert(C_UOM_ID, C_UOM_To_ID, GETRATE, false);
+            return (Decimal)Convert(VAB_UOM_ID, VAB_UOM_To_ID, GETRATE, false);
         }
 
         /// <summary>
         /// Get Converted Qty from Server (no cache)
         /// </summary>
-        /// <param name="C_UOM_From_ID">The C_UOM_ID of the qty</param>
-        /// <param name="C_UOM_To_ID">The targeted UOM</param>
+        /// <param name="VAB_UOM_From_ID">The VAB_UOM_ID of the qty</param>
+        /// <param name="VAB_UOM_To_ID">The targeted UOM</param>
         /// <param name="qty">The quantity to be converted</param>
         /// <param name="StdPrecision">if true, standard precision, if false costing precision</param>
         /// <returns>should not be used</returns>
-        public static Decimal? Convert(int C_UOM_From_ID, int C_UOM_To_ID, Decimal qty, bool StdPrecision)
+        public static Decimal? Convert(int VAB_UOM_From_ID, int VAB_UOM_To_ID, Decimal qty, bool StdPrecision)
         {
             //  Nothing to do
-            if (qty == null || qty.Equals(Env.ZERO) || C_UOM_From_ID == C_UOM_To_ID)
+            if (qty == null || qty.Equals(Env.ZERO) || VAB_UOM_From_ID == VAB_UOM_To_ID)
             {
                 return qty;
             }
@@ -463,9 +463,9 @@ namespace VAdvantage.Model
             Decimal? retValue = null;
             int precision = 2;
             String sql = "SELECT c.MultiplyRate, uomTo.StdPrecision, uomTo.CostingPrecision "
-                + "FROM	C_UOM_Conversion c"
-                + " INNER JOIN C_UOM uomTo ON (c.C_UOM_To_ID=uomTo.C_UOM_ID) "
-                + "WHERE c.IsActive='Y' AND c.C_UOM_ID=" + C_UOM_From_ID + " AND c.C_UOM_To_ID=" + C_UOM_To_ID		//	#1/2
+                + "FROM	VAB_UOM_Conversion c"
+                + " INNER JOIN VAB_UOM uomTo ON (c.VAB_UOM_To_ID=uomTo.VAB_UOM_ID) "
+                + "WHERE c.IsActive='Y' AND c.VAB_UOM_ID=" + VAB_UOM_From_ID + " AND c.VAB_UOM_To_ID=" + VAB_UOM_To_ID		//	#1/2
                 + " AND c.M_Product_ID IS NULL"
                 + " ORDER BY c.VAF_Client_ID DESC, c.VAF_Org_ID DESC";
             DataTable dt = null;
@@ -503,7 +503,7 @@ namespace VAdvantage.Model
             }
             if (retValue == null)
             {
-                _log.Info("NOT found - FromUOM=" + C_UOM_From_ID + ", ToUOM=" + C_UOM_To_ID);
+                _log.Info("NOT found - FromUOM=" + VAB_UOM_From_ID + ", ToUOM=" + VAB_UOM_To_ID);
                 return null;
             }
 
@@ -527,24 +527,24 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="M_Product_ID">product</param>
-        /// <param name="C_UOM_To_ID">entered UOM</param>
+        /// <param name="VAB_UOM_To_ID">entered UOM</param>
         /// <param name="qtyPrice">entered quantity or price</param>
         /// <returns>Product: Qty/Amt in product UoM (precision rounded)</returns>
-        public static Decimal? ConvertProductTo(Ctx ctx, int M_Product_ID, int C_UOM_To_ID, Decimal? qtyPrice)
+        public static Decimal? ConvertProductTo(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
         {
-            if (qtyPrice == null || qtyPrice == 0 || M_Product_ID == 0 || C_UOM_To_ID == 0)
+            if (qtyPrice == null || qtyPrice == 0 || M_Product_ID == 0 || VAB_UOM_To_ID == 0)
             {
                 return qtyPrice;
             }
 
-            Decimal? retValue = (Decimal?)(GetProductRateTo(ctx, M_Product_ID, C_UOM_To_ID));
+            Decimal? retValue = (Decimal?)(GetProductRateTo(ctx, M_Product_ID, VAB_UOM_To_ID));
             if (retValue != null)
             {
                 if (Env.ONE.CompareTo(retValue) == 0)
                 {
                     return qtyPrice;
                 }
-                MUOM uom = MUOM.Get(ctx, C_UOM_To_ID);
+                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(Utility.Util.GetValueOfDecimal(retValue), Utility.Util.GetValueOfDecimal(qtyPrice)), true);
@@ -559,9 +559,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="M_Product_ID">product</param>
-        /// <param name="C_UOM_To_ID">entered UOM</param>
+        /// <param name="VAB_UOM_To_ID">entered UOM</param>
         /// <returns>multiplier or null</returns>
-        public static Decimal? GetProductRateTo(Ctx ctx, int M_Product_ID, int C_UOM_To_ID)
+        public static Decimal? GetProductRateTo(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID)
         {
             if (M_Product_ID == 0)
             {
@@ -577,7 +577,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < rates.Length; i++)
             {
                 MUOMConversion rate = rates[i];
-                if (rate.GetC_UOM_To_ID() == C_UOM_To_ID)
+                if (rate.GetVAB_UOM_To_ID() == VAB_UOM_To_ID)
                 {
                     return rate.GetMultiplyRate();
                 }
@@ -591,30 +591,30 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="M_Product_ID">product</param>
-        /// <param name="C_UOM_To_ID">quantity or price</param>
+        /// <param name="VAB_UOM_To_ID">quantity or price</param>
         /// <param name="qtyPrice">quantity or price</param>
         /// <returns>Entered: Qty in entered UoM (precision rounded)</returns>
-        //public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int C_UOM_To_ID, Decimal? qtyPrice,bool _ProductToConversion=false)
-        public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int C_UOM_To_ID, Decimal? qtyPrice)
+        //public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice,bool _ProductToConversion=false)
+        public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
         {
             //	No conversion
             // Arpit to Pass a Parametrized Constructor so that we can have the reverse conversion rate for the defined product
             // bool ProductToConversion = _ProductToConversion;
             //  Arpit
-            if (qtyPrice == null || qtyPrice.Equals(Env.ZERO) || C_UOM_To_ID == 0 || M_Product_ID == 0)
+            if (qtyPrice == null || qtyPrice.Equals(Env.ZERO) || VAB_UOM_To_ID == 0 || M_Product_ID == 0)
             {
                 _log.Fine("No Conversion - QtyPrice=" + qtyPrice);
                 return qtyPrice;
             }
-            //Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, C_UOM_To_ID, ProductToConversion);
-            Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, C_UOM_To_ID);
+            //Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, VAB_UOM_To_ID, ProductToConversion);
+            Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, VAB_UOM_To_ID);
             if (retValue != null)
             {
                 if (Env.ONE.CompareTo(retValue.Value) == 0)
                 {
                     return qtyPrice;
                 }
-                MUOM uom = MUOM.Get(ctx, C_UOM_To_ID);
+                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(retValue.Value, qtyPrice.Value), true);
@@ -631,10 +631,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="M_Product_ID"></param>
-        /// <param name="C_UOM_To_ID"></param>
+        /// <param name="VAB_UOM_To_ID"></param>
         /// <returns>divisor or null</returns>
-        //public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int C_UOM_To_ID,bool _ProductToConversion=false)
-        public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int C_UOM_To_ID)
+        //public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID,bool _ProductToConversion=false)
+        public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID)
         {
             MUOMConversion[] rates = GetProductConversions(ctx, M_Product_ID);
             if (rates.Length == 0)
@@ -646,7 +646,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < rates.Length; i++)
             {
                 MUOMConversion rate = rates[i];
-                if (rate.GetC_UOM_To_ID() == C_UOM_To_ID)
+                if (rate.GetVAB_UOM_To_ID() == VAB_UOM_To_ID)
                 {
                     return rate.GetDivideRate();
                 }
@@ -684,10 +684,10 @@ namespace VAdvantage.Model
             List<MUOMConversion> list = new List<MUOMConversion>();
 
             //
-            String sql = "SELECT * FROM C_UOM_Conversion c "
+            String sql = "SELECT * FROM VAB_UOM_Conversion c "
                 + "WHERE c.M_Product_ID=" + M_Product_ID
                 + " AND EXISTS (SELECT * FROM M_Product p "
-                    + "WHERE c.M_Product_ID=p.M_Product_ID AND c.C_UOM_ID=p.C_UOM_ID)"
+                    + "WHERE c.M_Product_ID=p.M_Product_ID AND c.VAB_UOM_ID=p.VAB_UOM_ID)"
                 + " AND c.IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
@@ -707,9 +707,9 @@ namespace VAdvantage.Model
 
                 if (list.Count == 0)
                 {
-                    sql = "SELECT * FROM C_UOM_Conversion c "
+                    sql = "SELECT * FROM VAB_UOM_Conversion c "
                 + "WHERE EXISTS (SELECT * FROM M_Product p "
-                    + "WHERE c.C_UOM_ID=p.C_UOM_ID AND p.M_Product_ID=" + M_Product_ID + ")"
+                    + "WHERE c.VAB_UOM_ID=p.VAB_UOM_ID AND p.M_Product_ID=" + M_Product_ID + ")"
                 + " AND c.IsActive='Y'";
 
                     idr1 = DB.ExecuteReader(sql, null, null);
@@ -771,10 +771,10 @@ namespace VAdvantage.Model
         /// Default Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_Conversion_ID"></param>
+        /// <param name="VAB_UOM_Conversion_ID"></param>
         /// <param name="trxName"></param>
-        public MUOMConversion(Ctx ctx, int C_UOM_Conversion_ID, Trx trxName)
-            : base(ctx, C_UOM_Conversion_ID, trxName)
+        public MUOMConversion(Ctx ctx, int VAB_UOM_Conversion_ID, Trx trxName)
+            : base(ctx, VAB_UOM_Conversion_ID, trxName)
         {
 
         }
@@ -799,9 +799,9 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetC_UOM_ID(parent.GetC_UOM_ID());
+            SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
             SetM_Product_ID(0);
-            SetC_UOM_To_ID(parent.GetC_UOM_ID());
+            SetVAB_UOM_To_ID(parent.GetVAB_UOM_ID());
             SetMultiplyRate(Env.ONE);
             SetDivideRate(Env.ONE);
         }
@@ -814,9 +814,9 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetC_UOM_ID(parent.GetC_UOM_ID());
+            SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
             SetM_Product_ID(parent.GetM_Product_ID());
-            SetC_UOM_To_ID(parent.GetC_UOM_ID());
+            SetVAB_UOM_To_ID(parent.GetVAB_UOM_ID());
             SetMultiplyRate(Env.ONE);
             SetDivideRate(Env.ONE);
         }
@@ -830,9 +830,9 @@ namespace VAdvantage.Model
         {
             //	From - To is the same
             //Commented by arpit asked by sachin Sir 29 Jan,2018--to save records with same UOM also
-            //if (GetC_UOM_ID() == GetC_UOM_To_ID())
+            //if (GetVAB_UOM_ID() == GetVAB_UOM_To_ID())
             //{
-            //    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@C_UOM_ID@ = @C_UOM_ID@"));
+            //    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@VAB_UOM_ID@ = @VAB_UOM_ID@"));
             //    return false;
             //}
             //	Nothing to convert
@@ -845,9 +845,9 @@ namespace VAdvantage.Model
             if (GetM_Product_ID() != 0 && (newRecord || Is_ValueChanged("M_Product_ID")))
             {
                 MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
-                if (product.GetC_UOM_ID() != GetC_UOM_ID())
+                if (product.GetVAB_UOM_ID() != GetVAB_UOM_ID())
                 {
-                    MUOM uom = MUOM.Get(GetCtx(), product.GetC_UOM_ID());
+                    MUOM uom = MUOM.Get(GetCtx(), product.GetVAB_UOM_ID());
                     log.SaveError("ProductUOMConversionUOMError", uom.GetName());
                     return false;
                 }
@@ -884,8 +884,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MUOMConversion[");
-            sb.Append(Get_ID()).Append("-C_UOM_ID=").Append(GetC_UOM_ID())
-                .Append(",C_UOM_To_ID=").Append(GetC_UOM_To_ID())
+            sb.Append(Get_ID()).Append("-VAB_UOM_ID=").Append(GetVAB_UOM_ID())
+                .Append(",VAB_UOM_To_ID=").Append(GetVAB_UOM_To_ID())
                 .Append(",M_Product_ID=").Append(GetM_Product_ID())
                 .Append("-Multiply=").Append(GetMultiplyRate())
                 .Append("/Divide=").Append(GetDivideRate())

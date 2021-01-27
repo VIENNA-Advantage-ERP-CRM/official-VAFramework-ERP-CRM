@@ -16,21 +16,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MMeasureCalc : X_PA_MeasureCalc
+    public class MMeasureCalc : X_VAPA_EvaluateCalc
     {
         /**
          * 	Get MMeasureCalc from Cache
          *	@param ctx Ctx
-         *	@param PA_MeasureCalc_ID id
+         *	@param VAPA_EvaluateCalc_ID id
          *	@return MMeasureCalc
          */
-        public static MMeasureCalc Get(Ctx ctx, int PA_MeasureCalc_ID)
+        public static MMeasureCalc Get(Ctx ctx, int VAPA_EvaluateCalc_ID)
         {
-            int key = PA_MeasureCalc_ID;
+            int key = VAPA_EvaluateCalc_ID;
             MMeasureCalc retValue = (MMeasureCalc)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MMeasureCalc(ctx, PA_MeasureCalc_ID, null);
+            retValue = new MMeasureCalc(ctx, VAPA_EvaluateCalc_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -38,16 +38,16 @@ namespace VAdvantage.Model
 
         /**	Cache						*/
         private static CCache<int, MMeasureCalc> _cache
-            = new CCache<int, MMeasureCalc>("PA_MeasureCalc", 10);
+            = new CCache<int, MMeasureCalc>("VAPA_EvaluateCalc", 10);
 
         /**
          * 	Standard Constructor
          *	@param ctx Ctx
-         *	@param PA_MeasureCalc_ID id
+         *	@param VAPA_EvaluateCalc_ID id
          *	@param trxName trx
          */
-        public MMeasureCalc(Ctx ctx, int PA_MeasureCalc_ID, Trx trxName) :
-            base(ctx, PA_MeasureCalc_ID, trxName)
+        public MMeasureCalc(Ctx ctx, int VAPA_EvaluateCalc_ID, Trx trxName) :
+            base(ctx, VAPA_EvaluateCalc_ID, trxName)
         {
 
         }

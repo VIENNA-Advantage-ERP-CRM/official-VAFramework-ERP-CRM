@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for RC_KPIPane
+    /** Generated Model for VARC_KPIPane
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_RC_KPIPane : PO
+    public class X_VARC_KPIPane : PO
     {
-        public X_RC_KPIPane(Context ctx, int RC_KPIPane_ID, Trx trxName)
-            : base(ctx, RC_KPIPane_ID, trxName)
+        public X_VARC_KPIPane(Context ctx, int VARC_KPIPane_ID, Trx trxName)
+            : base(ctx, VARC_KPIPane_ID, trxName)
         {
-            /** if (RC_KPIPane_ID == 0)
+            /** if (VARC_KPIPane_ID == 0)
             {
-            SetRC_KPIPane_ID (0);
+            SetVARC_KPIPane_ID (0);
             }
              */
         }
-        public X_RC_KPIPane(Ctx ctx, int RC_KPIPane_ID, Trx trxName)
-            : base(ctx, RC_KPIPane_ID, trxName)
+        public X_VARC_KPIPane(Ctx ctx, int VARC_KPIPane_ID, Trx trxName)
+            : base(ctx, VARC_KPIPane_ID, trxName)
         {
-            /** if (RC_KPIPane_ID == 0)
+            /** if (VARC_KPIPane_ID == 0)
             {
-            SetRC_KPIPane_ID (0);
+            SetVARC_KPIPane_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPIPane(Context ctx, DataRow rs, Trx trxName)
+        public X_VARC_KPIPane(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPIPane(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VARC_KPIPane(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPIPane(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VARC_KPIPane(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_RC_KPIPane()
+        static X_VARC_KPIPane()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000231;
 
-        /** TableName=RC_KPIPane */
-        public static String Table_Name = "RC_KPIPane";
+        /** TableName=VARC_KPIPane */
+        public static String Table_Name = "VARC_KPIPane";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_RC_KPIPane[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VARC_KPIPane[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -237,17 +237,17 @@ namespace VAdvantage.Model
             return (String)Get_Value("Name");
         }
         /** Set KPI Pane.
-        @param RC_KPIPane_ID KPI Pane */
-        public void SetRC_KPIPane_ID(int RC_KPIPane_ID)
+        @param VARC_KPIPane_ID KPI Pane */
+        public void SetVARC_KPIPane_ID(int VARC_KPIPane_ID)
         {
-            if (RC_KPIPane_ID < 1) throw new ArgumentException("RC_KPIPane_ID is mandatory.");
-            Set_ValueNoCheck("RC_KPIPane_ID", RC_KPIPane_ID);
+            if (VARC_KPIPane_ID < 1) throw new ArgumentException("VARC_KPIPane_ID is mandatory.");
+            Set_ValueNoCheck("VARC_KPIPane_ID", VARC_KPIPane_ID);
         }
         /** Get KPI Pane.
         @return KPI Pane */
-        public int GetRC_KPIPane_ID()
+        public int GetVARC_KPIPane_ID()
         {
-            Object ii = Get_Value("RC_KPIPane_ID");
+            Object ii = Get_Value("VARC_KPIPane_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

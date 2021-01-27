@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_PaySchedule
+ * Class Used     : X_VAB_PaymentSchedule
  * Chronological Development
  * Veena Pandey     22-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySchedule : X_C_PaySchedule
+    public class MPaySchedule : X_VAB_PaymentSchedule
     {
         /**	Parent					*/
         public MPaymentTerm _parent = null;
@@ -26,15 +26,15 @@ namespace VAdvantage.Model
         /**
 	 * 	Standard Constructor
 	 *	@param ctx context
-	 *	@param C_PaySchedule_ID id
+	 *	@param VAB_PaymentSchedule_ID id
 	 *	@param trxName transaction
 	 */
-        public MPaySchedule(Ctx ctx, int C_PaySchedule_ID, Trx trxName)
-            : base(ctx, C_PaySchedule_ID, trxName)
+        public MPaySchedule(Ctx ctx, int VAB_PaymentSchedule_ID, Trx trxName)
+            : base(ctx, VAB_PaymentSchedule_ID, trxName)
         {
-            if (C_PaySchedule_ID == 0)
+            if (VAB_PaymentSchedule_ID == 0)
             {
-                //	setC_PaymentTerm_ID (0);	//	Parent
+                //	setVAB_PaymentTerm_ID (0);	//	Parent
                 SetPercentage(Env.ZERO);
                 SetDiscount(Env.ZERO);
                 SetDiscountDays(0);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         public MPaymentTerm GetParent()
         {
             if (_parent == null)
-                _parent = new MPaymentTerm(GetCtx(), GetC_PaymentTerm_ID(), Get_TrxName());
+                _parent = new MPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             }
 
             // set zero in net days at header if schedules created.
-            string qry = "UPDATE C_PaymentTerm SET NetDays = 0 WHERE C_PaymentTerm_ID = " + GetC_PaymentTerm_ID();
+            string qry = "UPDATE VAB_PaymentTerm SET NetDays = 0 WHERE VAB_PaymentTerm_ID = " + GetVAB_PaymentTerm_ID();
             int nos = DB.ExecuteQuery(qry, null, Get_Trx());
             if (nos <= 0)
             {
@@ -122,13 +122,13 @@ namespace VAdvantage.Model
             if (Is_Changed() && !newRecord)
             {
                 string sql = @" SELECT SUM(COUNT) FROM (
-                              SELECT COUNT(*) AS COUNT FROM C_Order  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Order  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND VAB_PaymentTerm_ID = " + GetVAB_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM VAB_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Invoice  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND VAB_PaymentTerm_ID = " + GetVAB_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM C_Project  WHERE IsActive = 'Y' AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Project  WHERE IsActive = 'Y' AND VAB_PaymentTerm_ID = " + GetVAB_PaymentTerm_ID() +
                               @" UNION ALL 
-                              SELECT COUNT(*) AS COUNT FROM VAB_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND C_PaymentTerm_ID = " + GetC_PaymentTerm_ID() +
+                              SELECT COUNT(*) AS COUNT FROM VAB_Contract  WHERE IsActive = 'Y' AND DocStatus NOT IN ('RE' , 'VO') AND VAB_PaymentTerm_ID = " + GetVAB_PaymentTerm_ID() +
                                " ) t";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (no > 0)

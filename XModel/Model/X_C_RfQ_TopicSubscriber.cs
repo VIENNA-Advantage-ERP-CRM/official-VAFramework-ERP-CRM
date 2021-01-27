@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_RfQ_TopicSubscriber
+/** Generated Model for VAB_RFQ_SubjectMember
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RfQ_TopicSubscriber : PO
+public class X_VAB_RFQ_SubjectMember : PO
 {
-public X_C_RfQ_TopicSubscriber (Context ctx, int C_RfQ_TopicSubscriber_ID, Trx trxName) : base (ctx, C_RfQ_TopicSubscriber_ID, trxName)
+public X_VAB_RFQ_SubjectMember (Context ctx, int VAB_RFQ_SubjectMember_ID, Trx trxName) : base (ctx, VAB_RFQ_SubjectMember_ID, trxName)
 {
-/** if (C_RfQ_TopicSubscriber_ID == 0)
-{
-SetVAB_BusinessPartner_ID (0);
-SetVAB_BPart_Location_ID (0);
-SetC_RfQ_TopicSubscriber_ID (0);
-SetC_RfQ_Topic_ID (0);
-}
- */
-}
-public X_C_RfQ_TopicSubscriber (Ctx ctx, int C_RfQ_TopicSubscriber_ID, Trx trxName) : base (ctx, C_RfQ_TopicSubscriber_ID, trxName)
-{
-/** if (C_RfQ_TopicSubscriber_ID == 0)
+/** if (VAB_RFQ_SubjectMember_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_BPart_Location_ID (0);
-SetC_RfQ_TopicSubscriber_ID (0);
-SetC_RfQ_Topic_ID (0);
+SetVAB_RFQ_SubjectMember_ID (0);
+SetVAB_RFQ_Subject_ID (0);
+}
+ */
+}
+public X_VAB_RFQ_SubjectMember (Ctx ctx, int VAB_RFQ_SubjectMember_ID, Trx trxName) : base (ctx, VAB_RFQ_SubjectMember_ID, trxName)
+{
+/** if (VAB_RFQ_SubjectMember_ID == 0)
+{
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetVAB_RFQ_SubjectMember_ID (0);
+SetVAB_RFQ_Subject_ID (0);
 }
  */
 }
@@ -43,7 +43,7 @@ SetC_RfQ_Topic_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriber (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQ_SubjectMember (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_RfQ_TopicSubscriber (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriber (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQ_SubjectMember (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_RfQ_TopicSubscriber (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriber (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_RFQ_SubjectMember (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RfQ_TopicSubscriber()
+static X_VAB_RFQ_SubjectMember()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389058266L;
 public static int Table_ID;
  // =670;
 
-/** TableName=C_RfQ_TopicSubscriber */
-public static String Table_Name="C_RfQ_TopicSubscriber";
+/** TableName=VAB_RFQ_SubjectMember */
+public static String Table_Name="VAB_RFQ_SubjectMember";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_RfQ_TopicSubscriber[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_RFQ_SubjectMember[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -163,32 +163,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Subscriber.
-@param C_RfQ_TopicSubscriber_ID Request for Quotation Topic Subscriber */
-public void SetC_RfQ_TopicSubscriber_ID (int C_RfQ_TopicSubscriber_ID)
+@param VAB_RFQ_SubjectMember_ID Request for Quotation Topic Subscriber */
+public void SetVAB_RFQ_SubjectMember_ID (int VAB_RFQ_SubjectMember_ID)
 {
-if (C_RfQ_TopicSubscriber_ID < 1) throw new ArgumentException ("C_RfQ_TopicSubscriber_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQ_TopicSubscriber_ID", C_RfQ_TopicSubscriber_ID);
+if (VAB_RFQ_SubjectMember_ID < 1) throw new ArgumentException ("VAB_RFQ_SubjectMember_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQ_SubjectMember_ID", VAB_RFQ_SubjectMember_ID);
 }
 /** Get RfQ Subscriber.
 @return Request for Quotation Topic Subscriber */
-public int GetC_RfQ_TopicSubscriber_ID() 
+public int GetVAB_RFQ_SubjectMember_ID() 
 {
-Object ii = Get_Value("C_RfQ_TopicSubscriber_ID");
+Object ii = Get_Value("VAB_RFQ_SubjectMember_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Topic.
-@param C_RfQ_Topic_ID Topic for Request for Quotations */
-public void SetC_RfQ_Topic_ID (int C_RfQ_Topic_ID)
+@param VAB_RFQ_Subject_ID Topic for Request for Quotations */
+public void SetVAB_RFQ_Subject_ID (int VAB_RFQ_Subject_ID)
 {
-if (C_RfQ_Topic_ID < 1) throw new ArgumentException ("C_RfQ_Topic_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQ_Topic_ID", C_RfQ_Topic_ID);
+if (VAB_RFQ_Subject_ID < 1) throw new ArgumentException ("VAB_RFQ_Subject_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQ_Subject_ID", VAB_RFQ_Subject_ID);
 }
 /** Get RfQ Topic.
 @return Topic for Request for Quotations */
-public int GetC_RfQ_Topic_ID() 
+public int GetVAB_RFQ_Subject_ID() 
 {
-Object ii = Get_Value("C_RfQ_Topic_ID");
+Object ii = Get_Value("VAB_RFQ_Subject_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -196,7 +196,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_RfQ_Topic_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_RFQ_Subject_ID().ToString());
 }
 /** Set Opt-out Date.
 @param OptOutDate Date the contact opted out */

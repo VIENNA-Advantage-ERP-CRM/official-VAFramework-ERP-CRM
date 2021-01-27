@@ -54,7 +54,7 @@ namespace VAdvantage.Process
         {
             MYear year = new MYear(GetCtx(), _cYearId, Get_Trx());
             if (_cYearId == 0 || year.Get_ID() != _cYearId)
-                throw new Exception("@NotFound@: @C_Year_ID@ - " + _cYearId);
+                throw new Exception("@NotFound@: @VAB_Year_ID@ - " + _cYearId);
             //log.info(year.ToString());
             //
             if (Month_ID != null)

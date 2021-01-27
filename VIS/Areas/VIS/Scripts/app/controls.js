@@ -2946,14 +2946,14 @@
                     M_PriceList_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "M_PriceList_ID");
                     var multipleSelection = false;
                     if (self.lookup.windowNo > 0) {
-                        multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_OrderLine_ID") ||
+                        multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_OrderLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_InvoiceLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "C_ProjectLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_ProjectLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;

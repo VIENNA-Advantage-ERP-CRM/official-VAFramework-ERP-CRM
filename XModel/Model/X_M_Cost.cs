@@ -195,16 +195,16 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-throw new ArgumentException ("C_UOM_ID Is virtual column");
+throw new ArgumentException ("VAB_UOM_ID Is virtual column");
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -20,7 +20,7 @@ namespace ViennaAdvantage.Process
     {
         #region Private Varibles
         /**	Project - Mandatory Parameter		*/
-        private int m_C_Project_ID = 0;
+        private int m_VAB_Project_ID = 0;
         /**	Receipt - Option 1					*/
         private int m_M_InOut_ID = 0;
         /**	Expenses - Option 2					*/
@@ -28,7 +28,7 @@ namespace ViennaAdvantage.Process
         /** Locator - Option 3,4				*/
         private int m_M_Locator_ID = 0;
         /** Project Line - Option 3				*/
-        private int m_C_ProjectLine_ID = 0;
+        private int m_VAB_ProjectLine_ID = 0;
         /** Product - Option 4					*/
         private int m_M_Product_ID = 0;
         /** Attribute - Option 4				*/
@@ -56,10 +56,10 @@ namespace ViennaAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Project_ID"))
+                else if (name.Equals("VAB_Project_ID"))
                 {
-                    // m_C_Project_ID = ((Decimal)para[i].GetParameter()).intValue();
-                    m_C_Project_ID = para[i].GetParameterAsInt();
+                    // m_VAB_Project_ID = ((Decimal)para[i].GetParameter()).intValue();
+                    m_VAB_Project_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_InOut_ID"))
                 {
@@ -76,10 +76,10 @@ namespace ViennaAdvantage.Process
                     //m_M_Locator_ID = ((BigDecimal)para[i].getParameter()).intValue();
                     m_M_Locator_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_ProjectLine_ID"))
+                else if (name.Equals("VAB_ProjectLine_ID"))
                 {
-                    // m_C_ProjectLine_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    m_C_ProjectLine_ID = para[i].GetParameterAsInt();
+                    // m_VAB_ProjectLine_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    m_VAB_ProjectLine_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_Product_ID"))
                 {
@@ -118,7 +118,7 @@ namespace ViennaAdvantage.Process
         protected override string DoIt()
         {
             //	Check Parameter
-            m_project = new MProject(GetCtx(), m_C_Project_ID, Get_TrxName());
+            m_project = new MProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
             if (!(MProject.PROJECTCATEGORY_WorkOrderJob.Equals(m_project.GetProjectCategory())
                 || MProject.PROJECTCATEGORY_AssetProject.Equals(m_project.GetProjectCategory())))
             {
@@ -139,7 +139,7 @@ namespace ViennaAdvantage.Process
             {
                 throw new ArgumentException("Locator missing");
             }
-            if (m_C_ProjectLine_ID != 0)
+            if (m_VAB_ProjectLine_ID != 0)
             {
                 return IssueProjectLine();
             }
@@ -162,14 +162,14 @@ namespace ViennaAdvantage.Process
             }
             log.Info(inOut.ToString());
             //	Set Project of Receipt
-            if (inOut.GetC_Project_ID() == 0)
+            if (inOut.GetVAB_Project_ID() == 0)
             {
-                inOut.SetC_Project_ID(m_project.GetC_Project_ID());
+                inOut.SetVAB_Project_ID(m_project.GetVAB_Project_ID());
                 inOut.Save();
             }
-            else if (inOut.GetC_Project_ID() != m_project.GetC_Project_ID())
+            else if (inOut.GetVAB_Project_ID() != m_project.GetVAB_Project_ID())
             {
-                throw new ArgumentException("Receipt for other Project (" + inOut.GetC_Project_ID() + ")");
+                throw new ArgumentException("Receipt for other Project (" + inOut.GetVAB_Project_ID() + ")");
             }
 
             MInOutLine[] inOutLines = inOut.GetLines(false);
@@ -213,9 +213,9 @@ namespace ViennaAdvantage.Process
                 for (int ii = 0; ii < pls.Length; ii++)
                 {
                     //	The Order we generated is the same as the Order of the receipt
-                    if (pls[ii].GetC_OrderPO_ID() == inOut.GetC_Order_ID()
+                    if (pls[ii].GetVAB_OrderPO_ID() == inOut.GetVAB_Order_ID()
                         && pls[ii].GetM_Product_ID() == inOutLines[i].GetM_Product_ID()
-                        && pls[ii].GetC_ProjectIssue_ID() == 0)		//	not issued
+                        && pls[ii].GetVAB_ProjectSupply_ID() == 0)		//	not issued
                     {
                         pl = pls[ii];
                         break;
@@ -258,7 +258,7 @@ namespace ViennaAdvantage.Process
                 if ( Env.Signum(expenseLines[i].GetQty()) == 0)
                     continue;
                 //	Need to the same project
-                if (expenseLines[i].GetC_Project_ID() != m_project.GetC_Project_ID())
+                if (expenseLines[i].GetVAB_Project_ID() != m_project.GetVAB_Project_ID())
                     continue;
                 //	not issued yet
                 if (ProjectIssueHasExpense(expenseLines[i].GetS_TimeExpenseLine_ID()))
@@ -303,12 +303,12 @@ namespace ViennaAdvantage.Process
          */
         private String IssueProjectLine()
         {
-            MProjectLine pl = new MProjectLine(GetCtx(), m_C_ProjectLine_ID, Get_TrxName());
+            MProjectLine pl = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
             if (pl.GetM_Product_ID() == 0)
             {
                 throw new ArgumentException("Projet Line has no Product");
             }
-            if (pl.GetC_ProjectIssue_ID() != 0)
+            if (pl.GetVAB_ProjectSupply_ID() != 0)
             {
                 throw new ArgumentException("Projet Line already been issued");
             }

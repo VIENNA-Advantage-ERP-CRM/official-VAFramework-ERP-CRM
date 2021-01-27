@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for RC_KPI
+    /** Generated Model for VARC_KPI
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_RC_KPI : PO
+    public class X_VARC_KPI : PO
     {
-        public X_RC_KPI(Context ctx, int RC_KPI_ID, Trx trxName)
-            : base(ctx, RC_KPI_ID, trxName)
+        public X_VARC_KPI(Context ctx, int VARC_KPI_ID, Trx trxName)
+            : base(ctx, VARC_KPI_ID, trxName)
         {
-            /** if (RC_KPI_ID == 0)
+            /** if (VARC_KPI_ID == 0)
             {
             SetVAF_TableView_ID (0);	// 0
-            SetRC_KPI_ID (0);
+            SetVARC_KPI_ID (0);
             }
              */
         }
-        public X_RC_KPI(Ctx ctx, int RC_KPI_ID, Trx trxName)
-            : base(ctx, RC_KPI_ID, trxName)
+        public X_VARC_KPI(Ctx ctx, int VARC_KPI_ID, Trx trxName)
+            : base(ctx, VARC_KPI_ID, trxName)
         {
-            /** if (RC_KPI_ID == 0)
+            /** if (VARC_KPI_ID == 0)
             {
             SetVAF_TableView_ID (0);	// 0
-            SetRC_KPI_ID (0);
+            SetVARC_KPI_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPI(Context ctx, DataRow rs, Trx trxName)
+        public X_VARC_KPI(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPI(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VARC_KPI(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_KPI(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VARC_KPI(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_RC_KPI()
+        static X_VARC_KPI()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000227;
 
-        /** TableName=RC_KPI */
-        public static String Table_Name = "RC_KPI";
+        /** TableName=VARC_KPI */
+        public static String Table_Name = "VARC_KPI";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_RC_KPI[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VARC_KPI[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Column.
@@ -265,18 +265,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -615,17 +615,17 @@ namespace VAdvantage.Model
             return (String)Get_Value("OrderByClause");
         }
         /** Set KPI.
-        @param RC_KPI_ID KPI */
-        public void SetRC_KPI_ID(int RC_KPI_ID)
+        @param VARC_KPI_ID KPI */
+        public void SetVARC_KPI_ID(int VARC_KPI_ID)
         {
-            if (RC_KPI_ID < 1) throw new ArgumentException("RC_KPI_ID is mandatory.");
-            Set_ValueNoCheck("RC_KPI_ID", RC_KPI_ID);
+            if (VARC_KPI_ID < 1) throw new ArgumentException("VARC_KPI_ID is mandatory.");
+            Set_ValueNoCheck("VARC_KPI_ID", VARC_KPI_ID);
         }
         /** Get KPI.
         @return KPI */
-        public int GetRC_KPI_ID()
+        public int GetVARC_KPI_ID()
         {
-            Object ii = Get_Value("RC_KPI_ID");
+            Object ii = Get_Value("VARC_KPI_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

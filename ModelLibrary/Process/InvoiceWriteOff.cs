@@ -312,7 +312,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			aLine = new MAllocationLine (_m_alloc, OpenAmt,
 				Env.ZERO, Env.ZERO, Env.ZERO);
 			_m_payment.SetPayAmt(Decimal.Add( _m_payment.GetPayAmt(),OpenAmt));
-			aLine.SetC_Payment_ID(_m_payment.GetC_Payment_ID());
+			aLine.SetVAB_Payment_ID(_m_payment.GetVAB_Payment_ID());
 		}
 		else
 			aLine = new MAllocationLine (_m_alloc, Env.ZERO, 

@@ -632,15 +632,15 @@ namespace VIS.Models
 //                      VAF_UserContact.GMAIL_UID,
 //                      bp.isemployee, bp.isvendor, bp.iscustomer, bp.VAB_BPart_Category_id,
 //                      cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
-//                                              cbl.VAB_BPart_Location_ID,CBL.c_location_ID 
+//                                              cbl.VAB_BPart_Location_ID,CBL.VAB_Address_ID 
 //                     FROM VAF_UserContact VAF_UserContact
 //                     Left outer JOIN VAB_BusinessPartner BP
 //                     ON VAF_UserContact.VAB_BusinessPartner_id=bp.VAB_BusinessPartner_id
 //                     Left Outer JOIn VAB_BPart_Location CBL on bp.VAB_BusinessPartner_id= cbl.VAB_BusinessPartner_id 
-//                     Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
+//                     Left Outer Join VAB_Address CL  on Cl.VAB_Address_id= cbl.VAB_Address_id
 //                     Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
 //                     Left outer JOIn VAB_City CCI on CCI.VAB_City_ID=cl.VAB_City_ID
-//                     Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id";
+//                     Left outer JOIN VAB_RegionState CR on cr.VAB_RegionState_id=cl.VAB_RegionState_id";
 
 
 //            //sql = MRole.GetDefault().AddAccessSQL(sql, "VAF_UserContact", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
@@ -1003,7 +1003,7 @@ namespace VIS.Models
 
 ////                        try
 ////                        {
-////                            //------------------ Create Location_ID from home Address for VAF_UserContact.C_Location---------------------------//
+////                            //------------------ Create Location_ID from home Address for VAF_UserContact.VAB_Address---------------------------//
 
 
 
@@ -1555,7 +1555,7 @@ namespace VIS.Models
 ////                return result.ToString();
 ////            }
 
-////            //------------------ Create Location_ID from home Address for VAB_BusinessPartner.C_Location---------------------------//
+////            //------------------ Create Location_ID from home Address for VAB_BusinessPartner.VAB_Address---------------------------//
 
 ////            ObservableCollection<ContactAddress> cAddress = ((MyContacts)objMyContact[i]).CWorkAddress;
 ////            if (cAddress.Count > 0)
@@ -1563,7 +1563,7 @@ namespace VIS.Models
 ////                int BPLCount = 0;
 ////                sql.Clear();
 ////                //int workAddressCount = 0;
-////                sql.Append("SELECT c_location_id,VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_id=" + ((MyContacts)objMyContact[i]).BPartner_ID + " order by c_location_id");
+////                sql.Append("SELECT VAB_Address_id,VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_id=" + ((MyContacts)objMyContact[i]).BPartner_ID + " order by VAB_Address_id");
 ////                DataSet ds = DB.ExecuteDataset(sql.ToString(), null);
 ////                if (ds == null || ds.Tables[0].Rows.Count == 0)
 ////                {
@@ -1577,7 +1577,7 @@ namespace VIS.Models
 ////                {
 ////                    if (k < BPLCount)
 ////                    {
-////                        location = new MLocation(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString()), trx);
+////                        location = new MLocation(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[k]["VAB_ADDRESS_ID"].ToString()), trx);
 ////                    }
 ////                    else
 ////                    {
@@ -1608,12 +1608,12 @@ namespace VIS.Models
 ////                    if (cAddress[k].WRegion != null)             //Search Region_ID using Name for work Address
 ////                    {
 ////                        sql.Clear();
-////                        sql.Append("SELECT c_region_id FROM c_region WHERE upper(name)='" + cAddress[k].WRegion.ToUpper() + "'");
+////                        sql.Append("SELECT VAB_RegionState_id FROM VAB_RegionState WHERE upper(name)='" + cAddress[k].WRegion.ToUpper() + "'");
 ////                        WRegion_ID = DB.ExecuteScalar(sql.ToString());
 ////                    }
 
 
-////                    //-----------Insset data into C_Location for VAB_BusinessPartner-------------\\
+////                    //-----------Insset data into VAB_Address for VAB_BusinessPartner-------------\\
 
 
 ////                    sql.Clear();
@@ -1622,7 +1622,7 @@ namespace VIS.Models
 ////                    location.SetVAB_Country_ID(Util.GetValueOfInt(WCountry_ID));
 ////                    if (WRegion_ID != null && WRegion_ID != DBNull.Value)
 ////                    {
-////                        location.SetC_Region_ID(Util.GetValueOfInt(WRegion_ID));
+////                        location.SetVAB_RegionState_ID(Util.GetValueOfInt(WRegion_ID));
 ////                    }
 ////                    if (WCity_ID != null && WCity_ID != DBNull.Value)
 ////                    {
@@ -1662,31 +1662,31 @@ namespace VIS.Models
 ////                    }
 ////                    sql.Clear();
 
-////                    sql.Append("Update C_Location set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    C_Location_ID=" + location.GetC_Location_ID());
+////                    sql.Append("Update VAB_Address set LastGmailUpdated =" + SetTime(((MyContacts)objMyContact[i]).Updated) + " where    VAB_Address_ID=" + location.GetVAB_Address_ID());
 ////                    if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////                    {
 ////                        trx.Rollback();
 ////                        trx.Close();
-////                        result.Append("C_Location " + location.GetC_Location_ID() + " not Updated");
+////                        result.Append("VAB_Address " + location.GetVAB_Address_ID() + " not Updated");
 ////                        count--;
 ////                        bpCount--;
 ////                        continue;
 ////                    }
 
 ////                    updatedTime = location.GetUpdated();
-////                    ID = location.GetC_Location_ID();
-////                    sql1 = "Update C_Location set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where C_Location_ID=" + ID;
+////                    ID = location.GetVAB_Address_ID();
+////                    sql1 = "Update VAB_Address set updated=" + GlobalVariable.TO_DATE(updatedTime, false) + ", LastLocalUpdated=" + GlobalVariable.TO_DATE(updatedTime, false) + " where VAB_Address_ID=" + ID;
 ////                    if (DB.ExecuteQuery(sql1.ToString(), null, trx) == -1)
 ////                    {
 ////                        trx.Rollback();
 ////                        trx.Close();
-////                        result.Append("C_Location " + location.GetC_Location_ID() + " not Updated");
+////                        result.Append("VAB_Address " + location.GetVAB_Address_ID() + " not Updated");
 ////                        count--;
 ////                        bpCount--;
 ////                        continue;
 ////                    }
 
-////                    //------------------Create VAB_BPart_Location for business partner using C_Location.---------------------\\
+////                    //------------------Create VAB_BPart_Location for business partner using VAB_Address.---------------------\\
 ////                    MBPartnerLocation bpLocation = null;
 ////                    if (k < BPLCount)
 ////                    {
@@ -1698,7 +1698,7 @@ namespace VIS.Models
 ////                    }
 ////                    bpLocation.SetVAF_Org_ID(Org_ID);
 ////                    bpLocation.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
-////                    bpLocation.SetC_Location_ID(location.GetC_Location_ID());
+////                    bpLocation.SetVAB_Address_ID(location.GetVAB_Address_ID());
 ////                    bpLocation.SetVAB_BusinessPartner_ID(partner.GetVAB_BusinessPartner_ID());
 ////                    bpLocation.SetIsBillTo(true);
 ////                    bpLocation.SetIsPayFrom(true);
@@ -1746,23 +1746,23 @@ namespace VIS.Models
 ////                    for (int k = cAddress.Count; k < BPLCount; k++)
 ////                    {
 ////                        sql.Clear();
-////                        sql.Append("delete from VAB_BPart_Location WHERE c_location_id=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
+////                        sql.Append("delete from VAB_BPart_Location WHERE VAB_Address_id=" + ds.Tables[0].Rows[k]["VAB_ADDRESS_ID"].ToString());
 ////                        if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////                        {
 ////                            trx.Rollback();
 ////                            trx.Close();
-////                            result.Append("Unable to delete BPlocationID WHERE C_LocationID=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
+////                            result.Append("Unable to delete BPlocationID WHERE VAB_AddressID=" + ds.Tables[0].Rows[k]["VAB_ADDRESS_ID"].ToString());
 ////                            count--;
 ////                            bpCount--;
 ////                            continue;
 ////                        }
 ////                        sql.Clear();
-////                        sql.Append("delete from c_location WHERE c_location_id=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
+////                        sql.Append("delete from VAB_Address WHERE VAB_Address_id=" + ds.Tables[0].Rows[k]["VAB_ADDRESS_ID"].ToString());
 ////                        if (DB.ExecuteQuery(sql.ToString(), null, trx) == -1)
 ////                        {
 ////                            trx.Rollback();
 ////                            trx.Close();
-////                            result.Append("Unable to delete C_LocationID=" + ds.Tables[0].Rows[k]["C_LOCATION_ID"].ToString());
+////                            result.Append("Unable to delete VAB_AddressID=" + ds.Tables[0].Rows[k]["VAB_ADDRESS_ID"].ToString());
 ////                            count--;
 ////                            bpCount--;
 ////                            continue;
@@ -2346,13 +2346,13 @@ namespace VIS.Models
 //            string sql = @"SELECT VAF_UserContact.GMAIL_UID, VAB_BusinessPartner.isemployee, VAB_BusinessPartner.isvendor, VAB_BusinessPartner.iscustomer, VAB_BusinessPartner.VAB_BPart_Category_id,VAB_BusinessPartner.VAB_BusinessPartner_ID, VAB_BusinessPartner.name as BPName,
 //                          VAF_UserContact.VAF_UserContact_ID,       VAF_UserContact.value ,VAF_UserContact.name,
 //                          cl.City,cl.regionname, cl.address1,cco.name as BPcountry, cci.name as BPCity, cr.name as BPregion,cl.postal as BPPostal,
-//                          cbl.VAB_BPart_Location_ID,CBL.c_location_ID 
+//                          cbl.VAB_BPart_Location_ID,CBL.VAB_Address_ID 
 //                          FROM VAB_BusinessPartner VAB_BusinessPartner right outer join VAF_UserContact VAF_UserContact on VAB_BusinessPartner.VAB_BusinessPartner_id= VAF_UserContact.VAB_BusinessPartner_id 
 //                          Left Outer JOIn VAB_BPart_Location CBL on VAB_BusinessPartner.VAB_BusinessPartner_id= cbl.VAB_BusinessPartner_id 
-//                          Left Outer Join c_location CL  on Cl.c_location_id= cbl.c_location_id
+//                          Left Outer Join VAB_Address CL  on Cl.VAB_Address_id= cbl.VAB_Address_id
 //                          Left outer JOIN c_country CCO on cco.c_country_id=cl.c_country_id
 //                          Left outer JOIn VAB_City CCI on CCI.VAB_City_ID=cl.VAB_City_ID
-//                          Left outer JOIN c_region CR on cr.c_region_id=cl.c_region_id
+//                          Left outer JOIN VAB_RegionState CR on cr.VAB_RegionState_id=cl.VAB_RegionState_id
 //                          WHERE VAF_UserContact.GMAIL_UID is not null ";
 
 //            sql += " order by VAF_UserContact.VAF_UserContact_ID";

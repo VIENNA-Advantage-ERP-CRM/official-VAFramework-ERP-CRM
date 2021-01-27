@@ -29,14 +29,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     /** Request Type		*/
 	//private int _R_RequestType_ID = 0;
 	/** Lead				*/
-	private int _C_Lead_ID = 0;
+	private int _VAB_Lead_ID = 0;
 
 	/// <summary>
 	/// Prepare
 	/// </summary>
 	protected override void Prepare()
 	{
-		_C_Lead_ID = GetRecord_ID();
+		_VAB_Lead_ID = GetRecord_ID();
 	}	//	prepare
 
 	/// <summary>
@@ -45,15 +45,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>summary</returns>
 	protected override String DoIt()
 	{
-		log.Info("C_Lead_ID=" + _C_Lead_ID);
-        if (_C_Lead_ID == 0)
+		log.Info("VAB_Lead_ID=" + _VAB_Lead_ID);
+        if (_VAB_Lead_ID == 0)
         {
-            throw new Exception("@C_Lead_ID@ ID=0");
+            throw new Exception("@VAB_Lead_ID@ ID=0");
         }
-		MLead lead = new MLead (GetCtx(), _C_Lead_ID, Get_TrxName());
-        if (lead.Get_ID() != _C_Lead_ID)
+		MLead lead = new MLead (GetCtx(), _VAB_Lead_ID, Get_TrxName());
+        if (lead.Get_ID() != _VAB_Lead_ID)
         {
-            throw new Exception("@NotFound@: @C_Lead_ID@ ID=" + _C_Lead_ID);
+            throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);
         }
 		//
 		String retValue = lead.CreateRequest();

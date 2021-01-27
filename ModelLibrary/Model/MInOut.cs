@@ -202,7 +202,7 @@ namespace VAdvantage.Model
                         //line.SetQtyEntered(lineQty.multiply(oLines[i].getQtyEntered()).divide(oLines[i].getQtyOrdered(), 12, Decimal.ROUND_HALF_UP));
                         line.SetQtyEntered(Decimal.Multiply(lineQty, Decimal.Divide(oLines[i].GetQtyEntered(), Decimal.Round(oLines[i].GetQtyOrdered(), 12, MidpointRounding.AwayFromZero))));
                     }
-                    line.SetC_Project_ID(oLines[i].GetC_Project_ID());
+                    line.SetVAB_Project_ID(oLines[i].GetVAB_Project_ID());
                     line.Save(trxName);
                     //	Delivered everything ?
                     qty = Decimal.Subtract(qty, lineQty);
@@ -251,7 +251,7 @@ namespace VAdvantage.Model
             //MOrderLine[] oLines = order.GetLines('
             for (int i = 0; i < iolines.Length; i++)
             {
-                MOrderLine ol = new MOrderLine(inout.GetCtx(), iolines[i].GetC_OrderLine_ID(), inout.Get_Trx());
+                MOrderLine ol = new MOrderLine(inout.GetCtx(), iolines[i].GetVAB_OrderLine_ID(), inout.Get_Trx());
                 MOrderLine olines = new MOrderLine(inout.GetCtx(), ol.GetRef_OrderLine_ID(), inout.Get_Trx());
                 Decimal qty = olines.GetQtyEntered();
                 //	Nothing to deliver
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
                         //line.SetQtyEntered(lineQty.multiply(olines.getQtyEntered()).divide(olines.getQtyOrdered(), 12, Decimal.ROUND_HALF_UP));
                         line.SetQtyEntered(Decimal.Multiply(lineQty, Decimal.Divide(olines.GetQtyEntered(), Decimal.Round(olines.GetQtyEntered(), 12, MidpointRounding.AwayFromZero))));
                     }
-                    line.SetC_Project_ID(olines.GetC_Project_ID());
+                    line.SetVAB_Project_ID(olines.GetVAB_Project_ID());
                     line.Save(trxName);
                     //	Delivered everything ?
                     qty = Decimal.Subtract(qty, lineQty);
@@ -391,17 +391,17 @@ namespace VAdvantage.Model
             //
             to.SetPosted(false);
             to.SetProcessed(false);
-            to.SetC_Order_ID(0);	//	Overwritten by setOrder
+            to.SetVAB_Order_ID(0);	//	Overwritten by setOrder
             if (counter)
             {
-                to.SetC_Order_ID(0);
+                to.SetVAB_Order_ID(0);
                 to.SetRef_InOut_ID(from.GetM_InOut_ID());
                 //	Try to find Order/Invoice link
-                if (from.GetC_Order_ID() != 0)
+                if (from.GetVAB_Order_ID() != 0)
                 {
-                    MOrder peer = new MOrder(from.GetCtx(), from.GetC_Order_ID(), from.Get_TrxName());
+                    MOrder peer = new MOrder(from.GetCtx(), from.GetVAB_Order_ID(), from.Get_TrxName());
                     if (peer.GetRef_Order_ID() != 0)
-                        to.SetC_Order_ID(peer.GetRef_Order_ID());
+                        to.SetVAB_Order_ID(peer.GetRef_Order_ID());
                 }
                 if (from.GetVAB_Invoice_ID() != 0)
                 {
@@ -414,7 +414,7 @@ namespace VAdvantage.Model
             {
                 to.SetRef_InOut_ID(0);
                 if (setOrder)
-                    to.SetC_Order_ID(from.GetC_Order_ID());
+                    to.SetVAB_Order_ID(from.GetVAB_Order_ID());
             }
 
             // for copy document set Temp Document No to empty
@@ -516,7 +516,7 @@ namespace VAdvantage.Model
             : this(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
             SetClientOrg(invoice);
-            MOrder ord = new MOrder(GetCtx(), invoice.GetC_Order_ID(), null);
+            MOrder ord = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
             SetVAB_BusinessPartner_ID(ord.GetVAB_BusinessPartner_ID());
             //SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             SetVAB_BPart_Location_ID(ord.GetVAB_BPart_Location_ID());	//	shipment address
@@ -532,8 +532,8 @@ namespace VAdvantage.Model
                 SetMovementType(invoice.IsSOTrx() ? MOVEMENTTYPE_CustomerReturns : MOVEMENTTYPE_VendorReturns);
 
             MOrder order = null;
-            if (invoice.GetC_Order_ID() != 0)
-                order = new MOrder(invoice.GetCtx(), invoice.GetC_Order_ID(), invoice.Get_TrxName());
+            if (invoice.GetVAB_Order_ID() != 0)
+                order = new MOrder(invoice.GetCtx(), invoice.GetVAB_Order_ID(), invoice.Get_TrxName());
             if (VAB_DocTypesShipment_ID == 0 && order != null)
                 VAB_DocTypesShipment_ID = int.Parse(ExecuteQuery.ExecuteScalar("SELECT VAB_DocTypesShipment_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + order.GetVAB_DocTypes_ID()));
             if (VAB_DocTypesShipment_ID != 0)
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
             SetDateAcct(GetMovementDate());
 
             //	Copy from Invoice
-            SetC_Order_ID(invoice.GetC_Order_ID());
+            SetVAB_Order_ID(invoice.GetVAB_Order_ID());
             SetSalesRep_ID(invoice.GetSalesRep_ID());
             //
             SetVAB_BillingCode_ID(invoice.GetVAB_BillingCode_ID());
@@ -555,7 +555,7 @@ namespace VAdvantage.Model
             SetVAB_Charge_ID(invoice.GetVAB_Charge_ID());
             SetChargeAmt(invoice.GetChargeAmt());
             //
-            SetC_Project_ID(invoice.GetC_Project_ID());
+            SetVAB_Project_ID(invoice.GetVAB_Project_ID());
             SetDateOrdered(invoice.GetDateOrdered());
             SetDescription(invoice.GetDescription());
             SetPOReference(invoice.GetPOReference());
@@ -605,7 +605,7 @@ namespace VAdvantage.Model
             SetDateAcct(GetMovementDate());
 
             //	Copy from Order
-            SetC_Order_ID(original.GetC_Order_ID());
+            SetVAB_Order_ID(original.GetVAB_Order_ID());
             SetDeliveryRule(original.GetDeliveryRule());
             SetDeliveryViaRule(original.GetDeliveryViaRule());
             SetM_Shipper_ID(original.GetM_Shipper_ID());
@@ -618,7 +618,7 @@ namespace VAdvantage.Model
             SetVAB_Charge_ID(original.GetVAB_Charge_ID());
             SetChargeAmt(original.GetChargeAmt());
             //
-            SetC_Project_ID(original.GetC_Project_ID());
+            SetVAB_Project_ID(original.GetVAB_Project_ID());
             SetDateOrdered(original.GetDateOrdered());
             SetDescription(original.GetDescription());
             SetPOReference(original.GetPOReference());
@@ -818,10 +818,10 @@ namespace VAdvantage.Model
         //Pratap VAWMS 31-8-2015
         public Boolean AddServiceLines()
         {
-            String sql = "SELECT C_OrderLine_ID "
-                          + " FROM C_OrderLine ol"
+            String sql = "SELECT VAB_OrderLine_ID "
+                          + " FROM VAB_OrderLine ol"
                           + " LEFT OUTER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
-                          + " WHERE ol.C_Order_ID=@param1"
+                          + " WHERE ol.VAB_Order_ID=@param1"
                           + " AND (ol.M_Product_ID IS NULL"
                           + " OR p.IsStocked = 'N'"
                           + " OR p.ProductType != 'I')"
@@ -829,8 +829,8 @@ namespace VAdvantage.Model
                           + " AND NOT EXISTS (SELECT 1 FROM M_InOut io "
                           + " INNER JOIN M_InOutLine iol ON (io.M_InOut_ID=iol.M_InOut_ID)"
                           + " WHERE io.M_InOut_ID=@param2"
-                          + " AND iol.C_OrderLine_ID=ol.C_OrderLine_ID)"
-                          + " ORDER BY C_OrderLine_ID";
+                          + " AND iol.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
+                          + " ORDER BY VAB_OrderLine_ID";
             //PreparedStatement pstmt = null;
             //ResultSet rs = null;
             SqlParameter[] param = null;
@@ -838,11 +838,11 @@ namespace VAdvantage.Model
             try
             {
                 param = new SqlParameter[2];
-                param[0] = new SqlParameter("@param1", GetC_Order_ID());
+                param[0] = new SqlParameter("@param1", GetVAB_Order_ID());
                 param[1] = new SqlParameter("@param2", GetM_InOut_ID());
                 idr = DB.ExecuteReader(sql, param, Get_Trx());
                 //pstmt = DB.prepareStatement(sql, get_Trx());
-                //pstmt.setInt(1, getC_Order_ID());
+                //pstmt.setInt(1, getVAB_Order_ID());
                 //pstmt.setInt(2, getM_InOut_ID());
                 //rs = pstmt.executeQuery();
                 ArrayList serviceLines = new ArrayList();// ArrayList<MInOutLine> serviceLines = new ArrayList<MInOutLine>();
@@ -851,9 +851,9 @@ namespace VAdvantage.Model
                 ////    //list.add(new MInOutLine(getCtx(), rs, get_Trx()));
                 while (idr.Read())
                 {
-                    // int C_OrderLine_ID = rs.getInt(1);
-                    int C_OrderLine_ID = VAdvantage.Utility.Util.GetValueOfInt(idr[0]);
-                    MOrderLine oLine = new MOrderLine(GetCtx(), C_OrderLine_ID, Get_TrxName());
+                    // int VAB_OrderLine_ID = rs.getInt(1);
+                    int VAB_OrderLine_ID = VAdvantage.Utility.Util.GetValueOfInt(idr[0]);
+                    MOrderLine oLine = new MOrderLine(GetCtx(), VAB_OrderLine_ID, Get_TrxName());
                     MInOutLine line = new MInOutLine(this);
                     line.SetOrderLine(oLine, 0, Env.ZERO);
                     // BigDecimal qty = oLine.getQtyOrdered().subtract(oLine.getQtyDelivered());
@@ -942,7 +942,7 @@ namespace VAdvantage.Model
                 line.Set_ValueNoCheck("M_InOutLine_ID", I_ZERO);	//	new
                 //	Reset
                 if (!setOrder)
-                    line.SetC_OrderLine_ID(0);
+                    line.SetVAB_OrderLine_ID(0);
                 // SI_0642 : when we reverse MR or Customer Return, at that tym - on Save - system also check - qty availablity agaisnt same attribute 
                 // on storage. If we set ASI as 0, then system not find qty and not able to save record
                 if (!counter && !IsReversal())
@@ -964,13 +964,13 @@ namespace VAdvantage.Model
                 //
                 if (counter)
                 {
-                    line.SetC_OrderLine_ID(0);
+                    line.SetVAB_OrderLine_ID(0);
                     line.SetRef_InOutLine_ID(fromLine.GetM_InOutLine_ID());
-                    if (fromLine.GetC_OrderLine_ID() != 0)
+                    if (fromLine.GetVAB_OrderLine_ID() != 0)
                     {
-                        MOrderLine peer = new MOrderLine(GetCtx(), fromLine.GetC_OrderLine_ID(), Get_TrxName());
+                        MOrderLine peer = new MOrderLine(GetCtx(), fromLine.GetVAB_OrderLine_ID(), Get_TrxName());
                         if (peer.GetRef_OrderLine_ID() != 0)
-                            line.SetC_OrderLine_ID(peer.GetRef_OrderLine_ID());
+                            line.SetVAB_OrderLine_ID(peer.GetRef_OrderLine_ID());
                     }
                 }
                 //
@@ -983,7 +983,7 @@ namespace VAdvantage.Model
                         line.SetReversalDoc_ID(fromLine.GetM_InOutLine_ID());
                     }
                     // to set OrderLine in case of reversal if it is available 
-                    line.SetC_OrderLine_ID(fromLine.GetC_OrderLine_ID());
+                    line.SetVAB_OrderLine_ID(fromLine.GetVAB_OrderLine_ID());
                     //set container reference(if, not a copy record)
                     line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
                 }
@@ -1030,7 +1030,7 @@ namespace VAdvantage.Model
         private void SetOrder(MOrder order)
         {
             SetClientOrg(order);
-            SetC_Order_ID(order.GetC_Order_ID());
+            SetVAB_Order_ID(order.GetVAB_Order_ID());
             //
             SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
             SetVAB_BPart_Location_ID(order.GetVAB_BPart_Location_ID());	//	shipment address
@@ -1057,7 +1057,7 @@ namespace VAdvantage.Model
             SetVAB_Charge_ID(order.GetVAB_Charge_ID());
             SetChargeAmt(order.GetChargeAmt());
             //
-            SetC_Project_ID(order.GetC_Project_ID());
+            SetVAB_Project_ID(order.GetVAB_Project_ID());
             SetDateOrdered(order.GetDateOrdered());
             SetDescription(order.GetDescription());
             SetPOReference(order.GetPOReference());
@@ -1070,20 +1070,20 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Order - Callout
-         *	@param oldC_Order_ID old BP
-         *	@param newC_Order_ID new BP
+         *	@param oldVAB_Order_ID old BP
+         *	@param newVAB_Order_ID new BP
          *	@param windowNo window no
          */
         //@UICallout Web user interface method
-        public void SetC_Order_ID(String oldC_Order_ID, String newC_Order_ID, int windowNo)
+        public void SetVAB_Order_ID(String oldVAB_Order_ID, String newVAB_Order_ID, int windowNo)
         {
-            if (newC_Order_ID == null || newC_Order_ID.Length == 0)
+            if (newVAB_Order_ID == null || newVAB_Order_ID.Length == 0)
                 return;
-            int C_Order_ID = int.Parse(newC_Order_ID);
-            if (C_Order_ID == 0)
+            int VAB_Order_ID = int.Parse(newVAB_Order_ID);
+            if (VAB_Order_ID == 0)
                 return;
             //	Get Details
-            MOrder order = new MOrder(GetCtx(), C_Order_ID, null);
+            MOrder order = new MOrder(GetCtx(), VAB_Order_ID, null);
             if (order.Get_ID() != 0)
                 SetOrder(order);
         }
@@ -1517,9 +1517,9 @@ namespace VAdvantage.Model
             SetDateAcct(GetMovementDate());
 
             //	Shipment - Needs Order
-            if (IsSOTrx() && GetC_Order_ID() == 0)
+            if (IsSOTrx() && GetVAB_Order_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
+                log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "VAB_Order_ID"));
                 return false;
             }
             if (newRecord || Is_ValueChanged("VAB_BusinessPartner_ID"))
@@ -1620,7 +1620,7 @@ namespace VAdvantage.Model
                         + " SET VAF_Org_ID ="
                             + "(SELECT VAF_Org_ID"
                             + " FROM M_InOut o WHERE ol.M_InOut_ID=o.M_InOut_ID) "
-                        + "WHERE M_InOut_ID=" + GetC_Order_ID();
+                        + "WHERE M_InOut_ID=" + GetVAB_Order_ID();
                     int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
                     log.Fine("Lines -> #" + no);
                 }
@@ -1628,7 +1628,7 @@ namespace VAdvantage.Model
 
             if (((IsSOTrx() && !IsReturnTrx()) || GetMovementType() == "V-") && !IsReversal())
             {
-                MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+                MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
                 Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
                         ord.GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
                         ord.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
@@ -1726,9 +1726,9 @@ namespace VAdvantage.Model
 
             // Added by Vivek on 08/11/2017 assigned by Mukesh sir
             // check if Linked PO is not in completed or closed stage then not complete this record
-            if (GetC_Order_ID() != 0 && !IsSOTrx() && !IsReturnTrx())
+            if (GetVAB_Order_ID() != 0 && !IsSOTrx() && !IsReturnTrx())
             {
-                MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                 if (order.GetDocStatus() != "CO" && order.GetDocStatus() != "CL")
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "LinkedPOStatus");
@@ -1743,7 +1743,7 @@ namespace VAdvantage.Model
                 if (Env.IsModuleInstalled("VAPOS_"))
                 {
                     // Change Here For On Credit
-                    Decimal? onCreditAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT VAPOS_CreditAmt FROM C_Order WHERE C_Order_ID = " + GetC_Order_ID()));
+                    Decimal? onCreditAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT VAPOS_CreditAmt FROM VAB_Order WHERE VAB_Order_ID = " + GetVAB_Order_ID()));
                     if (onCreditAmt <= 0)
                         checkCreditStatus = false;
                 }
@@ -1791,12 +1791,12 @@ namespace VAdvantage.Model
 
             if (Env.IsModuleInstalled("VA009_"))
             {
-                if (GetC_Order_ID() != 0)
+                if (GetVAB_Order_ID() != 0)
                 {
-                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID()));
+                    int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where VAB_Order_ID=" + GetVAB_Order_ID()));
                     if (_countschedule > 0)
                     {
-                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where C_Order_ID=" + GetC_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
+                        if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where VAB_Order_ID=" + GetVAB_Order_ID() + " AND VA009_Ispaid='Y'")) != _countschedule)
                         {
                             _processMsg = "Please Do Advance Payment against order";
                             return DocActionVariables.STATUS_INVALID;
@@ -1907,7 +1907,7 @@ namespace VAdvantage.Model
             int VAPOS_POSTerminal_ID = 0;
             if (Env.IsModuleInstalled("VAPOS_"))
             {
-                VAPOS_POSTerminal_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAPOS_POSTERMINAL_ID FROM C_Order WHERE C_ORDER_ID=" + GetC_Order_ID()));
+                VAPOS_POSTerminal_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAPOS_POSTERMINAL_ID FROM VAB_Order WHERE VAB_ORDER_ID=" + GetVAB_Order_ID()));
             }
             if (!(VAPOS_POSTerminal_ID > 0))
             {
@@ -2290,7 +2290,7 @@ namespace VAdvantage.Model
 
                 #region done by Amit on behalf of surya 30-9-2015 vawms
                 // on Warehouse, Set Qty Allocated only for Item type Product
-                if (sLine.GetC_OrderLine_ID() != 0 && product != null && product.GetProductType() == MProduct.PRODUCTTYPE_Item && IsSOTrx() && !IsReturnTrx())
+                if (sLine.GetVAB_OrderLine_ID() != 0 && product != null && product.GetProductType() == MProduct.PRODUCTTYPE_Item && IsSOTrx() && !IsReturnTrx())
                 {
                     if (Env.IsModuleInstalled("VAWMS_"))
                     {
@@ -2320,9 +2320,9 @@ namespace VAdvantage.Model
                 decimal qtytoset = Env.ZERO;
                 //	Update Order Line
                 MOrderLine oLine = null;
-                if (sLine.GetC_OrderLine_ID() != 0)
+                if (sLine.GetVAB_OrderLine_ID() != 0)
                 {
-                    oLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
+                    oLine = new MOrderLine(GetCtx(), sLine.GetVAB_OrderLine_ID(), Get_TrxName());
                     log.Fine("OrderLine - Reserved=" + oLine.GetQtyReserved()
                     + ", Delivered=" + oLine.GetQtyDelivered());
                     // nnayak - Qty reserved and Qty updated not affected by returns
@@ -2376,7 +2376,7 @@ namespace VAdvantage.Model
                     //        Decimal QtyPOMA = Env.ZERO;
 
                     //        // nnayak - Don't update qty reserved or qty ordered for Returns
-                    //        if (sLine.GetC_OrderLine_ID() != 0 && !IsReturnTrx())
+                    //        if (sLine.GetVAB_OrderLine_ID() != 0 && !IsReturnTrx())
                     //        {
                     //            if (IsSOTrx())
                     //                QtySOMA = Decimal.Negate(ma.GetMovementQty());
@@ -2461,7 +2461,7 @@ namespace VAdvantage.Model
                             Decimal QtyPOMA = Env.ZERO;
 
                             // nnayak - Don't update qty reserved or qty ordered for Returns
-                            if (sLine.GetC_OrderLine_ID() != 0 && !IsReturnTrx())
+                            if (sLine.GetVAB_OrderLine_ID() != 0 && !IsReturnTrx())
                             {
                                 if (IsSOTrx())
                                     QtySOMA = Decimal.Negate(ma.GetMovementQty());
@@ -2474,11 +2474,11 @@ namespace VAdvantage.Model
 
 
 
-                            if (sLine.GetC_OrderLine_ID() != 0 && !IsReturnTrx())
+                            if (sLine.GetVAB_OrderLine_ID() != 0 && !IsReturnTrx())
                             {
                                 #region Update Storage when record created with refenece of Orderline and not a RETURN trx
-                                MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                                MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                                MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetVAB_OrderLine_ID(), Get_TrxName());
+                                MOrder ord = new MOrder(GetCtx(), ordLine.GetVAB_Order_ID(), Get_TrxName());
                                 if (!IsReversal())
                                 {
                                     qtytoset = Decimal.Subtract(ordLine.GetQtyOrdered(), ordLine.GetQtyDelivered());
@@ -2672,10 +2672,10 @@ namespace VAdvantage.Model
                         Decimal? containerCurrentQty = 0;
                         //	Fallback: Update Storage - see also VMatch.createMatchRecord
 
-                        if (sLine.GetC_OrderLine_ID() != 0 && !IsReturnTrx())
+                        if (sLine.GetVAB_OrderLine_ID() != 0 && !IsReturnTrx())
                         {
-                            MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                            MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                            MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetVAB_OrderLine_ID(), Get_TrxName());
+                            MOrder ord = new MOrder(GetCtx(), ordLine.GetVAB_Order_ID(), Get_TrxName());
                             if (!IsReversal())
                             {
                                 qtytoset = Decimal.Subtract(ordLine.GetQtyOrdered(), ordLine.GetQtyDelivered());
@@ -2929,9 +2929,9 @@ namespace VAdvantage.Model
                     }
 
                     //Update Blanket Sales Order line on 9Aug, 2017, Sukhwinder.
-                    if (oLine != null && (oLine.GetC_OrderLine_Blanket_ID() > 0 || oLine.GetOrig_OrderLine_ID() > 0))
+                    if (oLine != null && (oLine.GetVAB_OrderLine_Blanket_ID() > 0 || oLine.GetOrig_OrderLine_ID() > 0))
                     {
-                        MOrderLine lineBlanket1 = new MOrderLine(GetCtx(), oLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                        MOrderLine lineBlanket1 = new MOrderLine(GetCtx(), oLine.GetVAB_OrderLine_Blanket_ID(), Get_TrxName());
                         MOrderLine origOrderLine = new MOrderLine(GetCtx(), oLine.GetOrig_OrderLine_ID(), Get_TrxName());
                         MOrderLine lineBlanket = null;
 
@@ -2960,9 +2960,9 @@ namespace VAdvantage.Model
                         }
 
                         // For Return Order created for Blanket Order
-                        if (origOrderLine.GetC_OrderLine_Blanket_ID() > 0)
+                        if (origOrderLine.GetVAB_OrderLine_Blanket_ID() > 0)
                         {
-                            lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetC_OrderLine_Blanket_ID(), Get_TrxName());
+                            lineBlanket = new MOrderLine(GetCtx(), origOrderLine.GetVAB_OrderLine_Blanket_ID(), Get_TrxName());
 
                         }
 
@@ -3065,7 +3065,7 @@ namespace VAdvantage.Model
                     }
 
                     //	Link to Order
-                    if (sLine.GetC_OrderLine_ID() != 0)
+                    if (sLine.GetVAB_OrderLine_ID() != 0)
                     {
                         log.Fine("PO Matching");
                         //	Ship - PO
@@ -3090,7 +3090,7 @@ namespace VAdvantage.Model
                     else	//	No Order - Try finding links via Invoice
                     {
                         //	Invoice has an Order Link
-                        if (iLine != null && iLine.GetC_OrderLine_ID() != 0)
+                        if (iLine != null && iLine.GetVAB_OrderLine_ID() != 0)
                         {
                             //	Invoice is created before  Shipment
                             log.Fine("PO(Inv) Matching");
@@ -3107,7 +3107,7 @@ namespace VAdvantage.Model
                                 return DocActionVariables.STATUS_INVALID;
                             }
                             //	Update PO with ASI                   Commented by Bharat
-                            //oLine = new MOrderLine(GetCtx(), po.GetC_OrderLine_ID(), Get_TrxName());
+                            //oLine = new MOrderLine(GetCtx(), po.GetVAB_OrderLine_ID(), Get_TrxName());
                             //if (oLine != null && oLine.GetM_AttributeSetInstance_ID() == 0)
                             //{
                             //    oLine.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
@@ -3120,11 +3120,11 @@ namespace VAdvantage.Model
                 #region Calculate Foreign Cost for Average PO
                 try
                 {
-                    if (!IsSOTrx() && !IsReturnTrx() && sLine.GetC_OrderLine_ID() > 0) // for MR against PO
+                    if (!IsSOTrx() && !IsReturnTrx() && sLine.GetVAB_OrderLine_ID() > 0) // for MR against PO
                     {
                         MProduct product1 = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
-                        MOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
-                        MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                        MOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
+                        MOrder order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                         if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
                         {
                             //if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
@@ -3180,11 +3180,11 @@ namespace VAdvantage.Model
                         //}
 
                         _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
-                        orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetC_OrderLine_ID(), null);
+                        orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         if (!IsSOTrx() && !IsReturnTrx()) // Material Receipt
                         {
                             bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), productCQ.GetM_Product_ID(), Get_Trx());
-                            if (orderLine == null || orderLine.GetC_OrderLine_ID() == 0)  // MR without PO
+                            if (orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)  // MR without PO
                             {
                                 #region MR without PO
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
@@ -3212,7 +3212,7 @@ namespace VAdvantage.Model
                                 }
                                 #endregion
                             }
-                            else if (orderLine != null && orderLine.GetC_Order_ID() > 0) // MR with PO
+                            else if (orderLine != null && orderLine.GetVAB_Order_ID() > 0) // MR with PO
                             {
                                 #region MR with PO
                                 // check IsCostAdjustmentOnLost exist on product 
@@ -3227,7 +3227,7 @@ namespace VAdvantage.Model
                                     isCostAdjustableOnLost = productCQ.IsCostAdjustmentOnLost();
                                 }
 
-                                MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                                MOrder order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                                 if (order.GetDocStatus() != "VO")
                                 {
                                     if (orderLine.GetQtyOrdered() == 0)
@@ -3353,7 +3353,7 @@ namespace VAdvantage.Model
                                 break;
                             }
 
-                            if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
+                            if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                 break;
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
@@ -3384,12 +3384,12 @@ namespace VAdvantage.Model
                         else if (IsSOTrx() && !IsReturnTrx())  // shipment
                         {
                             #region shipment
-                            if (GetC_Order_ID() <= 0)
+                            if (GetVAB_Order_ID() <= 0)
                             {
                                 break;
                             }
 
-                            if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0) { break; }
+                            if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0) { break; }
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
 
@@ -3418,7 +3418,7 @@ namespace VAdvantage.Model
                         }
                         else if (!IsSOTrx() && IsReturnTrx()) // Return To Vendor
                         {
-                            if (GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetC_OrderLine_ID() == 0)
+                            if (GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)
                             {
                                 #region Return To Vendor -- without order refernce
                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
@@ -3446,10 +3446,10 @@ namespace VAdvantage.Model
                                 }
                                 #endregion
                             }
-                            else if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                            else if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                             {
                                 #region Return To Vendor -- with order refernce
-                                MOrder order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                                MOrder order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                                 if (order.GetDocStatus() != "VO")
                                 {
                                     if (orderLine.GetQtyOrdered() == 0)
@@ -3677,15 +3677,15 @@ namespace VAdvantage.Model
 
                 #region update  receipt No and Date Trx on LC - By Amit
                 // update  receipt No and Date Trx on LC - By Amit
-                if (sLine.GetC_OrderLine_ID() != 0)
+                if (sLine.GetVAB_OrderLine_ID() != 0)
                 {
                     try
                     {
                         string PaymentBaseType = "";
                         if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX IN ('VA009_' , 'VA026_' ) ")) >= 2)
                         {
-                            MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetC_OrderLine_ID(), Get_TrxName());
-                            MOrder ord = new MOrder(GetCtx(), ordLine.GetC_Order_ID(), Get_TrxName());
+                            MOrderLine ordLine = new MOrderLine(GetCtx(), sLine.GetVAB_OrderLine_ID(), Get_TrxName());
+                            MOrder ord = new MOrder(GetCtx(), ordLine.GetVAB_Order_ID(), Get_TrxName());
                             if (tableId1 <= 0 && ord.GetPaymentMethod() == "L")
                             {
                                 _processMsg = "Could not Update Letter of Credit";
@@ -3702,28 +3702,28 @@ namespace VAdvantage.Model
                                 {
                                     VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(VA026_LCDetail_ID)  FROM VA026_LCDetail 
                                                             WHERE IsActive = 'Y' AND DocStatus IN ('CO' , 'CL')  AND
-                                                            VA026_Order_ID =" + ord.GetC_Order_ID(), null, Get_Trx()));
+                                                            VA026_Order_ID =" + ord.GetVAB_Order_ID(), null, Get_Trx()));
                                     // Check SO Detail tab of Letter of Credit
                                     if (VA026_LCDetail_ID == 0)
                                     {
                                         VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(lc.VA026_LCDetail_ID)  FROM VA026_LCDetail lc
                                                         INNER JOIN VA026_SODetail sod ON sod.VA026_LCDetail_ID = lc.VA026_LCDetail_ID 
                                                             WHERE sod.IsActive = 'Y' AND lc.IsActive = 'Y' AND lc.DocStatus IN ('CO' , 'CL')  AND
-                                                            sod.C_Order_ID =" + ord.GetC_Order_ID(), null, Get_Trx()));
+                                                            sod.VAB_Order_ID =" + ord.GetVAB_Order_ID(), null, Get_Trx()));
                                     }
                                 }
                                 else if (!ord.IsSOTrx() && !ord.IsReturnTrx())
                                 {
                                     VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(VA026_LCDetail_ID)  FROM VA026_LCDetail 
                                                             WHERE IsActive = 'Y' AND DocStatus IN ('CO' , 'CL')  AND
-                                                            c_order_id =" + ord.GetC_Order_ID(), null, Get_Trx()));
+                                                            VAB_Order_id =" + ord.GetVAB_Order_ID(), null, Get_Trx()));
                                     // Check PO Detail tab of Letter of Credit
                                     if (VA026_LCDetail_ID == 0)
                                     {
                                         VA026_LCDetail_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(lc.VA026_LCDetail_ID)  FROM VA026_LCDetail lc
                                                         INNER JOIN VA026_PODetail sod ON sod.VA026_LCDetail_ID = lc.VA026_LCDetail_ID 
                                                             WHERE sod.IsActive = 'Y' AND lc.IsActive = 'Y' AND lc.DocStatus IN ('CO' , 'CL')  AND
-                                                            sod.C_Order_ID =" + ord.GetC_Order_ID(), null, Get_Trx()));
+                                                            sod.VAB_Order_ID =" + ord.GetVAB_Order_ID(), null, Get_Trx()));
                                     }
                                 }
 
@@ -3857,7 +3857,7 @@ namespace VAdvantage.Model
                 {
                     if (!IsSOTrx() && !IsReturnTrx() && IsDropShip())
                     {
-                        MOrder order = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+                        MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         MOrder ref_order = new MOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
@@ -4602,11 +4602,11 @@ namespace VAdvantage.Model
                         qtyToReturn = autoBalanceNegative(line, product, line.GetMovementQty());
                     }
 
-                    if (line.GetC_OrderLine_ID() != 0 && qtyToReturn.CompareTo(Env.ZERO) > 0)
+                    if (line.GetVAB_OrderLine_ID() != 0 && qtyToReturn.CompareTo(Env.ZERO) > 0)
                     {
                         {
                             //Linking to shipment line
-                            MOrderLine rmaLine = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_Trx());
+                            MOrderLine rmaLine = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_Trx());
                             if (rmaLine.GetOrig_InOutLine_ID() > 0)
                             {
                                 //retrieving ASI which is not already returned
@@ -4655,7 +4655,7 @@ namespace VAdvantage.Model
                     }
                     #endregion
                 }
-                else if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReturns) == 0 && line.GetC_OrderLine_ID() != 0)
+                else if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReturns) == 0 && line.GetVAB_OrderLine_ID() != 0)
                 {
                     #region Vendor Return with respect to PO
                     Decimal qtyToReturn = line.GetMovementQty();
@@ -4663,7 +4663,7 @@ namespace VAdvantage.Model
                     {
                         {
                             //Linking to MR line
-                            MOrderLine rmaLine = new MOrderLine(GetCtx(), line.GetC_OrderLine_ID(), Get_Trx());
+                            MOrderLine rmaLine = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_Trx());
                             if (rmaLine.GetOrig_InOutLine_ID() > 0)
                             {
                                 //retrieving ASI which is not already returned
@@ -5128,7 +5128,7 @@ namespace VAdvantage.Model
         public bool IsOnlyForOrder(MOrder order)
         {
             //	TODO Compare Lines
-            return GetC_Order_ID() == order.GetC_Order_ID();
+            return GetVAB_Order_ID() == order.GetVAB_Order_ID();
         }
 
         /// <summary>
@@ -5156,7 +5156,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_Trx());
+            MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
             MDocType dtOrder = MDocType.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
             String DocSubTypeSO = dtOrder.GetDocSubTypeSO();
 
@@ -5180,7 +5180,7 @@ namespace VAdvantage.Model
                 // return false if linked document is in completed or closed stage
                 // stuck case for this -- Order1 --> M1 & MR2  --> create invoice against M1 and try to reverse MR2, system not allowing by this check
                 // linked doc check above, so not used this function
-                //if (!linkedDocument(GetC_Order_ID()))
+                //if (!linkedDocument(GetVAB_Order_ID()))
                 //{
                 //    _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
                 //    return false;
@@ -5302,7 +5302,7 @@ namespace VAdvantage.Model
                     ass.Save();
                 }
             }
-            reversal.SetC_Order_ID(GetC_Order_ID());
+            reversal.SetVAB_Order_ID(GetVAB_Order_ID());
             reversal.AddDescription("{->" + GetDocumentNo() + ")");
             reversal.Save(Get_TrxName());
             //
@@ -5496,11 +5496,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Linekd Document for the Order
         /// </summary>
-        /// <param name="C_Order_ID"></param>
+        /// <param name="VAB_Order_ID"></param>
         /// <returns>True/False</returns>
-        private bool linkedDocument(int C_Order_ID)
+        private bool linkedDocument(int VAB_Order_ID)
         {
-            string sql = "SELECT COUNT(C_Order_ID) FROM VAB_Invoice WHERE C_Order_ID = " + C_Order_ID + "  AND DocStatus NOT IN ('RE','VO')";
+            string sql = "SELECT COUNT(VAB_Order_ID) FROM VAB_Invoice WHERE VAB_Order_ID = " + VAB_Order_ID + "  AND DocStatus NOT IN ('RE','VO')";
             int _countOrder = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             if (_countOrder > 0)
             {
@@ -5518,7 +5518,7 @@ namespace VAdvantage.Model
                           WHERE il.M_InOutLine_ID = (SELECT M_InOutLine_ID FROM M_InOutLine mil WHERE mil.M_InOut_ID = " + M_Inout_ID + @"
                           AND mil.M_InOutLine_ID = il.M_InOutLine_ID) AND il.IsActive = 'Y' AND i.DocStatus NOT IN ('RE' , 'VO')
                           UNION ALL
-                          SELECT COUNT(o.C_Order_ID) AS Result FROM C_Order o WHERE o.Orig_InOut_ID = " + M_Inout_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) t";
+                          SELECT COUNT(o.VAB_Order_ID) AS Result FROM VAB_Order o WHERE o.Orig_InOut_ID = " + M_Inout_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) t";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
             {
                 return false;

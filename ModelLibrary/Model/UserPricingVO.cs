@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         // Enforce Price Limit	
         private bool _enforcePriceLimit = false;
         // Product UOM		
-        private int _C_UOM_ID = 0;
+        private int _VAB_UOM_ID = 0;
         #endregion
 
         /// <summary>
@@ -159,18 +159,18 @@ namespace VAdvantage.Model
         /// get UMO id
         /// </summary>
         /// <returns></returns>
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            return _C_UOM_ID;
+            return _VAB_UOM_ID;
         }
 
         /// <summary>
         /// set Umo
         /// </summary>
         /// <param name="uom_id"></param>
-        public void SetC_UOM_ID(int uom_id)
+        public void SetVAB_UOM_ID(int uom_id)
         {
-            _C_UOM_ID = uom_id;
+            _VAB_UOM_ID = uom_id;
         }
 
         /// <summary>

@@ -335,10 +335,10 @@ namespace VAdvantage.Acct
                 product.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), null);
                     try
                     {
-                        if (as1.IsNotPostPOVariance() && line.GetC_OrderLine_ID() > 0)
+                        if (as1.IsNotPostPOVariance() && line.GetVAB_OrderLine_ID() > 0)
                         {
-                            MOrderLine oLine = new MOrderLine(product.GetCtx(), line.GetC_OrderLine_ID(), null);
-                            MOrder order = new MOrder(product.GetCtx(), oLine.GetC_Order_ID(), null);
+                            MOrderLine oLine = new MOrderLine(product.GetCtx(), line.GetVAB_OrderLine_ID(), null);
+                            MOrder order = new MOrder(product.GetCtx(), oLine.GetVAB_Order_ID(), null);
                             Decimal convertedCost = MConversionRate.Convert(product.GetCtx(),
                                 oLine.GetPriceEntered(), order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                                 line.GetDateAcct(), order.GetVAB_CurrencyType_ID(),

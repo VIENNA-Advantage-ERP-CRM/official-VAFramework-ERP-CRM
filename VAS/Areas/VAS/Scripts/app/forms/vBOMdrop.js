@@ -85,13 +85,13 @@
                              + " <div class='vis-paymentselect-field'>"  // div Order starts here
                              +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbOrder_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Order_ID") + " </label>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Order_ID") + " </label>"
                              +"</div></div>"
                              + " </div>" // div Order ends here 
                              + " <div class='vis-paymentselect-field'>"  // div Project/Opportunity starts here
                              +'<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
                              + " <select id='VIS_cmbOpportunity_" + $self.windowNo + "'></select>"
-                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_Project_ID") + " </label>"
+                             + " <label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Project_ID") + " </label>"
                              +"</div></div>"
                              + " </div>" // div Project/Opportunity ends here                             
                              + " <div class='vis-paymentselect-field'>"  // div Quantity starts here

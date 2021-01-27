@@ -30,7 +30,7 @@ namespace VIS.Models
 
             Dictionary<String, String> retDic = new Dictionary<string, string>();
             //retDic["MovementDate"] = io.GetMovementDate().ToString();
-            retDic["C_Project_ID"] = io.GetC_Project_ID().ToString();
+            retDic["VAB_Project_ID"] = io.GetVAB_Project_ID().ToString();
             retDic["VAB_Promotion_ID"] = io.GetVAB_Promotion_ID().ToString();
             retDic["VAB_BillingCode_ID"] = io.GetVAB_BillingCode_ID().ToString();
             retDic["VAF_OrgTrx_ID"] = io.GetVAF_OrgTrx_ID().ToString();
@@ -105,21 +105,21 @@ namespace VIS.Models
             string[] paramString = fields.Split(',');
             MInOut inout = new MInOut(ctx, Util.GetValueOfInt(paramString[0]), null);
             int M_Product_ID = Util.GetValueOfInt(paramString[1]);
-            int C_UOM_ID = Util.GetValueOfInt(paramString[2]);
+            int VAB_UOM_ID = Util.GetValueOfInt(paramString[2]);
             try
             {
-                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.C_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + inout.GetVAB_BusinessPartner_ID(), null, null));
+                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.VAB_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + inout.GetVAB_BusinessPartner_ID(), null, null));
 
-                if (C_UOM_ID != 0)
+                if (VAB_UOM_ID != 0)
                 {
 
-                    if (C_UOM_ID != uom && uom != 0)
+                    if (VAB_UOM_ID != uom && uom != 0)
                     {
                         retValue = new Dictionary<string, object>();
-                        retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM C_UOM_Conversion WHERE C_UOM_ID = " + C_UOM_ID + " AND C_UOM_To_ID = " + uom + " AND M_Product_ID= " + M_Product_ID + " AND IsActive='Y'"));
+                        retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM VAB_UOM_Conversion WHERE VAB_UOM_ID = " + VAB_UOM_ID + " AND VAB_UOM_To_ID = " + uom + " AND M_Product_ID= " + M_Product_ID + " AND IsActive='Y'"));
                         if (Util.GetValueOfDecimal(retValue["multiplyrate"]) <= 0)
                         {
-                            retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM C_UOM_Conversion WHERE C_UOM_ID = " + C_UOM_ID + " AND C_UOM_To_ID = " + uom + " AND IsActive='Y'"));
+                            retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM VAB_UOM_Conversion WHERE VAB_UOM_ID = " + VAB_UOM_ID + " AND VAB_UOM_To_ID = " + uom + " AND IsActive='Y'"));
                         }
                         retValue["uom"] = uom;
                     }

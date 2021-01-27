@@ -30,7 +30,7 @@ namespace VAdvantage.Process
         #region Private Variables
         string msg = "";
         string sql = "";
-        // int C_Period_ID = 0;
+        // int VAB_YearPeriod_ID = 0;
         VAdvantage.Model.X_VAB_Contract cont = null;
         #endregion
 
@@ -182,15 +182,15 @@ namespace VAdvantage.Process
                 inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 inv.SetVAB_BusinessPartner_ID(cont.GetVAB_BusinessPartner_ID());
-                if (Util.GetValueOfInt(cont.GetC_Order_ID()) != 0)
+                if (Util.GetValueOfInt(cont.GetVAB_Order_ID()) != 0)
                 {
-                    inv.SetC_Order_ID(cont.GetC_Order_ID());
+                    inv.SetVAB_Order_ID(cont.GetVAB_Order_ID());
                 }
                 inv.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                 inv.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
                 inv.SetVAB_BPart_Location_ID(cont.GetBill_Location_ID());
                 inv.SetVAB_Currency_ID(cont.GetVAB_Currency_ID());
-                inv.SetC_PaymentTerm_ID(cont.GetC_PaymentTerm_ID());
+                inv.SetVAB_PaymentTerm_ID(cont.GetVAB_PaymentTerm_ID());
                 inv.SetVAB_Promotion_ID(cont.GetVAB_Promotion_ID());
                 inv.SetIsSOTrx(true);
                 inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
@@ -208,13 +208,13 @@ namespace VAdvantage.Process
                     invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
                     invLine.SetVAB_Promotion_ID(inv.GetVAB_Promotion_ID());
                     invLine.SetVAB_Invoice_ID(inv.GetVAB_Invoice_ID());
-                    invLine.SetC_UOM_ID(cont.GetC_UOM_ID());
+                    invLine.SetVAB_UOM_ID(cont.GetVAB_UOM_ID());
                     invLine.SetM_Product_ID(cont.GetM_Product_ID());
-                    if (Util.GetValueOfInt(cont.GetC_OrderLine_ID()) != 0)
+                    if (Util.GetValueOfInt(cont.GetVAB_OrderLine_ID()) != 0)
                     {
-                        invLine.SetC_OrderLine_ID(cont.GetC_OrderLine_ID());
+                        invLine.SetVAB_OrderLine_ID(cont.GetVAB_OrderLine_ID());
                     }
-                    invLine.SetC_Tax_ID(cont.GetC_Tax_ID());
+                    invLine.SetVAB_TaxRate_ID(cont.GetVAB_TaxRate_ID());
                     invLine.SetQty(cont.GetQtyEntered());
                     invLine.SetQtyEntered(cont.GetQtyEntered());
                     // invLine.SetQtyInvoiced(1);

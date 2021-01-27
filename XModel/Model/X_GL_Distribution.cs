@@ -11,39 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for GL_Distribution
+/** Generated Model for VAGL_Distribution
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_Distribution : PO
+public class X_VAGL_Distribution : PO
 {
-public X_GL_Distribution (Context ctx, int GL_Distribution_ID, Trx trxName) : base (ctx, GL_Distribution_ID, trxName)
+public X_VAGL_Distribution (Context ctx, int VAGL_Distribution_ID, Trx trxName) : base (ctx, VAGL_Distribution_ID, trxName)
 {
-/** if (GL_Distribution_ID == 0)
-{
-SetAnyAcct (true);	// Y
-SetAnyActivity (true);	// Y
-SetAnyBPartner (true);	// Y
-SetAnyCampaign (true);	// Y
-SetAnyLocFrom (true);	// Y
-SetAnyLocTo (true);	// Y
-SetAnyOrg (true);	// Y
-SetAnyOrgTrx (true);	// Y
-SetAnyProduct (true);	// Y
-SetAnyProject (true);	// Y
-SetAnySalesRegion (true);	// Y
-SetAnyUser1 (true);	// Y
-SetAnyUser2 (true);	// Y
-SetVAB_AccountBook_ID (0);
-SetGL_Distribution_ID (0);
-SetIsValid (false);	// N
-SetName (null);
-SetPercentTotal (0.0);
-}
- */
-}
-public X_GL_Distribution (Ctx ctx, int GL_Distribution_ID, Trx trxName) : base (ctx, GL_Distribution_ID, trxName)
-{
-/** if (GL_Distribution_ID == 0)
+/** if (VAGL_Distribution_ID == 0)
 {
 SetAnyAcct (true);	// Y
 SetAnyActivity (true);	// Y
@@ -59,7 +34,32 @@ SetAnySalesRegion (true);	// Y
 SetAnyUser1 (true);	// Y
 SetAnyUser2 (true);	// Y
 SetVAB_AccountBook_ID (0);
-SetGL_Distribution_ID (0);
+SetVAGL_Distribution_ID (0);
+SetIsValid (false);	// N
+SetName (null);
+SetPercentTotal (0.0);
+}
+ */
+}
+public X_VAGL_Distribution (Ctx ctx, int VAGL_Distribution_ID, Trx trxName) : base (ctx, VAGL_Distribution_ID, trxName)
+{
+/** if (VAGL_Distribution_ID == 0)
+{
+SetAnyAcct (true);	// Y
+SetAnyActivity (true);	// Y
+SetAnyBPartner (true);	// Y
+SetAnyCampaign (true);	// Y
+SetAnyLocFrom (true);	// Y
+SetAnyLocTo (true);	// Y
+SetAnyOrg (true);	// Y
+SetAnyOrgTrx (true);	// Y
+SetAnyProduct (true);	// Y
+SetAnyProject (true);	// Y
+SetAnySalesRegion (true);	// Y
+SetAnyUser1 (true);	// Y
+SetAnyUser2 (true);	// Y
+SetVAB_AccountBook_ID (0);
+SetVAGL_Distribution_ID (0);
 SetIsValid (false);	// N
 SetName (null);
 SetPercentTotal (0.0);
@@ -71,7 +71,7 @@ SetPercentTotal (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Distribution (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Distribution (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -79,7 +79,7 @@ public X_GL_Distribution (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Distribution (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Distribution (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -87,13 +87,13 @@ public X_GL_Distribution (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Distribution (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_Distribution (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_Distribution()
+static X_VAGL_Distribution()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -106,8 +106,8 @@ public static long updatedMS = 1280389059614L;
 public static int Table_ID;
  // =708;
 
-/** TableName=GL_Distribution */
-public static String Table_Name="GL_Distribution";
+/** TableName=VAGL_Distribution */
+public static String Table_Name="VAGL_Distribution";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -141,7 +141,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_GL_Distribution[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_Distribution[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -534,34 +534,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);
 else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -583,17 +583,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set GL Distribution.
-@param GL_Distribution_ID General Ledger Distribution */
-public void SetGL_Distribution_ID (int GL_Distribution_ID)
+@param VAGL_Distribution_ID General Ledger Distribution */
+public void SetVAGL_Distribution_ID (int VAGL_Distribution_ID)
 {
-if (GL_Distribution_ID < 1) throw new ArgumentException ("GL_Distribution_ID is mandatory.");
-Set_ValueNoCheck ("GL_Distribution_ID", GL_Distribution_ID);
+if (VAGL_Distribution_ID < 1) throw new ArgumentException ("VAGL_Distribution_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_Distribution_ID", VAGL_Distribution_ID);
 }
 /** Get GL Distribution.
 @return General Ledger Distribution */
-public int GetGL_Distribution_ID() 
+public int GetVAGL_Distribution_ID() 
 {
-Object ii = Get_Value("GL_Distribution_ID");
+Object ii = Get_Value("VAGL_Distribution_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

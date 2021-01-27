@@ -149,7 +149,7 @@ namespace VAdvantage.Model
 		sb.Append (Get_ID())
 			.Append ("-").Append (GetName())
 			.Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
-			.Append(",C_Project_ID=").Append(GetC_Project_ID())
+			.Append(",VAB_Project_ID=").Append(GetVAB_Project_ID())
 			.Append ("]");
 		return sb.ToString ();
 	}	//	toString

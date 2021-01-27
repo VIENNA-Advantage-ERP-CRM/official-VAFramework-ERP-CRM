@@ -38,7 +38,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
 
                
-                retDic["C_Project_ID"]= io.GetC_Project_ID().ToString();
+                retDic["VAB_Project_ID"]= io.GetVAB_Project_ID().ToString();
                 retDic["VAB_Promotion_ID"]= io.GetVAB_Promotion_ID().ToString();
                 retDic["VAB_BillingCode_ID"]= io.GetVAB_BillingCode_ID().ToString();
                 retDic["VAF_OrgTrx_ID"]= io.GetVAF_OrgTrx_ID().ToString();
@@ -72,11 +72,11 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 id = Util.GetValueOfInt(paramValue[0].ToString());
                 MInOutLine Orig_InOutLine = new MInOutLine(ctx, id, null);
                 retDic["MovementQty"] = Orig_InOutLine.GetMovementQty().ToString();
-                retDic["C_Project_ID"]= Orig_InOutLine.GetC_Project_ID().ToString();
+                retDic["VAB_Project_ID"]= Orig_InOutLine.GetVAB_Project_ID().ToString();
                 retDic["VAB_Promotion_ID"]= Orig_InOutLine.GetVAB_Promotion_ID().ToString();
                 retDic["M_Product_ID"]= Orig_InOutLine.GetM_Product_ID().ToString();
                 retDic["M_AttributeSetInstance_ID"]= Orig_InOutLine.GetM_AttributeSetInstance_ID().ToString();
-                retDic["C_UOM_ID"]= Orig_InOutLine.GetC_UOM_ID().ToString();
+                retDic["VAB_UOM_ID"]= Orig_InOutLine.GetVAB_UOM_ID().ToString();
                 //retlst.Add(retValue);
 
                 //retVal.Add(notReserved);

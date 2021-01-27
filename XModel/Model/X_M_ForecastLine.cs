@@ -20,7 +20,7 @@ public X_M_ForecastLine (Context ctx, int M_ForecastLine_ID, Trx trxName) : base
 {
 /** if (M_ForecastLine_ID == 0)
 {
-SetC_Period_ID (0);
+SetVAB_YearPeriod_ID (0);
 SetM_ForecastLine_ID (0);
 SetM_Forecast_ID (0);
 SetM_Product_ID (0);
@@ -33,7 +33,7 @@ public X_M_ForecastLine (Ctx ctx, int M_ForecastLine_ID, Trx trxName) : base (ct
 {
 /** if (M_ForecastLine_ID == 0)
 {
-SetC_Period_ID (0);
+SetVAB_YearPeriod_ID (0);
 SetM_ForecastLine_ID (0);
 SetM_Forecast_ID (0);
 SetM_Product_ID (0);
@@ -121,17 +121,17 @@ StringBuilder sb = new StringBuilder ("X_M_ForecastLine[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID < 1) throw new ArgumentException ("C_Period_ID is mandatory.");
-Set_ValueNoCheck ("C_Period_ID", C_Period_ID);
+if (VAB_YearPeriod_ID < 1) throw new ArgumentException ("VAB_YearPeriod_ID is mandatory.");
+Set_ValueNoCheck ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -139,7 +139,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Period_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_YearPeriod_ID().ToString());
 }
 /** Set Forecast Line.
 @param M_ForecastLine_ID Forecast Line */

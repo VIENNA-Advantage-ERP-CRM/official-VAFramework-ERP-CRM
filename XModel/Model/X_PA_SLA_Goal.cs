@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_SLA_Goal
+/** Generated Model for VAPA_SLA_Target
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_SLA_Goal : PO
+public class X_VAPA_SLA_Target : PO
 {
-public X_PA_SLA_Goal (Context ctx, int PA_SLA_Goal_ID, Trx trxName) : base (ctx, PA_SLA_Goal_ID, trxName)
+public X_VAPA_SLA_Target (Context ctx, int VAPA_SLA_Target_ID, Trx trxName) : base (ctx, VAPA_SLA_Target_ID, trxName)
 {
-/** if (PA_SLA_Goal_ID == 0)
-{
-SetVAB_BusinessPartner_ID (0);
-SetMeasureActual (0.0);
-SetMeasureTarget (0.0);
-SetName (null);
-SetPA_SLA_Criteria_ID (0);
-SetPA_SLA_Goal_ID (0);
-SetProcessed (false);	// N
-}
- */
-}
-public X_PA_SLA_Goal (Ctx ctx, int PA_SLA_Goal_ID, Trx trxName) : base (ctx, PA_SLA_Goal_ID, trxName)
-{
-/** if (PA_SLA_Goal_ID == 0)
+/** if (VAPA_SLA_Target_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetMeasureActual (0.0);
 SetMeasureTarget (0.0);
 SetName (null);
-SetPA_SLA_Criteria_ID (0);
-SetPA_SLA_Goal_ID (0);
+SetVAPA_SLA_Creteria_ID (0);
+SetVAPA_SLA_Target_ID (0);
+SetProcessed (false);	// N
+}
+ */
+}
+public X_VAPA_SLA_Target (Ctx ctx, int VAPA_SLA_Target_ID, Trx trxName) : base (ctx, VAPA_SLA_Target_ID, trxName)
+{
+/** if (VAPA_SLA_Target_ID == 0)
+{
+SetVAB_BusinessPartner_ID (0);
+SetMeasureActual (0.0);
+SetMeasureTarget (0.0);
+SetName (null);
+SetVAPA_SLA_Creteria_ID (0);
+SetVAPA_SLA_Target_ID (0);
 SetProcessed (false);	// N
 }
  */
@@ -49,7 +49,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Goal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Target (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_PA_SLA_Goal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Goal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Target (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_PA_SLA_Goal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Goal (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_SLA_Target (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_SLA_Goal()
+static X_VAPA_SLA_Target()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389065554L;
 public static int Table_ID;
  // =745;
 
-/** TableName=PA_SLA_Goal */
-public static String Table_Name="PA_SLA_Goal";
+/** TableName=VAPA_SLA_Target */
+public static String Table_Name="VAPA_SLA_Target";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_SLA_Goal[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_SLA_Target[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -238,32 +238,32 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set SLA Criteria.
-@param PA_SLA_Criteria_ID Service Level Agreement Criteria */
-public void SetPA_SLA_Criteria_ID (int PA_SLA_Criteria_ID)
+@param VAPA_SLA_Creteria_ID Service Level Agreement Criteria */
+public void SetVAPA_SLA_Creteria_ID (int VAPA_SLA_Creteria_ID)
 {
-if (PA_SLA_Criteria_ID < 1) throw new ArgumentException ("PA_SLA_Criteria_ID is mandatory.");
-Set_Value ("PA_SLA_Criteria_ID", PA_SLA_Criteria_ID);
+if (VAPA_SLA_Creteria_ID < 1) throw new ArgumentException ("VAPA_SLA_Creteria_ID is mandatory.");
+Set_Value ("VAPA_SLA_Creteria_ID", VAPA_SLA_Creteria_ID);
 }
 /** Get SLA Criteria.
 @return Service Level Agreement Criteria */
-public int GetPA_SLA_Criteria_ID() 
+public int GetVAPA_SLA_Creteria_ID() 
 {
-Object ii = Get_Value("PA_SLA_Criteria_ID");
+Object ii = Get_Value("VAPA_SLA_Creteria_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set SLA Goal.
-@param PA_SLA_Goal_ID Service Level Agreement Goal */
-public void SetPA_SLA_Goal_ID (int PA_SLA_Goal_ID)
+@param VAPA_SLA_Target_ID Service Level Agreement Goal */
+public void SetVAPA_SLA_Target_ID (int VAPA_SLA_Target_ID)
 {
-if (PA_SLA_Goal_ID < 1) throw new ArgumentException ("PA_SLA_Goal_ID is mandatory.");
-Set_ValueNoCheck ("PA_SLA_Goal_ID", PA_SLA_Goal_ID);
+if (VAPA_SLA_Target_ID < 1) throw new ArgumentException ("VAPA_SLA_Target_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_SLA_Target_ID", VAPA_SLA_Target_ID);
 }
 /** Get SLA Goal.
 @return Service Level Agreement Goal */
-public int GetPA_SLA_Goal_ID() 
+public int GetVAPA_SLA_Target_ID() 
 {
-Object ii = Get_Value("PA_SLA_Goal_ID");
+Object ii = Get_Value("VAPA_SLA_Target_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

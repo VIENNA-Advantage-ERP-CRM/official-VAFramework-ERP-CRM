@@ -26,7 +26,7 @@ SetVAB_Charge_ID (0);
 SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
 SetVAB_BatchInvoiceLine_ID (0);
 SetVAB_BatchInvoice_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetDateAcct (DateTime.Now);	// @DateAcct@;
 @DateDoc@
 SetDateInvoiced (DateTime.Now);	// @DateInvoiced@;
@@ -53,7 +53,7 @@ SetVAB_Charge_ID (0);
 SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
 SetVAB_BatchInvoiceLine_ID (0);
 SetVAB_BatchInvoice_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetDateAcct (DateTime.Now);	// @DateAcct@;
 @DateDoc@
 SetDateInvoiced (DateTime.Now);	// @DateInvoiced@;
@@ -322,33 +322,33 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_Value ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_Value ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

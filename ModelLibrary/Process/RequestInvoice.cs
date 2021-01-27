@@ -35,7 +35,7 @@ namespace VAdvantage.Process
         //	Request Group (opt)		
         private int _R_Group_ID = 0;
         // Request Categpry (opt)		
-        private int _R_Category_ID = 0;
+        private int _VAR_Category_ID = 0;
         // Business Partner (opt)		
         private int _VAB_BusinessPartner_ID = 0;
         // Default product				
@@ -69,9 +69,9 @@ namespace VAdvantage.Process
                 {
                     _R_Group_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("R_Category_ID"))
+                else if (name.Equals("VAR_Category_ID"))
                 {
-                    _R_Category_ID = para[i].GetParameterAsInt();
+                    _VAR_Category_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
 
             int lenth = 1;
             log.Info("R_RequestType_ID=" + _R_RequestType_ID + ", R_Group_ID=" + _R_Group_ID
-                + ", R_Category_ID=" + _R_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
+                + ", VAR_Category_ID=" + _VAR_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", _M_Product_ID=" + _M_Product_ID);
 
             MRequestType type = MRequestType.Get(GetCtx(), _R_RequestType_ID);
@@ -122,9 +122,9 @@ namespace VAdvantage.Process
                 lenth = lenth + 1;
 
             }
-            if (_R_Category_ID != 0 && _R_Category_ID != -1)
+            if (_VAR_Category_ID != 0 && _VAR_Category_ID != -1)
             {
-                sql += " AND r.R_Category_ID=@Param3";
+                sql += " AND r.VAR_Category_ID=@Param3";
                 lenth = lenth + 1;
             }
             if (_VAB_BusinessPartner_ID != 0)
@@ -147,10 +147,10 @@ namespace VAdvantage.Process
                     index++;
                     Param[index] = new SqlParameter("@Param2", _R_Group_ID);
                 }
-                if (_R_Category_ID != 0 && _R_Category_ID != -1)
+                if (_VAR_Category_ID != 0 && _VAR_Category_ID != -1)
                 {
                     index++;
-                    Param[index] = new SqlParameter("@Param3", _R_Category_ID);
+                    Param[index] = new SqlParameter("@Param3", _VAR_Category_ID);
                 }
                 if (_VAB_BusinessPartner_ID != 0)
                 {
@@ -203,7 +203,7 @@ namespace VAdvantage.Process
             {
                 _msg = "No Invoice Generated";
             }
-            //	R_Category_ID
+            //	VAR_Category_ID
             return _msg;
         }	//	doIt
 

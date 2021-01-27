@@ -215,7 +215,7 @@ namespace VAdvantage.Model
             DateTime ts = new DateTime(GetCtx().GetContextAsTime(windowNo, "DateAcct"));     //  from VAB_CashJRNL
             String sql = "SELECT VAB_BusinessPartner_ID, VAB_Currency_ID,"		//	1..2
                 + "invoiceOpen(VAB_Invoice_ID, 0), IsSOTrx, "			//	3..4
-                + "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0),VAB_Currency_ID,C_PaymentTerm_ID,DateInvoiced," + DB.TO_DATE(ts, true) + ") "
+                + "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0),VAB_Currency_ID,VAB_PaymentTerm_ID,DateInvoiced," + DB.TO_DATE(ts, true) + ") "
                 + "FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
             DataTable dt = null;
             IDataReader idr = null;

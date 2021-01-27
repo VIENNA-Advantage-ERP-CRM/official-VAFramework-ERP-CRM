@@ -22,7 +22,7 @@ public X_VAB_PositionPayment (Context ctx, int VAB_PositionPayment_ID, Trx trxNa
 {
 SetVAB_PositionPayment_ID (0);
 SetVAB_Position_ID (0);
-SetC_Remuneration_ID (0);
+SetVAB_Compensation_ID (0);
 SetValidFrom (DateTime.Now);
 }
  */
@@ -33,7 +33,7 @@ public X_VAB_PositionPayment (Ctx ctx, int VAB_PositionPayment_ID, Trx trxName) 
 {
 SetVAB_PositionPayment_ID (0);
 SetVAB_Position_ID (0);
-SetC_Remuneration_ID (0);
+SetVAB_Compensation_ID (0);
 SetValidFrom (DateTime.Now);
 }
  */
@@ -153,17 +153,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_Position_ID().ToString());
 }
 /** Set Remuneration.
-@param C_Remuneration_ID Wage or Salary */
-public void SetC_Remuneration_ID (int C_Remuneration_ID)
+@param VAB_Compensation_ID Wage or Salary */
+public void SetVAB_Compensation_ID (int VAB_Compensation_ID)
 {
-if (C_Remuneration_ID < 1) throw new ArgumentException ("C_Remuneration_ID is mandatory.");
-Set_ValueNoCheck ("C_Remuneration_ID", C_Remuneration_ID);
+if (VAB_Compensation_ID < 1) throw new ArgumentException ("VAB_Compensation_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Compensation_ID", VAB_Compensation_ID);
 }
 /** Get Remuneration.
 @return Wage or Salary */
-public int GetC_Remuneration_ID() 
+public int GetVAB_Compensation_ID() 
 {
-Object ii = Get_Value("C_Remuneration_ID");
+Object ii = Get_Value("VAB_Compensation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

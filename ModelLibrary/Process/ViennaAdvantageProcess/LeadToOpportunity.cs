@@ -17,17 +17,17 @@ namespace ViennaAdvantage.Process
 {
     class LeadToOpportunity : SvrProcess
     {
-        int _C_Lead_ID;
+        int _VAB_Lead_ID;
         protected override void Prepare()
         {
-            _C_Lead_ID = GetRecord_ID();
+            _VAB_Lead_ID = GetRecord_ID();
 
         }
 
 
         protected override String DoIt()
         {
-            VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), _C_Lead_ID, Get_TrxName());
+            VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
             //  lead.GetRef_BPartner_ID()))
             int ExCustomer = lead.GetVAB_BusinessPartner_ID();
             int Pospect = lead.GetRef_BPartner_ID();
@@ -36,10 +36,10 @@ namespace ViennaAdvantage.Process
 
             if (ExCustomer != 0)
             {
-                VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
+                VAdvantage.Model.X_VAB_Project opp = new VAdvantage.Model.X_VAB_Project(GetCtx(), 0, Get_TrxName());
                 opp.SetVAF_Client_ID(lead.GetVAF_Client_ID());
                 opp.SetVAF_Org_ID(lead.GetVAF_Org_ID());
-                opp.SetC_Lead_ID(lead.GetC_Lead_ID());
+                opp.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
                 opp.SetVAB_BusinessPartner_ID(lead.GetVAB_BusinessPartner_ID());
 
                 // Addde by Bharat on 19 Feb 2018 to set Ref Partner/Prospect
@@ -71,7 +71,7 @@ namespace ViennaAdvantage.Process
                 }
                 if (opp.Save())
                 {
-                    lead.SetC_Project_ID(opp.GetC_Project_ID());
+                    lead.SetVAB_Project_ID(opp.GetVAB_Project_ID());
                     lead.Save();
                     return Msg.GetMsg(GetCtx(), "OpprtunityGenerateDone");
 
@@ -85,10 +85,10 @@ namespace ViennaAdvantage.Process
             }
             if (Pospect != 0)
             {
-                VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
+                VAdvantage.Model.X_VAB_Project opp = new VAdvantage.Model.X_VAB_Project(GetCtx(), 0, Get_TrxName());
                 opp.SetVAF_Client_ID(lead.GetVAF_Client_ID());
                 opp.SetVAF_Org_ID(lead.GetVAF_Org_ID());
-                opp.SetC_Lead_ID(lead.GetC_Lead_ID());
+                opp.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
                 opp.SetVAB_BusinessPartnerSR_ID(lead.GetRef_BPartner_ID());
                 // Addde by Bharat on 19 Feb 2018 to set Ref Partner/Prospect
                 if (opp.Get_ColumnIndex("Ref_BPartner_ID") > 0)
@@ -120,7 +120,7 @@ namespace ViennaAdvantage.Process
                 }
                 if (opp.Save())
                 {
-                    lead.SetC_Project_ID(opp.GetC_Project_ID());
+                    lead.SetVAB_Project_ID(opp.GetVAB_Project_ID());
                     lead.Save();
                     return Msg.GetMsg(GetCtx(), "OpprtunityGenerateDone");
                 }
@@ -133,7 +133,7 @@ namespace ViennaAdvantage.Process
             }
             if (ExCustomer == 0 && Pospect == 0)
             {
-                //CallProcess(_C_Lead_ID);
+                //CallProcess(_VAB_Lead_ID);
                 if (lead.GetBPName() == null)
                 {
                     return Msg.GetMsg(GetCtx(), "Company Name, Prospect or Bpartner is Mandatory to fill");
@@ -147,7 +147,7 @@ namespace ViennaAdvantage.Process
         }
         private void CallProcess(int lead_id)
         {
-            string sql = "select VAF_Job_id from VAF_Job where name = 'C_Lead BPartner'";
+            string sql = "select VAF_Job_id from VAF_Job where name = 'VAB_Lead BPartner'";
             int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
 
             MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, GetRecord_ID());
@@ -164,7 +164,7 @@ namespace ViennaAdvantage.Process
 
             // Add Parameter - M_Warehouse_ID=x
             para = new MPInstancePara(instance, 20);
-            para.setParameter("_C_Lead_ID", lead_id);
+            para.setParameter("_VAB_Lead_ID", lead_id);
             if (!para.Save())
             {
                 String msg = "No DocAction Parameter added";  //  not translated
@@ -183,19 +183,19 @@ namespace ViennaAdvantage.Process
 
         public String callprospect()
         {
-            log.Info("C_Lead_ID=" + _C_Lead_ID);
-            if (_C_Lead_ID == 0)
+            log.Info("VAB_Lead_ID=" + _VAB_Lead_ID);
+            if (_VAB_Lead_ID == 0)
             {
-                throw new Exception("@C_Lead_ID@ ID=0");
+                throw new Exception("@VAB_Lead_ID@ ID=0");
             }
-            VAdvantage.Model.MLead lead = new VAdvantage.Model.MLead(GetCtx(), _C_Lead_ID, Get_TrxName());
+            VAdvantage.Model.MLead lead = new VAdvantage.Model.MLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
             if (lead.GetVAB_BPart_Category_ID() == 0)
             {
                 throw new Exception(Msg.GetMsg(GetCtx(), "SelectBPGroup"));
             }
-            if (lead.Get_ID() != _C_Lead_ID)
+            if (lead.Get_ID() != _VAB_Lead_ID)
             {
-                throw new Exception("@NotFound@: @C_Lead_ID@ ID=" + _C_Lead_ID);
+                throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);
             }
             //
             String retValue = lead.CreateBP();

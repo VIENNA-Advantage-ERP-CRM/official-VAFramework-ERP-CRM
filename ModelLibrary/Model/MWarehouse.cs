@@ -42,7 +42,7 @@ namespace VAdvantage.Model
             {
                 //SetValue(null);
                 //SetName(null);
-                //SetC_Location_ID(0);
+                //SetVAB_Address_ID(0);
                 SetSeparator("*");	// *
             }
         }
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             SetValue(org.GetValue());
             SetName(org.GetName());
             if (org.GetInfo() != null)
-                SetC_Location_ID(org.GetInfo().GetC_Location_ID());
+                SetVAB_Address_ID(org.GetInfo().GetVAB_Address_ID());
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoWarehouse)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From M_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.M_Warehouse_ID=ca.M_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.M_Warehouse_ID = " + GetM_Warehouse_ID());
+                                        _sql.Append("Select COUNT(*) From M_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.M_Warehouse_ID=ca.M_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.M_Warehouse_ID = " + GetM_Warehouse_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -283,7 +283,7 @@ namespace VAdvantage.Model
                                             wrhus.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             wrhus.Set_ValueNoCheck("M_Warehouse_ID", Util.GetValueOfInt(GetM_Warehouse_ID()));
                                             wrhus.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                            wrhus.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                            wrhus.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                             wrhus.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
 
                                             if (!wrhus.Save())

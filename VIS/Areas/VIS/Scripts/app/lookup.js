@@ -1039,7 +1039,7 @@
         return loc;
     };	//	get
     MLocationLookup.prototype.getColumnName = function () {
-        return "C_Location_ID";
+        return "VAB_Address_ID";
     };
     MLocationLookup.prototype.getLocation = function (key, isLatLong) {
         if (key == null)
@@ -1508,7 +1508,7 @@
         Lookup.call(this, null, null, ctx, windowNo, VIS.DisplayType.TableDir);
         this.log = VIS.Logging.VLogger.getVLogger("MAccountLookup");
         /** Account_ID			*/
-        this.C_ValidCombination_ID = 0;
+        this.VAB_Acct_ValidParameter_ID = 0;
         this.combination;
         this.description;
     };
@@ -1528,7 +1528,7 @@
      *  @return Combination
      */
     MAccountLookup.prototype.toStringX = function () {
-        if (this.C_ValidCombination_ID == 0)
+        if (this.VAB_Acct_ValidParameter_ID == 0)
             return "";
         return this.combination;
     };	//
@@ -1545,19 +1545,19 @@
         return this.load(intValue);
     };   //  containsKey
     /**
-     *	Load C_ValidCombination with ID
-     *  @param ID C_ValidCombination_ID
+     *	Load VAB_Acct_ValidParameter with ID
+     *  @param ID VAB_Acct_ValidParameter_ID
      *  @return true if found
      */
     MAccountLookup.prototype.load = function (ID) {
         if (ID == 0)						//	new
         {
-            this.C_ValidCombination_ID = 0;
+            this.VAB_Acct_ValidParameter_ID = 0;
             this.combination = "";
             this.description = "";
             return true;
         }
-        if (ID == this.C_ValidCombination_ID)	//	already loaded
+        if (ID == this.VAB_Acct_ValidParameter_ID)	//	already loaded
             return true;
 
         var SQL = "VIS_94";
@@ -1572,7 +1572,7 @@
             if (!dr.read())
                 return false;
 
-            this.C_ValidCombination_ID = dr.getInt(0);
+            this.VAB_Acct_ValidParameter_ID = dr.getInt(0);
             this.combination = dr.getString(1);
             this.description = dr.getString(2);
         }
@@ -1605,8 +1605,8 @@
         if (!mandatory)
             list.push({ "Key": -1, "Name": "" });
         //
-        //var sql = "SELECT C_ValidCombination_ID, Combination, Description "
-        //    + "FROM C_ValidCombination WHERE VAF_Client_ID=" + this.ctx.getVAF_Client_ID();
+        //var sql = "SELECT VAB_Acct_ValidParameter_ID, Combination, Description "
+        //    + "FROM VAB_Acct_ValidParameter WHERE VAF_Client_ID=" + this.ctx.getVAF_Client_ID();
         //if (onlyActive)
         //    sql += " AND IsActive='Y'";
         //sql.append(" ORDER BY 2");

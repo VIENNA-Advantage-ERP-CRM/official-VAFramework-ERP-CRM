@@ -30,7 +30,7 @@ SetAmtSourceBalance (0.0);
 SetVAB_CurrencyTypeReval_ID (0);
 SetVAB_Invoice_ID (0);
 SetDateReval (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetGrandTotal (0.0);
 SetIsAllCurrencies (false);
 SetOpenAmt (0.0);
@@ -51,7 +51,7 @@ SetAmtSourceBalance (0.0);
 SetVAB_CurrencyTypeReval_ID (0);
 SetVAB_Invoice_ID (0);
 SetDateReval (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetGrandTotal (0.0);
 SetIsAllCurrencies (false);
 SetOpenAmt (0.0);
@@ -348,17 +348,17 @@ public DateTime? GetDateReval()
 return (DateTime?)Get_Value("DateReval");
 }
 /** Set Accounting Fact.
-@param Fact_Acct_ID Accounting Fact */
-public void SetFact_Acct_ID (int Fact_Acct_ID)
+@param Actual_Acct_Detail_ID Accounting Fact */
+public void SetActual_Acct_Detail_ID (int Actual_Acct_Detail_ID)
 {
-if (Fact_Acct_ID < 1) throw new ArgumentException ("Fact_Acct_ID is mandatory.");
-Set_ValueNoCheck ("Fact_Acct_ID", Fact_Acct_ID);
+if (Actual_Acct_Detail_ID < 1) throw new ArgumentException ("Actual_Acct_Detail_ID is mandatory.");
+Set_ValueNoCheck ("Actual_Acct_Detail_ID", Actual_Acct_Detail_ID);
 }
 /** Get Accounting Fact.
 @return Accounting Fact */
-public int GetFact_Acct_ID() 
+public int GetActual_Acct_Detail_ID() 
 {
-Object ii = Get_Value("Fact_Acct_ID");
+Object ii = Get_Value("Actual_Acct_Detail_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

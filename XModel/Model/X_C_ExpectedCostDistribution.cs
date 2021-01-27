@@ -74,15 +74,15 @@ namespace VAdvantage.Model
         public void SetVAB_ExpectedCost_ID(int VAB_ExpectedCost_ID) { if (VAB_ExpectedCost_ID < 1) throw new ArgumentException("VAB_ExpectedCost_ID is mandatory."); Set_ValueNoCheck("VAB_ExpectedCost_ID", VAB_ExpectedCost_ID); }/** Get Expected Landed Cost.
 @return Expected Landed Cost */
         public int GetVAB_ExpectedCost_ID() { Object ii = Get_Value("VAB_ExpectedCost_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
-@param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+@param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_Value("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_Value("VAB_OrderLine_ID", null);
             else
-                Set_Value("C_OrderLine_ID", C_OrderLine_ID);
+                Set_Value("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }/** Get Order Line.
 @return Order Line */
-        public int GetC_OrderLine_ID() { Object ii = Get_Value("C_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAB_OrderLine_ID() { Object ii = Get_Value("VAB_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */

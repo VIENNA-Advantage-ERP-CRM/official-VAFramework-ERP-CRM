@@ -1097,14 +1097,14 @@ namespace VIS.Helpers
             {
 
                 // Get Default Heirarchy
-                string sqla = @"SELECT PA_HIERARCHY_id FROM PA_Hierarchy WHERE ISACTIVE ='Y' 
-                       ORDER BY ISDEFAULT DESC ,PA_HIERARCHY_id ASC";
-                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "PA_Hierarchy", true, true);
+                string sqla = @"SELECT VAPA_REPORTINGORDER_id FROM VAPA_FinancialReportingOrder WHERE ISACTIVE ='Y' 
+                       ORDER BY ISDEFAULT DESC ,VAPA_REPORTINGORDER_id ASC";
+                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
                 object ID = DB.ExecuteScalar(sqla);
-                int _PA_Hierarchy_ID = 0;
+                int _VAPA_FinancialReportingOrder_ID = 0;
                 if (ID != null && ID != DBNull.Value)
                 {
-                    _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
+                    _VAPA_FinancialReportingOrder_ID = Util.GetValueOfInt(ID);
                 }
                 Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
@@ -1145,31 +1145,31 @@ namespace VIS.Helpers
                         // Fetch child records from tree hierarchy based on ID selected.
                         if (columnName.Equals("VAF_Org_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, Convert.ToInt32(values[i]));
                         }
                         else if (columnName.Equals("VAB_BusinessPartner_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, Convert.ToInt32(values[i]));
                         }
                         else if (columnName.Equals("M_Product_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Product, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Product, Convert.ToInt32(values[i]));
                         }
-                        else if (columnName.Equals("C_Project_ID", StringComparison.OrdinalIgnoreCase))
+                        else if (columnName.Equals("VAB_Project_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Project, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Project, Convert.ToInt32(values[i]));
                         }
                         else if (columnName.Equals("VAF_OrgTrx_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_OrgTrx, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_OrgTrx, Convert.ToInt32(values[i]));
                         }
                         else if (columnName.Equals("Account_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Account, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Account, Convert.ToInt32(values[i]));
                         }
                         else if (columnName.Equals("VAB_Promotion_ID", StringComparison.OrdinalIgnoreCase))
                         {
-                            result1 = MReportTree.GetWhereClause(_ctx, _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Campaign, Convert.ToInt32(values[i]));
+                            result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Campaign, Convert.ToInt32(values[i]));
                         }
 
 

@@ -177,7 +177,7 @@ namespace VAdvantage.Process
                 if (no != 0)
                     log.Fine(strFields[i] + " - default from existing Product=" + no);
             }
-            String[] numFields = new String[] {"C_UOM_ID","M_Product_Category_ID",
+            String[] numFields = new String[] {"VAB_UOM_ID","M_Product_Category_ID",
 			"Volume","Weight","ShelfWidth","ShelfHeight","ShelfDepth","UnitsPerPallet"};
             for (int i = 0; i < numFields.Length; i++)
             {
@@ -209,7 +209,7 @@ namespace VAdvantage.Process
                 if (no != 0)
                     log.Fine(strFieldsPO[i] + " default from existing Product PO=" + no);
             }
-            String[] numFieldsPO = new String[] {"C_UOM_ID","VAB_Currency_ID",
+            String[] numFieldsPO = new String[] {"VAB_UOM_ID","VAB_Currency_ID",
 			"PriceList","PricePO","RoyaltyAmt",
 			"Order_Min","Order_Pack","CostPerOrder","DeliveryTime_Promised"};
             for (int i = 0; i < numFieldsPO.Length; i++)
@@ -239,22 +239,22 @@ namespace VAdvantage.Process
             //	Set UOM (System/own)
             sql = new StringBuilder("UPDATE I_Product i "
                 + "SET X12DE355 = "
-                + "(SELECT MAX(X12DE355) FROM C_UOM u WHERE u.IsDefault='Y' AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE X12DE355 IS NULL AND C_UOM_ID IS NULL"
+                + "(SELECT MAX(X12DE355) FROM VAB_UOM u WHERE u.IsDefault='Y' AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
+                + "WHERE X12DE355 IS NULL AND VAB_UOM_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set UOM Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET C_UOM_ID = (SELECT C_UOM_ID FROM C_UOM u WHERE u.X12DE355=i.X12DE355 AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
-                + "WHERE C_UOM_ID IS NULL"
+                + "SET VAB_UOM_ID = (SELECT VAB_UOM_ID FROM VAB_UOM u WHERE u.X12DE355=i.X12DE355 AND u.VAF_Client_ID IN (0,i.VAF_Client_ID)) "
+                + "WHERE VAB_UOM_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Set UOM=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid UOM, ' "
-                + "WHERE C_UOM_ID IS NULL"
+                + "WHERE VAB_UOM_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -349,16 +349,16 @@ namespace VAdvantage.Process
                 log.Warning("Not Unique VendorProductNo=" + no);
 
             //	Get Default Tax Category
-            int C_TaxCategory_ID = 0;
+            int VAB_TaxCategory_ID = 0;
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement
-                idr = DataBase.DB.ExecuteReader("SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y'" + clientCheck, null, Get_TrxName());
+                idr = DataBase.DB.ExecuteReader("SELECT VAB_TaxCategory_ID FROM VAB_TaxCategory WHERE IsDefault='Y'" + clientCheck, null, Get_TrxName());
 
                 if (idr.Read())
                 {
-                    C_TaxCategory_ID = Utility.Util.GetValueOfInt(idr[0]); //rs.getInt(1);
+                    VAB_TaxCategory_ID = Utility.Util.GetValueOfInt(idr[0]); //rs.getInt(1);
                 }
                 idr.Close();
             }
@@ -371,7 +371,7 @@ namespace VAdvantage.Process
 
                 throw new Exception("TaxCategory", e);
             }
-            log.Fine("C_TaxCategory_ID=" + C_TaxCategory_ID);
+            log.Fine("VAB_TaxCategory_ID=" + VAB_TaxCategory_ID);
 
             Commit();
 
@@ -392,12 +392,12 @@ namespace VAdvantage.Process
                     ("INSERT INTO M_Product (M_Product_ID,"
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,C_UOM_ID,IsSummary,M_Product_Category_ID,C_TaxCategory_ID,"
+                    + "UPC,SKU,VAB_UOM_ID,IsSummary,M_Product_Category_ID,VAB_TaxCategory_ID,"
                     + "ProductType,ImageURL,DescriptionURL) "
                     + "SELECT ?,"
                     + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,C_UOM_ID,'N',M_Product_Category_ID," + C_TaxCategory_ID + ","
+                    + "UPC,SKU,VAB_UOM_ID,'N',M_Product_Category_ID," + VAB_TaxCategory_ID + ","
                     + "ProductType,ImageURL,DescriptionURL "
                     + "FROM I_Product "
                     + "WHERE I_Product_ID=?");
@@ -407,11 +407,11 @@ namespace VAdvantage.Process
                 /*
                 String sqlt = "UPDATE M_PRODUCT "
                     + "SET (Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,C_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                    + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
                     + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                     + "Discontinued,DiscontinuedBy,Updated,UpdatedBy)= "
                     + "(SELECT Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,C_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                    + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
                     + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                     + "Discontinued,DiscontinuedBy,SysDate,UpdatedBy"
                     + " FROM I_Product WHERE I_Product_ID=?) "
@@ -421,12 +421,12 @@ namespace VAdvantage.Process
 
                 //	Update Product_PO from Import
                 sqlt = "UPDATE M_Product_PO "
-                    + "SET (IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
+                    + "SET (IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised,Updated,UpdatedBy)= "
-                    + "(SELECT 'Y',C_UOM_ID,VAB_Currency_ID,UPC,"
+                    + "(SELECT 'Y',VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
@@ -441,14 +441,14 @@ namespace VAdvantage.Process
                 //PreparedStatement pstmt_insertProductPO = DataBase.prepareStatement
                 String _insertProductPO = "INSERT INTO M_Product_PO (M_Product_ID,VAB_BusinessPartner_ID, "
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
-                    + "IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
+                    + "IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                     + "CostPerOrder,DeliveryTime_Promised) "
                     + "SELECT @param1,@param2, "
                     + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
-                    + "'Y',C_UOM_ID,VAB_Currency_ID,UPC,"
+                    + "'Y',VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
                     + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
@@ -478,7 +478,7 @@ namespace VAdvantage.Process
                     if (newProduct)			//	Insert new Product
                     {
                         MProduct product = new MProduct(imp);
-                        product.SetC_TaxCategory_ID(C_TaxCategory_ID);
+                        product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
                         if (product.Save())
                         {
                             M_Product_ID = product.GetM_Product_ID();
@@ -498,11 +498,11 @@ namespace VAdvantage.Process
                     {
                         String sqlt = "UPDATE M_PRODUCT "
                             + "SET (Value,Name,Description,DocumentNote,Help,"
-                            + "UPC,SKU,C_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                            + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
                             + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                             + "Discontinued,DiscontinuedBy,Updated,UpdatedBy)= "
                             + "(SELECT Value,Name,Description,DocumentNote,Help,"
-                            + "UPC,SKU,C_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                            + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
                             + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                             + "Discontinued,DiscontinuedBy,SysDate,UpdatedBy"
                             + " FROM I_Product WHERE I_Product_ID=" + I_Product_ID + ") "
@@ -540,12 +540,12 @@ namespace VAdvantage.Process
                         if (!newProduct)
                         {
                             String sqlt = "UPDATE M_Product_PO "
-                                + "SET (IsCurrentVendor,C_UOM_ID,VAB_Currency_ID,UPC,"
+                                + "SET (IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                                 + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                                 + "VendorProductNo,VendorCategory,Manufacturer,"
                                 + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"
                                 + "CostPerOrder,DeliveryTime_Promised,Updated,UpdatedBy)= "
-                                + "(SELECT CAST('Y' AS CHAR),C_UOM_ID,VAB_Currency_ID,UPC,"    //jz fix EDB unknown datatype error
+                                + "(SELECT CAST('Y' AS CHAR),VAB_UOM_ID,VAB_Currency_ID,UPC,"    //jz fix EDB unknown datatype error
                                 + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                                 + "VendorProductNo,VendorCategory,Manufacturer,"
                                 + "Discontinued,DiscontinuedBy,Order_Min,Order_Pack,"

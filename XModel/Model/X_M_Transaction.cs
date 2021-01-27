@@ -128,18 +128,18 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Project Issue.
-        @param C_ProjectIssue_ID Project Issues (Material, Labor) */
-        public void SetC_ProjectIssue_ID(int C_ProjectIssue_ID)
+        @param VAB_ProjectSupply_ID Project Issues (Material, Labor) */
+        public void SetVAB_ProjectSupply_ID(int VAB_ProjectSupply_ID)
         {
-            if (C_ProjectIssue_ID <= 0) Set_ValueNoCheck("C_ProjectIssue_ID", null);
+            if (VAB_ProjectSupply_ID <= 0) Set_ValueNoCheck("VAB_ProjectSupply_ID", null);
             else
-                Set_ValueNoCheck("C_ProjectIssue_ID", C_ProjectIssue_ID);
+                Set_ValueNoCheck("VAB_ProjectSupply_ID", VAB_ProjectSupply_ID);
         }
         /** Get Project Issue.
         @return Project Issues (Material, Labor) */
-        public int GetC_ProjectIssue_ID()
+        public int GetVAB_ProjectSupply_ID()
         {
-            Object ii = Get_Value("C_ProjectIssue_ID");
+            Object ii = Get_Value("VAB_ProjectSupply_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

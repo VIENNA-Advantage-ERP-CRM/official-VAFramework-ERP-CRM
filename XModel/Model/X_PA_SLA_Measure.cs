@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_SLA_Measure
+/** Generated Model for VAPA_SLA_Evaluate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_SLA_Measure : PO
+public class X_VAPA_SLA_Evaluate : PO
 {
-public X_PA_SLA_Measure (Context ctx, int PA_SLA_Measure_ID, Trx trxName) : base (ctx, PA_SLA_Measure_ID, trxName)
+public X_VAPA_SLA_Evaluate (Context ctx, int VAPA_SLA_Evaluate_ID, Trx trxName) : base (ctx, VAPA_SLA_Evaluate_ID, trxName)
 {
-/** if (PA_SLA_Measure_ID == 0)
+/** if (VAPA_SLA_Evaluate_ID == 0)
 {
 SetDateTrx (DateTime.Now);
 SetMeasureActual (0.0);
-SetPA_SLA_Goal_ID (0);
-SetPA_SLA_Measure_ID (0);
+SetVAPA_SLA_Target_ID (0);
+SetVAPA_SLA_Evaluate_ID (0);
 SetProcessed (false);	// N
 }
  */
 }
-public X_PA_SLA_Measure (Ctx ctx, int PA_SLA_Measure_ID, Trx trxName) : base (ctx, PA_SLA_Measure_ID, trxName)
+public X_VAPA_SLA_Evaluate (Ctx ctx, int VAPA_SLA_Evaluate_ID, Trx trxName) : base (ctx, VAPA_SLA_Evaluate_ID, trxName)
 {
-/** if (PA_SLA_Measure_ID == 0)
+/** if (VAPA_SLA_Evaluate_ID == 0)
 {
 SetDateTrx (DateTime.Now);
 SetMeasureActual (0.0);
-SetPA_SLA_Goal_ID (0);
-SetPA_SLA_Measure_ID (0);
+SetVAPA_SLA_Target_ID (0);
+SetVAPA_SLA_Evaluate_ID (0);
 SetProcessed (false);	// N
 }
  */
@@ -45,7 +45,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Measure (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Evaluate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_PA_SLA_Measure (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Measure (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Evaluate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_PA_SLA_Measure (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Measure (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_SLA_Evaluate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_SLA_Measure()
+static X_VAPA_SLA_Evaluate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389065585L;
 public static int Table_ID;
  // =743;
 
-/** TableName=PA_SLA_Measure */
-public static String Table_Name="PA_SLA_Measure";
+/** TableName=VAPA_SLA_Evaluate */
+public static String Table_Name="VAPA_SLA_Evaluate";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_SLA_Measure[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_SLA_Evaluate[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -186,32 +186,32 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set SLA Goal.
-@param PA_SLA_Goal_ID Service Level Agreement Goal */
-public void SetPA_SLA_Goal_ID (int PA_SLA_Goal_ID)
+@param VAPA_SLA_Target_ID Service Level Agreement Goal */
+public void SetVAPA_SLA_Target_ID (int VAPA_SLA_Target_ID)
 {
-if (PA_SLA_Goal_ID < 1) throw new ArgumentException ("PA_SLA_Goal_ID is mandatory.");
-Set_ValueNoCheck ("PA_SLA_Goal_ID", PA_SLA_Goal_ID);
+if (VAPA_SLA_Target_ID < 1) throw new ArgumentException ("VAPA_SLA_Target_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_SLA_Target_ID", VAPA_SLA_Target_ID);
 }
 /** Get SLA Goal.
 @return Service Level Agreement Goal */
-public int GetPA_SLA_Goal_ID() 
+public int GetVAPA_SLA_Target_ID() 
 {
-Object ii = Get_Value("PA_SLA_Goal_ID");
+Object ii = Get_Value("VAPA_SLA_Target_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set SLA Measure.
-@param PA_SLA_Measure_ID Service Level Agreement Measure */
-public void SetPA_SLA_Measure_ID (int PA_SLA_Measure_ID)
+@param VAPA_SLA_Evaluate_ID Service Level Agreement Measure */
+public void SetVAPA_SLA_Evaluate_ID (int VAPA_SLA_Evaluate_ID)
 {
-if (PA_SLA_Measure_ID < 1) throw new ArgumentException ("PA_SLA_Measure_ID is mandatory.");
-Set_ValueNoCheck ("PA_SLA_Measure_ID", PA_SLA_Measure_ID);
+if (VAPA_SLA_Evaluate_ID < 1) throw new ArgumentException ("VAPA_SLA_Evaluate_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_SLA_Evaluate_ID", VAPA_SLA_Evaluate_ID);
 }
 /** Get SLA Measure.
 @return Service Level Agreement Measure */
-public int GetPA_SLA_Measure_ID() 
+public int GetVAPA_SLA_Evaluate_ID() 
 {
-Object ii = Get_Value("PA_SLA_Measure_ID");
+Object ii = Get_Value("VAPA_SLA_Evaluate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

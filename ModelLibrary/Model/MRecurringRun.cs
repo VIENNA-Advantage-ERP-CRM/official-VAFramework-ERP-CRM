@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRecurringRun 
  * Purpose        : MRecurring Run  Model
- * Class Used     :  X_C_Recurring_Run
+ * Class Used     :  X_VAB_RecurringRun
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -24,11 +24,11 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MRecurringRun : X_C_Recurring_Run
+    public class MRecurringRun : X_VAB_RecurringRun
     {
 
-        public MRecurringRun(Ctx ctx, int C_Recurring_Run_ID, Trx trxName)
-            : base(ctx, C_Recurring_Run_ID, trxName)
+        public MRecurringRun(Ctx ctx, int VAB_RecurringRun_ID, Trx trxName)
+            : base(ctx, VAB_RecurringRun_ID, trxName)
         {
 
         }	//	MRecurringRun
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
             {
                 SetVAF_Client_ID(recurring.GetVAF_Client_ID());
                 SetVAF_Org_ID(recurring.GetVAF_Org_ID());
-                SetC_Recurring_ID(recurring.GetC_Recurring_ID());
+                SetVAB_Recurring_ID(recurring.GetVAB_Recurring_ID());
                 SetDateDoc(recurring.GetDateNextRun());
             }
         }	//	MRecurringRun

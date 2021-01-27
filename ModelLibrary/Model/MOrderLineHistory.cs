@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_OrderLineHistory
+ * Class Used     : X_VAB_OrderLineHistory
  * Chronological Development
  * Bharat Singla   22-Aug-2017
  ******************************************************/
@@ -26,10 +26,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MOrderlineHistory : X_C_OrderlineHistory
+    public class MOrderlineHistory : X_VAB_OrderlineHistory
     {
-        public MOrderlineHistory(Ctx ctx, int C_OrderlineHistory_ID, Trx trxName)
-            : base(ctx, C_OrderlineHistory_ID, trxName)
+        public MOrderlineHistory(Ctx ctx, int VAB_OrderlineHistory_ID, Trx trxName)
+            : base(ctx, VAB_OrderlineHistory_ID, trxName)
         {
 
         }
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
             //	Get Line No
             if (GetLine() == 0)
             {
-                String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM C_OrderlineHistory WHERE C_OrderLine_ID=" + GetC_OrderLine_ID();
+                String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM VAB_OrderlineHistory WHERE VAB_OrderLine_ID=" + GetVAB_OrderLine_ID();
                 int ii = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 SetLine(ii);
             }

@@ -190,13 +190,13 @@ namespace VAdvantage.Model
         /// <returns>Returns the payment.</returns>
         public MPayment GetPayment()
         {
-            if (GetC_Payment_ID() == 0)
+            if (GetVAB_Payment_ID() == 0)
             {
                 _payment = null;
             }
             else if (_payment == null)
             {
-                _payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+                _payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             }
             return _payment;
         }
@@ -227,28 +227,28 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Payment
         /// </summary>
-        /// <param name="C_Payment_ID">payment</param>
+        /// <param name="VAB_Payment_ID">payment</param>
         /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="payAmt">amount</param>
         /// <param name="openAmt">open</param>
-        public void SetPayment(int C_Payment_ID, int VAB_Currency_ID,
+        public void SetPayment(int VAB_Payment_ID, int VAB_Currency_ID,
             Decimal payAmt, Decimal openAmt)
         {
-            SetPayment(C_Payment_ID, VAB_Currency_ID, payAmt, openAmt, 0);
+            SetPayment(VAB_Payment_ID, VAB_Currency_ID, payAmt, openAmt, 0);
         }
 
         /// <summary>
         /// set payment from dunningRunCreate process
         /// </summary>
-        /// <param name="C_Payment_ID">payment</param>
+        /// <param name="VAB_Payment_ID">payment</param>
         /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="payAmt">amount</param>
         /// <param name="openAmt">openamont</param>
         /// <param name="VA027_PostDatedCheck_ID">PostDatedCheque</param>
-        public void SetPayment(int C_Payment_ID, int VAB_Currency_ID,
+        public void SetPayment(int VAB_Payment_ID, int VAB_Currency_ID,
             Decimal payAmt, Decimal openAmt, int VA027_PostDatedCheck_ID)
         {
-            SetC_Payment_ID(C_Payment_ID);
+            SetVAB_Payment_ID(VAB_Payment_ID);
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(payAmt);
             SetOpenAmt(openAmt);
@@ -281,13 +281,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set GLJournalLine 
         /// </summary>
-        /// <param name="Gl_JournalLine_ID">cash Jurnal Line</param>
+        /// <param name="VAGL_JRNLLine_ID">cash Jurnal Line</param>
         /// <param name="VAB_Currency_ID">currency</param>
         /// <param name="Amtount">amount</param>
         /// <param name="openAmt">openAmount</param>
-        public void SetJournalLine(int Gl_JournalLine_ID, int VAB_Currency_ID, Decimal Amount, Decimal OpenAmt)
+        public void SetJournalLine(int VAGL_JRNLLine_ID, int VAB_Currency_ID, Decimal Amount, Decimal OpenAmt)
         {
-            Set_Value("GL_JournalLine_ID", Gl_JournalLine_ID);
+            Set_Value("VAGL_JRNLLine_ID", VAGL_JRNLLine_ID);
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(Amount);
             SetOpenAmt(Amount);
@@ -324,7 +324,7 @@ namespace VAdvantage.Model
                 {
                     _VAB_CurrencyFrom_ID = GetInvoice().GetVAB_Currency_ID();
                 }
-                else if (GetC_Payment_ID() != 0)
+                else if (GetVAB_Payment_ID() != 0)
                 {
                     _VAB_CurrencyFrom_ID = GetPayment().GetVAB_Currency_ID();
                 }
@@ -353,7 +353,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             //	Set Amt
-            if (GetVAB_Invoice_ID() == 0 && GetC_Payment_ID() == 0 && Util.GetValueOfInt(Get_Value("VAB_CashJRNLLine_ID")) == 0 && Util.GetValueOfInt(Get_Value("GL_JournalLine_ID")) == 0 && (!Env.IsModuleInstalled("VA027_") || (Get_ColumnIndex("VA027_PostDatedCheck_ID") > 0 && Util.GetValueOfInt(Get_Value("VA027_PostDatedCheck_ID")) == 0)))
+            if (GetVAB_Invoice_ID() == 0 && GetVAB_Payment_ID() == 0 && Util.GetValueOfInt(Get_Value("VAB_CashJRNLLine_ID")) == 0 && Util.GetValueOfInt(Get_Value("VAGL_JRNLLine_ID")) == 0 && (!Env.IsModuleInstalled("VA027_") || (Get_ColumnIndex("VA027_PostDatedCheck_ID") > 0 && Util.GetValueOfInt(Get_Value("VA027_PostDatedCheck_ID")) == 0)))
             {
                 SetAmt(Env.ZERO);
                 SetOpenAmt(Env.ZERO);
@@ -420,7 +420,7 @@ namespace VAdvantage.Model
                 + "QTY=(SELECT COUNT(*)"
                 + " FROM VAB_DunningExeLine l "
                     + "WHERE e.VAB_DunningExeEntry_ID=l.VAB_DunningExeEntry_ID )"
-                //+ " AND (NOT VAB_Invoice_ID IS NULL OR NOT C_Payment_ID IS NULL))"
+                //+ " AND (NOT VAB_Invoice_ID IS NULL OR NOT VAB_Payment_ID IS NULL))"
                 + " WHERE VAB_DunningExeEntry_ID=" + GetVAB_DunningExeEntry_ID();
 
             DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());

@@ -38,8 +38,8 @@ namespace ViennaAdvantage.Process
         /** BPartner				*/
         private int _VAB_BusinessPartner_ID = 0;
         /** Order					*/
-        //private int _C_Order_ID = 0;
-        private string _C_Order_ID = "";
+        //private int _VAB_Order_ID = 0;
+        private string _VAB_Order_ID = "";
         /** Consolidate				*/
         private bool _ConsolidateDocument = true;
         /** Invoice Document Action	*/
@@ -90,9 +90,9 @@ namespace ViennaAdvantage.Process
                 {
                     _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    _C_Order_ID = para[i].GetParameter().ToString();
+                    _VAB_Order_ID = para[i].GetParameter().ToString();
                 }
                 else if (name.Equals("ConsolidateDocument"))
                 {
@@ -130,7 +130,7 @@ namespace ViennaAdvantage.Process
             defaultConversionType = MConversionType.GetDefault(GetVAF_Client_ID());
             log.Info("Selection=" + _Selection + ", DateInvoiced=" + _DateInvoiced
                 + ", VAF_Org_ID=" + _VAF_Org_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
-                + ", C_Order_ID=" + _C_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
+                + ", VAB_Order_ID=" + _VAB_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
                 + ", Consolidate=" + _ConsolidateDocument + ", Default Conversion Type = " + defaultConversionType);
             //
             String sql = null;
@@ -139,14 +139,14 @@ namespace ViennaAdvantage.Process
 
             //if (_Selection)	//	VInvoiceGen
             //{
-            //    sql = "SELECT * FROM C_Order "
+            //    sql = "SELECT * FROM VAB_Order "
             //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()
-            //        + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //        + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
             //}
             //else
             //{
             // not pick record of "Sales Quotation" And "Blanket Order"
-            sql = "SELECT * FROM C_Order o "
+            sql = "SELECT * FROM VAB_Order o "
                 + "WHERE o.DocStatus IN('CO','CL') AND o.IsSOTrx='Y' AND o.IsSalesQuotation = 'N' AND o.isblankettrx = 'N' AND o.VAF_Client_ID = " + GetVAF_Client_ID();
             if (_VAF_Org_ID != 0)
             {
@@ -156,19 +156,19 @@ namespace ViennaAdvantage.Process
             {
                 sql += " AND VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
             }
-            if (_C_Order_ID != null && _C_Order_ID != string.Empty)
+            if (_VAB_Order_ID != null && _VAB_Order_ID != string.Empty)
             {
-                sql += " AND C_Order_ID IN (" + _C_Order_ID + ")";
+                sql += " AND VAB_Order_ID IN (" + _VAB_Order_ID + ")";
             }
             // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
-            sql += " AND EXISTS (SELECT * FROM C_OrderLine ol "
-                    + "WHERE o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                + "ORDER BY VAF_Org_ID, VAB_BusinessPartner_ID, C_PaymentTerm_ID, M_PriceList_ID, VAB_CurrencyType_ID, C_Order_ID, M_Warehouse_ID, PriorityRule";
+            sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol "
+                    + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
+                + "ORDER BY VAF_Org_ID, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, M_PriceList_ID, VAB_CurrencyType_ID, VAB_Order_ID, M_Warehouse_ID, PriorityRule";
 
-            //sql += " AND EXISTS (SELECT * FROM C_OrderLine ol INNER JOIN c_order ord "
-            //      + "  ON (ord.c_order_id = ol.c_order_id) WHERE ord.C_Order_ID  =ol.C_Order_ID "
+            //sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol INNER JOIN VAB_Order ord "
+            //      + "  ON (ord.VAB_Order_id = ol.VAB_Order_id) WHERE ord.VAB_Order_ID  =ol.VAB_Order_ID "
             //     + "  AND ol.QtyOrdered <> ol.QtyInvoiced AND ol.Iscontract ='N') "
-            //  + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, C_PaymentTerm_ID, C_Order_ID";
+            //  + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
             //}
             //	sql += " FOR UPDATE";
 
@@ -275,7 +275,7 @@ namespace ViennaAdvantage.Process
                 if (!_ConsolidateDocument
                     || (_invoice != null
                     && (_invoice.GetVAB_BPart_Location_ID() != order.GetBill_Location_ID()
-                        || _invoice.GetC_PaymentTerm_ID() != order.GetC_PaymentTerm_ID()
+                        || _invoice.GetVAB_PaymentTerm_ID() != order.GetVAB_PaymentTerm_ID()
                         || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
                         || _invoice.GetVAF_Org_ID() != order.GetVAF_Org_ID()
                         || ((_invoice.GetVAB_CurrencyType_ID() != 0 ? _invoice.GetVAB_CurrencyType_ID() : defaultConversionType)
@@ -461,7 +461,7 @@ namespace ViennaAdvantage.Process
                         for (int j = 0; j < shipLines.Length; j++)
                         {
                             MInOutLine shipLine = shipLines[j];
-                            if (!order.IsOrderLine(shipLine.GetC_OrderLine_ID()))
+                            if (!order.IsOrderLine(shipLine.GetVAB_OrderLine_ID()))
                             {
                                 continue;
                             }

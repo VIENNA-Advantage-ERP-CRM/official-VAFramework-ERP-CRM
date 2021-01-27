@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for RC_ViewAccess
+/** Generated Model for VAVARC_ViewRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_RC_ViewAccess : PO
+public class X_VAVARC_ViewRights : PO
 {
-public X_RC_ViewAccess (Context ctx, int RC_ViewAccess_ID, Trx trxName) : base (ctx, RC_ViewAccess_ID, trxName)
+public X_VAVARC_ViewRights (Context ctx, int VAVARC_ViewRights_ID, Trx trxName) : base (ctx, VAVARC_ViewRights_ID, trxName)
 {
-/** if (RC_ViewAccess_ID == 0)
+/** if (VAVARC_ViewRights_ID == 0)
 {
-SetRC_ViewAccess_ID (0);
-SetRC_View_ID (0);
+SetVAVARC_ViewRights_ID (0);
+SetVARC_View_ID (0);
 }
  */
 }
-public X_RC_ViewAccess (Ctx ctx, int RC_ViewAccess_ID, Trx trxName) : base (ctx, RC_ViewAccess_ID, trxName)
+public X_VAVARC_ViewRights (Ctx ctx, int VAVARC_ViewRights_ID, Trx trxName) : base (ctx, VAVARC_ViewRights_ID, trxName)
 {
-/** if (RC_ViewAccess_ID == 0)
+/** if (VAVARC_ViewRights_ID == 0)
 {
-SetRC_ViewAccess_ID (0);
-SetRC_View_ID (0);
+SetVAVARC_ViewRights_ID (0);
+SetVARC_View_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetRC_View_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ViewAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVARC_ViewRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_RC_ViewAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ViewAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVARC_ViewRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_RC_ViewAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ViewAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAVARC_ViewRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_RC_ViewAccess()
+static X_VAVARC_ViewRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1352210387892L;
 public static int Table_ID;
  // =1000236;
 
-/** TableName=RC_ViewAccess */
-public static String Table_Name="RC_ViewAccess";
+/** TableName=VAVARC_ViewRights */
+public static String Table_Name="VAVARC_ViewRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_RC_ViewAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAVARC_ViewRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -162,32 +162,32 @@ public String GetExport_ID()
 return (String)Get_Value("Export_ID");
 }
 /** Set View Access.
-@param RC_ViewAccess_ID View Access */
-public void SetRC_ViewAccess_ID (int RC_ViewAccess_ID)
+@param VAVARC_ViewRights_ID View Access */
+public void SetVAVARC_ViewRights_ID (int VAVARC_ViewRights_ID)
 {
-if (RC_ViewAccess_ID < 1) throw new ArgumentException ("RC_ViewAccess_ID is mandatory.");
-Set_ValueNoCheck ("RC_ViewAccess_ID", RC_ViewAccess_ID);
+if (VAVARC_ViewRights_ID < 1) throw new ArgumentException ("VAVARC_ViewRights_ID is mandatory.");
+Set_ValueNoCheck ("VAVARC_ViewRights_ID", VAVARC_ViewRights_ID);
 }
 /** Get View Access.
 @return View Access */
-public int GetRC_ViewAccess_ID() 
+public int GetVAVARC_ViewRights_ID() 
 {
-Object ii = Get_Value("RC_ViewAccess_ID");
+Object ii = Get_Value("VAVARC_ViewRights_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Role Center View.
-@param RC_View_ID Role center View ID */
-public void SetRC_View_ID (int RC_View_ID)
+@param VARC_View_ID Role center View ID */
+public void SetVARC_View_ID (int VARC_View_ID)
 {
-if (RC_View_ID < 1) throw new ArgumentException ("RC_View_ID is mandatory.");
-Set_ValueNoCheck ("RC_View_ID", RC_View_ID);
+if (VARC_View_ID < 1) throw new ArgumentException ("VARC_View_ID is mandatory.");
+Set_ValueNoCheck ("VARC_View_ID", VARC_View_ID);
 }
 /** Get Role Center View.
 @return Role center View ID */
-public int GetRC_View_ID() 
+public int GetVARC_View_ID() 
 {
-Object ii = Get_Value("RC_View_ID");
+Object ii = Get_Value("VARC_View_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

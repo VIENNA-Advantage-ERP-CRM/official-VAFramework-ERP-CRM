@@ -1,37 +1,37 @@
 namespace VAdvantage.Model
 {
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_RfQLine
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_RFQLine
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RfQLine : PO{public X_C_RfQLine (Context ctx, int C_RfQLine_ID, Trx trxName) : base (ctx, C_RfQLine_ID, trxName){/** if (C_RfQLine_ID == 0){SetC_RfQLine_ID (0);SetC_RfQ_ID (0);SetLine (0);// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM C_RfQLine WHERE C_RfQ_ID=@C_RfQ_ID@
+public class X_VAB_RFQLine : PO{public X_VAB_RFQLine (Context ctx, int VAB_RFQLine_ID, Trx trxName) : base (ctx, VAB_RFQLine_ID, trxName){/** if (VAB_RFQLine_ID == 0){SetVAB_RFQLine_ID (0);SetVAB_RFQ_ID (0);SetLine (0);// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_RFQLine WHERE VAB_RFQ_ID=@VAB_RFQ_ID@
 SetProcessed (false);} */
-}public X_C_RfQLine (Ctx ctx, int C_RfQLine_ID, Trx trxName) : base (ctx, C_RfQLine_ID, trxName){/** if (C_RfQLine_ID == 0){SetC_RfQLine_ID (0);SetC_RfQ_ID (0);SetLine (0);// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM C_RfQLine WHERE C_RfQ_ID=@C_RfQ_ID@
+}public X_VAB_RFQLine (Ctx ctx, int VAB_RFQLine_ID, Trx trxName) : base (ctx, VAB_RFQLine_ID, trxName){/** if (VAB_RFQLine_ID == 0){SetVAB_RFQLine_ID (0);SetVAB_RFQ_ID (0);SetLine (0);// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_RFQLine WHERE VAB_RFQ_ID=@VAB_RFQ_ID@
 SetProcessed (false);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_RFQLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_RFQLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_RFQLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RfQLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_RFQLine(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27829052854760L;/** Last Updated Timestamp 1/8/2019 11:35:37 AM */
 public static long updatedMS = 1546927537971L;/** VAF_TableView_ID=676 */
 public static int Table_ID; // =676;
-/** TableName=C_RfQLine */
-public static String Table_Name="C_RfQLine";
+/** TableName=VAB_RFQLine */
+public static String Table_Name="VAB_RFQLine";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -46,17 +46,17 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_RfQLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set RfQ Line.
-@param C_RfQLine_ID Request for Quotation Line */
-public void SetC_RfQLine_ID (int C_RfQLine_ID){if (C_RfQLine_ID < 1) throw new ArgumentException ("C_RfQLine_ID is mandatory.");Set_ValueNoCheck ("C_RfQLine_ID", C_RfQLine_ID);}/** Get RfQ Line.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_RFQLine[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set RfQ Line.
+@param VAB_RFQLine_ID Request for Quotation Line */
+public void SetVAB_RFQLine_ID (int VAB_RFQLine_ID){if (VAB_RFQLine_ID < 1) throw new ArgumentException ("VAB_RFQLine_ID is mandatory.");Set_ValueNoCheck ("VAB_RFQLine_ID", VAB_RFQLine_ID);}/** Get RfQ Line.
 @return Request for Quotation Line */
-public int GetC_RfQLine_ID() {Object ii = Get_Value("C_RfQLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set RfQ.
-@param C_RfQ_ID Request for Quotation */
-public void SetC_RfQ_ID (int C_RfQ_ID){if (C_RfQ_ID < 1) throw new ArgumentException ("C_RfQ_ID is mandatory.");Set_ValueNoCheck ("C_RfQ_ID", C_RfQ_ID);}/** Get RfQ.
+public int GetVAB_RFQLine_ID() {Object ii = Get_Value("VAB_RFQLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set RfQ.
+@param VAB_RFQ_ID Request for Quotation */
+public void SetVAB_RFQ_ID (int VAB_RFQ_ID){if (VAB_RFQ_ID < 1) throw new ArgumentException ("VAB_RFQ_ID is mandatory.");Set_ValueNoCheck ("VAB_RFQ_ID", VAB_RFQ_ID);}/** Get RfQ.
 @return Request for Quotation */
-public int GetC_RfQ_ID() {Object ii = Get_Value("C_RfQ_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
+public int GetVAB_RFQ_ID() {Object ii = Get_Value("VAB_RFQ_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetC_RfQ_ID().ToString());}/** Set Work Complete.
+public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetVAB_RFQ_ID().ToString());}/** Set Work Complete.
 @param DateWorkComplete Date when work is (planned to be) complete */
 public void SetDateWorkComplete (DateTime? DateWorkComplete){Set_Value ("DateWorkComplete", (DateTime?)DateWorkComplete);}/** Get Work Complete.
 @return Date when work is (planned to be) complete */

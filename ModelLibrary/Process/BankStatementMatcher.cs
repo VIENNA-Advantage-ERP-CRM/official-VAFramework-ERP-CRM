@@ -92,7 +92,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message</returns>
         private String Match(X_I_BankStatement ibs)
         {
-            if (_matchers == null || ibs == null || ibs.GetC_Payment_ID() != 0)
+            if (_matchers == null || ibs == null || ibs.GetVAB_Payment_ID() != 0)
             {
                 return "--";
             }
@@ -106,9 +106,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     info = _matchers[i].GetMatcher().FindMatch(ibs);
                     if (info != null && info.IsMatched())
                     {
-                        if (info.GetC_Payment_ID() > 0)
+                        if (info.GetVAB_Payment_ID() > 0)
                         {
-                            ibs.SetC_Payment_ID(info.GetC_Payment_ID());
+                            ibs.SetVAB_Payment_ID(info.GetVAB_Payment_ID());
                         }
                         if (info.GetVAB_Invoice_ID() > 0)
                         {
@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message</returns>
         private String Match(MBankStatementLine bsl)
         {
-            if (_matchers == null || bsl == null || bsl.GetC_Payment_ID() != 0)
+            if (_matchers == null || bsl == null || bsl.GetVAB_Payment_ID() != 0)
             {
                 return "--";
             }
@@ -148,9 +148,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     info = _matchers[i].GetMatcher().FindMatch(bsl);
                     if (info != null && info.IsMatched())
                     {
-                        if (info.GetC_Payment_ID() > 0)
+                        if (info.GetVAB_Payment_ID() > 0)
                         {
-                            bsl.SetC_Payment_ID(info.GetC_Payment_ID());
+                            bsl.SetVAB_Payment_ID(info.GetVAB_Payment_ID());
                         }
                         if (info.GetVAB_Invoice_ID() > 0)
                         {
@@ -184,7 +184,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MBankStatementLine[] lines = bs.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                if (lines[i].GetC_Payment_ID() == 0)
+                if (lines[i].GetVAB_Payment_ID() == 0)
                 {
                     Match(lines[i]);
                     count++;

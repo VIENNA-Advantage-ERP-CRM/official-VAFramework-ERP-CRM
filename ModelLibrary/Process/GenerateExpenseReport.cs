@@ -122,8 +122,8 @@ namespace ViennaAdvantage.Process
             tLine.SetS_TimeExpense_ID(S_TimeExpence_ID);
             tLine.SetDateExpense(rTime.GetDate1());
             tLine.SetM_Product_ID(rTime.GetM_Product_ID());
-            tLine.SetC_OrderLine_ID(rTime.GetC_OrderLine_ID());
-            tLine.SetC_UOM_ID(rTime.GetC_UOM_ID());
+            tLine.SetVAB_OrderLine_ID(rTime.GetVAB_OrderLine_ID());
+            tLine.SetVAB_UOM_ID(rTime.GetVAB_UOM_ID());
             tLine.SetIsTimeReport(true);
             tLine.SetQty(rTime.GetActualHrs());
             tLine.SetActualQty(rTime.GetActualHrs());

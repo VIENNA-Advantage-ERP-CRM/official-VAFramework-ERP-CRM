@@ -49,13 +49,13 @@ namespace ViennaAdvantage.Process
             }
             #region commented
             //            _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-            //                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
+            //                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,VAB_UOM_ID,
             //                                  M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
 
             //            StringBuilder sql=new StringBuilder();
             //            sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
             //                                   p.m_product_category_id,
-            //                                   p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
+            //                                   p.VAB_UOM_id , tr.m_locator_ID , tr.movementdate ,
             //                                   tr.m_product_id,tr.currentqty,
             //                                   lc.m_warehouse_id FROM m_transaction tr INNER JOIN m_product p ON tr.m_product_id =p.m_product_id
             //                                 INNER JOIN m_locator lc ON tr.m_locator_id=lc.m_locator_id");
@@ -141,12 +141,12 @@ namespace ViennaAdvantage.Process
             }
 
             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,VAB_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
             sql = new StringBuilder();
             sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
-                                   p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
+                                   p.VAB_UOM_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
                                    lc.m_warehouse_id FROM m_transaction tr INNER JOIN m_product p ON tr.m_product_id =p.m_product_id
                                  INNER JOIN m_locator lc ON tr.m_locator_id=lc.m_locator_id");
@@ -187,7 +187,7 @@ namespace ViennaAdvantage.Process
                                                  " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProductlocator.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["m_product_category_id"]) + @",
-                                                " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["C_Uom_id"]) + @",
+                                                " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["VAB_UOM_id"]) + @",
                                                   " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["m_locator_ID"]) + @",
                                                      " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dsProductlocator.Tables[0].Rows[0]["movementdate"]), true) + @",
                                                   " + Util.GetValueOfInt(dsProductlocator.Tables[0].Rows[0]["m_product_id"]) + @",
@@ -248,7 +248,7 @@ namespace ViennaAdvantage.Process
                                                  " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProdLocator.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["m_product_category_id"]) + @",
-                                                " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["C_Uom_id"]) + @",
+                                                " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["VAB_UOM_id"]) + @",
                                                   " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["m_locator_ID"]) + @",
                                                      " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dsProdLocator.Tables[0].Rows[0]["movementdate"]), true) + @",
                                                   " + Util.GetValueOfInt(dsProdLocator.Tables[0].Rows[0]["m_product_id"]) + @",
@@ -283,12 +283,12 @@ namespace ViennaAdvantage.Process
                         {
                             _Insert = new StringBuilder();
                             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,VAB_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
                             sql = new StringBuilder();
                             sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
-                                   p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
+                                   p.VAB_UOM_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
                                    lc.m_warehouse_id FROM m_transaction tr INNER JOIN m_product p ON tr.m_product_id =p.m_product_id
                                  INNER JOIN m_locator lc ON tr.m_locator_id=lc.m_locator_id where movementdate<" + GlobalVariable.TO_DATE(MovementDate, true) + @"
@@ -323,7 +323,7 @@ namespace ViennaAdvantage.Process
                                                  " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsProduct.Tables[0].Rows[0]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["m_product_category_id"]) + @",
-                                                " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["C_Uom_id"]) + @",
+                                                " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["VAB_UOM_id"]) + @",
                                                   " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["m_locator_ID"]) + @",
                                                      " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dsProduct.Tables[0].Rows[0]["movementdate"]), true) + @",
                                                   " + Util.GetValueOfInt(dsProduct.Tables[0].Rows[0]["m_product_id"]) + @",
@@ -367,12 +367,12 @@ namespace ViennaAdvantage.Process
 
                             _Insert = new StringBuilder();
                             _Insert.Append(@"INSERT INTO  VARPT_Temp_Stock 
-                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,C_UOM_ID,
+                                   (VAF_Client_ID,VAF_Org_ID,value,m_product_category_id,VAB_UOM_ID,
                                   M_Locator_ID,MovementDate,M_Product_ID ,CurrentQty,m_warehouse_id)");
                             sql = new StringBuilder();
                             sql.Append(@"SELECT tr.vaf_client_id,tr.vaf_org_id,p.value,
                                    p.m_product_category_id,
-                                   p.c_uom_id , tr.m_locator_ID , tr.movementdate ,
+                                   p.VAB_UOM_id , tr.m_locator_ID , tr.movementdate ,
                                    tr.m_product_id,tr.currentqty,
                                    lc.m_warehouse_id FROM m_transaction tr INNER JOIN m_product p ON tr.m_product_id =p.m_product_id
                                  INNER JOIN m_locator lc ON tr.m_locator_id=lc.m_locator_id
@@ -411,7 +411,7 @@ namespace ViennaAdvantage.Process
                                                  " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["vaf_org_ID"]) + @",
                                                 ' " + Util.GetValueOfString(dsrecord.Tables[0].Rows[a]["Value"]) + @"',
                                                  " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["m_product_category_id"]) + @",
-                                                " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["C_Uom_id"]) + @",
+                                                " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["VAB_UOM_id"]) + @",
                                                   " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["m_locator_ID"]) + @",
                                                      " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(dsrecord.Tables[0].Rows[a]["movementdate"]), true) + @",
                                                   " + Util.GetValueOfInt(dsrecord.Tables[0].Rows[a]["m_product_id"]) + @",

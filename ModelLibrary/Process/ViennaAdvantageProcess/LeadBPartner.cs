@@ -29,7 +29,7 @@ namespace ViennaAdvantage.Process
     public class LeadBPartner : VAdvantage.ProcessEngine.SvrProcess
     {
         /** Lead				*/
-        private int _C_Lead_ID = 0;
+        private int _VAB_Lead_ID = 0;
 
         /// <summary>
         /// Prepare
@@ -42,17 +42,17 @@ namespace ViennaAdvantage.Process
                 foreach (ProcessInfoParameter element in para)
                 {
                     String name = element.GetParameterName();
-                    if (name.Equals("_C_Lead_ID"))
+                    if (name.Equals("_VAB_Lead_ID"))
                     {
-                        _C_Lead_ID = element.GetParameterAsInt();
+                        _VAB_Lead_ID = element.GetParameterAsInt();
                     }
                 }
             }
             else
             {
-                _C_Lead_ID = GetRecord_ID();
+                _VAB_Lead_ID = GetRecord_ID();
             }
-            //_C_Lead_ID = GetRecord_ID();
+            //_VAB_Lead_ID = GetRecord_ID();
         }	//	prepare
 
         /// <summary>
@@ -61,12 +61,12 @@ namespace ViennaAdvantage.Process
         /// <returns>BPartner</returns>
         protected override String DoIt()
         {
-            log.Info("C_Lead_ID=" + _C_Lead_ID);
-            if (_C_Lead_ID == 0)
+            log.Info("VAB_Lead_ID=" + _VAB_Lead_ID);
+            if (_VAB_Lead_ID == 0)
             {
-                throw new Exception("@C_Lead_ID@ ID=0");
+                throw new Exception("@VAB_Lead_ID@ ID=0");
             }
-            MLead lead = new MLead(GetCtx(), _C_Lead_ID, Get_TrxName());
+            MLead lead = new MLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
             if (lead.GetVAB_BPart_Category_ID() == 0)
             {
                 return Msg.GetMsg(GetCtx(), "SelectBPGroup");
@@ -75,9 +75,9 @@ namespace ViennaAdvantage.Process
             {
                 return Msg.GetMsg(GetCtx(), "Please enter Company name, Prospect or Business Partner");
             }
-            if (lead.Get_ID() != _C_Lead_ID)
+            if (lead.Get_ID() != _VAB_Lead_ID)
             {
-                throw new Exception("@NotFound@: @C_Lead_ID@ ID=" + _C_Lead_ID);
+                throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);
             }
             //
             String retValue = lead.CreateBP();

@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_SalesOffice
+/** Generated Model for VAB_SalesOffice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_SalesOffice : PO
+public class X_VAB_SalesOffice : PO
 {
-public X_C_SalesOffice (Context ctx, int C_SalesOffice_ID, Trx trxName) : base (ctx, C_SalesOffice_ID, trxName)
+public X_VAB_SalesOffice (Context ctx, int VAB_SalesOffice_ID, Trx trxName) : base (ctx, VAB_SalesOffice_ID, trxName)
 {
-/** if (C_SalesOffice_ID == 0)
+/** if (VAB_SalesOffice_ID == 0)
 {
-SetC_SalesOffice_ID (0);
+SetVAB_SalesOffice_ID (0);
 SetValue (null);
 }
  */
 }
-public X_C_SalesOffice (Ctx ctx, int C_SalesOffice_ID, Trx trxName) : base (ctx, C_SalesOffice_ID, trxName)
+public X_VAB_SalesOffice (Ctx ctx, int VAB_SalesOffice_ID, Trx trxName) : base (ctx, VAB_SalesOffice_ID, trxName)
 {
-/** if (C_SalesOffice_ID == 0)
+/** if (VAB_SalesOffice_ID == 0)
 {
-SetC_SalesOffice_ID (0);
+SetVAB_SalesOffice_ID (0);
 SetValue (null);
 }
  */
@@ -39,7 +39,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice(Context ctx, DataRow rs, Trx trxName)
+public X_VAB_SalesOffice(Context ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -48,7 +48,7 @@ public X_C_SalesOffice(Context ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice(Ctx ctx, DataRow rs, Trx trxName)
+public X_VAB_SalesOffice(Ctx ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -57,14 +57,14 @@ public X_C_SalesOffice(Ctx ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice(Ctx ctx, IDataReader dr, Trx trxName)
+public X_VAB_SalesOffice(Ctx ctx, IDataReader dr, Trx trxName)
     : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_SalesOffice()
+static X_VAB_SalesOffice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -77,8 +77,8 @@ public static long updatedMS = 1434525604935L;
 public static int Table_ID;
  // =1000653;
 
-/** TableName=C_SalesOffice */
-public static String Table_Name="C_SalesOffice";
+/** TableName=VAB_SalesOffice */
+public static String Table_Name="VAB_SalesOffice";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -112,21 +112,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_SalesOffice[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SalesOffice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
-/** Set C_SalesOffice_ID.
-@param C_SalesOffice_ID C_SalesOffice_ID */
-public void SetC_SalesOffice_ID (int C_SalesOffice_ID)
+/** Set VAB_SalesOffice_ID.
+@param VAB_SalesOffice_ID VAB_SalesOffice_ID */
+public void SetVAB_SalesOffice_ID (int VAB_SalesOffice_ID)
 {
-if (C_SalesOffice_ID < 1) throw new ArgumentException ("C_SalesOffice_ID is mandatory.");
-Set_ValueNoCheck ("C_SalesOffice_ID", C_SalesOffice_ID);
+if (VAB_SalesOffice_ID < 1) throw new ArgumentException ("VAB_SalesOffice_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SalesOffice_ID", VAB_SalesOffice_ID);
 }
-/** Get C_SalesOffice_ID.
-@return C_SalesOffice_ID */
-public int GetC_SalesOffice_ID() 
+/** Get VAB_SalesOffice_ID.
+@return VAB_SalesOffice_ID */
+public int GetVAB_SalesOffice_ID() 
 {
-Object ii = Get_Value("C_SalesOffice_ID");
+Object ii = Get_Value("VAB_SalesOffice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

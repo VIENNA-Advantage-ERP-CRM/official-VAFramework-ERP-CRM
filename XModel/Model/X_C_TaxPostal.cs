@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_TaxPostal
+/** Generated Model for VAB_TaxZIP
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_TaxPostal : PO
+public class X_VAB_TaxZIP : PO
 {
-public X_C_TaxPostal (Context ctx, int C_TaxPostal_ID, Trx trxName) : base (ctx, C_TaxPostal_ID, trxName)
+public X_VAB_TaxZIP (Context ctx, int VAB_TaxZIP_ID, Trx trxName) : base (ctx, VAB_TaxZIP_ID, trxName)
 {
-/** if (C_TaxPostal_ID == 0)
+/** if (VAB_TaxZIP_ID == 0)
 {
-SetC_TaxPostal_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxZIP_ID (0);
+SetVAB_TaxRate_ID (0);
 SetPostal (null);
 }
  */
 }
-public X_C_TaxPostal (Ctx ctx, int C_TaxPostal_ID, Trx trxName) : base (ctx, C_TaxPostal_ID, trxName)
+public X_VAB_TaxZIP (Ctx ctx, int VAB_TaxZIP_ID, Trx trxName) : base (ctx, VAB_TaxZIP_ID, trxName)
 {
-/** if (C_TaxPostal_ID == 0)
+/** if (VAB_TaxZIP_ID == 0)
 {
-SetC_TaxPostal_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxZIP_ID (0);
+SetVAB_TaxRate_ID (0);
 SetPostal (null);
 }
  */
@@ -41,7 +41,7 @@ SetPostal (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxPostal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_TaxZIP (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_TaxPostal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxPostal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_TaxZIP (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_TaxPostal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxPostal (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_TaxZIP (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_TaxPostal()
+static X_VAB_TaxZIP()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389058736L;
 public static int Table_ID;
  // =701;
 
-/** TableName=C_TaxPostal */
-public static String Table_Name="C_TaxPostal";
+/** TableName=VAB_TaxZIP */
+public static String Table_Name="VAB_TaxZIP";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,36 +111,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_TaxPostal[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_TaxZIP[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tax ZIP.
-@param C_TaxPostal_ID Tax Postal/ZIP */
-public void SetC_TaxPostal_ID (int C_TaxPostal_ID)
+@param VAB_TaxZIP_ID Tax Postal/ZIP */
+public void SetVAB_TaxZIP_ID (int VAB_TaxZIP_ID)
 {
-if (C_TaxPostal_ID < 1) throw new ArgumentException ("C_TaxPostal_ID is mandatory.");
-Set_ValueNoCheck ("C_TaxPostal_ID", C_TaxPostal_ID);
+if (VAB_TaxZIP_ID < 1) throw new ArgumentException ("VAB_TaxZIP_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxZIP_ID", VAB_TaxZIP_ID);
 }
 /** Get Tax ZIP.
 @return Tax Postal/ZIP */
-public int GetC_TaxPostal_ID() 
+public int GetVAB_TaxZIP_ID() 
 {
-Object ii = Get_Value("C_TaxPostal_ID");
+Object ii = Get_Value("VAB_TaxZIP_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

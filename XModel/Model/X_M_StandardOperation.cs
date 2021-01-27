@@ -21,7 +21,7 @@
         {
             /** if (M_StandardOperation_ID == 0)
             {
-            SetC_UOM_ID (0);	// @SQL=SELECT C_UOM_ID FROM C_UOM WHERE Name='Day'
+            SetVAB_UOM_ID (0);	// @SQL=SELECT VAB_UOM_ID FROM VAB_UOM WHERE Name='Day'
             SetIsHazmat (false);	// N
             SetIsPermitRequired (false);	// N
             SetM_Operation_ID (0);
@@ -38,7 +38,7 @@
         {
             /** if (M_StandardOperation_ID == 0)
             {
-            SetC_UOM_ID (0);	// @SQL=SELECT C_UOM_ID FROM C_UOM WHERE Name='Day'
+            SetVAB_UOM_ID (0);	// @SQL=SELECT VAB_UOM_ID FROM VAB_UOM WHERE Name='Day'
             SetIsHazmat (false);	// N
             SetIsPermitRequired (false);	// N
             SetM_Operation_ID (0);
@@ -132,17 +132,17 @@
             return sb.ToString();
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID < 1) throw new ArgumentException("C_UOM_ID is mandatory.");
-            Set_Value("C_UOM_ID", C_UOM_ID);
+            if (VAB_UOM_ID < 1) throw new ArgumentException("VAB_UOM_ID is mandatory.");
+            Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

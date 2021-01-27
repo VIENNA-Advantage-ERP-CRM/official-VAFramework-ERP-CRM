@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQResponseLineQty
  * Purpose        : RfQ Response Line Qty
- * Class Used     : X_C_RfQResponseLineQty
+ * Class Used     : X_VAB_RFQReplyLineQty
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQResponseLineQty : X_C_RfQResponseLineQty,IComparer<PO>
+    public class MRfQResponseLineQty : X_VAB_RFQReplyLineQty,IComparer<PO>
     {
         //	RfQ Line Qty	
         private MRfQLineQty _rfqQty = null;
@@ -36,16 +36,16 @@ namespace VAdvantage.Model
         /// Persistency Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQResponseLineQty_ID">ID</param>
+        /// <param name="VAB_RFQReplyLineQty_ID">ID</param>
         /// <param name="trxName">Transaction</param>
-        public MRfQResponseLineQty(Ctx ctx, int C_RfQResponseLineQty_ID, Trx trxName)
-            : base(ctx, C_RfQResponseLineQty_ID, trxName)
+        public MRfQResponseLineQty(Ctx ctx, int VAB_RFQReplyLineQty_ID, Trx trxName)
+            : base(ctx, VAB_RFQReplyLineQty_ID, trxName)
         {
-            if (C_RfQResponseLineQty_ID == 0)
+            if (VAB_RFQReplyLineQty_ID == 0)
             {
-                //	setC_RfQResponseLineQty_ID (0);		//	PK
-                //	setC_RfQLineQty_ID (0);
-                //	setC_RfQResponseLine_ID (0);
+                //	setVAB_RFQReplyLineQty_ID (0);		//	PK
+                //	setVAB_RFQLine_Qty_ID (0);
+                //	setVAB_RFQReplyLine_ID (0);
                 //
                 SetPrice(Env.ZERO);
                 SetDiscount(Env.ZERO);
@@ -74,8 +74,8 @@ namespace VAdvantage.Model
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
             SetClientOrg(line);
-            SetC_RfQResponseLine_ID(line.GetC_RfQResponseLine_ID());
-            SetC_RfQLineQty_ID(qty.GetC_RfQLineQty_ID());
+            SetVAB_RFQReplyLine_ID(line.GetVAB_RFQReplyLine_ID());
+            SetVAB_RFQLine_Qty_ID(qty.GetVAB_RFQLine_Qty_ID());
         }	
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
         {
             if (_rfqQty == null)
             {
-                _rfqQty = MRfQLineQty.Get(GetCtx(), GetC_RfQLineQty_ID(), Get_TrxName());
+                _rfqQty = MRfQLineQty.Get(GetCtx(), GetVAB_RFQLine_Qty_ID(), Get_TrxName());
             }
             return _rfqQty;
         }

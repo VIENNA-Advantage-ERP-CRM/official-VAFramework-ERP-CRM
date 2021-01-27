@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_Year
+ * Class Used     : X_VAB_Year
  * Chronological Development
  * Veena Pandey     07-May-2009
  ******************************************************/
@@ -21,21 +21,21 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MYear : X_C_Year
+    public class MYear : X_VAB_Year
     {
         //Cache						
-        private static CCache<int, MYear> _years = new CCache<int, MYear>("C_Year", 10);
+        private static CCache<int, MYear> _years = new CCache<int, MYear>("VAB_Year", 10);
         private static VLogger s_log = VLogger.GetVLogger(typeof(MYear).FullName);
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Year_ID">id</param>
+        /// <param name="VAB_Year_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MYear(Ctx ctx, int C_Year_ID, Trx trxName)
-            : base(ctx, C_Year_ID, trxName)
+        public MYear(Ctx ctx, int VAB_Year_ID, Trx trxName)
+            : base(ctx, VAB_Year_ID, trxName)
         {
-            if (C_Year_ID == 0)
+            if (VAB_Year_ID == 0)
             {
                 //	setVAB_Calender_ID (0);
                 //	setYear (null);
@@ -324,17 +324,17 @@ namespace VAdvantage.Model
         /// Get Year
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Year_ID"></param>
+        /// <param name="VAB_Year_ID"></param>
         /// <returns>year or null</returns>
         /// <date>07-march-2011</date>
         /// <writer>raghu</writer>
-        public static MYear Get(Ctx ctx, int C_Year_ID)
+        public static MYear Get(Ctx ctx, int VAB_Year_ID)
         {
-            MYear year = _years.Get(ctx, C_Year_ID);
+            MYear year = _years.Get(ctx, VAB_Year_ID);
             if (year != null)
                 return year;
             //
-            String sql = "SELECT * FROM C_Year WHERE C_Year_ID=" + C_Year_ID;
+            String sql = "SELECT * FROM VAB_Year WHERE VAB_Year_ID=" + VAB_Year_ID;
             IDataReader idr = null;
             try
             {

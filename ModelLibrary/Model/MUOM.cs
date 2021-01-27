@@ -25,11 +25,11 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUOM : X_C_UOM
+    public class MUOM : X_VAB_UOM
     {
         #region Private Variable
         //	UOM Cache				
-        private static CCache<int, MUOM> s_cache = new CCache<int, MUOM>("C_UOM", 30);
+        private static CCache<int, MUOM> s_cache = new CCache<int, MUOM>("VAB_UOM", 30);
         // X12 Element 355 Code	Minute	
         static String X12_MINUTE = "MJ";
         // X12 Element 355 Code	Hour	
@@ -52,10 +52,10 @@ namespace VAdvantage.Model
         #endregion
 
         /// <summary>
-        /// Get Minute C_UOM_ID
+        /// Get Minute VAB_UOM_ID
         /// </summary>
         /// <param name="ctx"></param>
-        /// <returns>C_UOM_ID for Minute</returns>
+        /// <returns>VAB_UOM_ID for Minute</returns>
         public static int GetMinute_UOM_ID(Ctx ctx)
         {
             if (Ini.IsClient())
@@ -67,13 +67,13 @@ namespace VAdvantage.Model
                     MUOM uom = (MUOM)it.Current;
                     if (uom.IsMinute())
                     {
-                        return uom.GetC_UOM_ID();
+                        return uom.GetVAB_UOM_ID();
                     }
                 }
             }
             //	Server
-            int C_UOM_ID = 0;
-            String sql = "SELECT C_UOM_ID FROM C_UOM WHERE IsActive='Y' AND X12DE355='MJ'";	//	HardCoded
+            int VAB_UOM_ID = 0;
+            String sql = "SELECT VAB_UOM_ID FROM VAB_UOM WHERE IsActive='Y' AND X12DE355='MJ'";	//	HardCoded
             //DataTable dt = null;
             IDataReader idr = null;
             try
@@ -81,7 +81,7 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 while (idr.Read())
                 {
-                    C_UOM_ID = Utility.Util.GetValueOfInt(idr[0]);
+                    VAB_UOM_ID = Utility.Util.GetValueOfInt(idr[0]);
                 }
                 idr.Close();
                 idr = null;
@@ -95,20 +95,20 @@ namespace VAdvantage.Model
                 }
                 _log.Log(Level.SEVERE, sql, e);
             }
-            return C_UOM_ID;
+            return VAB_UOM_ID;
         }
 
         /// <summary>
-        /// Get Default C_UOM_ID
+        /// Get Default VAB_UOM_ID
         /// </summary>
         /// <param name="ctx">context for VAF_Client</param>
-        /// <returns>C_UOM_ID</returns>
+        /// <returns>VAB_UOM_ID</returns>
         public static int GetDefault_UOM_ID(Ctx ctx)
         {
-            String sql = "SELECT C_UOM_ID "
-                + "FROM C_UOM "
+            String sql = "SELECT VAB_UOM_ID "
+                + "FROM VAB_UOM "
                 + "WHERE VAF_Client_ID IN (0," + ctx.GetVAF_Client_ID() + ") "
-                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, C_UOM_ID";
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, VAB_UOM_ID";
 
             return Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
         }
@@ -117,24 +117,24 @@ namespace VAdvantage.Model
         /// Get UOM from Cache
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <returns>UOM</returns>
-        public static MUOM Get(Ctx ctx, int C_UOM_ID)
+        public static MUOM Get(Ctx ctx, int VAB_UOM_ID)
         {
             if (s_cache.Count == 0)
             {
                 LoadUOMs(ctx);
             }
             //
-            int ii = C_UOM_ID;
+            int ii = VAB_UOM_ID;
             MUOM uom = (MUOM)s_cache[ii];
             if (uom != null)
             {
                 return uom;
             }
             //
-            uom = new MUOM(ctx, C_UOM_ID, null);
-            s_cache.Add(Utility.Util.GetValueOfInt(C_UOM_ID), uom);
+            uom = new MUOM(ctx, VAB_UOM_ID, null);
+            s_cache.Add(Utility.Util.GetValueOfInt(VAB_UOM_ID), uom);
             return uom;
         }
 
@@ -142,11 +142,11 @@ namespace VAdvantage.Model
         /// Get Precision
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <returns>Precision</returns>
-        public static int GetPrecision(Ctx ctx, int C_UOM_ID)
+        public static int GetPrecision(Ctx ctx, int VAB_UOM_ID)
         {
-            MUOM uom = Get(ctx, C_UOM_ID);
+            MUOM uom = Get(ctx, VAB_UOM_ID);
             return uom.GetStdPrecision();
         }
 
@@ -157,9 +157,9 @@ namespace VAdvantage.Model
         private static void LoadUOMs(Ctx ctx)
         {
             String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
-                "SELECT * FROM C_UOM "
+                "SELECT * FROM VAB_UOM "
                 + "WHERE IsActive='Y'",
-                "C_UOM", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_UOM", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
             try
             {
                 DataSet ds = ExecuteQuery.ExecuteDataset(sql, null);
@@ -167,7 +167,7 @@ namespace VAdvantage.Model
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
                     MUOM uom = new MUOM(ctx, dr, null);
-                    s_cache.Add(uom.GetC_UOM_ID(), uom);
+                    s_cache.Add(uom.GetVAB_UOM_ID(), uom);
                 }
                 ds = null;
             }
@@ -181,13 +181,13 @@ namespace VAdvantage.Model
         /// Constructor.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <param name="trxName"></param>
-        public MUOM(Ctx ctx, int C_UOM_ID, Trx trxName)
-            : base(ctx, C_UOM_ID, trxName)
+        public MUOM(Ctx ctx, int VAB_UOM_ID, Trx trxName)
+            : base(ctx, VAB_UOM_ID, trxName)
         {
 
-            if (C_UOM_ID == 0)
+            if (VAB_UOM_ID == 0)
             {
                 SetIsDefault(false);
                 SetStdPrecision(2);

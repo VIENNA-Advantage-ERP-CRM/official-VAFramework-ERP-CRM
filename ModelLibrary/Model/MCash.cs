@@ -754,7 +754,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public FileInfo CreatePDF(FileInfo file)
         {
-            ////ReportEngine re = ReportEngine.Get(GetCtx(), ReportEngine.ORDER, GetC_Order_ID());
+            ////ReportEngine re = ReportEngine.Get(GetCtx(), ReportEngine.ORDER, GetVAB_Order_ID());
             ////if (re == null)
             ////    return null;
             ////return re.getPDF(file);
@@ -1069,7 +1069,7 @@ namespace VAdvantage.Model
                     if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAB_CashJRNL c INNER JOIN VAB_CashJRNLLine cl ON c.VAB_CashBook_id = cl.VAB_CashBook_id 
                                                            INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID
                                                            INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
-                                         WHERE cl.CashType = 'I' AND cs.DueAmt > 0  AND (nvl(cs.c_payment_id,0) != 0 or nvl(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
+                                         WHERE cl.CashType = 'I' AND cs.DueAmt > 0  AND (nvl(cs.VAB_Payment_id,0) != 0 or nvl(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y')
                                          AND cl.IsActive = 'Y' AND c.VAB_CashBook_id = " + GetVAB_CashJRNL_ID(), null, Get_Trx())) > 0)
                     {
                         String schedule = string.Empty;
@@ -1158,7 +1158,7 @@ namespace VAdvantage.Model
                 else
                 {
                     int[] InvoicePaySchedule_ID = MInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
-                    (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE C_Payment_ID IN (SELECT NVL(C_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
+                    (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN (SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
                     SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_TrxName());
 
                     foreach (int invocePay in InvoicePaySchedule_ID)
@@ -1809,7 +1809,7 @@ namespace VAdvantage.Model
                         cashAmt = Decimal.Add(Decimal.Add(Util.GetValueOfDecimal(idr[0]), Util.GetValueOfDecimal(idr[1])), Util.GetValueOfDecimal(idr[2]));
                     }
                     idr = null;
-                    sql = "select sum(payamt), sum(writeoffamt), sum(discountamt) from c_payment where VAB_Invoice_id =" + Util.GetValueOfInt(inv[i]);
+                    sql = "select sum(payamt), sum(writeoffamt), sum(discountamt) from VAB_Payment where VAB_Invoice_id =" + Util.GetValueOfInt(inv[i]);
                     Decimal totalPayAmount = 0;
                     idr = DB.ExecuteReader(sql, null, Get_TrxName());
                     if (idr.Read())

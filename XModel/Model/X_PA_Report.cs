@@ -11,33 +11,33 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for PA_Report
+    /** Generated Model for VAPA_FinancialReport
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_PA_Report : PO
+    public class X_VAPA_FinancialReport : PO
     {
-        public X_PA_Report(Context ctx, int PA_Report_ID, Trx trxName)
-            : base(ctx, PA_Report_ID, trxName)
+        public X_VAPA_FinancialReport(Context ctx, int VAPA_FinancialReport_ID, Trx trxName)
+            : base(ctx, VAPA_FinancialReport_ID, trxName)
         {
-            /** if (PA_Report_ID == 0)
+            /** if (VAPA_FinancialReport_ID == 0)
             {
             SetListSources (false);
             SetListTrx (false);
             SetName (null);
-            SetPA_Report_ID (0);
+            SetVAPA_FinancialReport_ID (0);
             SetProcessing (false);	// N
             }
              */
         }
-        public X_PA_Report(Ctx ctx, int PA_Report_ID, Trx trxName)
-            : base(ctx, PA_Report_ID, trxName)
+        public X_VAPA_FinancialReport(Ctx ctx, int VAPA_FinancialReport_ID, Trx trxName)
+            : base(ctx, VAPA_FinancialReport_ID, trxName)
         {
-            /** if (PA_Report_ID == 0)
+            /** if (VAPA_FinancialReport_ID == 0)
             {
             SetListSources (false);
             SetListTrx (false);
             SetName (null);
-            SetPA_Report_ID (0);
+            SetVAPA_FinancialReport_ID (0);
             SetProcessing (false);	// N
             }
              */
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Report(Context ctx, DataRow rs, Trx trxName)
+        public X_VAPA_FinancialReport(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Report(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAPA_FinancialReport(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Report(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAPA_FinancialReport(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_PA_Report()
+        static X_VAPA_FinancialReport()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =445;
 
-        /** TableName=PA_Report */
-        public static String Table_Name = "PA_Report";
+        /** TableName=VAPA_FinancialReport */
+        public static String Table_Name = "VAPA_FinancialReport";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_PA_Report[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAPA_FinancialReport[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Print Format.
@@ -266,49 +266,49 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
         /** Set Report Column Set.
-        @param PA_ReportColumnSet_ID Collection of Columns for Report */
-        public void SetPA_ReportColumnSet_ID(int PA_ReportColumnSet_ID)
+        @param VAPA_FR_ColumnSet_ID Collection of Columns for Report */
+        public void SetVAPA_FR_ColumnSet_ID(int VAPA_FR_ColumnSet_ID)
         {
-            if (PA_ReportColumnSet_ID <= 0) Set_Value("PA_ReportColumnSet_ID", null);
+            if (VAPA_FR_ColumnSet_ID <= 0) Set_Value("VAPA_FR_ColumnSet_ID", null);
             else
-                Set_Value("PA_ReportColumnSet_ID", PA_ReportColumnSet_ID);
+                Set_Value("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID);
         }
         /** Get Report Column Set.
         @return Collection of Columns for Report */
-        public int GetPA_ReportColumnSet_ID()
+        public int GetVAPA_FR_ColumnSet_ID()
         {
-            Object ii = Get_Value("PA_ReportColumnSet_ID");
+            Object ii = Get_Value("VAPA_FR_ColumnSet_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Report Line Set.
-        @param PA_ReportLineSet_ID Report Line Set */
-        public void SetPA_ReportLineSet_ID(int PA_ReportLineSet_ID)
+        @param VAPA_FR_RowSet_ID Report Line Set */
+        public void SetVAPA_FR_RowSet_ID(int VAPA_FR_RowSet_ID)
         {
-            if (PA_ReportLineSet_ID <= 0) Set_Value("PA_ReportLineSet_ID", null);
+            if (VAPA_FR_RowSet_ID <= 0) Set_Value("VAPA_FR_RowSet_ID", null);
             else
-                Set_Value("PA_ReportLineSet_ID", PA_ReportLineSet_ID);
+                Set_Value("VAPA_FR_RowSet_ID", VAPA_FR_RowSet_ID);
         }
         /** Get Report Line Set.
         @return Report Line Set */
-        public int GetPA_ReportLineSet_ID()
+        public int GetVAPA_FR_RowSet_ID()
         {
-            Object ii = Get_Value("PA_ReportLineSet_ID");
+            Object ii = Get_Value("VAPA_FR_RowSet_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Financial Report.
-        @param PA_Report_ID Financial Report */
-        public void SetPA_Report_ID(int PA_Report_ID)
+        @param VAPA_FinancialReport_ID Financial Report */
+        public void SetVAPA_FinancialReport_ID(int VAPA_FinancialReport_ID)
         {
-            if (PA_Report_ID < 1) throw new ArgumentException("PA_Report_ID is mandatory.");
-            Set_ValueNoCheck("PA_Report_ID", PA_Report_ID);
+            if (VAPA_FinancialReport_ID < 1) throw new ArgumentException("VAPA_FinancialReport_ID is mandatory.");
+            Set_ValueNoCheck("VAPA_FinancialReport_ID", VAPA_FinancialReport_ID);
         }
         /** Get Financial Report.
         @return Financial Report */
-        public int GetPA_Report_ID()
+        public int GetVAPA_FinancialReport_ID()
         {
-            Object ii = Get_Value("PA_Report_ID");
+            Object ii = Get_Value("VAPA_FinancialReport_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

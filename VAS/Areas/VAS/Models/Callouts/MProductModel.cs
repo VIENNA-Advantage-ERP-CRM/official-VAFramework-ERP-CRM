@@ -25,7 +25,7 @@ namespace VIS.Models
 
             MProduct product = MProduct.Get(ctx, M_Product_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["C_UOM_ID"] = product.GetC_UOM_ID().ToString();
+            result["VAB_UOM_ID"] = product.GetVAB_UOM_ID().ToString();
             result["IsStocked"] = product.IsStocked() ? "Y" : "N";
             if (M_Product_ID > 0)
             {
@@ -74,12 +74,12 @@ namespace VIS.Models
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public int GetC_UOM_ID(Ctx ctx,string fields)
+        public int GetVAB_UOM_ID(Ctx ctx,string fields)
         {
             string[] paramValue = fields.Split(',');
             int M_Product_ID;
             M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            return MProduct.Get(ctx, M_Product_ID).GetC_UOM_ID();
+            return MProduct.Get(ctx, M_Product_ID).GetVAB_UOM_ID();
            
         }
 
@@ -89,7 +89,7 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             int M_Product_ID;
             M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            return MProduct.Get(ctx, M_Product_ID).GetC_TaxCategory_ID();
+            return MProduct.Get(ctx, M_Product_ID).GetVAB_TaxCategory_ID();
         }
         //End
 

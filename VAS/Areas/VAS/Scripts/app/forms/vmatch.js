@@ -104,7 +104,7 @@
         var _matchOptions = [];
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAB_Invoice_ID", false));
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "C_Order_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAB_Order_ID", false));
 
         // Match Mode 
         var _matchMode = [];
@@ -984,23 +984,23 @@
         //    else if (display == MATCH_ORDER) {
         //        _dateColumn = "hdr.DateOrdered";
         //        _qtyColumn = "lin.QtyOrdered";
-        //        _sql = _sql.concat("SELECT hdr.C_Order_ID,hdr.DocumentNo, hdr.DateOrdered, bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.C_OrderLine_ID, p.Name as Product,lin.M_Product_ID,"
+        //        _sql = _sql.concat("SELECT hdr.VAB_Order_ID,hdr.DocumentNo, hdr.DateOrdered, bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAB_OrderLine_ID, p.Name as Product,lin.M_Product_ID,"
         //            + " lin.QtyOrdered,SUM(COALESCE(mo.Qty,0)) as match "
-        //            + "FROM C_Order hdr"
+        //            + "FROM VAB_Order hdr"
         //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
-        //            + " INNER JOIN C_OrderLine lin ON (hdr.C_Order_ID=lin.C_Order_ID)"
+        //            + " INNER JOIN VAB_OrderLine lin ON (hdr.VAB_Order_ID=lin.VAB_Order_ID)"
         //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
         //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID AND dt.DocBaseType='POO'AND dt.isReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
-        //            .concat(" FULL JOIN M_MatchPO mo ON (lin.C_OrderLine_ID=mo.C_OrderLine_ID) "
+        //            .concat(" FULL JOIN M_MatchPO mo ON (lin.VAB_OrderLine_ID=mo.VAB_OrderLine_ID) "
         //            + "WHERE mo.")
         //            .concat(matchToType == MATCH_SHIPMENT ? "M_InOutLine_ID" : "VAB_InvoiceLine_ID")
         //            .concat(matched ? " IS NOT NULL" : " IS NULL"
         //            + " AND hdr.DocStatus IN ('CO','CL')");
 
-        //        _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.C_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
+        //        _groupBy = " GROUP BY hdr.VAB_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAB_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyOrdered")
         //            + "<>SUM(COALESCE(mo.Qty,0))";

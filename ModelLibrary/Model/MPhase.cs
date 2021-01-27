@@ -10,10 +10,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MPhase : X_C_Phase 
+    public class MPhase : X_VAB_Std_Stage 
     {
-        public MPhase(Ctx ctx, int C_Phase_ID, Trx trxName)
-            : base(ctx, C_Phase_ID, trxName)
+        public MPhase(Ctx ctx, int VAB_Std_Stage_ID, Trx trxName)
+            : base(ctx, VAB_Std_Stage_ID, trxName)
         {
             
         }

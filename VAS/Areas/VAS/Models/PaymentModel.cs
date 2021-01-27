@@ -35,9 +35,9 @@ namespace VIS.Models
         // Start Acct Date          
         DateTime? _DateAcct = null;
         // Start Payment Term       
-        int _C_PaymentTerm_ID = 0;
+        int _VAB_PaymentTerm_ID = 0;
         // Start Payment            
-        int _C_Payment_ID = 0;
+        int _VAB_Payment_ID = 0;
         // Start CashBook Line      
         private int _VAB_CashJRNLLine_ID = 0;
         private MCashLine _cashLine = null;
@@ -74,8 +74,8 @@ namespace VIS.Models
             _PaymentRule = inputValues._PaymentRule;
             _VAB_Currency_ID = inputValues._VAB_Currency_ID;
             _DateAcct = Convert.ToDateTime(inputValues._DateAcct);
-            _C_PaymentTerm_ID = inputValues._C_PaymentTerm_ID;
-            _C_Payment_ID = inputValues._C_Payment_ID;
+            _VAB_PaymentTerm_ID = inputValues._VAB_PaymentTerm_ID;
+            _VAB_Payment_ID = inputValues._VAB_Payment_ID;
             _VAF_Client_ID = inputValues._VAF_Client_ID;
             _VAF_Org_ID = inputValues._VAF_Org_ID;
             _VAB_BusinessPartner_ID = inputValues._VAB_BusinessPartner_ID;
@@ -90,7 +90,7 @@ namespace VIS.Models
         {
             pDetails = new PaymentMetohdDetails();
 
-            SetPayments(_C_Payment_ID, _VAB_Currency_ID, _PaymentRule);
+            SetPayments(_VAB_Payment_ID, _VAB_Currency_ID, _PaymentRule);
 
 
             if (_VAB_CashJRNLLine_ID == 0)
@@ -111,8 +111,8 @@ namespace VIS.Models
 
             //Load Payment Terms
             String SQL = MRole.GetDefault(ctx).AddAccessSQL(
-                "SELECT C_PaymentTerm_ID, Name FROM C_PaymentTerm WHERE IsActive='Y' ORDER BY Name",
-                "C_PaymentTerm", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "SELECT VAB_PaymentTerm_ID, Name FROM VAB_PaymentTerm WHERE IsActive='Y' ORDER BY Name",
+                "VAB_PaymentTerm", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
 
             IDataReader idr = null;
             DataTable dt = null;
@@ -135,7 +135,7 @@ namespace VIS.Models
                     }
                     pDetails.loadPaymentTerms.Add(pp);
 
-                    if (key == _C_PaymentTerm_ID)
+                    if (key == _VAB_PaymentTerm_ID)
                     {
                         kp = pp;
                     }
@@ -335,19 +335,19 @@ namespace VIS.Models
             return pDetails;
         }
 
-        private void SetPayments(int C_Payment_ID, int VAB_Currency_ID, string _PaymentRule)
+        private void SetPayments(int VAB_Payment_ID, int VAB_Currency_ID, string _PaymentRule)
         {
             if (pDetails == null)
             {
                 pDetails = new PaymentMetohdDetails();
             }
             //  Existing Payment
-            if ( C_Payment_ID != 0)
+            if ( VAB_Payment_ID != 0)
             {
-                if (C_Payment_ID != 0)
+                if (VAB_Payment_ID != 0)
                 {
-                    _mPayment = new MPayment(ctx, C_Payment_ID, null);
-                    _mPaymentOriginal = new MPayment(ctx, _C_Payment_ID, null);	//	full copy
+                    _mPayment = new MPayment(ctx, VAB_Payment_ID, null);
+                    _mPaymentOriginal = new MPayment(ctx, _VAB_Payment_ID, null);	//	full copy
                     //  CreditCard
                     pDetails.CCType = _mPayment.GetCreditCardType();
                     pDetails.StrKNumber = _mPayment.GetCreditCardNumber();
@@ -443,14 +443,14 @@ namespace VIS.Models
                 String newPaymentRule = inputs.cmbPayment;
                 inputs._DateAcct = Convert.ToDateTime(inputs._DateAcct);
                 DateTime? newDateAcct = Convert.ToDateTime(inputs._DateAcct);
-                int newC_PaymentTerm_ID = inputs._C_PaymentTerm_ID;
+                int newVAB_PaymentTerm_ID = inputs._VAB_PaymentTerm_ID;
                 int newVAB_CashJRNLLine_ID = inputs._VAB_CashJRNLLine_ID;
                 int newVAB_CashBook_ID = inputs._VAB_CashBook_ID;
                 String newCCType = inputs.CCType;
                 int newVAB_Bank_Acct_ID = 0;
 
                 //	B (Cash)		(Currency)
-                if (newPaymentRule.Equals(X_C_Order.PAYMENTRULE_Cash))
+                if (newPaymentRule.Equals(X_VAB_Order.PAYMENTRULE_Cash))
                 {
                     newVAB_CashBook_ID = inputs.cmbBCashBook;
                     //newDateAcct = (DateTime)bDateField.GetValue();
@@ -458,7 +458,7 @@ namespace VIS.Models
                 }
 
                 //	K (CreditCard)  Type, Number, Exp, Approval
-                else if (newPaymentRule.Equals(X_C_Order.PAYMENTRULE_CreditCard))
+                else if (newPaymentRule.Equals(X_VAB_Order.PAYMENTRULE_CreditCard))
                 {
                     newCCType = inputs.cmbKType;
                 }
@@ -471,13 +471,13 @@ namespace VIS.Models
                 }
 
                 //	P (PaymentTerm)	PaymentTerm
-                else if (newPaymentRule.Equals(X_C_Order.PAYMENTRULE_OnCredit))
+                else if (newPaymentRule.Equals(X_VAB_Order.PAYMENTRULE_OnCredit))
                 {
-                    newC_PaymentTerm_ID = inputs.cmbPTerm;
+                    newVAB_PaymentTerm_ID = inputs.cmbPTerm;
                 }
 
                 //	S (Check)		(Currency) CheckNo, Routing
-                else if (newPaymentRule.Equals(X_C_Order.PAYMENTRULE_Check))
+                else if (newPaymentRule.Equals(X_VAB_Order.PAYMENTRULE_Check))
                 {
                     //	cmbSCurrency.SelectedItem;
                     newVAB_Bank_Acct_ID = inputs.cmbSBankAccount;
@@ -489,7 +489,7 @@ namespace VIS.Models
                 }
 
 
-                SetPayments(inputs._C_Payment_ID, inputs._VAB_Currency_ID, inputs._PaymentRule);
+                SetPayments(inputs._VAB_Payment_ID, inputs._VAB_Currency_ID, inputs._PaymentRule);
 
 
                 //  find Bank Account if not qualified yet
@@ -517,7 +517,7 @@ namespace VIS.Models
                 {
                     //log.fine("Changed PaymentRule: " + _PaymentRule + " -> " + newPaymentRule);
                     //  We had a CashBook Entry
-                    if (inputs._PaymentRule.Equals(X_C_Order.PAYMENTRULE_Cash))
+                    if (inputs._PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_Cash))
                     {
                         //log.fine("Old Cash - " + _cashLine);
                         if (_cashLine != null)
@@ -583,11 +583,11 @@ namespace VIS.Models
 
 
                 //  Get Order and optionally Invoice
-                //int C_Order_ID = ctx.GetContextAsInt(inputs.WindowNo, "C_Order_ID");
+                //int VAB_Order_ID = ctx.GetContextAsInt(inputs.WindowNo, "VAB_Order_ID");
                 //int VAB_Invoice_ID = ctx.GetContextAsInt(inputs.WindowNo, "VAB_Invoice_ID");
                 if (inputs.VAB_Invoice_ID == 0 && inputs._DocStatus.Equals("CO"))
                 {
-                    inputs.VAB_Invoice_ID = GetInvoiceID(inputs.C_Order_ID);
+                    inputs.VAB_Invoice_ID = GetInvoiceID(inputs.VAB_Order_ID);
                 }
                 //  Amount sign negative, if ARC (Credit Memo) or API (AP Invoice)
                 bool negateAmt = false;
@@ -598,9 +598,9 @@ namespace VIS.Models
                     negateAmt = invoice.IsCreditMemo();
                 }
                 MOrder order = null;
-                if (invoice == null && inputs.C_Order_ID != 0)
+                if (invoice == null && inputs.VAB_Order_ID != 0)
                 {
-                    order = new MOrder(ctx, inputs.C_Order_ID, null);
+                    order = new MOrder(ctx, inputs.VAB_Order_ID, null);
                 }
                 Decimal payAmount = inputs._Amount;
                 if (negateAmt)
@@ -608,13 +608,13 @@ namespace VIS.Models
                     payAmount = Decimal.Negate(inputs._Amount);//.negate();
                 }
                 // Info
-                //    log.Config("C_Order_ID=" + C_Order_ID + ", VAB_Invoice_ID=" + VAB_Invoice_ID + ", NegateAmt=" + negateAmt);
+                //    log.Config("VAB_Order_ID=" + VAB_Order_ID + ", VAB_Invoice_ID=" + VAB_Invoice_ID + ", NegateAmt=" + negateAmt);
 
 
                 /***********************
                  *  CashBook
                  */
-                if (newPaymentRule.Equals(X_C_Order.PAYMENTRULE_Cash))
+                if (newPaymentRule.Equals(X_VAB_Order.PAYMENTRULE_Cash))
                 {
                     //log.fine("Cash");
                     String description = inputs.Description;
@@ -735,7 +735,7 @@ namespace VIS.Models
                     _mPayment.SetVAB_Invoice_ID(inputs.VAB_Invoice_ID);
                     if (order != null)
                     {
-                        _mPayment.SetC_Order_ID(inputs.C_Order_ID);
+                        _mPayment.SetVAB_Order_ID(inputs.VAB_Order_ID);
                         //     _needSave = true;
                     }
                     _mPayment.SetDateTrx(DateTime.SpecifyKind(Convert.ToDateTime(inputs._DateAcct), DateTimeKind.Utc));
@@ -770,8 +770,8 @@ namespace VIS.Models
                 details.newPaymentRule = newPaymentRule;
                 details.newDateAcct = newDateAcct;
                 details._VAB_CashJRNLLine_ID = inputs._VAB_CashJRNLLine_ID;
-                details._C_Payment_ID = inputs._C_Payment_ID;
-                details.newC_PaymentTerm_ID = inputs.cmbPTerm;
+                details._VAB_Payment_ID = inputs._VAB_Payment_ID;
+                details.newVAB_PaymentTerm_ID = inputs.cmbPTerm;
                 details.ErrorMsg = errorMsg.ToString();
                 details.SucessMsg = SucessMsg;
             }
@@ -786,12 +786,12 @@ namespace VIS.Models
         /// <summary>
         /// Get Invoice ID for Order
         /// </summary>
-        /// <param name="C_Order_ID">order</param>
+        /// <param name="VAB_Order_ID">order</param>
         /// <returns>VAB_Invoice_ID or 0 if not found</returns>
-        private int GetInvoiceID(int C_Order_ID)
+        private int GetInvoiceID(int VAB_Order_ID)
         {
             int retValue = 0;
-            String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice WHERE C_Order_ID=" + C_Order_ID
+            String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice WHERE VAB_Order_ID=" + VAB_Order_ID
                 + "ORDER BY VAB_Invoice_ID DESC";     //  last invoice
             DataTable dt = null;
             IDataReader idr = null;
@@ -857,7 +857,7 @@ namespace VIS.Models
                 }
 
                 DateTime? DateAcct = inputs._DateAcct;
-                int C_PaymentTerm_ID = inputs._C_PaymentTerm_ID;
+                int VAB_PaymentTerm_ID = inputs._VAB_PaymentTerm_ID;
                 int VAB_CashBook_ID = inputs._VAB_CashBook_ID;
                 String CCType = inputs.CCType;
                 //
@@ -909,8 +909,8 @@ namespace VIS.Models
                 }
 
                 //	T (Transfer)	BPartner_Bank
-                else if (PaymentRule.Equals(X_C_Order.PAYMENTRULE_DirectDeposit)
-                    || PaymentRule.Equals(X_C_Order.PAYMENTRULE_DirectDebit))
+                else if (PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_DirectDeposit)
+                    || PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_DirectDebit))
                 {
                     string bpba = inputs.cmbTAccount;
                     if (bpba == null || bpba == "")
@@ -924,9 +924,9 @@ namespace VIS.Models
                 }	//	Direct
 
                 //	P (PaymentTerm)	PaymentTerm
-                else if (PaymentRule.Equals(X_C_Order.PAYMENTRULE_OnCredit))
+                else if (PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_OnCredit))
                 {
-                    C_PaymentTerm_ID = inputs.cmbPTerm;
+                    VAB_PaymentTerm_ID = inputs.cmbPTerm;
 
                 }
 
@@ -1021,9 +1021,9 @@ namespace VIS.Models
         // Start Acct Date          
         public DateTime? _DateAcct { get; set; }
         // Start Payment Term       
-        public int _C_PaymentTerm_ID { get; set; }
+        public int _VAB_PaymentTerm_ID { get; set; }
         // Start Payment            
-        public int _C_Payment_ID { get; set; }
+        public int _VAB_Payment_ID { get; set; }
         //log
         public int _VAF_Client_ID { get; set; }
         public int _VAF_Org_ID { get; set; }
@@ -1050,7 +1050,7 @@ namespace VIS.Models
         public string cmbSCurrency { get; set; }
         public bool OnlyRule { get; set; }
         public int WindowNo { get; set; }
-        public int C_Order_ID { get; set; }
+        public int VAB_Order_ID { get; set; }
         public int VAB_Invoice_ID { get; set; }
         public string Description { get; set; }
 
@@ -1090,8 +1090,8 @@ namespace VIS.Models
     {
         public string newPaymentRule { get; set; }
         public DateTime? newDateAcct { get; set; }
-        public int newC_PaymentTerm_ID { get; set; }
-        public int _C_Payment_ID { get; set; }
+        public int newVAB_PaymentTerm_ID { get; set; }
+        public int _VAB_Payment_ID { get; set; }
         public int _VAB_CashJRNLLine_ID { get; set; }
         public string ErrorMsg { get; set; }
         public string SucessMsg { get; set; }

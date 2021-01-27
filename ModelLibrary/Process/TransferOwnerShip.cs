@@ -55,13 +55,13 @@ namespace ViennaAdvantageServer.Process
 
         protected override String DoIt()
         {
-            string Sql = "Select C_Lead_ID From C_Lead where SalesRep_ID=" + FromSalesRep_ID+" and isactive='Y' and vaf_org_id="+GetCtx().GetVAF_Org_ID();
+            string Sql = "Select VAB_Lead_ID From VAB_Lead where SalesRep_ID=" + FromSalesRep_ID+" and isactive='Y' and vaf_org_id="+GetCtx().GetVAF_Org_ID();
             IDataReader dr =DB.ExecuteReader(Sql);
             try
             {
                 while (dr.Read())
                 {
-                    VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), Util.GetValueOfInt(dr[0]), null);
                     lead.SetSalesRep_ID(ToSalesRep_ID);
                     lead.Save();
                     {
@@ -72,11 +72,11 @@ namespace ViennaAdvantageServer.Process
 
                 dr.Close();
 
-                Sql = "Select C_Project_ID From C_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
+                Sql = "Select VAB_Project_ID From VAB_Project where SalesRep_ID=" + FromSalesRep_ID + " and isactive='Y' and vaf_org_id=" + GetCtx().GetVAF_Org_ID();
                 dr = DB.ExecuteReader(Sql);
                 while (dr.Read())
                 {
-                    VAdvantage.Model.X_C_Project Project = new VAdvantage.Model.X_C_Project(GetCtx(), Util.GetValueOfInt(dr[0]), null);
+                    VAdvantage.Model.X_VAB_Project Project = new VAdvantage.Model.X_VAB_Project(GetCtx(), Util.GetValueOfInt(dr[0]), null);
                     Project.SetSalesRep_ID(ToSalesRep_ID);
                     Project.Save();
                     {

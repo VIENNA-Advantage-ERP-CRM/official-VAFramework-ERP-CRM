@@ -239,7 +239,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("C_Project_ID", "C_Project", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAB_Project_ID", "VAB_Project", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }
@@ -287,7 +287,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("C_SalesRegion_ID", "C_SalesRegion", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAB_SalesRegionState_ID", "VAB_SalesRegionState", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }

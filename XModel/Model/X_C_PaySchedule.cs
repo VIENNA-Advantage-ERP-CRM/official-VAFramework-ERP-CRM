@@ -1,35 +1,35 @@
 namespace VAdvantage.Model
 {
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_PaySchedule
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_PaymentSchedule
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaySchedule : PO{public X_C_PaySchedule (Context ctx, int C_PaySchedule_ID, Trx trxName) : base (ctx, C_PaySchedule_ID, trxName){/** if (C_PaySchedule_ID == 0){SetC_PaySchedule_ID (0);SetC_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscountDays (0);SetGraceDays (0);SetIsValid (false);SetNetDays (0);SetPercentage (0.0);} */
-}public X_C_PaySchedule (Ctx ctx, int C_PaySchedule_ID, Trx trxName) : base (ctx, C_PaySchedule_ID, trxName){/** if (C_PaySchedule_ID == 0){SetC_PaySchedule_ID (0);SetC_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscountDays (0);SetGraceDays (0);SetIsValid (false);SetNetDays (0);SetPercentage (0.0);} */
+public class X_VAB_PaymentSchedule : PO{public X_VAB_PaymentSchedule (Context ctx, int VAB_PaymentSchedule_ID, Trx trxName) : base (ctx, VAB_PaymentSchedule_ID, trxName){/** if (VAB_PaymentSchedule_ID == 0){SetVAB_PaymentSchedule_ID (0);SetVAB_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscountDays (0);SetGraceDays (0);SetIsValid (false);SetNetDays (0);SetPercentage (0.0);} */
+}public X_VAB_PaymentSchedule (Ctx ctx, int VAB_PaymentSchedule_ID, Trx trxName) : base (ctx, VAB_PaymentSchedule_ID, trxName){/** if (VAB_PaymentSchedule_ID == 0){SetVAB_PaymentSchedule_ID (0);SetVAB_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscountDays (0);SetGraceDays (0);SetIsValid (false);SetNetDays (0);SetPercentage (0.0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySchedule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_PaymentSchedule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySchedule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_PaymentSchedule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySchedule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_PaymentSchedule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaySchedule(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_PaymentSchedule(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27745177405388L;/** Last Updated Timestamp 5/12/2016 4:51:28 PM */
 public static long updatedMS = 1463052088599L;/** VAF_TableView_ID=548 */
 public static int Table_ID; // =548;
-/** TableName=C_PaySchedule */
-public static String Table_Name="C_PaySchedule";
+/** TableName=VAB_PaymentSchedule */
+public static String Table_Name="VAB_PaymentSchedule";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -44,17 +44,17 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_PaySchedule[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Payment Schedule.
-@param C_PaySchedule_ID Payment Schedule Template */
-public void SetC_PaySchedule_ID (int C_PaySchedule_ID){if (C_PaySchedule_ID < 1) throw new ArgumentException ("C_PaySchedule_ID is mandatory.");Set_ValueNoCheck ("C_PaySchedule_ID", C_PaySchedule_ID);}/** Get Payment Schedule.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_PaymentSchedule[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Payment Schedule.
+@param VAB_PaymentSchedule_ID Payment Schedule Template */
+public void SetVAB_PaymentSchedule_ID (int VAB_PaymentSchedule_ID){if (VAB_PaymentSchedule_ID < 1) throw new ArgumentException ("VAB_PaymentSchedule_ID is mandatory.");Set_ValueNoCheck ("VAB_PaymentSchedule_ID", VAB_PaymentSchedule_ID);}/** Get Payment Schedule.
 @return Payment Schedule Template */
-public int GetC_PaySchedule_ID() {Object ii = Get_Value("C_PaySchedule_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Payment Term.
-@param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-public void SetC_PaymentTerm_ID (int C_PaymentTerm_ID){if (C_PaymentTerm_ID < 1) throw new ArgumentException ("C_PaymentTerm_ID is mandatory.");Set_ValueNoCheck ("C_PaymentTerm_ID", C_PaymentTerm_ID);}/** Get Payment Term.
+public int GetVAB_PaymentSchedule_ID() {Object ii = Get_Value("VAB_PaymentSchedule_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Payment Term.
+@param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+public void SetVAB_PaymentTerm_ID (int VAB_PaymentTerm_ID){if (VAB_PaymentTerm_ID < 1) throw new ArgumentException ("VAB_PaymentTerm_ID is mandatory.");Set_ValueNoCheck ("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);}/** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-public int GetC_PaymentTerm_ID() {Object ii = Get_Value("C_PaymentTerm_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
+public int GetVAB_PaymentTerm_ID() {Object ii = Get_Value("VAB_PaymentTerm_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetC_PaymentTerm_ID().ToString());}/** Set Discount %.
+public KeyNamePair GetKeyNamePair() {return new KeyNamePair(Get_ID(), GetVAB_PaymentTerm_ID().ToString());}/** Set Discount %.
 @param Discount Discount in percent */
 public void SetDiscount (Decimal? Discount){if (Discount == null) throw new ArgumentException ("Discount is mandatory.");Set_Value ("Discount", (Decimal?)Discount);}/** Get Discount %.
 @return Discount in percent */

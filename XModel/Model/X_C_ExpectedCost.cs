@@ -15,11 +15,11 @@ namespace VAdvantage.Model
     public class X_VAB_ExpectedCost : PO
     {
         public X_VAB_ExpectedCost(Context ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
-        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
+        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetVAB_Order_ID (0);SetLandedCostDistribution (null);// Q
 SetM_CostElement_ID (0);} */
         }
         public X_VAB_ExpectedCost(Ctx ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
-        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetC_Order_ID (0);SetLandedCostDistribution (null);// Q
+        {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetVAB_Order_ID (0);SetLandedCostDistribution (null);// Q
 SetM_CostElement_ID (0);} */
         }/** Load Constructor 
 @param ctx context
@@ -68,10 +68,10 @@ SetM_CostElement_ID (0);} */
         public void SetVAB_ExpectedCost_ID(int VAB_ExpectedCost_ID) { if (VAB_ExpectedCost_ID < 1) throw new ArgumentException("VAB_ExpectedCost_ID is mandatory."); Set_ValueNoCheck("VAB_ExpectedCost_ID", VAB_ExpectedCost_ID); }/** Get Expected Landed Cost.
 @return Expected Landed Cost */
         public int GetVAB_ExpectedCost_ID() { Object ii = Get_Value("VAB_ExpectedCost_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
-@param C_Order_ID Sales Order */
-        public void SetC_Order_ID(int C_Order_ID) { if (C_Order_ID < 1) throw new ArgumentException("C_Order_ID is mandatory."); Set_ValueNoCheck("C_Order_ID", C_Order_ID); }/** Get Order.
+@param VAB_Order_ID Sales Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID) { if (VAB_Order_ID < 1) throw new ArgumentException("VAB_Order_ID is mandatory."); Set_ValueNoCheck("VAB_Order_ID", VAB_Order_ID); }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
+        public int GetVAB_Order_ID() { Object ii = Get_Value("VAB_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
 @param Description Optional short description of the record */
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */

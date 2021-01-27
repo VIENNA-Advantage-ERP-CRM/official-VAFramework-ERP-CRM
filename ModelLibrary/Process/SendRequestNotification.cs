@@ -81,10 +81,10 @@ namespace VAdvantage.Process
                 //    _changed = true;
                 //    sendInfo.Add("R_Group_ID");
                 //}
-                //if (_req.GetR_Category_ID() != _reqAction.GetR_Category_ID() && _reqAction.GetR_Category_ID() > 0)
+                //if (_req.GetVAR_Category_ID() != _reqAction.GetVAR_Category_ID() && _reqAction.GetVAR_Category_ID() > 0)
                 //{
                 //    _changed = true;
-                //    sendInfo.Add("R_Category_ID");
+                //    sendInfo.Add("VAR_Category_ID");
                 //}
                 //if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID() > 0)
                 //{

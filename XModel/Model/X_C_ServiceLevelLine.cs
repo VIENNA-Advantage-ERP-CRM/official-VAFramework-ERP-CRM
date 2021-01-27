@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ServiceLevelLine
+/** Generated Model for VAB_SLevelCriteriaLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ServiceLevelLine : PO
+public class X_VAB_SLevelCriteriaLine : PO
 {
-public X_C_ServiceLevelLine (Context ctx, int C_ServiceLevelLine_ID, Trx trxName) : base (ctx, C_ServiceLevelLine_ID, trxName)
+public X_VAB_SLevelCriteriaLine (Context ctx, int VAB_SLevelCriteriaLine_ID, Trx trxName) : base (ctx, VAB_SLevelCriteriaLine_ID, trxName)
 {
-/** if (C_ServiceLevelLine_ID == 0)
+/** if (VAB_SLevelCriteriaLine_ID == 0)
 {
-SetC_ServiceLevelLine_ID (0);
-SetC_ServiceLevel_ID (0);
+SetVAB_SLevelCriteriaLine_ID (0);
+SetVAB_SLevelCriteria_ID (0);
 SetServiceDate (DateTime.Now);
 SetServiceLevelProvided (0.0);
 }
  */
 }
-public X_C_ServiceLevelLine (Ctx ctx, int C_ServiceLevelLine_ID, Trx trxName) : base (ctx, C_ServiceLevelLine_ID, trxName)
+public X_VAB_SLevelCriteriaLine (Ctx ctx, int VAB_SLevelCriteriaLine_ID, Trx trxName) : base (ctx, VAB_SLevelCriteriaLine_ID, trxName)
 {
-/** if (C_ServiceLevelLine_ID == 0)
+/** if (VAB_SLevelCriteriaLine_ID == 0)
 {
-SetC_ServiceLevelLine_ID (0);
-SetC_ServiceLevel_ID (0);
+SetVAB_SLevelCriteriaLine_ID (0);
+SetVAB_SLevelCriteria_ID (0);
 SetServiceDate (DateTime.Now);
 SetServiceLevelProvided (0.0);
 }
@@ -43,7 +43,7 @@ SetServiceLevelProvided (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevelLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SLevelCriteriaLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_ServiceLevelLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevelLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SLevelCriteriaLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_ServiceLevelLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevelLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_SLevelCriteriaLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ServiceLevelLine()
+static X_VAB_SLevelCriteriaLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389058407L;
 public static int Table_ID;
  // =338;
 
-/** TableName=C_ServiceLevelLine */
-public static String Table_Name="C_ServiceLevelLine";
+/** TableName=VAB_SLevelCriteriaLine */
+public static String Table_Name="VAB_SLevelCriteriaLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -113,36 +113,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ServiceLevelLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SLevelCriteriaLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Service Level Line.
-@param C_ServiceLevelLine_ID Product Revenue Recognition Service Level Line */
-public void SetC_ServiceLevelLine_ID (int C_ServiceLevelLine_ID)
+@param VAB_SLevelCriteriaLine_ID Product Revenue Recognition Service Level Line */
+public void SetVAB_SLevelCriteriaLine_ID (int VAB_SLevelCriteriaLine_ID)
 {
-if (C_ServiceLevelLine_ID < 1) throw new ArgumentException ("C_ServiceLevelLine_ID is mandatory.");
-Set_ValueNoCheck ("C_ServiceLevelLine_ID", C_ServiceLevelLine_ID);
+if (VAB_SLevelCriteriaLine_ID < 1) throw new ArgumentException ("VAB_SLevelCriteriaLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SLevelCriteriaLine_ID", VAB_SLevelCriteriaLine_ID);
 }
 /** Get Service Level Line.
 @return Product Revenue Recognition Service Level Line */
-public int GetC_ServiceLevelLine_ID() 
+public int GetVAB_SLevelCriteriaLine_ID() 
 {
-Object ii = Get_Value("C_ServiceLevelLine_ID");
+Object ii = Get_Value("VAB_SLevelCriteriaLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Service Level.
-@param C_ServiceLevel_ID Product Revenue Recognition Service Level */
-public void SetC_ServiceLevel_ID (int C_ServiceLevel_ID)
+@param VAB_SLevelCriteria_ID Product Revenue Recognition Service Level */
+public void SetVAB_SLevelCriteria_ID (int VAB_SLevelCriteria_ID)
 {
-if (C_ServiceLevel_ID < 1) throw new ArgumentException ("C_ServiceLevel_ID is mandatory.");
-Set_ValueNoCheck ("C_ServiceLevel_ID", C_ServiceLevel_ID);
+if (VAB_SLevelCriteria_ID < 1) throw new ArgumentException ("VAB_SLevelCriteria_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SLevelCriteria_ID", VAB_SLevelCriteria_ID);
 }
 /** Get Service Level.
 @return Product Revenue Recognition Service Level */
-public int GetC_ServiceLevel_ID() 
+public int GetVAB_SLevelCriteria_ID() 
 {
-Object ii = Get_Value("C_ServiceLevel_ID");
+Object ii = Get_Value("VAB_SLevelCriteria_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

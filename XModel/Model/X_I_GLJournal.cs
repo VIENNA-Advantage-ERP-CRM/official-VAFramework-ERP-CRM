@@ -461,82 +461,82 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID <= 0) Set_Value ("C_Period_ID", null);
+if (VAB_YearPeriod_ID <= 0) Set_Value ("VAB_YearPeriod_ID", null);
 else
-Set_Value ("C_Period_ID", C_Period_ID);
+Set_Value ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);
 else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID <= 0) Set_Value ("C_UOM_ID", null);
+if (VAB_UOM_ID <= 0) Set_Value ("VAB_UOM_ID", null);
 else
-Set_Value ("C_UOM_ID", C_UOM_ID);
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Combination.
-@param C_ValidCombination_ID Valid Account Combination */
-public void SetC_ValidCombination_ID (int C_ValidCombination_ID)
+@param VAB_Acct_ValidParameter_ID Valid Account Combination */
+public void SetVAB_Acct_ValidParameter_ID (int VAB_Acct_ValidParameter_ID)
 {
-if (C_ValidCombination_ID <= 0) Set_Value ("C_ValidCombination_ID", null);
+if (VAB_Acct_ValidParameter_ID <= 0) Set_Value ("VAB_Acct_ValidParameter_ID", null);
 else
-Set_Value ("C_ValidCombination_ID", C_ValidCombination_ID);
+Set_Value ("VAB_Acct_ValidParameter_ID", VAB_Acct_ValidParameter_ID);
 }
 /** Get Combination.
 @return Valid Account Combination */
-public int GetC_ValidCombination_ID() 
+public int GetVAB_Acct_ValidParameter_ID() 
 {
-Object ii = Get_Value("C_ValidCombination_ID");
+Object ii = Get_Value("VAB_Acct_ValidParameter_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -652,82 +652,82 @@ public String GetDocTypeName()
 return (String)Get_Value("DocTypeName");
 }
 /** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-public void SetGL_Budget_ID (int GL_Budget_ID)
+@param VAGL_Budget_ID General Ledger Budget */
+public void SetVAGL_Budget_ID (int VAGL_Budget_ID)
 {
-if (GL_Budget_ID <= 0) Set_Value ("GL_Budget_ID", null);
+if (VAGL_Budget_ID <= 0) Set_Value ("VAGL_Budget_ID", null);
 else
-Set_Value ("GL_Budget_ID", GL_Budget_ID);
+Set_Value ("VAGL_Budget_ID", VAGL_Budget_ID);
 }
 /** Get Budget.
 @return General Ledger Budget */
-public int GetGL_Budget_ID() 
+public int GetVAGL_Budget_ID() 
 {
-Object ii = Get_Value("GL_Budget_ID");
+Object ii = Get_Value("VAGL_Budget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set GL Category.
-@param GL_Category_ID General Ledger Category */
-public void SetGL_Category_ID (int GL_Category_ID)
+@param VAGL_Group_ID General Ledger Category */
+public void SetVAGL_Group_ID (int VAGL_Group_ID)
 {
-if (GL_Category_ID <= 0) Set_Value ("GL_Category_ID", null);
+if (VAGL_Group_ID <= 0) Set_Value ("VAGL_Group_ID", null);
 else
-Set_Value ("GL_Category_ID", GL_Category_ID);
+Set_Value ("VAGL_Group_ID", VAGL_Group_ID);
 }
 /** Get GL Category.
 @return General Ledger Category */
-public int GetGL_Category_ID() 
+public int GetVAGL_Group_ID() 
 {
-Object ii = Get_Value("GL_Category_ID");
+Object ii = Get_Value("VAGL_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Journal Batch.
-@param GL_JournalBatch_ID General Ledger Journal Batch */
-public void SetGL_JournalBatch_ID (int GL_JournalBatch_ID)
+@param VAGL_BatchJRNL_ID General Ledger Journal Batch */
+public void SetVAGL_BatchJRNL_ID (int VAGL_BatchJRNL_ID)
 {
-if (GL_JournalBatch_ID <= 0) Set_Value ("GL_JournalBatch_ID", null);
+if (VAGL_BatchJRNL_ID <= 0) Set_Value ("VAGL_BatchJRNL_ID", null);
 else
-Set_Value ("GL_JournalBatch_ID", GL_JournalBatch_ID);
+Set_Value ("VAGL_BatchJRNL_ID", VAGL_BatchJRNL_ID);
 }
 /** Get Journal Batch.
 @return General Ledger Journal Batch */
-public int GetGL_JournalBatch_ID() 
+public int GetVAGL_BatchJRNL_ID() 
 {
-Object ii = Get_Value("GL_JournalBatch_ID");
+Object ii = Get_Value("VAGL_BatchJRNL_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Journal Line.
-@param GL_JournalLine_ID General Ledger Journal Line */
-public void SetGL_JournalLine_ID (int GL_JournalLine_ID)
+@param VAGL_JRNLLine_ID General Ledger Journal Line */
+public void SetVAGL_JRNLLine_ID (int VAGL_JRNLLine_ID)
 {
-if (GL_JournalLine_ID <= 0) Set_Value ("GL_JournalLine_ID", null);
+if (VAGL_JRNLLine_ID <= 0) Set_Value ("VAGL_JRNLLine_ID", null);
 else
-Set_Value ("GL_JournalLine_ID", GL_JournalLine_ID);
+Set_Value ("VAGL_JRNLLine_ID", VAGL_JRNLLine_ID);
 }
 /** Get Journal Line.
 @return General Ledger Journal Line */
-public int GetGL_JournalLine_ID() 
+public int GetVAGL_JRNLLine_ID() 
 {
-Object ii = Get_Value("GL_JournalLine_ID");
+Object ii = Get_Value("VAGL_JRNLLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Journal.
-@param GL_Journal_ID General Ledger Journal */
-public void SetGL_Journal_ID (int GL_Journal_ID)
+@param VAGL_JRNL_ID General Ledger Journal */
+public void SetVAGL_JRNL_ID (int VAGL_JRNL_ID)
 {
-if (GL_Journal_ID <= 0) Set_Value ("GL_Journal_ID", null);
+if (VAGL_JRNL_ID <= 0) Set_Value ("VAGL_JRNL_ID", null);
 else
-Set_Value ("GL_Journal_ID", GL_Journal_ID);
+Set_Value ("VAGL_JRNL_ID", VAGL_JRNL_ID);
 }
 /** Get Journal.
 @return General Ledger Journal */
-public int GetGL_Journal_ID() 
+public int GetVAGL_JRNL_ID() 
 {
-Object ii = Get_Value("GL_Journal_ID");
+Object ii = Get_Value("VAGL_JRNL_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

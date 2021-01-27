@@ -312,34 +312,34 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Order.
-        @param C_Order_ID Order */
-        public void SetC_Order_ID(int C_Order_ID)
+        @param VAB_Order_ID Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_ValueNoCheck("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_ValueNoCheck("VAB_Order_ID", null);
             else
-                Set_ValueNoCheck("C_Order_ID", C_Order_ID);
+                Set_ValueNoCheck("VAB_Order_ID", VAB_Order_ID);
         }
         /** Get Order.
         @return Order */
-        public int GetC_Order_ID()
+        public int GetVAB_Order_ID()
         {
-            Object ii = Get_Value("C_Order_ID");
+            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

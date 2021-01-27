@@ -11,19 +11,19 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_RfQLineQty
+/** Generated Model for VAB_RFQLine_Qty
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RfQLineQty : PO
+public class X_VAB_RFQLine_Qty : PO
 {
-public X_C_RfQLineQty (Context ctx, int C_RfQLineQty_ID, Trx trxName) : base (ctx, C_RfQLineQty_ID, trxName)
+public X_VAB_RFQLine_Qty (Context ctx, int VAB_RFQLine_Qty_ID, Trx trxName) : base (ctx, VAB_RFQLine_Qty_ID, trxName)
 {
-/** if (C_RfQLineQty_ID == 0)
+/** if (VAB_RFQLine_Qty_ID == 0)
 {
 SetBenchmarkPrice (0.0);
-SetC_RfQLineQty_ID (0);
-SetC_RfQLine_ID (0);
-SetC_UOM_ID (0);
+SetVAB_RFQLine_Qty_ID (0);
+SetVAB_RFQLine_ID (0);
+SetVAB_UOM_ID (0);
 SetIsOfferQty (false);
 SetIsPurchaseQty (false);
 SetIsRfQQty (true);	// Y
@@ -31,14 +31,14 @@ SetQty (0.0);	// 1
 }
  */
 }
-public X_C_RfQLineQty (Ctx ctx, int C_RfQLineQty_ID, Trx trxName) : base (ctx, C_RfQLineQty_ID, trxName)
+public X_VAB_RFQLine_Qty (Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName) : base (ctx, VAB_RFQLine_Qty_ID, trxName)
 {
-/** if (C_RfQLineQty_ID == 0)
+/** if (VAB_RFQLine_Qty_ID == 0)
 {
 SetBenchmarkPrice (0.0);
-SetC_RfQLineQty_ID (0);
-SetC_RfQLine_ID (0);
-SetC_UOM_ID (0);
+SetVAB_RFQLine_Qty_ID (0);
+SetVAB_RFQLine_ID (0);
+SetVAB_UOM_ID (0);
 SetIsOfferQty (false);
 SetIsPurchaseQty (false);
 SetIsRfQQty (true);	// Y
@@ -51,7 +51,7 @@ SetQty (0.0);	// 1
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLineQty (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQLine_Qty (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_C_RfQLineQty (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLineQty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQLine_Qty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_C_RfQLineQty (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQLineQty (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_RFQLine_Qty (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RfQLineQty()
+static X_VAB_RFQLine_Qty()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389057984L;
 public static int Table_ID;
  // =675;
 
-/** TableName=C_RfQLineQty */
-public static String Table_Name="C_RfQLineQty";
+/** TableName=VAB_RFQLine_Qty */
+public static String Table_Name="VAB_RFQLine_Qty";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_RfQLineQty[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_RFQLine_Qty[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Benchmark Price.
@@ -154,47 +154,47 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set RfQ Line Quantity.
-@param C_RfQLineQty_ID Request for Quotation Line Quantity */
-public void SetC_RfQLineQty_ID (int C_RfQLineQty_ID)
+@param VAB_RFQLine_Qty_ID Request for Quotation Line Quantity */
+public void SetVAB_RFQLine_Qty_ID (int VAB_RFQLine_Qty_ID)
 {
-if (C_RfQLineQty_ID < 1) throw new ArgumentException ("C_RfQLineQty_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQLineQty_ID", C_RfQLineQty_ID);
+if (VAB_RFQLine_Qty_ID < 1) throw new ArgumentException ("VAB_RFQLine_Qty_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQLine_Qty_ID", VAB_RFQLine_Qty_ID);
 }
 /** Get RfQ Line Quantity.
 @return Request for Quotation Line Quantity */
-public int GetC_RfQLineQty_ID() 
+public int GetVAB_RFQLine_Qty_ID() 
 {
-Object ii = Get_Value("C_RfQLineQty_ID");
+Object ii = Get_Value("VAB_RFQLine_Qty_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Line.
-@param C_RfQLine_ID Request for Quotation Line */
-public void SetC_RfQLine_ID (int C_RfQLine_ID)
+@param VAB_RFQLine_ID Request for Quotation Line */
+public void SetVAB_RFQLine_ID (int VAB_RFQLine_ID)
 {
-if (C_RfQLine_ID < 1) throw new ArgumentException ("C_RfQLine_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQLine_ID", C_RfQLine_ID);
+if (VAB_RFQLine_ID < 1) throw new ArgumentException ("VAB_RFQLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQLine_ID", VAB_RFQLine_ID);
 }
 /** Get RfQ Line.
 @return Request for Quotation Line */
-public int GetC_RfQLine_ID() 
+public int GetVAB_RFQLine_ID() 
 {
-Object ii = Get_Value("C_RfQLine_ID");
+Object ii = Get_Value("VAB_RFQLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_Value ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -202,7 +202,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_UOM_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_UOM_ID().ToString());
 }
 /** Set Offer Quantity.
 @param IsOfferQty This quantity is used in the Offer to the Customer */

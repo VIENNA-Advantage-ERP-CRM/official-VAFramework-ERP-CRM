@@ -283,11 +283,11 @@ namespace VAdvantage.Model
         /// <summary>
         /// Is the region valid in the country
         /// </summary>
-        /// <param name="C_Region_ID">region</param>
+        /// <param name="VAB_RegionState_ID">region</param>
         /// <returns>true if valid</returns>
-        public bool IsValidRegion(int C_Region_ID)
+        public bool IsValidRegion(int VAB_RegionState_ID)
         {
-            if (C_Region_ID == 0
+            if (VAB_RegionState_ID == 0
                 || GetVAB_Country_ID() == 0
                 || !IsHasRegion())
             {
@@ -296,7 +296,7 @@ namespace VAdvantage.Model
             MRegion[] regions = MRegion.GetRegions(GetCtx(), GetVAB_Country_ID());
             for (int i = 0; i < regions.Length; i++)
             {
-                if (C_Region_ID == regions[i].GetC_Region_ID())
+                if (VAB_RegionState_ID == regions[i].GetVAB_RegionState_ID())
                 {
                     return true;
                 }
@@ -311,8 +311,8 @@ namespace VAdvantage.Model
         //{
         //    /**	Migration before
         //    UPDATE VAB_Country SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
-        //    UPDATE C_Region SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
-        //    IDs migration for C_Location, VAB_City, C_Tax (VAB_Country, C_Region)
+        //    UPDATE VAB_RegionState SET VAF_Client_ID=0, VAF_Org_ID=0 WHERE VAF_Client_ID<>0 OR VAF_Org_ID<>0;
+        //    IDs migration for VAB_Address, VAB_City, VAB_TaxRate (VAB_Country, VAB_RegionState)
         //    **
         //    //	from http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1-semic.txt
         //    String countries = "AFGHANISTAN;AF, ALBANIA;AL, ALGERIA;DZ, AMERICAN SAMOA;AS, ANDORRA;AD, ANGOLA;AO, ANGUILLA;AI, ANTARCTICA;AQ, ANTIGUA AND BARBUDA;AG, ARGENTINA;AR,"

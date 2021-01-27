@@ -22,7 +22,7 @@ namespace VAdvantage.Model
             /** if (VAB_Charge_ID == 0)
             {
             SetVAB_Charge_ID (0);
-            SetC_TaxCategory_ID (0);
+            SetVAB_TaxCategory_ID (0);
             SetChargeAmt (0.0);
             SetIsSameCurrency (false);
             SetIsSameTax (false);
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
             /** if (VAB_Charge_ID == 0)
             {
             SetVAB_Charge_ID (0);
-            SetC_TaxCategory_ID (0);
+            SetVAB_TaxCategory_ID (0);
             SetChargeAmt (0.0);
             SetIsSameCurrency (false);
             SetIsSameTax (false);
@@ -159,17 +159,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tax Category.
-        @param C_TaxCategory_ID Tax Category */
-        public void SetC_TaxCategory_ID(int C_TaxCategory_ID)
+        @param VAB_TaxCategory_ID Tax Category */
+        public void SetVAB_TaxCategory_ID(int VAB_TaxCategory_ID)
         {
-            if (C_TaxCategory_ID < 1) throw new ArgumentException("C_TaxCategory_ID is mandatory.");
-            Set_Value("C_TaxCategory_ID", C_TaxCategory_ID);
+            if (VAB_TaxCategory_ID < 1) throw new ArgumentException("VAB_TaxCategory_ID is mandatory.");
+            Set_Value("VAB_TaxCategory_ID", VAB_TaxCategory_ID);
         }
         /** Get Tax Category.
         @return Tax Category */
-        public int GetC_TaxCategory_ID()
+        public int GetVAB_TaxCategory_ID()
         {
-            Object ii = Get_Value("C_TaxCategory_ID");
+            Object ii = Get_Value("VAB_TaxCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -379,15 +379,15 @@ namespace VAdvantage.Model
         }
 
         /** Set Withholding Category.
-@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
-        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+@param VAB_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetVAB_WithholdingCategory_ID(int VAB_WithholdingCategory_ID)
         {
-            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            if (VAB_WithholdingCategory_ID <= 0) Set_Value("VAB_WithholdingCategory_ID", null);
             else
-                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+                Set_Value("VAB_WithholdingCategory_ID", VAB_WithholdingCategory_ID);
         }/** Get Withholding Category.
 @return This field represents the withholding category linked with respective withholding tax. */
-        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_WithholdingCategory_ID() { Object ii = Get_Value("VAB_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
     }

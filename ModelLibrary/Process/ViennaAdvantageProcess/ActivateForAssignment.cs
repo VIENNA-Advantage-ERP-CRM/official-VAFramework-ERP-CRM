@@ -41,7 +41,7 @@ namespace ViennaAdvantage.Process
         {
             if (S_Resource_id == 0)
             {
-                throw new ArgumentException("C_Project_ID == 0");
+                throw new ArgumentException("VAB_Project_ID == 0");
             }
             VAdvantage.Model.MResource Resource = new VAdvantage.Model.MResource(GetCtx(), S_Resource_id, Get_Trx());
             string sql = "select ProfileType from s_resource where s_resource_id=" + S_Resource_id + "";
@@ -65,7 +65,7 @@ namespace ViennaAdvantage.Process
                 {
                     return Msg.GetMsg(GetCtx(), "RoleNotSelected");
                 }
-                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_Location_ID()) == 0)
+                if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAB_Address_ID()) == 0)
                 {
                     return Msg.GetMsg(GetCtx(), "AddressNotSelected");
                 }
@@ -83,7 +83,7 @@ namespace ViennaAdvantage.Process
                             bp.SetName(Resource.GetName());
                             bp.SetEMail(Resource.GetEMail());
                             bp.SetMobile(Resource.GetMobile());
-                            bp.SetC_Location_ID(Resource.GetC_Location_ID());
+                            bp.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             bp.SetVAB_BPart_Category_ID(Resource.GetVAB_BPart_Category_ID());
                             if (!bp.Save())
                             {
@@ -95,7 +95,7 @@ namespace ViennaAdvantage.Process
                             bploc.SetVAF_Org_ID(bp.GetVAF_Org_ID());
                             bploc.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
                             bploc.SetPhone(Resource.GetMobile());
-                            bploc.SetC_Location_ID(Resource.GetC_Location_ID());
+                            bploc.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
 
                             if (!bploc.Save())
                             {
@@ -120,7 +120,7 @@ namespace ViennaAdvantage.Process
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
                             user.SetPhone(Resource.GetMobile());
-                            user.SetC_Location_ID(Resource.GetC_Location_ID());
+                            user.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
@@ -169,7 +169,7 @@ namespace ViennaAdvantage.Process
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
                             user.SetPhone(Resource.GetMobile());
-                            user.SetC_Location_ID(Resource.GetC_Location_ID());
+                            user.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
@@ -227,7 +227,7 @@ namespace ViennaAdvantage.Process
                             bp.SetName(Resource.GetName());
                             bp.SetEMail(Resource.GetEMail());
                             bp.SetMobile(Resource.GetMobile());
-                            bp.SetC_Location_ID(Resource.GetC_Location_ID());
+                            bp.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             //if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAB_BPart_Category_ID()) == 0)
                             // {
                             //  return Msg.GetMsg(GetCtx(), "plzselectresource");
@@ -249,13 +249,13 @@ namespace ViennaAdvantage.Process
                             bploc.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
                             bploc.SetPhone(Resource.GetMobile());
 
-                            // if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetC_Location_ID()) == 0)
+                            // if (VAdvantage.Utility.Util.GetValueOfInt(Resource.GetVAB_Address_ID()) == 0)
                             // {
                             //     return Msg.GetMsg(GetCtx(), "Plz enter Address");
                             // }
                             // else
                             //{
-                            bploc.SetC_Location_ID(Resource.GetC_Location_ID());
+                            bploc.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             //}
 
                             if (!bploc.Save())
@@ -280,7 +280,7 @@ namespace ViennaAdvantage.Process
                             user.SetName(Resource.GetName());
                             user.SetEMail(Resource.GetEMail());
                             user.SetPhone(Resource.GetMobile());
-                            user.SetC_Location_ID(Resource.GetC_Location_ID());
+                            user.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {
@@ -335,7 +335,7 @@ namespace ViennaAdvantage.Process
                             user.SetEMail(Resource.GetEMail());
                             user.SetName(Resource.GetName());
                             user.SetPhone(Resource.GetMobile());
-                            user.SetC_Location_ID(Resource.GetC_Location_ID());
+                            user.SetVAB_Address_ID(Resource.GetVAB_Address_ID());
                             user.SetIsLoginUser(true);
                             if (!user.Save())
                             {

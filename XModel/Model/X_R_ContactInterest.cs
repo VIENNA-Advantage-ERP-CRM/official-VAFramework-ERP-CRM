@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_ContactInterest
+/** Generated Model for VAR_InterestedUser
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_ContactInterest : PO
+public class X_VAR_InterestedUser : PO
 {
-public X_R_ContactInterest (Context ctx, int R_ContactInterest_ID, Trx trxName) : base (ctx, R_ContactInterest_ID, trxName)
+public X_VAR_InterestedUser (Context ctx, int VAR_InterestedUser_ID, Trx trxName) : base (ctx, VAR_InterestedUser_ID, trxName)
 {
-/** if (R_ContactInterest_ID == 0)
-{
-SetVAF_UserContact_ID (0);	// @VAF_UserContact_ID@
-SetR_InterestArea_ID (0);
-}
- */
-}
-public X_R_ContactInterest (Ctx ctx, int R_ContactInterest_ID, Trx trxName) : base (ctx, R_ContactInterest_ID, trxName)
-{
-/** if (R_ContactInterest_ID == 0)
+/** if (VAR_InterestedUser_ID == 0)
 {
 SetVAF_UserContact_ID (0);	// @VAF_UserContact_ID@
 SetR_InterestArea_ID (0);
 }
  */
 }
+public X_VAR_InterestedUser (Ctx ctx, int VAR_InterestedUser_ID, Trx trxName) : base (ctx, VAR_InterestedUser_ID, trxName)
+{
+/** if (VAR_InterestedUser_ID == 0)
+{
+SetVAF_UserContact_ID (0);	// @VAF_UserContact_ID@
+SetR_InterestArea_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_R_ContactInterest (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_InterestedUser (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_R_ContactInterest (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_R_ContactInterest (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_InterestedUser (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_R_ContactInterest (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_R_ContactInterest (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_InterestedUser (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_ContactInterest()
+static X_VAR_InterestedUser()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389065930L;
 public static int Table_ID;
  // =528;
 
-/** TableName=R_ContactInterest */
-public static String Table_Name="R_ContactInterest";
+/** TableName=VAR_InterestedUser */
+public static String Table_Name="VAR_InterestedUser";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_ContactInterest[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_InterestedUser[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -308,18 +308,18 @@ public String GetPhone()
 }
 
 /** Set Address.
-@param C_Location_ID Location or Address */
-public void SetC_Location_ID(int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+public void SetVAB_Address_ID(int VAB_Address_ID)
 {
-    if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+    if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
     else
-        Set_Value("C_Location_ID", C_Location_ID);
+        Set_Value("VAB_Address_ID", VAB_Address_ID);
 }
 /** Get Address.
 @return Location or Address */
-public int GetC_Location_ID()
+public int GetVAB_Address_ID()
 {
-    Object ii = Get_Value("C_Location_ID");
+    Object ii = Get_Value("VAB_Address_ID");
     if (ii == null) return 0;
     return Convert.ToInt32(ii);
 }

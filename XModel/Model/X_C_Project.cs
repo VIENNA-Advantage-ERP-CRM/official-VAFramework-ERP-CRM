@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Project
+    /** Generated Model for VAB_Project
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Project : PO
+    public class X_VAB_Project : PO
     {
-        public X_C_Project(Context ctx, int C_Project_ID, Trx trxName)
-            : base(ctx, C_Project_ID, trxName)
+        public X_VAB_Project(Context ctx, int VAB_Project_ID, Trx trxName)
+            : base(ctx, VAB_Project_ID, trxName)
         {
-            /** if (C_Project_ID == 0)
+            /** if (VAB_Project_ID == 0)
             {
-            SetC_Project_ID (0);
+            SetVAB_Project_ID (0);
             SetCommittedAmt (0.0);
             SetCommittedQty (0.0);
             SetInvoicedAmt (0.0);
@@ -41,12 +41,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Project(Ctx ctx, int C_Project_ID, Trx trxName)
-            : base(ctx, C_Project_ID, trxName)
+        public X_VAB_Project(Ctx ctx, int VAB_Project_ID, Trx trxName)
+            : base(ctx, VAB_Project_ID, trxName)
         {
-            /** if (C_Project_ID == 0)
+            /** if (VAB_Project_ID == 0)
             {
-            SetC_Project_ID (0);
+            SetVAB_Project_ID (0);
             SetCommittedAmt (0.0);
             SetCommittedQty (0.0);
             SetInvoicedAmt (0.0);
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Project(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Project(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Project(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Project(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -89,14 +89,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Project(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Project(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Project()
+        static X_VAB_Project()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -109,8 +109,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =203;
 
-        /** TableName=C_Project */
-        public static String Table_Name = "C_Project";
+        /** TableName=VAB_Project */
+        public static String Table_Name = "VAB_Project";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Project[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Project[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set User/Contact.
@@ -247,82 +247,82 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID <= 0) Set_Value("C_PaymentTerm_ID", null);
+            if (VAB_PaymentTerm_ID <= 0) Set_Value("VAB_PaymentTerm_ID", null);
             else
-                Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+                Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Standard Phase.
-        @param C_Phase_ID Standard Phase of the Project Type */
-        public void SetC_Phase_ID(int C_Phase_ID)
+        @param VAB_Std_Stage_ID Standard Phase of the Project Type */
+        public void SetVAB_Std_Stage_ID(int VAB_Std_Stage_ID)
         {
-            if (C_Phase_ID <= 0) Set_Value("C_Phase_ID", null);
+            if (VAB_Std_Stage_ID <= 0) Set_Value("VAB_Std_Stage_ID", null);
             else
-                Set_Value("C_Phase_ID", C_Phase_ID);
+                Set_Value("VAB_Std_Stage_ID", VAB_Std_Stage_ID);
         }
         /** Get Standard Phase.
         @return Standard Phase of the Project Type */
-        public int GetC_Phase_ID()
+        public int GetVAB_Std_Stage_ID()
         {
-            Object ii = Get_Value("C_Phase_ID");
+            Object ii = Get_Value("VAB_Std_Stage_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project Type.
-        @param C_ProjectType_ID Type of the project */
-        public void SetC_ProjectType_ID(String C_ProjectType_ID)
+        @param VAB_ProjectType_ID Type of the project */
+        public void SetVAB_ProjectType_ID(String VAB_ProjectType_ID)
         {
-            if (C_ProjectType_ID != null && C_ProjectType_ID.Length > 22)
+            if (VAB_ProjectType_ID != null && VAB_ProjectType_ID.Length > 22)
             {
                 log.Warning("Length > 22 - truncated");
-                C_ProjectType_ID = C_ProjectType_ID.Substring(0, 22);
+                VAB_ProjectType_ID = VAB_ProjectType_ID.Substring(0, 22);
             }
-            Set_Value("C_ProjectType_ID", C_ProjectType_ID);
+            Set_Value("VAB_ProjectType_ID", VAB_ProjectType_ID);
         }
         /** Get Project Type.
         @return Type of the project */
-        public String GetC_ProjectType_ID()
+        public String GetVAB_ProjectType_ID()
         {
-            return (String)Get_Value("C_ProjectType_ID");
+            return (String)Get_Value("VAB_ProjectType_ID");
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID < 1) throw new ArgumentException("C_Project_ID is mandatory.");
-            Set_ValueNoCheck("C_Project_ID", C_Project_ID);
+            if (VAB_Project_ID < 1) throw new ArgumentException("VAB_Project_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Sales Region.
-        @param C_SalesRegion_ID Sales coverage region */
-        public void SetC_SalesRegion_ID(int C_SalesRegion_ID)
+        @param VAB_SalesRegionState_ID Sales coverage region */
+        public void SetVAB_SalesRegionState_ID(int VAB_SalesRegionState_ID)
         {
-            if (C_SalesRegion_ID <= 0) Set_Value("C_SalesRegion_ID", null);
+            if (VAB_SalesRegionState_ID <= 0) Set_Value("VAB_SalesRegionState_ID", null);
             else
-                Set_Value("C_SalesRegion_ID", C_SalesRegion_ID);
+                Set_Value("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
         }
         /** Get Sales Region.
         @return Sales coverage region */
-        public int GetC_SalesRegion_ID()
+        public int GetVAB_SalesRegionState_ID()
         {
-            Object ii = Get_Value("C_SalesRegion_ID");
+            Object ii = Get_Value("VAB_SalesRegionState_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -883,19 +883,19 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetValue());
         }
 
-        /** Set C_Lead_ID.
-        @param C_Lead_ID( Identifies a C_Lead_ID */
-        public void SetC_Lead_ID(int C_Lead_ID)
+        /** Set VAB_Lead_ID.
+        @param VAB_Lead_ID( Identifies a VAB_Lead_ID */
+        public void SetVAB_Lead_ID(int VAB_Lead_ID)
         {
-            if (C_Lead_ID <= 0) Set_Value("C_Lead_ID", null);
+            if (VAB_Lead_ID <= 0) Set_Value("VAB_Lead_ID", null);
             else
-                Set_Value("C_Lead_ID", C_Lead_ID);
+                Set_Value("VAB_Lead_ID", VAB_Lead_ID);
         }
-        /** Get C_Lead_ID.
-        @return Identifies a C_Lead_ID  */
-        public int GetC_Lead_ID()
+        /** Get VAB_Lead_ID.
+        @return Identifies a VAB_Lead_ID  */
+        public int GetVAB_Lead_ID()
         {
-            Object ii = Get_Value("C_Lead_ID");
+            Object ii = Get_Value("VAB_Lead_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -955,21 +955,21 @@ namespace VAdvantage.Model
             return (String)Get_Value("Generate_Quotation");
         }
 
-        /** C_Order_ID VAF_Control_Ref_ID=290 */
-        public static int C_ORDER_ID_VAF_Control_Ref_ID = 290;
+        /** VAB_Order_ID VAF_Control_Ref_ID=290 */
+        public static int VAB_ORDER_ID_VAF_Control_Ref_ID = 290;
         /** Set Order.
-        @param C_Order_ID Order */
-        public void SetC_Order_ID(int C_Order_ID)
+        @param VAB_Order_ID Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
             else
-                Set_Value("C_Order_ID", C_Order_ID);
+                Set_Value("VAB_Order_ID", VAB_Order_ID);
         }
         /** Get Order.
         @return Order */
-        public int GetC_Order_ID()
+        public int GetVAB_Order_ID()
         {
-            Object ii = Get_Value("C_Order_ID");
+            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -1,6 +1,6 @@
 namespace VAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for GL_ReDistribution
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAGL_ReDistribution
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_GL_ReDistribution : PO{public X_GL_ReDistribution (Context ctx, int GL_ReDistribution_ID, Trx trxName) : base (ctx, GL_ReDistribution_ID, trxName){/** if (GL_ReDistribution_ID == 0){SetVAB_AccountBook_ID (0);SetDateAcct (DateTime.Now);// SYSDATE
@@ -29,8 +29,8 @@ static X_GL_ReDistribution(){ Table_ID = Get_Table_ID(Table_Name); model = new K
 static long serialVersionUID = 27856268167673L;/** Last Updated Timestamp 11/19/2019 11:24:10 AM */
 public static long updatedMS = 1574142850884L;/** VAF_TableView_ID=1000533 */
 public static int Table_ID; // =1000533;
-/** TableName=GL_ReDistribution */
-public static String Table_Name="GL_ReDistribution";
+/** TableName=VAGL_ReDistribution */
+public static String Table_Name="VAGL_ReDistribution";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -69,11 +69,11 @@ public void SetVAB_Currency_ID (int VAB_Currency_ID){if (VAB_Currency_ID <= 0) S
 Set_Value ("VAB_Currency_ID", VAB_Currency_ID);}/** Get Currency.
 @return The Currency for this record */
 public int GetVAB_Currency_ID() {Object ii = Get_Value("VAB_Currency_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID){if (C_Period_ID <= 0) Set_Value ("C_Period_ID", null);else
-Set_Value ("C_Period_ID", C_Period_ID);}/** Get Period.
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID){if (VAB_YearPeriod_ID <= 0) Set_Value ("VAB_YearPeriod_ID", null);else
+Set_Value ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);}/** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() {Object ii = Get_Value("C_Period_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Date.
+public int GetVAB_YearPeriod_ID() {Object ii = Get_Value("VAB_YearPeriod_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Account Date.
 @param DateAcct General Ledger Date */
 public void SetDateAcct (DateTime? DateAcct){if (DateAcct == null) throw new ArgumentException ("DateAcct is mandatory.");Set_Value ("DateAcct", (DateTime?)DateAcct);}/** Get Account Date.
 @return General Ledger Date */

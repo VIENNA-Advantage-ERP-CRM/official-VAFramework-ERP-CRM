@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportLineSet
  * Purpose        : Report Line Set Model
- * Class Used     : X_PA_ReportLineSet
+ * Class Used     : X_VAPA_FR_RowSet
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -22,18 +22,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportLineSet : X_PA_ReportLineSet
+    public class MReportLineSet : X_VAPA_FR_RowSet
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_ReportLineSet_ID">id</param>
+        /// <param name="VAPA_FR_RowSet_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportLineSet(Ctx ctx, int PA_ReportLineSet_ID, Trx trxName):base(ctx, PA_ReportLineSet_ID, trxName)
+        public MReportLineSet(Ctx ctx, int VAPA_FR_RowSet_ID, Trx trxName):base(ctx, VAPA_FR_RowSet_ID, trxName)
         {
             
-            if (PA_ReportLineSet_ID == 0)
+            if (VAPA_FR_RowSet_ID == 0)
             {
             }
             else
@@ -49,8 +49,8 @@ namespace VAdvantage.Report
         private void LoadLines()
         {
             List<MReportLine> list = new List<MReportLine>();
-            String sql = "SELECT * FROM PA_ReportLine "
-                + "WHERE PA_ReportLineSet_ID=@param AND IsActive='Y' "
+            String sql = "SELECT * FROM VAPA_FR_Row "
+                + "WHERE VAPA_FR_RowSet_ID=@param AND IsActive='Y' "
                 + "ORDER BY SeqNo";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
@@ -58,8 +58,8 @@ namespace VAdvantage.Report
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                //pstmt.setInt(1, getPA_ReportLineSet_ID());
-                param[0] = new SqlParameter("@param", GetPA_ReportLineSet_ID());
+                //pstmt.setInt(1, getVAPA_FR_RowSet_ID());
+                param[0] = new SqlParameter("@param", GetVAPA_FR_RowSet_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -97,7 +97,7 @@ namespace VAdvantage.Report
             //
             _lines = new MReportLine[list.Count];
             _lines=list.ToArray();
-            log.Finest("ID=" + GetPA_ReportLineSet_ID()
+            log.Finest("ID=" + GetVAPA_FR_RowSet_ID()
                 + " - Size=" + list.Count);
         }	//	loadColumns
 

@@ -25,24 +25,24 @@ using System.Data.SqlClient;
 using System.Drawing;
 namespace VAdvantage.Model
 {
-    public class MSalesRegion : X_C_SalesRegion
+    public class MSalesRegion : X_VAB_SalesRegionState
     {
         //Cache						
-        private static CCache<int, MSalesRegion> s_cache = new CCache<int, MSalesRegion>("C_SalesRegion", 10);
+        private static CCache<int, MSalesRegion> s_cache = new CCache<int, MSalesRegion>("VAB_SalesRegionState", 10);
 
         /// <summary>
         /// Get SalesRegion from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_SalesRegion_ID">id</param>
+        /// <param name="VAB_SalesRegionState_ID">id</param>
         /// <returns>MSalesRegion</returns>
-        public static MSalesRegion Get(Ctx ctx, int C_SalesRegion_ID)
+        public static MSalesRegion Get(Ctx ctx, int VAB_SalesRegionState_ID)
         {
-            int key = C_SalesRegion_ID;
+            int key = VAB_SalesRegionState_ID;
             MSalesRegion retValue = (MSalesRegion)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MSalesRegion(ctx, C_SalesRegion_ID, null);
+            retValue = new MSalesRegion(ctx, VAB_SalesRegionState_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -52,12 +52,12 @@ namespace VAdvantage.Model
         /// Default Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_SalesRegion_ID"></param>
+        /// <param name="VAB_SalesRegionState_ID"></param>
         /// <param name="trxName">transaction</param>
-        public MSalesRegion(Ctx ctx, int C_SalesRegion_ID, Trx trxName)
-            : base(ctx, C_SalesRegion_ID, trxName)
+        public MSalesRegion(Ctx ctx, int VAB_SalesRegionState_ID, Trx trxName)
+            : base(ctx, VAB_SalesRegionState_ID, trxName)
         {
-            if (C_SalesRegion_ID == 0)
+            if (VAB_SalesRegionState_ID == 0)
             {
                 SetIsDefault(false);
                 SetIsSummary(false);
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
                 return success;
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                MAccount.UpdateValueDescription(GetCtx(), "C_SalesRegion_ID=" + GetC_SalesRegion_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "VAB_SalesRegionState_ID=" + GetVAB_SalesRegionState_ID(), Get_TrxName());
             return true;
         }
     }

@@ -6,7 +6,7 @@
  *                  you should not subscribe the user again.
  *                  Internally, the isActive flag is used.
  * Purpose        : Charge Modle
- * Class Used     : X_R_ContactInterest
+ * Class Used     : X_VAR_InterestedUser
  * Chronological    Development
  * Raghunandan      23-Jun-2009
   ******************************************************/
@@ -28,7 +28,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MContactInterest : X_R_ContactInterest
+    public class MContactInterest : X_VAR_InterestedUser
     {
         /**
 	 * 	Get Contact Interest
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             int R_InterestArea_ID, int VAF_UserContact_ID, Boolean isActive, Trx trxName)
         {
             MContactInterest retValue = null;
-            String sql = "SELECT * FROM R_ContactInterest "
+            String sql = "SELECT * FROM VAR_InterestedUser "
                 + "WHERE R_InterestArea_ID=@R_InterestArea_ID AND VAF_UserContact_ID=@VAF_UserContact_ID";
             DataTable dt = null;
             IDataReader idr = null;

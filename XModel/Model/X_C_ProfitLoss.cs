@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_ProfitLoss
+    /** Generated Model for VAB_ProfitLoss
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_ProfitLoss : PO
+    public class X_VAB_ProfitLoss : PO
     {
-        public X_C_ProfitLoss(Context ctx, int C_ProfitLoss_ID, Trx trxName)
-            : base(ctx, C_ProfitLoss_ID, trxName)
+        public X_VAB_ProfitLoss(Context ctx, int VAB_ProfitLoss_ID, Trx trxName)
+            : base(ctx, VAB_ProfitLoss_ID, trxName)
         {
-            /** if (C_ProfitLoss_ID == 0)
+            /** if (VAB_ProfitLoss_ID == 0)
             {
-            SetC_ProfitLoss_ID (0);
+            SetVAB_ProfitLoss_ID (0);
             SetPosted (false);	// N
             }
              */
         }
-        public X_C_ProfitLoss(Ctx ctx, int C_ProfitLoss_ID, Trx trxName)
-            : base(ctx, C_ProfitLoss_ID, trxName)
+        public X_VAB_ProfitLoss(Ctx ctx, int VAB_ProfitLoss_ID, Trx trxName)
+            : base(ctx, VAB_ProfitLoss_ID, trxName)
         {
-            /** if (C_ProfitLoss_ID == 0)
+            /** if (VAB_ProfitLoss_ID == 0)
             {
-            SetC_ProfitLoss_ID (0);
+            SetVAB_ProfitLoss_ID (0);
             SetPosted (false);	// N
             }
              */
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ProfitLoss(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_ProfitLoss(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ProfitLoss(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_ProfitLoss(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_ProfitLoss(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_ProfitLoss(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_ProfitLoss()
+        static X_VAB_ProfitLoss()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000439;
 
-        /** TableName=C_ProfitLoss */
-        public static String Table_Name = "C_ProfitLoss";
+        /** TableName=VAB_ProfitLoss */
+        public static String Table_Name = "VAB_ProfitLoss";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_ProfitLoss[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_ProfitLoss[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Currency.
@@ -150,49 +150,49 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Profit Dimension.
-        @param C_ProfitAndLoss_ID Profit Dimension */
-        public void SetC_ProfitAndLoss_ID(int C_ProfitAndLoss_ID)
+        @param VAB_ProfitAndLoss_ID Profit Dimension */
+        public void SetVAB_ProfitAndLoss_ID(int VAB_ProfitAndLoss_ID)
         {
-            if (C_ProfitAndLoss_ID <= 0) Set_Value("C_ProfitAndLoss_ID", null);
+            if (VAB_ProfitAndLoss_ID <= 0) Set_Value("VAB_ProfitAndLoss_ID", null);
             else
-                Set_Value("C_ProfitAndLoss_ID", C_ProfitAndLoss_ID);
+                Set_Value("VAB_ProfitAndLoss_ID", VAB_ProfitAndLoss_ID);
         }
         /** Get Profit Dimension.
         @return Profit Dimension */
-        public int GetC_ProfitAndLoss_ID()
+        public int GetVAB_ProfitAndLoss_ID()
         {
-            Object ii = Get_Value("C_ProfitAndLoss_ID");
+            Object ii = Get_Value("VAB_ProfitAndLoss_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Profit Loss.
-        @param C_ProfitLoss_ID Profit Loss */
-        public void SetC_ProfitLoss_ID(int C_ProfitLoss_ID)
+        @param VAB_ProfitLoss_ID Profit Loss */
+        public void SetVAB_ProfitLoss_ID(int VAB_ProfitLoss_ID)
         {
-            if (C_ProfitLoss_ID < 1) throw new ArgumentException("C_ProfitLoss_ID is mandatory.");
-            Set_ValueNoCheck("C_ProfitLoss_ID", C_ProfitLoss_ID);
+            if (VAB_ProfitLoss_ID < 1) throw new ArgumentException("VAB_ProfitLoss_ID is mandatory.");
+            Set_ValueNoCheck("VAB_ProfitLoss_ID", VAB_ProfitLoss_ID);
         }
         /** Get Profit Loss.
         @return Profit Loss */
-        public int GetC_ProfitLoss_ID()
+        public int GetVAB_ProfitLoss_ID()
         {
-            Object ii = Get_Value("C_ProfitLoss_ID");
+            Object ii = Get_Value("VAB_ProfitLoss_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Year.
-        @param C_Year_ID Calendar Year */
-        public void SetC_Year_ID(int C_Year_ID)
+        @param VAB_Year_ID Calendar Year */
+        public void SetVAB_Year_ID(int VAB_Year_ID)
         {
-            if (C_Year_ID <= 0) Set_Value("C_Year_ID", null);
+            if (VAB_Year_ID <= 0) Set_Value("VAB_Year_ID", null);
             else
-                Set_Value("C_Year_ID", C_Year_ID);
+                Set_Value("VAB_Year_ID", VAB_Year_ID);
         }
         /** Get Year.
         @return Calendar Year */
-        public int GetC_Year_ID()
+        public int GetVAB_Year_ID()
         {
-            Object ii = Get_Value("C_Year_ID");
+            Object ii = Get_Value("VAB_Year_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

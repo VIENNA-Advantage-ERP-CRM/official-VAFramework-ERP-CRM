@@ -11,37 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PaymentProcessor
+/** Generated Model for VAB_PaymentHandler
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaymentProcessor : PO
+public class X_VAB_PaymentHandler : PO
 {
-public X_C_PaymentProcessor (Context ctx, int C_PaymentProcessor_ID, Trx trxName) : base (ctx, C_PaymentProcessor_ID, trxName)
+public X_VAB_PaymentHandler (Context ctx, int VAB_PaymentHandler_ID, Trx trxName) : base (ctx, VAB_PaymentHandler_ID, trxName)
 {
-/** if (C_PaymentProcessor_ID == 0)
-{
-SetAcceptAMEX (false);
-SetAcceptATM (false);
-SetAcceptCheck (false);
-SetAcceptCorporate (false);
-SetAcceptDiners (false);
-SetAcceptDirectDebit (false);
-SetAcceptDirectDeposit (false);
-SetAcceptDiscover (false);
-SetAcceptMC (false);
-SetAcceptVisa (false);
-SetVAB_Bank_Acct_ID (0);
-SetC_PaymentProcessor_ID (0);
-SetCommission (0.0);
-SetCostPerTrx (0.0);
-SetName (null);
-SetRequireVV (false);
-}
- */
-}
-public X_C_PaymentProcessor (Ctx ctx, int C_PaymentProcessor_ID, Trx trxName) : base (ctx, C_PaymentProcessor_ID, trxName)
-{
-/** if (C_PaymentProcessor_ID == 0)
+/** if (VAB_PaymentHandler_ID == 0)
 {
 SetAcceptAMEX (false);
 SetAcceptATM (false);
@@ -54,7 +31,30 @@ SetAcceptDiscover (false);
 SetAcceptMC (false);
 SetAcceptVisa (false);
 SetVAB_Bank_Acct_ID (0);
-SetC_PaymentProcessor_ID (0);
+SetVAB_PaymentHandler_ID (0);
+SetCommission (0.0);
+SetCostPerTrx (0.0);
+SetName (null);
+SetRequireVV (false);
+}
+ */
+}
+public X_VAB_PaymentHandler (Ctx ctx, int VAB_PaymentHandler_ID, Trx trxName) : base (ctx, VAB_PaymentHandler_ID, trxName)
+{
+/** if (VAB_PaymentHandler_ID == 0)
+{
+SetAcceptAMEX (false);
+SetAcceptATM (false);
+SetAcceptCheck (false);
+SetAcceptCorporate (false);
+SetAcceptDiners (false);
+SetAcceptDirectDebit (false);
+SetAcceptDirectDeposit (false);
+SetAcceptDiscover (false);
+SetAcceptMC (false);
+SetAcceptVisa (false);
+SetVAB_Bank_Acct_ID (0);
+SetVAB_PaymentHandler_ID (0);
 SetCommission (0.0);
 SetCostPerTrx (0.0);
 SetName (null);
@@ -67,7 +67,7 @@ SetRequireVV (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentHandler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -75,7 +75,7 @@ public X_C_PaymentProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentHandler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -83,13 +83,13 @@ public X_C_PaymentProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentProcessor (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PaymentHandler (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaymentProcessor()
+static X_VAB_PaymentHandler()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -102,8 +102,8 @@ public static long updatedMS = 1280389057201L;
 public static int Table_ID;
  // =398;
 
-/** TableName=C_PaymentProcessor */
-public static String Table_Name="C_PaymentProcessor";
+/** TableName=VAB_PaymentHandler */
+public static String Table_Name="VAB_PaymentHandler";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -137,7 +137,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PaymentProcessor[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PaymentHandler[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -371,17 +371,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment Processor.
-@param C_PaymentProcessor_ID Payment processor for electronic payments */
-public void SetC_PaymentProcessor_ID (int C_PaymentProcessor_ID)
+@param VAB_PaymentHandler_ID Payment processor for electronic payments */
+public void SetVAB_PaymentHandler_ID (int VAB_PaymentHandler_ID)
 {
-if (C_PaymentProcessor_ID < 1) throw new ArgumentException ("C_PaymentProcessor_ID is mandatory.");
-Set_ValueNoCheck ("C_PaymentProcessor_ID", C_PaymentProcessor_ID);
+if (VAB_PaymentHandler_ID < 1) throw new ArgumentException ("VAB_PaymentHandler_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PaymentHandler_ID", VAB_PaymentHandler_ID);
 }
 /** Get Payment Processor.
 @return Payment processor for electronic payments */
-public int GetC_PaymentProcessor_ID() 
+public int GetVAB_PaymentHandler_ID() 
 {
-Object ii = Get_Value("C_PaymentProcessor_ID");
+Object ii = Get_Value("VAB_PaymentHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

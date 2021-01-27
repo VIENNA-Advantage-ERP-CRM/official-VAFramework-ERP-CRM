@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportSource
  * Purpose        : Report Source Model
- * Class Used     : X_PA_ReportSource
+ * Class Used     : X_VAPA_FR_Source
  * Chronological    Development
  * Deepak           19-Jan-2010
   ******************************************************/
@@ -22,18 +22,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportSource : X_PA_ReportSource
+    public class MReportSource : X_VAPA_FR_Source
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_ReportSource_ID">id</param>
+        /// <param name="VAPA_FR_Source_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportSource(Ctx ctx, int PA_ReportSource_ID, Trx trxName):base(ctx, PA_ReportSource_ID, trxName)
+        public MReportSource(Ctx ctx, int VAPA_FR_Source_ID, Trx trxName):base(ctx, VAPA_FR_Source_ID, trxName)
         {
             
-            if (PA_ReportSource_ID == 0)
+            if (VAPA_FR_Source_ID == 0)
             {
             }
         }	//	MReportSource
@@ -53,9 +53,9 @@ namespace VAdvantage.Report
        /// <summary>
        ///  Get SQL where clause
        /// </summary>
-       /// <param name="PA_Hierarchy_ID">hierarchy </param>
+       /// <param name="VAPA_FinancialReportingOrder_ID">hierarchy </param>
         /// <returns> where clause</returns>
-        public String GetWhereClause(int PA_Hierarchy_ID)
+        public String GetWhereClause(int VAPA_FinancialReportingOrder_ID)
         {
             String et = GetElementType();
             //	ID for Tree Leaf Value
@@ -79,11 +79,11 @@ namespace VAdvantage.Report
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_LocationFrom.Equals(et))
             {
-                ID = GetC_Location_ID();
+                ID = GetVAB_Address_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_LocationTo.Equals(et))
             {
-                ID = GetC_Location_ID();
+                ID = GetVAB_Address_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(et))
             {
@@ -95,11 +95,11 @@ namespace VAdvantage.Report
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et))
             {
-                ID = GetC_Project_ID();
+                ID = GetVAB_Project_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et))
             {
-                ID = GetC_SalesRegion_ID();
+                ID = GetVAB_SalesRegionState_ID();
             }
             else if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et))
             {
@@ -123,7 +123,7 @@ namespace VAdvantage.Report
                 return "";
             }
             //
-            return MReportTree.GetWhereClause(GetCtx(), PA_Hierarchy_ID, et, ID);
+            return MReportTree.GetWhereClause(GetCtx(), VAPA_FinancialReportingOrder_ID, et, ID);
         }	//	getWhereClause
 
 
@@ -147,16 +147,16 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="VAF_Client_ID">parent</param>
         /// <param name="VAF_Org_ID">parent</param>
-        /// <param name="PA_ReportLine_ID">parent</param>
+        /// <param name="VAPA_FR_Row_ID">parent</param>
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Report Source</returns>
         public static MReportSource Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
-            int PA_ReportLine_ID, MReportSource source, Trx trxName)
+            int VAPA_FR_Row_ID, MReportSource source, Trx trxName)
         {
             MReportSource retValue = new MReportSource(ctx, 0, trxName);
             MReportSource.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
-            retValue.SetPA_ReportLine_ID(PA_ReportLine_ID);
+            retValue.SetVAPA_FR_Row_ID(VAPA_FR_Row_ID);
             return retValue;
         }	//	copy
 

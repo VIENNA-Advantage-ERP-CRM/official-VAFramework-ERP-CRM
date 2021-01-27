@@ -569,7 +569,7 @@
             + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
             + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
             + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
-            + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
+            + " LEFT OUTER JOIN VAB_UOM c ON (p.VAB_UOM_ID=c.VAB_UOM_ID)";
         //+ " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
 
         function bindEvent() {
@@ -1005,7 +1005,7 @@
                             //var countID = drProd.getInt("VAICNT_InventoryCountLine_ID");
                             //prodName = drProd.getString("name");
                             //uom = drProd.getString("uom");
-                            //uom_ID = drProd.getInt("C_UOM_ID");
+                            //uom_ID = drProd.getInt("VAB_UOM_ID");
                             var qty = drProd[i]["VAICNT_Quantity"];
                             var M_Product_ID = drProd[i]["M_Product_ID"];
                             var value = drProd[i]["Value"];
@@ -1014,7 +1014,7 @@
                             var countID = drProd[i]["VAICNT_InventoryCountLine_ID"];
                             prodName = drProd[i]["Name"];
                             uom = drProd[i]["UOM"];
-                            uom_ID = drProd[i]["C_UOM_ID"];
+                            uom_ID = drProd[i]["VAB_UOM_ID"];
 
                             // Reference Line ID will be Orderline and Requisitionline only in case of Reference no and for M_Inout table and Internal use Inventory and InventoryMove
                             var RefLineID = drProd[i]["LineID"];
@@ -1098,7 +1098,7 @@
                         //var value = drProd.getString("value");
                         //prodName = drProd.getString("name");
                         //uom = drProd.getString("uom");
-                        //uom_ID = drProd.getInt("C_UOM_ID");
+                        //uom_ID = drProd.getInt("VAB_UOM_ID");
                         //var RefNo = drProd.getString("VAICNT_ReferenceNo");
                         var attr_ID = drProd[i]["M_AttributeSetInstance_ID"];
                         var attrName = drProd[i]["Description"];
@@ -1108,7 +1108,7 @@
                         var value = drProd[i]["Value"];
                         prodName = drProd[i]["Name"];
                         uom = drProd[i]["UOM"];
-                        uom_ID = drProd[i]["C_UOM_ID"];
+                        uom_ID = drProd[i]["VAB_UOM_ID"];
                         var RefNo = drProd[i]["VAICNT_ReferenceNo"];
                         if (RefNo == "") {
                             RefNo = "null";
@@ -1245,7 +1245,7 @@
             var key, value;
             if (data.length > 0) {
                 for (var i in data) {
-                    key = VIS.Utility.Util.getValueOfInt(data[i]["C_UOM_ID"]);
+                    key = VIS.Utility.Util.getValueOfInt(data[i]["VAB_UOM_ID"]);
                     value = VIS.Utility.Util.getValueOfString(data[i]["Name"]);
                     uomArray.push({ id: key, text: value });
                 }
@@ -1301,7 +1301,7 @@
                     },
                     { field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.translate(VIS.Env.getCtx(), "UOM") + '</span></div>', sortable: false, size: '70px', min: 60, hidden: false },
                     //{
-                    //    field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.getElement(VIS.Env.getCtx(), "C_UOM_ID") + '</span></div>', sortable: false, size: '80px', min: 80, hidden: false, editable: { type: 'select', items: uomArray, showAll: true },
+                    //    field: "UOM", caption: '<div style="text-align: center;" ><span>' + VIS.Msg.getElement(VIS.Env.getCtx(), "VAB_UOM_ID") + '</span></div>', sortable: false, size: '80px', min: 80, hidden: false, editable: { type: 'select', items: uomArray, showAll: true },
                     //    render: function (record, index, col_index) {
                     //        var html = '';
                     //        for (var p in uomArray) {
@@ -1487,7 +1487,7 @@
                                         _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
                                         _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
                                         _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                        _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                        _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
                                         _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
                                         _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
                                         _windowNo: WindowNo,
@@ -1508,7 +1508,7 @@
                                     _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
                                     _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
                                     _value: w2ui[grdname].records[selection[i] - 1].NAME,
-                                    _uom: w2ui[grdname].records[selection[i] - 1].C_UOM_ID,
+                                    _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
                                     _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
                                     _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
                                     _windowNo: WindowNo,
@@ -1670,7 +1670,7 @@
                             keyColumn: keycolName,
                             VAF_TableView_ID: VIS.context.getWindowTabContext(WindowNo, 1, "VAF_TableView_ID"),
                             prod: JSON.stringify(prodID),
-                            C_UOM_ID: JSON.stringify(uoms),
+                            VAB_UOM_ID: JSON.stringify(uoms),
                             listAst: JSON.stringify(listAst),
                             qty: JSON.stringify(qty),
                             locatorTo: M_LocatorTo_ID,
@@ -1701,7 +1701,7 @@
                             id: id,
                             keyColumn: keycolName,
                             prod: JSON.stringify(prodID),
-                            C_UOM_ID: JSON.stringify(uoms),
+                            VAB_UOM_ID: JSON.stringify(uoms),
                             listAst: JSON.stringify(listAst),
                             qty: JSON.stringify(qty),
                             locatorTo: M_LocatorTo_ID,
@@ -1769,7 +1769,7 @@
                         keyColumn: keycolName,
                         VAF_TableView_ID: VIS.context.getWindowTabContext(WindowNo, 1, "VAF_TableView_ID"),
                         prod: JSON.stringify(prodID.splice(0, saveCount)),
-                        C_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
+                        VAB_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
                         listAst: JSON.stringify(listAst.splice(0, saveCount)),
                         qty: JSON.stringify(qty.splice(0, saveCount)),
                         locatorTo: M_LocatorTo_ID,
@@ -1801,7 +1801,7 @@
                         id: id,
                         keyColumn: keycolName,
                         prod: JSON.stringify(prodID.splice(0, saveCount)),
-                        C_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
+                        VAB_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
                         listAst: JSON.stringify(listAst.splice(0, saveCount)),
                         qty: JSON.stringify(qty.splice(0, saveCount)),
                         locatorTo: M_LocatorTo_ID,
@@ -2006,7 +2006,7 @@
                     + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
                     + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
                     + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
-                    + " LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)";
+                    + " LEFT OUTER JOIN VAB_UOM c ON (p.VAB_UOM_ID=c.VAB_UOM_ID)";
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
                     if (srchValue == null || srchValue.length == 0 || srchValue == 0) {
@@ -2423,7 +2423,7 @@
                 }
             });
             w2ui[grdname].hideColumn('M_PRODUCT_ID');
-            w2ui[grdname].hideColumn('C_UOM_ID');
+            w2ui[grdname].hideColumn('VAB_UOM_ID');
             w2ui[grdname].hideColumn('UOM');
             w2ui[grdname].hideColumn('M_WAREHOUSE_ID');
             w2ui[grdname].hideColumn('M_PRICELIST_VERSION_ID');
@@ -2549,7 +2549,7 @@
                                         _prdID: multiValues[item].M_PRODUCT_ID,
                                         _prdName: multiValues[item].NAME,
                                         _value: multiValues[item].VALUE,
-                                        _uom: multiValues[item].C_UOM_ID,
+                                        _uom: multiValues[item].VAB_UOM_ID,
                                         _uomName: multiValues[item].UOM,
                                         _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
                                         _windowNo: WindowNo,
@@ -2570,7 +2570,7 @@
                                     _prdID: multiValues[item].M_PRODUCT_ID,
                                     _prdName: multiValues[item].NAME,
                                     _value: multiValues[item].VALUE,
-                                    _uom: multiValues[item].C_UOM_ID,
+                                    _uom: multiValues[item].VAB_UOM_ID,
                                     _uomName: multiValues[item].UOM,
                                     _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
                                     _windowNo: WindowNo,

@@ -59,11 +59,11 @@ public void SetVAB_Invoice_ID (int VAB_Invoice_ID){if (VAB_Invoice_ID <= 0) Set_
 Set_Value ("VAB_Invoice_ID", VAB_Invoice_ID);}/** Get Invoice.
 @return Invoice Identifier */
 public int GetVAB_Invoice_ID() {Object ii = Get_Value("VAB_Invoice_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Order.
-@param C_Order_ID Sales Order */
-public void SetC_Order_ID (int C_Order_ID){if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);else
-Set_Value ("C_Order_ID", C_Order_ID);}/** Get Order.
+@param VAB_Order_ID Sales Order */
+public void SetVAB_Order_ID (int VAB_Order_ID){if (VAB_Order_ID <= 0) Set_Value ("VAB_Order_ID", null);else
+Set_Value ("VAB_Order_ID", VAB_Order_ID);}/** Get Order.
 @return Sales Order */
-public int GetC_Order_ID() {Object ii = Get_Value("C_Order_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set CostPerUnit.
+public int GetVAB_Order_ID() {Object ii = Get_Value("VAB_Order_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set CostPerUnit.
 @param CostPerUnit CostPerUnit */
 public void SetCostPerUnit (Decimal? CostPerUnit){Set_Value ("CostPerUnit", (Decimal?)CostPerUnit);}/** Get CostPerUnit.
 @return CostPerUnit */

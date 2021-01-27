@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Category
+/** Generated Model for VAR_Category
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_Category : PO
+public class X_VAR_Category : PO
 {
-public X_R_Category (Context ctx, int R_Category_ID, Trx trxName) : base (ctx, R_Category_ID, trxName)
+public X_VAR_Category (Context ctx, int VAR_Category_ID, Trx trxName) : base (ctx, VAR_Category_ID, trxName)
 {
-/** if (R_Category_ID == 0)
+/** if (VAR_Category_ID == 0)
 {
 SetName (null);
-SetR_Category_ID (0);
+SetVAR_Category_ID (0);
 }
  */
 }
-public X_R_Category (Ctx ctx, int R_Category_ID, Trx trxName) : base (ctx, R_Category_ID, trxName)
+public X_VAR_Category (Ctx ctx, int VAR_Category_ID, Trx trxName) : base (ctx, VAR_Category_ID, trxName)
 {
-/** if (R_Category_ID == 0)
+/** if (VAR_Category_ID == 0)
 {
 SetName (null);
-SetR_Category_ID (0);
+SetVAR_Category_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetR_Category_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Category (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Category (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_R_Category (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Category (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Category (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_R_Category (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Category (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Category (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_Category()
+static X_VAR_Category()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389065899L;
 public static int Table_ID;
  // =772;
 
-/** TableName=R_Category */
-public static String Table_Name="R_Category";
+/** TableName=VAR_Category */
+public static String Table_Name="VAR_Category";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_Category[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Category[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -187,17 +187,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Category.
-@param R_Category_ID Request Category */
-public void SetR_Category_ID (int R_Category_ID)
+@param VAR_Category_ID Request Category */
+public void SetVAR_Category_ID (int VAR_Category_ID)
 {
-if (R_Category_ID < 1) throw new ArgumentException ("R_Category_ID is mandatory.");
-Set_ValueNoCheck ("R_Category_ID", R_Category_ID);
+if (VAR_Category_ID < 1) throw new ArgumentException ("VAR_Category_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Category_ID", VAR_Category_ID);
 }
 /** Get Category.
 @return Request Category */
-public int GetR_Category_ID() 
+public int GetVAR_Category_ID() 
 {
-Object ii = Get_Value("R_Category_ID");
+Object ii = Get_Value("VAR_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

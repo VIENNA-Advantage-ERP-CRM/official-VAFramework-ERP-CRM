@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQTopicSubscriberOnly
  * Purpose        : Subcriber Topic Only List (positive - i.e. must be a match if exists)
- * Class Used     : X_C_RfQ_TopicSubscriberOnly
+ * Class Used     : X_VAB_RFQ_SubjectMem_Allow
  * Chronological    Development
  * Raghunandan     11-Aug.-2009
   ******************************************************/
@@ -23,16 +23,16 @@ using System.Data;
 using System.Data.SqlClient;
 namespace VAdvantage.Model
 {
-    public class MRfQTopicSubscriberOnly : X_C_RfQ_TopicSubscriberOnly
+    public class MRfQTopicSubscriberOnly : X_VAB_RFQ_SubjectMem_Allow
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_RfQ_TopicSubscriberOnly_ID"></param>
+        /// <param name="VAB_RFQ_SubjectMem_Allow_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQTopicSubscriberOnly(Ctx ctx, int C_RfQ_TopicSubscriberOnly_ID, Trx trxName)
-            : base(ctx, C_RfQ_TopicSubscriberOnly_ID, trxName)
+        public MRfQTopicSubscriberOnly(Ctx ctx, int VAB_RFQ_SubjectMem_Allow_ID, Trx trxName)
+            : base(ctx, VAB_RFQ_SubjectMem_Allow_ID, trxName)
         {
 
         }

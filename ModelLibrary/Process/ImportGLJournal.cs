@@ -191,15 +191,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	GL Category
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET GL_Category_ID=(SELECT c.GL_Category_ID FROM GL_Category c"
+                + "SET VAGL_Group_ID=(SELECT c.VAGL_Group_ID FROM VAGL_Group c"
                 + " WHERE c.Name=i.CategoryName AND i.VAF_Client_ID=c.VAF_Client_ID) "
-                + "WHERE GL_Category_ID IS NULL AND CategoryName IS NOT NULL"
+                + "WHERE VAGL_Group_ID IS NULL AND CategoryName IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set DocType=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Category, '"
-                + "WHERE (GL_Category_ID IS NULL OR GL_Category_ID=0)"
+                + "WHERE (VAGL_Group_ID IS NULL OR VAGL_Group_ID=0)"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -302,20 +302,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Period
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_Period_ID=(SELECT MAX(p.C_Period_ID) FROM C_Period p"
-                + " INNER JOIN C_Year y ON (y.C_Year_ID=p.C_Year_ID)"
+                + "SET VAB_YearPeriod_ID=(SELECT MAX(p.VAB_YearPeriod_ID) FROM VAB_YearPeriod p"
+                + " INNER JOIN VAB_Year y ON (y.VAB_Year_ID=p.VAB_Year_ID)"
                 + " INNER JOIN VAF_ClientDetail c ON (c.VAB_Calender_ID=y.VAB_Calender_ID)"
                 + " WHERE c.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND i.DateAcct BETWEEN p.StartDate AND p.EndDate AND p.PeriodType='S') "
-                + "WHERE C_Period_ID IS NULL"
+                + "WHERE VAB_YearPeriod_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Period=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Period, '"
-                + "WHERE C_Period_ID IS NULL OR C_Period_ID NOt IN "
-                + "(SELECT C_Period_ID FROM C_Period p"
-                + " INNER JOIN C_Year y ON (y.C_Year_ID=p.C_Year_ID)"
+                + "WHERE VAB_YearPeriod_ID IS NULL OR VAB_YearPeriod_ID NOt IN "
+                + "(SELECT VAB_YearPeriod_ID FROM VAB_YearPeriod p"
+                + " INNER JOIN VAB_Year y ON (y.VAB_Year_ID=p.VAB_Year_ID)"
                 + " INNER JOIN VAF_ClientDetail c ON (c.VAB_Calender_ID=y.VAB_Calender_ID) "
                 + " WHERE c.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND i.DateAcct BETWEEN p.StartDate AND p.EndDate AND p.PeriodType='S')"
@@ -325,8 +325,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Warning("Invalid Period=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_ErrorMsg=" + ts + "||'WARN=Period Closed, ' "
-                + "WHERE C_Period_ID IS NOT NULL AND NOT EXISTS"
-                + " (SELECT * FROM C_PeriodControl pc WHERE pc.C_Period_ID=i.C_Period_ID AND DocBaseType='GLJ' AND PeriodStatus='O') "
+                + "WHERE VAB_YearPeriod_ID IS NOT NULL AND NOT EXISTS"
+                + " (SELECT * FROM VAB_YearPeriodControl pc WHERE pc.VAB_YearPeriod_ID=i.VAB_YearPeriod_ID AND DocBaseType='GLJ' AND PeriodStatus='O') "
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -349,20 +349,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
             //	** Account Elements (optional) **
-            //	(C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0)
+            //	(VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0)
 
             //	Set Org from Name (* is overwritten and default)
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET VAF_Org_ID=(SELECT o.VAF_Org_ID FROM VAF_Org o"
                 + " WHERE o.Value=i.OrgValue AND o.IsSummary='N' AND i.VAF_Client_ID=o.VAF_Client_ID) "
                 + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0) AND OrgValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'");
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Org from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET VAF_Org_ID=VAF_OrgDoc_ID "
                 + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0) AND OrgValue IS NULL AND VAF_OrgDoc_ID IS NOT NULL AND VAF_OrgDoc_ID<>0"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Org from Doc Org=" + no);
             //	Error Org
@@ -370,7 +370,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Org, '"
                 + "WHERE (VAF_Org_ID IS NULL OR VAF_Org_ID=0"
                 + " OR EXISTS (SELECT * FROM VAF_Org oo WHERE o.VAF_Org_ID=oo.VAF_Org_ID AND (oo.IsSummary='Y' OR oo.IsActive='N')))"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid Org=" + no);
@@ -383,13 +383,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " WHERE ev.Value=i.AccountValue AND ev.IsSummary='N'"
                 + " AND i.VAB_AccountBook_ID=ase.VAB_AccountBook_ID AND i.VAF_Client_ID=ev.VAF_Client_ID) "
                 + "WHERE Account_ID IS NULL AND AccountValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Account from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Account, '"
                 + "WHERE (Account_ID IS NULL OR Account_ID=0)"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid Account=" + no);
@@ -399,13 +399,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAB_BusinessPartner_ID=(SELECT bp.VAB_BusinessPartner_ID FROM VAB_BusinessPartner bp"
                 + " WHERE bp.Value=i.BPartnerValue AND bp.IsSummary='N' AND i.VAF_Client_ID=bp.VAF_Client_ID) "
                 + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set BPartner from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid BPartner, '"
                 + "WHERE VAB_BusinessPartner_ID IS NULL AND BPartnerValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid BPartner=" + no);
@@ -416,29 +416,29 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " WHERE (p.Value=i.ProductValue OR p.UPC=i.UPC OR p.SKU=i.SKU)"
                 + " AND p.IsSummary='N' AND i.VAF_Client_ID=p.VAF_Client_ID) "
                 + "WHERE M_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Product, '"
                 + "WHERE M_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid Product=" + no);
 
             //	Set Project
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET C_Project_ID=(SELECT p.C_Project_ID FROM C_Project p"
+                + "SET VAB_Project_ID=(SELECT p.VAB_Project_ID FROM VAB_Project p"
                 + " WHERE p.Value=i.ProjectValue AND p.IsSummary='N' AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE C_Project_ID IS NULL AND ProjectValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + "WHERE VAB_Project_ID IS NULL AND ProjectValue IS NOT NULL"
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Project from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Project, '"
-                + "WHERE C_Project_ID IS NULL AND ProjectValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + "WHERE VAB_Project_ID IS NULL AND ProjectValue IS NOT NULL"
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid Project=" + no);
@@ -448,13 +448,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAF_OrgTrx_ID=(SELECT o.VAF_Org_ID FROM VAF_Org o"
                 + " WHERE o.Value=i.OrgValue AND o.IsSummary='N' AND i.VAF_Client_ID=o.VAF_Client_ID) "
                 + "WHERE VAF_OrgTrx_ID IS NULL AND OrgTrxValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set OrgTrx from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid OrgTrx, '"
                 + "WHERE VAF_OrgTrx_ID IS NULL AND OrgTrxValue IS NOT NULL"
-                + " AND (C_ValidCombination_ID IS NULL OR C_ValidCombination_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
+                + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid OrgTrx=" + no);
@@ -574,7 +574,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Go through Journal Records
             sql = new StringBuilder("SELECT * FROM I_GLJournal "
                 + "WHERE I_IsImported='N'").Append(clientCheck)
-                .Append(" ORDER BY COALESCE(BatchDocumentNo, TO_NCHAR(I_GLJournal_ID)),	COALESCE(JournalDocumentNo, TO_NCHAR(I_GLJournal_ID)), VAB_AccountBook_ID, PostingType, VAB_DocTypes_ID, GL_Category_ID, VAB_Currency_ID, TRUNC(DateAcct,'DD'), Line, I_GLJournal_ID");
+                .Append(" ORDER BY COALESCE(BatchDocumentNo, TO_NCHAR(I_GLJournal_ID)),	COALESCE(JournalDocumentNo, TO_NCHAR(I_GLJournal_ID)), VAB_AccountBook_ID, PostingType, VAB_DocTypes_ID, VAGL_Group_ID, VAB_Currency_ID, TRUNC(DateAcct,'DD'), Line, I_GLJournal_ID");
             try
             {
                 //pstmt = DataBase.prepareStatement (sql.ToString (), get_TrxName());
@@ -635,7 +635,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || imp.IsCreateNewJournal()
                         || !JournalDocumentNo.Equals(impJournalDocumentNo)
                         || journal.GetVAB_DocTypes_ID() != imp.GetVAB_DocTypes_ID()
-                        || journal.GetGL_Category_ID() != imp.GetGL_Category_ID()
+                        || journal.GetVAGL_Group_ID() != imp.GetVAGL_Group_ID()
                         || !journal.GetPostingType().Equals(imp.GetPostingType())
                         || journal.GetVAB_Currency_ID() != imp.GetVAB_Currency_ID()
                         || !impDateAcct.Equals(DateAcct)
@@ -644,7 +644,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         JournalDocumentNo = impJournalDocumentNo;	//	cannot compare real DocumentNo
                         DateAcct = impDateAcct.Value;
                         journal = new MJournal(GetCtx(), 0, Get_TrxName());
-                        journal.SetGL_JournalBatch_ID(batch.GetGL_JournalBatch_ID());
+                        journal.SetVAGL_BatchJRNL_ID(batch.GetVAGL_BatchJRNL_ID());
                         journal.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_OrgDoc_ID());
                         //
                         String description = imp.GetBatchDescription();
@@ -656,13 +656,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //
                         journal.SetVAB_AccountBook_ID(imp.GetVAB_AccountBook_ID());
                         journal.SetVAB_DocTypes_ID(imp.GetVAB_DocTypes_ID());
-                        journal.SetGL_Category_ID(imp.GetGL_Category_ID());
+                        journal.SetVAGL_Group_ID(imp.GetVAGL_Group_ID());
                         journal.SetPostingType(imp.GetPostingType());
-                        journal.SetGL_Budget_ID(imp.GetGL_Budget_ID());
+                        journal.SetVAGL_Budget_ID(imp.GetVAGL_Budget_ID());
                         //
                         journal.SetCurrency(imp.GetVAB_Currency_ID(), imp.GetVAB_CurrencyType_ID(), imp.GetCurrencyRate());
                         //
-                        journal.SetC_Period_ID(imp.GetC_Period_ID());
+                        journal.SetVAB_YearPeriod_ID(imp.GetVAB_YearPeriod_ID());
                         journal.SetDateAcct(imp.GetDateAcct());		//	sets Period if not defined
                         journal.SetDateDoc(imp.GetDateAcct());
                         //
@@ -690,13 +690,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     line.SetDescription(imp.GetDescription());
                     line.SetCurrency(imp.GetVAB_Currency_ID(), imp.GetVAB_CurrencyType_ID(), imp.GetCurrencyRate());
                     //	Set/Get Account Combination
-                    if (imp.GetC_ValidCombination_ID() == 0)
+                    if (imp.GetVAB_Acct_ValidParameter_ID() == 0)
                     {
                         MAccount acct = MAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
                             imp.GetVAB_AccountBook_ID(), imp.GetAccount_ID(), 0,
                             imp.GetM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
-                            imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetC_SalesRegion_ID(),
-                            imp.GetC_Project_ID(), imp.GetVAB_Promotion_ID(), imp.GetVAB_BillingCode_ID(),
+                            imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetVAB_SalesRegionState_ID(),
+                            imp.GetVAB_Project_ID(), imp.GetVAB_Promotion_ID(), imp.GetVAB_BillingCode_ID(),
                             imp.GetUser1_ID(), imp.GetUser2_ID(), 0, 0);
                         if (acct != null && acct.Get_ID() == 0)
                             acct.Save();
@@ -709,12 +709,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
                         else
                         {
-                            line.SetC_ValidCombination_ID(acct.Get_ID());
-                            imp.SetC_ValidCombination_ID(acct.Get_ID());
+                            line.SetVAB_Acct_ValidParameter_ID(acct.Get_ID());
+                            imp.SetVAB_Acct_ValidParameter_ID(acct.Get_ID());
                         }
                     }
                     else
-                        line.SetC_ValidCombination_ID(imp.GetC_ValidCombination_ID());
+                        line.SetVAB_Acct_ValidParameter_ID(imp.GetVAB_Acct_ValidParameter_ID());
                     //
                     line.SetLine(imp.GetLine());
                     line.SetAmtSourceCr(imp.GetAmtSourceCr());
@@ -722,14 +722,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     line.SetAmtAcct(imp.GetAmtAcctDr(), imp.GetAmtAcctCr());	//	only if not 0
                     line.SetDateAcct(imp.GetDateAcct());
                     //
-                    line.SetC_UOM_ID(imp.GetC_UOM_ID());
+                    line.SetVAB_UOM_ID(imp.GetVAB_UOM_ID());
                     line.SetQty(imp.GetQty());
                     //
                     if (line.Save())
                     {
-                        imp.SetGL_JournalBatch_ID(batch.GetGL_JournalBatch_ID());
-                        imp.SetGL_Journal_ID(journal.GetGL_Journal_ID());
-                        imp.SetGL_JournalLine_ID(line.GetGL_JournalLine_ID());
+                        imp.SetVAGL_BatchJRNL_ID(batch.GetVAGL_BatchJRNL_ID());
+                        imp.SetVAGL_JRNL_ID(journal.GetVAGL_JRNL_ID());
+                        imp.SetVAGL_JRNLLine_ID(line.GetVAGL_JRNLLine_ID());
                         imp.SetI_IsImported(X_I_GLJournal.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         if (imp.Save())
@@ -755,9 +755,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             //
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@GL_JournalBatch_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertJournal), "@GL_Journal_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@GL_JournalLine_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAGL_BatchJRNL_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertJournal), "@VAGL_JRNL_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@VAGL_JRNLLine_ID@: @Inserted@");
             return "";
         }	//	doIt
 

@@ -1,9 +1,9 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : Doc_Order
+ * Class Name     : DoVAB_Order
  * Purpose        : Post Order Documents.
                     <pre>
-                    Table:              C_Order (259)
+                    Table:              VAB_Order (259)
                     Document Types:     SOO, POO
  *                  </pre>
  * Class Used     : Doc
@@ -30,7 +30,7 @@ using VAdvantage.Acct;
 
 namespace VAdvantage.Acct
 {
-    public class Doc_Order : Doc
+    public class DoVAB_Order : Doc
     {
 
         #region
@@ -48,12 +48,12 @@ namespace VAdvantage.Acct
         /// <param name="ass">accounting schemata</param>
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
-        public Doc_Order(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public DoVAB_Order(MAcctSchema[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MOrder), idr, null, trxName)
         {
 
         }
-        public Doc_Order(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public DoVAB_Order(MAcctSchema[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MOrder), dr, null, trxName)
         {
 
@@ -114,11 +114,11 @@ namespace VAdvantage.Acct
                 }
                 docLine.SetAmount(LineNetAmt);	//	DR
                 Decimal PriceList = line.GetPriceList();
-                int C_Tax_ID = docLine.GetC_Tax_ID();
+                int VAB_TaxRate_ID = docLine.GetVAB_TaxRate_ID();
                 //	Correct included Tax
-                if (IsTaxIncluded() && C_Tax_ID != 0)
+                if (IsTaxIncluded() && VAB_TaxRate_ID != 0)
                 {
-                    MTax tax = MTax.Get(GetCtx(), C_Tax_ID);
+                    MTax tax = MTax.Get(GetCtx(), VAB_TaxRate_ID);
                     if (!tax.IsZeroTax())
                     {
                         Decimal LineNetAmtTax = tax.CalculateTax(LineNetAmt.Value, true, GetStdPrecision());
@@ -126,7 +126,7 @@ namespace VAdvantage.Acct
                         LineNetAmt = Decimal.Subtract(LineNetAmt.Value, LineNetAmtTax);
                         for (int t = 0; t < _taxes.Length; t++)
                         {
-                            if (_taxes[t].GetC_Tax_ID() == C_Tax_ID)
+                            if (_taxes[t].GetVAB_TaxRate_ID() == VAB_TaxRate_ID)
                             {
                                 _taxes[t].AddIncludedTax(LineNetAmtTax);
                                 break;
@@ -159,16 +159,16 @@ namespace VAdvantage.Acct
             for (int i = 0; i < oLines.Length; i++)
             {
                 MOrderLine line = oLines[i];
-                qtys.Add(Utility.Util.GetValueOfInt(line.GetC_OrderLine_ID()), line.GetQtyOrdered());
+                qtys.Add(Utility.Util.GetValueOfInt(line.GetVAB_OrderLine_ID()), line.GetQtyOrdered());
             }
             //
             List<DocLine> list = new List<DocLine>();
             String sql = "SELECT * FROM M_RequisitionLine rl "
-                + "WHERE EXISTS (SELECT * FROM C_Order o "
-                    + " INNER JOIN C_OrderLine ol ON (o.C_Order_ID=ol.C_Order_ID) "
-                    + "WHERE ol.C_OrderLine_ID=rl.C_OrderLine_ID"
-                    + " AND o.C_Order_ID=" + order.GetC_Order_ID() + ") "
-                + "ORDER BY rl.C_OrderLine_ID";
+                + "WHERE EXISTS (SELECT * FROM VAB_Order o "
+                    + " INNER JOIN VAB_OrderLine ol ON (o.VAB_Order_ID=ol.VAB_Order_ID) "
+                    + "WHERE ol.VAB_OrderLine_ID=rl.VAB_OrderLine_ID"
+                    + " AND o.VAB_Order_ID=" + order.GetVAB_Order_ID() + ") "
+                + "ORDER BY rl.VAB_OrderLine_ID";
             IDataReader idr = null;
             try
             {
@@ -179,7 +179,7 @@ namespace VAdvantage.Acct
                     DocLine docLine = new DocLine(line, this);
                     //	Quantity - not more then OrderLine
                     //	Issue: Split of Requisition to multiple POs & different price
-                    int key = line.GetC_OrderLine_ID();
+                    int key = line.GetVAB_OrderLine_ID();
                     Decimal maxQty = qtys[key];
                     Decimal Qty = Math.Max(line.GetQty(), maxQty);
                     if (Env.Signum(Qty) == 0)
@@ -241,23 +241,23 @@ namespace VAdvantage.Acct
         private DocTax[] LoadTaxes()
         {
             List<DocTax> list = new List<DocTax>();
-            String sql = "SELECT it.C_Tax_ID, t.Name, t.Rate, it.TaxBaseAmt, it.TaxAmt, t.IsSalesTax "
-                + "FROM C_Tax t, C_OrderTax it "
-                + "WHERE t.C_Tax_ID=it.C_Tax_ID AND it.C_Order_ID=" + Get_ID();
+            String sql = "SELECT it.VAB_TaxRate_ID, t.Name, t.Rate, it.TaxBaseAmt, it.TaxAmt, t.IsSalesTax "
+                + "FROM VAB_TaxRate t, VAB_OrderTax it "
+                + "WHERE t.VAB_TaxRate_ID=it.VAB_TaxRate_ID AND it.VAB_Order_ID=" + Get_ID();
             IDataReader idr = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql, null, GetTrx());
                 while (idr.Read())
                 {
-                    int C_Tax_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                    int VAB_TaxRate_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     String name = Utility.Util.GetValueOfString(idr[1]);//.getString(2);
                     Decimal rate = Utility.Util.GetValueOfDecimal(idr[2]);//.getBigDecimal(3);
                     Decimal taxBaseAmt = Utility.Util.GetValueOfDecimal(idr[3]);//.getBigDecimal(4);
                     Decimal amount = Utility.Util.GetValueOfDecimal(idr[4]);//.getBigDecimal(5);
                     bool salesTax = "Y".Equals(Utility.Util.GetValueOfString(idr[5]));//.getString(6));
                     //
-                    DocTax taxLine = new DocTax(C_Tax_ID, name, rate, taxBaseAmt, amount, salesTax);
+                    DocTax taxLine = new DocTax(VAB_TaxRate_ID, name, rate, taxBaseAmt, amount, salesTax);
                     list.Add(taxLine);
                 }
                 //
@@ -431,10 +431,10 @@ namespace VAdvantage.Acct
             StringBuilder sql = new StringBuilder(
                 "UPDATE M_Product_PO po "
                 + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.VAB_Currency_ID,po.VAB_Currency_ID,o.DateOrdered,o.VAB_CurrencyType_ID,o.VAF_Client_ID,o.VAF_Org_ID) "
-                + "FROM C_Order o, C_OrderLine ol "
-                + "WHERE o.C_Order_ID=ol.C_Order_ID"
+                + "FROM VAB_Order o, VAB_OrderLine ol "
+                + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID"
                 + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID");
-            //	AND ROWNUM=1 AND o.C_Order_ID=").Append(get_ID()).Append(") ")
+            //	AND ROWNUM=1 AND o.VAB_Order_ID=").Append(get_ID()).Append(") ")
             if (DataBase.DB.IsOracle()) //jz
             {
                 sql.Append(" AND ROWNUM=1 ");
@@ -442,18 +442,18 @@ namespace VAdvantage.Acct
             else
             {
                 sql.Append(" AND o.UPDATED IN (SELECT MAX(o1.UPDATED) "
-                        + "FROM C_Order o1, C_OrderLine ol1 "
-                        + "WHERE o1.C_Order_ID=ol1.C_Order_ID"
+                        + "FROM VAB_Order o1, VAB_OrderLine ol1 "
+                        + "WHERE o1.VAB_Order_ID=ol1.VAB_Order_ID"
                         + " AND po.M_Product_ID=ol1.M_Product_ID AND po.VAB_BusinessPartner_ID=o1.VAB_BusinessPartner_ID")
-                        .Append("  AND o1.C_Order_ID=").Append(Get_ID()).Append(") ");
+                        .Append("  AND o1.VAB_Order_ID=").Append(Get_ID()).Append(") ");
             }
 
-            sql.Append(" AND o.C_Order_ID=").Append(Get_ID()).Append(") ")
+            sql.Append(" AND o.VAB_Order_ID=").Append(Get_ID()).Append(") ")
             .Append("WHERE EXISTS (SELECT * "
-            + "FROM C_Order o, C_OrderLine ol "
-            + "WHERE o.C_Order_ID=ol.C_Order_ID"
+            + "FROM VAB_Order o, VAB_OrderLine ol "
+            + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID"
             + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID"
-            + " AND o.C_Order_ID=").Append(Get_ID()).Append(")");
+            + " AND o.VAB_Order_ID=").Append(Get_ID()).Append(")");
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
             log.Fine("Updated=" + no);
         }
@@ -471,14 +471,14 @@ namespace VAdvantage.Acct
             int precision = -1;
             //
             List<DocLine> list = new List<DocLine>();
-            String sql = "SELECT * FROM C_OrderLine ol "
+            String sql = "SELECT * FROM VAB_OrderLine ol "
                 + "WHERE EXISTS "
                     + "(SELECT * FROM VAB_InvoiceLine il "
-                    + "WHERE il.C_OrderLine_ID=ol.C_OrderLine_ID"
+                    + "WHERE il.VAB_OrderLine_ID=ol.VAB_OrderLine_ID"
                     + " AND il.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")"
                 + " OR EXISTS "
                     + "(SELECT * FROM M_MatchPO po "
-                    + "WHERE po.C_OrderLine_ID=ol.C_OrderLine_ID"
+                    + "WHERE po.VAB_OrderLine_ID=ol.VAB_OrderLine_ID"
                     + " AND po.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")";
             IDataReader idr = null;
             try
@@ -521,11 +521,11 @@ namespace VAdvantage.Acct
 
                     docLine.SetAmount(LineNetAmt);	//	DR
                     Decimal PriceList = line.GetPriceList();
-                    int C_Tax_ID = docLine.GetC_Tax_ID();
+                    int VAB_TaxRate_ID = docLine.GetVAB_TaxRate_ID();
                     //	Correct included Tax
-                    if (C_Tax_ID != 0 && line.GetParent().IsTaxIncluded())
+                    if (VAB_TaxRate_ID != 0 && line.GetParent().IsTaxIncluded())
                     {
-                        MTax tax = MTax.Get(doc.GetCtx(), C_Tax_ID);
+                        MTax tax = MTax.Get(doc.GetCtx(), VAB_TaxRate_ID);
                         if (!tax.IsZeroTax())
                         {
                             Decimal LineNetAmtTax = tax.CalculateTax(LineNetAmt.Value, true, precision);
@@ -572,7 +572,7 @@ namespace VAdvantage.Acct
             Decimal Qty, int VAB_InvoiceLine_ID, Decimal multiplier)
         {
             Fact fact = new Fact(doc, as1, Fact.POST_Commitment);
-            DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
+            DocLine[] commitments = DoVAB_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
             Decimal total = Env.ZERO;
             int VAB_Currency_ID = -1;
             for (int i = 0; i < commitments.Length; i++)

@@ -14,7 +14,7 @@ namespace VAModelAD.Reflection
         /* MReportTree */
         private static MethodInfo _fnGetWhereClause = null;
 
-        internal static string GetTreeWhereClause(Ctx _ctx, string columnName, int _PA_Hierarchy_ID, int value)
+        internal static string GetTreeWhereClause(Ctx _ctx, string columnName, int _VAPA_FinancialReportingOrder_ID, int value)
         {
             if (_fnGetWhereClause == null)
             {
@@ -37,7 +37,7 @@ namespace VAModelAD.Reflection
                 {
                     ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Product;
                 }
-                else if (columnName.Equals("C_Project_ID", StringComparison.OrdinalIgnoreCase))
+                else if (columnName.Equals("VAB_Project_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Project;
                 }
@@ -54,7 +54,7 @@ namespace VAModelAD.Reflection
                     ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Campaign;
                 }
                 if(ele !="")
-                result1 = (string)_fnGetWhereClause.Invoke(null, new object[] { _ctx, _PA_Hierarchy_ID, ele, Convert.ToInt32(value) });
+                result1 = (string)_fnGetWhereClause.Invoke(null, new object[] { _ctx, _VAPA_FinancialReportingOrder_ID, ele, Convert.ToInt32(value) });
                 else 
                 result1 = null;
             }

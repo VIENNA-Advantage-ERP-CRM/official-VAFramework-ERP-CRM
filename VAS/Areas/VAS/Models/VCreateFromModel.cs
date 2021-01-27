@@ -50,7 +50,7 @@ namespace VIS.Models
                 }
             }
             //Added O.ISSALESQUOTATION='N' in where condition(Sales quotation will not display in Order dropdown)
-            StringBuilder sql = new StringBuilder("SELECT o.C_Order_ID," + display + " AS displays FROM C_Order o WHERE o.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
+            StringBuilder sql = new StringBuilder("SELECT o.VAB_Order_ID," + display + " AS displays FROM VAB_Order o WHERE o.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND o.IsSOTrx ='" + (IsSOTrx ? "Y" : "N")
                 + "' AND O.IsBlanketTrx = 'N' AND O.ISSALESQUOTATION='N' AND o.DocStatus IN ('CL','CO') ");
 
             if (OrgId > 0)
@@ -65,11 +65,11 @@ namespace VIS.Models
 
             // when create lines fom open from M_Inout then pick records from match po having m_inoutline is not null 
             // when create lines fom open from M_Invoiceline then pick records from match po having m_invoiceline is not null 
-            sql.Append("AND o.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND o.IsDropShip='" + (DropShip ? "Y" : "N") + "'  AND o.C_Order_ID IN "
-            + @"(SELECT C_Order_ID FROM (SELECT ol.C_Order_ID,ol.C_OrderLine_ID,ol.QtyOrdered, 
-            (SELECT SUM(m.qty) FROM m_matchPO m WHERE ol.C_OrderLine_ID=m.C_OrderLine_ID AND NVL(" + column + @", 0) != 0 AND m.ISACTIVE = 'Y' ) AS Qty,
+            sql.Append("AND o.IsReturnTrx='" + (isReturnTrx ? "Y" : "N") + "' AND o.IsDropShip='" + (DropShip ? "Y" : "N") + "'  AND o.VAB_Order_ID IN "
+            + @"(SELECT VAB_Order_ID FROM (SELECT ol.VAB_Order_ID,ol.VAB_OrderLine_ID,ol.QtyOrdered, 
+            (SELECT SUM(m.qty) FROM m_matchPO m WHERE ol.VAB_OrderLine_ID=m.VAB_OrderLine_ID AND NVL(" + column + @", 0) != 0 AND m.ISACTIVE = 'Y' ) AS Qty,
             (SELECT SUM(IL.QtyInvoiced)  FROM VAB_INVOICELINE IL INNER JOIN VAB_Invoice I ON I.VAB_INVOICE_ID = IL.VAB_INVOICE_ID
-            WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.C_ORDERLINE_ID  =IL.C_ORDERLINE_ID) AS QtyInvoiced FROM C_OrderLine ol ");
+            WHERE il.ISACTIVE = 'Y' AND I.DOCSTATUS NOT IN ('VO','RE') AND OL.VAB_ORDERLINE_ID  =IL.VAB_ORDERLINE_ID) AS QtyInvoiced FROM VAB_OrderLine ol ");
 
             // Get Orders based on the setting taken on Tenant to allow non item Product
             if (!forInvoices && tenant.Get_ColumnIndex("IsAllowNonItem") > 0 && !tenant.IsAllowNonItem())
@@ -77,7 +77,7 @@ namespace VIS.Models
                 sql.Append("INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID AND p.ProductType = 'I'");
             }
 
-            sql.Append(") t GROUP BY C_Order_ID,C_OrderLine_ID,QtyOrdered "
+            sql.Append(") t GROUP BY VAB_Order_ID,VAB_OrderLine_ID,QtyOrdered "
             + "HAVING QtyOrdered > SUM(nvl(Qty,0)) AND QtyOrdered > SUM(NVL(QtyInvoiced,0))) ORDER BY o.DateOrdered, o.DocumentNo");
 
             DataSet ds = DB.ExecuteDataset(sql.ToString());
@@ -87,7 +87,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     VCreateFromGetCOrder objc = new VCreateFromGetCOrder();
-                    objc.key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]);
+                    objc.key = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Order_ID"]);
                     objc.value = Util.GetValueOfString(ds.Tables[0].Rows[i]["displays"]);
                     obj.Add(objc);
                 }
@@ -120,7 +120,7 @@ namespace VIS.Models
 
             //+ "(SELECT M_InOut_ID FROM (SELECT sl.M_InOut_ID,sl.M_InOutLine_ID,sl.MovementQty,mi.Qty,IL.QtyInvoiced FROM M_InOutLine sl "
             //+ "LEFT OUTER JOIN M_MatchInv mi ON (sl.M_InOutLine_ID=mi.M_InOutLine_ID) "
-            //+ " LEFT OUTER JOIN VAB_INVOICELINE IL    ON (sl.C_ORDERLINE_ID =IL.C_ORDERLINE_ID)"
+            //+ " LEFT OUTER JOIN VAB_INVOICELINE IL    ON (sl.VAB_ORDERLINE_ID =IL.VAB_ORDERLINE_ID)"
             //+ " LEFT OUTER JOIN VAB_Invoice I   ON I.VAB_INVOICE_ID      =IL.VAB_INVOICE_ID "
             //+ " AND I.DOCSTATUS NOT   IN ('VO','RE') "
             //+ " WHERE (sl.MovementQty <> nvl(mi.Qty,0) OR SL.MovementQty     <> NVL(IL.QtyInvoiced,0)"
@@ -157,9 +157,9 @@ namespace VIS.Models
                 + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END ),2) as QUANTITY,"	//	2
                 + "round((l.MovementQty-SUM(COALESCE(mi.Qty,0))) * "					//	1               
                 + "(CASE WHEN l.MovementQty=0 THEN 0 ELSE l.QtyEntered/l.MovementQty END ),2) as QTYENTER,"	//	2
-                + " l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name)," // 3..4
+                + " l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name)," // 3..4
                 + " l.M_Product_ID,p.Name, l.M_InOutLine_ID,l.Line," // 5..8
-                + " l.C_OrderLine_ID ";
+                + " l.VAB_OrderLine_ID ";
 
             if (isBaseLanguageUmos != "")
             {
@@ -167,8 +167,8 @@ namespace VIS.Models
             }
             sql += " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) " +
                    "  LEFT OUTER JOIN M_MatchInv mi ON (l.M_InOutLine_ID=mi.M_InOutLine_ID) WHERE l.M_InOut_ID=" + MInOutIDs +
-                   "  GROUP BY l.MovementQty, l.QtyEntered," + "l.C_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name)," +
-                   "  l.M_Product_ID,p.Name, l.M_InOutLine_ID,l.Line,l.C_OrderLine_ID ORDER BY l.Line";
+                   "  GROUP BY l.MovementQty, l.QtyEntered," + "l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name)," +
+                   "  l.M_Product_ID,p.Name, l.M_InOutLine_ID,l.Line,l.VAB_OrderLine_ID ORDER BY l.Line";
 
 
             DataSet ds = DB.ExecuteDataset(sql);
@@ -256,7 +256,7 @@ namespace VIS.Models
             List<ExecuteQueryVinoutgen> obj = new List<ExecuteQueryVinoutgen>();
 
             string sql =
-                 "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
+                 "SELECT VAB_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
                  + "FROM M_InOut_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
                  + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
                  + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
@@ -284,7 +284,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     ExecuteQueryVinoutgen objc = new ExecuteQueryVinoutgen();
-                    objc.c_order_id = Util.GetValueOfInt(ds.Tables[0].Rows[i]["c_order_id"]);
+                    objc.VAB_Order_id = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Order_id"]);
                     objc.ord = Util.GetValueOfString(ds.Tables[0].Rows[i]["ord"]);
                     objc.doctype = Util.GetValueOfString(ds.Tables[0].Rows[i]["doctype"]);
                     objc.documentno = Util.GetValueOfString(ds.Tables[0].Rows[i]["documentno"]);
@@ -299,7 +299,7 @@ namespace VIS.Models
         }
 
         /// <summary>
-        /// get data from c_order
+        /// get data from VAB_Order
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="adClientID"></param>
@@ -311,7 +311,7 @@ namespace VIS.Models
         {
             List<ExecuteQueryVinoutgen> obj = new List<ExecuteQueryVinoutgen>();
 
-            var sql = "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
+            var sql = "SELECT VAB_Order_ID, o.Name as ord, dt.Name as docType, ic.DocumentNo, bp.Name as bpName, ic.DateOrdered, ic.TotalLines "
                       + "FROM VAB_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
                       + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
                       + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
@@ -341,7 +341,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     ExecuteQueryVinoutgen objc = new ExecuteQueryVinoutgen();
-                    objc.c_order_id = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Order_ID"]);
+                    objc.VAB_Order_id = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Order_ID"]);
                     objc.ord = Util.GetValueOfString(ds.Tables[0].Rows[i]["ord"]);
                     objc.doctype = Util.GetValueOfString(ds.Tables[0].Rows[i]["doctype"]);
                     objc.documentno = Util.GetValueOfString(ds.Tables[0].Rows[i]["documentno"]);
@@ -408,11 +408,11 @@ namespace VIS.Models
             }
             else if (displayMATCH_ORDERs != "")
             {
-                _sql.Append(@"SELECT hdr.C_Order_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.DateOrdered AS Dates, bp.Name AS BPNames,hdr.VAB_BusinessPartner_ID AS Bpartner_Id,
-                        lin.Line AS Lines,lin.C_OrderLine_ID AS Linek, p.Name as Product,lin.M_Product_ID AS Productk,lin.QtyOrdered AS qty,SUM(COALESCE(mo.Qty,0)) AS MATCH
-                        FROM C_Order hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN C_OrderLine lin ON (hdr.C_Order_ID=lin.C_Order_ID)
+                _sql.Append(@"SELECT hdr.VAB_Order_ID AS IDD,hdr.DocumentNo AS Docnum, hdr.DateOrdered AS Dates, bp.Name AS BPNames,hdr.VAB_BusinessPartner_ID AS Bpartner_Id,
+                        lin.Line AS Lines,lin.VAB_OrderLine_ID AS Linek, p.Name as Product,lin.M_Product_ID AS Productk,lin.QtyOrdered AS qty,SUM(COALESCE(mo.Qty,0)) AS MATCH
+                        FROM VAB_Order hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_OrderLine lin ON (hdr.VAB_Order_ID=lin.VAB_Order_ID)
                         INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID AND dt.DocBaseType='POO'
-                        AND dt.isReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + @" FULL JOIN M_MatchPO mo ON (lin.C_OrderLine_ID=mo.C_OrderLine_ID)
+                        AND dt.isReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + @" FULL JOIN M_MatchPO mo ON (lin.VAB_OrderLine_ID=mo.VAB_OrderLine_ID)
                         WHERE  hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? " AND mo.M_InOutLine_ID = " + MatchToID : ""));
 
                 //Conneted this condition because of partialy received qty from MR In case of Purcahse Order : Done by Manjot issue assigned by Puneet and Mukesh Sir
@@ -421,8 +421,8 @@ namespace VIS.Models
                 //    + (matched ? " IS NOT NULL" : " IS NULL")
                 //    + " AND
 
-                _groupBy = " GROUP BY hdr.C_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
-                    + " lin.Line,lin.C_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
+                _groupBy = " GROUP BY hdr.VAB_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
+                    + " lin.Line,lin.VAB_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
                     + "HAVING "
                     + (matched ? "0" : "lin.QtyOrdered")
                     + "<>SUM(COALESCE(mo.Qty,0)) ORDER BY hdr.DocumentNo";
@@ -434,7 +434,7 @@ namespace VIS.Models
                         FROM M_InOut hdr INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN M_InOutLine lin ON (hdr.M_InOut_ID=lin.M_InOut_ID)
                         INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID) INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID = dt.VAB_DocTypes_ID AND dt.DocBaseType='MMR'
                         AND dt.isReturnTrx = " + (chkIsReturnTrxProps ? "'Y')" : "'N')") + " FULL JOIN " + (matchToTypes == MATCH_ORDERs ? "M_MatchPO" : "M_MatchInv")
-                    + @" m ON (lin.M_InOutLine_ID=m.M_InOutLine_ID) WHERE hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? (matchToTypes == MATCH_ORDERs ? " AND m.C_OrderLine_ID = "
+                    + @" m ON (lin.M_InOutLine_ID=m.M_InOutLine_ID) WHERE hdr.DocStatus IN ('CO','CL')" + (matched && MatchToID != "" ? (matchToTypes == MATCH_ORDERs ? " AND m.VAB_OrderLine_ID = "
                     + MatchToID : " AND m.VAB_InvoiceLine_ID = " + MatchToID) : ""));
 
                 _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.VAB_BusinessPartner_ID,"
@@ -557,21 +557,21 @@ namespace VIS.Models
     {
         public int Quantity { get; set; }
         public int QuantityEntered { get; set; }
-        public int C_UOM_ID { get; set; }
+        public int VAB_UOM_ID { get; set; }
         public int M_Product_ID { get; set; }
-        public int C_Order_ID { get; set; }
+        public int VAB_Order_ID { get; set; }
         public int M_InOut_ID { get; set; }
         public int VAB_Invoice_ID { get; set; }
-        public int C_UOM_ID_K { get; set; }
+        public int VAB_UOM_ID_K { get; set; }
         public int M_Product_ID_K { get; set; }
-        public int C_Order_ID_K { get; set; }
+        public int VAB_Order_ID_K { get; set; }
         public int M_InOut_ID_K { get; set; }
         public int VAB_Invoice_ID_K { get; set; }
     }
 
     public class ExecuteQueryVinoutgen
     {
-        public int c_order_id { get; set; }
+        public int VAB_Order_id { get; set; }
         public string ord { get; set; }
         public string doctype { get; set; }
         public string documentno { get; set; }

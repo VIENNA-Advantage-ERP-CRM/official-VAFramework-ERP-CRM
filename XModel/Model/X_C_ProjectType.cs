@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ProjectType
+/** Generated Model for VAB_ProjectType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ProjectType : PO
+public class X_VAB_ProjectType : PO
 {
-public X_C_ProjectType (Context ctx, int C_ProjectType_ID, Trx trxName) : base (ctx, C_ProjectType_ID, trxName)
+public X_VAB_ProjectType (Context ctx, int VAB_ProjectType_ID, Trx trxName) : base (ctx, VAB_ProjectType_ID, trxName)
 {
-/** if (C_ProjectType_ID == 0)
+/** if (VAB_ProjectType_ID == 0)
 {
-SetC_ProjectType_ID (0);
+SetVAB_ProjectType_ID (0);
 SetName (null);
 SetProjectCategory (null);	// N
 }
  */
 }
-public X_C_ProjectType (Ctx ctx, int C_ProjectType_ID, Trx trxName) : base (ctx, C_ProjectType_ID, trxName)
+public X_VAB_ProjectType (Ctx ctx, int VAB_ProjectType_ID, Trx trxName) : base (ctx, VAB_ProjectType_ID, trxName)
 {
-/** if (C_ProjectType_ID == 0)
+/** if (VAB_ProjectType_ID == 0)
 {
-SetC_ProjectType_ID (0);
+SetVAB_ProjectType_ID (0);
 SetName (null);
 SetProjectCategory (null);	// N
 }
@@ -41,7 +41,7 @@ SetProjectCategory (null);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_ProjectType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_ProjectType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ProjectType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ProjectType()
+static X_VAB_ProjectType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389057592L;
 public static int Table_ID;
  // =575;
 
-/** TableName=C_ProjectType */
-public static String Table_Name="C_ProjectType";
+/** TableName=VAB_ProjectType */
+public static String Table_Name="VAB_ProjectType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,21 +111,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ProjectType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ProjectType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Project Type.
-@param C_ProjectType_ID Type of the project */
-public void SetC_ProjectType_ID (int C_ProjectType_ID)
+@param VAB_ProjectType_ID Type of the project */
+public void SetVAB_ProjectType_ID (int VAB_ProjectType_ID)
 {
-if (C_ProjectType_ID < 1) throw new ArgumentException ("C_ProjectType_ID is mandatory.");
-Set_ValueNoCheck ("C_ProjectType_ID", C_ProjectType_ID);
+if (VAB_ProjectType_ID < 1) throw new ArgumentException ("VAB_ProjectType_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ProjectType_ID", VAB_ProjectType_ID);
 }
 /** Get Project Type.
 @return Type of the project */
-public int GetC_ProjectType_ID() 
+public int GetVAB_ProjectType_ID() 
 {
-Object ii = Get_Value("C_ProjectType_ID");
+Object ii = Get_Value("VAB_ProjectType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

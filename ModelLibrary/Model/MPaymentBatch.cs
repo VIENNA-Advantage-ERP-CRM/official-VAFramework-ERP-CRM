@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_PaymentBatch
+ * Class Used     : X_VAB_PaymentBatch
  * Chronological Development
  * Veena Pandey     24-June-2009
  ******************************************************/
@@ -16,18 +16,18 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-    public class MPaymentBatch : X_C_PaymentBatch
+    public class MPaymentBatch : X_VAB_PaymentBatch
     {
        /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_PaymentBatch_ID">id</param>
+        /// <param name="VAB_PaymentBatch_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentBatch(Ctx ctx, int C_PaymentBatch_ID, Trx trxName)
-            : base(ctx, C_PaymentBatch_ID, trxName)
+        public MPaymentBatch(Ctx ctx, int VAB_PaymentBatch_ID, Trx trxName)
+            : base(ctx, VAB_PaymentBatch_ID, trxName)
         {
-            if (C_PaymentBatch_ID == 0)
+            if (VAB_PaymentBatch_ID == 0)
             {
                 //	setName (null);
                 SetProcessed(false);
@@ -73,12 +73,12 @@ namespace VAdvantage.Model
         /// Get Payment Batch for PaySelection
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_PaySelection_ID">id</param>
+        /// <param name="VAB_PaymentOption_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>payment batch</returns>
-        public static MPaymentBatch GetForPaySelection(Ctx ctx, int C_PaySelection_ID, Trx trxName)
+        public static MPaymentBatch GetForPaySelection(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName)
         {
-            MPaySelection ps = new MPaySelection(ctx, C_PaySelection_ID, trxName);
+            MPaySelection ps = new MPaySelection(ctx, VAB_PaymentOption_ID, trxName);
             MPaymentBatch retValue = new MPaymentBatch(ps);
             return retValue;
         }

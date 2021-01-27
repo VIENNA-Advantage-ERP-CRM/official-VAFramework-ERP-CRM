@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MGoal
  * Purpose        : Performance Goal
- * Class Used     : X_PA_Goal
+ * Class Used     : X_VAPA_Target
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MGoal : X_PA_Goal
+    public class MGoal : X_VAPA_Target
     {
         /**
          * 	Get User Goals
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
             if (VAF_UserContact_ID < 0)
                 return GetTestGoals(ctx);
             List<MGoal> list = new List<MGoal>();
-            String sql = "SELECT * FROM PA_Goal g "
+            String sql = "SELECT * FROM VAPA_Target g "
                 + "WHERE IsActive='Y'"
                 + " AND VAF_Client_ID=@ADClientID"		//	#1
                 + " AND ((VAF_UserContact_ID IS NULL AND VAF_Role_ID IS NULL)"
@@ -90,9 +90,9 @@ namespace VAdvantage.Model
         public static MGoal[] GetGoals(Ctx ctx)
         {
             List<MGoal> list = new List<MGoal>();
-            String sql = "SELECT * FROM PA_Goal WHERE IsActive='Y' "
+            String sql = "SELECT * FROM VAPA_Target WHERE IsActive='Y' "
                 + "ORDER BY SeqNo";
-            sql = MRole.GetDefault(ctx, false).AddAccessSQL(sql, "PA_Goal",
+            sql = MRole.GetDefault(ctx, false).AddAccessSQL(sql, "VAPA_Target",
                 false, true);	//	RW to restrict Access
             DataTable dt = null;
             IDataReader idr = null;
@@ -152,13 +152,13 @@ namespace VAdvantage.Model
         /**
          * 	Get Goals with Measure
          *	@param ctx context
-         *	@param PA_Measure_ID measure
+         *	@param VAPA_Evaluate_ID measure
          *	@return goals
          */
-        public static MGoal[] GetMeasureGoals(Ctx ctx, int PA_Measure_ID)
+        public static MGoal[] GetMeasureGoals(Ctx ctx, int VAPA_Evaluate_ID)
         {
             List<MGoal> list = new List<MGoal>();
-            String sql = "SELECT * FROM PA_Goal WHERE IsActive='Y' AND PA_Measure_ID= " + PA_Measure_ID
+            String sql = "SELECT * FROM VAPA_Target WHERE IsActive='Y' AND VAPA_Evaluate_ID= " + VAPA_Evaluate_ID
                 + " ORDER BY SeqNo";
             DataTable dt;
             IDataReader idr = null;
@@ -271,18 +271,18 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param PA_Goal_ID id
+         *	@param VAPA_Target_ID id
          *	@param trxName trx
          */
-        public MGoal(Ctx ctx, int PA_Goal_ID, Trx trxName) :
-            base(ctx, PA_Goal_ID, trxName)
+        public MGoal(Ctx ctx, int VAPA_Target_ID, Trx trxName) :
+            base(ctx, VAPA_Target_ID, trxName)
         {
             //super ();
-            if (PA_Goal_ID == 0)
+            if (VAPA_Target_ID == 0)
             {
                 //	SetName (null);
                 //	SetVAF_UserContact_ID (0);
-                //	SetPA_ColorSchema_ID (0);
+                //	SetVAPA_Color_ID (0);
                 SetSeqNo(0);
                 SetIsSummary(false);
                 SetMeasureScope(MEASUREDISPLAY_Year);
@@ -338,8 +338,8 @@ namespace VAdvantage.Model
                 return _restrictions;
             List<MGoalRestriction> list = new List<MGoalRestriction>();
             //
-            String sql = "SELECT * FROM PA_GoalRestriction "
-                + "WHERE PA_Goal_ID=@PA_Goal_ID AND IsActive='Y' "
+            String sql = "SELECT * FROM VAPA_TargetRestriction "
+                + "WHERE VAPA_Target_ID=@VAPA_Target_ID AND IsActive='Y' "
                 + "ORDER BY Org_ID, VAB_BusinessPartner_ID, M_Product_ID";
             DataTable dt;
             IDataReader idr = null;
@@ -379,8 +379,8 @@ namespace VAdvantage.Model
          */
         public MMeasure GetMeasure()
         {
-            if (GetPA_Measure_ID() != 0)
-                return MMeasure.Get(GetCtx(), GetPA_Measure_ID());
+            if (GetVAPA_Evaluate_ID() != 0)
+                return MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
             return null;
         }
 
@@ -393,7 +393,7 @@ namespace VAdvantage.Model
         public Boolean UpdateGoal(Boolean force)
         {
            log.Config("Force=" + force);
-            MMeasure measure = MMeasure.Get(GetCtx(), GetPA_Measure_ID());
+            MMeasure measure = MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
             if (force
                 || GetDateLastRun() == null
                 || !TimeUtil.IsSameHour(GetDateLastRun(), null))
@@ -466,7 +466,7 @@ namespace VAdvantage.Model
         //    if (Env.Signum(GetMeasureTarGet()) == 0)
         //        return Color.white;
         //    else
-        //        return MColorSchema.GetColor(GetCtx(), GetPA_ColorSchema_ID(), GetPercent());
+        //        return MColorSchema.GetColor(GetCtx(), GetVAPA_Color_ID(), GetPercent());
         //}
 
         /**
@@ -477,7 +477,7 @@ namespace VAdvantage.Model
         //public MColorSchema GetColorSchema()
         //{
         //    return (Env.Signum(GetMeasureTarget()) == 0) ?
-        //        null : MColorSchema.Get(GetCtx(), GetPA_ColorSchema_ID());
+        //        null : MColorSchema.Get(GetCtx(), GetVAPA_Color_ID());
         //}
 
         /**
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
                 if (MMeasure.MEASURETYPE_Request.Equals(measure.GetMeasureType()))
                     return Msg.GetElement(GetCtx(), "R_Status_ID");
                 if (MMeasure.MEASURETYPE_Project.Equals(measure.GetMeasureType()))
-                    return Msg.GetElement(GetCtx(), "C_Phase_ID");
+                    return Msg.GetElement(GetCtx(), "VAB_Std_Stage_ID");
             }
             String value = GetMeasureDisplay();
             String display = MRefList.GetListName(GetCtx(), MEASUREDISPLAY_VAF_Control_Ref_ID, value);
@@ -550,13 +550,13 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             //	Measure required if nor Summary
-            if (!IsSummary() && GetPA_Measure_ID() == 0)
+            if (!IsSummary() && GetVAPA_Evaluate_ID() == 0)
             {
-               log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "PA_Measure_ID"));
+               log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAPA_Evaluate_ID"));
                 return false;
             }
-            if (IsSummary() && GetPA_Measure_ID() != 0)
-                SetPA_Measure_ID(0);
+            if (IsSummary() && GetVAPA_Evaluate_ID() != 0)
+                SetVAPA_Evaluate_ID(0);
 
             //	User/Role Check
             if ((newRecord || Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("VAF_Role_ID"))

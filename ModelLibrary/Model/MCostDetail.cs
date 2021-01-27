@@ -41,7 +41,7 @@ namespace VAdvantage.Model
                 //	setVAB_AccountBook_ID (0);
                 //	setM_Product_ID (0);
                 SetM_AttributeSetInstance_ID(0);
-                //	setC_OrderLine_ID (0);
+                //	setVAB_OrderLine_ID (0);
                 //	setM_InOutLine_ID(0);
                 //	setVAB_InvoiceLine_ID (0);
                 SetProcessed(false);
@@ -142,9 +142,9 @@ namespace VAdvantage.Model
                 else if (WindowName == "Material Receipt" || WindowName == "Shipment" || WindowName == "Customer Return" || WindowName == "Return To Vendor")
                 {
                     cd.SetM_InOutLine_ID(inoutline.GetM_InOutLine_ID());
-                    if (inoutline.GetC_OrderLine_ID() > 0)
+                    if (inoutline.GetVAB_OrderLine_ID() > 0)
                     {
-                        cd.SetC_OrderLine_ID(inoutline.GetC_OrderLine_ID());
+                        cd.SetVAB_OrderLine_ID(inoutline.GetVAB_OrderLine_ID());
                     }
                     if (WindowName == "Material Receipt" || WindowName == "Return To Vendor")
                     {
@@ -159,9 +159,9 @@ namespace VAdvantage.Model
                 {
                     cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     cd.SetIsSOTrx(false);
-                    if (invoiceline.GetC_OrderLine_ID() > 0)
+                    if (invoiceline.GetVAB_OrderLine_ID() > 0)
                     {
-                        cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
+                        cd.SetVAB_OrderLine_ID(invoiceline.GetVAB_OrderLine_ID());
                     }
                     if (invoiceline.GetM_InOutLine_ID() > 0)
                     {
@@ -179,17 +179,17 @@ namespace VAdvantage.Model
                 {
                     cd.SetVAB_InvoiceLine_ID(invoiceline.GetVAB_InvoiceLine_ID());
                     cd.SetIsSOTrx(true);
-                    if (invoiceline.GetC_OrderLine_ID() > 0)
+                    if (invoiceline.GetVAB_OrderLine_ID() > 0)
                     {
-                        cd.SetC_OrderLine_ID(invoiceline.GetC_OrderLine_ID());
+                        cd.SetVAB_OrderLine_ID(invoiceline.GetVAB_OrderLine_ID());
                     }
                     if (invoiceline.GetM_InOutLine_ID() > 0)
                     {
                         cd.SetM_InOutLine_ID(invoiceline.GetM_InOutLine_ID());
                     }
-                    else if (invoiceline.GetC_OrderLine_ID() > 0)
+                    else if (invoiceline.GetVAB_OrderLine_ID() > 0)
                     {
-                        cd.SetM_InOutLine_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT m_inoutline_id FROM m_inoutline WHERE isactive     = 'Y' AND c_orderline_id = " + invoiceline.GetC_OrderLine_ID(), null, null)));
+                        cd.SetM_InOutLine_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT m_inoutline_id FROM m_inoutline WHERE isactive     = 'Y' AND VAB_Orderline_id = " + invoiceline.GetVAB_OrderLine_ID(), null, null)));
                     }
                 }
                 bool ok = cd.Save();
@@ -482,7 +482,7 @@ namespace VAdvantage.Model
                         sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
-                                     @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
+                                     @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
                                      @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
                             sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
-                                     @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) =  " + cd.GetC_OrderLine_ID() +
+                                     @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) =  " + cd.GetVAB_OrderLine_ID() +
                                      @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND cq.M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
                             sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced LEFT JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
-                                        @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.C_OrderLIne_ID , 0) = 0 " +
+                                        @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
                                         @" AND NVL(ced.VAB_InvoiceLine_ID , 0) = 0 AND NVL(cq.M_CostElement_ID , 0)  = 0 " +
                                         @" AND ced.VAF_Client_ID = " + cd.GetVAF_Client_ID();
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
@@ -515,19 +515,19 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                      " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                      " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                     " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
+                                     " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                          " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
+                                         " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
                         }
                         else
                         {
                             sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " + ce.GetM_CostElement_ID() +
                                              " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
+                                             " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
                         }
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
 
@@ -537,13 +537,13 @@ namespace VAdvantage.Model
                                          " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                          " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                          " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                         " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
+                                         " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0", null, Get_Trx())) > 0)
                             {
                                 sql = @"SELECT Amt/Qty FROM M_CostElementDetail WHERE IsActive = 'Y' AND M_Product_ID = " + product.GetM_Product_ID() +
                                              " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                              " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                              " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                             " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
+                                             " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = 0";
                             }
                             else
                             {
@@ -551,7 +551,7 @@ namespace VAdvantage.Model
                                                  " AND VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + " AND M_CostElement_ID = " +
                                                  " ( SELECT MIN(M_CostElement_ID) FROM M_CostElement WHERE IsActive = 'Y' AND CostingMethod = 'I' AND VAF_Client_ID = " + ce.GetVAF_Client_ID() + ")" +
                                                  " AND NVL(M_AttributeSetInstance_ID, 0) = " + M_ASI_ID + " AND M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() +
-                                                 " AND NVL(C_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
+                                                 " AND NVL(VAB_OrderLIne_ID , 0) = 0 AND NVL(VAB_InvoiceLine_ID , 0) = " + cd.GetVAB_InvoiceLine_ID();
                             }
                             MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
@@ -766,7 +766,7 @@ namespace VAdvantage.Model
 
                 if (ce.IsAverageInvoice())
                 {
-                    if (cd.GetC_OrderLine_ID() > 0)
+                    if (cd.GetVAB_OrderLine_ID() > 0)
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) <= 0)
                         {
@@ -792,7 +792,7 @@ namespace VAdvantage.Model
                 }
                 else if (ce.IsLastInvoice())
                 {
-                    if (cd.GetC_OrderLine_ID() > 0)
+                    if (cd.GetVAB_OrderLine_ID() > 0)
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) <= 0)
                         {
@@ -829,7 +829,7 @@ namespace VAdvantage.Model
                 }
                 else if (ce.IsStandardCosting())
                 {
-                    if (cd.GetC_OrderLine_ID() > 0)
+                    if (cd.GetVAB_OrderLine_ID() > 0)
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) <= 0)
                         {
@@ -856,7 +856,7 @@ namespace VAdvantage.Model
                 }
                 else if (ce.IsLifo() || ce.IsFifo())
                 {
-                    if (cd.GetC_OrderLine_ID() > 0)
+                    if (cd.GetVAB_OrderLine_ID() > 0)
                     {
                         if (Decimal.Add(cost.GetCurrentQty(), qty) <= 0)
                         {
@@ -959,10 +959,10 @@ namespace VAdvantage.Model
             //            }
 
             //	*** Purchase Order Detail Record ***
-            if (GetC_OrderLine_ID() != 0 && windowName == "Material Receipt")
+            if (GetVAB_OrderLine_ID() != 0 && windowName == "Material Receipt")
             {
                 #region Material Receipt with Purchase Order
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), null);
+                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
@@ -1070,7 +1070,7 @@ namespace VAdvantage.Model
                                            ced.m_costelementdetail_id,  ced.M_CostElement_ID,  row_number() over(order by ced.m_costelementdetail_id desc nulls last) rnm
                                            FROM m_costelementdetail ced inner join m_inoutline il on il.m_inoutline_id = ced.m_inoutline_id
                                            inner join m_inout i on i.m_inout_id = il.m_inout_id 
-                                           WHERE ced.m_inoutline_id > 0 AND ced.C_Orderline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
+                                           WHERE ced.m_inoutline_id > 0 AND ced.VAB_Orderline_ID > 0 AND ced.qty > 0 AND ced.M_CostElement_ID in ( " + ce.GetM_CostElement_ID() + @" ) 
                                            and i.docstatus in ('CO' , 'CL') AND ced.VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() +
                                            @" AND ced.M_Product_ID = " + GetM_Product_ID() + @" AND ced.VAF_Org_ID = " + Org_ID +
                                            @" AND NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @"
@@ -1155,7 +1155,7 @@ namespace VAdvantage.Model
             {
                 #region AP Invoice Detail Record
                 bool isReturnTrx = Env.Signum(qty) < 0;
-                if (GetM_InOutLine_ID() > 0 || GetC_OrderLine_ID() > 0)
+                if (GetM_InOutLine_ID() > 0 || GetVAB_OrderLine_ID() > 0)
                 {
                     invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
                     invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
@@ -1163,7 +1163,7 @@ namespace VAdvantage.Model
                 }
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_LCostDistribution WHERE  VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID(), null, Get_Trx())) <= 0)
                 {
-                    if (GetC_OrderLine_ID() == 0) // if invoice created without orderline  then no impact on cost
+                    if (GetVAB_OrderLine_ID() == 0) // if invoice created without orderline  then no impact on cost
                     {
                         // 20-4-2016
                         if (windowName == "Invoice(APC)")
@@ -1546,7 +1546,7 @@ namespace VAdvantage.Model
                         //        if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         //        {
                         //            cost.SetCurrentCostPrice(MCost.GetSeedCosts(product, M_ASI_ID,
-                        //                    mas, Org_ID, ce.GetCostingMethod(), GetC_OrderLine_ID()));
+                        //                    mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         //        }
                         //    }
                         //    if (cost.GetCurrentCostPrice() != 0)
@@ -1564,7 +1564,7 @@ namespace VAdvantage.Model
                                 if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                                 {
                                     cost.SetCurrentCostPrice(MCost.GetSeedCosts(product, M_ASI_ID,
-                                            mas, Org_ID, ce.GetCostingMethod(), GetC_OrderLine_ID()));
+                                            mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                                 }
                             }
                             cost.Add(amt, qty);
@@ -1631,7 +1631,7 @@ namespace VAdvantage.Model
                 || GetM_MovementLine_ID() != 0
                 || GetM_InventoryLine_ID() != 0
                 || GetM_ProductionLine_ID() != 0
-                || GetC_ProjectIssue_ID() != 0
+                || GetVAB_ProjectSupply_ID() != 0
                 || GetM_WorkOrderTransactionLine_ID() != 0
                 || GetVAMFG_M_WrkOdrTrnsctionLine_ID() != 0
                 || GetM_WorkOrderResourceTxnLine_ID() != 0
@@ -1659,7 +1659,7 @@ namespace VAdvantage.Model
                     // In case of Invoice against Return To Vendor - impacts come with Invoice Amount
                     amt = GetAmt();
                 }
-                else if (windowName.Equals("Return To Vendor") && GetC_OrderLine_ID() > 0)
+                else if (windowName.Equals("Return To Vendor") && GetVAB_OrderLine_ID() > 0)
                 {
                     amt = GetAmt();
                 }
@@ -2326,7 +2326,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                                 // Accumulation qty / amt and Currentcostprice affceted
-                                if (windowName.Equals("Return To Vendor") && GetC_OrderLine_ID() > 0)
+                                if (windowName.Equals("Return To Vendor") && GetVAB_OrderLine_ID() > 0)
                                 {
                                     cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), cd.GetAmt()));
                                     cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
@@ -2490,7 +2490,7 @@ namespace VAdvantage.Model
                         {
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        if (GetC_OrderLine_ID() > 0)
+                        if (GetVAB_OrderLine_ID() > 0)
                         {
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), cd.GetAmt()));
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
@@ -2596,7 +2596,7 @@ namespace VAdvantage.Model
                             {
                                 return false;
                             }
-                            else if (GetC_OrderLine_ID() > 0)
+                            else if (GetVAB_OrderLine_ID() > 0)
                             {
                                 cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                                 cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
@@ -2747,7 +2747,7 @@ namespace VAdvantage.Model
                         {
                             return false;
                         }
-                        else if (GetC_OrderLine_ID() > 0)
+                        else if (GetVAB_OrderLine_ID() > 0)
                         {
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), amt));
@@ -3309,7 +3309,7 @@ namespace VAdvantage.Model
                             {
                                 cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                                 //Accumulation qty / amt  affeceted
-                                if (windowName.Equals("Return To Vendor") && GetC_OrderLine_ID() > 0)
+                                if (windowName.Equals("Return To Vendor") && GetVAB_OrderLine_ID() > 0)
                                 {
                                     cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), cd.GetAmt()));
                                     cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
@@ -3443,7 +3443,7 @@ namespace VAdvantage.Model
                         {
                             cost.SetCurrentQty(Decimal.Add(cost.GetCurrentQty(), qty));
                         }
-                        if (GetC_OrderLine_ID() > 0)
+                        if (GetVAB_OrderLine_ID() > 0)
                         {
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), cd.GetAmt()));
                             cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
@@ -4603,7 +4603,7 @@ namespace VAdvantage.Model
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
-        /// <param name="C_OrderLine_ID">order</param>
+        /// <param name="VAB_OrderLine_ID">order</param>
         /// <param name="M_CostElement_ID">optional cost element</param>
         /// <param name="Amt">total amount</param>
         /// <param name="Qty">quantity</param>
@@ -4611,28 +4611,28 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
         public static bool CreateOrder(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
-            int M_AttributeSetInstance_ID, int C_OrderLine_ID, int M_CostElement_ID,
+            int M_AttributeSetInstance_ID, int VAB_OrderLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
 
             //	Delete Unprocessed zero Differences
             String sql = "DELETE FROM M_CostDetail "
                 + "WHERE Processed='N' AND COALESCE(DeltaAmt,0)=0 AND COALESCE(DeltaQty,0)=0"
-                + " AND C_OrderLine_ID=" + C_OrderLine_ID
+                + " AND VAB_OrderLine_ID=" + VAB_OrderLine_ID
                 + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);
             if (no != 0)
             {
                 _log.Config("Deleted #" + no);
             }
-            MCostDetail cd = Get(mas.GetCtx(), "C_OrderLine_ID=@param1 AND M_AttributeSetInstance_ID=@param2",
-                C_OrderLine_ID, M_AttributeSetInstance_ID, trxName);
+            MCostDetail cd = Get(mas.GetCtx(), "VAB_OrderLine_ID=@param1 AND M_AttributeSetInstance_ID=@param2",
+                VAB_OrderLine_ID, M_AttributeSetInstance_ID, trxName);
             //
             if (cd == null)		//	createNew cost deatil for selected product
             {
                 cd = new MCostDetail(mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID,
                     M_CostElement_ID, Amt, Qty, Description, trxName);
-                cd.SetC_OrderLine_ID(C_OrderLine_ID);
+                cd.SetVAB_OrderLine_ID(VAB_OrderLine_ID);
             }
             else
             {
@@ -4645,7 +4645,7 @@ namespace VAdvantage.Model
                             M_CostElement_ID, Amt, Qty, Description, trxName);
                     }
                     //CostSetByProcess(cd, mas, VAF_Org_ID, M_Product_ID, M_AttributeSetInstance_ID, M_CostElement_ID, Amt, Qty, Description, trxName, RectifyPostedRecords);
-                    cd.SetC_OrderLine_ID(C_OrderLine_ID);
+                    cd.SetVAB_OrderLine_ID(VAB_OrderLine_ID);
                     /*****************************************/
                     cd.SetVAB_AccountBook_ID(mas.GetVAB_AccountBook_ID());
                     cd.SetM_Product_ID(M_Product_ID);
@@ -4991,7 +4991,7 @@ namespace VAdvantage.Model
         /// <returns>true if order line</returns>
         public bool IsOrder()
         {
-            return GetC_OrderLine_ID() != 0;
+            return GetVAB_OrderLine_ID() != 0;
         }
 
         /// <summary>
@@ -5113,11 +5113,11 @@ namespace VAdvantage.Model
             {
                 if (product.IsOneAssetPerUOM())
                 {
-                    if (GetC_OrderLine_ID() > 0)
+                    if (GetVAB_OrderLine_ID() > 0)
                     {
                         qry = @"SELECT ast.VAA_Asset_ID from VAA_Asset ast INNER JOIN M_InOutLine inl ON (ast.M_InOutLine_ID = inl.M_InOutLine_ID)
-                            INNER JOIN C_OrderLine odl ON (inl.C_OrderLine_ID = odl.C_OrderLine_ID) Where ast.IsActive='Y' 
-                            AND ast.M_Product_ID=" + product.GetM_Product_ID() + " AND inl.C_OrderLine_ID=" + GetC_OrderLine_ID();
+                            INNER JOIN VAB_OrderLine odl ON (inl.VAB_OrderLine_ID = odl.VAB_OrderLine_ID) Where ast.IsActive='Y' 
+                            AND ast.M_Product_ID=" + product.GetM_Product_ID() + " AND inl.VAB_OrderLine_ID=" + GetVAB_OrderLine_ID();
                     }
                     else
                     {
@@ -5194,9 +5194,9 @@ namespace VAdvantage.Model
             **/
 
             //	*** Purchase Order Detail Record ***
-            if (GetC_OrderLine_ID() != 0)
+            if (GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), null);
+                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
@@ -5310,7 +5310,7 @@ namespace VAdvantage.Model
                         if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         {
                             cost.SetCurrentCostPrice(MCost.GetSeedCosts(product, M_ASI_ID,
-                                    mas, Org_ID, ce.GetCostingMethod(), GetC_OrderLine_ID()));
+                                    mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         }
                     }
                     cost.Add(amt, qty);
@@ -5347,7 +5347,7 @@ namespace VAdvantage.Model
                 || GetM_MovementLine_ID() != 0
                 || GetM_InventoryLine_ID() != 0
                 || GetM_ProductionLine_ID() != 0
-                || GetC_ProjectIssue_ID() != 0
+                || GetVAB_ProjectSupply_ID() != 0
                 || GetM_WorkOrderTransactionLine_ID() != 0
                 || GetM_WorkOrderResourceTxnLine_ID() != 0)
             {
@@ -5518,14 +5518,14 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MCostDetail[");
             sb.Append(Get_ID());
-            if (GetC_OrderLine_ID() != 0)
-                sb.Append(",C_OrderLine_ID=").Append(GetC_OrderLine_ID());
+            if (GetVAB_OrderLine_ID() != 0)
+                sb.Append(",VAB_OrderLine_ID=").Append(GetVAB_OrderLine_ID());
             if (GetM_InOutLine_ID() != 0)
                 sb.Append(",M_InOutLine_ID=").Append(GetM_InOutLine_ID());
             if (GetVAB_InvoiceLine_ID() != 0)
                 sb.Append(",VAB_InvoiceLine_ID=").Append(GetVAB_InvoiceLine_ID());
-            if (GetC_ProjectIssue_ID() != 0)
-                sb.Append(",C_ProjectIssue_ID=").Append(GetC_ProjectIssue_ID());
+            if (GetVAB_ProjectSupply_ID() != 0)
+                sb.Append(",VAB_ProjectSupply_ID=").Append(GetVAB_ProjectSupply_ID());
             if (GetM_MovementLine_ID() != 0)
                 sb.Append(",M_MovementLine_ID=").Append(GetM_MovementLine_ID());
             if (GetM_InventoryLine_ID() != 0)
@@ -5579,9 +5579,9 @@ namespace VAdvantage.Model
             **/
 
             //	*** Purchase Order Detail Record ***
-            if (GetC_OrderLine_ID() != 0)
+            if (GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), null);
+                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
@@ -5607,9 +5607,9 @@ namespace VAdvantage.Model
 
 
                     string lastPrice = "select round(amt/ qty,6) as Price from m_costdetail where m_product_id="
-                        + cost.GetM_Product_ID() + " and c_orderline_id is NOT NULL and c_orderline_id<> @param1"
+                        + cost.GetM_Product_ID() + " and VAB_Orderline_id is NOT NULL and VAB_Orderline_id<> @param1"
                         + " ORDER BY m_costdetail_id DESC";
-                    cost.SetCurrentCostPrice(DB.GetSQLValueBD(Get_TrxName(), lastPrice, GetC_OrderLine_ID()));
+                    cost.SetCurrentCostPrice(DB.GetSQLValueBD(Get_TrxName(), lastPrice, GetVAB_OrderLine_ID()));
 
                     cost.Add(amt, qty);
 
@@ -5713,7 +5713,7 @@ namespace VAdvantage.Model
                         if (Env.Signum(cost.GetCurrentCostPrice()) == 0 && cost.Get_ID() == 0)
                         {
                             cost.SetCurrentCostPrice(MCost.GetSeedCosts(product, M_ASI_ID,
-                                    mas, Org_ID, ce.GetCostingMethod(), GetC_OrderLine_ID()));
+                                    mas, Org_ID, ce.GetCostingMethod(), GetVAB_OrderLine_ID()));
                         }
                     }
                     cost.Add(amt, qty);
@@ -5741,7 +5741,7 @@ namespace VAdvantage.Model
                 || GetM_MovementLine_ID() != 0
                 || GetM_InventoryLine_ID() != 0
                 || GetM_ProductionLine_ID() != 0
-                || GetC_ProjectIssue_ID() != 0
+                || GetVAB_ProjectSupply_ID() != 0
                 || GetM_WorkOrderTransactionLine_ID() != 0
                 || GetM_WorkOrderResourceTxnLine_ID() != 0)
             {

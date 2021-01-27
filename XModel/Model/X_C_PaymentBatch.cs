@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PaymentBatch
+/** Generated Model for VAB_PaymentBatch
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaymentBatch : PO
+public class X_VAB_PaymentBatch : PO
 {
-public X_C_PaymentBatch (Context ctx, int C_PaymentBatch_ID, Trx trxName) : base (ctx, C_PaymentBatch_ID, trxName)
+public X_VAB_PaymentBatch (Context ctx, int VAB_PaymentBatch_ID, Trx trxName) : base (ctx, VAB_PaymentBatch_ID, trxName)
 {
-/** if (C_PaymentBatch_ID == 0)
+/** if (VAB_PaymentBatch_ID == 0)
 {
-SetC_PaymentBatch_ID (0);
+SetVAB_PaymentBatch_ID (0);
 SetName (null);
 SetProcessed (false);	// N
 SetProcessing (false);	// N
 }
  */
 }
-public X_C_PaymentBatch (Ctx ctx, int C_PaymentBatch_ID, Trx trxName) : base (ctx, C_PaymentBatch_ID, trxName)
+public X_VAB_PaymentBatch (Ctx ctx, int VAB_PaymentBatch_ID, Trx trxName) : base (ctx, VAB_PaymentBatch_ID, trxName)
 {
-/** if (C_PaymentBatch_ID == 0)
+/** if (VAB_PaymentBatch_ID == 0)
 {
-SetC_PaymentBatch_ID (0);
+SetVAB_PaymentBatch_ID (0);
 SetName (null);
 SetProcessed (false);	// N
 SetProcessing (false);	// N
@@ -43,7 +43,7 @@ SetProcessing (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_PaymentBatch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_PaymentBatch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentBatch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PaymentBatch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaymentBatch()
+static X_VAB_PaymentBatch()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389057169L;
 public static int Table_ID;
  // =411;
 
-/** TableName=C_PaymentBatch */
-public static String Table_Name="C_PaymentBatch";
+/** TableName=VAB_PaymentBatch */
+public static String Table_Name="VAB_PaymentBatch";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -113,37 +113,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PaymentBatch[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PaymentBatch[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Payment Batch.
-@param C_PaymentBatch_ID Payment batch for EFT */
-public void SetC_PaymentBatch_ID (int C_PaymentBatch_ID)
+@param VAB_PaymentBatch_ID Payment batch for EFT */
+public void SetVAB_PaymentBatch_ID (int VAB_PaymentBatch_ID)
 {
-if (C_PaymentBatch_ID < 1) throw new ArgumentException ("C_PaymentBatch_ID is mandatory.");
-Set_ValueNoCheck ("C_PaymentBatch_ID", C_PaymentBatch_ID);
+if (VAB_PaymentBatch_ID < 1) throw new ArgumentException ("VAB_PaymentBatch_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PaymentBatch_ID", VAB_PaymentBatch_ID);
 }
 /** Get Payment Batch.
 @return Payment batch for EFT */
-public int GetC_PaymentBatch_ID() 
+public int GetVAB_PaymentBatch_ID() 
 {
-Object ii = Get_Value("C_PaymentBatch_ID");
+Object ii = Get_Value("VAB_PaymentBatch_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment Processor.
-@param C_PaymentProcessor_ID Payment processor for electronic payments */
-public void SetC_PaymentProcessor_ID (int C_PaymentProcessor_ID)
+@param VAB_PaymentHandler_ID Payment processor for electronic payments */
+public void SetVAB_PaymentHandler_ID (int VAB_PaymentHandler_ID)
 {
-if (C_PaymentProcessor_ID <= 0) Set_Value ("C_PaymentProcessor_ID", null);
+if (VAB_PaymentHandler_ID <= 0) Set_Value ("VAB_PaymentHandler_ID", null);
 else
-Set_Value ("C_PaymentProcessor_ID", C_PaymentProcessor_ID);
+Set_Value ("VAB_PaymentHandler_ID", VAB_PaymentHandler_ID);
 }
 /** Get Payment Processor.
 @return Payment processor for electronic payments */
-public int GetC_PaymentProcessor_ID() 
+public int GetVAB_PaymentHandler_ID() 
 {
-Object ii = Get_Value("C_PaymentProcessor_ID");
+Object ii = Get_Value("VAB_PaymentHandler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

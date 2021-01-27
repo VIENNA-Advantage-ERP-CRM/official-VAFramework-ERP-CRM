@@ -9,44 +9,44 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for GL_LineDimension
+    using System.Data;/** Generated Model for VAGL_LineDimension
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_GL_LineDimension : PO
+    public class X_VAGL_LineDimension : PO
     {
-        public X_GL_LineDimension(Context ctx, int GL_LineDimension_ID, Trx trxName)
-            : base(ctx, GL_LineDimension_ID, trxName)
-        {/** if (GL_LineDimension_ID == 0){SetGL_JournalLine_ID (0);SetGL_LineDimension_ID (0);SetLineType (null);// @ElementType@
+        public X_VAGL_LineDimension(Context ctx, int VAGL_LineDimension_ID, Trx trxName)
+            : base(ctx, VAGL_LineDimension_ID, trxName)
+        {/** if (VAGL_LineDimension_ID == 0){SetVAGL_JRNLLine_ID (0);SetVAGL_LineDimension_ID (0);SetLineType (null);// @ElementType@
 } */
         }
-        public X_GL_LineDimension(Ctx ctx, int GL_LineDimension_ID, Trx trxName)
-            : base(ctx, GL_LineDimension_ID, trxName)
-        {/** if (GL_LineDimension_ID == 0){SetGL_JournalLine_ID (0);SetGL_LineDimension_ID (0);SetLineType (null);// @ElementType@
+        public X_VAGL_LineDimension(Ctx ctx, int VAGL_LineDimension_ID, Trx trxName)
+            : base(ctx, VAGL_LineDimension_ID, trxName)
+        {/** if (VAGL_LineDimension_ID == 0){SetVAGL_JRNLLine_ID (0);SetVAGL_LineDimension_ID (0);SetLineType (null);// @ElementType@
 } */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_GL_LineDimension(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAGL_LineDimension(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_GL_LineDimension(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAGL_LineDimension(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_GL_LineDimension(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAGL_LineDimension(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_GL_LineDimension() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAGL_LineDimension() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27751729338550L;/** Last Updated Timestamp 7/27/2016 12:50:21 PM */
         public static long updatedMS = 1469604021761L;/** VAF_TableView_ID=1000595 */
         public static int Table_ID; // =1000595;
-        /** TableName=GL_LineDimension */
-        public static String Table_Name = "GL_LineDimension";
+        /** TableName=VAGL_LineDimension */
+        public static String Table_Name = "VAGL_LineDimension";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_GL_LineDimension[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Column.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAGL_LineDimension[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Column.
 @param VAF_Column_ID Column in the table */
         public void SetVAF_Column_ID(int VAF_Column_ID)
         {
@@ -120,45 +120,45 @@ namespace VAdvantage.Model
         }/** Get Element.
 @return Accounting Element */
         public int GetVAB_Element_ID() { Object ii = Get_Value("VAB_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Address.
-@param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }/** Get Address.
 @return Location or Address */
-        public int GetC_Location_ID() { Object ii = Get_Value("C_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-        public void SetC_Project_ID(int C_Project_ID)
+        public int GetVAB_Address_ID() { Object ii = Get_Value("VAB_Address_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }/** Get Opportunity.
 @return Business Opportunity */
-        public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-        public void SetC_SalesRegion_ID(int C_SalesRegion_ID)
+        public int GetVAB_Project_ID() { Object ii = Get_Value("VAB_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
+@param VAB_SalesRegionState_ID Sales coverage region */
+        public void SetVAB_SalesRegionState_ID(int VAB_SalesRegionState_ID)
         {
-            if (C_SalesRegion_ID <= 0) Set_Value("C_SalesRegion_ID", null);
+            if (VAB_SalesRegionState_ID <= 0) Set_Value("VAB_SalesRegionState_ID", null);
             else
-                Set_Value("C_SalesRegion_ID", C_SalesRegion_ID);
+                Set_Value("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
         }/** Get Sales Region.
 @return Sales coverage region */
-        public int GetC_SalesRegion_ID() { Object ii = Get_Value("C_SalesRegion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
+        public int GetVAB_SalesRegionState_ID() { Object ii = Get_Value("VAB_SalesRegionState_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Journal Line.
-@param GL_JournalLine_ID General Ledger Journal Line */
-        public void SetGL_JournalLine_ID(int GL_JournalLine_ID) { if (GL_JournalLine_ID < 1) throw new ArgumentException("GL_JournalLine_ID is mandatory."); Set_ValueNoCheck("GL_JournalLine_ID", GL_JournalLine_ID); }/** Get Journal Line.
+@param VAGL_JRNLLine_ID General Ledger Journal Line */
+        public void SetVAGL_JRNLLine_ID(int VAGL_JRNLLine_ID) { if (VAGL_JRNLLine_ID < 1) throw new ArgumentException("VAGL_JRNLLine_ID is mandatory."); Set_ValueNoCheck("VAGL_JRNLLine_ID", VAGL_JRNLLine_ID); }/** Get Journal Line.
 @return General Ledger Journal Line */
-        public int GetGL_JournalLine_ID() { Object ii = Get_Value("GL_JournalLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set GL_LineDimension_ID.
-@param GL_LineDimension_ID GL_LineDimension_ID */
-        public void SetGL_LineDimension_ID(int GL_LineDimension_ID) { if (GL_LineDimension_ID < 1) throw new ArgumentException("GL_LineDimension_ID is mandatory."); Set_ValueNoCheck("GL_LineDimension_ID", GL_LineDimension_ID); }/** Get GL_LineDimension_ID.
-@return GL_LineDimension_ID */
-        public int GetGL_LineDimension_ID() { Object ii = Get_Value("GL_LineDimension_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Line No.
+        public int GetVAGL_JRNLLine_ID() { Object ii = Get_Value("VAGL_JRNLLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set VAGL_LineDimension_ID.
+@param VAGL_LineDimension_ID VAGL_LineDimension_ID */
+        public void SetVAGL_LineDimension_ID(int VAGL_LineDimension_ID) { if (VAGL_LineDimension_ID < 1) throw new ArgumentException("VAGL_LineDimension_ID is mandatory."); Set_ValueNoCheck("VAGL_LineDimension_ID", VAGL_LineDimension_ID); }/** Get VAGL_LineDimension_ID.
+@return VAGL_LineDimension_ID */
+        public int GetVAGL_LineDimension_ID() { Object ii = Get_Value("VAGL_LineDimension_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Line No.
 @param Line Unique line for this document */
         public void SetLine(int Line) { Set_Value("Line", Line); }/** Get Line No.
 @return Unique line for this document */

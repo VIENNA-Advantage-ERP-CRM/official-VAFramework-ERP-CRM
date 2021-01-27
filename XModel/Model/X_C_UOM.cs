@@ -11,17 +11,17 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_UOM
+    /** Generated Model for VAB_UOM
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_UOM : PO
+    public class X_VAB_UOM : PO
     {
-        public X_C_UOM(Context ctx, int C_UOM_ID, Trx trxName)
-            : base(ctx, C_UOM_ID, trxName)
+        public X_VAB_UOM(Context ctx, int VAB_UOM_ID, Trx trxName)
+            : base(ctx, VAB_UOM_ID, trxName)
         {
-            /** if (C_UOM_ID == 0)
+            /** if (VAB_UOM_ID == 0)
             {
-            SetC_UOM_ID (0);
+            SetVAB_UOM_ID (0);
             SetCostingPrecision (0);
             SetIsDefault (false);
             SetName (null);
@@ -30,12 +30,12 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_UOM(Ctx ctx, int C_UOM_ID, Trx trxName)
-            : base(ctx, C_UOM_ID, trxName)
+        public X_VAB_UOM(Ctx ctx, int VAB_UOM_ID, Trx trxName)
+            : base(ctx, VAB_UOM_ID, trxName)
         {
-            /** if (C_UOM_ID == 0)
+            /** if (VAB_UOM_ID == 0)
             {
-            SetC_UOM_ID (0);
+            SetVAB_UOM_ID (0);
             SetCostingPrecision (0);
             SetIsDefault (false);
             SetName (null);
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_UOM(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_UOM(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_UOM(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_UOM(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_UOM(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_UOM(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_UOM()
+        static X_VAB_UOM()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =146;
 
-        /** TableName=C_UOM */
-        public static String Table_Name = "C_UOM";
+        /** TableName=VAB_UOM */
+        public static String Table_Name = "VAB_UOM";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -122,21 +122,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_UOM[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_UOM[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID < 1) throw new ArgumentException("C_UOM_ID is mandatory.");
-            Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
+            if (VAB_UOM_ID < 1) throw new ArgumentException("VAB_UOM_ID is mandatory.");
+            Set_ValueNoCheck("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

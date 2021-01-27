@@ -377,7 +377,7 @@ namespace VAdvantage.Process
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetVAB_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
-                                                if (invoiceLine.GetC_OrderLine_ID() > 0)
+                                                if (invoiceLine.GetVAB_OrderLine_ID() > 0)
                                                 {
                                                     if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
@@ -469,17 +469,17 @@ namespace VAdvantage.Process
                                                                 isCostAdjustableOnLost = product.IsCostAdjustmentOnLost();
                                                             }
                                                             MOrderLine ol1 = null;
-                                                            MOrder order1 = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
-                                                            ol1 = new MOrderLine(GetCtx(), invoiceLine.GetC_OrderLine_ID(), Get_Trx());
+                                                            MOrder order1 = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
+                                                            ol1 = new MOrderLine(GetCtx(), invoiceLine.GetVAB_OrderLine_ID(), Get_Trx());
                                                             if (ol1 != null && ol1.Get_ID() > 0)
                                                             {
                                                                 ProductOrderLineCost = ol1.GetProductLineCost(ol1);
                                                                 ProductOrderPriceActual = ProductOrderLineCost / ol1.GetQtyEntered();
                                                             }
-                                                            if (order1.GetC_Order_ID() == 0)
+                                                            if (order1.GetVAB_Order_ID() == 0)
                                                             {
-                                                                //ol1 = new MOrderLine(GetCtx(), invoiceLine.GetC_OrderLine_ID(), Get_Trx());
-                                                                order1 = new MOrder(GetCtx(), ol1.GetC_Order_ID(), Get_Trx());
+                                                                //ol1 = new MOrderLine(GetCtx(), invoiceLine.GetVAB_OrderLine_ID(), Get_Trx());
+                                                                order1 = new MOrder(GetCtx(), ol1.GetVAB_Order_ID(), Get_Trx());
                                                             }
 
                                                             #region  Sales Cycle
@@ -650,7 +650,7 @@ namespace VAdvantage.Process
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
                                                                 MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
-                                                                if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
+                                                                if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                                 {
                                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
                                                                       "Invoice(Vendor)", null, null, null, invoiceLine, null, Decimal.Negate(ProductInvoiceLineCost), Decimal.Negate(invoiceLine.GetQtyInvoiced()),
@@ -955,7 +955,7 @@ namespace VAdvantage.Process
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
                                                             MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
-                                                            if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
+                                                            if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                             {
                                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
                                                                   "Invoice(Vendor)", null, null, null, invoiceLine, null, Decimal.Negate(ProductInvoiceLineCost), Decimal.Negate(invoiceLine.GetQtyInvoiced()),
@@ -1559,7 +1559,7 @@ namespace VAdvantage.Process
                                                 }
                                                 if (invoiceLine != null && invoiceLine.GetVAB_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
-                                                if (invoiceLine.GetC_OrderLine_ID() > 0)
+                                                if (invoiceLine.GetVAB_OrderLine_ID() > 0)
                                                 {
                                                     if (invoiceLine.GetVAB_Charge_ID() > 0)
                                                     {
@@ -1651,11 +1651,11 @@ namespace VAdvantage.Process
                                                                 isCostAdjustableOnLost = product.IsCostAdjustmentOnLost();
                                                             }
 
-                                                            MOrder order1 = new MOrder(GetCtx(), invoice.GetC_Order_ID(), Get_Trx());
-                                                            if (order1.GetC_Order_ID() == 0)
+                                                            MOrder order1 = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
+                                                            if (order1.GetVAB_Order_ID() == 0)
                                                             {
-                                                                MOrderLine ol1 = new MOrderLine(GetCtx(), invoiceLine.GetC_OrderLine_ID(), Get_Trx());
-                                                                order1 = new MOrder(GetCtx(), ol1.GetC_Order_ID(), Get_Trx());
+                                                                MOrderLine ol1 = new MOrderLine(GetCtx(), invoiceLine.GetVAB_OrderLine_ID(), Get_Trx());
+                                                                order1 = new MOrder(GetCtx(), ol1.GetVAB_Order_ID(), Get_Trx());
                                                             }
 
                                                             #region  Sales Order
@@ -1791,7 +1791,7 @@ namespace VAdvantage.Process
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
                                                                 MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
-                                                                if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
+                                                                if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                                 {
                                                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
                                                                       "Invoice(Vendor)", null, null, null, invoiceLine, null, Decimal.Negate(ProductInvoiceLineCost), Decimal.Negate(invoiceLine.GetQtyInvoiced()),
@@ -2057,7 +2057,7 @@ namespace VAdvantage.Process
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
                                                             MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
-                                                            if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetC_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
+                                                            if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetM_InOutLine_ID() == 0 && invoiceLine.GetM_Product_ID() > 0)
                                                             {
                                                                 if (!MCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetM_AttributeSetInstance_ID(),
                                                                   "Invoice(Vendor)", null, null, null, invoiceLine, null, Decimal.Negate(ProductInvoiceLineCost), Decimal.Negate(invoiceLine.GetQtyInvoiced()),
@@ -2356,8 +2356,8 @@ namespace VAdvantage.Process
                 // expected landed cost
                 //countRecord = 0;
                 //countRecord = DB.ExecuteQuery(@"UPDATE VAB_ExpectedCostDis Set Iscostcalculated  = 'N'
-                //                                    Where C_Orderline_Id In (Select C_Orderline_Id
-                //                                      FROM C_OrderLine WHERE M_Product_Id IN 
+                //                                    Where VAB_Orderline_Id In (Select VAB_Orderline_Id
+                //                                      FROM VAB_OrderLine WHERE M_Product_Id IN 
                 //                                      ((SELECT M_Product_Id FROM M_Product WHERE M_Product_Category_Id IN (" + productCategoryID + "))))", null, Get_Trx());
 
                 // for M_Inventory / M_InventoryLine
@@ -2472,8 +2472,8 @@ namespace VAdvantage.Process
                 // expected landed cost
                 //countRecord = 0;
                 //countRecord = DB.ExecuteQuery(@"UPDATE VAB_ExpectedCostDis Set IsCostCalculated  = 'N'
-                //                                    Where C_Orderline_ID IN (Select C_Orderline_ID
-                //                                      FROM C_OrderLine WHERE M_Product_ID IN (" + productID + "))", null, Get_Trx());
+                //                                    Where VAB_Orderline_ID IN (Select VAB_Orderline_ID
+                //                                      FROM VAB_OrderLine WHERE M_Product_ID IN (" + productID + "))", null, Get_Trx());
 
                 // for M_Inventory / M_InventoryLine
                 countRecord = 0;
@@ -2648,13 +2648,13 @@ namespace VAdvantage.Process
                     try
                     {
                         inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
-                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
-                        if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
+                        if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                         {
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                             if (order.GetDocStatus() != "VO")
                             {
-                                if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
+                                if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                     continue;
                             }
                             ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
@@ -2666,7 +2666,7 @@ namespace VAdvantage.Process
                             #region shipment
                             if (inout.IsSOTrx() && !inout.IsReturnTrx())
                             {
-                                if (inout.GetC_Order_ID() <= 0)
+                                if (inout.GetVAB_Order_ID() <= 0)
                                 {
                                     break;
                                 }
@@ -2810,13 +2810,13 @@ namespace VAdvantage.Process
                     try
                     {
                         inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
-                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
-                        if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
+                        if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                         {
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                             if (order.GetDocStatus() != "VO")
                             {
-                                if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
+                                if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                     continue;
                             }
                             ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
@@ -2972,13 +2972,13 @@ namespace VAdvantage.Process
                     try
                     {
                         inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
-                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
-                        if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
+                        if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                         {
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                             if (order.GetDocStatus() != "VO")
                             {
-                                if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
+                                if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                     continue;
                             }
                             ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
@@ -3001,7 +3001,7 @@ namespace VAdvantage.Process
                                 }
                                 #endregion
 
-                                if (inout.GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetC_OrderLine_ID() == 0)
+                                if (inout.GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)
                                 {
                                     #region Return to Vendor against without Vendor RMA
                                     if (!MCostQueue.CreateProductCostsDetails(GetCtx(), inout.GetVAF_Client_ID(), inout.GetVAF_Org_ID(), product, inoutLine.GetM_AttributeSetInstance_ID(),
@@ -3193,13 +3193,13 @@ namespace VAdvantage.Process
                     try
                     {
                         inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
-                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
-                        if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
+                        if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                         {
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                             if (order.GetDocStatus() != "VO")
                             {
-                                if (orderLine != null && orderLine.GetC_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
+                                if (orderLine != null && orderLine.GetVAB_Order_ID() > 0 && orderLine.GetQtyOrdered() == 0)
                                     continue;
                             }
                             ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
@@ -3213,7 +3213,7 @@ namespace VAdvantage.Process
                             #region Material Receipt
                             if (!inout.IsSOTrx() && !inout.IsReturnTrx())
                             {
-                                if (orderLine == null || orderLine.GetC_OrderLine_ID() == 0) //MR Without PO
+                                if (orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0) //MR Without PO
                                 {
                                     #region MR Without PO
                                     if (!client.IsCostImmediate() || !inoutLine.IsCostImmediate() || inoutLine.GetCurrentCostPrice() == 0)
@@ -3452,10 +3452,10 @@ namespace VAdvantage.Process
                     try
                     {
                         inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
-                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), null);
-                        if (orderLine != null && orderLine.GetC_Order_ID() > 0)
+                        orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
+                        if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                         {
-                            order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), null);
+                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), null);
                             if (order.GetDocStatus() != "VO")
                             {
                                 if (orderLine.GetQtyOrdered() == 0)
@@ -3470,7 +3470,7 @@ namespace VAdvantage.Process
                             #region Material Receipt
                             if (!inout.IsSOTrx() && !inout.IsReturnTrx())
                             {
-                                if (orderLine == null || orderLine.GetC_OrderLine_ID() == 0)
+                                if (orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)
                                 {
                                     #region get price from m_cost (Current Cost Price)
                                     if (!client.IsCostImmediate() || inoutLine.GetCurrentCostPrice() == 0)
@@ -3671,10 +3671,10 @@ namespace VAdvantage.Process
             {
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
             }
-            if (inoutLine.GetC_OrderLine_ID() > 0)
+            if (inoutLine.GetVAB_OrderLine_ID() > 0)
             {
-                orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), Get_Trx());
-                order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), Get_Trx());
+                order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                 ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
                 ProductOrderPriceActual = ProductOrderLineCost / orderLine.GetQtyEntered();
             }
@@ -3842,10 +3842,10 @@ namespace VAdvantage.Process
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
             }
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
-            if (inoutLine.GetC_OrderLine_ID() > 0)
+            if (inoutLine.GetVAB_OrderLine_ID() > 0)
             {
-                orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), Get_Trx());
-                order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), Get_Trx());
+                order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
             }
             if (product.GetProductType() == "I" && product.GetM_Product_ID() > 0)
             {
@@ -4700,10 +4700,10 @@ namespace VAdvantage.Process
             {
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
             }
-            if (inoutLine.GetC_OrderLine_ID() > 0)
+            if (inoutLine.GetVAB_OrderLine_ID() > 0)
             {
-                orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), Get_Trx());
-                order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), Get_Trx());
+                order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
             }
             if (product.GetProductType() == "I" && product.GetM_Product_ID() > 0)
             {
@@ -4797,10 +4797,10 @@ namespace VAdvantage.Process
                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
             }
             product = new MProduct(GetCtx(), invoiceLine.GetM_Product_ID(), Get_Trx());
-            if (inoutLine.GetC_OrderLine_ID() > 0)
+            if (inoutLine.GetVAB_OrderLine_ID() > 0)
             {
-                orderLine = new MOrderLine(GetCtx(), inoutLine.GetC_OrderLine_ID(), Get_Trx());
-                order = new MOrder(GetCtx(), orderLine.GetC_Order_ID(), Get_Trx());
+                orderLine = new MOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), Get_Trx());
+                order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
             }
             if (product.GetProductType() == "I" && product.GetM_Product_ID() > 0)
             {

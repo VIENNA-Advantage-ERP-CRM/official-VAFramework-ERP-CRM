@@ -39,7 +39,7 @@ namespace VAdvantage.Process
         //Vendor			
         private int _Vendor_ID;
         //Sales Order		
-        private string _C_Order_ID;
+        private string _VAB_Order_ID;
         //Drop Ship			
         private String _IsDropShip;
         // Consolidated PO
@@ -78,11 +78,11 @@ namespace VAdvantage.Process
                 {
                     _Vendor_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    _C_Order_ID = Util.GetValueOfString(para[i].GetParameter());
-                    //acctSchemaRecord = Array.ConvertAll(_C_Order_ID.Split(','), int.Parse);
-                    //_C_Order_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                    _VAB_Order_ID = Util.GetValueOfString(para[i].GetParameter());
+                    //acctSchemaRecord = Array.ConvertAll(_VAB_Order_ID.Split(','), int.Parse);
+                    //_VAB_Order_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("IsDropShip"))
                 {
@@ -107,23 +107,23 @@ namespace VAdvantage.Process
         {
             log.Info("DateOrdered=" + _DateOrdered_From + " - " + _DateOrdered_To
                 + " - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID + " - Vendor_ID=" + _Vendor_ID
-                + " - IsDropShip=" + _IsDropShip + " - C_Order_ID=" + _C_Order_ID);
-            if (string.IsNullOrEmpty(_C_Order_ID) && _IsDropShip == null
+                + " - IsDropShip=" + _IsDropShip + " - VAB_Order_ID=" + _VAB_Order_ID);
+            if (string.IsNullOrEmpty(_VAB_Order_ID) && _IsDropShip == null
                 && _DateOrdered_From == null && _DateOrdered_To == null
                 && _VAB_BusinessPartner_ID == 0 && _Vendor_ID == 0)
             {
                 throw new Exception("You need to restrict selection");
             }
             //
-            String sql = "SELECT * FROM C_Order o "
+            String sql = "SELECT * FROM VAB_Order o "
                 + "WHERE o.IsSOTrx='Y' AND o.IsReturnTrx='N' AND o.IsSalesQuotation = 'N'"
                 //	No Duplicates
                 //	" AND o.Ref_Order_ID IS NULL"
-                + " AND NOT EXISTS (SELECT * FROM C_OrderLine ol WHERE o.C_Order_ID=ol.C_Order_ID AND ol.Ref_OrderLine_ID IS NOT NULL)"
+                + " AND NOT EXISTS (SELECT * FROM VAB_OrderLine ol WHERE o.VAB_Order_ID=ol.VAB_Order_ID AND ol.Ref_OrderLine_ID IS NOT NULL)"
                 ;
-            if (!string.IsNullOrEmpty(_C_Order_ID))
+            if (!string.IsNullOrEmpty(_VAB_Order_ID))
             {
-                sql += " AND o.C_Order_ID IN ( " + _C_Order_ID + " ) ";
+                sql += " AND o.VAB_Order_ID IN ( " + _VAB_Order_ID + " ) ";
             }
             else
             {
@@ -144,9 +144,9 @@ namespace VAdvantage.Process
                 //}
                 if (_Vendor_ID != 0)
                 {
-                    sql += " AND EXISTS (SELECT * FROM C_OrderLine ol"
+                    sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol"
                         + " INNER JOIN M_Product_PO po ON (ol.M_Product_ID=po.M_Product_ID) "
-                            + "WHERE o.C_Order_ID=ol.C_Order_ID AND po.VAB_BusinessPartner_ID=" + _Vendor_ID + ")";
+                            + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID AND po.VAB_BusinessPartner_ID=" + _Vendor_ID + ")";
                 }
                 if (_DateOrdered_From != null && _DateOrdered_To != null)
                 {
@@ -179,7 +179,7 @@ namespace VAdvantage.Process
                 {
                     for (int i = 0; i < listConsolidatePO.Count; i++)
                     {
-                        MOrder purchaseOrder = new MOrder(GetCtx(), listConsolidatePO[i].C_Order_ID, Get_Trx());
+                        MOrder purchaseOrder = new MOrder(GetCtx(), listConsolidatePO[i].VAB_Order_ID, Get_Trx());
                         AddLog(0, null, purchaseOrder.GetGrandTotal(), purchaseOrder.GetDocumentNo());
                     }
                 }
@@ -232,10 +232,10 @@ namespace VAdvantage.Process
             sql.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, po.M_Product_ID ,ol.Isdropship, po.PriceList , po.PricePO , po.VAB_Currency_ID
                 FROM  M_Product_PO po
                 INNER JOIN M_Product prd ON po.M_Product_ID=prd.M_Product_ID
-                INNER JOIN C_OrderLine ol ON (po.M_Product_ID=ol.M_Product_ID ");       // changes done by bharat on 26 June 2018 If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
+                INNER JOIN VAB_OrderLine ol ON (po.M_Product_ID=ol.M_Product_ID ");       // changes done by bharat on 26 June 2018 If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
 
             sqlErrorMessage.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, bp.name AS BPName,  ol.M_Product_ID , p.Name,  ol.Isdropship,  po.VAB_Currency_ID,  bp.PO_PaymentTerm_ID,  bp.PO_PriceList_ID 
-                FROM  C_OrderLine ol INNER JOIN m_product p ON (p.M_Product_ID =ol.M_Product_ID)
+                FROM  VAB_OrderLine ol INNER JOIN m_product p ON (p.M_Product_ID =ol.M_Product_ID)
                 LEFT JOIN M_Product_PO po ON (po.M_Product_ID=ol.M_Product_ID  AND po.isactive = 'Y' AND po.IsCurrentVendor = 'Y' )
                 LEFT JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_id = po.VAB_BusinessPartner_id ");
 
@@ -254,8 +254,8 @@ namespace VAdvantage.Process
             }
 
             // changes don eby Bharat on 26 June 2018 to handle If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
-            sql.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID() + @" AND po.IsCurrentVendor='Y' AND prd.IsPurchased='Y'");
-            sqlErrorMessage.Append(@") WHERE ol.C_Order_ID=" + so.GetC_Order_ID());
+            sql.Append(@") WHERE ol.VAB_Order_ID=" + so.GetVAB_Order_ID() + @" AND po.IsCurrentVendor='Y' AND prd.IsPurchased='Y'");
+            sqlErrorMessage.Append(@") WHERE ol.VAB_Order_ID=" + so.GetVAB_Order_ID());
 
             if (_Vendor_ID > 0)
             {
@@ -301,7 +301,7 @@ namespace VAdvantage.Process
                             poRecord = listConsolidatePO.Find(x => (x.VAB_BusinessPartner_ID == VAB_BusinessPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2])));
                             if (poRecord != null)
                             {
-                                po = new MOrder(GetCtx(), poRecord.C_Order_ID, Get_Trx());
+                                po = new MOrder(GetCtx(), poRecord.VAB_Order_ID, Get_Trx());
                                 _Dropship = po.IsDropShip() ? "Y" : "N";
                             }
                         }
@@ -317,10 +317,10 @@ namespace VAdvantage.Process
                         counter++;
 
                         // maintain list
-                        if (po != null && po.GetC_Order_ID() > 0)
+                        if (po != null && po.GetVAB_Order_ID() > 0)
                         {
                             consolidatePO = new ConsolidatePO();
-                            consolidatePO.C_Order_ID = po.GetC_Order_ID();
+                            consolidatePO.VAB_Order_ID = po.GetVAB_Order_ID();
                             consolidatePO.VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
                             consolidatePO.IsDropShip = Utility.Util.GetValueOfString(dr[2]);
                             listConsolidatePO.Add(consolidatePO);
@@ -353,10 +353,10 @@ namespace VAdvantage.Process
                             if (soLines[i].GetM_Product_ID() == M_Product_ID && _Drop == _Dropship)
                             {
                                 MOrderLine poLine = new MOrderLine(po);
-                                poLine.SetRef_OrderLine_ID(soLines[i].GetC_OrderLine_ID());
+                                poLine.SetRef_OrderLine_ID(soLines[i].GetVAB_OrderLine_ID());
                                 poLine.SetM_Product_ID(soLines[i].GetM_Product_ID());
                                 poLine.SetM_AttributeSetInstance_ID(soLines[i].GetM_AttributeSetInstance_ID());
-                                poLine.SetC_UOM_ID(soLines[i].GetC_UOM_ID());
+                                poLine.SetVAB_UOM_ID(soLines[i].GetVAB_UOM_ID());
                                 poLine.SetQtyEntered(soLines[i].GetQtyEntered());
                                 poLine.SetQtyOrdered(soLines[i].GetQtyOrdered());
                                 poLine.SetDescription(soLines[i].GetDescription());
@@ -373,14 +373,14 @@ namespace VAdvantage.Process
                                 }
                                 //else
                                 //{
-                                //    if (poLine != null && poLine.GetC_OrderLine_ID() > 0)
+                                //    if (poLine != null && poLine.GetVAB_OrderLine_ID() > 0)
                                 //    {
                                 //        consolidatePOLine = new ConsolidatePOLine();
-                                //        consolidatePOLine.C_Order_ID = poLine.GetC_Order_ID();
-                                //        consolidatePOLine.C_OrderLine_ID = poLine.GetC_OrderLine_ID();
+                                //        consolidatePOLine.VAB_Order_ID = poLine.GetVAB_Order_ID();
+                                //        consolidatePOLine.VAB_OrderLine_ID = poLine.GetVAB_OrderLine_ID();
                                 //        consolidatePOLine.M_Product_ID = poLine.GetM_Product_ID();
                                 //        consolidatePOLine.M_AttributeSetInstance_ID = poLine.GetM_AttributeSetInstance_ID();
-                                //        consolidatePOLine.C_UOM_ID = poLine.GetC_UOM_ID();
+                                //        consolidatePOLine.VAB_UOM_ID = poLine.GetVAB_UOM_ID();
                                 //        consolidatePOLine.IsDropShip = soLines[i].IsDropShip() ? "Y" : "N";
                                 //        listConsolidatePOLine.Add(consolidatePOLine);
                                 //    }
@@ -405,7 +405,7 @@ namespace VAdvantage.Process
             //	Set Reference to PO
             if (po != null)
             {
-                so.SetRef_Order_ID(po.GetC_Order_ID());
+                so.SetRef_Order_ID(po.GetVAB_Order_ID());
                 so.Save();
             }
             return counter;
@@ -421,7 +421,7 @@ namespace VAdvantage.Process
         {
             MOrder po = new MOrder(GetCtx(), 0, Get_TrxName());
             po.SetClientOrg(so.GetVAF_Client_ID(), so.GetVAF_Org_ID());
-            po.SetRef_Order_ID(so.GetC_Order_ID());
+            po.SetRef_Order_ID(so.GetVAB_Order_ID());
             po.SetIsSOTrx(false);
             // method edited to set unreleased document type for PO
             po.SetVAB_DocTypesTarget_ID(false);
@@ -478,7 +478,7 @@ namespace VAdvantage.Process
             // JID_1262: If Payment Term is not bind BP, BP Group and No Default Payment Term. System do not create PO neither give message. 
             if (vendor.GetPO_PaymentTerm_ID() > 0)
             {
-                po.SetC_PaymentTerm_ID(vendor.GetPO_PaymentTerm_ID());
+                po.SetVAB_PaymentTerm_ID(vendor.GetPO_PaymentTerm_ID());
             }
             else
             {
@@ -527,7 +527,7 @@ namespace VAdvantage.Process
             //	References
             po.SetVAB_BillingCode_ID(so.GetVAB_BillingCode_ID());
             po.SetVAB_Promotion_ID(so.GetVAB_Promotion_ID());
-            po.SetC_Project_ID(so.GetC_Project_ID());
+            po.SetVAB_Project_ID(so.GetVAB_Project_ID());
             po.SetUser1_ID(so.GetUser1_ID());
             po.SetUser2_ID(so.GetUser2_ID());
             //
@@ -598,18 +598,18 @@ namespace VAdvantage.Process
 
     public class ConsolidatePO
     {
-        public int C_Order_ID { get; set; }
+        public int VAB_Order_ID { get; set; }
         public int VAB_BusinessPartner_ID { get; set; }
         public string IsDropShip { get; set; }
     }
 
     //public class ConsolidatePOLine
     //{
-    //    public int C_Order_ID { get; set; }
-    //    public int C_OrderLine_ID { get; set; }
+    //    public int VAB_Order_ID { get; set; }
+    //    public int VAB_OrderLine_ID { get; set; }
     //    public int M_Product_ID { get; set; }
     //    public int M_AttributeSetInstance_ID { get; set; }
-    //    public int C_UOM_ID { get; set; }
+    //    public int VAB_UOM_ID { get; set; }
     //    public string IsDropShip { get; set; }
     //}
 }

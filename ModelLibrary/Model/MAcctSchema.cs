@@ -498,8 +498,8 @@ namespace VAdvantage.Model
             {
                 GetAcctSchemaGL();
             }
-            int C_ValidCombination_ID = _gl.GetSuspenseBalancing_Acct();
-            _SuspenseError_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetSuspenseBalancing_Acct();
+            _SuspenseError_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _SuspenseError_Acct;
         }
 
@@ -518,8 +518,8 @@ namespace VAdvantage.Model
             {
                 GetAcctSchemaGL();
             }
-            int C_ValidCombination_ID = _gl.GetIntercompanyDueTo_Acct();
-            _DueTo_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetIntercompanyDueTo_Acct();
+            _DueTo_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _DueTo_Acct;
 
         }
@@ -539,8 +539,8 @@ namespace VAdvantage.Model
             {
                 GetAcctSchemaGL();
             }
-            int C_ValidCombination_ID = _gl.GetIntercompanyDueFrom_Acct();
-            _DueFrom_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetIntercompanyDueFrom_Acct();
+            _DueFrom_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _DueFrom_Acct;
         }
 
@@ -560,9 +560,9 @@ namespace VAdvantage.Model
                 GetAcctSchemaGL();
             }
 
-            int C_ValidCombination_ID = _gl.GetFRPT_RealizedGain_Acct();
-            if (C_ValidCombination_ID > 0)
-                _realizedGain_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetFRPT_RealizedGain_Acct();
+            if (VAB_Acct_ValidParameter_ID > 0)
+                _realizedGain_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _realizedGain_Acct;
         }
 
@@ -581,9 +581,9 @@ namespace VAdvantage.Model
             {
                 GetAcctSchemaGL();
             }
-            int C_ValidCombination_ID = _gl.GetFRPT_RealizedLoss_Acct();
-            if (C_ValidCombination_ID > 0)
-                _realizedLoss_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetFRPT_RealizedLoss_Acct();
+            if (VAB_Acct_ValidParameter_ID > 0)
+                _realizedLoss_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _realizedLoss_Acct;
         }
 
@@ -616,8 +616,8 @@ namespace VAdvantage.Model
             {
                 GetAcctSchemaGL();
             }
-            int C_ValidCombination_ID = _gl.GetCurrencyBalancing_Acct();
-            _CurrencyBalancing_Acct = MAccount.Get(GetCtx(), C_ValidCombination_ID);
+            int VAB_Acct_ValidParameter_ID = _gl.GetCurrencyBalancing_Acct();
+            _CurrencyBalancing_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _CurrencyBalancing_Acct;
         }
 

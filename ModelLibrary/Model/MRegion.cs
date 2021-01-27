@@ -26,15 +26,15 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     [Serializable]
-    public class MRegion : X_C_Region, IComparer<PO>
+    public class MRegion : X_VAB_RegionState, IComparer<PO>
     {
         /* 	Load Regions (cached)
          *	@param ctx context
          */
         private static void LoadAllRegions(Ctx ctx)
         {
-            s_regions = new CCache<String, MRegion>("C_Region", 100);
-            String sql = "SELECT * FROM C_Region WHERE IsActive='Y'";
+            s_regions = new CCache<String, MRegion>("VAB_RegionState", 100);
+            String sql = "SELECT * FROM VAB_RegionState WHERE IsActive='Y'";
             try
             {
                 DataSet stmt = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
                 {
                     DataRow rs = stmt.Tables[0].Rows[i];
                     MRegion r = new MRegion(ctx, rs, null);
-                    s_regions.Add(r.GetC_Region_ID().ToString(), r);
+                    s_regions.Add(r.GetVAB_RegionState_ID().ToString(), r);
                     if (r.IsDefault())
                         s_default = r;
                 }
@@ -57,19 +57,19 @@ namespace VAdvantage.Model
         /**
          * 	Get Country (cached)
          * 	@param ctx context
-         *	@param C_Region_ID ID
+         *	@param VAB_RegionState_ID ID
          *	@return Country
          */
-        public static MRegion Get(Ctx ctx, int C_Region_ID)
+        public static MRegion Get(Ctx ctx, int VAB_RegionState_ID)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
-            String key = C_Region_ID.ToString();
+            String key = VAB_RegionState_ID.ToString();
             MRegion r = (MRegion)s_regions[key];
             if (r != null)
                 return r;
-            r = new MRegion(ctx, C_Region_ID, null);
-            if (r.GetC_Region_ID() == C_Region_ID)
+            r = new MRegion(ctx, VAB_RegionState_ID, null);
+            if (r.GetVAB_RegionState_ID() == VAB_RegionState_ID)
             {
                 s_regions.Add(key, r);
                 return r;
@@ -143,14 +143,14 @@ namespace VAdvantage.Model
         /**************************************************************************
          *	Create empty Region
          * 	@param ctx context
-         * 	@param C_Region_ID id
+         * 	@param VAB_RegionState_ID id
          *	@param trxName transaction
          */
-        public MRegion(Ctx ctx, int C_Region_ID, Trx trxName)
-            : base(ctx, C_Region_ID, trxName)
+        public MRegion(Ctx ctx, int VAB_RegionState_ID, Trx trxName)
+            : base(ctx, VAB_RegionState_ID, trxName)
         {
 
-            if (C_Region_ID == 0)
+            if (VAB_RegionState_ID == 0)
             {
             }
         }

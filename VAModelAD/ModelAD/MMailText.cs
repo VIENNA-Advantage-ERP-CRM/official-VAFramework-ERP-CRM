@@ -292,7 +292,7 @@ namespace VAdvantage.Model
                                                           END CityName,
                                                           (SELECT NAME FROM VAB_Country c WHERE c.VAB_Country_ID=l.VAB_Country_ID
                                                           ) AS CountryName
-                                                        FROM C_Location l WHERE l.C_Location_ID="+value);
+                                                        FROM VAB_Address l WHERE l.VAB_Address_ID="+value);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     if (ds.Tables[0].Rows[0]["address1"] != null && ds.Tables[0].Rows[0]["address1"] != DBNull.Value)

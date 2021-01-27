@@ -11,7 +11,7 @@ using ViennaAdvantage.Model;
 
 namespace ViennaAdvantage.Model
 {
-    public class MTeamMember : X_C_TeamMember
+    public class MTeamMember : X_VAB_TeamMember
     {
 
         public MTeamMember(Ctx ctx, DataRow dr, Trx trx)
@@ -20,8 +20,8 @@ namespace ViennaAdvantage.Model
 
         }
 
-        public MTeamMember(Ctx ctx, int C_TeamMember_ID, Trx trx)
-            : base(ctx, C_TeamMember_ID, trx)
+        public MTeamMember(Ctx ctx, int VAB_TeamMember_ID, Trx trx)
+            : base(ctx, VAB_TeamMember_ID, trx)
         {
 
         }
@@ -34,7 +34,7 @@ namespace ViennaAdvantage.Model
                 string ObjectName = Convert.ToString(DB.ExecuteScalar(Sql));
                 if (ObjectName != "")
                 {
-                    Sql = @"SELECT Distinct VAF_TableView_ID,record_ID FROM VADMS_Team_Access where C_Team_ID=" + GetC_Team_ID() + " AND IsActive='Y'";
+                    Sql = @"SELECT Distinct VAF_TableView_ID,record_ID FROM VADMS_Team_Access where VAB_Team_ID=" + GetVAB_Team_ID() + " AND IsActive='Y'";
                     DataSet ds = DB.ExecuteDataset(Sql);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
@@ -46,7 +46,7 @@ namespace ViennaAdvantage.Model
                             //pos.Set_Value("VAF_TableView_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]));
                             //pos.Set_Value("VAF_UserContact_ID", GetVAF_UserContact_ID());
                             //pos.Set_Value("Record_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["Record_ID"]));
-                            //pos.Set_Value("C_Team_ID", GetC_Team_ID());
+                            //pos.Set_Value("VAB_Team_ID", GetVAB_Team_ID());
                             //pos.Set_Value("VADMS_Access", "20");
                             //pos.Save();
 
@@ -92,7 +92,7 @@ namespace ViennaAdvantage.Model
         /// <returns></returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            string Sql = "SELECT VAF_USERCONTACT_ID FROM C_TEAMMEMBER WHERE VAF_USERCONTACT_ID = " + GetVAF_UserContact_ID() + " AND C_TEAM_ID = "+ GetC_Team_ID();
+            string Sql = "SELECT VAF_USERCONTACT_ID FROM VAB_TEAMMEMBER WHERE VAF_USERCONTACT_ID = " + GetVAF_UserContact_ID() + " AND VAB_TEAM_ID = "+ GetVAB_Team_ID();
             int UserID = Util.GetValueOfInt(DB.ExecuteScalar(Sql));
             if (UserID > 0)
             {

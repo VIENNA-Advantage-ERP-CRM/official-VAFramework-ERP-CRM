@@ -21,7 +21,7 @@ public X_M_Forecast (Context ctx, int M_Forecast_ID, Trx trxName) : base (ctx, M
 /** if (M_Forecast_ID == 0)
 {
 SetVAB_Calender_ID (0);
-SetC_Year_ID (0);
+SetVAB_Year_ID (0);
 SetIsDefault (false);
 SetM_Forecast_ID (0);
 SetName (null);
@@ -33,7 +33,7 @@ public X_M_Forecast (Ctx ctx, int M_Forecast_ID, Trx trxName) : base (ctx, M_For
 /** if (M_Forecast_ID == 0)
 {
 SetVAB_Calender_ID (0);
-SetC_Year_ID (0);
+SetVAB_Year_ID (0);
 SetIsDefault (false);
 SetM_Forecast_ID (0);
 SetName (null);
@@ -134,17 +134,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Year.
-@param C_Year_ID Calendar Year */
-public void SetC_Year_ID (int C_Year_ID)
+@param VAB_Year_ID Calendar Year */
+public void SetVAB_Year_ID (int VAB_Year_ID)
 {
-if (C_Year_ID < 1) throw new ArgumentException ("C_Year_ID is mandatory.");
-Set_ValueNoCheck ("C_Year_ID", C_Year_ID);
+if (VAB_Year_ID < 1) throw new ArgumentException ("VAB_Year_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Year_ID", VAB_Year_ID);
 }
 /** Get Year.
 @return Calendar Year */
-public int GetC_Year_ID() 
+public int GetVAB_Year_ID() 
 {
-Object ii = Get_Value("C_Year_ID");
+Object ii = Get_Value("VAB_Year_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

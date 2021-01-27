@@ -273,12 +273,12 @@ namespace VIS.Models
                             }//Account
                             else if (elementTypeID == "AY") { Sql += " and VAB_BillingCode_id=" + oldDimensionName; }//Activity
                             else if (elementTypeID == "BP") { Sql += " and VAB_BusinessPartner_ID=" + oldDimensionName; }//BPartner
-                            else if (elementTypeID == "LF" || elementTypeID == "LT") { Sql += " and c_location_ID=" + oldDimensionName; }//Location From//Location To
+                            else if (elementTypeID == "LF" || elementTypeID == "LT") { Sql += " and VAB_Address_ID=" + oldDimensionName; }//Location From//Location To
                             else if (elementTypeID == "MC") { Sql += " and VAB_Promotion_ID=" + oldDimensionName; }//Campaign
                             else if (elementTypeID == "OO" || elementTypeID == "OT") { Sql += " and Org_ID=" + oldDimensionName; }//Organization//Org Trx
-                            else if (elementTypeID == "PJ") { Sql += " and c_Project_id=" + oldDimensionName; }//Project
+                            else if (elementTypeID == "PJ") { Sql += " and VAB_Project_ID=" + oldDimensionName; }//Project
                             else if (elementTypeID == "PR") { Sql += " and M_Product_Id=" + oldDimensionName; }//Product
-                            else if (elementTypeID == "SR") { Sql += " and c_SalesRegion_Id=" + oldDimensionName; }//Sales Region
+                            else if (elementTypeID == "SR") { Sql += " and VAB_SalesRegionState_Id=" + oldDimensionName; }//Sales Region
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
                                 Sql += " and VAB_Acct_Element_id=" + oldDimensionName;
@@ -314,13 +314,13 @@ namespace VIS.Models
                             }//Account
                             else if (elementTypeID == "AY") { objDimAmtLine.SetVAB_BillingCode_ID(dimensionValue); }//Activity
                             else if (elementTypeID == "BP") { objDimAmtLine.SetVAB_BusinessPartner_ID(dimensionValue); }//BPartner
-                            else if (elementTypeID == "LF" || elementTypeID == "LT") { objDimAmtLine.SetC_Location_ID(dimensionValue); }//Location From//Location To
+                            else if (elementTypeID == "LF" || elementTypeID == "LT") { objDimAmtLine.SetVAB_Address_ID(dimensionValue); }//Location From//Location To
                             else if (elementTypeID == "MC") { objDimAmtLine.SetVAB_Promotion_ID(dimensionValue); }//Campaign
                             else if (elementTypeID == "OO" || elementTypeID == "OT") { objDimAmtLine.SetOrg_ID(dimensionValue); }//Organization//Org Trx
-                            else if (elementTypeID == "PJ") { objDimAmtLine.SetC_Project_ID(dimensionValue); }//Project
+                            else if (elementTypeID == "PJ") { objDimAmtLine.SetVAB_Project_ID(dimensionValue); }//Project
                             else if (elementTypeID == "PR") { objDimAmtLine.SetM_Product_ID(dimensionValue); }//Product
                             else if (elementTypeID == "SA") { }//Sub Account
-                            else if (elementTypeID == "SR") { objDimAmtLine.SetC_SalesRegion_ID(dimensionValue); }//Sales Region
+                            else if (elementTypeID == "SR") { objDimAmtLine.SetVAB_SalesRegionState_ID(dimensionValue); }//Sales Region
                             else if (elementTypeID == "U1" || elementTypeID == "U2")
                             {
                                 objDimAmtLine.SetVAB_Element_ID(elementID);
@@ -466,12 +466,12 @@ namespace VIS.Models
         //                        }//Account
         //                        else if (mod.DimensionTypeVal == "AY") { Sql += " and cl.VAB_BillingCode_id=" + mod.DimensionNameVal; }//Activity
         //                        else if (mod.DimensionTypeVal == "BP") { Sql += " and cl.VAB_BusinessPartner_ID=" + mod.DimensionNameVal; }//BPartner
-        //                        else if (mod.DimensionTypeVal == "LF" || mod.DimensionTypeVal == "LT") { Sql += " and cl.c_location_ID=" + mod.DimensionNameVal; }//Location From//Location To
+        //                        else if (mod.DimensionTypeVal == "LF" || mod.DimensionTypeVal == "LT") { Sql += " and cl.VAB_Address_ID=" + mod.DimensionNameVal; }//Location From//Location To
         //                        else if (mod.DimensionTypeVal == "MC") { Sql += " and cl.VAB_Promotion_ID=" + mod.DimensionNameVal; }//Campaign
         //                        else if (mod.DimensionTypeVal == "OO" || mod.DimensionTypeVal == "OT") { Sql += " and cl.Org_ID=" + mod.DimensionNameVal; }//Organization//Org Trx
-        //                        else if (mod.DimensionTypeVal == "PJ") { Sql += " and cl.c_Project_id=" + mod.DimensionNameVal; }//Project
+        //                        else if (mod.DimensionTypeVal == "PJ") { Sql += " and cl.VAB_Project_ID=" + mod.DimensionNameVal; }//Project
         //                        else if (mod.DimensionTypeVal == "PR") { Sql += " and cl.M_Product_Id=" + mod.DimensionNameVal; }//Product
-        //                        else if (mod.DimensionTypeVal == "SR") { Sql += " and cl.c_SalesRegion_Id=" + mod.DimensionNameVal; }//Sales Region
+        //                        else if (mod.DimensionTypeVal == "SR") { Sql += " and cl.VAB_SalesRegionState_Id=" + mod.DimensionNameVal; }//Sales Region
         //                        else if (mod.DimensionTypeVal == "U1" || mod.DimensionTypeVal == "U2")
         //                        {
         //                            Sql += " and cl.VAB_Acct_Element_id=" + mod.DimensionNameVal;
@@ -496,13 +496,13 @@ namespace VIS.Models
         //                    }//Account
         //                    else if (elementType[i] == "AY") { objDimAmtLine.SetVAB_BillingCode_ID(mod.DimensionNameVal); }//Activity
         //                    else if (elementType[i] == "BP") { objDimAmtLine.SetVAB_BusinessPartner_ID(mod.DimensionNameVal); }//BPartner
-        //                    else if (elementType[i] == "LF" || elementType[i] == "LT") { objDimAmtLine.SetC_Location_ID(mod.DimensionNameVal); }//Location From//Location To
+        //                    else if (elementType[i] == "LF" || elementType[i] == "LT") { objDimAmtLine.SetVAB_Address_ID(mod.DimensionNameVal); }//Location From//Location To
         //                    else if (elementType[i] == "MC") { objDimAmtLine.SetVAB_Promotion_ID(mod.DimensionNameVal); }//Campaign
         //                    else if (elementType[i] == "OO" || elementType[i] == "OT") { objDimAmtLine.SetOrg_ID(mod.DimensionNameVal); }//Organization//Org Trx
-        //                    else if (elementType[i] == "PJ") { objDimAmtLine.SetC_Project_ID(mod.DimensionNameVal); }//Project
+        //                    else if (elementType[i] == "PJ") { objDimAmtLine.SetVAB_Project_ID(mod.DimensionNameVal); }//Project
         //                    else if (elementType[i] == "PR") { objDimAmtLine.SetM_Product_ID(mod.DimensionNameVal); }//Product
         //                    else if (elementType[i] == "SA") { }//Sub Account
-        //                    else if (elementType[i] == "SR") { objDimAmtLine.SetC_SalesRegion_ID(mod.DimensionNameVal); }//Sales Region
+        //                    else if (elementType[i] == "SR") { objDimAmtLine.SetVAB_SalesRegionState_ID(mod.DimensionNameVal); }//Sales Region
         //                    else if (elementType[i] == "U1" || elementType[i] == "U2")
         //                    {
         //                        objDimAmtLine.SetVAB_Element_ID(mod.ElementID);
@@ -584,7 +584,7 @@ namespace VIS.Models
                         uElementColumn = Convert.ToString(dsUelement.Tables[0].Rows[0][1]);
                     }
 
-                    string sql = "SELECT distinct COALESCE(cl.vaf_column_id,cl.VAB_ACCT_ELEMENT_ID,cl.VAB_BillingCode_id,cl.VAB_BUSINESSPARTNER_ID,cl.VAB_PROMOTION_ID,cl.C_LOCATION_ID,cl.C_PROJECT_ID ,cl.C_SALESREGION_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
+                    string sql = "SELECT distinct COALESCE(cl.vaf_column_id,cl.VAB_ACCT_ELEMENT_ID,cl.VAB_BillingCode_id,cl.VAB_BUSINESSPARTNER_ID,cl.VAB_PROMOTION_ID,cl.VAB_ADDRESS_ID,cl.VAB_PROJECT_ID ,cl.VAB_SALESREGIONSTATE_ID,cl.M_PRODUCT_ID,cl.ORG_ID) AS DimensionValue," +
                                   " cl.amount,ct.VAB_AccountBook_id,ct.elementtype,rl.Name as DimensionType, " +
                                    " COALESCE(o.name ";
                     if (uElementColumn != "")
@@ -621,9 +621,9 @@ namespace VIS.Models
                        " LEFT JOIN VAB_PROMOTION cc ON cl.VAB_PROMOTION_ID=cc.VAB_PROMOTION_ID " +
                        " LEFT JOIN VAB_ACCT_ELEMENT cel ON cl.VAB_ACCT_ELEMENT_ID=cel.VAB_ACCT_ELEMENT_ID " +
                        " LEFT JOIN VAB_ELEMENT el ON cl.VAB_ELEMENT_ID=el.VAB_ELEMENT_ID " +
-                       " LEFT JOIN C_LOCATION cloc ON cl.C_LOCATION_ID=cloc.C_LOCATION_ID " +
-                       " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
-                       " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
+                       " LEFT JOIN VAB_ADDRESS cloc ON cl.VAB_ADDRESS_ID=cloc.VAB_ADDRESS_ID " +
+                       " LEFT JOIN VAB_PROJECT cpr ON cl.VAB_PROJECT_ID=cpr.VAB_PROJECT_ID " +
+                       " LEFT JOIN VAB_SALESREGIONSTATE cs ON cl.VAB_SALESREGIONSTATE_ID=cs.VAB_SALESREGIONSTATE_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
                        " WHERE cdm.VAB_DimAmt_ID=" + dimensionID + " and ct.VAB_AccountBook_id=" + acctId;
@@ -668,9 +668,9 @@ namespace VIS.Models
                        " LEFT JOIN VAB_PROMOTION cc ON cl.VAB_PROMOTION_ID=cc.VAB_PROMOTION_ID " +
                        " LEFT JOIN VAB_ACCT_ELEMENT cel ON cl.VAB_ACCT_ELEMENT_ID=cel.VAB_ACCT_ELEMENT_ID " +
                        " LEFT JOIN VAB_ELEMENT el ON cl.VAB_ELEMENT_ID=el.VAB_ELEMENT_ID " +
-                       " LEFT JOIN C_LOCATION cloc ON cl.C_LOCATION_ID=cloc.C_LOCATION_ID " +
-                       " LEFT JOIN C_PROJECT cpr ON cl.C_PROJECT_ID=cpr.C_PROJECT_ID " +
-                       " LEFT JOIN C_SALESREGION cs ON cl.C_SALESREGION_ID=cs.C_SALESREGION_ID " +
+                       " LEFT JOIN VAB_ADDRESS cloc ON cl.VAB_ADDRESS_ID=cloc.VAB_ADDRESS_ID " +
+                       " LEFT JOIN VAB_PROJECT cpr ON cl.VAB_PROJECT_ID=cpr.VAB_PROJECT_ID " +
+                       " LEFT JOIN VAB_SALESREGIONSTATE cs ON cl.VAB_SALESREGIONSTATE_ID=cs.VAB_SALESREGIONSTATE_ID " +
                        " LEFT JOIN M_PRODUCT mp ON cl.M_PRODUCT_ID=mp.M_PRODUCT_ID " +
                        " LEFT JOIN vaf_org o ON cl.org_id=o.vaf_org_id " +
                        " WHERE cdm.VAB_DimAmt_ID=" + dimensionID + " and ct.VAB_AccountBook_id=" + acctId + "  ) main";//order by  ct.VAB_AccountBook_id

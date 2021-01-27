@@ -96,7 +96,7 @@ namespace ViennaAdvantageServer.Process
                     int Owner = Util.GetValueOfInt(GetCtx().GetVAF_UserContact_ID());
                     //Util.GetValueOfString(GetCtx().GetVAF_UserContact_ID());
 
-                    VAdvantage.Model.X_C_Project opp = new VAdvantage.Model.X_C_Project(GetCtx(), 0, Get_TrxName());
+                    VAdvantage.Model.X_VAB_Project opp = new VAdvantage.Model.X_VAB_Project(GetCtx(), 0, Get_TrxName());
                     opp.SetIsOpportunity(true);
                     opp.SetName(opportunity);
                     opp.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_id);

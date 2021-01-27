@@ -79,7 +79,7 @@ namespace VAdvantage.Model
           AND (Description <> v_Description OR Qty <> :new.Qty);
 	  
         -- Update Order Line
-        UPDATE C_OrderLine
+        UPDATE VAB_OrderLine
           SET  Description = v_Description,
             QtyOrdered = :new.Qty
         WHERE s_ResourceAssignment_ID = :new.s_ResourceAssignment_ID

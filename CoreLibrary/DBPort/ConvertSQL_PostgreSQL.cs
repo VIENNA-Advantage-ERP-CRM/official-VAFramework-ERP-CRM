@@ -912,8 +912,8 @@ namespace VAdvantage.DBPort
         /// <summary>
         ///Converts Update.
         /// <pre>
-        ///        UPDATE C_Order i SET 
-        ///         =&gt; UPDATE C_Order SET
+        ///        UPDATE VAB_Order i SET 
+        ///         =&gt; UPDATE VAB_Order SET
         /// </pre>
         /// </summary>
         /// <param name="sqlStatement">sqlStatement</param>

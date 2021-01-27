@@ -178,18 +178,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tax Category.
-        @param C_TaxCategory_ID Tax Category */
-        public void SetC_TaxCategory_ID(int C_TaxCategory_ID)
+        @param VAB_TaxCategory_ID Tax Category */
+        public void SetVAB_TaxCategory_ID(int VAB_TaxCategory_ID)
         {
-            if (C_TaxCategory_ID <= 0) Set_Value("C_TaxCategory_ID", null);
+            if (VAB_TaxCategory_ID <= 0) Set_Value("VAB_TaxCategory_ID", null);
             else
-                Set_Value("C_TaxCategory_ID", C_TaxCategory_ID);
+                Set_Value("VAB_TaxCategory_ID", VAB_TaxCategory_ID);
         }
         /** Get Tax Category.
         @return Tax Category */
-        public int GetC_TaxCategory_ID()
+        public int GetVAB_TaxCategory_ID()
         {
-            Object ii = Get_Value("C_TaxCategory_ID");
+            Object ii = Get_Value("VAB_TaxCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

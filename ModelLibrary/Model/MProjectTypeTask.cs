@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_Task
+ * Class Used     : X_VAB_Std_Task
  * Chronological Development
  * Veena Pandey     17-June-2009
  ******************************************************/
@@ -20,22 +20,22 @@ namespace VAdvantage.Model
     /// <summary>
     /// Project Type Phase Task Model
     /// </summary>
-    public class MProjectTypeTask : X_C_Task
+    public class MProjectTypeTask : X_VAB_Std_Task
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Task_ID">id</param>
+        /// <param name="VAB_Std_Task_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypeTask(Ctx ctx, int C_Task_ID, Trx trxName)
-            : base (ctx, C_Task_ID, trxName)
+        public MProjectTypeTask(Ctx ctx, int VAB_Std_Task_ID, Trx trxName)
+            : base (ctx, VAB_Std_Task_ID, trxName)
         {
             
-            if (C_Task_ID == 0)
+            if (VAB_Std_Task_ID == 0)
             {
-                //	setC_Task_ID (0);		//	PK
-                //	setC_Phase_ID (0);		//	Parent
+                //	setVAB_Std_Task_ID (0);		//	PK
+                //	setVAB_Std_Stage_ID (0);		//	Parent
                 //	setName (null);
                 SetSeqNo(0);
                 SetStandardQty(Utility.Env.ZERO);

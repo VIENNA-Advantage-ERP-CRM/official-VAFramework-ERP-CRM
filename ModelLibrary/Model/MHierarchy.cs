@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MHierarchy
  * Purpose        : Reporting Hierarchy Model
- * Class Used     : X_PA_Hierarchy
+ * Class Used     : X_VAPA_FinancialReportingOrder
  * Chronological    Development
  * Deepak           11-Jan-2010
   ******************************************************/
@@ -22,23 +22,23 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MHierarchy:X_PA_Hierarchy
+    public class MHierarchy:X_VAPA_FinancialReportingOrder
     {
         /// <summary>
         /// Get MHierarchy from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">id</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">id</param>
         /// <returns>MHierarchy</returns>
-        public static MHierarchy Get(Ctx ctx, int PA_Hierarchy_ID)
+        public static MHierarchy Get(Ctx ctx, int VAPA_FinancialReportingOrder_ID)
         {
-            int key =PA_Hierarchy_ID;
+            int key =VAPA_FinancialReportingOrder_ID;
             MHierarchy retValue = (MHierarchy)s_cache[key];//.get(key);
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MHierarchy(ctx, PA_Hierarchy_ID, null);
+            retValue = new MHierarchy(ctx, VAPA_FinancialReportingOrder_ID, null);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);// .put(key, retValue);
@@ -48,17 +48,17 @@ namespace VAdvantage.Model
 
         /**	Cache						*/
         private static CCache<int, MHierarchy> s_cache
-            = new CCache<int, MHierarchy>("PA_Hierarchy_ID", 20);
+            = new CCache<int, MHierarchy>("VAPA_FinancialReportingOrder_ID", 20);
 
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">id</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MHierarchy(Ctx ctx, int PA_Hierarchy_ID, Trx trxName):base(ctx, PA_Hierarchy_ID, trxName)
+        public MHierarchy(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName):base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
-            //super(ctx, PA_Hierarchy_ID, trxName);
+            //super(ctx, VAPA_FinancialReportingOrder_ID, trxName);
         }	//	MHierarchy
 
         /// <summary>

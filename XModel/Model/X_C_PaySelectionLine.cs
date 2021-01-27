@@ -11,24 +11,24 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_PaySelectionLine
+    /** Generated Model for VAB_PaymentOptionLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_PaySelectionLine : PO
+    public class X_VAB_PaymentOptionLine : PO
     {
-        public X_C_PaySelectionLine(Context ctx, int C_PaySelectionLine_ID, Trx trxName)
-            : base(ctx, C_PaySelectionLine_ID, trxName)
+        public X_VAB_PaymentOptionLine(Context ctx, int VAB_PaymentOptionLine_ID, Trx trxName)
+            : base(ctx, VAB_PaymentOptionLine_ID, trxName)
         {
-            /** if (C_PaySelectionLine_ID == 0)
+            /** if (VAB_PaymentOptionLine_ID == 0)
             {
             SetVAB_Invoice_ID (0);
-            SetC_PaySelectionLine_ID (0);
-            SetC_PaySelection_ID (0);
+            SetVAB_PaymentOptionLine_ID (0);
+            SetVAB_PaymentOption_ID (0);
             SetDifferenceAmt (0.0);
             SetDiscountAmt (0.0);
             SetIsManual (false);
             SetIsSOTrx (false);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_PaySelectionLine WHERE C_PaySelection_ID=@C_PaySelection_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_PaymentOptionLine WHERE VAB_PaymentOption_ID=@VAB_PaymentOption_ID@
             SetOpenAmt (0.0);
             SetPayAmt (0.0);
             SetPaymentRule (null);	// S
@@ -36,19 +36,19 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_PaySelectionLine(Ctx ctx, int C_PaySelectionLine_ID, Trx trxName)
-            : base(ctx, C_PaySelectionLine_ID, trxName)
+        public X_VAB_PaymentOptionLine(Ctx ctx, int VAB_PaymentOptionLine_ID, Trx trxName)
+            : base(ctx, VAB_PaymentOptionLine_ID, trxName)
         {
-            /** if (C_PaySelectionLine_ID == 0)
+            /** if (VAB_PaymentOptionLine_ID == 0)
             {
             SetVAB_Invoice_ID (0);
-            SetC_PaySelectionLine_ID (0);
-            SetC_PaySelection_ID (0);
+            SetVAB_PaymentOptionLine_ID (0);
+            SetVAB_PaymentOption_ID (0);
             SetDifferenceAmt (0.0);
             SetDiscountAmt (0.0);
             SetIsManual (false);
             SetIsSOTrx (false);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_PaySelectionLine WHERE C_PaySelection_ID=@C_PaySelection_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_PaymentOptionLine WHERE VAB_PaymentOption_ID=@VAB_PaymentOption_ID@
             SetOpenAmt (0.0);
             SetPayAmt (0.0);
             SetPaymentRule (null);	// S
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_PaySelectionLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_PaymentOptionLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_PaySelectionLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_PaymentOptionLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -79,14 +79,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_PaySelectionLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_PaymentOptionLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_PaySelectionLine()
+        static X_VAB_PaymentOptionLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -99,8 +99,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =427;
 
-        /** TableName=C_PaySelectionLine */
-        public static String Table_Name = "C_PaySelectionLine";
+        /** TableName=VAB_PaymentOptionLine */
+        public static String Table_Name = "VAB_PaymentOptionLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_PaySelectionLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_PaymentOptionLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice.
@@ -153,33 +153,33 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Pay Selection Check.
-        @param C_PaySelectionCheck_ID Payment Selection Check */
-        public void SetC_PaySelectionCheck_ID(int C_PaySelectionCheck_ID)
+        @param VAB_PaymentOptionCheck_ID Payment Selection Check */
+        public void SetVAB_PaymentOptionCheck_ID(int VAB_PaymentOptionCheck_ID)
         {
-            if (C_PaySelectionCheck_ID <= 0) Set_Value("C_PaySelectionCheck_ID", null);
+            if (VAB_PaymentOptionCheck_ID <= 0) Set_Value("VAB_PaymentOptionCheck_ID", null);
             else
-                Set_Value("C_PaySelectionCheck_ID", C_PaySelectionCheck_ID);
+                Set_Value("VAB_PaymentOptionCheck_ID", VAB_PaymentOptionCheck_ID);
         }
         /** Get Pay Selection Check.
         @return Payment Selection Check */
-        public int GetC_PaySelectionCheck_ID()
+        public int GetVAB_PaymentOptionCheck_ID()
         {
-            Object ii = Get_Value("C_PaySelectionCheck_ID");
+            Object ii = Get_Value("VAB_PaymentOptionCheck_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment Selection Line.
-        @param C_PaySelectionLine_ID Payment Selection Line */
-        public void SetC_PaySelectionLine_ID(int C_PaySelectionLine_ID)
+        @param VAB_PaymentOptionLine_ID Payment Selection Line */
+        public void SetVAB_PaymentOptionLine_ID(int VAB_PaymentOptionLine_ID)
         {
-            if (C_PaySelectionLine_ID < 1) throw new ArgumentException("C_PaySelectionLine_ID is mandatory.");
-            Set_ValueNoCheck("C_PaySelectionLine_ID", C_PaySelectionLine_ID);
+            if (VAB_PaymentOptionLine_ID < 1) throw new ArgumentException("VAB_PaymentOptionLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_PaymentOptionLine_ID", VAB_PaymentOptionLine_ID);
         }
         /** Get Payment Selection Line.
         @return Payment Selection Line */
-        public int GetC_PaySelectionLine_ID()
+        public int GetVAB_PaymentOptionLine_ID()
         {
-            Object ii = Get_Value("C_PaySelectionLine_ID");
+            Object ii = Get_Value("VAB_PaymentOptionLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -187,20 +187,20 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetC_PaySelectionLine_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAB_PaymentOptionLine_ID().ToString());
         }
         /** Set Payment Selection.
-        @param C_PaySelection_ID Payment Selection */
-        public void SetC_PaySelection_ID(int C_PaySelection_ID)
+        @param VAB_PaymentOption_ID Payment Selection */
+        public void SetVAB_PaymentOption_ID(int VAB_PaymentOption_ID)
         {
-            if (C_PaySelection_ID < 1) throw new ArgumentException("C_PaySelection_ID is mandatory.");
-            Set_ValueNoCheck("C_PaySelection_ID", C_PaySelection_ID);
+            if (VAB_PaymentOption_ID < 1) throw new ArgumentException("VAB_PaymentOption_ID is mandatory.");
+            Set_ValueNoCheck("VAB_PaymentOption_ID", VAB_PaymentOption_ID);
         }
         /** Get Payment Selection.
         @return Payment Selection */
-        public int GetC_PaySelection_ID()
+        public int GetVAB_PaymentOption_ID()
         {
-            Object ii = Get_Value("C_PaySelection_ID");
+            Object ii = Get_Value("VAB_PaymentOption_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

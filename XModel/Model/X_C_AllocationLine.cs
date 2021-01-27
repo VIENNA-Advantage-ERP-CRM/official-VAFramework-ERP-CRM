@@ -116,24 +116,24 @@ namespace VAdvantage.Model
         public int GetVAB_Invoice_ID() { Object ii = Get_Value("VAB_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString()); }/** Set Order.
-@param C_Order_ID Sales Order */
-        public void SetC_Order_ID(int C_Order_ID)
+@param VAB_Order_ID Sales Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_ValueNoCheck("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_ValueNoCheck("VAB_Order_ID", null);
             else
-                Set_ValueNoCheck("C_Order_ID", C_Order_ID);
+                Set_ValueNoCheck("VAB_Order_ID", VAB_Order_ID);
         }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
-@param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        public int GetVAB_Order_ID() { Object ii = Get_Value("VAB_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
+@param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_ValueNoCheck("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_ValueNoCheck("VAB_Payment_ID", null);
             else
-                Set_ValueNoCheck("C_Payment_ID", C_Payment_ID);
+                Set_ValueNoCheck("VAB_Payment_ID", VAB_Payment_ID);
         }/** Get Payment.
 @return Payment identifier */
-        public int GetC_Payment_ID() { Object ii = Get_Value("C_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Transaction Date.
+        public int GetVAB_Payment_ID() { Object ii = Get_Value("VAB_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Transaction Date.
 @param DateTrx Transaction Date */
         public void SetDateTrx(DateTime? DateTrx) { Set_ValueNoCheck("DateTrx", (DateTime?)DateTrx); }/** Get Transaction Date.
 @return Transaction Date */
@@ -150,15 +150,15 @@ namespace VAdvantage.Model
         public void SetFRPT_TotalAmt(Decimal? FRPT_TotalAmt) { throw new ArgumentException("FRPT_TotalAmt Is virtual column"); }/** Get Total Amount.
 @return Total Amount */
         public Decimal GetFRPT_TotalAmt() { Object bd = Get_Value("FRPT_TotalAmt"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }/** Set Journal Line.
-@param GL_JournalLine_ID General Ledger Journal Line */
-        public void SetGL_JournalLine_ID(int GL_JournalLine_ID)
+@param VAGL_JRNLLine_ID General Ledger Journal Line */
+        public void SetVAGL_JRNLLine_ID(int VAGL_JRNLLine_ID)
         {
-            if (GL_JournalLine_ID <= 0) Set_Value("GL_JournalLine_ID", null);
+            if (VAGL_JRNLLine_ID <= 0) Set_Value("VAGL_JRNLLine_ID", null);
             else
-                Set_Value("GL_JournalLine_ID", GL_JournalLine_ID);
+                Set_Value("VAGL_JRNLLine_ID", VAGL_JRNLLine_ID);
         }/** Get Journal Line.
 @return General Ledger Journal Line */
-        public int GetGL_JournalLine_ID() { Object ii = Get_Value("GL_JournalLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Generate Allocation.
+        public int GetVAGL_JRNLLine_ID() { Object ii = Get_Value("VAGL_JRNLLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Generate Allocation.
 @param GenerateAllocation Generate Allocation */
         public void SetGenerateAllocation(String GenerateAllocation) { if (GenerateAllocation != null && GenerateAllocation.Length > 10) { log.Warning("Length > 10 - truncated"); GenerateAllocation = GenerateAllocation.Substring(0, 10); } Set_Value("GenerateAllocation", GenerateAllocation); }/** Get Generate Allocation.
 @return Generate Allocation */

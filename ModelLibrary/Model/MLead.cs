@@ -24,7 +24,7 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MLead : X_C_Lead
+    public class MLead : X_VAB_Lead
     {
         #region private variables
         /** BPartner			*/
@@ -42,13 +42,13 @@ namespace VAdvantage.Model
         /**
         * 	Standard Constructor
         *	@param ctx context
-        *	@param C_Lead_ID id
+        *	@param VAB_Lead_ID id
         *	@param trxName trx
         */
-        public MLead(Ctx ctx, int C_Lead_ID, Trx trxName) :
-            base(ctx, C_Lead_ID, trxName)
+        public MLead(Ctx ctx, int VAB_Lead_ID, Trx trxName) :
+            base(ctx, VAB_Lead_ID, trxName)
         {
-            if (C_Lead_ID == 0)
+            if (VAB_Lead_ID == 0)
             {
                 SetProcessed(false);
             }
@@ -78,7 +78,7 @@ namespace VAdvantage.Model
 
             Load(map);
             //	Overwrite
-            //	Set_ValueNoCheck ("C_Lead_ID", null);
+            //	Set_ValueNoCheck ("VAB_Lead_ID", null);
             SetIsActive(true);
             SetProcessed(false);
         }
@@ -182,7 +182,7 @@ namespace VAdvantage.Model
 
         /**
          * 	Set R_Status_ID
-         *	@see Model.X_C_Lead#SetR_Status_ID(int)
+         *	@see Model.X_VAB_Lead#SetR_Status_ID(int)
          *	@param R_Status_ID
          */
         public new void SetR_Status_ID(int R_Status_ID)
@@ -264,12 +264,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set C_Project_ID
-         *	@param C_Project_ID project
+         * 	Set VAB_Project_ID
+         *	@param VAB_Project_ID project
          */
-        public new void SetC_Project_ID(int C_Project_ID)
+        public new void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            base.SetC_Project_ID(C_Project_ID);
+            base.SetVAB_Project_ID(VAB_Project_ID);
             GetProject();
         }
 
@@ -279,11 +279,11 @@ namespace VAdvantage.Model
          */
         public MProject GetProject()
         {
-            if (GetC_Project_ID() == 0)
+            if (GetVAB_Project_ID() == 0)
                 _project = null;
             else if (_project == null
-                || _project.GetC_Project_ID() != GetC_Project_ID())
-                _project = new MProject(GetCtx(), GetC_Project_ID(), Get_TrxName());
+                || _project.GetVAB_Project_ID() != GetVAB_Project_ID())
+                _project = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
             return _project;
         }
 
@@ -421,11 +421,11 @@ namespace VAdvantage.Model
 
                 if (GetR_InterestArea_ID() != 0)
                 {
-                    string sql = "Select R_InterestArea_ID from vss_lead_interestarea where C_Lead_ID=" + GetC_Lead_ID();
+                    string sql = "Select R_InterestArea_ID from vss_lead_interestarea where VAB_Lead_ID=" + GetVAB_Lead_ID();
                     IDataReader dr = DB.ExecuteReader(sql, null, Get_TrxName());
                     while (dr.Read())
                     {
-                        X_R_ContactInterest Prospect = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
+                        X_VAR_InterestedUser Prospect = new X_VAR_InterestedUser(GetCtx(), 0, Get_TrxName());
                         Prospect.SetR_InterestArea_ID(Util.GetValueOfInt(dr[0]));
                         Prospect.SetVAB_BusinessPartner_ID(GetRef_BPartner_ID());
                         String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + GetRef_BPartner_ID();
@@ -541,7 +541,7 @@ namespace VAdvantage.Model
 
             //	Address
             MLocation location = new MLocation(GetCtx(), GetVAB_Country_ID(),
-                GetC_Region_ID(), GetCity(), Get_TrxName());
+                GetVAB_RegionState_ID(), GetCity(), Get_TrxName());
             location.SetAddress1(GetAddress1());
             location.SetAddress2(GetAddress2());
             location.SetPostal(GetPostal());
@@ -550,11 +550,11 @@ namespace VAdvantage.Model
             if (location.Save())
             {
                 MBPartnerLocation bpl = new MBPartnerLocation(_bp);
-                bpl.SetC_Location_ID(location.GetC_Location_ID());
+                bpl.SetVAB_Address_ID(location.GetVAB_Address_ID());
                 bpl.SetPhone(GetPhone());
                 bpl.SetPhone2(GetPhone2());
                 bpl.SetFax(GetFax());
-                bpl.SetC_SalesRegion_ID(GetC_SalesRegion_ID());
+                bpl.SetVAB_SalesRegionState_ID(GetVAB_SalesRegionState_ID());
                 if (bpl.Save())
                     SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
             }
@@ -565,10 +565,10 @@ namespace VAdvantage.Model
          * 	Create Project from Lead
          *	@return error message
          */
-        public String CreateProject(int C_ProjectType_ID)
+        public String CreateProject(int VAB_ProjectType_ID)
         {
-            if (GetC_Project_ID() != 0)
-                return "@AlreadyExists@: @C_Project_ID@ (ID=" + GetC_Project_ID() + ")";
+            if (GetVAB_Project_ID() != 0)
+                return "@AlreadyExists@: @VAB_Project_ID@ (ID=" + GetVAB_Project_ID() + ")";
             if (GetVAB_BusinessPartner_ID() == 0)
             {
                 String retValue = CreateBP();
@@ -588,19 +588,19 @@ namespace VAdvantage.Model
             _project.SetVAB_BusinessPartnerSR_ID(GetVAB_BusinessPartnerSR_ID());
             _project.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
 
-            _project.SetC_ProjectType_ID(C_ProjectType_ID);
+            _project.SetVAB_ProjectType_ID(VAB_ProjectType_ID);
             _project.SetSalesRep_ID(GetSalesRep_ID());
-            _project.SetC_SalesRegion_ID(GetC_SalesRegion_ID());
+            _project.SetVAB_SalesRegionState_ID(GetVAB_SalesRegionState_ID());
             if (!_project.Save())
                 return "@SaveError@";
             //
             if (GetRequest() != null)
             {
-                _request.SetC_Project_ID(_project.GetC_Project_ID());
+                _request.SetVAB_Project_ID(_project.GetVAB_Project_ID());
                 _request.Save();
             }
             //
-            SetC_Project_ID(_project.GetC_Project_ID());
+            SetVAB_Project_ID(_project.GetVAB_Project_ID());
             return null;
         }
 
@@ -649,15 +649,15 @@ namespace VAdvantage.Model
             else
                 _request.SetR_Status_ID();
             //
-            _request.SetC_Lead_ID(GetC_Lead_ID());
+            _request.SetVAB_Lead_ID(GetVAB_Lead_ID());
             //
             _request.SetVAB_BusinessPartner_ID(GetVAB_BusinessPartner_ID());
             _request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
-            _request.SetC_Project_ID(GetC_Project_ID());
+            _request.SetVAB_Project_ID(GetVAB_Project_ID());
             _request.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
             _request.SetR_Source_ID(GetR_Source_ID());
             _request.SetVAB_BusinessPartnerSR_ID(GetVAB_BusinessPartnerSR_ID());
-            _request.SetC_SalesRegion_ID(GetC_SalesRegion_ID());
+            _request.SetVAB_SalesRegionState_ID(GetVAB_SalesRegionState_ID());
 
             _request.SetSalesRep_ID(GetSalesRep_ID());
             if (!_request.Save())

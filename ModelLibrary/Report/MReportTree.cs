@@ -28,16 +28,16 @@ namespace VAdvantage.Report
         /// Get Report Tree (cached)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">optional hierarchy</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">optional hierarchy</param>
         /// <param name="ElementType">Account Schema Element Type</param>
         /// <returns>tree</returns>
-        public static MReportTree Get(Ctx ctx, int PA_Hierarchy_ID, String ElementType)
+        public static MReportTree Get(Ctx ctx, int VAPA_FinancialReportingOrder_ID, String ElementType)
         {
-            String key = PA_Hierarchy_ID + ElementType;
+            String key = VAPA_FinancialReportingOrder_ID + ElementType;
             MReportTree tree = (MReportTree)s_trees[key];//.get(key);
             if (tree == null)
             {
-                tree = new MReportTree(ctx, PA_Hierarchy_ID, ElementType);
+                tree = new MReportTree(ctx, VAPA_FinancialReportingOrder_ID, ElementType);
                 //s_trees.put(key, tree);
                 s_trees.Add(key, tree);
 
@@ -49,14 +49,14 @@ namespace VAdvantage.Report
         /// Get Where Clause
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">optional hierarchy</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">optional hierarchy</param>
         /// <param name="ElementType">Account Schema Element Type</param>
         /// <param name="ID">leaf element id</param>
         /// <returns>where clause</returns>
         public static String GetWhereClause(Ctx ctx,
-            int PA_Hierarchy_ID, String ElementType, int ID)
+            int VAPA_FinancialReportingOrder_ID, String ElementType, int ID)
         {
-            MReportTree tree = Get(ctx, PA_Hierarchy_ID, ElementType);
+            MReportTree tree = Get(ctx, VAPA_FinancialReportingOrder_ID, ElementType);
             return tree.GetWhereClause(ID);
         }	//	getWhereClause
 
@@ -64,14 +64,14 @@ namespace VAdvantage.Report
         /// Get Child IDs
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">optional hierarchie</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">optional hierarchie</param>
         /// <param name="ElementType">Account Schema Element Type</param>
         /// <param name="ID">id</param>
         /// <returns>array of IDs</returns>
         public static int?[] GetChildIDs(Ctx ctx,
-            int PA_Hierarchy_ID, String ElementType, int ID)
+            int VAPA_FinancialReportingOrder_ID, String ElementType, int ID)
         {
-            MReportTree tree = Get(ctx, PA_Hierarchy_ID, ElementType);
+            MReportTree tree = Get(ctx, VAPA_FinancialReportingOrder_ID, ElementType);
             return tree.GetChildIDs(ID);
         }	//	getChildIDs
 
@@ -84,9 +84,9 @@ namespace VAdvantage.Report
         /// Report Tree
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Hierarchy_ID">optional hierarchy</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">optional hierarchy</param>
         /// <param name="ElementType">Account Schema Element Type</param>
-        public MReportTree(Ctx ctx, int PA_Hierarchy_ID, String ElementType)
+        public MReportTree(Ctx ctx, int VAPA_FinancialReportingOrder_ID, String ElementType)
         {
             log = VLogger.GetVLogger(this.GetType().FullName);
             _ElementType = ElementType;
@@ -95,7 +95,7 @@ namespace VAdvantage.Report
                 || MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(_ElementType)
                 || MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(_ElementType))
                 _TreeType = MTree.TREETYPE_ElementValue;
-            _PA_Hierarchy_ID = PA_Hierarchy_ID;
+            _VAPA_FinancialReportingOrder_ID = VAPA_FinancialReportingOrder_ID;
             _ctx = ctx;
             //
             int VAF_TreeInfo_ID = GetVAF_TreeInfo_ID();
@@ -103,7 +103,7 @@ namespace VAdvantage.Report
             if (VAF_TreeInfo_ID == 0)
             {
                 throw new ArgumentException("No VAF_TreeInfo_ID for TreeType=" + _TreeType
-                    + ", PA_Hierarchy_ID=" + PA_Hierarchy_ID);
+                    + ", VAPA_FinancialReportingOrder_ID=" + VAPA_FinancialReportingOrder_ID);
             }
             //
             Boolean clientTree = true;
@@ -111,7 +111,7 @@ namespace VAdvantage.Report
         }	//	MReportTree
 
         /** Optional Hierarchy		*/
-        private int _PA_Hierarchy_ID = 0;
+        private int _VAPA_FinancialReportingOrder_ID = 0;
         /**	Element Type			*/
         private String _ElementType = null;
         /** Context					*/
@@ -131,12 +131,12 @@ namespace VAdvantage.Report
         /// <returns>tree</returns>
         protected int GetVAF_TreeInfo_ID()
         {
-            if (_PA_Hierarchy_ID == 0 || _PA_Hierarchy_ID == -1)
+            if (_VAPA_FinancialReportingOrder_ID == 0 || _VAPA_FinancialReportingOrder_ID == -1)
             {
                 return GetDefaultVAF_TreeInfo_ID();
             }
 
-            MHierarchy hierarchy = MHierarchy.Get(_ctx, _PA_Hierarchy_ID);
+            MHierarchy hierarchy = MHierarchy.Get(_ctx, _VAPA_FinancialReportingOrder_ID);
             int VAF_TreeInfo_ID = hierarchy.GetVAF_TreeInfo_ID(_TreeType);
 
             if (VAF_TreeInfo_ID == 0)

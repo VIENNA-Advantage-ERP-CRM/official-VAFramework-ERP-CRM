@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportColumn
  * Purpose        : Report Column Model
- * Class Used     : X_PA_ReportColumn
+ * Class Used     : X_VAPA_FR_ColumnSet
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportColumn:X_PA_ReportColumn
+    public class MReportColumn:X_VAPA_FR_ColumnSet
     {
    /// <summary>
    /// 	Copy
@@ -30,17 +30,17 @@ namespace VAdvantage.Report
    /// <param name="ctx">context</param>
    /// <param name="VAF_Client_ID">parent</param>
    /// <param name="VAF_Org_ID">parent</param>
-   /// <param name="PA_ReportColumnSet_ID">parent</param>
+   /// <param name="VAPA_FR_ColumnSet_ID">parent</param>
    /// <param name="source">copy source</param>
    /// <param name="trxName">transaction</param>
    /// <returns>report column</returns>
 	public static MReportColumn Copy (Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, 
-		int PA_ReportColumnSet_ID, MReportColumn source, Trx trxName)
+		int VAPA_FR_ColumnSet_ID, MReportColumn source, Trx trxName)
 	{
 		MReportColumn retValue = new MReportColumn (ctx, 0, trxName);
 		MReportColumn.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
 		//
-		retValue.SetPA_ReportColumnSet_ID(PA_ReportColumnSet_ID);	//	parent
+		retValue.SetVAPA_FR_ColumnSet_ID(VAPA_FR_ColumnSet_ID);	//	parent
 		retValue.SetOper_1_ID(0);
 		retValue.SetOper_2_ID(0);
 		return retValue;
@@ -51,12 +51,12 @@ namespace VAdvantage.Report
 	///	Constructor
 	/// </summary>
 	/// <param name="ctx">context</param>
-	/// <param name="PA_ReportColumn_ID">id</param>
+	/// <param name="VAPA_FR_ColumnSet_ID">id</param>
 	/// <param name="trxName">transction</param>
-	public MReportColumn(Ctx ctx, int PA_ReportColumn_ID, Trx trxName):base(ctx, PA_ReportColumn_ID, trxName)
+	public MReportColumn(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName):base(ctx, VAPA_FR_ColumnSet_ID, trxName)
 	{
 		
-		if (PA_ReportColumn_ID == 0)
+		if (VAPA_FR_ColumnSet_ID == 0)
 		{
 			SetIsPrinted (true);
 			SetSeqNo (0);
@@ -162,9 +162,9 @@ namespace VAdvantage.Report
 	/// <summary>
 	///	Get Segment Value Where Clause
 	/// </summary>
-	/// <param name="PA_Hierarchy_ID"> hierarchy</param>
+	/// <param name="VAPA_FinancialReportingOrder_ID"> hierarchy</param>
 	/// <returns> where clause</returns>
-	public String GetWhereClause(int PA_Hierarchy_ID)
+	public String GetWhereClause(int VAPA_FinancialReportingOrder_ID)
 	{
 		if (!IsColumnTypeSegmentValue())
         {
@@ -180,19 +180,19 @@ namespace VAdvantage.Report
 		else if (MReportColumn.ELEMENTTYPE_Product.Equals(et))
 			ID = GetM_Product_ID();
 		else if (MReportColumn.ELEMENTTYPE_Project.Equals(et))
-			ID = GetC_Project_ID();
+			ID = GetVAB_Project_ID();
 		else if (MReportColumn.ELEMENTTYPE_Activity.Equals(et))
 			ID = GetVAB_BillingCode_ID();
 		else if (MReportColumn.ELEMENTTYPE_Campaign.Equals(et))
 			ID = GetVAB_Promotion_ID();
 		else if (MReportColumn.ELEMENTTYPE_LocationFrom.Equals(et))
-			ID = GetC_Location_ID();
+			ID = GetVAB_Address_ID();
 		else if (MReportColumn.ELEMENTTYPE_LocationTo.Equals(et))
-			ID = GetC_Location_ID();
+			ID = GetVAB_Address_ID();
 		else if (MReportColumn.ELEMENTTYPE_OrgTrx.Equals(et))
 			ID = GetOrg_ID();
 		else if (MReportColumn.ELEMENTTYPE_SalesRegion.Equals(et))
-			ID = GetC_SalesRegion_ID();
+			ID = GetVAB_SalesRegionState_ID();
 		else if (MReportColumn.ELEMENTTYPE_Account.Equals(et))
 			ID = GetVAB_Acct_Element_ID();
 		else if (MReportColumn.ELEMENTTYPE_UserList1.Equals(et))
@@ -211,7 +211,7 @@ namespace VAdvantage.Report
 			log.Fine("No Restrictions - No ID for EntityType=" + et);
 			return "";
 		}
-		return " AND " + MReportTree.GetWhereClause (GetCtx(), PA_Hierarchy_ID, et, ID);
+		return " AND " + MReportTree.GetWhereClause (GetCtx(), VAPA_FinancialReportingOrder_ID, et, ID);
 	}	//	getWhereClause
 	
 	/// <summary>

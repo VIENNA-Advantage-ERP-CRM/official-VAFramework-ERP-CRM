@@ -476,34 +476,34 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID <= 0) Set_ValueNoCheck("C_PaymentTerm_ID", null);
+            if (VAB_PaymentTerm_ID <= 0) Set_ValueNoCheck("VAB_PaymentTerm_ID", null);
             else
-                Set_ValueNoCheck("C_PaymentTerm_ID", C_PaymentTerm_ID);
+                Set_ValueNoCheck("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Region.
-        @param C_Region_ID Identifies a geographical Region */
-        public void SetC_Region_ID(int C_Region_ID)
+        @param VAB_RegionState_ID Identifies a geographical Region */
+        public void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID <= 0) Set_ValueNoCheck("C_Region_ID", null);
+            if (VAB_RegionState_ID <= 0) Set_ValueNoCheck("VAB_RegionState_ID", null);
             else
-                Set_ValueNoCheck("C_Region_ID", C_Region_ID);
+                Set_ValueNoCheck("VAB_RegionState_ID", VAB_RegionState_ID);
         }
         /** Get Region.
         @return Identifies a geographical Region */
-        public int GetC_Region_ID()
+        public int GetVAB_RegionState_ID()
         {
-            Object ii = Get_Value("C_Region_ID");
+            Object ii = Get_Value("VAB_RegionState_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

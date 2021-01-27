@@ -835,8 +835,8 @@
                                         contactInfoDialog.close();
                                     }
                                     else {
-                                        //zoomQuery.addRestriction("C_Order" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
-                                        zoomQuery.addRestriction("C_Order" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
+                                        //zoomQuery.addRestriction("VAB_Order" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
+                                        zoomQuery.addRestriction("VAB_Order" + "_ID", VIS.Query.prototype.EQUAL, dd[1]);
                                         win = VIS.viewManager.startWindow(dd[0], zoomQuery);
                                         win.onLoad = function () {
                                             var gc = win.cPanel.curGC;

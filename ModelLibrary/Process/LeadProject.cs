@@ -27,9 +27,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class LeadProject : ProcessEngine.SvrProcess
     {
    /** Project Type		*/
-	private int _C_ProjectType_ID = 0;
+	private int _VAB_ProjectType_ID = 0;
 	/** Lead				*/
-	private int _C_Lead_ID = 0;
+	private int _VAB_Lead_ID = 0;
 	
 	/// <summary>
 	/// Prepare
@@ -44,16 +44,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("C_ProjectType_ID"))
+			else if (name.Equals("VAB_ProjectType_ID"))
             {
-				_C_ProjectType_ID = para[i].GetParameterAsInt();
+				_VAB_ProjectType_ID = para[i].GetParameterAsInt();
             }
 			else
             {
 				log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
 		}
-		_C_Lead_ID = GetRecord_ID();
+		_VAB_Lead_ID = GetRecord_ID();
 	}	//	prepare
 
 	/// <summary>
@@ -62,24 +62,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>summary</returns>
 	protected override String DoIt()
 	{
-		log.Info("C_Lead_ID=" + _C_Lead_ID + ",C_ProjectType_ID=" + _C_ProjectType_ID);
-        if (_C_Lead_ID == 0)
+		log.Info("VAB_Lead_ID=" + _VAB_Lead_ID + ",VAB_ProjectType_ID=" + _VAB_ProjectType_ID);
+        if (_VAB_Lead_ID == 0)
         {
-            throw new Exception("@C_Lead_ID@ ID=0");
+            throw new Exception("@VAB_Lead_ID@ ID=0");
         }
-        if (_C_ProjectType_ID == 0)
+        if (_VAB_ProjectType_ID == 0)
         {
-            throw new Exception("@C_ProjectType_ID@ ID=0");
+            throw new Exception("@VAB_ProjectType_ID@ ID=0");
 
         }
 
-		MLead lead = new MLead (GetCtx(), _C_Lead_ID, Get_TrxName());
-        if (lead.Get_ID() != _C_Lead_ID)
+		MLead lead = new MLead (GetCtx(), _VAB_Lead_ID, Get_TrxName());
+        if (lead.Get_ID() != _VAB_Lead_ID)
         {
-            throw new Exception("@NotFound@: @C_Lead_ID@ ID=" + _C_Lead_ID);
+            throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);
         }
 		//
-		String retValue = lead.CreateProject(_C_ProjectType_ID);
+		String retValue = lead.CreateProject(_VAB_ProjectType_ID);
         if (retValue != null)
         {
             throw new SystemException(retValue);
@@ -87,7 +87,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		lead.Save();
 		MProject project = lead.GetProject();
 		//
-		return "@C_Project_ID@ " + project.GetName();
+		return "@VAB_Project_ID@ " + project.GetName();
 	}	//	doIt
 
 }	//	LeadProject

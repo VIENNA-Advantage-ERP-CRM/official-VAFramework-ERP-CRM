@@ -348,82 +348,82 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Address.
-        @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+        @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID <= 0) Set_Value("C_PaymentTerm_ID", null);
+            if (VAB_PaymentTerm_ID <= 0) Set_Value("VAB_PaymentTerm_ID", null);
             else
-                Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+                Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Region.
-        @param C_Region_ID Identifies a geographical Region */
-        public void SetC_Region_ID(int C_Region_ID)
+        @param VAB_RegionState_ID Identifies a geographical Region */
+        public void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            if (VAB_RegionState_ID <= 0) Set_Value("VAB_RegionState_ID", null);
             else
-                Set_Value("C_Region_ID", C_Region_ID);
+                Set_Value("VAB_RegionState_ID", VAB_RegionState_ID);
         }
         /** Get Region.
         @return Identifies a geographical Region */
-        public int GetC_Region_ID()
+        public int GetVAB_RegionState_ID()
         {
-            Object ii = Get_Value("C_Region_ID");
+            Object ii = Get_Value("VAB_RegionState_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tax.
-        @param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        @param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID <= 0) Set_Value("C_Tax_ID", null);
+            if (VAB_TaxRate_ID <= 0) Set_Value("VAB_TaxRate_ID", null);
             else
-                Set_Value("C_Tax_ID", C_Tax_ID);
+                Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }
         /** Get Tax.
         @return Tax identifier */
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            Object ii = Get_Value("C_Tax_ID");
+            Object ii = Get_Value("VAB_TaxRate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

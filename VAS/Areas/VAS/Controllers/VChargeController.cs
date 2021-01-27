@@ -29,13 +29,13 @@ namespace VIS.Controllers
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult CreateCharge(int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, String name, int VAB_Acct_Element_ID, bool expense)
+        public JsonResult CreateCharge(int m_VAB_AccountBook_ID, int m_VAB_TaxCategory_ID, String name, int VAB_Acct_Element_ID, bool expense)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 VChargeModel obj = new VChargeModel();
-                obj.CreateCharge(ctx, m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, VAB_Acct_Element_ID, expense);
+                obj.CreateCharge(ctx, m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, name, VAB_Acct_Element_ID, expense);
                 return Json(new { obj.ID, obj.Msg }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);

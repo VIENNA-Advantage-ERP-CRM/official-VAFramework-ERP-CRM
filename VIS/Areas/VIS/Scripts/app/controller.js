@@ -833,9 +833,9 @@
 
     GridTab.prototype.getFooterInfo = function (tableName, ctx, windowNo, tabNo, rec_id) {
         return new Promise(function (resolve, reject) {
-            if (tableName.startsWith("C_Order") || tableName.startsWith("VAB_Invoice")) {
+            if (tableName.startsWith("VAB_Order") || tableName.startsWith("VAB_Invoice")) {
                 var Record_ID;
-                var isOrder = tableName.startsWith("C_Order");
+                var isOrder = tableName.startsWith("VAB_Order");
 
                 var mf = null;
                 var mfMC = null;
@@ -869,7 +869,7 @@
 
                 var Record_ID = 0;
                 if (isOrder) {
-                    Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
+                    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Order_ID");
                 }
                 else {
                     Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
@@ -934,18 +934,18 @@
 
 
     GridTab.prototype.getTrxInfo = function (tableName, ctx, windowNo, tabNo) {
-        if (tableName.startsWith("C_Order") || tableName.startsWith("VAB_Invoice")) {
+        if (tableName.startsWith("VAB_Order") || tableName.startsWith("VAB_Invoice")) {
             var Record_ID;
-            var isOrder = tableName.startsWith("C_Order");
+            var isOrder = tableName.startsWith("VAB_Order");
             //
             //var sql = new StringBuilder("SELECT COUNT(*) AS Lines,c.ISO_Code,o.TotalLines,o.GrandTotal,"
             //		+ "CURRENCYBASEWITHCONVERSIONTYPE(o.GrandTotal,o.VAB_Currency_ID,o.DateAcct, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) AS ConvAmt ");
             //if (isOrder) {
-            //    Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
-            //    sql.append("FROM C_Order o"
+            //    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Order_ID");
+            //    sql.append("FROM VAB_Order o"
             //			+ " INNER JOIN VAB_Currency c ON (o.VAB_Currency_ID=c.VAB_Currency_ID)"
-            //			+ " INNER JOIN C_OrderLine l ON (o.C_Order_ID=l.C_Order_ID) "
-            //			+ "WHERE o.C_Order_ID=" + Record_ID + "");
+            //			+ " INNER JOIN VAB_OrderLine l ON (o.VAB_Order_ID=l.VAB_Order_ID) "
+            //			+ "WHERE o.VAB_Order_ID=" + Record_ID + "");
             //}
             //else {
             //    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
@@ -990,7 +990,7 @@
 
                 var Record_ID = 0;
                 if (isOrder) {
-                    Record_ID = ctx.getContextAsInt(windowNo, "C_Order_ID");
+                    Record_ID = ctx.getContextAsInt(windowNo, "VAB_Order_ID");
                 }
                 else {
                     Record_ID = ctx.getContextAsInt(windowNo, "VAB_Invoice_ID");
@@ -1460,7 +1460,7 @@
         else if (colName.equals("CreatedBy") || colName.equals("UpdatedBy"))
             refColName = "VAF_UserContact_ID";
         else if (colName.equals("Orig_Order_ID"))
-            refColName = "C_Order_ID";
+            refColName = "VAB_Order_ID";
         else if (colName.equals("Orig_InOut_ID"))
             refColName = "M_InOut_ID";
         if (refColName != null) {
@@ -4610,9 +4610,9 @@
                     || columnName.equals("Posted")
                     //	Order/Invoice
                     || columnName.equals("GrandTotal") || columnName.equals("TotalLines")
-                    || columnName.equals("VAB_CashJRNLLine_ID") || columnName.equals("C_Payment_ID")
+                    || columnName.equals("VAB_CashJRNLLine_ID") || columnName.equals("VAB_Payment_ID")
                     || columnName.equals("IsPaid") || columnName.equals("IsAllocated")
-                    || columnName.equalsIgnoreCase("C_Location_ID")
+                    || columnName.equalsIgnoreCase("VAB_Address_ID")
                     || columnName.equals("IsApproved") || columnName.equals("IsDelivered")
                     || columnName.equals("IsInvoiced") || columnName.equals("TotalDr")
                     || columnName.equals("TotalCr")

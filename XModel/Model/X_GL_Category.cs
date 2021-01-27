@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for GL_Category
+/** Generated Model for VAGL_Group
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_Category : PO
+public class X_VAGL_Group : PO
 {
-public X_GL_Category (Context ctx, int GL_Category_ID, Trx trxName) : base (ctx, GL_Category_ID, trxName)
+public X_VAGL_Group (Context ctx, int VAGL_Group_ID, Trx trxName) : base (ctx, VAGL_Group_ID, trxName)
 {
-/** if (GL_Category_ID == 0)
+/** if (VAGL_Group_ID == 0)
 {
 SetCategoryType (null);	// M
-SetGL_Category_ID (0);
+SetVAGL_Group_ID (0);
 SetIsDefault (false);
 SetName (null);
 }
  */
 }
-public X_GL_Category (Ctx ctx, int GL_Category_ID, Trx trxName) : base (ctx, GL_Category_ID, trxName)
+public X_VAGL_Group (Ctx ctx, int VAGL_Group_ID, Trx trxName) : base (ctx, VAGL_Group_ID, trxName)
 {
-/** if (GL_Category_ID == 0)
+/** if (VAGL_Group_ID == 0)
 {
 SetCategoryType (null);	// M
-SetGL_Category_ID (0);
+SetVAGL_Group_ID (0);
 SetIsDefault (false);
 SetName (null);
 }
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Category (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Group (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_GL_Category (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Category (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Group (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_GL_Category (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Category (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_Group (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_Category()
+static X_VAGL_Group()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389059551L;
 public static int Table_ID;
  // =218;
 
-/** TableName=GL_Category */
-public static String Table_Name="GL_Category";
+/** TableName=VAGL_Group */
+public static String Table_Name="VAGL_Group";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_GL_Category[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_Group[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -172,17 +172,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set GL Category.
-@param GL_Category_ID General Ledger Category */
-public void SetGL_Category_ID (int GL_Category_ID)
+@param VAGL_Group_ID General Ledger Category */
+public void SetVAGL_Group_ID (int VAGL_Group_ID)
 {
-if (GL_Category_ID < 1) throw new ArgumentException ("GL_Category_ID is mandatory.");
-Set_ValueNoCheck ("GL_Category_ID", GL_Category_ID);
+if (VAGL_Group_ID < 1) throw new ArgumentException ("VAGL_Group_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_Group_ID", VAGL_Group_ID);
 }
 /** Get GL Category.
 @return General Ledger Category */
-public int GetGL_Category_ID() 
+public int GetVAGL_Group_ID() 
 {
-Object ii = Get_Value("GL_Category_ID");
+Object ii = Get_Value("VAGL_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

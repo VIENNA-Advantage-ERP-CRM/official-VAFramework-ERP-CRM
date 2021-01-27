@@ -11,18 +11,18 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ProjectIssue
+/** Generated Model for VAB_ProjectSupply
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ProjectIssue : PO
+public class X_VAB_ProjectSupply : PO
 {
-public X_C_ProjectIssue (Context ctx, int C_ProjectIssue_ID, Trx trxName) : base (ctx, C_ProjectIssue_ID, trxName)
+public X_VAB_ProjectSupply (Context ctx, int VAB_ProjectSupply_ID, Trx trxName) : base (ctx, VAB_ProjectSupply_ID, trxName)
 {
-/** if (C_ProjectIssue_ID == 0)
+/** if (VAB_ProjectSupply_ID == 0)
 {
-SetC_ProjectIssue_ID (0);
-SetC_Project_ID (0);
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_ProjectIssue WHERE C_Project_ID=@C_Project_ID@
+SetVAB_ProjectSupply_ID (0);
+SetVAB_Project_ID (0);
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_ProjectSupply WHERE VAB_Project_ID=@VAB_Project_ID@
 SetM_Locator_ID (0);
 SetM_Product_ID (0);
 SetMovementDate (DateTime.Now);
@@ -32,13 +32,13 @@ SetProcessed (false);	// N
 }
  */
 }
-public X_C_ProjectIssue (Ctx ctx, int C_ProjectIssue_ID, Trx trxName) : base (ctx, C_ProjectIssue_ID, trxName)
+public X_VAB_ProjectSupply (Ctx ctx, int VAB_ProjectSupply_ID, Trx trxName) : base (ctx, VAB_ProjectSupply_ID, trxName)
 {
-/** if (C_ProjectIssue_ID == 0)
+/** if (VAB_ProjectSupply_ID == 0)
 {
-SetC_ProjectIssue_ID (0);
-SetC_Project_ID (0);
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_ProjectIssue WHERE C_Project_ID=@C_Project_ID@
+SetVAB_ProjectSupply_ID (0);
+SetVAB_Project_ID (0);
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_ProjectSupply WHERE VAB_Project_ID=@VAB_Project_ID@
 SetM_Locator_ID (0);
 SetM_Product_ID (0);
 SetMovementDate (DateTime.Now);
@@ -53,7 +53,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectIssue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectSupply (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_C_ProjectIssue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectIssue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectSupply (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_C_ProjectIssue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectIssue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ProjectSupply (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ProjectIssue()
+static X_VAB_ProjectSupply()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -88,8 +88,8 @@ public static long updatedMS = 1280389057467L;
 public static int Table_ID;
  // =623;
 
-/** TableName=C_ProjectIssue */
-public static String Table_Name="C_ProjectIssue";
+/** TableName=VAB_ProjectSupply */
+public static String Table_Name="VAB_ProjectSupply";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -123,36 +123,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ProjectIssue[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ProjectSupply[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Project Issue.
-@param C_ProjectIssue_ID Project Issues (Material, Labor) */
-public void SetC_ProjectIssue_ID (int C_ProjectIssue_ID)
+@param VAB_ProjectSupply_ID Project Issues (Material, Labor) */
+public void SetVAB_ProjectSupply_ID (int VAB_ProjectSupply_ID)
 {
-if (C_ProjectIssue_ID < 1) throw new ArgumentException ("C_ProjectIssue_ID is mandatory.");
-Set_ValueNoCheck ("C_ProjectIssue_ID", C_ProjectIssue_ID);
+if (VAB_ProjectSupply_ID < 1) throw new ArgumentException ("VAB_ProjectSupply_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ProjectSupply_ID", VAB_ProjectSupply_ID);
 }
 /** Get Project Issue.
 @return Project Issues (Material, Labor) */
-public int GetC_ProjectIssue_ID() 
+public int GetVAB_ProjectSupply_ID() 
 {
-Object ii = Get_Value("C_ProjectIssue_ID");
+Object ii = Get_Value("VAB_ProjectSupply_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID < 1) throw new ArgumentException ("C_Project_ID is mandatory.");
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+if (VAB_Project_ID < 1) throw new ArgumentException ("VAB_Project_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -160,7 +160,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Project_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Project_ID().ToString());
 }
 /** Set Description.
 @param Description Optional short description of the record */

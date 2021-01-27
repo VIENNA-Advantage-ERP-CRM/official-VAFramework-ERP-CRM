@@ -17,7 +17,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     //Accounting Balances Accumulation Model
-    public class MFactAccumulation : X_Fact_Accumulation
+    public class MFactAccumulation : X_Actual_Accumulation
     {
         #region Private Variables
         /** Logger for class MFactAccumulation */
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
      */
         public static List<MFactAccumulation> GetAll(Ctx ctx, int VAB_AccountBook_ID)
         {
-            StringBuilder sql = new StringBuilder("SELECT * FROM Fact_Accumulation "
+            StringBuilder sql = new StringBuilder("SELECT * FROM Actual_Accumulation "
                 + "WHERE IsActive='Y' AND VAF_Client_ID=" + ctx.GetVAF_Client_ID());
             if (VAB_AccountBook_ID > 0)
             {
@@ -96,11 +96,11 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param Fact_Accumulation_ID id
+         *	@param Actual_Accumulation_ID id
          *	@param trx p_trx
          */
-        public MFactAccumulation(Ctx ctx, int Fact_Accumulation_ID, Trx trx)
-            : base(ctx, Fact_Accumulation_ID, trx)
+        public MFactAccumulation(Ctx ctx, int Actual_Accumulation_ID, Trx trx)
+            : base(ctx, Actual_Accumulation_ID, trx)
         {
 
         }
@@ -200,11 +200,11 @@ namespace VAdvantage.Model
             if (IsDefault())
             {
                 Boolean exists = false;
-                String sql = "SELECT * FROM Fact_Accumulation "
+                String sql = "SELECT * FROM Actual_Accumulation "
                     + " WHERE IsDefault = 'Y'"
                     + " AND IsActive = 'Y' "
                     + " AND VAF_Client_ID = " + GetVAF_Client_ID()
-                    + " AND Fact_Accumulation_ID <> " + GetFACT_ACCUMULATION_ID();
+                    + " AND Actual_Accumulation_ID <> " + GetACTUAL_ACCUMULATION_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -251,8 +251,8 @@ namespace VAdvantage.Model
                         Is_ValueChanged("IsUserList2"))
                 {
                     Boolean exists = false;
-                    String sql = "SELECT * FROM Fact_Acct_Balance "
-                        + " WHERE Fact_Accumulation_ID = " + GetFACT_ACCUMULATION_ID();
+                    String sql = "SELECT * FROM Actual_Acct_Balance "
+                        + " WHERE Actual_Accumulation_ID = " + GetACTUAL_ACCUMULATION_ID();
                     IDataReader idr = null;
                     try
                     {

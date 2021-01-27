@@ -21,8 +21,8 @@ public X_T_Report (Context ctx, int T_Report_ID, Trx trxName) : base (ctx, T_Rep
 /** if (T_Report_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetFact_Acct_ID (0);
-SetPA_ReportLine_ID (0);
+SetActual_Acct_Detail_ID (0);
+SetVAPA_FR_Row_ID (0);
 SetRecord_ID (0);
 }
  */
@@ -32,8 +32,8 @@ public X_T_Report (Ctx ctx, int T_Report_ID, Trx trxName) : base (ctx, T_Report_
 /** if (T_Report_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetFact_Acct_ID (0);
-SetPA_ReportLine_ID (0);
+SetActual_Acct_Detail_ID (0);
+SetVAPA_FR_Row_ID (0);
 SetRecord_ID (0);
 }
  */
@@ -449,17 +449,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Accounting Fact.
-@param Fact_Acct_ID Accounting Fact */
-public void SetFact_Acct_ID (int Fact_Acct_ID)
+@param Actual_Acct_Detail_ID Accounting Fact */
+public void SetActual_Acct_Detail_ID (int Actual_Acct_Detail_ID)
 {
-if (Fact_Acct_ID < 1) throw new ArgumentException ("Fact_Acct_ID is mandatory.");
-Set_ValueNoCheck ("Fact_Acct_ID", Fact_Acct_ID);
+if (Actual_Acct_Detail_ID < 1) throw new ArgumentException ("Actual_Acct_Detail_ID is mandatory.");
+Set_ValueNoCheck ("Actual_Acct_Detail_ID", Actual_Acct_Detail_ID);
 }
 /** Get Accounting Fact.
 @return Accounting Fact */
-public int GetFact_Acct_ID() 
+public int GetActual_Acct_Detail_ID() 
 {
-Object ii = Get_Value("Fact_Acct_ID");
+Object ii = Get_Value("Actual_Acct_Detail_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -495,17 +495,17 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 /** Set Report Line.
-@param PA_ReportLine_ID Report Line */
-public void SetPA_ReportLine_ID (int PA_ReportLine_ID)
+@param VAPA_FR_Row_ID Report Line */
+public void SetVAPA_FR_Row_ID (int VAPA_FR_Row_ID)
 {
-if (PA_ReportLine_ID < 1) throw new ArgumentException ("PA_ReportLine_ID is mandatory.");
-Set_ValueNoCheck ("PA_ReportLine_ID", PA_ReportLine_ID);
+if (VAPA_FR_Row_ID < 1) throw new ArgumentException ("VAPA_FR_Row_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_FR_Row_ID", VAPA_FR_Row_ID);
 }
 /** Get Report Line.
 @return Report Line */
-public int GetPA_ReportLine_ID() 
+public int GetVAPA_FR_Row_ID() 
 {
-Object ii = Get_Value("PA_ReportLine_ID");
+Object ii = Get_Value("VAPA_FR_Row_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

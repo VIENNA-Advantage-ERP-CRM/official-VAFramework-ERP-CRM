@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for RC_ActionView
+/** Generated Model for VARC_ActionView
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_RC_ActionView : PO
+public class X_VARC_ActionView : PO
 {
-public X_RC_ActionView (Context ctx, int RC_ActionView_ID, Trx trxName) : base (ctx, RC_ActionView_ID, trxName)
+public X_VARC_ActionView (Context ctx, int VARC_ActionView_ID, Trx trxName) : base (ctx, VARC_ActionView_ID, trxName)
 {
-/** if (RC_ActionView_ID == 0)
+/** if (VARC_ActionView_ID == 0)
 {
-SetRC_ActionView_ID (0);
+SetVARC_ActionView_ID (0);
 }
  */
 }
-public X_RC_ActionView (Ctx ctx, int RC_ActionView_ID, Trx trxName) : base (ctx, RC_ActionView_ID, trxName)
+public X_VARC_ActionView (Ctx ctx, int VARC_ActionView_ID, Trx trxName) : base (ctx, VARC_ActionView_ID, trxName)
 {
-/** if (RC_ActionView_ID == 0)
+/** if (VARC_ActionView_ID == 0)
 {
-SetRC_ActionView_ID (0);
+SetVARC_ActionView_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetRC_ActionView_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ActionView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_ActionView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_RC_ActionView (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ActionView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_ActionView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_RC_ActionView (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_ActionView (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VARC_ActionView (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_RC_ActionView()
+static X_VARC_ActionView()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1308040511100L;
 public static int Table_ID;
  // =1000189;
 
-/** TableName=RC_ActionView */
-public static String Table_Name="RC_ActionView";
+/** TableName=VARC_ActionView */
+public static String Table_Name="VARC_ActionView";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -107,7 +107,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_RC_ActionView[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VARC_ActionView[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Field.
@@ -176,34 +176,34 @@ public String GetName()
 {
 return (String)Get_Value("Name");
 }
-/** Set RC_ActionView_ID.
-@param RC_ActionView_ID RC_ActionView_ID */
-public void SetRC_ActionView_ID (int RC_ActionView_ID)
+/** Set VARC_ActionView_ID.
+@param VARC_ActionView_ID VARC_ActionView_ID */
+public void SetVARC_ActionView_ID (int VARC_ActionView_ID)
 {
-if (RC_ActionView_ID < 1) throw new ArgumentException ("RC_ActionView_ID is mandatory.");
-Set_ValueNoCheck ("RC_ActionView_ID", RC_ActionView_ID);
+if (VARC_ActionView_ID < 1) throw new ArgumentException ("VARC_ActionView_ID is mandatory.");
+Set_ValueNoCheck ("VARC_ActionView_ID", VARC_ActionView_ID);
 }
-/** Get RC_ActionView_ID.
-@return RC_ActionView_ID */
-public int GetRC_ActionView_ID() 
+/** Get VARC_ActionView_ID.
+@return VARC_ActionView_ID */
+public int GetVARC_ActionView_ID() 
 {
-Object ii = Get_Value("RC_ActionView_ID");
+Object ii = Get_Value("VARC_ActionView_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set RC_View_ID.
-@param RC_View_ID RC_View_ID */
-public void SetRC_View_ID (int RC_View_ID)
+/** Set VARC_View_ID.
+@param VARC_View_ID VARC_View_ID */
+public void SetVARC_View_ID (int VARC_View_ID)
 {
-if (RC_View_ID <= 0) Set_Value ("RC_View_ID", null);
+if (VARC_View_ID <= 0) Set_Value ("VARC_View_ID", null);
 else
-Set_Value ("RC_View_ID", RC_View_ID);
+Set_Value ("VARC_View_ID", VARC_View_ID);
 }
-/** Get RC_View_ID.
-@return RC_View_ID */
-public int GetRC_View_ID() 
+/** Get VARC_View_ID.
+@return VARC_View_ID */
+public int GetVARC_View_ID() 
 {
-Object ii = Get_Value("RC_View_ID");
+Object ii = Get_Value("VARC_View_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

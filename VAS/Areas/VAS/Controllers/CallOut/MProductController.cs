@@ -41,7 +41,7 @@ namespace VIS.Controllers
             }           
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetC_UOM_ID(string fields)
+        public JsonResult GetVAB_UOM_ID(string fields)
         {
            
             string retJSON = "";
@@ -49,7 +49,7 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MProductModel objProduct = new MProductModel();
-                retJSON = JsonConvert.SerializeObject(objProduct.GetC_UOM_ID(ctx,fields));
+                retJSON = JsonConvert.SerializeObject(objProduct.GetVAB_UOM_ID(ctx,fields));
             }            
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

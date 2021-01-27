@@ -20,7 +20,7 @@ public X_RV_WarehousePrice (Context ctx, int RV_WarehousePrice_ID, Trx trxName) 
 {
 /** if (RV_WarehousePrice_ID == 0)
 {
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetM_PriceList_Version_ID (0);
 SetM_Product_ID (0);
 SetM_Warehouse_ID (0);
@@ -34,7 +34,7 @@ public X_RV_WarehousePrice (Ctx ctx, int RV_WarehousePrice_ID, Trx trxName) : ba
 {
 /** if (RV_WarehousePrice_ID == 0)
 {
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetM_PriceList_Version_ID (0);
 SetM_Product_ID (0);
 SetM_Warehouse_ID (0);
@@ -123,17 +123,17 @@ StringBuilder sb = new StringBuilder ("X_RV_WarehousePrice[").Append(Get_ID()).A
 return sb.ToString();
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_ValueNoCheck ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_ValueNoCheck ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

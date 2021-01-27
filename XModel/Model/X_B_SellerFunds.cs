@@ -153,34 +153,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_Value ("VAB_Order_ID", null);
 else
-Set_Value ("C_Order_ID", C_Order_ID);
+Set_Value ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID)
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID)
 {
-if (C_Payment_ID <= 0) Set_Value ("C_Payment_ID", null);
+if (VAB_Payment_ID <= 0) Set_Value ("VAB_Payment_ID", null);
 else
-Set_Value ("C_Payment_ID", C_Payment_ID);
+Set_Value ("VAB_Payment_ID", VAB_Payment_ID);
 }
 /** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() 
+public int GetVAB_Payment_ID() 
 {
-Object ii = Get_Value("C_Payment_ID");
+Object ii = Get_Value("VAB_Payment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

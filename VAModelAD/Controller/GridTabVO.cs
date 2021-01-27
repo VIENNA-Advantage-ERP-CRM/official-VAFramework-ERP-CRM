@@ -345,7 +345,7 @@ namespace VAdvantage.Controller
                 {
                     //	Document Translation
                     vo.TableName = Utility.Util.GetValueOfString(dr["TableName"]);
-                    if (!Env.IsBaseTranslation(vo.TableName)	//	C_UOM, ...
+                    if (!Env.IsBaseTranslation(vo.TableName)	//	VAB_UOM, ...
                         && !Common.Common.IsMultiLingualDocument(vo.ctx))
                         showTrl = false;
                     if (!showTrl)

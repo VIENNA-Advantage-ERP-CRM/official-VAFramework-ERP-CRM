@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_PeriodControl
+ * Class Used     : X_VAB_YearPeriodControl
  * Chronological Development
  * Veena Pandey     07-May-2009
  ******************************************************/
@@ -17,20 +17,20 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MPeriodControl : X_C_PeriodControl
+    public class MPeriodControl : X_VAB_YearPeriodControl
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_PeriodControl_ID">id</param>
+        /// <param name="VAB_YearPeriodControl_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPeriodControl(Ctx ctx, int C_PeriodControl_ID, Trx trxName)
-            : base(ctx, C_PeriodControl_ID, trxName)
+        public MPeriodControl(Ctx ctx, int VAB_YearPeriodControl_ID, Trx trxName)
+            : base(ctx, VAB_YearPeriodControl_ID, trxName)
         {
-            if (C_PeriodControl_ID == 0)
+            if (VAB_YearPeriodControl_ID == 0)
             {
-                //	setC_Period_ID (0);
+                //	setVAB_YearPeriod_ID (0);
                 //	setDocBaseType (null);
                 SetPeriodAction(PERIODACTION_NoAction);
                 SetPeriodStatus(PERIODSTATUS_NeverOpened);
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="period">parent</param>
         /// <param name="docBaseType">doc base type</param>
         public MPeriodControl(MPeriod period, String docBaseType)
-            : this(period.GetCtx(), period.GetVAF_Client_ID(), period.GetC_Period_ID(), docBaseType, 
+            : this(period.GetCtx(), period.GetVAF_Client_ID(), period.GetVAB_YearPeriod_ID(), docBaseType, 
                 period.Get_TrxName())
         {
         }
@@ -64,14 +64,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAF_Client_ID">client id</param>
-        /// <param name="C_Period_ID">period id</param>
+        /// <param name="VAB_YearPeriod_ID">period id</param>
         /// <param name="docBaseType">doc base type</param>
         /// <param name="trxName">transaction</param>
-        public MPeriodControl(Ctx ctx, int VAF_Client_ID, int C_Period_ID, String docBaseType, Trx trxName)
+        public MPeriodControl(Ctx ctx, int VAF_Client_ID, int VAB_YearPeriod_ID, String docBaseType, Trx trxName)
             : this(ctx, 0, trxName)
         {
             SetClientOrg(VAF_Client_ID, 0);
-            SetC_Period_ID(C_Period_ID);
+            SetVAB_YearPeriod_ID(VAB_YearPeriod_ID);
             SetDocBaseType(docBaseType);
         }
 

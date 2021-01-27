@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             _parent = invoice;
             SetClientOrg(invoice);
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
-            SetC_PaySchedule_ID(paySchedule.GetC_PaySchedule_ID());
+            SetVAB_PaymentSchedule_ID(paySchedule.GetVAB_PaymentSchedule_ID());
 
             //	Amounts
             int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
@@ -226,10 +226,10 @@ namespace VAdvantage.Model
                 SetVA009_PaidAmntInvce(Decimal.Round(GetVA009_PaidAmntInvce(), currency.GetStdPrecision()));
 
                 // when invoice schedule have payment reference then need to check payment mode on payment window & update here
-                if (GetC_Payment_ID() > 0)
+                if (GetVAB_Payment_ID() > 0)
                 {
                     #region for payment
-                    MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_Trx());
+                    MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_Trx());
                     SetVA009_PaymentMethod_ID(payment.GetVA009_PaymentMethod_ID());
 
                     // get payment method detail -- update to here 
@@ -304,7 +304,7 @@ namespace VAdvantage.Model
                 SetProcessing(false);
 
                 // when schedile is not paid and invoice hedaer having "Hold Payment", then set "Hold payment" on schedule also
-                if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0))
+                if (Get_ColumnIndex("IsHoldPayment") > 0 && (GetVAB_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0))
                 {
                     String sql = "SELECT IsHoldPayment FROM VAB_Invoice WHERE VAB_Invoice_ID = " + GetVAB_Invoice_ID();
                     String IsHoldPayment = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
@@ -312,7 +312,7 @@ namespace VAdvantage.Model
                 }
             }
             // if payment refrence not found on schedule the set withholdimh amount as ZERO
-            if (GetC_Payment_ID() <= 0)
+            if (GetVAB_Payment_ID() <= 0)
             {
                 SetBackupWithholdingAmount(0);
                 SetWithholdingAmt(0);
@@ -345,9 +345,9 @@ namespace VAdvantage.Model
                 {
                     DB.ExecuteQuery("UPDATE VAB_sched_InvoicePayment SET VA009_IsPaid = 'Y' WHERE VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx());
                     // if payment is done against invioce for advanced schedules then update payment reference at order schedule tab
-                    if (GetVA009_OrderPaySchedule_ID() > 0 && GetC_Payment_ID() > 0)
+                    if (GetVA009_OrderPaySchedule_ID() > 0 && GetVAB_Payment_ID() > 0)
                     {
-                        DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', C_Payment_ID=" + GetC_Payment_ID() +
+                        DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', VAB_Payment_ID=" + GetVAB_Payment_ID() +
                                         @" where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
                     }
                 }
@@ -361,9 +361,9 @@ namespace VAdvantage.Model
                     // if payment is done against invioce for advanced schedules then update payment reference at order schedule tab
                     else if (GetVA009_OrderPaySchedule_ID() != 0)
                     {
-                        if (GetC_Payment_ID() > 0)
+                        if (GetVAB_Payment_ID() > 0)
                         {
-                            DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', C_Payment_ID=" + GetC_Payment_ID() + " where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
+                            DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y', VAB_Payment_ID=" + GetVAB_Payment_ID() + " where VA009_OrderPaySchedule_ID=" + GetVA009_OrderPaySchedule_ID(), null, Get_Trx());
                         }
                     }
                 }

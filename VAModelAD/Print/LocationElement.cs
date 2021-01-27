@@ -11,11 +11,11 @@ namespace VAdvantage.Print
 {
     public class LocationElement : GridElement
     {
-        public LocationElement(Ctx ctx, int C_Location_ID, Font font, Color color) : base(10, 1)		//	max
+        public LocationElement(Ctx ctx, int VAB_Address_ID, Font font, Color color) : base(10, 1)		//	max
         {
             SetGap(0, 0);
-            dynamic ml = VAModelAD.Model.MLocation.Get(ctx, C_Location_ID, null);
-            //	log.fine("C_Location_ID=" + C_Location_ID);
+            dynamic ml = VAModelAD.Model.MLocation.Get(ctx, VAB_Address_ID, null);
+            //	log.fine("VAB_Address_ID=" + VAB_Address_ID);
             if (ml != null)
             {
                 int index = 0;

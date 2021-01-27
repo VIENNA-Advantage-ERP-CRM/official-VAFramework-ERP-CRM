@@ -69,11 +69,11 @@ namespace VAdvantage.Acct
         // Description      		
         private String _Description = null;
         // GL Category      		
-        private int _GL_Category_ID = 0;
+        private int _VAGL_Group_ID = 0;
         //GL Period					
         private MPeriod _period = null;
         //Period ID					
-        private int _C_Period_ID = 0;
+        private int _VAB_YearPeriod_ID = 0;
         // Location From			
         private int _C_LocFrom_ID = 0;
         // Location To				
@@ -88,7 +88,7 @@ namespace VAdvantage.Acct
         //  (if true, the document will not be source balanced)     
         private bool _MultiCurrency = false;
         //BP Sales Region    		
-        private int _BP_C_SalesRegion_ID = -1;
+        private int _BP_VAB_SalesRegionState_ID = -1;
         // B Partner	    		
         private int _VAB_BusinessPartner_ID = -1;
         //Bank Account				
@@ -563,7 +563,7 @@ namespace VAdvantage.Acct
                     Unlock();
                     return "PeriodClosed";
                 }
-                if (Get_TableName() != "GL_Journal")
+                if (Get_TableName() != "VAGL_JRNL")
                 {
                     //	delete it
                     DeleteAcct(0);
@@ -587,7 +587,7 @@ namespace VAdvantage.Acct
             {
                 for (int i = 0; OK && i < _ass.Length; i++)
                 {
-                    if (Get_TableName() == "GL_Journal")
+                    if (Get_TableName() == "VAGL_JRNL")
                     {
                         DeleteAcct(_ass[i].GetVAB_AccountBook_ID());
                     }
@@ -691,7 +691,7 @@ namespace VAdvantage.Acct
         /// <returns>number of records</returns>
         private int DeleteAcct(int accountingSchema_ID)
         {
-            StringBuilder sql = new StringBuilder("DELETE FROM Fact_Acct WHERE VAF_TableView_ID=")
+            StringBuilder sql = new StringBuilder("DELETE FROM Actual_Acct_Detail WHERE VAF_TableView_ID=")
                 .Append(Get_Table_ID())
                 .Append(" AND Record_ID=").Append(_po.Get_ID());
             if (accountingSchema_ID > 0)
@@ -917,7 +917,7 @@ namespace VAdvantage.Acct
 
         /// <summary>
         ///  Load Document Type and GL Info.
-        ///  Set p_DocumentType and p_GL_Category_ID
+        ///  Set p_DocumentType and p_VAGL_Group_ID
         /// </summary>
         /// <returns>document type</returns>
         public String GetDocumentType()
@@ -931,7 +931,7 @@ namespace VAdvantage.Acct
 
         /// <summary>
         /// Load Document Type and GL Info.
-        /// Set p_DocumentType and p_GL_Category_ID
+        /// Set p_DocumentType and p_VAGL_Group_ID
         /// </summary>
         /// <param name="DocumentType"></param>
         protected void SetDocumentType(String DocumentType)
@@ -940,10 +940,10 @@ namespace VAdvantage.Acct
             {
                 _DocumentType = DocumentType;
             }
-            //  Set Document Type & GL_Category	// TODO - Cache DocTypes
+            //  Set Document Type & VAGL_Group	// TODO - Cache DocTypes
             if (GetVAB_DocTypes_ID() != 0)		//	MatchInv,.. does not have VAB_DocTypes_ID
             {
-                String sql = "SELECT DocBaseType, GL_Category_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + GetVAB_DocTypes_ID();
+                String sql = "SELECT DocBaseType, VAGL_Group_ID FROM VAB_DocTypes WHERE VAB_DocTypes_ID=" + GetVAB_DocTypes_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -952,7 +952,7 @@ namespace VAdvantage.Acct
                     if (idr.Read())
                     {
                         _DocumentType = Utility.Util.GetValueOfString(idr[0]);//.getString(1);
-                        _GL_Category_ID = Utility.Util.GetValueOfInt(idr[1]);//.getInt(2);
+                        _VAGL_Group_ID = Utility.Util.GetValueOfInt(idr[1]);//.getInt(2);
                     }
                     idr.Close();
                 }
@@ -973,9 +973,9 @@ namespace VAdvantage.Acct
             }
 
             //  We have a document Type, but no GL Info - search for DocType
-            if (_GL_Category_ID == 0)
+            if (_VAGL_Group_ID == 0)
             {
-                String sql = "SELECT GL_Category_ID FROM VAB_DocTypes "
+                String sql = "SELECT VAGL_Group_ID FROM VAB_DocTypes "
                     + "WHERE VAF_Client_ID=@param1 AND DocBaseType=@param2";
 
                 IDataReader idr = null;
@@ -987,7 +987,7 @@ namespace VAdvantage.Acct
                     idr = DataBase.DB.ExecuteReader(sql, param, null);
                     if (idr.Read())
                     {
-                        _GL_Category_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                        _VAGL_Group_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     }
                     idr.Close();
                 }
@@ -999,10 +999,10 @@ namespace VAdvantage.Acct
                 }
             }
 
-            //  Still no GL_Category - get Default GL Category
-            if (_GL_Category_ID == 0)
+            //  Still no VAGL_Group - get Default GL Category
+            if (_VAGL_Group_ID == 0)
             {
-                String sql = "SELECT GL_Category_ID FROM GL_Category "
+                String sql = "SELECT VAGL_Group_ID FROM VAGL_Group "
                     + "WHERE VAF_Client_ID=" + GetVAF_Client_ID()
                     + "ORDER BY IsDefault DESC";
                 IDataReader idr = null;
@@ -1011,7 +1011,7 @@ namespace VAdvantage.Acct
                     idr = DataBase.DB.ExecuteReader(sql, null, null);
                     if (idr.Read())
                     {
-                        _GL_Category_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                        _VAGL_Group_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     }
                     idr.Close();
                 }
@@ -1023,9 +1023,9 @@ namespace VAdvantage.Acct
                 }
             }
             //
-            if (_GL_Category_ID == 0)
+            if (_VAGL_Group_ID == 0)
             {
-                log.Log(Level.WARNING, "No default GL_Category - " + ToString());
+                log.Log(Level.WARNING, "No default VAGL_Group - " + ToString());
             }
 
             if (_DocumentType == null)
@@ -1122,7 +1122,7 @@ namespace VAdvantage.Acct
 
         /// <summary>
         /// Calculate Period from DateAcct.
-        /// _C_Period_ID is set to -1 of not open to 0 if not found
+        /// _VAB_YearPeriod_ID is set to -1 of not open to 0 if not found
         /// </summary>
         public void SetPeriod()
         {
@@ -1132,7 +1132,7 @@ namespace VAdvantage.Acct
             }
 
             //	Period defined in GL Journal (e.g. adjustment period)
-            int index = _po.Get_ColumnIndex("C_Period_ID");
+            int index = _po.Get_ColumnIndex("VAB_YearPeriod_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -1148,28 +1148,28 @@ namespace VAdvantage.Acct
             //	Is Period Open?
             if (_period != null && MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetVAF_Org_ID()))
             {
-                _C_Period_ID = _period.GetC_Period_ID();
+                _VAB_YearPeriod_ID = _period.GetVAB_YearPeriod_ID();
             }
             else
             {
-                _C_Period_ID = -1;
+                _VAB_YearPeriod_ID = -1;
             }
             //
             log.Fine(	// + VAF_Client_ID + " - " 
-                GetDateAcct() + " - " + GetDocumentType() + " => " + _C_Period_ID);
+                GetDateAcct() + " - " + GetDocumentType() + " => " + _VAB_YearPeriod_ID);
         }
 
         /// <summary>
-        /// Get C_Period_ID
+        /// Get VAB_YearPeriod_ID
         /// </summary>
         /// <returns>period</returns>
-        public int GetC_Period_ID()
+        public int GetVAB_YearPeriod_ID()
         {
             if (_period == null)
             {
                 SetPeriod();
             }
-            return _C_Period_ID;
+            return _VAB_YearPeriod_ID;
         }
 
         /// <summary>
@@ -1179,7 +1179,7 @@ namespace VAdvantage.Acct
         public bool IsPeriodOpen()
         {
             SetPeriod();
-            bool open = _C_Period_ID > 0;
+            bool open = _VAB_YearPeriod_ID > 0;
             if (open)
             {
                 log.Fine("Yes - " + ToString());
@@ -1271,7 +1271,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
-        /// <returns> C_ValidCombination_ID</returns>
+        /// <returns> VAB_Acct_ValidParameter_ID</returns>
         public int GetValidCombination_ID(int AcctType, MAcctSchema as1)
         {
             int para_1 = 0;     //  first parameter (second is always AcctSchema)
@@ -1440,13 +1440,13 @@ namespace VAdvantage.Acct
             // Project Accounts          	
             else if (AcctType == ACCTTYPE_ProjectAsset)
             {
-                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                para_1 = GetC_Project_ID();
+                sql = "SELECT PJ_Asset_Acct FROM VAB_Project_Acct WHERE VAB_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Project_ID();
             }
             else if (AcctType == ACCTTYPE_ProjectWIP)
             {
-                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                para_1 = GetC_Project_ID();
+                sql = "SELECT PJ_WIP_Acct FROM VAB_Project_Acct WHERE VAB_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Project_ID();
             }
 
             //GL Accounts                 
@@ -1628,7 +1628,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
-        /// <returns> C_ValidCombination_ID</returns>
+        /// <returns> VAB_Acct_ValidParameter_ID</returns>
         public int GetValidCombination_ID(int AcctType, MAcctSchema as1, int BPartner_ID)
         {
             int para_1 = 0;     //  first parameter (second is always AcctSchema)
@@ -1788,13 +1788,13 @@ namespace VAdvantage.Acct
             // Project Accounts          	
             else if (AcctType == ACCTTYPE_ProjectAsset)
             {
-                sql = "SELECT PJ_Asset_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                para_1 = GetC_Project_ID();
+                sql = "SELECT PJ_Asset_Acct FROM VAB_Project_Acct WHERE VAB_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Project_ID();
             }
             else if (AcctType == ACCTTYPE_ProjectWIP)
             {
-                sql = "SELECT PJ_WIP_Acct FROM C_Project_Acct WHERE C_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                para_1 = GetC_Project_ID();
+                sql = "SELECT PJ_WIP_Acct FROM VAB_Project_Acct WHERE VAB_Project_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                para_1 = GetVAB_Project_ID();
             }
 
             //GL Accounts                 
@@ -2024,13 +2024,13 @@ namespace VAdvantage.Acct
         /// <returns>Account</returns>
         public MAccount GetAccount(int AcctType, MAcctSchema as1)
         {
-            int C_ValidCombination_ID = GetValidCombination_ID(AcctType, as1);
-            if (C_ValidCombination_ID == 0)
+            int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1);
+            if (VAB_Acct_ValidParameter_ID == 0)
             {
                 return null;
             }
             //	Return Account
-            MAccount acct = MAccount.Get(as1.GetCtx(), C_ValidCombination_ID);
+            MAccount acct = MAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
             return acct;
         }
 
@@ -2043,13 +2043,13 @@ namespace VAdvantage.Acct
         /// <returns>Account</returns>
         public MAccount GetAccount(int AcctType, MAcctSchema as1, int BPartner_ID)
         {
-            int C_ValidCombination_ID = GetValidCombination_ID(AcctType, as1, BPartner_ID);
-            if (C_ValidCombination_ID == 0)
+            int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1, BPartner_ID);
+            if (VAB_Acct_ValidParameter_ID == 0)
             {
                 return null;
             }
             //	Return Account
-            MAccount acct = MAccount.Get(as1.GetCtx(), C_ValidCombination_ID);
+            MAccount acct = MAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
             return acct;
         }
 
@@ -2253,21 +2253,21 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// 	Get GL_Category_ID
+        /// 	Get VAGL_Group_ID
         /// </summary>
         /// <returns>categoory</returns>
-        public int GetGL_Category_ID()
+        public int GetVAGL_Group_ID()
         {
-            return _GL_Category_ID;
+            return _VAGL_Group_ID;
         }
 
         /// <summary>
-        /// Get GL_Category_ID
+        /// Get VAGL_Group_ID
         /// </summary>
         /// <returns>categoory</returns>
-        public int GetGL_Budget_ID()
+        public int GetVAGL_Budget_ID()
         {
-            int index = _po.Get_ColumnIndex("GL_Budget_ID");
+            int index = _po.Get_ColumnIndex("VAGL_Budget_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2623,12 +2623,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_Project_ID
+        /// Get VAB_Project_ID
         /// </summary>
         /// <returns>Project</returns>
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            int index = _po.Get_ColumnIndex("C_Project_ID");
+            int index = _po.Get_ColumnIndex("VAB_Project_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2641,12 +2641,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_SalesRegion_ID
+        /// Get VAB_SalesRegionState_ID
         /// </summary>
         /// <returns>Sales Region</returns>
-        public int GetC_SalesRegion_ID()
+        public int GetVAB_SalesRegionState_ID()
         {
-            int index = _po.Get_ColumnIndex("C_SalesRegion_ID");
+            int index = _po.Get_ColumnIndex("VAB_SalesRegionState_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2659,37 +2659,37 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_SalesRegion_ID
+        /// Get VAB_SalesRegionState_ID
         /// </summary>
         /// <returns>Sales Region</returns>
-        public int GetBP_C_SalesRegion_ID()
+        public int GetBP_VAB_SalesRegionState_ID()
         {
-            if (_BP_C_SalesRegion_ID == -1)
+            if (_BP_VAB_SalesRegionState_ID == -1)
             {
-                int index = _po.Get_ColumnIndex("C_SalesRegion_ID");
+                int index = _po.Get_ColumnIndex("VAB_SalesRegionState_ID");
                 if (index != -1)
                 {
                     int? ii = (int?)_po.Get_Value(index);
                     if (ii != null)
                     {
-                        _BP_C_SalesRegion_ID = Utility.Util.GetValueOfInt(ii);
+                        _BP_VAB_SalesRegionState_ID = Utility.Util.GetValueOfInt(ii);
                     }
                 }
-                if (_BP_C_SalesRegion_ID == -1)
+                if (_BP_VAB_SalesRegionState_ID == -1)
                 {
-                    _BP_C_SalesRegion_ID = 0;
+                    _BP_VAB_SalesRegionState_ID = 0;
                 }
             }
-            return _BP_C_SalesRegion_ID;
+            return _BP_VAB_SalesRegionState_ID;
         }
 
         /// <summary>
-        /// 	Set C_SalesRegion_ID
+        /// 	Set VAB_SalesRegionState_ID
         /// </summary>
-        /// <param name="C_SalesRegion_ID"></param>
-        public void SetBP_C_SalesRegion_ID(int C_SalesRegion_ID)
+        /// <param name="VAB_SalesRegionState_ID"></param>
+        public void SetBP_VAB_SalesRegionState_ID(int VAB_SalesRegionState_ID)
         {
-            _BP_C_SalesRegion_ID = C_SalesRegion_ID;
+            _BP_VAB_SalesRegionState_ID = VAB_SalesRegionState_ID;
         }
 
         /// <summary>

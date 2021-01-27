@@ -319,7 +319,7 @@ namespace VAdvantage.Process
                     ConstraintName.Clear();
 
                     if ((column.GetVAF_Control_Ref_ID() == DisplayType.Account)
-                        && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
+                        && !(column.GetColumnName().Equals("VAB_Acct_ValidParameter_ID", StringComparison.OrdinalIgnoreCase)))
                     {
                         fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
                             + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
@@ -329,12 +329,12 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=1014)"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
                             + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=25 AND C.VAF_Column_ID= @param"   //	Acct
-                            + " AND c.ColumnName<>'C_ValidCombination_ID'"
+                            + " AND c.ColumnName<>'VAB_Acct_ValidParameter_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }
                     else if ((column.GetVAF_Control_Ref_ID() == DisplayType.PAttribute)
-                        && !(column.GetColumnName().Equals("C_ValidCombination_ID", StringComparison.OrdinalIgnoreCase)))
+                        && !(column.GetColumnName().Equals("VAB_Acct_ValidParameter_ID", StringComparison.OrdinalIgnoreCase)))
                     {
                         fk.Append("SELECT t.TableName, c.ColumnName, c.VAF_Column_ID,"
                             + " cPK.VAF_Column_ID, tPK.TableName, cPK.ColumnName, c.ConstraintType,"
@@ -344,7 +344,7 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAF_Column cPK ON (cPK.VAF_Column_ID=8472)"
                             + " INNER JOIN VAF_TableView tPK ON (cPK.VAF_TableView_ID=tPK.VAF_TableView_ID) "
                             + "WHERE c.IsKey='N' AND c.VAF_Control_Ref_ID=35 AND C.VAF_Column_ID=@param"    //	Product Attribute
-                            + " AND c.ColumnName<>'C_ValidCombination_ID'"
+                            + " AND c.ColumnName<>'VAB_Acct_ValidParameter_ID'"
                             + " AND t.IsView='N' "
                             + " ORDER BY t.TableName, c.ColumnName");
                     }

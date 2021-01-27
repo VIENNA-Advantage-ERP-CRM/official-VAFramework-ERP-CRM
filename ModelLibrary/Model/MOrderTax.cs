@@ -22,7 +22,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MOrderTax : X_C_OrderTax
+    public class MOrderTax : X_VAB_OrderTax
     {
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MOrderTax).FullName);
@@ -43,29 +43,29 @@ namespace VAdvantage.Model
         public static MOrderTax Get(MOrderLine line, int precision, bool oldTax, Trx trxName)
         {
             MOrderTax retValue = null;
-            if (line == null || line.GetC_Order_ID() == 0)
+            if (line == null || line.GetVAB_Order_ID() == 0)
             {
                 //s_log.fine("No Order");
                 return null;
             }
-            int C_Tax_ID = line.GetC_Tax_ID();
-            if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
+            int VAB_TaxRate_ID = line.GetVAB_TaxRate_ID();
+            if (oldTax && line.Is_ValueChanged("VAB_TaxRate_ID"))
             {
-                Object old = line.Get_ValueOld("C_Tax_ID");
+                Object old = line.Get_ValueOld("VAB_TaxRate_ID");
                 if (old == null)
                 {
                     //s_log.fine("No Old Tax");
                     return null;
                 }
-                C_Tax_ID = int.Parse(old.ToString());
+                VAB_TaxRate_ID = int.Parse(old.ToString());
             }
-            if (C_Tax_ID == 0)
+            if (VAB_TaxRate_ID == 0)
             {
                 s_log.Fine("No Tax");
                 return null;
             }
 
-            String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + line.GetC_Order_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+            String sql = "SELECT * FROM VAB_OrderTax WHERE VAB_Order_ID=" + line.GetVAB_Order_ID() + " AND VAB_TaxRate_ID=" + VAB_TaxRate_ID;
             DataSet ds = null;
             try
             {
@@ -83,8 +83,8 @@ namespace VAdvantage.Model
             }
 
             // JID_1303: On Order tax calculate tax according to selected pricelist. If user delete lines and change pricelist, it should check IsTaxIncluded on selected Pricelist.
-            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
+            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Order WHERE VAB_Order_ID = "
+                + line.GetVAB_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
@@ -101,8 +101,8 @@ namespace VAdvantage.Model
             retValue = new MOrderTax(line.GetCtx(), 0, trxName);
             retValue.Set_TrxName(trxName);
             retValue.SetClientOrg(line);
-            retValue.SetC_Order_ID(line.GetC_Order_ID());
-            retValue.SetC_Tax_ID(line.GetC_Tax_ID());
+            retValue.SetVAB_Order_ID(line.GetVAB_Order_ID());
+            retValue.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
             retValue.SetPrecision(precision);
             retValue.SetIsTaxIncluded(line.IsTaxIncluded());
             s_log.Fine("(new) " + retValue);
@@ -120,33 +120,33 @@ namespace VAdvantage.Model
         public static MOrderTax GetSurcharge(MOrderLine line, int precision, bool oldTax, Trx trxName)
         {
             MOrderTax retValue = null;
-            if (line == null || line.GetC_Order_ID() == 0)
+            if (line == null || line.GetVAB_Order_ID() == 0)
             {
                 //s_log.fine("No Order");
                 return null;
             }
-            int C_Tax_ID = line.GetC_Tax_ID();
-            if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
+            int VAB_TaxRate_ID = line.GetVAB_TaxRate_ID();
+            if (oldTax && line.Is_ValueChanged("VAB_TaxRate_ID"))
             {
-                Object old = line.Get_ValueOld("C_Tax_ID");
+                Object old = line.Get_ValueOld("VAB_TaxRate_ID");
                 if (old == null)
                 {
                     //s_log.fine("No Old Tax");
                     return null;
                 }
-                C_Tax_ID = int.Parse(old.ToString());
+                VAB_TaxRate_ID = int.Parse(old.ToString());
             }
 
             // Get Surcharge Tax ID from Tax selected on Line
-            C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Surcharge_Tax_ID FROM C_Tax WHERE C_Tax_ID = " + C_Tax_ID, null, trxName));
+            VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Surcharge_Tax_ID FROM VAB_TaxRate WHERE VAB_TaxRate_ID = " + VAB_TaxRate_ID, null, trxName));
 
-            if (C_Tax_ID == 0)
+            if (VAB_TaxRate_ID == 0)
             {
                 s_log.Fine("No Tax");
                 return null;
             }
 
-            String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + line.GetC_Order_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+            String sql = "SELECT * FROM VAB_OrderTax WHERE VAB_Order_ID=" + line.GetVAB_Order_ID() + " AND VAB_TaxRate_ID=" + VAB_TaxRate_ID;
             DataSet ds = null;
             try
             {
@@ -167,8 +167,8 @@ namespace VAdvantage.Model
             }
 
             // Get IsTaxincluded from selected PriceList on header
-            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM C_Order WHERE C_Order_ID = "
-                + line.GetC_Order_ID() + ")", null, trxName)) == "Y";
+            bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Order WHERE VAB_Order_ID = "
+                + line.GetVAB_Order_ID() + ")", null, trxName)) == "Y";
 
             if (retValue != null)
             {
@@ -183,8 +183,8 @@ namespace VAdvantage.Model
             retValue = new MOrderTax(line.GetCtx(), 0, trxName);
             retValue.Set_TrxName(trxName);
             retValue.SetClientOrg(line);
-            retValue.SetC_Order_ID(line.GetC_Order_ID());
-            retValue.SetC_Tax_ID(C_Tax_ID);
+            retValue.SetVAB_Order_ID(line.GetVAB_Order_ID());
+            retValue.SetVAB_TaxRate_ID(VAB_TaxRate_ID);
             retValue.SetPrecision(precision);
             retValue.SetIsTaxIncluded(isTaxIncluded);
             s_log.Fine("(new) " + retValue);
@@ -204,7 +204,7 @@ namespace VAdvantage.Model
             MTax tax = GetTax();
             
             // Calculate Tax on TaxAble Amount
-            String sql = "SELECT TaxAbleAmt FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND C_Tax_ID=" + GetC_Tax_ID();
+            String sql = "SELECT TaxAbleAmt FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAB_TaxRate_ID=" + GetVAB_TaxRate_ID();
             IDataReader idr = null;
             try
             {
@@ -253,13 +253,13 @@ namespace VAdvantage.Model
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //            
-            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
+            MTax surTax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
 
             //
-            String sql = "SELECT ol.TaxAbleAmt, ol.TaxAmt, tax.SurchargeType FROM C_OrderLine ol"
-                + " INNER JOIN C_Tax tax ON ol.C_Tax_ID=tax.C_Tax_ID WHERE ol.C_Order_ID=" + GetC_Order_ID() 
-                + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
+            String sql = "SELECT ol.TaxAbleAmt, ol.TaxAmt, tax.SurchargeType FROM VAB_OrderLine ol"
+                + " INNER JOIN VAB_TaxRate tax ON ol.VAB_TaxRate_ID=tax.VAB_TaxRate_ID WHERE ol.VAB_Order_ID=" + GetVAB_Order_ID() 
+                + " AND tax.Surcharge_Tax_ID=" + GetVAB_TaxRate_ID();
             IDataReader idr = null;
             try
             {
@@ -370,7 +370,7 @@ namespace VAdvantage.Model
         public MTax GetTax()
         {
             if (_tax == null)
-                _tax = MTax.Get(GetCtx(), GetC_Tax_ID());
+                _tax = MTax.Get(GetCtx(), GetVAB_TaxRate_ID());
             return _tax;
         }
 

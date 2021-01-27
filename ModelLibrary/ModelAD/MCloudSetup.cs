@@ -1225,20 +1225,20 @@ namespace VAdvantage.Model
         }
         private void CreateKpi(int role_ID)
         {
-            tableName = "RC_KPI";
+            tableName = "VARC_KPI";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_KPI Where VAF_Client_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VARC_KPI Where VAF_Client_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
                 DataSet dsAccess = null;
                 DataSet dsUsrQry = null;
                 if (ds != null)
                 {
-                    X_RC_KPI kpi = null;
-                    X_RC_KPIAccess kpiA = null;
+                    X_VARC_KPI kpi = null;
+                    X_VAVARC_KPIRights kpiA = null;
                     X_VAF_UserSearch qry = null;
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        kpi = new X_RC_KPI(m_ctx, 0, m_trx);
+                        kpi = new X_VARC_KPI(m_ctx, 0, m_trx);
                         kpi.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         kpi.SetVAF_Org_ID(0);
                         if (ds.Tables[0].Rows[i]["SEARCHKEY"] != null && ds.Tables[0].Rows[i]["SEARCHKEY"] != DBNull.Value)
@@ -1342,15 +1342,15 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            dsAccess = DB.ExecuteDataset("SELECT VAF_USERCONTACT_ID,VAF_ROLE_ID FROM RC_KPIACCESS WHERE RC_KPI_ID=" + ds.Tables[0].Rows[i]["RC_KPI_ID"]);
+                            dsAccess = DB.ExecuteDataset("SELECT VAF_USERCONTACT_ID,VAF_ROLE_ID FROM VARC_KPIRIGHTS WHERE VARC_KPI_ID=" + ds.Tables[0].Rows[i]["VARC_KPI_ID"]);
                             if (dsAccess != null)
                             {
                                 for (int j = 0; j < dsAccess.Tables[0].Rows.Count; j++)
                                 {
-                                    kpiA = new X_RC_KPIAccess(m_ctx, 0, m_trx);
+                                    kpiA = new X_VAVARC_KPIRights(m_ctx, 0, m_trx);
                                     kpiA.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                     kpiA.SetVAF_Org_ID(0);
-                                    kpiA.SetRC_KPI_ID(kpi.Get_ID());
+                                    kpiA.SetVARC_KPI_ID(kpi.Get_ID());
                                     kpiA.SetIsActive(true);
                                     if (dsAccess.Tables[0].Rows[j]["VAF_USERCONTACT_ID"] != null && dsAccess.Tables[0].Rows[j]["VAF_USERCONTACT_ID"] != DBNull.Value)
                                     {
@@ -1363,7 +1363,7 @@ namespace VAdvantage.Model
                                     kpiA.SetVAF_Role_ID(role_ID);
                                     if (!kpiA.Save(m_trx))
                                     {
-                                        log.Info(kpiA.GetRC_KPI_ID() + " KpiNotSaved");
+                                        log.Info(kpiA.GetVARC_KPI_ID() + " KpiNotSaved");
                                     }
 
                                 }
@@ -1375,18 +1375,18 @@ namespace VAdvantage.Model
         }
         private void CreateKPIPane()
         {
-            tableName = "RC_KPIPane";
+            tableName = "VARC_KPIPane";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_KPIPane WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VARC_KPIPane WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
                 {
-                    X_RC_KPIPane pane = null;
-                    X_RC_KPICenter center = null;
+                    X_VARC_KPIPane pane = null;
+                    X_VARC_KPICenter center = null;
                     DataSet dsCenter = null;
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        pane = new X_RC_KPIPane(m_ctx, 0, m_trx);
+                        pane = new X_VARC_KPIPane(m_ctx, 0, m_trx);
                         pane.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         pane.SetVAF_Org_ID(0);
                         if (ds.Tables[0].Rows[i]["SeqNo"] != null && ds.Tables[0].Rows[i]["SeqNo"] != DBNull.Value)
@@ -1412,15 +1412,15 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            dsCenter = DB.ExecuteDataset("SELECT * FROM RC_KPICenter WHERE RC_KPIPANE_ID=" + ds.Tables[0].Rows[i]["RC_KPIPANE_ID"]);
+                            dsCenter = DB.ExecuteDataset("SELECT * FROM VARC_KPICenter WHERE VARC_KPIPANE_ID=" + ds.Tables[0].Rows[i]["VARC_KPIPANE_ID"]);
                             if (dsCenter != null)
                             {
                                 for (int j = 0; j < dsCenter.Tables[0].Rows.Count; j++)
                                 {
-                                    center = new X_RC_KPICenter(m_ctx, 0, m_trx);
+                                    center = new X_VARC_KPICenter(m_ctx, 0, m_trx);
                                     center.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                     center.SetVAF_Org_ID(0);
-                                    center.SetRC_KPIPane_ID(pane.Get_ID());
+                                    center.SetVARC_KPIPane_ID(pane.Get_ID());
                                     center.SetIsActive(true);
                                     if (dsCenter.Tables[0].Rows[j]["SeqNo"] != null && dsCenter.Tables[0].Rows[j]["SeqNo"] != DBNull.Value)
                                     {
@@ -1430,9 +1430,9 @@ namespace VAdvantage.Model
                                     {
                                         center.SetName(dsCenter.Tables[0].Rows[j]["Name"].ToString());
                                     }
-                                    //if (dsCenter.Tables[0].Rows[j]["RC_KPI_ID"] != null && dsCenter.Tables[0].Rows[j]["RC_KPI_ID"] != DBNull.Value)
+                                    //if (dsCenter.Tables[0].Rows[j]["VARC_KPI_ID"] != null && dsCenter.Tables[0].Rows[j]["VARC_KPI_ID"] != DBNull.Value)
                                     //{
-                                    //    center.SetRC_KPI_ID(Util.GetValueOfInt(dsCenter.Tables[0].Rows[j]["RC_KPI_ID"]));
+                                    //    center.SetVARC_KPI_ID(Util.GetValueOfInt(dsCenter.Tables[0].Rows[j]["VARC_KPI_ID"]));
                                     //}
                                     if (dsCenter.Tables[0].Rows[j]["Font_Color_ID"] != null && dsCenter.Tables[0].Rows[j]["Font_Color_ID"] != DBNull.Value)
                                     {
@@ -1451,17 +1451,17 @@ namespace VAdvantage.Model
         }
         private void CreateChartPane()
         {
-            tableName = "RC_ChartPane";
+            tableName = "VARC_ChartPane";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_ChartPane WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VARC_ChartPane WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
                 {
-                    X_RC_ChartPane chart = null;
+                    X_VARC_ChartPane chart = null;
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        chart = new X_RC_ChartPane(m_ctx, 0, m_trx);
+                        chart = new X_VARC_ChartPane(m_ctx, 0, m_trx);
                         chart.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         chart.SetVAF_Org_ID(0);
                         if (ds.Tables[0].Rows[i]["SeqNo"] != null && ds.Tables[0].Rows[i]["SeqNo"] != DBNull.Value)
@@ -1494,23 +1494,23 @@ namespace VAdvantage.Model
         }
         private void CreateView(int adminRole_ID)
         {
-            tableName = "RC_View";
+            tableName = "VARC_View";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_View WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VARC_View WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
                 DataSet dsUsrQry = null;
                 if (ds != null)
                 {
-                    X_RC_View view = null;
-                    X_RC_ViewAccess vAccess = null;
-                    X_RC_ViewColumn vCol = null;
-                    X_RC_ViewPane vPane = null;
+                    X_VARC_View view = null;
+                    X_VAVARC_ViewRights vAccess = null;
+                    X_VARC_ViewColumn vCol = null;
+                    X_VARC_ViewPane vPane = null;
                     X_VAF_UserSearch qry = null;
                     DataSet dsAccess = null;
 
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        view = new X_RC_View(m_ctx, 0, m_trx);
+                        view = new X_VARC_View(m_ctx, 0, m_trx);
                         view.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         view.SetVAF_Org_ID(0);
                         view.SetIsActive(true);
@@ -1622,16 +1622,16 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            dsAccess = DB.ExecuteDataset("Select * from RC_ViewAccess WHERE RC_View_ID= " + ds.Tables[0].Rows[i]["RC_View_ID"]);
+                            dsAccess = DB.ExecuteDataset("Select * from VAVARC_ViewRights WHERE VARC_View_ID= " + ds.Tables[0].Rows[i]["VARC_View_ID"]);
                             if (dsAccess != null)
                             {
                                 for (int j = 0; j < dsAccess.Tables[0].Rows.Count; j++)
                                 {
-                                    vAccess = new X_RC_ViewAccess(m_ctx, 0, m_trx);
+                                    vAccess = new X_VAVARC_ViewRights(m_ctx, 0, m_trx);
                                     vAccess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                     vAccess.SetVAF_Org_ID(0);
                                     vAccess.SetIsActive(true);
-                                    vAccess.SetRC_View_ID(view.Get_ID());
+                                    vAccess.SetVARC_View_ID(view.Get_ID());
                                     //if (dsAccess.Tables[0].Rows[j]["VAF_UserContact_ID"] != null && dsAccess.Tables[0].Rows[j]["VAF_UserContact_ID"] != DBNull.Value)
                                     //{
                                     //    vAccess.SetVAF_UserContact_ID(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["VAF_UserContact_ID"]));
@@ -1648,16 +1648,16 @@ namespace VAdvantage.Model
                                 }
                             }
 
-                            dsAccess = DB.ExecuteDataset("Select * from RC_ViewColumn WHERE  RC_View_ID =" + ds.Tables[0].Rows[i]["RC_View_ID"]);
+                            dsAccess = DB.ExecuteDataset("Select * from VARC_ViewColumn WHERE  VARC_View_ID =" + ds.Tables[0].Rows[i]["VARC_View_ID"]);
                             if (dsAccess != null)
                             {
                                 for (int j = 0; j < dsAccess.Tables[0].Rows.Count; j++)
                                 {
-                                    vCol = new X_RC_ViewColumn(m_ctx, 0, m_trx);
+                                    vCol = new X_VARC_ViewColumn(m_ctx, 0, m_trx);
                                     vCol.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                     vCol.SetVAF_Org_ID(0);
                                     vCol.SetIsActive(true);
-                                    vCol.SetRC_View_ID(view.Get_ID());
+                                    vCol.SetVARC_View_ID(view.Get_ID());
                                     if (dsAccess.Tables[0].Rows[j]["SeqNo"] != null && dsAccess.Tables[0].Rows[j]["SeqNo"] != DBNull.Value)
                                     {
                                         vCol.SetSeqNo(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["SeqNo"]));
@@ -1678,16 +1678,16 @@ namespace VAdvantage.Model
                                 }
                             }
 
-                            dsAccess = DB.ExecuteDataset("Select * from RC_ViewPane WHERE  RC_View_ID= " + ds.Tables[0].Rows[i]["RC_View_ID"]);
+                            dsAccess = DB.ExecuteDataset("Select * from VARC_ViewPane WHERE  VARC_View_ID= " + ds.Tables[0].Rows[i]["VARC_View_ID"]);
                             if (dsAccess != null)
                             {
                                 for (int j = 0; j < dsAccess.Tables[0].Rows.Count; j++)
                                 {
-                                    vPane = new X_RC_ViewPane(m_ctx, 0, m_trx);
+                                    vPane = new X_VARC_ViewPane(m_ctx, 0, m_trx);
                                     vPane.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                     vPane.SetVAF_Org_ID(0);
                                     vPane.SetIsActive(true);
-                                    vPane.SetRC_View_ID(view.Get_ID());
+                                    vPane.SetVARC_View_ID(view.Get_ID());
                                     if (dsAccess.Tables[0].Rows[j]["SeqNo"] != null && dsAccess.Tables[0].Rows[j]["SeqNo"] != DBNull.Value)
                                     {
                                         vPane.SetSeqNo(Util.GetValueOfInt(dsAccess.Tables[0].Rows[j]["SeqNo"]));
@@ -1933,20 +1933,20 @@ namespace VAdvantage.Model
         }
         private void CopyRoleCenter(int role_ID)
         {
-            tableName = "RC_RoleCenterManager";
+            tableName = "VARC_RoleCenterManager";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                DataSet ds = DB.ExecuteDataset("SELECT * FROM RC_RoleCenterManager WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
+                DataSet ds = DB.ExecuteDataset("SELECT * FROM VARC_RoleCenterManager WHERE VAF_CLIENT_ID=0 AND VAF_ORG_ID=0 AND IsForNewTenant='Y'");
                 if (ds != null)
                 {
-                    X_RC_RoleCenterManager rcmngr = null;
-                    X_RC_RoleCenterTab tab = null;
-                    X_RC_TabPanels panel = null;
+                    X_VARC_RoleCenterManager rcmngr = null;
+                    X_VARC_RoleCenterTab tab = null;
+                    X_VARC_TabPanels panel = null;
                     DataSet rcTab = null;
                     DataSet dsPanel = null;
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        rcmngr = new X_RC_RoleCenterManager(m_ctx, 0, m_trx);
+                        rcmngr = new X_VARC_RoleCenterManager(m_ctx, 0, m_trx);
                         rcmngr.SetVAF_Client_ID(m_client.Get_ID());
                         rcmngr.SetVAF_Org_ID(0);
                         rcmngr.SetIsActive(true);
@@ -1965,16 +1965,16 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            rcTab = DB.ExecuteDataset("SELECT * FROM RC_RoleCenterTab WHERE RC_RoleCenterManager_ID=" + ds.Tables[0].Rows[i]["RC_RoleCenterManager_ID"]);
+                            rcTab = DB.ExecuteDataset("SELECT * FROM VARC_RoleCenterTab WHERE VARC_RoleCenterManager_ID=" + ds.Tables[0].Rows[i]["VARC_RoleCenterManager_ID"]);
                             if (rcTab != null)
                             {
                                 for (int j = 0; j < rcTab.Tables[0].Rows.Count; j++)
                                 {
-                                    tab = new X_RC_RoleCenterTab(m_ctx, 0, m_trx);
+                                    tab = new X_VARC_RoleCenterTab(m_ctx, 0, m_trx);
                                     tab.SetVAF_Client_ID(m_client.Get_ID());
                                     tab.SetVAF_Org_ID(0);
                                     tab.SetIsActive(true);
-                                    tab.SetRC_RoleCenterManager_ID(rcmngr.Get_ID());
+                                    tab.SetVARC_RoleCenterManager_ID(rcmngr.Get_ID());
                                     if (rcTab.Tables[0].Rows[j]["Name"] != null && rcTab.Tables[0].Rows[j]["Name"] != DBNull.Value)
                                     {
                                         tab.SetName(rcTab.Tables[0].Rows[j]["Name"].ToString());
@@ -1993,15 +1993,15 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        dsPanel = DB.ExecuteDataset("SELECT * FROM RC_TabPanels WHERE RC_RoleCenterTab_ID =" + rcTab.Tables[0].Rows[j]["RC_RoleCenterTab_ID"]);
+                                        dsPanel = DB.ExecuteDataset("SELECT * FROM VARC_TabPanels WHERE VARC_RoleCenterTab_ID =" + rcTab.Tables[0].Rows[j]["VARC_RoleCenterTab_ID"]);
                                         if (dsPanel != null)
                                         {
                                             for (int k = 0; k < dsPanel.Tables[0].Rows.Count; k++)
                                             {
-                                                panel = new X_RC_TabPanels(m_ctx, 0, m_trx);
+                                                panel = new X_VARC_TabPanels(m_ctx, 0, m_trx);
                                                 panel.SetVAF_Client_ID(m_client.Get_ID());
                                                 panel.SetVAF_Org_ID(0);
-                                                panel.SetRC_RoleCenterTab_ID(tab.Get_ID());
+                                                panel.SetVARC_RoleCenterTab_ID(tab.Get_ID());
                                                 panel.SetIsActive(true);
                                                 if (dsPanel.Tables[0].Rows[k]["SeqNo"] != null && dsPanel.Tables[0].Rows[k]["SeqNo"] != DBNull.Value)
                                                 {
@@ -2053,7 +2053,7 @@ namespace VAdvantage.Model
                 if (ds != null)
                 {
                     X_D_Chart chart = null;
-                    X_D_ChartAccess cAcess = null;
+                    X_D_ChartRights cAcess = null;
                     X_D_Series series = null;
                     X_D_SeriesFilter filter = null;
                     DataSet dsAs = null;
@@ -2098,12 +2098,12 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            dsAs = DB.ExecuteDataset("SELECT * FROM D_ChartAccess WHERE D_CHART_ID =" + ds.Tables[0].Rows[i]["D_CHART_ID"]);
+                            dsAs = DB.ExecuteDataset("SELECT * FROM D_ChartRights WHERE D_CHART_ID =" + ds.Tables[0].Rows[i]["D_CHART_ID"]);
                             if (dsAs != null)
                             {
                                 for (int j = 0; j < dsAs.Tables[0].Rows.Count; j++)
                                 {
-                                    cAcess = new X_D_ChartAccess(m_ctx, 0, m_trx);
+                                    cAcess = new X_D_ChartRights(m_ctx, 0, m_trx);
                                     cAcess.SetVAF_Client_ID(m_client.Get_ID());
                                     cAcess.SetVAF_Org_ID(0);
                                     cAcess.SetIsActive(true);
@@ -2793,7 +2793,7 @@ namespace VAdvantage.Model
                 }
             }
             //  GL Categories
-            tableName = "GL_Category";
+            tableName = "VAGL_Group";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
                 CreateGLCategory("Standard", MGLCategory.CATEGORYTYPE_Manual, true);
@@ -2807,7 +2807,7 @@ namespace VAdvantage.Model
                 int GL_CASH = CreateGLCategory("Cash/Payments", MGLCategory.CATEGORYTYPE_Document, false);
 
                 //	Base DocumentTypes
-                int ii = CreateDocType("GL Journal", Msg.GetElement(m_ctx, "GL_Journal_ID"),
+                int ii = CreateDocType("GL Journal", Msg.GetElement(m_ctx, "VAGL_JRNL_ID"),
                     MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
                     1000, GL_GL);
                 if (ii == 0)
@@ -2819,7 +2819,7 @@ namespace VAdvantage.Model
                     m_trx.Close();
                     return false;
                 }
-                CreateDocType("GL Journal Batch", Msg.GetElement(m_ctx, "GL_JournalBatch_ID"),
+                CreateDocType("GL Journal Batch", Msg.GetElement(m_ctx, "VAGL_BatchJRNL_ID"),
                     MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
                     100, GL_GL);
                 //	MDocBaseType.DOCBASETYPE_GLDocument
@@ -2851,10 +2851,10 @@ namespace VAdvantage.Model
                     MDocBaseType.DOCBASETYPE_MATCHINVOICE, null, 0, 0,
                     390000, GL_API);
 
-                CreateDocType("AR Receipt", Msg.GetElement(m_ctx, "C_Payment_ID", true),
+                CreateDocType("AR Receipt", Msg.GetElement(m_ctx, "VAB_Payment_ID", true),
                     MDocBaseType.DOCBASETYPE_ARRECEIPT, null, 0, 0,
                     0, GL_ARR);
-                CreateDocType("AP Payment", Msg.GetElement(m_ctx, "C_Payment_ID", false),
+                CreateDocType("AP Payment", Msg.GetElement(m_ctx, "VAB_Payment_ID", false),
                     MDocBaseType.DOCBASETYPE_APPAYMENT, null, 0, 0,
                     0, GL_APP);
                 CreateDocType("Allocation", "Allocation",
@@ -2878,7 +2878,7 @@ namespace VAdvantage.Model
                     MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
                     0, GL_MM, true, false);
 
-                CreateDocType("Purchase Order", Msg.GetElement(m_ctx, "C_Order_ID", false),
+                CreateDocType("Purchase Order", Msg.GetElement(m_ctx, "VAB_Order_ID", false),
                     MDocBaseType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
                     800000, GL_None);
                 CreateDocType("Vendor RMA", "Vendor RMA",
@@ -2907,7 +2907,7 @@ namespace VAdvantage.Model
                 CreateDocType("Material Production", Msg.GetElement(m_ctx, "M_Production_ID", false),
                     MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, null, 0, 0,
                     630000, GL_MM);
-                CreateDocType("Project Issue", Msg.GetElement(m_ctx, "C_ProjectIssue_ID", false),
+                CreateDocType("Project Issue", Msg.GetElement(m_ctx, "VAB_ProjectSupply_ID", false),
                     MDocBaseType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
                     640000, GL_MM);
 
@@ -2972,7 +2972,7 @@ namespace VAdvantage.Model
         /// Get Account ID for key
         /// </summary>
         /// <param name="key">key</param>
-        /// <returns>C_ValidCombination_ID</returns>
+        /// <returns>VAB_Acct_ValidParameter_ID</returns>
         private int GetAcct(String key)
         {
             log.Fine(key);
@@ -2994,13 +2994,13 @@ namespace VAdvantage.Model
                 m_accountsOK = false;
                 return 0;
             }
-            int C_ValidCombination_ID = vc.GetC_ValidCombination_ID();
-            if (C_ValidCombination_ID == 0)
+            int VAB_Acct_ValidParameter_ID = vc.GetVAB_Acct_ValidParameter_ID();
+            if (VAB_Acct_ValidParameter_ID == 0)
             {
                 log.Severe("No account - Key=" + key + ", VAB_Acct_Element_ID=" + VAB_Acct_Element_ID);
                 m_accountsOK = false;
             }
-            return C_ValidCombination_ID;
+            return VAB_Acct_ValidParameter_ID;
         }   //  GetAcct
 
 
@@ -3010,7 +3010,7 @@ namespace VAdvantage.Model
         /// <param name="Name">name</param>
         /// <param name="CategoryType">category type MGLCategory.CATEGORYTYPE_*</param>
         /// <param name="isDefault">is default value</param>
-        /// <returns>GL_Category_ID</returns>
+        /// <returns>VAGL_Group_ID</returns>
         private int CreateGLCategory(String Name, String CategoryType, bool isDefault)
         {
             MGLCategory cat = new MGLCategory(m_ctx, 0, m_trx);
@@ -3023,7 +3023,7 @@ namespace VAdvantage.Model
                 return 0;
             }
             //
-            return cat.GetGL_Category_ID();
+            return cat.GetVAGL_Group_ID();
         }   //  createGLCategory
 
         /// <summary>
@@ -3036,13 +3036,13 @@ namespace VAdvantage.Model
         /// <param name="VAB_DocTypesShipment_ID">shippent doc</param>
         /// <param name="VAB_DocTypesInvoice_ID">invoice doc</param>
         /// <param name="StartNo">doc no</param>
-        /// <param name="GL_Category_ID">gl category</param>
+        /// <param name="VAGL_Group_ID">gl category</param>
         /// <returns>doc type or 0 for error</returns>
-        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int VAB_DocTypesShipment_ID, int VAB_DocTypesInvoice_ID, int StartNo, int GL_Category_ID)
+        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int VAB_DocTypesShipment_ID, int VAB_DocTypesInvoice_ID, int StartNo, int VAGL_Group_ID)
         {
             return CreateDocType(Name, PrintName, DocBaseType, DocSubTypeSO,
                     VAB_DocTypesShipment_ID, VAB_DocTypesInvoice_ID,
-                    StartNo, GL_Category_ID, false, true);
+                    StartNo, VAGL_Group_ID, false, true);
         }	//	CreateDocType
 
         /// <summary>
@@ -3055,11 +3055,11 @@ namespace VAdvantage.Model
         /// <param name="VAB_DocTypesShipment_ID">shippent doc</param>
         /// <param name="VAB_DocTypesInvoice_ID">invoice doc</param>
         /// <param name="StartNo">doc no</param>
-        /// <param name="GL_Category_ID">gl category</param>
+        /// <param name="VAGL_Group_ID">gl category</param>
         /// <param name="IsCreateCounter"></param>
         /// <param name="isReturnTrx">optinal trx</param>
         /// <returns>doc type or 0 for error</returns>
-        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int VAB_DocTypesShipment_ID, int VAB_DocTypesInvoice_ID, int StartNo, int GL_Category_ID, bool isReturnTrx, bool IsCreateCounter)
+        private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int VAB_DocTypesShipment_ID, int VAB_DocTypesInvoice_ID, int StartNo, int VAGL_Group_ID, bool isReturnTrx, bool IsCreateCounter)
         {
             MSequence sequence = null;
             if (StartNo != 0)
@@ -3081,8 +3081,8 @@ namespace VAdvantage.Model
                 dt.SetVAB_DocTypesShipment_ID(VAB_DocTypesShipment_ID);
             if (VAB_DocTypesInvoice_ID != 0)
                 dt.SetVAB_DocTypesInvoice_ID(VAB_DocTypesInvoice_ID);
-            if (GL_Category_ID != 0)
-                dt.SetGL_Category_ID(GL_Category_ID);
+            if (VAGL_Group_ID != 0)
+                dt.SetVAGL_Group_ID(VAGL_Group_ID);
             if (sequence == null)
                 dt.SetIsDocNoControlled(false);
             else
@@ -3103,7 +3103,7 @@ namespace VAdvantage.Model
         }   //  CreateDocType
 
 
-        public bool CreateEntities(int VAB_Country_ID, String City, int C_Region_ID, int VAB_Currency_ID)
+        public bool CreateEntities(int VAB_Country_ID, String City, int VAB_RegionState_ID, int VAB_Currency_ID)
         {
             if (m_as == null && ISTENATRUNNINGFORERP)
             {
@@ -3113,7 +3113,7 @@ namespace VAdvantage.Model
                 return false;
             }
             log.Info("VAB_Country_ID=" + VAB_Country_ID
-                + ", City=" + City + ", C_Region_ID=" + C_Region_ID);
+                + ", City=" + City + ", VAB_RegionState_ID=" + VAB_RegionState_ID);
             m_info.Append("\n----\n");
             //
             String defaultName = Msg.Translate(m_lang, "Standard");
@@ -3163,18 +3163,18 @@ namespace VAdvantage.Model
                 }
 
                 //	Create Sales Region
-                int C_SalesRegion_ID = 0;
-                if (lstTableName.Contains("C_SalesRegion"))
+                int VAB_SalesRegionState_ID = 0;
+                if (lstTableName.Contains("VAB_SalesRegionState"))
                 {
-                    C_SalesRegion_ID = GetNextID(GetVAF_Client_ID(), "C_SalesRegion");
-                    sqlCmd = new StringBuilder("INSERT INTO C_SalesRegion ");
-                    sqlCmd.Append("(C_SalesRegion_ID,").Append(m_stdColumns).Append(",");
+                    VAB_SalesRegionState_ID = GetNextID(GetVAF_Client_ID(), "VAB_SalesRegionState");
+                    sqlCmd = new StringBuilder("INSERT INTO VAB_SalesRegionState ");
+                    sqlCmd.Append("(VAB_SalesRegionState_ID,").Append(m_stdColumns).Append(",");
                     sqlCmd.Append(" Value,Name,IsSummary) VALUES (");
-                    sqlCmd.Append(C_SalesRegion_ID).Append(",").Append(m_stdValues).Append(", ");
+                    sqlCmd.Append(VAB_SalesRegionState_ID).Append(",").Append(m_stdValues).Append(", ");
                     sqlCmd.Append(defaultEntry).Append(defaultEntry).Append("'N')");
                     no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                     if (no == 1)
-                        m_info.Append(Msg.Translate(m_lang, "C_SalesRegion_ID")).Append("=").Append(defaultName).Append("\n");
+                        m_info.Append(Msg.Translate(m_lang, "VAB_SalesRegionState_ID")).Append("=").Append(defaultName).Append("\n");
                     else
                         log.Log(Level.SEVERE, "SalesRegion NOT inserted");
                 }
@@ -3182,10 +3182,10 @@ namespace VAdvantage.Model
                 if (m_hasSRegion)
                 {
                     //  Default
-                    if (lstTableName.Contains("C_SalesRegion") && C_SalesRegion_ID > 0)
+                    if (lstTableName.Contains("VAB_SalesRegionState") && VAB_SalesRegionState_ID > 0)
                     {
                         sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                        sqlCmd.Append("C_SalesRegion_ID=").Append(C_SalesRegion_ID);
+                        sqlCmd.Append("VAB_SalesRegionState_ID=").Append(VAB_SalesRegionState_ID);
                         sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
                         sqlCmd.Append(" AND ElementType='SR'");
                         no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
@@ -3226,7 +3226,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "BPartner NOT inserted");
             }
             //  Location for Standard BP
-            MLocation bpLoc = new MLocation(m_ctx, VAB_Country_ID, C_Region_ID, City, m_trx);
+            MLocation bpLoc = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             bpLoc.Save();
             MProduct product = null;
             if (lstTableName.Contains("M_Product") && bp != null) // Update by Paramjeet Singh
@@ -3234,7 +3234,7 @@ namespace VAdvantage.Model
 
 
                 MBPartnerLocation bpl = new MBPartnerLocation(bp);
-                bpl.SetC_Location_ID(bpLoc.GetC_Location_ID());
+                bpl.SetVAB_Address_ID(bpLoc.GetVAB_Address_ID());
                 if (!bpl.Save())
                     log.Log(Level.SEVERE, "BP_Location (Standard) NOT inserted");
                 //  Default
@@ -3263,14 +3263,14 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "Product Category NOT inserted");
 
                 //  UOM (EA)
-                int C_UOM_ID = 100;
+                int VAB_UOM_ID = 100;
 
                 //  TaxCategory
-                int C_TaxCategory_ID = GetNextID(GetVAF_Client_ID(), "C_TaxCategory");
-                sqlCmd = new StringBuilder("INSERT INTO C_TaxCategory ");
-                sqlCmd.Append("(C_TaxCategory_ID,").Append(m_stdColumns).Append(",");
+                int VAB_TaxCategory_ID = GetNextID(GetVAF_Client_ID(), "VAB_TaxCategory");
+                sqlCmd = new StringBuilder("INSERT INTO VAB_TaxCategory ");
+                sqlCmd.Append("(VAB_TaxCategory_ID,").Append(m_stdColumns).Append(",");
                 sqlCmd.Append(" Name,IsDefault) VALUES (");
-                sqlCmd.Append(C_TaxCategory_ID).Append(",").Append(m_stdValues).Append(", ");
+                sqlCmd.Append(VAB_TaxCategory_ID).Append(",").Append(m_stdValues).Append(", ");
                 if (VAB_Country_ID == 100)    // US
                     sqlCmd.Append("'Sales Tax','Y')");
                 else
@@ -3280,10 +3280,10 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "TaxCategory NOT inserted");
 
                 //  Tax - Zero Rate
-                MTax tax = new MTax(m_ctx, "Standard", Env.ZERO, C_TaxCategory_ID, m_trx);
+                MTax tax = new MTax(m_ctx, "Standard", Env.ZERO, VAB_TaxCategory_ID, m_trx);
                 tax.SetIsDefault(true);
                 if (tax.Save())
-                    m_info.Append(Msg.Translate(m_lang, "C_Tax_ID"))
+                    m_info.Append(Msg.Translate(m_lang, "VAB_TaxRate_ID"))
                         .Append("=").Append(tax.GetName()).Append("\n");
                 else
                     log.Log(Level.SEVERE, "Tax NOT inserted");
@@ -3292,9 +3292,9 @@ namespace VAdvantage.Model
                 product = new MProduct(m_ctx, 0, m_trx);
                 product.SetValue(defaultName);
                 product.SetName(defaultName);
-                product.SetC_UOM_ID(C_UOM_ID);
+                product.SetVAB_UOM_ID(VAB_UOM_ID);
                 product.SetM_Product_Category_ID(pc.GetM_Product_Category_ID());
-                product.SetC_TaxCategory_ID(C_TaxCategory_ID);
+                product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
                 if (product.Save())
                     m_info.Append(Msg.Translate(m_lang, "M_Product_ID")).Append("=").Append(defaultName).Append("\n");
                 else
@@ -3314,12 +3314,12 @@ namespace VAdvantage.Model
              *  Location, Warehouse, Locator
              */
             //  Location (Company)
-            MLocation loc = new MLocation(m_ctx, VAB_Country_ID, C_Region_ID, City, m_trx);
+            MLocation loc = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             loc.Save();
 
 
-            sqlCmd = new StringBuilder("UPDATE VAF_OrgDetail SET C_Location_ID=");
-            sqlCmd.Append(loc.GetC_Location_ID()).Append(" WHERE VAF_Org_ID=").Append(GetVAF_Org_ID());
+            sqlCmd = new StringBuilder("UPDATE VAF_OrgDetail SET VAB_Address_ID=");
+            sqlCmd.Append(loc.GetVAB_Address_ID()).Append(" WHERE VAF_Org_ID=").Append(GetVAF_Org_ID());
             no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
             if (no != 1)
                 log.Log(Level.SEVERE, "Location NOT inserted");
@@ -3330,7 +3330,7 @@ namespace VAdvantage.Model
             MWarehouse wh = new MWarehouse(m_ctx, 0, m_trx);
             wh.SetValue(defaultName);
             wh.SetName(defaultName);
-            wh.SetC_Location_ID(loc.GetC_Location_ID());
+            wh.SetVAB_Address_ID(loc.GetVAB_Address_ID());
             if (!wh.Save())
             {
                 log.Log(Level.SEVERE, "Warehouse NOT inserted");
@@ -3366,10 +3366,10 @@ namespace VAdvantage.Model
                 {
                     sqlCmd.Append(",M_ProductFreight_ID=").Append(product.GetM_Product_ID());
                 }
-                //		sqlCmd.Append("C_UOM_Volume_ID=");
-                //		sqlCmd.Append(",C_UOM_Weight_ID=");
-                //		sqlCmd.Append(",C_UOM_Length_ID=");
-                //		sqlCmd.Append(",C_UOM_Time_ID=");
+                //		sqlCmd.Append("VAB_UOM_Volume_ID=");
+                //		sqlCmd.Append(",VAB_UOM_Weight_ID=");
+                //		sqlCmd.Append(",VAB_UOM_Length_ID=");
+                //		sqlCmd.Append(",VAB_UOM_Time_ID=");
                 sqlCmd.Append(" WHERE VAF_Client_ID=").Append(GetVAF_Client_ID());
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 if (no != 1)
@@ -3429,10 +3429,10 @@ namespace VAdvantage.Model
             //    log.Log(Level.SEVERE, "SalesRep (User) NOT inserted");
             ////  Location for Client-User
 
-            //MLocation bpLocCU = new MLocation(m_ctx, VAB_Country_ID, C_Region_ID, City, m_trx);
+            //MLocation bpLocCU = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             //bpLocCU.Save();
             //MBPartnerLocation bplCU = new MBPartnerLocation(bpCU);
-            //bplCU.SetC_Location_ID(bpLocCU.GetC_Location_ID());
+            //bplCU.SetVAB_Address_ID(bpLocCU.GetVAB_Address_ID());
             //if (!bplCU.Save())
             //    log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
 
@@ -3463,10 +3463,10 @@ namespace VAdvantage.Model
                 if (lstTableName.Contains("VAB_BPart_Location"))
                 {
                     //  Location for Client-Admin
-                    MLocation bpLocCA = new MLocation(m_ctx, VAB_Country_ID, C_Region_ID, City, m_trx);
+                    MLocation bpLocCA = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
                     bpLocCA.Save();
                     MBPartnerLocation bplCA = new MBPartnerLocation(bpCA);
-                    bplCA.SetC_Location_ID(bpLocCA.GetC_Location_ID());
+                    bplCA.SetVAB_Address_ID(bpLocCA.GetVAB_Address_ID());
                     if (!bplCA.Save())
                         log.Log(Level.SEVERE, "BP_Location (Admin) NOT inserted");
                 }
@@ -3485,13 +3485,13 @@ namespace VAdvantage.Model
 
 
             //  Payment Term
-            if (lstTableName.Contains("C_PaymentTerm"))
+            if (lstTableName.Contains("VAB_PaymentTerm"))
             {
-                int C_PaymentTerm_ID = GetNextID(GetVAF_Client_ID(), "C_PaymentTerm");
-                sqlCmd = new StringBuilder("INSERT INTO C_PaymentTerm ");
-                sqlCmd.Append("(C_PaymentTerm_ID,").Append(m_stdColumns).Append(",");
+                int VAB_PaymentTerm_ID = GetNextID(GetVAF_Client_ID(), "VAB_PaymentTerm");
+                sqlCmd = new StringBuilder("INSERT INTO VAB_PaymentTerm ");
+                sqlCmd.Append("(VAB_PaymentTerm_ID,").Append(m_stdColumns).Append(",");
                 sqlCmd.Append("Value,Name,NetDays,GraceDays,DiscountDays,Discount,DiscountDays2,Discount2,IsDefault) VALUES (");
-                sqlCmd.Append(C_PaymentTerm_ID).Append(",").Append(m_stdValues).Append(",");
+                sqlCmd.Append(VAB_PaymentTerm_ID).Append(",").Append(m_stdValues).Append(",");
                 sqlCmd.Append("'Immediate','Immediate',0,0,0,0,0,0,'Y')");
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 if (no != 1)
@@ -3515,17 +3515,17 @@ namespace VAdvantage.Model
              */
 
             //	Create Default Project
-            if (lstTableName.Contains("C_Project"))
+            if (lstTableName.Contains("VAB_Project"))
             {
-                int C_Project_ID = GetNextID(GetVAF_Client_ID(), "C_Project");
-                sqlCmd = new StringBuilder("INSERT INTO C_Project ");
-                sqlCmd.Append("(C_Project_ID,").Append(m_stdColumns).Append(",");
+                int VAB_Project_ID = GetNextID(GetVAF_Client_ID(), "VAB_Project");
+                sqlCmd = new StringBuilder("INSERT INTO VAB_Project ");
+                sqlCmd.Append("(VAB_Project_ID,").Append(m_stdColumns).Append(",");
                 sqlCmd.Append(" Value,Name,VAB_Currency_ID,IsSummary) VALUES (");
-                sqlCmd.Append(C_Project_ID).Append(",").Append(m_stdValuesOrg).Append(", ");
+                sqlCmd.Append(VAB_Project_ID).Append(",").Append(m_stdValuesOrg).Append(", ");
                 sqlCmd.Append(defaultEntry).Append(defaultEntry).Append(VAB_Currency_ID).Append(",'N')");
                 no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);
                 if (no == 1)
-                    m_info.Append(Msg.Translate(m_lang, "C_Project_ID")).Append("=").Append(defaultName).Append("\n");
+                    m_info.Append(Msg.Translate(m_lang, "VAB_Project_ID")).Append("=").Append(defaultName).Append("\n");
                 else
                     log.Log(Level.SEVERE, "Project NOT inserted");
 
@@ -3534,7 +3534,7 @@ namespace VAdvantage.Model
                 if (m_hasProject)
                 {
                     sqlCmd = new StringBuilder("UPDATE VAB_AccountBook_Element SET ");
-                    sqlCmd.Append("C_Project_ID=").Append(C_Project_ID);
+                    sqlCmd.Append("VAB_Project_ID=").Append(VAB_Project_ID);
                     sqlCmd.Append(" WHERE VAB_AccountBook_ID=").Append(m_as.GetVAB_AccountBook_ID());
                     sqlCmd.Append(" AND ElementType='PJ'");
                     no = CoreLibrary.DataBase.DB.ExecuteQuery(sqlCmd.ToString(), null, m_trx);

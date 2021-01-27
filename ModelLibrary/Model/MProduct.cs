@@ -178,8 +178,8 @@ namespace VAdvantage.Model
                 //	setValue (null);
                 //	setName (null);
                 //	setM_Product_Category_ID (0);
-                //	setC_TaxCategory_ID (0);
-                //	setC_UOM_ID (0);
+                //	setVAB_TaxCategory_ID (0);
+                //	setVAB_UOM_ID (0);
                 //
                 SetProductType(PRODUCTTYPE_Item);	// I
                 SetIsBOM(false);	// N
@@ -287,9 +287,9 @@ namespace VAdvantage.Model
                 SetDescription(parent.GetDescription());
                 changed = true;
             }
-            if (parent.GetC_UOM_ID() != GetC_UOM_ID())
+            if (parent.GetVAB_UOM_ID() != GetVAB_UOM_ID())
             {
-                SetC_UOM_ID(parent.GetC_UOM_ID());
+                SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
                 changed = true;
             }
             if (parent.GetM_Product_Category_ID() != GetM_Product_Category_ID())
@@ -297,9 +297,9 @@ namespace VAdvantage.Model
                 SetM_Product_Category_ID(parent.GetM_Product_Category_ID());
                 changed = true;
             }
-            if (parent.GetC_TaxCategory_ID() != GetC_TaxCategory_ID())
+            if (parent.GetVAB_TaxCategory_ID() != GetVAB_TaxCategory_ID())
             {
-                SetC_TaxCategory_ID(parent.GetC_TaxCategory_ID());
+                SetVAB_TaxCategory_ID(parent.GetVAB_TaxCategory_ID());
                 changed = true;
             }
             //
@@ -364,9 +364,9 @@ namespace VAdvantage.Model
                 changed = true;
             }
             //
-            if (parent.GetC_UOM_ID() != GetC_UOM_ID())
+            if (parent.GetVAB_UOM_ID() != GetVAB_UOM_ID())
             {
-                SetC_UOM_ID(parent.GetC_UOM_ID());
+                SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
                 changed = true;
             }
             if (parent.GetM_Product_Category_ID() != GetM_Product_Category_ID())
@@ -374,9 +374,9 @@ namespace VAdvantage.Model
                 SetM_Product_Category_ID(parent.GetM_Product_Category_ID());
                 changed = true;
             }
-            if (parent.GetC_TaxCategory_ID() != GetC_TaxCategory_ID())
+            if (parent.GetVAB_TaxCategory_ID() != GetVAB_TaxCategory_ID())
             {
-                SetC_TaxCategory_ID(parent.GetC_TaxCategory_ID());
+                SetVAB_TaxCategory_ID(parent.GetVAB_TaxCategory_ID());
                 changed = true;
             }
             //
@@ -391,10 +391,10 @@ namespace VAdvantage.Model
         {
             if (_precision == null)
             {
-                int C_UOM_ID = GetC_UOM_ID();
-                if (C_UOM_ID == 0)
+                int VAB_UOM_ID = GetVAB_UOM_ID();
+                if (VAB_UOM_ID == 0)
                     return 0;	//	EA
-                _precision = (int)MUOM.GetPrecision(GetCtx(), C_UOM_ID);
+                _precision = (int)MUOM.GetPrecision(GetCtx(), VAB_UOM_ID);
             }
             return (int)_precision;
         }
@@ -488,10 +488,10 @@ namespace VAdvantage.Model
          */
         public String GetUOMSymbol()
         {
-            int C_UOM_ID = GetC_UOM_ID();
-            if (C_UOM_ID == 0)
+            int VAB_UOM_ID = GetVAB_UOM_ID();
+            if (VAB_UOM_ID == 0)
                 return "";
-            return MUOM.Get(GetCtx(), C_UOM_ID).GetUOMSymbol();
+            return MUOM.Get(GetCtx(), VAB_UOM_ID).GetUOMSymbol();
         }
 
         /**
@@ -620,14 +620,14 @@ namespace VAdvantage.Model
                 SetIsStocked(false);
 
             //	UOM reset
-            if (_precision != null && Is_ValueChanged("C_UOM_ID"))
+            if (_precision != null && Is_ValueChanged("VAB_UOM_ID"))
                 _precision = null;
             if (Util.GetValueOfInt(Env.GetCtx().GetContext("#VAF_UserContact_ID")) != 100)
             {
-                if (Is_ValueChanged("C_UOM_ID") || Is_ValueChanged("M_AttributeSet_ID"))
+                if (Is_ValueChanged("VAB_UOM_ID") || Is_ValueChanged("M_AttributeSet_ID"))
                 {
                     string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + @"  UNION
-                SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " UNION SELECT COUNT(*) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() +
+                SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " UNION SELECT COUNT(*) AS cc FROM VAB_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() +
                     " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + ") t";
                     int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                     if (no == 0 || IsBOM())
@@ -684,8 +684,8 @@ namespace VAdvantage.Model
         {
             int M_Product_ID = 0;
             string sql = @"SELECT p.M_Product_ID FROM M_Product p LEFT JOIN M_Manufacturer m ON m.M_Product_ID = p.M_Product_ID 
-                            LEFT JOIN M_ProductAttributes a ON a.M_Product_ID = p.M_Product_ID LEFT JOIN C_UOM_Conversion c ON c.M_Product_ID = p.M_Product_ID 
-                            LEFT JOIN C_UOM_ProductBarcode b ON b.M_Product_ID = p.M_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
+                            LEFT JOIN M_ProductAttributes a ON a.M_Product_ID = p.M_Product_ID LEFT JOIN VAB_UOM_Conversion c ON c.M_Product_ID = p.M_Product_ID 
+                            LEFT JOIN VAB_UOM_ProductBarcode b ON b.M_Product_ID = p.M_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
                             + " AND ( p.UPC = '" + upc + "' OR m.UPC = '" + upc + "' OR a.UPC = '" + upc + "' OR c.UPC = '" + upc + "' OR b.UPC = '" + upc + "')";
             M_Product_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             return M_Product_ID;
@@ -724,8 +724,8 @@ namespace VAdvantage.Model
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append("Select  PCA.VAB_AccountBook_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
-                    //_sql.Append("Select VAB_AccountBook_ID, C_ValidCombination_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
+                    _sql.Append("Select  PCA.VAB_AccountBook_id, PCA.VAB_Acct_ValidParameter_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
+                    //_sql.Append("Select VAB_AccountBook_ID, VAB_Acct_ValidParameter_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -737,7 +737,7 @@ namespace VAdvantage.Model
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                             obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
                             obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
-                            obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                            obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                             obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                             if (!obj.Save())
                             { }
@@ -752,7 +752,7 @@ namespace VAdvantage.Model
                 //    {
                 //        if (Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                 //        {
-                //            DataSet _dsAcct = DB.ExecuteDataset("SELECT VAB_AccountBook_ID, FRPT_AcctDefault_ID, C_VALIDCOMBINATION_ID, SEQNO FROM VA038_Amortization_Acct "
+                //            DataSet _dsAcct = DB.ExecuteDataset("SELECT VAB_AccountBook_ID, FRPT_AcctDefault_ID, VAB_Acct_ValidParameter_ID, SEQNO FROM VA038_Amortization_Acct "
                 //                              + "WHERE IsActive='Y' AND  VA038_AmortizationTemplate_ID=" + Util.GetValueOfInt(Get_Value("VA038_AmortizationTemplate_ID")));
                 //            if (_dsAcct != null && _dsAcct.Tables[0].Rows.Count > 0)
                 //            {
@@ -762,7 +762,7 @@ namespace VAdvantage.Model
                 //                    obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                 //                    obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
                 //                    obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_AccountBook_ID"]));
-                //                    obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["C_ValidCombination_ID"]));
+                //                    obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_Acct_ValidParameter_ID"]));
                 //                    obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["FRPT_AcctDefault_ID"]));
                 //                    if (!obj.Save())
                 //                    { }

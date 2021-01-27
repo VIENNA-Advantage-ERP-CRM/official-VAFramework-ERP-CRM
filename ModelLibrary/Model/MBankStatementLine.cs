@@ -105,7 +105,7 @@ namespace VAdvantage.Model
         /// <param name="payment">Payment</param>
         public void SetPayment(MPayment payment)
         {
-            SetC_Payment_ID(payment.GetC_Payment_ID());
+            SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
             SetVAB_Currency_ID(payment.GetVAB_Currency_ID());
             Decimal amt = payment.GetPayAmt(true);
             SetTrxAmt(amt);
@@ -265,34 +265,34 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Payment - Callout.
         /// </summary>
-        /// <param name="oldC_Payment_ID">old ID</param>
-        /// <param name="newC_Payment_ID">new ID</param>
+        /// <param name="oldVAB_Payment_ID">old ID</param>
+        /// <param name="newVAB_Payment_ID">new ID</param>
         /// <param name="windowNo">window</param>
         /// @UICallout
-        public void SetC_Payment_ID(String oldC_Payment_ID, String newC_Payment_ID, int windowNo)
+        public void SetVAB_Payment_ID(String oldVAB_Payment_ID, String newVAB_Payment_ID, int windowNo)
         {
-            if (newC_Payment_ID == null || newC_Payment_ID.Length == 0)
+            if (newVAB_Payment_ID == null || newVAB_Payment_ID.Length == 0)
             {
                 return;
             }
-            int C_Payment_ID = int.Parse(newC_Payment_ID);
-            if (C_Payment_ID == 0)
+            int VAB_Payment_ID = int.Parse(newVAB_Payment_ID);
+            if (VAB_Payment_ID == 0)
             {
                 return;
             }
-            SetC_Payment_ID(C_Payment_ID);
+            SetVAB_Payment_ID(VAB_Payment_ID);
             Decimal stmt = GetStmtAmt();
             if (stmt == null)
             {
                 stmt = Env.ZERO;
             }
-            String sql = "SELECT PayAmt FROM C_Payment_v WHERE C_Payment_ID=@C_Payment_ID";		//	1
+            String sql = "SELECT PayAmt FROM VAB_Payment_V WHERE VAB_Payment_ID=@VAB_Payment_ID";		//	1
             DataTable dt = null;
             IDataReader idr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@C_Payment_ID", C_Payment_ID);
+                param[0] = new SqlParameter("@VAB_Payment_ID", VAB_Payment_ID);
                 idr = DB.ExecuteReader(sql, param, null);
                 dt = new DataTable();
                 dt.Load(idr);
@@ -324,7 +324,7 @@ namespace VAdvantage.Model
                 }
             }
             //  Recalculate Amounts
-            SetAmt(windowNo, "C_Payment_ID");
+            SetAmt(windowNo, "VAB_Payment_ID");
         }
 
         /// <summary>
@@ -350,9 +350,9 @@ namespace VAdvantage.Model
             }
 
             //	Set References
-            if (GetC_Payment_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
+            if (GetVAB_Payment_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
-                MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+                MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
                 SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
                 if (payment.GetVAB_Invoice_ID() != 0)
                 {
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
             bool updateBS = UpdateBSAndLine();
 
             //JID_1325: On save on bank statment system should give warning message "Payment and charge reference not found. Either create payment or the system will not complete bank statement."
-            if (GetC_Payment_ID() == 0 && GetVAB_Charge_ID() == 0)
+            if (GetVAB_Payment_ID() == 0 && GetVAB_Charge_ID() == 0)
             {
                 log.SaveWarning("VIS_NoPaymentorChargeStatement", "");
             }

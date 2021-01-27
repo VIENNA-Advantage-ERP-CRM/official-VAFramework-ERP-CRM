@@ -35,11 +35,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>message</returns>
 	protected override String DoIt()
     {
-		log.Info("doIt - GL_Distribution_ID=" + GetRecord_ID());
+		log.Info("doIt - VAGL_Distribution_ID=" + GetRecord_ID());
 		MDistribution distribution = new MDistribution (GetCtx(), GetRecord_ID(), Get_TrxName());
         if (distribution.Get_ID() == 0)
         {
-            throw new Exception("Not found GL_Distribution_ID=" + GetRecord_ID());
+            throw new Exception("Not found VAGL_Distribution_ID=" + GetRecord_ID());
         }
 		String error = distribution.Validate();
 		Boolean saved = distribution.Save();

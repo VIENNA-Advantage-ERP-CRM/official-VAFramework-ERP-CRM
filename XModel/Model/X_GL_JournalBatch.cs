@@ -11,15 +11,15 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for GL_JournalBatch
+    /** Generated Model for VAGL_BatchJRNL
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_GL_JournalBatch : PO
+    public class X_VAGL_BatchJRNL : PO
     {
-        public X_GL_JournalBatch(Context ctx, int GL_JournalBatch_ID, Trx trxName)
-            : base(ctx, GL_JournalBatch_ID, trxName)
+        public X_VAGL_BatchJRNL(Context ctx, int VAGL_BatchJRNL_ID, Trx trxName)
+            : base(ctx, VAGL_BatchJRNL_ID, trxName)
         {
-            /** if (GL_JournalBatch_ID == 0)
+            /** if (VAGL_BatchJRNL_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetDescription (null);
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
              * 
              * 
              * 
-            SetGL_JournalBatch_ID (0);
+            SetVAGL_BatchJRNL_ID (0);
             SetPostingType (null);	// A
             SetProcessed (false);	// N
             SetProcessing (false);	// N
@@ -39,17 +39,17 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_GL_JournalBatch(Ctx ctx, int GL_JournalBatch_ID, Trx trxName)
-            : base(ctx, GL_JournalBatch_ID, trxName)
+        public X_VAGL_BatchJRNL(Ctx ctx, int VAGL_BatchJRNL_ID, Trx trxName)
+            : base(ctx, VAGL_BatchJRNL_ID, trxName)
         {
-            /** if (GL_JournalBatch_ID == 0)
+            /** if (VAGL_BatchJRNL_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetDescription (null);
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
-            SetGL_JournalBatch_ID (0);
+            SetVAGL_BatchJRNL_ID (0);
             SetPostingType (null);	// A
             SetProcessed (false);	// N
             SetProcessing (false);	// N
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalBatch(Context ctx, DataRow rs, Trx trxName)
+        public X_VAGL_BatchJRNL(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalBatch(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAGL_BatchJRNL(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -81,14 +81,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalBatch(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAGL_BatchJRNL(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_GL_JournalBatch()
+        static X_VAGL_BatchJRNL()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -101,8 +101,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =225;
 
-        /** TableName=GL_JournalBatch */
-        public static String Table_Name = "GL_JournalBatch";
+        /** TableName=VAGL_BatchJRNL */
+        public static String Table_Name = "VAGL_BatchJRNL";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_GL_JournalBatch[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAGL_BatchJRNL[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Currency.
@@ -171,21 +171,21 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Period_ID VAF_Control_Ref_ID=275 */
-        public static int C_PERIOD_ID_VAF_Control_Ref_ID = 275;
+        /** VAB_YearPeriod_ID VAF_Control_Ref_ID=275 */
+        public static int VAB_YEARPERIOD_ID_VAF_Control_Ref_ID = 275;
         /** Set Period.
-        @param C_Period_ID Period of the Calendar */
-        public void SetC_Period_ID(int C_Period_ID)
+        @param VAB_YearPeriod_ID Period of the Calendar */
+        public void SetVAB_YearPeriod_ID(int VAB_YearPeriod_ID)
         {
-            if (C_Period_ID <= 0) Set_Value("C_Period_ID", null);
+            if (VAB_YearPeriod_ID <= 0) Set_Value("VAB_YearPeriod_ID", null);
             else
-                Set_Value("C_Period_ID", C_Period_ID);
+                Set_Value("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
         }
         /** Get Period.
         @return Period of the Calendar */
-        public int GetC_Period_ID()
+        public int GetVAB_YearPeriod_ID()
         {
-            Object ii = Get_Value("C_Period_ID");
+            Object ii = Get_Value("VAB_YearPeriod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -194,10 +194,10 @@ namespace VAdvantage.Model
 
                                                                                                                                
                                                                                                                        
-public void SetC_Year_ID (int C_Year_ID){if (C_Year_ID <= 0) Set_Value ("C_Year_ID", null);else
-Set_Value ("C_Year_ID", C_Year_ID);}/** Get Year.
+public void SetVAB_Year_ID (int VAB_Year_ID){if (VAB_Year_ID <= 0) Set_Value ("VAB_Year_ID", null);else
+Set_Value ("VAB_Year_ID", VAB_Year_ID);}/** Get Year.
 @return Calendar Year */
-public int GetC_Year_ID() {Object ii = Get_Value("C_Year_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Control Amount.
+public int GetVAB_Year_ID() {Object ii = Get_Value("VAB_Year_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Control Amount.
 
                                                                                                                     * 
     
@@ -433,33 +433,33 @@ public int GetC_Year_ID() {Object ii = Get_Value("C_Year_ID");if (ii == null) re
             return (String)Get_Value("Export_ID");
         }
         /** Set GL Category.
-        @param GL_Category_ID General Ledger Category */
-        public void SetGL_Category_ID(int GL_Category_ID)
+        @param VAGL_Group_ID General Ledger Category */
+        public void SetVAGL_Group_ID(int VAGL_Group_ID)
         {
-            if (GL_Category_ID <= 0) Set_Value("GL_Category_ID", null);
+            if (VAGL_Group_ID <= 0) Set_Value("VAGL_Group_ID", null);
             else
-                Set_Value("GL_Category_ID", GL_Category_ID);
+                Set_Value("VAGL_Group_ID", VAGL_Group_ID);
         }
         /** Get GL Category.
         @return General Ledger Category */
-        public int GetGL_Category_ID()
+        public int GetVAGL_Group_ID()
         {
-            Object ii = Get_Value("GL_Category_ID");
+            Object ii = Get_Value("VAGL_Group_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Journal Batch.
-        @param GL_JournalBatch_ID General Ledger Journal Batch */
-        public void SetGL_JournalBatch_ID(int GL_JournalBatch_ID)
+        @param VAGL_BatchJRNL_ID General Ledger Journal Batch */
+        public void SetVAGL_BatchJRNL_ID(int VAGL_BatchJRNL_ID)
         {
-            if (GL_JournalBatch_ID < 1) throw new ArgumentException("GL_JournalBatch_ID is mandatory.");
-            Set_ValueNoCheck("GL_JournalBatch_ID", GL_JournalBatch_ID);
+            if (VAGL_BatchJRNL_ID < 1) throw new ArgumentException("VAGL_BatchJRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAGL_BatchJRNL_ID", VAGL_BatchJRNL_ID);
         }
         /** Get Journal Batch.
         @return General Ledger Journal Batch */
-        public int GetGL_JournalBatch_ID()
+        public int GetVAGL_BatchJRNL_ID()
         {
-            Object ii = Get_Value("GL_JournalBatch_ID");
+            Object ii = Get_Value("VAGL_BatchJRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

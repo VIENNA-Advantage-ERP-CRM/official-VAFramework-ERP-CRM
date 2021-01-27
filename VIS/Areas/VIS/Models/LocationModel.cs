@@ -12,10 +12,10 @@ namespace VIS.Models
 {
     public class LocationModel
     {
-        public int C_LOCATION_ID { get; set; }
+        public int VAB_ADDRESS_ID { get; set; }
         public int VAB_City_ID { get; set; }
         public int VAB_Country_ID { get; set; }
-        public int C_Region_ID { get; set; }
+        public int VAB_RegionState_ID { get; set; }
 
         [Display(Name = "Search")]
         public List<SearchAddress> Addresslist { get; set; }
@@ -56,19 +56,19 @@ namespace VIS.Models
             if (Env.IsBaseLanguage(ctx, ""))
             {
                 sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CN.NAME AS COUNTRY,L.VAF_CLIENT_ID,L.VAF_ORG_ID,L.VAB_CITY_ID," +
-                           " L.VAB_COUNTRY_ID,L.C_LOCATION_ID,L.C_REGION_ID FROM C_LOCATION L" +
+                           " L.VAB_COUNTRY_ID,L.VAB_ADDRESS_ID,L.VAB_REGIONSTATE_ID FROM VAB_ADDRESS L" +
                            " LEFT JOIN VAB_COUNTRY CN ON CN.VAB_COUNTRY_ID=L.VAB_COUNTRY_ID WHERE L.IsActive='Y'";
             }
             else
             {
                 // Check applied by mohit - Picked data from translation tab - if base language
                 sql = "SELECT L.ADDRESS1,L.ADDRESS2,L.ADDRESS3,L.ADDRESS4,L.CITY,L.REGIONNAME ,L.POSTAL,L.POSTAL_ADD,CNTRL.NAME AS COUNTRY,L.VAF_CLIENT_ID,L.VAF_ORG_ID,L.VAB_CITY_ID," +
-                           " L.VAB_COUNTRY_ID,L.C_LOCATION_ID,L.C_REGION_ID FROM C_LOCATION L" +
+                           " L.VAB_COUNTRY_ID,L.VAB_ADDRESS_ID,L.VAB_REGIONSTATE_ID FROM VAB_ADDRESS L" +
                            " LEFT JOIN VAB_COUNTRY CN ON CN.VAB_COUNTRY_ID=L.VAB_COUNTRY_ID INNER JOIN VAB_Country_TL CNTRL ON (CN.VAB_COUNTRY_ID  =CNTRL.VAB_COUNTRY_ID)" +
                            " WHERE L.IsActive='Y' AND CNTRL.VAF_Language='" + ctx.GetVAF_Language() + "' ";
             }
 
-            sql += " AND L.c_location_id=" + locationId;
+            sql += " AND L.VAB_Address_id=" + locationId;
 
             var ds = new DataSet();
             try
@@ -77,7 +77,7 @@ namespace VIS.Models
 
                 if (ds != null)
                 {
-                    //DataRow[] dr = ds.Tables[0].Select("c_location_id=" + locationId);
+                    //DataRow[] dr = ds.Tables[0].Select("VAB_Address_id=" + locationId);
                     DataRowCollection dr = ds.Tables[0].Rows;
                     //if contain saved records
                     if (dr.Count > 0)
@@ -91,7 +91,7 @@ namespace VIS.Models
 
                             obj.VAB_City_ID = Convert.ToInt32(dr[0]["VAB_City_ID"] == DBNull.Value ? 0 : dr[0]["VAB_City_ID"]);
                             obj.VAB_Country_ID = Convert.ToInt32(dr[0]["VAB_Country_ID"] == DBNull.Value ? 0 : dr[0]["VAB_Country_ID"]);
-                            obj.C_Region_ID = Convert.ToInt32(dr[0]["C_Region_ID"] == DBNull.Value ? 0 : dr[0]["C_Region_ID"]);
+                            obj.VAB_RegionState_ID = Convert.ToInt32(dr[0]["VAB_RegionState_ID"] == DBNull.Value ? 0 : dr[0]["VAB_RegionState_ID"]);
 
                             obj.City = Convert.ToString(dr[0]["City"] == DBNull.Value ? "" : dr[0]["City"]);
                             obj.RegionName = Convert.ToString(dr[0]["RegionName"] == DBNull.Value ? "" : dr[0]["RegionName"]);
@@ -120,9 +120,9 @@ namespace VIS.Models
                     //        + "," + Convert.ToString(ds.Tables[0].Rows[i]["RegionName"] == DBNull.Value ? "" : ds.Tables[0].Rows[i]["RegionName"])
                     //        + "," + Convert.ToString(ds.Tables[0].Rows[i]["POSTAL"] == DBNull.Value ? "" : ds.Tables[0].Rows[i]["POSTAL"]);
 
-                    //    searchObj.ID = Convert.ToInt32(ds.Tables[0].Rows[i]["c_location_id"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["c_location_id"]);
+                    //    searchObj.ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Address_id"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["VAB_Address_id"]);
                     //    searchObj.CityId = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_City_ID"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["VAB_City_ID"]);
-                    //    searchObj.StateId = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Region_ID"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["C_Region_ID"]);
+                    //    searchObj.StateId = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_RegionState_ID"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["VAB_RegionState_ID"]);
                     //    searchObj.CountryId = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Country_ID"] == DBNull.Value ? 0 : ds.Tables[0].Rows[i]["VAB_Country_ID"]);
 
                     //    obj.Addresslist.Add(searchObj);
@@ -147,16 +147,16 @@ namespace VIS.Models
         {
             MLocation _location = null;
 
-            var c_Location_Id = Convert.ToInt32(pref["clocationId"]);
+            var VAB_Address_Id = Convert.ToInt32(pref["clocationId"]);
 
-            string sql = "SELECT COUNT(*) FROM C_Location WHERE C_Location_ID=" + c_Location_Id;
+            string sql = "SELECT COUNT(*) FROM VAB_Address WHERE VAB_Address_ID=" + VAB_Address_Id;
             object count = DB.ExecuteScalar(sql);
             if (count == null || count == DBNull.Value || Util.GetValueOfInt(count) == 0)
             {
-                c_Location_Id = 0;
+                VAB_Address_Id = 0;
             }
 
-            _location = new MLocation(ctx, c_Location_Id, null);
+            _location = new MLocation(ctx, VAB_Address_Id, null);
             _location.SetAddress1(Convert.ToString(pref["addvalue1"]));
             _location.SetAddress2(Convert.ToString(pref["addvalue2"]));
             _location.SetAddress3(Convert.ToString(pref["addvalue3"]));
@@ -168,11 +168,11 @@ namespace VIS.Models
 
             if (_location.GetCountry().IsHasRegion())
             {
-                _location.SetC_Region_ID(Convert.ToInt32(pref["stateId"]));
+                _location.SetVAB_RegionState_ID(Convert.ToInt32(pref["stateId"]));
             }
             else
             {
-                _location.SetC_Region_ID(0);
+                _location.SetVAB_RegionState_ID(0);
             }
             _location.SetRegionName(Convert.ToString(pref["stateValue"]));
             _location.SetVAB_City_ID(Convert.ToInt32(pref["cityId"]));
@@ -223,14 +223,14 @@ namespace VIS.Models
         public List<KeyNamePair> GetStatesByText(string name_startsWith, string countryId)
         {
             List<KeyNamePair> obj = new List<KeyNamePair>();
-            string sqlquery = " select C_REGION_id,Name from C_REGION where IsActive='Y' AND VAB_COUNTRY_ID=" + countryId + " and LOWER(name) like LOWER('" + name_startsWith + "%')";
+            string sqlquery = " select VAB_REGIONSTATE_id,Name from VAB_REGIONSTATE where IsActive='Y' AND VAB_COUNTRY_ID=" + countryId + " and LOWER(name) like LOWER('" + name_startsWith + "%')";
             var ds = new DataSet();
             ds = DB.ExecuteDataset(sqlquery);
             if (ds != null)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    obj.Add(new KeyNamePair(Convert.ToInt32(ds.Tables[0].Rows[i]["C_REGION_id"]), Convert.ToString(ds.Tables[0].Rows[i]["Name"])));
+                    obj.Add(new KeyNamePair(Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_REGIONSTATE_id"]), Convert.ToString(ds.Tables[0].Rows[i]["Name"])));
                 }
             }
             ds = null;
@@ -251,7 +251,7 @@ namespace VIS.Models
             //{
             //    sqlquery = " SELECT * FROM (SELECT (NVL(cn.Name,'')||' '|| NVL(l.ADDRESS1,'') ||' '|| NVL(l.ADDRESS2,'') ||' '|| NVL(l.ADDRESS3,'') ||' '|| NVL(l.ADDRESS4,'') ||' '|| NVL(l.CITY,'') ||' '|| NVL(l.REGIONNAME,'') ||' '|| NVL(l.POSTAL,'') ||' '|| NVL(l.POSTAL_ADD,'')) as address," +
             //                        "cn.Name, l.ADDRESS1 , l.ADDRESS2 , l.ADDRESS3 , l.ADDRESS4 , l.CITY , l.REGIONNAME , l.POSTAL , l.POSTAL_ADD," +
-            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.VAB_CITY_ID,l.VAB_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
+            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.VAB_CITY_ID,l.VAB_COUNTRY_ID,l.VAB_ADDRESS_ID,l.VAB_REGIONSTATE_ID FROM VAB_Address l" +
             //                        " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=l.VAB_COUNTRY_ID WHERE l.ISACTIVE='Y') qb1";
             //}
             //else
@@ -259,31 +259,31 @@ namespace VIS.Models
             //    // Check applied by mohit - Picked data from translation tab - if base language
             //    sqlquery = " SELECT * FROM (SELECT (NVL(CNTRL.Name,'')||' '|| NVL(l.ADDRESS1,'') ||' '|| NVL(l.ADDRESS2,'') ||' '|| NVL(l.ADDRESS3,'') ||' '|| NVL(l.ADDRESS4,'') ||' '|| NVL(l.CITY,'') ||' '|| NVL(l.REGIONNAME,'') ||' '|| NVL(l.POSTAL,'') ||' '|| NVL(l.POSTAL_ADD,'')) as address," +
             //                        " cnTRL.Name, l.ADDRESS1 , l.ADDRESS2 , l.ADDRESS3 , l.ADDRESS4 , l.CITY , l.REGIONNAME , l.POSTAL , l.POSTAL_ADD," +
-            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.VAB_CITY_ID,l.VAB_COUNTRY_ID,l.C_LOCATION_ID,l.C_REGION_ID FROM C_Location l" +
+            //                        " l.VAF_CLIENT_ID,l.VAF_ORG_ID,l.VAB_CITY_ID,l.VAB_COUNTRY_ID,l.VAB_ADDRESS_ID,l.VAB_REGIONSTATE_ID FROM VAB_Address l" +
             //                        " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=l.VAB_COUNTRY_ID INNER JOIN VAB_Country_TL CNTRL     ON (cn.VAB_Country_ID=CNTRL.VAB_Country_ID) WHERE l.ISACTIVE='Y' AND cnTRL.VAF_Language='" + ctx.GetVAF_Language() + "') qb1";
             //}
             #endregion
             // Check applied by mohit - asked by mukesh sir - to check if login langauge is base language - then pick non translated data.
             if (Env.IsBaseLanguage(ctx, ""))
             {
-                sqlquery = " SELECT (NVL(cn.Name,'')||' '|| NVL(C_Location.ADDRESS1,'') ||' '|| NVL(C_Location.ADDRESS2,'') ||' '|| NVL(C_Location.ADDRESS3,'') ||' '|| NVL(C_Location.ADDRESS4,'') ||' '|| NVL(C_Location.CITY,'') ||' '|| NVL(C_Location.REGIONNAME,'') ||' '|| NVL(C_Location.POSTAL,'') ||' '|| NVL(C_Location.POSTAL_ADD,'')) as address," +
-                                    "cn.Name, C_Location.ADDRESS1 , C_Location.ADDRESS2 , C_Location.ADDRESS3 , C_Location.ADDRESS4 , C_Location.CITY , C_Location.REGIONNAME , C_Location.POSTAL , C_Location.POSTAL_ADD," +
-                                    " C_Location.VAF_CLIENT_ID,C_Location.VAF_ORG_ID,C_Location.VAB_CITY_ID,C_Location.VAB_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
-                                    " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=C_Location.VAB_COUNTRY_ID WHERE C_Location.ISACTIVE='Y'" +
-                                    " AND Lower( (NVL(cn.Name,'') ||' '  || NVL(C_Location.ADDRESS1,'')  ||' ' || NVL(C_Location.ADDRESS2,'') ||' ' || NVL(C_Location.ADDRESS3,'')  ||' ' || NVL(C_Location.ADDRESS4,'') ||' ' || NVL(C_Location.CITY,'')" +
-                                   " ||' '  || NVL(C_Location.REGIONNAME,'') ||' ' || NVL(C_Location.POSTAL,'')  ||' '   || NVL(C_Location.POSTAL_ADD,''))) like LOWER ('%" + name_startsWith + "%') AND rownum < 500";
+                sqlquery = " SELECT (NVL(cn.Name,'')||' '|| NVL(VAB_Address.ADDRESS1,'') ||' '|| NVL(VAB_Address.ADDRESS2,'') ||' '|| NVL(VAB_Address.ADDRESS3,'') ||' '|| NVL(VAB_Address.ADDRESS4,'') ||' '|| NVL(VAB_Address.CITY,'') ||' '|| NVL(VAB_Address.REGIONNAME,'') ||' '|| NVL(VAB_Address.POSTAL,'') ||' '|| NVL(VAB_Address.POSTAL_ADD,'')) as address," +
+                                    "cn.Name, VAB_Address.ADDRESS1 , VAB_Address.ADDRESS2 , VAB_Address.ADDRESS3 , VAB_Address.ADDRESS4 , VAB_Address.CITY , VAB_Address.REGIONNAME , VAB_Address.POSTAL , VAB_Address.POSTAL_ADD," +
+                                    " VAB_Address.VAF_CLIENT_ID,VAB_Address.VAF_ORG_ID,VAB_Address.VAB_CITY_ID,VAB_Address.VAB_COUNTRY_ID,VAB_Address.VAB_ADDRESS_ID,VAB_Address.VAB_REGIONSTATE_ID FROM VAB_Address VAB_Address" +
+                                    " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=VAB_Address.VAB_COUNTRY_ID WHERE VAB_Address.ISACTIVE='Y'" +
+                                    " AND Lower( (NVL(cn.Name,'') ||' '  || NVL(VAB_Address.ADDRESS1,'')  ||' ' || NVL(VAB_Address.ADDRESS2,'') ||' ' || NVL(VAB_Address.ADDRESS3,'')  ||' ' || NVL(VAB_Address.ADDRESS4,'') ||' ' || NVL(VAB_Address.CITY,'')" +
+                                   " ||' '  || NVL(VAB_Address.REGIONNAME,'') ||' ' || NVL(VAB_Address.POSTAL,'')  ||' '   || NVL(VAB_Address.POSTAL_ADD,''))) like LOWER ('%" + name_startsWith + "%') AND rownum < 500";
             }
             else
             {
                 // Check applied by mohit - Picked data from translation tab - if base language
-                sqlquery = " SELECT (NVL(CNTRL.Name,'')||' '|| NVL(C_Location.ADDRESS1,'') ||' '|| NVL(C_Location.ADDRESS2,'') ||' '|| NVL(C_Location.ADDRESS3,'') ||' '|| NVL(C_Location.ADDRESS4,'') ||' '|| NVL(C_Location.CITY,'') ||' '|| NVL(C_Location.REGIONNAME,'') ||' '|| NVL(C_Location.POSTAL,'') ||' '|| NVL(C_Location.POSTAL_ADD,'')) as address," +
-                                    " cnTRL.Name, C_Location.ADDRESS1 , C_Location.ADDRESS2 , C_Location.ADDRESS3 , C_Location.ADDRESS4 , C_Location.CITY , C_Location.REGIONNAME , C_Location.POSTAL , C_Location.POSTAL_ADD," +
-                                    " C_Location.VAF_CLIENT_ID,C_Location.VAF_ORG_ID,C_Location.VAB_CITY_ID,C_Location.VAB_COUNTRY_ID,C_Location.C_LOCATION_ID,C_Location.C_REGION_ID FROM C_Location C_Location" +
-                                    " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=C_Location.VAB_COUNTRY_ID INNER JOIN VAB_Country_TL CNTRL     ON (cn.VAB_Country_ID=CNTRL.VAB_Country_ID) WHERE C_Location.ISACTIVE='Y' AND cnTRL.VAF_Language='" + ctx.GetVAF_Language() + "'" +
-                                    " AND Lower((NVL(CNTRL.Name,'')   ||' '  || NVL(C_Location.ADDRESS1,'')  ||' '  || NVL(C_Location.ADDRESS2,'')  ||' '  || NVL(C_Location.ADDRESS3,'')  ||' '  || NVL(C_Location.ADDRESS4,'')  ||' ' " +
-                                    " || NVL(C_Location.CITY,'')  ||' '  || NVL(C_Location.REGIONNAME,'')  ||' '  || NVL(C_Location.POSTAL,'')  ||' '  || NVL(C_Location.POSTAL_ADD,''))) like Lower('%" + name_startsWith + "%')  AND rownum <500";
+                sqlquery = " SELECT (NVL(CNTRL.Name,'')||' '|| NVL(VAB_Address.ADDRESS1,'') ||' '|| NVL(VAB_Address.ADDRESS2,'') ||' '|| NVL(VAB_Address.ADDRESS3,'') ||' '|| NVL(VAB_Address.ADDRESS4,'') ||' '|| NVL(VAB_Address.CITY,'') ||' '|| NVL(VAB_Address.REGIONNAME,'') ||' '|| NVL(VAB_Address.POSTAL,'') ||' '|| NVL(VAB_Address.POSTAL_ADD,'')) as address," +
+                                    " cnTRL.Name, VAB_Address.ADDRESS1 , VAB_Address.ADDRESS2 , VAB_Address.ADDRESS3 , VAB_Address.ADDRESS4 , VAB_Address.CITY , VAB_Address.REGIONNAME , VAB_Address.POSTAL , VAB_Address.POSTAL_ADD," +
+                                    " VAB_Address.VAF_CLIENT_ID,VAB_Address.VAF_ORG_ID,VAB_Address.VAB_CITY_ID,VAB_Address.VAB_COUNTRY_ID,VAB_Address.VAB_ADDRESS_ID,VAB_Address.VAB_REGIONSTATE_ID FROM VAB_Address VAB_Address" +
+                                    " LEFT JOIN VAB_Country cn on cn.VAB_COUNTRY_ID=VAB_Address.VAB_COUNTRY_ID INNER JOIN VAB_Country_TL CNTRL     ON (cn.VAB_Country_ID=CNTRL.VAB_Country_ID) WHERE VAB_Address.ISACTIVE='Y' AND cnTRL.VAF_Language='" + ctx.GetVAF_Language() + "'" +
+                                    " AND Lower((NVL(CNTRL.Name,'')   ||' '  || NVL(VAB_Address.ADDRESS1,'')  ||' '  || NVL(VAB_Address.ADDRESS2,'')  ||' '  || NVL(VAB_Address.ADDRESS3,'')  ||' '  || NVL(VAB_Address.ADDRESS4,'')  ||' ' " +
+                                    " || NVL(VAB_Address.CITY,'')  ||' '  || NVL(VAB_Address.REGIONNAME,'')  ||' '  || NVL(VAB_Address.POSTAL,'')  ||' '  || NVL(VAB_Address.POSTAL_ADD,''))) like Lower('%" + name_startsWith + "%')  AND rownum <500";
             }
-            sqlquery = MRole.GetDefault(ctx).AddAccessSQL(sqlquery, "C_Location", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sqlquery = MRole.GetDefault(ctx).AddAccessSQL(sqlquery, "VAB_Address", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             //sqlquery = "SELECT * FROM (" + sqlquery + " ) fltr WHERE LOWER(fltr.address) LIKE LOWER('" + name_startsWith + "%') or LOWER(fltr.address) LIKE LOWER('%" + name_startsWith + "%') or LOWER(fltr.address) LIKE LOWER('%" + name_startsWith + "')";
 
 
@@ -311,8 +311,8 @@ namespace VIS.Models
                         VAF_ORG_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_ORG_ID"]),
                         // VAB_CITY_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_CITY_ID"]),
                         VAB_COUNTRY_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_COUNTRY_ID"] == DBNull.Value ? null : ds.Tables[0].Rows[i]["VAB_COUNTRY_ID"]),
-                        C_LOCATION_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_LOCATION_ID"]),
-                        C_REGION_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_REGION_ID"] == DBNull.Value ? null : ds.Tables[0].Rows[i]["C_REGION_ID"])
+                        VAB_ADDRESS_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_ADDRESS_ID"]),
+                        VAB_REGIONSTATE_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_REGIONSTATE_ID"] == DBNull.Value ? null : ds.Tables[0].Rows[i]["VAB_REGIONSTATE_ID"])
                     };
                     obj.Add(ladd);
                 }
@@ -338,12 +338,12 @@ namespace VIS.Models
             Dictionary<int, LatLng> lstLatLng = new Dictionary<int, LatLng>();
             try
             {
-                dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT * FROM C_Location");
+                dr = VAdvantage.DataBase.DB.ExecuteReader("SELECT * FROM VAB_Address");
                 while (dr.Read())
                 {
                     if (count > MAX_ROWS)
                         break;
-                    MLocation loc = MLocation.Get(ctx, Convert.ToInt32(dr["C_Location_ID"]), null);
+                    MLocation loc = MLocation.Get(ctx, Convert.ToInt32(dr["VAB_Address_ID"]), null);
                     locs[loc.Get_ID()] = new KeyNamePair(loc.Get_ID(), loc.ToString());
 
                     lstLatLng[loc.Get_ID()] = new LatLng() { Latitude = loc.GetLatitude(), Longitude = loc.GetLongitude() };
@@ -373,17 +373,17 @@ namespace VIS.Models
             try
             {
                 // load the country from login orgnization's organization info loaction.
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Location_ID FROM VAF_OrgDetail WHERE IsActive='Y' AND VAF_Org_ID=" + ctx.GetVAF_Org_ID() + " ", null, null)) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Address_ID FROM VAF_OrgDetail WHERE IsActive='Y' AND VAF_Org_ID=" + ctx.GetVAF_Org_ID() + " ", null, null)) > 0)
                 {
                     if (Env.IsBaseLanguage(ctx, ""))
                     {
-                        _ds = DB.ExecuteDataset("SELECT cnt.VAB_Country_ID,  cnt.Name FROM VAB_Country cnt INNER JOIN C_Location loc ON(loc.VAB_Country_ID = cnt.VAB_Country_ID) "
-                                         + " INNER JOIN VAF_OrgDetail oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE oi.VAF_Org_ID =  " + ctx.GetVAF_Org_ID());
+                        _ds = DB.ExecuteDataset("SELECT cnt.VAB_Country_ID,  cnt.Name FROM VAB_Country cnt INNER JOIN VAB_Address loc ON(loc.VAB_Country_ID = cnt.VAB_Country_ID) "
+                                         + " INNER JOIN VAF_OrgDetail oi ON(loc.VAB_Address_ID = oi.VAB_Address_ID) WHERE oi.VAF_Org_ID =  " + ctx.GetVAF_Org_ID());
                     }
                     else
                     {
                         _ds = DB.ExecuteDataset(@"SELECT cnt.VAB_Country_ID,  cntrl.Name FROM VAB_Country cnt INNER JOIN VAB_Country_TL cntrl ON(cnt.c_country_ID = cntrl.c_country_id)
-                                                INNER JOIN C_Location loc ON(loc.VAB_Country_ID = cnt.VAB_Country_ID) INNER JOIN VAF_OrgDetail oi ON(loc.C_Location_ID = oi.C_Location_ID) WHERE 
+                                                INNER JOIN VAB_Address loc ON(loc.VAB_Country_ID = cnt.VAB_Country_ID) INNER JOIN VAF_OrgDetail oi ON(loc.VAB_Address_ID = oi.VAB_Address_ID) WHERE 
                                                 oi.VAF_Org_ID = " + ctx.GetVAF_Org_ID() + "  AND CNTRL.VAF_Language = '" + VAF_Language + "'");
                     }
                 }
@@ -466,8 +466,8 @@ namespace VIS.Models
         public int VAF_ORG_ID { get; set; }
         // public int? VAB_CITY_ID { get; set; }
         public int? VAB_COUNTRY_ID { get; set; }
-        public int C_LOCATION_ID { get; set; }
-        public int? C_REGION_ID { get; set; }
+        public int VAB_ADDRESS_ID { get; set; }
+        public int? VAB_REGIONSTATE_ID { get; set; }
     }
 
     public class LocationData

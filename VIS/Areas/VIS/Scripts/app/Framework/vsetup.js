@@ -135,7 +135,7 @@
             var dRegInner = $("<div class='vis-control-wrap'></div>"); 
             cmbReg = $('<select placeholder="Region">');
             dRegInner.append(cmbReg);
-            dRegInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Region_ID")));
+            dRegInner.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_RegionState_ID")));
             dReg.append(dRegInner);
             dTForm.append(dReg);
 
@@ -170,7 +170,7 @@
             //ulCase.append(liReg);
             //var dReg = $('<div class="intial-form-dataCombo">');
             //liReg.append(dReg);
-            //dReg.append($('<label>').append(VIS.Msg.translate(VIS.context, "C_Region_ID")));
+            //dReg.append($('<label>').append(VIS.Msg.translate(VIS.context, "VAB_RegionState_ID")));
             //cmbReg = $('<select placeholder="Region">');
             //dReg.append(cmbReg);
 
@@ -188,13 +188,13 @@
             var dOpprotunity = $('<div class="vis-initial-form-checkbox" >');
             chkOpprotunity = $('<input type="checkbox">');
             dOpprotunity.append(chkOpprotunity);
-            dOpprotunity.append($("<label>").append(VIS.Msg.translate(VIS.context, "C_Project_ID")));
+            dOpprotunity.append($("<label>").append(VIS.Msg.translate(VIS.context, "VAB_Project_ID")));
             dChkBox.append(dOpprotunity);
 
             var dSR = $('<div class="vis-initial-form-checkbox">');
             chkSR = $('<input type="checkbox">');
             dSR.append(chkSR);
-            dSR.append($("<label>").append(VIS.Msg.translate(VIS.context, "C_SalesRegion_ID")));
+            dSR.append($("<label>").append(VIS.Msg.translate(VIS.context, "VAB_SalesRegionState_ID")));
             dChkBox.append(dSR);
 
             var dProduct = $('<div class="vis-initial-form-checkbox">');

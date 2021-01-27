@@ -100,12 +100,12 @@ namespace VIS.Models
         {
             List<Order> lstOrder = new List<Order>();
             DataSet ds = new DataSet();
-            string sql = "SELECT C_Order_ID, DocumentNo || '_' || GrandTotal as Name "
-                  + "FROM C_Order "
+            string sql = "SELECT VAB_Order_ID, DocumentNo || '_' || GrandTotal as Name "
+                  + "FROM VAB_Order "
                   + "WHERE IsActive='Y' AND IsSOTrx='N' AND IsReturnTrx='N' AND Processed='N' AND DocStatus='DR' "
                   + "ORDER BY DocumentNo";
             // Added Check By Pratap 30-12-15  -- IsActive='Y' AND IsSOTrx='N' AND IsReturnTrx='N'
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_Order", true, false);     
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Order", true, false);     
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -115,7 +115,7 @@ namespace VIS.Models
                     {
                         lstOrder.Add(new Order()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Order_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Order_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
 
                         });
@@ -130,12 +130,12 @@ namespace VIS.Models
         {
             List<Opportunity> lstOpportunity = new List<Opportunity>();
             DataSet ds = new DataSet();
-            string sql = "SELECT C_Project_ID, Name "
-                 + "FROM C_Project "
+            string sql = "SELECT VAB_Project_ID, Name "
+                 + "FROM VAB_Project "
                  + "WHERE Processed='N' AND IsSummary='N' AND IsActive='Y'"
                  + " AND ProjectCategory<>'S' "
                  + "ORDER BY Name";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "C_Project", true, false);          
+            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Project", true, false);          
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -145,7 +145,7 @@ namespace VIS.Models
                     {
                         lstOpportunity.Add(new Opportunity()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_Project_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_Project_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
 
                         });
@@ -274,15 +274,15 @@ namespace VIS.Models
         /// <summary>
         /// Save to Order
         /// </summary>
-        /// <param name="C_Order_ID">id</param>
+        /// <param name="VAB_Order_ID">id</param>
         /// <returns>true if saved</returns>
-        private bool Cmd_SaveOrder(Ctx ctx,int C_Order_ID)
+        private bool Cmd_SaveOrder(Ctx ctx,int VAB_Order_ID)
         {
-            log.Config("C_Order_ID=" + C_Order_ID);
-            MOrder order = new MOrder(ctx, C_Order_ID, null);
+            log.Config("VAB_Order_ID=" + VAB_Order_ID);
+            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
             if (order.Get_ID() == 0)
             {
-                log.Log(Level.SEVERE, "Not found - C_Order_ID=" + C_Order_ID);
+                log.Log(Level.SEVERE, "Not found - VAB_Order_ID=" + VAB_Order_ID);
                 
             }
             int lineCount = 0;
@@ -369,16 +369,16 @@ namespace VIS.Models
         /// <summary>
         /// Save to Project
         /// </summary>
-        /// <param name="C_Project_ID">id</param>
+        /// <param name="VAB_Project_ID">id</param>
         /// <returns>true if saved</returns>
-        private bool Cmd_SaveProject(Ctx ctx,int C_Project_ID)
+        private bool Cmd_SaveProject(Ctx ctx,int VAB_Project_ID)
         {
             Decimal qty = 0;        
-            log.Config("C_Project_ID=" + C_Project_ID);
-            MProject project = new MProject(ctx, C_Project_ID, null);
+            log.Config("VAB_Project_ID=" + VAB_Project_ID);
+            MProject project = new MProject(ctx, VAB_Project_ID, null);
             if (project.Get_ID() == 0)
             {
-                log.Log(Level.SEVERE, "Not found - C_Project_ID=" + C_Project_ID);
+                log.Log(Level.SEVERE, "Not found - VAB_Project_ID=" + VAB_Project_ID);
                 
             }
             int lineCount = 0;

@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         }
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetC_Lead_ID() == 0 && GetVAB_BusinessPartner_ID() == 0 && GetRef_BPartner_ID() == 0)
+            if (GetVAB_Lead_ID() == 0 && GetVAB_BusinessPartner_ID() == 0 && GetRef_BPartner_ID() == 0)
             {
                 throw new Exception(Msg.GetMsg(GetCtx(), "VIS_PleaseFillColumn"));
                

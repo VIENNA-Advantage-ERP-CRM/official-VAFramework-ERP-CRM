@@ -200,34 +200,34 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Tax.
-        @param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        @param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID <= 0) Set_Value("C_Tax_ID", null);
+            if (VAB_TaxRate_ID <= 0) Set_Value("VAB_TaxRate_ID", null);
             else
-                Set_Value("C_Tax_ID", C_Tax_ID);
+                Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }
         /** Get Tax.
         @return Tax identifier */
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            Object ii = Get_Value("C_Tax_ID");
+            Object ii = Get_Value("VAB_TaxRate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

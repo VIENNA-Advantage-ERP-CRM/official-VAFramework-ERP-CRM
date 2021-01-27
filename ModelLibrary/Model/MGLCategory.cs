@@ -16,15 +16,15 @@ namespace VAdvantage.Model
     /// <summary>
     /// GL Category
     /// </summary>
-    public class MGLCategory : X_GL_Category
+    public class MGLCategory : X_VAGL_Group
     {
-        public static MGLCategory Get(Ctx ctx, int GL_Category_ID)
+        public static MGLCategory Get(Ctx ctx, int VAGL_Group_ID)
         {
-            int key = GL_Category_ID;
+            int key = VAGL_Group_ID;
             MGLCategory retValue = (MGLCategory)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MGLCategory(ctx, GL_Category_ID, null);
+            retValue = new MGLCategory(ctx, VAGL_Group_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache[key] = retValue;
             return retValue;
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         public static MGLCategory GetDefault(Ctx ctx, String CategoryType)
         {
             MGLCategory retValue = null;
-            String sql = "SELECT * FROM GL_Category "
+            String sql = "SELECT * FROM VAGL_Group "
                 + "WHERE VAF_Client_ID=@clientid AND IsDefault='Y'";
             try
             {
@@ -92,19 +92,19 @@ namespace VAdvantage.Model
         /**	Logger						*/
             private static VLogger s_log = VLogger.GetVLogger(typeof(MGLCategory).FullName);
         /**	Cache						*/
-        private static CCache<int, MGLCategory> s_cache = new CCache<int, MGLCategory>("GL_Category", 5);
+        private static CCache<int, MGLCategory> s_cache = new CCache<int, MGLCategory>("VAGL_Group", 5);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="GL_Category_ID"></param>
+        /// <param name="VAGL_Group_ID"></param>
         /// <param name="trxName"></param>
-        public MGLCategory(Ctx ctx, int GL_Category_ID, Trx trxName)
-            : base(ctx, GL_Category_ID, trxName)
+        public MGLCategory(Ctx ctx, int VAGL_Group_ID, Trx trxName)
+            : base(ctx, VAGL_Group_ID, trxName)
         {
             
-            if (GL_Category_ID == 0)
+            if (VAGL_Group_ID == 0)
             {
                 //	setName (null);
                 SetCategoryType(CATEGORYTYPE_Manual);

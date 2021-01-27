@@ -24,7 +24,7 @@ namespace VIS.Models
             {
                 sqlCu = "SELECT VAB_Currency_ID, Description FROM VAB_Currency ORDER BY 1";
                 sqlCo = "SELECT VAB_Country_ID, Name FROM VAB_Country WHERE IsSummary='N' ORDER BY 1";
-                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY VAB_Country_ID, Name";
+                sqlRe = "SELECT VAB_RegionState_ID, Name FROM VAB_RegionState ORDER BY VAB_Country_ID, Name";
             }
             else
             {
@@ -39,7 +39,7 @@ namespace VIS.Models
                             INNER JOIN VAB_Country_TL CL
                             ON (C.VAB_Country_ID=CL.VAB_Country_ID
                             AND CL.VAF_Language ='" + ctx.GetVAF_Language() + "') ORDER BY 1";
-                sqlRe = "SELECT C_Region_ID, Name FROM C_Region ORDER BY VAB_Country_ID, Name";
+                sqlRe = "SELECT VAB_RegionState_ID, Name FROM VAB_RegionState ORDER BY VAB_Country_ID, Name";
                 
             }
             InitialData ini = new InitialData();
@@ -152,9 +152,9 @@ namespace VIS.Models
 
                     int VAB_Country_ID = countryID;
 
-                    int C_Region_ID = regionID;
+                    int VAB_RegionState_ID = regionID;
                     //  worker.ReportProgress(75);
-                    ms.CreateEntities(VAB_Country_ID, city, C_Region_ID, currencyID);
+                    ms.CreateEntities(VAB_Country_ID, city, VAB_RegionState_ID, currencyID);
                     //worker.ReportProgress(90);
                     info += ms.GetInfo();
                     //	Create Print Documents

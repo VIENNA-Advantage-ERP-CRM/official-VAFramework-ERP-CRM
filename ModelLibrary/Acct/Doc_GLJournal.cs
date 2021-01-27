@@ -3,7 +3,7 @@
  * Class Name     : Doc_GLJournal
  * Purpose        : Post Invoice Documents.
  *                  <pre>
- *                  Table:              GL_Journal (224)
+ *                  Table:              VAGL_JRNL (224)
  *                  Document Types:     GLJ
  *                  </pre>
  *                  * Class Used     : Doc
@@ -80,7 +80,7 @@ namespace VAdvantage.Acct
             MAcctSchema mSc = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
-            record_Id = lines[0].GetGL_Journal_ID();
+            record_Id = lines[0].GetVAGL_JRNL_ID();
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -106,7 +106,7 @@ namespace VAdvantage.Acct
                     // Set Description
                     docLine.SetDescription(line.GetDescription());
                     // set primary key value 
-                    docLine.SetPrimaryKeyValue(line.GetGL_JournalLine_ID());
+                    docLine.SetPrimaryKeyValue(line.GetVAGL_JRNLLine_ID());
                     // set GL journal line table ID
                     docLine.SetLineTable_ID(line.Get_Table_ID());
 
@@ -114,14 +114,14 @@ namespace VAdvantage.Acct
                 }
                 else
                 {
-                    string sql = "SELECT * FROM GL_LineDimension WHERE GL_JournalLine_ID=" + line.Get_ID();
+                    string sql = "SELECT * FROM VAGL_LineDimension WHERE VAGL_JRNLLine_ID=" + line.Get_ID();
                     DataSet ds = DB.ExecuteDataset(sql);
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int m = 0; m < ds.Tables[0].Rows.Count; m++)
                         {
                             DataRow dr = ds.Tables[0].Rows[m];
-                            X_GL_LineDimension lDim = new X_GL_LineDimension(GetCtx(), dr, null);
+                            X_VAGL_LineDimension lDim = new X_VAGL_LineDimension(GetCtx(), dr, null);
 
                             DocLine docLine = new DocLine(lDim, this);
                             //  --  Source Amounts
@@ -170,7 +170,7 @@ namespace VAdvantage.Acct
                             // Set Description
                             docLine.SetDescription(line.GetDescription());
                             // set primary key value 
-                            docLine.SetPrimaryKeyValue(line.GetGL_JournalLine_ID());
+                            docLine.SetPrimaryKeyValue(line.GetVAGL_JRNLLine_ID());
                             // set GL journal line table ID
                             docLine.SetLineTable_ID(line.Get_Table_ID());
 
@@ -192,7 +192,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="journalLineDimension">journal line dimension object</param>
         /// <param name="docLine">document line object</param>
-        private DocLine SetUserDimension(X_GL_LineDimension journalLineDimension, DocLine docLine)
+        private DocLine SetUserDimension(X_VAGL_LineDimension journalLineDimension, DocLine docLine)
         {
             if (journalLineDimension.GetLineType() == MJournalLine.ELEMENTTYPE_UserElement1 && !String.IsNullOrEmpty(journalLineDimension.GetDimensionValue()))
             {
@@ -286,8 +286,8 @@ namespace VAdvantage.Acct
             Fact fact = new Fact(this, as1, _PostingType);
 
             // get conversion rate from Assigned accounting schema tab - 
-            Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM GL_AssignAcctSchema WHERE 
-                                     VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID() + " AND GL_Journal_ID = " + record_Id, null, null));
+            Decimal conversionRate = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT CurrencyRate FROM VAGL_AssignAcctSchema WHERE 
+                                     VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID() + " AND VAGL_JRNL_ID = " + record_Id, null, null));
 
             //  GLJ
             if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_GLJOURNAL))

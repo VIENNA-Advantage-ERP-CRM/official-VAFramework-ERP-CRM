@@ -263,7 +263,7 @@ namespace VAdvantage.DBPort
                                     log.Info("-Third-dep: " + third);
                                 //   FROM ((VAB_BusinessPartner p LEFT OUTER JOIN VAF_UserContact c ON (p.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID))
                                 //  LEFT OUTER JOIN VAB_BPart_Location l ON (p.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID))
-                                //  LEFT OUTER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID)
+                                //  LEFT OUTER JOIN VAB_Address a ON (l.VAB_Address_ID=a.VAB_Address_ID)
                                 newFrom.Insert(6, '(');     //  _FROM ...
                                 newFrom.Append(')');        //  add parantesis on previous relation
                                                             //
@@ -406,8 +406,8 @@ namespace VAdvantage.DBPort
         /// <summary>
         /// Converts Delete.
         /// <pre>
-        ///        DELETE C_Order i WHERE  
-        ///         =&gt; DELETE FROM C_Order WHERE  
+        ///        DELETE VAB_Order i WHERE  
+        ///         =&gt; DELETE FROM VAB_Order WHERE  
         /// </pre>
         /// </summary>
         /// <param name="sqlStatement">sqlStatement</param>

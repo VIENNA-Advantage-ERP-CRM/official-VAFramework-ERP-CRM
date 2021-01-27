@@ -9,46 +9,46 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for PA_ReportLine
+    using System.Data;/** Generated Model for VAPA_FR_Row
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_PA_ReportLine : PO
+    public class X_VAPA_FR_Row : PO
     {
-        public X_PA_ReportLine(Context ctx, int PA_ReportLine_ID, Trx trxName)
-            : base(ctx, PA_ReportLine_ID, trxName)
-        {/** if (PA_ReportLine_ID == 0){SetIsPrinted (true);// Y
-SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0);SetPA_ReportLine_ID (0);SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportLine WHERE PA_ReportLineSet_ID=@PA_ReportLineSet_ID@
+        public X_VAPA_FR_Row(Context ctx, int VAPA_FR_Row_ID, Trx trxName)
+            : base(ctx, VAPA_FR_Row_ID, trxName)
+        {/** if (VAPA_FR_Row_ID == 0){SetIsPrinted (true);// Y
+SetIsSummary (false);SetLineType (null);SetName (null);SetVAPA_FR_RowSet_ID (0);SetVAPA_FR_Row_ID (0);SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_Row WHERE VAPA_FR_RowSet_ID=@VAPA_FR_RowSet_ID@
 } */
         }
-        public X_PA_ReportLine(Ctx ctx, int PA_ReportLine_ID, Trx trxName)
-            : base(ctx, PA_ReportLine_ID, trxName)
-        {/** if (PA_ReportLine_ID == 0){SetIsPrinted (true);// Y
-SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0);SetPA_ReportLine_ID (0);SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportLine WHERE PA_ReportLineSet_ID=@PA_ReportLineSet_ID@
+        public X_VAPA_FR_Row(Ctx ctx, int VAPA_FR_Row_ID, Trx trxName)
+            : base(ctx, VAPA_FR_Row_ID, trxName)
+        {/** if (VAPA_FR_Row_ID == 0){SetIsPrinted (true);// Y
+SetIsSummary (false);SetLineType (null);SetName (null);SetVAPA_FR_RowSet_ID (0);SetVAPA_FR_Row_ID (0);SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_Row WHERE VAPA_FR_RowSet_ID=@VAPA_FR_RowSet_ID@
 } */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportLine(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Row(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportLine(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Row(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportLine(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAPA_FR_Row(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_PA_ReportLine() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAPA_FR_Row() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621413794L;/** Last Updated Timestamp 4/1/2016 1:04:57 PM */
         public static long updatedMS = 1459496097005L;/** VAF_TableView_ID=448 */
         public static int Table_ID; // =448;
-        /** TableName=PA_ReportLine */
-        public static String Table_Name = "PA_ReportLine";
+        /** TableName=VAPA_FR_Row */
+        public static String Table_Name = "VAPA_FR_Row";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -63,7 +63,7 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_PA_ReportLine[").Append(Get_ID()).Append("]"); return sb.ToString(); }
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAPA_FR_Row[").Append(Get_ID()).Append("]"); return sb.ToString(); }
         /** AmountType VAF_Control_Ref_ID=235 */
         public static int AMOUNTTYPE_VAF_Control_Ref_ID = 235;/** Period Balance = BP */
         public static String AMOUNTTYPE_PeriodBalance = "BP";/** Total Balance = BT */
@@ -212,15 +212,15 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         public void SetFRPT_TrxLineFormatting(int FRPT_TrxLineFormatting) { Set_Value("FRPT_TrxLineFormatting", FRPT_TrxLineFormatting); }/** Get Trx Line Formatting.
 @return Trx Line Formatting */
         public int GetFRPT_TrxLineFormatting() { Object ii = Get_Value("FRPT_TrxLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-        public void SetGL_Budget_ID(int GL_Budget_ID)
+@param VAGL_Budget_ID General Ledger Budget */
+        public void SetVAGL_Budget_ID(int VAGL_Budget_ID)
         {
-            if (GL_Budget_ID <= 0) Set_Value("GL_Budget_ID", null);
+            if (VAGL_Budget_ID <= 0) Set_Value("VAGL_Budget_ID", null);
             else
-                Set_Value("GL_Budget_ID", GL_Budget_ID);
+                Set_Value("VAGL_Budget_ID", VAGL_Budget_ID);
         }/** Get Budget.
 @return General Ledger Budget */
-        public int GetGL_Budget_ID() { Object ii = Get_Value("GL_Budget_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Printed.
+        public int GetVAGL_Budget_ID() { Object ii = Get_Value("VAGL_Budget_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Printed.
 @param IsPrinted Indicates if this document / line is printed */
         public void SetIsPrinted(Boolean IsPrinted) { Set_Value("IsPrinted", IsPrinted); }/** Get Printed.
 @return Indicates if this document / line is printed */
@@ -272,14 +272,14 @@ SetIsSummary (false);SetLineType (null);SetName (null);SetPA_ReportLineSet_ID (0
         }/** Get Operand 2.
 @return Second operand for calculation */
         public int GetOper_2_ID() { Object ii = Get_Value("Oper_2_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Line Set.
-@param PA_ReportLineSet_ID Report Line Set */
-        public void SetPA_ReportLineSet_ID(int PA_ReportLineSet_ID) { if (PA_ReportLineSet_ID < 1) throw new ArgumentException("PA_ReportLineSet_ID is mandatory."); Set_ValueNoCheck("PA_ReportLineSet_ID", PA_ReportLineSet_ID); }/** Get Report Line Set.
+@param VAPA_FR_RowSet_ID Report Line Set */
+        public void SetVAPA_FR_RowSet_ID(int VAPA_FR_RowSet_ID) { if (VAPA_FR_RowSet_ID < 1) throw new ArgumentException("VAPA_FR_RowSet_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_RowSet_ID", VAPA_FR_RowSet_ID); }/** Get Report Line Set.
 @return Report Line Set */
-        public int GetPA_ReportLineSet_ID() { Object ii = Get_Value("PA_ReportLineSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Line.
-@param PA_ReportLine_ID Report Line */
-        public void SetPA_ReportLine_ID(int PA_ReportLine_ID) { if (PA_ReportLine_ID < 1) throw new ArgumentException("PA_ReportLine_ID is mandatory."); Set_ValueNoCheck("PA_ReportLine_ID", PA_ReportLine_ID); }/** Get Report Line.
+        public int GetVAPA_FR_RowSet_ID() { Object ii = Get_Value("VAPA_FR_RowSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Line.
+@param VAPA_FR_Row_ID Report Line */
+        public void SetVAPA_FR_Row_ID(int VAPA_FR_Row_ID) { if (VAPA_FR_Row_ID < 1) throw new ArgumentException("VAPA_FR_Row_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_Row_ID", VAPA_FR_Row_ID); }/** Get Report Line.
 @return Report Line */
-        public int GetPA_ReportLine_ID() { Object ii = Get_Value("PA_ReportLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAPA_FR_Row_ID() { Object ii = Get_Value("VAPA_FR_Row_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** PostingType VAF_Control_Ref_ID=125 */
         public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;/** Actual = A */
         public static String POSTINGTYPE_Actual = "A";/** Budget = B */

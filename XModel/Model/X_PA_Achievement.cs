@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_Achievement
+/** Generated Model for VAPA_Accomplishment
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_Achievement : PO
+public class X_VAPA_Accomplishment : PO
 {
-public X_PA_Achievement (Context ctx, int PA_Achievement_ID, Trx trxName) : base (ctx, PA_Achievement_ID, trxName)
+public X_VAPA_Accomplishment (Context ctx, int VAPA_Accomplishment_ID, Trx trxName) : base (ctx, VAPA_Accomplishment_ID, trxName)
 {
-/** if (PA_Achievement_ID == 0)
-{
-SetIsAchieved (false);
-SetManualActual (0.0);
-SetName (null);
-SetPA_Achievement_ID (0);
-SetPA_Measure_ID (0);
-SetSeqNo (0);
-}
- */
-}
-public X_PA_Achievement (Ctx ctx, int PA_Achievement_ID, Trx trxName) : base (ctx, PA_Achievement_ID, trxName)
-{
-/** if (PA_Achievement_ID == 0)
+/** if (VAPA_Accomplishment_ID == 0)
 {
 SetIsAchieved (false);
 SetManualActual (0.0);
 SetName (null);
-SetPA_Achievement_ID (0);
-SetPA_Measure_ID (0);
+SetVAPA_Accomplishment_ID (0);
+SetVAPA_Evaluate_ID (0);
+SetSeqNo (0);
+}
+ */
+}
+public X_VAPA_Accomplishment (Ctx ctx, int VAPA_Accomplishment_ID, Trx trxName) : base (ctx, VAPA_Accomplishment_ID, trxName)
+{
+/** if (VAPA_Accomplishment_ID == 0)
+{
+SetIsAchieved (false);
+SetManualActual (0.0);
+SetName (null);
+SetVAPA_Accomplishment_ID (0);
+SetVAPA_Evaluate_ID (0);
 SetSeqNo (0);
 }
  */
@@ -47,7 +47,7 @@ SetSeqNo (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Achievement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Accomplishment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_PA_Achievement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Achievement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Accomplishment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_PA_Achievement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Achievement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Accomplishment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_Achievement()
+static X_VAPA_Accomplishment()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389064770L;
 public static int Table_ID;
  // =438;
 
-/** TableName=PA_Achievement */
-public static String Table_Name="PA_Achievement";
+/** TableName=VAPA_Accomplishment */
+public static String Table_Name="VAPA_Accomplishment";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_Achievement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Accomplishment[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Document Date.
@@ -224,32 +224,32 @@ public String GetNote()
 return (String)Get_Value("Note");
 }
 /** Set Achievement.
-@param PA_Achievement_ID Performance Achievement */
-public void SetPA_Achievement_ID (int PA_Achievement_ID)
+@param VAPA_Accomplishment_ID Performance Achievement */
+public void SetVAPA_Accomplishment_ID (int VAPA_Accomplishment_ID)
 {
-if (PA_Achievement_ID < 1) throw new ArgumentException ("PA_Achievement_ID is mandatory.");
-Set_ValueNoCheck ("PA_Achievement_ID", PA_Achievement_ID);
+if (VAPA_Accomplishment_ID < 1) throw new ArgumentException ("VAPA_Accomplishment_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Accomplishment_ID", VAPA_Accomplishment_ID);
 }
 /** Get Achievement.
 @return Performance Achievement */
-public int GetPA_Achievement_ID() 
+public int GetVAPA_Accomplishment_ID() 
 {
-Object ii = Get_Value("PA_Achievement_ID");
+Object ii = Get_Value("VAPA_Accomplishment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Measure.
-@param PA_Measure_ID Concrete Performance Measurement */
-public void SetPA_Measure_ID (int PA_Measure_ID)
+@param VAPA_Evaluate_ID Concrete Performance Measurement */
+public void SetVAPA_Evaluate_ID (int VAPA_Evaluate_ID)
 {
-if (PA_Measure_ID < 1) throw new ArgumentException ("PA_Measure_ID is mandatory.");
-Set_ValueNoCheck ("PA_Measure_ID", PA_Measure_ID);
+if (VAPA_Evaluate_ID < 1) throw new ArgumentException ("VAPA_Evaluate_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Evaluate_ID", VAPA_Evaluate_ID);
 }
 /** Get Measure.
 @return Concrete Performance Measurement */
-public int GetPA_Measure_ID() 
+public int GetVAPA_Evaluate_ID() 
 {
-Object ii = Get_Value("PA_Measure_ID");
+Object ii = Get_Value("VAPA_Evaluate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

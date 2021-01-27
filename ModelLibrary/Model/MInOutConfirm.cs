@@ -78,7 +78,7 @@ namespace VAdvantage.Model
                 MInOutLineConfirm cLine = new MInOutLineConfirm(confirm1);
                 cLine.SetInOutLine(sLine);
                 //Arpit Start Here to Set UOM from the shipment/Receipt Line to Confirmation Lines
-                cLine.SetC_UOM_ID(sLine.GetC_UOM_ID());
+                cLine.SetVAB_UOM_ID(sLine.GetVAB_UOM_ID());
                 cLine.SetTargetQty(sLine.GetQtyEntered());
                 cLine.SetConfirmedQty(sLine.GetQtyEntered());
                 //Arpit 
@@ -968,8 +968,8 @@ namespace VAdvantage.Model
                 log.Fine("Qty=" + differenceQty + ", Old=" + oldLine);
                 //
                 MInOutLine splitLine = new MInOutLine(split);
-                splitLine.SetC_OrderLine_ID(oldLine.GetC_OrderLine_ID());
-                splitLine.SetC_UOM_ID(oldLine.GetC_UOM_ID());
+                splitLine.SetVAB_OrderLine_ID(oldLine.GetVAB_OrderLine_ID());
+                splitLine.SetVAB_UOM_ID(oldLine.GetVAB_UOM_ID());
                 splitLine.SetDescription(oldLine.GetDescription());
                 splitLine.SetIsDescription(oldLine.IsDescription());
                 splitLine.SetLine(oldLine.GetLine());
@@ -1003,7 +1003,7 @@ namespace VAdvantage.Model
                 /** Otherwise system can not save splited line because system founf mote qty to be shipped from Ordered Qty **/
                 oldLine.AddDescription("Splitted: from " + oldLine.GetMovementQty());
                 MProduct Product_ = new MProduct(GetCtx(), splitLine.GetM_Product_ID(), Get_TrxName());
-                if (Product_.GetC_UOM_ID() != splitLine.GetC_UOM_ID())
+                if (Product_.GetVAB_UOM_ID() != splitLine.GetVAB_UOM_ID())
                 {
                     oldLine.SetQty(Decimal.Subtract(oldLine.GetQtyEntered(), differenceQty));
                 }
@@ -1116,9 +1116,9 @@ namespace VAdvantage.Model
                 //Arpit for invoice --qty should be converted while saving on invoice line
                 MInOutLine iol = new MInOutLine(GetCtx(), confirm.GetM_InOutLine_ID(), Get_TrxName());
                 MProduct _Pro = new MProduct(GetCtx(), iol.GetM_Product_ID(), Get_TrxName());
-                if (confirm.GetC_UOM_ID() != _Pro.GetC_UOM_ID())
+                if (confirm.GetVAB_UOM_ID() != _Pro.GetVAB_UOM_ID())
                 {
-                    decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), iol.GetM_Product_ID(), confirm.GetC_UOM_ID(), confirm.GetDifferenceQty());
+                    decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), iol.GetM_Product_ID(), confirm.GetVAB_UOM_ID(), confirm.GetDifferenceQty());
                     line.SetQty(Util.GetValueOfDecimal(pc));	//	Entered/Invoiced
                 }
                 else
@@ -1189,7 +1189,7 @@ namespace VAdvantage.Model
                 //new 15 jan
 
                 // Added by Bharat on 17 Jan 2019 to set new fields UOM and Qty Entered..
-                line.Set_Value("C_UOM_ID", ioLine.GetC_UOM_ID());
+                line.Set_Value("VAB_UOM_ID", ioLine.GetVAB_UOM_ID());
                 line.Set_Value("QtyEntered", line.GetQtyBook());
                 line.SetQtyInternalUse(line.GetQtyBook());
                 line.SetQtyBook(0);

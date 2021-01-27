@@ -301,12 +301,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String set = "SET VAF_Org_ID=0 WHERE VAF_Client_ID=" + GetVAF_Client_ID()
                 + " AND VAF_Org_ID<>0";
 
-            //	R_ContactInterest
-            String sql = "UPDATE R_ContactInterest " + set;
+            //	VAR_InterestedUser
+            String sql = "UPDATE VAR_InterestedUser " + set;
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - R_ContactInterest=" + no);
+                log.Fine("generalOwnership - VAR_InterestedUser=" + no);
             }
 
             //	VAF_UserContact_Roles

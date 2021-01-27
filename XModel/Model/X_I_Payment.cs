@@ -418,18 +418,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment.
-        @param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        @param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_Value("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_Value("VAB_Payment_ID", null);
             else
-                Set_Value("C_Payment_ID", C_Payment_ID);
+                Set_Value("VAB_Payment_ID", VAB_Payment_ID);
         }
         /** Get Payment.
         @return Payment identifier */
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            Object ii = Get_Value("C_Payment_ID");
+            Object ii = Get_Value("VAB_Payment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

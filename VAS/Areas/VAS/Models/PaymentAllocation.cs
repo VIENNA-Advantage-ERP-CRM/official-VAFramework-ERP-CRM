@@ -57,7 +57,7 @@ namespace VIS.Models
             int VAF_Client_ID = ctx.GetContextAsInt(_windowNo, "VAF_Client_ID");
             int VAF_Org_ID = ctx.GetContextAsInt(_windowNo, "VAF_Org_ID");
             int VAB_BusinessPartner_ID = _VAB_BusinessPartner_ID;
-            int C_Order_ID = 0;
+            int VAB_Order_ID = 0;
             int VAB_CashJRNLLine_ID = 0;
             string msg = string.Empty;
             //Check weather dateTrx is null than set DateTrx as SystemDate
@@ -417,7 +417,7 @@ namespace VIS.Models
                             //	Allocation Line // Changed PaymentAmt to AppliedAmt 17/4/18
                             MAllocationLine aLine = new MAllocationLine(alloc, amount,
                                 DiscountAmt, WriteOffAmt, OverUnderAmt);
-                            aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                            aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                             aLine.SetPaymentInfo(0, VAB_CashJRNLLine_ID); //payment for payment allocation is zero
                             if (Env.IsModuleInstalled("VA009_"))
                             {
@@ -608,7 +608,7 @@ namespace VIS.Models
                                 VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                 //allocation for positive Appliedamount Invoice
                                 aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
-                                aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
                                 //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
@@ -726,7 +726,7 @@ namespace VIS.Models
 
                                 //allocation for negative Amount Invoice
                                 aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
-                                aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                 aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
 
@@ -949,7 +949,7 @@ namespace VIS.Models
                                 //allocation for positive Appliedamount Invoice
                                 aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
 
-                                aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
                                 //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
@@ -1069,7 +1069,7 @@ namespace VIS.Models
 
                                 //allocation for negative Amount Invoice
                                 aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
-                                aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                 aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
 
@@ -1479,14 +1479,14 @@ namespace VIS.Models
             //to set transaction on allocation line
             aLine.SetDateTrx(DateTrx);
 
-            if (aLine.GetC_Payment_ID() > 0 && (aLine.GetWithholdingAmt() == 0 && aLine.GetBackupWithholdingAmount() == 0))
+            if (aLine.GetVAB_Payment_ID() > 0 && (aLine.GetWithholdingAmt() == 0 && aLine.GetBackupWithholdingAmount() == 0))
             {
                 // set withholding amount based on porpotionate
                 DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + aLine.GetAmount() + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.VAB_Withholding_ID ) AS withholdingAmt,
                                                   (SELECT ROUND((" + aLine.GetAmount() + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + aLine.GetC_Payment_ID(), null, null);
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM VAB_Payment WHERE VAB_Payment.IsActive   = 'Y' AND VAB_Payment.VAB_Payment_ID = " + aLine.GetVAB_Payment_ID(), null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
@@ -1543,7 +1543,7 @@ namespace VIS.Models
             SetIsprocessingFalse(rowsPayment, "cpaymentid", false, false, true, trx); //Payment
             SetIsprocessingFalse(rowsCash, "ccashlineid", true, false, false, trx); //CashLine
             SetIsprocessingFalse(rowsInvoice, "VAB_sched_InvoicePayment_id", false, true, false, trx); //InvoicePaySchedule
-            SetIsprocessingFalse(rowsGL, "GL_Journal_ID", false, false, false, trx); //GL_Journal
+            SetIsprocessingFalse(rowsGL, "VAGL_JRNL_ID", false, false, false, trx); //VAGL_JRNL
         }
         /// <summary>
         /// to create view allocation against Payment
@@ -1573,7 +1573,7 @@ namespace VIS.Models
             int VAF_Client_ID = ctx.GetContextAsInt(_windowNo, "VAF_Client_ID");
             int VAF_Org_ID = ctx.GetContextAsInt(_windowNo, "VAF_Org_ID");
             int VAB_BusinessPartner_ID = _VAB_BusinessPartner_ID;
-            int C_Order_ID = 0;
+            int VAB_Order_ID = 0;
             string msg = string.Empty;
             Trx trx = Trx.GetTrx(Trx.CreateTrxName("AL"));
 
@@ -1678,8 +1678,8 @@ namespace VIS.Models
                 {
                     //  Payment line is selected
                     //  Payment variables
-                    int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
-                    paymentList.Add(C_Payment_ID);
+                    int VAB_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
+                    paymentList.Add(VAB_Payment_ID);
                     //
                     Decimal PaymentAmt = Util.GetValueOfDecimal(rowsPayment[i][payment.ToLower()]);  //  Applied Payment
                     amountList.Add(PaymentAmt);
@@ -1785,8 +1785,8 @@ namespace VIS.Models
 
                             #region payment match
                             mpay2 = null;
-                            int C_Payment_ID = Util.GetValueOfInt(paymentList[j]);
-                            objPayment = new MPayment(ctx, C_Payment_ID, trx);
+                            int VAB_Payment_ID = Util.GetValueOfInt(paymentList[j]);
+                            objPayment = new MPayment(ctx, VAB_Payment_ID, trx);
                             Decimal PaymentAmt = Util.GetValueOfDecimal(amountList[j]);
 
                             // check match receipt with receipt && payment with payment
@@ -1915,16 +1915,16 @@ namespace VIS.Models
                                 //	Allocation Line
                                 MAllocationLine aLine = new MAllocationLine(alloc, amount,
                                     DiscountAmt, WriteOffAmt, OverUnderAmt);
-                                aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
 
                                 // set withholding amount based on porpotionate
-                                if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                                if (objPayment.GetVAB_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
                                 {
                                     DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.VAB_Withholding_ID ) AS withholdingAmt,
                                                   (SELECT ROUND((" + amount + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + C_Payment_ID, null, null);
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM VAB_Payment WHERE VAB_Payment.IsActive   = 'Y' AND VAB_Payment.VAB_Payment_ID = " + VAB_Payment_ID, null, null);
                                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                     {
                                         aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
@@ -1937,8 +1937,8 @@ namespace VIS.Models
                                 //    MInvoicePaySchedule invPay = new MInvoicePaySchedule(ctx, VAB_sched_InvoicePayment_ID, trx);
                                 //    aLine.SetVAB_BusinessPartner_ID(invPay.GetVAB_BusinessPartner_ID());
                                 //}
-                                //aLine.SetPaymentInfo(C_Payment_ID, VAB_CashJRNLLine_ID);
-                                aLine.SetPaymentInfo(C_Payment_ID, 0);//cashline for payment allocation is zero
+                                //aLine.SetPaymentInfo(VAB_Payment_ID, VAB_CashJRNLLine_ID);
+                                aLine.SetPaymentInfo(VAB_Payment_ID, 0);//cashline for payment allocation is zero
 
                                 if (mpay2 == null)
                                     aLine.SetVAB_sched_InvoicePayment_ID(Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]));
@@ -1988,7 +1988,7 @@ namespace VIS.Models
                                 rowsInvoice[i].Add(applied.ToLower(), AppliedAmt.ToString());
                             }	//	for all applied amounts
 
-                            // MPayment pay1 = new MPayment(ctx, C_Payment_ID, trx);
+                            // MPayment pay1 = new MPayment(ctx, VAB_Payment_ID, trx);
                             #endregion
                         }	//	loop through payments for invoice
 
@@ -1999,7 +1999,7 @@ namespace VIS.Models
                         if (noPayments == 0 && paymentList.Count == 0)
                         {
                             #region when match invoice to invoice
-                            //int C_Payment_ID = 0;
+                            //int VAB_Payment_ID = 0;
 
                             //	Allocation Header
                             if (alloc.Get_ID() == 0 && !alloc.Save())
@@ -2136,7 +2136,7 @@ namespace VIS.Models
                                     VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                     //allocation for positive Appliedamount Invoice
                                     aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
-                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     //aLine.SetRef_Invoiceschedule_ID(Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]));
                                     int positiveAmtInvSchdle_ID = 0;
@@ -2254,7 +2254,7 @@ namespace VIS.Models
 
                                     //allocation for negative Amount Invoice
                                     aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
-                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
 
@@ -2477,7 +2477,7 @@ namespace VIS.Models
                                     VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                     //allocation for positive Appliedamount Invoice
                                     aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
-                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
                                     //get InvoiceSchedule_ID and Initalize to positiveAmtInvSchdle_ID
@@ -2600,7 +2600,7 @@ namespace VIS.Models
 
                                     //allocation for negative Amount Invoice
                                     aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
-                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, C_Order_ID, VAB_Invoice_ID);
+                                    aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
 
@@ -2702,7 +2702,7 @@ namespace VIS.Models
                     //loop for payment to payment
                     for (int i = 0; i < paymentList.Count; i++)
                     {
-                        //int C_Payment_ID = Util.GetValueOfInt(paymentList[i]);
+                        //int VAB_Payment_ID = Util.GetValueOfInt(paymentList[i]);
                         Decimal PaymentAmt = Util.GetValueOfDecimal(amountList[i]);
 
                         //	Allocation Header
@@ -2745,14 +2745,14 @@ namespace VIS.Models
                                     continue;
                                 }
                                 //new allocation
-                                int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
+                                int VAB_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
                                 noPayments++;
                                 int Ref_Payment_ID = Util.GetValueOfInt(negPayList[c]["cpaymentid"]);
 
                                 //for positive Appliedamount Invoice
                                 aLine = new MAllocationLine(alloc, Math.Abs(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                                aLine.SetPaymentInfo(C_Payment_ID, 0);
+                                aLine.SetPaymentInfo(VAB_Payment_ID, 0);
                                 aLine.SetRef_Payment_ID(Ref_Payment_ID);
                                 PaymentAmt -= Math.Abs(postAppliedAmt);
                                 msg = InvAlloc(0, null, aLine, DateTrx, trx);
@@ -2763,7 +2763,7 @@ namespace VIS.Models
                                 }
 
                                 //new allocation
-                                C_Payment_ID = Util.GetValueOfInt(negPayList[c]["cpaymentid"]);
+                                VAB_Payment_ID = Util.GetValueOfInt(negPayList[c]["cpaymentid"]);
                                 noPayments++;
                                 //  Invoice variables
                                 Ref_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
@@ -2771,7 +2771,7 @@ namespace VIS.Models
                                 //for negative Amount Invoice
                                 aLine = new MAllocationLine(alloc, Decimal.Negate(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                                aLine.SetPaymentInfo(C_Payment_ID, 0);
+                                aLine.SetPaymentInfo(VAB_Payment_ID, 0);
                                 aLine.SetRef_Payment_ID(Ref_Payment_ID);
                                 msg = InvAlloc(0, null, aLine, DateTrx, trx);
                                 if (msg != string.Empty)
@@ -2857,8 +2857,8 @@ namespace VIS.Models
                 if (rowsPayment.Count > 0)
                     for (int i = 0; i < paymentList.Count; i++)
                     {
-                        int C_Payment_ID = Util.GetValueOfInt(paymentList[i]);
-                        MPayment pay = new MPayment(ctx, C_Payment_ID, trx);
+                        int VAB_Payment_ID = Util.GetValueOfInt(paymentList[i]);
+                        MPayment pay = new MPayment(ctx, VAB_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
                             if (!pay.Save())
@@ -2880,7 +2880,7 @@ namespace VIS.Models
                                 return msg;
                             }
                         }
-                        string sqlGetOpenPayments = "SELECT currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.VAB_Currency_ID ," + alloc.GetVAB_Currency_ID() + ", p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID) FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        string sqlGetOpenPayments = "SELECT currencyConvert(ALLOCPAYMENTAVAILABLE(p.VAB_Payment_ID) ,p.VAB_Currency_ID ," + alloc.GetVAB_Currency_ID() + ", p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID) FROM VAB_Payment p Where VAB_Payment_ID = " + VAB_Payment_ID;
                         object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
@@ -3006,7 +3006,7 @@ namespace VIS.Models
             MCurrency objCurrency = MCurrency.Get(ctx, _VAB_Currency_ID);
 
             //Changed DateTrx to DateAcct because we have to convert currency on Account Date Not on Transaction Date 
-            string sql = "SELECT 'false' as SELECTROW, TO_CHAR(p.DateTrx,'YYYY-MM-DD') as DATE1,p.DocumentNo As DOCUMENTNO,p.C_Payment_ID As CPAYMENTID,"  //  1..3
+            string sql = "SELECT 'false' as SELECTROW, TO_CHAR(p.DateTrx,'YYYY-MM-DD') as DATE1,p.DocumentNo As DOCUMENTNO,p.VAB_Payment_ID As CPAYMENTID,"  //  1..3
               + @"c.ISO_Code as ISOCODE, 
                 CASE
                   WHEN NVL(p.VAB_CurrencyType_ID , 0) !=0 THEN p.VAB_CurrencyType_ID
@@ -3017,15 +3017,15 @@ namespace VIS.Models
                   WHEN (GetConversionType(p.VAF_Client_ID) != 0 ) THEN (SELECT name FROM VAB_CurrencyType WHERE VAB_CurrencyType_ID = GetConversionType(p.VAF_Client_ID))
                   ELSE (SELECT name FROM VAB_CurrencyType WHERE VAB_CurrencyType_ID =(GetConversionType(0)) ) END AS CONVERSIONNAME, 
                   ROUND(p.PayAmt, " + objCurrency.GetStdPrecision() + ") AS PAYMENT,"                            //  4..5
-              + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.VAB_Currency_ID ," + _VAB_Currency_ID + ",cp.DATEACCT ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1
-              + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.C_Payment_ID) ,p.VAB_Currency_ID ," + _VAB_Currency_ID + ",cp.DATEACCT ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
+              + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.VAB_Payment_ID) ,p.VAB_Currency_ID ," + _VAB_Currency_ID + ",cp.DATEACCT ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID ), " + objCurrency.GetStdPrecision() + ") AS CONVERTEDAMOUNT,"//  6   #1
+              + "ROUND(currencyConvert(ALLOCPAYMENTAVAILABLE(p.VAB_Payment_ID) ,p.VAB_Currency_ID ," + _VAB_Currency_ID + ",cp.DATEACCT ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID), " + objCurrency.GetStdPrecision() + ") as OPENAMT,"  //  7   #2
               + "p.MultiplierAP as MULTIPLIERAP, 0 as APPLIEDAMT , TO_CHAR(cp.DATEACCT ,'YYYY-MM-DD') AS DATEACCT, p.VAF_Org_ID , o.Name, d.docbasetype "
               //+ " , dc.name AS DocTypeName "
-              + "FROM C_Payment_v p"		//	Corrected for AP/AR
+              + "FROM VAB_Payment_V p"		//	Corrected for AP/AR
               + " INNER JOIN VAB_DocTypes d ON p.VAB_DocTypes_ID = d.VAB_DocTypes_ID"  //getting docbasetype
               + " INNER JOIN VAF_Org o ON o.VAF_Org_ID = p.VAF_Org_ID "
               + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID) "
-              + " INNER JOIN C_Payment cp ON (p.C_Payment_ID = cp.C_Payment_ID) "
+              + " INNER JOIN VAB_Payment cp ON (p.VAB_Payment_ID = cp.VAB_Payment_ID) "
               // + " INNER JOIN VAB_DocTypes DC ON (P.VAB_DocTypes_ID=DC.VAB_DocTypes_ID) "
               + " WHERE   ((p.IsAllocated ='N' and p.VAB_Charge_id is null) "
               + " OR (p.isallocated = 'N' AND p.VAB_Charge_id is not null and p.isprepayment = 'Y'))"
@@ -3105,7 +3105,7 @@ namespace VIS.Models
             // count record for paging
             if (page == 1)
             {
-                string sql1 = @"SELECT COUNT(*) FROM C_Payment_v p"
+                string sql1 = @"SELECT COUNT(*) FROM VAB_Payment_V p"
               + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID) "
               + " WHERE   ((p.IsAllocated ='N' and p.VAB_Charge_id is null) "
               + " OR (p.isallocated = 'N' AND p.VAB_Charge_id is not null and p.isprepayment = 'Y'))"
@@ -3175,13 +3175,13 @@ namespace VIS.Models
 
             //    List<PayAllocPayment> obj = new List<PayAllocPayment>();
 
-            //    string sql = "SELECT 'false' as SELECTROW, p.DateTrx as DATE1,p.DocumentNo As DOCUMENTNO,p.C_Payment_ID As CPAYMENTID,"  //  1..3
+            //    string sql = "SELECT 'false' as SELECTROW, p.DateTrx as DATE1,p.DocumentNo As DOCUMENTNO,p.VAB_Payment_ID As CPAYMENTID,"  //  1..3
             //               + "c.ISO_Code as ISOCODE,p.PayAmt AS PAYMENT,"                            //  4..5
             //               + "currencyConvert(p.PayAmt ,p.VAB_Currency_ID ," + VAB_Currencyid + ",p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID ) AS CONVERTEDAMOUNT,"//  6   #1
-            //               + "currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.VAB_Currency_ID ," + VAB_Currencyid + ",p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID) as OPENAMT,"  //  7   #2
+            //               + "currencyConvert(ALLOCPAYMENTAVAILABLE(VAB_Payment_ID) ,p.VAB_Currency_ID ," + VAB_Currencyid + ",p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID) as OPENAMT,"  //  7   #2
             //               + "p.MultiplierAP as MULTIPLIERAP, "
             //               + "0 as APPLIEDAMT "
-            //               + "FROM C_Payment_v p"
+            //               + "FROM VAB_Payment_V p"
             //               + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID) "
             //               + "WHERE "
             //               + "  ((p.IsAllocated ='N' and p.VAB_Charge_id is null) "
@@ -3958,13 +3958,13 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 }
                 else if (isPayment)
                 {
-                    str = (@" SELECT PROCESSING, isAllocated FROM C_Payment WHERE C_PAYMENT_ID IN (" + msg.ToString() + ") FOR UPDATE ");
-                    updateQry = (" UPDATE C_Payment SET PROCESSING ='Y' WHERE C_PAYMENT_ID IN (" + msg.ToString() + ")");
+                    str = (@" SELECT PROCESSING, isAllocated FROM VAB_Payment WHERE VAB_PAYMENT_ID IN (" + msg.ToString() + ") FOR UPDATE ");
+                    updateQry = (" UPDATE VAB_Payment SET PROCESSING ='Y' WHERE VAB_PAYMENT_ID IN (" + msg.ToString() + ")");
                 }
                 else
                 {
-                    str = (@" SELECT GL.PROCESSING, GLL.isAllocated from GL_JOURNAL GL INNER JOIN GL_JOURNALLINE GLL ON GL.GL_JOURNAL_ID = GLL.GL_JOURNAL_ID WHERE GLL.GL_JOURNALLINE_ID IN (" + msg.ToString() + ") FOR UPDATE ");
-                    updateQry = (" UPDATE GL_JOURNAL SET PROCESSING ='Y' WHERE GL_JOURNAL_ID IN (SELECT DISTINCT(GL_JOURNAL_ID) from GL_Journalline WHERE GL_JOURNALLine_ID IN (" + msg.ToString() + "))");
+                    str = (@" SELECT GL.PROCESSING, GLL.isAllocated from VAGL_JRNL GL INNER JOIN VAGL_JRNLLINE GLL ON GL.VAGL_JRNL_ID = GLL.VAGL_JRNL_ID WHERE GLL.VAGL_JRNLLINE_ID IN (" + msg.ToString() + ") FOR UPDATE ");
+                    updateQry = (" UPDATE VAGL_JRNL SET PROCESSING ='Y' WHERE VAGL_JRNL_ID IN (SELECT DISTINCT(VAGL_JRNL_ID) from VAGL_JRNLLine WHERE VAGL_JRNLLine_ID IN (" + msg.ToString() + "))");
                 }
 
                 ds = DB.ExecuteDataset(str.ToString(), null, trx);
@@ -4026,11 +4026,11 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 }
                 else if (isPayment)
                 {
-                    updated = DB.ExecuteQuery(" UPDATE C_Payment SET PROCESSING ='N' WHERE C_PAYMENT_ID IN (" + msg.ToString() + ")", null, trx);
+                    updated = DB.ExecuteQuery(" UPDATE VAB_Payment SET PROCESSING ='N' WHERE VAB_PAYMENT_ID IN (" + msg.ToString() + ")", null, trx);
                 }
                 else
                 {
-                    updated = DB.ExecuteQuery(" UPDATE GL_JOURNAL SET PROCESSING ='N' WHERE GL_JOURNAL_ID IN (" + msg.ToString() + ")", null, trx);
+                    updated = DB.ExecuteQuery(" UPDATE VAGL_JRNL SET PROCESSING ='N' WHERE VAGL_JRNL_ID IN (" + msg.ToString() + ")", null, trx);
                 }
             }
         }
@@ -4078,9 +4078,9 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 JL.VAB_CurrencyType_ID, CT.name as CONVERSIONNAME, o.VAF_Org_ID, o.Name, EV.Name AS Account,
                 NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.VAB_CURRENCY_ID ," + _VAB_Currency_ID + @",J.DATEACCT ,Jl.VAB_CurrencyType_ID ,J.VAF_CLIENT_ID ,J.VAF_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
                 NVL(ROUND(currencyConvert(JL.AMTSOURCECR ,jl.VAB_Currency_ID ," + _VAB_Currency_ID + @",j.DATEACCT ,jl.VAB_CurrencyType_ID ,j.VAF_Client_ID ,j.VAF_Org_ID ), " + objCurrency.GetStdPrecision() + @"),0) AS AMTACCTCR, 
-                j.GL_Journal_ID, jl.GL_JOURNALLINE_ID FROM GL_Journal j 
+                j.VAGL_JRNL_ID, jl.VAGL_JRNLLINE_ID FROM VAGL_JRNL j 
                 INNER JOIN VAF_Org o ON o.VAF_Org_ID = j.VAF_Org_ID 
-                INNER JOIN GL_JOURNALLINE JL ON JL.GL_JOURNAL_ID=J.GL_JOURNAL_ID 
+                INNER JOIN VAGL_JRNLLINE JL ON JL.VAGL_JRNL_ID=J.VAGL_JRNL_ID 
                 INNER JOIN VAB_Currency c ON c.VAB_Currency_ID = jl.VAB_Currency_ID 
                 INNER JOIN VAB_CurrencyType CT ON ct.VAB_CurrencyType_ID= jl.VAB_CurrencyType_ID INNER JOIN VAB_ACCT_ELEMENT EV ON ev.VAB_Acct_Element_ID=JL.ACCOUNT_ID INNER JOIN VAB_BUSINESSPARTNER CB
                 ON cb.VAB_BusinessPartner_ID = jl.VAB_BusinessPartner_ID WHERE j.docstatus IN ('CO','CL') AND jl.isallocated ='N' AND EV.isAllocationrelated='Y' AND EV.AccountType IN ('A','L')");
@@ -4167,18 +4167,18 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     gData.VAB_CurrencyType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CurrencyType_ID"]);
                     gData.ConversionName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ConversionName"]);
                     gData.OpenAmount = Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AmtAcctCr"]);
-                    gData.GL_Journal_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_Journal_ID"]);
+                    gData.VAGL_JRNL_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNL_ID"]);
                     gData.VAF_Org_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]);
                     gData.OrgName = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]).ToString();
-                    gData.GL_JOURNALLINE_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]);
-                    alreadyPaidAmt = getAlreadyPaidAmount(_VAB_Currency_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]));
+                    gData.VAGL_JRNLLINE_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNLLINE_ID"]);
+                    alreadyPaidAmt = getAlreadyPaidAmount(_VAB_Currency_ID, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNLLINE_ID"]));
                     if (Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AMTACCTDR"]) > 0)
                     {
                         openAmt = Util.GetNullableDecimal(ds.Tables[0].Rows[i]["AMTACCTDR"]);
                         openAmt = openAmt - alreadyPaidAmt;
                         if (openAmt == 0)
                         {
-                            //aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
+                            //aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNLLINE_ID"]), null);
                             //if (!aline.Save())
                             //{
                             //    _log.SaveError("Error: ", "Allocation Line not created");
@@ -4196,7 +4196,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         openAmt = openAmt - alreadyPaidAmt;
                         if (openAmt == 0)
                         {
-                            //aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["GL_JOURNALLINE_ID"]), null);
+                            //aline = new MJournalLine(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNLLINE_ID"]), null);
                             //if (!aline.Save())
                             //{
                             //    _log.SaveError("Error: ", "Allocation Line not created");
@@ -4309,15 +4309,15 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         /// To get already paid amount
         /// </summary>
         /// <param name="VAB_Currency_ID"> Currency ID</param>
-        /// <param name="GL_JOURNALLINE_ID">GL Journal Line ID</param>
+        /// <param name="VAGL_JRNLLINE_ID">GL Journal Line ID</param>
         /// <returns>Already Paid Amount</returns>
-        public decimal? getAlreadyPaidAmount(int VAB_Currency_ID, int GL_JOURNALLINE_ID)
+        public decimal? getAlreadyPaidAmount(int VAB_Currency_ID, int VAGL_JRNLLINE_ID)
         {
             string sql = @"SELECT NVL(SUM(ROUND(CURRENCYCONVERT(AL.AMOUNT ,AR.VAB_CURRENCY_ID ," + VAB_Currency_ID + @",AR.DATEACCT ,AR.VAB_CurrencyType_ID ,AR.VAF_CLIENT_ID ,AR.VAF_ORG_ID ), 2)),0) AS PaidAmt
                         FROM VAB_DocAllocationLine AL
                         INNER JOIN VAB_DocAllocation AR
                         ON ar.VAB_DocAllocation_ID   =al.VAB_DocAllocation_ID
-                        WHERE al.GL_JOURNALLINE_ID = " + GL_JOURNALLINE_ID + " AND AR.DOCSTATUS ='CO'";
+                        WHERE al.VAGL_JRNLLINE_ID = " + VAGL_JRNLLINE_ID + " AND AR.DOCSTATUS ='CO'";
             decimal? amt = Util.GetValueOfDecimal(DB.ExecuteScalar(sql));
             if (amt < 0)
                 amt = -1 * amt;
@@ -4385,7 +4385,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 return msg;
             }
 
-            msg = ValidateRecords(rowsGL, "GL_JournalLine_ID", false, false, false, trx); //GL_JOURNALLINE
+            msg = ValidateRecords(rowsGL, "VAGL_JRNLLine_ID", false, false, false, trx); //VAGL_JRNLLINE
             if (msg != string.Empty)
             {
                 //set isProcessing false
@@ -4405,8 +4405,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             {
                 //  Payment line is selected
                 //  Payment variables
-                int GL_JournalLine_ID = Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]);
-                glList.Add(GL_JournalLine_ID);
+                int VAGL_JRNLLine_ID = Util.GetValueOfInt(rowsGL[i]["VAGL_JRNLLine_ID"]);
+                glList.Add(VAGL_JRNLLine_ID);
                 //
                 Decimal GLAmt = Util.GetValueOfDecimal(rowsGL[i]["AppliedAmt"]);  //  Applied Payment
                 amountList.Add(GLAmt);
@@ -4604,7 +4604,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         }
                         MAllocationLine aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                         aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                        aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
                         aLine.SetVAB_CashJRNLLine_ID(Util.GetValueOfInt(rowsCash[i]["ccashlineid"]));
                         if (!aLine.Save())
@@ -4680,15 +4680,15 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetRef_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
                             aLine.SetDateTrx(DateTrx);
-                            aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
+                            aLine.SetVAB_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
                             // set withholding amount based on porpotionate
-                            if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                            if (objPayment.GetVAB_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
                             {
                                 DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.VAB_Withholding_ID ) AS withholdingAmt,
                                                   (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM VAB_Payment WHERE VAB_Payment.IsActive   = 'Y' AND VAB_Payment.VAB_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
                                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                 {
                                     aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
@@ -4718,17 +4718,17 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                             aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                            aLine.SetC_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
+                            aLine.SetVAB_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
                             aLine.SetDateTrx(DateTrx);
                             aLine.SetRef_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
                             // set withholding amount based on porpotionate
-                            if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                            if (objPayment.GetVAB_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
                             {
                                 DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + Decimal.Negate(netAmt) + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.VAB_Withholding_ID ) AS withholdingAmt,
                                                   (SELECT ROUND((" + Decimal.Negate(netAmt) + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(negList[j]["cpaymentid"]), null, trx);
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM VAB_Payment WHERE VAB_Payment.IsActive   = 'Y' AND VAB_Payment.VAB_Payment_ID = " + Util.GetValueOfInt(negList[j]["cpaymentid"]), null, trx);
                                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                                 {
                                     aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
@@ -4807,18 +4807,18 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         }
                         MAllocationLine aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                         aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                        aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                        aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
-                        aLine.SetC_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
+                        aLine.SetVAB_Payment_ID(Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]));
 
                         // set withholding amount based on porpotionate
-                        if (objPayment.GetC_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
+                        if (objPayment.GetVAB_Withholding_ID() > 0 || objPayment.GetBackupWithholding_ID() > 0)
                         {
                             DataSet ds = DB.ExecuteDataset(@"SELECT (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.C_Withholding_ID ) AS withholdingAmt,
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.VAB_Withholding_ID ) AS withholdingAmt,
                                                   (SELECT ROUND((" + netAmt + @" * PayPercentage)/100 , 2) AS withholdingAmt
-                                                  FROM C_Withholding WHERE C_Withholding_ID = C_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
-                                                FROM C_Payment WHERE C_Payment.IsActive   = 'Y' AND C_Payment.C_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
+                                                  FROM VAB_Withholding WHERE VAB_Withholding_ID = VAB_Payment.BackupWithholding_ID ) AS BackupwithholdingAmt
+                                                FROM VAB_Payment WHERE VAB_Payment.IsActive   = 'Y' AND VAB_Payment.VAB_Payment_ID = " + Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), null, trx);
                             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                             {
                                 aLine.SetWithholdingAmt(Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["withholdingAmt"]));
@@ -4905,7 +4905,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         {
                             mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
                             invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
-                            MJournalLine journalLine = new MJournalLine(ctx, Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]), trx);
+                            MJournalLine journalLine = new MJournalLine(ctx, Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]), trx);
 
                             if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
                                 continue;
@@ -5041,7 +5041,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                             aLine = new MAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
-                            aLine.Set_Value("GL_JournalLine_ID", Util.GetValueOfInt(rowsGL[j]["GL_JournalLine_ID"]));
+                            aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                             aLine.SetVAB_Invoice_ID(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
 
                             //set the trx Date and InvoicePayschedule_ID
@@ -5480,8 +5480,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 {
                     for (int i = 0; i < rowsPayment.Count; i++)
                     {
-                        int C_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
-                        MPayment pay = new MPayment(ctx, C_Payment_ID, trx);
+                        int VAB_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
+                        MPayment pay = new MPayment(ctx, VAB_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
                             if (!pay.Save())
@@ -5505,7 +5505,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                         }
 
-                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(C_Payment_ID) ,p.VAB_Currency_ID ," + VAB_Currency_ID + ",p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID),0) as amt FROM C_Payment p Where C_Payment_ID = " + C_Payment_ID;
+                        string sqlGetOpenPayments = "SELECT  NVL(currencyConvert(ALLOCPAYMENTAVAILABLE(VAB_Payment_ID) ,p.VAB_Currency_ID ," + VAB_Currency_ID + ",p.DateTrx ,p.VAB_CurrencyType_ID ,p.VAF_Client_ID ,p.VAF_Org_ID),0) as amt FROM VAB_Payment p Where VAB_Payment_ID = " + VAB_Payment_ID;
                         object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
                         Decimal? amtPayment = 0;
                         if (result == null || result == DBNull.Value)
@@ -5605,18 +5605,18 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     int chk = 0;
                     for (int i = 0; i < rowsGL.Count; i++)
                     {
-                        //int _GL_JournalLine_ID = Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]);
+                        //int _VAGL_JRNLLine_ID = Util.GetValueOfInt(rowsGL[i]["VAGL_JRNLLine_ID"]);
                         //string sqlGetOpenGlAmt = @"SELECT (ABS(NVL(SUM(ROUND(CURRENCYCONVERT(AL.AMOUNT ,AR.VAB_CURRENCY_ID ," + VAB_Currency_ID + @",AR.DATEACCT ,AR.VAB_CurrencyType_ID ,
                         //                    AR.VAF_CLIENT_ID ,AR.VAF_ORG_ID ), 2)),0)) - ABS(SUM(NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.VAB_CURRENCY_ID ,
                         //                    " + VAB_Currency_ID + @",J.DATEACCT ,J.VAB_CurrencyType_ID ,J.VAF_CLIENT_ID ,J.VAF_ORG_ID ), 2),0))) - ABS(SUM(NVL(ROUND(currencyConvert
                         //                    (JL.AMTSOURCECR ,jl.VAB_Currency_ID ," + VAB_Currency_ID + @",j.DATEACCT ,j.VAB_CurrencyType_ID ,j.VAF_Client_ID ,j.VAF_Org_ID ), 2),0)))) 
                         //                    AS balanceamt FROM VAB_DocAllocationLine AL INNER JOIN VAB_DocAllocation AR ON ar.VAB_DocAllocation_ID = al.VAB_DocAllocation_ID
-                        //                    INNER JOIN GL_JOURNALLINE jl ON jl.GL_JOURNALLINE_ID = al.GL_JOURNALLINE_ID INNER JOIN GL_JOURNAL j ON j.GL_JOURNAL_ID 
-                        //                    = jl.GL_JOURNAL_ID WHERE al.GL_JOURNALLINE_ID = " + _GL_JournalLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
+                        //                    INNER JOIN VAGL_JRNLLINE jl ON jl.VAGL_JRNLLINE_ID = al.VAGL_JRNLLINE_ID INNER JOIN VAGL_JRNL j ON j.VAGL_JRNL_ID 
+                        //                    = jl.VAGL_JRNL_ID WHERE al.VAGL_JRNLLINE_ID = " + _VAGL_JRNLLine_ID + @" AND AR.DOCSTATUS IN('CO', 'CL') ";
                         //decimal result = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlGetOpenGlAmt, null, trx));
                         if (Util.GetValueOfBool(rowsGL[i]["IsPaid"]) == true)
                         {
-                            chk = DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='Y' WHERE GL_JOURNALLINE_ID =" + Util.GetValueOfInt(rowsGL[i]["GL_JournalLine_ID"]), null, trx);
+                            chk = DB.ExecuteQuery(@" UPDATE VAGL_JRNLLINE SET isAllocated ='Y' WHERE VAGL_JRNLLINE_ID =" + Util.GetValueOfInt(rowsGL[i]["VAGL_JRNLLine_ID"]), null, trx);
                             if (chk < 0)
                             {
                                 trx.Rollback();
@@ -5636,15 +5636,15 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                 #region set gl journal id on invoice pay schedule
                 if (rowsInvoice.Count > 0 && rowsGL.Count > 0)
                 {
-                    string sql = @"SELECT al.VAB_sched_InvoicePayment_id, al.gl_journalline_id FROM VAB_DocAllocationLine al WHERE 
-                                 al.VAB_DocAllocation_ID IN (" + alloc.GetVAB_DocAllocation_ID() + ") AND al.gl_journalline_id IS NOT NULL ";
+                    string sql = @"SELECT al.VAB_sched_InvoicePayment_id, al.VAGL_JRNLLine_id FROM VAB_DocAllocationLine al WHERE 
+                                 al.VAB_DocAllocation_ID IN (" + alloc.GetVAB_DocAllocation_ID() + ") AND al.VAGL_JRNLLine_id IS NOT NULL ";
                     DataSet ds = DB.ExecuteDataset(sql, null, trx);
                     int chk = 0;
                     if (ds != null && ds.Tables[0].Rows.Count > 0)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            chk = DB.ExecuteQuery(@" UPDATE VAB_sched_InvoicePayment SET gl_journalline_id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["gl_journalline_id"]) + ""
+                            chk = DB.ExecuteQuery(@" UPDATE VAB_sched_InvoicePayment SET VAGL_JRNLLine_id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAGL_JRNLLine_id"]) + ""
                                          + " WHERE VAB_sched_InvoicePayment_id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_id"]), null, trx);
                             if (chk < 0)
                             {
@@ -5697,14 +5697,14 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         public MInvoicePaySchedule CreateNewSchedule(MInvoicePaySchedule mpay, MInvoice invoice, MJournalLine journalLine, MAllocationLine aLine, Decimal amount, Trx trx)
         {
             MInvoicePaySchedule mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
-            MJournal journal = new MJournal(ctx, journalLine.GetGL_Journal_ID(), trx);
+            MJournal journal = new MJournal(ctx, journalLine.GetVAGL_JRNL_ID(), trx);
             PO.CopyValues(mpay, mpay2);
             //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
             mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
             mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
             mpay2.SetVAB_CashJRNLLine_ID(0);
-            mpay2.SetC_Payment_ID(0);
-            mpay2.Set_Value("GL_JournalLine_ID", 0);
+            mpay2.SetVAB_Payment_ID(0);
+            mpay2.Set_Value("VAGL_JRNLLine_ID", 0);
             if (invoice.GetVAB_Currency_ID() != journalLine.GetVAB_Currency_ID())
             {
                 var conertedAmount = MConversionRate.Convert(ctx, amount, journalLine.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), journal.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
@@ -5953,8 +5953,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             public decimal? AppliedAmt { get; set; }
             public decimal? ConvertedAmount { get; set; }
             public decimal? OpenAmount { get; set; }
-            public int GL_JOURNALLINE_ID { get; set; }
-            public int GL_Journal_ID { get; set; }
+            public int VAGL_JRNLLINE_ID { get; set; }
+            public int VAGL_JRNL_ID { get; set; }
             public int VAB_CurrencyType_ID { get; set; }
             public string ConversionName { get; set; }
             public DateTime? DATEACCT { get; set; }

@@ -180,7 +180,7 @@ namespace VIS.Models
 
             if (_pLocation != null)
             {
-                location = _pLocation.GetC_Location_ID();
+                location = _pLocation.GetVAB_Address_ID();
 
                 //
                 phoneNo = _pLocation.GetPhone() ?? "";
@@ -264,16 +264,16 @@ namespace VIS.Models
             return VAB_BusinessPartner_ID;
         }
         /// <summary>
-        /// Get C_order_id
+        /// Get VAB_Order_id
         /// </summary>
         /// <param name="userID"></param>
         /// <returns></returns>
         public int GetCOrderID(int userID)
         {
-            int c_Order_ID = 0;
-            string sqlQuery = "select C_ORDER_ID from C_ORDER where VAF_UserContact_id =" + userID;
-            c_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
-            return c_Order_ID;
+            int VAB_Order_ID = 0;
+            string sqlQuery = "select VAB_ORDER_ID from VAB_ORDER where VAF_UserContact_id =" + userID;
+            VAB_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlQuery, null, null));
+            return VAB_Order_ID;
         }
         public List<BPInfo> lstBPGroup = null;
         public List<BPInfo> FillBPGroup()
@@ -582,7 +582,7 @@ namespace VIS.Models
                 }
             if (address != string.Empty)
             {
-                _pLocation.SetC_Location_ID(Convert.ToInt32(address));
+                _pLocation.SetVAB_Address_ID(Convert.ToInt32(address));
             }
 
             //
@@ -621,7 +621,7 @@ namespace VIS.Models
                 _user.SetName(contact);
                 _user.SetEMail(email);
                 _user.SetTitle(title);
-                _user.SetC_Location_ID(Convert.ToInt32(address));
+                _user.SetVAB_Address_ID(Convert.ToInt32(address));
 
                 // = (KeyNamePair)cmbGreetingC.SelectedItem;
 

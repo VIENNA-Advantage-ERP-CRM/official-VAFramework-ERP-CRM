@@ -39,13 +39,13 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int c_payment_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_Payment_ID = Util.GetValueOfInt(paramValue[0]);
             int CurTo_ID = Util.GetValueOfInt(paramValue[1]);
             //DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
             Decimal rate = 0;
             //End Assign parameter value
 
-            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID, DateAcct FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
+            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID, DateAcct FROM VAB_Payment_V WHERE VAB_Payment_ID=" + VAB_Payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -69,13 +69,13 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
-            int c_payment_ID = Util.GetValueOfInt(paramValue[0]);
+            int VAB_Payment_ID = Util.GetValueOfInt(paramValue[0]);
             int CurTo_ID = Util.GetValueOfInt(paramValue[1]);
             DateTime? convDate = Util.GetValueOfDateTime(paramValue[2]);
             Decimal rate = 0;
             //End Assign parameter value
 
-            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID FROM C_Payment_v WHERE C_Payment_ID=" + c_payment_ID;
+            string qry = "SELECT PayAmt, VAB_Currency_ID, VAB_CurrencyType_ID FROM VAB_Payment_V WHERE VAB_Payment_ID=" + VAB_Payment_ID;
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

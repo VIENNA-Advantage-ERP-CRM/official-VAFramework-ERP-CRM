@@ -259,98 +259,98 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
         }
         /** Set Order Line.
-        @param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+        @param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_ValueNoCheck("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_ValueNoCheck("VAB_OrderLine_ID", null);
             else
-                Set_ValueNoCheck("C_OrderLine_ID", C_OrderLine_ID);
+                Set_ValueNoCheck("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }
         /** Get Order Line.
         @return Order Line */
-        public int GetC_OrderLine_ID()
+        public int GetVAB_OrderLine_ID()
         {
-            Object ii = Get_Value("C_OrderLine_ID");
+            Object ii = Get_Value("VAB_OrderLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project Phase.
-        @param C_ProjectPhase_ID Phase of a Project */
-        public void SetC_ProjectPhase_ID(int C_ProjectPhase_ID)
+        @param VAB_ProjectStage_ID Phase of a Project */
+        public void SetVAB_ProjectStage_ID(int VAB_ProjectStage_ID)
         {
-            if (C_ProjectPhase_ID <= 0) Set_ValueNoCheck("C_ProjectPhase_ID", null);
+            if (VAB_ProjectStage_ID <= 0) Set_ValueNoCheck("VAB_ProjectStage_ID", null);
             else
-                Set_ValueNoCheck("C_ProjectPhase_ID", C_ProjectPhase_ID);
+                Set_ValueNoCheck("VAB_ProjectStage_ID", VAB_ProjectStage_ID);
         }
         /** Get Project Phase.
         @return Phase of a Project */
-        public int GetC_ProjectPhase_ID()
+        public int GetVAB_ProjectStage_ID()
         {
-            Object ii = Get_Value("C_ProjectPhase_ID");
+            Object ii = Get_Value("VAB_ProjectStage_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project Task.
-        @param C_ProjectTask_ID Actual Project Task in a Phase */
-        public void SetC_ProjectTask_ID(int C_ProjectTask_ID)
+        @param VAB_ProjectJob_ID Actual Project Task in a Phase */
+        public void SetVAB_ProjectJob_ID(int VAB_ProjectJob_ID)
         {
-            if (C_ProjectTask_ID <= 0) Set_ValueNoCheck("C_ProjectTask_ID", null);
+            if (VAB_ProjectJob_ID <= 0) Set_ValueNoCheck("VAB_ProjectJob_ID", null);
             else
-                Set_ValueNoCheck("C_ProjectTask_ID", C_ProjectTask_ID);
+                Set_ValueNoCheck("VAB_ProjectJob_ID", VAB_ProjectJob_ID);
         }
         /** Get Project Task.
         @return Actual Project Task in a Phase */
-        public int GetC_ProjectTask_ID()
+        public int GetVAB_ProjectJob_ID()
         {
-            Object ii = Get_Value("C_ProjectTask_ID");
+            Object ii = Get_Value("VAB_ProjectJob_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tax.
-        @param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        @param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID <= 0) Set_Value("C_Tax_ID", null);
+            if (VAB_TaxRate_ID <= 0) Set_Value("VAB_TaxRate_ID", null);
             else
-                Set_Value("C_Tax_ID", C_Tax_ID);
+                Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }
         /** Get Tax.
         @return Tax identifier */
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            Object ii = Get_Value("C_Tax_ID");
+            Object ii = Get_Value("VAB_TaxRate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_ValueNoCheck("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_ValueNoCheck("VAB_UOM_ID", null);
             else
-                Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
+                Set_ValueNoCheck("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1109,15 +1109,15 @@ namespace VAdvantage.Model
         public Decimal GetAmountAfterApplyDiscount() { Object bd = Get_Value("AmountAfterApplyDiscount"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
         /** Set Withholding Tax.
-@param C_Withholding_ID Withholding type defined */
-        public void SetC_Withholding_ID(int C_Withholding_ID)
+@param VAB_Withholding_ID Withholding type defined */
+        public void SetVAB_Withholding_ID(int VAB_Withholding_ID)
         {
-            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            if (VAB_Withholding_ID <= 0) Set_Value("VAB_Withholding_ID", null);
             else
-                Set_Value("C_Withholding_ID", C_Withholding_ID);
+                Set_Value("VAB_Withholding_ID", VAB_Withholding_ID);
         }/** Get Withholding Tax.
 @return Withholding type defined */
-        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Withholding_ID() { Object ii = Get_Value("VAB_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Withholding Amount.
 @param WithholdingAmt This field represents the calculated withholding amount */

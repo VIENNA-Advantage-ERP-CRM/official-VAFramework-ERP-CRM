@@ -237,21 +237,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Payment Term
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_PaymentTerm_ID=(SELECT C_PaymentTerm_ID FROM C_PaymentTerm p"
+                  + "SET VAB_PaymentTerm_ID=(SELECT VAB_PaymentTerm_ID FROM VAB_PaymentTerm p"
                   + " WHERE o.PaymentTermValue=p.Value AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE C_PaymentTerm_ID IS NULL AND PaymentTermValue IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_PaymentTerm_ID IS NULL AND PaymentTermValue IS NOT NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PaymentTerm=" + no);
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_PaymentTerm_ID=(SELECT MAX(C_PaymentTerm_ID) FROM C_PaymentTerm p"
+                  + "SET VAB_PaymentTerm_ID=(SELECT MAX(VAB_PaymentTerm_ID) FROM VAB_PaymentTerm p"
                   + " WHERE p.IsDefault='Y' AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE C_PaymentTerm_ID IS NULL AND o.PaymentTermValue IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAB_PaymentTerm_ID IS NULL AND o.PaymentTermValue IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default PaymentTerm=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No PaymentTerm, ' "
-                  + "WHERE C_PaymentTerm_ID IS NULL"
+                  + "WHERE VAB_PaymentTerm_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -294,11 +294,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Existing Location ? Exact Match
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET VAB_BPart_Location_ID=(SELECT VAB_BPart_Location_ID"
-                  + " FROM VAB_BPart_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
+                  + " FROM VAB_BPart_Location bpl INNER JOIN VAB_Address l ON (bpl.VAB_Address_ID=l.VAB_Address_ID)"
                   + " WHERE o.VAB_BusinessPartner_ID=bpl.VAB_BusinessPartner_ID AND bpl.VAF_Client_ID=o.VAF_Client_ID"
                   + " AND DUMP(o.Address1)=DUMP(l.Address1) AND DUMP(o.Address2)=DUMP(l.Address2)"
                   + " AND DUMP(o.City)=DUMP(l.City) AND DUMP(o.Postal)=DUMP(l.Postal)"
-                  + " AND DUMP(o.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(o.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
+                  + " AND DUMP(o.VAB_RegionState_ID)=DUMP(l.VAB_RegionState_ID) AND DUMP(o.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
                   + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                   + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -350,26 +350,26 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Region
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "Set RegionName=(SELECT MAX(Name) FROM C_Region r"
+                  + "Set RegionName=(SELECT MAX(Name) FROM VAB_RegionState r"
                   + " WHERE r.IsDefault='Y' AND r.VAB_Country_ID=o.VAB_Country_ID"
                   + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
-                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_RegionState_ID IS NULL AND RegionName IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
+                  + "Set VAB_RegionState_ID=(SELECT VAB_RegionState_ID FROM VAB_RegionState r"
                   + " WHERE r.Name=o.RegionName AND r.VAB_Country_ID=o.VAB_Country_ID"
                   + " AND r.VAF_Client_ID IN (0, o.VAF_Client_ID)) "
-                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL AND RegionName IS NOT NULL"
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_RegionState_ID IS NULL AND RegionName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region=" + no);
             //
             sql = new StringBuilder("UPDATE I_Invoice o "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Region, ' "
-                  + "WHERE VAB_BusinessPartner_ID IS NULL AND C_Region_ID IS NULL "
+                  + "WHERE VAB_BusinessPartner_ID IS NULL AND VAB_RegionState_ID IS NULL "
                   + " AND EXISTS (SELECT * FROM VAB_Country c"
                   + " WHERE c.VAB_Country_ID=o.VAB_Country_ID AND c.HasRegion='Y')"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -409,15 +409,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Tax
             sql = new StringBuilder("UPDATE I_Invoice o "
-                  + "SET C_Tax_ID=(SELECT MAX(C_Tax_ID) FROM C_Tax t"
+                  + "SET VAB_TaxRate_ID=(SELECT MAX(VAB_TaxRate_ID) FROM VAB_TaxRate t"
                   + " WHERE o.TaxIndicator=t.TaxIndicator AND o.VAF_Client_ID=t.VAF_Client_ID) "
-                  + "WHERE C_Tax_ID IS NULL AND TaxIndicator IS NOT NULL"
+                  + "WHERE VAB_TaxRate_ID IS NULL AND TaxIndicator IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Tax=" + no);
             sql = new StringBuilder("UPDATE I_Invoice "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Tax, ' "
-                  + "WHERE C_Tax_ID IS NULL AND TaxIndicator IS NOT NULL"
+                  + "WHERE VAB_TaxRate_ID IS NULL AND TaxIndicator IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -475,13 +475,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (imp.GetVAB_BPart_Location_ID() == bpls[i].GetVAB_BPart_Location_ID())
                             bpl = bpls[i];
                         //	Same Location ID
-                        else if (imp.GetC_Location_ID() == bpls[i].GetC_Location_ID())
+                        else if (imp.GetVAB_Address_ID() == bpls[i].GetVAB_Address_ID())
                             bpl = bpls[i];
                         //	Same Location Info
-                        else if (imp.GetC_Location_ID() == 0)
+                        else if (imp.GetVAB_Address_ID() == 0)
                         {
                             MLocation loc = bpl.GetLocation(false);
-                            if (loc.Equals(imp.GetVAB_Country_ID(), imp.GetC_Region_ID(),
+                            if (loc.Equals(imp.GetVAB_Country_ID(), imp.GetVAB_RegionState_ID(),
                                     imp.GetPostal(), "", imp.GetCity(),
                                     imp.GetAddress1(), imp.GetAddress2()))
                                 bpl = bpls[i];
@@ -495,18 +495,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         loc.SetAddress2(imp.GetAddress2());
                         loc.SetCity(imp.GetCity());
                         loc.SetPostal(imp.GetPostal());
-                        if (imp.GetC_Region_ID() != 0)
-                            loc.SetC_Region_ID(imp.GetC_Region_ID());
+                        if (imp.GetVAB_RegionState_ID() != 0)
+                            loc.SetVAB_RegionState_ID(imp.GetVAB_RegionState_ID());
                         loc.SetVAB_Country_ID(imp.GetVAB_Country_ID());
                         if (!loc.Save())
                             continue;
                         //
                         bpl = new MBPartnerLocation(bp);
-                        bpl.SetC_Location_ID(imp.GetC_Location_ID());
+                        bpl.SetVAB_Address_ID(imp.GetVAB_Address_ID());
                         if (!bpl.Save())
                             continue;
                     }
-                    imp.SetC_Location_ID(bpl.GetC_Location_ID());
+                    imp.SetVAB_Address_ID(bpl.GetVAB_Address_ID());
                     imp.SetVAB_BPart_Location_ID(bpl.GetVAB_BPart_Location_ID());
 
                     //	User/Contact
@@ -621,7 +621,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             invoice.SetDescription(imp.GetDescription());
                         if (imp.GetPaymentRule() != null)
                             invoice.SetPaymentRule(imp.GetPaymentRule());
-                        invoice.SetC_PaymentTerm_ID(imp.GetC_PaymentTerm_ID());
+                        invoice.SetVAB_PaymentTerm_ID(imp.GetVAB_PaymentTerm_ID());
                         invoice.SetM_PriceList_ID(imp.GetM_PriceList_ID());
 
                         MPriceList pl = MPriceList.Get(GetCtx(), imp.GetM_PriceList_ID(), Get_TrxName());
@@ -639,8 +639,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             invoice.SetVAB_BillingCode_ID(imp.GetVAB_BillingCode_ID());
                         if (imp.GetVAB_Promotion_ID() != 0)
                             invoice.SetVAB_Promotion_ID(imp.GetVAB_Promotion_ID());
-                        if (imp.GetC_Project_ID() != 0)
-                            invoice.SetC_Project_ID(imp.GetC_Project_ID());
+                        if (imp.GetVAB_Project_ID() != 0)
+                            invoice.SetVAB_Project_ID(imp.GetVAB_Project_ID());
                         //
                         if (imp.GetDateInvoiced() != null)
                             invoice.SetDateInvoiced(imp.GetDateInvoiced());
@@ -665,12 +665,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     Decimal? price = (Decimal?)imp.GetPriceActual();
                     if (price != null && Env.ZERO.CompareTo(price) != 0)
                         line.SetPrice(price.Value);
-                    if (imp.GetC_Tax_ID() != 0)
-                        line.SetC_Tax_ID(imp.GetC_Tax_ID());
+                    if (imp.GetVAB_TaxRate_ID() != 0)
+                        line.SetVAB_TaxRate_ID(imp.GetVAB_TaxRate_ID());
                     else
                     {
                         line.SetTax();
-                        imp.SetC_Tax_ID(line.GetC_Tax_ID());
+                        imp.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
                     }
                     Decimal? taxAmt = (Decimal?)imp.GetTaxAmt();
                     if (taxAmt != null && Env.ZERO.CompareTo(taxAmt) != 0)

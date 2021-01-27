@@ -93,28 +93,28 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             _log.Info("VAF_Client_ID=" + VAF_Client_ID);
 
             //	Delete Duplicates
-            //jz remove correlation ID  String sql = "DELETE FROM C_PeriodControl pc1 "
-            String sql = "DELETE FROM C_PeriodControl "
-                + "WHERE (C_Period_ID, DocBaseType) IN "
-                    + "(SELECT C_Period_ID, DocBaseType "
-                    + "FROM C_PeriodControl pc2 "
-                    + "GROUP BY C_Period_ID, DocBaseType "
+            //jz remove correlation ID  String sql = "DELETE FROM VAB_YearPeriodControl pc1 "
+            String sql = "DELETE FROM VAB_YearPeriodControl "
+                + "WHERE (VAB_YearPeriod_ID, DocBaseType) IN "
+                    + "(SELECT VAB_YearPeriod_ID, DocBaseType "
+                    + "FROM VAB_YearPeriodControl pc2 "
+                    + "GROUP BY VAB_YearPeriod_ID, DocBaseType "
                     + "HAVING COUNT(*) > 1)"
-                + " AND C_PeriodControl_ID NOT IN "
-                    + "(SELECT MIN(C_PeriodControl_ID) "
-                    + "FROM C_PeriodControl pc3 "
-                    + "GROUP BY C_Period_ID, DocBaseType)";
+                + " AND VAB_YearPeriodControl_ID NOT IN "
+                    + "(SELECT MIN(VAB_YearPeriodControl_ID) "
+                    + "FROM VAB_YearPeriodControl pc3 "
+                    + "GROUP BY VAB_YearPeriod_ID, DocBaseType)";
             int no = DataBase.DB.ExecuteQuery(sql, null, trxName);
             _log.Info("Duplicates deleted #" + no);
 
             //	Insert Missing
-            sql = "SELECT DISTINCT p.VAF_Client_ID, p.VAF_Org_ID, p.C_Period_ID, dt.DocBaseType "
-                + "FROM C_Period p"
+            sql = "SELECT DISTINCT p.VAF_Client_ID, p.VAF_Org_ID, p.VAB_YearPeriod_ID, dt.DocBaseType "
+                + "FROM VAB_YearPeriod p"
                 + " FULL JOIN VAB_DocTypes dt ON (p.VAF_Client_ID=dt.VAF_Client_ID) "
                 + "WHERE p.VAF_Client_ID='" + VAF_Client_ID + "'"
                 + " AND NOT EXISTS"
-                + " (SELECT * FROM C_PeriodControl pc "
-                    + "WHERE pc.C_Period_ID=p.C_Period_ID AND pc.DocBaseType=dt.DocBaseType)";
+                + " (SELECT * FROM VAB_YearPeriodControl pc "
+                    + "WHERE pc.VAB_YearPeriod_ID=p.VAB_YearPeriod_ID AND pc.DocBaseType=dt.DocBaseType)";
             IDataReader idr = null;
             int counter = 0;
             try
@@ -124,12 +124,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     int Client_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
                     int Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
-                    int C_Period_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
+                    int VAB_YearPeriod_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
                     String DocBaseType = idr[3].ToString();
                    _log.Config("VAF_Client_ID=" + Client_ID
-                        + ", C_Period_ID=" + C_Period_ID + ", DocBaseType=" + DocBaseType);
+                        + ", VAB_YearPeriod_ID=" + VAB_YearPeriod_ID + ", DocBaseType=" + DocBaseType);
                     //
-                    MPeriodControl pc = new MPeriodControl(ctx, Client_ID, C_Period_ID, DocBaseType, trxName);
+                    MPeriodControl pc = new MPeriodControl(ctx, Client_ID, VAB_YearPeriod_ID, DocBaseType, trxName);
                     pc.SetVAF_Org_ID(Org_ID);                // Set Organization of Period, on Period Control.
                     if (pc.Save())
                     {
@@ -151,7 +151,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             if (sp != null)
-                sp.AddLog(0, null, (Decimal)counter, "@C_PeriodControl_ID@ @Created@");
+                sp.AddLog(0, null, (Decimal)counter, "@VAB_YearPeriodControl_ID@ @Created@");
             _log.Info("Inserted #" + counter);
         }	//	createPeriodControls
 

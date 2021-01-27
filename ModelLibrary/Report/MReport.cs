@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReport
  * Purpose        : Report Model
- * Class Used     : X_PA_Report
+ * Class Used     : X_VAPA_FinancialReport
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -23,30 +23,30 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReport : X_PA_Report
+    public class MReport : X_VAPA_FinancialReport
     {
         /// <summary>
         ///  Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Report_ID">id</param>
+        /// <param name="VAPA_FinancialReport_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReport(Ctx ctx, int PA_Report_ID, Trx trxName)
-            : base(ctx, PA_Report_ID, trxName)
+        public MReport(Ctx ctx, int VAPA_FinancialReport_ID, Trx trxName)
+            : base(ctx, VAPA_FinancialReport_ID, trxName)
         {
 
-            if (PA_Report_ID == 0)
+            if (VAPA_FinancialReport_ID == 0)
             {
                 //	setName (null);
-                //	setPA_ReportLineSet_ID (0);
-                //	setPA_ReportColumnSet_ID (0);
+                //	setVAPA_FR_RowSet_ID (0);
+                //	setVAPA_FR_ColumnSet_ID (0);
                 SetListSources(false);
                 SetListTrx(false);
             }
             else
             {
-                _columnSet = new MReportColumnSet(ctx, GetPA_ReportColumnSet_ID(), trxName);
-                _lineSet = new MReportLineSet(ctx, GetPA_ReportLineSet_ID(), trxName);
+                _columnSet = new MReportColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
+                _lineSet = new MReportLineSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
             }
         }	//	MReport
 
@@ -59,8 +59,8 @@ namespace VAdvantage.Report
         public MReport(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {            
-            _columnSet = new MReportColumnSet(ctx, GetPA_ReportColumnSet_ID(), trxName);
-            _lineSet = new MReportLineSet(ctx, GetPA_ReportLineSet_ID(), trxName);
+            _columnSet = new MReportColumnSet(ctx, GetVAPA_FR_ColumnSet_ID(), trxName);
+            _lineSet = new MReportLineSet(ctx, GetVAPA_FR_RowSet_ID(), trxName);
         }	//	MReport
 
         private MReportColumnSet _columnSet = null;

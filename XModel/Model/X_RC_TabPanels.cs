@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for RC_TabPanels
+/** Generated Model for VARC_TabPanels
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_RC_TabPanels : PO
+public class X_VARC_TabPanels : PO
 {
-public X_RC_TabPanels (Context ctx, int RC_TabPanels_ID, Trx trxName) : base (ctx, RC_TabPanels_ID, trxName)
+public X_VARC_TabPanels (Context ctx, int VARC_TabPanels_ID, Trx trxName) : base (ctx, VARC_TabPanels_ID, trxName)
 {
-/** if (RC_TabPanels_ID == 0)
+/** if (VARC_TabPanels_ID == 0)
 {
-SetRC_RoleCenterTab_ID (0);
-SetRC_TabPanels_ID (0);
+SetVARC_RoleCenterTab_ID (0);
+SetVARC_TabPanels_ID (0);
 }
  */
 }
-public X_RC_TabPanels (Ctx ctx, int RC_TabPanels_ID, Trx trxName) : base (ctx, RC_TabPanels_ID, trxName)
+public X_VARC_TabPanels (Ctx ctx, int VARC_TabPanels_ID, Trx trxName) : base (ctx, VARC_TabPanels_ID, trxName)
 {
-/** if (RC_TabPanels_ID == 0)
+/** if (VARC_TabPanels_ID == 0)
 {
-SetRC_RoleCenterTab_ID (0);
-SetRC_TabPanels_ID (0);
+SetVARC_RoleCenterTab_ID (0);
+SetVARC_TabPanels_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetRC_TabPanels_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_TabPanels (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_TabPanels (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_RC_TabPanels (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_TabPanels (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_TabPanels (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_RC_TabPanels (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_TabPanels (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VARC_TabPanels (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_RC_TabPanels()
+static X_VARC_TabPanels()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1352453099460L;
 public static int Table_ID;
  // =1000234;
 
-/** TableName=RC_TabPanels */
-public static String Table_Name="RC_TabPanels";
+/** TableName=VARC_TabPanels */
+public static String Table_Name="VARC_TabPanels";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_RC_TabPanels[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VARC_TabPanels[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User Query.
@@ -160,32 +160,32 @@ public String GetExport_ID()
 return (String)Get_Value("Export_ID");
 }
 /** Set Role Center Tab.
-@param RC_RoleCenterTab_ID Role Center Tab ID */
-public void SetRC_RoleCenterTab_ID (int RC_RoleCenterTab_ID)
+@param VARC_RoleCenterTab_ID Role Center Tab ID */
+public void SetVARC_RoleCenterTab_ID (int VARC_RoleCenterTab_ID)
 {
-if (RC_RoleCenterTab_ID < 1) throw new ArgumentException ("RC_RoleCenterTab_ID is mandatory.");
-Set_ValueNoCheck ("RC_RoleCenterTab_ID", RC_RoleCenterTab_ID);
+if (VARC_RoleCenterTab_ID < 1) throw new ArgumentException ("VARC_RoleCenterTab_ID is mandatory.");
+Set_ValueNoCheck ("VARC_RoleCenterTab_ID", VARC_RoleCenterTab_ID);
 }
 /** Get Role Center Tab.
 @return Role Center Tab ID */
-public int GetRC_RoleCenterTab_ID() 
+public int GetVARC_RoleCenterTab_ID() 
 {
-Object ii = Get_Value("RC_RoleCenterTab_ID");
+Object ii = Get_Value("VARC_RoleCenterTab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tab Panel.
-@param RC_TabPanels_ID Tab Panel */
-public void SetRC_TabPanels_ID (int RC_TabPanels_ID)
+@param VARC_TabPanels_ID Tab Panel */
+public void SetVARC_TabPanels_ID (int VARC_TabPanels_ID)
 {
-if (RC_TabPanels_ID < 1) throw new ArgumentException ("RC_TabPanels_ID is mandatory.");
-Set_ValueNoCheck ("RC_TabPanels_ID", RC_TabPanels_ID);
+if (VARC_TabPanels_ID < 1) throw new ArgumentException ("VARC_TabPanels_ID is mandatory.");
+Set_ValueNoCheck ("VARC_TabPanels_ID", VARC_TabPanels_ID);
 }
 /** Get Tab Panel.
 @return Tab Panel */
-public int GetRC_TabPanels_ID() 
+public int GetVARC_TabPanels_ID() 
 {
-Object ii = Get_Value("RC_TabPanels_ID");
+Object ii = Get_Value("VARC_TabPanels_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

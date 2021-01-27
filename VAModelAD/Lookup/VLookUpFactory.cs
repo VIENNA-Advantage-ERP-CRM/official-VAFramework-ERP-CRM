@@ -1074,12 +1074,12 @@ namespace VAdvantage.Classes
             //    return retValue.Clone();
             //}
             string displayColumn = "Combination";
-            string sql = "SELECT C_ValidCombination_ID, NULL, " + displayColumn + ", IsActive FROM C_ValidCombination";
+            string sql = "SELECT VAB_Acct_ValidParameter_ID, NULL, " + displayColumn + ", IsActive FROM VAB_Acct_ValidParameter";
             int zoomWindow = 153;
-            Query zoomQuery = new Query("C_ValidCombination");
+            Query zoomQuery = new Query("VAB_Acct_ValidParameter");
             //
-            retValue = new VLookUpInfo(sql, "C_ValidCombination",
-                "C_ValidCombination.C_ValidCombination_ID",
+            retValue = new VLookUpInfo(sql, "VAB_Acct_ValidParameter",
+                "VAB_Acct_ValidParameter.VAB_Acct_ValidParameter_ID",
                 zoomWindow, zoomWindow, zoomQuery);
             // Display column for Account Control
             retValue.displayColSubQ = displayColumn;

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PaymentTerm_Trl
+/** Generated Model for VAB_PaymentTerm_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaymentTerm_Trl : PO
+public class X_VAB_PaymentTerm_TL : PO
 {
-public X_C_PaymentTerm_Trl (Context ctx, int C_PaymentTerm_Trl_ID, Trx trxName) : base (ctx, C_PaymentTerm_Trl_ID, trxName)
+public X_VAB_PaymentTerm_TL (Context ctx, int VAB_PaymentTerm_TL_ID, Trx trxName) : base (ctx, VAB_PaymentTerm_TL_ID, trxName)
 {
-/** if (C_PaymentTerm_Trl_ID == 0)
+/** if (VAB_PaymentTerm_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_PaymentTerm_ID (0);
+SetVAB_PaymentTerm_ID (0);
 SetIsTranslated (false);
 SetName (null);
 }
  */
 }
-public X_C_PaymentTerm_Trl (Ctx ctx, int C_PaymentTerm_Trl_ID, Trx trxName) : base (ctx, C_PaymentTerm_Trl_ID, trxName)
+public X_VAB_PaymentTerm_TL (Ctx ctx, int VAB_PaymentTerm_TL_ID, Trx trxName) : base (ctx, VAB_PaymentTerm_TL_ID, trxName)
 {
-/** if (C_PaymentTerm_Trl_ID == 0)
+/** if (VAB_PaymentTerm_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_PaymentTerm_ID (0);
+SetVAB_PaymentTerm_ID (0);
 SetIsTranslated (false);
 SetName (null);
 }
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentTerm_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_PaymentTerm_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentTerm_TL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_PaymentTerm_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm_Trl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PaymentTerm_TL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaymentTerm_Trl()
+static X_VAB_PaymentTerm_TL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1434630285063L;
 public static int Table_ID;
  // =303;
 
-/** TableName=C_PaymentTerm_Trl */
-public static String Table_Name="C_PaymentTerm_Trl";
+/** TableName=VAB_PaymentTerm_TL */
+public static String Table_Name="VAB_PaymentTerm_TL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PaymentTerm_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PaymentTerm_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -143,17 +143,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Language().ToString());
 }
 /** Set Payment Term.
-@param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-public void SetC_PaymentTerm_ID (int C_PaymentTerm_ID)
+@param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+public void SetVAB_PaymentTerm_ID (int VAB_PaymentTerm_ID)
 {
-if (C_PaymentTerm_ID < 1) throw new ArgumentException ("C_PaymentTerm_ID is mandatory.");
-Set_ValueNoCheck ("C_PaymentTerm_ID", C_PaymentTerm_ID);
+if (VAB_PaymentTerm_ID < 1) throw new ArgumentException ("VAB_PaymentTerm_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
 }
 /** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-public int GetC_PaymentTerm_ID() 
+public int GetVAB_PaymentTerm_ID() 
 {
-Object ii = Get_Value("C_PaymentTerm_ID");
+Object ii = Get_Value("VAB_PaymentTerm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

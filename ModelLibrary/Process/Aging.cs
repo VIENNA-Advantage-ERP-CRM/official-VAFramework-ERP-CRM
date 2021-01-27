@@ -121,7 +121,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     .Append(", currencyConvert(oi.PaidAmt").Append(s)
                     .Append(", currencyConvert(oi.OpenAmt").Append(s);
             }
-            sql.Append(",oi.VAB_BillingCode_ID,oi.VAB_Promotion_ID,oi.C_Project_ID "	//	14
+            sql.Append(",oi.VAB_BillingCode_ID,oi.VAB_Promotion_ID,oi.VAB_Project_ID "	//	14
                 + "FROM RV_OpenItem oi"
                 + " INNER JOIN VAB_BusinessPartner bp ON (oi.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
                 + "WHERE oi.ISSoTrx=").Append(_IsSOTrx ? "'Y'" : "'N'");
@@ -181,7 +181,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //
                     int VAB_BillingCode_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[13]) : 0;
                     int VAB_Promotion_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[14]) : 0;
-                    int C_Project_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[15]) : 0;
+                    int VAB_Project_ID = _IsListInvoices ? Utility.Util.GetValueOfInt(idr[15]) : 0;
 
                     rows++;
                     //	New Aging Row
@@ -214,7 +214,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
                         aging.SetVAB_BillingCode_ID(VAB_BillingCode_ID);
                         aging.SetVAB_Promotion_ID(VAB_Promotion_ID);
-                        aging.SetC_Project_ID(C_Project_ID);
+                        aging.SetVAB_Project_ID(VAB_Project_ID);
                     }
                     //	Fill Buckets
                     aging.Add(DueDate.Value, DaysDue, GrandTotal.Value, OpenAmt.Value);

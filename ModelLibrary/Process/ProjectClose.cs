@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ProjectClose:ProcessEngine.SvrProcess
     {
     /**	Project from Record			*/
-	private int 		m_C_Project_ID = 0;
+	private int 		m_VAB_Project_ID = 0;
 
 	/**
 	 *  Prepare - e.g., get Parameters.
@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
             }
 		}
-		m_C_Project_ID = GetRecord_ID();
+		m_VAB_Project_ID = GetRecord_ID();
 	}	//	prepare
 
 	/// <summary>
@@ -55,7 +55,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>Message (translated text)</returns>
 	protected override String DoIt()
 	{
-		MProject project = new MProject (GetCtx(), m_C_Project_ID, Get_TrxName());
+		MProject project = new MProject (GetCtx(), m_VAB_Project_ID, Get_TrxName());
 		log.Info("doIt - " + project);
 
 		MProjectLine[] projectLines = project.GetLines();

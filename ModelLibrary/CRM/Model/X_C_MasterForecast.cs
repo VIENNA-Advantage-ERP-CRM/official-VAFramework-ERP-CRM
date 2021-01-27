@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_MasterForecast
+/** Generated Model for VAB_MasterForecast
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_MasterForecast : PO
+public class X_VAB_MasterForecast : PO
 {
-public X_C_MasterForecast (Context ctx, int C_MasterForecast_ID, Trx trxName) : base (ctx, C_MasterForecast_ID, trxName)
+public X_VAB_MasterForecast (Context ctx, int VAB_MasterForecast_ID, Trx trxName) : base (ctx, VAB_MasterForecast_ID, trxName)
 {
-/** if (C_MasterForecast_ID == 0)
+/** if (VAB_MasterForecast_ID == 0)
 {
-SetC_MasterForecast_ID (0);
+SetVAB_MasterForecast_ID (0);
 }
  */
 }
-public X_C_MasterForecast (Ctx ctx, int C_MasterForecast_ID, Trx trxName) : base (ctx, C_MasterForecast_ID, trxName)
+public X_VAB_MasterForecast (Ctx ctx, int VAB_MasterForecast_ID, Trx trxName) : base (ctx, VAB_MasterForecast_ID, trxName)
 {
-/** if (C_MasterForecast_ID == 0)
+/** if (VAB_MasterForecast_ID == 0)
 {
-SetC_MasterForecast_ID (0);
+SetVAB_MasterForecast_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetC_MasterForecast_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_MasterForecast (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MasterForecast (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_C_MasterForecast (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_MasterForecast (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_MasterForecast (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_C_MasterForecast (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_MasterForecast (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_MasterForecast (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_MasterForecast()
+static X_VAB_MasterForecast()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1327326204262L;
 public static int Table_ID;
  // =1000246;
 
-/** TableName=C_MasterForecast */
-public static String Table_Name="C_MasterForecast";
+/** TableName=VAB_MasterForecast */
+public static String Table_Name="VAB_MasterForecast";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -107,37 +107,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_MasterForecast[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_MasterForecast[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Forecast.
-@param C_MasterForecast_ID Forecast */
-public void SetC_MasterForecast_ID (int C_MasterForecast_ID)
+@param VAB_MasterForecast_ID Forecast */
+public void SetVAB_MasterForecast_ID (int VAB_MasterForecast_ID)
 {
-if (C_MasterForecast_ID < 1) throw new ArgumentException ("C_MasterForecast_ID is mandatory.");
-Set_ValueNoCheck ("C_MasterForecast_ID", C_MasterForecast_ID);
+if (VAB_MasterForecast_ID < 1) throw new ArgumentException ("VAB_MasterForecast_ID is mandatory.");
+Set_ValueNoCheck ("VAB_MasterForecast_ID", VAB_MasterForecast_ID);
 }
 /** Get Forecast.
 @return Forecast */
-public int GetC_MasterForecast_ID() 
+public int GetVAB_MasterForecast_ID() 
 {
-Object ii = Get_Value("C_MasterForecast_ID");
+Object ii = Get_Value("VAB_MasterForecast_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID <= 0) Set_Value ("C_Period_ID", null);
+if (VAB_YearPeriod_ID <= 0) Set_Value ("VAB_YearPeriod_ID", null);
 else
-Set_Value ("C_Period_ID", C_Period_ID);
+Set_Value ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

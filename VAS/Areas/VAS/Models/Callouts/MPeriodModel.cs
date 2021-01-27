@@ -28,7 +28,7 @@ namespace VIS.Models
             DateTime? dateAcct = Util.GetValueOfDateTime(paramValue[1]);
             int VAF_Org_ID = Util.GetValueOfInt(paramValue[2]);
 
-            period_ID = MPeriod.GetC_Period_ID(ctx, dateAcct, VAF_Org_ID);
+            period_ID = MPeriod.GetVAB_YearPeriod_ID(ctx, dateAcct, VAF_Org_ID);
             return period_ID;
         }
 
@@ -45,7 +45,7 @@ namespace VIS.Models
             int Period_ID = Util.GetValueOfInt(paramValue[0]);
 
             string sql = "SELECT PeriodType, StartDate, EndDate "
-                + "FROM C_Period WHERE C_Period_ID=" + Period_ID;
+                + "FROM VAB_YearPeriod WHERE VAB_YearPeriod_ID=" + Period_ID;
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

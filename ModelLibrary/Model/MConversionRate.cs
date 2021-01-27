@@ -564,7 +564,7 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*) FROM VAB_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                               + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
@@ -578,7 +578,7 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+                sql = @"SELECT COUNT(*) FROM VAB_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                                + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidFrom")), true) +
                                " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_ValueOld("ValidTo")), true) +
@@ -708,7 +708,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*) FROM VAB_Order i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                           + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +
@@ -722,7 +722,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            sql = @"SELECT COUNT(*) FROM C_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
+            sql = @"SELECT COUNT(*) FROM VAB_Payment i INNER JOIN VAB_ExchangeRate cr ON (i.VAB_Currency_id = cr.VAB_Currency_id AND i.vaf_client_id  = cr.vaf_client_id)
                           WHERE i.IsActive = 'Y' AND i.docstatus IN ('CO' , 'CL') AND i.DateAcct BETWEEN "
                            + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidFrom")), true) +
                            " AND " + GlobalVariable.TO_DATE(Util.GetValueOfDateTime(Get_Value("ValidTo")), true) +

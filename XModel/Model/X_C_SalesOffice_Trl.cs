@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_SalesOffice_Trl
+/** Generated Model for VAB_SalesOffice_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_SalesOffice_Trl : PO
+public class X_VAB_SalesOffice_TL : PO
 {
-public X_C_SalesOffice_Trl (Context ctx, int C_SalesOffice_Trl_ID, Trx trxName) : base (ctx, C_SalesOffice_Trl_ID, trxName)
+public X_VAB_SalesOffice_TL (Context ctx, int VAB_SalesOffice_TL_ID, Trx trxName) : base (ctx, VAB_SalesOffice_TL_ID, trxName)
 {
-/** if (C_SalesOffice_Trl_ID == 0)
+/** if (VAB_SalesOffice_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_SalesOffice_ID (0);
+SetVAB_SalesOffice_ID (0);
 SetIsTranslated (true);	// Y
 SetName (null);
 SetPrintName (null);
 }
  */
 }
-public X_C_SalesOffice_Trl (Ctx ctx, int C_SalesOffice_Trl_ID, Trx trxName) : base (ctx, C_SalesOffice_Trl_ID, trxName)
+public X_VAB_SalesOffice_TL (Ctx ctx, int VAB_SalesOffice_TL_ID, Trx trxName) : base (ctx, VAB_SalesOffice_TL_ID, trxName)
 {
-/** if (C_SalesOffice_Trl_ID == 0)
+/** if (VAB_SalesOffice_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_SalesOffice_ID (0);
+SetVAB_SalesOffice_ID (0);
 SetIsTranslated (true);	// Y
 SetName (null);
 SetPrintName (null);
@@ -45,7 +45,7 @@ SetPrintName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SalesOffice_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_SalesOffice_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SalesOffice_TL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_SalesOffice_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SalesOffice_Trl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_SalesOffice_TL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_SalesOffice_Trl()
+static X_VAB_SalesOffice_TL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1434612226312L;
 public static int Table_ID;
  // =1000468;
 
-/** TableName=C_SalesOffice_Trl */
-public static String Table_Name="C_SalesOffice_Trl";
+/** TableName=VAB_SalesOffice_TL */
+public static String Table_Name="VAB_SalesOffice_TL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_SalesOffice_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SalesOffice_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -139,17 +139,17 @@ public String GetVAF_Language()
 return (String)Get_Value("VAF_Language");
 }
 /** Set Sales Office.
-@param C_SalesOffice_ID Sales Office */
-public void SetC_SalesOffice_ID (int C_SalesOffice_ID)
+@param VAB_SalesOffice_ID Sales Office */
+public void SetVAB_SalesOffice_ID (int VAB_SalesOffice_ID)
 {
-if (C_SalesOffice_ID < 1) throw new ArgumentException ("C_SalesOffice_ID is mandatory.");
-Set_ValueNoCheck ("C_SalesOffice_ID", C_SalesOffice_ID);
+if (VAB_SalesOffice_ID < 1) throw new ArgumentException ("VAB_SalesOffice_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SalesOffice_ID", VAB_SalesOffice_ID);
 }
 /** Get Sales Office.
 @return Sales Office */
-public int GetC_SalesOffice_ID() 
+public int GetVAB_SalesOffice_ID() 
 {
-Object ii = Get_Value("C_SalesOffice_ID");
+Object ii = Get_Value("VAB_SalesOffice_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

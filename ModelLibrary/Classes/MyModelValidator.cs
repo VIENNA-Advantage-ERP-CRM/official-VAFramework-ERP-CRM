@@ -39,9 +39,9 @@ namespace ViennaAdvantageSvc.Classes
         public void Initialize(ModelValidationEngine engine, int ClientId)
         {
             VAF_Client_ID = ClientId;
-            engine.AddDocValidate("C_Order", this);
+            engine.AddDocValidate("VAB_Order", this);
             engine.AddDocValidate("VAB_Invoice", this);
-            engine.AddModelChange(X_C_Order.Table_Name, this);
+            engine.AddModelChange(X_VAB_Order.Table_Name, this);
             engine.AddModelChange(X_VAB_Invoice.Table_Name, this);
         }
 

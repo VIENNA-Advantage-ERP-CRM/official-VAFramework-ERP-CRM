@@ -191,10 +191,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Category
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_Category_ID = "
-                      + " (SELECT R_Category_ID FROM R_Category c WHERE c.Name = r.CategoryName)"
+                      + " SET VAR_Category_ID = "
+                      + " (SELECT VAR_Category_ID FROM VAR_Category c WHERE c.Name = r.CategoryName)"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Category_ID is NULL"
+                      + " AND r.VAR_Category_ID is NULL"
                       + " AND r.CategoryName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Category=" + no);
@@ -203,7 +203,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid CategoryName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Category_ID is NULL"
+                      + " AND r.VAR_Category_ID is NULL"
                       + " AND r.CategoryName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -559,22 +559,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Project from ProjectKey
             sql = new StringBuilder("UPDATE I_Request r "
-                      + " SET C_Project_ID=(SELECT C_Project_ID FROM C_Project p"
+                      + " SET VAB_Project_ID=(SELECT VAB_Project_ID FROM VAB_Project p"
                       + " WHERE p.Value=r.ProjectValue AND p.VAF_Client_ID=r.VAF_Client_ID ), "
-                      + " ProjectName=(SELECT Name FROM C_Project p"
+                      + " ProjectName=(SELECT Name FROM VAB_Project p"
                       + " WHERE p.Value=r.ProjectValue AND p.VAF_Client_ID=r.VAF_Client_ID ) "
-                      + " WHERE C_Project_ID IS NULL AND ProjectValue IS NOT NULL"
+                      + " WHERE VAB_Project_ID IS NULL AND ProjectValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Project from ProjectKey=" + no);
 
             // Set Project from ProjectName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Project_ID=(SELECT C_Project_ID FROM C_Project p"
+                      + " SET VAB_Project_ID=(SELECT VAB_Project_ID FROM VAB_Project p"
                       + " WHERE p.Name=r.ProjectName AND p.VAF_Client_ID=r.VAF_Client_ID ), "
-                      + " ProjectValue=(SELECT Value FROM C_Project p"
+                      + " ProjectValue=(SELECT Value FROM VAB_Project p"
                       + " WHERE p.Name=r.ProjectName AND p.VAF_Client_ID=r.VAF_Client_ID ) "
-                      + " WHERE C_Project_ID IS NULL AND ProjectName IS NOT NULL"
+                      + " WHERE VAB_Project_ID IS NULL AND ProjectName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Project from ProjectName=" + no);
@@ -583,7 +583,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Project, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Project_ID is NULL"
+                      + " AND r.VAB_Project_ID is NULL"
                       + " AND (r.ProjectName is NOT NULL OR r.ProjectValue IS NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -689,22 +689,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set SalesRegion from SalesRegionKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_SalesRegion_ID=(SELECT C_SalesRegion_ID FROM C_SalesRegion s"
+                      + " SET VAB_SalesRegionState_ID=(SELECT VAB_SalesRegionState_ID FROM VAB_SalesRegionState s"
                       + " WHERE r.SalesRegionValue=s.Value AND r.VAF_Client_ID=s.VAF_Client_ID ), "
-                      + " SalesRegionName=(SELECT Name FROM C_SalesRegion s"
+                      + " SalesRegionName=(SELECT Name FROM VAB_SalesRegionState s"
                       + " WHERE r.SalesRegionValue=s.Value AND r.VAF_Client_ID=s.VAF_Client_ID )"
-                      + " WHERE C_SalesRegion_ID IS NULL AND SalesRegionValue IS NOT NULL"
+                      + " WHERE VAB_SalesRegionState_ID IS NULL AND SalesRegionValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set SalesRegion from SalesRegionValue =" + no);
 
             //	Set SalesRegion from SalesRegionName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_SalesRegion_ID=(SELECT C_SalesRegion_ID FROM C_SalesRegion s"
+                      + " SET VAB_SalesRegionState_ID=(SELECT VAB_SalesRegionState_ID FROM VAB_SalesRegionState s"
                       + " WHERE r.SalesRegionName=s.Name AND r.VAF_Client_ID=s.VAF_Client_ID ), "
-                      + " SalesRegionValue=(SELECT SalesRegionValue FROM C_SalesRegion s"
+                      + " SalesRegionValue=(SELECT SalesRegionValue FROM VAB_SalesRegionState s"
                       + " WHERE r.SalesRegionName=s.Name AND r.VAF_Client_ID=s.VAF_Client_ID )"
-                      + " WHERE C_SalesRegion_ID IS NULL AND SalesRegionName IS NOT NULL"
+                      + " WHERE VAB_SalesRegionState_ID IS NULL AND SalesRegionName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set SalesRegion from SalesRegionValue =" + no);
@@ -713,7 +713,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid SalesRegion, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_SalesRegion_ID IS NULL"
+                      + " AND r.VAB_SalesRegionState_ID IS NULL"
                       + " AND (r.SalesRegionName IS NOT NULL OR r.SalesRegionValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -721,9 +721,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Order from OrderDocumentNo
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Order_ID =(SELECT C_Order_ID FROM C_Order o"
+                      + " SET VAB_Order_ID =(SELECT VAB_Order_ID FROM VAB_Order o"
                       + " WHERE r.OrderDocumentNo = o.DocumentNo AND r.VAF_Client_ID=o.VAF_Client_ID )"
-                      + " WHERE C_Order_ID IS NULL AND OrderDocumentNo IS NOT NULL"
+                      + " WHERE VAB_Order_ID IS NULL AND OrderDocumentNo IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Order from OrderDocumentNo =" + no);
@@ -732,7 +732,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid OrderDocumentNo, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Order_ID IS NULL"
+                      + " AND r.VAB_Order_ID IS NULL"
                       + " AND r.OrderDocumentNo IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -759,9 +759,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Payment from PaymentDocumentNo
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Payment_ID =(SELECT C_Payment_ID FROM C_Payment p"
+                      + " SET VAB_Payment_ID =(SELECT VAB_Payment_ID FROM VAB_Payment p"
                       + " WHERE r.PaymentDocumentNo = p.DocumentNo AND r.VAF_Client_ID=p.VAF_Client_ID )"
-                      + " WHERE C_Payment_ID IS NULL AND PaymentDocumentNo IS NOT NULL"
+                      + " WHERE VAB_Payment_ID IS NULL AND PaymentDocumentNo IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Payment from PaymentDocumentNo =" + no);
@@ -770,7 +770,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid PaymentDocumentNo, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Payment_ID IS NULL"
+                      + " AND r.VAB_Payment_ID IS NULL"
                       + " AND r.PaymentDocumentNo IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -816,9 +816,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Lead from LeadDocumentNo
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET C_Lead_ID =(SELECT C_Lead_ID FROM C_Lead l"
+                      + " SET VAB_Lead_ID =(SELECT VAB_Lead_ID FROM VAB_Lead l"
                       + " WHERE r.LeadDocumentNo = l.DocumentNo AND r.VAF_Client_ID=l.VAF_Client_ID )"
-                      + " WHERE C_Lead_ID IS NULL AND LeadDocumentNo IS NOT NULL"
+                      + " WHERE VAB_Lead_ID IS NULL AND LeadDocumentNo IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Lead from LeadDocumentNo =" + no);
@@ -827,7 +827,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid LeadDocumentNo, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.C_Lead_ID IS NULL"
+                      + " AND r.VAB_Lead_ID IS NULL"
                       + " AND r.LeadDocumentNo IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

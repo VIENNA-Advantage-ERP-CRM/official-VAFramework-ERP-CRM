@@ -95,7 +95,7 @@
                 <div class="vis-control-wrap">
                     @Html.TextBoxFor(m => m.RegionName, new { autofocus = "autofocus", id = "txtState_" + ViewBag.WindowNumber, @maxlength = "40", @class = "form-control", @placeholder = @VAdvantage.Utility.Msg.GetMsg(lang, "Region") })
                     <label id="lblState_@windowNo" class="VIS_Pref_Label_Font control-label">@VAdvantage.Utility.Msg.GetMsg(lang, "Region") </label>
-                    <input id="Statehdn_@windowNo" type="hidden" value="@Model.C_Region_ID" placeholder=" ">
+                    <input id="Statehdn_@windowNo" type="hidden" value="@Model.VAB_RegionState_ID" placeholder=" ">
                 </div>
             </div>
             <div class="zip-input pull-right location input-group vis-input-wrap">

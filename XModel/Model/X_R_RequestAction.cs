@@ -209,50 +209,50 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_ValueNoCheck ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_ValueNoCheck ("VAB_Order_ID", null);
 else
-Set_ValueNoCheck ("C_Order_ID", C_Order_ID);
+Set_ValueNoCheck ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID)
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID)
 {
-if (C_Payment_ID <= 0) Set_ValueNoCheck ("C_Payment_ID", null);
+if (VAB_Payment_ID <= 0) Set_ValueNoCheck ("VAB_Payment_ID", null);
 else
-Set_ValueNoCheck ("C_Payment_ID", C_Payment_ID);
+Set_ValueNoCheck ("VAB_Payment_ID", VAB_Payment_ID);
 }
 /** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() 
+public int GetVAB_Payment_ID() 
 {
-Object ii = Get_Value("C_Payment_ID");
+Object ii = Get_Value("VAB_Payment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_ValueNoCheck ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_ValueNoCheck ("VAB_Project_ID", null);
 else
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -629,18 +629,18 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Category.
-@param R_Category_ID Request Category */
-public void SetR_Category_ID (int R_Category_ID)
+@param VAR_Category_ID Request Category */
+public void SetVAR_Category_ID (int VAR_Category_ID)
 {
-if (R_Category_ID <= 0) Set_ValueNoCheck ("R_Category_ID", null);
+if (VAR_Category_ID <= 0) Set_ValueNoCheck ("VAR_Category_ID", null);
 else
-Set_ValueNoCheck ("R_Category_ID", R_Category_ID);
+Set_ValueNoCheck ("VAR_Category_ID", VAR_Category_ID);
 }
 /** Get Category.
 @return Request Category */
-public int GetR_Category_ID() 
+public int GetVAR_Category_ID() 
 {
-Object ii = Get_Value("R_Category_ID");
+Object ii = Get_Value("VAR_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

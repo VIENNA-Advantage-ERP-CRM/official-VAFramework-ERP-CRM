@@ -79,7 +79,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns></returns>
         private String CreatePayment(X_I_BankStatement ibs)
         {
-            if (ibs == null || ibs.GetC_Payment_ID() != 0)
+            if (ibs == null || ibs.GetVAB_Payment_ID() != 0)
             {
                 return "--";
             }
@@ -102,12 +102,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new SystemException("Could not create Payment");
             }
 
-            ibs.SetC_Payment_ID(payment.GetC_Payment_ID());
+            ibs.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
             ibs.SetVAB_Currency_ID(payment.GetVAB_Currency_ID());
             ibs.SetTrxAmt(payment.GetPayAmt());
             ibs.Save();
             //
-            String retString = "@C_Payment_ID@ = " + payment.GetDocumentNo();
+            String retString = "@VAB_Payment_ID@ = " + payment.GetDocumentNo();
             if (Env.Signum(payment.GetOverUnderAmt()) != 0)
             {
                 retString += " - @OverUnderAmt@=" + payment.GetOverUnderAmt();
@@ -122,7 +122,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message</returns>
         private String CreatePayment(MBankStatementLine bsl)
         {
-            if (bsl == null || bsl.GetC_Payment_ID() != 0)
+            if (bsl == null || bsl.GetVAB_Payment_ID() != 0)
             {
                 return "--";
             }
@@ -146,7 +146,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             bsl.SetPayment(payment);
             bsl.Save();
             //
-            String retString = "@C_Payment_ID@ = " + payment.GetDocumentNo();
+            String retString = "@VAB_Payment_ID@ = " + payment.GetDocumentNo();
             if (Env.Signum(payment.GetOverUnderAmt()) != 0)
             {
                 retString += " - @OverUnderAmt@=" + payment.GetOverUnderAmt();

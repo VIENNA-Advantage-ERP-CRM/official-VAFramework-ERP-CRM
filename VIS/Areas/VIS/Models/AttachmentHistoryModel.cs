@@ -1046,7 +1046,7 @@ and ai.record_id = " + _Record_ID;
                 curRecordM = new StringBuilder();
 
                 //here in this dictionary, we will have TableName as key  and columnNames in List<string>.
-                //here list<string> is used because there may be more that one column with Table reference in a table like Salesrep_ID and BILL_USER_ID in C_ORder
+                //here list<string> is used because there may be more that one column with Table reference in a table like Salesrep_ID and BILL_USER_ID in VAB_Order
 
                 Dictionary<string, List<string>> colNamess = new Dictionary<string, List<string>>();
 

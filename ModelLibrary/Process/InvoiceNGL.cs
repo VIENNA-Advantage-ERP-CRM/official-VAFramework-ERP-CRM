@@ -124,13 +124,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String dateStr = DataBase.DB.TO_DATE(_DateReval, true);
             sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
              + " VAF_JInstance_ID, VAB_Invoice_ID, GrandTotal, OpenAmt, "
-             + " Fact_Acct_ID, AmtSourceBalance, AmtAcctBalance, "
+             + " Actual_Acct_Detail_ID, AmtSourceBalance, AmtAcctBalance, "
              + " AmtRevalDr, AmtRevalCr, VAB_DocTypesReval_ID, IsAllCurrencies, "
              + " DateReval, VAB_CurrencyTypeReval_ID, AmtRevalDrDiff, AmtRevalCrDiff, APAR) "
                 //	--
              + "SELECT i.VAF_Client_ID, i.VAF_Org_ID, i.IsActive, i.Created,i.CreatedBy, i.Updated,i.UpdatedBy,"
              + GetVAF_JInstance_ID() + ", i.VAB_Invoice_ID, i.GrandTotal, invoiceOpen(i.VAB_Invoice_ID, 0), "
-             + " fa.Fact_Acct_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
+             + " fa.Actual_Acct_Detail_ID, fa.AmtSourceDr-fa.AmtSourceCr, fa.AmtAcctDr-fa.AmtAcctCr, "
                 //	AmtRevalDr, AmtRevalCr,
              + " currencyConvert(fa.AmtSourceDr, i.VAB_Currency_ID, a.VAB_Currency_ID, " + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
              + " currencyConvert(fa.AmtSourceCr, i.VAB_Currency_ID, a.VAB_Currency_ID, " + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", i.VAF_Client_ID, i.VAF_Org_ID),"
@@ -139,7 +139,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
              + dateStr + ", " + _VAB_CurrencyTypeReval_ID + ", 0, 0, '" + _APAR + "' "
                 //
              + "FROM VAB_Invoice_v i"
-             + " INNER JOIN Fact_Acct fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.VAB_Invoice_ID"
+             + " INNER JOIN Actual_Acct_Detail fa ON (fa.VAF_TableView_ID=318 AND fa.Record_ID=i.VAB_Invoice_ID"
                  + " AND (i.GrandTotal=fa.AmtSourceDr OR i.GrandTotal=fa.AmtSourceCr))"
              + " INNER JOIN VAB_AccountBook a ON (fa.VAB_AccountBook_ID=a.VAB_AccountBook_ID) "
              + "WHERE i.IsPaid='N'"
@@ -181,8 +181,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = "UPDATE T_InvoiceGL gl "
                 + "SET (AmtRevalDrDiff,AmtRevalCrDiff)="
                     + "(SELECT gl.AmtRevalDr-fa.AmtAcctDr, gl.AmtRevalCr-fa.AmtAcctCr "
-                    + "FROM Fact_Acct fa "
-                    + "WHERE gl.Fact_Acct_ID=fa.Fact_Acct_ID) "
+                    + "FROM Actual_Acct_Detail fa "
+                    + "WHERE gl.Actual_Acct_Detail_ID=fa.Actual_Acct_Detail_ID) "
                 + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             int noT = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (noT > 0)
@@ -274,7 +274,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (cat == null)
             {
                 MDocType docType = MDocType.Get(GetCtx(), _VAB_DocTypesReval_ID);
-                cat = MGLCategory.Get(GetCtx(), docType.GetGL_Category_ID());
+                cat = MGLCategory.Get(GetCtx(), docType.GetVAGL_Group_ID());
             }
             //
             MJournalBatch batch = new MJournalBatch(GetCtx(), 0, Get_TrxName());
@@ -314,7 +314,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     journal.SetVAB_CurrencyType_ID(_VAB_CurrencyTypeReval_ID);
                     MOrg org = MOrg.Get(GetCtx(), gl.GetVAF_Org_ID());
                     journal.SetDescription(GetName() + " - " + org.GetName());
-                    journal.SetGL_Category_ID(cat.GetGL_Category_ID());
+                    journal.SetVAGL_Group_ID(cat.GetVAGL_Group_ID());
                     if (!journal.Save())
                     {
                         return GetRetrievedError(journal, "Could not create Journal");
@@ -326,8 +326,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine((i + 1) * 10);
                 line.SetDescription(invoice.GetSummary());
                 //
-                MFactAcct fa = new MFactAcct(GetCtx(), gl.GetFact_Acct_ID(), null);
-                line.SetC_ValidCombination_ID(MAccount.Get(fa));
+                MFactAcct fa = new MFactAcct(GetCtx(), gl.GetActual_Acct_Detail_ID(), null);
+                line.SetVAB_Acct_ValidParameter_ID(MAccount.Get(fa));
                 Decimal? dr = gl.GetAmtRevalDrDiff();
                 Decimal? cr = gl.GetAmtRevalCrDiff();
                 drTotal = Decimal.Add(drTotal.Value, dr.Value);
@@ -381,13 +381,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine(lineNo + 1);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
-                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
+                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
                     bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
-                    bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
-                    bas.GetC_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
+                    bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),
+                    bas.GetVAB_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
                 line.SetDescription(Msg.GetElement(GetCtx(), "UnrealizedGain_Acct"));
-                line.SetC_ValidCombination_ID(acct.GetC_ValidCombination_ID());
+                line.SetVAB_Acct_ValidParameter_ID(acct.GetVAB_Acct_ValidParameter_ID());
                 line.SetAmtSourceCr(drTotal);
                 line.SetAmtAcctCr(drTotal);
                 line.Save();
@@ -399,13 +399,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine(lineNo + 2);
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
-                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetC_SubAcct_ID(),
+                    asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
                     bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
-                    bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetC_SalesRegion_ID(),
-                    bas.GetC_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
+                    bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),
+                    bas.GetVAB_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
                 line.SetDescription(Msg.GetElement(GetCtx(), "UnrealizedLoss_Acct"));
-                line.SetC_ValidCombination_ID(acct.GetC_ValidCombination_ID());
+                line.SetVAB_Acct_ValidParameter_ID(acct.GetVAB_Acct_ValidParameter_ID());
                 line.SetAmtSourceDr(crTotal);
                 line.SetAmtAcctDr(crTotal);
                 line.Save();

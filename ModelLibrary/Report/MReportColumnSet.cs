@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportColumnSet
  * Purpose        : Report Column Set Model
- * Class Used     : X_PA_ReportColumnSet
+ * Class Used     : X_VAPA_FR_ColumnSet
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -22,19 +22,19 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportColumnSet : X_PA_ReportColumnSet
+    public class MReportColumnSet : X_VAPA_FR_ColumnSet
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_ReportColumnSet_ID">id</param>
+        /// <param name="VAPA_FR_ColumnSet_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportColumnSet(Ctx ctx, int PA_ReportColumnSet_ID, Trx trxName)
-            : base(ctx, PA_ReportColumnSet_ID, trxName)
+        public MReportColumnSet(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+            : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
         {
 
-            if (PA_ReportColumnSet_ID == 0)
+            if (VAPA_FR_ColumnSet_ID == 0)
             {
             }
             else
@@ -52,14 +52,14 @@ namespace VAdvantage.Report
         private void LoadColumns()
         {
             List<MReportColumn> list = new List<MReportColumn>();
-            String sql = "SELECT * FROM PA_ReportColumn WHERE PA_ReportColumnSet_ID=@param AND IsActive='Y' ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@param AND IsActive='Y' ORDER BY SeqNo";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             DataTable dt = null;
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                param[0] = new SqlParameter("@param", GetPA_ReportColumnSet_ID());
+                param[0] = new SqlParameter("@param", GetVAPA_FR_ColumnSet_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -96,7 +96,7 @@ namespace VAdvantage.Report
             //
             _columns = new MReportColumn[list.Count];
             _columns = list.ToArray();
-            log.Finest("ID=" + GetPA_ReportColumnSet_ID()
+            log.Finest("ID=" + GetVAPA_FR_ColumnSet_ID()
                 + " - Size=" + list.Count);
         }	//	loadColumns
 

@@ -60,7 +60,7 @@
         /** AccountSchema       */
         var m_VAB_AccountBook_ID = 0;
         /** Default Charge Tax Category */
-        var m_C_TaxCategory_ID = 0;
+        var m_VAB_TaxCategory_ID = 0;
         var m_VAF_Client_ID = 0;
         var m_VAF_Org_ID = 0;
 
@@ -211,7 +211,7 @@
                         if (m_VAB_Element_ID == 0) {
                             return;
                         }
-                        m_C_TaxCategory_ID = results.result.VchargeMCElemTaxCatID[0]["mCTaxCategoryID"];
+                        m_VAB_TaxCategory_ID = results.result.VchargeMCElemTaxCatID[0]["mCTaxCategoryID"];
                     }
 
                     if (results.result && results.result.VchargeCElementValue) {
@@ -256,8 +256,8 @@
         //    m_VAB_Element_ID = VIS.DB.executeScalar(sql, null, null);
         //    if (m_VAB_Element_ID == 0)
         //        return;
-        //    sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + m_VAF_Client_ID;
-        //    m_C_TaxCategory_ID = VIS.DB.executeScalar(sql, null, null);
+        //    sql = "SELECT VAB_TaxCategory_ID FROM VAB_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + m_VAF_Client_ID;
+        //    m_VAB_TaxCategory_ID = VIS.DB.executeScalar(sql, null, null);
 
         //    //  Create SQL
         //    sql = "SELECT 'false' as Select1,VAB_Acct_Element_ID,Value, Name, case when AccountType = 'E' THEN 'true' else 'false' end as Expense"
@@ -292,14 +292,14 @@
             $busyDiv.css("display", isBusy ? 'block' : 'none');
         };
 
-        function createCharge(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, VAB_Acct_Element_ID, expense) {
+        function createCharge(m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, name, VAB_Acct_Element_ID, expense) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VCharge/CreateCharge",
                 dataType: "json",
                 //async: false,
                 data: {
                     m_VAB_AccountBook_ID: m_VAB_AccountBook_ID,
-                    m_C_TaxCategory_ID: m_C_TaxCategory_ID,
+                    m_VAB_TaxCategory_ID: m_VAB_TaxCategory_ID,
                     name: name,
                     VAB_Acct_Element_ID: VAB_Acct_Element_ID,
                     expense: expense
@@ -322,7 +322,7 @@
             });
         }
 
-        function createChargeByList(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, namelst, VAB_Acct_Element_IDlst, expenselst) {
+        function createChargeByList(m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, namelst, VAB_Acct_Element_IDlst, expenselst) {
             $.ajax({
                 url: VIS.Application.contextUrl + "VCharge/CreateChargeByList",
                 type: "POST",
@@ -331,7 +331,7 @@
                 //async: false,
                 data: JSON.stringify({
                     'AcctSchemaID': m_VAB_AccountBook_ID,
-                    'TaxCategoryID': m_C_TaxCategory_ID,
+                    'TaxCategoryID': m_VAB_TaxCategory_ID,
                     'namepara': namelst,
                     'ElementValuID': VAB_Acct_Element_IDlst,
                     'expense': expenselst
@@ -510,7 +510,7 @@
                         setBusy(false);
                         return "";
                     }
-                    createChargeByList(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, eleName, eleValue_ID, expense);
+                    createChargeByList(m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, eleName, eleValue_ID, expense);
                 });
 
             if (btnCreateCharge != null)
@@ -550,7 +550,7 @@
                                 return;
                             }
                             else {
-                                createCharge(m_VAB_AccountBook_ID, m_C_TaxCategory_ID, name, data.ID, expense);
+                                createCharge(m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, name, data.ID, expense);
                             }
                         }
                     });
@@ -621,7 +621,7 @@
 
             m_VAB_Element_ID = null;
             m_VAB_AccountBook_ID = null;
-            m_C_TaxCategory_ID = null;
+            m_VAB_TaxCategory_ID = null;
             m_VAF_Client_ID = null;
             m_VAF_Org_ID = null;
 

@@ -144,7 +144,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MRequisitionLine[] lines = req.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    if (lines[i].GetC_OrderLine_ID() == 0)
+                    if (lines[i].GetVAB_OrderLine_ID() == 0)
                     {
                         Process(lines[i]);
                     }
@@ -164,7 +164,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ", ConsolidateDocument" + _ConsolidateDocument);
 
             StringBuilder sql = new StringBuilder("SELECT * FROM M_RequisitionLine rl ")
-                .Append("WHERE rl.C_OrderLine_ID IS NULL");
+                .Append("WHERE rl.VAB_OrderLine_ID IS NULL");
             if (_VAF_Org_ID != 0)
             {
                 sql.Append(" AND VAF_Org_ID=" + _VAF_Org_ID);
@@ -291,7 +291,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             _orderLine.SetQty(Decimal.Add(_orderLine.GetQtyOrdered(), rLine.GetQty()));
 
             //	Update Requisition Line
-            rLine.SetC_OrderLine_ID(_orderLine.GetC_OrderLine_ID());
+            rLine.SetVAB_OrderLine_ID(_orderLine.GetVAB_OrderLine_ID());
             if (!rLine.Save())
             {
                 throw new Exception("Cannot update Request Line");

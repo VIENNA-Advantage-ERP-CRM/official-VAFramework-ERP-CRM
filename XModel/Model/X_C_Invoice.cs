@@ -27,7 +27,7 @@ namespace VAdvantage.Model
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
             SetVAB_Invoice_ID (0);
-            SetC_PaymentTerm_ID (0);
+            SetVAB_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateInvoiced (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
             SetVAB_Invoice_ID (0);
-            SetC_PaymentTerm_ID (0);
+            SetVAB_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateInvoiced (DateTime.Now);	// @#Date@
             SetDocAction (null);	// CO
@@ -385,65 +385,65 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Order.
-        @param C_Order_ID Order */
-        public void SetC_Order_ID(int C_Order_ID)
+        @param VAB_Order_ID Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_ValueNoCheck("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_ValueNoCheck("VAB_Order_ID", null);
             else
-                Set_ValueNoCheck("C_Order_ID", C_Order_ID);
+                Set_ValueNoCheck("VAB_Order_ID", VAB_Order_ID);
         }
         /** Get Order.
         @return Order */
-        public int GetC_Order_ID()
+        public int GetVAB_Order_ID()
         {
-            Object ii = Get_Value("C_Order_ID");
+            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID < 1) throw new ArgumentException("C_PaymentTerm_ID is mandatory.");
-            Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+            if (VAB_PaymentTerm_ID < 1) throw new ArgumentException("VAB_PaymentTerm_ID is mandatory.");
+            Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment.
-        @param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        @param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_Value("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_Value("VAB_Payment_ID", null);
             else
-                Set_Value("C_Payment_ID", C_Payment_ID);
+                Set_Value("VAB_Payment_ID", VAB_Payment_ID);
         }
         /** Get Payment.
         @return Payment identifier */
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            Object ii = Get_Value("C_Payment_ID");
+            Object ii = Get_Value("VAB_Payment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1545,18 +1545,18 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Withholding Tax.
         /// </summary>
-        /// <param name="C_Withholding_ID">Withholding type defined</param>
-        public void SetC_Withholding_ID(int C_Withholding_ID)
+        /// <param name="VAB_Withholding_ID">Withholding type defined</param>
+        public void SetVAB_Withholding_ID(int VAB_Withholding_ID)
         {
-            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            if (VAB_Withholding_ID <= 0) Set_Value("VAB_Withholding_ID", null);
             else
-                Set_Value("C_Withholding_ID", C_Withholding_ID);
+                Set_Value("VAB_Withholding_ID", VAB_Withholding_ID);
         }
         /// <summary>
         /// Get Withholding Tax.
         /// </summary>
         /// <returns>Withholding type defined</returns>
-        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Withholding_ID() { Object ii = Get_Value("VAB_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /// <summary>
         /// Set Withholding Amt.

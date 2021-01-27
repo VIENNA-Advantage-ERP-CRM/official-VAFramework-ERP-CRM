@@ -21,7 +21,7 @@ namespace ViennaAdvantageServer.Process
     {
         #region Private Variable
         /**	Project         		*/
-        private int _C_Project_ID = 0;
+        private int _VAB_Project_ID = 0;
         /**BPartner Customer        */
         private int VAB_BusinessPartner_id = 0;
         /**BPartner Location        */
@@ -29,9 +29,9 @@ namespace ViennaAdvantageServer.Process
         /**BPartner Prospect        */
         private int VAB_BusinessPartnerSR_ID = 0;
         /*Order                   	*/
-       // private int C_Order_ID = 0;
+       // private int VAB_Order_ID = 0;
         /**ProjectLine       */
-        private int C_ProjectLine_ID = 0;
+        private int VAB_ProjectLine_ID = 0;
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace ViennaAdvantageServer.Process
 	 */
         protected override void Prepare()
         {
-            _C_Project_ID = GetRecord_ID();
+            _VAB_Project_ID = GetRecord_ID();
         } //	prepare
 
 
@@ -57,12 +57,12 @@ namespace ViennaAdvantageServer.Process
             MBPartner bp = null;
             MOrderLine ol = null;
 
-            log.Info("C_Project_ID=" + _C_Project_ID);
-            if (_C_Project_ID == 0)
+            log.Info("VAB_Project_ID=" + _VAB_Project_ID);
+            if (_VAB_Project_ID == 0)
             {
-                throw new ArgumentException("C_Project_ID == 0");
+                throw new ArgumentException("VAB_Project_ID == 0");
             }
-            MProject fromProject = new MProject(GetCtx(), _C_Project_ID, Get_TrxName());
+            MProject fromProject = new MProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
             if (fromProject.GetGenerate_Order().Trim() == "Y")
             {
                 throw new ArgumentException("Sales Order already generated");
@@ -89,9 +89,9 @@ namespace ViennaAdvantageServer.Process
             
             MBPartnerLocation bpartnerloc = new MBPartnerLocation(GetCtx(), VAB_BPart_Location_id, Get_TrxName());
             //String currentdate = DateTime.Now.ToString();
-            String sqlprjln = "SELECT COUNT(C_ProjectLine_ID) FROM C_ProjectLine WHERE C_Project_ID=" + _C_Project_ID;
-            C_ProjectLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln, null, Get_TrxName()));
-            if (C_ProjectLine_ID != 0)
+            String sqlprjln = "SELECT COUNT(VAB_ProjectLine_ID) FROM VAB_ProjectLine WHERE VAB_Project_ID=" + _VAB_Project_ID;
+            VAB_ProjectLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln, null, Get_TrxName()));
+            if (VAB_ProjectLine_ID != 0)
             {
                 order.SetDateOrdered(DateTime.Now.ToLocalTime());
                 order.SetDatePromised(DateTime.Now.ToLocalTime());
@@ -137,7 +137,7 @@ namespace ViennaAdvantageServer.Process
                 int Doctype_id = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 order.SetM_PriceList_ID(fromProject.GetM_PriceList_ID());
 
-                order.SetC_Project_ID(GetRecord_ID());
+                order.SetVAB_Project_ID(GetRecord_ID());
                 if (fromProject.GetSalesRep_ID() > 0)
                 order.SetSalesRep_ID(fromProject.GetSalesRep_ID());
                 order.SetVAB_Currency_ID(fromProject.GetVAB_Currency_ID());
@@ -148,10 +148,10 @@ namespace ViennaAdvantageServer.Process
                         bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     //bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
-                    if (bp.GetC_PaymentTerm_ID() != 0)
+                    if (bp.GetVAB_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
-                        order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
                     }
 
                     if (!bp.Save())
@@ -168,10 +168,10 @@ namespace ViennaAdvantageServer.Process
                         bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     //bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
-                    if (bp.GetC_PaymentTerm_ID() != 0)
+                    if (bp.GetVAB_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
-                        order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
                     }
 
                     if (!bp.Save())
@@ -239,7 +239,7 @@ namespace ViennaAdvantageServer.Process
                         return msg;
                     }
                 }
-                fromProject.SetC_Order_ID(order.GetC_Order_ID());
+                fromProject.SetVAB_Order_ID(order.GetVAB_Order_ID());
                 fromProject.SetVAB_BusinessPartner_ID(fromProject.GetVAB_BusinessPartnerSR_ID());
                 fromProject.SetVAB_BusinessPartnerSR_ID(0);
                 fromProject.SetGenerate_Order("Y");

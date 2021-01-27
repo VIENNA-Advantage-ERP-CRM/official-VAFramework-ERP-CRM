@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_SubAcct
+/** Generated Model for VAB_SubAcct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_SubAcct : PO
+public class X_VAB_SubAcct : PO
 {
-public X_C_SubAcct (Context ctx, int C_SubAcct_ID, Trx trxName) : base (ctx, C_SubAcct_ID, trxName)
+public X_VAB_SubAcct (Context ctx, int VAB_SubAcct_ID, Trx trxName) : base (ctx, VAB_SubAcct_ID, trxName)
 {
-/** if (C_SubAcct_ID == 0)
+/** if (VAB_SubAcct_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetC_SubAcct_ID (0);
+SetVAB_SubAcct_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_SubAcct (Ctx ctx, int C_SubAcct_ID, Trx trxName) : base (ctx, C_SubAcct_ID, trxName)
+public X_VAB_SubAcct (Ctx ctx, int VAB_SubAcct_ID, Trx trxName) : base (ctx, VAB_SubAcct_ID, trxName)
 {
-/** if (C_SubAcct_ID == 0)
+/** if (VAB_SubAcct_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetC_SubAcct_ID (0);
+SetVAB_SubAcct_ID (0);
 SetName (null);
 SetValue (null);
 }
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SubAcct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SubAcct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_SubAcct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SubAcct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SubAcct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_SubAcct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_SubAcct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_SubAcct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_SubAcct()
+static X_VAB_SubAcct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389058439L;
 public static int Table_ID;
  // =825;
 
-/** TableName=C_SubAcct */
-public static String Table_Name="C_SubAcct";
+/** TableName=VAB_SubAcct */
+public static String Table_Name="VAB_SubAcct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_SubAcct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SubAcct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Account Element.
@@ -132,17 +132,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sub Account.
-@param C_SubAcct_ID Sub account for Element Value */
-public void SetC_SubAcct_ID (int C_SubAcct_ID)
+@param VAB_SubAcct_ID Sub account for Element Value */
+public void SetVAB_SubAcct_ID (int VAB_SubAcct_ID)
 {
-if (C_SubAcct_ID < 1) throw new ArgumentException ("C_SubAcct_ID is mandatory.");
-Set_ValueNoCheck ("C_SubAcct_ID", C_SubAcct_ID);
+if (VAB_SubAcct_ID < 1) throw new ArgumentException ("VAB_SubAcct_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SubAcct_ID", VAB_SubAcct_ID);
 }
 /** Get Sub Account.
 @return Sub account for Element Value */
-public int GetC_SubAcct_ID() 
+public int GetVAB_SubAcct_ID() 
 {
-Object ii = Get_Value("C_SubAcct_ID");
+Object ii = Get_Value("VAB_SubAcct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for GL_FundRestriction
+/** Generated Model for VAVAGL_FundAllow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_FundRestriction : PO
+public class X_VAVAGL_FundAllow : PO
 {
-public X_GL_FundRestriction (Context ctx, int GL_FundRestriction_ID, Trx trxName) : base (ctx, GL_FundRestriction_ID, trxName)
+public X_VAVAGL_FundAllow (Context ctx, int VAVAGL_FundAllow_ID, Trx trxName) : base (ctx, VAVAGL_FundAllow_ID, trxName)
 {
-/** if (GL_FundRestriction_ID == 0)
+/** if (VAVAGL_FundAllow_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetGL_FundRestriction_ID (0);
-SetGL_Fund_ID (0);
+SetVAVAGL_FundAllow_ID (0);
+SetVAGL_Fund_ID (0);
 SetName (null);
 }
  */
 }
-public X_GL_FundRestriction (Ctx ctx, int GL_FundRestriction_ID, Trx trxName) : base (ctx, GL_FundRestriction_ID, trxName)
+public X_VAVAGL_FundAllow (Ctx ctx, int VAVAGL_FundAllow_ID, Trx trxName) : base (ctx, VAVAGL_FundAllow_ID, trxName)
 {
-/** if (GL_FundRestriction_ID == 0)
+/** if (VAVAGL_FundAllow_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetGL_FundRestriction_ID (0);
-SetGL_Fund_ID (0);
+SetVAVAGL_FundAllow_ID (0);
+SetVAGL_Fund_ID (0);
 SetName (null);
 }
  */
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_FundRestriction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVAGL_FundAllow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_GL_FundRestriction (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_FundRestriction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVAGL_FundAllow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_GL_FundRestriction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_FundRestriction (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAVAGL_FundAllow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_FundRestriction()
+static X_VAVAGL_FundAllow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389059755L;
 public static int Table_ID;
  // =824;
 
-/** TableName=GL_FundRestriction */
-public static String Table_Name="GL_FundRestriction";
+/** TableName=VAVAGL_FundAllow */
+public static String Table_Name="VAVAGL_FundAllow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_GL_FundRestriction[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAVAGL_FundAllow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Account Element.
@@ -149,32 +149,32 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Fund Restriction.
-@param GL_FundRestriction_ID Restriction of Funds */
-public void SetGL_FundRestriction_ID (int GL_FundRestriction_ID)
+@param VAVAGL_FundAllow_ID Restriction of Funds */
+public void SetVAVAGL_FundAllow_ID (int VAVAGL_FundAllow_ID)
 {
-if (GL_FundRestriction_ID < 1) throw new ArgumentException ("GL_FundRestriction_ID is mandatory.");
-Set_ValueNoCheck ("GL_FundRestriction_ID", GL_FundRestriction_ID);
+if (VAVAGL_FundAllow_ID < 1) throw new ArgumentException ("VAVAGL_FundAllow_ID is mandatory.");
+Set_ValueNoCheck ("VAVAGL_FundAllow_ID", VAVAGL_FundAllow_ID);
 }
 /** Get Fund Restriction.
 @return Restriction of Funds */
-public int GetGL_FundRestriction_ID() 
+public int GetVAVAGL_FundAllow_ID() 
 {
-Object ii = Get_Value("GL_FundRestriction_ID");
+Object ii = Get_Value("VAVAGL_FundAllow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set GL Fund.
-@param GL_Fund_ID General Ledger Funds Control */
-public void SetGL_Fund_ID (int GL_Fund_ID)
+@param VAGL_Fund_ID General Ledger Funds Control */
+public void SetVAGL_Fund_ID (int VAGL_Fund_ID)
 {
-if (GL_Fund_ID < 1) throw new ArgumentException ("GL_Fund_ID is mandatory.");
-Set_ValueNoCheck ("GL_Fund_ID", GL_Fund_ID);
+if (VAGL_Fund_ID < 1) throw new ArgumentException ("VAGL_Fund_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_Fund_ID", VAGL_Fund_ID);
 }
 /** Get GL Fund.
 @return General Ledger Funds Control */
-public int GetGL_Fund_ID() 
+public int GetVAGL_Fund_ID() 
 {
-Object ii = Get_Value("GL_Fund_ID");
+Object ii = Get_Value("VAGL_Fund_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

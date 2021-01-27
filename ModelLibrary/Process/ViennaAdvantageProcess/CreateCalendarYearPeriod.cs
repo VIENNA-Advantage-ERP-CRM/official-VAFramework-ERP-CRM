@@ -136,7 +136,7 @@ namespace ViennaAdvantage.Process
             if (calendarID > 0)
             {
                 sql.Clear();
-                sql.Append(@"SELECT C_YEAR_ID FROM C_YEAR WHERE ISACTIVE='Y' AND FiscalYear='" + YearName + "' AND VAB_Calender_ID=" + calendarID);
+                sql.Append(@"SELECT VAB_YEAR_ID FROM VAB_YEAR WHERE ISACTIVE='Y' AND FiscalYear='" + YearName + "' AND VAB_Calender_ID=" + calendarID);
                 int yearID = 0;
                 try
                 {
@@ -330,8 +330,8 @@ namespace ViennaAdvantage.Process
 //                DateTime from = PeriodEndDate.AddDays(-daysPast);
 //                sql.Clear();
 
-//                sql.Append(@" SELECT C_Period_ID  
-//                                   FROM C_period
+//                sql.Append(@" SELECT VAB_YearPeriod_ID  
+//                                   FROM VAB_YearPeriod
 //                                  WHERE to_date(startdate,'dd-MM-yyyy') BETWEEN to_date('"+from+@"','dd-MM-yyyy') AND to_date('"+PeriodEndDate+@"','dd-MM-yyyy')
 //                                  or to_date(enddate,'dd-MM-yyyy') BETWEEN to_date('" + from + @"','dd-MM-yyyy') AND to_date('" + PeriodEndDate + @"','dd-MM-yyyy')");
 //                ds=null;
@@ -369,8 +369,8 @@ namespace ViennaAdvantage.Process
                
 //                sql.Clear();
 
-//                sql.Append(@" SELECT C_Period_ID  
-//                                   FROM C_period
+//                sql.Append(@" SELECT VAB_YearPeriod_ID  
+//                                   FROM VAB_YearPeriod
 //                                  WHERE to_date(startdate,'dd-MM-yyyy') BETWEEN to_date('" + from + @"','dd-MM-yyyy') AND to_date('" + PeriodEndDate + @"','dd-MM-yyyy')
 //                                  or to_date(enddate,'dd-MM-yyyy') BETWEEN to_date('" + from + @"','dd-MM-yyyy') AND to_date('" + PeriodEndDate + @"','dd-MM-yyyy')");
 //                ds = null;
@@ -411,16 +411,16 @@ namespace ViennaAdvantage.Process
             {
                 return false;
             }
-            //throw new Exception("@NotFound@  @C_Period_ID@=" + _C_Period_ID);
+            //throw new Exception("@NotFound@  @VAB_YearPeriod_ID@=" + _VAB_YearPeriod_ID);
            StringBuilder  sql=new StringBuilder();
-            sql = new StringBuilder("UPDATE C_PeriodControl ");
+            sql = new StringBuilder("UPDATE VAB_YearPeriodControl ");
             sql.Append("SET PeriodStatus='");
             //	Open                          
             sql.Append(MPeriodControl.PERIODSTATUS_Open);
 
             sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE
-            sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID());
+            sql.Append(" WHERE VAB_YearPeriod_ID=").Append(period.GetVAB_YearPeriod_ID());
 
             int no = DB.ExecuteQuery(sql.ToString(), null, trx);
             if (no == -1)

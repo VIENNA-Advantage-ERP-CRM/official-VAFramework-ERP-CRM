@@ -163,18 +163,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment Term.
-@param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-public void SetC_PaymentTerm_ID (int C_PaymentTerm_ID)
+@param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+public void SetVAB_PaymentTerm_ID (int VAB_PaymentTerm_ID)
 {
-if (C_PaymentTerm_ID <= 0) Set_Value ("C_PaymentTerm_ID", null);
+if (VAB_PaymentTerm_ID <= 0) Set_Value ("VAB_PaymentTerm_ID", null);
 else
-Set_Value ("C_PaymentTerm_ID", C_PaymentTerm_ID);
+Set_Value ("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
 }
 /** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-public int GetC_PaymentTerm_ID() 
+public int GetVAB_PaymentTerm_ID() 
 {
-Object ii = Get_Value("C_PaymentTerm_ID");
+Object ii = Get_Value("VAB_PaymentTerm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

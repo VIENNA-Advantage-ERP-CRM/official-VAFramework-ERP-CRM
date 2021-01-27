@@ -12,7 +12,7 @@ namespace ViennaAdvantage.Process
 {
     class CreatePayment : SvrProcess
     {
-        int C_Order_ID = 0;
+        int VAB_Order_ID = 0;
         protected override void Prepare()
         {
 
@@ -26,9 +26,9 @@ namespace ViennaAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    C_Order_ID = para[i].GetParameterAsInt();
+                    VAB_Order_ID = para[i].GetParameterAsInt();
                 }
 
                 else
@@ -44,12 +44,12 @@ namespace ViennaAdvantage.Process
             try
             {
 
-                if (C_Order_ID < 1)
+                if (VAB_Order_ID < 1)
                 {
                     return "Failed";
                 }
-                //int c_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_Order_ID From C_Order WHERE DocumentNo=" + salesOrderNo));
-                MOrder order = new MOrder(GetCtx(), C_Order_ID, Get_TrxName());
+                //int VAB_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Order_ID From VAB_Order WHERE DocumentNo=" + salesOrderNo));
+                MOrder order = new MOrder(GetCtx(), VAB_Order_ID, Get_TrxName());
                 int VAB_DocTypes_ID = order.GetVAB_DocTypesTarget_ID();
                 string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From VAB_DocTypes WHERE isactive='Y' AND VAB_DocTypes_ID=" + VAB_DocTypes_ID).ToString();
 
@@ -73,7 +73,7 @@ namespace ViennaAdvantage.Process
                 payment.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
                 if (baseType.Equals("PR")) //prepay Order
                 {
-                    payment.SetC_Order_ID(order.GetC_Order_ID());
+                    payment.SetVAB_Order_ID(order.GetVAB_Order_ID());
                     payment.SetIsPrepayment(true);
                 }
                 else if (baseType.Equals("WI"))//OnCreditOrder

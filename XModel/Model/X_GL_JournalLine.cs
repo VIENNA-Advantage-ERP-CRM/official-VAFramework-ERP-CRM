@@ -11,15 +11,15 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for GL_JournalLine
+    /** Generated Model for VAGL_JRNLLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_GL_JournalLine : PO
+    public class X_VAGL_JRNLLine : PO
     {
-        public X_GL_JournalLine(Context ctx, int GL_JournalLine_ID, Trx trxName)
-            : base(ctx, GL_JournalLine_ID, trxName)
+        public X_VAGL_JRNLLine(Context ctx, int VAGL_JRNLLine_ID, Trx trxName)
+            : base(ctx, VAGL_JRNLLine_ID, trxName)
         {
-            /** if (GL_JournalLine_ID == 0)
+            /** if (VAGL_JRNLLine_ID == 0)
             {
             SetAmtAcctCr (0.0);
             SetAmtAcctDr (0.0);
@@ -27,22 +27,22 @@ namespace VAdvantage.Model
             SetAmtSourceDr (0.0);
             SetVAB_CurrencyType_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
-            SetC_ValidCombination_ID (0);
+            SetVAB_Acct_ValidParameter_ID (0);
             SetCurrencyRate (0.0);	// @CurrencyRate@;
             1
             SetDateAcct (DateTime.Now);	// @DateAcct@
-            SetGL_JournalLine_ID (0);
-            SetGL_Journal_ID (0);
+            SetVAGL_JRNLLine_ID (0);
+            SetVAGL_JRNL_ID (0);
             SetIsGenerated (false);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM GL_JournalLine WHERE GL_Journal_ID=@GL_Journal_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID=@VAGL_JRNL_ID@
             SetProcessed (false);	// N
             }
              */
         }
-        public X_GL_JournalLine(Ctx ctx, int GL_JournalLine_ID, Trx trxName)
-            : base(ctx, GL_JournalLine_ID, trxName)
+        public X_VAGL_JRNLLine(Ctx ctx, int VAGL_JRNLLine_ID, Trx trxName)
+            : base(ctx, VAGL_JRNLLine_ID, trxName)
         {
-            /** if (GL_JournalLine_ID == 0)
+            /** if (VAGL_JRNLLine_ID == 0)
             {
             SetAmtAcctCr (0.0);
             SetAmtAcctDr (0.0);
@@ -50,14 +50,14 @@ namespace VAdvantage.Model
             SetAmtSourceDr (0.0);
             SetVAB_CurrencyType_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
-            SetC_ValidCombination_ID (0);
+            SetVAB_Acct_ValidParameter_ID (0);
             SetCurrencyRate (0.0);	// @CurrencyRate@;
             1
             SetDateAcct (DateTime.Now);	// @DateAcct@
-            SetGL_JournalLine_ID (0);
-            SetGL_Journal_ID (0);
+            SetVAGL_JRNLLine_ID (0);
+            SetVAGL_JRNL_ID (0);
             SetIsGenerated (false);
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM GL_JournalLine WHERE GL_Journal_ID=@GL_Journal_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID=@VAGL_JRNL_ID@
             SetProcessed (false);	// N
             }
              */
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAGL_JRNLLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAGL_JRNLLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -85,14 +85,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_JournalLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAGL_JRNLLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_GL_JournalLine()
+        static X_VAGL_JRNLLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -105,8 +105,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =226;
 
-        /** TableName=GL_JournalLine */
-        public static String Table_Name = "GL_JournalLine";
+        /** TableName=VAGL_JRNLLine */
+        public static String Table_Name = "VAGL_JRNLLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_GL_JournalLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAGL_JRNLLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Accounted Credit.
@@ -234,33 +234,33 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Combination.
-        @param C_ValidCombination_ID Valid Account Combination */
-        public void SetC_ValidCombination_ID(int C_ValidCombination_ID)
+        @param VAB_Acct_ValidParameter_ID Valid Account Combination */
+        public void SetVAB_Acct_ValidParameter_ID(int VAB_Acct_ValidParameter_ID)
         {
-            if (C_ValidCombination_ID < 1) throw new ArgumentException("C_ValidCombination_ID is mandatory.");
-            Set_Value("C_ValidCombination_ID", C_ValidCombination_ID);
+            if (VAB_Acct_ValidParameter_ID < 1) throw new ArgumentException("VAB_Acct_ValidParameter_ID is mandatory.");
+            Set_Value("VAB_Acct_ValidParameter_ID", VAB_Acct_ValidParameter_ID);
         }
         /** Get Combination.
         @return Valid Account Combination */
-        public int GetC_ValidCombination_ID()
+        public int GetVAB_Acct_ValidParameter_ID()
         {
-            Object ii = Get_Value("C_ValidCombination_ID");
+            Object ii = Get_Value("VAB_Acct_ValidParameter_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -377,7 +377,7 @@ namespace VAdvantage.Model
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_ValueNoCheck("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Journal Line.
-@param GL_JournalLine_ID General Ledger Journal Line */
+@param VAGL_JRNLLine_ID General Ledger Journal Line */
 
 
 
@@ -395,32 +395,32 @@ namespace VAdvantage.Model
 
 
         /** Set Journal Line.
-        @param GL_JournalLine_ID General Ledger Journal Line */
-        public void SetGL_JournalLine_ID(int GL_JournalLine_ID)
+        @param VAGL_JRNLLine_ID General Ledger Journal Line */
+        public void SetVAGL_JRNLLine_ID(int VAGL_JRNLLine_ID)
         {
-            if (GL_JournalLine_ID < 1) throw new ArgumentException("GL_JournalLine_ID is mandatory.");
-            Set_ValueNoCheck("GL_JournalLine_ID", GL_JournalLine_ID);
+            if (VAGL_JRNLLine_ID < 1) throw new ArgumentException("VAGL_JRNLLine_ID is mandatory.");
+            Set_ValueNoCheck("VAGL_JRNLLine_ID", VAGL_JRNLLine_ID);
         }
         /** Get Journal Line.
         @return General Ledger Journal Line */
-        public int GetGL_JournalLine_ID()
+        public int GetVAGL_JRNLLine_ID()
         {
-            Object ii = Get_Value("GL_JournalLine_ID");
+            Object ii = Get_Value("VAGL_JRNLLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Journal.
-        @param GL_Journal_ID General Ledger Journal */
-        public void SetGL_Journal_ID(int GL_Journal_ID)
+        @param VAGL_JRNL_ID General Ledger Journal */
+        public void SetVAGL_JRNL_ID(int VAGL_JRNL_ID)
         {
-            if (GL_Journal_ID < 1) throw new ArgumentException("GL_Journal_ID is mandatory.");
-            Set_ValueNoCheck("GL_Journal_ID", GL_Journal_ID);
+            if (VAGL_JRNL_ID < 1) throw new ArgumentException("VAGL_JRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAGL_JRNL_ID", VAGL_JRNL_ID);
         }
         /** Get Journal.
         @return General Ledger Journal */
-        public int GetGL_Journal_ID()
+        public int GetVAGL_JRNL_ID()
         {
-            Object ii = Get_Value("GL_Journal_ID");
+            Object ii = Get_Value("VAGL_JRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

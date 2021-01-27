@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Target Payment Rule			
         private String _PaymentRule = null;
         //	Payment Selection			
-        private int _C_PaySelection_ID = 0;
+        private int _VAB_PaymentOption_ID = 0;
         // The checks					
         private List<MPaySelectionCheck> _list = new List<MPaySelectionCheck>();
 
@@ -55,8 +55,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_PaySelection_ID = GetRecord_ID();
-            if (_PaymentRule != null && _PaymentRule.Equals(X_C_Order.PAYMENTRULE_DirectDebit))
+            _VAB_PaymentOption_ID = GetRecord_ID();
+            if (_PaymentRule != null && _PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_DirectDebit))
             {
                 _PaymentRule = null;
             }
@@ -68,13 +68,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            log.Info("C_PaySelection_ID=" + _C_PaySelection_ID
+            log.Info("VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID
                 + ", PaymentRule=" + _PaymentRule);
 
-            MPaySelection psel = new MPaySelection(GetCtx(), _C_PaySelection_ID, Get_TrxName());
+            MPaySelection psel = new MPaySelection(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
             if (psel.Get_ID() == 0)
             {
-                throw new ArgumentException("Not found C_PaySelection_ID=" + _C_PaySelection_ID);
+                throw new ArgumentException("Not found VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID);
             }
             if (psel.IsProcessed())
             {
@@ -95,7 +95,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             psel.SetProcessed(true);
             psel.Save();
 
-            return "@C_PaySelectionCheck_ID@ - #" + _list.Count;
+            return "@VAB_PaymentOptionCheck_ID@ - #" + _list.Count;
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         throw new Exception("Cannot save MPaySelectionCheck");
                     }
-                    line.SetC_PaySelectionCheck_ID(check.GetC_PaySelectionCheck_ID());
+                    line.SetVAB_PaymentOptionCheck_ID(check.GetVAB_PaymentOptionCheck_ID());
                     line.SetProcessed(true);
                     if (!line.Save())
                     {
@@ -129,7 +129,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String PaymentRule = line.GetPaymentRule();
             if (_PaymentRule != null && _PaymentRule != " ")
             {
-                if (!X_C_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
+                if (!X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
                 {
                     PaymentRule = _PaymentRule;
                 }
@@ -146,7 +146,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("Cannot save MPaySelectionCheck");
             }
-            line.SetC_PaySelectionCheck_ID(check1.GetC_PaySelectionCheck_ID());
+            line.SetVAB_PaymentOptionCheck_ID(check1.GetVAB_PaymentOptionCheck_ID());
             line.SetProcessed(true);
             if (!line.Save())
             {

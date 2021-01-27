@@ -466,18 +466,18 @@ namespace VAdvantage.Model
         public Decimal GetToCurrentCostPrice() { Object bd = Get_Value("ToCurrentCostPrice"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
         /** Set Order Line.
-@param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+@param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_Value("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_Value("VAB_OrderLine_ID", null);
             else
-                Set_Value("C_OrderLine_ID", C_OrderLine_ID);
+                Set_Value("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }
         /** Get Order Line.
         @return Order Line */
-        public int GetC_OrderLine_ID()
+        public int GetVAB_OrderLine_ID()
         {
-            Object ii = Get_Value("C_OrderLine_ID");
+            Object ii = Get_Value("VAB_OrderLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -522,15 +522,15 @@ namespace VAdvantage.Model
         /** Get To Container.@return To Container */
         public int GetRef_M_ProductContainerTo_ID() { Object ii = Get_Value("Ref_M_ProductContainerTo_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** Set UOM.@param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        /** Set UOM.@param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.@return Unit of Measure */
-        public int GetC_UOM_ID() { Object ii = Get_Value("C_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_UOM_ID() { Object ii = Get_Value("VAB_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Move Full Container.@param MoveFullContainer Move Full Container */
         public void SetMoveFullContainer(Boolean MoveFullContainer) { Set_Value("MoveFullContainer", MoveFullContainer); }

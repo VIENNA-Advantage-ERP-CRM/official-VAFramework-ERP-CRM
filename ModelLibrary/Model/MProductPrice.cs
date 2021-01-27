@@ -66,17 +66,17 @@ namespace VAdvantage.Model
         /// Get Product Price (Only in case when UOM Pricing and Vienna Advance Pricing Modules are available)
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_UOM_ID"></param>
+        /// <param name="VAB_UOM_ID"></param>
         /// <param name="M_Product_ID"></param>
         /// <param name="M_PriceList_Version_ID"></param>
         /// <param name="M_AttributeSetInstance_ID"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public static MProductPrice Get(Ctx ctx, int C_UOM_ID, int M_Product_ID, int M_PriceList_Version_ID,
+        public static MProductPrice Get(Ctx ctx, int VAB_UOM_ID, int M_Product_ID, int M_PriceList_Version_ID,
              int M_AttributeSetInstance_ID, Trx trxName)
         {
             MProductPrice retValue = null;
-            String sql = " SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + M_PriceList_Version_ID + " AND C_UOM_ID = " + C_UOM_ID
+            String sql = " SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + M_PriceList_Version_ID + " AND VAB_UOM_ID = " + VAB_UOM_ID
                 + " AND M_AttributeSetInstance_ID =" + M_AttributeSetInstance_ID + " AND M_Product_ID=" + M_Product_ID;
             DataSet ds = new DataSet();
             try

@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_MeasureCalc
+/** Generated Model for VAPA_EvaluateCalc
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_MeasureCalc : PO
+public class X_VAPA_EvaluateCalc : PO
 {
-public X_PA_MeasureCalc (Context ctx, int PA_MeasureCalc_ID, Trx trxName) : base (ctx, PA_MeasureCalc_ID, trxName)
+public X_VAPA_EvaluateCalc (Context ctx, int VAPA_EvaluateCalc_ID, Trx trxName) : base (ctx, VAPA_EvaluateCalc_ID, trxName)
 {
-/** if (PA_MeasureCalc_ID == 0)
-{
-SetVAF_TableView_ID (0);
-SetDateColumn (null);	// x.Date
-SetEntityType (null);	// U
-SetKeyColumn (null);
-SetName (null);
-SetPA_MeasureCalc_ID (0);
-SetSelectClause (null);	// SELECT ... FROM ...
-SetWhereClause (null);	// WHERE ...
-}
- */
-}
-public X_PA_MeasureCalc (Ctx ctx, int PA_MeasureCalc_ID, Trx trxName) : base (ctx, PA_MeasureCalc_ID, trxName)
-{
-/** if (PA_MeasureCalc_ID == 0)
+/** if (VAPA_EvaluateCalc_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetDateColumn (null);	// x.Date
 SetEntityType (null);	// U
 SetKeyColumn (null);
 SetName (null);
-SetPA_MeasureCalc_ID (0);
+SetVAPA_EvaluateCalc_ID (0);
+SetSelectClause (null);	// SELECT ... FROM ...
+SetWhereClause (null);	// WHERE ...
+}
+ */
+}
+public X_VAPA_EvaluateCalc (Ctx ctx, int VAPA_EvaluateCalc_ID, Trx trxName) : base (ctx, VAPA_EvaluateCalc_ID, trxName)
+{
+/** if (VAPA_EvaluateCalc_ID == 0)
+{
+SetVAF_TableView_ID (0);
+SetDateColumn (null);	// x.Date
+SetEntityType (null);	// U
+SetKeyColumn (null);
+SetName (null);
+SetVAPA_EvaluateCalc_ID (0);
 SetSelectClause (null);	// SELECT ... FROM ...
 SetWhereClause (null);	// WHERE ...
 }
@@ -51,7 +51,7 @@ SetWhereClause (null);	// WHERE ...
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_MeasureCalc (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_EvaluateCalc (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_PA_MeasureCalc (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_MeasureCalc (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_EvaluateCalc (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_PA_MeasureCalc (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_MeasureCalc (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_EvaluateCalc (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_MeasureCalc()
+static X_VAPA_EvaluateCalc()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389065162L;
 public static int Table_ID;
  // =442;
 
-/** TableName=PA_MeasureCalc */
-public static String Table_Name="PA_MeasureCalc";
+/** TableName=VAPA_EvaluateCalc */
+public static String Table_Name="VAPA_EvaluateCalc";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_MeasureCalc[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_EvaluateCalc[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -273,17 +273,17 @@ public String GetOrgColumn()
 return (String)Get_Value("OrgColumn");
 }
 /** Set Measure Calculation.
-@param PA_MeasureCalc_ID Calculation method for measuring performance */
-public void SetPA_MeasureCalc_ID (int PA_MeasureCalc_ID)
+@param VAPA_EvaluateCalc_ID Calculation method for measuring performance */
+public void SetVAPA_EvaluateCalc_ID (int VAPA_EvaluateCalc_ID)
 {
-if (PA_MeasureCalc_ID < 1) throw new ArgumentException ("PA_MeasureCalc_ID is mandatory.");
-Set_ValueNoCheck ("PA_MeasureCalc_ID", PA_MeasureCalc_ID);
+if (VAPA_EvaluateCalc_ID < 1) throw new ArgumentException ("VAPA_EvaluateCalc_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_EvaluateCalc_ID", VAPA_EvaluateCalc_ID);
 }
 /** Get Measure Calculation.
 @return Calculation method for measuring performance */
-public int GetPA_MeasureCalc_ID() 
+public int GetVAPA_EvaluateCalc_ID() 
 {
-Object ii = Get_Value("PA_MeasureCalc_ID");
+Object ii = Get_Value("VAPA_EvaluateCalc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

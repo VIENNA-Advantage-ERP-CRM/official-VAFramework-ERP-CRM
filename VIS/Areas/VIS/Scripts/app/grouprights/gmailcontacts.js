@@ -981,8 +981,8 @@
 //                        }
 //                        else if (colna == "BPAddress") {
 
-//                            //var lookup = VIS.MLookupFactory.get(VIS.context.ctx, 0, 0, VIS.DisplayType.TableDir, "C_Location_ID", 0, false, null);
-//                            //row[colna] = new VIS.Controls.VComboBox("C_Location_ID", false, false, true, lookup, 50)
+//                            //var lookup = VIS.MLookupFactory.get(VIS.context.ctx, 0, 0, VIS.DisplayType.TableDir, "VAB_Address_ID", 0, false, null);
+//                            //row[colna] = new VIS.Controls.VComboBox("VAB_Address_ID", false, false, true, lookup, 50)
 
 //                            row[colna] = dData[j]["BPAddress"];
 //                        }

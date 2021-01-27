@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Region
+/** Generated Model for VAB_RegionState
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Region : PO
+public class X_VAB_RegionState : PO
 {
-public X_C_Region (Context ctx, int C_Region_ID, Trx trxName) : base (ctx, C_Region_ID, trxName)
+public X_VAB_RegionState (Context ctx, int VAB_RegionState_ID, Trx trxName) : base (ctx, VAB_RegionState_ID, trxName)
 {
-/** if (C_Region_ID == 0)
+/** if (VAB_RegionState_ID == 0)
 {
 SetVAB_Country_ID (0);
-SetC_Region_ID (0);
+SetVAB_RegionState_ID (0);
 SetName (null);
 }
  */
 }
-public X_C_Region (Ctx ctx, int C_Region_ID, Trx trxName) : base (ctx, C_Region_ID, trxName)
+public X_VAB_RegionState (Ctx ctx, int VAB_RegionState_ID, Trx trxName) : base (ctx, VAB_RegionState_ID, trxName)
 {
-/** if (C_Region_ID == 0)
+/** if (VAB_RegionState_ID == 0)
 {
 SetVAB_Country_ID (0);
-SetC_Region_ID (0);
+SetVAB_RegionState_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Region (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RegionState (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_C_Region (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Region (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RegionState (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_C_Region (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Region (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_RegionState (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Region()
+static X_VAB_RegionState()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389057749L;
 public static int Table_ID;
  // =164;
 
-/** TableName=C_Region */
-public static String Table_Name="C_Region";
+/** TableName=VAB_RegionState */
+public static String Table_Name="VAB_RegionState";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Region[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_RegionState[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Country.
@@ -130,17 +130,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Region.
-@param C_Region_ID Identifies a geographical Region */
-public void SetC_Region_ID (int C_Region_ID)
+@param VAB_RegionState_ID Identifies a geographical Region */
+public void SetVAB_RegionState_ID (int VAB_RegionState_ID)
 {
-if (C_Region_ID < 1) throw new ArgumentException ("C_Region_ID is mandatory.");
-Set_ValueNoCheck ("C_Region_ID", C_Region_ID);
+if (VAB_RegionState_ID < 1) throw new ArgumentException ("VAB_RegionState_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RegionState_ID", VAB_RegionState_ID);
 }
 /** Get Region.
 @return Identifies a geographical Region */
-public int GetC_Region_ID() 
+public int GetVAB_RegionState_ID() 
 {
-Object ii = Get_Value("C_Region_ID");
+Object ii = Get_Value("VAB_RegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

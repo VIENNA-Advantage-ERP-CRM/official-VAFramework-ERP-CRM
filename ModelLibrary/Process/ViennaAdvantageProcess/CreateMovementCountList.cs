@@ -240,9 +240,9 @@ ORDER BY s.M_Locator_ID, s.M_Product_ID, s.Qty DESC, s.M_AttributeSetInstance_ID
                         {
                             _line.SetM_ProductContainer_ID(container_Id);
                         }
-                        if (_line.Get_ColumnIndex("C_UOM_ID") > 0 && product != null)
+                        if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0 && product != null)
                         {
-                            _line.SetC_UOM_ID(product.GetC_UOM_ID());
+                            _line.SetVAB_UOM_ID(product.GetVAB_UOM_ID());
                         }
                         if (_line.Get_ColumnIndex("QtyEntered") > 0)
                         {

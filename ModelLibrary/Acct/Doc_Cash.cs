@@ -537,7 +537,7 @@ namespace VAdvantage.Acct
 
             if (TotalCurrGain != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrGain = MConversionRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
@@ -549,7 +549,7 @@ namespace VAdvantage.Acct
             }
             if (TotalCurrLoss != Env.ZERO)
             {
-                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT C_ValidCombination_ID FROM C_ValidCombination WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
+                int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrLoss = MConversionRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 

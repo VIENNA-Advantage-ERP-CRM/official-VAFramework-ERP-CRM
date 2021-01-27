@@ -47,7 +47,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                X_R_ContactInterest customer = new X_R_ContactInterest(GetCtx(), 0, Get_TrxName());
+                X_VAR_InterestedUser customer = new X_VAR_InterestedUser(GetCtx(), 0, Get_TrxName());
                 customer.SetR_InterestArea_ID(R_InterestArea_ID);
                 customer.SetVAB_BusinessPartner_ID(_VAB_BusinessPartner_ID);
                 String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + _VAB_BusinessPartner_ID;

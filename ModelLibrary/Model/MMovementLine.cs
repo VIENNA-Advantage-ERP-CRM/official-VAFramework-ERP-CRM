@@ -308,12 +308,12 @@ namespace VAdvantage.Model
                 SetQtyEntered(GetQtyEntered());
 
             // change to set Converted Quantity in Movement quantity if there is differnce in UOM of Base Product and UOM Selected on line
-            if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID"))
+            if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("VAB_UOM_ID"))
             {
                 Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
-                if (product.GetC_UOM_ID() != Util.GetValueOfInt(Get_Value("C_UOM_ID")))
+                if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                 {
-                    SetMovementQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("C_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
+                    SetMovementQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                 }
             }
 

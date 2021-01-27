@@ -524,18 +524,18 @@ namespace VAdvantage.Process
         {
             sql.Clear();
             int VA027_PostDatedCheck_ID = 0;
-            int C_Payment_ID = 0;
+            int VAB_Payment_ID = 0;
             Decimal PayAmt = 0;
             Decimal openAmt = 0;
 
-            sql.Append("SELECT C_Payment_ID, VAB_Currency_ID, PayAmt,"
-               + " paymentAvailable(C_Payment_ID) AS OpenAmt, VAB_BusinessPartner_ID ");
+            sql.Append("SELECT VAB_Payment_ID, VAB_Currency_ID, PayAmt,"
+               + " paymentAvailable(VAB_Payment_ID) AS OpenAmt, VAB_BusinessPartner_ID ");
 
             if (Env.IsModuleInstalled("VA027_") && _IncludePDC)
             {
-                sql.Append(", (SELECT VA027_PostDatedCheck_ID FROM C_Payment WHERE C_Payment_ID= p.C_Payment_ID) AS VA027_postdatedcheck_ID ");
+                sql.Append(", (SELECT VA027_PostDatedCheck_ID FROM VAB_Payment WHERE VAB_Payment_ID= p.VAB_Payment_ID) AS VA027_postdatedcheck_ID ");
             }
-            sql.Append("FROM C_Payment_v p "
+            sql.Append("FROM VAB_Payment_V p "
            + "WHERE VAF_Client_ID=" + _run.GetVAF_Client_ID()        //	##1
            + " AND VAF_Org_ID=" + _run.GetVAF_Org_ID()
            + " AND IsAllocated='N' AND VAB_BusinessPartner_ID IS NOT NULL"
@@ -579,9 +579,9 @@ namespace VAdvantage.Process
                 sql.Clear();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    C_Payment_ID = 0; VAB_Currency_ID = 0; PayAmt = 0; openAmt = 0; VAB_BusinessPartner_ID = 0; VA027_PostDatedCheck_ID = 0;
+                    VAB_Payment_ID = 0; VAB_Currency_ID = 0; PayAmt = 0; openAmt = 0; VAB_BusinessPartner_ID = 0; VA027_PostDatedCheck_ID = 0;
 
-                    C_Payment_ID = Utility.Util.GetValueOfInt(dr["C_Payment_ID"]);
+                    VAB_Payment_ID = Utility.Util.GetValueOfInt(dr["VAB_Payment_ID"]);
                     VAB_Currency_ID = Utility.Util.GetValueOfInt(dr["VAB_Currency_ID"]);
                     PayAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr["PayAmt"]));//.getBigDecimal(3).negate();
                     openAmt = Decimal.Negate(Utility.Util.GetValueOfDecimal(dr["OpenAmt"]));// rs.getBigDecimal(4).negate();
@@ -599,7 +599,7 @@ namespace VAdvantage.Process
                     }
 
                     //
-                    if (CreatePaymentLine(C_Payment_ID, VAB_Currency_ID, PayAmt, openAmt,
+                    if (CreatePaymentLine(VAB_Payment_ID, VAB_Currency_ID, PayAmt, openAmt,
                         VAB_BusinessPartner_ID, VA027_PostDatedCheck_ID))
                     {
                         count++;
@@ -622,12 +622,12 @@ namespace VAdvantage.Process
         /// <summary>
         /// Create Payment Line on run tab of dunning run window.
         /// </summary>
-        /// <param name="C_Payment_ID">Payment ID.</param>
+        /// <param name="VAB_Payment_ID">Payment ID.</param>
         /// <param name="VAB_Currency_ID">Currency ID.</param>
         /// <param name="PayAmt">Amount.</param>
         /// <param name="openAmt">Open.</param>
         /// <param name="VAB_BusinessPartner_ID">Business Partner ID.</param>
-        private bool CreatePaymentLine(int C_Payment_ID, int VAB_Currency_ID,
+        private bool CreatePaymentLine(int VAB_Payment_ID, int VAB_Currency_ID,
             Decimal PayAmt, Decimal OpenAmt, int VAB_BusinessPartner_ID, int VA027_PostDatedCheck_ID)
         {
             MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
@@ -654,7 +654,7 @@ namespace VAdvantage.Process
             }
             //
             MDunningRunLine line = new MDunningRunLine(entry);
-            line.SetPayment(C_Payment_ID, VAB_Currency_ID, PayAmt, OpenAmt, VA027_PostDatedCheck_ID);
+            line.SetPayment(VAB_Payment_ID, VAB_Currency_ID, PayAmt, OpenAmt, VA027_PostDatedCheck_ID);
 
             if (!line.Save())
             {
@@ -882,17 +882,17 @@ namespace VAdvantage.Process
         private int AddGLJournal()
         {
             sql.Clear();
-            int GL_JournalLine_ID = 0;
+            int VAGL_JRNLLine_ID = 0;
             Decimal Amount = 0;
             Decimal openAmt = 0;
 
-            sql.Append("SELECT GL_JournalLine_ID ,GL.VAB_Currency_ID, GL.VAB_BusinessPartner_ID, AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) AS openAmt, " +
+            sql.Append("SELECT VAGL_JRNLLine_ID ,GL.VAB_Currency_ID, GL.VAB_BusinessPartner_ID, AcctBalance(Gl.Account_ID, Gl.AmtSourceDr, Gl.AmtSourceCr) AS openAmt, " +
                "CASE " +
                "WHEN Gl.AmtSourceDr > 0 Then Gl.AmtSourceDr " +
                "WHEN Gl.AmtSourceCr > 0 Then Gl.AmtSourceCr * -1 " +
                "END AS Amount " +
-                "FROM Gl_JournalLine GL " +
-                "INNER JOIN GL_Journal J ON GL.GL_Journal_ID =J.GL_Journal_ID " +
+                "FROM VAGL_JRNLLine GL " +
+                "INNER JOIN VAGL_JRNL J ON GL.VAGL_JRNL_ID =J.VAGL_JRNL_ID " +
                 "INNER JOIN VAB_Acct_Element EV ON Gl.Account_ID = EV.VAB_Acct_Element_ID " +
                 "WHERE EV.IsAllocationRelated ='Y' AND GL.IsAllocated='N'  " +
                 "AND J.DocStatus In ('CO','Cl') " +
@@ -935,8 +935,8 @@ namespace VAdvantage.Process
                 sql.Clear();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    GL_JournalLine_ID = 0; VAB_Currency_ID = 0; Amount = 0; openAmt = 0; VAB_BusinessPartner_ID = 0;
-                    GL_JournalLine_ID = Utility.Util.GetValueOfInt(dr["GL_JournalLine_ID"]);
+                    VAGL_JRNLLine_ID = 0; VAB_Currency_ID = 0; Amount = 0; openAmt = 0; VAB_BusinessPartner_ID = 0;
+                    VAGL_JRNLLine_ID = Utility.Util.GetValueOfInt(dr["VAGL_JRNLLine_ID"]);
                     VAB_Currency_ID = Utility.Util.GetValueOfInt(dr["VAB_Currency_ID"]);
                     VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt(dr["VAB_BusinessPartner_ID"]);
                     Amount = Utility.Util.GetValueOfDecimal(dr["Amount"]);
@@ -948,7 +948,7 @@ namespace VAdvantage.Process
                         continue;
                     }
                     //crate records at line tab of Dunning Run window
-                    if (CreatGLJournalLine(GL_JournalLine_ID, VAB_Currency_ID, VAB_BusinessPartner_ID, Amount, openAmt))
+                    if (CreatGLJournalLine(VAGL_JRNLLine_ID, VAB_Currency_ID, VAB_BusinessPartner_ID, Amount, openAmt))
                     {
                         count++;
                     }
@@ -972,13 +972,13 @@ namespace VAdvantage.Process
         /// <summary>
         /// create journalline on line tab of dunning run window
         /// </summary>
-        /// <param name="Gl_JournalLine_ID">Gl_JournalLine_ID</param>
+        /// <param name="VAGL_JRNLLine_ID">VAGL_JRNLLine_ID</param>
         /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="VAB_BusinessPartner_ID">Business partner</param>
         /// <param name="Amount">Amount</param>
         /// <param name="openAmt">OpenAmount</param>
         /// <returns>true/false</returns>
-        private bool CreatGLJournalLine(int Gl_JournalLine_ID, int VAB_Currency_ID, int VAB_BusinessPartner_ID, Decimal Amount, Decimal OpenAmt)
+        private bool CreatGLJournalLine(int VAGL_JRNLLine_ID, int VAB_Currency_ID, int VAB_BusinessPartner_ID, Decimal Amount, Decimal OpenAmt)
         {
             MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
@@ -1002,7 +1002,7 @@ namespace VAdvantage.Process
             }
             //
             MDunningRunLine line = new MDunningRunLine(entry);
-            line.SetJournalLine(Gl_JournalLine_ID, VAB_Currency_ID, Amount, OpenAmt);
+            line.SetJournalLine(VAGL_JRNLLine_ID, VAB_Currency_ID, Amount, OpenAmt);
 
             if (!line.Save())
             {

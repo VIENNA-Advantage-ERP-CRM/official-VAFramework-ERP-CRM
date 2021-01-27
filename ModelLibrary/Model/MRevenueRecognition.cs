@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
                                                        Left Join FRPT_RevenueRecognition_Acct  ca On Bp.C_RevenueRecognition_ID=ca.C_RevenueRecognition_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                                    + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
-                                                   " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
+                                                   " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) +
                                                    " AND Bp.C_RevenueRecognition_ID = " + GetC_RevenueRecognition_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
                                         assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         assetGroupAcct.Set_ValueNoCheck("C_RevenueRecognition_ID", Util.GetValueOfInt(GetC_RevenueRecognition_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                        assetGroupAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                        assetGroupAcct.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                         assetGroupAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!assetGroupAcct.Save())
                                         {
@@ -344,9 +344,9 @@ namespace VAdvantage.Model
                             {
                                 calendar_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE vaf_client_id = " + Invoice.GetVAF_Client_ID()));
                             }
-                            sql = "SELECT startdate , enddate FROM c_period WHERE " +
-                                "c_year_id = (SELECT c_year.c_year_id FROM c_year INNER JOIN C_period ON c_year.c_year_id = C_period.c_year_id " +
-                                "WHERE  c_year.VAB_Calender_id =" + calendar_ID + " AND " + GlobalVariable.TO_DATE(RecognizationDate, true) + " BETWEEN C_period.startdate AND C_period.enddate) AND periodno IN (1, 12)";
+                            sql = "SELECT startdate , enddate FROM VAB_YearPeriod WHERE " +
+                                "VAB_Year_id = (SELECT VAB_Year.VAB_Year_id FROM VAB_Year INNER JOIN VAB_YearPeriod ON VAB_Year.VAB_Year_id = VAB_YearPeriod.VAB_Year_id " +
+                                "WHERE  VAB_Year.VAB_Calender_id =" + calendar_ID + " AND " + GlobalVariable.TO_DATE(RecognizationDate, true) + " BETWEEN VAB_YearPeriod.startdate AND VAB_YearPeriod.enddate) AND periodno IN (1, 12)";
                             ds = DB.ExecuteDataset(sql);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
                             {

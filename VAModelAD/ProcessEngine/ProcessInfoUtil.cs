@@ -320,14 +320,14 @@ namespace VAdvantage.ProcessEngine
             {
 
                 // Get Default Heirarchy
-                string sqla = @"SELECT PA_HIERARCHY_id FROM PA_Hierarchy WHERE ISACTIVE ='Y' 
-                       ORDER BY ISDEFAULT DESC ,PA_HIERARCHY_id ASC";
-                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "PA_Hierarchy", true, true);
+                string sqla = @"SELECT VAPA_REPORTINGORDER_id FROM VAPA_FinancialReportingOrder WHERE ISACTIVE ='Y' 
+                       ORDER BY ISDEFAULT DESC ,VAPA_REPORTINGORDER_id ASC";
+                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
                 object ID = DB.ExecuteScalar(sqla);
-                int _PA_Hierarchy_ID = 0;
+                int _VAPA_FinancialReportingOrder_ID = 0;
                 if (ID != null && ID != DBNull.Value)
                 {
-                    _PA_Hierarchy_ID = Util.GetValueOfInt(ID);
+                    _VAPA_FinancialReportingOrder_ID = Util.GetValueOfInt(ID);
                 }
                 Language _language = Language.GetLanguage(_ctx.GetVAF_Language());
 
@@ -364,7 +364,7 @@ namespace VAdvantage.ProcessEngine
                         //    result = "";
                         //    continue;
                         //}
-                        result1 = Query.GetTreeWhereClause(_ctx, columnName, _PA_Hierarchy_ID, Convert.ToInt32(values[i]));
+                        result1 = Query.GetTreeWhereClause(_ctx, columnName, _VAPA_FinancialReportingOrder_ID, Convert.ToInt32(values[i]));
                         // Fetch child records from tree hierarchy based on ID selected.
                         
 

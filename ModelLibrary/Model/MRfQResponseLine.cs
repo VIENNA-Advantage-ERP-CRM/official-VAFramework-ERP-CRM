@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQResponseLine
  * Purpose        : RfQ Response Line Model
- * Class Used     : X_C_RfQResponseLine
+ * Class Used     : X_VAB_RFQReplyLine
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQResponseLine : X_C_RfQResponseLine
+    public class MRfQResponseLine : X_VAB_RFQReplyLine
     {
 
         //	RfQ Line				
@@ -72,9 +72,9 @@ namespace VAdvantage.Model
             : base(response.GetCtx(), 0, response.Get_TrxName())
         {
             SetClientOrg(response);
-            SetC_RfQResponse_ID(response.GetC_RfQResponse_ID());
+            SetVAB_RFQReply_ID(response.GetVAB_RFQReply_ID());
             //
-            SetC_RfQLine_ID(line.GetC_RfQLine_ID());
+            SetVAB_RFQLine_ID(line.GetVAB_RFQLine_ID());
             //
             SetIsSelectedWinner(false);
             SetIsSelfService(false);
@@ -116,8 +116,8 @@ namespace VAdvantage.Model
             }
 
             List<MRfQResponseLineQty> list = new List<MRfQResponseLineQty>();
-            String sql = "SELECT * FROM C_RfQResponseLineQty "
-                + "WHERE C_RfQResponseLine_ID=" + GetC_RfQResponseLine_ID() + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAB_RFQReplyLineQty "
+                + "WHERE VAB_RFQReplyLine_ID=" + GetVAB_RFQReplyLine_ID() + " AND IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
         {
             if (_rfqLine == null)
             {
-                _rfqLine = MRfQLine.Get(GetCtx(), GetC_RfQLine_ID(), Get_TrxName());
+                _rfqLine = MRfQLine.Get(GetCtx(), GetVAB_RFQLine_ID(), Get_TrxName());
             }
             return _rfqLine;
         }

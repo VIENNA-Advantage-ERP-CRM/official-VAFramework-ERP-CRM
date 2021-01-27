@@ -51,16 +51,16 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="m_VAB_AccountBook_ID"></param>
-        /// <param name="m_C_TaxCategory_ID"></param>
+        /// <param name="m_VAB_TaxCategory_ID"></param>
         /// <param name="name"></param>
         /// <param name="primaryVAB_Acct_Element_ID"></param>
         /// <param name="expense"></param>
         /// <returns></returns>
-        public int CreateCharge(Ctx ctx, int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, String name, int primaryVAB_Acct_Element_ID, Boolean expense)
+        public int CreateCharge(Ctx ctx, int m_VAB_AccountBook_ID, int m_VAB_TaxCategory_ID, String name, int primaryVAB_Acct_Element_ID, Boolean expense)
         {
             MCharge charge = new MCharge(ctx, 0, null);
             charge.SetName(name);
-            charge.SetC_TaxCategory_ID(m_C_TaxCategory_ID);
+            charge.SetVAB_TaxCategory_ID(m_VAB_TaxCategory_ID);
             if (!charge.Save())
             {
                 // log.Log(Level.SEVERE, name + " not created");
@@ -94,12 +94,12 @@ namespace VIS.Controllers
                 if (primary_ase.GetVAB_Element_ID() != ase.GetVAB_Element_ID())
                 {
                     MAcctSchemaDefault defAccts = MAcctSchemaDefault.Get(ctx, ac.GetVAB_AccountBook_ID());
-                    int C_ValidCombination_ID = defAccts.GetCh_Expense_Acct();
+                    int VAB_Acct_ValidParameter_ID = defAccts.GetCh_Expense_Acct();
                     if (!expense)
                     {
-                        C_ValidCombination_ID = defAccts.GetCh_Revenue_Acct();
+                        VAB_Acct_ValidParameter_ID = defAccts.GetCh_Revenue_Acct();
                     }
-                    MAccount chargeAcct = MAccount.Get(ctx, C_ValidCombination_ID);
+                    MAccount chargeAcct = MAccount.Get(ctx, VAB_Acct_ValidParameter_ID);
                     VAB_Acct_Element_ID = chargeAcct.GetAccount_ID();
                     //	Fallback
                     if (VAB_Acct_Element_ID == 0)
@@ -121,10 +121,10 @@ namespace VIS.Controllers
                 MAccount acct = MAccount.Get(ctx,
                     charge.GetVAF_Client_ID(), charge.GetVAF_Org_ID(),
                     ac.GetVAB_AccountBook_ID(),
-                    VAB_Acct_Element_ID, defaultAcct.GetC_SubAcct_ID(),
+                    VAB_Acct_Element_ID, defaultAcct.GetVAB_SubAcct_ID(),
                     defaultAcct.GetM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
-                    defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetC_SalesRegion_ID(),
-                    defaultAcct.GetC_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
+                    defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetVAB_SalesRegionState_ID(),
+                    defaultAcct.GetVAB_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),
                     defaultAcct.GetUserElement1_ID(), defaultAcct.GetUserElement2_ID());
                 if (acct == null)
@@ -136,8 +136,8 @@ namespace VIS.Controllers
 
                 //  Update Accounts
                 StringBuilder sql = new StringBuilder("UPDATE VAB_Charge_Acct ");
-                sql.Append("SET CH_Expense_Acct=").Append(acct.GetC_ValidCombination_ID());
-                sql.Append(", CH_Revenue_Acct=").Append(acct.GetC_ValidCombination_ID());
+                sql.Append("SET CH_Expense_Acct=").Append(acct.GetVAB_Acct_ValidParameter_ID());
+                sql.Append(", CH_Revenue_Acct=").Append(acct.GetVAB_Acct_ValidParameter_ID());
                 sql.Append(" WHERE VAB_Charge_ID=").Append(charge.GetVAB_Charge_ID());
                 sql.Append(" AND VAB_AccountBook_ID=").Append(ac.GetVAB_AccountBook_ID());
                 //
@@ -152,14 +152,14 @@ namespace VIS.Controllers
             return charge.GetVAB_Charge_ID();
         }
 
-        public void CreateChargeByList(Ctx ctx, int m_VAB_AccountBook_ID, int m_C_TaxCategory_ID, List<string> eleName, List<string> eleValue_ID, List<bool> expense)
+        public void CreateChargeByList(Ctx ctx, int m_VAB_AccountBook_ID, int m_VAB_TaxCategory_ID, List<string> eleName, List<string> eleValue_ID, List<bool> expense)
         {
             StringBuilder listCreated = new StringBuilder();
             StringBuilder listRejected = new StringBuilder();
 
             for (int j = 0; j < eleValue_ID.Count; j++)
             {
-                int VAB_Charge_ID = CreateCharge(ctx, m_VAB_AccountBook_ID, m_C_TaxCategory_ID, eleName[j], Convert.ToInt32(eleValue_ID[j]), Convert.ToBoolean(expense[j]));
+                int VAB_Charge_ID = CreateCharge(ctx, m_VAB_AccountBook_ID, m_VAB_TaxCategory_ID, eleName[j], Convert.ToInt32(eleValue_ID[j]), Convert.ToBoolean(expense[j]));
                 if (VAB_Charge_ID == 0)
                 {
                     if (listRejected.Length > 0)
@@ -207,7 +207,7 @@ namespace VIS.Controllers
         }
 
         /// <summary>
-        /// Get C_TaxCategory_ID FROM C_TaxCategory
+        /// Get VAB_TaxCategory_ID FROM VAB_TaxCategory
         /// </summary>
         /// <param name="MCElement_ID"></param>
         /// <param name="mADClientId"></param>
@@ -215,7 +215,7 @@ namespace VIS.Controllers
         private List<VchargeMCElementTaxCategoryID> VchargeMCElemTaxCatID(int MCElement_ID, int mADClientId)
         {
             List<VchargeMCElementTaxCategoryID> obj = new List<VchargeMCElementTaxCategoryID>();
-            string sql = "SELECT C_TaxCategory_ID FROM C_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + mADClientId;
+            string sql = "SELECT VAB_TaxCategory_ID FROM VAB_TaxCategory WHERE IsDefault='Y' AND VAF_Client_ID=" + mADClientId;
             int mCTaxCategoryID = 0;
 
             object mtaxcatid = DB.ExecuteScalar(sql);

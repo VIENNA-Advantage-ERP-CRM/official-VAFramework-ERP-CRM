@@ -221,7 +221,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         && (size == 10))
                         column.SetVAF_Control_Ref_ID(DisplayType.Account);
                     // Location
-                    else if (columnName.Equals("C_Location_ID", StringComparison.OrdinalIgnoreCase))
+                    else if (columnName.Equals("VAB_Address_ID", StringComparison.OrdinalIgnoreCase))
                         column.SetVAF_Control_Ref_ID(DisplayType.Location);
                     // Product Attribute
                     else if (columnName.Equals("M_AttributeSetInstance_ID"))

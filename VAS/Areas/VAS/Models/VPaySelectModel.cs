@@ -20,7 +20,7 @@ namespace VIS.Models
 {
     public class VPaySelectModel
     {
-        private int _C_PaySelection_ID = 0;
+        private int _VAB_PaymentOption_ID = 0;
         private int VAB_Bank_Acct_ID = 0;
         /// <summary>
         /// Get Detail for Payment Selection Form
@@ -153,21 +153,21 @@ namespace VIS.Models
         {
             List<GridRecords> lstGridRecords = new List<GridRecords>();
             string m_sql = "SELECT 'false' as SELECTROW, i.VAB_INVOICE_ID, adddays(i.DateInvoiced, p.NetDays) AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
-            + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
+            + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTerm_ID,i.DateInvoiced, @param1) as DISCOUNTAMOUNT, adddays(SYSDATE, -1 * PaymentTermDueDays(i.VAB_PaymentTerm_ID,i.DateInvoiced,SysDate)) as DISCOUNTDATE, "
             + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID),i.VAB_Currency_ID, @param2, @param3,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
+            + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTerm_ID,i.DateInvoiced, @param4)  , "
             + " i.VAB_Currency_ID, @param5, @param6,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM VAB_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
-            + " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
-            + " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)"
+            + " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN VAB_PaymentTerm p ON "
+            + " (i.VAB_PaymentTerm_ID=p.VAB_PaymentTerm_ID)"
             + "   WHERE i.IsSOTrx= @param7 AND IsPaid='N' AND "
             + " i.DocStatus IN ('CO','CL') AND i.VAF_Client_ID= @param8 AND i.VAF_Client_ID IN(0," + ctx.GetVAF_Client_ID() + ") AND (COALESCE(i.VAF_Org_ID,0) IN(0," + ctx.GetVAF_Org_ID() + "))";
             //   string m_sql = "SELECT 'false' as SELECTROW, i.VAB_INVOICE_ID, i.DateInvoiced+p.NetDays AS DUEDATE, bp.NAME as BUSINESSPARTNER,i.VAB_BUSINESSPARTNER_ID, i.DOCUMENTNO, c.ISO_CODE as CURRENCY,i.VAB_CURRENCY_ID, i.GRANDTOTAL, "
-            //+ " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.C_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
+            //+ " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTerm_ID,i.DateInvoiced, null) as DISCOUNTAMOUNT, SysDate-paymentTermDueDays(i.VAB_PaymentTerm_ID,i.DateInvoiced,SysDate) as DISCOUNTDATE, "
             //+ " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID),i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as AMOUNTDUE, "
-            //+ " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, null)  , "
+            //+ " currencyConvert(invoiceOpen(i.VAB_Invoice_ID,i.VAB_sched_InvoicePayment_ID)-paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTerm_ID,i.DateInvoiced, null)  , "
             //+ " i.VAB_Currency_ID, null, null,i.VAB_CurrencyType_ID, i.VAF_Client_ID,i.VAF_Org_ID) as PAYMENTAMOUNT FROM VAB_Invoice_v i INNER JOIN VAB_BusinessPartner bp ON "
-            //+ " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN C_PaymentTerm p ON "
-            //+ " (i.C_PaymentTerm_ID=p.C_PaymentTerm_ID)";
+            //+ " (i.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) INNER JOIN VAB_Currency c ON (i.VAB_Currency_ID=c.VAB_Currency_ID) INNER JOIN VAB_PaymentTerm p ON "
+            //+ " (i.VAB_PaymentTerm_ID=p.VAB_PaymentTerm_ID)";
             String sql = m_sql;
             int countParam = 8;
             DateTime payDate1 = (DateTime)payDate;
@@ -176,10 +176,10 @@ namespace VIS.Models
             // log.Config("PayDate=" + payDate);
             String isSOTrx = "N";
             //   string paymentRule = Util.GetValueOfString(paymentRule);
-            if (paymentRule != "" && X_C_Order.PAYMENTRULE_DirectDebit.Equals(paymentRule))
+            if (paymentRule != "" && X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(paymentRule))
             {
                 isSOTrx = "Y";
-                sql += " AND i.PaymentRule='" + X_C_Order.PAYMENTRULE_DirectDebit + "'";
+                sql += " AND i.PaymentRule='" + X_VAB_Order.PAYMENTRULE_DirectDebit + "'";
             }
             if (chkDue)
             {
@@ -294,20 +294,20 @@ namespace VIS.Models
             m_ps.SetIsApproved(true);
             if (!m_ps.Save())
             {
-                //log.SaveError("SaveError", Msg.Translate(Envs.GetCtx(), "C_PaySelection_ID"));
+                //log.SaveError("SaveError", Msg.Translate(Envs.GetCtx(), "VAB_PaymentOption_ID"));
                 m_ps = null;
                 return "";
             }
 
-            _C_PaySelection_ID = m_ps.GetC_PaySelection_ID();
+            _VAB_PaymentOption_ID = m_ps.GetVAB_PaymentOption_ID();
             string name = m_ps.GetName();
 
-            //string sqlTableID = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelection'";
+            //string sqlTableID = "select vaf_tableview_id from vaf_tableview where tablename = 'VAB_PaymentOption'";
             //int VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlTableID, null, null));
 
             // log.Config(m_ps.ToString());
             bool isSOTrx = false;
-            if (X_C_Order.PAYMENTRULE_DirectDebit.Equals(paymentRule))
+            if (X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(paymentRule))
             {
                 isSOTrx = true;
             }
@@ -357,10 +357,10 @@ namespace VIS.Models
             //}
 
 
-            MPaySelection psel = new MPaySelection(ctx, _C_PaySelection_ID, null);
+            MPaySelection psel = new MPaySelection(ctx, _VAB_PaymentOption_ID, null);
             if (psel.Get_ID() == 0)
             {
-                throw new ArgumentException("Not found C_PaySelection_ID=" + _C_PaySelection_ID);
+                throw new ArgumentException("Not found VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID);
             }
             if (psel.IsProcessed())
             {
@@ -386,7 +386,7 @@ namespace VIS.Models
             //string sql = "select ad_form_id from ad_form where classname = 'VAdvantage.Apps.AForms.VPayPrint'";
             //int VAF_Page_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-            return "@C_PaySelectionCheck_ID@ - #" + _list.Count;
+            return "@VAB_PaymentOptionCheck_ID@ - #" + _list.Count;
 
             //SetBusy(false);
             //Dispose();
@@ -410,7 +410,7 @@ namespace VIS.Models
         {
 
             string _PaymentRule = "S";
-            if (_PaymentRule != null && _PaymentRule.Equals(X_C_Order.PAYMENTRULE_DirectDebit))
+            if (_PaymentRule != null && _PaymentRule.Equals(X_VAB_Order.PAYMENTRULE_DirectDebit))
                 _PaymentRule = null;
             ////	Try to find one
             for (int i = 0; i < _list.Count; i++)
@@ -424,7 +424,7 @@ namespace VIS.Models
                     {
                         throw new Exception("Cannot save MPaySelectionCheck");
                     }
-                    line.SetC_PaySelectionCheck_ID(check.GetC_PaySelectionCheck_ID());
+                    line.SetVAB_PaymentOptionCheck_ID(check.GetVAB_PaymentOptionCheck_ID());
                     line.SetProcessed(true);
                     if (!line.Save())
                     {
@@ -437,7 +437,7 @@ namespace VIS.Models
             String PaymentRule = line.GetPaymentRule();
             if (_PaymentRule != null && _PaymentRule != " ")
             {
-                if (!X_C_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
+                if (!X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
                 {
                     PaymentRule = _PaymentRule;
                 }
@@ -454,7 +454,7 @@ namespace VIS.Models
             {
                 throw new Exception("Cannot save MPaySelectionCheck");
             }
-            line.SetC_PaySelectionCheck_ID(check1.GetC_PaySelectionCheck_ID());
+            line.SetVAB_PaymentOptionCheck_ID(check1.GetVAB_PaymentOptionCheck_ID());
             line.SetProcessed(true);
             if (!line.Save())
             {

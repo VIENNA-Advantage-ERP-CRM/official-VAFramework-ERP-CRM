@@ -191,7 +191,7 @@ namespace VAdvantage.Model
                 // JID_0495_1: Set unit price on Requisition Line based on selected Pricelist on header
                 if (Env.IsModuleInstalled("ED011_"))
                 {
-                    pp.SetC_UOM_ID(Util.GetValueOfInt(Get_Value("C_UOM_ID")));
+                    pp.SetVAB_UOM_ID(Util.GetValueOfInt(Get_Value("VAB_UOM_ID")));
                 }
 
                 //	pp.setPriceDate(getDateOrdered());
@@ -403,12 +403,12 @@ namespace VAdvantage.Model
                 }
 
                 // change to set Converted Quantity in Movement quantity if there is differnce in UOM of Base Product and UOM Selected on line
-                if (GetM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID")))
+                if (GetM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("VAB_UOM_ID")))
                 {
                     Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
-                    if (product.GetC_UOM_ID() != Util.GetValueOfInt(Get_Value("C_UOM_ID")))
+                    if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                     {
-                        SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("C_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
+                        SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                     }
                 }
 

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQResponse
  * Purpose        : RfQ Response Model
- * Class Used     : X_C_RfQResponse
+ * Class Used     : X_VAB_RFQReply
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using System.IO;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MRfQResponse : X_C_RfQResponse
+    public class MRfQResponse : X_VAB_RFQReply
     {
         //	underlying RfQ				
         private MRfQ _rfq = null;
@@ -36,12 +36,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_RfQResponse_ID"></param>
+        /// <param name="VAB_RFQReply_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQResponse(Ctx ctx, int C_RfQResponse_ID, Trx trxName)
-            : base(ctx, C_RfQResponse_ID, trxName)
+        public MRfQResponse(Ctx ctx, int VAB_RFQReply_ID, Trx trxName)
+            : base(ctx, VAB_RFQReply_ID, trxName)
         {
-            if (C_RfQResponse_ID == 0)
+            if (VAB_RFQReply_ID == 0)
             {
                 SetIsComplete(false);
                 SetIsSelectedWinner(false);
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(rfq);
-            SetC_RfQ_ID(rfq.GetC_RfQ_ID());
+            SetVAB_RFQ_ID(rfq.GetVAB_RFQ_ID());
             SetVAB_Currency_ID(rfq.GetVAB_Currency_ID());
             SetName(rfq.GetName());
             _rfq = rfq;
@@ -154,8 +154,8 @@ namespace VAdvantage.Model
                 return _lines;
             }
             List<MRfQResponseLine> list = new List<MRfQResponseLine>();
-            String sql = "SELECT * FROM C_RfQResponseLine "
-                + "WHERE C_RfQResponse_ID=" + GetC_RfQResponse_ID() + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAB_RFQReplyLine "
+                + "WHERE VAB_RFQReply_ID=" + GetVAB_RFQReply_ID() + " AND IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
         {
             if (_rfq == null)
             {
-                _rfq = MRfQ.Get(GetCtx(), GetC_RfQ_ID(), Get_TrxName());
+                _rfq = MRfQ.Get(GetCtx(), GetVAB_RFQ_ID(), Get_TrxName());
             }
             return _rfq;
         }
@@ -249,8 +249,8 @@ namespace VAdvantage.Model
                 // Check if mail template is set for RfQ window, if not then get from RfQ Topic window.
                 if (mtext.GetR_MailText_ID() == 0)
                 {
-                    MRfQTopic mRfQTopic = new MRfQTopic(GetCtx(), GetRfQ().GetC_RfQ_Topic_ID(), Get_TrxName());
-                    if (mRfQTopic.GetC_RfQ_Topic_ID() > 0)
+                    MRfQTopic mRfQTopic = new MRfQTopic(GetCtx(), GetRfQ().GetVAB_RFQ_Subject_ID(), Get_TrxName());
+                    if (mRfQTopic.GetVAB_RFQ_Subject_ID() > 0)
                     {
                         mtext = new MMailText(GetCtx(), mRfQTopic.GetR_MailText_ID(), Get_TrxName());
                     }
@@ -301,7 +301,7 @@ namespace VAdvantage.Model
         /// <returns>File or null</returns>
         public FileInfo CreatePDF(FileInfo file)
         {
-            //ReportEngine re = ReportEngine.get(getCtx(), ReportEngine.RFQ, getC_RfQResponse_ID());
+            //ReportEngine re = ReportEngine.get(getCtx(), ReportEngine.RFQ, getVAB_RFQReply_ID());
             //if (re == null)
             //   return null;
             //return re.getPDF(file);

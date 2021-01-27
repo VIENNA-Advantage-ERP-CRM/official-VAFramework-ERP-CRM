@@ -72,7 +72,7 @@ namespace VAdvantage.Process
                 // JID_1474 if full quantity of all lines are released from blanket order and user run Release order process then system will not allow to create 
                 // Release order and give message: 'All quantity are released'.
 
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM C_OrderLine WHERE C_Order_ID = " + GetRecord_ID(), null, Get_TrxName())) == 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT SUM(qtyentered) FROM VAB_OrderLine WHERE VAB_Order_ID = " + GetRecord_ID(), null, Get_TrxName())) == 0)
                 {
                     return Msg.GetMsg(GetCtx(), "VIS_AllQtyReleased");
                 }
@@ -86,7 +86,7 @@ namespace VAdvantage.Process
 
                 // JID_0890: On Blanket Sales/Purchase Order, Create Release Purchase/Sales Order Process was not working.
                 //rposo.SetOrig_Order_ID(order_ID);
-                rposo.SetC_Order_Blanket(GetRecord_ID()); //Set Blanket Order ID to release SO/PO
+                rposo.SetVAB_Order_Blanket(GetRecord_ID()); //Set Blanket Order ID to release SO/PO
                 rposo.SetIsSOTrx(dt.IsSOTrx());
                 //Set Same Document Sequence FROM Document type-- for Document is Number Controlled
                 //Commented because its creating same document no

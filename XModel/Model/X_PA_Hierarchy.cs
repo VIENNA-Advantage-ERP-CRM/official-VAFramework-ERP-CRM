@@ -11,15 +11,15 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for PA_Hierarchy
+    /** Generated Model for VAPA_FinancialReportingOrder
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_PA_Hierarchy : PO
+    public class X_VAPA_FinancialReportingOrder : PO
     {
-        public X_PA_Hierarchy(Context ctx, int PA_Hierarchy_ID, Trx trxName)
-            : base(ctx, PA_Hierarchy_ID, trxName)
+        public X_VAPA_FinancialReportingOrder(Context ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
+            : base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
-            /** if (PA_Hierarchy_ID == 0)
+            /** if (VAPA_FinancialReportingOrder_ID == 0)
             {
             SetVAF_TreeInfo_Account_ID (0);
             SetVAF_TreeInfo_Activity_ID (0);
@@ -30,14 +30,14 @@ namespace VAdvantage.Model
             SetVAF_TreeInfo_Project_ID (0);
             SetVAF_TreeInfo_SalesRegion_ID (0);
             SetName (null);
-            SetPA_Hierarchy_ID (0);
+            SetVAPA_FinancialReportingOrder_ID (0);
             }
              */
         }
-        public X_PA_Hierarchy(Ctx ctx, int PA_Hierarchy_ID, Trx trxName)
-            : base(ctx, PA_Hierarchy_ID, trxName)
+        public X_VAPA_FinancialReportingOrder(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
+            : base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
-            /** if (PA_Hierarchy_ID == 0)
+            /** if (VAPA_FinancialReportingOrder_ID == 0)
             {
             SetVAF_TreeInfo_Account_ID (0);
             SetVAF_TreeInfo_Activity_ID (0);
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
             SetVAF_TreeInfo_Project_ID (0);
             SetVAF_TreeInfo_SalesRegion_ID (0);
             SetName (null);
-            SetPA_Hierarchy_ID (0);
+            SetVAPA_FinancialReportingOrder_ID (0);
             }
              */
         }
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Hierarchy(Context ctx, DataRow rs, Trx trxName)
+        public X_VAPA_FinancialReportingOrder(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Hierarchy(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAPA_FinancialReportingOrder(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -75,14 +75,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_PA_Hierarchy(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAPA_FinancialReportingOrder(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_PA_Hierarchy()
+        static X_VAPA_FinancialReportingOrder()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -95,8 +95,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =821;
 
-        /** TableName=PA_Hierarchy */
-        public static String Table_Name = "PA_Hierarchy";
+        /** TableName=VAPA_FinancialReportingOrder */
+        public static String Table_Name = "VAPA_FinancialReportingOrder";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_PA_Hierarchy[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAPA_FinancialReportingOrder[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -353,17 +353,17 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetName());
         }
         /** Set Reporting Hierarchy.
-        @param PA_Hierarchy_ID Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
-        public void SetPA_Hierarchy_ID(int PA_Hierarchy_ID)
+        @param VAPA_FinancialReportingOrder_ID Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
+        public void SetVAPA_FinancialReportingOrder_ID(int VAPA_FinancialReportingOrder_ID)
         {
-            if (PA_Hierarchy_ID < 1) throw new ArgumentException("PA_Hierarchy_ID is mandatory.");
-            Set_ValueNoCheck("PA_Hierarchy_ID", PA_Hierarchy_ID);
+            if (VAPA_FinancialReportingOrder_ID < 1) throw new ArgumentException("VAPA_FinancialReportingOrder_ID is mandatory.");
+            Set_ValueNoCheck("VAPA_FinancialReportingOrder_ID", VAPA_FinancialReportingOrder_ID);
         }
         /** Get Reporting Hierarchy.
         @return Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
-        public int GetPA_Hierarchy_ID()
+        public int GetVAPA_FinancialReportingOrder_ID()
         {
-            Object ii = Get_Value("PA_Hierarchy_ID");
+            Object ii = Get_Value("VAPA_FinancialReportingOrder_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

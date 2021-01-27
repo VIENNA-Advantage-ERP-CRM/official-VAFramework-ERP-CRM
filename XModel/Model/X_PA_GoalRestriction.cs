@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_GoalRestriction
+/** Generated Model for VAPA_TargetRestriction
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_GoalRestriction : PO
+public class X_VAPA_TargetRestriction : PO
 {
-public X_PA_GoalRestriction (Context ctx, int PA_GoalRestriction_ID, Trx trxName) : base (ctx, PA_GoalRestriction_ID, trxName)
+public X_VAPA_TargetRestriction (Context ctx, int VAPA_TargetRestriction_ID, Trx trxName) : base (ctx, VAPA_TargetRestriction_ID, trxName)
 {
-/** if (PA_GoalRestriction_ID == 0)
-{
-SetGoalRestrictionType (null);
-SetName (null);
-SetPA_GoalRestriction_ID (0);
-SetPA_Goal_ID (0);
-}
- */
-}
-public X_PA_GoalRestriction (Ctx ctx, int PA_GoalRestriction_ID, Trx trxName) : base (ctx, PA_GoalRestriction_ID, trxName)
-{
-/** if (PA_GoalRestriction_ID == 0)
+/** if (VAPA_TargetRestriction_ID == 0)
 {
 SetGoalRestrictionType (null);
 SetName (null);
-SetPA_GoalRestriction_ID (0);
-SetPA_Goal_ID (0);
+SetVAPA_TargetRestriction_ID (0);
+SetVAPA_Target_ID (0);
+}
+ */
+}
+public X_VAPA_TargetRestriction (Ctx ctx, int VAPA_TargetRestriction_ID, Trx trxName) : base (ctx, VAPA_TargetRestriction_ID, trxName)
+{
+/** if (VAPA_TargetRestriction_ID == 0)
+{
+SetGoalRestrictionType (null);
+SetName (null);
+SetVAPA_TargetRestriction_ID (0);
+SetVAPA_Target_ID (0);
 }
  */
 }
@@ -43,7 +43,7 @@ SetPA_Goal_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_GoalRestriction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_TargetRestriction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_PA_GoalRestriction (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_GoalRestriction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_TargetRestriction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_PA_GoalRestriction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_GoalRestriction (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_TargetRestriction (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_GoalRestriction()
+static X_VAPA_TargetRestriction()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389065068L;
 public static int Table_ID;
  // =832;
 
-/** TableName=PA_GoalRestriction */
-public static String Table_Name="PA_GoalRestriction";
+/** TableName=VAPA_TargetRestriction */
+public static String Table_Name="VAPA_TargetRestriction";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_GoalRestriction[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_TargetRestriction[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner Group.
@@ -264,32 +264,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Goal Restriction.
-@param PA_GoalRestriction_ID Performance Goal Restriction */
-public void SetPA_GoalRestriction_ID (int PA_GoalRestriction_ID)
+@param VAPA_TargetRestriction_ID Performance Goal Restriction */
+public void SetVAPA_TargetRestriction_ID (int VAPA_TargetRestriction_ID)
 {
-if (PA_GoalRestriction_ID < 1) throw new ArgumentException ("PA_GoalRestriction_ID is mandatory.");
-Set_ValueNoCheck ("PA_GoalRestriction_ID", PA_GoalRestriction_ID);
+if (VAPA_TargetRestriction_ID < 1) throw new ArgumentException ("VAPA_TargetRestriction_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_TargetRestriction_ID", VAPA_TargetRestriction_ID);
 }
 /** Get Goal Restriction.
 @return Performance Goal Restriction */
-public int GetPA_GoalRestriction_ID() 
+public int GetVAPA_TargetRestriction_ID() 
 {
-Object ii = Get_Value("PA_GoalRestriction_ID");
+Object ii = Get_Value("VAPA_TargetRestriction_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Goal.
-@param PA_Goal_ID Performance Goal */
-public void SetPA_Goal_ID (int PA_Goal_ID)
+@param VAPA_Target_ID Performance Goal */
+public void SetVAPA_Target_ID (int VAPA_Target_ID)
 {
-if (PA_Goal_ID < 1) throw new ArgumentException ("PA_Goal_ID is mandatory.");
-Set_ValueNoCheck ("PA_Goal_ID", PA_Goal_ID);
+if (VAPA_Target_ID < 1) throw new ArgumentException ("VAPA_Target_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Target_ID", VAPA_Target_ID);
 }
 /** Get Goal.
 @return Performance Goal */
-public int GetPA_Goal_ID() 
+public int GetVAPA_Target_ID() 
 {
-Object ii = Get_Value("PA_Goal_ID");
+Object ii = Get_Value("VAPA_Target_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

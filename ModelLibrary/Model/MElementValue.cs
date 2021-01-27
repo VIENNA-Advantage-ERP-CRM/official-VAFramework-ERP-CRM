@@ -199,7 +199,7 @@ namespace VAdvantage.Model
             if (!newRecord && IsSummary()
                 && Is_ValueChanged("IsSummary"))
             {
-                String sql = "SELECT COUNT(*) FROM Fact_Acct WHERE Account_ID=" + GetVAB_Acct_Element_ID();
+                String sql = "SELECT COUNT(*) FROM Actual_Acct_Detail WHERE Account_ID=" + GetVAB_Acct_Element_ID();
                 int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (no != 0)
                 {

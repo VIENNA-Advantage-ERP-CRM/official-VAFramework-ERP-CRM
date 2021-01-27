@@ -42,9 +42,9 @@ namespace VIS.Models
         {
             LcDetails lc = new LcDetails();
             MInvoice inv = new MInvoice(ctx, Invoice_ID, null);
-            if (inv.GetC_Order_ID() > 0)
+            if (inv.GetVAB_Order_ID() > 0)
             {
-                MOrder order = new MOrder(ctx, inv.GetC_Order_ID(), null);
+                MOrder order = new MOrder(ctx, inv.GetVAB_Order_ID(), null);
                 try
                 {
                     lc.paymethod = order.GetVA009_PaymentMethod_ID();
@@ -52,14 +52,14 @@ namespace VIS.Models
                     {
                         lc.lcno = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(VA026_LCDetail_ID)  FROM VA026_LCDetail 
                                                             WHERE IsActive = 'Y' AND DocStatus IN ('CO' , 'CL')  AND
-                                                            c_order_id =" + order.GetC_Order_ID(), null, null));
+                                                            VAB_Order_id =" + order.GetVAB_Order_ID(), null, null));
                         // Check PO Detail tab of Letter of Credit
                         if (lc.lcno == 0)
                         {
                             lc.lcno = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT MIN(lc.VA026_LCDetail_ID)  FROM VA026_LCDetail lc
                                                         INNER JOIN VA026_PODetail sod ON sod.VA026_LCDetail_ID = lc.VA026_LCDetail_ID 
                                                             WHERE sod.IsActive = 'Y' AND lc.IsActive = 'Y' AND lc.DocStatus IN ('CO' , 'CL')  AND
-                                                            sod.C_Order_ID =" + order.GetC_Order_ID(), null, null));
+                                                            sod.VAB_Order_ID =" + order.GetVAB_Order_ID(), null, null));
                             if (lc.lcno != 0)
                             {
                                 if (Util.GetValueOfString(DB.ExecuteScalar("SELECT VA026_IsLoanRequired FROM VA026_LCDetail WHERE VA026_LCDetail_ID=" + lc.lcno, null, null)) == "Y")

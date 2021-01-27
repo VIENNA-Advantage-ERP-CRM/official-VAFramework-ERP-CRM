@@ -405,17 +405,17 @@ namespace VAdvantage.Model
             {
                 //	Get Order and decrease invoices
                 MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
-                int C_OrderLine_ID = iLine.GetC_OrderLine_ID();
-                if (C_OrderLine_ID == 0)
+                int VAB_OrderLine_ID = iLine.GetVAB_OrderLine_ID();
+                if (VAB_OrderLine_ID == 0)
                 {
                     MInOutLine ioLine = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                    C_OrderLine_ID = ioLine.GetC_OrderLine_ID();
+                    VAB_OrderLine_ID = ioLine.GetVAB_OrderLine_ID();
                 }
                 //	No Order Found
-                if (C_OrderLine_ID == 0)
+                if (VAB_OrderLine_ID == 0)
                     return success;
                 //	Find MatchPO
-                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), C_OrderLine_ID, GetVAB_InvoiceLine_ID(), Get_TrxName());
+                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), VAB_OrderLine_ID, GetVAB_InvoiceLine_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetM_InOutLine_ID() == 0)

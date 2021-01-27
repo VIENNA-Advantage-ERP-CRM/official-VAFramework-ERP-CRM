@@ -9,44 +9,44 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_Recurring
+    using System.Data;/** Generated Model for VAB_Recurring
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Recurring : PO
+    public class X_VAB_Recurring : PO
     {
-        public X_C_Recurring(Context ctx, int C_Recurring_ID, Trx trxName)
-            : base(ctx, C_Recurring_ID, trxName)
-        {/** if (C_Recurring_ID == 0){SetC_Recurring_ID (0);SetFrequencyType (null);// M
+        public X_VAB_Recurring(Context ctx, int VAB_Recurring_ID, Trx trxName)
+            : base(ctx, VAB_Recurring_ID, trxName)
+        {/** if (VAB_Recurring_ID == 0){SetVAB_Recurring_ID (0);SetFrequencyType (null);// M
 SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         }
-        public X_C_Recurring(Ctx ctx, int C_Recurring_ID, Trx trxName)
-            : base(ctx, C_Recurring_ID, trxName)
-        {/** if (C_Recurring_ID == 0){SetC_Recurring_ID (0);SetFrequencyType (null);// M
+        public X_VAB_Recurring(Ctx ctx, int VAB_Recurring_ID, Trx trxName)
+            : base(ctx, VAB_Recurring_ID, trxName)
+        {/** if (VAB_Recurring_ID == 0){SetVAB_Recurring_ID (0);SetFrequencyType (null);// M
 SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Recurring(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Recurring(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Recurring(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Recurring(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Recurring(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_Recurring(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_Recurring() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_Recurring() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763848376125L;/** Last Updated Timestamp 12/14/2016 7:14:19 PM */
         public static long updatedMS = 1481723059336L;/** VAF_TableView_ID=574 */
         public static int Table_ID; // =574;
-        /** TableName=C_Recurring */
-        public static String Table_Name = "C_Recurring";
+        /** TableName=VAB_Recurring */
+        public static String Table_Name = "VAB_Recurring";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -61,7 +61,7 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Recurring[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Invoice.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_Recurring[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Invoice.
 @param VAB_Invoice_ID Invoice Identifier */
         public void SetVAB_Invoice_ID(int VAB_Invoice_ID)
         {
@@ -71,37 +71,37 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         }/** Get Invoice.
 @return Invoice Identifier */
         public int GetVAB_Invoice_ID() { Object ii = Get_Value("VAB_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
-@param C_Order_ID Sales Order */
-        public void SetC_Order_ID(int C_Order_ID)
+@param VAB_Order_ID Sales Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
             else
-                Set_Value("C_Order_ID", C_Order_ID);
+                Set_Value("VAB_Order_ID", VAB_Order_ID);
         }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
-@param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        public int GetVAB_Order_ID() { Object ii = Get_Value("VAB_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
+@param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_Value("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_Value("VAB_Payment_ID", null);
             else
-                Set_Value("C_Payment_ID", C_Payment_ID);
+                Set_Value("VAB_Payment_ID", VAB_Payment_ID);
         }/** Get Payment.
 @return Payment identifier */
-        public int GetC_Payment_ID() { Object ii = Get_Value("C_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-        public void SetC_Project_ID(int C_Project_ID)
+        public int GetVAB_Payment_ID() { Object ii = Get_Value("VAB_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }/** Get Opportunity.
 @return Business Opportunity */
-        public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Recurring.
-@param C_Recurring_ID Recurring Document */
-        public void SetC_Recurring_ID(int C_Recurring_ID) { if (C_Recurring_ID < 1) throw new ArgumentException("C_Recurring_ID is mandatory."); Set_ValueNoCheck("C_Recurring_ID", C_Recurring_ID); }/** Get Recurring.
+        public int GetVAB_Project_ID() { Object ii = Get_Value("VAB_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Recurring.
+@param VAB_Recurring_ID Recurring Document */
+        public void SetVAB_Recurring_ID(int VAB_Recurring_ID) { if (VAB_Recurring_ID < 1) throw new ArgumentException("VAB_Recurring_ID is mandatory."); Set_ValueNoCheck("VAB_Recurring_ID", VAB_Recurring_ID); }/** Get Recurring.
 @return Recurring Document */
-        public int GetC_Recurring_ID() { Object ii = Get_Value("C_Recurring_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Date Last Run.
+        public int GetVAB_Recurring_ID() { Object ii = Get_Value("VAB_Recurring_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Date Last Run.
 @param DateLastRun Date the process was last run. */
         public void SetDateLastRun(DateTime? DateLastRun) { Set_ValueNoCheck("DateLastRun", (DateTime?)DateLastRun); }/** Get Date Last Run.
 @return Date the process was last run. */
@@ -139,24 +139,24 @@ SetName (null);SetRecurringType (null);SetRunsMax (0);SetRunsRemaining (0);} */
         }/** Get Frequency Type.
 @return Frequency of event */
         public String GetFrequencyType() { return (String)Get_Value("FrequencyType"); }/** Set Journal Batch.
-@param GL_JournalBatch_ID General Ledger Journal Batch */
-        public void SetGL_JournalBatch_ID(int GL_JournalBatch_ID)
+@param VAGL_BatchJRNL_ID General Ledger Journal Batch */
+        public void SetVAGL_BatchJRNL_ID(int VAGL_BatchJRNL_ID)
         {
-            if (GL_JournalBatch_ID <= 0) Set_Value("GL_JournalBatch_ID", null);
+            if (VAGL_BatchJRNL_ID <= 0) Set_Value("VAGL_BatchJRNL_ID", null);
             else
-                Set_Value("GL_JournalBatch_ID", GL_JournalBatch_ID);
+                Set_Value("VAGL_BatchJRNL_ID", VAGL_BatchJRNL_ID);
         }/** Get Journal Batch.
 @return General Ledger Journal Batch */
-        public int GetGL_JournalBatch_ID() { Object ii = Get_Value("GL_JournalBatch_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Journal.
-@param GL_Journal_ID General Ledger Journal */
-        public void SetGL_Journal_ID(int GL_Journal_ID)
+        public int GetVAGL_BatchJRNL_ID() { Object ii = Get_Value("VAGL_BatchJRNL_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Journal.
+@param VAGL_JRNL_ID General Ledger Journal */
+        public void SetVAGL_JRNL_ID(int VAGL_JRNL_ID)
         {
-            if (GL_Journal_ID <= 0) Set_Value("GL_Journal_ID", null);
+            if (VAGL_JRNL_ID <= 0) Set_Value("VAGL_JRNL_ID", null);
             else
-                Set_Value("GL_Journal_ID", GL_Journal_ID);
+                Set_Value("VAGL_JRNL_ID", VAGL_JRNL_ID);
         }/** Get Journal.
 @return General Ledger Journal */
-        public int GetGL_Journal_ID() { Object ii = Get_Value("GL_Journal_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Comment.
+        public int GetVAGL_JRNL_ID() { Object ii = Get_Value("VAGL_JRNL_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Comment.
 @param Help Comment, Help or Hint */
         public void SetHelp(String Help) { if (Help != null && Help.Length > 2000) { log.Warning("Length > 2000 - truncated"); Help = Help.Substring(0, 2000); } Set_Value("Help", Help); }/** Get Comment.
 @return Comment, Help or Hint */

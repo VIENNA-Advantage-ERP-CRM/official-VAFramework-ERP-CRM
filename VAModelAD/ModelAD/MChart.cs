@@ -113,7 +113,7 @@ namespace VAdvantage.Model
                             "pfi.ISSHOWZEROSERIES, " +
                             "pfi.SEQNO, " +
                             "pfi.IsTiltLabel " +
-                        "FROM D_Chart pfi INNER JOIN D_CHARTACCESS DCA " +
+                        "FROM D_Chart pfi INNER JOIN D_CHARTRIGHTS DCA " +
                 "ON pfi.D_CHART_ID=DCA.D_CHART_ID " +
                 "INNER JOIN (SELECT DISTINCT D_CHART_ID FROM D_Series WHERE ISACTIVE ='Y') ds " +
                 "ON DS.D_CHART_ID = DCA.D_CHART_ID " +

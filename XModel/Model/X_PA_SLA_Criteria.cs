@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_SLA_Criteria
+/** Generated Model for VAPA_SLA_Creteria
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_SLA_Criteria : PO
+public class X_VAPA_SLA_Creteria : PO
 {
-public X_PA_SLA_Criteria (Context ctx, int PA_SLA_Criteria_ID, Trx trxName) : base (ctx, PA_SLA_Criteria_ID, trxName)
+public X_VAPA_SLA_Creteria (Context ctx, int VAPA_SLA_Creteria_ID, Trx trxName) : base (ctx, VAPA_SLA_Creteria_ID, trxName)
 {
-/** if (PA_SLA_Criteria_ID == 0)
-{
-SetIsManual (true);	// Y
-SetName (null);
-SetPA_SLA_Criteria_ID (0);
-}
- */
-}
-public X_PA_SLA_Criteria (Ctx ctx, int PA_SLA_Criteria_ID, Trx trxName) : base (ctx, PA_SLA_Criteria_ID, trxName)
-{
-/** if (PA_SLA_Criteria_ID == 0)
+/** if (VAPA_SLA_Creteria_ID == 0)
 {
 SetIsManual (true);	// Y
 SetName (null);
-SetPA_SLA_Criteria_ID (0);
+SetVAPA_SLA_Creteria_ID (0);
+}
+ */
+}
+public X_VAPA_SLA_Creteria (Ctx ctx, int VAPA_SLA_Creteria_ID, Trx trxName) : base (ctx, VAPA_SLA_Creteria_ID, trxName)
+{
+/** if (VAPA_SLA_Creteria_ID == 0)
+{
+SetIsManual (true);	// Y
+SetName (null);
+SetVAPA_SLA_Creteria_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetPA_SLA_Criteria_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Criteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Creteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_PA_SLA_Criteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Criteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_SLA_Creteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_PA_SLA_Criteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_SLA_Criteria (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_SLA_Creteria (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_SLA_Criteria()
+static X_VAPA_SLA_Creteria()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065507L;
 public static int Table_ID;
  // =744;
 
-/** TableName=PA_SLA_Criteria */
-public static String Table_Name="PA_SLA_Criteria";
+/** TableName=VAPA_SLA_Creteria */
+public static String Table_Name="VAPA_SLA_Creteria";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_SLA_Criteria[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_SLA_Creteria[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Classname.
@@ -208,17 +208,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set SLA Criteria.
-@param PA_SLA_Criteria_ID Service Level Agreement Criteria */
-public void SetPA_SLA_Criteria_ID (int PA_SLA_Criteria_ID)
+@param VAPA_SLA_Creteria_ID Service Level Agreement Criteria */
+public void SetVAPA_SLA_Creteria_ID (int VAPA_SLA_Creteria_ID)
 {
-if (PA_SLA_Criteria_ID < 1) throw new ArgumentException ("PA_SLA_Criteria_ID is mandatory.");
-Set_ValueNoCheck ("PA_SLA_Criteria_ID", PA_SLA_Criteria_ID);
+if (VAPA_SLA_Creteria_ID < 1) throw new ArgumentException ("VAPA_SLA_Creteria_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_SLA_Creteria_ID", VAPA_SLA_Creteria_ID);
 }
 /** Get SLA Criteria.
 @return Service Level Agreement Criteria */
-public int GetPA_SLA_Criteria_ID() 
+public int GetVAPA_SLA_Creteria_ID() 
 {
-Object ii = Get_Value("PA_SLA_Criteria_ID");
+Object ii = Get_Value("VAPA_SLA_Creteria_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

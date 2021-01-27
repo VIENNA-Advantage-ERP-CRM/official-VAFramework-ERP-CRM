@@ -22,7 +22,7 @@ public X_T_ReportStatement (Context ctx, int T_ReportStatement_ID, Trx trxName) 
 {
 SetVAF_JInstance_ID (0);
 SetDateAcct (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetLevelNo (0);
 }
  */
@@ -33,7 +33,7 @@ public X_T_ReportStatement (Ctx ctx, int T_ReportStatement_ID, Trx trxName) : ba
 {
 SetVAF_JInstance_ID (0);
 SetDateAcct (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetLevelNo (0);
 }
  */
@@ -210,17 +210,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Accounting Fact.
-@param Fact_Acct_ID Accounting Fact */
-public void SetFact_Acct_ID (int Fact_Acct_ID)
+@param Actual_Acct_Detail_ID Accounting Fact */
+public void SetActual_Acct_Detail_ID (int Actual_Acct_Detail_ID)
 {
-if (Fact_Acct_ID < 1) throw new ArgumentException ("Fact_Acct_ID is mandatory.");
-Set_ValueNoCheck ("Fact_Acct_ID", Fact_Acct_ID);
+if (Actual_Acct_Detail_ID < 1) throw new ArgumentException ("Actual_Acct_Detail_ID is mandatory.");
+Set_ValueNoCheck ("Actual_Acct_Detail_ID", Actual_Acct_Detail_ID);
 }
 /** Get Accounting Fact.
 @return Accounting Fact */
-public int GetFact_Acct_ID() 
+public int GetActual_Acct_Detail_ID() 
 {
-Object ii = Get_Value("Fact_Acct_ID");
+Object ii = Get_Value("Actual_Acct_Detail_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

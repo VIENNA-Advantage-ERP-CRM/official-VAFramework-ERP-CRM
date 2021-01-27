@@ -50,7 +50,7 @@ namespace VAdvantage.Process
                         reqline.M_Product_ID,
                         reqline.M_AttributeSetInstance_ID,
                         reqline.Description,
-                        reqline.C_Uom_ID,
+                        reqline.VAB_UOM_ID,
                         (reqline.Qty - reqline.DTD001_DeliveredQty) as Qty ,
                         req.DateRequired
                         FROM M_RequisitionLine ReqLine
@@ -180,7 +180,7 @@ namespace VAdvantage.Process
                 {
                     RfQtype = (String)para[i].GetParameter();
                 }
-                else if (name.Equals("C_RfQ_Topic_ID"))
+                else if (name.Equals("VAB_RFQ_Subject_ID"))
                 {
                     RfQTopic_ID = para[i].GetParameterAsInt();
                 }
@@ -222,7 +222,7 @@ namespace VAdvantage.Process
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
-                        rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);
+                        rfq.SetVAB_RFQ_Subject_ID(RfQTopic_ID);
                         rfq.SetM_Requisition_ID(Requisition_ID);
                         rfq.SetDateWorkStart(System.DateTime.Now);
                         rfq.SetDateResponse(DateResponse);      // Added by Bharat on 15 Jan 2019 as asked by Puneet
@@ -244,7 +244,7 @@ namespace VAdvantage.Process
                         rfq.SetVAB_Currency_ID(VAB_Currency_ID);
                         if (rfq.Save())
                         {
-                            DB.ExecuteQuery("UPDATE C_Rfq SET Name='" + rfq.GetDocumentNo() + "' WHERE C_RfQ_ID= " + rfq.GetC_RfQ_ID(), null, Get_TrxName());
+                            DB.ExecuteQuery("UPDATE VAB_RFQ SET Name='" + rfq.GetDocumentNo() + "' WHERE VAB_RFQ_ID= " + rfq.GetVAB_RFQ_ID(), null, Get_TrxName());
                             if (message == "")
                             {
                                 message = Msg.GetMsg(GetCtx(), "RfQGeneratedSuccess") + " =" + rfq.GetDocumentNo();
@@ -280,7 +280,7 @@ namespace VAdvantage.Process
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
-                        rfq.SetC_RfQ_Topic_ID(RfQTopic_ID);
+                        rfq.SetVAB_RFQ_Subject_ID(RfQTopic_ID);
                         rfq.SetDateWorkStart(System.DateTime.Now);
                         rfq.SetDateResponse(DateResponse);      // Added by Bharat on 15 Jan 2019 as asked by Puneet
                         if (Util.GetValueOfDateTime(_ds.Tables[0].Rows[i]["DateRequired"]) >= System.DateTime.Now)
@@ -315,7 +315,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            DB.ExecuteQuery("UPDATE C_Rfq SET Name='" + rfq.GetDocumentNo() + "' WHERE C_RfQ_ID= " + rfq.GetC_RfQ_ID(), null, Get_TrxName());
+                            DB.ExecuteQuery("UPDATE VAB_RFQ SET Name='" + rfq.GetDocumentNo() + "' WHERE VAB_RFQ_ID= " + rfq.GetVAB_RFQ_ID(), null, Get_TrxName());
                         }
                         message = "RfQ Generated =" + rfq.GetDocumentNo();
 
@@ -336,7 +336,7 @@ namespace VAdvantage.Process
                 {
                     // Create RfQ Qty
                     MRfQLineQty RfQLineQty = new MRfQLineQty(RfqLine);
-                    RfQLineQty.SetC_UOM_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["C_UOM_ID"]));
+                    RfQLineQty.SetVAB_UOM_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAB_UOM_ID"]));
                     RfQLineQty.SetQty(Util.GetValueOfDecimal(_ds.Tables[0].Rows[i]["Qty"]));
                     RfQLineQty.SetIsPurchaseQty(true);
                     RfQLineQty.SetIsRfQQty(true);

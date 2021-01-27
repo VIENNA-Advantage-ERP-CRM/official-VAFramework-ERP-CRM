@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Location
+    /** Generated Model for VAB_Address
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Location : PO
+    public class X_VAB_Address : PO
     {
-        public X_C_Location(Context ctx, int C_Location_ID, Trx trxName)
-            : base(ctx, C_Location_ID, trxName)
+        public X_VAB_Address(Context ctx, int VAB_Address_ID, Trx trxName)
+            : base(ctx, VAB_Address_ID, trxName)
         {
-            /** if (C_Location_ID == 0)
+            /** if (VAB_Address_ID == 0)
             {
             SetVAB_Country_ID (0);
-            SetC_Location_ID (0);
+            SetVAB_Address_ID (0);
             }
              */
         }
-        public X_C_Location(Ctx ctx, int C_Location_ID, Trx trxName)
-            : base(ctx, C_Location_ID, trxName)
+        public X_VAB_Address(Ctx ctx, int VAB_Address_ID, Trx trxName)
+            : base(ctx, VAB_Address_ID, trxName)
         {
-            /** if (C_Location_ID == 0)
+            /** if (VAB_Address_ID == 0)
             {
             SetVAB_Country_ID (0);
-            SetC_Location_ID (0);
+            SetVAB_Address_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Location(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Address(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Location(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Address(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Location(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Address(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Location()
+        static X_VAB_Address()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =162;
 
-        /** TableName=C_Location */
-        public static String Table_Name = "C_Location";
+        /** TableName=VAB_Address */
+        public static String Table_Name = "VAB_Address";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Location[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Address[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Address 1.
@@ -217,33 +217,33 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Address.
-        @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+        @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID < 1) throw new ArgumentException("C_Location_ID is mandatory.");
-            Set_ValueNoCheck("C_Location_ID", C_Location_ID);
+            if (VAB_Address_ID < 1) throw new ArgumentException("VAB_Address_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Region.
-        @param C_Region_ID Identifies a geographical Region */
-        public void SetC_Region_ID(int C_Region_ID)
+        @param VAB_RegionState_ID Identifies a geographical Region */
+        public void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            if (VAB_RegionState_ID <= 0) Set_Value("VAB_RegionState_ID", null);
             else
-                Set_Value("C_Region_ID", C_Region_ID);
+                Set_Value("VAB_RegionState_ID", VAB_RegionState_ID);
         }
         /** Get Region.
         @return Identifies a geographical Region */
-        public int GetC_Region_ID()
+        public int GetVAB_RegionState_ID()
         {
-            Object ii = Get_Value("C_Region_ID");
+            Object ii = Get_Value("VAB_RegionState_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

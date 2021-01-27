@@ -33,7 +33,7 @@ namespace VAdvantage.Process
      */
     public class ProjectPhaseGenOrder : SvrProcess
     {
-        private int m_C_ProjectPhase_ID = 0;
+        private int m_VAB_ProjectStage_ID = 0;
         /**
          *  Prepare - e.g., get Parameters.
          */
@@ -63,12 +63,12 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            m_C_ProjectPhase_ID = GetRecord_ID();
-            log.Info("doIt - C_ProjectPhase_ID=" + m_C_ProjectPhase_ID);
-            if (m_C_ProjectPhase_ID == 0)
-                throw new ArgumentException("C_ProjectPhase_ID == 0");
-            MProjectPhase fromPhase = new MProjectPhase(GetCtx(), m_C_ProjectPhase_ID, Get_TrxName());
-            MProject fromProject = ProjectGenOrder.GetProject(GetCtx(), fromPhase.GetC_Project_ID(), Get_TrxName());
+            m_VAB_ProjectStage_ID = GetRecord_ID();
+            log.Info("doIt - VAB_ProjectStage_ID=" + m_VAB_ProjectStage_ID);
+            if (m_VAB_ProjectStage_ID == 0)
+                throw new ArgumentException("VAB_ProjectStage_ID == 0");
+            MProjectPhase fromPhase = new MProjectPhase(GetCtx(), m_VAB_ProjectStage_ID, Get_TrxName());
+            MProject fromProject = ProjectGenOrder.GetProject(GetCtx(), fromPhase.GetVAB_Project_ID(), Get_TrxName());
             MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
             order.SetDescription(order.GetDescription() + " - " + fromPhase.GetName());
             if (!order.Save())
@@ -93,7 +93,7 @@ namespace VAdvantage.Process
                 ol.SetTax();
                 if (!ol.Save())
                     log.Log(Level.SEVERE, "doIt - Lines not generated");
-                return "@C_Order_ID@ " + order.GetDocumentNo() + " (1)";
+                return "@VAB_Order_ID@ " + order.GetDocumentNo() + " (1)";
             }
 
             //	Project Tasks
@@ -122,7 +122,7 @@ namespace VAdvantage.Process
             order.SetIsActive(order.IsActive());
             order.Save();
 
-            return "@C_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")";
+            return "@VAB_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")";
         }	//	doIt
 
     }	//	ProjectPhaseGenOrder

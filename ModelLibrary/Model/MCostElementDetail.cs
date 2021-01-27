@@ -61,7 +61,7 @@ namespace VAdvantage.Model
                 ced.SetQty(qty);
                 ced.SetAmt(amt);
                 //Refrences
-                ced.SetC_OrderLine_ID(cd.GetC_OrderLine_ID());
+                ced.SetVAB_OrderLine_ID(cd.GetVAB_OrderLine_ID());
                 ced.SetM_InOutLine_ID(cd.GetM_InOutLine_ID());
                 if (windowName == "Material Receipt" || windowName == "Customer Return" || windowName == "Shipment" || windowName == "Return To Vendor")
                 {
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
                 ced.Set_Value("VAFAM_AssetDisposal_ID", cd.Get_Value("VAFAM_AssetDisposal_ID"));
                 ced.SetM_InventoryLine_ID(cd.GetM_InventoryLine_ID());
                 ced.SetM_MovementLine_ID(cd.GetM_MovementLine_ID());
-                ced.SetC_ProjectIssue_ID(cd.GetC_ProjectIssue_ID());
+                ced.SetVAB_ProjectSupply_ID(cd.GetVAB_ProjectSupply_ID());
                 ced.SetIsSOTrx(cd.IsSOTrx());
                 ced.SetA_Asset_ID(cd.GetA_Asset_ID());
                 ced.SetM_ProductionLine_ID(cd.GetM_ProductionLine_ID());

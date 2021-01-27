@@ -787,7 +787,7 @@ namespace VAdvantage.Model
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append(@"Select  PCA.VAB_AccountBook_id, PCA.c_validcombination_id, PCA.frpt_acctdefault_id " +
+                    _sql.Append(@"Select  PCA.VAB_AccountBook_id, PCA.VAB_Acct_ValidParameter_id, PCA.frpt_acctdefault_id " +
                         " From FRPT_Asset_Group_Acct PCA " +
                         " inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id " +
                         " where PCA.VAA_AssetGroup_ID=" + assetGroupId +
@@ -803,7 +803,7 @@ namespace VAdvantage.Model
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                             obj.Set_ValueNoCheck("VAA_Asset_ID", assetId);
                             obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
-                            obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                            obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                             obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                             if (!obj.Save())
                             {
@@ -865,7 +865,7 @@ namespace VAdvantage.Model
             //                                          M_COST.VAB_ACCOUNTBOOK_ID,
             //                                          M_COST.M_COSTTYPE_ID,
             //                                          M_COST.BASISTYPE,
-            //                                          M_PRODUCT.C_UOM_ID,
+            //                                          M_PRODUCT.VAB_UOM_ID,
             //                                          M_COSTELEMENT.COSTINGMETHOD,
             //                                          M_COST.M_ATTRIBUTESETINSTANCE_ID,
             //                                          M_COST.CURRENTCOSTPRICE,
@@ -895,7 +895,7 @@ namespace VAdvantage.Model
             //                            MCost _cost = null;
             //                            if (GetM_InOutLine_ID() > 0)
             //                            {
-            //                                if (_inOutLine.GetC_OrderLine_ID() > 0)
+            //                                if (_inOutLine.GetVAB_OrderLine_ID() > 0)
             //                                {
             //                                    if (_costElement.IsLastPOPrice() || _costElement.IsAveragePO())
             //                                    {

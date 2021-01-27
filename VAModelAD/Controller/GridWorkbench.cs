@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         private int VAF_Column_ID = 0;
         private int VAF_Image_ID = 0;
         private int VAF_Colour_ID = 0;
-        private int PA_Goal_ID = 0;
+        private int VAPA_Target_ID = 0;
         private String ColumnName = "";
 
         /**	Logger			*/
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             String sql = null;
             if (Env.IsBaseLanguage(_ctx, "AD_Workbench"))
                 sql = "SELECT w.Name,w.Description,w.Help,"                         //  1..3
-                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.PA_Goal_ID,"   //  4..7
+                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.VAPA_Target_ID,"   //  4..7
                     + " c.ColumnName "                                              //  8
                     + "FROM AD_Workbench w, VAF_Column c "
                     + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                     + " AND w.VAF_Column_ID=c.VAF_Column_ID";
             else
                 sql = "SELECT t.Name,t.Description,t.Help,"
-                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.PA_Goal_ID,"
+                    + " w.VAF_Column_ID,w.VAF_Image_ID,w.VAF_Colour_ID,w.VAPA_Target_ID,"
                     + " c.ColumnName "
                     + "FROM AD_Workbench w, AD_Workbench_Trl t, VAF_Column c "
                     + "WHERE w.AD_Workbench_ID=" + AD_Workbench_ID.ToString()                   //  #1
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
                     VAF_Column_ID = Utility.Util.GetValueOfInt(dr[3]);
                     VAF_Image_ID = Utility.Util.GetValueOfInt(dr[4]);
                     VAF_Colour_ID = Utility.Util.GetValueOfInt(dr[5]);
-                    PA_Goal_ID = Utility.Util.GetValueOfInt(dr[6]);
+                    VAPA_Target_ID = Utility.Util.GetValueOfInt(dr[6]);
                     ColumnName = Utility.Util.GetValueOfString(dr[7]);
                 }
                 else
@@ -222,12 +222,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        ///Get PA_Goal_ID
+        ///Get VAPA_Target_ID
         /// </summary>
         /// <returns></returns>
-        public int GetPA_Goal_ID()
+        public int GetVAPA_Target_ID()
         {
-            return PA_Goal_ID;
+            return VAPA_Target_ID;
         }
 
         /*************************************************************************/

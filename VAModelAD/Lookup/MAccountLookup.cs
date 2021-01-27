@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MPAttributeLookup
- * Purpose        : used for Lookup account and C_ValidCombination table
+ * Purpose        : used for Lookup account and VAB_Acct_ValidParameter table
  * Chronological    Development
  * Raghunandan     26-Jun-2009
   ******************************************************/
@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MAccountLookup : Lookup
     {
         //Account_ID			
-        public int C_ValidCombination_ID;
+        public int VAB_Acct_ValidParameter_ID;
         private String Combination;
         private String Description;
 
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
                 return null;
             if (!ContainsKey(value))
                 return null;
-            return new KeyNamePair(C_ValidCombination_ID, ToString());
+            return new KeyNamePair(VAB_Acct_ValidParameter_ID, ToString());
         }
         /// <summary>
         /// The Lookup contains the key
@@ -98,13 +98,13 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override String ToString()
         {
-            if (C_ValidCombination_ID == 0)
+            if (VAB_Acct_ValidParameter_ID == 0)
                 return "";
             return Combination;
         }
 
         /// <summary>
-        ///Load C_ValidCombination with ID
+        ///Load VAB_Acct_ValidParameter with ID
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
@@ -112,16 +112,16 @@ namespace VAdvantage.Model
         {
             if (ID == 0)						//	new
             {
-                C_ValidCombination_ID = 0;
+                VAB_Acct_ValidParameter_ID = 0;
                 Combination = "";
                 Description = "";
                 return true;
             }
-            if (ID == C_ValidCombination_ID)	//	already loaded
+            if (ID == VAB_Acct_ValidParameter_ID)	//	already loaded
                 return true;
 
-            String sql = "SELECT C_ValidCombination_ID, Combination, Description "
-                + "FROM C_ValidCombination WHERE C_ValidCombination_ID=" + ID;
+            String sql = "SELECT VAB_Acct_ValidParameter_ID, Combination, Description "
+                + "FROM VAB_Acct_ValidParameter WHERE VAB_Acct_ValidParameter_ID=" + ID;
             IDataReader dr = null;
             try
             {
@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                 dr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (dr.Read())
                 {
-                    C_ValidCombination_ID = Utility.Util.GetValueOfInt(dr[0]);
+                    VAB_Acct_ValidParameter_ID = Utility.Util.GetValueOfInt(dr[0]);
                     Combination = dr[1].ToString();//.getString(2);
                     Description = dr[2].ToString();//.getString(3);
 
@@ -180,8 +180,8 @@ namespace VAdvantage.Model
             if (!mandatory)
                 list.Add(new KeyNamePair(-1, ""));
             //
-            StringBuilder sql = new StringBuilder("SELECT C_ValidCombination_ID, Combination, Description "
-                + "FROM C_ValidCombination WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
+            StringBuilder sql = new StringBuilder("SELECT VAB_Acct_ValidParameter_ID, Combination, Description "
+                + "FROM VAB_Acct_ValidParameter WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID());
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 2");

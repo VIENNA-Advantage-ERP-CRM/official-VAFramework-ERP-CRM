@@ -65,9 +65,9 @@ namespace VAdvantage.DataBase
                     sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
                                 M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
-                    if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+                    if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
-                        sql.Append(", QtyEntered, C_UOM_ID");
+                        sql.Append(", QtyEntered, VAB_UOM_ID");
                     }
 
                     if (line.Get_ColumnIndex("IsFromProcess") > 0)
@@ -83,9 +83,9 @@ namespace VAdvantage.DataBase
                         GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
                         M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
-                    if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+                    if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
-                        sql.Append("," + currentQty + "," + product.GetC_UOM_ID());
+                        sql.Append("," + currentQty + "," + product.GetVAB_UOM_ID());
                     }
 
                     if (line.Get_ColumnIndex("IsFromProcess") > 0)
@@ -140,9 +140,9 @@ namespace VAdvantage.DataBase
                     sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
                                 M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
-                    if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+                    if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
-                        sql.Append(", QtyEntered, C_UOM_ID");
+                        sql.Append(", QtyEntered, VAB_UOM_ID");
                     }
 
                     if (line.Get_ColumnIndex("IsFromProcess") > 0)
@@ -158,9 +158,9 @@ namespace VAdvantage.DataBase
                         GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
                         M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
-                    if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+                    if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
-                        sql.Append("," + currentQty + "," + product.GetC_UOM_ID());
+                        sql.Append("," + currentQty + "," + product.GetVAB_UOM_ID());
                     }
 
                     if (line.Get_ColumnIndex("IsFromProcess") > 0)
@@ -338,7 +338,7 @@ namespace VAdvantage.DataBase
                                                  INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID 
                                                  INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                                  WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
-                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.VAB_Payment_id,0)  != 0
                                                  OR NVL(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.VAB_CashBook_id = " + cash_ID +
                                                  @" AND ROWNUM <= 100 )  )
                                                  WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1";
@@ -352,7 +352,7 @@ namespace VAdvantage.DataBase
                                                  INNER JOIN VAB_sched_InvoicePayment cs ON cs.VAB_sched_InvoicePayment_ID = cl.VAB_sched_InvoicePayment_ID 
                                                  INNER JOIN VAB_Invoice inv ON inv.VAB_Invoice_ID = cl.VAB_Invoice_ID AND inv.DocStatus NOT IN ('RE' , 'VO') 
                                                  WHERE cl.CashType = 'I' AND  cl.IsActive = 'Y' AND c.IsActive = 'Y' AND cs.IsActive = 'Y' 
-                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.c_payment_id,0)  != 0
+                                                 AND NVL(cl.VAB_Invoice_ID , 0)  <> 0 AND (NVL(cs.VAB_Payment_id,0)  != 0
                                                  OR NVL(cs.VAB_CashJRNLLine_id , 0) != 0 OR cs.VA009_IsPaid = 'Y') AND c.VAB_CashBook_id = " + cash_ID +
                                                  @") t ORDER BY PaidSchedule LIMIT 100) tb
                                                  WHERE PaidSchedule IS NOT NULL";

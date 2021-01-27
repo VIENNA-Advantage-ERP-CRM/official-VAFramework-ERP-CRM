@@ -222,8 +222,8 @@ namespace VAdvantage.Acct
             }
             cr.SetVAB_BillingCode_ID(_invoiceLine.GetVAB_BillingCode_ID());
             cr.SetVAB_Promotion_ID(_invoiceLine.GetVAB_Promotion_ID());
-            cr.SetC_Project_ID(_invoiceLine.GetC_Project_ID());
-            cr.SetC_UOM_ID(_invoiceLine.GetC_UOM_ID());
+            cr.SetVAB_Project_ID(_invoiceLine.GetVAB_Project_ID());
+            cr.SetVAB_UOM_ID(_invoiceLine.GetVAB_UOM_ID());
             cr.SetUser1_ID(_invoiceLine.GetUser1_ID());
             cr.SetUser2_ID(_invoiceLine.GetUser2_ID());
 
@@ -237,8 +237,8 @@ namespace VAdvantage.Acct
                     as1.GetVAB_Currency_ID(), ipv);
                 pv.SetVAB_BillingCode_ID(_invoiceLine.GetVAB_BillingCode_ID());
                 pv.SetVAB_Promotion_ID(_invoiceLine.GetVAB_Promotion_ID());
-                pv.SetC_Project_ID(_invoiceLine.GetC_Project_ID());
-                pv.SetC_UOM_ID(_invoiceLine.GetC_UOM_ID());
+                pv.SetVAB_Project_ID(_invoiceLine.GetVAB_Project_ID());
+                pv.SetVAB_UOM_ID(_invoiceLine.GetVAB_UOM_ID());
                 pv.SetUser1_ID(_invoiceLine.GetUser1_ID());
                 pv.SetUser2_ID(_invoiceLine.GetUser2_ID());
             }
@@ -266,7 +266,7 @@ namespace VAdvantage.Acct
             /** Commitment release										****/
             if (as1.IsAccrual() && as1.IsCreateCommitment())
             {
-                fact = Doc_Order.GetCommitmentRelease(as1, this,
+                fact = DoVAB_Order.GetCommitmentRelease(as1, this,
                    Utility.Util.GetValueOfDecimal(GetQty()), _invoiceLine.GetVAB_InvoiceLine_ID(), Env.ONE);
                 if (fact == null)
                 {

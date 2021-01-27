@@ -20,9 +20,9 @@ namespace VAdvantage.Process
     public class ProjectGenPO : SvrProcess
     {
         /** Project Parameter			*/
-        private int m_C_Project_ID = 0;
+        private int m_VAB_Project_ID = 0;
         /** Opt Project Line Parameter	*/
-        private int m_C_ProjectLine_ID = 0;
+        private int m_VAB_ProjectLine_ID = 0;
         /** Consolidate Document		*/
         //private boolean m_ConsolidateDocument = true;
         private bool m_ConsolidateDocument = true;
@@ -45,15 +45,15 @@ namespace VAdvantage.Process
                     continue;
                 }
 
-                else if (name.Equals("C_Project_ID"))
+                else if (name.Equals("VAB_Project_ID"))
                 {
-                    //m_C_Project_ID = ((BigDecimal)element.getParameter()).intValue();
-                    m_C_Project_ID = VAdvantage.Utility.Util.GetValueOfInt(VAdvantage.Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
+                    //m_VAB_Project_ID = ((BigDecimal)element.getParameter()).intValue();
+                    m_VAB_Project_ID = VAdvantage.Utility.Util.GetValueOfInt(VAdvantage.Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
-                else if (name.Equals("C_ProjectLine_ID"))
+                else if (name.Equals("VAB_ProjectLine_ID"))
                 {
-                    //m_C_ProjectLine_ID = ((BigDecimal)element.getParameter()).intValue();
-                    m_C_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(VAdvantage.Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
+                    //m_VAB_ProjectLine_ID = ((BigDecimal)element.getParameter()).intValue();
+                    m_VAB_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(VAdvantage.Utility.Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else if (name.Equals("ConsolidateDocument"))
                 {
@@ -69,16 +69,16 @@ namespace VAdvantage.Process
 
         protected override String DoIt()
         {
-            log.Info("doIt - C_Project_ID=" + m_C_Project_ID + " - C_ProjectLine_ID=" + m_C_ProjectLine_ID + " - Consolidate=" + m_ConsolidateDocument);
-            if (m_C_ProjectLine_ID != 0)
+            log.Info("doIt - VAB_Project_ID=" + m_VAB_Project_ID + " - VAB_ProjectLine_ID=" + m_VAB_ProjectLine_ID + " - Consolidate=" + m_ConsolidateDocument);
+            if (m_VAB_ProjectLine_ID != 0)
             {
-                MProjectLine projectLine = new MProjectLine(GetCtx(), m_C_ProjectLine_ID, Get_TrxName());
-                MProject project = new MProject(GetCtx(), projectLine.GetC_Project_ID(), Get_TrxName());
+                MProjectLine projectLine = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
+                MProject project = new MProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
                 CreatePO(project, projectLine);
             }
             else
             {
-                MProject project = new MProject(GetCtx(), m_C_Project_ID, Get_TrxName());
+                MProject project = new MProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
                 MProjectLine[] lines = project.GetLines();
                 //for (MProjectLine element : lines)
                 for (int i = 0; i < lines.Length; i++)
@@ -101,7 +101,7 @@ namespace VAdvantage.Process
                 AddLog(projectLine.GetLine(), null, null, "Line has no Product");
                 return;
             }
-            if (projectLine.GetC_OrderPO_ID() != 0)
+            if (projectLine.GetVAB_OrderPO_ID() != 0)
             {
                 AddLog(projectLine.GetLine(), null, null, "Line was ordered previously");
                 return;
@@ -143,7 +143,7 @@ namespace VAdvantage.Process
                 }
                 order.SetClientOrg(projectLine.GetVAF_Client_ID(), VAF_Org_ID);
                 order.SetBPartner(bp);
-                order.SetC_Project_ID(project.Get_ID());
+                order.SetVAB_Project_ID(project.Get_ID());
                 order.Save();
                 //	optionally save for consolidation
                 if (m_ConsolidateDocument)
@@ -188,7 +188,7 @@ namespace VAdvantage.Process
             order.Save();
 
             //	update ProjectLine
-            projectLine.SetC_OrderPO_ID(order.GetC_Order_ID());
+            projectLine.SetVAB_OrderPO_ID(order.GetVAB_Order_ID());
             projectLine.Save();
             AddLog(projectLine.GetLine(), null, projectLine.GetPlannedQty(), order.GetDocumentNo());
         }

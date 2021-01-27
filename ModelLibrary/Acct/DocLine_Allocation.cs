@@ -30,9 +30,9 @@ namespace VAdvantage.Acct
     {
 
         private int _VAB_Invoice_ID;
-        private int _C_Payment_ID;
+        private int _VAB_Payment_ID;
         private int _VAB_CashJRNLLine_ID;
-        private int _C_Order_ID;
+        private int _VAB_Order_ID;
         private Decimal _DiscountAmt;
         private Decimal _WriteOffAmt;
         private Decimal _OverUnderAmt;
@@ -46,10 +46,10 @@ namespace VAdvantage.Acct
             : base(line, doc)
         {
 
-            _C_Payment_ID = line.GetC_Payment_ID();
+            _VAB_Payment_ID = line.GetVAB_Payment_ID();
             _VAB_CashJRNLLine_ID = line.GetVAB_CashJRNLLine_ID();
             _VAB_Invoice_ID = line.GetVAB_Invoice_ID();
-            _C_Order_ID = line.GetC_Order_ID();
+            _VAB_Order_ID = line.GetVAB_Order_ID();
             //
             SetAmount(line.GetAmount());
             _DiscountAmt = line.GetDiscountAmt();
@@ -85,7 +85,7 @@ namespace VAdvantage.Acct
                 .Append(",Discount=").Append(GetDiscountAmt())
                 .Append(",WriteOff=").Append(GetWriteOffAmt())
                 .Append(",OverUnderAmt=").Append(GetOverUnderAmt())
-                .Append(" - C_Payment_ID=").Append(_C_Payment_ID)
+                .Append(" - VAB_Payment_ID=").Append(_VAB_Payment_ID)
                 .Append(",VAB_CashJRNLLine_ID=").Append(_VAB_CashJRNLLine_ID)
                 .Append(",VAB_Invoice_ID=").Append(_VAB_Invoice_ID)
                 .Append("]");
@@ -94,12 +94,12 @@ namespace VAdvantage.Acct
 
 
         /// <summary>
-        /// Returns the c_Order_ID.
+        /// Returns the VAB_Order_ID.
         /// </summary>
-        /// <returns>c_Order_ID.</returns>
-        public int GetC_Order_ID()
+        /// <returns>VAB_Order_ID.</returns>
+        public int GetVAB_Order_ID()
         {
-            return _C_Order_ID;
+            return _VAB_Order_ID;
         }
 
         /// <summary>
@@ -148,12 +148,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Returns the c_Payment_ID.
+        /// Returns the VAB_Payment_ID.
         /// </summary>
         /// <returns></returns>
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            return _C_Payment_ID;
+            return _VAB_Payment_ID;
         }
     }
 }

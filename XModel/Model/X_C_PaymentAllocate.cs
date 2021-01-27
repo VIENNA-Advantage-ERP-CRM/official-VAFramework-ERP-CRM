@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PaymentAllocate
+/** Generated Model for VAB_PaymentAllotment
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaymentAllocate : PO
+public class X_VAB_PaymentAllotment : PO
 {
-public X_C_PaymentAllocate (Context ctx, int C_PaymentAllocate_ID, Trx trxName) : base (ctx, C_PaymentAllocate_ID, trxName)
+public X_VAB_PaymentAllotment (Context ctx, int VAB_PaymentAllotment_ID, Trx trxName) : base (ctx, VAB_PaymentAllotment_ID, trxName)
 {
-/** if (C_PaymentAllocate_ID == 0)
+/** if (VAB_PaymentAllotment_ID == 0)
 {
 SetAmount (0.0);
 SetVAB_Invoice_ID (0);
-SetC_PaymentAllocate_ID (0);
-SetC_Payment_ID (0);
+SetVAB_PaymentAllotment_ID (0);
+SetVAB_Payment_ID (0);
 SetDiscountAmt (0.0);
 SetOverUnderAmt (0.0);
 SetWriteOffAmt (0.0);
 }
  */
 }
-public X_C_PaymentAllocate (Ctx ctx, int C_PaymentAllocate_ID, Trx trxName) : base (ctx, C_PaymentAllocate_ID, trxName)
+public X_VAB_PaymentAllotment (Ctx ctx, int VAB_PaymentAllotment_ID, Trx trxName) : base (ctx, VAB_PaymentAllotment_ID, trxName)
 {
-/** if (C_PaymentAllocate_ID == 0)
+/** if (VAB_PaymentAllotment_ID == 0)
 {
 SetAmount (0.0);
 SetVAB_Invoice_ID (0);
-SetC_PaymentAllocate_ID (0);
-SetC_Payment_ID (0);
+SetVAB_PaymentAllotment_ID (0);
+SetVAB_Payment_ID (0);
 SetDiscountAmt (0.0);
 SetOverUnderAmt (0.0);
 SetWriteOffAmt (0.0);
@@ -49,7 +49,7 @@ SetWriteOffAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentAllocate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentAllotment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_PaymentAllocate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentAllocate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentAllotment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_PaymentAllocate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentAllocate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PaymentAllotment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaymentAllocate()
+static X_VAB_PaymentAllotment()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389057154L;
 public static int Table_ID;
  // =812;
 
-/** TableName=C_PaymentAllocate */
-public static String Table_Name="C_PaymentAllocate";
+/** TableName=VAB_PaymentAllotment */
+public static String Table_Name="VAB_PaymentAllotment";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PaymentAllocate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PaymentAllotment[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Amount.
@@ -175,32 +175,32 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_Invoice_ID().ToString());
 }
 /** Set Allocate Payment.
-@param C_PaymentAllocate_ID Allocate Payment to Invoices */
-public void SetC_PaymentAllocate_ID (int C_PaymentAllocate_ID)
+@param VAB_PaymentAllotment_ID Allocate Payment to Invoices */
+public void SetVAB_PaymentAllotment_ID (int VAB_PaymentAllotment_ID)
 {
-if (C_PaymentAllocate_ID < 1) throw new ArgumentException ("C_PaymentAllocate_ID is mandatory.");
-Set_ValueNoCheck ("C_PaymentAllocate_ID", C_PaymentAllocate_ID);
+if (VAB_PaymentAllotment_ID < 1) throw new ArgumentException ("VAB_PaymentAllotment_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PaymentAllotment_ID", VAB_PaymentAllotment_ID);
 }
 /** Get Allocate Payment.
 @return Allocate Payment to Invoices */
-public int GetC_PaymentAllocate_ID() 
+public int GetVAB_PaymentAllotment_ID() 
 {
-Object ii = Get_Value("C_PaymentAllocate_ID");
+Object ii = Get_Value("VAB_PaymentAllotment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID)
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID)
 {
-if (C_Payment_ID < 1) throw new ArgumentException ("C_Payment_ID is mandatory.");
-Set_ValueNoCheck ("C_Payment_ID", C_Payment_ID);
+if (VAB_Payment_ID < 1) throw new ArgumentException ("VAB_Payment_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Payment_ID", VAB_Payment_ID);
 }
 /** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() 
+public int GetVAB_Payment_ID() 
 {
-Object ii = Get_Value("C_Payment_ID");
+Object ii = Get_Value("VAB_Payment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

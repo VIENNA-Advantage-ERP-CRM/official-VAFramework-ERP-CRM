@@ -234,13 +234,13 @@ namespace VAdvantage.Model
         *	@param VAF_Org_ID real org																													
         *	@param costingMethod AcctSchema.COSTINGMETHOD_*
         *	@param qty qty
-        *	@param C_OrderLine_ID optional order line
+        *	@param VAB_OrderLine_ID optional order line
         *	@param zeroCostsOK zero/no costs are OK
         *	@param trxName trx
         *	@return current cost price or null
         */
         public static Decimal GetCurrentCost(MProduct product, int M_AttributeSetInstance_ID,
-            VAdvantage.Model.MAcctSchema as1, int VAF_Org_ID, String costingMethod, Decimal qty, int C_OrderLine_ID,
+            VAdvantage.Model.MAcctSchema as1, int VAF_Org_ID, String costingMethod, Decimal qty, int VAB_OrderLine_ID,
             bool zeroCostsOK, Trx trxName)
         {
             String CostingLevel = as1.GetCostingLevel();
@@ -323,7 +323,7 @@ namespace VAdvantage.Model
             return Util.GetValueOfDecimal(GetCurrentCost(
                 product, M_AttributeSetInstance_ID,
                 as1, VAF_Org_ID, as1.GetM_CostType_ID(), costingMethod, qty,
-                C_OrderLine_ID, zeroCostsOK, trxName));
+                VAB_OrderLine_ID, zeroCostsOK, trxName));
         }
 
         /**
@@ -335,14 +335,14 @@ namespace VAdvantage.Model
          *	@param as1 AcctSchema
          *	@param costingMethod method
          *	@param qty quantity
-         *	@param C_OrderLine_ID optional order line
+         *	@param VAB_OrderLine_ID optional order line
          *	@param zeroCostsOK zero/no costs are OK
          *	@param trxName trx
          *	@return cost price or null
          */
         private static Decimal? GetCurrentCost(MProduct product, int M_ASI_ID,
             VAdvantage.Model.MAcctSchema as1, int Org_ID, int M_CostType_ID,
-            String costingMethod, Decimal qty, int C_OrderLine_ID,
+            String costingMethod, Decimal qty, int VAB_OrderLine_ID,
             bool zeroCostsOK, Trx trxName)
         {
             /**	Any Transactions not costed		*
@@ -423,13 +423,13 @@ namespace VAdvantage.Model
             int count = 0;
 
             //Added by Amit 30-Mar-2017
-            //pick current cost price against Asset if Asset ID available on M_inOut against C_Orderline
+            //pick current cost price against Asset if Asset ID available on M_inOut against VAB_Orderline
             int VAA_Asset_ID = 0;
-            if (C_OrderLine_ID > 0)
+            if (VAB_OrderLine_ID > 0)
             {
                 VAA_Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT inl.VAA_Asset_ID from  M_InOutLine inl 
-                            INNER JOIN C_OrderLine odl ON (inl.C_OrderLine_ID = odl.C_OrderLine_ID) Where inl.IsActive='Y' 
-                            AND inl.M_Product_ID=" + product.GetM_Product_ID() + " AND inl.C_OrderLine_ID=" + C_OrderLine_ID, null, trxName));
+                            INNER JOIN VAB_OrderLine odl ON (inl.VAB_OrderLine_ID = odl.VAB_OrderLine_ID) Where inl.IsActive='Y' 
+                            AND inl.M_Product_ID=" + product.GetM_Product_ID() + " AND inl.VAB_OrderLine_ID=" + VAB_OrderLine_ID, null, trxName));
             }
 
             //
@@ -527,7 +527,7 @@ namespace VAdvantage.Model
                     return Env.ZERO;
                 }
                 materialCostEach = Util.GetValueOfDecimal(GetSeedCosts(product, M_ASI_ID,
-                    as1, Org_ID, costingMethod, C_OrderLine_ID));
+                    as1, Org_ID, costingMethod, VAB_OrderLine_ID));
             }
             if (materialCostEach == null || materialCostEach == 0)
             {
@@ -591,11 +591,11 @@ namespace VAdvantage.Model
          *	@param as1 accounting schema
          *	@param Org_ID costing level org
          *	@param costingMethod costing method
-         *	@param C_OrderLine_ID optional order line
+         *	@param VAB_OrderLine_ID optional order line
          *	@return price or null
          */
         public static Decimal? GetSeedCosts(MProduct product, int M_ASI_ID,
-            VAdvantage.Model.MAcctSchema as1, int Org_ID, String costingMethod, int C_OrderLine_ID)
+            VAdvantage.Model.MAcctSchema as1, int Org_ID, String costingMethod, int VAB_OrderLine_ID)
         {
             Decimal? retValue = null;
             //	Direct Data
@@ -611,8 +611,8 @@ namespace VAdvantage.Model
                 retValue = GetLastInvoicePrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
             else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod))
             {
-                if (C_OrderLine_ID != 0)
-                    retValue = GetPOPrice(product, C_OrderLine_ID, as1.GetVAB_Currency_ID());
+                if (VAB_OrderLine_ID != 0)
+                    retValue = GetPOPrice(product, VAB_OrderLine_ID, as1.GetVAB_Currency_ID());
                 if (retValue == null || Env.Signum((Decimal)retValue) == 0)
                     retValue = GetLastPOPrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
             }
@@ -641,9 +641,9 @@ namespace VAdvantage.Model
             }
 
             //	Look for exact Order Line
-            if (C_OrderLine_ID != 0)
+            if (VAB_OrderLine_ID != 0)
             {
-                retValue = GetPOPrice(product, C_OrderLine_ID, as1.GetVAB_Currency_ID());
+                retValue = GetPOPrice(product, VAB_OrderLine_ID, as1.GetVAB_Currency_ID());
                 if (retValue != null && Env.Signum((Decimal)retValue) != 0)
                 {
                     _log.Fine(product.GetName() + ", VAdvantage.Model.PO - " + retValue);
@@ -818,8 +818,8 @@ namespace VAdvantage.Model
             String sql = "SELECT currencyConvert(ol.PriceCost, o.VAB_Currency_ID," + VAB_Currency_ID + ", o.DateAcct, o.VAB_CurrencyType_ID, ol.VAF_Client_ID, ol.VAF_Org_ID),"
                 + " currencyConvert(ol.PriceActual, o.VAB_Currency_ID," + VAB_Currency_ID + ", o.DateAcct, o.VAB_CurrencyType_ID, ol.VAF_Client_ID, ol.VAF_Org_ID) "
                 //	,ol.PriceCost,ol.PriceActual, ol.QtyOrdered, o.DateOrdered, ol.Line
-                + "FROM C_OrderLine ol"
-                + " INNER JOIN C_Order o ON (ol.C_Order_ID=o.C_Order_ID) "
+                + "FROM VAB_OrderLine ol"
+                + " INNER JOIN VAB_Order o ON (ol.VAB_Order_ID=o.VAB_Order_ID) "
                 + "WHERE ol.M_Product_ID=" + product.GetM_Product_ID()
                 + " AND o.IsSOTrx='N'";
             if (VAF_Org_ID != 0)
@@ -869,19 +869,19 @@ namespace VAdvantage.Model
         /**
          * 	Get VAdvantage.Model.PO Price in currency
          * 	@param product product
-         *	@param C_OrderLine_ID order line
+         *	@param VAB_OrderLine_ID order line
          *	@param VAB_Currency_ID accounting currency
          *	@return last VAdvantage.Model.PO price in currency or null
          */
-        public static Decimal? GetPOPrice(MProduct product, int C_OrderLine_ID, int VAB_Currency_ID)
+        public static Decimal? GetPOPrice(MProduct product, int VAB_OrderLine_ID, int VAB_Currency_ID)
         {
             Decimal? retValue = null;
             String sql = "SELECT currencyConvert(ol.PriceCost, o.VAB_Currency_ID, " + VAB_Currency_ID + ", o.DateAcct, o.VAB_CurrencyType_ID, ol.VAF_Client_ID, ol.VAF_Org_ID),"
                 + " currencyConvert(ol.PriceActual, o.VAB_Currency_ID, " + VAB_Currency_ID + ", o.DateAcct, o.VAB_CurrencyType_ID, ol.VAF_Client_ID, ol.VAF_Org_ID) "
                 //	,ol.PriceCost,ol.PriceActual, ol.QtyOrdered, o.DateOrdered, ol.Line
-                + "FROM C_OrderLine ol"
-                + " INNER JOIN C_Order o ON (ol.C_Order_ID=o.C_Order_ID) "
-                + "WHERE ol.C_OrderLine_ID=" + C_OrderLine_ID
+                + "FROM VAB_OrderLine ol"
+                + " INNER JOIN VAB_Order o ON (ol.VAB_Order_ID=o.VAB_Order_ID) "
+                + "WHERE ol.VAB_OrderLine_ID=" + VAB_OrderLine_ID
                 + " AND o.IsSOTrx='N'";
             //
             DataTable dt = null;
@@ -1300,8 +1300,8 @@ namespace VAdvantage.Model
                 + " o.VAF_Client_ID, o.VAF_Org_ID, t.M_Transaction_ID "		//	9..11
                 + "FROM M_Transaction t"
                 + " INNER JOIN M_MatchPO mp ON (t.M_InOutLine_ID=mp.M_InOutLine_ID)"
-                + " INNER JOIN C_OrderLine ol ON (mp.C_OrderLine_ID=ol.C_OrderLine_ID)"
-                + " INNER JOIN C_Order o ON (ol.C_Order_ID=o.C_Order_ID) "
+                + " INNER JOIN VAB_OrderLine ol ON (mp.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
+                + " INNER JOIN VAB_Order o ON (ol.VAB_Order_ID=o.VAB_Order_ID) "
                 + "WHERE t.M_Product_ID=" + product.GetM_Product_ID();
             if (VAF_Org_ID != 0)
                 sql += " AND t.VAF_Org_ID=" + VAF_Org_ID;

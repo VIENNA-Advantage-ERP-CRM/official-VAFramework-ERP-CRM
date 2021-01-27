@@ -10,7 +10,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MWithholding : X_C_Withholding
+    public class MWithholding : X_VAB_Withholding
     {
         #region private variables
         //	Logger							
@@ -21,10 +21,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Withholding_ID">id</param>
+        /// <param name="VAB_Withholding_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWithholding(Ctx ctx, int C_Withholding_ID, Trx trxName)
-            : base(ctx, C_Withholding_ID, trxName)
+        public MWithholding(Ctx ctx, int VAB_Withholding_ID, Trx trxName)
+            : base(ctx, VAB_Withholding_ID, trxName)
         {
 
         }
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
                 SetInvCalculation(null);
                 SetInvPercentage(0);
                 //JID_1857
-                SetC_WithholdingCategory_ID(0);
+                SetVAB_WithholdingCategory_ID(0);
             }
 
             // Applicable on Payment = false, then clear values
@@ -60,11 +60,11 @@ namespace VAdvantage.Model
             }
 
             // validate unique record on the basis of this filteration of parameters
-            string sql = @"SELECT COUNT(C_Withholding_ID) FROM C_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND NVL(C_WithholdingCategory_ID , 0) = " +
-                GetC_WithholdingCategory_ID() + " AND NVL(c_country_ID  ,0) = " + GetVAB_Country_ID() + " AND NVL(C_region_ID , 0) = " + GetC_Region_ID();
+            string sql = @"SELECT COUNT(VAB_Withholding_ID) FROM VAB_Withholding WHERE TransactionType='" + GetTransactionType() + "'AND NVL(VAB_WithholdingCategory_ID , 0) = " +
+                GetVAB_WithholdingCategory_ID() + " AND NVL(c_country_ID  ,0) = " + GetVAB_Country_ID() + " AND NVL(VAB_RegionState_ID , 0) = " + GetVAB_RegionState_ID();
             if (!newRecord)
             {
-                sql += " AND C_withholding_ID != " + GetC_Withholding_ID();
+                sql += " AND VAB_Withholding_ID != " + GetVAB_Withholding_ID();
             }
             if (IsApplicableonPay())
             {
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
 
                         // Get Accounting default and combination from "Default Accounting" tab of Accounting schema based on "Related To" (withholding)
                         _sql.Clear();
-                        _sql.Append(@"SELECT Frpt_Acctdefault_Id,C_Validcombination_Id FROM Frpt_Acctschema_Default
+                        _sql.Append(@"SELECT Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id FROM Frpt_Acctschema_Default
                                         WHERE ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID +
                                         " AND Frpt_Relatedto = " + relatedtoProduct);
                         dsDefaultAcct = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
@@ -122,20 +122,20 @@ namespace VAdvantage.Model
                             {
                                 // check record exist or not, if not then create it
                                 _sql.Clear();
-                                _sql.Append(@"Select COUNT(Bp.C_Withholding_ID) From C_Withholding Bp
-                                                       Left Join FRPT_Withholding_Acct  ca On Bp.C_Withholding_ID=ca.C_Withholding_ID 
+                                _sql.Append(@"Select COUNT(Bp.VAB_Withholding_ID) From VAB_Withholding Bp
+                                                       Left Join FRPT_Withholding_Acct  ca On Bp.VAB_Withholding_ID=ca.VAB_Withholding_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                                + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
-                                               " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["C_Validcombination_Id"]) +
-                                               " AND Bp.C_Withholding_ID = " + GetC_Withholding_ID());
+                                               " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) +
+                                               " AND Bp.VAB_Withholding_ID = " + GetVAB_Withholding_ID());
                                 int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                 if (recordFound == 0)
                                 {
                                     withholdingAcct = MTable.GetPO(GetCtx(), "FRPT_Withholding_Acct", 0, null);
                                     withholdingAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                    withholdingAcct.Set_ValueNoCheck("C_Withholding_ID", Util.GetValueOfInt(GetC_Withholding_ID()));
+                                    withholdingAcct.Set_ValueNoCheck("VAB_Withholding_ID", Util.GetValueOfInt(GetVAB_Withholding_ID()));
                                     withholdingAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                    withholdingAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                    withholdingAcct.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                     withholdingAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                     if (!withholdingAcct.Save())
                                     {

@@ -28,7 +28,7 @@ namespace VIS.Models
         //Window No	
         private int m_WindowNo = 0;
         private bool _printCheck = false;
-        private int _C_PaySelection_ID = 0;
+        private int _VAB_PaymentOption_ID = 0;
         //Used Bank Account	
         private int _VAB_Bank_Acct_ID = 0;
         //Logger
@@ -86,10 +86,10 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public PaymentPrintDetail GetDetail(Ctx ctx, bool printCheck, int C_PaySelection_ID, bool isFirstTime)
+        public PaymentPrintDetail GetDetail(Ctx ctx, bool printCheck, int VAB_PaymentOption_ID, bool isFirstTime)
         {
             _printCheck = printCheck;
-            _C_PaySelection_ID = C_PaySelection_ID;
+            _VAB_PaymentOption_ID = VAB_PaymentOption_ID;
             PaymentPrintDetail objPPrintDetail = new PaymentPrintDetail();
             VPaySelectModel objPSelectModel = new VPaySelectModel();
             objPPrintDetail.PaymentSelection = GetPaymentSelection(ctx, isFirstTime);
@@ -106,15 +106,15 @@ namespace VIS.Models
         private List<PaymentSelection> GetPaymentSelection(Ctx ctx, bool isFirstTime)
         {
             List<PaymentSelection> objPSelection = new List<PaymentSelection>();
-            StringBuilder sql = new StringBuilder("SELECT C_PaySelection_ID, Name || ' - ' || " + DB.TO_CHAR("TotalAmt",
-                      DisplayType.Number, ctx.GetVAF_Language()) + " AS NAME FROM C_PaySelection "
+            StringBuilder sql = new StringBuilder("SELECT VAB_PaymentOption_ID, Name || ' - ' || " + DB.TO_CHAR("TotalAmt",
+                      DisplayType.Number, ctx.GetVAF_Language()) + " AS NAME FROM VAB_PaymentOption "
                       + "WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND Processed='Y' AND IsActive='Y'");
             if (!_printCheck)
             {
-                sql.Append(" AND EXISTS (SELECT * FROM C_PaySelectionCheck psc" +
-                           " WHERE psc.C_PaySelection_ID = C_PaySelection.C_PaySelection_ID	AND psc.IsPrinted = 'N') ");
+                sql.Append(" AND EXISTS (SELECT * FROM VAB_PaymentOptionCheck psc" +
+                           " WHERE psc.VAB_PaymentOption_ID = VAB_PaymentOption.VAB_PaymentOption_ID	AND psc.IsPrinted = 'N') ");
             }
-            sql.Append("ORDER BY PayDate DESC, C_PaySelection_ID DESC");
+            sql.Append("ORDER BY PayDate DESC, VAB_PaymentOption_ID DESC");
             DataSet ds = new DataSet();
             ds = DB.ExecuteDataset(sql.ToString(), null, null);
             if (ds != null)
@@ -123,13 +123,13 @@ namespace VIS.Models
                 {
                     if (isFirstTime)
                     {
-                        _C_PaySelection_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_PaySelection_ID"]);
+                        _VAB_PaymentOption_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_PaymentOption_ID"]);
                     }
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         objPSelection.Add(new PaymentSelection()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["C_PaySelection_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_PaymentOption_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                         });
                     }
@@ -147,11 +147,11 @@ namespace VIS.Models
             List<PSelectInfo> objPSelectInfo = new List<PSelectInfo>();
             String sql = "SELECT ps.VAB_Bank_Acct_ID, b.Name || ' ' || ba.AccountNo AS NAME,"	//	1..2
                + " c.ISO_Code, CurrentBalance "										//	3..4
-               + "FROM C_PaySelection ps"
+               + "FROM VAB_PaymentOption ps"
                + " INNER JOIN VAB_Bank_Acct ba ON (ps.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
                + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID)"
                + " INNER JOIN VAB_Currency c ON (ba.VAB_Currency_ID=c.VAB_Currency_ID) "
-               + "WHERE ps.C_PaySelection_ID=" + _C_PaySelection_ID + " AND ps.Processed='Y' AND ba.IsActive='Y'";
+               + "WHERE ps.VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID + " AND ps.Processed='Y' AND ba.IsActive='Y'";
             DataSet ds = new DataSet();
             ds = DB.ExecuteDataset(sql.ToString(), null, null);
             if (ds != null)
@@ -178,15 +178,15 @@ namespace VIS.Models
         /// PaymentRule changed - load DocumentNo, NoPayments,
         ///  enable/disable EFT, Print
         /// </summary>
-        public PInfo LoadPaymentRuleInfo(Ctx ctx, string paymentMethod_ID, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule)
+        public PInfo LoadPaymentRuleInfo(Ctx ctx, string paymentMethod_ID, int VAB_PaymentOption_ID, int m_VAB_Bank_Acct_ID, string PaymentRule)
         {
 
             PInfo objPInfo = new PInfo();
 
 
             String sql = "SELECT COUNT(*) "
-                + "FROM C_PaySelectionCheck "
-                + "WHERE C_PaySelection_ID=" + C_PaySelection_ID;
+                + "FROM VAB_PaymentOptionCheck "
+                + "WHERE VAB_PaymentOption_ID=" + VAB_PaymentOption_ID;
 
             //  DocumentNo
             String sql1 = "SELECT CurrentNext "
@@ -216,7 +216,7 @@ namespace VIS.Models
         /// <summary>
         /// Print Checks and/or Remittance
         /// </summary>
-        public Cmd_Print Cmd_Print(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
+        public Cmd_Print Cmd_Print(Ctx ctx, int VAB_PaymentOption_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
         {
 
             Cmd_Print objCmdPrint = new Cmd_Print();
@@ -225,14 +225,14 @@ namespace VIS.Models
             log.Info(PaymentRule);
 
 
-            log.Config("C_PaySelection_ID=" + C_PaySelection_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
+            log.Config("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
 
 
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(C_PaySelection_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             if (m_checks == null || m_checks.Length == 0)
             {
-                //ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(Envs.GetCtx(), "C_PaySelectionLine_ID") + " #0");
+                //ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(Envs.GetCtx(), "VAB_PaymentOptionLine_ID") + " #0");
                 res = false;
                 //return false;
             }
@@ -240,7 +240,7 @@ namespace VIS.Models
             {
                 res = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, C_PaySelection_ID, null);
+            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             if (!m_batch.Save())
             {
 
@@ -255,7 +255,7 @@ namespace VIS.Models
             bool directPrint = !Ini.IsPropertyBool(Ini.P_PRINTPREVIEW);
             Dictionary<VAdvantage.Model.MPaySelectionCheck, String> oldCheckValues = new Dictionary<VAdvantage.Model.MPaySelectionCheck, string>();
             int checkID = 0;
-            int c_payment_ID = 0;
+            int VAB_Payment_ID = 0;
             List<int> check_ID = new List<int>();
             foreach (VAdvantage.Model.MPaySelectionCheck check in m_checks)
             {
@@ -278,14 +278,14 @@ namespace VIS.Models
             try
             {
 
-                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_PaySelectionCheck'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'VAB_PaymentOptionCheck'";
                 table_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 //sql = "select VAF_Job_id from VAF_Job where value = 'CheckPrint'";
-                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from VAB_Bank_Acctdoc where VAB_Bank_Acct_id = (select VAB_Bank_Acct_id from c_payment where c_payment_id = (select c_payment_id from c_payselectioncheck where c_payselectioncheck_id = " + checkID + ")) and VAB_Bank_Acctdoc.isactive = 'Y' and rownum =1)";
+                sql = "select VAF_Job_id from VAF_Job where VAF_Print_Rpt_Layout_id = (select check_printformat_id from VAB_Bank_Acctdoc where VAB_Bank_Acct_id = (select VAB_Bank_Acct_id from VAB_Payment where VAB_Payment_id = (select VAB_Payment_id from VAB_PaymentOptioncheck where VAB_PaymentOptioncheck_id = " + checkID + ")) and VAB_Bank_Acctdoc.isactive = 'Y' and rownum =1)";
                 VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'VAB_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
@@ -311,7 +311,7 @@ namespace VIS.Models
 
             //}
             objCmdPrint.check_ID = check_ID;
-            objCmdPrint.m_batch = m_batch.GetC_PaymentBatch_ID();
+            objCmdPrint.m_batch = m_batch.GetVAB_PaymentBatch_ID();
             return objCmdPrint;
 
         }
@@ -319,7 +319,7 @@ namespace VIS.Models
         /// ContinueCheckPrint
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_PaySelection_ID"></param>
+        /// <param name="VAB_PaymentOption_ID"></param>
         /// <param name="m_VAB_Bank_Acct_ID"></param>
         /// <param name="PaymentRule"></param>
         /// <param name="startDocumentNo"></param>
@@ -327,10 +327,10 @@ namespace VIS.Models
         /// <param name="m_checks"></param>
         /// <param name="m_batch"></param>
         /// <returns></returns>
-        public List<int> ContinueCheckPrint(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, string startDocumentNo, List<int> check_ID,
+        public List<int> ContinueCheckPrint(Ctx ctx, int VAB_PaymentOption_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, string startDocumentNo, List<int> check_ID,
                                        VAdvantage.Model.MPaySelectionCheck[] m_checks, VAdvantage.Model.MPaymentBatch m_batch)
         {
-            int c_payment_ID = 0;
+            int VAB_Payment_ID = 0;
             string sql = string.Empty;
             // int lastDocumentNo = MPaySelectionCheck.ConfirmPrint(m_checks, m_batch);
             int lastDocumentNo = VAdvantage.Model.MPaySelectionCheck.ConfirmPrint(m_checks, m_batch);
@@ -347,9 +347,9 @@ namespace VIS.Models
             payment_ID = new List<int>();
             for (int k = 0; k < check_ID.Count; k++)
             {
-                sql = "select c_payment_id from c_PaySelectionCheck where c_PaySelectionCheck_id = " + Util.GetValueOfInt(check_ID[k]);
-                c_payment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                payment_ID.Add(c_payment_ID);
+                sql = "select VAB_Payment_id from VAB_PaymentOptionCheck where VAB_PaymentOptionCheck_id = " + Util.GetValueOfInt(check_ID[k]);
+                VAB_Payment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+                payment_ID.Add(VAB_Payment_ID);
             }
 
 
@@ -373,7 +373,7 @@ namespace VIS.Models
             VAdvantage.ProcessEngine.ProcessCtl pctrl = null;
             try
             {
-                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'C_Payment'";
+                sql = "select vaf_tableview_id from vaf_tableview where tablename = 'VAB_Payment'";
                 paymentTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                 sql = "select VAF_Job_id from VAF_Job where value = 'PaymentPrintFormat'";
@@ -398,23 +398,23 @@ namespace VIS.Models
         }
 
 
-        public Cmd_Export Cmd_Export(Ctx ctx, int C_PaySelection_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
+        public Cmd_Export Cmd_Export(Ctx ctx, int VAB_PaymentOption_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, int startDocumentNo)
         {
             Cmd_Export objCmdExport = new Cmd_Export();
             bool res = false;
 
             log.Info(PaymentRule);
-            log.Config("C_PaySelection_ID=" + C_PaySelection_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
+            log.Config("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
 
             string expFile = "Export.txt";
 
 
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(C_PaySelection_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             //
             if (m_checks == null || m_checks.Length == 0)
             {
-                // ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(Envs.GetCtx(), "C_PaySelectionLine_ID") + " #0");
+                // ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(Envs.GetCtx(), "VAB_PaymentOptionLine_ID") + " #0");
                 res = false;
                 //return false;
             }
@@ -422,7 +422,7 @@ namespace VIS.Models
             {
                 res = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, C_PaySelection_ID, null);
+            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             //return true;
             if (!res)
             {
@@ -480,7 +480,7 @@ namespace VIS.Models
             string filepath = Export(m_checks, expFile, comm, busPart, bankAcc, DocumentNo, PayDate, ISOCode, PayAmt);
 
             objCmdExport.check_ID = check_ID;
-            objCmdExport.m_batch = m_batch.GetC_PaymentBatch_ID();
+            objCmdExport.m_batch = m_batch.GetVAB_PaymentBatch_ID();
             objCmdExport.filepath = filepath;
             return objCmdExport;
         }
@@ -588,23 +588,23 @@ namespace VIS.Models
         /// </summary>
         /// <param name="PaymentRule">Payment Rule</param>
         /// <returns> true if payments were created</returns>
-        private bool GetChecks(Ctx ctx, String PaymentRule, int C_PaySelection_ID, int startDocumentNo)
+        private bool GetChecks(Ctx ctx, String PaymentRule, int VAB_PaymentOption_ID, int startDocumentNo)
         {
 
-            log.Config("C_PaySelection_ID=" + C_PaySelection_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
+            log.Config("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
             //
             //this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
             //	get Selections
 
             bool result = false;
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(C_PaySelection_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             //this.setCursor(Cursor.getDefaultCursor());
             //
             if (m_checks == null || m_checks.Length == 0)
             {
-                // ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(ctx, "C_PaySelectionLine_ID") + " #0");
+                // ShowMessage.Error("VPayPrintNoRecords", null, "(" + Msg.Translate(ctx, "VAB_PaymentOptionLine_ID") + " #0");
                 result = false;
                 //return false;
             }
@@ -612,7 +612,7 @@ namespace VIS.Models
             {
                 result = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, C_PaySelection_ID, null);
+            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             //return true;
 
 
@@ -632,19 +632,19 @@ namespace VIS.Models
                 + "a.Address1, a.Address2, a.City, r.Name AS Region, a.Postal, "
                 + "cc.Name AS Country, bp.ReferenceNo "
                 /*//jz use SQL standard outer join
-                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, VAB_Address a, VAB_RegionState r, VAB_Country cc "
                 + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
                 + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
                 + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
-                + " AND l.C_Location_ID=a.C_Location_ID"
-                + " AND a.C_Region_ID=r.C_Region_ID(+)"
+                + " AND l.VAB_Address_ID=a.VAB_Address_ID"
+                + " AND a.VAB_RegionState_ID=r.VAB_RegionState_ID(+)"
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BusinessPartner bp "
                 + "LEFT OUTER JOIN VAF_UserContact c ON (bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID) "
                 + "INNER JOIN VAB_BPart_Location l ON (bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID) "
-                + "INNER JOIN C_Location a ON (l.C_Location_ID=a.C_Location_ID) "
-                + "LEFT OUTER JOIN C_Region r ON (a.C_Region_ID=r.C_Region_ID) "
+                + "INNER JOIN VAB_Address a ON (l.VAB_Address_ID=a.VAB_Address_ID) "
+                + "LEFT OUTER JOIN VAB_RegionState r ON (a.VAB_RegionState_ID=r.VAB_RegionState_ID) "
                 + "INNER JOIN VAB_Country cc ON (a.VAB_Country_ID=cc.VAB_Country_ID) "
                 + "WHERE bp.VAB_BusinessPartner_ID= " + VAB_BusinessPartner_ID          // #1
                 + " ORDER BY l.IsBillTo DESC";
@@ -715,12 +715,12 @@ namespace VIS.Models
             String sql = "SELECT bpba.RoutingNo, bpba.AccountNo, bpba.A_Name, bpba.A_City, bpba.BBAN, "
                 + "bpba.IBAN, ba.Name, ba.RoutingNo, ba.SwiftCode "
                 /*//jz use SQL standard outer join
-                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, C_Location a, C_Region r, VAB_Country cc "
+                + "FROM VAB_BusinessPartner bp, VAF_UserContact c, VAB_BPart_Location l, VAB_Address a, VAB_RegionState r, VAB_Country cc "
                 + "WHERE bp.VAB_BusinessPartner_ID=?"        // #1
                 + " AND bp.VAB_BusinessPartner_ID=c.VAB_BusinessPartner_ID(+)"
                 + " AND bp.VAB_BusinessPartner_ID=l.VAB_BusinessPartner_ID"
-                + " AND l.C_Location_ID=a.C_Location_ID"
-                + " AND a.C_Region_ID=r.C_Region_ID(+)"
+                + " AND l.VAB_Address_ID=a.VAB_Address_ID"
+                + " AND a.VAB_RegionState_ID=r.VAB_RegionState_ID(+)"
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BPart_Bank_Acct bpba "

@@ -44,7 +44,7 @@ namespace VAdvantage.Model
                 setVAB_BPart_Location_ID (0);
                 setVAB_Charge_ID (0);
                 setVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
-                setC_Tax_ID (0);
+                setVAB_TaxRate_ID (0);
                 setDocumentNo (null);
                 setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=@VAB_BatchInvoice_ID@
                 **/
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
             if (VAB_BusinessPartner_ID == 0)
                 return;
 
-            String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
+            String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -336,12 +336,12 @@ namespace VAdvantage.Model
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             //
-            int C_Tax_ID = Tax.Get(GetCtx(), 0, VAB_Charge_ID, billDate, shipDate,
+            int VAB_TaxRate_ID = Tax.Get(GetCtx(), 0, VAB_Charge_ID, billDate, shipDate,
                 VAF_Org_ID, M_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
                 isSOTrx);
-            log.Info("Tax ID=" + C_Tax_ID + " - SOTrx=" + isSOTrx);
+            log.Info("Tax ID=" + VAB_TaxRate_ID + " - SOTrx=" + isSOTrx);
 
-            if (C_Tax_ID == 0)
+            if (VAB_TaxRate_ID == 0)
             {
                 //ValueNamePair pp = CLogger.retrieveError();
                 //if (pp != null)
@@ -355,29 +355,29 @@ namespace VAdvantage.Model
             }
             else
             {
-                base.SetC_Tax_ID(C_Tax_ID);
+                base.SetVAB_TaxRate_ID(VAB_TaxRate_ID);
             }
             SetAmt(windowNo, columnName);
         }
 
         /**
          * 	Set Tax - Callout
-         *	@param oldC_Tax_ID old value
-         *	@param newC_Tax_ID new value
+         *	@param oldVAB_TaxRate_ID old value
+         *	@param newVAB_TaxRate_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout 
-        public void SetC_Tax_ID(String oldC_Tax_ID,
-            String newC_Tax_ID, int windowNo)
+        public void SetVAB_TaxRate_ID(String oldVAB_TaxRate_ID,
+            String newVAB_TaxRate_ID, int windowNo)
         {
             try
             {
-                if (newC_Tax_ID == null || newC_Tax_ID.Length == 0)
+                if (newVAB_TaxRate_ID == null || newVAB_TaxRate_ID.Length == 0)
                     return;
-                int C_Tax_ID = int.Parse(newC_Tax_ID);
-                SetC_Tax_ID(C_Tax_ID);
-                SetAmt(windowNo, "C_Tax_ID");
+                int VAB_TaxRate_ID = int.Parse(newVAB_TaxRate_ID);
+                SetVAB_TaxRate_ID(VAB_TaxRate_ID);
+                SetAmt(windowNo, "VAB_TaxRate_ID");
             }
             catch (Exception e)
             {
@@ -495,10 +495,10 @@ namespace VAdvantage.Model
             }
             else
             {
-                int C_Tax_ID = GetC_Tax_ID();
-                if (C_Tax_ID != 0)
+                int VAB_TaxRate_ID = GetVAB_TaxRate_ID();
+                if (VAB_TaxRate_ID != 0)
                 {
-                    MTax tax = new MTax(GetCtx(), C_Tax_ID, null);
+                    MTax tax = new MTax(GetCtx(), VAB_TaxRate_ID, null);
                     taxAmt = tax.CalculateTax(lineNetAmt, isTaxIncluded, stdPrecision);
                     SetTaxAmt(Convert.ToDecimal(taxAmt));
                 }

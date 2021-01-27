@@ -225,18 +225,18 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_WorkCommission_ID().ToString());
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);
 else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

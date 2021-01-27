@@ -21,7 +21,7 @@ public X_VAB_BPart_Withholding (Context ctx, int VAB_BPart_Withholding_ID, Trx t
 /** if (VAB_BPart_Withholding_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
-SetC_Withholding_ID (0);
+SetVAB_Withholding_ID (0);
 SetIsMandatoryWithholding (false);
 SetIsTemporaryExempt (false);
 }
@@ -32,7 +32,7 @@ public X_VAB_BPart_Withholding (Ctx ctx, int VAB_BPart_Withholding_ID, Trx trxNa
 /** if (VAB_BPart_Withholding_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
-SetC_Withholding_ID (0);
+SetVAB_Withholding_ID (0);
 SetIsMandatoryWithholding (false);
 SetIsTemporaryExempt (false);
 }
@@ -138,17 +138,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_BusinessPartner_ID().ToString());
 }
 /** Set Withholding.
-@param C_Withholding_ID Withholding type defined */
-public void SetC_Withholding_ID (int C_Withholding_ID)
+@param VAB_Withholding_ID Withholding type defined */
+public void SetVAB_Withholding_ID (int VAB_Withholding_ID)
 {
-if (C_Withholding_ID < 1) throw new ArgumentException ("C_Withholding_ID is mandatory.");
-Set_ValueNoCheck ("C_Withholding_ID", C_Withholding_ID);
+if (VAB_Withholding_ID < 1) throw new ArgumentException ("VAB_Withholding_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Withholding_ID", VAB_Withholding_ID);
 }
 /** Get Withholding.
 @return Withholding type defined */
-public int GetC_Withholding_ID() 
+public int GetVAB_Withholding_ID() 
 {
-Object ii = Get_Value("C_Withholding_ID");
+Object ii = Get_Value("VAB_Withholding_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

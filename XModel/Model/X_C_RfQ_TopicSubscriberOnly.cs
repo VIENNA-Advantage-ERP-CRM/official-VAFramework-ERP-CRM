@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_RfQ_TopicSubscriberOnly
+/** Generated Model for VAB_RFQ_SubjectMem_Allow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RfQ_TopicSubscriberOnly : PO
+public class X_VAB_RFQ_SubjectMem_Allow : PO
 {
-public X_C_RfQ_TopicSubscriberOnly (Context ctx, int C_RfQ_TopicSubscriberOnly_ID, Trx trxName) : base (ctx, C_RfQ_TopicSubscriberOnly_ID, trxName)
+public X_VAB_RFQ_SubjectMem_Allow (Context ctx, int VAB_RFQ_SubjectMem_Allow_ID, Trx trxName) : base (ctx, VAB_RFQ_SubjectMem_Allow_ID, trxName)
 {
-/** if (C_RfQ_TopicSubscriberOnly_ID == 0)
+/** if (VAB_RFQ_SubjectMem_Allow_ID == 0)
 {
-SetC_RfQ_TopicSubscriberOnly_ID (0);
-SetC_RfQ_TopicSubscriber_ID (0);
+SetVAB_RFQ_SubjectMem_Allow_ID (0);
+SetVAB_RFQ_SubjectMember_ID (0);
 }
  */
 }
-public X_C_RfQ_TopicSubscriberOnly (Ctx ctx, int C_RfQ_TopicSubscriberOnly_ID, Trx trxName) : base (ctx, C_RfQ_TopicSubscriberOnly_ID, trxName)
+public X_VAB_RFQ_SubjectMem_Allow (Ctx ctx, int VAB_RFQ_SubjectMem_Allow_ID, Trx trxName) : base (ctx, VAB_RFQ_SubjectMem_Allow_ID, trxName)
 {
-/** if (C_RfQ_TopicSubscriberOnly_ID == 0)
+/** if (VAB_RFQ_SubjectMem_Allow_ID == 0)
 {
-SetC_RfQ_TopicSubscriberOnly_ID (0);
-SetC_RfQ_TopicSubscriber_ID (0);
+SetVAB_RFQ_SubjectMem_Allow_ID (0);
+SetVAB_RFQ_SubjectMember_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetC_RfQ_TopicSubscriber_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriberOnly (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQ_SubjectMem_Allow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_RfQ_TopicSubscriberOnly (Context ctx, DataRow rs, Trx trxName) : base
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriberOnly (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_RFQ_SubjectMem_Allow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_RfQ_TopicSubscriberOnly (Ctx ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RfQ_TopicSubscriberOnly (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_RFQ_SubjectMem_Allow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RfQ_TopicSubscriberOnly()
+static X_VAB_RFQ_SubjectMem_Allow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389058298L;
 public static int Table_ID;
  // =747;
 
-/** TableName=C_RfQ_TopicSubscriberOnly */
-public static String Table_Name="C_RfQ_TopicSubscriberOnly";
+/** TableName=VAB_RFQ_SubjectMem_Allow */
+public static String Table_Name="VAB_RFQ_SubjectMem_Allow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_RfQ_TopicSubscriberOnly[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_RFQ_SubjectMem_Allow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set RfQ Topic Subscriber Restriction.
-@param C_RfQ_TopicSubscriberOnly_ID Include Subscriber only for certain products or product categories */
-public void SetC_RfQ_TopicSubscriberOnly_ID (int C_RfQ_TopicSubscriberOnly_ID)
+@param VAB_RFQ_SubjectMem_Allow_ID Include Subscriber only for certain products or product categories */
+public void SetVAB_RFQ_SubjectMem_Allow_ID (int VAB_RFQ_SubjectMem_Allow_ID)
 {
-if (C_RfQ_TopicSubscriberOnly_ID < 1) throw new ArgumentException ("C_RfQ_TopicSubscriberOnly_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQ_TopicSubscriberOnly_ID", C_RfQ_TopicSubscriberOnly_ID);
+if (VAB_RFQ_SubjectMem_Allow_ID < 1) throw new ArgumentException ("VAB_RFQ_SubjectMem_Allow_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQ_SubjectMem_Allow_ID", VAB_RFQ_SubjectMem_Allow_ID);
 }
 /** Get RfQ Topic Subscriber Restriction.
 @return Include Subscriber only for certain products or product categories */
-public int GetC_RfQ_TopicSubscriberOnly_ID() 
+public int GetVAB_RFQ_SubjectMem_Allow_ID() 
 {
-Object ii = Get_Value("C_RfQ_TopicSubscriberOnly_ID");
+Object ii = Get_Value("VAB_RFQ_SubjectMem_Allow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RfQ Subscriber.
-@param C_RfQ_TopicSubscriber_ID Request for Quotation Topic Subscriber */
-public void SetC_RfQ_TopicSubscriber_ID (int C_RfQ_TopicSubscriber_ID)
+@param VAB_RFQ_SubjectMember_ID Request for Quotation Topic Subscriber */
+public void SetVAB_RFQ_SubjectMember_ID (int VAB_RFQ_SubjectMember_ID)
 {
-if (C_RfQ_TopicSubscriber_ID < 1) throw new ArgumentException ("C_RfQ_TopicSubscriber_ID is mandatory.");
-Set_ValueNoCheck ("C_RfQ_TopicSubscriber_ID", C_RfQ_TopicSubscriber_ID);
+if (VAB_RFQ_SubjectMember_ID < 1) throw new ArgumentException ("VAB_RFQ_SubjectMember_ID is mandatory.");
+Set_ValueNoCheck ("VAB_RFQ_SubjectMember_ID", VAB_RFQ_SubjectMember_ID);
 }
 /** Get RfQ Subscriber.
 @return Request for Quotation Topic Subscriber */
-public int GetC_RfQ_TopicSubscriber_ID() 
+public int GetVAB_RFQ_SubjectMember_ID() 
 {
-Object ii = Get_Value("C_RfQ_TopicSubscriber_ID");
+Object ii = Get_Value("VAB_RFQ_SubjectMember_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

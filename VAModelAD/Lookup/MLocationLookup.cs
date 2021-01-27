@@ -61,7 +61,7 @@ namespace VAdvantage.Model
             dynamic loc = GetLocation(value, null);
             if (loc == null)
                 return null;
-            return new KeyNamePair(loc.GetC_Location_ID(), loc.ToString());
+            return new KeyNamePair(loc.GetVAB_Address_ID(), loc.ToString());
         }
 
         /// <summary>
@@ -83,24 +83,24 @@ namespace VAdvantage.Model
         {
             if (key == null)
                 return null;
-            int C_Location_ID = 0;
+            int VAB_Address_ID = 0;
             if (key is int)
-                C_Location_ID = (int)key;
+                VAB_Address_ID = (int)key;
             else if (key != null)
-                C_Location_ID = int.Parse(key.ToString());
+                VAB_Address_ID = int.Parse(key.ToString());
             //
-            return GetLocation(C_Location_ID, trxName);
+            return GetLocation(VAB_Address_ID, trxName);
         }
 
         /// <summary>
         ///Get Location
         /// </summary>
-        /// <param name="C_Location_ID">C_Location_ID id</param>
+        /// <param name="VAB_Address_ID">VAB_Address_ID id</param>
         /// <param name="trxName">transaction</param>
         /// <returns></returns>
-        public MLocation GetLocation(int C_Location_ID, Trx trxName)
+        public MLocation GetLocation(int VAB_Address_ID, Trx trxName)
         {
-            return MLocation.Get((Context)GetCtx(), C_Location_ID, trxName);
+            return MLocation.Get((Context)GetCtx(), VAB_Address_ID, trxName);
         }
 
 
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         /// <returns>Column</returns>
         public override String GetColumnName()
         {
-            return "C_Location_ID";
+            return "VAB_Address_ID";
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder(
-                    "SELECT C_Location_ID from C_Location WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
+                    "SELECT VAB_Address_ID from VAB_Address WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 1");

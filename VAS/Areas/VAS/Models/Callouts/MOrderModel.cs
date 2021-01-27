@@ -22,11 +22,11 @@ namespace VIS.Models
         {
 
             string[] paramValue = fields.ToString().Split(',');
-            int C_Order_ID;
+            int VAB_Order_ID;
 
             //Assign parameter value
-            C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, C_Order_ID, null);
+            VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
             // End Assign parameter value
 
             Dictionary<String, object> retDic = new Dictionary<string, object>();
@@ -41,8 +41,8 @@ namespace VIS.Models
                 retDic["Bill_User_ID"] = Util.GetValueOfString(order.GetBill_User_ID());
             retDic["M_PriceList_ID"] = Util.GetValueOfString(order.GetM_PriceList_ID());
             retDic["PaymentRule"] = order.GetPaymentRule();
-            retDic["C_PaymentTerm_ID"] = Util.GetValueOfString(order.GetC_PaymentTerm_ID());
-            //mTab.setValue ("DeliveryRule", X_C_Order.DELIVERYRULE_Manual);
+            retDic["VAB_PaymentTerm_ID"] = Util.GetValueOfString(order.GetVAB_PaymentTerm_ID());
+            //mTab.setValue ("DeliveryRule", X_VAB_Order.DELIVERYRULE_Manual);
             retDic["Bill_Location_ID"] = Util.GetValueOfString(order.GetBill_Location_ID());
             retDic["InvoiceRule"] = order.GetInvoiceRule();
             retDic["PaymentRule"] = order.GetPaymentRule();
@@ -61,7 +61,7 @@ namespace VIS.Models
             retDic["VAF_OrgTrx_ID"] = Util.GetValueOfString(order.GetVAF_OrgTrx_ID());
             retDic["VAB_BillingCode_ID"] = Util.GetValueOfString(order.GetVAB_BillingCode_ID());
             retDic["VAB_Promotion_ID"] = Util.GetValueOfString(order.GetVAB_Promotion_ID());
-            retDic["C_Project_ID"] = Util.GetValueOfString(order.GetC_Project_ID());
+            retDic["VAB_Project_ID"] = Util.GetValueOfString(order.GetVAB_Project_ID());
             retDic["User1_ID"] = Util.GetValueOfString(order.GetUser1_ID());
             retDic["User2_ID"] = Util.GetValueOfString(order.GetUser2_ID());
             retDic["M_Warehouse_ID"] = Util.GetValueOfString(order.GetM_Warehouse_ID());
@@ -70,10 +70,10 @@ namespace VIS.Models
             //Added By Amit
             retDic["IsSOTrx"] = Util.GetValueOfString(order.IsSOTrx());
             retDic["IsReturnTrx"] = Util.GetValueOfString(order.IsReturnTrx());
-            retDic["C_Payment_ID"] = Util.GetValueOfString(order.GetPaymentMethod());
+            retDic["VAB_Payment_ID"] = Util.GetValueOfString(order.GetPaymentMethod());
             retDic["VA009_PaymentMethod_ID"] = Util.GetValueOfString(order.GetVA009_PaymentMethod_ID());
             retDic["SalesRep_ID"] = Util.GetValueOfString(order.GetSalesRep_ID());
-            retDic["C_ProjectRef_ID"] = Util.GetValueOfString(order.GetC_ProjectRef_ID());
+            retDic["VAB_ProjectRef_ID"] = Util.GetValueOfString(order.GetVAB_ProjectRef_ID());
             retDic["PriorityRule"] = Util.GetValueOfString(order.GetPriorityRule());
 
 
@@ -102,18 +102,18 @@ namespace VIS.Models
         public int GetM_PriceList(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Order_ID;
-            C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, C_Order_ID, null);
+            int VAB_Order_ID;
+            VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
             return order.GetM_PriceList_ID();
         }
 
         public int GetVAB_Currency_ID(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Order_ID;
-            C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, C_Order_ID, null);
+            int VAB_Order_ID;
+            VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
             return order.GetVAB_Currency_ID();
         }
         //End
@@ -123,14 +123,14 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             bool countVA009 = false;
-            int C_Order_ID = 0;
+            int VAB_Order_ID = 0;
             countVA009 = Util.GetValueOfBool(paramValue[0]);
-            C_Order_ID = Util.GetValueOfInt(paramValue[1]);
+            VAB_Order_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<String, object> retDir = null; ;
             if (countVA009)
             {
-                string sql = "SELECT p.VA009_PaymentMethod_ID, p.VA009_PaymentBaseType FROM C_Order o INNER JOIN VA009_PaymentMethod p "
-                + " ON o.VA009_PaymentMethod_ID = p.VA009_PaymentMethod_ID WHERE o.C_Order_ID = " + C_Order_ID;
+                string sql = "SELECT p.VA009_PaymentMethod_ID, p.VA009_PaymentBaseType FROM VAB_Order o INNER JOIN VA009_PaymentMethod p "
+                + " ON o.VA009_PaymentMethod_ID = p.VA009_PaymentMethod_ID WHERE o.VAB_Order_ID = " + VAB_Order_ID;
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -153,7 +153,7 @@ namespace VIS.Models
             tableName = Util.GetValueOfString(paramValue[1]);
             refColumn = Util.GetValueOfString(paramValue[2]);
             referenceID = Util.GetValueOfInt(paramValue[3]);
-            if (tableName == "C_Order")
+            if (tableName == "VAB_Order")
             {
                 if (referenceID > 0)
                 {
@@ -168,7 +168,7 @@ namespace VIS.Models
                     MOrder ord = new MOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
-                else if (!isSOTrx && referenceID > 0 && refColumn == "C_Order_ID")
+                else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Order_ID")
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
@@ -186,7 +186,7 @@ namespace VIS.Models
                     MOrder ord = new MOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
-                else if (!isSOTrx && referenceID > 0 && refColumn == "C_Order_ID")
+                else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Order_ID")
                 {
                     MOrder ord = new MOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
@@ -224,14 +224,14 @@ namespace VIS.Models
                 isAdvancePayTerm = true;
             }
             // check payment term is Advance, then return False
-            else if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM C_PaymentTerm
-                                            WHERE C_PaymentTerm_ID = " + PaymentTerm_Id, null, null)).Equals("Y"))
+            else if (Util.GetValueOfString(DB.ExecuteScalar(@"SELECT VA009_Advance FROM VAB_PaymentTerm
+                                            WHERE VAB_PaymentTerm_ID = " + PaymentTerm_Id, null, null)).Equals("Y"))
             {
                 isAdvancePayTerm = false;
             }
             // check any payment term schedule is Advance, then return False
-            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM C_PaySchedule 
-                                            WHERE VA009_Advance = 'Y' AND C_PaymentTerm_ID = " + PaymentTerm_Id, null, null)) > 0)
+            else if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAB_PaymentSchedule 
+                                            WHERE VA009_Advance = 'Y' AND VAB_PaymentTerm_ID = " + PaymentTerm_Id, null, null)) > 0)
             {
                 isAdvancePayTerm = false;
             }
@@ -256,8 +256,8 @@ namespace VIS.Models
                 {
                     sql.Append("VA009_PAYMENTMETHOD_ID,");
                 }
-                sql.Append("C_PAYMENTTERM_ID, VAB_PROMOTION_ID, VAB_BILLINGCODE_ID, VAF_ORGTRX_ID, USER1_ID, USER2_ID,");
-                sql.Append("TOTALLINES, GRANDTOTAL FROM C_ORDER WHERE C_ORDER_ID= " + _Order_ID);
+                sql.Append("VAB_PAYMENTTERM_ID, VAB_PROMOTION_ID, VAB_BILLINGCODE_ID, VAF_ORGTRX_ID, USER1_ID, USER2_ID,");
+                sql.Append("TOTALLINES, GRANDTOTAL FROM VAB_ORDER WHERE VAB_ORDER_ID= " + _Order_ID);
                 DataSet ds = DB.ExecuteDataset(sql.ToString(), null, null);
                 sql.Clear();
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -288,7 +288,7 @@ namespace VIS.Models
                     {
                         retDir["VA009_PaymentMethod_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VA009_PaymentMethod_ID"]);
                     }
-                    retDir["C_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["C_PaymentTerm_ID"]);
+                    retDir["VAB_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_PaymentTerm_ID"]);
                     retDir["VAB_Promotion_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Promotion_ID"]);
                     retDir["VAB_BillingCode_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BillingCode_ID"]);
                     retDir["VAF_OrgTrx_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_OrgTrx_ID"]);
@@ -311,7 +311,7 @@ namespace VIS.Models
 
         public int GetPrecision(Ctx ctx,string fields)
         {
-            string sql = "SELECT CC.StdPrecision FROM C_Order CO INNER JOIN VAB_Currency CC on CC.VAB_Currency_Id = Co.VAB_Currency_Id where CO.C_Order_Id= " + Util.GetValueOfInt(fields);
+            string sql = "SELECT CC.StdPrecision FROM VAB_Order CO INNER JOIN VAB_Currency CC on CC.VAB_Currency_Id = Co.VAB_Currency_Id where CO.VAB_Order_Id= " + Util.GetValueOfInt(fields);
             var stdPrecision = Util.GetValueOfInt(DB.ExecuteScalar(sql, null,null));
             return stdPrecision;
         }

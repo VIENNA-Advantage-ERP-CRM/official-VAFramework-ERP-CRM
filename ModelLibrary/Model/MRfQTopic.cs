@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQTopic
  * Purpose        : RfQ Topic Model
- * Class Used     : X_C_RfQ_Topic
+ * Class Used     : X_VAB_RFQ_Subject
  * Chronological    Development
  * Raghunandan     11-Aug.-2009
   ******************************************************/
@@ -25,17 +25,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQTopic : X_C_RfQ_Topic
+    public class MRfQTopic : X_VAB_RFQ_Subject
     {
 
         /// <summary>
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_RfQ_Topic_ID"></param>
+        /// <param name="VAB_RFQ_Subject_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQTopic(Ctx ctx, int C_RfQ_Topic_ID, Trx trxName)
-            : base(ctx, C_RfQ_Topic_ID, trxName)
+        public MRfQTopic(Ctx ctx, int VAB_RFQ_Subject_ID, Trx trxName)
+            : base(ctx, VAB_RFQ_Subject_ID, trxName)
         {
 
         }
@@ -59,8 +59,8 @@ namespace VAdvantage.Model
         public MRfQTopicSubscriber[] GetSubscribers()
         {
             List<MRfQTopicSubscriber> list = new List<MRfQTopicSubscriber>();
-            String sql = "SELECT * FROM C_RfQ_TopicSubscriber "
-                + "WHERE C_RfQ_Topic_ID=" + GetC_RfQ_Topic_ID() + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAB_RFQ_SubjectMember "
+                + "WHERE VAB_RFQ_Subject_ID=" + GetVAB_RFQ_Subject_ID() + " AND IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
             try

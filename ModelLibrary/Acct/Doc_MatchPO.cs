@@ -32,7 +32,7 @@ namespace VAdvantage.Acct
 {
     public class Doc_MatchPO : Doc
     {
-        private int _C_OrderLine_ID = 0;
+        private int _VAB_OrderLine_ID = 0;
         private MOrderLine _oLine = null;
         //
         private int _M_InOutLine_ID = 0;
@@ -71,8 +71,8 @@ namespace VAdvantage.Acct
             _M_AttributeSetInstance_ID = matchPO.GetM_AttributeSetInstance_ID();
             SetQty(matchPO.GetQty());
             //
-            _C_OrderLine_ID = matchPO.GetC_OrderLine_ID();
-            _oLine = new MOrderLine(GetCtx(), _C_OrderLine_ID, GetTrxName());
+            _VAB_OrderLine_ID = matchPO.GetVAB_OrderLine_ID();
+            _oLine = new MOrderLine(GetCtx(), _VAB_OrderLine_ID, GetTrxName());
             //
             _M_InOutLine_ID = matchPO.GetM_InOutLine_ID();
             //	m_VAB_InvoiceLine_ID = matchPO.getVAB_InvoiceLine_ID();
@@ -157,7 +157,7 @@ namespace VAdvantage.Acct
                 //	Create PO Cost Detail Record firs
                 MCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
                         GetM_Product_ID(), _M_AttributeSetInstance_ID,
-                        _C_OrderLine_ID, 0,		//	no cost element
+                        _VAB_OrderLine_ID, 0,		//	no cost element
                         isReturnTrx ? Decimal.Negate(poCost) : poCost, isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),			//	Delivered
                         _oLine.GetDescription(), GetTrx(), GetRectifyingProcess());
             }
@@ -172,7 +172,7 @@ namespace VAdvantage.Acct
             {
                 costingMethod = pca.GetCostingMethod();
             }
-            Decimal? costs = _pc.GetProductCosts(as1, GetVAF_Org_ID(), costingMethod, _C_OrderLine_ID, false);	//	non-zero costs
+            Decimal? costs = _pc.GetProductCosts(as1, GetVAF_Org_ID(), costingMethod, _VAB_OrderLine_ID, false);	//	non-zero costs
 
             //	No Costs yet - no PPV
             if (costs == null || Env.Signum(Utility.Util.GetValueOfDecimal(costs)) == 0)
@@ -221,8 +221,8 @@ namespace VAdvantage.Acct
                 cr.SetVAB_BusinessPartner_ID(_oLine.GetVAB_BusinessPartner_ID());
                 cr.SetVAB_BillingCode_ID(_oLine.GetVAB_BillingCode_ID());
                 cr.SetVAB_Promotion_ID(_oLine.GetVAB_Promotion_ID());
-                cr.SetC_Project_ID(_oLine.GetC_Project_ID());
-                cr.SetC_UOM_ID(_oLine.GetC_UOM_ID());
+                cr.SetVAB_Project_ID(_oLine.GetVAB_Project_ID());
+                cr.SetVAB_UOM_ID(_oLine.GetVAB_UOM_ID());
                 cr.SetUser1_ID(_oLine.GetUser1_ID());
                 cr.SetUser2_ID(_oLine.GetUser2_ID());
             }
@@ -238,8 +238,8 @@ namespace VAdvantage.Acct
                 dr.SetVAB_BusinessPartner_ID(_oLine.GetVAB_BusinessPartner_ID());
                 dr.SetVAB_BillingCode_ID(_oLine.GetVAB_BillingCode_ID());
                 dr.SetVAB_Promotion_ID(_oLine.GetVAB_Promotion_ID());
-                dr.SetC_Project_ID(_oLine.GetC_Project_ID());
-                dr.SetC_UOM_ID(_oLine.GetC_UOM_ID());
+                dr.SetVAB_Project_ID(_oLine.GetVAB_Project_ID());
+                dr.SetVAB_UOM_ID(_oLine.GetVAB_UOM_ID());
                 dr.SetUser1_ID(_oLine.GetUser1_ID());
                 dr.SetUser2_ID(_oLine.GetUser2_ID());
             }

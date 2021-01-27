@@ -143,7 +143,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Region
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "Set RegionName=(SELECT Name FROM C_Region r"
+                + "Set RegionName=(SELECT Name FROM VAB_RegionState r"
                 + " WHERE r.IsDefault='Y' AND r.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) ");
             /*
@@ -152,27 +152,27 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 sql.Append(" AND ROWNUM=1) ");
             }
             else 
-                sql.Append(" AND r.UPDATED IN (SELECT MAX(UPDATED) FROM C_Region r1"
+                sql.Append(" AND r.UPDATED IN (SELECT MAX(UPDATED) FROM VAB_RegionState r1"
                 + " WHERE r1.IsDefault='Y' AND r1.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r1.VAF_Client_ID IN (0, i.VAF_Client_ID) ");
                 */
-            sql.Append("WHERE RegionName IS NULL AND C_Region_ID IS NULL"
+            sql.Append("WHERE RegionName IS NULL AND VAB_RegionState_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region Default=" + no);
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "Set C_Region_ID=(SELECT C_Region_ID FROM C_Region r"
+                + "Set VAB_RegionState_ID=(SELECT VAB_RegionState_ID FROM VAB_RegionState r"
                 + " WHERE r.Name=i.RegionName AND r.VAB_Country_ID=i.VAB_Country_ID"
                 + " AND r.VAF_Client_ID IN (0, i.VAF_Client_ID)) "
-                + "WHERE C_Region_ID IS NULL"
+                + "WHERE VAB_RegionState_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Region=" + no);
             //
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Region, ' "
-                + "WHERE C_Region_ID IS NULL "
+                + "WHERE VAB_RegionState_ID IS NULL "
                 + " AND EXISTS (SELECT * FROM VAB_Country c"
                 + " WHERE c.VAB_Country_ID=i.VAB_Country_ID AND c.HasRegion='Y')"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
@@ -226,11 +226,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Existing Location ? Exact Match
             sql = new StringBuilder("UPDATE I_BPartner i "
                 + "SET VAB_BPart_Location_ID=(SELECT VAB_BPart_Location_ID"
-                + " FROM VAB_BPart_Location bpl INNER JOIN C_Location l ON (bpl.C_Location_ID=l.C_Location_ID)"
+                + " FROM VAB_BPart_Location bpl INNER JOIN VAB_Address l ON (bpl.VAB_Address_ID=l.VAB_Address_ID)"
                 + " WHERE i.VAB_BusinessPartner_ID=bpl.VAB_BusinessPartner_ID AND bpl.VAF_Client_ID=i.VAF_Client_ID"
                 + " AND DUMP(i.Address1)=DUMP(l.Address1) AND DUMP(i.Address2)=DUMP(l.Address2)"
                 + " AND DUMP(i.City)=DUMP(l.City) AND DUMP(i.Postal)=DUMP(l.Postal) AND DUMP(i.Postal_Add)=DUMP(l.Postal_Add)"
-                + " AND DUMP(i.C_Region_ID)=DUMP(l.C_Region_ID) AND DUMP(i.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
+                + " AND DUMP(i.VAB_RegionState_ID)=DUMP(l.VAB_RegionState_ID) AND DUMP(i.VAB_Country_ID)=DUMP(l.VAB_Country_ID)) "
                 + "WHERE VAB_BusinessPartner_ID IS NOT NULL AND VAB_BPart_Location_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -331,9 +331,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (impBP.GetVAB_BPart_Location_ID() != 0)		//	Update Location
                     {
                         bpl = new MBPartnerLocation(GetCtx(), impBP.GetVAB_BPart_Location_ID(), Get_TrxName());
-                        MLocation location = new MLocation(GetCtx(), bpl.GetC_Location_ID(), Get_TrxName());
+                        MLocation location = new MLocation(GetCtx(), bpl.GetVAB_Address_ID(), Get_TrxName());
                         location.SetVAB_Country_ID(impBP.GetVAB_Country_ID());
-                        location.SetC_Region_ID(impBP.GetC_Region_ID());
+                        location.SetVAB_RegionState_ID(impBP.GetVAB_RegionState_ID());
                         location.SetCity(impBP.GetCity());
                         location.SetAddress1(impBP.GetAddress1());
                         location.SetAddress2(impBP.GetAddress2());
@@ -343,7 +343,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (!location.Save())
                             log.Warning("Location not updated");
                         else
-                            bpl.SetC_Location_ID(location.GetC_Location_ID());
+                            bpl.SetVAB_Address_ID(location.GetVAB_Address_ID());
                         if (impBP.GetPhone() != null)
                             bpl.SetPhone(impBP.GetPhone());
                         if (impBP.GetPhone2() != null)
@@ -358,14 +358,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             && impBP.GetCity() != null)
                         {
                             MLocation location = new MLocation(GetCtx(), impBP.GetVAB_Country_ID(),
-                                impBP.GetC_Region_ID(), impBP.GetCity(), Get_TrxName());
+                                impBP.GetVAB_RegionState_ID(), impBP.GetCity(), Get_TrxName());
                             location.SetAddress1(impBP.GetAddress1());
                             location.SetAddress2(impBP.GetAddress2());
                             location.SetPostal(impBP.GetPostal());
                             location.SetPostal_Add(impBP.GetPostal_Add());
                             location.SetRegionName(impBP.GetRegionName());
                             if (location.Save())
-                                log.Finest("Insert Location - " + location.GetC_Location_ID());
+                                log.Finest("Insert Location - " + location.GetVAB_Address_ID());
                             else
                             {
                                 Rollback();
@@ -379,7 +379,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             }
                             //
                             bpl = new MBPartnerLocation(bp);
-                            bpl.SetC_Location_ID(location.GetC_Location_ID());
+                            bpl.SetVAB_Address_ID(location.GetVAB_Address_ID());
                             bpl.SetPhone(impBP.GetPhone());
                             bpl.SetPhone2(impBP.GetPhone2());
                             bpl.SetFax(impBP.GetFax());

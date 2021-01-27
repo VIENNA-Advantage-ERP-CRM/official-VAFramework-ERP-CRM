@@ -26,7 +26,7 @@ namespace VAdvantage.Process
     class RecurringMenu : SvrProcess
     {
 
-        int _C_Recurring_ID = 0;
+        int _VAB_Recurring_ID = 0;
         /// <summary>
         /// Prepare - e.g., get Parameters.
         /// </summary>
@@ -40,9 +40,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Recurring_ID"))
+                else if (name.Equals("VAB_Recurring_ID"))
                 {
-                    _C_Recurring_ID = para[i].GetParameterAsInt();
+                    _VAB_Recurring_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -57,9 +57,9 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            if (_C_Recurring_ID > 0)
+            if (_VAB_Recurring_ID > 0)
             {
-                MRecurring rec = new MRecurring(GetCtx(), _C_Recurring_ID, Get_TrxName());
+                MRecurring rec = new MRecurring(GetCtx(), _VAB_Recurring_ID, Get_TrxName());
                 log.Info(rec.ToString());
                 return rec.ExecuteRun();
             }

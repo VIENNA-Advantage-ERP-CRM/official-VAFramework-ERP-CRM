@@ -11,32 +11,32 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_BenchmarkData
+/** Generated Model for VAPA_Std_BMData
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_BenchmarkData : PO
+public class X_VAPA_Std_BMData : PO
 {
-public X_PA_BenchmarkData (Context ctx, int PA_BenchmarkData_ID, Trx trxName) : base (ctx, PA_BenchmarkData_ID, trxName)
+public X_VAPA_Std_BMData (Context ctx, int VAPA_Std_BMData_ID, Trx trxName) : base (ctx, VAPA_Std_BMData_ID, trxName)
 {
-/** if (PA_BenchmarkData_ID == 0)
-{
-SetBenchmarkDate (DateTime.Now);
-SetBenchmarkValue (0.0);
-SetName (null);
-SetPA_BenchmarkData_ID (0);
-SetPA_Benchmark_ID (0);
-}
- */
-}
-public X_PA_BenchmarkData (Ctx ctx, int PA_BenchmarkData_ID, Trx trxName) : base (ctx, PA_BenchmarkData_ID, trxName)
-{
-/** if (PA_BenchmarkData_ID == 0)
+/** if (VAPA_Std_BMData_ID == 0)
 {
 SetBenchmarkDate (DateTime.Now);
 SetBenchmarkValue (0.0);
 SetName (null);
-SetPA_BenchmarkData_ID (0);
-SetPA_Benchmark_ID (0);
+SetVAPA_Std_BMData_ID (0);
+SetVAPA_Std_BM_ID (0);
+}
+ */
+}
+public X_VAPA_Std_BMData (Ctx ctx, int VAPA_Std_BMData_ID, Trx trxName) : base (ctx, VAPA_Std_BMData_ID, trxName)
+{
+/** if (VAPA_Std_BMData_ID == 0)
+{
+SetBenchmarkDate (DateTime.Now);
+SetBenchmarkValue (0.0);
+SetName (null);
+SetVAPA_Std_BMData_ID (0);
+SetVAPA_Std_BM_ID (0);
 }
  */
 }
@@ -45,7 +45,7 @@ SetPA_Benchmark_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_BenchmarkData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Std_BMData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_PA_BenchmarkData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_BenchmarkData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Std_BMData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_PA_BenchmarkData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_BenchmarkData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Std_BMData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_BenchmarkData()
+static X_VAPA_Std_BMData()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389064849L;
 public static int Table_ID;
  // =834;
 
-/** TableName=PA_BenchmarkData */
-public static String Table_Name="PA_BenchmarkData";
+/** TableName=VAPA_Std_BMData */
+public static String Table_Name="VAPA_Std_BMData";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_BenchmarkData[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Std_BMData[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Date.
@@ -188,32 +188,32 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Benchmark Data.
-@param PA_BenchmarkData_ID Performance Benchmark Data Point */
-public void SetPA_BenchmarkData_ID (int PA_BenchmarkData_ID)
+@param VAPA_Std_BMData_ID Performance Benchmark Data Point */
+public void SetVAPA_Std_BMData_ID (int VAPA_Std_BMData_ID)
 {
-if (PA_BenchmarkData_ID < 1) throw new ArgumentException ("PA_BenchmarkData_ID is mandatory.");
-Set_ValueNoCheck ("PA_BenchmarkData_ID", PA_BenchmarkData_ID);
+if (VAPA_Std_BMData_ID < 1) throw new ArgumentException ("VAPA_Std_BMData_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Std_BMData_ID", VAPA_Std_BMData_ID);
 }
 /** Get Benchmark Data.
 @return Performance Benchmark Data Point */
-public int GetPA_BenchmarkData_ID() 
+public int GetVAPA_Std_BMData_ID() 
 {
-Object ii = Get_Value("PA_BenchmarkData_ID");
+Object ii = Get_Value("VAPA_Std_BMData_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Benchmark.
-@param PA_Benchmark_ID Performance Benchmark */
-public void SetPA_Benchmark_ID (int PA_Benchmark_ID)
+@param VAPA_Std_BM_ID Performance Benchmark */
+public void SetVAPA_Std_BM_ID (int VAPA_Std_BM_ID)
 {
-if (PA_Benchmark_ID < 1) throw new ArgumentException ("PA_Benchmark_ID is mandatory.");
-Set_ValueNoCheck ("PA_Benchmark_ID", PA_Benchmark_ID);
+if (VAPA_Std_BM_ID < 1) throw new ArgumentException ("VAPA_Std_BM_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Std_BM_ID", VAPA_Std_BM_ID);
 }
 /** Get Benchmark.
 @return Performance Benchmark */
-public int GetPA_Benchmark_ID() 
+public int GetVAPA_Std_BM_ID() 
 {
-Object ii = Get_Value("PA_Benchmark_ID");
+Object ii = Get_Value("VAPA_Std_BM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

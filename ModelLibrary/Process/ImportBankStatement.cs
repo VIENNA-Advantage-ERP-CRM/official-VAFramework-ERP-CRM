@@ -245,7 +245,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_BankStatement_ID IN "
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE i.VAB_Invoice_ID IS NOT NULL "
                     + " AND p.VAB_Invoice_ID IS NOT NULL "
                     + " AND p.VAB_Invoice_ID<>i.VAB_Invoice_ID) ")
@@ -260,7 +260,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_BankStatement_ID IN "
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND p.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND p.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
@@ -291,7 +291,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_BankStatement_ID "
                     + "FROM I_BankStatement i"
                     + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID)"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE p.VAB_Invoice_ID<>v.VAB_Invoice_ID"
                     + " AND v.VAB_BusinessPartner_ID<>p.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
@@ -461,9 +461,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     line.SetInterestAmt(imp.GetInterestAmt());
                     line.SetChargeAmt(imp.GetChargeAmt());
                     line.SetMemo(imp.GetMemo());
-                    if (imp.GetC_Payment_ID() != 0)
+                    if (imp.GetVAB_Payment_ID() != 0)
                     {
-                        line.SetC_Payment_ID(imp.GetC_Payment_ID());
+                        line.SetVAB_Payment_ID(imp.GetVAB_Payment_ID());
                     }
 
                     //	Copy statement line reference data

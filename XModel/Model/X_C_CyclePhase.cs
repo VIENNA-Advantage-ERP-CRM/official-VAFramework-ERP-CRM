@@ -21,7 +21,7 @@ public X_VAB_ProjectCycleStage (Context ctx, int VAB_ProjectCycleStage_ID, Trx t
 /** if (VAB_ProjectCycleStage_ID == 0)
 {
 SetVAB_ProjectCycleStep_ID (0);
-SetC_Phase_ID (0);
+SetVAB_Std_Stage_ID (0);
 }
  */
 }
@@ -30,7 +30,7 @@ public X_VAB_ProjectCycleStage (Ctx ctx, int VAB_ProjectCycleStage_ID, Trx trxNa
 /** if (VAB_ProjectCycleStage_ID == 0)
 {
 SetVAB_ProjectCycleStep_ID (0);
-SetC_Phase_ID (0);
+SetVAB_Std_Stage_ID (0);
 }
  */
 }
@@ -134,17 +134,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_ProjectCycleStep_ID().ToString());
 }
 /** Set Standard Phase.
-@param C_Phase_ID Standard Phase of the Project Type */
-public void SetC_Phase_ID (int C_Phase_ID)
+@param VAB_Std_Stage_ID Standard Phase of the Project Type */
+public void SetVAB_Std_Stage_ID (int VAB_Std_Stage_ID)
 {
-if (C_Phase_ID < 1) throw new ArgumentException ("C_Phase_ID is mandatory.");
-Set_ValueNoCheck ("C_Phase_ID", C_Phase_ID);
+if (VAB_Std_Stage_ID < 1) throw new ArgumentException ("VAB_Std_Stage_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Std_Stage_ID", VAB_Std_Stage_ID);
 }
 /** Get Standard Phase.
 @return Standard Phase of the Project Type */
-public int GetC_Phase_ID() 
+public int GetVAB_Std_Stage_ID() 
 {
-Object ii = Get_Value("C_Phase_ID");
+Object ii = Get_Value("VAB_Std_Stage_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

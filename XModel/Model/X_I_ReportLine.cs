@@ -413,50 +413,50 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Report Line Set.
-@param PA_ReportLineSet_ID Report Line Set */
-public void SetPA_ReportLineSet_ID (int PA_ReportLineSet_ID)
+@param VAPA_FR_RowSet_ID Report Line Set */
+public void SetVAPA_FR_RowSet_ID (int VAPA_FR_RowSet_ID)
 {
-if (PA_ReportLineSet_ID <= 0) Set_Value ("PA_ReportLineSet_ID", null);
+if (VAPA_FR_RowSet_ID <= 0) Set_Value ("VAPA_FR_RowSet_ID", null);
 else
-Set_Value ("PA_ReportLineSet_ID", PA_ReportLineSet_ID);
+Set_Value ("VAPA_FR_RowSet_ID", VAPA_FR_RowSet_ID);
 }
 /** Get Report Line Set.
 @return Report Line Set */
-public int GetPA_ReportLineSet_ID() 
+public int GetVAPA_FR_RowSet_ID() 
 {
-Object ii = Get_Value("PA_ReportLineSet_ID");
+Object ii = Get_Value("VAPA_FR_RowSet_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report Line.
-@param PA_ReportLine_ID Report Line */
-public void SetPA_ReportLine_ID (int PA_ReportLine_ID)
+@param VAPA_FR_Row_ID Report Line */
+public void SetVAPA_FR_Row_ID (int VAPA_FR_Row_ID)
 {
-if (PA_ReportLine_ID <= 0) Set_Value ("PA_ReportLine_ID", null);
+if (VAPA_FR_Row_ID <= 0) Set_Value ("VAPA_FR_Row_ID", null);
 else
-Set_Value ("PA_ReportLine_ID", PA_ReportLine_ID);
+Set_Value ("VAPA_FR_Row_ID", VAPA_FR_Row_ID);
 }
 /** Get Report Line.
 @return Report Line */
-public int GetPA_ReportLine_ID() 
+public int GetVAPA_FR_Row_ID() 
 {
-Object ii = Get_Value("PA_ReportLine_ID");
+Object ii = Get_Value("VAPA_FR_Row_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report Source.
-@param PA_ReportSource_ID Restriction of what will be shown in Report Line */
-public void SetPA_ReportSource_ID (int PA_ReportSource_ID)
+@param VAPA_FR_Source_ID Restriction of what will be shown in Report Line */
+public void SetVAPA_FR_Source_ID (int VAPA_FR_Source_ID)
 {
-if (PA_ReportSource_ID <= 0) Set_Value ("PA_ReportSource_ID", null);
+if (VAPA_FR_Source_ID <= 0) Set_Value ("VAPA_FR_Source_ID", null);
 else
-Set_Value ("PA_ReportSource_ID", PA_ReportSource_ID);
+Set_Value ("VAPA_FR_Source_ID", VAPA_FR_Source_ID);
 }
 /** Get Report Source.
 @return Restriction of what will be shown in Report Line */
-public int GetPA_ReportSource_ID() 
+public int GetVAPA_FR_Source_ID() 
 {
-Object ii = Get_Value("PA_ReportSource_ID");
+Object ii = Get_Value("VAPA_FR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

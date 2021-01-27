@@ -17,7 +17,7 @@
         //  Editors for Query
         var f_Alias = null, f_Combination = null, f_VAF_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
             f_M_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
-            f_C_Project_ID = null, f_C_SalesRegion_ID = null, f_VAF_OrgTrx_ID = null, f_VAB_BillingCode_ID = null,
+            f_VAB_Project_ID = null, f_VAB_SalesRegionState_ID = null, f_VAF_OrgTrx_ID = null, f_VAB_BillingCode_ID = null,
             f_User1_ID = null, f_User2_ID = null, f_UserElement1_ID = null, f_UserElement2_ID = null, f_UserElement3_ID = null,
             f_UserElement4_ID = null, f_UserElement5_ID = null, f_UserElement6_ID = null, f_UserElement7_ID = null, f_UserElement8_ID = null, f_UserElement9_ID = null;
 
@@ -172,7 +172,7 @@
         };
 
         this.log = VIS.Logging.VLogger.getVLogger("AccountForm");
-        this.log.config("VAB_AccountBook_ID=" + VAB_AccountBook_ID + ", C_ValidCombination_ID=" + mAccount.C_ValidCombination_ID);
+        this.log.config("VAB_AccountBook_ID=" + VAB_AccountBook_ID + ", VAB_Acct_ValidParameter_ID=" + mAccount.VAB_Acct_ValidParameter_ID);
         //control on form
 
 
@@ -242,7 +242,7 @@
         var acctbl = null;
         var gridController = null;
         var changed = false;
-        var C_ValidCombination_ID = null;
+        var VAB_Acct_ValidParameter_ID = null;
         var query = null;
         var _mTab = null;
         var lblbottumMsg = null;
@@ -454,7 +454,7 @@
                             // f_Account_ID.VetoableChangeListener += new EventHandler(f_Account_ID_VetoableChangeListener);
                         }
                         else if (type.equals(eLEMENTTYPE_SubAccount)) {
-                            var field = _mTab.getField("C_SubAcct_ID");
+                            var field = _mTab.getField("VAB_SubAcct_ID");
                             f_SubAcct_ID = VIS.VControlFactory.getControl(_mTab, field, false);
                             addLine(field, f_SubAcct_ID, isMandatory, lblNames, eLEMENTTYPE_SubAccount);
                         }
@@ -485,14 +485,14 @@
                             addLine(field, f_C_LocTo_ID, isMandatory, lblNames, eLEMENTTYPE_LocationTo);
                         }
                         else if (type.equals(eLEMENTTYPE_Project)) {
-                            var field = _mTab.getField("C_Project_ID");
-                            f_C_Project_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_Project_ID, isMandatory, lblNames, eLEMENTTYPE_Project);
+                            var field = _mTab.getField("VAB_Project_ID");
+                            f_VAB_Project_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_Project_ID, isMandatory, lblNames, eLEMENTTYPE_Project);
                         }
                         else if (type.equals(eLEMENTTYPE_SalesRegion)) {
-                            var field = _mTab.getField("C_SalesRegion_ID");
-                            f_C_SalesRegion_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            addLine(field, f_C_SalesRegion_ID, isMandatory, lblNames, eLEMENTTYPE_SalesRegion);
+                            var field = _mTab.getField("VAB_SalesRegionState_ID");
+                            f_VAB_SalesRegionState_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            addLine(field, f_VAB_SalesRegionState_ID, isMandatory, lblNames, eLEMENTTYPE_SalesRegion);
                         }
                         else if (type.equals(eLEMENTTYPE_OrgTrx)) {
                             var field = _mTab.getField("VAF_OrgTrx_ID");
@@ -844,18 +844,18 @@
                     param[0] = new VIS.DB.SqlParam("@tblID_s", tblID_s);
                     var wIDName = executeScalar(qry, param);
 
-                    if (wIDName == "GL_JournalLine") {
+                    if (wIDName == "VAGL_JRNLLine") {
                         query.addRestriction("IsFullyQualified", VIS.Query.prototype.EQUAL, "Y");
                     }
                     // end 17/03/2017, Requested By Mukesh sir
 
 
-                    if (mAccount.C_ValidCombination_ID == 0)
+                    if (mAccount.VAB_Acct_ValidParameter_ID == 0)
                         _mTab.setQuery(VIS.Query.prototype.getEqualQuery("1", "2"));
                     else {
                         var _query = new VIS.Query();
                         _query.addRestriction("VAB_AccountBook_ID", VIS.Query.prototype.EQUAL, VAB_AccountBook_ID);
-                        _query.addRestriction("C_ValidCombination_ID", VIS.Query.prototype.EQUAL, mAccount.C_ValidCombination_ID);
+                        _query.addRestriction("VAB_Acct_ValidParameter_ID", VIS.Query.prototype.EQUAL, mAccount.VAB_Acct_ValidParameter_ID);
                         _mTab.setQuery(_query);
                     }
 
@@ -889,7 +889,7 @@
                         param[0] = new VIS.DB.SqlParam("@tblID_s", tblID_s);
                         var wIDName = executeScalar(qry, param);
 
-                        if (wIDName == "GL_JournalLine") {
+                        if (wIDName == "VAGL_JRNLLine") {
                             getOrgDiv.on("click", function () {
                                 if (getOrgDiv.find('option[value=0]').length != 0) {
                                     getOrgDiv.find('option[value=0]').remove();
@@ -959,10 +959,10 @@
             }
 
             function saveSelection() {
-                C_ValidCombination_ID = _mTab.getValue("C_ValidCombination_ID");
+                VAB_Acct_ValidParameter_ID = _mTab.getValue("VAB_Acct_ValidParameter_ID");
 
                 if ($self.onClose)
-                    $self.onClose(C_ValidCombination_ID);
+                    $self.onClose(VAB_Acct_ValidParameter_ID);
                 root.dialog('close');
             }
 
@@ -999,7 +999,7 @@
                     localquery.addRestriction("Account_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_Account_ID.getValue()));
 
                 if (f_SubAcct_ID != null && !isNull(f_SubAcct_ID.getValue()))
-                    localquery.addRestriction("C_SubAcct_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_SubAcct_ID.getValue()));
+                    localquery.addRestriction("VAB_SubAcct_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_SubAcct_ID.getValue()));
 
                 //	Product
                 if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
@@ -1017,11 +1017,11 @@
                 if (f_C_LocTo_ID != null && !isNull(f_C_LocTo_ID.getValue()))
                     localquery.addRestriction("C_LocTo_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_LocTo_ID.getValue()));
                 //	Project
-                if (f_C_Project_ID != null && !isNull(f_C_Project_ID.getValue()))
-                    localquery.addRestriction("C_Project_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_Project_ID.getValue()));
+                if (f_VAB_Project_ID != null && !isNull(f_VAB_Project_ID.getValue()))
+                    localquery.addRestriction("VAB_Project_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_Project_ID.getValue()));
                 //	SRegion
-                if (f_C_SalesRegion_ID != null && !isNull(f_C_SalesRegion_ID.getValue()))
-                    localquery.addRestriction("C_SalesRegion_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_C_SalesRegion_ID.getValue()));
+                if (f_VAB_SalesRegionState_ID != null && !isNull(f_VAB_SalesRegionState_ID.getValue()))
+                    localquery.addRestriction("VAB_SalesRegionState_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_SalesRegionState_ID.getValue()));
                 //	Org Trx
                 if (f_VAF_OrgTrx_ID != null && !isNull(f_VAF_OrgTrx_ID.getValue()))
                     localquery.addRestriction("VAF_OrgTrx_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAF_OrgTrx_ID.getValue()));
@@ -1100,11 +1100,11 @@
                 if (f_C_LocTo_ID != null)
                     f_C_LocTo_ID.setValue(null);
                 //	Project
-                if (f_C_Project_ID != null)
-                    f_C_Project_ID.setValue(null);
+                if (f_VAB_Project_ID != null)
+                    f_VAB_Project_ID.setValue(null);
                 //	SRegion
-                if (f_C_SalesRegion_ID != null)
-                    f_C_SalesRegion_ID.setValue(null);
+                if (f_VAB_SalesRegionState_ID != null)
+                    f_VAB_SalesRegionState_ID.setValue(null);
                 //	Org Trx
                 if (f_VAF_OrgTrx_ID != null)
                     f_VAF_OrgTrx_ID.setValue(null);
@@ -1188,7 +1188,7 @@
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_SubAccount)) {
                 //        value = f_SubAcct_ID.getValue();
-                //        sql = sql.concat("C_SubAcct_ID");
+                //        sql = sql.concat("VAB_SubAcct_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1235,16 +1235,16 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_Project)) {
-                //        value = f_C_Project_ID.getValue();
-                //        sql = sql.concat("C_Project_ID");
+                //        value = f_VAB_Project_ID.getValue();
+                //        sql = sql.concat("VAB_Project_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_SalesRegion)) {
-                //        value = f_C_SalesRegion_ID.getValue();
-                //        sql = sql.concat("C_SalesRegion_ID");
+                //        value = f_VAB_SalesRegionState_ID.getValue();
+                //        sql = sql.concat("VAB_SalesRegionState_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1408,7 +1408,7 @@
                 try {
                     dr = executeDReader(sql, null);
                     if (dr.read()) {
-                        IDvalue = dr.tables[0].rows[0].cells["c_validcombination_id"];
+                        IDvalue = dr.tables[0].rows[0].cells["VAB_Acct_ValidParameter_id"];
                         Alias = dr.tables[0].rows[0].cells["alias"];
                     }
                     dr.close();
@@ -1434,7 +1434,7 @@
 
 
                     if (f_alies.toString().length == 0) {
-                        // sql = "UPDATE C_ValidCombination SET Alias=NULL WHERE C_ValidCombination_ID=" + IDvalue;
+                        // sql = "UPDATE VAB_Acct_ValidParameter SET Alias=NULL WHERE VAB_Acct_ValidParameter_ID=" + IDvalue;
                         sql = "VIS_127";
                         param[0] = new VIS.DB.SqlParam("@IDvalue", IDvalue);
                     }
@@ -1444,7 +1444,7 @@
                         param[1] = new VIS.DB.SqlParam("@IDvalue", IDvalue);
                     }
 
-                    //sql = sql.concat(" WHERE C_ValidCombination_ID=").concat(IDvalue);
+                    //sql = sql.concat(" WHERE VAB_Acct_ValidParameter_ID=").concat(IDvalue);
 
 
 
@@ -1472,9 +1472,9 @@
                 Alias = null;
                 if (f_Alias != null)
                     Alias = f_Alias.getValue().toString();
-                var C_SubAcct_ID = 0;
+                var VAB_SubAcct_ID = 0;
                 if (f_SubAcct_ID != null && (f_SubAcct_ID.getValue() != null))
-                    C_SubAcct_ID = f_SubAcct_ID.getValue();
+                    VAB_SubAcct_ID = f_SubAcct_ID.getValue();
                 var M_Product_ID = 0;
                 if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
                     M_Product_ID = f_M_Product_ID.getValue();
@@ -1491,11 +1491,11 @@
                 if (f_C_LocTo_ID != null && !isNull(f_C_LocTo_ID.getValue()))
                     C_LocTo_ID = f_C_LocTo_ID.getValue();
                 var C_SRegion_ID = 0;
-                if (f_C_SalesRegion_ID != null && !isNull(f_C_SalesRegion_ID.getValue()))
-                    C_SRegion_ID = f_C_SalesRegion_ID.getValue();
-                var C_Project_ID = 0;
-                if (f_C_Project_ID != null && !isNull(f_C_Project_ID.getValue()))
-                    C_Project_ID = f_C_Project_ID.getValue();
+                if (f_VAB_SalesRegionState_ID != null && !isNull(f_VAB_SalesRegionState_ID.getValue()))
+                    C_SRegion_ID = f_VAB_SalesRegionState_ID.getValue();
+                var VAB_Project_ID = 0;
+                if (f_VAB_Project_ID != null && !isNull(f_VAB_Project_ID.getValue()))
+                    VAB_Project_ID = f_VAB_Project_ID.getValue();
                 var VAB_Promotion_ID = 0;
                 if (f_VAB_Promotion_ID != null && !isNull(f_VAB_Promotion_ID.getValue()))
                     VAB_Promotion_ID = f_VAB_Promotion_ID.getValue();
@@ -1578,14 +1578,14 @@
                         VAF_Org_ID: VAF_Org_ID,
                         VAB_AccountBook_ID: VAB_AccountBook_ID,
                         AD_Account_ID: AD_Account_ID,
-                        C_SubAcct_ID: C_SubAcct_ID,
+                        VAB_SubAcct_ID: VAB_SubAcct_ID,
                         M_Product_ID: M_Product_ID,
                         VAB_BusinessPartner_ID: VAB_BusinessPartner_ID,
                         VAF_OrgTrx_ID: VAF_OrgTrx_ID,
                         C_LocFrom_ID: C_LocFrom_ID,
                         C_LocTo_ID: C_LocTo_ID,
                         C_SRegion_ID: C_SRegion_ID,
-                        C_Project_ID: C_Project_ID,
+                        VAB_Project_ID: VAB_Project_ID,
                         VAB_Promotion_ID: VAB_Promotion_ID,
                         VAB_BillingCode_ID: VAB_BillingCode_ID,
                         User1_ID: User1_ID,
@@ -1604,20 +1604,20 @@
                     success: function (data) {
                         returnValue = data.result;
                         //load control
-                        loadInfo(returnValue.C_ValidCombination_ID, returnValue.VAB_AccountBook_ID);
+                        loadInfo(returnValue.VAB_Acct_ValidParameter_ID, returnValue.VAB_AccountBook_ID);
                     }
                 });
             };
 
-            function loadInfo(C_ValidCombination_ID, VAB_AccountBook_ID) {
-                // this.log.fine("C_ValidCombination_ID=" + C_ValidCombination_ID);
+            function loadInfo(VAB_Acct_ValidParameter_ID, VAB_AccountBook_ID) {
+                // this.log.fine("VAB_Acct_ValidParameter_ID=" + VAB_Acct_ValidParameter_ID);
                 var sql = "VIS_124";
                 var dr = null;
                 try {
                     // dr = VIS.DB.executeReader(sql, null);
 
                     var param = [];
-                    param[0] = new VIS.DB.SqlParam("@C_ValidCombination_ID", C_ValidCombination_ID);
+                    param[0] = new VIS.DB.SqlParam("@VAB_Acct_ValidParameter_ID", VAB_Acct_ValidParameter_ID);
                     param[1] = new VIS.DB.SqlParam("@VAB_AccountBook_ID", VAB_AccountBook_ID);
 
                     dr = executeReader(sql, param);
@@ -1632,7 +1632,7 @@
                         if (f_Account_ID != null)
                             f_Account_ID.setValue(dr.getInt("Account_ID"));
                         if (f_SubAcct_ID != null)
-                            f_SubAcct_ID.setValue(dr.getInt("C_SubAcct_ID"));
+                            f_SubAcct_ID.setValue(dr.getInt("VAB_SubAcct_ID"));
                         if (f_M_Product_ID != null) {
                             if (dr.getInt("M_Product_ID") != 0) {
                                 f_M_Product_ID.setValue(dr.getInt("M_Product_ID"));
@@ -1649,10 +1649,10 @@
                             f_C_LocFrom_ID.setValue(dr.getInt("C_LocFrom_ID"));
                         if (f_C_LocTo_ID != null)
                             f_C_LocTo_ID.setValue(dr.getInt("C_LocTo_ID"));
-                        if (f_C_Project_ID != null)
-                            f_C_Project_ID.setValue(dr.getInt("C_Project_ID"));
-                        if (f_C_SalesRegion_ID != null)
-                            f_C_SalesRegion_ID.setValue(dr.getInt("C_SalesRegion_ID"));
+                        if (f_VAB_Project_ID != null)
+                            f_VAB_Project_ID.setValue(dr.getInt("VAB_Project_ID"));
+                        if (f_VAB_SalesRegionState_ID != null)
+                            f_VAB_SalesRegionState_ID.setValue(dr.getInt("VAB_SalesRegionState_ID"));
                         if (f_VAF_OrgTrx_ID != null)
                             f_VAF_OrgTrx_ID.setValue(dr.getInt("VAF_OrgTrx_ID"));
                         if (f_VAB_BillingCode_ID != null)
@@ -1814,7 +1814,7 @@
             f_Combination = null;
             f_VAF_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
             f_M_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
-            f_C_Project_ID = null; f_C_SalesRegion_ID = null; f_VAF_OrgTrx_ID = null; f_VAB_BillingCode_ID = null;
+            f_VAB_Project_ID = null; f_VAB_SalesRegionState_ID = null; f_VAF_OrgTrx_ID = null; f_VAB_BillingCode_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;
             eLEMENTTYPE_VAF_Control_Ref_ID = null;
@@ -1856,7 +1856,7 @@
             acctbl = null;
             gridController = null;
             changed = false;
-            C_ValidCombination_ID = null;
+            VAB_Acct_ValidParameter_ID = null;
             query = null;
             _mTab = null;
             lblbottumMsg = null;

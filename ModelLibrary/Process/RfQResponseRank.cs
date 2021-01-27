@@ -30,7 +30,7 @@ namespace VAdvantage.Process
     public class RfQResponseRank : ProcessEngine.SvrProcess
     {
         //RfQ 			
-        private int _C_RfQ_ID = 0;
+        private int _VAB_RFQ_ID = 0;
         //private Logging.VLogger s_log = Logging.VLogger.GetVLogger(typeof(MOrderLine).FullName);
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_RfQ_ID = GetRecord_ID();
+            _VAB_RFQ_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _C_RfQ_ID, Get_TrxName());
+            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");

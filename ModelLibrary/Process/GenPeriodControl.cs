@@ -20,7 +20,7 @@ namespace VAdvantage.Process
     public class GenPeriodControl : SvrProcess
     {
         //Period					
-        private int _C_Period_ID = 0;
+        private int _VAB_YearPeriod_ID = 0;
         //Organization
         private string orgs = null;
         private string[] _VAF_Org_ID;
@@ -48,7 +48,7 @@ namespace VAdvantage.Process
                     //log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_Period_ID = GetRecord_ID();
+            _VAB_YearPeriod_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MPeriod period = new MPeriod(GetCtx(), _C_Period_ID, Get_Trx());
+            MPeriod period = new MPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_Trx());
 
             // Get all Document type related to Tenant
             MDocType[] types = MDocType.GetOfClient(GetCtx());

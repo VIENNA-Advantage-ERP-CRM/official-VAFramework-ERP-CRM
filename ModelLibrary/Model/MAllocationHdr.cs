@@ -104,15 +104,15 @@ namespace VAdvantage.Model
         /// Get Allocations of Payment
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Payment_ID">payment</param>
+        /// <param name="VAB_Payment_ID">payment</param>
         /// <param name="trxName">transaction</param>
         /// <returns>allocations of payment</returns>
-        public static MAllocationHdr[] GetOfPayment(Ctx ctx, int C_Payment_ID, Trx trxName)
+        public static MAllocationHdr[] GetOfPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
         {
             String sql = "SELECT * FROM VAB_DocAllocation h "
                 + "WHERE IsActive='Y'"
                 + " AND EXISTS (SELECT * FROM VAB_DocAllocationLine l "
-                    + "WHERE h.VAB_DocAllocation_ID=l.VAB_DocAllocation_ID AND l.C_Payment_ID=" + C_Payment_ID + ")";
+                    + "WHERE h.VAB_DocAllocation_ID=l.VAB_DocAllocation_ID AND l.VAB_Payment_ID=" + VAB_Payment_ID + ")";
             List<MAllocationHdr> list = new List<MAllocationHdr>();
             try
             {
@@ -482,22 +482,22 @@ namespace VAdvantage.Model
                         #region set Invoice Paid Amount
                         //added check for payment and cash if cash/payment exist than create object otherwise that will be null
                         MPayment payment = null;
-                        if (line.GetC_Payment_ID() > 0)
-                            payment = new MPayment(GetCtx(), line.GetC_Payment_ID(), Get_Trx());
+                        if (line.GetVAB_Payment_ID() > 0)
+                            payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_Trx());
 
                         MCashLine cashline = null;
                         if (line.GetVAB_CashJRNLLine_ID() > 0)
                             cashline = new MCashLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), Get_Trx());
 
-                        // in case of GL Allocation if GL_JournalLine_ID is available on Allocation Line
+                        // in case of GL Allocation if VAGL_JRNLLine_ID is available on Allocation Line
                         MJournalLine journalline = null;
-                        if (Util.GetValueOfInt(line.Get_Value("GL_JournalLine_ID")) > 0)
+                        if (Util.GetValueOfInt(line.Get_Value("VAGL_JRNLLine_ID")) > 0)
                         {
-                            journalline = new MJournalLine(GetCtx(), Util.GetValueOfInt(line.Get_Value("GL_JournalLine_ID")), Get_Trx());
+                            journalline = new MJournalLine(GetCtx(), Util.GetValueOfInt(line.Get_Value("VAGL_JRNLLine_ID")), Get_Trx());
                         }
 
                         decimal currencymultiplyRate = 1;
-                        if (payment != null && payment.GetC_Payment_ID() != 0)
+                        if (payment != null && payment.GetVAB_Payment_ID() != 0)
                         {
                             // to get Multiply Rate 
                             currencymultiplyRate = GetCurrencyMultiplyRate(invoice, payment, cashline, journalline);
@@ -532,7 +532,7 @@ namespace VAdvantage.Model
                         }
 
                         // set Backup Withholding amount and withholding Amount
-                        if (payment != null && payment.GetC_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
+                        if (payment != null && payment.GetVAB_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
                         {
                             if (doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) || doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE))
                             {
@@ -586,19 +586,19 @@ namespace VAdvantage.Model
                         {
                             paySch.SetVA009_IsPaid(false);
                         }
-                        paySch.SetC_Payment_ID(line.GetC_Payment_ID());
+                        paySch.SetVAB_Payment_ID(line.GetVAB_Payment_ID());
 
                         // work done to set cashline ID on payschedule tab of invoice if allocation done by cash
                         paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
 
                         // when schedule is paid from cash journal then Payment Execution status = Received
                         // when schedule is paid from Payment then Payment Execution status = In-Progress
-                        if (paySch.GetC_Payment_ID() > 0)
+                        if (paySch.GetVAB_Payment_ID() > 0)
                         {
                             // update payment execution status from payment
                             // Reason : in case of independent payment -- bank statement already created - then status on payment become Received
                             // after that when we allocate the same payment with schedule then its show "In-Pogress". It should be "Received".
-                            if (payment != null && payment.GetC_Payment_ID() > 0)
+                            if (payment != null && payment.GetVAB_Payment_ID() > 0)
                             {
                                 paySch.SetVA009_ExecutionStatus(payment.GetVA009_ExecutionStatus());
                             }
@@ -669,7 +669,7 @@ namespace VAdvantage.Model
                             newPaySch.SetVA009_PaidAmnt((BaseCurrency != invoice.GetVAB_Currency_ID() ? ShiftVarianceOnOther * multiplyRate : ShiftVarianceOnOther));
                             newPaySch.SetVA009_PaidAmntInvce(ShiftVarianceOnOther);
                             newPaySch.SetVA009_Variance(0);
-                            newPaySch.SetC_Payment_ID(0);
+                            newPaySch.SetVAB_Payment_ID(0);
                             newPaySch.SetVAB_CashJRNLLine_ID(0);
                             newPaySch.SetVA009_ExecutionStatus("A");
                             newPaySch.SetIsValid(true);
@@ -953,10 +953,10 @@ namespace VAdvantage.Model
                 throw new Exception("Cannot de-activate allocation");
 
             //	Delete Posting
-            String sql = "DELETE FROM Fact_Acct WHERE VAF_TableView_ID=" + MAllocationHdr.Table_ID
+            String sql = "DELETE FROM Actual_Acct_Detail WHERE VAF_TableView_ID=" + MAllocationHdr.Table_ID
                 + " AND Record_ID=" + GetVAB_DocAllocation_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            log.Fine("Fact_Acct deleted #" + no);
+            log.Fine("Actual_Acct_Detail deleted #" + no);
 
             //	Unlink Invoices
             GetLines(true);

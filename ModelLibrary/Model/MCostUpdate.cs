@@ -24,7 +24,7 @@ namespace VAdvantage.Model
         /**************************************************************************
 	 *  Default Constructor
 	 *  @param ctx context
-	 *  @param  C_Order_ID    order to load, (0 create new order)
+	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
         public MCostUpdate(Ctx ctx, int M_CostUpdate_ID, Trx trx)

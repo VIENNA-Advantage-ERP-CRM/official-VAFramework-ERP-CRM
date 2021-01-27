@@ -326,18 +326,18 @@ namespace VAdvantage.Model
                 SetQtyInternalUse(GetQtyInternalUse());
 
             //JID_0680 set quantity according to precision
-            if (Is_ValueChanged("C_UOM_ID"))
+            if (Is_ValueChanged("VAB_UOM_ID"))
             {
-                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("C_UOM_ID")))));
+                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))));
             }
 
             // change to set Converted Quantity in Internal Use Qty and AsonDateQty and difference qty if there is differnce in UOM of Base Product and UOM Selected on line
-            if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("C_UOM_ID"))
+            if (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("VAB_UOM_ID"))
             {
                 Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
-                if (product.GetC_UOM_ID() != Util.GetValueOfInt(Get_Value("C_UOM_ID")))
+                if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                 {
-                    qty = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("C_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered")));
+                    qty = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered")));
                     if (IsInternalUse())
                         SetQtyInternalUse(qty);
                     else

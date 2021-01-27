@@ -29,7 +29,7 @@ namespace VAdvantage.Process
     public class RfQResponseCComplete : ProcessEngine.SvrProcess
     {
         //RfQ Response				
-        private int _C_RfQResponse_ID = 0;
+        private int _VAB_RFQReply_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -49,7 +49,7 @@ namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_RfQResponse_ID = GetRecord_ID();
+            _VAB_RFQReply_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQResponse response = new MRfQResponse(GetCtx(), _C_RfQResponse_ID, Get_TrxName());
+            MRfQResponse response = new MRfQResponse(GetCtx(), _VAB_RFQReply_ID, Get_TrxName());
             log.Info("doIt - " + response);
             //
             String error = response.CheckComplete();

@@ -81,7 +81,7 @@ namespace BaseLibrary.CloudService {
                     int bpgroup_ID, 
                     int VAB_Promotion_ID, 
                     int R_STATUS_ID, 
-                    int C_Region_ID, 
+                    int VAB_RegionState_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
                     int vaf_org_id, 
@@ -569,7 +569,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetPartnerLeadDetails", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetPartnerLeadDetails(int C_Lead_ID, string accessKey);
+        string GetPartnerLeadDetails(int VAB_Lead_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancellAssociationRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -634,7 +634,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetVideosFromDMS", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int C_Lead_ID, string accessKey);
+        string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int VAB_Lead_ID, string accessKey);
         
         // CODEGEN: Parameter 'countryid' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/RegisterTempInfo", ReplyAction="*")]
@@ -6323,14 +6323,14 @@ namespace BaseLibrary.CloudService {
                     int bpgroup_ID, 
                     int VAB_Promotion_ID, 
                     int R_STATUS_ID, 
-                    int C_Region_ID, 
+                    int VAB_RegionState_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
                     int vaf_org_id, 
                     int vaf_client_id, 
                     int UpdatedBy, 
                     string AccessKey) {
-            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, VAB_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, VAB_Promotion_ID, R_STATUS_ID, C_Region_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
+            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, VAB_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, VAB_Promotion_ID, R_STATUS_ID, VAB_RegionState_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
         }
         
         public System.Data.DataSet GetTopicInfo(out string error, string url, bool isInitConfig, string langCode, string searchText, string option) {
@@ -6865,8 +6865,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetPartnerFilteredListing(RegionID, accessKey);
         }
         
-        public string GetPartnerLeadDetails(int C_Lead_ID, string accessKey) {
-            return base.Channel.GetPartnerLeadDetails(C_Lead_ID, accessKey);
+        public string GetPartnerLeadDetails(int VAB_Lead_ID, string accessKey) {
+            return base.Channel.GetPartnerLeadDetails(VAB_Lead_ID, accessKey);
         }
         
         public string CancellAssociationRequest(int R_Request_ID, string Remarks, int VAF_UserContact_ID, string accessKey) {
@@ -7004,8 +7004,8 @@ namespace BaseLibrary.CloudService {
             return retVal.RegisterInfoFromModuleResult;
         }
         
-        public string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int C_Lead_ID, string accessKey) {
-            return base.Channel.GetVideosFromDMS(VAF_Client_ID, VAF_UserContact_ID, VAB_BusinessPartner_ID, C_Lead_ID, accessKey);
+        public string GetVideosFromDMS(string VAF_Client_ID, string VAF_UserContact_ID, string VAB_BusinessPartner_ID, int VAB_Lead_ID, string accessKey) {
+            return base.Channel.GetVideosFromDMS(VAF_Client_ID, VAF_UserContact_ID, VAB_BusinessPartner_ID, VAB_Lead_ID, accessKey);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

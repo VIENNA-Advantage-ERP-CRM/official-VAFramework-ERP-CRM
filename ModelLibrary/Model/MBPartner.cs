@@ -209,8 +209,8 @@ namespace VAdvantage.Model
             Decimal retValue = new decimal();
             String sql = "SELECT SUM(COALESCE("
                 + "CURRENCYBASEWITHCONVERSIONTYPE((ol.QtyDelivered-ol.QtyInvoiced)*ol.PriceActual,o.VAB_Currency_ID,o.DateOrdered, o.VAF_Client_ID,o.VAF_Org_ID, o.VAB_CurrencyType_ID) ,0)) "
-                + " FROM C_OrderLine ol"
-                + " INNER JOIN C_Order o ON (ol.C_Order_ID=o.C_Order_ID) "
+                + " FROM VAB_OrderLine ol"
+                + " INNER JOIN VAB_Order o ON (ol.VAB_Order_ID=o.VAB_Order_ID) "
                 + " WHERE o.IsSOTrx='Y' AND Bill_BPartner_ID=" + VAB_BusinessPartner_ID;
             IDataReader idr = null;
             try
@@ -698,7 +698,7 @@ namespace VAdvantage.Model
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')),0) "
                 //					- Unallocated Receipts	= (All Receipts
                 + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.VAB_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.VAB_CurrencyType_ID)),0) "
-                    + " FROM C_Payment_v p "
+                    + " FROM VAB_Payment_V p "
                     + " WHERE p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND p.IsReceipt='Y' AND p.DocStatus IN('CO','CL')"
                     + " AND p.VAB_Charge_ID IS NULL)"
@@ -712,7 +712,7 @@ namespace VAdvantage.Model
                     + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
-                    + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL"
+                    + " AND a.IsActive='Y' AND a.VAB_Payment_ID IS NOT NULL"
                     + " AND i.isSoTrx='Y' AND h.DocStatus IN('CO','CL')) "
                 //                                          - All Cash Receipt Allocatioons
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0)"
@@ -731,7 +731,7 @@ namespace VAdvantage.Model
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID AND a.IsActive='Y' AND h.DocStatus IN('CO','CL')),0) "
                 //					- Unallocated Receipts	= (All Receipts
                 + "-(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(p.PayAmt+p.DiscountAmt+p.WriteoffAmt,p.VAB_Currency_ID,p.DateTrx,p.VAF_Client_ID,p.VAF_Org_ID, p.VAB_CurrencyType_ID)),0) "
-                    + " FROM C_Payment_v p "
+                    + " FROM VAB_Payment_V p "
                     + " WHERE p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
                     + " AND p.DocStatus IN('CO','CL')"
                     + " AND p.VAB_Charge_ID IS NULL)"
@@ -745,7 +745,7 @@ namespace VAdvantage.Model
                     + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
                     + " INNER JOIN VAB_DocAllocation h ON (a.VAB_DocAllocation_ID = h.VAB_DocAllocation_ID) "
                     + " WHERE a.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
-                    + " AND a.IsActive='Y' AND a.C_Payment_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
+                    + " AND a.IsActive='Y' AND a.VAB_Payment_ID IS NOT NULL AND h.DocStatus IN('CO','CL')) "
                 //											- All Cash Allocations
                 + "+(SELECT COALESCE(SUM(CURRENCYBASEWITHCONVERSIONTYPE(a.Amount+a.DiscountAmt+a.WriteoffAmt,i.VAB_Currency_ID,i.DateOrdered,a.VAF_Client_ID,a.VAF_Org_ID, i.VAB_CurrencyType_ID)),0) "
                     + " FROM VAB_DocAllocationLine a INNER JOIN VAB_Invoice i ON (a.VAB_Invoice_ID=i.VAB_Invoice_ID) "
@@ -1219,7 +1219,7 @@ namespace VAdvantage.Model
                     {
 
                         _sql.Clear();
-                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToCustmer + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.VAB_Acct_ValidParameter_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToCustmer + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1230,7 +1230,7 @@ namespace VAdvantage.Model
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Customer_ID);
                                 obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
-                                obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                                obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                 if (!obj.Save())
                                 {
@@ -1265,7 +1265,7 @@ namespace VAdvantage.Model
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToVendor + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.VAB_Acct_ValidParameter_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToVendor + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1275,7 +1275,7 @@ namespace VAdvantage.Model
                                 obj = MTable.GetPO(GetCtx(), "FRPT_BP_Vendor_Acct", 0, null);
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Vendor_ID);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
-                                obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                                obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
 
                                 if (!obj.Save())
@@ -1311,7 +1311,7 @@ namespace VAdvantage.Model
                     if (value < 1)
                     {
                         _sql.Clear();
-                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.c_validcombination_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToEmployee + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
+                        _sql.Append("Select  BPG.VAB_AccountBook_id, BPG.VAB_Acct_ValidParameter_id, BPG.frpt_acctdefault_id From FRPT_BP_Group_Acct  BPG inner join frpt_acctdefault ACC ON ACC.frpt_acctdefault_id= BPG.frpt_acctdefault_id where BPG.VAB_BPart_Category_ID=" + VAB_BPart_Category_ID + " and ACC.frpt_relatedto='" + _RelatedToEmployee + "' AND BPG.IsActive = 'Y' AND BPG.VAF_Client_ID = " + GetVAF_Client_ID());
                         DataSet ds = DB.ExecuteDataset(_sql.ToString());
                         if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                         {
@@ -1321,7 +1321,7 @@ namespace VAdvantage.Model
                                 var obj = MTable.GetPO(GetCtx(), "FRPT_BP_Employee_Acct", 0, null);
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Employee_ID);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
-                                obj.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ValidCombination_ID"]));
+                                obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                                 obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                 if (!obj.Save())
                                 {

@@ -131,11 +131,11 @@ namespace VAdvantage.Process
             {
                 //KeyNamePair pp = list.get(i);
                 KeyNamePair pp = list[i];
-                int sourceC_ValidCombination_ID = pp.GetKey();
+                int sourceVAB_Acct_ValidParameter_ID = pp.GetKey();
                 String columnName = pp.GetName();
-                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceC_ValidCombination_ID);
+                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
                 MAccount targetAccount = CreateAccount(targetAS, sourceAccount);
-                target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetC_ValidCombination_ID()));
+                target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetVAB_Acct_ValidParameter_ID()));
             }
             if (!target.Save())
             {
@@ -159,11 +159,11 @@ namespace VAdvantage.Process
             {
                 //KeyNamePair pp = list.get(i);
                 KeyNamePair pp = list[i];
-                int sourceC_ValidCombination_ID = pp.GetKey();
+                int sourceVAB_Acct_ValidParameter_ID = pp.GetKey();
                 String columnName = pp.GetName();
-                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceC_ValidCombination_ID);
+                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
                 MAccount targetAccount = CreateAccount(targetAS, sourceAccount);
-                target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetC_ValidCombination_ID()));
+                target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetVAB_Acct_ValidParameter_ID()));
                 
             }
             if (!target.Save())
@@ -185,14 +185,14 @@ namespace VAdvantage.Process
             //
             int VAF_Org_ID = 0;
             int Account_ID = 0;
-            int C_SubAcct_ID = 0;
+            int VAB_SubAcct_ID = 0;
             int M_Product_ID = 0;
             int VAB_BusinessPartner_ID = 0;
             int VAF_OrgTrx_ID = 0;
             int C_LocFrom_ID = 0;
             int C_LocTo_ID = 0;
-            int C_SalesRegion_ID = 0;
-            int C_Project_ID = 0;
+            int VAB_SalesRegionState_ID = 0;
+            int VAB_Project_ID = 0;
             int VAB_Promotion_ID = 0;
             int VAB_BillingCode_ID = 0;
             int User1_ID = 0;
@@ -217,7 +217,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SubAccount))
                 {
-                    C_SubAcct_ID = sourceAcct.GetC_SubAcct_ID();
+                    VAB_SubAcct_ID = sourceAcct.GetVAB_SubAcct_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
                 {
@@ -249,11 +249,11 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
                 {
-                    C_Project_ID = sourceAcct.GetC_Project_ID();
+                    VAB_Project_ID = sourceAcct.GetVAB_Project_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
                 {
-                    C_SalesRegion_ID = sourceAcct.GetC_SalesRegion_ID();
+                    VAB_SalesRegionState_ID = sourceAcct.GetVAB_SalesRegionState_ID();
                 }
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1))
                 {
@@ -275,10 +275,10 @@ namespace VAdvantage.Process
             }
             //
             return MAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
-                VAB_AccountBook_ID, Account_ID, C_SubAcct_ID,
+                VAB_AccountBook_ID, Account_ID, VAB_SubAcct_ID,
                 M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
-                C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
-                C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
+                C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
+                VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
         }	//	createAccount
 

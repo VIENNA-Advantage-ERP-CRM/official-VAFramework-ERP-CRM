@@ -326,40 +326,40 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update Project
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_Project_Acct a "
+			sql = "UPDATE VAB_Project_Acct a "
 				+ "SET PJ_Asset_Acct=" + acct.GetPJ_Asset_Acct()
 				+ ", PJ_WIP_Acct=" + acct.GetPJ_Asset_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-				+ " AND EXISTS (SELECT * FROM C_Project_Acct x "
-					+ "WHERE x.C_Project_ID=a.C_Project_ID)";
+				+ " AND EXISTS (SELECT * FROM VAB_Project_Acct x "
+					+ "WHERE x.VAB_Project_ID=a.VAB_Project_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_Project_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_Project_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Projects
-		sql = "INSERT INTO C_Project_Acct "
-			+ "(C_Project_ID, VAB_AccountBook_ID,"
+		sql = "INSERT INTO VAB_Project_Acct "
+			+ "(VAB_Project_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " PJ_Asset_Acct, PJ_WIP_Acct) "
-			+ "SELECT x.C_Project_ID, acct.VAB_AccountBook_ID,"
+			+ "SELECT x.VAB_Project_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.PJ_Asset_Acct, acct.PJ_WIP_Acct "
-			+ "FROM C_Project x"
+			+ "FROM VAB_Project x"
 			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
 			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_Project_Acct a "
-				+ "WHERE a.C_Project_ID=x.C_Project_ID"
+			+ " AND NOT EXISTS (SELECT * FROM VAB_Project_Acct a "
+				+ "WHERE a.VAB_Project_ID=x.VAB_Project_ID"
 				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Project_ID@");
+		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_Project_ID@");
 		createdTotal += created;
 
 
 		//	Update Tax
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_Tax_Acct a "
+			sql = "UPDATE VAB_Tax_Acct a "
 				+ "SET T_Due_Acct=" + acct.GetT_Due_Acct()
 				+ ", T_Liability_Acct=" + acct.GetT_Liability_Acct()
 				+ ", T_Credit_Acct=" + acct.GetT_Credit_Acct()
@@ -367,28 +367,28 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				+ ", T_Expense_Acct=" + acct.GetT_Expense_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-				+ " AND EXISTS (SELECT * FROM C_Tax_Acct x "
-					+ "WHERE x.C_Tax_ID=a.C_Tax_ID)";
+				+ " AND EXISTS (SELECT * FROM VAB_Tax_Acct x "
+					+ "WHERE x.VAB_TaxRate_ID=a.VAB_TaxRate_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_Tax_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_TaxRate_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Tax
-		sql = "INSERT INTO C_Tax_Acct "
-			+ "(C_Tax_ID, VAB_AccountBook_ID,"
+		sql = "INSERT INTO VAB_Tax_Acct "
+			+ "(VAB_TaxRate_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " T_Due_Acct, T_Liability_Acct, T_Credit_Acct, T_Receivables_Acct, T_Expense_Acct) "
-			+ "SELECT x.C_Tax_ID, acct.VAB_AccountBook_ID,"
+			+ "SELECT x.VAB_TaxRate_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.T_Due_Acct, acct.T_Liability_Acct, acct.T_Credit_Acct, acct.T_Receivables_Acct, acct.T_Expense_Acct "
-			+ "FROM C_Tax x"
+			+ "FROM VAB_TaxRate x"
 			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
 			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_Tax_Acct a "
-				+ "WHERE a.C_Tax_ID=x.C_Tax_ID"
+			+ " AND NOT EXISTS (SELECT * FROM VAB_Tax_Acct a "
+				+ "WHERE a.VAB_TaxRate_ID=x.VAB_TaxRate_ID"
 				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Tax_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_TaxRate_ID@");
 		createdTotal += created;
 
 
@@ -444,32 +444,32 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update Withholding
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE C_Withholding_Acct a "
+			sql = "UPDATE VAB_Withholding_Acct a "
 				+ "SET Withholding_Acct=" + acct.GetWithholding_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID 
-				+ " AND EXISTS (SELECT * FROM C_Withholding_Acct x "
-					+ "WHERE x.C_Withholding_ID=a.C_Withholding_ID)";
+				+ " AND EXISTS (SELECT * FROM VAB_Withholding_Acct x "
+					+ "WHERE x.VAB_Withholding_ID=a.VAB_Withholding_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @C_Withholding_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAB_Withholding_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Withholding
-		sql = "INSERT INTO C_Withholding_Acct "
-			+ "(C_Withholding_ID, VAB_AccountBook_ID,"
+		sql = "INSERT INTO VAB_Withholding_Acct "
+			+ "(VAB_Withholding_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ "	Withholding_Acct) "
-			+ "SELECT x.C_Withholding_ID, acct.VAB_AccountBook_ID,"
+			+ "SELECT x.VAB_Withholding_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.Withholding_Acct "
-			+ "FROM C_Withholding x"
+			+ "FROM VAB_Withholding x"
 			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
 			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-			+ " AND NOT EXISTS (SELECT * FROM C_Withholding_Acct a "
-				+ "WHERE a.C_Withholding_ID=x.C_Withholding_ID"
+			+ " AND NOT EXISTS (SELECT * FROM VAB_Withholding_Acct a "
+				+ "WHERE a.VAB_Withholding_ID=x.VAB_Withholding_ID"
 				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @C_Withholding_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAB_Withholding_ID@");
 		createdTotal += created;
 
 		

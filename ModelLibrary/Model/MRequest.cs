@@ -483,9 +483,9 @@ namespace VAdvantage.Model
          */
         public MRequestCategory GetCategory()
         {
-            if (GetR_Category_ID() == 0)
+            if (GetVAR_Category_ID() == 0)
                 return null;
-            return MRequestCategory.Get(GetCtx(), GetR_Category_ID());
+            return MRequestCategory.Get(GetCtx(), GetVAR_Category_ID());
         }
 
         /**
@@ -986,8 +986,8 @@ namespace VAdvantage.Model
                 sendInfo.Add("R_RequestType_ID");
             if (CheckChange(ra, "R_Group_ID"))
                 sendInfo.Add("R_Group_ID");
-            if (CheckChange(ra, "R_Category_ID"))
-                sendInfo.Add("R_Category_ID");
+            if (CheckChange(ra, "VAR_Category_ID"))
+                sendInfo.Add("VAR_Category_ID");
             if (CheckChange(ra, "R_Status_ID"))
                 sendInfo.Add("R_Status_ID");
             if (CheckChange(ra, "R_Resolution_ID"))
@@ -1034,12 +1034,12 @@ namespace VAdvantage.Model
             CheckChange(ra, "IsSelfService");
             CheckChange(ra, "VAB_BusinessPartner_ID");
             CheckChange(ra, "VAF_UserContact_ID");
-            CheckChange(ra, "C_Project_ID");
+            CheckChange(ra, "VAB_Project_ID");
             CheckChange(ra, "VAA_Asset_ID");
-            CheckChange(ra, "C_Order_ID");
+            CheckChange(ra, "VAB_Order_ID");
             CheckChange(ra, "VAB_Invoice_ID");
             CheckChange(ra, "M_Product_ID");
-            CheckChange(ra, "C_Payment_ID");
+            CheckChange(ra, "VAB_Payment_ID");
             CheckChange(ra, "M_InOut_ID");
             //	checkChange(ra, "VAB_Promotion_ID");
             //	checkChange(ra, "RequestAmt");
@@ -1318,8 +1318,8 @@ namespace VAdvantage.Model
                     sendInfo.Add("R_RequestType_ID");
                 if (CheckChange(ra, "R_Group_ID"))
                     sendInfo.Add("R_Group_ID");
-                if (CheckChange(ra, "R_Category_ID"))
-                    sendInfo.Add("R_Category_ID");
+                if (CheckChange(ra, "VAR_Category_ID"))
+                    sendInfo.Add("VAR_Category_ID");
                 if (CheckChange(ra, "R_Status_ID"))
                     sendInfo.Add("R_Status_ID");
                 if (CheckChange(ra, "R_Resolution_ID"))
@@ -1366,12 +1366,12 @@ namespace VAdvantage.Model
                 CheckChange(ra, "IsSelfService");
                 CheckChange(ra, "VAB_BusinessPartner_ID");
                 CheckChange(ra, "VAF_UserContact_ID");
-                CheckChange(ra, "C_Project_ID");
+                CheckChange(ra, "VAB_Project_ID");
                 CheckChange(ra, "VAA_Asset_ID");
-                CheckChange(ra, "C_Order_ID");
+                CheckChange(ra, "VAB_Order_ID");
                 CheckChange(ra, "VAB_Invoice_ID");
                 CheckChange(ra, "M_Product_ID");
-                CheckChange(ra, "C_Payment_ID");
+                CheckChange(ra, "VAB_Payment_ID");
                 CheckChange(ra, "M_InOut_ID");
                 //	checkChange(ra, "VAB_Promotion_ID");
                 //	checkChange(ra, "RequestAmt");

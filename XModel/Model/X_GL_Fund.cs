@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for GL_Fund
+/** Generated Model for VAGL_Fund
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_Fund : PO
+public class X_VAGL_Fund : PO
 {
-public X_GL_Fund (Context ctx, int GL_Fund_ID, Trx trxName) : base (ctx, GL_Fund_ID, trxName)
+public X_VAGL_Fund (Context ctx, int VAGL_Fund_ID, Trx trxName) : base (ctx, VAGL_Fund_ID, trxName)
 {
-/** if (GL_Fund_ID == 0)
+/** if (VAGL_Fund_ID == 0)
 {
 SetAmt (0.0);
 SetVAB_AccountBook_ID (0);
-SetGL_Fund_ID (0);
+SetVAGL_Fund_ID (0);
 SetName (null);
 }
  */
 }
-public X_GL_Fund (Ctx ctx, int GL_Fund_ID, Trx trxName) : base (ctx, GL_Fund_ID, trxName)
+public X_VAGL_Fund (Ctx ctx, int VAGL_Fund_ID, Trx trxName) : base (ctx, VAGL_Fund_ID, trxName)
 {
-/** if (GL_Fund_ID == 0)
+/** if (VAGL_Fund_ID == 0)
 {
 SetAmt (0.0);
 SetVAB_AccountBook_ID (0);
-SetGL_Fund_ID (0);
+SetVAGL_Fund_ID (0);
 SetName (null);
 }
  */
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Fund (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Fund (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_GL_Fund (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Fund (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_Fund (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_GL_Fund (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_Fund (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_Fund (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_Fund()
+static X_VAGL_Fund()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389059724L;
 public static int Table_ID;
  // =823;
 
-/** TableName=GL_Fund */
-public static String Table_Name="GL_Fund";
+/** TableName=VAGL_Fund */
+public static String Table_Name="VAGL_Fund";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_GL_Fund[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_Fund[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Amount.
@@ -188,17 +188,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set GL Fund.
-@param GL_Fund_ID General Ledger Funds Control */
-public void SetGL_Fund_ID (int GL_Fund_ID)
+@param VAGL_Fund_ID General Ledger Funds Control */
+public void SetVAGL_Fund_ID (int VAGL_Fund_ID)
 {
-if (GL_Fund_ID < 1) throw new ArgumentException ("GL_Fund_ID is mandatory.");
-Set_ValueNoCheck ("GL_Fund_ID", GL_Fund_ID);
+if (VAGL_Fund_ID < 1) throw new ArgumentException ("VAGL_Fund_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_Fund_ID", VAGL_Fund_ID);
 }
 /** Get GL Fund.
 @return General Ledger Funds Control */
-public int GetGL_Fund_ID() 
+public int GetVAGL_Fund_ID() 
 {
-Object ii = Get_Value("GL_Fund_ID");
+Object ii = Get_Value("VAGL_Fund_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

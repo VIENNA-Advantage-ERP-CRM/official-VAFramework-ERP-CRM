@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_PA_Achievement
+ * Class Used     : X_VAPA_Accomplishment
  * Chronological Development
  * Veena Pandey     19-June-2009
  ******************************************************/
@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAchievement : X_PA_Achievement
+    public class MAchievement : X_VAPA_Accomplishment
     {
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MAchievement).FullName);
@@ -28,10 +28,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Achievement_ID">id</param>
+        /// <param name="VAPA_Accomplishment_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAchievement(Ctx ctx, int PA_Achievement_ID, Trx trxName)
-            : base(ctx, PA_Achievement_ID, trxName)
+        public MAchievement(Ctx ctx, int VAPA_Accomplishment_ID, Trx trxName)
+            : base(ctx, VAPA_Accomplishment_ID, trxName)
         {
         }
 
@@ -53,20 +53,20 @@ namespace VAdvantage.Model
         /// <returns>array of Achievements</returns>
         public static MAchievement[] Get(MMeasure measure)
         {
-            return GetOfMeasure(measure.GetCtx(), measure.GetPA_Measure_ID());
+            return GetOfMeasure(measure.GetCtx(), measure.GetVAPA_Evaluate_ID());
         }
 
         /// <summary>
         /// Get achieved Achievements Of Measure
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="PA_Measure_ID">measure id</param>
+        /// <param name="VAPA_Evaluate_ID">measure id</param>
         /// <returns>array of Achievements</returns>
-        public static MAchievement[] GetOfMeasure(Ctx ctx, int PA_Measure_ID)
+        public static MAchievement[] GetOfMeasure(Ctx ctx, int VAPA_Evaluate_ID)
         {
             List<MAchievement> list = new List<MAchievement>();
-            String sql = "SELECT * FROM PA_Achievement "
-                + "WHERE PA_Measure_ID=" + PA_Measure_ID + " AND IsAchieved='Y' ORDER BY SeqNo, DateDoc";
+            String sql = "SELECT * FROM VAPA_Accomplishment "
+                + "WHERE VAPA_Evaluate_ID=" + VAPA_Evaluate_ID + " AND IsAchieved='Y' ORDER BY SeqNo, DateDoc";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateAchievementGoals()
         {
-            MMeasure measure = MMeasure.Get(GetCtx(), GetPA_Measure_ID());
+            MMeasure measure = MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
             measure.UpdateGoals();
         }
 

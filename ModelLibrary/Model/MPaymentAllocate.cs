@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_PaymentAllocate
+ * Class Used     : X_VAB_PaymentAllotment
  * Chronological Development
  * Veena Pandey     24-June-2009
  ******************************************************/
@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaymentAllocate : X_C_PaymentAllocate
+    public class MPaymentAllocate : X_VAB_PaymentAllotment
     {
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MPaymentAllocate).FullName);
@@ -31,14 +31,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_PaymentAllocate_ID">id</param>
+        /// <param name="VAB_PaymentAllotment_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentAllocate(Ctx ctx, int C_PaymentAllocate_ID, Trx trxName)
-            : base(ctx, C_PaymentAllocate_ID, trxName)
+        public MPaymentAllocate(Ctx ctx, int VAB_PaymentAllotment_ID, Trx trxName)
+            : base(ctx, VAB_PaymentAllotment_ID, trxName)
         {
-            if (C_PaymentAllocate_ID == 0)
+            if (VAB_PaymentAllotment_ID == 0)
             {
-                //	SetC_Payment_ID (0);	//	Parent
+                //	SetVAB_Payment_ID (0);	//	Parent
                 //	SetVAB_Invoice_ID (0);
                 SetAmount(Env.ZERO);
                 SetDiscountAmt(Env.ZERO);
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
         public static MPaymentAllocate[] Get(MPayment parent)
         {
             List<MPaymentAllocate> list = new List<MPaymentAllocate>();
-            String sql = "SELECT * FROM C_PaymentAllocate WHERE C_Payment_ID=" + parent.GetC_Payment_ID() + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAB_PaymentAllotment WHERE VAB_Payment_ID=" + parent.GetVAB_Payment_ID() + " AND IsActive='Y'";
             try
             {
                 //DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -140,11 +140,11 @@ namespace VAdvantage.Model
             if (VAB_Invoice_ID == 0)
                 return;
             //	Check Payment
-            int C_Payment_ID = GetC_Payment_ID();
-            MPayment payment = new MPayment(GetCtx(), C_Payment_ID, null);
+            int VAB_Payment_ID = GetVAB_Payment_ID();
+            MPayment payment = new MPayment(GetCtx(), VAB_Payment_ID, null);
             if (payment.GetVAB_Charge_ID() != 0
                 || payment.GetVAB_Invoice_ID() != 0
-                || payment.GetC_Order_ID() != 0)
+                || payment.GetVAB_Order_ID() != 0)
             {
                 //p_changeVO.addError( Msg.GetMsg(GetCtx(),"PaymentIsAllocated"));
                 return;
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
                 int currency_ID = GetCtx().GetContextAsInt(windowNo, "VAB_Currency_ID");
                 if (currency_ID != VAB_Currency_ID)
                 {
-                    String msg = Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@: @VAB_Invoice_ID@ <> @C_Payment_ID@");
+                    String msg = Msg.ParseTranslation(GetCtx(), "@VAB_Currency_ID@: @VAB_Invoice_ID@ <> @VAB_Payment_ID@");
                     //p_changeVO.addError(msg);
                 }
             }
@@ -336,11 +336,11 @@ namespace VAdvantage.Model
         /// <returns>true, on Save</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            MPayment payment = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+            MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if ((newRecord || Is_ValueChanged("VAB_Invoice_ID"))
                 && (payment.GetVAB_Charge_ID() != 0
                     || payment.GetVAB_Invoice_ID() != 0
-                    || payment.GetC_Order_ID() != 0))
+                    || payment.GetVAB_Order_ID() != 0))
             {
                 log.SaveError("PaymentIsAllocated", "");
                 return false;
@@ -349,7 +349,7 @@ namespace VAdvantage.Model
             // during saving a new record, system will check same invoice schedule reference exist on same payment or not
             if (newRecord && Get_ColumnIndex("VAB_sched_InvoicePayment_ID") >= 0 && GetVAB_sched_InvoicePayment_ID() > 0)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM C_PaymentAllocate   WHERE C_Payment_ID = " + GetC_Payment_ID() +
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_PaymentAllotment   WHERE VAB_Payment_ID = " + GetVAB_Payment_ID() +
                           @" AND IsActive = 'Y' AND VAB_sched_InvoicePayment_ID = " + GetVAB_sched_InvoicePayment_ID(), null, Get_Trx())) > 0)
                 {
                     //"Error" not required
@@ -401,14 +401,14 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
-            MPayment pay = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+            MPayment pay = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if (pay.Get_ColumnIndex("IsPaymentAllocate") > 0)
             {
-                string sql = "SELECT Count(C_PaymentAllocate_ID) FROM C_PaymentAllocate WHERE C_Payment_ID = " + GetC_Payment_ID();
+                string sql = "SELECT Count(VAB_PaymentAllotment_ID) FROM VAB_PaymentAllotment WHERE VAB_Payment_ID = " + GetVAB_Payment_ID();
                 int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
                 if (count == 0)
                 {
-                    String qry = "UPDATE C_Payment SET IsPaymentAllocate = 'N' WHERE C_Payment_ID=" + GetC_Payment_ID();
+                    String qry = "UPDATE VAB_Payment SET IsPaymentAllocate = 'N' WHERE VAB_Payment_ID=" + GetVAB_Payment_ID();
                     int no = DataBase.DB.ExecuteQuery(qry, null, Get_TrxName());
                     if (no != 1)
                     {
@@ -422,13 +422,13 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // consider record which are active
-                String sql = "UPDATE C_Payment i"
-                    + " SET PayAmt= (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) ,  "
-                    + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) ,  "
-                    + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) , "
-                    + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID)  "
-                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID)" : "")
-                    + "WHERE C_Payment_ID=" + GetC_Payment_ID();
+                String sql = "UPDATE VAB_Payment i"
+                    + " SET PayAmt= (SELECT COALESCE(SUM(Amount),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) ,  "
+                    + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) ,  "
+                    + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) , "
+                    + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID)  "
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM VAB_PaymentAllotment il WHERE il.IsActive = 'Y' AND i.VAB_Payment_ID=il.VAB_Payment_ID)" : "")
+                    + "WHERE VAB_Payment_ID=" + GetVAB_Payment_ID();
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 1)
                 {
@@ -456,10 +456,10 @@ namespace VAdvantage.Model
                 return success;
 
             // Added by Bharat on 25 July 2017 to set IsPaymentAllocate to True.
-            MPayment pay = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+            MPayment pay = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if (pay.Get_ColumnIndex("IsPaymentAllocate") > 0)
             {
-                String qry = "UPDATE C_Payment SET IsPaymentAllocate = 'Y' WHERE C_Payment_ID=" + GetC_Payment_ID();
+                String qry = "UPDATE VAB_Payment SET IsPaymentAllocate = 'Y' WHERE VAB_Payment_ID=" + GetVAB_Payment_ID();
                 int no = DataBase.DB.ExecuteQuery(qry, null, Get_TrxName());
                 if (no != 1)
                 {
@@ -470,14 +470,14 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // consider record which are active
-                String sql = "UPDATE C_Payment i"
-                    + " SET PayAmt= ((SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID) "
+                String sql = "UPDATE VAB_Payment i"
+                    + " SET PayAmt= ((SELECT COALESCE(SUM(Amount),0) FROM VAB_PaymentAllotment il WHERE il.IsActive = 'Y' AND i.VAB_Payment_ID=il.VAB_Payment_ID) "
                     + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? " - (BackupWithholdingAmount + WithholdingAmt)),  " : "), ")
-                    + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) ,  "
-                    + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID) , "
-                    + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM C_PaymentAllocate il WHERE  il.IsActive = 'Y' AND  i.C_Payment_ID=il.C_Payment_ID)  "
-                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM C_PaymentAllocate il WHERE il.IsActive = 'Y' AND i.C_Payment_ID=il.C_Payment_ID)" : "")
-                    + "WHERE C_Payment_ID=" + GetC_Payment_ID();
+                    + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) ,  "
+                    + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) , "
+                    + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID)  "
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? ", PaymentAmount =  (SELECT COALESCE(SUM(Amount),0) FROM VAB_PaymentAllotment il WHERE il.IsActive = 'Y' AND i.VAB_Payment_ID=il.VAB_Payment_ID)" : "")
+                    + "WHERE VAB_Payment_ID=" + GetVAB_Payment_ID();
                 int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 1)
                 {

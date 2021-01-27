@@ -302,15 +302,15 @@ namespace VAdvantage.Model
 
 
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }/** Get UOM.
 @return Unit of Measure */
-        public int GetC_UOM_ID() { Object ii = Get_Value("C_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_UOM_ID() { Object ii = Get_Value("VAB_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** ReversalDoc_ID VAF_Control_Ref_ID=297 */
         public static int REVERSALDOC_ID_VAF_Control_Ref_ID = 297;

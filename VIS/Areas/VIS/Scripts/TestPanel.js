@@ -8,7 +8,7 @@ VIS = window.VIS || {};
         this.selectedRow = null;
         this.panelWidth;
         var $lblName = null;
-        var $lblC_Location = null;
+        var $lblVAB_Address = null;
         var $lblBPartner = null;
         var $lblDateTime = null;
         var $lblAmount = null;
@@ -32,7 +32,7 @@ VIS = window.VIS || {};
 
             $root.append(html);
             $lblName = $root.find('#' + this.windowNo + 'lblName');
-            $lblC_Location = $root.find('#' + this.windowNo + 'lblLocation');
+            $lblVAB_Address = $root.find('#' + this.windowNo + 'lblLocation');
             $lblBPartner = $root.find('#' + this.windowNo + 'lblBPartner');
             $lblDateTime = $root.find('#' + this.windowNo + 'lblDateTime');
             $lblAmount = $root.find('#' + this.windowNo + 'lblAmount');
@@ -53,7 +53,7 @@ VIS = window.VIS || {};
             $lblName.text(VIS.context.getWindowContext(this.windowNo, "Name"));
             try{
                 // Get Value for lookup Fields
-                var columnName = "C_Location_ID";
+                var columnName = "VAB_Address_ID";
                 var fieldValue = this.selectedRow[columnName.toLower()];
                 // Check if field is of lookup Type
                 if (VIS.DisplayType.IsLookup(this.curTab.getField(columnName).getDisplayType()) ||
@@ -62,7 +62,7 @@ VIS = window.VIS || {};
                         fieldValue = this.curTab.getField(columnName.toLower()).
                             lookup.getDisplay(fieldValue);
                     }
-                    $lblC_Location.text(fieldValue);
+                    $lblVAB_Address.text(fieldValue);
                 }
 
                 fieldValue = null;
@@ -105,8 +105,8 @@ VIS = window.VIS || {};
             this.panelWidth = null;
             $lblName.remove();
             $lblName = null;
-            $lblC_Location.remove();
-            $lblC_Location = null;
+            $lblVAB_Address.remove();
+            $lblVAB_Address = null;
             $lblBPartner.remove();
             $lblBPartner = null;
             $lblDateTime.remove();

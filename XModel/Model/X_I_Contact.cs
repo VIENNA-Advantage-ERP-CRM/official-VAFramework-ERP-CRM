@@ -160,18 +160,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lead.
-@param C_Lead_ID Business Lead */
-public void SetC_Lead_ID (int C_Lead_ID)
+@param VAB_Lead_ID Business Lead */
+public void SetVAB_Lead_ID (int VAB_Lead_ID)
 {
-if (C_Lead_ID <= 0) Set_Value ("C_Lead_ID", null);
+if (VAB_Lead_ID <= 0) Set_Value ("VAB_Lead_ID", null);
 else
-Set_Value ("C_Lead_ID", C_Lead_ID);
+Set_Value ("VAB_Lead_ID", VAB_Lead_ID);
 }
 /** Get Lead.
 @return Business Lead */
-public int GetC_Lead_ID() 
+public int GetVAB_Lead_ID() 
 {
-Object ii = Get_Value("C_Lead_ID");
+Object ii = Get_Value("VAB_Lead_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

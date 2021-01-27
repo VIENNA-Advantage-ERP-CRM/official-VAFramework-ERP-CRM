@@ -72,13 +72,13 @@
     VCreateFromStatement.prototype.initBPartner = function (VAB_Bank_Acct_ID) {
         //  load BPartner
         var baseObj = this.$super;
-        var VAF_Column_ID = 5398;        //  C_Payment.VAB_BusinessPartner_ID
+        var VAF_Column_ID = 5398;        //  VAB_Payment.VAB_BusinessPartner_ID
         var where = " VAB_BusinessPartner.VAB_BusinessPartner_ID IN (SELECT  p.VAB_BusinessPartner_ID as VAB_BusinessPartner_ID"
-            + " FROM C_Payment p WHERE p.Processed='Y' AND p.IsReconciled='N'"
+            + " FROM VAB_Payment p WHERE p.Processed='Y' AND p.IsReconciled='N'"
             + " AND p.DocStatus IN ('CO','CL','RE','VO') AND p.PayAmt<>0"
             + " AND p.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID                           	//  #2
             + " AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l "
-                + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0) )";
+                + "WHERE p.VAB_Payment_ID=l.VAB_Payment_ID AND l.StmtAmt <> 0) )";
         var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), this.windowNo, VAF_Column_ID, VIS.DisplayType.Search, "VAB_BusinessPartner_ID", 0, false, where);
         baseObj.vBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, lookup);
     }
@@ -93,7 +93,7 @@
                 return new Date(val).toLocaleDateString();
             }
         });
-        baseObj.arrListColumns.push({ field: "C_Payment_ID", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '100px', hidden: false });
+        baseObj.arrListColumns.push({ field: "VAB_Payment_ID", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '100px', hidden: false });
         baseObj.arrListColumns.push({ field: "VAB_Currency_ID", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '80px', hidden: false });
 
         ////Sukhwinder  on 25-08-2016 for Module(VA034) specific
@@ -123,7 +123,7 @@
         baseObj.arrListColumns.push({ field: "Description", caption: VIS.Msg.getMsg("Description"), sortable: true, size: '250px', hidden: false });
         baseObj.arrListColumns.push({ field: "VAB_BusinessPartner_ID", caption: VIS.Msg.getMsg("BusinessPartner"), sortable: true, size: '150px', hidden: false });
         baseObj.arrListColumns.push({ field: "Type", caption: VIS.Msg.getMsg("Type"), sortable: true, size: '80px', hidden: true });
-        baseObj.arrListColumns.push({ field: "C_Payment_ID_K", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '150px', hidden: true });
+        baseObj.arrListColumns.push({ field: "VAB_Payment_ID_K", caption: VIS.Msg.getMsg("Payment"), sortable: true, size: '150px', hidden: true });
         baseObj.arrListColumns.push({ field: "VAB_Currency_ID_K", caption: VIS.Msg.getMsg("Currency"), sortable: true, size: '150px', hidden: true });
     }
 
@@ -133,7 +133,7 @@
         /**
          *  Selected        - 0
          *  Date            - 1
-         *  C_Payment_ID    - 2
+         *  VAB_Payment_ID    - 2
          *  C_Currenncy     - 3
          *  Amt             - 4
          */
@@ -160,7 +160,7 @@
             var selection = self.$super.dGrid.getSelection();
             for (item in selection) {
                 var obj = $.grep(self.$super.multiValues, function (n, i) {
-                    return n.C_Payment_ID_K == self.$super.dGrid.get(selection[item])["C_Payment_ID_K"]
+                    return n.VAB_Payment_ID_K == self.$super.dGrid.get(selection[item])["VAB_Payment_ID_K"]
                 });
                 if (obj.length > 0) {
 
@@ -257,7 +257,7 @@
     //        var selection = self.$super.dGrid.getSelection();
     //        for (item in selection) {
     //            var obj = $.grep(self.$super.multiValues, function (n, i) {
-    //                return n.C_Payment_ID_K == self.$super.dGrid.get(selection[item])["C_Payment_ID_K"]
+    //                return n.VAB_Payment_ID_K == self.$super.dGrid.get(selection[item])["VAB_Payment_ID_K"]
     //            });
     //            if (obj.length > 0) {
 
@@ -273,14 +273,14 @@
     //    }
     //    var countVA034 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA034_' AND IsActive = 'Y'"));
     //    var date = VIS.DB.to_date(ts, true);
-    //    var sql = "SELECT  p.DateTrx,p.C_Payment_ID, p.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,p.PayAmt,"
+    //    var sql = "SELECT  p.DateTrx,p.VAB_Payment_ID, p.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,p.PayAmt,"
     //        + "currencyConvert(p.PayAmt,p.VAB_Currency_ID,ba.VAB_Currency_ID," + date + ",null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
     //        + " bp.Name,'P' AS Type ";
     //    if (countVA034 > 0)
     //        sql += ", p.va034_depositslipno ";
 
     //    sql += " , p.TrxNo, p.CheckNo  FROM VAB_Bank_Acct ba"
-    //        + " INNER JOIN C_Payment_v p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
+    //        + " INNER JOIN VAB_Payment_V p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
     //        + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID)"
     //        + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
     //        + "WHERE p.Processed='Y' AND p.IsReconciled='N'"
@@ -303,11 +303,11 @@
     //        sql += " AND p.DateTrx = " + dateTrx;
     //    }
     //    sql += " AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l "        //	Voided Bank Statements have 0 StmtAmt
-    //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
+    //        + "WHERE p.VAB_Payment_ID=l.VAB_Payment_ID AND l.StmtAmt <> 0)";
     //    var countVA012 = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
     //    if (countVA012 > 0) {
 
-    //        sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.VAB_CashJRNLLine_ID AS C_Payment_ID,  cs.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
+    //        sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.VAB_CashJRNLLine_ID AS VAB_Payment_ID,  cs.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
     //        + "currencyConvert(cl.Amount,cl.VAB_Currency_ID,ba.VAB_Currency_ID," + date + ",null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
     //        + " Null AS Name,'C' AS Type"
 
@@ -381,13 +381,13 @@
     //    //    while (dr.read()) {
     //    //        var line = {};
     //    //        line['Date'] = dr.getString(0);             //  1-DateTrx
-    //    //        line['C_Payment_ID'] = dr.getString(2);     //  2-C_Payment_ID
+    //    //        line['VAB_Payment_ID'] = dr.getString(2);     //  2-VAB_Payment_ID
     //    //        line['VAB_Currency_ID'] = dr.getString(4);    //  3-Currency
     //    //        line['Amount'] = dr.getDecimal(5);          //  4-PayAmt
     //    //        line['ConvertedAmount'] = dr.getDecimal(6); //  5-Conv Amt
     //    //        line['VAB_BusinessPartner_ID'] = dr.getString(7);    //  6-BParner
     //    //        line['Type'] = dr.getString(8);
-    //    //        line['C_Payment_ID_K'] = dr.getString(1);   //  2-C_Payment_ID -Key
+    //    //        line['VAB_Payment_ID_K'] = dr.getString(1);   //  2-VAB_Payment_ID -Key
     //    //        line['VAB_Currency_ID_K'] = dr.getInt(3);     //  3-Currency -Key
 
     //    //        line['recid'] = count;
@@ -407,7 +407,7 @@
         /**
          *  Selected        - 0
          *  Date            - 1
-         *  C_Payment_ID    - 2
+         *  VAB_Payment_ID    - 2
          *  C_Currenncy     - 3
          *  Amt             - 4
          */
@@ -426,11 +426,11 @@
     VCreateFromStatement.prototype.getBankAccountData = function (ctx, VAB_Bank_Acct_ID, ts) {
         var data = [];
 
-        //var sql = "SELECT p.DateTrx,p.C_Payment_ID,p.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,p.PayAmt,"
+        //var sql = "SELECT p.DateTrx,p.VAB_Payment_ID,p.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,p.PayAmt,"
         //    + "currencyConvert(p.PayAmt,p.VAB_Currency_ID,ba.VAB_Currency_ID,@t,null,p.VAF_Client_ID,p.VAF_Org_ID),"   //  #1
         //    + " bp.Name,'P' AS Type "
         //    + "FROM VAB_Bank_Acct ba"
-        //    + " INNER JOIN C_Payment_v p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
+        //    + " INNER JOIN VAB_Payment_V p ON (p.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
         //    + " INNER JOIN VAB_Currency c ON (p.VAB_Currency_ID=c.VAB_Currency_ID)"
         //    + " LEFT OUTER JOIN VAB_BusinessPartner bp ON (p.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID) "
         //    + "WHERE p.Processed='Y' AND p.IsReconciled='N'"
@@ -438,11 +438,11 @@
         //    + " AND p.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID"                              	//  #2
         //    + " AND NOT EXISTS (SELECT * FROM VAB_BankingJRNLLine l "
         //    //	Voided Bank Statements have 0 StmtAmt
-        //        + "WHERE p.C_Payment_ID=l.C_Payment_ID AND l.StmtAmt <> 0)";
+        //        + "WHERE p.VAB_Payment_ID=l.VAB_Payment_ID AND l.StmtAmt <> 0)";
         //var countVA012 = VIS.Utility.Util.getValueOfInt(executeScalar("SELECT Count(VAF_ModuleInfo_ID) FROM VAF_ModuleInfo WHERE PREFIX='VA012_' AND IsActive = 'Y'"));
         //if (countVA012 > 0) {
 
-        //    sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.VAB_CashJRNLLine_ID AS C_Payment_ID,cs.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
+        //    sql += " UNION SELECT cs.DateAcct AS DateTrx,cl.VAB_CashJRNLLine_ID AS VAB_Payment_ID,cs.DocumentNo, ba.VAB_Currency_ID,c.ISO_Code,cl.Amount AS PayAmt,"
         //    + "currencyConvert(cl.Amount,cl.VAB_Currency_ID,ba.VAB_Currency_ID,@t,null,cs.VAF_Client_ID,cs.VAF_Org_ID),"   //  #1
         //    + " Null AS Name,'C' AS Type FROM VAB_Bank_Acct ba"
         //    + " INNER JOIN VAB_CashJRNLLine cl ON (cl.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
@@ -487,13 +487,13 @@
             while (dr.read()) {
                 var line = {};
                 line['Date'] = dr.getString(0);             //  1-DateTrx
-                line['C_Payment_ID'] = dr.getString(2);     //  2-C_Payment_ID
+                line['VAB_Payment_ID'] = dr.getString(2);     //  2-VAB_Payment_ID
                 line['VAB_Currency_ID'] = dr.getString(4);    //  3-Currency
                 line['Amount'] = dr.getDecimal(5);          //  4-PayAmt
                 line['ConvertedAmount'] = dr.getDecimal(6); //  5-Conv Amt
                 line['VAB_BusinessPartner_ID'] = dr.getString(7);    //  6-BParner
                 line['Type'] = dr.getString(8);
-                line['C_Payment_ID_K'] = dr.getString(1);   //  2-C_Payment_ID -Key
+                line['VAB_Payment_ID_K'] = dr.getString(1);   //  2-VAB_Payment_ID -Key
                 line['VAB_Currency_ID_K'] = dr.getInt(3);     //  3-Currency -Key
 
                 line['recid'] = count;

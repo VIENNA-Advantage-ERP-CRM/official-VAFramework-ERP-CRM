@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_Phase
+ * Class Used     : X_VAB_Std_Stage
  * Chronological Development
  * Veena Pandey     17-June-2009
  ******************************************************/
@@ -21,21 +21,21 @@ namespace VAdvantage.Model
     /// <summary>
     /// Project Type Phase Model
     /// </summary>
-    public class MProjectTypePhase : X_C_Phase
+    public class MProjectTypePhase : X_VAB_Std_Stage
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Phase_ID">id</param>
+        /// <param name="VAB_Std_Stage_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypePhase(Ctx ctx, int C_Phase_ID, Trx trxName)
-            : base(ctx, C_Phase_ID, trxName)
+        public MProjectTypePhase(Ctx ctx, int VAB_Std_Stage_ID, Trx trxName)
+            : base(ctx, VAB_Std_Stage_ID, trxName)
         {
-            if (C_Phase_ID == 0)
+            if (VAB_Std_Stage_ID == 0)
             {
-                //	setC_Phase_ID (0);			//	PK
-                //	setC_ProjectType_ID (0);	//	Parent
+                //	setVAB_Std_Stage_ID (0);			//	PK
+                //	setVAB_ProjectType_ID (0);	//	Parent
                 //	setName (null);
                 SetSeqNo(0);
                 SetStandardQty(Utility.Env.ZERO);
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         public MProjectTypeTask[] GetTasks()
         {
             List<MProjectTypeTask> list = new List<MProjectTypeTask>();
-            String sql = "SELECT * FROM C_Task WHERE C_Phase_ID=" + GetC_Phase_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAB_Std_Task WHERE VAB_Std_Stage_ID=" + GetVAB_Std_Stage_ID() + " ORDER BY SeqNo";
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());

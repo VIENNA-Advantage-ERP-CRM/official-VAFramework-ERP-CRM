@@ -21,13 +21,13 @@ namespace VIS.Models
 
             //Assign parameter value
             int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int C_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
             Decimal? QtyEntered = Util.GetValueOfDecimal(paramValue[2].ToString());
             //End Assign parameter value  
 
 
             return MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
-                    C_UOM_To_ID, QtyEntered);
+                    VAB_UOM_To_ID, QtyEntered);
 
         }
         /// <summary>
@@ -42,12 +42,12 @@ namespace VIS.Models
 
             //Assign parameter value
             int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int C_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
             Decimal? PriceStd = Util.GetValueOfDecimal(paramValue[2].ToString());
             //End Assign parameter value             
 
             return MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
-                    C_UOM_To_ID, PriceStd);
+                    VAB_UOM_To_ID, PriceStd);
 
         }
     }

@@ -121,24 +121,24 @@ namespace VAdvantage.Model
         /// Set Document Info
         /// </summary>
         /// <param name="VAB_BusinessPartner_ID">partner</param>
-        /// <param name="C_Order_ID">order</param>
+        /// <param name="VAB_Order_ID">order</param>
         /// <param name="VAB_Invoice_ID">invoice</param>
-        public void SetDocInfo(int VAB_BusinessPartner_ID, int C_Order_ID, int VAB_Invoice_ID)
+        public void SetDocInfo(int VAB_BusinessPartner_ID, int VAB_Order_ID, int VAB_Invoice_ID)
         {
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
-            SetC_Order_ID(C_Order_ID);
+            SetVAB_Order_ID(VAB_Order_ID);
             SetVAB_Invoice_ID(VAB_Invoice_ID);
         }
 
         /// <summary>
         /// Set Payment Info
         /// </summary>
-        /// <param name="C_Payment_ID">payment</param>
+        /// <param name="VAB_Payment_ID">payment</param>
         /// <param name="VAB_CashJRNLLine_ID">cash line</param>
-        public void SetPaymentInfo(int C_Payment_ID, int VAB_CashJRNLLine_ID)
+        public void SetPaymentInfo(int VAB_Payment_ID, int VAB_CashJRNLLine_ID)
         {
-            if (C_Payment_ID != 0)
-                SetC_Payment_ID(C_Payment_ID);
+            if (VAB_Payment_ID != 0)
+                SetVAB_Payment_ID(VAB_Payment_ID);
             if (VAB_CashJRNLLine_ID != 0)
                 SetVAB_CashJRNLLine_ID(VAB_CashJRNLLine_ID);
         }
@@ -172,8 +172,8 @@ namespace VAdvantage.Model
             //	Set BPartner/Order from Invoice
             if (GetVAB_BusinessPartner_ID() == 0 && GetInvoice() != null)
                 SetVAB_BusinessPartner_ID(GetInvoice().GetVAB_BusinessPartner_ID());
-            if (GetC_Order_ID() == 0 && GetInvoice() != null)
-                SetC_Order_ID(GetInvoice().GetC_Order_ID());
+            if (GetVAB_Order_ID() == 0 && GetInvoice() != null)
+                SetVAB_Order_ID(GetInvoice().GetVAB_Order_ID());
             //
             return true;
         }
@@ -198,8 +198,8 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MAllocationLine[");
             sb.Append(Get_ID());
-            if (GetC_Payment_ID() != 0)
-                sb.Append(",C_Payment_ID=").Append(GetC_Payment_ID());
+            if (GetVAB_Payment_ID() != 0)
+                sb.Append(",VAB_Payment_ID=").Append(GetVAB_Payment_ID());
             if (GetVAB_CashJRNLLine_ID() != 0)
                 sb.Append(",VAB_CashJRNLLine_ID=").Append(GetVAB_CashJRNLLine_ID());
             if (GetVAB_Invoice_ID() != 0)
@@ -232,13 +232,13 @@ namespace VAdvantage.Model
                 && GetVAB_BusinessPartner_ID() != invoice.GetVAB_BusinessPartner_ID())
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             //
-            int C_Payment_ID = GetC_Payment_ID();
+            int VAB_Payment_ID = GetVAB_Payment_ID();
             int VAB_CashJRNLLine_ID = GetVAB_CashJRNLLine_ID();
 
             //	Update Payment
-            if (C_Payment_ID != 0)
+            if (VAB_Payment_ID != 0)
             {
-                payment = new MPayment(GetCtx(), C_Payment_ID, Get_TrxName());
+                payment = new MPayment(GetCtx(), VAB_Payment_ID, Get_TrxName());
                 if (GetVAB_BusinessPartner_ID() != payment.GetVAB_BusinessPartner_ID())
                 {
                     log.Warning("VAB_BusinessPartner_ID different - Invoice=" + GetVAB_BusinessPartner_ID() + " - Payment=" + payment.GetVAB_BusinessPartner_ID());
@@ -279,31 +279,31 @@ namespace VAdvantage.Model
             }
 
             //	Payment - Invoice
-            if (C_Payment_ID != 0 && invoice != null)
+            if (VAB_Payment_ID != 0 && invoice != null)
             {
                 //	Link to Invoice
                 if (reverse)
                 {
-                    invoice.SetC_Payment_ID(0);
-                    log.Fine("C_Payment_ID=" + C_Payment_ID
+                    invoice.SetVAB_Payment_ID(0);
+                    log.Fine("VAB_Payment_ID=" + VAB_Payment_ID
                        + " Unlinked from VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
                 else if (invoice.IsPaid())
                 {
-                    invoice.SetC_Payment_ID(C_Payment_ID);
-                    log.Fine("C_Payment_ID=" + C_Payment_ID
+                    invoice.SetVAB_Payment_ID(VAB_Payment_ID);
+                    log.Fine("VAB_Payment_ID=" + VAB_Payment_ID
                         + " Linked to VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
 
                 //	Link to Order
-                String update = "UPDATE C_Order o "
-                    + "SET C_Payment_ID="
-                        + (reverse ? "NULL " : "(SELECT C_Payment_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID + ") ")
+                String update = "UPDATE VAB_Order o "
+                    + "SET VAB_Payment_ID="
+                        + (reverse ? "NULL " : "(SELECT VAB_Payment_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID + ") ")
                     + "WHERE EXISTS (SELECT * FROM VAB_Invoice i "
-                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
+                        + "WHERE o.VAB_Order_ID=i.VAB_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
                 if (DataBase.DB.ExecuteQuery(update, null, Get_TrxName()) > 0)
                 {
-                    log.Fine("C_Payment_ID=" + C_Payment_ID
+                    log.Fine("VAB_Payment_ID=" + VAB_Payment_ID
                         + (reverse ? " UnLinked from" : " Linked to")
                         + " order of VAB_Invoice_ID=" + VAB_Invoice_ID);
                 }
@@ -331,11 +331,11 @@ namespace VAdvantage.Model
                 }
 
                 //	Link to Order
-                String update = "UPDATE C_Order o "
+                String update = "UPDATE VAB_Order o "
                     + "SET VAB_CashJRNLLine_ID="
                         + (reverse ? "NULL " : "(SELECT VAB_CashJRNLLine_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID + ") ")
                     + "WHERE EXISTS (SELECT * FROM VAB_Invoice i "
-                        + "WHERE o.C_Order_ID=i.C_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
+                        + "WHERE o.VAB_Order_ID=i.VAB_Order_ID AND i.VAB_Invoice_ID=" + VAB_Invoice_ID + ")";
                 if (DataBase.DB.ExecuteQuery(update, null, Get_TrxName()) > 0)
                 {
                     log.Fine("VAB_CashJRNLLine_ID=" + VAB_CashJRNLLine_ID
@@ -344,14 +344,14 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (GetGL_JournalLine_ID() != 0 && reverse)
+            if (GetVAGL_JRNLLine_ID() != 0 && reverse)
             {
                 // set allocation as false on View Allocation reversal
-                DB.ExecuteQuery(@" UPDATE GL_JOURNALLINE SET isAllocated ='N' WHERE GL_JOURNALLINE_ID =" + GetGL_JournalLine_ID(), null, Get_TrxName());
+                DB.ExecuteQuery(@" UPDATE VAGL_JRNLLINE SET isAllocated ='N' WHERE VAGL_JRNLLINE_ID =" + GetVAGL_JRNLLine_ID(), null, Get_TrxName());
             }
             // Added by Bharat- Update Discrepancy amount on Invoice.
 
-            if (C_Payment_ID == 0 && VAB_CashJRNLLine_ID == 0 && invoice != null)
+            if (VAB_Payment_ID == 0 && VAB_CashJRNLLine_ID == 0 && invoice != null)
             {
                 if (invoice.Get_ColumnIndex("DiscrepancyAmt") >= 0)
                 {
@@ -530,7 +530,7 @@ namespace VAdvantage.Model
                                 invoiceSchedule.SetVA009_Variance(0);
 
                                 // remove linking of Payment from schedule
-                                invoiceSchedule.SetC_Payment_ID(0);
+                                invoiceSchedule.SetVAB_Payment_ID(0);
 
                                 #endregion
                             }

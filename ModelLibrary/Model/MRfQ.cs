@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQ
  * Purpose        : RfQ Model
- * Class Used     : X_C_RfQ
+ * Class Used     : X_VAB_RFQ
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -25,28 +25,28 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRfQ : X_C_RfQ
+    public class MRfQ : X_VAB_RFQ
     {
 
         //Cache	
-        private static CCache<int, MRfQ> s_cache = new CCache<int, MRfQ>("C_RfQ", 10);
+        private static CCache<int, MRfQ> s_cache = new CCache<int, MRfQ>("VAB_RFQ", 10);
 
         /// <summary>
         /// Get MRfQ from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQ_ID">ID</param>
+        /// <param name="VAB_RFQ_ID">ID</param>
         /// <param name="trxName">transction</param>
         /// <returns>MRFQ</returns>
-        public static MRfQ Get(Ctx ctx, int C_RfQ_ID, Trx trxName)
+        public static MRfQ Get(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
         {
-            int key = C_RfQ_ID;
+            int key = VAB_RFQ_ID;
             MRfQ retValue = (MRfQ)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MRfQ(ctx, C_RfQ_ID, trxName);
+            retValue = new MRfQ(ctx, VAB_RFQ_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -58,14 +58,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQ_ID">ID</param>
+        /// <param name="VAB_RFQ_ID">ID</param>
         /// <param name="trxName">transaction</param>
-        public MRfQ(Ctx ctx, int C_RfQ_ID, Trx trxName)
-            :base(ctx, C_RfQ_ID, trxName)
+        public MRfQ(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
+            :base(ctx, VAB_RFQ_ID, trxName)
         {
-            if (C_RfQ_ID == 0)
+            if (VAB_RFQ_ID == 0)
             {
-                //	setC_RfQ_Topic_ID (0);
+                //	setVAB_RFQ_Subject_ID (0);
                 //	setName (null);
                 //	setVAB_Currency_ID (0);	// @$VAB_Currency_ID @
                 //	setSalesRep_ID (0);
@@ -101,8 +101,8 @@ namespace VAdvantage.Model
         public MRfQLine[] GetLines()
         {
             List<MRfQLine> list = new List<MRfQLine>();
-            String sql = "SELECT * FROM C_RfQLine "
-                + "WHERE C_RfQ_ID=@param1 AND IsActive='Y' "
+            String sql = "SELECT * FROM VAB_RFQLine "
+                + "WHERE VAB_RFQ_ID=@param1 AND IsActive='Y' "
                 + "ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
             try
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", GetC_RfQ_ID());
+                param[0] = new SqlParameter("@param1", GetVAB_RFQ_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -144,8 +144,8 @@ namespace VAdvantage.Model
         public MRfQResponse[] GetResponses(bool activeOnly, bool completedOnly)
         {
             List<MRfQResponse> list = new List<MRfQResponse>();
-            String sql = "SELECT * FROM C_RfQResponse "
-                + "WHERE C_RfQ_ID=@param1";
+            String sql = "SELECT * FROM VAB_RFQReply "
+                + "WHERE VAB_RFQ_ID=@param1";
             if (activeOnly)
             {
                 sql += " AND IsActive='Y'";
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
             try
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", GetC_RfQ_ID());
+                param[0] = new SqlParameter("@param1", GetVAB_RFQ_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -247,7 +247,7 @@ namespace VAdvantage.Model
                     log.Warning("isQuoteTotalAmtOnlyValid - #" + qtys.Length + " - " + line);
                    
                     String msg = "@Line@ " + line.GetLine()
-                        + ": #@C_RfQLineQty@=" + qtys.Length + " - @IsQuoteTotalAmt@";
+                        + ": #@VAB_RFQLine_Qty@=" + qtys.Length + " - @IsQuoteTotalAmt@";
                     return msg;
                 }
             }
@@ -287,11 +287,12 @@ namespace VAdvantage.Model
             //    return;
             String setline = "SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE C_Rfq_ID =" + GetC_RfQ_ID();
-            int noLine = DataBase.DB.ExecuteQuery("UPDATE C_RfQLine " + setline, null, Get_Trx());
+                + "' WHERE VAB_RFQ_ID =" + GetVAB_RFQ_ID();
+            int noLine = DataBase.DB.ExecuteQuery("UPDATE VAB_RFQLine " + setline, null, Get_Trx());
 
-            string setQty = @"UPDATE C_RFQLINEQTY SET PROCESSED ='Y' WHERE C_RFQLINEQTY_ID IN (SELECT LQTY.C_RFQLINEQTY_ID FROM C_RFQLINEQTY LQTY INNER JOIN C_RFQLINE LINE
-                    ON LINE.C_RFQLINE_ID=LQTY.C_RFQLINE_ID INNER JOIN C_RFQ RFQ ON RFQ.C_RFQ_ID = LINE.C_RFQ_ID WHERE RFQ.C_RFQ_ID =" + GetC_RfQ_ID() + ")";
+            string setQty = @"UPDATE VAB_RFQLINE_QTYVAB_SalesRegionState
+ SET PROCESSED ='Y' WHERE VAB_RFQLINE_QTY_ID IN (SELECT LQTY.VAB_RFQLINE_QTY_ID FROM VAB_RFQLINE_QTY LQTY INNER JOIN VAB_RFQLINE LINE
+                    ON LINE.VAB_RFQLINE_ID=LQTY.VAB_RFQLINE_ID INNER JOIN VAB_RFQ RFQ ON RFQ.VAB_RFQ_ID = LINE.VAB_RFQ_ID WHERE RFQ.VAB_RFQ_ID =" + GetVAB_RFQ_ID() + ")";
             int noQty = DataBase.DB.ExecuteQuery(setQty, null, Get_Trx());
 
             log.Fine(processed + " - Lines=" + noLine + ", Qty=" + noQty);

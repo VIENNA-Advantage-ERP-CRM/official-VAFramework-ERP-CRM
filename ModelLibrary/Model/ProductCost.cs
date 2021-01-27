@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         private Trx _trx = null;
 
 
-        private int _C_UOM_ID = 0;
+        private int _VAB_UOM_ID = 0;
         private Decimal? _qty = Env.ZERO;
         // Product Revenue Acct    
         public static int ACCTTYPE_P_Revenue = 1;
@@ -134,10 +134,10 @@ namespace VAdvantage.Model
         /// Set Quantity in UOM
         /// </summary>
         /// <param name="qty">quantity</param>
-        /// <param name="C_UOM_ID">UOM</param>
-        public void SetQty(Decimal? qty, int C_UOM_ID)
+        /// <param name="VAB_UOM_ID">UOM</param>
+        public void SetQty(Decimal? qty, int VAB_UOM_ID)
         {
-            _qty = MUOMConversion.Convert(C_UOM_ID, _C_UOM_ID, Utility.Util.GetValueOfDecimal(qty), true);    //  StdPrecision
+            _qty = MUOMConversion.Convert(VAB_UOM_ID, _VAB_UOM_ID, Utility.Util.GetValueOfDecimal(qty), true);    //  StdPrecision
             if (qty != null && _qty == null)   //  conversion error
             {
                 log.Severe("Conversion error - set to " + qty);
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                _C_UOM_ID = C_UOM_ID;
+                _VAB_UOM_ID = VAB_UOM_ID;
             }
         }
 
@@ -303,10 +303,10 @@ namespace VAdvantage.Model
         /// <param name="as1">accounting schema</param>
         /// <param name="VAF_Org_ID"></param>
         /// <param name="costingMethod">if null uses Accounting Schema - AcctSchema.COSTINGMETHOD_*</param>
-        /// <param name="C_OrderLine_ID">optional order line</param>
+        /// <param name="VAB_OrderLine_ID">optional order line</param>
         /// <param name="zeroCostsOK">zero/no costs are OK</param>
         /// <returns>cost or null, if qty or costs cannot be determined</returns>
-        public Decimal? GetProductCosts(MAcctSchema as1, int VAF_Org_ID, String costingMethod, int C_OrderLine_ID, bool zeroCostsOK)
+        public Decimal? GetProductCosts(MAcctSchema as1, int VAF_Org_ID, String costingMethod, int VAB_OrderLine_ID, bool zeroCostsOK)
         {
             if (_qty == null)
             {
@@ -321,7 +321,7 @@ namespace VAdvantage.Model
             }
             //
             Decimal? cost = MCost.GetCurrentCost(_product, _M_AttributeSetInstance_ID,
-                as1, VAF_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), C_OrderLine_ID, zeroCostsOK, _trx);
+                as1, VAF_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), VAB_OrderLine_ID, zeroCostsOK, _trx);
             if (cost == null || cost == 0)
             {
                 log.Fine("No Costs");

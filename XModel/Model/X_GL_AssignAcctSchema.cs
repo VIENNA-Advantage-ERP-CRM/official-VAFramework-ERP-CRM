@@ -1,34 +1,34 @@
 namespace ViennaAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for GL_AssignAcctSchema
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAGL_AssignAcctSchema
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_GL_AssignAcctSchema : PO{public X_GL_AssignAcctSchema (Context ctx, int GL_AssignAcctSchema_ID, Trx trxName) : base (ctx, GL_AssignAcctSchema_ID, trxName){/** if (GL_AssignAcctSchema_ID == 0){SetGL_AssignAcctSchema_ID (0);SetGL_Journal_ID (0);} */
-}public X_GL_AssignAcctSchema (Ctx ctx, int GL_AssignAcctSchema_ID, Trx trxName) : base (ctx, GL_AssignAcctSchema_ID, trxName){/** if (GL_AssignAcctSchema_ID == 0){SetGL_AssignAcctSchema_ID (0);SetGL_Journal_ID (0);} */
+public class X_VAGL_AssignAcctSchema : PO{public X_VAGL_AssignAcctSchema (Context ctx, int VAGL_AssignAcctSchema_ID, Trx trxName) : base (ctx, VAGL_AssignAcctSchema_ID, trxName){/** if (VAGL_AssignAcctSchema_ID == 0){SetVAGL_AssignAcctSchema_ID (0);SetVAGL_JRNL_ID (0);} */
+}public X_VAGL_AssignAcctSchema (Ctx ctx, int VAGL_AssignAcctSchema_ID, Trx trxName) : base (ctx, VAGL_AssignAcctSchema_ID, trxName){/** if (VAGL_AssignAcctSchema_ID == 0){SetVAGL_AssignAcctSchema_ID (0);SetVAGL_JRNL_ID (0);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_AssignAcctSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAGL_AssignAcctSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_AssignAcctSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAGL_AssignAcctSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_GL_AssignAcctSchema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAGL_AssignAcctSchema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_GL_AssignAcctSchema(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAGL_AssignAcctSchema(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27853764428601L;/** Last Updated Timestamp 10/21/2019 11:55:11 AM */
 public static long updatedMS = 1571639111812L;/** VAF_TableView_ID=1001269 */
 public static int Table_ID; // =1001269;
-/** TableName=GL_AssignAcctSchema */
-public static String Table_Name="GL_AssignAcctSchema";
+/** TableName=VAGL_AssignAcctSchema */
+public static String Table_Name="VAGL_AssignAcctSchema";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -43,7 +43,7 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_GL_AssignAcctSchema[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Accounting Schema.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAGL_AssignAcctSchema[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Accounting Schema.
 @param VAB_AccountBook_ID Rules for accounting */
 public void SetVAB_AccountBook_ID (int VAB_AccountBook_ID){if (VAB_AccountBook_ID <= 0) Set_Value ("VAB_AccountBook_ID", null);else
 Set_Value ("VAB_AccountBook_ID", VAB_AccountBook_ID);}/** Get Accounting Schema.
@@ -67,12 +67,12 @@ public Decimal GetCurrencyRate() {Object bd =Get_Value("CurrencyRate");if (bd ==
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
 @return Export */
 public String GetExport_ID() {return (String)Get_Value("Export_ID");}/** Set Assigned Accounting Schema.
-@param GL_AssignAcctSchema_ID Assigned Accounting Schema */
-public void SetGL_AssignAcctSchema_ID (int GL_AssignAcctSchema_ID){if (GL_AssignAcctSchema_ID < 1) throw new ArgumentException ("GL_AssignAcctSchema_ID is mandatory.");Set_ValueNoCheck ("GL_AssignAcctSchema_ID", GL_AssignAcctSchema_ID);}/** Get Assigned Accounting Schema.
+@param VAGL_AssignAcctSchema_ID Assigned Accounting Schema */
+public void SetVAGL_AssignAcctSchema_ID (int VAGL_AssignAcctSchema_ID){if (VAGL_AssignAcctSchema_ID < 1) throw new ArgumentException ("VAGL_AssignAcctSchema_ID is mandatory.");Set_ValueNoCheck ("VAGL_AssignAcctSchema_ID", VAGL_AssignAcctSchema_ID);}/** Get Assigned Accounting Schema.
 @return Assigned Accounting Schema */
-public int GetGL_AssignAcctSchema_ID() {Object ii = Get_Value("GL_AssignAcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Journal.
-@param GL_Journal_ID General Ledger Journal */
-public void SetGL_Journal_ID (int GL_Journal_ID){if (GL_Journal_ID < 1) throw new ArgumentException ("GL_Journal_ID is mandatory.");Set_ValueNoCheck ("GL_Journal_ID", GL_Journal_ID);}/** Get Journal.
+public int GetVAGL_AssignAcctSchema_ID() {Object ii = Get_Value("VAGL_AssignAcctSchema_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Journal.
+@param VAGL_JRNL_ID General Ledger Journal */
+public void SetVAGL_JRNL_ID (int VAGL_JRNL_ID){if (VAGL_JRNL_ID < 1) throw new ArgumentException ("VAGL_JRNL_ID is mandatory.");Set_ValueNoCheck ("VAGL_JRNL_ID", VAGL_JRNL_ID);}/** Get Journal.
 @return General Ledger Journal */
-public int GetGL_Journal_ID() {Object ii = Get_Value("GL_Journal_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}}
+public int GetVAGL_JRNL_ID() {Object ii = Get_Value("VAGL_JRNL_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}}
 }

@@ -90,15 +90,15 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
         }/** Get BOM Type.
 @return Type of BOM */
         public String GetBOMType() { return (String)Get_Value("BOMType"); }/** Set UOM.
-@param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }/** Get UOM.
 @return Unit of Measure */
-        public int GetC_UOM_ID() { Object ii = Get_Value("C_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
+        public int GetVAB_UOM_ID() { Object ii = Get_Value("VAB_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
 @param Description Optional short description of the record */
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */

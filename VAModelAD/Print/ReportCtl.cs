@@ -75,17 +75,17 @@ namespace VAdvantage.Print
             /**
              *	Order Print
              */
-            if (pi.GetVAF_Job_ID() == 110)			//	C_Order
+            if (pi.GetVAF_Job_ID() == 110)			//	VAB_Order
                 return StartDocumentPrint(ctx, ReportEngine_N.ORDER, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == 116)		//	VAB_Invoice
                 return StartDocumentPrint(ctx, ReportEngine_N.INVOICE, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == 117)		//	M_InOut
                 return StartDocumentPrint(ctx, ReportEngine_N.SHIPMENT, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetVAF_Job_ID() == 217)		//	C_Project
+            else if (pi.GetVAF_Job_ID() == 217)		//	VAB_Project
                 return StartDocumentPrint(ctx, ReportEngine_N.PROJECT, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetVAF_Job_ID() == 276)		//	C_RfQResponse
+            else if (pi.GetVAF_Job_ID() == 276)		//	VAB_RFQReply
                 return StartDocumentPrint(ctx, ReportEngine_N.RFQ, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetVAF_Job_ID() == 313)		//	C_Payment
+            else if (pi.GetVAF_Job_ID() == 313)		//	VAB_Payment
                 return StartCheckPrint(ctx, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == 290)      // 	Movement
                 return StartDocumentPrint(ctx, ReportEngine_N.MOVEMENT, pi.GetRecord_ID(), IsDirectPrint);
@@ -218,24 +218,24 @@ namespace VAdvantage.Print
         /// 
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_Payment_ID"></param>
+        /// <param name="VAB_Payment_ID"></param>
         /// <param name="IsDirectPrint"></param>
         /// <returns></returns>
-        public static ReportEngine_N StartCheckPrint(Ctx ctx, int C_Payment_ID, bool IsDirectPrint)
+        public static ReportEngine_N StartCheckPrint(Ctx ctx, int VAB_Payment_ID, bool IsDirectPrint)
         {
-            int C_PaySelectionCheck_ID = 0;
-            //MPaySelectionCheck psc = MPaySelectionCheck.GetOfPayment(ctx, C_Payment_ID, null);
+            int VAB_PaymentOptionCheck_ID = 0;
+            //MPaySelectionCheck psc = MPaySelectionCheck.GetOfPayment(ctx, VAB_Payment_ID, null);
             //if (psc != null)
             //{
-            //    C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
+            //    VAB_PaymentOptionCheck_ID = psc.GetVAB_PaymentOptionCheck_ID();
             //}
             //else
             //{
-            //    psc = MPaySelectionCheck.CreateForPayment(ctx, C_Payment_ID, null);
+            //    psc = MPaySelectionCheck.CreateForPayment(ctx, VAB_Payment_ID, null);
             //    if (psc != null)
-            //        C_PaySelectionCheck_ID = psc.GetC_PaySelectionCheck_ID();
+            //        VAB_PaymentOptionCheck_ID = psc.GetVAB_PaymentOptionCheck_ID();
             //}
-            return StartDocumentPrint(ctx, ReportEngine_N.CHECK, C_PaySelectionCheck_ID, IsDirectPrint);
+            return StartDocumentPrint(ctx, ReportEngine_N.CHECK, VAB_PaymentOptionCheck_ID, IsDirectPrint);
         }	//	startCheckPrint
 
       

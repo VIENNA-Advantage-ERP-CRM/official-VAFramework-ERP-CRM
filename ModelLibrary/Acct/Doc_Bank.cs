@@ -105,7 +105,7 @@ namespace VAdvantage.Acct
                 MPeriod period = MPeriod.Get(GetCtx(), line.GetDateAcct());
                 if (period != null && period.IsOpen(MDocBaseType.DOCBASETYPE_BANKSTATEMENT))
                 {
-                    docLine.SetC_Period_ID(period.GetC_Period_ID());
+                    docLine.SetVAB_YearPeriod_ID(period.GetVAB_YearPeriod_ID());
                 }
                 //
                 list.Add(docLine);
@@ -180,7 +180,7 @@ namespace VAdvantage.Acct
                 {
                     DocLine_Bank line = (DocLine_Bank)_lines[i];
                     int VAB_BusinessPartner_ID = line.GetVAB_BusinessPartner_ID();
-                    int C_Payment_ID = line.GetC_Payment_ID();
+                    int VAB_Payment_ID = line.GetVAB_Payment_ID();
                     //  BankAsset       DR      CR  (Statement)
                     fl = fact.CreateLine(line,
                         GetAccount(Doc.ACCTTYPE_BankAsset, as1), line.GetVAB_Currency_ID(), line.GetStmtAmt());
@@ -197,7 +197,7 @@ namespace VAdvantage.Acct
                     //  BankInTransit   DR      CR              (Payment)
                     MAccount acct = null;
 
-                    string tenderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT tendertype FROM C_Payment WHERE C_Payment_ID=" + C_Payment_ID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                    string tenderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT tendertype FROM VAB_Payment WHERE VAB_Payment_ID=" + VAB_Payment_ID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     // Tender Type RIBA
                     if ("R".Equals(tenderType))
                     {

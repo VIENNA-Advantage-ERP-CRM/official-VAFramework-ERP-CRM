@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         public MLocation GetLocation(bool requery)
         {
             if (_location == null || requery)
-                _location = MLocation.Get(GetCtx(), GetC_Location_ID(), Get_TrxName());
+                _location = MLocation.Get(GetCtx(), GetVAB_Address_ID(), Get_TrxName());
             return _location;
         }
 
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MBPartner_Location[ID=")
                 .Append(Get_ID())
-                .Append(",C_Location_ID=").Append(GetC_Location_ID())
+                .Append(",VAB_Address_ID=").Append(GetVAB_Address_ID())
                 .Append(",Name=").Append(GetName())
                 .Append("]");
             return sb.ToString();
@@ -154,7 +154,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetC_Location_ID() == 0)
+            if (GetVAB_Address_ID() == 0)
                 return false;
 
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
             //    return true;
 
 
-            if (Util.GetValueOfString(Get_ValueOld("Name")) == GetName() && Util.GetValueOfInt(Get_ValueOld("C_Location_ID")) == GetC_Location_ID())
+            if (Util.GetValueOfString(Get_ValueOld("Name")) == GetName() && Util.GetValueOfInt(Get_ValueOld("VAB_Address_ID")) == GetVAB_Address_ID())
             {
                 return true;
             }

@@ -129,7 +129,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + GetVAF_Client_ID() + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null, Get_Trx());
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
                                                        Left Join FRPT_Asset_Group_Acct  ca On Bp.VAA_AssetGroup_ID=ca.VAA_AssetGroup_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                                    + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
-                                                   " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) +
+                                                   " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) +
                                                    " AND Bp.VAA_AssetGroup_ID = " + GetVAA_AssetGroup_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
                                         assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         assetGroupAcct.Set_ValueNoCheck("VAA_AssetGroup_ID", Util.GetValueOfInt(GetVAA_AssetGroup_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                        assetGroupAcct.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                        assetGroupAcct.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                         assetGroupAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!assetGroupAcct.Save())
                                         {

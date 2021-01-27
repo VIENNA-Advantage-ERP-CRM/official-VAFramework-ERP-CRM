@@ -11,20 +11,20 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_TaxDeclarationLine
+/** Generated Model for VAB_TaxComputationLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_TaxDeclarationLine : PO
+public class X_VAB_TaxComputationLine : PO
 {
-public X_C_TaxDeclarationLine (Context ctx, int C_TaxDeclarationLine_ID, Trx trxName) : base (ctx, C_TaxDeclarationLine_ID, trxName)
+public X_VAB_TaxComputationLine (Context ctx, int VAB_TaxComputationLine_ID, Trx trxName) : base (ctx, VAB_TaxComputationLine_ID, trxName)
 {
-/** if (C_TaxDeclarationLine_ID == 0)
+/** if (VAB_TaxComputationLine_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_Currency_ID (0);
-SetC_TaxDeclarationLine_ID (0);
-SetC_TaxDeclaration_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxComputationLine_ID (0);
+SetVAVAB_TaxRateComputation_ID (0);
+SetVAB_TaxRate_ID (0);
 SetDateAcct (DateTime.Now);
 SetIsManual (true);	// Y
 SetLine (0);
@@ -33,15 +33,15 @@ SetTaxBaseAmt (0.0);
 }
  */
 }
-public X_C_TaxDeclarationLine (Ctx ctx, int C_TaxDeclarationLine_ID, Trx trxName) : base (ctx, C_TaxDeclarationLine_ID, trxName)
+public X_VAB_TaxComputationLine (Ctx ctx, int VAB_TaxComputationLine_ID, Trx trxName) : base (ctx, VAB_TaxComputationLine_ID, trxName)
 {
-/** if (C_TaxDeclarationLine_ID == 0)
+/** if (VAB_TaxComputationLine_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_Currency_ID (0);
-SetC_TaxDeclarationLine_ID (0);
-SetC_TaxDeclaration_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxComputationLine_ID (0);
+SetVAVAB_TaxRateComputation_ID (0);
+SetVAB_TaxRate_ID (0);
 SetDateAcct (DateTime.Now);
 SetIsManual (true);	// Y
 SetLine (0);
@@ -55,7 +55,7 @@ SetTaxBaseAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxDeclarationLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_TaxComputationLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_C_TaxDeclarationLine (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxDeclarationLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_TaxComputationLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_C_TaxDeclarationLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_C_TaxDeclarationLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_TaxComputationLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_TaxDeclarationLine()
+static X_VAB_TaxComputationLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389058705L;
 public static int Table_ID;
  // =819;
 
-/** TableName=C_TaxDeclarationLine */
-public static String Table_Name="C_TaxDeclarationLine";
+/** TableName=VAB_TaxComputationLine */
+public static String Table_Name="VAB_TaxComputationLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -125,7 +125,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_TaxDeclarationLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_TaxComputationLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Allocation Line.
@@ -207,47 +207,47 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax Declaration Line.
-@param C_TaxDeclarationLine_ID Tax Declaration Document Information */
-public void SetC_TaxDeclarationLine_ID (int C_TaxDeclarationLine_ID)
+@param VAB_TaxComputationLine_ID Tax Declaration Document Information */
+public void SetVAB_TaxComputationLine_ID (int VAB_TaxComputationLine_ID)
 {
-if (C_TaxDeclarationLine_ID < 1) throw new ArgumentException ("C_TaxDeclarationLine_ID is mandatory.");
-Set_ValueNoCheck ("C_TaxDeclarationLine_ID", C_TaxDeclarationLine_ID);
+if (VAB_TaxComputationLine_ID < 1) throw new ArgumentException ("VAB_TaxComputationLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxComputationLine_ID", VAB_TaxComputationLine_ID);
 }
 /** Get Tax Declaration Line.
 @return Tax Declaration Document Information */
-public int GetC_TaxDeclarationLine_ID() 
+public int GetVAB_TaxComputationLine_ID() 
 {
-Object ii = Get_Value("C_TaxDeclarationLine_ID");
+Object ii = Get_Value("VAB_TaxComputationLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax Declaration.
-@param C_TaxDeclaration_ID Define the declaration to the tax authorities */
-public void SetC_TaxDeclaration_ID (int C_TaxDeclaration_ID)
+@param VAVAB_TaxRateComputation_ID Define the declaration to the tax authorities */
+public void SetVAVAB_TaxRateComputation_ID (int VAVAB_TaxRateComputation_ID)
 {
-if (C_TaxDeclaration_ID < 1) throw new ArgumentException ("C_TaxDeclaration_ID is mandatory.");
-Set_ValueNoCheck ("C_TaxDeclaration_ID", C_TaxDeclaration_ID);
+if (VAVAB_TaxRateComputation_ID < 1) throw new ArgumentException ("VAVAB_TaxRateComputation_ID is mandatory.");
+Set_ValueNoCheck ("VAVAB_TaxRateComputation_ID", VAVAB_TaxRateComputation_ID);
 }
 /** Get Tax Declaration.
 @return Define the declaration to the tax authorities */
-public int GetC_TaxDeclaration_ID() 
+public int GetVAVAB_TaxRateComputation_ID() 
 {
-Object ii = Get_Value("C_TaxDeclaration_ID");
+Object ii = Get_Value("VAVAB_TaxRateComputation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

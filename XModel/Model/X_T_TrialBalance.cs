@@ -26,7 +26,7 @@ SetAmtAcctCr (0.0);
 SetAmtAcctDr (0.0);
 SetVAB_AccountBook_ID (0);
 SetDateAcct (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetPostingType (null);
 }
  */
@@ -41,7 +41,7 @@ SetAmtAcctCr (0.0);
 SetAmtAcctDr (0.0);
 SetVAB_AccountBook_ID (0);
 SetDateAcct (DateTime.Now);
-SetFact_Acct_ID (0);
+SetActual_Acct_Detail_ID (0);
 SetPostingType (null);
 }
  */
@@ -431,82 +431,82 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID <= 0) Set_ValueNoCheck ("C_Period_ID", null);
+if (VAB_YearPeriod_ID <= 0) Set_ValueNoCheck ("VAB_YearPeriod_ID", null);
 else
-Set_ValueNoCheck ("C_Period_ID", C_Period_ID);
+Set_ValueNoCheck ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_ValueNoCheck ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_ValueNoCheck ("VAB_Project_ID", null);
 else
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_ValueNoCheck ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_ValueNoCheck ("VAB_SalesRegionState_ID", null);
 else
-Set_ValueNoCheck ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_ValueNoCheck ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID <= 0) Set_ValueNoCheck ("C_Tax_ID", null);
+if (VAB_TaxRate_ID <= 0) Set_ValueNoCheck ("VAB_TaxRate_ID", null);
 else
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID <= 0) Set_ValueNoCheck ("C_UOM_ID", null);
+if (VAB_UOM_ID <= 0) Set_ValueNoCheck ("VAB_UOM_ID", null);
 else
-Set_ValueNoCheck ("C_UOM_ID", C_UOM_ID);
+Set_ValueNoCheck ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -553,49 +553,49 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Accounting Fact.
-@param Fact_Acct_ID Accounting Fact */
-public void SetFact_Acct_ID (int Fact_Acct_ID)
+@param Actual_Acct_Detail_ID Accounting Fact */
+public void SetActual_Acct_Detail_ID (int Actual_Acct_Detail_ID)
 {
-if (Fact_Acct_ID < 1) throw new ArgumentException ("Fact_Acct_ID is mandatory.");
-Set_ValueNoCheck ("Fact_Acct_ID", Fact_Acct_ID);
+if (Actual_Acct_Detail_ID < 1) throw new ArgumentException ("Actual_Acct_Detail_ID is mandatory.");
+Set_ValueNoCheck ("Actual_Acct_Detail_ID", Actual_Acct_Detail_ID);
 }
 /** Get Accounting Fact.
 @return Accounting Fact */
-public int GetFact_Acct_ID() 
+public int GetActual_Acct_Detail_ID() 
 {
-Object ii = Get_Value("Fact_Acct_ID");
+Object ii = Get_Value("Actual_Acct_Detail_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-public void SetGL_Budget_ID (int GL_Budget_ID)
+@param VAGL_Budget_ID General Ledger Budget */
+public void SetVAGL_Budget_ID (int VAGL_Budget_ID)
 {
-if (GL_Budget_ID <= 0) Set_ValueNoCheck ("GL_Budget_ID", null);
+if (VAGL_Budget_ID <= 0) Set_ValueNoCheck ("VAGL_Budget_ID", null);
 else
-Set_ValueNoCheck ("GL_Budget_ID", GL_Budget_ID);
+Set_ValueNoCheck ("VAGL_Budget_ID", VAGL_Budget_ID);
 }
 /** Get Budget.
 @return General Ledger Budget */
-public int GetGL_Budget_ID() 
+public int GetVAGL_Budget_ID() 
 {
-Object ii = Get_Value("GL_Budget_ID");
+Object ii = Get_Value("VAGL_Budget_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set GL Category.
-@param GL_Category_ID General Ledger Category */
-public void SetGL_Category_ID (int GL_Category_ID)
+@param VAGL_Group_ID General Ledger Category */
+public void SetVAGL_Group_ID (int VAGL_Group_ID)
 {
-if (GL_Category_ID <= 0) Set_ValueNoCheck ("GL_Category_ID", null);
+if (VAGL_Group_ID <= 0) Set_ValueNoCheck ("VAGL_Group_ID", null);
 else
-Set_ValueNoCheck ("GL_Category_ID", GL_Category_ID);
+Set_ValueNoCheck ("VAGL_Group_ID", VAGL_Group_ID);
 }
 /** Get GL Category.
 @return General Ledger Category */
-public int GetGL_Category_ID() 
+public int GetVAGL_Group_ID() 
 {
-Object ii = Get_Value("GL_Category_ID");
+Object ii = Get_Value("VAGL_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

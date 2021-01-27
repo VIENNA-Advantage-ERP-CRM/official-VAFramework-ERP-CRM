@@ -347,78 +347,78 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Length_ID VAF_Control_Ref_ID=114 */
-        public static int C_UOM_LENGTH_ID_VAF_Control_Ref_ID = 114;
+        /** VAB_UOM_Length_ID VAF_Control_Ref_ID=114 */
+        public static int VAB_UOM_LENGTH_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Length.
-        @param C_UOM_Length_ID Standard Unit of Measure for Length */
-        public void SetC_UOM_Length_ID(int C_UOM_Length_ID)
+        @param VAB_UOM_Length_ID Standard Unit of Measure for Length */
+        public void SetVAB_UOM_Length_ID(int VAB_UOM_Length_ID)
         {
-            if (C_UOM_Length_ID <= 0) Set_Value("C_UOM_Length_ID", null);
+            if (VAB_UOM_Length_ID <= 0) Set_Value("VAB_UOM_Length_ID", null);
             else
-                Set_Value("C_UOM_Length_ID", C_UOM_Length_ID);
+                Set_Value("VAB_UOM_Length_ID", VAB_UOM_Length_ID);
         }
         /** Get UOM for Length.
         @return Standard Unit of Measure for Length */
-        public int GetC_UOM_Length_ID()
+        public int GetVAB_UOM_Length_ID()
         {
-            Object ii = Get_Value("C_UOM_Length_ID");
+            Object ii = Get_Value("VAB_UOM_Length_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Time_ID VAF_Control_Ref_ID=114 */
-        public static int C_UOM_TIME_ID_VAF_Control_Ref_ID = 114;
+        /** VAB_UOM_Time_ID VAF_Control_Ref_ID=114 */
+        public static int VAB_UOM_TIME_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Time.
-        @param C_UOM_Time_ID Standard Unit of Measure for Time */
-        public void SetC_UOM_Time_ID(int C_UOM_Time_ID)
+        @param VAB_UOM_Time_ID Standard Unit of Measure for Time */
+        public void SetVAB_UOM_Time_ID(int VAB_UOM_Time_ID)
         {
-            if (C_UOM_Time_ID <= 0) Set_Value("C_UOM_Time_ID", null);
+            if (VAB_UOM_Time_ID <= 0) Set_Value("VAB_UOM_Time_ID", null);
             else
-                Set_Value("C_UOM_Time_ID", C_UOM_Time_ID);
+                Set_Value("VAB_UOM_Time_ID", VAB_UOM_Time_ID);
         }
         /** Get UOM for Time.
         @return Standard Unit of Measure for Time */
-        public int GetC_UOM_Time_ID()
+        public int GetVAB_UOM_Time_ID()
         {
-            Object ii = Get_Value("C_UOM_Time_ID");
+            Object ii = Get_Value("VAB_UOM_Time_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Volume_ID VAF_Control_Ref_ID=114 */
-        public static int C_UOM_VOLUME_ID_VAF_Control_Ref_ID = 114;
+        /** VAB_UOM_Volume_ID VAF_Control_Ref_ID=114 */
+        public static int VAB_UOM_VOLUME_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Volume.
-        @param C_UOM_Volume_ID Standard Unit of Measure for Volume */
-        public void SetC_UOM_Volume_ID(int C_UOM_Volume_ID)
+        @param VAB_UOM_Volume_ID Standard Unit of Measure for Volume */
+        public void SetVAB_UOM_Volume_ID(int VAB_UOM_Volume_ID)
         {
-            if (C_UOM_Volume_ID <= 0) Set_Value("C_UOM_Volume_ID", null);
+            if (VAB_UOM_Volume_ID <= 0) Set_Value("VAB_UOM_Volume_ID", null);
             else
-                Set_Value("C_UOM_Volume_ID", C_UOM_Volume_ID);
+                Set_Value("VAB_UOM_Volume_ID", VAB_UOM_Volume_ID);
         }
         /** Get UOM for Volume.
         @return Standard Unit of Measure for Volume */
-        public int GetC_UOM_Volume_ID()
+        public int GetVAB_UOM_Volume_ID()
         {
-            Object ii = Get_Value("C_UOM_Volume_ID");
+            Object ii = Get_Value("VAB_UOM_Volume_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** C_UOM_Weight_ID VAF_Control_Ref_ID=114 */
-        public static int C_UOM_WEIGHT_ID_VAF_Control_Ref_ID = 114;
+        /** VAB_UOM_Weight_ID VAF_Control_Ref_ID=114 */
+        public static int VAB_UOM_WEIGHT_ID_VAF_Control_Ref_ID = 114;
         /** Set UOM for Weight.
-        @param C_UOM_Weight_ID Standard Unit of Measure for Weight */
-        public void SetC_UOM_Weight_ID(int C_UOM_Weight_ID)
+        @param VAB_UOM_Weight_ID Standard Unit of Measure for Weight */
+        public void SetVAB_UOM_Weight_ID(int VAB_UOM_Weight_ID)
         {
-            if (C_UOM_Weight_ID <= 0) Set_Value("C_UOM_Weight_ID", null);
+            if (VAB_UOM_Weight_ID <= 0) Set_Value("VAB_UOM_Weight_ID", null);
             else
-                Set_Value("C_UOM_Weight_ID", C_UOM_Weight_ID);
+                Set_Value("VAB_UOM_Weight_ID", VAB_UOM_Weight_ID);
         }
         /** Get UOM for Weight.
         @return Standard Unit of Measure for Weight */
-        public int GetC_UOM_Weight_ID()
+        public int GetVAB_UOM_Weight_ID()
         {
-            Object ii = Get_Value("C_UOM_Weight_ID");
+            Object ii = Get_Value("VAB_UOM_Weight_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

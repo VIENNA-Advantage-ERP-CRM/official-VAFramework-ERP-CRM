@@ -270,18 +270,18 @@ namespace VIS.Helpers
                 int userid = ctx.GetVAF_UserContact_ID();
                 int roleid = ctx.GetVAF_Role_ID();
 
-                string sql = @"SELECT Distinct  kpi.RC_KPI_ID
-                                        FROM RC_KPI kpi
+                string sql = @"SELECT Distinct  kpi.VARC_KPI_ID
+                                        FROM VARC_KPI kpi
                                         
                                         WHERE kpi.IsActive      = 'Y'
                                         AND kpi.KPITYPE         ='Te'
 
-                                        AND kpi.RC_KPI_ID  IN
+                                        AND kpi.VARC_KPI_ID  IN
                                           (SELECT record_ID
                                           FROM VAF_UserHomePageSetting
                                           WHERE ISActive ='Y'
                                           AND VAF_TableView_ID=
-                                            (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='RC_KPI'
+                                            (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VARC_KPI'
                                             )
                                           AND VAF_UserContact_ID=" + userid + ") ";
                 //sql += " AND ( (acc.VAF_UserContact_ID = " + userid + @")   OR ( acc.VAF_Role_ID = " + roleid + @") ) ";

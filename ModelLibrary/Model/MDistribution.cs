@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistribution
  * Purpose        : GL Distribution model.
- * Class Used     : X_GL_Distribution class
+ * Class Used     : X_VAGL_Distribution class
  * Chronological    Development
  * Deepak           19-Nov-2009
   ******************************************************/
@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MDistribution : X_GL_Distribution
+    public class MDistribution : X_VAGL_Distribution
     {
 
         /**	Static Logger	*/
@@ -40,9 +40,9 @@ namespace VAdvantage.Model
 		return Get (acct.GetCtx(), acct.GetVAB_AccountBook_ID(), 
 			PostingType, VAB_DocTypes_ID,
 			acct.GetVAF_Org_ID(), acct.GetAccount_ID(),
-			acct.GetM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetC_Project_ID(),
+			acct.GetM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetVAB_Project_ID(),
 			acct.GetVAB_Promotion_ID(), acct.GetVAB_BillingCode_ID(), acct.GetVAF_OrgTrx_ID(),
-			acct.GetC_SalesRegion_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
+			acct.GetVAB_SalesRegionState_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
 			acct.GetUser1_ID(), acct.GetUser2_ID());
 	}	//	get
         /// <summary>
@@ -56,11 +56,11 @@ namespace VAdvantage.Model
         /// <param name="Account_ID">account</param>
         /// <param name="M_Product_ID">product</param>
         /// <param name="VAB_BusinessPartner_ID">partner</param>
-        /// <param name="C_Project_ID">project</param>
+        /// <param name="VAB_Project_ID">project</param>
         /// <param name="VAB_Promotion_ID">campaign</param>
         /// <param name="VAB_BillingCode_ID">activity</param>
         /// <param name="VAF_OrgTrx_ID">trx org</param>
-        /// <param name="C_SalesRegion_ID">C_SalesRegion_ID</param>
+        /// <param name="VAB_SalesRegionState_ID">VAB_SalesRegionState_ID</param>
         /// <param name="C_LocTo_ID">location to</param>
         /// <param name="C_LocFrom_ID">from</param>
         /// <param name="User1_ID">user 1</param>
@@ -69,9 +69,9 @@ namespace VAdvantage.Model
 	public static MDistribution[] Get (Ctx ctx, int VAB_AccountBook_ID, 
 		String PostingType, int VAB_DocTypes_ID,
 		int VAF_Org_ID, int Account_ID,
-		int M_Product_ID, int VAB_BusinessPartner_ID, int C_Project_ID,
+		int M_Product_ID, int VAB_BusinessPartner_ID, int VAB_Project_ID,
 		int VAB_Promotion_ID, int VAB_BillingCode_ID, int VAF_OrgTrx_ID,
-		int C_SalesRegion_ID, int C_LocTo_ID, int C_LocFrom_ID,
+		int VAB_SalesRegionState_ID, int C_LocTo_ID, int C_LocFrom_ID,
 		int User1_ID, int User2_ID)
 	{
 		MDistribution[] acctList = Get (ctx, Account_ID);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyProject() && distribution.GetC_Project_ID() != C_Project_ID)
+			if (!distribution.IsAnyProject() && distribution.GetVAB_Project_ID() != VAB_Project_ID)
             {
 				continue;
             }
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnySalesRegion() && distribution.GetC_SalesRegion_ID() != C_SalesRegion_ID)
+			if (!distribution.IsAnySalesRegion() && distribution.GetVAB_SalesRegionState_ID() != VAB_SalesRegionState_ID)
             {
 				continue;
             }
@@ -182,7 +182,7 @@ namespace VAdvantage.Model
         {  
 			return retValue;
 		}
-		String sql = "SELECT * FROM GL_Distribution "
+		String sql = "SELECT * FROM VAGL_Distribution "
 			+ "WHERE Account_ID=@Param1";
 		//ArrayList<MDistribution> list = new ArrayList<MDistribution>();
         List<MDistribution> list=new List<MDistribution>();
@@ -229,18 +229,18 @@ namespace VAdvantage.Model
 	
 	/**	Distributions by Account			*/
 	private static CCache<int,MDistribution[]> s_accounts 
-		= new CCache<int,MDistribution[]>("GL_Distribution", 100);
+		= new CCache<int,MDistribution[]>("VAGL_Distribution", 100);
 	
 	/// <summary>
     ///Standard Constructor 
     /// </summary>
     /// <param name="ctx">context</param>
-	/// <param name="GL_Distribution_ID">id</param>
+	/// <param name="VAGL_Distribution_ID">id</param>
     /// <param name="trxName">transaction</param>
-	public MDistribution (Ctx ctx, int GL_Distribution_ID, Trx trxName):base(ctx, GL_Distribution_ID, trxName)
+	public MDistribution (Ctx ctx, int VAGL_Distribution_ID, Trx trxName):base(ctx, VAGL_Distribution_ID, trxName)
 	{
-		//super (ctx, GL_Distribution_ID, trxName);
-		if (GL_Distribution_ID == 0)
+		//super (ctx, VAGL_Distribution_ID, trxName);
+		if (VAGL_Distribution_ID == 0)
 		{
 		//	setVAB_AccountBook_ID (0);
 		//	setName (null);
@@ -292,8 +292,8 @@ namespace VAdvantage.Model
 		Decimal PercentTotal = Env.ZERO;
 		//ArrayList<MDistributionLine> list = new ArrayList<MDistributionLine>();
         List<MDistributionLine> list=new List<MDistributionLine>();
-		String sql = "SELECT * FROM GL_DistributionLine "
-			+ "WHERE GL_Distribution_ID=@Param1 ORDER BY Line";
+		String sql = "SELECT * FROM VAGL_DistributionLine "
+			+ "WHERE VAGL_Distribution_ID=@Param1 ORDER BY Line";
 		Boolean hasNullRemainder = false;
 
         SqlParameter[] Param=new SqlParameter[1];
@@ -303,8 +303,8 @@ namespace VAdvantage.Model
 		try
 		{
 			//pstmt = DataBase.prepareStatement (sql, get_TrxName());
-			//pstmt.setInt (1, getGL_Distribution_ID());
-            Param[0]=new SqlParameter("@Param1",GetGL_Distribution_ID());
+			//pstmt.setInt (1, getVAGL_Distribution_ID());
+            Param[0]=new SqlParameter("@Param1",GetVAGL_Distribution_ID());
 			//ResultSet rs = pstmt.executeQuery ();
             idr=DataBase.DB.ExecuteReader(sql,Param,Get_TrxName());
             dt=new DataTable();
@@ -518,13 +518,13 @@ namespace VAdvantage.Model
         {
 			SetM_Product_ID(0);
         }
-		if (IsAnyProject() && GetC_Project_ID() != 0)
+		if (IsAnyProject() && GetVAB_Project_ID() != 0)
         {
-			SetC_Project_ID(0);
+			SetVAB_Project_ID(0);
         }
-		if (IsAnySalesRegion() && GetC_SalesRegion_ID() != 0)
+		if (IsAnySalesRegion() && GetVAB_SalesRegionState_ID() != 0)
         {
-			SetC_SalesRegion_ID(0);
+			SetVAB_SalesRegionState_ID(0);
         }
 		if (IsAnyUser1() && GetUser1_ID() != 0)
         {

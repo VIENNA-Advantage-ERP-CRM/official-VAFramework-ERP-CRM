@@ -396,82 +396,82 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lead.
-@param C_Lead_ID Business Lead */
-public void SetC_Lead_ID (int C_Lead_ID)
+@param VAB_Lead_ID Business Lead */
+public void SetVAB_Lead_ID (int VAB_Lead_ID)
 {
-if (C_Lead_ID <= 0) Set_Value ("C_Lead_ID", null);
+if (VAB_Lead_ID <= 0) Set_Value ("VAB_Lead_ID", null);
 else
-Set_Value ("C_Lead_ID", C_Lead_ID);
+Set_Value ("VAB_Lead_ID", VAB_Lead_ID);
 }
 /** Get Lead.
 @return Business Lead */
-public int GetC_Lead_ID() 
+public int GetVAB_Lead_ID() 
 {
-Object ii = Get_Value("C_Lead_ID");
+Object ii = Get_Value("VAB_Lead_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_Value ("VAB_Order_ID", null);
 else
-Set_Value ("C_Order_ID", C_Order_ID);
+Set_Value ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID)
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID)
 {
-if (C_Payment_ID <= 0) Set_Value ("C_Payment_ID", null);
+if (VAB_Payment_ID <= 0) Set_Value ("VAB_Payment_ID", null);
 else
-Set_Value ("C_Payment_ID", C_Payment_ID);
+Set_Value ("VAB_Payment_ID", VAB_Payment_ID);
 }
 /** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() 
+public int GetVAB_Payment_ID() 
 {
-Object ii = Get_Value("C_Payment_ID");
+Object ii = Get_Value("VAB_Payment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);
 else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -1455,18 +1455,18 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Category.
-@param R_Category_ID Request Category */
-public void SetR_Category_ID (int R_Category_ID)
+@param VAR_Category_ID Request Category */
+public void SetVAR_Category_ID (int VAR_Category_ID)
 {
-if (R_Category_ID <= 0) Set_Value ("R_Category_ID", null);
+if (VAR_Category_ID <= 0) Set_Value ("VAR_Category_ID", null);
 else
-Set_Value ("R_Category_ID", R_Category_ID);
+Set_Value ("VAR_Category_ID", VAR_Category_ID);
 }
 /** Get Category.
 @return Request Category */
-public int GetR_Category_ID() 
+public int GetVAR_Category_ID() 
 {
-Object ii = Get_Value("R_Category_ID");
+Object ii = Get_Value("VAR_Category_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

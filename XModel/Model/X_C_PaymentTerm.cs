@@ -1,35 +1,35 @@
 namespace VAdvantage.Model
 {
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for C_PaymentTerm
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAB_PaymentTerm
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaymentTerm : PO{public X_C_PaymentTerm (Context ctx, int C_PaymentTerm_ID, Trx trxName) : base (ctx, C_PaymentTerm_ID, trxName){/** if (C_PaymentTerm_ID == 0){SetAfterDelivery (false);SetC_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscount2 (0.0);SetDiscountDays (0);SetDiscountDays2 (0);SetGraceDays (0);SetIsDueFixed (false);SetIsValid (false);SetName (null);SetNetDays (0);SetValue (null);} */
-}public X_C_PaymentTerm (Ctx ctx, int C_PaymentTerm_ID, Trx trxName) : base (ctx, C_PaymentTerm_ID, trxName){/** if (C_PaymentTerm_ID == 0){SetAfterDelivery (false);SetC_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscount2 (0.0);SetDiscountDays (0);SetDiscountDays2 (0);SetGraceDays (0);SetIsDueFixed (false);SetIsValid (false);SetName (null);SetNetDays (0);SetValue (null);} */
+public class X_VAB_PaymentTerm : PO{public X_VAB_PaymentTerm (Context ctx, int VAB_PaymentTerm_ID, Trx trxName) : base (ctx, VAB_PaymentTerm_ID, trxName){/** if (VAB_PaymentTerm_ID == 0){SetAfterDelivery (false);SetVAB_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscount2 (0.0);SetDiscountDays (0);SetDiscountDays2 (0);SetGraceDays (0);SetIsDueFixed (false);SetIsValid (false);SetName (null);SetNetDays (0);SetValue (null);} */
+}public X_VAB_PaymentTerm (Ctx ctx, int VAB_PaymentTerm_ID, Trx trxName) : base (ctx, VAB_PaymentTerm_ID, trxName){/** if (VAB_PaymentTerm_ID == 0){SetAfterDelivery (false);SetVAB_PaymentTerm_ID (0);SetDiscount (0.0);SetDiscount2 (0.0);SetDiscountDays (0);SetDiscountDays2 (0);SetGraceDays (0);SetIsDueFixed (false);SetIsValid (false);SetName (null);SetNetDays (0);SetValue (null);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_PaymentTerm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAB_PaymentTerm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaymentTerm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAB_PaymentTerm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaymentTerm(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAB_PaymentTerm(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27745177343589L;/** Last Updated Timestamp 5/12/2016 4:50:26 PM */
 public static long updatedMS = 1463052026800L;/** VAF_TableView_ID=113 */
 public static int Table_ID; // =113;
-/** TableName=C_PaymentTerm */
-public static String Table_Name="C_PaymentTerm";
+/** TableName=VAB_PaymentTerm */
+public static String Table_Name="VAB_PaymentTerm";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -44,15 +44,15 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_C_PaymentTerm[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set After Delivery.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAB_PaymentTerm[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set After Delivery.
 @param AfterDelivery Due after delivery rather than after invoicing */
 public void SetAfterDelivery (Boolean AfterDelivery){Set_Value ("AfterDelivery", AfterDelivery);}/** Get After Delivery.
 @return Due after delivery rather than after invoicing */
 public Boolean IsAfterDelivery() {Object oo = Get_Value("AfterDelivery");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set Payment Term.
-@param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-public void SetC_PaymentTerm_ID (int C_PaymentTerm_ID){if (C_PaymentTerm_ID < 1) throw new ArgumentException ("C_PaymentTerm_ID is mandatory.");Set_ValueNoCheck ("C_PaymentTerm_ID", C_PaymentTerm_ID);}/** Get Payment Term.
+@param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+public void SetVAB_PaymentTerm_ID (int VAB_PaymentTerm_ID){if (VAB_PaymentTerm_ID < 1) throw new ArgumentException ("VAB_PaymentTerm_ID is mandatory.");Set_ValueNoCheck ("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);}/** Get Payment Term.
 @return The terms of Payment (timing, discount) */
-public int GetC_PaymentTerm_ID() {Object ii = Get_Value("C_PaymentTerm_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Description.
+public int GetVAB_PaymentTerm_ID() {Object ii = Get_Value("VAB_PaymentTerm_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Description.
 @param Description Optional short description of the record */
 public void SetDescription (String Description){if (Description != null && Description.Length > 255){log.Warning("Length > 255 - truncated");Description = Description.Substring(0,255);}Set_Value ("Description", Description);}/** Get Description.
 @return Optional short description of the record */

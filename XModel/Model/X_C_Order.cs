@@ -11,23 +11,23 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Order
+    /** Generated Model for VAB_Order
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Order : PO
+    public class X_VAB_Order : PO
     {
-        public X_C_Order(Context ctx, int C_Order_ID, Trx trxName)
-            : base(ctx, C_Order_ID, trxName)
+        public X_VAB_Order(Context ctx, int VAB_Order_ID, Trx trxName)
+            : base(ctx, VAB_Order_ID, trxName)
         {
-            /** if (C_Order_ID == 0)
+            /** if (VAB_Order_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
-            SetC_Order_ID (0);
-            SetC_PaymentTerm_ID (0);
+            SetVAB_Order_ID (0);
+            SetVAB_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateOrdered (DateTime.Now);	// @#Date@
             SetDeliveryRule (null);	// F
@@ -63,18 +63,18 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Order(Ctx ctx, int C_Order_ID, Trx trxName)
-            : base(ctx, C_Order_ID, trxName)
+        public X_VAB_Order(Ctx ctx, int VAB_Order_ID, Trx trxName)
+            : base(ctx, VAB_Order_ID, trxName)
         {
-            /** if (C_Order_ID == 0)
+            /** if (VAB_Order_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_DocTypesTarget_ID (0);
             SetVAB_DocTypes_ID (0);	// 0
-            SetC_Order_ID (0);
-            SetC_PaymentTerm_ID (0);
+            SetVAB_Order_ID (0);
+            SetVAB_PaymentTerm_ID (0);
             SetDateAcct (DateTime.Now);	// @#Date@
             SetDateOrdered (DateTime.Now);	// @#Date@
             SetDeliveryRule (null);	// F
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Order(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Order(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Order(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Order(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -133,14 +133,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Order(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Order(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Order()
+        static X_VAB_Order()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -153,8 +153,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =259;
 
-        /** TableName=C_Order */
-        public static String Table_Name = "C_Order";
+        /** TableName=VAB_Order */
+        public static String Table_Name = "VAB_Order";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Order[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Order[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -445,64 +445,64 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Order.
-        @param C_Order_ID Order */
-        public void SetC_Order_ID(int C_Order_ID)
+        @param VAB_Order_ID Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID < 1) throw new ArgumentException("C_Order_ID is mandatory.");
-            Set_ValueNoCheck("C_Order_ID", C_Order_ID);
+            if (VAB_Order_ID < 1) throw new ArgumentException("VAB_Order_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Order_ID", VAB_Order_ID);
         }
         /** Get Order.
         @return Order */
-        public int GetC_Order_ID()
+        public int GetVAB_Order_ID()
         {
-            Object ii = Get_Value("C_Order_ID");
+            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID < 1) throw new ArgumentException("C_PaymentTerm_ID is mandatory.");
-            Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+            if (VAB_PaymentTerm_ID < 1) throw new ArgumentException("VAB_PaymentTerm_ID is mandatory.");
+            Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment.
-        @param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        @param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_Value("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_Value("VAB_Payment_ID", null);
             else
-                Set_Value("C_Payment_ID", C_Payment_ID);
+                Set_Value("VAB_Payment_ID", VAB_Payment_ID);
         }
         /** Get Payment.
         @return Payment identifier */
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            Object ii = Get_Value("C_Payment_ID");
+            Object ii = Get_Value("VAB_Payment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -2683,15 +2683,15 @@ namespace VAdvantage.Model
 
 
         //-------------new columns Added by Sukhwinder----------------27-07-2017        
-        public void SetC_Order_Blanket(int C_Order_Blanket)
+        public void SetVAB_Order_Blanket(int VAB_Order_Blanket)
         {
-            if (C_Order_Blanket <= 0) Set_Value("C_Order_Blanket", null);
+            if (VAB_Order_Blanket <= 0) Set_Value("VAB_Order_Blanket", null);
             else
-                Set_Value("C_Order_Blanket", C_Order_Blanket);
+                Set_Value("VAB_Order_Blanket", VAB_Order_Blanket);
         }
-        public int GetC_Order_Blanket()
+        public int GetVAB_Order_Blanket()
         {
-            Object ii = Get_Value("C_Order_Blanket");
+            Object ii = Get_Value("VAB_Order_Blanket");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -2743,21 +2743,21 @@ namespace VAdvantage.Model
         public int GetShipToPartner_ID() { Object ii = Get_Value("ShipToPartner_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
-        /** C_ProjectRef_ID VAF_Control_Ref_ID=1000155 */
-        public static int C_PROJECTREF_ID_VAF_Control_Ref_ID = 1000155;
+        /** VAB_ProjectRef_ID VAF_Control_Ref_ID=1000155 */
+        public static int VAB_PROJECTREF_ID_VAF_Control_Ref_ID = 1000155;
         /** Set Project.
-        @param C_ProjectRef_ID Project */
-        public void SetC_ProjectRef_ID(int C_ProjectRef_ID)
+        @param VAB_ProjectRef_ID Project */
+        public void SetVAB_ProjectRef_ID(int VAB_ProjectRef_ID)
         {
-            if (C_ProjectRef_ID <= 0) Set_Value("C_ProjectRef_ID", null);
+            if (VAB_ProjectRef_ID <= 0) Set_Value("VAB_ProjectRef_ID", null);
             else
-                Set_Value("C_ProjectRef_ID", C_ProjectRef_ID);
+                Set_Value("VAB_ProjectRef_ID", VAB_ProjectRef_ID);
         }
         /** Get Project.
         @return Project */
-        public int GetC_ProjectRef_ID()
+        public int GetVAB_ProjectRef_ID()
         {
-            Object ii = Get_Value("C_ProjectRef_ID");
+            Object ii = Get_Value("VAB_ProjectRef_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);
@@ -2783,16 +2783,16 @@ namespace VAdvantage.Model
         }
 
         /** Set Quotation No..
-        @param C_Order_Quotation Quotation No. */
-        public void SetC_Order_Quotation(int C_Order_Quotation)
+        @param VAB_Order_Quotation Quotation No. */
+        public void SetVAB_Order_Quotation(int VAB_Order_Quotation)
         {
-            Set_Value("C_Order_Quotation", C_Order_Quotation);
+            Set_Value("VAB_Order_Quotation", VAB_Order_Quotation);
         }
         /** Get Quotation No..
         @return Quotation No. */
-        public int GetC_Order_Quotation()
+        public int GetVAB_Order_Quotation()
         {
-            Object ii = Get_Value("C_Order_Quotation");
+            Object ii = Get_Value("VAB_Order_Quotation");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

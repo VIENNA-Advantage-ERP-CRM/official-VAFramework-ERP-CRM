@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MMeasure
  * Purpose        : Performance Measure
- * Class Used     : X_PA_Measure
+ * Class Used     : X_VAPA_Evaluate
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -23,21 +23,21 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MMeasure : X_PA_Measure
+    public class MMeasure : X_VAPA_Evaluate
     {
         /**
 	 * 	Get MMeasure from Cache
 	 *	@param ctx context
-	 *	@param PA_Measure_ID id
+	 *	@param VAPA_Evaluate_ID id
 	 *	@return MMeasure
 	 */
-        public static MMeasure Get(Ctx ctx, int PA_Measure_ID)
+        public static MMeasure Get(Ctx ctx, int VAPA_Evaluate_ID)
         {
-            int key = PA_Measure_ID;
+            int key = VAPA_Evaluate_ID;
             MMeasure retValue = (MMeasure)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MMeasure(ctx, PA_Measure_ID, null);
+            retValue = new MMeasure(ctx, VAPA_Evaluate_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -45,16 +45,16 @@ namespace VAdvantage.Model
 
         /**	Cache						*/
         private static CCache<int, MMeasure> _cache
-            = new CCache<int, MMeasure>("PA_Measure", 10);
+            = new CCache<int, MMeasure>("VAPA_Evaluate", 10);
 
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param PA_Measure_ID id
+         *	@param VAPA_Evaluate_ID id
          *	@param trxName trx
          */
-        public MMeasure(Ctx ctx, int PA_Measure_ID, Trx trxName) :
-            base(ctx, PA_Measure_ID, trxName)
+        public MMeasure(Ctx ctx, int VAPA_Evaluate_ID, Trx trxName) :
+            base(ctx, VAPA_Evaluate_ID, trxName)
         {
         }
 
@@ -89,15 +89,15 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             if (MEASURETYPE_Calculated.Equals(GetMeasureType())
-                && GetPA_MeasureCalc_ID() == 0)
+                && GetVAPA_EvaluateCalc_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "PA_MeasureCalc_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAPA_EvaluateCalc_ID"));
                 return false;
             }
             else if (MEASURETYPE_Ratio.Equals(GetMeasureType())
-                && GetPA_Ratio_ID() == 0)
+                && GetVAPA_Ratio_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "PA_Ratio_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAPA_Ratio_ID"));
                 return false;
             }
             else if (MEASURETYPE_UserDefined.Equals(GetMeasureType())
@@ -113,9 +113,9 @@ namespace VAdvantage.Model
                 return false;
             }
             else if (MEASURETYPE_Project.Equals(GetMeasureType())
-                && GetC_ProjectType_ID() == 0)
+                && GetVAB_ProjectType_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_ProjectType_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_ProjectType_ID"));
                 return false;
             }
             return true;
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
         {
             if (!MEASURETYPE_Manual.Equals(GetMeasureType()))
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetPA_Measure_ID());
+            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
                 MGoal goal = goals[i];
@@ -193,14 +193,14 @@ namespace VAdvantage.Model
             if (!MEASURETYPE_Achievements.Equals(GetMeasureType()))
                 return false;
             DateTime today = DateTime.Now;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetPA_Measure_ID());
+            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
                 MGoal goal = goals[i];
                 String MeasureScope = goal.GetMeasureScope();
                 String trunc = TimeUtil.TRUNC_DAY;
                 if (MGoal.MEASUREDISPLAY_Year.Equals(MeasureScope))
-                    trunc = TimeUtil.TRUNC_YEAR;
+                    trunc = TimeUtil.TRUNVAB_YEAR;
                 else if (MGoal.MEASUREDISPLAY_Quarter.Equals(MeasureScope))
                     trunc = TimeUtil.TRUNC_QUARTER;
                 else if (MGoal.MEASUREDISPLAY_Month.Equals(MeasureScope))
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
                     trunc = TimeUtil.TRUNC_WEEK;
                 DateTime compare = TimeUtil.Trunc(today, trunc);
                 //
-                MAchievement[] achievements = MAchievement.GetOfMeasure(GetCtx(), GetPA_Measure_ID());
+                MAchievement[] achievements = MAchievement.GetOfMeasure(GetCtx(), GetVAPA_Evaluate_ID());
                 Decimal ManualActual = Env.ZERO;
                 for (int j = 0; j < achievements.Length; j++)
                 {
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
         {
             if (!MEASURETYPE_Calculated.Equals(GetMeasureType()))
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetPA_Measure_ID());
+            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
                 MGoal goal = goals[i];
@@ -253,10 +253,10 @@ namespace VAdvantage.Model
                 if (role == null)
                     role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
-                MMeasureCalc mc = MMeasureCalc.Get(GetCtx(), GetPA_MeasureCalc_ID());
-                if (mc == null || mc.Get_ID() == 0 || mc.Get_ID() != GetPA_MeasureCalc_ID())
+                MMeasureCalc mc = MMeasureCalc.Get(GetCtx(), GetVAPA_EvaluateCalc_ID());
+                if (mc == null || mc.Get_ID() == 0 || mc.Get_ID() != GetVAPA_EvaluateCalc_ID())
                 {
-                    log.Log(Level.SEVERE, "Not found PA_MeasureCalc_ID=" + GetPA_MeasureCalc_ID());
+                    log.Log(Level.SEVERE, "Not found VAPA_EvaluateCalc_ID=" + GetVAPA_EvaluateCalc_ID());
                     return false;
                 }
 
@@ -312,7 +312,7 @@ namespace VAdvantage.Model
             if (!MEASURETYPE_Request.Equals(GetMeasureType())
                 || GetR_RequestType_ID() == 0)
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetPA_Measure_ID());
+            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
                 MGoal goal = goals[i];
@@ -373,9 +373,9 @@ namespace VAdvantage.Model
         private Boolean UpdateProjects()
         {
             if (!MEASURETYPE_Project.Equals(GetMeasureType())
-                || GetC_ProjectType_ID() == 0)
+                || GetVAB_ProjectType_ID() == 0)
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetPA_Measure_ID());
+            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
                 MGoal goal = goals[i];
@@ -394,7 +394,7 @@ namespace VAdvantage.Model
                     role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
-                MProjectType pt = MProjectType.Get(GetCtx(), GetC_ProjectType_ID());
+                MProjectType pt = MProjectType.Get(GetCtx(), GetVAB_ProjectType_ID());
                 String sql = pt.GetSqlPI(goal.GetRestrictions(false),
                     goal.GetMeasureScope(), GetMeasureDataType(), null, role);
                 IDataReader idr = null;

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_UOM_Trl
+/** Generated Model for VAB_UOM_TL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_UOM_Trl : PO
+public class X_VAB_UOM_TL : PO
 {
-public X_C_UOM_Trl (Context ctx, int C_UOM_Trl_ID, Trx trxName) : base (ctx, C_UOM_Trl_ID, trxName)
+public X_VAB_UOM_TL (Context ctx, int VAB_UOM_TL_ID, Trx trxName) : base (ctx, VAB_UOM_TL_ID, trxName)
 {
-/** if (C_UOM_Trl_ID == 0)
+/** if (VAB_UOM_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetIsTranslated (false);
 SetName (null);
 }
  */
 }
-public X_C_UOM_Trl (Ctx ctx, int C_UOM_Trl_ID, Trx trxName) : base (ctx, C_UOM_Trl_ID, trxName)
+public X_VAB_UOM_TL (Ctx ctx, int VAB_UOM_TL_ID, Trx trxName) : base (ctx, VAB_UOM_TL_ID, trxName)
 {
-/** if (C_UOM_Trl_ID == 0)
+/** if (VAB_UOM_TL_ID == 0)
 {
 SetVAF_Language (null);
-SetC_UOM_ID (0);
+SetVAB_UOM_ID (0);
 SetIsTranslated (false);
 SetName (null);
 }
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_UOM_TL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_UOM_Trl (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_UOM_TL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_UOM_Trl (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UOM_Trl (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_UOM_TL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_UOM_Trl()
+static X_VAB_UOM_TL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1435158115743L;
 public static int Table_ID;
  // =339;
 
-/** TableName=C_UOM_Trl */
-public static String Table_Name="C_UOM_Trl";
+/** TableName=VAB_UOM_TL */
+public static String Table_Name="VAB_UOM_TL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_UOM_Trl[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_UOM_TL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -143,17 +143,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Language().ToString());
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_ValueNoCheck ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_ValueNoCheck ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

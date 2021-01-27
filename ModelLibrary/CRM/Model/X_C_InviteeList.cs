@@ -225,50 +225,50 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lead.
-@param C_Lead_ID Business Lead */
-public void SetC_Lead_ID (int C_Lead_ID)
+@param VAB_Lead_ID Business Lead */
+public void SetVAB_Lead_ID (int VAB_Lead_ID)
 {
-if (C_Lead_ID <= 0) Set_Value ("C_Lead_ID", null);
+if (VAB_Lead_ID <= 0) Set_Value ("VAB_Lead_ID", null);
 else
-Set_Value ("C_Lead_ID", C_Lead_ID);
+Set_Value ("VAB_Lead_ID", VAB_Lead_ID);
 }
 /** Get Lead.
 @return Business Lead */
-public int GetC_Lead_ID() 
+public int GetVAB_Lead_ID() 
 {
-Object ii = Get_Value("C_Lead_ID");
+Object ii = Get_Value("VAB_Lead_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Address.
-@param C_Location_ID Location or Address */
-public void SetC_Location_ID (int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+public void SetVAB_Address_ID (int VAB_Address_ID)
 {
-if (C_Location_ID <= 0) Set_Value ("C_Location_ID", null);
+if (VAB_Address_ID <= 0) Set_Value ("VAB_Address_ID", null);
 else
-Set_Value ("C_Location_ID", C_Location_ID);
+Set_Value ("VAB_Address_ID", VAB_Address_ID);
 }
 /** Get Address.
 @return Location or Address */
-public int GetC_Location_ID() 
+public int GetVAB_Address_ID() 
 {
-Object ii = Get_Value("C_Location_ID");
+Object ii = Get_Value("VAB_Address_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Region.
-@param C_Region_ID Identifies a geographical Region */
-public void SetC_Region_ID (int C_Region_ID)
+@param VAB_RegionState_ID Identifies a geographical Region */
+public void SetVAB_RegionState_ID (int VAB_RegionState_ID)
 {
-if (C_Region_ID <= 0) Set_Value ("C_Region_ID", null);
+if (VAB_RegionState_ID <= 0) Set_Value ("VAB_RegionState_ID", null);
 else
-Set_Value ("C_Region_ID", C_Region_ID);
+Set_Value ("VAB_RegionState_ID", VAB_RegionState_ID);
 }
 /** Get Region.
 @return Identifies a geographical Region */
-public int GetC_Region_ID() 
+public int GetVAB_RegionState_ID() 
 {
-Object ii = Get_Value("C_Region_ID");
+Object ii = Get_Value("VAB_RegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

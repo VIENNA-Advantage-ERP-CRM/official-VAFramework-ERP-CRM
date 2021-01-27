@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTaxCategory
  * Purpose        : Tax Category Model
- * Class Used     : X_C_TaxCategory class
+ * Class Used     : X_VAB_TaxCategory class
  * Chronological    Development
  * Deepak           20-Nov-2009
   ******************************************************/
@@ -22,19 +22,19 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxCategory : X_C_TaxCategory
+    public class MTaxCategory : X_VAB_TaxCategory
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_TaxCategory_ID">id</param>
+        /// <param name="VAB_TaxCategory_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxCategory(Ctx ctx, int C_TaxCategory_ID, Trx trxName)
-            : base(ctx, C_TaxCategory_ID, trxName)
+        public MTaxCategory(Ctx ctx, int VAB_TaxCategory_ID, Trx trxName)
+            : base(ctx, VAB_TaxCategory_ID, trxName)
         {
-            //super(ctx, C_TaxCategory_ID, trxName);
-            if (C_TaxCategory_ID == 0)
+            //super(ctx, VAB_TaxCategory_ID, trxName);
+            if (VAB_TaxCategory_ID == 0)
             {
                 //	setName (null);
                 SetIsDefault(false);

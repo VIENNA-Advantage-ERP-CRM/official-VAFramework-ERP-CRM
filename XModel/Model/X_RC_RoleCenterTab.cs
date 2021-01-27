@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for RC_RoleCenterTab
+/** Generated Model for VARC_RoleCenterTab
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_RC_RoleCenterTab : PO
+public class X_VARC_RoleCenterTab : PO
 {
-public X_RC_RoleCenterTab (Context ctx, int RC_RoleCenterTab_ID, Trx trxName) : base (ctx, RC_RoleCenterTab_ID, trxName)
+public X_VARC_RoleCenterTab (Context ctx, int VARC_RoleCenterTab_ID, Trx trxName) : base (ctx, VARC_RoleCenterTab_ID, trxName)
 {
-/** if (RC_RoleCenterTab_ID == 0)
+/** if (VARC_RoleCenterTab_ID == 0)
 {
-SetRC_RoleCenterManager_ID (0);
-SetRC_RoleCenterTab_ID (0);
+SetVARC_RoleCenterManager_ID (0);
+SetVARC_RoleCenterTab_ID (0);
 }
  */
 }
-public X_RC_RoleCenterTab (Ctx ctx, int RC_RoleCenterTab_ID, Trx trxName) : base (ctx, RC_RoleCenterTab_ID, trxName)
+public X_VARC_RoleCenterTab (Ctx ctx, int VARC_RoleCenterTab_ID, Trx trxName) : base (ctx, VARC_RoleCenterTab_ID, trxName)
 {
-/** if (RC_RoleCenterTab_ID == 0)
+/** if (VARC_RoleCenterTab_ID == 0)
 {
-SetRC_RoleCenterManager_ID (0);
-SetRC_RoleCenterTab_ID (0);
+SetVARC_RoleCenterManager_ID (0);
+SetVARC_RoleCenterTab_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetRC_RoleCenterTab_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterTab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_RoleCenterTab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_RC_RoleCenterTab (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterTab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_RoleCenterTab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_RC_RoleCenterTab (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterTab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VARC_RoleCenterTab (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_RC_RoleCenterTab()
+static X_VARC_RoleCenterTab()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1352453087355L;
 public static int Table_ID;
  // =1000233;
 
-/** TableName=RC_RoleCenterTab */
-public static String Table_Name="RC_RoleCenterTab";
+/** TableName=VARC_RoleCenterTab */
+public static String Table_Name="VARC_RoleCenterTab";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_RC_RoleCenterTab[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VARC_RoleCenterTab[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Image.
@@ -175,32 +175,32 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 /** Set Role Center Manager.
-@param RC_RoleCenterManager_ID Role Center Manager ID */
-public void SetRC_RoleCenterManager_ID (int RC_RoleCenterManager_ID)
+@param VARC_RoleCenterManager_ID Role Center Manager ID */
+public void SetVARC_RoleCenterManager_ID (int VARC_RoleCenterManager_ID)
 {
-if (RC_RoleCenterManager_ID < 1) throw new ArgumentException ("RC_RoleCenterManager_ID is mandatory.");
-Set_ValueNoCheck ("RC_RoleCenterManager_ID", RC_RoleCenterManager_ID);
+if (VARC_RoleCenterManager_ID < 1) throw new ArgumentException ("VARC_RoleCenterManager_ID is mandatory.");
+Set_ValueNoCheck ("VARC_RoleCenterManager_ID", VARC_RoleCenterManager_ID);
 }
 /** Get Role Center Manager.
 @return Role Center Manager ID */
-public int GetRC_RoleCenterManager_ID() 
+public int GetVARC_RoleCenterManager_ID() 
 {
-Object ii = Get_Value("RC_RoleCenterManager_ID");
+Object ii = Get_Value("VARC_RoleCenterManager_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set RoleCenter Tab.
-@param RC_RoleCenterTab_ID RoleCenter Tab */
-public void SetRC_RoleCenterTab_ID (int RC_RoleCenterTab_ID)
+@param VARC_RoleCenterTab_ID RoleCenter Tab */
+public void SetVARC_RoleCenterTab_ID (int VARC_RoleCenterTab_ID)
 {
-if (RC_RoleCenterTab_ID < 1) throw new ArgumentException ("RC_RoleCenterTab_ID is mandatory.");
-Set_ValueNoCheck ("RC_RoleCenterTab_ID", RC_RoleCenterTab_ID);
+if (VARC_RoleCenterTab_ID < 1) throw new ArgumentException ("VARC_RoleCenterTab_ID is mandatory.");
+Set_ValueNoCheck ("VARC_RoleCenterTab_ID", VARC_RoleCenterTab_ID);
 }
 /** Get RoleCenter Tab.
 @return RoleCenter Tab */
-public int GetRC_RoleCenterTab_ID() 
+public int GetVARC_RoleCenterTab_ID() 
 {
-Object ii = Get_Value("RC_RoleCenterTab_ID");
+Object ii = Get_Value("VARC_RoleCenterTab_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

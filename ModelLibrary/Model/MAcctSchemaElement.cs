@@ -103,9 +103,9 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 return "VAF_OrgTrx_ID";
             else if (elementType.Equals(ELEMENTTYPE_Project))
-                return "C_Project_ID";
+                return "VAB_Project_ID";
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
-                return "C_SalesRegion_ID";
+                return "VAB_SalesRegionState_ID";
             else if (elementType.Equals(ELEMENTTYPE_UserList1))
                 return "User1_ID";
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
@@ -152,17 +152,17 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 return "SELECT Value,Name FROM VAB_BillingCode WHERE VAB_BillingCode_ID=";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
-                return "SELECT City,Address1 FROM C_Location WHERE C_Location_ID=";
+                return "SELECT City,Address1 FROM VAB_Address WHERE VAB_Address_ID=";
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
-                return "SELECT City,Address1 FROM C_Location WHERE C_Location_ID=";
+                return "SELECT City,Address1 FROM VAB_Address WHERE VAB_Address_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
                 return "SELECT Value,Name FROM VAB_Promotion WHERE VAB_Promotion_ID=";
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 return "SELECT Value,Name FROM VAF_Org WHERE VAF_Org_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Project))
-                return "SELECT Value,Name FROM C_Project WHERE C_Project_ID=";
+                return "SELECT Value,Name FROM VAB_Project WHERE VAB_Project_ID=";
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
-                return "SELECT Value,Name FROM C_SalesRegion WHERE C_SalesRegion_ID";
+                return "SELECT Value,Name FROM VAB_SalesRegionState WHERE VAB_SalesRegionState_ID";
             else if (elementType.Equals(ELEMENTTYPE_UserList1))
                 return "SELECT Value,Name FROM VAB_Acct_Element WHERE VAB_Acct_Element_ID=";
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
@@ -292,13 +292,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="SeqNo">sequence</param>
         /// <param name="Name">name</param>
-        /// <param name="C_Project_ID">id</param>
-        public void SetTypeProject(int SeqNo, String Name, int C_Project_ID)
+        /// <param name="VAB_Project_ID">id</param>
+        public void SetTypeProject(int SeqNo, String Name, int VAB_Project_ID)
         {
             SetElementType(ELEMENTTYPE_Project);
             SetSeqNo(SeqNo);
             SetName(Name);
-            SetC_Project_ID(C_Project_ID);
+            SetVAB_Project_ID(VAB_Project_ID);
         }
 
         /// <summary>
@@ -332,17 +332,17 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 defaultValue = GetVAB_BillingCode_ID();
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
-                defaultValue = GetC_Location_ID();
+                defaultValue = GetVAB_Address_ID();
             else if (elementType.Equals(ELEMENTTYPE_LocationTo))
-                defaultValue = GetC_Location_ID();
+                defaultValue = GetVAB_Address_ID();
             else if (elementType.Equals(ELEMENTTYPE_Campaign))
                 defaultValue = GetVAB_Promotion_ID();
             else if (elementType.Equals(ELEMENTTYPE_OrgTrx))
                 defaultValue = GetOrg_ID();
             else if (elementType.Equals(ELEMENTTYPE_Project))
-                defaultValue = GetC_Project_ID();
+                defaultValue = GetVAB_Project_ID();
             else if (elementType.Equals(ELEMENTTYPE_SalesRegion))
-                defaultValue = GetC_SalesRegion_ID();
+                defaultValue = GetVAB_SalesRegionState_ID();
             else if (elementType.Equals(ELEMENTTYPE_UserList1))
                 defaultValue = GetVAB_Acct_Element_ID();
             else if (elementType.Equals(ELEMENTTYPE_UserList2))
@@ -443,20 +443,20 @@ namespace VAdvantage.Model
                     errorField = "VAB_BusinessPartner_ID";
                 else if (ELEMENTTYPE_Campaign.Equals(et) && GetVAB_Promotion_ID() == 0)
                     errorField = "VAB_Promotion_ID";
-                else if (ELEMENTTYPE_LocationFrom.Equals(et) && GetC_Location_ID() == 0)
-                    errorField = "C_Location_ID";
-                else if (ELEMENTTYPE_LocationTo.Equals(et) && GetC_Location_ID() == 0)
-                    errorField = "C_Location_ID";
+                else if (ELEMENTTYPE_LocationFrom.Equals(et) && GetVAB_Address_ID() == 0)
+                    errorField = "VAB_Address_ID";
+                else if (ELEMENTTYPE_LocationTo.Equals(et) && GetVAB_Address_ID() == 0)
+                    errorField = "VAB_Address_ID";
                 else if (ELEMENTTYPE_Organization.Equals(et) && GetOrg_ID() == 0)
                     errorField = "Org_ID";
                 else if (ELEMENTTYPE_OrgTrx.Equals(et) && GetOrg_ID() == 0)
                     errorField = "Org_ID";
                 else if (ELEMENTTYPE_Product.Equals(et) && GetM_Product_ID() == 0)
                     errorField = "M_Product_ID";
-                else if (ELEMENTTYPE_Project.Equals(et) && GetC_Project_ID() == 0)
-                    errorField = "C_Project_ID";
-                else if (ELEMENTTYPE_SalesRegion.Equals(et) && GetC_SalesRegion_ID() == 0)
-                    errorField = "C_SalesRegion_ID";
+                else if (ELEMENTTYPE_Project.Equals(et) && GetVAB_Project_ID() == 0)
+                    errorField = "VAB_Project_ID";
+                else if (ELEMENTTYPE_SalesRegion.Equals(et) && GetVAB_SalesRegionState_ID() == 0)
+                    errorField = "VAB_SalesRegionState_ID";
                 if (errorField != null)
                 {
                     log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@IsMandatory@: @" + errorField + "@"));
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
                 else if (ELEMENTTYPE_Product.Equals(GetElementType()))
                     UpdateData("M_Product_ID", GetM_Product_ID());
                 else if (ELEMENTTYPE_Project.Equals(GetElementType()))
-                    UpdateData("C_Project_ID", GetC_Project_ID());
+                    UpdateData("VAB_Project_ID", GetVAB_Project_ID());
             }
             //	Resequence
             if (newRecord || Is_ValueChanged("SeqNo"))
@@ -510,11 +510,11 @@ namespace VAdvantage.Model
         {
             MAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
             //
-            String sql = "UPDATE C_ValidCombination SET " + element + "=" + id
+            String sql = "UPDATE VAB_Acct_ValidParameter SET " + element + "=" + id
                 + " WHERE " + element + " IS NULL AND VAF_Client_ID=" + GetVAF_Client_ID();
             int noC = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             //
-            sql = "UPDATE Fact_Acct SET " + element + "=" + id
+            sql = "UPDATE Actual_Acct_Detail SET " + element + "=" + id
                 + " WHERE " + element + " IS NULL AND VAB_AccountBook_ID=" + GetVAB_AccountBook_ID();
             int noF = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             //

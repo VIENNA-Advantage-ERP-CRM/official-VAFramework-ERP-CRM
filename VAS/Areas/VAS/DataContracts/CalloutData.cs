@@ -15,7 +15,7 @@ namespace VIS.DataContracts
         public int VAB_Currency_ID { get; set; }
         public decimal Discount { get; set; }
         public decimal LineAmt { get; set; }
-        public int C_UOM_ID { get; set; }
+        public int VAB_UOM_ID { get; set; }
         public int QtyOrdered { get; set; }
         public bool EnforcePriceLimit { get; set; }
         public bool DiscountSchema { get; set; }

@@ -103,9 +103,9 @@ namespace VAdvantage.Model
 		    X_VAF_MenuConfig.Table_ID,
 		    X_VAF_Org.Table_ID,
 		    X_M_Product_Category.Table_ID,
-		    X_C_Project.Table_ID,
+		    X_VAB_Project.Table_ID,
 		    X_M_Product.Table_ID,
-		    X_C_SalesRegion.Table_ID,
+		    X_VAB_SalesRegionState.Table_ID,
 		    0,0,0,0,0
 	    };
 

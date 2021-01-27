@@ -28,7 +28,7 @@ namespace VAdvantage.Model
 
         ////	Parent Table ID
         //private static int[] _parents = new int[]{
-        ////X_C_Order.Table_ID,
+        ////X_VAB_Order.Table_ID,
         ////X_CM_Container.Table_ID
         //};
 
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
         }
         ////	Parent Table Names
         //private static string[] _parentNames = new string[]{
-        ////X_C_Order.Table_Name,
+        ////X_VAB_Order.Table_Name,
         ////X_CM_Container.Table_Name
         //};
         // Child Table ID
@@ -57,13 +57,13 @@ namespace VAdvantage.Model
 
         // Child Table ID
 
-        //X_C_OrderLine.Table_ID,
+        //X_VAB_OrderLine.Table_ID,
         //X_CM_Container_Element.Table_ID
         //};
 
         // Child Table Names
         // private static string[] _parentChildNames = new string[]{
-        //X_C_OrderLine.Table_Name,
+        //X_VAB_OrderLine.Table_Name,
         //X_CM_Container_Element.Table_Name
         //};
 

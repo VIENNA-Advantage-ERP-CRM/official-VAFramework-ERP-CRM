@@ -21,7 +21,7 @@ namespace VAdvantage.Process
         DataSet ds = null;
         DataSet ds1 = null;
         MProfitLoss prof = null;
-        int C_ProfitLossLines_ID = 0;
+        int VAB_ProfitLossLines_ID = 0;
         static readonly object lockRecord = new object();
 
         protected override string DoIt()
@@ -29,14 +29,14 @@ namespace VAdvantage.Process
             MProfitLoss PL = new MProfitLoss(GetCtx(), GetRecord_ID(), null);
             prof = new MProfitLoss(GetCtx(), GetRecord_ID(), Get_Trx());
 
-            stDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.startdate from c_period p  inner join c_year y on p.c_year_id=y.c_year_id where p.periodno='1' and p.c_year_id= " + prof.GetC_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
-            eDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.enddate from c_period p  inner join c_year y on p.c_year_id=y.c_year_id where p.periodno='12' and p.c_year_id= " + prof.GetC_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
+            stDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.startdate from VAB_YearPeriod p  inner join VAB_Year y on p.VAB_Year_id=y.VAB_Year_id where p.periodno='1' and p.VAB_Year_id= " + prof.GetVAB_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
+            eDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.enddate from VAB_YearPeriod p  inner join VAB_Year y on p.VAB_Year_id=y.VAB_Year_id where p.periodno='12' and p.VAB_Year_id= " + prof.GetVAB_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
 
             // lock record 
             lock (lockRecord)
             {
                 sql.Clear();
-                sql.Append("SELECT distinct CP.* FROM C_ProfitLoss CP INNER JOIN Fact_Acct ft ON ft.VAB_AccountBook_ID = Cp.VAB_AccountBook_ID                             "
+                sql.Append("SELECT distinct CP.* FROM VAB_ProfitLoss CP INNER JOIN Actual_Acct_Detail ft ON ft.VAB_AccountBook_ID = Cp.VAB_AccountBook_ID                             "
                             + " INNER JOIN VAB_Acct_Element ev ON ft.account_id         =ev.VAB_Acct_Element_id                                                           "
                             + " WHERE CP.vaf_client_id    = " + GetVAF_Client_ID());
 
@@ -63,22 +63,22 @@ namespace VAdvantage.Process
                 }
 
                 // Get currentNext for generating key
-                C_ProfitLossLines_ID = MSequence.GetNextID(GetVAF_Client_ID(), "C_ProfitLossLines", Get_Trx());
-                C_ProfitLossLines_ID -= 1;
+                VAB_ProfitLossLines_ID = MSequence.GetNextID(GetVAF_Client_ID(), "VAB_ProfitLossLines", Get_Trx());
+                VAB_ProfitLossLines_ID -= 1;
 
                 // Delete All Record from line
-                DB.ExecuteQuery("DELETE FROM C_ProfitLossLines WHERE C_ProfitLoss_ID=" + GetRecord_ID());
+                DB.ExecuteQuery("DELETE FROM VAB_ProfitLossLines WHERE VAB_ProfitLoss_ID=" + GetRecord_ID());
 
                 insert.Clear();
-                insert.Append(@"INSERT INTO C_ProfitLossLines (C_ProfitLossLines_ID , VAF_Client_ID , VAF_Org_ID , C_ProfitLoss_ID , C_ProfitAndLoss_ID , VAB_AccountBook_ID , PostingType ,
-                            AccountCredit ,AccountDebit,Account_ID, C_SubAcct_ID,  VAB_BusinessPartner_ID , M_Product_ID , C_Project_ID , C_SalesRegion_ID ,  VAB_Promotion_ID , VAF_OrgTrx_ID ,
+                insert.Append(@"INSERT INTO VAB_ProfitLossLines (VAB_ProfitLossLines_ID , VAF_Client_ID , VAF_Org_ID , VAB_ProfitLoss_ID , VAB_ProfitAndLoss_ID , VAB_AccountBook_ID , PostingType ,
+                            AccountCredit ,AccountDebit,Account_ID, VAB_SubAcct_ID,  VAB_BusinessPartner_ID , M_Product_ID , VAB_Project_ID , VAB_SalesRegionState_ID ,  VAB_Promotion_ID , VAF_OrgTrx_ID ,
                            C_LocFrom_ID , C_LocTo_ID , VAB_BillingCode_ID, User1_ID , User2_ID , UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID,
-                          UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID , GL_Budget_ID, C_ProjectPhase_ID, C_ProjectTask_ID, LedgerCode,LedgerName, Line ) ");
+                          UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID , VAGL_Budget_ID, VAB_ProjectStage_ID, VAB_ProjectJob_ID, LedgerCode,LedgerName, Line ) ");
 
                 qry.Clear();
-                qry.Append(@"select " + C_ProfitLossLines_ID + " + " + DBFunctionCollection.RowNumAggregation("rownum") + " AS C_ProfitLossLines_id, ft.VAF_Client_ID , ft.VAF_Org_ID , " + PL.GetC_ProfitLoss_ID() + " , " + prof.GetC_ProfitAndLoss_ID() + ",  ft.VAB_AccountBook_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.C_SubAcct_ID,ft.VAB_BusinessPartner_ID,ft.M_Product_ID,ft.C_Project_ID,ft.C_SalesRegion_ID,ft.VAB_Promotion_ID,ft.VAF_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.VAB_BillingCode_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
-                         + " ft.UserElement3_ID,ft.UserElement4_ID, ft.UserElement5_ID, ft.UserElement6_ID, ft.UserElement7_ID,ft.UserElement8_ID, ft.UserElement9_ID,ft.GL_Budget_ID,ft.C_ProjectPhase_ID,ft.C_ProjectTask_ID,"
-                         + @" ev.Value as LedgerCode,ev.Name as LedgerName , (SELECT NVL(MAX(Line),0) FROM C_ProfitLossLines   WHERE C_ProfitLoss_ID=" + PL.GetC_ProfitLoss_ID() + "   ) + (" + DBFunctionCollection.RowNumAggregation("rownum") + " *10) AS lineno from Fact_Acct ft inner join VAB_Acct_Element ev on ft.account_id=ev.VAB_Acct_Element_id where ft.vaf_client_id= " + GetVAF_Client_ID());
+                qry.Append(@"select " + VAB_ProfitLossLines_ID + " + " + DBFunctionCollection.RowNumAggregation("rownum") + " AS VAB_ProfitLossLines_id, ft.VAF_Client_ID , ft.VAF_Org_ID , " + PL.GetVAB_ProfitLoss_ID() + " , " + prof.GetVAB_ProfitAndLoss_ID() + ",  ft.VAB_AccountBook_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.VAB_SubAcct_ID,ft.VAB_BusinessPartner_ID,ft.M_Product_ID,ft.VAB_Project_ID,ft.VAB_SalesRegionState_ID,ft.VAB_Promotion_ID,ft.VAF_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.VAB_BillingCode_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
+                         + " ft.UserElement3_ID,ft.UserElement4_ID, ft.UserElement5_ID, ft.UserElement6_ID, ft.UserElement7_ID,ft.UserElement8_ID, ft.UserElement9_ID,ft.VAGL_Budget_ID,ft.VAB_ProjectStage_ID,ft.VAB_ProjectJob_ID,"
+                         + @" ev.Value as LedgerCode,ev.Name as LedgerName , (SELECT NVL(MAX(Line),0) FROM VAB_ProfitLossLines   WHERE VAB_ProfitLoss_ID=" + PL.GetVAB_ProfitLoss_ID() + "   ) + (" + DBFunctionCollection.RowNumAggregation("rownum") + " *10) AS lineno from Actual_Acct_Detail ft inner join VAB_Acct_Element ev on ft.account_id=ev.VAB_Acct_Element_id where ft.vaf_client_id= " + GetVAF_Client_ID());
 
 
                 // Added by SUkhwinder on 27 Nov 2017, for filtering query on the basis of postingtype. And string variable converted to stringBuilder also.
@@ -100,14 +100,14 @@ namespace VAdvantage.Process
                 if (no > 0)
                 {
                     // Update curentNext in VAF_Record_Seq 
-                    C_ProfitLossLines_ID += (no + 1);
-                    String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext = " + C_ProfitLossLines_ID + ", CurrentNextSys = " + C_ProfitLossLines_ID + " "
-                    + " WHERE Upper(Name)=Upper('C_ProfitLossLines')"
+                    VAB_ProfitLossLines_ID += (no + 1);
+                    String updateSQL = "UPDATE VAF_Record_Seq SET  CurrentNext = " + VAB_ProfitLossLines_ID + ", CurrentNextSys = " + VAB_ProfitLossLines_ID + " "
+                    + " WHERE Upper(Name)=Upper('VAB_ProfitLossLines')"
                     + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y' ";
                     DB.ExecuteQuery(updateSQL, null, Get_Trx());
 
                     // Update Profit Before tax on Header
-                    ProfitBeforeTax = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(AccountDebit) - SUM(AccountCredit) FROM C_ProfitLossLines WHERE  C_ProfitAndLoss_ID > 0 AND  IsActive='Y' AND C_ProfitLoss_ID=" + GetRecord_ID(), null, Get_Trx()));
+                    ProfitBeforeTax = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(AccountDebit) - SUM(AccountCredit) FROM VAB_ProfitLossLines WHERE  VAB_ProfitAndLoss_ID > 0 AND  IsActive='Y' AND VAB_ProfitLoss_ID=" + GetRecord_ID(), null, Get_Trx()));
                     prof.SetProfitBeforeTax(ProfitBeforeTax);
                     if (!prof.Save(Get_Trx()))
                     {
@@ -145,12 +145,12 @@ namespace VAdvantage.Process
         {
             // get consolidated profit amount agsint Organization
             String Sql = @"SELECT VAF_Org_ID , (SUM(AccountDebit) - SUM(AccountCredit)) AS ProfitAmt
-                                    FROM C_ProfitLossLines WHERE C_ProfitAndLoss_ID > 0 AND C_ProfitLoss_ID = " + Profit.GetC_ProfitLoss_ID() + @" GROUP BY VAF_Org_ID";
+                                    FROM VAB_ProfitLossLines WHERE VAB_ProfitAndLoss_ID > 0 AND VAB_ProfitLoss_ID = " + Profit.GetVAB_ProfitLoss_ID() + @" GROUP BY VAF_Org_ID";
             DataSet dsProfit = DB.ExecuteDataset(Sql, null, Get_Trx());
             if (dsProfit != null && dsProfit.Tables.Count > 0 && dsProfit.Tables[0].Rows.Count > 0)
             {
                 // get max line no 
-                int lineNo = Convert.ToInt32(DB.ExecuteScalar(@"SELECT NVL(MAX(Line),0)+10 AS line FROM C_ProfitLossLines WHERE C_ProfitLoss_ID = " + Profit.GetC_ProfitLoss_ID(), null, Get_Trx()));
+                int lineNo = Convert.ToInt32(DB.ExecuteScalar(@"SELECT NVL(MAX(Line),0)+10 AS line FROM VAB_ProfitLossLines WHERE VAB_ProfitLoss_ID = " + Profit.GetVAB_ProfitLoss_ID(), null, Get_Trx()));
 
                 // get Valid Combination against Income Summary Acct  from accounting schema
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT IncomeSummary_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=" + Util.GetValueOfInt(Profit.Get_Value("VAB_AccountBook_ID"))));
@@ -169,7 +169,7 @@ namespace VAdvantage.Process
                     MProfitLossLines profitLossLines = new MProfitLossLines(GetCtx(), 0, Get_Trx());
                     profitLossLines.SetVAF_Client_ID(Profit.GetVAF_Client_ID());
                     profitLossLines.SetVAF_Org_ID(Util.GetValueOfInt(dsProfit.Tables[0].Rows[i]["VAF_Org_ID"]));
-                    profitLossLines.SetC_ProfitLoss_ID(Profit.GetC_ProfitLoss_ID());
+                    profitLossLines.SetVAB_ProfitLoss_ID(Profit.GetVAB_ProfitLoss_ID());
                     profitLossLines.SetLine(lineNo);
                     profitLossLines.SetVAB_AccountBook_ID(Util.GetValueOfInt(Profit.Get_Value("VAB_AccountBook_ID")));
                     profitLossLines.SetPostingType(Util.GetValueOfString(Profit.Get_Value("PostingType")));

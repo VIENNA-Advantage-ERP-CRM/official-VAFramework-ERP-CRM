@@ -63,7 +63,7 @@ namespace VIS.Models
         /// <returns></returns>
         public decimal GetTaxRate(Ctx ctx, int Tax_ID)
         {
-            decimal TaxRate = Util.GetValueOfDecimal(DB.ExecuteScalar("Select Rate From C_Tax Where C_Tax_ID=" + Tax_ID + " AND IsActive='Y'"));
+            decimal TaxRate = Util.GetValueOfDecimal(DB.ExecuteScalar("Select Rate From VAB_TaxRate Where VAB_TaxRate_ID=" + Tax_ID + " AND IsActive='Y'"));
             return TaxRate;
         }
 
@@ -102,8 +102,8 @@ namespace VIS.Models
         public decimal GetPaySheduleAmount(string fields)
         {
             string _sql = "SELECT sum(ips.DueAmt)  FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment ips ON (i.VAB_Invoice_ID=ips.VAB_Invoice_ID) WHERE i.IsPayScheduleValid='Y' AND ips.IsValid ='Y' AND ips.isactive ='Y'" +
-                    "AND i.VAB_Invoice_ID = " + Util.GetValueOfInt(fields) + " AND VAB_sched_InvoicePayment_ID NOT IN (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE C_Payment_ID IN " +
-                    "(SELECT NVL(C_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))";
+                    "AND i.VAB_Invoice_ID = " + Util.GetValueOfInt(fields) + " AND VAB_sched_InvoicePayment_ID NOT IN (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN " +
+                    "(SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))";
             return Util.GetValueOfDecimal(DB.ExecuteScalar(_sql, null, null));
         }
 

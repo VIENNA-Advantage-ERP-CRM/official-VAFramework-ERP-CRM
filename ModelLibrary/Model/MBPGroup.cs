@@ -244,7 +244,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = new DataSet();
                         ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
                                     {
                                         _sql.Clear();
                                         //_sql.Append("Select Bp.VAB_BPart_Category_ID,ca.Frpt_Acctdefault_Id From VAB_BPart_Category Bp Left Join FRPT_BP_Group_Acct ca On Bp.VAB_BPart_Category_ID=ca.VAB_BPart_Category_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID);
-                                        _sql.Append("Select COUNT(*) From VAB_BPart_Category Bp Left Join FRPT_BP_Group_Acct ca On Bp.VAB_BPart_Category_ID=ca.VAB_BPart_Category_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.VAB_BPart_Category_ID = " + GetVAB_BPart_Category_ID());
+                                        _sql.Append("Select COUNT(*) From VAB_BPart_Category Bp Left Join FRPT_BP_Group_Acct ca On Bp.VAB_BPart_Category_ID=ca.VAB_BPart_Category_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.VAB_BPart_Category_ID = " + GetVAB_BPart_Category_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         // ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -278,7 +278,7 @@ namespace VAdvantage.Model
                                             gpact.Set_ValueNoCheck("VAB_BPart_Category_ID", Util.GetValueOfInt(GetVAB_BPart_Category_ID()));
                                             gpact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             gpact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                            gpact.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                            gpact.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                             gpact.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                             if (!gpact.Save())
                                             {

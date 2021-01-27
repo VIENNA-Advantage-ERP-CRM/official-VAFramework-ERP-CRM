@@ -815,7 +815,7 @@ namespace VAdvantage.Model
                 line.SetQtyCount(Decimal.Subtract(Util.GetValueOfDecimal(line.GetQtyBook()), Util.GetValueOfDecimal(confirm.GetDifferenceQty())));
 
                 //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
-                line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
+                line.Set_Value("VAB_UOM_ID", mLine.GetVAB_UOM_ID());
                 line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
 
                 line.SetDescription(Msg.Translate(GetCtx(), "DifferenceQty"));
@@ -863,7 +863,7 @@ namespace VAdvantage.Model
                 line.SetDescription(Msg.Translate(GetCtx(), "ScrappedQty"));
 
                 //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
-                line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
+                line.Set_Value("VAB_UOM_ID", mLine.GetVAB_UOM_ID());
                 line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
 
                 // JID_0804 Ship receipt confirm with scrap Qty

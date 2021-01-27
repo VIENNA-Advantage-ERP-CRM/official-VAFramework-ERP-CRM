@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Task
+/** Generated Model for VAB_Std_Task
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Task : PO
+public class X_VAB_Std_Task : PO
 {
-public X_C_Task (Context ctx, int C_Task_ID, Trx trxName) : base (ctx, C_Task_ID, trxName)
+public X_VAB_Std_Task (Context ctx, int VAB_Std_Task_ID, Trx trxName) : base (ctx, VAB_Std_Task_ID, trxName)
 {
-/** if (C_Task_ID == 0)
+/** if (VAB_Std_Task_ID == 0)
 {
-SetC_Phase_ID (0);
-SetC_Task_ID (0);
+SetVAB_Std_Stage_ID (0);
+SetVAB_Std_Task_ID (0);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM C_Task WHERE C_Phase_ID=@C_Phase_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_Std_Task WHERE VAB_Std_Stage_ID=@VAB_Std_Stage_ID@
 SetStandardQty (0.0);	// 1
 }
  */
 }
-public X_C_Task (Ctx ctx, int C_Task_ID, Trx trxName) : base (ctx, C_Task_ID, trxName)
+public X_VAB_Std_Task (Ctx ctx, int VAB_Std_Task_ID, Trx trxName) : base (ctx, VAB_Std_Task_ID, trxName)
 {
-/** if (C_Task_ID == 0)
+/** if (VAB_Std_Task_ID == 0)
 {
-SetC_Phase_ID (0);
-SetC_Task_ID (0);
+SetVAB_Std_Stage_ID (0);
+SetVAB_Std_Task_ID (0);
 SetName (null);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM C_Task WHERE C_Phase_ID=@C_Phase_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAB_Std_Task WHERE VAB_Std_Stage_ID=@VAB_Std_Stage_ID@
 SetStandardQty (0.0);	// 1
 }
  */
@@ -45,7 +45,7 @@ SetStandardQty (0.0);	// 1
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Task (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Std_Task (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_Task (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Task (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Std_Task (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_Task (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Task (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Std_Task (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Task()
+static X_VAB_Std_Task()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389058533L;
 public static int Table_ID;
  // =583;
 
-/** TableName=C_Task */
-public static String Table_Name="C_Task";
+/** TableName=VAB_Std_Task */
+public static String Table_Name="VAB_Std_Task";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,36 +115,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Task[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Std_Task[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Standard Phase.
-@param C_Phase_ID Standard Phase of the Project Type */
-public void SetC_Phase_ID (int C_Phase_ID)
+@param VAB_Std_Stage_ID Standard Phase of the Project Type */
+public void SetVAB_Std_Stage_ID (int VAB_Std_Stage_ID)
 {
-if (C_Phase_ID < 1) throw new ArgumentException ("C_Phase_ID is mandatory.");
-Set_ValueNoCheck ("C_Phase_ID", C_Phase_ID);
+if (VAB_Std_Stage_ID < 1) throw new ArgumentException ("VAB_Std_Stage_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Std_Stage_ID", VAB_Std_Stage_ID);
 }
 /** Get Standard Phase.
 @return Standard Phase of the Project Type */
-public int GetC_Phase_ID() 
+public int GetVAB_Std_Stage_ID() 
 {
-Object ii = Get_Value("C_Phase_ID");
+Object ii = Get_Value("VAB_Std_Stage_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Standard Task.
-@param C_Task_ID Standard Project Type Task */
-public void SetC_Task_ID (int C_Task_ID)
+@param VAB_Std_Task_ID Standard Project Type Task */
+public void SetVAB_Std_Task_ID (int VAB_Std_Task_ID)
 {
-if (C_Task_ID < 1) throw new ArgumentException ("C_Task_ID is mandatory.");
-Set_ValueNoCheck ("C_Task_ID", C_Task_ID);
+if (VAB_Std_Task_ID < 1) throw new ArgumentException ("VAB_Std_Task_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Std_Task_ID", VAB_Std_Task_ID);
 }
 /** Get Standard Task.
 @return Standard Project Type Task */
-public int GetC_Task_ID() 
+public int GetVAB_Std_Task_ID() 
 {
-Object ii = Get_Value("C_Task_ID");
+Object ii = Get_Value("VAB_Std_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

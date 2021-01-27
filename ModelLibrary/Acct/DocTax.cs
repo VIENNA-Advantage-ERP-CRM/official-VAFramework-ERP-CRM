@@ -34,7 +34,7 @@ namespace VAdvantage.Acct
         #region Private variables
 
         // Tax ID           
-        private int _C_Tax_ID = 0;
+        private int _VAB_TaxRate_ID = 0;
         // Amount           
         private Decimal? _amount = null;
         //Tax Rate          
@@ -64,16 +64,16 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Create Tax
         /// </summary>
-        /// <param name="C_Tax_ID">tax</param>
+        /// <param name="VAB_TaxRate_ID">tax</param>
         /// <param name="name">name</param>
         /// <param name="rate">rate</param>
         /// <param name="taxBaseAmt">tax base amount</param>
         /// <param name="amount">amount</param>
         /// <param name="salesTax">sales tax flag</param>
-        public DocTax(int C_Tax_ID, String name, Decimal rate,
+        public DocTax(int VAB_TaxRate_ID, String name, Decimal rate,
             Decimal taxBaseAmt, Decimal amount, bool salesTax)
         {
-            _C_Tax_ID = C_Tax_ID;
+            _VAB_TaxRate_ID = VAB_TaxRate_ID;
             _name = name;
             _rate = rate;
             _amount = amount;
@@ -94,7 +94,7 @@ namespace VAdvantage.Acct
             }
             //
             String sql = "SELECT T_Due_Acct, T_Liability_Acct, T_Credit_Acct, T_Receivables_Acct, T_Expense_Acct "
-                + "FROM C_Tax_Acct WHERE C_Tax_ID=" + _C_Tax_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
+                + "FROM VAB_Tax_Acct WHERE VAB_TaxRate_ID=" + _VAB_TaxRate_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             int validCombination_ID = 0;
             IDataReader idr = null;
             try
@@ -159,12 +159,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get C_Tax_ID
+        /// Get VAB_TaxRate_ID
         /// </summary>
         /// <returns>tax id</returns>
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            return _C_Tax_ID;
+            return _VAB_TaxRate_ID;
         }
 
         /// <summary>

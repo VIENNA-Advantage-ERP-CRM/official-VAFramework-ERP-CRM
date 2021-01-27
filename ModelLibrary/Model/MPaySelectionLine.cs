@@ -16,19 +16,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelectionLine : X_C_PaySelectionLine
+    public class MPaySelectionLine : X_VAB_PaymentOptionLine
     {
         /**
 	     * 	Standard Constructor
 	     *	@param ctx context
-	     *	@param C_PaySelectionLine_ID id
+	     *	@param VAB_PaymentOptionLine_ID id
 	     *	@param trxName transaction
 	     */
-        public MPaySelectionLine(Ctx ctx, int C_PaySelectionLine_ID, Trx trxName) :
-            base(ctx, C_PaySelectionLine_ID, trxName)
+        public MPaySelectionLine(Ctx ctx, int VAB_PaymentOptionLine_ID, Trx trxName) :
+            base(ctx, VAB_PaymentOptionLine_ID, trxName)
         {
 
-            if (C_PaySelectionLine_ID == 0)
+            if (VAB_PaymentOptionLine_ID == 0)
             {
                 SetIsSOTrx(false);
                 SetOpenAmt(Env.ZERO);
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(ps);
-            SetC_PaySelection_ID(ps.GetC_PaySelection_ID());
+            SetVAB_PaymentOption_ID(ps.GetVAB_PaymentOption_ID());
             SetLine(Line);
             SetPaymentRule(PaymentRule);
         }
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             Boolean IsSOTrx = false;
             String sql = "SELECT currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0), i.VAB_Currency_ID,"
                     + "ba.VAB_Currency_ID, i.DateInvoiced, i.VAB_CurrencyType_ID, i.VAF_Client_ID, i.VAF_Org_ID),"
-                + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
+                + " paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTer_ID,i.DateInvoiced, @PayDate), i.IsSOTrx "
                 + "FROM VAB_Invoice_v i, VAB_Bank_Acct ba "
                 + "WHERE i.VAB_Invoice_ID=@VAB_Invoice_ID AND ba.VAB_Bank_Acct_ID=@VAB_Bank_Acct_ID";	//	#1..2
 
@@ -297,11 +297,11 @@ namespace VAdvantage.Model
         private void SetHeader()
         {
             //	Update Header
-            String sql = "UPDATE C_PaySelection ps "
+            String sql = "UPDATE VAB_PaymentOption ps "
                 + "SET TotalAmt = (SELECT COALESCE(SUM(psl.PayAmt),0) "
-                    + "FROM C_PaySelectionLine psl "
-                    + "WHERE ps.C_PaySelection_ID=psl.C_PaySelection_ID AND psl.IsActive='Y') "
-                + "WHERE C_PaySelection_ID=" + GetC_PaySelection_ID();
+                    + "FROM VAB_PaymentOptionLine psl "
+                    + "WHERE ps.VAB_PaymentOption_ID=psl.VAB_PaymentOption_ID AND psl.IsActive='Y') "
+                + "WHERE VAB_PaymentOption_ID=" + GetVAB_PaymentOption_ID();
             DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
         }
 

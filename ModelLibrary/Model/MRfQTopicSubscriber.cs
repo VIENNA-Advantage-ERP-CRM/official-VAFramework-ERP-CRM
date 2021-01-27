@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQTopicSubscriber
  * Purpose        : RfQ Topic Subscriber Model
- * Class Used     : X_C_RfQLine
+ * Class Used     : X_VAB_RFQLine
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQTopicSubscriber : X_C_RfQ_TopicSubscriber
+    public class MRfQTopicSubscriber : X_VAB_RFQ_SubjectMember
     {
         //Restrictions					
         private MRfQTopicSubscriberOnly[] _restrictions = null;
@@ -34,10 +34,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQ_TopicSubscriber_ID">id</param>
+        /// <param name="VAB_RFQ_SubjectMember_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MRfQTopicSubscriber(Ctx ctx, int C_RfQ_TopicSubscriber_ID, Trx trxName)
-            : base(ctx, C_RfQ_TopicSubscriber_ID, trxName)
+        public MRfQTopicSubscriber(Ctx ctx, int VAB_RFQ_SubjectMember_ID, Trx trxName)
+            : base(ctx, VAB_RFQ_SubjectMember_ID, trxName)
         {
 
         }
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
             }
 
             List<MRfQTopicSubscriberOnly> list = new List<MRfQTopicSubscriberOnly>();
-            String sql = "SELECT * FROM C_RfQ_TopicSubscriberOnly WHERE C_RfQ_TopicSubscriber_ID=" + GetC_RfQ_TopicSubscriber_ID();
+            String sql = "SELECT * FROM VAB_RFQ_SubjectMem_Allow WHERE VAB_RFQ_SubjectMember_ID=" + GetVAB_RFQ_SubjectMember_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try

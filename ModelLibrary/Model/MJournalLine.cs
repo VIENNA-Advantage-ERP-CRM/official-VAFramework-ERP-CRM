@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Class Name     : MJournalLine
  * Purpose        : Journal Line Model
- * Class Used     : X_GL_JournalLine
+ * Class Used     : X_VAGL_JRNLLine
  * Chronological    Development
  * Deepak           15-JAN-2010
   ******************************************************/
@@ -25,24 +25,24 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-    public class MJournalLine : X_GL_JournalLine
+    public class MJournalLine : X_VAGL_JRNLLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="GL_JournalLine_ID">id</param>
+        /// <param name="VAGL_JRNLLine_ID">id</param>
         /// <param name="trxName"> transaction</param>
-        public MJournalLine(Ctx ctx, int GL_JournalLine_ID, Trx trxName)
-            : base(ctx, GL_JournalLine_ID, trxName)
+        public MJournalLine(Ctx ctx, int VAGL_JRNLLine_ID, Trx trxName)
+            : base(ctx, VAGL_JRNLLine_ID, trxName)
         {
-            //super (ctx, GL_JournalLine_ID, trxName);
-            if (GL_JournalLine_ID == 0)
+            //super (ctx, VAGL_JRNLLine_ID, trxName);
+            if (VAGL_JRNLLine_ID == 0)
             {
-                //	setGL_JournalLine_ID (0);		//	PK
-                //	setGL_Journal_ID (0);			//	Parent
+                //	setVAGL_JRNLLine_ID (0);		//	PK
+                //	setVAGL_JRNL_ID (0);			//	Parent
                 //	setVAB_Currency_ID (0);
-                //	setC_ValidCombination_ID (0);
+                //	setVAB_Acct_ValidParameter_ID (0);
                 SetLine(0);
                 SetAmtAcctCr(Env.ZERO);
                 SetAmtAcctDr(Env.ZERO);
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         {
             //this (parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(parent);
-            SetGL_Journal_ID(parent.GetGL_Journal_ID());
+            SetVAGL_JRNL_ID(parent.GetVAGL_JRNL_ID());
             SetVAB_Currency_ID(parent.GetVAB_Currency_ID());
             SetVAB_CurrencyType_ID(parent.GetVAB_CurrencyType_ID());
             SetDateAcct(parent.GetDateAcct());
@@ -381,30 +381,30 @@ namespace VAdvantage.Model
 
 
         /// <summary>
-        /// Set C_ValidCombination_ID
+        /// Set VAB_Acct_ValidParameter_ID
         /// </summary>
-        /// <param name="C_ValidCombination_ID">id</param>
-        public new void SetC_ValidCombination_ID(int C_ValidCombination_ID)
+        /// <param name="VAB_Acct_ValidParameter_ID">id</param>
+        public new void SetVAB_Acct_ValidParameter_ID(int VAB_Acct_ValidParameter_ID)
         {
-            base.SetC_ValidCombination_ID(C_ValidCombination_ID);
+            base.SetVAB_Acct_ValidParameter_ID(VAB_Acct_ValidParameter_ID);
             m_account = null;
             m_accountElement = null;
-        }	//	setC_ValidCombination_ID
+        }	//	setVAB_Acct_ValidParameter_ID
 
         /// <summary>
-        ///	Set C_ValidCombination_ID
+        ///	Set VAB_Acct_ValidParameter_ID
         /// </summary>
         /// <param name="acct">account</param>
-        public void SetC_ValidCombination_ID(MAccount acct)
+        public void SetVAB_Acct_ValidParameter_ID(MAccount acct)
         {
             if (acct == null)
             {
                 throw new ArgumentException("Account is null");
             }
-            base.SetC_ValidCombination_ID(acct.GetC_ValidCombination_ID());
+            base.SetVAB_Acct_ValidParameter_ID(acct.GetVAB_Acct_ValidParameter_ID());
             m_account = acct;
             m_accountElement = null;
-        }	//	setC_ValidCombination_ID
+        }	//	setVAB_Acct_ValidParameter_ID
 
         /// <summary>
         /// Get Account (Valid Combination)
@@ -412,8 +412,8 @@ namespace VAdvantage.Model
         /// <returns> combination or null</returns>
         public MAccount GetAccount()
         {
-            if (m_account == null && GetC_ValidCombination_ID() != 0)
-                m_account = new MAccount(GetCtx(), GetC_ValidCombination_ID(), Get_TrxName());
+            if (m_account == null && GetVAB_Acct_ValidParameter_ID() != 0)
+                m_account = new MAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
             return m_account;
         }	//	getValidCombination
 
@@ -443,7 +443,7 @@ namespace VAdvantage.Model
             MElementValue acct = GetAccountElementValue();
             if (acct == null)
             {
-                log.Warning("Account not found for C_ValidCombination_ID=" + GetC_ValidCombination_ID());
+                log.Warning("Account not found for VAB_Acct_ValidParameter_ID=" + GetVAB_Acct_ValidParameter_ID());
                 return false;
             }
             return acct.IsDocControlled();
@@ -462,7 +462,7 @@ namespace VAdvantage.Model
 
             // set precision value based on cuurenncy define on GL Journal
             m_precision = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT stdprecision FROM VAB_Currency WHERE VAB_Currency_id = 
-                            ( SELECT VAB_Currency_id FROM GL_journal WHERE GL_Journal_ID=" + GetGL_Journal_ID() + " )", null, Get_Trx()));
+                            ( SELECT VAB_Currency_id FROM VAGL_JRNL WHERE VAGL_JRNL_ID=" + GetVAGL_JRNL_ID() + " )", null, Get_Trx()));
 
             Decimal valuesRate = 0;
             Decimal valuesRateCredit = 0;
@@ -506,7 +506,7 @@ namespace VAdvantage.Model
 
             //	Set Line Org to Acct Org
             if (newRecord
-                || Is_ValueChanged("C_ValidCombination_ID")
+                || Is_ValueChanged("VAB_Acct_ValidParameter_ID")
                 || Is_ValueChanged("VAF_Org_ID"))
             {
                 SetVAF_Org_ID(GetAccount().GetVAF_Org_ID());
@@ -514,7 +514,7 @@ namespace VAdvantage.Model
 
             //18/7/2016
             //MAnish before save journal line. if journal line has some dimention and user update debit or credit field,, first chk is there dimention or not.
-            string sql = "Select Count(*) FROM GL_LineDimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
+            string sql = "Select Count(*) FROM VAGL_LineDimension WHERE VAGL_JRNLLine_ID=" + Get_Value("VAGL_JRNLLine_ID");
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
             if (!newRecord && Is_ValueChanged("ElementType") && count > 0)
@@ -526,7 +526,7 @@ namespace VAdvantage.Model
 
             if (!newRecord && (Is_ValueChanged("AmtSourceDr") || Is_ValueChanged("AmtSourceCr")))
             {
-                string sqlQury = "SELECT SUM(amount) FROM GL_LineDimension WHERE GL_JournalLine_ID=" + Get_Value("GL_JournalLine_ID");
+                string sqlQury = "SELECT SUM(amount) FROM VAGL_LineDimension WHERE VAGL_JRNLLine_ID=" + Get_Value("VAGL_JRNLLine_ID");
                 int countQuery = Util.GetValueOfInt(DB.ExecuteScalar(sqlQury));
 
                 if (Is_ValueChanged("AmtSourceDr"))
@@ -593,20 +593,20 @@ namespace VAdvantage.Model
         /** Update combination and optionally **/
         private bool GetOrCreateCombination(Boolean newRecord)
         {
-            int Account_ID = 0, C_SubAcct_ID = 0, M_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
-                C_LocFrom_ID = 0, C_LocTo_ID = 0, C_SalesRegion_ID = 0, C_Project_ID = 0, VAB_Promotion_ID = 0,
+            int Account_ID = 0, VAB_SubAcct_ID = 0, M_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
+                C_LocFrom_ID = 0, C_LocTo_ID = 0, VAB_SalesRegionState_ID = 0, VAB_Project_ID = 0, VAB_Promotion_ID = 0,
                 VAB_BillingCode_ID = 0, User1_ID = 0, User2_ID = 0;
 
-            if (GetC_ValidCombination_ID() == 0
+            if (GetVAB_Acct_ValidParameter_ID() == 0
                     || (!newRecord && (Is_ValueChanged("Account_ID")
                             || Is_ValueChanged("M_Product_ID")
                             || Is_ValueChanged("VAB_BusinessPartner_ID")
                             || Is_ValueChanged("VAF_Org_ID")
-                            || Is_ValueChanged("C_Project_ID")
+                            || Is_ValueChanged("VAB_Project_ID")
                             || Is_ValueChanged("VAB_Promotion_ID")
                             || Is_ValueChanged("VAB_BillingCode_ID"))))
             {
-                MJournal gl = new MJournal(GetCtx(), GetGL_Journal_ID(), Get_TrxName());
+                MJournal gl = new MJournal(GetCtx(), GetVAGL_JRNL_ID(), Get_TrxName());
 
                 // Validate all mandatory combinations are set
                 MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetVAB_AccountBook_ID());
@@ -617,8 +617,8 @@ namespace VAdvantage.Model
                     String et = elem.GetElementType();
                     if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") >= 0)
                         Account_ID = Util.GetValueOfInt(Get_Value("Account_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("C_SubAcct_ID") > 0)
-                        C_SubAcct_ID = Util.GetValueOfInt(Get_Value("C_SubAcct_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("VAB_SubAcct_ID") > 0)
+                        VAB_SubAcct_ID = Util.GetValueOfInt(Get_Value("VAB_SubAcct_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et) && Get_ColumnIndex("VAB_BillingCode_ID") > 0)
                         VAB_BillingCode_ID = Util.GetValueOfInt(Get_Value("VAB_BillingCode_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
@@ -635,12 +635,12 @@ namespace VAdvantage.Model
                         C_LocTo_ID = Util.GetValueOfInt(Get_Value("C_LocTo_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("M_Product_ID") > 0)
                         M_Product_ID = Util.GetValueOfInt(Get_Value("M_Product_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("C_Project_ID") > 0)
-                        C_Project_ID = Util.GetValueOfInt(Get_Value("C_Project_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Project_ID") > 0)
+                        VAB_Project_ID = Util.GetValueOfInt(Get_Value("VAB_Project_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Promotion_ID") > 0)
                         VAB_Promotion_ID = Util.GetValueOfInt(Get_Value("VAB_Promotion_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et) && Get_ColumnIndex("C_SalesRegion_ID") > 0)
-                        C_SalesRegion_ID = Util.GetValueOfInt(Get_Value("C_SalesRegion_ID"));
+                    if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et) && Get_ColumnIndex("VAB_SalesRegionState_ID") > 0)
+                        VAB_SalesRegionState_ID = Util.GetValueOfInt(Get_Value("VAB_SalesRegionState_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(et) && Get_ColumnIndex("User1_ID") > 0)
                         User1_ID = Util.GetValueOfInt(Get_Value("User1_ID"));
                     if (MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(et) && Get_ColumnIndex("User2_ID") > 0)
@@ -648,13 +648,13 @@ namespace VAdvantage.Model
                 }
 
                 MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
-                        C_SubAcct_ID, M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SalesRegion_ID,
-                        C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                        VAB_SubAcct_ID, M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
+                        VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
                 if (acct != null)
                 {
                     acct.Save(Get_TrxName());	// get ID from transaction
-                    SetC_ValidCombination_ID(acct.Get_ID());
+                    SetVAB_Acct_ValidParameter_ID(acct.Get_ID());
 
                     //if (acct.GetAlias() != null && acct.GetAlias().length > 0)
                     //    setAlias_ValidCombination_ID(acct.get_ID());
@@ -673,13 +673,13 @@ namespace VAdvantage.Model
         /** Fill Accounting Dimensions from line combination **/
         private void fillDimensionsFromCombination()
         {
-            if (GetC_ValidCombination_ID() > 0)
+            if (GetVAB_Acct_ValidParameter_ID() > 0)
             {
-                MAccount combi = new MAccount(GetCtx(), GetC_ValidCombination_ID(), Get_TrxName());
+                MAccount combi = new MAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
                 if (Get_ColumnIndex("Account_ID") > 0)
                     Set_Value("Account_ID", combi.GetAccount_ID() > 0 ? combi.GetAccount_ID() : 0);
-                if (Get_ColumnIndex("C_SubAcct_ID") > 0)
-                    Set_Value("C_SubAcct_ID", combi.GetC_SubAcct_ID() > 0 ? combi.GetC_SubAcct_ID() : 0);
+                if (Get_ColumnIndex("VAB_SubAcct_ID") > 0)
+                    Set_Value("VAB_SubAcct_ID", combi.GetVAB_SubAcct_ID() > 0 ? combi.GetVAB_SubAcct_ID() : 0);
                 // setting null in business partner and product search control because if set 0 then it shows <0> in controls.-Mohit-11 May 2020
                 if (Get_ColumnIndex("M_Product_ID") > 0)
                 {
@@ -699,10 +699,10 @@ namespace VAdvantage.Model
                     Set_Value("C_LocFrom_ID", combi.GetC_LocFrom_ID() > 0 ? combi.GetC_LocFrom_ID() : 0);
                 if (Get_ColumnIndex("C_LocTo_ID") > 0)
                     Set_Value("C_LocTo_ID", combi.GetC_LocTo_ID() > 0 ? combi.GetC_LocTo_ID() : 0);
-                if (Get_ColumnIndex("C_SalesRegion_ID") > 0)
-                    Set_Value("C_SalesRegion_ID", combi.GetC_SalesRegion_ID() > 0 ? combi.GetC_SalesRegion_ID() : 0);
-                if (Get_ColumnIndex("C_Project_ID") > 0)
-                    Set_Value("C_Project_ID", combi.GetC_Project_ID() > 0 ? combi.GetC_Project_ID() : 0);
+                if (Get_ColumnIndex("VAB_SalesRegionState_ID") > 0)
+                    Set_Value("VAB_SalesRegionState_ID", combi.GetVAB_SalesRegionState_ID() > 0 ? combi.GetVAB_SalesRegionState_ID() : 0);
+                if (Get_ColumnIndex("VAB_Project_ID") > 0)
+                    Set_Value("VAB_Project_ID", combi.GetVAB_Project_ID() > 0 ? combi.GetVAB_Project_ID() : 0);
                 if (Get_ColumnIndex("VAB_Promotion_ID") > 0)
                     Set_Value("VAB_Promotion_ID", combi.GetVAB_Promotion_ID() > 0 ? combi.GetVAB_Promotion_ID() : 0);
                 if (Get_ColumnIndex("VAB_BillingCode_ID") > 0)
@@ -721,19 +721,19 @@ namespace VAdvantage.Model
         private Boolean UpdateJournalTotal()
         {
             //	Update Journal Total
-            String sql = "UPDATE GL_Journal j"
+            String sql = "UPDATE VAGL_JRNL j"
                 + " SET (TotalDr, TotalCr) = (SELECT SUM(AmtAcctDr), SUM(AmtAcctCr)" //jz ", "
-                    + " FROM GL_JournalLine jl WHERE jl.IsActive='Y' AND j.GL_Journal_ID=jl.GL_Journal_ID) "
-                + "WHERE GL_Journal_ID=" + GetGL_Journal_ID();
+                    + " FROM VAGL_JRNLLine jl WHERE jl.IsActive='Y' AND j.VAGL_JRNL_ID=jl.VAGL_JRNL_ID) "
+                + "WHERE VAGL_JRNL_ID=" + GetVAGL_JRNL_ID();
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
                 log.Warning("afterSave - Update Journal #" + no);
             }
 
-            // Manish 18/7/2016 .. chk is gl_journalbatch_id there or not.
-            string sqlquery = @"SELECT gl_journalbatch_id FROM gl_journal WHERE gl_journal_id IN
-                                ( SELECT gl_journal_id FROM GL_JournalLine WHERE GL_JournalLine_ID=" + GetGL_JournalLine_ID() + " )";
+            // Manish 18/7/2016 .. chk is VAGL_BatchJRNL_id there or not.
+            string sqlquery = @"SELECT VAGL_BatchJRNL_id FROM VAGL_JRNL WHERE VAGL_JRNL_id IN
+                                ( SELECT VAGL_JRNL_id FROM VAGL_JRNLLine WHERE VAGL_JRNLLine_ID=" + GetVAGL_JRNLLine_ID() + " )";
 
             int nooo = Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sqlquery, null, null));
             if (nooo <= 0)
@@ -742,12 +742,12 @@ namespace VAdvantage.Model
             }
 
             //	Update Batch Total
-            sql = "UPDATE GL_JournalBatch jb"
+            sql = "UPDATE VAGL_BatchJRNL jb"
                 + " SET (TotalDr, TotalCr) = (SELECT SUM(TotalDr), SUM(TotalCr)" //jz hard coded ", "
-                    + " FROM GL_Journal j WHERE jb.GL_JournalBatch_ID=j.GL_JournalBatch_ID) "
-                + "WHERE GL_JournalBatch_ID="
-                    + "(SELECT DISTINCT GL_JournalBatch_ID FROM GL_Journal WHERE GL_Journal_ID="
-                    + GetGL_Journal_ID() + ")";
+                    + " FROM VAGL_JRNL j WHERE jb.VAGL_BatchJRNL_ID=j.VAGL_BatchJRNL_ID) "
+                + "WHERE VAGL_BatchJRNL_ID="
+                    + "(SELECT DISTINCT VAGL_BatchJRNL_ID FROM VAGL_JRNL WHERE VAGL_JRNL_ID="
+                    + GetVAGL_JRNL_ID() + ")";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 1)
             {
@@ -783,14 +783,14 @@ namespace VAdvantage.Model
                 toLine.SetVAB_Promotion_ID(fromLines[i].GetVAB_Promotion_ID());
                 toLine.SetVAB_Acct_Element_ID(fromLines[i].GetVAB_Acct_Element_ID());
                 toLine.SetVAB_Element_ID(fromLines[i].GetVAB_Element_ID());
-                toLine.SetC_Location_ID(fromLines[i].GetC_Location_ID());
-                toLine.SetC_Project_ID(fromLines[i].GetC_Project_ID());
-                toLine.SetC_SalesRegion_ID(fromLines[i].GetC_SalesRegion_ID());
+                toLine.SetVAB_Address_ID(fromLines[i].GetVAB_Address_ID());
+                toLine.SetVAB_Project_ID(fromLines[i].GetVAB_Project_ID());
+                toLine.SetVAB_SalesRegionState_ID(fromLines[i].GetVAB_SalesRegionState_ID());
                 toLine.SetM_Product_ID(fromLines[i].GetM_Product_ID());
                 toLine.SetOrg_ID(fromLines[i].GetOrg_ID());
                 toLine.SetSeqNo(fromLines[i].GetSeqNo());
                 toLine.SetLineType(fromLines[i].GetLineType());
-                toLine.SetGL_JournalLine_ID(newlineID);
+                toLine.SetVAGL_JRNLLine_ID(newlineID);
 
                 if (typeCR == 'C')
                 {
@@ -822,7 +822,7 @@ namespace VAdvantage.Model
         {
             //ArrayList<MJournalLine> list = new ArrayList<MJournalLine>();
             List<MLineDimension> list = new List<MLineDimension>();
-            String sql = "SELECT * FROM GL_LineDimension WHERE GL_JournalLine_ID=@Param1 ORDER BY Line";
+            String sql = "SELECT * FROM VAGL_LineDimension WHERE VAGL_JRNLLine_ID=@Param1 ORDER BY Line";
             //PreparedStatement pstmt = null;
             SqlParameter[] Param = new SqlParameter[1];
             IDataReader idr = null;
@@ -830,8 +830,8 @@ namespace VAdvantage.Model
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                //pstmt.setInt(1, GetGL_JournalLine_ID());
-                Param[0] = new SqlParameter("@Param1", GetGL_JournalLine_ID());
+                //pstmt.setInt(1, GetVAGL_JRNLLine_ID());
+                Param[0] = new SqlParameter("@Param1", GetVAGL_JRNLLine_ID());
 
                 idr = DataBase.DB.ExecuteReader(sql, Param, Get_TrxName());
                 dt = new DataTable();

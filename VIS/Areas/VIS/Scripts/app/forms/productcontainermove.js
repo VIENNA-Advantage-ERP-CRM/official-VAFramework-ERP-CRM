@@ -685,7 +685,7 @@
             grdCols.push({ field: "M_ProductContainer_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_ProductContainer_ID"), hidden: true });
             grdCols.push({ field: "M_PRODUCT_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_PRODUCT_ID"), hidden: true });
             grdCols.push({ field: "M_AttributeSetInstance_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"), size: "15%", hidden: true });
-            grdCols.push({ field: "C_Uom_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_Uom_ID"), size: "15%", hidden: true });
+            grdCols.push({ field: "VAB_UOM_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_UOM_ID"), size: "15%", hidden: true });
             grdCols.push({ field: "M_Transaction_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Transaction_ID"), size: "15%", hidden: true });
 
 
@@ -699,7 +699,7 @@
                 row['M_ProductContainer_ID'] = data[j].M_ProductContainer_ID;
                 row['M_Product_ID'] = data[j].M_Product_ID
                 row['M_AttributeSetInstance_ID'] = data[j].M_AttributeSetInstance_ID;
-                row['C_Uom_ID'] = data[j].C_Uom_ID;
+                row['VAB_UOM_ID'] = data[j].VAB_UOM_ID;
 
                 if (multiselectData.length > 0) {
                     var obj = $.map(multiselectData, function (value) {
@@ -820,7 +820,7 @@
                         moveData.push({
                             M_Product_ID: row.M_Product_ID,
                             M_AttributeSetInstance_ID: row.M_AttributeSetInstance_ID,
-                            C_UOM_ID: row.C_Uom_ID,
+                            VAB_UOM_ID: row.VAB_UOM_ID,
                             FromLocator: parseInt($cmbFromLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
@@ -838,7 +838,7 @@
                         moveData.push({
                             M_Product_ID: 0,
                             M_AttributeSetInstance_ID: 0,
-                            C_UOM_ID: 0,
+                            VAB_UOM_ID: 0,
                             FromLocator: parseInt($cmbFromLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
@@ -900,7 +900,7 @@
                 multiselectData.push({
                     M_Product_ID: row.M_Product_ID,
                     M_AttributeSetInstance_ID: row.M_AttributeSetInstance_ID,
-                    C_UOM_ID: row.C_Uom_ID,
+                    VAB_UOM_ID: row.VAB_UOM_ID,
                     FromLocator: parseInt($cmbFromLocator.val()),
                     ToLocator: parseInt($cmbToLocator.val()),
                     FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),

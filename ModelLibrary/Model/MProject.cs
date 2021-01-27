@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProject : X_C_Project
+    public class MProject : X_VAB_Project
     {
         /**	Cached PL			*/
         private int _M_PriceList_ID = 0;
@@ -32,20 +32,20 @@ namespace VAdvantage.Model
         /**
      * 	Create new Project by copying
      * 	@param ctx context
-     *	@param C_Project_ID project
+     *	@param VAB_Project_ID project
      * 	@param dateDoc date of the document date
      *	@param trxName transaction
      *	@return Project
      */
-        public static MProject CopyFrom(Ctx ctx, int C_Project_ID, DateTime? dateDoc, Trx trxName)
+        public static MProject CopyFrom(Ctx ctx, int VAB_Project_ID, DateTime? dateDoc, Trx trxName)
         {
-            MProject from = new MProject(ctx, C_Project_ID, trxName);
-            if (from.GetC_Project_ID() == 0)
-                throw new ArgumentException("From Project not found C_Project_ID=" + C_Project_ID);
+            MProject from = new MProject(ctx, VAB_Project_ID, trxName);
+            if (from.GetVAB_Project_ID() == 0)
+                throw new ArgumentException("From Project not found VAB_Project_ID=" + VAB_Project_ID);
             //
             MProject to = new MProject(ctx, 0, trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
-            to.Set_ValueNoCheck("C_Project_ID", I_ZERO);
+            to.Set_ValueNoCheck("VAB_Project_ID", I_ZERO);
             //	Set Value with Time
             String Value = to.GetValue() + " ";
             String Time = dateDoc.ToString();
@@ -72,16 +72,16 @@ namespace VAdvantage.Model
         /*****
          * 	Standard Constructor
          *	@param ctx context
-         *	@param C_Project_ID id
+         *	@param VAB_Project_ID id
          *	@param trxName transaction
          */
-        public MProject(Ctx ctx, int C_Project_ID, Trx trxName)
-            : base(ctx, C_Project_ID, trxName)
+        public MProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
+            : base(ctx, VAB_Project_ID, trxName)
         {
 
-            if (C_Project_ID == 0)
+            if (VAB_Project_ID == 0)
             {
-                //	setC_Project_ID(0);
+                //	setVAB_Project_ID(0);
                 //	setValue (null);
                 //	setVAB_Currency_ID (0);
                 SetCommittedAmt(Env.ZERO);
@@ -118,35 +118,35 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Project Type as Int (is Button).
-         *	@return C_ProjectType_ID id
+         *	@return VAB_ProjectType_ID id
          */
-        public int GetC_ProjectType_ID_Int()
+        public int GetVAB_ProjectType_ID_Int()
         {
-            String pj = base.GetC_ProjectType_ID();
+            String pj = base.GetVAB_ProjectType_ID();
             if (pj == null)
                 return 0;
-            int C_ProjectType_ID = 0;
+            int VAB_ProjectType_ID = 0;
             try
             {
-                C_ProjectType_ID = int.Parse(pj);
+                VAB_ProjectType_ID = int.Parse(pj);
             }
             catch (Exception ex)
             {
                log.Log(Level.SEVERE, pj, ex);
             }
-            return C_ProjectType_ID;
+            return VAB_ProjectType_ID;
         }
 
         /**
          * 	Set Project Type (overwrite r/o)
-         *	@param C_ProjectType_ID id
+         *	@param VAB_ProjectType_ID id
          */
-        public void SetC_ProjectType_ID(int C_ProjectType_ID)
+        public void SetVAB_ProjectType_ID(int VAB_ProjectType_ID)
         {
-            if (C_ProjectType_ID == 0)
-                base.Set_Value("C_ProjectType_ID", null);
+            if (VAB_ProjectType_ID == 0)
+                base.Set_Value("VAB_ProjectType_ID", null);
             else
-                base.Set_Value("C_ProjectType_ID", (int)C_ProjectType_ID);
+                base.Set_Value("VAB_ProjectType_ID", (int)VAB_ProjectType_ID);
         }
 
         /**
@@ -195,7 +195,7 @@ namespace VAdvantage.Model
         public MProjectLine[] GetLines()
         {
             List<MProjectLine> list = new List<MProjectLine>();
-            String sql = "SELECT * FROM C_ProjectLine WHERE C_Project_ID=" + GetC_Project_ID() + " ORDER BY Line";
+            String sql = "SELECT * FROM VAB_ProjectLine WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
         public MProjectIssue[] GetIssues()
         {
             List<MProjectIssue> list = new List<MProjectIssue>();
-            String sql = "SELECT * FROM C_ProjectIssue WHERE C_Project_ID=" + GetC_Project_ID() + " ORDER BY Line";
+            String sql = "SELECT * FROM VAB_ProjectSupply WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -278,7 +278,7 @@ namespace VAdvantage.Model
         public MProjectPhase[] GetPhases()
         {
             List<MProjectPhase> list = new List<MProjectPhase>();
-            String sql = "SELECT * FROM C_ProjectPhase WHERE C_Project_ID=" + GetC_Project_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAB_ProjectStage WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY SeqNo";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -344,11 +344,11 @@ namespace VAdvantage.Model
             {
                 MProjectLine line = new MProjectLine(GetCtx(), 0, project.Get_TrxName());
                 PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
-                line.SetC_Project_ID(GetC_Project_ID());
+                line.SetVAB_Project_ID(GetVAB_Project_ID());
                 line.SetInvoicedAmt(Env.ZERO);
                 line.SetInvoicedQty(Env.ZERO);
-                line.SetC_OrderPO_ID(0);
-                line.SetC_Order_ID(0);
+                line.SetVAB_OrderPO_ID(0);
+                line.SetVAB_Order_ID(0);
                 line.SetProcessed(false);
                 if (line.Save())
                     count++;
@@ -379,15 +379,15 @@ namespace VAdvantage.Model
             for (int i = 0; i < fromPhases.Length; i++)
             {
                 //	Check if Phase already exists
-                int C_Phase_ID = fromPhases[i].GetC_Phase_ID();
+                int VAB_Std_Stage_ID = fromPhases[i].GetVAB_Std_Stage_ID();
                 bool exists = false;
-                if (C_Phase_ID == 0)
+                if (VAB_Std_Stage_ID == 0)
                     exists = false;
                 else
                 {
                     for (int ii = 0; ii < myPhases.Length; ii++)
                     {
-                        if (myPhases[ii].GetC_Phase_ID() == C_Phase_ID)
+                        if (myPhases[ii].GetVAB_Std_Stage_ID() == VAB_Std_Stage_ID)
                         {
                             exists = true;
                             break;
@@ -403,8 +403,8 @@ namespace VAdvantage.Model
                 {
                     MProjectPhase toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
                     PO.CopyValues(fromPhases[i], toPhase, GetVAF_Client_ID(), GetVAF_Org_ID());
-                    toPhase.SetC_Project_ID(GetC_Project_ID());
-                    toPhase.SetC_Order_ID(0);
+                    toPhase.SetVAB_Project_ID(GetVAB_Project_ID());
+                    toPhase.SetVAB_Order_ID(0);
                     toPhase.SetIsComplete(false);
                     if (toPhase.Save())
                     {
@@ -430,7 +430,7 @@ namespace VAdvantage.Model
         {
             if (type == null)
                 return;
-            SetC_ProjectType_ID(type.GetC_ProjectType_ID());
+            SetVAB_ProjectType_ID(type.GetVAB_ProjectType_ID());
             SetProjectCategory(type.GetProjectCategory());
             //vikas  Mantis Issue 0000529 5 dec 2014
         //    if (PROJECTCATEGORY_ServiceChargeProject.Equals(GetProjectCategory()))
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -527,15 +527,15 @@ namespace VAdvantage.Model
                                 if (_relatedTo != "" && (_relatedTo == relatedtoProject))
                                 {
                                     _sql.Clear();
-                                    _sql.Append("Select COUNT(*) From C_Project Bp Left Join FRPT_Project_Acct ca On Bp.C_Project_ID=ca.C_Project_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Project_ID = " + GetC_Project_ID());
+                                    _sql.Append("Select COUNT(*) From VAB_Project Bp Left Join FRPT_Project_Acct ca On Bp.VAB_Project_ID=ca.VAB_Project_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.VAB_Project_ID = " + GetVAB_Project_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         project = MTable.GetPO(GetCtx(), "FRPT_Project_Acct", 0, null);
                                         project.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                        project.Set_ValueNoCheck("C_Project_ID", Util.GetValueOfInt(GetC_Project_ID()));
+                                        project.Set_ValueNoCheck("VAB_Project_ID", Util.GetValueOfInt(GetVAB_Project_ID()));
                                         project.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                        project.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                        project.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                         project.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!project.Save())
                                         {
@@ -550,7 +550,7 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-              bool sucs=  Insert_Accounting("C_Project_Acct", "VAB_AccountBook_Default", null);
+              bool sucs=  Insert_Accounting("VAB_Project_Acct", "VAB_AccountBook_Default", null);
               //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
               // Before this, data was being saved but giving message "record not saved".
               if (!sucs)
@@ -563,21 +563,21 @@ namespace VAdvantage.Model
             MProject prjph = null;
             if (success && !newRecord
                 && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                MAccount.UpdateValueDescription(GetCtx(), "C_Project_ID=" + GetC_Project_ID(), Get_TrxName());
+                MAccount.UpdateValueDescription(GetCtx(), "VAB_Project_ID=" + GetVAB_Project_ID(), Get_TrxName());
             if (GetVAB_Promotion_ID() != 0)
             {
                 MCampaign cam = new MCampaign(GetCtx(), GetVAB_Promotion_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_Project pl WHERE pl.IsActive = 'Y' AND pl.VAB_Promotion_ID = " + GetVAB_Promotion_ID()));
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_Project pl WHERE pl.IsActive = 'Y' AND pl.VAB_Promotion_ID = " + GetVAB_Promotion_ID()));
                 cam.SetCosts(plnAmt);
                 cam.Save();
             }
             else
             {                
-                prjph = new MProject(GetCtx(), GetC_Project_ID(), Get_Trx());
+                prjph = new MProject(GetCtx(), GetVAB_Project_ID(), Get_Trx());
                 if (!prjph.IsOpportunity())
                 {
-                    decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0) FROM C_ProjectPhase WHERE IsActive= 'Y' AND C_Project_ID= " + GetC_Project_ID()));
-                    DB.ExecuteQuery("UPDATE C_Project SET PlannedAmt=" + plnAmt + " WHERE C_Project_ID=" + GetC_Project_ID(), null, Get_Trx());
+                    decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0) FROM VAB_ProjectStage WHERE IsActive= 'Y' AND VAB_Project_ID= " + GetVAB_Project_ID()));
+                    DB.ExecuteQuery("UPDATE VAB_Project SET PlannedAmt=" + plnAmt + " WHERE VAB_Project_ID=" + GetVAB_Project_ID(), null, Get_Trx());
                 }
             }
             return success;
@@ -589,7 +589,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeDelete()
         {
-            return Delete_Accounting("C_Project_Acct");
+            return Delete_Accounting("VAB_Project_Acct");
         }
     }
 }

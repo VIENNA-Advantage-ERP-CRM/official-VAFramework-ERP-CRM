@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_LeadQualification
+/** Generated Model for VAB_Lead_Qua
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_LeadQualification : PO
+public class X_VAB_Lead_Qua : PO
 {
-public X_C_LeadQualification (Context ctx, int C_LeadQualification_ID, Trx trxName) : base (ctx, C_LeadQualification_ID, trxName)
+public X_VAB_Lead_Qua (Context ctx, int VAB_Lead_Qua_ID, Trx trxName) : base (ctx, VAB_Lead_Qua_ID, trxName)
 {
-/** if (C_LeadQualification_ID == 0)
+/** if (VAB_Lead_Qua_ID == 0)
 {
-SetC_LeadQualification_ID (0);
+SetVAB_Lead_Qua_ID (0);
 SetIsQualified (false);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_C_LeadQualification (Ctx ctx, int C_LeadQualification_ID, Trx trxName) : base (ctx, C_LeadQualification_ID, trxName)
+public X_VAB_Lead_Qua (Ctx ctx, int VAB_Lead_Qua_ID, Trx trxName) : base (ctx, VAB_Lead_Qua_ID, trxName)
 {
-/** if (C_LeadQualification_ID == 0)
+/** if (VAB_Lead_Qua_ID == 0)
 {
-SetC_LeadQualification_ID (0);
+SetVAB_Lead_Qua_ID (0);
 SetIsQualified (false);
 SetName (null);
 SetValue (null);
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LeadQualification (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Lead_Qua (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_LeadQualification (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LeadQualification (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Lead_Qua (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_LeadQualification (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_C_LeadQualification (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Lead_Qua (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_LeadQualification()
+static X_VAB_Lead_Qua()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389056245L;
 public static int Table_ID;
  // =925;
 
-/** TableName=C_LeadQualification */
-public static String Table_Name="C_LeadQualification";
+/** TableName=VAB_Lead_Qua */
+public static String Table_Name="VAB_Lead_Qua";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,21 +113,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_LeadQualification[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Lead_Qua[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Lead Qualification.
-@param C_LeadQualification_ID Lead Qualification evaluation */
-public void SetC_LeadQualification_ID (int C_LeadQualification_ID)
+@param VAB_Lead_Qua_ID Lead Qualification evaluation */
+public void SetVAB_Lead_Qua_ID (int VAB_Lead_Qua_ID)
 {
-if (C_LeadQualification_ID < 1) throw new ArgumentException ("C_LeadQualification_ID is mandatory.");
-Set_ValueNoCheck ("C_LeadQualification_ID", C_LeadQualification_ID);
+if (VAB_Lead_Qua_ID < 1) throw new ArgumentException ("VAB_Lead_Qua_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Lead_Qua_ID", VAB_Lead_Qua_ID);
 }
 /** Get Lead Qualification.
 @return Lead Qualification evaluation */
-public int GetC_LeadQualification_ID() 
+public int GetVAB_Lead_Qua_ID() 
 {
-Object ii = Get_Value("C_LeadQualification_ID");
+Object ii = Get_Value("VAB_Lead_Qua_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

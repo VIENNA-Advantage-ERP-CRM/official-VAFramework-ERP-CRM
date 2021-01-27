@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_ReportLineSet
+/** Generated Model for VAPA_FR_RowSet
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_ReportLineSet : PO
+public class X_VAPA_FR_RowSet : PO
 {
-public X_PA_ReportLineSet (Context ctx, int PA_ReportLineSet_ID, Trx trxName) : base (ctx, PA_ReportLineSet_ID, trxName)
+public X_VAPA_FR_RowSet (Context ctx, int VAPA_FR_RowSet_ID, Trx trxName) : base (ctx, VAPA_FR_RowSet_ID, trxName)
 {
-/** if (PA_ReportLineSet_ID == 0)
+/** if (VAPA_FR_RowSet_ID == 0)
 {
 SetName (null);
-SetPA_ReportLineSet_ID (0);
+SetVAPA_FR_RowSet_ID (0);
 SetProcessing (false);	// N
 }
  */
 }
-public X_PA_ReportLineSet (Ctx ctx, int PA_ReportLineSet_ID, Trx trxName) : base (ctx, PA_ReportLineSet_ID, trxName)
+public X_VAPA_FR_RowSet (Ctx ctx, int VAPA_FR_RowSet_ID, Trx trxName) : base (ctx, VAPA_FR_RowSet_ID, trxName)
 {
-/** if (PA_ReportLineSet_ID == 0)
+/** if (VAPA_FR_RowSet_ID == 0)
 {
 SetName (null);
-SetPA_ReportLineSet_ID (0);
+SetVAPA_FR_RowSet_ID (0);
 SetProcessing (false);	// N
 }
  */
@@ -41,7 +41,7 @@ SetProcessing (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportLineSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_FR_RowSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_PA_ReportLineSet (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportLineSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_FR_RowSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_PA_ReportLineSet (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ReportLineSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_FR_RowSet (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_ReportLineSet()
+static X_VAPA_FR_RowSet()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065476L;
 public static int Table_ID;
  // =449;
 
-/** TableName=PA_ReportLineSet */
-public static String Table_Name="PA_ReportLineSet";
+/** TableName=VAPA_FR_RowSet */
+public static String Table_Name="VAPA_FR_RowSet";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_ReportLineSet[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_FR_RowSet[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -156,17 +156,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Report Line Set.
-@param PA_ReportLineSet_ID Report Line Set */
-public void SetPA_ReportLineSet_ID (int PA_ReportLineSet_ID)
+@param VAPA_FR_RowSet_ID Report Line Set */
+public void SetVAPA_FR_RowSet_ID (int VAPA_FR_RowSet_ID)
 {
-if (PA_ReportLineSet_ID < 1) throw new ArgumentException ("PA_ReportLineSet_ID is mandatory.");
-Set_ValueNoCheck ("PA_ReportLineSet_ID", PA_ReportLineSet_ID);
+if (VAPA_FR_RowSet_ID < 1) throw new ArgumentException ("VAPA_FR_RowSet_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_FR_RowSet_ID", VAPA_FR_RowSet_ID);
 }
 /** Get Report Line Set.
 @return Report Line Set */
-public int GetPA_ReportLineSet_ID() 
+public int GetVAPA_FR_RowSet_ID() 
 {
-Object ii = Get_Value("PA_ReportLineSet_ID");
+Object ii = Get_Value("VAPA_FR_RowSet_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

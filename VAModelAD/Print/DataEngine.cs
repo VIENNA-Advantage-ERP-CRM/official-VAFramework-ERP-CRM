@@ -444,15 +444,15 @@ namespace VAdvantage.Print
                         //
                         if (VAF_Control_Ref_ID == DisplayType.Location)
                         {
-                            table = "C_Location";
-                            key = "C_Location_ID";
+                            table = "VAB_Address";
+                            key = "VAB_Address_ID";
                             display = "City||'.'";	//	in case City is empty
                             synonym = "Address";
                         }
                         else if (VAF_Control_Ref_ID == DisplayType.Account)
                         {
-                            table = "C_ValidCombination";
-                            key = "C_ValidCombination_ID";
+                            table = "VAB_Acct_ValidParameter";
+                            key = "VAB_Acct_ValidParameter_ID";
                             display = "Combination";
                         }
                         else if (VAF_Control_Ref_ID == DisplayType.Locator)

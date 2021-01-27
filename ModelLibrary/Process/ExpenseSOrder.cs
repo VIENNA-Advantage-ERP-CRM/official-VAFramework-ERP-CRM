@@ -79,7 +79,7 @@ namespace VAdvantage.Process
             StringBuilder sql = new StringBuilder("SELECT * FROM S_TimeExpenseLine el "
                 + "WHERE el.VAF_Client_ID=@param1"                       //	#1
                 + " AND el.VAB_BusinessPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
-                + " AND el.C_OrderLine_ID IS NULL"                  //	not invoiced yet
+                + " AND el.VAB_OrderLine_ID IS NULL"                  //	not invoiced yet
                 + " AND EXISTS (SELECT * FROM S_TimeExpense e "     //	processed only
                     + "WHERE el.S_TimeExpense_ID=e.S_TimeExpense_ID AND e.Processed='Y')");
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
@@ -105,7 +105,7 @@ namespace VAdvantage.Process
 
                 sql.Append(")");
             }
-            sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.C_Project_ID, el.S_TimeExpense_ID, el.Line");
+            sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.VAB_Project_ID, el.S_TimeExpense_ID, el.Line");
 
             //
             MBPartner oldBPartner = null;
@@ -162,10 +162,10 @@ namespace VAdvantage.Process
                             oldBPartner = new MBPartner(GetCtx(), tel.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         }
                         //	New Project - New Order
-                        if (old_Project_ID != tel.GetC_Project_ID())
+                        if (old_Project_ID != tel.GetVAB_Project_ID())
                         {
                             CompleteOrder();
-                            old_Project_ID = tel.GetC_Project_ID();
+                            old_Project_ID = tel.GetVAB_Project_ID();
                         }
                         if (te == null || te.GetS_TimeExpense_ID() != tel.GetS_TimeExpense_ID())
                             te = new MTimeExpense(GetCtx(), tel.GetS_TimeExpense_ID(), Get_TrxName());
@@ -229,7 +229,7 @@ namespace VAdvantage.Process
         {
             if (_order == null)
             {
-                log.Info("New Order for " + bp + ", Project=" + tel.GetC_Project_ID());
+                log.Info("New Order for " + bp + ", Project=" + tel.GetVAB_Project_ID());
                 _order = new MOrder(GetCtx(), 0, Get_TrxName());
                 _order.SetVAF_Org_ID(tel.GetVAF_Org_ID());
                 _order.SetVAB_DocTypesTarget_ID(MOrder.DocSubTypeSO_Standard);
@@ -246,7 +246,7 @@ namespace VAdvantage.Process
                 _order.SetM_Warehouse_ID(te.GetM_Warehouse_ID());
                 //Bhupendra: Add payment term 
                 // to check for if payment term is null
-                if (bp.GetC_PaymentTerm_ID() == 0)
+                if (bp.GetVAB_PaymentTerm_ID() == 0)
                 {
                     // set the default payment method as check
                     int payTerm = GetPaymentTerm();
@@ -257,15 +257,15 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        _order.SetC_PaymentTerm_ID(payTerm);
+                        _order.SetVAB_PaymentTerm_ID(payTerm);
                     }
                 }
                 else
                 {
                     //check weather paymentterm is active or not
-                    if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM C_PaymentTerm WHERE C_PaymentTerm_ID=" + bp.GetC_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
+                    if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAB_PaymentTerm WHERE VAB_PaymentTerm_ID=" + bp.GetVAB_PaymentTerm_ID(), null, Get_Trx())).Equals("Y"))
                     {
-                        _order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        _order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
                     }
                     else
                     {
@@ -314,11 +314,11 @@ namespace VAdvantage.Process
                 {
                     _order.SetVAB_Promotion_ID(tel.GetVAB_Promotion_ID());
                 }
-                if (tel.GetC_Project_ID() != 0)
+                if (tel.GetVAB_Project_ID() != 0)
                 {
-                    _order.SetC_Project_ID(tel.GetC_Project_ID());
+                    _order.SetVAB_Project_ID(tel.GetVAB_Project_ID());
                     //	Optionally Overwrite BP Price list from Project
-                    MProject project = new MProject(GetCtx(), tel.GetC_Project_ID(), Get_TrxName());
+                    MProject project = new MProject(GetCtx(), tel.GetVAB_Project_ID(), Get_TrxName());
                     if (project.GetM_PriceList_ID() != 0)
                     {
                         //check weather the PriceList is active or not
@@ -412,7 +412,7 @@ namespace VAdvantage.Process
             if (tel.GetM_Product_ID() != 0)
             {
                 ol.SetM_Product_ID(tel.GetM_Product_ID(),
-                    tel.GetC_UOM_ID());
+                    tel.GetVAB_UOM_ID());
             }
             if (tel.GetS_ResourceAssignment_ID() != 0)
             {
@@ -428,9 +428,9 @@ namespace VAdvantage.Process
             ol.SetQty(tel.GetQtyInvoiced());        //	
             ol.SetDescription(tel.GetDescription());
             //
-            ol.SetC_Project_ID(tel.GetC_Project_ID());
-            ol.SetC_ProjectPhase_ID(tel.GetC_ProjectPhase_ID());
-            ol.SetC_ProjectTask_ID(tel.GetC_ProjectTask_ID());
+            ol.SetVAB_Project_ID(tel.GetVAB_Project_ID());
+            ol.SetVAB_ProjectStage_ID(tel.GetVAB_ProjectStage_ID());
+            ol.SetVAB_ProjectJob_ID(tel.GetVAB_ProjectJob_ID());
             ol.SetVAB_BillingCode_ID(tel.GetVAB_BillingCode_ID());
             ol.SetVAB_Promotion_ID(tel.GetVAB_Promotion_ID());
             //
@@ -449,9 +449,9 @@ namespace VAdvantage.Process
             {
                 ol.SetPrice();
             }
-            if (tel.GetC_UOM_ID() != 0 && ol.GetC_UOM_ID() == 0)
+            if (tel.GetVAB_UOM_ID() != 0 && ol.GetVAB_UOM_ID() == 0)
             {
-                ol.SetC_UOM_ID(tel.GetC_UOM_ID());
+                ol.SetVAB_UOM_ID(tel.GetVAB_UOM_ID());
             }
             ol.SetTax();
             if (!ol.Save())
@@ -477,14 +477,14 @@ namespace VAdvantage.Process
                 //throw new Exception("Cannot save Order Line");
             }
             //	Update TimeExpense Line
-            tel.SetC_OrderLine_ID(ol.GetC_OrderLine_ID());
+            tel.SetVAB_OrderLine_ID(ol.GetVAB_OrderLine_ID());
             if (tel.Save())
             {
-                log.Fine("Updated " + tel + " with C_OrderLine_ID");
+                log.Fine("Updated " + tel + " with VAB_OrderLine_ID");
             }
             else
             {
-                log.Log(Level.SEVERE, "Not Updated " + tel + " with C_OrderLine_ID");
+                log.Log(Level.SEVERE, "Not Updated " + tel + " with VAB_OrderLine_ID");
             }
 
         }   //	processLine
@@ -528,7 +528,7 @@ namespace VAdvantage.Process
         /// <returns> returns payment term ID</returns>
         public int GetPaymentTerm(){
             //added IsActive condition to check weather the term is active or not
-            string sql = "SELECT C_PaymentTerm_ID FROM C_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Org_ID IN(@param1,0) AND IsActive='Y' AND VAF_Client_ID=" + tel.GetVAF_Client_ID() + " ORDER BY VAF_ORG_ID DESC, C_PaymentTerm_ID DESC";
+            string sql = "SELECT VAB_PaymentTerm_ID FROM VAB_PaymentTerm WHERE ISDEFAULT='Y' AND VAF_Org_ID IN(@param1,0) AND IsActive='Y' AND VAF_Client_ID=" + tel.GetVAF_Client_ID() + " ORDER BY VAF_ORG_ID DESC, VAB_PaymentTerm_ID DESC";
             SqlParameter[] param = new SqlParameter[1];
             param[0] = new SqlParameter("@param1", tel.GetVAF_Org_ID());
             dynamic pri= DataBase.DB.ExecuteScalar(sql,param, Get_TrxName());

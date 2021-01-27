@@ -43,7 +43,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //BPartner Group			
         private int _VAB_BPart_Category_ID = 0;
         //Payment Selection		
-        private int _C_PaySelection_ID = 0;
+        private int _VAB_PaymentOption_ID = 0;
         //Document No From		   
         private String _DocumentNo_From = null;
         //Document No To			
@@ -100,7 +100,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_PaySelection_ID = GetRecord_ID();
+            _VAB_PaymentOption_ID = GetRecord_ID();
             if (_DocumentNo_From != null && _DocumentNo_From.Length == 0)
             {
                 _DocumentNo_From = null;
@@ -120,18 +120,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int count = 0;
             
 
-            log.Info("C_PaySelection_ID=" + _C_PaySelection_ID
+            log.Info("VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID
                 + ", OnlyDiscount=" + _OnlyDiscount + ", OnlyDue=" + _OnlyDue
                 + ", IncludeInDispute=" + _IncludeInDispute
                 + ", MatchRequirement=" + _MatchRequirementI
                 + ", PaymentRule=" + _PaymentRule
                 + ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
 
-            MPaySelection psel = new MPaySelection(GetCtx(), _C_PaySelection_ID, Get_TrxName());
+            MPaySelection psel = new MPaySelection(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
             int VAB_CurrencyTo_ID = psel.GetVAB_Currency_ID();
             if (psel.Get_ID() == 0)
             {
-                throw new ArgumentException("Not found C_PaySelection_ID=" + _C_PaySelection_ID);
+                throw new ArgumentException("Not found VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID);
             }
             if (psel.IsProcessed())
             {
@@ -144,7 +144,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " currencyConvert(invoiceOpen(i.VAB_Invoice_ID, 0)"
                     + ",i.VAB_Currency_ID, " + VAB_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ", i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##1/2 Currency_To,PayDate
                 //	Discount
-                + " currencyConvert(paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.C_PaymentTerm_ID,i.DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ")"	//	##3 PayDate
+                + " currencyConvert(paymentTermDiscount(i.GrandTotal,i.VAB_Currency_ID,i.VAB_PaymentTerm_ID,i.DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ")"	//	##3 PayDate
                     + ",i.VAB_Currency_ID," + VAB_CurrencyTo_ID + "," + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ",i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID),"	//	##4/5 Currency_To,PayDate
                 + " PaymentRule, IsSOTrx "		//	4..6
                 + "FROM VAB_Invoice i "
@@ -160,9 +160,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql+=" AND IsPaid='N' AND DocStatus IN ('CO','CL')" // ##6
                 + " AND VAF_Client_ID=" + psel.GetVAF_Client_ID()				//	##7
                 //	Existing Payments - Will reselect Invoice if prepared but not paid 
-                + " AND NOT EXISTS (SELECT * FROM C_PaySelectionLine psl "
+                + " AND NOT EXISTS (SELECT * FROM VAB_PaymentOptionLine psl "
                     + "WHERE i.VAB_Invoice_ID=psl.VAB_Invoice_ID AND psl.IsActive='Y'"
-                    + " AND psl.C_PaySelectionCheck_ID IS NOT NULL)";
+                    + " AND psl.VAB_PaymentOptionCheck_ID IS NOT NULL)";
             count = 7;
             //	Disputed
             if (!_IncludeInDispute)
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     sql += " AND ";
                 }
-                sql += "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0), VAB_Currency_ID, C_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") > 0";	//	##
+                sql += "paymentTermDiscount(invoiceOpen(VAB_Invoice_ID, 0), VAB_Currency_ID, VAB_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") > 0";	//	##
                 count += 1;
             }
             //	OnlyDue
@@ -200,7 +200,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     sql += " AND ";
                 }
-                sql += "paymentTermDueDays(C_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") >= 0";	//	##
+                sql += "paymentTermDueDays(VAB_PaymentTerm_ID, DateInvoiced, " + DataBase.DB.TO_DATE(psel.GetPayDate(), true) + ") >= 0";	//	##
                 count += 1;
                 if (_OnlyDiscount)
                 {
@@ -310,7 +310,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            return "@C_PaySelectionLine_ID@  - #" + lines;
+            return "@VAB_PaymentOptionLine_ID@  - #" + lines;
         }
     }
 }

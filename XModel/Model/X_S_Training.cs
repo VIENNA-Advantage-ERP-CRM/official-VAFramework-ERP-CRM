@@ -20,8 +20,8 @@ public X_S_Training (Context ctx, int S_Training_ID, Trx trxName) : base (ctx, S
 {
 /** if (S_Training_ID == 0)
 {
-SetC_TaxCategory_ID (0);
-SetC_UOM_ID (0);
+SetVAB_TaxCategory_ID (0);
+SetVAB_UOM_ID (0);
 SetM_Product_Category_ID (0);
 SetName (null);
 SetS_Training_ID (0);
@@ -32,8 +32,8 @@ public X_S_Training (Ctx ctx, int S_Training_ID, Trx trxName) : base (ctx, S_Tra
 {
 /** if (S_Training_ID == 0)
 {
-SetC_TaxCategory_ID (0);
-SetC_UOM_ID (0);
+SetVAB_TaxCategory_ID (0);
+SetVAB_UOM_ID (0);
 SetM_Product_Category_ID (0);
 SetName (null);
 SetS_Training_ID (0);
@@ -119,32 +119,32 @@ StringBuilder sb = new StringBuilder ("X_S_Training[").Append(Get_ID()).Append("
 return sb.ToString();
 }
 /** Set Tax Category.
-@param C_TaxCategory_ID Tax Category */
-public void SetC_TaxCategory_ID (int C_TaxCategory_ID)
+@param VAB_TaxCategory_ID Tax Category */
+public void SetVAB_TaxCategory_ID (int VAB_TaxCategory_ID)
 {
-if (C_TaxCategory_ID < 1) throw new ArgumentException ("C_TaxCategory_ID is mandatory.");
-Set_Value ("C_TaxCategory_ID", C_TaxCategory_ID);
+if (VAB_TaxCategory_ID < 1) throw new ArgumentException ("VAB_TaxCategory_ID is mandatory.");
+Set_Value ("VAB_TaxCategory_ID", VAB_TaxCategory_ID);
 }
 /** Get Tax Category.
 @return Tax Category */
-public int GetC_TaxCategory_ID() 
+public int GetVAB_TaxCategory_ID() 
 {
-Object ii = Get_Value("C_TaxCategory_ID");
+Object ii = Get_Value("VAB_TaxCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID < 1) throw new ArgumentException ("C_UOM_ID is mandatory.");
-Set_Value ("C_UOM_ID", C_UOM_ID);
+if (VAB_UOM_ID < 1) throw new ArgumentException ("VAB_UOM_ID is mandatory.");
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

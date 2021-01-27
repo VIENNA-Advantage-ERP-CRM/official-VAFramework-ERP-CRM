@@ -9,14 +9,14 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_Payment
+    using System.Data;/** Generated Model for VAB_Payment
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Payment : PO
+    public class X_VAB_Payment : PO
     {
-        public X_C_Payment(Context ctx, int C_Payment_ID, Trx trxName)
-            : base(ctx, C_Payment_ID, trxName)
-        {/** if (C_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
+        public X_VAB_Payment(Context ctx, int VAB_Payment_ID, Trx trxName)
+            : base(ctx, VAB_Payment_ID, trxName)
+        {/** if (VAB_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetVAB_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
 SetDateTrx (DateTime.Now);// @#Date@
 SetDocAction (null);// CO
 SetDocStatus (null);// DR
@@ -30,9 +30,9 @@ SetTenderType (null);// K
 SetTrxType (null);// S
 } */
         }
-        public X_C_Payment(Ctx ctx, int C_Payment_ID, Trx trxName)
-            : base(ctx, C_Payment_ID, trxName)
-        {/** if (C_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetC_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
+        public X_VAB_Payment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
+            : base(ctx, VAB_Payment_ID, trxName)
+        {/** if (VAB_Payment_ID == 0){SetVAB_Bank_Acct_ID (0);SetVAB_Currency_ID (0);SetVAB_DocTypes_ID (0);SetVAB_Payment_ID (0);SetDateAcct (DateTime.Now);// @#Date@
 SetDateTrx (DateTime.Now);// @#Date@
 SetDocAction (null);// CO
 SetDocStatus (null);// DR
@@ -50,25 +50,25 @@ SetTrxType (null);// S
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Payment(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Payment(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Payment(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_Payment(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Payment(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_Payment(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_Payment() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_Payment() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27745609833465L;/** Last Updated Timestamp 5/17/2016 4:58:36 PM */
         public static long updatedMS = 1463484516676L;/** VAF_TableView_ID=335 */
         public static int Table_ID; // =335;
-        /** TableName=C_Payment */
-        public static String Table_Name = "C_Payment";
+        /** TableName=VAB_Payment */
+        public static String Table_Name = "VAB_Payment";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -83,7 +83,7 @@ SetTrxType (null);// S
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_Payment[").Append(Get_ID()).Append("]"); return sb.ToString(); }
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_Payment[").Append(Get_ID()).Append("]"); return sb.ToString(); }
         /** VAF_OrgTrx_ID VAF_Control_Ref_ID=130 */
         public static int VAF_ORGTRX_ID_VAF_Control_Ref_ID = 130;/** Set Trx Organization.
 @param VAF_OrgTrx_ID Performing or initiating organization */
@@ -219,57 +219,57 @@ SetTrxType (null);// S
         }/** Get Invoice.
 @return Invoice Identifier */
         public int GetVAB_Invoice_ID() { Object ii = Get_Value("VAB_Invoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
-@param C_Order_ID Sales Order */
-        public void SetC_Order_ID(int C_Order_ID)
+@param VAB_Order_ID Sales Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
             else
-                Set_Value("C_Order_ID", C_Order_ID);
+                Set_Value("VAB_Order_ID", VAB_Order_ID);
         }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment Batch.
-@param C_PaymentBatch_ID Payment batch for EFT */
-        public void SetC_PaymentBatch_ID(int C_PaymentBatch_ID)
+        public int GetVAB_Order_ID() { Object ii = Get_Value("VAB_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment Batch.
+@param VAB_PaymentBatch_ID Payment batch for EFT */
+        public void SetVAB_PaymentBatch_ID(int VAB_PaymentBatch_ID)
         {
-            if (C_PaymentBatch_ID <= 0) Set_Value("C_PaymentBatch_ID", null);
+            if (VAB_PaymentBatch_ID <= 0) Set_Value("VAB_PaymentBatch_ID", null);
             else
-                Set_Value("C_PaymentBatch_ID", C_PaymentBatch_ID);
+                Set_Value("VAB_PaymentBatch_ID", VAB_PaymentBatch_ID);
         }/** Get Payment Batch.
 @return Payment batch for EFT */
-        public int GetC_PaymentBatch_ID() { Object ii = Get_Value("C_PaymentBatch_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
-@param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID) { if (C_Payment_ID < 1) throw new ArgumentException("C_Payment_ID is mandatory."); Set_ValueNoCheck("C_Payment_ID", C_Payment_ID); }/** Get Payment.
+        public int GetVAB_PaymentBatch_ID() { Object ii = Get_Value("VAB_PaymentBatch_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Payment.
+@param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID) { if (VAB_Payment_ID < 1) throw new ArgumentException("VAB_Payment_ID is mandatory."); Set_ValueNoCheck("VAB_Payment_ID", VAB_Payment_ID); }/** Get Payment.
 @return Payment identifier */
-        public int GetC_Payment_ID() { Object ii = Get_Value("C_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** C_ProjectRef_ID VAF_Control_Ref_ID=1000329 */
-        public static int C_PROJECTREF_ID_VAF_Control_Ref_ID = 1000329;/** Set Project.
-@param C_ProjectRef_ID Project */
-        public void SetC_ProjectRef_ID(int C_ProjectRef_ID)
+        public int GetVAB_Payment_ID() { Object ii = Get_Value("VAB_Payment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        /** VAB_ProjectRef_ID VAF_Control_Ref_ID=1000329 */
+        public static int VAB_PROJECTREF_ID_VAF_Control_Ref_ID = 1000329;/** Set Project.
+@param VAB_ProjectRef_ID Project */
+        public void SetVAB_ProjectRef_ID(int VAB_ProjectRef_ID)
         {
-            if (C_ProjectRef_ID <= 0) Set_Value("C_ProjectRef_ID", null);
+            if (VAB_ProjectRef_ID <= 0) Set_Value("VAB_ProjectRef_ID", null);
             else
-                Set_Value("C_ProjectRef_ID", C_ProjectRef_ID);
+                Set_Value("VAB_ProjectRef_ID", VAB_ProjectRef_ID);
         }/** Get Project.
 @return Project */
-        public int GetC_ProjectRef_ID() { Object ii = Get_Value("C_ProjectRef_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-        public void SetC_Project_ID(int C_Project_ID)
+        public int GetVAB_ProjectRef_ID() { Object ii = Get_Value("VAB_ProjectRef_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }/** Get Opportunity.
 @return Business Opportunity */
-        public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Tax Rate.
-@param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        public int GetVAB_Project_ID() { Object ii = Get_Value("VAB_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Tax Rate.
+@param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID <= 0) Set_Value("C_Tax_ID", null);
+            if (VAB_TaxRate_ID <= 0) Set_Value("VAB_TaxRate_ID", null);
             else
-                Set_Value("C_Tax_ID", C_Tax_ID);
+                Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }/** Get Tax Rate.
         @return Tax identifier */
-        public int GetC_Tax_ID() { Object ii = Get_Value("C_Tax_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_TaxRate_ID() { Object ii = Get_Value("VAB_TaxRate_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         //** Set Trxno
         //@param CreditCardExpYY Expiry Year */
         public void SetTrxNo(String TrxNo)
@@ -1001,18 +1001,18 @@ SetTrxType (null);// S
         /// <summary>
         /// Set Withholding Tax.
         /// </summary>
-        /// <param name="C_Withholding_ID">Withholding type defined</param>
-        public void SetC_Withholding_ID(int C_Withholding_ID)
+        /// <param name="VAB_Withholding_ID">Withholding type defined</param>
+        public void SetVAB_Withholding_ID(int VAB_Withholding_ID)
         {
-            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            if (VAB_Withholding_ID <= 0) Set_Value("VAB_Withholding_ID", null);
             else
-                Set_Value("C_Withholding_ID", C_Withholding_ID);
+                Set_Value("VAB_Withholding_ID", VAB_Withholding_ID);
         }
         /// <summary>
         /// Get Withholding Tax.
         /// </summary>
         /// <returns>Withholding type defined</returns>
-        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Withholding_ID() { Object ii = Get_Value("VAB_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /// <summary>
         /// Set Withholding Amt.

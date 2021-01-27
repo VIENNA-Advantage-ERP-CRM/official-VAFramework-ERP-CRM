@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MLocation
  * Purpose        : Location (Address)
- * Class Used     :  X_C_Location, IComparer<PO>
+ * Class Used     :  X_VAB_Address, IComparer<PO>
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -26,13 +26,13 @@ using System.Web;
 
 namespace VAdvantage.Model
 {
-    public class MLocation : X_C_Location, IEquatable<Object> //Comparator<PO>
+    public class MLocation : X_VAB_Address, IEquatable<Object> //Comparator<PO>
     {
 
 
         #region Private Variable
         //	Cache						
-        private static CCache<int, MLocation> s_cache = new CCache<int, MLocation>("C_Location", 100, 30);
+        private static CCache<int, MLocation> s_cache = new CCache<int, MLocation>("VAB_Address", 100, 30);
         private MCountry _country = null;
         private MRegion _region = null;
         //	Static Logger				
@@ -43,20 +43,20 @@ namespace VAdvantage.Model
         /// Get Location from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Location_ID">id</param>
+        /// <param name="VAB_Address_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>MLocation</returns>
-        public static MLocation Get(Ctx ctx, int C_Location_ID, Trx trxName)
+        public static MLocation Get(Ctx ctx, int VAB_Address_ID, Trx trxName)
         {
             //	New
-            if (C_Location_ID == 0)
-                return new MLocation(ctx, C_Location_ID, trxName);
+            if (VAB_Address_ID == 0)
+                return new MLocation(ctx, VAB_Address_ID, trxName);
             //
-            int key = (int)C_Location_ID;
+            int key = (int)VAB_Address_ID;
             MLocation retValue = (MLocation)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MLocation(ctx, C_Location_ID, trxName);
+            retValue = new MLocation(ctx, VAB_Address_ID, trxName);
             if (retValue.Get_ID() != 0)		//	found
             {
                 s_cache.Add(key, retValue);
@@ -78,8 +78,8 @@ namespace VAdvantage.Model
                 return null;
 
             MLocation loc = null;
-            String sql = "SELECT * FROM C_Location l "
-                + "WHERE C_Location_ID IN (SELECT C_Location_ID FROM VAB_BPart_Location WHERE VAB_BPart_Location_ID=" + VAB_BPart_Location_ID + ")";
+            String sql = "SELECT * FROM VAB_Address l "
+                + "WHERE VAB_Address_ID IN (SELECT VAB_Address_ID FROM VAB_BPart_Location WHERE VAB_BPart_Location_ID=" + VAB_BPart_Location_ID + ")";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -101,12 +101,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Location_ID">id</param>
+        /// <param name="VAB_Address_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, int C_Location_ID, Trx trxName)
-            : base(ctx, C_Location_ID, trxName)
+        public MLocation(Ctx ctx, int VAB_Address_ID, Trx trxName)
+            : base(ctx, VAB_Address_ID, trxName)
         {
-            if (C_Location_ID == 0)
+            if (VAB_Address_ID == 0)
             {
                 MCountry defaultCountry = MCountry.GetDefault(GetCtx());
                 SetCountry(defaultCountry);
@@ -134,16 +134,16 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAB_Country_ID">country</param>
-        /// <param name="C_Region_ID">region</param>
+        /// <param name="VAB_RegionState_ID">region</param>
         /// <param name="city">city</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, int VAB_Country_ID, int C_Region_ID, String city, Trx trxName)
+        public MLocation(Ctx ctx, int VAB_Country_ID, int VAB_RegionState_ID, String city, Trx trxName)
             : this(ctx, 0, trxName)
         {
             if (VAB_Country_ID != 0)
                 SetVAB_Country_ID(VAB_Country_ID);
-            if (C_Region_ID != 0)
-                SetC_Region_ID(C_Region_ID);
+            if (VAB_RegionState_ID != 0)
+                SetVAB_RegionState_ID(VAB_RegionState_ID);
             SetCity(city);
         }
 
@@ -233,10 +233,10 @@ namespace VAdvantage.Model
         {
             _region = region;
             if (region == null)
-                base.SetC_Region_ID(0);
+                base.SetVAB_RegionState_ID(0);
             else
             {
-                base.SetC_Region_ID(_region.GetC_Region_ID());
+                base.SetVAB_RegionState_ID(_region.GetVAB_RegionState_ID());
                 if (_region.GetVAB_Country_ID() != GetVAB_Country_ID())
                 {
                     log.Info("Region(" + region + ") VAB_Country_ID=" + region.GetVAB_Country_ID()
@@ -247,24 +247,24 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set C_Region_ID
-         *	@param C_Region_ID region
+         * 	Set VAB_RegionState_ID
+         *	@param VAB_RegionState_ID region
          */
-        public new void SetC_Region_ID(int C_Region_ID)
+        public new void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID == 0)
+            if (VAB_RegionState_ID == 0)
                 SetRegion(null);
             //	Country defined
             else if (GetVAB_Country_ID() != 0)
             {
                 MCountry cc = GetCountry();
-                if (cc.IsValidRegion(C_Region_ID))
-                    base.SetC_Region_ID(C_Region_ID);
+                if (cc.IsValidRegion(VAB_RegionState_ID))
+                    base.SetVAB_RegionState_ID(VAB_RegionState_ID);
                 else
                     SetRegion(null);
             }
             else
-                SetRegion(MRegion.Get(GetCtx(), C_Region_ID));
+                SetRegion(MRegion.Get(GetCtx(), VAB_RegionState_ID));
         }
 
         /**
@@ -273,8 +273,8 @@ namespace VAdvantage.Model
          */
         public MRegion GetRegion()
         {
-            if (_region == null && GetC_Region_ID() != 0)
-                _region = MRegion.Get(GetCtx(), GetC_Region_ID());
+            if (_region == null && GetVAB_RegionState_ID() != 0)
+                _region = MRegion.Get(GetCtx(), GetVAB_RegionState_ID());
             return _region;
         }
 
@@ -310,7 +310,7 @@ namespace VAdvantage.Model
         /**
          * 	Compares to current record
          *	@param VAB_Country_ID if 0 ignored
-         *	@param C_Region_ID if 0 ignored
+         *	@param VAB_RegionState_ID if 0 ignored
          *	@param Postal match postal
          *	@param Postal_Add match postal add
          *	@param City match city
@@ -318,12 +318,12 @@ namespace VAdvantage.Model
          *	@param Address2 match addtess 2
          *	@return true if equals
          */
-        public bool Equals(int VAB_Country_ID, int C_Region_ID,
+        public bool Equals(int VAB_Country_ID, int VAB_RegionState_ID,
             String Postal, String Postal_Add, String City, String Address1, String Address2)
         {
             if (VAB_Country_ID != 0 && GetVAB_Country_ID() != VAB_Country_ID)
                 return false;
-            if (C_Region_ID != 0 && GetC_Region_ID() != C_Region_ID)
+            if (VAB_RegionState_ID != 0 && GetVAB_RegionState_ID() != VAB_RegionState_ID)
                 return false;
             //	must match
             if (!EqualsNull(Postal, GetPostal()))
@@ -572,7 +572,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MLocation=[");
             sb.Append(Get_ID())
                 .Append(",VAB_Country_ID=").Append(GetVAB_Country_ID())
-                .Append(",C_Region_ID=").Append(GetC_Region_ID())
+                .Append(",VAB_RegionState_ID=").Append(GetVAB_RegionState_ID())
                 .Append(",Postal=").Append(GetPostal())
                 .Append("]");
             return sb.ToString();
@@ -588,12 +588,12 @@ namespace VAdvantage.Model
             if (GetVAF_Org_ID() != 0)
                 SetVAF_Org_ID(0);
             //	Region Check
-            if (GetC_Region_ID() != 0)
+            if (GetVAB_RegionState_ID() != 0)
             {
                 if (_country == null || _country.GetVAB_Country_ID() != GetVAB_Country_ID())
                     GetCountry();
                 if (!_country.IsHasRegion())
-                    SetC_Region_ID(0);
+                    SetVAB_RegionState_ID(0);
             }
 
             var LngLat = GetLongitudeAndLatitude(ToString(), "false");
@@ -644,8 +644,8 @@ namespace VAdvantage.Model
                 )
             {
                 MAccount.UpdateValueDescription(GetCtx(),
-                    "(C_LocFrom_ID=" + GetC_Location_ID()
-                    + " OR C_LocTo_ID=" + GetC_Location_ID() + ")", Get_TrxName());
+                    "(C_LocFrom_ID=" + GetVAB_Address_ID()
+                    + " OR C_LocTo_ID=" + GetVAB_Address_ID() + ")", Get_TrxName());
             }
             return success;
         }

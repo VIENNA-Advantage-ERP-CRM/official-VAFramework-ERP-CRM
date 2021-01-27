@@ -148,7 +148,7 @@ namespace VAdvantage.Process
         /// <returns>TRUE/FALSE</returns>
         private bool VerifyDocumentStatus()
         {
-            //int no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_Order_ID) FROM C_Order WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
+            //int no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAB_Order_ID) FROM VAB_Order WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
             //if (no > 0)
             //{
             //    return false;

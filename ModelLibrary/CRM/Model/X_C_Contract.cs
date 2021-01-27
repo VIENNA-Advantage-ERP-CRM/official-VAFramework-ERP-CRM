@@ -25,9 +25,9 @@ namespace VAdvantage.Model
             SetVAB_Contract_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_Frequency_ID (0);
-            SetC_PaymentTerm_ID (0);
-            SetC_Tax_ID (0);
-            SetC_UOM_ID (0);	// @#C_UOM_ID@
+            SetVAB_PaymentTerm_ID (0);
+            SetVAB_TaxRate_ID (0);
+            SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetEndDate (DateTime.Now);
@@ -52,9 +52,9 @@ namespace VAdvantage.Model
             SetVAB_Contract_ID (0);
             SetVAB_Currency_ID (0);	// @VAB_Currency_ID@
             SetVAB_Frequency_ID (0);
-            SetC_PaymentTerm_ID (0);
-            SetC_Tax_ID (0);
-            SetC_UOM_ID (0);	// @#C_UOM_ID@
+            SetVAB_PaymentTerm_ID (0);
+            SetVAB_TaxRate_ID (0);
+            SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetEndDate (DateTime.Now);
@@ -301,65 +301,65 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Order Line.
-        @param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+        @param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_Value("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_Value("VAB_OrderLine_ID", null);
             else
-                Set_Value("C_OrderLine_ID", C_OrderLine_ID);
+                Set_Value("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }
         /** Get Order Line.
         @return Order Line */
-        public int GetC_OrderLine_ID()
+        public int GetVAB_OrderLine_ID()
         {
-            Object ii = Get_Value("C_OrderLine_ID");
+            Object ii = Get_Value("VAB_OrderLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Order.
-        @param C_Order_ID Order */
-        public void SetC_Order_ID(int C_Order_ID)
+        @param VAB_Order_ID Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
             else
-                Set_Value("C_Order_ID", C_Order_ID);
+                Set_Value("VAB_Order_ID", VAB_Order_ID);
         }
         /** Get Order.
         @return Order */
-        public int GetC_Order_ID()
+        public int GetVAB_Order_ID()
         {
-            Object ii = Get_Value("C_Order_ID");
+            Object ii = Get_Value("VAB_Order_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID < 1) throw new ArgumentException("C_PaymentTerm_ID is mandatory.");
-            Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+            if (VAB_PaymentTerm_ID < 1) throw new ArgumentException("VAB_PaymentTerm_ID is mandatory.");
+            Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Opporutnity.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Opporutnity.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -380,32 +380,32 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tax.
-        @param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        @param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID < 1) throw new ArgumentException("C_Tax_ID is mandatory.");
-            Set_Value("C_Tax_ID", C_Tax_ID);
+            if (VAB_TaxRate_ID < 1) throw new ArgumentException("VAB_TaxRate_ID is mandatory.");
+            Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }
         /** Get Tax.
         @return Tax identifier */
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            Object ii = Get_Value("C_Tax_ID");
+            Object ii = Get_Value("VAB_TaxRate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID < 1) throw new ArgumentException("C_UOM_ID is mandatory.");
-            Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
+            if (VAB_UOM_ID < 1) throw new ArgumentException("VAB_UOM_ID is mandatory.");
+            Set_ValueNoCheck("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

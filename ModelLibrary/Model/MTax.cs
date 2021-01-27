@@ -23,13 +23,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MTax : X_C_Tax
+    public class MTax : X_VAB_TaxRate
     {
         #region Private Variables
         //	Cache			
-        private static CCache<int, MTax> _cache = new CCache<int, MTax>("C_Tax", 5);
+        private static CCache<int, MTax> _cache = new CCache<int, MTax>("VAB_TaxRate", 5);
         //	Cache of Client	
-        private static CCache<int, MTax[]> _cacheAll = new CCache<int, MTax[]>("C_Tax", 5);
+        private static CCache<int, MTax[]> _cacheAll = new CCache<int, MTax[]>("VAB_TaxRate", 5);
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MTax).FullName);
         //	100				
@@ -55,8 +55,8 @@ namespace VAdvantage.Model
                 return retValue;
 
             //	Create it
-            String sql = "SELECT * FROM C_Tax WHERE VAF_Client_ID=@VAF_Client_ID"
-                + " ORDER BY VAB_Country_ID, C_Region_ID, To_Country_ID, To_Region_ID";
+            String sql = "SELECT * FROM VAB_TaxRate WHERE VAF_Client_ID=@VAF_Client_ID"
+                + " ORDER BY VAB_Country_ID, VAB_RegionState_ID, To_Country_ID, To_Region_ID";
             List<MTax> list = new List<MTax>();
             //PreparedStatement pstmt = null;
             DataSet ds;
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MTax tax = new MTax(ctx, dr, null);
-                    _cache.Add(tax.GetC_Tax_ID(), tax);
+                    _cache.Add(tax.GetVAB_TaxRate_ID(), tax);
                     list.Add(tax);
                 }
                 ds = null;
@@ -98,15 +98,15 @@ namespace VAdvantage.Model
         /// Get Tax from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Tax_ID">id</param>
+        /// <param name="VAB_TaxRate_ID">id</param>
         /// <returns>MTax</returns>
-        public static MTax Get(Ctx ctx, int C_Tax_ID)
+        public static MTax Get(Ctx ctx, int VAB_TaxRate_ID)
         {
-            int key = C_Tax_ID;
+            int key = VAB_TaxRate_ID;
             MTax retValue = (MTax)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MTax(ctx, C_Tax_ID, null);
+            retValue = new MTax(ctx, VAB_TaxRate_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -116,15 +116,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Tax_ID">id</param>
+        /// <param name="VAB_TaxRate_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MTax(Ctx ctx, int C_Tax_ID, Trx trxName) :
-            base(ctx, C_Tax_ID, trxName)
+        public MTax(Ctx ctx, int VAB_TaxRate_ID, Trx trxName) :
+            base(ctx, VAB_TaxRate_ID, trxName)
         {
 
-            if (C_Tax_ID == 0)
+            if (VAB_TaxRate_ID == 0)
             {
-                //	setC_Tax_ID (0);		PK
+                //	setVAB_TaxRate_ID (0);		PK
                 SetIsDefault(false);
                 SetIsDocumentLevel(true);
                 SetIsSummary(false);
@@ -132,7 +132,7 @@ namespace VAdvantage.Model
                 //	setName (null);
                 SetRate(Env.ZERO);
                 SetRequiresTaxCertificate(false);
-                //	setC_TaxCategory_ID (0);	//	FK
+                //	setVAB_TaxCategory_ID (0);	//	FK
                 SetSOPOType(SOPOTYPE_Both);
                 SetValidFrom(TimeUtil.GetDay(1990, 1, 1));
                 SetIsSalesTax(false);
@@ -157,15 +157,15 @@ namespace VAdvantage.Model
         /// <param name="ctx">ctx</param>
         /// <param name="Name">Name</param>
         /// <param name="Rate"></param>
-        /// <param name="C_TaxCategory_ID"></param>
+        /// <param name="VAB_TaxCategory_ID"></param>
         /// <param name="trxName">transaction</param>
-        public MTax(Ctx ctx, String Name, Decimal Rate, int C_TaxCategory_ID, Trx trxName)
+        public MTax(Ctx ctx, String Name, Decimal Rate, int VAB_TaxCategory_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
 
             SetName(Name);
             SetRate(Rate);
-            SetC_TaxCategory_ID(C_TaxCategory_ID);	//	FK
+            SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);	//	FK
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
             if (_childTaxes != null && !requery)
                 return _childTaxes;
             //
-            String sql = "SELECT * FROM C_Tax WHERE Parent_Tax_ID=" + GetC_Tax_ID();
+            String sql = "SELECT * FROM VAB_TaxRate WHERE Parent_Tax_ID=" + GetVAB_TaxRate_ID();
             List<MTax> list = new List<MTax>();
             DataSet ds;
             try
@@ -217,7 +217,7 @@ namespace VAdvantage.Model
             if (_postals != null && !requery)
                 return _postals;
 
-            String sql = "SELECT * FROM C_TaxPostal WHERE C_Tax_ID=" + GetC_Tax_ID() + " ORDER BY Postal, Postal_To";
+            String sql = "SELECT * FROM VAB_TaxZIP WHERE VAB_TaxRate_ID=" + GetVAB_TaxRate_ID() + " ORDER BY Postal, Postal_To";
             List<MTaxPostal> list = new List<MTaxPostal>();
             IDataReader dr = null;
             try
@@ -270,11 +270,11 @@ namespace VAdvantage.Model
             sb.Append(Get_ID()).Append(",").Append(GetName())
                 .Append(", SO/PO=").Append(GetSOPOType())
                 .Append(",Rate=").Append(GetRate())
-                .Append(",C_TaxCategory_ID=").Append(GetC_TaxCategory_ID())
+                .Append(",VAB_TaxCategory_ID=").Append(GetVAB_TaxCategory_ID())
                 .Append(",Summary=").Append(IsSummary())
                 .Append(",Parent=").Append(GetParent_Tax_ID())
                 .Append(",Country=").Append(GetVAB_Country_ID()).Append("|").Append(GetTo_Country_ID())
-                .Append(",Region=").Append(GetC_Region_ID()).Append("|").Append(GetTo_Region_ID())
+                .Append(",Region=").Append(GetVAB_RegionState_ID()).Append("|").Append(GetTo_Region_ID())
                 .Append(",From=").Append(GetValidFrom())
                 .Append("]");
             return sb.ToString();
@@ -469,7 +469,7 @@ namespace VAdvantage.Model
                     {
                         int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                         _sql.Clear();
-                        _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                        _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                         DataSet ds = DB.ExecuteDataset(_sql.ToString(), null);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
@@ -479,15 +479,15 @@ namespace VAdvantage.Model
                                 if (_relatedTo != "" && (_relatedTo == relatedtoTax))
                                 {
                                     _sql.Clear();
-                                    _sql.Append("Select COUNT(*) From C_Tax Bp Left Join FRPT_TaxRate_Acct ca On Bp.C_Tax_ID=ca.C_Tax_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Bp.C_Tax_ID = " + GetC_Tax_ID());
+                                    _sql.Append("Select COUNT(*) From VAB_TaxRate Bp Left Join FRPT_TaxRate_Acct ca On Bp.VAB_TaxRate_ID=ca.VAB_TaxRate_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.VAB_TaxRate_ID = " + GetVAB_TaxRate_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         tax = MTable.GetPO(GetCtx(), "FRPT_TaxRate_Acct", 0, null);
                                         tax.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                        tax.Set_ValueNoCheck("C_Tax_ID", Util.GetValueOfInt(GetC_Tax_ID()));
+                                        tax.Set_ValueNoCheck("VAB_TaxRate_ID", Util.GetValueOfInt(GetVAB_TaxRate_ID()));
                                         tax.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                        tax.Set_ValueNoCheck("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                        tax.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                         tax.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
                                         if (!tax.Save())
                                         {
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
             }
             else if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
             {
-                bool sucs = Insert_Accounting("C_Tax_Acct", "VAB_AccountBook_Default", null);
+                bool sucs = Insert_Accounting("VAB_Tax_Acct", "VAB_AccountBook_Default", null);
                 //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                 // Before this, data was being saved but giving message "record not saved".
                 if (!sucs)
@@ -520,7 +520,7 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override Boolean BeforeDelete()
         {
-            return Delete_Accounting("C_Tax_Acct");
+            return Delete_Accounting("VAB_Tax_Acct");
         }
     }
 }

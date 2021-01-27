@@ -160,16 +160,16 @@ namespace ViennaAdvantage.Process
 
             if (_selection)	//	VInOutGen
             {
-                _sql.Append("SELECT * FROM C_Order "
+                _sql.Append("SELECT * FROM VAB_Order "
                     + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID=" + GetCtx().GetVAF_Client_ID()
                    //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
-                   + @" AND C_order_ID NOT IN
-                      (SELECT C_order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.C_Order_ID =C_Order.c_order_id
+                   + @" AND VAB_Order_ID NOT IN
+                      (SELECT VAB_Order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.VAB_Order_ID =VAB_Order.VAB_Order_id
                       AND va009_orderpayschedule.va009_ispaid = 'N' AND va009_orderpayschedule.isactive = 'Y')");
             }
             else
             {
-                _sql.Append("SELECT * FROM C_Order o "
+                _sql.Append("SELECT * FROM VAB_Order o "
                     + "WHERE DocStatus='CO' AND IsSOTrx='Y'"
                     //	No Offer,POS
                     + " AND o.VAB_DocTypes_ID IN (SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
@@ -178,12 +178,12 @@ namespace ViennaAdvantage.Process
                     //	No Manual
                     + " AND o.DeliveryRule<>'M'"
                    //JID_0444_1 : If there are orders with Advance payment and not paid, system will not create the shipments for that orders but will create the shipment for other orders.
-                   + @" AND o.C_order_ID NOT IN
-                      (SELECT C_order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.C_Order_ID =o.c_order_id
+                   + @" AND o.VAB_Order_ID NOT IN
+                      (SELECT VAB_Order_ID FROM VA009_OrderPaySchedule WHERE va009_orderpayschedule.VAB_Order_ID =o.VAB_Order_id
                       AND va009_orderpayschedule.va009_ispaid = 'N' AND va009_orderpayschedule.isactive = 'Y' ) "
                     //	Open Order Lines with Warehouse
                     // JID_0685: If there is sales order with Charge and product that are other than items type that order should not be available at Gemerate Shipment process.
-                    + " AND EXISTS (SELECT C_OrderLine_ID FROM C_OrderLine ol ");
+                    + " AND EXISTS (SELECT VAB_OrderLine_ID FROM VAB_OrderLine ol ");
 
                 // Get the lines of Order based on the setting taken on Tenant to allow non item Product
                 if (!isAllowNonItem)
@@ -197,14 +197,14 @@ namespace ViennaAdvantage.Process
                 {
                     _sql.Append(" AND TRUNC(ol.DatePromised,'DD')<='" + String.Format("{0:dd-MMM-yy}", _datePromised) + "'");		//	#2
                 }
-                _sql.Append(" AND o.C_Order_ID=ol.C_Order_ID AND ol.QtyOrdered<>ol.QtyDelivered)");
+                _sql.Append(" AND o.VAB_Order_ID=ol.VAB_Order_ID AND ol.QtyOrdered<>ol.QtyDelivered)");
                 //
                 if (_VAB_BusinessPartner_ID != 0)
                 {
                     _sql.Append(" AND o.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);					//	#3
                 }
             }
-            _sql.Append(" ORDER BY M_Warehouse_ID, PriorityRule, M_Shipper_ID, VAB_BusinessPartner_ID, VAB_BPart_Location_ID, C_PaymentTerm_ID , C_Order_ID");
+            _sql.Append(" ORDER BY M_Warehouse_ID, PriorityRule, M_Shipper_ID, VAB_BusinessPartner_ID, VAB_BPart_Location_ID, VAB_PaymentTerm_ID , VAB_Order_ID");
             //	_sql += " FOR UPDATE";
 
             IDataReader idr = null;
@@ -327,9 +327,9 @@ namespace ViennaAdvantage.Process
                 //	Exclude Auto Delivery if not Force
                 if (!MOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
                 {
-                    where.Append(" AND (C_OrderLine.M_Product_ID IS NULL"
+                    where.Append(" AND (VAB_OrderLine.M_Product_ID IS NULL"
                         + " OR EXISTS (SELECT * FROM M_Product p "
-                        + "WHERE C_OrderLine.M_Product_ID=p.M_Product_ID"
+                        + "WHERE VAB_OrderLine.M_Product_ID=p.M_Product_ID"
                         + " AND IsExcludeAutoDelivery='N'))");
                 }
                 //	Exclude Unconfirmed
@@ -337,15 +337,15 @@ namespace ViennaAdvantage.Process
                 {
                     where.Append(" AND NOT EXISTS (SELECT * FROM M_InOutLine iol"
                             + " INNER JOIN M_InOut io ON (iol.M_InOut_ID=io.M_InOut_ID) "
-                                + "WHERE iol.C_OrderLine_ID=C_OrderLine.C_OrderLine_ID AND io.DocStatus IN ('IP','WC'))");
+                                + "WHERE iol.VAB_OrderLine_ID=VAB_OrderLine.VAB_OrderLine_ID AND io.DocStatus IN ('IP','WC'))");
                 }
 
                 // Get the lines of Order based on the setting taken on Tenant to allow non item Product
                 if (!isAllowNonItem)
                 {
                     // JID_1307: Shipment is not generating against the Sales Order which includes combination of ItemType & Service/Expense/Resource type of Products at SO lines
-                    where.Append(" AND C_OrderLine_ID IN (SELECT ol.C_OrderLine_ID FROM C_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.C_Order_ID = "
-                    + order.GetC_Order_ID() + " AND p.ProductType = 'I')");
+                    where.Append(" AND VAB_OrderLine_ID IN (SELECT ol.VAB_OrderLine_ID FROM VAB_OrderLine ol INNER JOIN M_Product p ON ol.M_Product_ID = p.M_Product_ID WHERE ol.VAB_Order_ID = "
+                    + order.GetVAB_Order_ID() + " AND p.ProductType = 'I')");
                 }
 
                 //	Deadlock Prevention - Order by M_Product_ID
@@ -365,7 +365,7 @@ namespace ViennaAdvantage.Process
                         Decimal toDeliver = Decimal.Subtract(line.GetQtyOrdered(),
                             line.GetQtyDelivered());
                         Decimal QtyNotDelivered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(MovementQty) FROM M_Inout i INNER JOIN M_InoutLine il ON i.M_Inout_ID = il.M_Inout_ID
-                            WHERE il.C_OrderLine_ID = " + line.GetC_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO')", null, Get_Trx()));
+                            WHERE il.VAB_OrderLine_ID = " + line.GetVAB_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO')", null, Get_Trx()));
                         toDeliver -= QtyNotDelivered;
                         MProduct product = line.GetProduct();
                         //	Nothing to Deliver
@@ -386,7 +386,7 @@ namespace ViennaAdvantage.Process
                         {
                             String where2 = "EXISTS (SELECT * FROM M_InOut io WHERE io.M_InOut_ID=M_InOutLine.M_InOut_ID AND io.DocStatus IN ('IP','WC'))";
                             MInOutLine[] iols = MInOutLine.GetOfOrderLine(GetCtx(),
-                                line.GetC_OrderLine_ID(), where2, null);
+                                line.GetVAB_OrderLine_ID(), where2, null);
                             for (int j = 0; j < iols.Length; j++)
                             {
                                 unconfirmedShippedQty = Decimal.Add(unconfirmedShippedQty, iols[j].GetMovementQty());
@@ -637,7 +637,7 @@ namespace ViennaAdvantage.Process
                 if (!line.Save())
                 {
                     //throw new Exception("Could not create Shipment Line");
-                    log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
+                    log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetVAB_OrderLine_ID());
 
                     // JID_0405: In the error message it should show the Name of the Product for which qty is not available.
                     pp = VLogger.RetrieveError();
@@ -746,7 +746,7 @@ namespace ViennaAdvantage.Process
 
                     if (!line.Save())
                     {
-                        log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
+                        log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetVAB_OrderLine_ID());
                         pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -841,7 +841,7 @@ namespace ViennaAdvantage.Process
                     if (!line.Save())
                     {
                         //throw new Exception("Could not create Shipment Line");
-                        log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetC_OrderLine_ID());
+                        log.Fine("Failed: Could not create Shipment Line against Order No : " + order.GetDocumentNo() + " for orderline id : " + orderLine.GetVAB_OrderLine_ID());
 
                         // JID_0405: In the error message it should show the Name of the Product for which qty is not available.
                         pp = VLogger.RetrieveError();
@@ -989,7 +989,7 @@ namespace ViennaAdvantage.Process
                 //
                 if ((_msg != null && _msg.Length > 0) || !String.IsNullOrEmpty(_shipment.GetProcessMsg()))
                 {
-                    MOrder OrderDoc = new MOrder(GetCtx(), _shipment.GetC_Order_ID(), _shipment.Get_TrxName());
+                    MOrder OrderDoc = new MOrder(GetCtx(), _shipment.GetVAB_Order_ID(), _shipment.Get_TrxName());
                     AddLog(_shipment.GetM_InOut_ID(), _shipment.GetMovementDate(), null,
                         (_msg + "  " +
                         (_shipment.GetProcessMsg() != "" ? (_shipment.GetProcessMsg() + " " + (!_consolidateDocument ? OrderDoc.GetDocumentNo() : " ")) : _shipment.GetDocumentNo())));

@@ -59,7 +59,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 //Assign parameter value
                 M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                //C_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                //VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //Price = Util.GetValueOfInt(paramValue[2].ToString());
 
 
@@ -69,7 +69,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
 
                 //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
-                //      C_UOM_To_ID, QtyEntered);
+                //      VAB_UOM_To_ID, QtyEntered);
 
                 int retValue = MProduct.Get(ctx, M_Product_ID).GetUOMPrecision();
 

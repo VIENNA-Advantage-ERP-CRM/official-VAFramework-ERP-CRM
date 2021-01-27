@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Year
+    /** Generated Model for VAB_Year
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Year : PO
+    public class X_VAB_Year : PO
     {
-        public X_C_Year(Context ctx, int C_Year_ID, Trx trxName) : base(ctx, C_Year_ID, trxName)
+        public X_VAB_Year(Context ctx, int VAB_Year_ID, Trx trxName) : base(ctx, VAB_Year_ID, trxName)
         {
-            /** if (C_Year_ID == 0)
+            /** if (VAB_Year_ID == 0)
 {
 SetVAB_Calender_ID (0);
-SetC_Year_ID (0);
+SetVAB_Year_ID (0);
 SetFiscalYear (null);
 }
              */
         }
-        public X_C_Year(Ctx ctx, int C_Year_ID, Trx trxName) : base(ctx, C_Year_ID, trxName)
+        public X_VAB_Year(Ctx ctx, int VAB_Year_ID, Trx trxName) : base(ctx, VAB_Year_ID, trxName)
         {
-            /** if (C_Year_ID == 0)
+            /** if (VAB_Year_ID == 0)
 {
 SetVAB_Calender_ID (0);
-SetC_Year_ID (0);
+SetVAB_Year_ID (0);
 SetFiscalYear (null);
 }
              */
@@ -41,7 +41,7 @@ SetFiscalYear (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Year(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAB_Year(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -49,7 +49,7 @@ SetFiscalYear (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Year(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+        public X_VAB_Year(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
         {
         }
         /** Load Constructor 
@@ -57,13 +57,13 @@ SetFiscalYear (null);
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_Year(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+        public X_VAB_Year(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Year()
+        static X_VAB_Year()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -76,8 +76,8 @@ SetFiscalYear (null);
         public static int Table_ID;
         // =177;
 
-        /** TableName=C_Year */
-        public static String Table_Name = "C_Year";
+        /** TableName=VAB_Year */
+        public static String Table_Name = "VAB_Year";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -111,7 +111,7 @@ SetFiscalYear (null);
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Year[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_Year[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Calendar.
@@ -130,17 +130,17 @@ SetFiscalYear (null);
             return Convert.ToInt32(ii);
         }
         /** Set Year.
-@param C_Year_ID Calendar Year */
-        public void SetC_Year_ID(int C_Year_ID)
+@param VAB_Year_ID Calendar Year */
+        public void SetVAB_Year_ID(int VAB_Year_ID)
         {
-            if (C_Year_ID < 1) throw new ArgumentException("C_Year_ID is mandatory.");
-            Set_ValueNoCheck("C_Year_ID", C_Year_ID);
+            if (VAB_Year_ID < 1) throw new ArgumentException("VAB_Year_ID is mandatory.");
+            Set_ValueNoCheck("VAB_Year_ID", VAB_Year_ID);
         }
         /** Get Year.
 @return Calendar Year */
-        public int GetC_Year_ID()
+        public int GetVAB_Year_ID()
         {
-            Object ii = Get_Value("C_Year_ID");
+            Object ii = Get_Value("VAB_Year_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

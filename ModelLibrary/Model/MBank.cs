@@ -156,7 +156,7 @@ namespace VAdvantage.Model
         public int GetVAB_Country_ID()
         {
             if (_loc == null)
-                _loc = MLocation.Get(GetCtx(), GetC_Location_ID(), null);
+                _loc = MLocation.Get(GetCtx(), GetVAB_Address_ID(), null);
             if (_loc == null)
                 return 0;
             return _loc.GetVAB_Country_ID();

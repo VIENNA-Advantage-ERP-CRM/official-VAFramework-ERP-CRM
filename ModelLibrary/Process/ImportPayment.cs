@@ -292,7 +292,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_Payment_ID IN "
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE i.VAB_Invoice_ID IS NOT NULL "
                     + " AND p.VAB_Invoice_ID IS NOT NULL "
                     + " AND p.VAB_Invoice_ID<>i.VAB_Invoice_ID) ")
@@ -307,7 +307,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_Payment_ID IN "
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE i.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND p.VAB_BusinessPartner_ID IS NOT NULL "
                     + " AND p.VAB_BusinessPartner_ID<>i.VAB_BusinessPartner_ID) ")
@@ -338,7 +338,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     + "(SELECT I_Payment_ID "
                     + "FROM I_Payment i"
                     + " INNER JOIN VAB_Invoice v ON (i.VAB_Invoice_ID=v.VAB_Invoice_ID)"
-                    + " INNER JOIN C_Payment p ON (i.C_Payment_ID=p.C_Payment_ID) "
+                    + " INNER JOIN VAB_Payment p ON (i.VAB_Payment_ID=p.VAB_Payment_ID) "
                     + "WHERE p.VAB_Invoice_ID<>v.VAB_Invoice_ID"
                     + " AND v.VAB_BusinessPartner_ID<>p.VAB_BusinessPartner_ID) ")
                 .Append(clientCheck);
@@ -479,7 +479,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Save patment
                     if (payment.Save())
                     {
-                        imp.SetC_Payment_ID(payment.GetC_Payment_ID());
+                        imp.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                         imp.SetI_IsImported(X_I_Payment.I_ISIMPORTED_Yes);
                         imp.SetProcessed(true);
                         imp.Save();
@@ -507,7 +507,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             //
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@C_Payment_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAB_Payment_ID@: @Inserted@");
             return "";
         }	//	doIt
 

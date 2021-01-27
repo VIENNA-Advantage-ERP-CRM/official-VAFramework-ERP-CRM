@@ -25,11 +25,11 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = param.Split(',');
-                int C_Order_ID;
+                int VAB_Order_ID;
 
                 //Assign parameter value
-                C_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MOrder order = new MOrder(ctx, C_Order_ID, null);
+                VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                MOrder order = new MOrder(ctx, VAB_Order_ID, null);
 
 
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
@@ -56,8 +56,8 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 //retDic["DateOrdered", order.GetDateOrdered());
                 retDic["M_PriceList_ID"]= order.GetM_PriceList_ID().ToString();
                 retDic["PaymentRule"]= order.GetPaymentRule();
-                retDic["C_PaymentTerm_ID"]= order.GetC_PaymentTerm_ID().ToString();
-                //mTab.setValue ("DeliveryRule", X_C_Order.DELIVERYRULE_Manual);
+                retDic["VAB_PaymentTerm_ID"]= order.GetVAB_PaymentTerm_ID().ToString();
+                //mTab.setValue ("DeliveryRule", X_VAB_Order.DELIVERYRULE_Manual);
 
                 retDic["Bill_Location_ID"]= order.GetBill_Location_ID().ToString();
                 retDic["InvoiceRule"]= order.GetInvoiceRule();
@@ -95,7 +95,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 MOrderLine orderline = new MOrderLine(ctx, id, null);
                 //retDic["Orig_InOutLine_ID", null);
-                retDic["C_Tax_ID"]= orderline.GetC_Tax_ID().ToString();
+                retDic["VAB_TaxRate_ID"]= orderline.GetVAB_TaxRate_ID().ToString();
                 retDic["PriceList"]= orderline.GetPriceList().ToString();
                 retDic["PriceLimit"]= orderline.GetPriceLimit().ToString();
                 retDic["PriceActual"]= orderline.GetPriceActual().ToString();

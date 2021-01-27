@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for RC_ChartPane
+    /** Generated Model for VARC_ChartPane
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_RC_ChartPane : PO
+    public class X_VARC_ChartPane : PO
     {
-        public X_RC_ChartPane(Context ctx, int RC_ChartPane_ID, Trx trxName)
-            : base(ctx, RC_ChartPane_ID, trxName)
+        public X_VARC_ChartPane(Context ctx, int VARC_ChartPane_ID, Trx trxName)
+            : base(ctx, VARC_ChartPane_ID, trxName)
         {
-            /** if (RC_ChartPane_ID == 0)
+            /** if (VARC_ChartPane_ID == 0)
             {
-            SetRC_ChartPane_ID (0);
+            SetVARC_ChartPane_ID (0);
             }
              */
         }
-        public X_RC_ChartPane(Ctx ctx, int RC_ChartPane_ID, Trx trxName)
-            : base(ctx, RC_ChartPane_ID, trxName)
+        public X_VARC_ChartPane(Ctx ctx, int VARC_ChartPane_ID, Trx trxName)
+            : base(ctx, VARC_ChartPane_ID, trxName)
         {
-            /** if (RC_ChartPane_ID == 0)
+            /** if (VARC_ChartPane_ID == 0)
             {
-            SetRC_ChartPane_ID (0);
+            SetVARC_ChartPane_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ChartPane(Context ctx, DataRow rs, Trx trxName)
+        public X_VARC_ChartPane(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ChartPane(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VARC_ChartPane(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ChartPane(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VARC_ChartPane(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_RC_ChartPane()
+        static X_VARC_ChartPane()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000226;
 
-        /** TableName=RC_ChartPane */
-        public static String Table_Name = "RC_ChartPane";
+        /** TableName=VARC_ChartPane */
+        public static String Table_Name = "VARC_ChartPane";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_RC_ChartPane[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VARC_ChartPane[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Colspan.
@@ -197,18 +197,18 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("Name");
         }
-        /** Set RC_ChartPane_ID.
-        @param RC_ChartPane_ID RC_ChartPane_ID */
-        public void SetRC_ChartPane_ID(int RC_ChartPane_ID)
+        /** Set VARC_ChartPane_ID.
+        @param VARC_ChartPane_ID VARC_ChartPane_ID */
+        public void SetVARC_ChartPane_ID(int VARC_ChartPane_ID)
         {
-            if (RC_ChartPane_ID < 1) throw new ArgumentException("RC_ChartPane_ID is mandatory.");
-            Set_ValueNoCheck("RC_ChartPane_ID", RC_ChartPane_ID);
+            if (VARC_ChartPane_ID < 1) throw new ArgumentException("VARC_ChartPane_ID is mandatory.");
+            Set_ValueNoCheck("VARC_ChartPane_ID", VARC_ChartPane_ID);
         }
-        /** Get RC_ChartPane_ID.
-        @return RC_ChartPane_ID */
-        public int GetRC_ChartPane_ID()
+        /** Get VARC_ChartPane_ID.
+        @return VARC_ChartPane_ID */
+        public int GetVARC_ChartPane_ID()
         {
-            Object ii = Get_Value("RC_ChartPane_ID");
+            Object ii = Get_Value("VARC_ChartPane_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

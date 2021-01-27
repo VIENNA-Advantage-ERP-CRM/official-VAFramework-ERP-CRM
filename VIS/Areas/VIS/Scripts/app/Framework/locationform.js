@@ -8,7 +8,7 @@
         //call parent function on close
         this.onClose = null;
 
-        var $C_Location_ID = locationId;
+        var $VAB_Address_ID = locationId;
         var $self = this;
         var $root = $("<div style='position:relative;'>");
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
@@ -40,7 +40,7 @@
 
         this.load = function () {
             // Parameter - VAF_Language - Added to get country from location
-            $root.load(VIS.Application.contextUrl + 'Location/Locations/?windowno=' + windowNo + '&locationId=' + $C_Location_ID + '&VAF_Language=' + VIS.context.getContext("#VAF_Language"), function (event) {
+            $root.load(VIS.Application.contextUrl + 'Location/Locations/?windowno=' + windowNo + '&locationId=' + $VAB_Address_ID + '&VAF_Language=' + VIS.context.getContext("#VAF_Language"), function (event) {
                 $root.append($busyDiv);
                 setBusy(true);
                 $self.init();
@@ -226,8 +226,8 @@
                                     label: item.ADDRESS,
                                     value: item.ADDRESS,
                                     VAB_COUNTRY_ID: item.VAB_COUNTRY_ID,
-                                    C_LOCATION_ID: item.C_LOCATION_ID,
-                                    C_REGION_ID: item.C_REGION_ID,
+                                    VAB_ADDRESS_ID: item.VAB_ADDRESS_ID,
+                                    VAB_REGIONSTATE_ID: item.VAB_REGIONSTATE_ID,
                                     COUNTRYNAME: item.COUNTRYNAME,
                                     ADDRESS1: item.ADDRESS1,
                                     ADDRESS2: item.ADDRESS2,
@@ -252,8 +252,8 @@
                     state.val(ui.item.STATENAME);
                     zip.val(ui.item.ZIPCODE);
                     change = true;
-                    stateId = ui.item.C_REGION_ID;
-                    $C_Location_ID = 0;//ui.item.C_LOCATION_ID;    
+                    stateId = ui.item.VAB_REGIONSTATE_ID;
+                    $VAB_Address_ID = 0;//ui.item.VAB_ADDRESS_ID;    
                     cityId = 0;
                     contryId = ui.item.VAB_COUNTRY_ID;
                 },
@@ -275,10 +275,10 @@
                     return;
                 }
 
-                // Set C_Location_ID as 0, 
+                // Set VAB_Address_ID as 0, 
                 // if maintain Version is marked on column and there is any change in value on Location Control
                 if (maintainVer && change)
-                    $C_Location_ID = 0;
+                    $VAB_Address_ID = 0;
 
                 var objValue = {
                     countryName: country.val(),
@@ -289,7 +289,7 @@
                     cityValue: city.val(),
                     stateValue: state.val(),
                     zipValue: zip.val(),
-                    clocationId: $C_Location_ID,
+                    clocationId: $VAB_Address_ID,
                     countryId: contryId,
                     stateId: stateId,
                     cityId: cityId
@@ -352,12 +352,12 @@
                     data: JSON.stringify({ pref: data })
                 }).done(function (json) {
                     result = json;
-                    $C_Location_ID = result.locationid;
+                    $VAB_Address_ID = result.locationid;
                     stringAddress = result.locaddress;
-                    this.location = $C_Location_ID;
+                    this.location = $VAB_Address_ID;
                     setBusy(false);
                     if ($self.onClose)
-                        $self.onClose($C_Location_ID, change);
+                        $self.onClose($VAB_Address_ID, change);
                     $root.dialog('close');
                     change = null;
                 })
@@ -394,7 +394,7 @@
             if (cancelbtn)
                 cancelbtn.off("click");
 
-            $C_Location_ID = 0;
+            $VAB_Address_ID = 0;
             searchlst = null;
             country = null;
             add1 = null;

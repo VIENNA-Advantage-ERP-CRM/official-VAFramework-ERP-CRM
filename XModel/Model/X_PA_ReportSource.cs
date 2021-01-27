@@ -9,42 +9,42 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for PA_ReportSource
+    using System.Data;/** Generated Model for VAPA_FR_Source
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_PA_ReportSource : PO
+    public class X_VAPA_FR_Source : PO
     {
-        public X_PA_ReportSource(Context ctx, int PA_ReportSource_ID, Trx trxName)
-            : base(ctx, PA_ReportSource_ID, trxName)
-        {/** if (PA_ReportSource_ID == 0){SetElementType (null);SetPA_ReportLine_ID (0);SetPA_ReportSource_ID (0);} */
+        public X_VAPA_FR_Source(Context ctx, int VAPA_FR_Source_ID, Trx trxName)
+            : base(ctx, VAPA_FR_Source_ID, trxName)
+        {/** if (VAPA_FR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FR_Source_ID (0);} */
         }
-        public X_PA_ReportSource(Ctx ctx, int PA_ReportSource_ID, Trx trxName)
-            : base(ctx, PA_ReportSource_ID, trxName)
-        {/** if (PA_ReportSource_ID == 0){SetElementType (null);SetPA_ReportLine_ID (0);SetPA_ReportSource_ID (0);} */
+        public X_VAPA_FR_Source(Ctx ctx, int VAPA_FR_Source_ID, Trx trxName)
+            : base(ctx, VAPA_FR_Source_ID, trxName)
+        {/** if (VAPA_FR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FR_Source_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportSource(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Source(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportSource(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_Source(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportSource(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAPA_FR_Source(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_PA_ReportSource() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAPA_FR_Source() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621498829L;/** Last Updated Timestamp 4/1/2016 1:06:22 PM */
         public static long updatedMS = 1459496182040L;/** VAF_TableView_ID=450 */
         public static int Table_ID; // =450;
-        /** TableName=PA_ReportSource */
-        public static String Table_Name = "PA_ReportSource";
+        /** TableName=VAPA_FR_Source */
+        public static String Table_Name = "VAPA_FR_Source";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_PA_ReportSource[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Activity.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAPA_FR_Source[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Activity.
 @param VAB_BillingCode_ID Business Activity */
         public void SetVAB_BillingCode_ID(int VAB_BillingCode_ID)
         {
@@ -98,33 +98,33 @@ namespace VAdvantage.Model
         }/** Get Account Element.
 @return Account Element */
         public int GetVAB_Acct_Element_ID() { Object ii = Get_Value("VAB_Acct_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Address.
-@param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }/** Get Address.
 @return Location or Address */
-        public int GetC_Location_ID() { Object ii = Get_Value("C_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-        public void SetC_Project_ID(int C_Project_ID)
+        public int GetVAB_Address_ID() { Object ii = Get_Value("VAB_Address_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }/** Get Opportunity.
 @return Business Opportunity */
-        public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-        public void SetC_SalesRegion_ID(int C_SalesRegion_ID)
+        public int GetVAB_Project_ID() { Object ii = Get_Value("VAB_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
+@param VAB_SalesRegionState_ID Sales coverage region */
+        public void SetVAB_SalesRegionState_ID(int VAB_SalesRegionState_ID)
         {
-            if (C_SalesRegion_ID <= 0) Set_Value("C_SalesRegion_ID", null);
+            if (VAB_SalesRegionState_ID <= 0) Set_Value("VAB_SalesRegionState_ID", null);
             else
-                Set_Value("C_SalesRegion_ID", C_SalesRegion_ID);
+                Set_Value("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
         }/** Get Sales Region.
 @return Sales coverage region */
-        public int GetC_SalesRegion_ID() { Object ii = Get_Value("C_SalesRegion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
+        public int GetVAB_SalesRegionState_ID() { Object ii = Get_Value("VAB_SalesRegionState_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Description.
 @param Description Optional short description of the record */
         public void SetDescription(String Description) { if (Description != null && Description.Length > 255) { log.Warning("Length > 255 - truncated"); Description = Description.Substring(0, 255); } Set_Value("Description", Description); }/** Get Description.
 @return Optional short description of the record */
@@ -191,13 +191,13 @@ namespace VAdvantage.Model
         }/** Get Organization.
 @return Organizational entity within client */
         public int GetOrg_ID() { Object ii = Get_Value("Org_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Line.
-@param PA_ReportLine_ID Report Line */
-        public void SetPA_ReportLine_ID(int PA_ReportLine_ID) { if (PA_ReportLine_ID < 1) throw new ArgumentException("PA_ReportLine_ID is mandatory."); Set_ValueNoCheck("PA_ReportLine_ID", PA_ReportLine_ID); }/** Get Report Line.
+@param VAPA_FR_Row_ID Report Line */
+        public void SetVAPA_FR_Row_ID(int VAPA_FR_Row_ID) { if (VAPA_FR_Row_ID < 1) throw new ArgumentException("VAPA_FR_Row_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_Row_ID", VAPA_FR_Row_ID); }/** Get Report Line.
 @return Report Line */
-        public int GetPA_ReportLine_ID() { Object ii = Get_Value("PA_ReportLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Source.
-@param PA_ReportSource_ID Restriction of what will be shown in Report Line */
-        public void SetPA_ReportSource_ID(int PA_ReportSource_ID) { if (PA_ReportSource_ID < 1) throw new ArgumentException("PA_ReportSource_ID is mandatory."); Set_ValueNoCheck("PA_ReportSource_ID", PA_ReportSource_ID); }/** Get Report Source.
+        public int GetVAPA_FR_Row_ID() { Object ii = Get_Value("VAPA_FR_Row_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Source.
+@param VAPA_FR_Source_ID Restriction of what will be shown in Report Line */
+        public void SetVAPA_FR_Source_ID(int VAPA_FR_Source_ID) { if (VAPA_FR_Source_ID < 1) throw new ArgumentException("VAPA_FR_Source_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_Source_ID", VAPA_FR_Source_ID); }/** Get Report Source.
 @return Restriction of what will be shown in Report Line */
-        public int GetPA_ReportSource_ID() { Object ii = Get_Value("PA_ReportSource_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAPA_FR_Source_ID() { Object ii = Get_Value("VAPA_FR_Source_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }

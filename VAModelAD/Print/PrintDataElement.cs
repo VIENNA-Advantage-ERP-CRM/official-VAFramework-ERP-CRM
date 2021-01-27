@@ -206,10 +206,10 @@ namespace VAdvantage.Print
         {
             try
             {
-                int C_Location_ID = int.Parse(GetValueKey());
-                if (C_Location_ID != 0)
+                int VAB_Address_ID = int.Parse(GetValueKey());
+                if (VAB_Address_ID != 0)
                 {
-                    dynamic loc = VAModelAD.Model.MLocation.Get(Env.GetContext(), C_Location_ID, null);
+                    dynamic loc = VAModelAD.Model.MLocation.Get(Env.GetContext(), VAB_Address_ID, null);
                     if (loc != null)
                         return loc.ToStringCR();
                 }

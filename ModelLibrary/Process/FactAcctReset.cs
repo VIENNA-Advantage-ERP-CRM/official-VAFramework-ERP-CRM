@@ -173,17 +173,17 @@ namespace VAdvantage.Process
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_MATERIALDELIVERY
                     + "','" + MDocBaseType.DOCBASETYPE_MATERIALRECEIPT + "')";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Payment"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_Payment"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APPAYMENT
                     + "','" + MDocBaseType.DOCBASETYPE_ARRECEIPT + "')";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_Order"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_Order"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_SALESORDER
                     + "','" + MDocBaseType.DOCBASETYPE_PURCHASEORDER + "')";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_ProjectIssue"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_ProjectSupply"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROJECTISSUE + "'";
             }
@@ -200,7 +200,7 @@ namespace VAdvantage.Process
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION + "'";
             }
 
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("GL_Journal"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAGL_JRNL"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "'";
 
@@ -237,7 +237,7 @@ namespace VAdvantage.Process
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INCOMETAX + "'";
             }
-            else if (VAF_TableView_ID == MTable.Get_Table_ID("C_ProfitLoss"))
+            else if (VAF_TableView_ID == MTable.Get_Table_ID("VAB_ProfitLoss"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROFITLOSS + "'";
             }
@@ -285,19 +285,19 @@ namespace VAdvantage.Process
                 + " SET Posted='N', Processing='N' "
                 + "WHERE VAF_Client_ID=" + _VAF_Client_ID
                 + " AND (Posted<>'N' OR Posted IS NULL OR Processing<>'N' OR Processing IS NULL)"
-                + " AND EXISTS (SELECT * FROM C_PeriodControl pc"
-                    + " INNER JOIN Fact_Acct fact ON (fact.C_Period_ID=pc.C_Period_ID) "
+                + " AND EXISTS (SELECT * FROM VAB_YearPeriodControl pc"
+                    + " INNER JOIN Actual_Acct_Detail fact ON (fact.VAB_YearPeriod_ID=pc.VAB_YearPeriod_ID) "
                     + "WHERE pc.PeriodStatus = 'O'" + docBaseType
                     + " AND fact.VAF_TableView_ID=" + VAF_TableView_ID
                     + " AND fact.Record_ID=doc." + TableName + "_ID)";
             int reset = DataBase.DB.ExecuteQuery(sql1, null, Get_TrxName());
             //	Fact
-            String sql2 = "DELETE FROM Fact_Acct fact "
+            String sql2 = "DELETE FROM Actual_Acct_Detail fact "
                 + "WHERE VAF_Client_ID=" + _VAF_Client_ID
                 + " AND VAF_TableView_ID=" + VAF_TableView_ID
-                + " AND EXISTS (SELECT * FROM C_PeriodControl pc "
+                + " AND EXISTS (SELECT * FROM VAB_YearPeriodControl pc "
                     + "WHERE pc.PeriodStatus = 'O'" + docBaseType
-                    + " AND fact.C_Period_ID=pc.C_Period_ID)";
+                    + " AND fact.VAB_YearPeriod_ID=pc.VAB_YearPeriod_ID)";
             int deleted = DataBase.DB.ExecuteQuery(sql2, null, Get_TrxName());
             //
             log.Info(TableName + "(" + VAF_TableView_ID + ") - Reset=" + reset + " - Deleted=" + deleted);

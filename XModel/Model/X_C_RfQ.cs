@@ -9,24 +9,24 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_RfQ
+    using System.Data;/** Generated Model for VAB_RFQ
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_RfQ : PO
+    public class X_VAB_RFQ : PO
     {
-        public X_C_RfQ(Context ctx, int C_RfQ_ID, Trx trxName)
-            : base(ctx, C_RfQ_ID, trxName)
-        {/** if (C_RfQ_ID == 0){SetVAB_Currency_ID (0);// @$VAB_Currency_ID @
-SetC_RfQ_ID (0);SetC_RfQ_Topic_ID (0);SetDateResponse (DateTime.Now);SetDocumentNo (null);SetIsInvitedVendorsOnly (false);SetIsQuoteAllQty (false);SetIsQuoteTotalAmt (false);SetIsRfQResponseAccepted (true);// Y
+        public X_VAB_RFQ(Context ctx, int VAB_RFQ_ID, Trx trxName)
+            : base(ctx, VAB_RFQ_ID, trxName)
+        {/** if (VAB_RFQ_ID == 0){SetVAB_Currency_ID (0);// @$VAB_Currency_ID @
+SetVAB_RFQ_ID (0);SetVAB_RFQ_Subject_ID (0);SetDateResponse (DateTime.Now);SetDocumentNo (null);SetIsInvitedVendorsOnly (false);SetIsQuoteAllQty (false);SetIsQuoteTotalAmt (false);SetIsRfQResponseAccepted (true);// Y
 SetIsSelfService (true);// Y
 SetName (null);SetProcessed (false);// N
 SetQuoteType (null);// S
 SetSalesRep_ID (0);} */
         }
-        public X_C_RfQ(Ctx ctx, int C_RfQ_ID, Trx trxName)
-            : base(ctx, C_RfQ_ID, trxName)
-        {/** if (C_RfQ_ID == 0){SetVAB_Currency_ID (0);// @$VAB_Currency_ID @
-SetC_RfQ_ID (0);SetC_RfQ_Topic_ID (0);SetDateResponse (DateTime.Now);SetDocumentNo (null);SetIsInvitedVendorsOnly (false);SetIsQuoteAllQty (false);SetIsQuoteTotalAmt (false);SetIsRfQResponseAccepted (true);// Y
+        public X_VAB_RFQ(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
+            : base(ctx, VAB_RFQ_ID, trxName)
+        {/** if (VAB_RFQ_ID == 0){SetVAB_Currency_ID (0);// @$VAB_Currency_ID @
+SetVAB_RFQ_ID (0);SetVAB_RFQ_Subject_ID (0);SetDateResponse (DateTime.Now);SetDocumentNo (null);SetIsInvitedVendorsOnly (false);SetIsQuoteAllQty (false);SetIsQuoteTotalAmt (false);SetIsRfQResponseAccepted (true);// Y
 SetIsSelfService (true);// Y
 SetName (null);SetProcessed (false);// N
 SetQuoteType (null);// S
@@ -36,25 +36,25 @@ SetSalesRep_ID (0);} */
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RfQ(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_RFQ(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RfQ(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_RFQ(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_RfQ(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_RFQ(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_RfQ() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_RFQ() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27867938076683L;/** Last Updated Timestamp 4/2/2020 1:02:40 PM */
         public static long updatedMS = 1585812759894L;/** VAF_TableView_ID=677 */
         public static int Table_ID; // =677;
-        /** TableName=C_RfQ */
-        public static String Table_Name = "C_RfQ";
+        /** TableName=VAB_RFQ */
+        public static String Table_Name = "VAB_RFQ";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(1);/** AccessLevel
 @return 1 - Org 
 */
@@ -69,7 +69,7 @@ SetSalesRep_ID (0);} */
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_RfQ[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set User/Contact.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_RFQ[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set User/Contact.
 @param VAF_UserContact_ID User within the system - Internal or Customer/Prospect Contact. */
         public void SetVAF_UserContact_ID(int VAF_UserContact_ID)
         {
@@ -101,23 +101,23 @@ SetSalesRep_ID (0);} */
         public void SetVAB_Currency_ID(int VAB_Currency_ID) { if (VAB_Currency_ID < 1) throw new ArgumentException("VAB_Currency_ID is mandatory."); Set_Value("VAB_Currency_ID", VAB_Currency_ID); }/** Get Currency.
 @return The Currency for this record */
         public int GetVAB_Currency_ID() { Object ii = Get_Value("VAB_Currency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order.
-@param C_Order_ID Sales Order */
-        public void SetC_Order_ID(int C_Order_ID)
+@param VAB_Order_ID Sales Order */
+        public void SetVAB_Order_ID(int VAB_Order_ID)
         {
-            if (C_Order_ID <= 0) Set_Value("C_Order_ID", null);
+            if (VAB_Order_ID <= 0) Set_Value("VAB_Order_ID", null);
             else
-                Set_Value("C_Order_ID", C_Order_ID);
+                Set_Value("VAB_Order_ID", VAB_Order_ID);
         }/** Get Order.
 @return Sales Order */
-        public int GetC_Order_ID() { Object ii = Get_Value("C_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ.
-@param C_RfQ_ID Request for Quotation */
-        public void SetC_RfQ_ID(int C_RfQ_ID) { if (C_RfQ_ID < 1) throw new ArgumentException("C_RfQ_ID is mandatory."); Set_ValueNoCheck("C_RfQ_ID", C_RfQ_ID); }/** Get RfQ.
+        public int GetVAB_Order_ID() { Object ii = Get_Value("VAB_Order_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ.
+@param VAB_RFQ_ID Request for Quotation */
+        public void SetVAB_RFQ_ID(int VAB_RFQ_ID) { if (VAB_RFQ_ID < 1) throw new ArgumentException("VAB_RFQ_ID is mandatory."); Set_ValueNoCheck("VAB_RFQ_ID", VAB_RFQ_ID); }/** Get RfQ.
 @return Request for Quotation */
-        public int GetC_RfQ_ID() { Object ii = Get_Value("C_RfQ_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ Topic.
-@param C_RfQ_Topic_ID Topic for Request for Quotations */
-        public void SetC_RfQ_Topic_ID(int C_RfQ_Topic_ID) { if (C_RfQ_Topic_ID < 1) throw new ArgumentException("C_RfQ_Topic_ID is mandatory."); Set_Value("C_RfQ_Topic_ID", C_RfQ_Topic_ID); }/** Get RfQ Topic.
+        public int GetVAB_RFQ_ID() { Object ii = Get_Value("VAB_RFQ_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set RfQ Topic.
+@param VAB_RFQ_Subject_ID Topic for Request for Quotations */
+        public void SetVAB_RFQ_Subject_ID(int VAB_RFQ_Subject_ID) { if (VAB_RFQ_Subject_ID < 1) throw new ArgumentException("VAB_RFQ_Subject_ID is mandatory."); Set_Value("VAB_RFQ_Subject_ID", VAB_RFQ_Subject_ID); }/** Get RfQ Topic.
 @return Topic for Request for Quotations */
-        public int GetC_RfQ_Topic_ID() { Object ii = Get_Value("C_RfQ_Topic_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Copy Lines.
+        public int GetVAB_RFQ_Subject_ID() { Object ii = Get_Value("VAB_RFQ_Subject_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Copy Lines.
 @param CopyLines Copy Lines */
         public void SetCopyLines(String CopyLines) { if (CopyLines != null && CopyLines.Length > 1) { log.Warning("Length > 1 - truncated"); CopyLines = CopyLines.Substring(0, 1); } Set_Value("CopyLines", CopyLines); }/** Get Copy Lines.
 @return Copy Lines */

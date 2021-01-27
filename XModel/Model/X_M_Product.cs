@@ -21,8 +21,8 @@ namespace VAdvantage.Model
         {
             /** if (M_Product_ID == 0)
             {
-            SetC_TaxCategory_ID (0);
-            SetC_UOM_ID (0);
+            SetVAB_TaxCategory_ID (0);
+            SetVAB_UOM_ID (0);
             SetIsBOM (false);	// N
             SetIsBasedOnRollup (true);	// Y
             SetIsDropShip (false);
@@ -54,8 +54,8 @@ namespace VAdvantage.Model
         {
             /** if (M_Product_ID == 0)
             {
-            SetC_TaxCategory_ID (0);
-            SetC_UOM_ID (0);
+            SetVAB_TaxCategory_ID (0);
+            SetVAB_UOM_ID (0);
             SetIsBOM (false);	// N
             SetIsBasedOnRollup (true);	// Y
             SetIsDropShip (false);
@@ -243,18 +243,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Skill.
-        @param C_Skill_ID Skills, certifications and specialization */
-        public void SetC_Skill_ID(int C_Skill_ID)
+        @param VAB_Skill_ID Skills, certifications and specialization */
+        public void SetVAB_Skill_ID(int VAB_Skill_ID)
         {
-            if (C_Skill_ID <= 0) Set_Value("C_Skill_ID", null);
+            if (VAB_Skill_ID <= 0) Set_Value("VAB_Skill_ID", null);
             else
-                Set_Value("C_Skill_ID", C_Skill_ID);
+                Set_Value("VAB_Skill_ID", VAB_Skill_ID);
         }
         /** Get Skill.
         @return Skills, certifications and specialization */
-        public int GetC_Skill_ID()
+        public int GetVAB_Skill_ID()
         {
-            Object ii = Get_Value("C_Skill_ID");
+            Object ii = Get_Value("VAB_Skill_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -275,57 +275,57 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Tax Category.
-        @param C_TaxCategory_ID Tax Category */
-        public void SetC_TaxCategory_ID(int C_TaxCategory_ID)
+        @param VAB_TaxCategory_ID Tax Category */
+        public void SetVAB_TaxCategory_ID(int VAB_TaxCategory_ID)
         {
             //JID_0128: When we select the Summary level checkbox true, tax category field get hidden. when we try to save the record system giving error for Tax category field is mandatory.
-            //if (C_TaxCategory_ID < 1) throw new ArgumentException("C_TaxCategory_ID is mandatory.");
-            if (C_TaxCategory_ID <= 0)
-                Set_Value("C_TaxCategory_ID", null);
+            //if (VAB_TaxCategory_ID < 1) throw new ArgumentException("VAB_TaxCategory_ID is mandatory.");
+            if (VAB_TaxCategory_ID <= 0)
+                Set_Value("VAB_TaxCategory_ID", null);
             else
-                Set_Value("C_TaxCategory_ID", C_TaxCategory_ID);
+                Set_Value("VAB_TaxCategory_ID", VAB_TaxCategory_ID);
         }
         /** Get Tax Category.
         @return Tax Category */
-        public int GetC_TaxCategory_ID()
+        public int GetVAB_TaxCategory_ID()
         {
-            Object ii = Get_Value("C_TaxCategory_ID");
+            Object ii = Get_Value("VAB_TaxCategory_ID");
             if (ii == null)
             {
                 X_M_Product_Category pCat = new X_M_Product_Category(GetCtx(), GetM_Product_Category_ID(), null);
-                return  pCat.GetC_TaxCategory_ID();
+                return  pCat.GetVAB_TaxCategory_ID();
                 
             }
             return Convert.ToInt32(ii);
         }
         /** Set UOM Group.
-        @param C_UOMGroup_ID Group for managing sets of Unit of Measure */
-        public void SetC_UOMGroup_ID(int C_UOMGroup_ID)
+        @param VAB_UOMGroup_ID Group for managing sets of Unit of Measure */
+        public void SetVAB_UOMGroup_ID(int VAB_UOMGroup_ID)
         {
-            if (C_UOMGroup_ID <= 0) Set_Value("C_UOMGroup_ID", null);
+            if (VAB_UOMGroup_ID <= 0) Set_Value("VAB_UOMGroup_ID", null);
             else
-                Set_Value("C_UOMGroup_ID", C_UOMGroup_ID);
+                Set_Value("VAB_UOMGroup_ID", VAB_UOMGroup_ID);
         }
         /** Get UOM Group.
         @return Group for managing sets of Unit of Measure */
-        public int GetC_UOMGroup_ID()
+        public int GetVAB_UOMGroup_ID()
         {
-            Object ii = Get_Value("C_UOMGroup_ID");
+            Object ii = Get_Value("VAB_UOMGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID < 1) throw new ArgumentException("C_UOM_ID is mandatory.");
-            Set_Value("C_UOM_ID", C_UOM_ID);
+            if (VAB_UOM_ID < 1) throw new ArgumentException("VAB_UOM_ID is mandatory.");
+            Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1840,15 +1840,15 @@ namespace VAdvantage.Model
         public Boolean IsCostAdjustmentOnLost() { Object oo = Get_Value("IsCostAdjustmentOnLost"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
         /** Set Withholding Category.
-@param C_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
-        public void SetC_WithholdingCategory_ID(int C_WithholdingCategory_ID)
+@param VAB_WithholdingCategory_ID This field represents the withholding category linked with respective withholding tax. */
+        public void SetVAB_WithholdingCategory_ID(int VAB_WithholdingCategory_ID)
         {
-            if (C_WithholdingCategory_ID <= 0) Set_Value("C_WithholdingCategory_ID", null);
+            if (VAB_WithholdingCategory_ID <= 0) Set_Value("VAB_WithholdingCategory_ID", null);
             else
-                Set_Value("C_WithholdingCategory_ID", C_WithholdingCategory_ID);
+                Set_Value("VAB_WithholdingCategory_ID", VAB_WithholdingCategory_ID);
         }/** Get Withholding Category.
 @return This field represents the withholding category linked with respective withholding tax. */
-        public int GetC_WithholdingCategory_ID() { Object ii = Get_Value("C_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_WithholdingCategory_ID() { Object ii = Get_Value("VAB_WithholdingCategory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

@@ -215,7 +215,7 @@
             "VAF_Org_ID",
             "VAB_BusinessPartner_ID",
             "VAB_Currency_ID",
-            "C_Payment_ID ",
+            "VAB_Payment_ID ",
             "VAB_CashJRNLLine_ID",
             "VAB_CashJRNL_ID",
             "VAB_Invoice_ID ",
@@ -239,8 +239,8 @@
             "WriteOffAmount",
             "VAB_sched_InvoicePayment_ID",
             "DateAcct",
-            "GL_JOURNALLINE_ID",
-            "GL_Journal_ID",
+            "VAGL_JRNLLINE_ID",
+            "VAGL_JRNL_ID",
             "DocType",
             "Doc_Base_Type",
             "FromDate",
@@ -1656,9 +1656,9 @@
         //                    return new Date(val).toLocaleDateString();
         //                }, size: '80px', hidden: true
         //            },
-        //            { field: "GL_JOURNALLINE_ID", caption: VIS.translatedTexts.GL_JOURNALLINE_ID, size: '150px', hidden: true },
+        //            { field: "VAGL_JRNLLINE_ID", caption: VIS.translatedTexts.VAGL_JRNLLINE_ID, size: '150px', hidden: true },
         //            { field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true },
-        //            { field: "GL_Journal_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true }
+        //            { field: "VAGL_JRNL_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true }
 
         //        ],
         //        onClick: function (event) {
@@ -2231,10 +2231,10 @@
             $allocationTo.append('<option value="C">' + VIS.translatedTexts.VAB_CashJRNL_ID + '</option>');
             $allocationFrom.append('<option value="I">' + VIS.translatedTexts.VAB_Invoice_ID + '</option>');
             $allocationTo.append('<option value="I">' + VIS.translatedTexts.VAB_Invoice_ID + '</option>');
-            $allocationFrom.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
-            $allocationTo.append('<option value="G">' + VIS.translatedTexts.GL_Journal_ID + '</option>');
-            $allocationFrom.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
-            $allocationTo.append('<option value="P">' + VIS.translatedTexts.C_Payment_ID + '</option>');
+            $allocationFrom.append('<option value="G">' + VIS.translatedTexts.VAGL_JRNL_ID + '</option>');
+            $allocationTo.append('<option value="G">' + VIS.translatedTexts.VAGL_JRNL_ID + '</option>');
+            $allocationFrom.append('<option value="P">' + VIS.translatedTexts.VAB_Payment_ID + '</option>');
+            $allocationTo.append('<option value="P">' + VIS.translatedTexts.VAB_Payment_ID + '</option>');
         };
 
         function createRow1() {
@@ -2416,7 +2416,7 @@
         };
 
         function createRow2() {
-            $row2.append('<div class="d-flex doc-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.C_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 4px;"></p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh" title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-paymentSum"> 0 ' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div> <div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="paySrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchpBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType_' + $self.windowNo + '"></div><div class="payBaseType input-group vis-input-wrap" id="docbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div> ').append(' <div class= "vis-allocation-payment-grid" ></div> ');//.append(' < p class= "vis-allocate-paymentSum" > 0 - Sum 0.00</p > ');
+            $row2.append('<div class="d-flex doc-allocation"><div class="vis-doc-AllocOuter-wrap"><div><p>' + VIS.translatedTexts.VAB_Payment_ID + '</p>  <input type="checkbox" id="paymentselectall" /><p style="margin: 0 4px;"></p> <span id="pclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh" title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-paymentSum"> 0 ' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div> <div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="paySrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchpBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap" id="docType_' + $self.windowNo + '"></div><div class="payBaseType input-group vis-input-wrap" id="docbaseType_' + $self.windowNo + '"></div><div class="vis-fdate-allocation input-group vis-input-wrap"></div><div class="vis-tdate-allocation input-group vis-input-wrap"></div></div></div> ').append(' <div class= "vis-allocation-payment-grid" ></div> ');//.append(' < p class= "vis-allocate-paymentSum" > 0 - Sum 0.00</p > ');
             $divPayment = $row2.find('.vis-allocation-payment-grid');
             $lblPaymentSum = $row2.find('.vis-allocate-paymentSum');
             $paymentSelctAll = $row2.find('#paymentselectall');
@@ -2462,7 +2462,7 @@
 
         //added grid design for gl-allocation
         function createRow5() {
-            $row5.append('<div class="d-flex  gl-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.GL_Journal_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 4px;"></span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-glSum"> 0' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="glSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchglBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-gl-grid"></div>');
+            $row5.append('<div class="d-flex  gl-allocation"><div class="vis-doc-AllocOuter-wrap"><div><span>' + VIS.translatedTexts.VAGL_JRNL_ID + '</span> <input type="checkbox" id="glselectall" /><span style="margin: 0 4px;"></span> <span id="gclrbutton_' + $self.windowNo + '" style="cursor: pointer;margin: 2px 0 0;" class="glyphicon glyphicon-refresh"  title=' + VIS.Msg.getMsg("Reset") + '></span></div><p class="vis-allocate-glSum"> 0' + VIS.Msg.getMsg("SelectedLines") + ' - ' + summation + ' 0.00</p></div><div class="vis-allocation-topFields-wrap"><div class="input-group vis-input-wrap"><div class="vis-control-wrap"><input placeholder="' + VIS.Msg.getMsg("SearchResults") + '" data-hasbtn=" " type="text" id="glSrch' + $self.windowNo + '" /><label>' + VIS.Msg.getMsg("SearchResults") + '</label></div><div class="input-group-append"><a class="input-group-text" id="_SrchglBtn_' + $self.windowNo + '"><span class="glyphicon glyphicon-search"></span></a></div></div><div class="input-group vis-input-wrap vis-fdate-allocation"></div><div class="input-group vis-input-wrap vis-tdate-allocation"></div></div></div>').append('<div  class="vis-allocation-gl-grid"></div>');
             $divGl = $row5.find('.vis-allocation-gl-grid');
             $lblglSum = $row5.find('.vis-allocate-glSum');
             $glSelectAll = $row5.find('#glselectall');
@@ -2866,7 +2866,7 @@
                             for (var i = 0; i < data.length; i++) {
 
                                 var filterObj = SelectedGL.filter(function (e) {
-                                    return e.GL_JOURNALLINE_ID == data[i]["GL_JOURNALLINE_ID"];
+                                    return e.VAGL_JRNLLINE_ID == data[i]["VAGL_JRNLLINE_ID"];
                                 });
 
                                 if (filterObj.length == 0) {
@@ -3202,9 +3202,9 @@
                     return new Date(val).toLocaleDateString();
                 }, size: '80px', hidden: true
             });
-            columns.push({ field: "GL_JOURNALLINE_ID", caption: VIS.translatedTexts.GL_JOURNALLINE_ID, size: '150px', hidden: true });
+            columns.push({ field: "VAGL_JRNLLINE_ID", caption: VIS.translatedTexts.VAGL_JRNLLINE_ID, size: '150px', hidden: true });
             columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
-            columns.push({ field: "GL_Journal_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
+            columns.push({ field: "VAGL_JRNL_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
             var rows = [];
 
@@ -3377,7 +3377,7 @@
                     return new Date(val).toLocaleDateString();
                 }
             });
-            columns.push({ field: "CpaymentID", caption: VIS.translatedTexts.c_payment_id, size: '150px', hidden: true });
+            columns.push({ field: "CpaymentID", caption: VIS.translatedTexts.VAB_Payment_id, size: '150px', hidden: true });
             columns.push({ field: "VAB_CurrencyType_ID", caption: VIS.translatedTexts.VAB_CurrencyType_ID, size: '85px', hidden: true });
 
             var rows = [];
@@ -5831,8 +5831,8 @@
                         Account: record.Account,
                         DATEDOC: record.DATEDOC,
                         Isocode: record.Isocode,
-                        GL_JOURNALLINE_ID: record.GL_JOURNALLINE_ID,
-                        GL_Journal_ID: record.GL_Journal_ID,
+                        VAGL_JRNLLINE_ID: record.VAGL_JRNLLINE_ID,
+                        VAGL_JRNL_ID: record.VAGL_JRNL_ID,
                         OpenAmount: record.OpenAmount,
                         //Payment: record.Payment,
                         //Multiplierap: record.Multiplierap,
@@ -5866,7 +5866,7 @@
                 {
                     //de-select from SelectedGL list.
                     for (var x = 0; x < SelectedGL.length; x++) {
-                        if (SelectedGL[x].GL_JOURNALLINE_ID == $glLineGrid.records[row].GL_JOURNALLINE_ID) {
+                        if (SelectedGL[x].VAGL_JRNLLINE_ID == $glLineGrid.records[row].VAGL_JRNLLINE_ID) {
                             SelectedGL.splice(x, 1);
                         }
                     }
@@ -6119,7 +6119,7 @@
                                 for (var i = 0; i < data.length; i++) {
 
                                     var filterObj = SelectedGL.filter(function (e) {
-                                        return e.GL_JOURNALLINE_ID == data[i]["GL_JOURNALLINE_ID"];
+                                        return e.VAGL_JRNLLINE_ID == data[i]["VAGL_JRNLLINE_ID"];
                                     });
 
                                     if (filterObj.length == 0) {
@@ -7046,7 +7046,7 @@
                                 if (rowsGLVoucher[i].AppliedAmt != undefined && rowsGLVoucher[i].AppliedAmt != 0) {
                                     glData.push({
                                         AppliedAmt: rowsGLVoucher[i].AppliedAmt, Date: row.DATEACCT, DateDoc: row.DATEDOC, DocumentNo: row.DOCUMENTNO,
-                                        OpenAmount: row.OpenAmount, GL_JournalLine_ID: row.GL_JOURNALLINE_ID, GL_Journal_ID: row.GL_Journal_ID,
+                                        OpenAmount: row.OpenAmount, VAGL_JRNLLine_ID: row.VAGL_JRNLLINE_ID, VAGL_JRNL_ID: row.VAGL_JRNL_ID,
                                         ConvertedAmount: row.ConvertedAmount, Org: parseInt($cmbOrg.val()), IsPaid: false, paidAmt: 0
                                     });
                                 }

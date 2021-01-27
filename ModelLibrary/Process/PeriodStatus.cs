@@ -27,7 +27,7 @@ namespace VAdvantage.Process
     public class PeriodStatus : ProcessEngine.SvrProcess
     {
         //Period					
-        private int _C_Period_ID = 0;
+        private int _VAB_YearPeriod_ID = 0;
         //Action					
         private String _PeriodAction = null;
         //Organization					
@@ -65,7 +65,7 @@ namespace VAdvantage.Process
                     //log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_Period_ID = GetRecord_ID();
+            _VAB_YearPeriod_ID = GetRecord_ID();
         }
 
         /**
@@ -75,12 +75,12 @@ namespace VAdvantage.Process
          */
         protected override String DoIt()
         {
-            //log.info("C_Period_ID=" + _C_Period_ID + ", PeriodAction=" + _PeriodAction);
-            MPeriod period = new MPeriod(GetCtx(), _C_Period_ID, Get_TrxName());
+            //log.info("VAB_YearPeriod_ID=" + _VAB_YearPeriod_ID + ", PeriodAction=" + _PeriodAction);
+            MPeriod period = new MPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_TrxName());
             if (period.Get_ID() == 0)
-                throw new Exception("@NotFound@  @C_Period_ID@=" + _C_Period_ID);
+                throw new Exception("@NotFound@  @VAB_YearPeriod_ID@=" + _VAB_YearPeriod_ID);
 
-            StringBuilder sql = new StringBuilder("UPDATE C_PeriodControl ");
+            StringBuilder sql = new StringBuilder("UPDATE VAB_YearPeriodControl ");
             sql.Append("SET PeriodStatus='");
             //	Open
             if (MPeriodControl.PERIODACTION_OpenPeriod.Equals(_PeriodAction))
@@ -96,7 +96,7 @@ namespace VAdvantage.Process
             //
             sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE
-            sql.Append(" WHERE C_Period_ID=").Append(period.GetC_Period_ID())
+            sql.Append(" WHERE VAB_YearPeriod_ID=").Append(period.GetVAB_YearPeriod_ID())
                 .Append(" AND PeriodStatus<>'P'")
                 .Append(" AND PeriodStatus<>'").Append(_PeriodAction).Append("'");
 
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 int VAB_AccountBook_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]);
-                                string sqlUpd = "UPDATE Fact_Accumulation SET DateFrom = " + DB.TO_DATE(period.GetStartDate().Value.AddDays(-1)) + " WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
+                                string sqlUpd = "UPDATE Actual_Accumulation SET DateFrom = " + DB.TO_DATE(period.GetStartDate().Value.AddDays(-1)) + " WHERE IsActive = 'Y' AND VAF_Client_ID = " + GetCtx().GetVAF_Client_ID();
                                 no = DB.ExecuteQuery(sqlUpd, null, Get_TrxName());
                                 if (Get_Trx().Commit())
                                 {
@@ -147,8 +147,8 @@ namespace VAdvantage.Process
                 }
             }
 
-            CacheMgt.Get().Reset("C_PeriodControl", 0);
-            CacheMgt.Get().Reset("C_Period", _C_Period_ID);
+            CacheMgt.Get().Reset("VAB_YearPeriodControl", 0);
+            CacheMgt.Get().Reset("VAB_YearPeriod", _VAB_YearPeriod_ID);
             return "@Period Updated@ #" + no;
         }
     }

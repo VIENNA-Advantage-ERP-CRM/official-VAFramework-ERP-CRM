@@ -369,7 +369,7 @@
                 }
                 else {
                     if (window_ID == 184) {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on M_inout and internal use move line respectively
-                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
+                        query += " AND VAICNT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from VAB_Order WHERE VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
                     }
                     else if (window_ID == 319 || window_ID == 170) {
                         query += " AND VAICNT_TransactionType = 'IM' ";
@@ -384,7 +384,7 @@
                         M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
                     }
                     else if (window_ID == 169) {
-                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from C_Order WHERE  VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO'))";
+                        query += " AND VAICNT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from VAB_Order WHERE  VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO'))";
                     }
                     else if (window_ID == 341) {
                         query += " AND VAICNT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";
@@ -526,9 +526,9 @@
                         countID += selectedItems[item] + ",";
                     }
                     countID = countID.substr(0, countID.length - 1);
-                    //_query = "SELECT cl.M_Product_ID,prd.Name,prd.Value,cl.VAICNT_Quantity,cl.M_AttributeSetInstance_ID,cl.C_UOM_ID,uom.Name as UOM,ic.VAICNT_ReferenceNo,cl.VAICNT_InventoryCountLine_ID,"
+                    //_query = "SELECT cl.M_Product_ID,prd.Name,prd.Value,cl.VAICNT_Quantity,cl.M_AttributeSetInstance_ID,cl.VAB_UOM_ID,uom.Name as UOM,ic.VAICNT_ReferenceNo,cl.VAICNT_InventoryCountLine_ID,"
                     //    + " ats.Description FROM VAICNT_InventoryCount ic INNER JOIN VAICNT_InventoryCountLine cl ON ic.VAICNT_InventoryCount_ID = cl.VAICNT_InventoryCount_ID"
-                    //    + " INNER JOIN M_Product prd ON cl.M_Product_ID = prd.M_Product_ID INNER JOIN C_UOM uom ON cl.C_UOM_ID = uom.C_UOM_ID LEFT JOIN M_AttributeSetInstance ats"
+                    //    + " INNER JOIN M_Product prd ON cl.M_Product_ID = prd.M_Product_ID INNER JOIN VAB_UOM uom ON cl.VAB_UOM_ID = uom.VAB_UOM_ID LEFT JOIN M_AttributeSetInstance ats"
                     //    + " ON cl.M_AttributeSetInstance_ID = ats.M_AttributeSetInstance_ID WHERE ic.VAICNT_InventoryCount_ID IN (" + countID + ") ORDER BY cl.Line";
 
                     //}

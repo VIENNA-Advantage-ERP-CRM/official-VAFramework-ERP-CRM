@@ -25,13 +25,13 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            int c_order_id = 0;
+            int VAB_Order_id = 0;
             int pid = 0;
-            VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), c_order_id, null);
+            VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), VAB_Order_id, null);
 
 
             VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), 0, null);
-            ol.SetC_Order_ID(c_order_id);
+            ol.SetVAB_Order_ID(VAB_Order_id);
             ol.SetM_Product_ID(pid);
             ol.SetVAF_Client_ID(ord.GetVAF_Client_ID());
             ol.SetVAF_Org_ID(ord.GetVAF_Org_ID());

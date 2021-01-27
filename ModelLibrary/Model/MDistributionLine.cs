@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionLine
  * Purpose        : GL Distribution Line Model
- * Class Used     : X_GL_DistributionLine class
+ * Class Used     : X_VAGL_DistributionLine class
  * Chronological    Development
  * Deepak           19-Nov-2009
   ******************************************************/
@@ -22,20 +22,20 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionLine : X_GL_DistributionLine
+    public class MDistributionLine : X_VAGL_DistributionLine
     {
        /// <summary>
        /// Standard Constructor
        /// </summary>
        /// <param name="ctx">context</param>
-       /// <param name="GL_DistributionLine_ID">id</param>
+       /// <param name="VAGL_DistributionLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDistributionLine(Ctx ctx, int GL_DistributionLine_ID, Trx trxName):base(ctx, GL_DistributionLine_ID, trxName)
+        public MDistributionLine(Ctx ctx, int VAGL_DistributionLine_ID, Trx trxName):base(ctx, VAGL_DistributionLine_ID, trxName)
         {
-            //super(ctx, GL_DistributionLine_ID, trxName);
-            if (GL_DistributionLine_ID == 0)
+            //super(ctx, VAGL_DistributionLine_ID, trxName);
+            if (VAGL_DistributionLine_ID == 0)
             {
-                //	setGL_Distribution_ID (0);		//	Parent
+                //	setVAGL_Distribution_ID (0);		//	Parent
                 //	setLine (0);
                 //
                 SetOverwriteAcct(false);
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
         {
             if (_parent == null)
             {
-                _parent = new MDistribution(GetCtx(), GetGL_Distribution_ID(), Get_TrxName());
+                _parent = new MDistribution(GetCtx(), GetVAGL_Distribution_ID(), Get_TrxName());
             }
             return _parent;
         }	//	getParent
@@ -116,15 +116,15 @@ namespace VAdvantage.Model
                 IsOverwriteOrg() && GetOrg_ID() != 0 ? GetOrg_ID() : _account.GetVAF_Org_ID(),
                 _account.GetVAB_AccountBook_ID(),
                 IsOverwriteAcct() && GetAccount_ID() != 0 ? GetAccount_ID() : _account.GetAccount_ID(),
-                    _account.GetC_SubAcct_ID(),
+                    _account.GetVAB_SubAcct_ID(),
                 //	
                 IsOverwriteProduct() ? GetM_Product_ID() : _account.GetM_Product_ID(),
                 IsOverwriteBPartner() ? GetVAB_BusinessPartner_ID() : _account.GetVAB_BusinessPartner_ID(),
                 IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
                 IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
                 IsOverwriteLocTo() ? GetC_LocTo_ID() : _account.GetC_LocTo_ID(),
-                IsOverwriteSalesRegion() ? GetC_SalesRegion_ID() : _account.GetC_SalesRegion_ID(),
-                IsOverwriteProject() ? GetC_Project_ID() : _account.GetC_Project_ID(),
+                IsOverwriteSalesRegion() ? GetVAB_SalesRegionState_ID() : _account.GetVAB_SalesRegionState_ID(),
+                IsOverwriteProject() ? GetVAB_Project_ID() : _account.GetVAB_Project_ID(),
                 IsOverwriteCampaign() ? GetVAB_Promotion_ID() : _account.GetVAB_Promotion_ID(),
                 IsOverwriteActivity() ? GetVAB_BillingCode_ID() : _account.GetVAB_BillingCode_ID(),
                 IsOverwriteUser1() ? GetUser1_ID() : _account.GetUser1_ID(),
@@ -177,8 +177,8 @@ namespace VAdvantage.Model
         {
             if (GetLine() == 0)
             {
-                String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM GL_DistributionLine WHERE GL_Distribution_ID=@Param1";
-                int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetGL_Distribution_ID());
+                String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM VAGL_DistributionLine WHERE VAGL_Distribution_ID=@Param1";
+                int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAGL_Distribution_ID());
                 SetLine(ii);
             }
             //	Reset not selected Overwrite
@@ -218,13 +218,13 @@ namespace VAdvantage.Model
             {
                 SetM_Product_ID(0);
             }
-            if (!IsOverwriteProject() && GetC_Project_ID() != 0)
+            if (!IsOverwriteProject() && GetVAB_Project_ID() != 0)
             {
-                SetC_Project_ID(0);
+                SetVAB_Project_ID(0);
             }
-            if (!IsOverwriteSalesRegion() && GetC_SalesRegion_ID() != 0)
+            if (!IsOverwriteSalesRegion() && GetVAB_SalesRegionState_ID() != 0)
             {
-                SetC_SalesRegion_ID(0);
+                SetVAB_SalesRegionState_ID(0);
             }
             if (!IsOverwriteUser1() && GetUser1_ID() != 0)
             {

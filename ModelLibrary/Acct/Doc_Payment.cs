@@ -1,9 +1,9 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : Doc_Payment
+ * Class Name     : DoVAB_Payment
  * Purpose        : Post Invoice Documents.
  *                  <pre>
- *                   Table:              C_Payment (335)
+ *                   Table:              VAB_Payment (335)
  *                   Document Types      ARP, APP
  *                   </pre>
  * Class Used     : Doc
@@ -30,7 +30,7 @@ using VAdvantage.Acct;
 
 namespace VAdvantage.Acct
 {
-    public class Doc_Payment : Doc
+    public class DoVAB_Payment : Doc
     {
         //	Tender Type			
         private String _TenderType = null;
@@ -45,12 +45,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Payment(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public DoVAB_Payment(MAcctSchema[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MPayment), idr, null, trxName)
         {
 
         }
-        public Doc_Payment(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public DoVAB_Payment(MAcctSchema[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MPayment), dr, null, trxName)
         {
 
@@ -201,8 +201,8 @@ namespace VAdvantage.Acct
                     {
                         MAccount acct = null;
                         MAccount portAcct = null;
-                        string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                        int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM VAB_Payment WHERE VAB_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                        int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM VAB_Payment WHERE VAB_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if ("T".Equals(boeType))
                         {
                             int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_BOE_Acct FROM ED008_BOEAccounting WHERE ED008_BOE_ID=" + boeID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
@@ -364,8 +364,8 @@ namespace VAdvantage.Acct
                 {
                     MAccount acct = null;
                     MAccount portAcct = null;
-                    string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                    int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM C_Payment WHERE C_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                    string boeType = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT ED008_BOEType FROM VAB_Payment WHERE VAB_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
+                    int boeID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED008_BOE_ID FROM VAB_Payment WHERE VAB_Payment_ID = " + Get_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     if ("E".Equals(_TenderType))
                     {
                         if ("T".Equals(boeType))
@@ -410,11 +410,11 @@ namespace VAdvantage.Acct
                         payAmt = GetAmount();
 
                         string sql = @"SELECT cl.m_product_id, cl.linenetamt,prd.ed010_sscode_id,holddet.ed010_appliedpercentage,holddet.ed010_actualpercentage,withAcct.Withholding_Acct
-                        FROM C_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
-                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN c_withholding hold ON hold.C_WithHolding_Id = prd.c_withholding_id
-                        LEFT JOIN ed010_withholdingdetails holddet ON holddet.C_WithHolding_Id = hold.C_WithHolding_Id left join C_Withholding_Acct withAcct on hold.C_WithHolding_Id=withAcct.C_WithHolding_Id
+                        FROM VAB_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
+                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN VAB_Withholding hold ON hold.VAB_Withholding_Id = prd.VAB_Withholding_id
+                        LEFT JOIN ed010_withholdingdetails holddet ON holddet.VAB_Withholding_Id = hold.VAB_Withholding_Id left join VAB_Withholding_Acct withAcct on hold.VAB_Withholding_Id=withAcct.VAB_Withholding_Id
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
-                            @"BETWEEN holddet.ED010_FromDate AND holddet.ED010_ToDate and pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.c_payment_id = " + Get_ID();
+                            @"BETWEEN holddet.ED010_FromDate AND holddet.ED010_ToDate and pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.VAB_Payment_id = " + Get_ID();
 
                         ds = new DataSet();
                         ds = DB.ExecuteDataset(sql, null, null);
@@ -454,11 +454,11 @@ namespace VAdvantage.Acct
                         ds.Dispose();
 
                         sql = @"SELECT cl.m_product_id,cb.VAB_BusinessPartner_id,cl.linenetamt,prd.ed010_sscode_id,sdet.ed010_percentagetype,sdet.ed010_maxamt,sdet.ed010_minamt,sdet.ed010_socialsecurityprcnt,sdet.ed010_orgpercentage,
-                        sdet.ed010_vendorpercentage,sscAcct.ED000_SecCodeAcct FROM C_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
+                        sdet.ed010_vendorpercentage,sscAcct.ED000_SecCodeAcct FROM VAB_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
                         on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN ed010_sscode scode ON scode.ed010_sscode_ID = prd.ed010_sscode_id
                         LEFT JOIN ed010_sscodedetails sdet ON sdet.ed010_sscode_ID = scode.ed010_sscode_ID left join ED010_SSCode_Acct sscAcct on scode.ED010_SSCode_ID=sscAcct.ED010_SSCode_ID
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
-                            @"BETWEEN sdet.ED010_FromDate AND sdet.ED010_ToDate AND pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.c_payment_id = " + Get_ID();
+                            @"BETWEEN sdet.ED010_FromDate AND sdet.ED010_ToDate AND pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.VAB_Payment_id = " + Get_ID();
 
                         dsSSCode = new DataSet();
                         dsSSCode = DB.ExecuteDataset(sql, null, null);

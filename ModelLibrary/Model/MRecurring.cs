@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRecurring
  * Purpose        : MRecurring Model
- * Class Used     : X_C_Recurring
+ * Class Used     : X_VAB_Recurring
  * Chronological    Development
  * Deepak           03-Feb-2010
   ******************************************************/
@@ -24,15 +24,15 @@ using ViennaAdvantage.Model; //Added by Arpit
 
 namespace VAdvantage.Model
 {
-    public class MRecurring : X_C_Recurring
+    public class MRecurring : X_VAB_Recurring
     {
-        public MRecurring(Ctx ctx, int C_Recurring_ID, Trx trxName)
-            : base(ctx, C_Recurring_ID, trxName)
+        public MRecurring(Ctx ctx, int VAB_Recurring_ID, Trx trxName)
+            : base(ctx, VAB_Recurring_ID, trxName)
         {
 
-            if (C_Recurring_ID == 0)
+            if (VAB_Recurring_ID == 0)
             {
-                //	setC_Recurring_ID (0);		//	PK
+                //	setVAB_Recurring_ID (0);		//	PK
                 SetDateNextRun(DateTime.Now); // (new Timestamp(System.currentTimeMillis()));
                 SetFrequencyType(FREQUENCYTYPE_Monthly);
                 SetFrequency(1);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
                 .Append(Get_ID()).Append("-").Append(GetName());
             if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Order))
             {
-                sb.Append(",C_Order_ID=").Append(GetC_Order_ID());
+                sb.Append(",VAB_Order_ID=").Append(GetVAB_Order_ID());
             }
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
             {
@@ -69,21 +69,21 @@ namespace VAdvantage.Model
             }
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
             {
-                sb.Append(",C_Project_ID=").Append(GetC_Project_ID());
+                sb.Append(",VAB_Project_ID=").Append(GetVAB_Project_ID());
             }
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournalBatch)) //changes to Journal Batch by Arpit
             {
-                sb.Append(",GL_JournalBatch_ID=").Append(GetGL_JournalBatch_ID());
+                sb.Append(",VAGL_BatchJRNL_ID=").Append(GetVAGL_BatchJRNL_ID());
             }
             //Added by arpit on 14th, Dec, 2016
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournal))
             {
-                sb.Append(",GL_Journal_ID=").Append(GetGL_Journal_ID());
+                sb.Append(",VAGL_JRNL_ID=").Append(GetVAGL_JRNL_ID());
             }
             // 27-Dec,2016
             else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Payment))
             {
-                sb.Append("C_Payment_ID=").Append(GetC_Payment_ID());
+                sb.Append("VAB_Payment_ID=").Append(GetVAB_Payment_ID());
             }
             // End Here
             sb.Append(",Fequency=").Append(GetFrequencyType()).Append("*").Append(GetFrequency());
@@ -113,10 +113,10 @@ namespace VAdvantage.Model
                 //	Copy
                 if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Order))
                 {
-                    MOrder from = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+                    MOrder from = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
                     MOrder order = MOrder.CopyFrom(from, dateDoc,
                         from.GetVAB_DocTypes_ID(), false, false, Get_TrxName());
-                    run.SetC_Order_ID(order.GetC_Order_ID());
+                    run.SetVAB_Order_ID(order.GetVAB_Order_ID());
                     msg += order.GetDocumentNo();
                 }
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
@@ -145,31 +145,31 @@ namespace VAdvantage.Model
                 }
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
                 {
-                    MProject project = MProject.CopyFrom(GetCtx(), GetC_Project_ID(), dateDoc, Get_TrxName());
-                    run.SetC_Project_ID(project.GetC_Project_ID());
+                    MProject project = MProject.CopyFrom(GetCtx(), GetVAB_Project_ID(), dateDoc, Get_TrxName());
+                    run.SetVAB_Project_ID(project.GetVAB_Project_ID());
                     msg += project.GetValue();
                 }
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournalBatch)) //Changes to GL Journal Batch by Arpit
                 {
-                    MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), GetGL_JournalBatch_ID(), dateDoc, Get_TrxName());
-                    run.SetGL_JournalBatch_ID(journal.GetGL_JournalBatch_ID());
+                    MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
+                    run.SetVAGL_BatchJRNL_ID(journal.GetVAGL_BatchJRNL_ID());
                     msg += journal.GetDocumentNo();
                 }
                 //Added by Arpit on 14th, Dec,2016
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournal))
                 {
-                    MJournal Journal = MJournal.CopyFrom(GetCtx(), GetGL_Journal_ID(), dateDoc, Get_TrxName());
-                    run.SetGL_Journal_ID(Journal.GetGL_Journal_ID());
+                    MJournal Journal = MJournal.CopyFrom(GetCtx(), GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
+                    run.SetVAGL_JRNL_ID(Journal.GetVAGL_JRNL_ID());
                     msg += Journal.GetDocumentNo();
                 }
 
                 //End here
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Payment))
                 {
-                    MPayment from = new MPayment(GetCtx(), GetC_Payment_ID(), Get_TrxName());
+                    MPayment from = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
                     MPayment payment = MPayment.CopyFrom(from, dateDoc,
                         from.GetVAB_DocTypes_ID(), Get_TrxName());
-                    run.SetC_Payment_ID(payment.GetC_Payment_ID());
+                    run.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                     msg += payment.GetDocumentNo();
                 }
                 else
@@ -195,8 +195,8 @@ namespace VAdvantage.Model
         /// <returns>true if runs left</returns>
         public bool CalculateRuns()
         {
-            String sql = "SELECT COUNT(*) FROM C_Recurring_Run WHERE C_Recurring_ID=@param1";
-            int current = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetC_Recurring_ID());
+            String sql = "SELECT COUNT(*) FROM VAB_RecurringRun WHERE VAB_Recurring_ID=@param1";
+            int current = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAB_Recurring_ID());
             int remaining = GetRunsMax() - current;
             SetRunsRemaining(remaining);
             Save();
@@ -264,9 +264,9 @@ namespace VAdvantage.Model
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_Order)
-                && GetC_Order_ID() == 0)
+                && GetVAB_Order_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Order_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Order_ID"));
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_Invoice)
@@ -276,28 +276,28 @@ namespace VAdvantage.Model
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_GLJournalBatch) //Changes recurring type from GL JOurnal To GL Journal Batch
-                && GetGL_JournalBatch_ID() == 0)
+                && GetVAGL_BatchJRNL_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "GL_JournalBatch_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAGL_BatchJRNL_ID"));
                 return false;
             }
             if (rt.Equals(MRecurring.RECURRINGTYPE_Project)
-                && GetC_Project_ID() == 0)
+                && GetVAB_Project_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Project_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Project_ID"));
                 return false;
             }
             //Added by Arpit on 15th Dec,2016
-            if (rt.Equals(MRecurring.RECURRINGTYPE_GLJournal) && GetGL_Journal_ID() == 0)
+            if (rt.Equals(MRecurring.RECURRINGTYPE_GLJournal) && GetVAGL_JRNL_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "GL_Journal_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAGL_JRNL_ID"));
                 return false;
             }
             //End Here
             //Arpit 17th Dec,2016
-            if (rt.Equals(MRecurring.RECURRINGTYPE_Payment) && GetC_Payment_ID() == 0)
+            if (rt.Equals(MRecurring.RECURRINGTYPE_Payment) && GetVAB_Payment_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "C_Payment_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAB_Payment_ID"));
                 return false;
             }
             //End here

@@ -160,18 +160,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment Schedule.
-        @param C_PaySchedule_ID Payment Schedule Template */
-        public void SetC_PaySchedule_ID(int C_PaySchedule_ID)
+        @param VAB_PaymentSchedule_ID Payment Schedule Template */
+        public void SetVAB_PaymentSchedule_ID(int VAB_PaymentSchedule_ID)
         {
-            if (C_PaySchedule_ID <= 0) Set_ValueNoCheck("C_PaySchedule_ID", null);
+            if (VAB_PaymentSchedule_ID <= 0) Set_ValueNoCheck("VAB_PaymentSchedule_ID", null);
             else
-                Set_ValueNoCheck("C_PaySchedule_ID", C_PaySchedule_ID);
+                Set_ValueNoCheck("VAB_PaymentSchedule_ID", VAB_PaymentSchedule_ID);
         }
         /** Get Payment Schedule.
         @return Payment Schedule Template */
-        public int GetC_PaySchedule_ID()
+        public int GetVAB_PaymentSchedule_ID()
         {
-            Object ii = Get_Value("C_PaySchedule_ID");
+            Object ii = Get_Value("VAB_PaymentSchedule_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -308,18 +308,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment.
-        @param C_Payment_ID Payment identifier */
-        public void SetC_Payment_ID(int C_Payment_ID)
+        @param VAB_Payment_ID Payment identifier */
+        public void SetVAB_Payment_ID(int VAB_Payment_ID)
         {
-            if (C_Payment_ID <= 0) Set_Value("C_Payment_ID", null);
+            if (VAB_Payment_ID <= 0) Set_Value("VAB_Payment_ID", null);
             else
-                Set_Value("C_Payment_ID", C_Payment_ID);
+                Set_Value("VAB_Payment_ID", VAB_Payment_ID);
         }
         /** Get Payment.
         @return Payment identifier */
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            Object ii = Get_Value("C_Payment_ID");
+            Object ii = Get_Value("VAB_Payment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -345,18 +345,18 @@ namespace VAdvantage.Model
 
 
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID <= 0) Set_Value("C_PaymentTerm_ID", null);
+            if (VAB_PaymentTerm_ID <= 0) Set_Value("VAB_PaymentTerm_ID", null);
             else
-                Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+                Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

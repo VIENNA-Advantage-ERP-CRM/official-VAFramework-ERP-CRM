@@ -20,7 +20,7 @@ namespace VAdvantage.Process
     {
         #region Private Variable
         /**	Project         		*/
-        private int _C_Project_ID = 0;
+        private int _VAB_Project_ID = 0;
         /**BPartner Customer        */
         private int VAB_BusinessPartner_id = 0;
         /**BPartner Location        */
@@ -28,28 +28,28 @@ namespace VAdvantage.Process
         /**BPartner Prospect        */
         private int VAB_BusinessPartnerSR_ID = 0;
         /*Order                   	*/
-        //private int C_Order_ID = 0;
+        //private int VAB_Order_ID = 0;
         /**ProjectLine       */
-        private int C_ProjectLine_ID = 0;
+        private int VAB_ProjectLine_ID = 0;
 
         #endregion
 
         protected override void Prepare()
         {
-            _C_Project_ID = GetRecord_ID();
+            _VAB_Project_ID = GetRecord_ID();
         }
 
         protected override string DoIt()
         {
             //Int32 value = 0;
             string msg = "";
-            log.Info("C_Project_ID=" + _C_Project_ID);
-            if (_C_Project_ID == 0)
+            log.Info("VAB_Project_ID=" + _VAB_Project_ID);
+            if (_VAB_Project_ID == 0)
             {
-                throw new ArgumentException("C_Project_ID == 0");
+                throw new ArgumentException("VAB_Project_ID == 0");
             }
 
-            VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _C_Project_ID, null);
+            VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _VAB_Project_ID, null);
             VAdvantage.Model.MOrder order = new VAdvantage.Model.MOrder(GetCtx(), 0, null);
             VAB_BusinessPartner_id = fromProject.GetVAB_BusinessPartner_ID();
             VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
@@ -57,9 +57,9 @@ namespace VAdvantage.Process
             //MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartner_id, null);
             VAdvantage.Model.MBPartnerLocation bpartnerloc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), VAB_BPart_Location_id, null);
             String currentdate = DateTime.Now.ToString();
-            String sqlprjln = " select c_projectline_id from c_projectline where c_project_id=" + _C_Project_ID + "";
-            C_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln));
-            if (C_ProjectLine_ID != 0)
+            String sqlprjln = " select VAB_ProjectLine_ID from VAB_ProjectLine where VAB_Project_ID=" + _VAB_Project_ID + "";
+            VAB_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln));
+            if (VAB_ProjectLine_ID != 0)
             {
                 order.SetDateOrdered(Convert.ToDateTime(currentdate));
                 order.SetDatePromised(Convert.ToDateTime(currentdate));
@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                 //    int VAB_CurrencyType_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlconversiontype));
                 //    order.SetVAB_CurrencyType_ID(VAB_CurrencyType_id);
                 //}
-                order.SetC_Project_ID(GetRecord_ID());
+                order.SetVAB_Project_ID(GetRecord_ID());
                 order.SetSalesRep_ID(fromProject.GetSalesRep_ID());
                 order.SetVAB_Currency_ID(fromProject.GetVAB_Currency_ID());
                 if (VAB_BusinessPartner_id != 0)
@@ -122,10 +122,10 @@ namespace VAdvantage.Process
                     bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
-                    if (bp.GetC_PaymentTerm_ID() != 0)
+                    if (bp.GetVAB_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
-                        order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
 
                     }
 
@@ -141,10 +141,10 @@ namespace VAdvantage.Process
                     bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
-                    if (bp.GetC_PaymentTerm_ID() != 0)
+                    if (bp.GetVAB_PaymentTerm_ID() != 0)
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
-                        order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
 
                     }
 
@@ -154,10 +154,10 @@ namespace VAdvantage.Process
                         return Msg.GetMsg(GetCtx(), "CampaignIDtNotSaved");
                     }
                 }
-                //if (bp.GetC_PaymentTerm_ID() != 0)
+                //if (bp.GetVAB_PaymentTerm_ID() != 0)
                 //{
                 //    order.SetPaymentMethod(bp.GetPaymentRule());
-                //    order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                //    order.SetVAB_PaymentTerm_ID(bp.GetVAB_PaymentTerm_ID());
 
                 //}
                 order.SetFreightCostRule("I");
@@ -191,7 +191,7 @@ namespace VAdvantage.Process
                     }
                 }
 
-                fromProject.SetRef_Order_ID(order.GetC_Order_ID());
+                fromProject.SetRef_Order_ID(order.GetVAB_Order_ID());
                 fromProject.SetGenerate_Quotation("Y");
                 if (!fromProject.Save())
                 {

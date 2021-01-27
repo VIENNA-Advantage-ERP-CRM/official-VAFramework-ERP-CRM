@@ -26,7 +26,7 @@ namespace VAdvantage.Process
 {
     public class CopyFromJournal : SvrProcess
     {
-        private int _GL_JournalBatch_ID = 0;
+        private int _VAGL_BatchJRNL_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -41,9 +41,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("GL_JournalBatch_ID"))
+                else if (name.Equals("VAGL_BatchJRNL_ID"))
                 {
-                    _GL_JournalBatch_ID = Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAGL_BatchJRNL_ID = Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else
                 {
@@ -58,18 +58,18 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            int To_GL_JournalBatch_ID = GetRecord_ID();
-            log.Info("doIt - From GL_JournalBatch_ID=" + _GL_JournalBatch_ID + " to " + To_GL_JournalBatch_ID);
-            if (To_GL_JournalBatch_ID == 0)
+            int To_VAGL_BatchJRNL_ID = GetRecord_ID();
+            log.Info("doIt - From VAGL_BatchJRNL_ID=" + _VAGL_BatchJRNL_ID + " to " + To_VAGL_BatchJRNL_ID);
+            if (To_VAGL_BatchJRNL_ID == 0)
             {
-                throw new ArgumentException("Target GL_JournalBatch_ID == 0");
+                throw new ArgumentException("Target VAGL_BatchJRNL_ID == 0");
             }
-            if (_GL_JournalBatch_ID == 0)
+            if (_VAGL_BatchJRNL_ID == 0)
             {
-                throw new ArgumentException("Source GL_JournalBatch_ID == 0");
+                throw new ArgumentException("Source VAGL_BatchJRNL_ID == 0");
             }
-            VAdvantage.Model.MJournalBatch from = new VAdvantage.Model.MJournalBatch(GetCtx(), _GL_JournalBatch_ID, Get_Trx());
-            VAdvantage.Model.MJournalBatch to = new VAdvantage.Model.MJournalBatch(GetCtx(), To_GL_JournalBatch_ID, Get_Trx());
+            VAdvantage.Model.MJournalBatch from = new VAdvantage.Model.MJournalBatch(GetCtx(), _VAGL_BatchJRNL_ID, Get_Trx());
+            VAdvantage.Model.MJournalBatch to = new VAdvantage.Model.MJournalBatch(GetCtx(), To_VAGL_BatchJRNL_ID, Get_Trx());
             //
             int no = to.CopyDetailsFrom(from);
             //

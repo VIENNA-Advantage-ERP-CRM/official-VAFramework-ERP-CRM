@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for RC_RoleCenterManager
+/** Generated Model for VARC_RoleCenterManager
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_RC_RoleCenterManager : PO
+public class X_VARC_RoleCenterManager : PO
 {
-public X_RC_RoleCenterManager (Context ctx, int RC_RoleCenterManager_ID, Trx trxName) : base (ctx, RC_RoleCenterManager_ID, trxName)
+public X_VARC_RoleCenterManager (Context ctx, int VARC_RoleCenterManager_ID, Trx trxName) : base (ctx, VARC_RoleCenterManager_ID, trxName)
 {
-/** if (RC_RoleCenterManager_ID == 0)
+/** if (VARC_RoleCenterManager_ID == 0)
 {
-SetRC_RoleCenterManager_ID (0);
+SetVARC_RoleCenterManager_ID (0);
 }
  */
 }
-public X_RC_RoleCenterManager (Ctx ctx, int RC_RoleCenterManager_ID, Trx trxName) : base (ctx, RC_RoleCenterManager_ID, trxName)
+public X_VARC_RoleCenterManager (Ctx ctx, int VARC_RoleCenterManager_ID, Trx trxName) : base (ctx, VARC_RoleCenterManager_ID, trxName)
 {
-/** if (RC_RoleCenterManager_ID == 0)
+/** if (VARC_RoleCenterManager_ID == 0)
 {
-SetRC_RoleCenterManager_ID (0);
+SetVARC_RoleCenterManager_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetRC_RoleCenterManager_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterManager (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_RoleCenterManager (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_RC_RoleCenterManager (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterManager (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VARC_RoleCenterManager (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_RC_RoleCenterManager (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_RC_RoleCenterManager (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VARC_RoleCenterManager (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_RC_RoleCenterManager()
+static X_VARC_RoleCenterManager()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1352453070064L;
 public static int Table_ID;
  // =1000232;
 
-/** TableName=RC_RoleCenterManager */
-public static String Table_Name="RC_RoleCenterManager";
+/** TableName=VARC_RoleCenterManager */
+public static String Table_Name="VARC_RoleCenterManager";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -107,7 +107,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_RC_RoleCenterManager[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VARC_RoleCenterManager[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -161,17 +161,17 @@ public String GetName()
 return (String)Get_Value("Name");
 }
 /** Set RoleCenter Manager.
-@param RC_RoleCenterManager_ID RoleCenter Manager */
-public void SetRC_RoleCenterManager_ID (int RC_RoleCenterManager_ID)
+@param VARC_RoleCenterManager_ID RoleCenter Manager */
+public void SetVARC_RoleCenterManager_ID (int VARC_RoleCenterManager_ID)
 {
-if (RC_RoleCenterManager_ID < 1) throw new ArgumentException ("RC_RoleCenterManager_ID is mandatory.");
-Set_ValueNoCheck ("RC_RoleCenterManager_ID", RC_RoleCenterManager_ID);
+if (VARC_RoleCenterManager_ID < 1) throw new ArgumentException ("VARC_RoleCenterManager_ID is mandatory.");
+Set_ValueNoCheck ("VARC_RoleCenterManager_ID", VARC_RoleCenterManager_ID);
 }
 /** Get RoleCenter Manager.
 @return RoleCenter Manager */
-public int GetRC_RoleCenterManager_ID() 
+public int GetVARC_RoleCenterManager_ID() 
 {
-Object ii = Get_Value("RC_RoleCenterManager_ID");
+Object ii = Get_Value("VARC_RoleCenterManager_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

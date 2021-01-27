@@ -70,7 +70,7 @@
                 + " <label for='VIS_chkOnlyDue_" + $self.windowNo + "'>" + VIS.Msg.getMsg("ShowPrintedPayments") + " </label>"
                 + " </div>" // div ShowPrintedPayments ends here 
                 + " <select id='VIS_PaySelection_" + $self.windowNo + "'></select>"
-                + " <label style='top: 11px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "C_PaySelection_ID") + " </label>"
+                + " <label style='top: 11px;'>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAB_PaymentOption_ID") + " </label>"
                 + "</div></div> </div>" // div PaySelection ends here 
                 + " <div class='vis-paymentPrint-field'>"  // div bankAccount starts here
                 + '<div class="input-group vis-input-wrap"><div class="vis-control-wrap">'
@@ -155,7 +155,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { showPrintedPayment: $chkShowPrintedPayments.prop("checked"), C_PaymentSelect_ID: pSelectID, isFirstTime: isFirstTime },
+                data: { showPrintedPayment: $chkShowPrintedPayments.prop("checked"), VAB_PaymentSelect_ID: pSelectID, isFirstTime: isFirstTime },
                 success: function (jsonResult) {
                     var data = JSON.parse(jsonResult);
                     controlsData = data;
@@ -182,7 +182,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), VAB_PaymentOption_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text() },
                 success: function (jsonResult) {
                     var data = JSON.parse(jsonResult);
                     isBusy(false);
@@ -328,7 +328,7 @@
                 datatype: "Json",
                 type: "GET",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), VAB_PaymentOption_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
                 success: function (jsonResult) {
                     isBusy(false);
                     var data = JSON.parse(jsonResult);
@@ -469,7 +469,7 @@
                 datatype: "Json",
                 type: "POST",
                 cache: false,
-                data: { paymentMethod_ID: $cmbPaymentMethod.val(), C_PaySelection_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
+                data: { paymentMethod_ID: $cmbPaymentMethod.val(), VAB_PaymentOption_ID: $cmbPaymentSelect.val(), m_VAB_Bank_Acct_ID: VAB_Bank_Acct_ID, PaymentRule: $cmbPaymentMethod.text(), checkNo: $txtCheckNo.val() },
                 success: function (jsonResult) {
                     isBusy(false);
                     var data = JSON.parse(jsonResult);

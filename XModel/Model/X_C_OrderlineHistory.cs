@@ -9,20 +9,20 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for C_OrderlineHistory
+    using System.Data;/** Generated Model for VAB_OrderlineHistory
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_OrderlineHistory : PO
+    public class X_VAB_OrderlineHistory : PO
     {
-        public X_C_OrderlineHistory(Context ctx, int C_OrderlineHistory_ID, Trx trxName)
-            : base(ctx, C_OrderlineHistory_ID, trxName)
-        {/** if (C_OrderlineHistory_ID == 0){SetC_OrderLine_ID (0);SetC_OrderlineHistory_ID (0);SetC_Tax_ID (0);SetLineNetAmt (0.0);SetPriceActual (0.0);SetPriceEntered (0.0);SetPriceList (0.0);SetProcessed (false);// N
+        public X_VAB_OrderlineHistory(Context ctx, int VAB_OrderlineHistory_ID, Trx trxName)
+            : base(ctx, VAB_OrderlineHistory_ID, trxName)
+        {/** if (VAB_OrderlineHistory_ID == 0){SetVAB_OrderLine_ID (0);SetVAB_OrderlineHistory_ID (0);SetVAB_TaxRate_ID (0);SetLineNetAmt (0.0);SetPriceActual (0.0);SetPriceEntered (0.0);SetPriceList (0.0);SetProcessed (false);// N
 SetQtyEntered (0.0);// 1
 } */
         }
-        public X_C_OrderlineHistory(Ctx ctx, int C_OrderlineHistory_ID, Trx trxName)
-            : base(ctx, C_OrderlineHistory_ID, trxName)
-        {/** if (C_OrderlineHistory_ID == 0){SetC_OrderLine_ID (0);SetC_OrderlineHistory_ID (0);SetC_Tax_ID (0);SetLineNetAmt (0.0);SetPriceActual (0.0);SetPriceEntered (0.0);SetPriceList (0.0);SetProcessed (false);// N
+        public X_VAB_OrderlineHistory(Ctx ctx, int VAB_OrderlineHistory_ID, Trx trxName)
+            : base(ctx, VAB_OrderlineHistory_ID, trxName)
+        {/** if (VAB_OrderlineHistory_ID == 0){SetVAB_OrderLine_ID (0);SetVAB_OrderlineHistory_ID (0);SetVAB_TaxRate_ID (0);SetLineNetAmt (0.0);SetPriceActual (0.0);SetPriceEntered (0.0);SetPriceList (0.0);SetProcessed (false);// N
 SetQtyEntered (0.0);// 1
 } */
         }/** Load Constructor 
@@ -30,25 +30,25 @@ SetQtyEntered (0.0);// 1
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_OrderlineHistory(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_OrderlineHistory(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_OrderlineHistory(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAB_OrderlineHistory(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_C_OrderlineHistory(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAB_OrderlineHistory(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_C_OrderlineHistory() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAB_OrderlineHistory() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27785509045284L;/** Last Updated Timestamp 8/22/2017 12:05:28 PM */
         public static long updatedMS = 1503383728495L;/** VAF_TableView_ID=1000511 */
         public static int Table_ID; // =1000511;
-        /** TableName=C_OrderlineHistory */
-        public static String Table_Name = "C_OrderlineHistory";
+        /** TableName=VAB_OrderlineHistory */
+        public static String Table_Name = "VAB_OrderlineHistory";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -63,7 +63,7 @@ SetQtyEntered (0.0);// 1
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_C_OrderlineHistory[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Charge.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_OrderlineHistory[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Charge.
 @param VAB_Charge_ID Additional document charges */
         public void SetVAB_Charge_ID(int VAB_Charge_ID)
         {
@@ -82,18 +82,18 @@ SetQtyEntered (0.0);// 1
         }/** Get Billing Frequency.
 @return Identifies the billing frequency i.e, monthly, quaterly etc. */
         public int GetVAB_Frequency_ID() { Object ii = Get_Value("VAB_Frequency_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
-@param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID) { if (C_OrderLine_ID < 1) throw new ArgumentException("C_OrderLine_ID is mandatory."); Set_ValueNoCheck("C_OrderLine_ID", C_OrderLine_ID); }/** Get Order Line.
+@param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID) { if (VAB_OrderLine_ID < 1) throw new ArgumentException("VAB_OrderLine_ID is mandatory."); Set_ValueNoCheck("VAB_OrderLine_ID", VAB_OrderLine_ID); }/** Get Order Line.
 @return Order Line */
-        public int GetC_OrderLine_ID() { Object ii = Get_Value("C_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Line history.
-@param C_OrderlineHistory_ID Line history */
-        public void SetC_OrderlineHistory_ID(int C_OrderlineHistory_ID) { if (C_OrderlineHistory_ID < 1) throw new ArgumentException("C_OrderlineHistory_ID is mandatory."); Set_ValueNoCheck("C_OrderlineHistory_ID", C_OrderlineHistory_ID); }/** Get Line history.
+        public int GetVAB_OrderLine_ID() { Object ii = Get_Value("VAB_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Line history.
+@param VAB_OrderlineHistory_ID Line history */
+        public void SetVAB_OrderlineHistory_ID(int VAB_OrderlineHistory_ID) { if (VAB_OrderlineHistory_ID < 1) throw new ArgumentException("VAB_OrderlineHistory_ID is mandatory."); Set_ValueNoCheck("VAB_OrderlineHistory_ID", VAB_OrderlineHistory_ID); }/** Get Line history.
 @return Line history */
-        public int GetC_OrderlineHistory_ID() { Object ii = Get_Value("C_OrderlineHistory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Tax.
-@param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID) { if (C_Tax_ID < 1) throw new ArgumentException("C_Tax_ID is mandatory."); Set_Value("C_Tax_ID", C_Tax_ID); }/** Get Tax.
+        public int GetVAB_OrderlineHistory_ID() { Object ii = Get_Value("VAB_OrderlineHistory_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Tax.
+@param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID) { if (VAB_TaxRate_ID < 1) throw new ArgumentException("VAB_TaxRate_ID is mandatory."); Set_Value("VAB_TaxRate_ID", VAB_TaxRate_ID); }/** Get Tax.
 @return Tax identifier */
-        public int GetC_Tax_ID() { Object ii = Get_Value("C_Tax_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Date Ordered.
+        public int GetVAB_TaxRate_ID() { Object ii = Get_Value("VAB_TaxRate_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Date Ordered.
 @param DateOrdered Date of Order */
         public void SetDateOrdered(DateTime? DateOrdered) { Set_Value("DateOrdered", (DateTime?)DateOrdered); }/** Get Date Ordered.
 @return Date of Order */
@@ -181,17 +181,17 @@ SetQtyEntered (0.0);// 1
 @return First effective day (inclusive) */
         public DateTime? GetStartDate() { return (DateTime?)Get_Value("StartDate"); }
         /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }/** Get UOM.
 @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

@@ -11,28 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_ColorSchema
+/** Generated Model for VAPA_Color
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_ColorSchema : PO
+public class X_VAPA_Color : PO
 {
-public X_PA_ColorSchema (Context ctx, int PA_ColorSchema_ID, Trx trxName) : base (ctx, PA_ColorSchema_ID, trxName)
+public X_VAPA_Color (Context ctx, int VAPA_Color_ID, Trx trxName) : base (ctx, VAPA_Color_ID, trxName)
 {
-/** if (PA_ColorSchema_ID == 0)
-{
-SetVAF_Print_Rpt_Colour1_ID (0);
-SetVAF_Print_Rpt_Colour2_ID (0);
-SetEntityType (null);	// U
-SetMark1Percent (0);
-SetMark2Percent (0);
-SetName (null);
-SetPA_ColorSchema_ID (0);
-}
- */
-}
-public X_PA_ColorSchema (Ctx ctx, int PA_ColorSchema_ID, Trx trxName) : base (ctx, PA_ColorSchema_ID, trxName)
-{
-/** if (PA_ColorSchema_ID == 0)
+/** if (VAPA_Color_ID == 0)
 {
 SetVAF_Print_Rpt_Colour1_ID (0);
 SetVAF_Print_Rpt_Colour2_ID (0);
@@ -40,7 +26,21 @@ SetEntityType (null);	// U
 SetMark1Percent (0);
 SetMark2Percent (0);
 SetName (null);
-SetPA_ColorSchema_ID (0);
+SetVAPA_Color_ID (0);
+}
+ */
+}
+public X_VAPA_Color (Ctx ctx, int VAPA_Color_ID, Trx trxName) : base (ctx, VAPA_Color_ID, trxName)
+{
+/** if (VAPA_Color_ID == 0)
+{
+SetVAF_Print_Rpt_Colour1_ID (0);
+SetVAF_Print_Rpt_Colour2_ID (0);
+SetEntityType (null);	// U
+SetMark1Percent (0);
+SetMark2Percent (0);
+SetName (null);
+SetVAPA_Color_ID (0);
 }
  */
 }
@@ -49,7 +49,7 @@ SetPA_ColorSchema_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ColorSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Color (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_PA_ColorSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ColorSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Color (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_PA_ColorSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_ColorSchema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Color (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_ColorSchema()
+static X_VAPA_Color()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389064864L;
 public static int Table_ID;
  // =831;
 
-/** TableName=PA_ColorSchema */
-public static String Table_Name="PA_ColorSchema";
+/** TableName=VAPA_Color */
+public static String Table_Name="VAPA_Color";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_ColorSchema[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Color[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -316,17 +316,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Color Schema.
-@param PA_ColorSchema_ID Performance Color Schema */
-public void SetPA_ColorSchema_ID (int PA_ColorSchema_ID)
+@param VAPA_Color_ID Performance Color Schema */
+public void SetVAPA_Color_ID (int VAPA_Color_ID)
 {
-if (PA_ColorSchema_ID < 1) throw new ArgumentException ("PA_ColorSchema_ID is mandatory.");
-Set_ValueNoCheck ("PA_ColorSchema_ID", PA_ColorSchema_ID);
+if (VAPA_Color_ID < 1) throw new ArgumentException ("VAPA_Color_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Color_ID", VAPA_Color_ID);
 }
 /** Get Color Schema.
 @return Performance Color Schema */
-public int GetPA_ColorSchema_ID() 
+public int GetVAPA_Color_ID() 
 {
-Object ii = Get_Value("PA_ColorSchema_ID");
+Object ii = Get_Value("VAPA_Color_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

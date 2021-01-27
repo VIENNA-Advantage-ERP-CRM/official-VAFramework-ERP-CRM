@@ -26,15 +26,15 @@ namespace VIS.Models
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["M_Locator_ID"] = ioLine.GetM_Locator_ID().ToString();
             result["MovementQty"] = ioLine.GetMovementQty().ToString();
-            result["C_Project_ID"] = ioLine.GetC_Project_ID().ToString();
+            result["VAB_Project_ID"] = ioLine.GetVAB_Project_ID().ToString();
             result["VAB_Promotion_ID"] = ioLine.GetVAB_Promotion_ID().ToString();
             result["M_Product_ID"] = ioLine.GetM_Product_ID().ToString();
             result["M_AttributeSetInstance_ID"] = ioLine.GetM_AttributeSetInstance_ID().ToString();
-            result["C_UOM_ID"] = ioLine.GetC_UOM_ID().ToString();
+            result["VAB_UOM_ID"] = ioLine.GetVAB_UOM_ID().ToString();
             result["IsDropShip"] = ioLine.IsDropShip() ? "Y" : "N";
 
             // JID_1310: On Selection of Shipment line on Customer/Vendor RMA. System should check Total Delivred - Total Return Qty From Sales PO line and Balance  show in qty field
-            decimal qtyRMA = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyEntered) FROM C_Order o INNER JOIN C_OrderLine ol ON o.C_Order_ID = ol.C_Order_ID                            
+            decimal qtyRMA = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(QtyEntered) FROM VAB_Order o INNER JOIN VAB_OrderLine ol ON o.VAB_Order_ID = ol.VAB_Order_ID                            
                             WHERE ol.Orig_InOutLine_ID = " + Orig_InOutLine_ID
                             + @" AND ol.Isactive = 'Y' AND o.docstatus NOT IN ('RE' , 'VO')", null, null));
             decimal QtyNotDelivered = ioLine.GetQtyEntered() - qtyRMA;

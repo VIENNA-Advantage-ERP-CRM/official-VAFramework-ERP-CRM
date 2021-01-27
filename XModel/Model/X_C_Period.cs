@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Period
+/** Generated Model for VAB_YearPeriod
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Period : PO
+public class X_VAB_YearPeriod : PO
 {
-public X_C_Period (Context ctx, int C_Period_ID, Trx trxName) : base (ctx, C_Period_ID, trxName)
+public X_VAB_YearPeriod (Context ctx, int VAB_YearPeriod_ID, Trx trxName) : base (ctx, VAB_YearPeriod_ID, trxName)
 {
-/** if (C_Period_ID == 0)
+/** if (VAB_YearPeriod_ID == 0)
 {
-SetC_Period_ID (0);
-SetC_Year_ID (0);
+SetVAB_YearPeriod_ID (0);
+SetVAB_Year_ID (0);
 SetName (null);
 SetPeriodNo (0);
 SetPeriodType (null);	// S
@@ -29,12 +29,12 @@ SetStartDate (DateTime.Now);
 }
  */
 }
-public X_C_Period (Ctx ctx, int C_Period_ID, Trx trxName) : base (ctx, C_Period_ID, trxName)
+public X_VAB_YearPeriod (Ctx ctx, int VAB_YearPeriod_ID, Trx trxName) : base (ctx, VAB_YearPeriod_ID, trxName)
 {
-/** if (C_Period_ID == 0)
+/** if (VAB_YearPeriod_ID == 0)
 {
-SetC_Period_ID (0);
-SetC_Year_ID (0);
+SetVAB_YearPeriod_ID (0);
+SetVAB_Year_ID (0);
 SetName (null);
 SetPeriodNo (0);
 SetPeriodType (null);	// S
@@ -47,7 +47,7 @@ SetStartDate (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Period (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_YearPeriod (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_Period (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Period (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_YearPeriod (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_Period (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Period (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_YearPeriod (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Period()
+static X_VAB_YearPeriod()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389057279L;
 public static int Table_ID;
  // =145;
 
-/** TableName=C_Period */
-public static String Table_Name="C_Period";
+/** TableName=VAB_YearPeriod */
+public static String Table_Name="VAB_YearPeriod";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -117,36 +117,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Period[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_YearPeriod[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID < 1) throw new ArgumentException ("C_Period_ID is mandatory.");
-Set_ValueNoCheck ("C_Period_ID", C_Period_ID);
+if (VAB_YearPeriod_ID < 1) throw new ArgumentException ("VAB_YearPeriod_ID is mandatory.");
+Set_ValueNoCheck ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Year.
-@param C_Year_ID Calendar Year */
-public void SetC_Year_ID (int C_Year_ID)
+@param VAB_Year_ID Calendar Year */
+public void SetVAB_Year_ID (int VAB_Year_ID)
 {
-if (C_Year_ID < 1) throw new ArgumentException ("C_Year_ID is mandatory.");
-Set_ValueNoCheck ("C_Year_ID", C_Year_ID);
+if (VAB_Year_ID < 1) throw new ArgumentException ("VAB_Year_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Year_ID", VAB_Year_ID);
 }
 /** Get Year.
 @return Calendar Year */
-public int GetC_Year_ID() 
+public int GetVAB_Year_ID() 
 {
-Object ii = Get_Value("C_Year_ID");
+Object ii = Get_Value("VAB_Year_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

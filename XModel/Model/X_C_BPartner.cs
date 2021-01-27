@@ -469,18 +469,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Payment Term.
-        @param C_PaymentTerm_ID The terms of Payment (timing, discount) */
-        public void SetC_PaymentTerm_ID(int C_PaymentTerm_ID)
+        @param VAB_PaymentTerm_ID The terms of Payment (timing, discount) */
+        public void SetVAB_PaymentTerm_ID(int VAB_PaymentTerm_ID)
         {
-            if (C_PaymentTerm_ID <= 0) Set_Value("C_PaymentTerm_ID", null);
+            if (VAB_PaymentTerm_ID <= 0) Set_Value("VAB_PaymentTerm_ID", null);
             else
-                Set_Value("C_PaymentTerm_ID", C_PaymentTerm_ID);
+                Set_Value("VAB_PaymentTerm_ID", VAB_PaymentTerm_ID);
         }
         /** Get Payment Term.
         @return The terms of Payment (timing, discount) */
-        public int GetC_PaymentTerm_ID()
+        public int GetVAB_PaymentTerm_ID()
         {
-            Object ii = Get_Value("C_PaymentTerm_ID");
+            Object ii = Get_Value("VAB_PaymentTerm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -2308,18 +2308,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Address.
-       @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+       @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -2887,18 +2887,18 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Withholding Tax.
         /// </summary>
-        /// <param name="C_Withholding_ID">Withholding type defined</param>
-        public void SetC_Withholding_ID(int C_Withholding_ID)
+        /// <param name="VAB_Withholding_ID">Withholding type defined</param>
+        public void SetVAB_Withholding_ID(int VAB_Withholding_ID)
         {
-            if (C_Withholding_ID <= 0) Set_Value("C_Withholding_ID", null);
+            if (VAB_Withholding_ID <= 0) Set_Value("VAB_Withholding_ID", null);
             else
-                Set_Value("C_Withholding_ID", C_Withholding_ID);
+                Set_Value("VAB_Withholding_ID", VAB_Withholding_ID);
         }
         /// <summary>
         /// Get Withholding Tax.
         /// </summary>
         /// <returns>Withholding type defined</returns>
-        public int GetC_Withholding_ID() { Object ii = Get_Value("C_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Withholding_ID() { Object ii = Get_Value("VAB_Withholding_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Withholding applicable on AP Invoice.
 @param IsApplicableonAPInvoice This field represents that withholding tax to be calculated on the AP Invoices. */

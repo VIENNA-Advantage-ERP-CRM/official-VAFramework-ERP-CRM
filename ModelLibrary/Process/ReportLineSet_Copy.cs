@@ -37,7 +37,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }	//	ReportLineSet_Copy
 
         /**	Source Line Set					*/
-        private int _PA_ReportLineSet_ID = 0;
+        private int _VAPA_FR_RowSet_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -52,9 +52,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("PA_ReportLineSet_ID"))
+                else if (name.Equals("VAPA_FR_RowSet_ID"))
                 {
-                    _PA_ReportLineSet_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAPA_FR_RowSet_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 }
                 else
                 {
@@ -70,14 +70,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             int to_ID = base.GetRecord_ID();
-            //log.Info("From PA_ReportLineSet_ID=" + _PA_ReportLineSet_ID + ", To=" + to_ID);
+            //log.Info("From VAPA_FR_RowSet_ID=" + _VAPA_FR_RowSet_ID + ", To=" + to_ID);
             //if (to_ID < 1)
             //{
             //    throw new Exception(msgSaveErrorRowNotFound);
             //}
             ////
             //MReportLineSet to = new MReportLineSet(GetCtx(), to_ID, Get_TrxName());
-            //MReportLineSet rlSet = new MReportLineSet(GetCtx(), _PA_ReportLineSet_ID, Get_TrxName());
+            //MReportLineSet rlSet = new MReportLineSet(GetCtx(), _VAPA_FR_RowSet_ID, Get_TrxName());
             //MReportLine[] rls = rlSet.GetLiness();
             //for (int i = 0; i < rls.Length; i++)
             //{

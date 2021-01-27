@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Lead
+/** Generated Model for VAB_Lead
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Lead : PO
+public class X_VAB_Lead : PO
 {
-public X_C_Lead (Context ctx, int C_Lead_ID, Trx trxName) : base (ctx, C_Lead_ID, trxName)
+public X_VAB_Lead (Context ctx, int VAB_Lead_ID, Trx trxName) : base (ctx, VAB_Lead_ID, trxName)
 {
-/** if (C_Lead_ID == 0)
+/** if (VAB_Lead_ID == 0)
 {
-SetC_Lead_ID (0);
+SetVAB_Lead_ID (0);
 SetDocumentNo (null);
 }
  */
 }
-public X_C_Lead (Ctx ctx, int C_Lead_ID, Trx trxName) : base (ctx, C_Lead_ID, trxName)
+public X_VAB_Lead (Ctx ctx, int VAB_Lead_ID, Trx trxName) : base (ctx, VAB_Lead_ID, trxName)
 {
-/** if (C_Lead_ID == 0)
+/** if (VAB_Lead_ID == 0)
 {
-SetC_Lead_ID (0);
+SetVAB_Lead_ID (0);
 SetDocumentNo (null);
 }
  */
@@ -39,7 +39,7 @@ SetDocumentNo (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Lead (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Lead (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_C_Lead (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Lead (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Lead (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_C_Lead (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Lead (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Lead (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Lead()
+static X_VAB_Lead()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389056182L;
 public static int Table_ID;
  // =923;
 
-/** TableName=C_Lead */
-public static String Table_Name="C_Lead";
+/** TableName=VAB_Lead */
+public static String Table_Name="VAB_Lead";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Lead[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Lead[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -375,81 +375,81 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lead Qualification.
-@param C_LeadQualification_ID Lead Qualification evaluation */
-public void SetC_LeadQualification_ID (int C_LeadQualification_ID)
+@param VAB_Lead_Qua_ID Lead Qualification evaluation */
+public void SetVAB_Lead_Qua_ID (int VAB_Lead_Qua_ID)
 {
-if (C_LeadQualification_ID <= 0) Set_Value ("C_LeadQualification_ID", null);
+if (VAB_Lead_Qua_ID <= 0) Set_Value ("VAB_Lead_Qua_ID", null);
 else
-Set_Value ("C_LeadQualification_ID", C_LeadQualification_ID);
+Set_Value ("VAB_Lead_Qua_ID", VAB_Lead_Qua_ID);
 }
 /** Get Lead Qualification.
 @return Lead Qualification evaluation */
-public int GetC_LeadQualification_ID() 
+public int GetVAB_Lead_Qua_ID() 
 {
-Object ii = Get_Value("C_LeadQualification_ID");
+Object ii = Get_Value("VAB_Lead_Qua_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lead.
-@param C_Lead_ID Business Lead */
-public void SetC_Lead_ID (int C_Lead_ID)
+@param VAB_Lead_ID Business Lead */
+public void SetVAB_Lead_ID (int VAB_Lead_ID)
 {
-if (C_Lead_ID < 1) throw new ArgumentException ("C_Lead_ID is mandatory.");
-Set_ValueNoCheck ("C_Lead_ID", C_Lead_ID);
+if (VAB_Lead_ID < 1) throw new ArgumentException ("VAB_Lead_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Lead_ID", VAB_Lead_ID);
 }
 /** Get Lead.
 @return Business Lead */
-public int GetC_Lead_ID() 
+public int GetVAB_Lead_ID() 
 {
-Object ii = Get_Value("C_Lead_ID");
+Object ii = Get_Value("VAB_Lead_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Region.
-@param C_Region_ID Identifies a geographical Region */
-public void SetC_Region_ID (int C_Region_ID)
+@param VAB_RegionState_ID Identifies a geographical Region */
+public void SetVAB_RegionState_ID (int VAB_RegionState_ID)
 {
-if (C_Region_ID <= 0) Set_Value ("C_Region_ID", null);
+if (VAB_RegionState_ID <= 0) Set_Value ("VAB_RegionState_ID", null);
 else
-Set_Value ("C_Region_ID", C_Region_ID);
+Set_Value ("VAB_RegionState_ID", VAB_RegionState_ID);
 }
 /** Get Region.
 @return Identifies a geographical Region */
-public int GetC_Region_ID() 
+public int GetVAB_RegionState_ID() 
 {
-Object ii = Get_Value("C_Region_ID");
+Object ii = Get_Value("VAB_RegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_Value ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_Value ("VAB_SalesRegionState_ID", null);
 else
-Set_Value ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_Value ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

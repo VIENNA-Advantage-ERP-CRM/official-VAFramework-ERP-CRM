@@ -9,10 +9,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MSalesOffice : X_C_SalesOffice
+    public class MSalesOffice : X_VAB_SalesOffice
     {
-        public MSalesOffice(Ctx ctx, int C_SalesOffice_ID, Trx trxName)
-            : base(ctx, C_SalesOffice_ID, trxName)
+        public MSalesOffice(Ctx ctx, int VAB_SalesOffice_ID, Trx trxName)
+            : base(ctx, VAB_SalesOffice_ID, trxName)
         {
 
         }

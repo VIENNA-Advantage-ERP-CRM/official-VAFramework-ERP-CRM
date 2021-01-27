@@ -11,18 +11,18 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_Tax
+    /** Generated Model for VAB_TaxRate
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_Tax : PO
+    public class X_VAB_TaxRate : PO
     {
-        public X_C_Tax(Context ctx, int C_Tax_ID, Trx trxName)
-            : base(ctx, C_Tax_ID, trxName)
+        public X_VAB_TaxRate(Context ctx, int VAB_TaxRate_ID, Trx trxName)
+            : base(ctx, VAB_TaxRate_ID, trxName)
         {
-            /** if (C_Tax_ID == 0)
+            /** if (VAB_TaxRate_ID == 0)
             {
-            SetC_TaxCategory_ID (0);
-            SetC_Tax_ID (0);
+            SetVAB_TaxCategory_ID (0);
+            SetVAB_TaxRate_ID (0);
             SetIsDefault (false);
             SetIsDocumentLevel (false);
             SetIsSalesTax (false);	// N
@@ -36,13 +36,13 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_C_Tax(Ctx ctx, int C_Tax_ID, Trx trxName)
-            : base(ctx, C_Tax_ID, trxName)
+        public X_VAB_TaxRate(Ctx ctx, int VAB_TaxRate_ID, Trx trxName)
+            : base(ctx, VAB_TaxRate_ID, trxName)
         {
-            /** if (C_Tax_ID == 0)
+            /** if (VAB_TaxRate_ID == 0)
             {
-            SetC_TaxCategory_ID (0);
-            SetC_Tax_ID (0);
+            SetVAB_TaxCategory_ID (0);
+            SetVAB_TaxRate_ID (0);
             SetIsDefault (false);
             SetIsDocumentLevel (false);
             SetIsSalesTax (false);	// N
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Tax(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_TaxRate(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Tax(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_TaxRate(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -79,14 +79,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_Tax(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_TaxRate(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_Tax()
+        static X_VAB_TaxRate()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -99,8 +99,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =261;
 
-        /** TableName=C_Tax */
-        public static String Table_Name = "C_Tax";
+        /** TableName=VAB_TaxRate */
+        public static String Table_Name = "VAB_TaxRate";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_Tax[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_TaxRate[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -157,51 +157,51 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Region_ID VAF_Control_Ref_ID=157 */
-        public static int C_REGION_ID_VAF_Control_Ref_ID = 157;
+        /** VAB_RegionState_ID VAF_Control_Ref_ID=157 */
+        public static int VAB_REGIONSTATE_ID_VAF_Control_Ref_ID = 157;
         /** Set Region.
-        @param C_Region_ID Identifies a geographical Region */
-        public void SetC_Region_ID(int C_Region_ID)
+        @param VAB_RegionState_ID Identifies a geographical Region */
+        public void SetVAB_RegionState_ID(int VAB_RegionState_ID)
         {
-            if (C_Region_ID <= 0) Set_Value("C_Region_ID", null);
+            if (VAB_RegionState_ID <= 0) Set_Value("VAB_RegionState_ID", null);
             else
-                Set_Value("C_Region_ID", C_Region_ID);
+                Set_Value("VAB_RegionState_ID", VAB_RegionState_ID);
         }
         /** Get Region.
         @return Identifies a geographical Region */
-        public int GetC_Region_ID()
+        public int GetVAB_RegionState_ID()
         {
-            Object ii = Get_Value("C_Region_ID");
+            Object ii = Get_Value("VAB_RegionState_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tax Category.
-        @param C_TaxCategory_ID Tax Category */
-        public void SetC_TaxCategory_ID(int C_TaxCategory_ID)
+        @param VAB_TaxCategory_ID Tax Category */
+        public void SetVAB_TaxCategory_ID(int VAB_TaxCategory_ID)
         {
-            if (C_TaxCategory_ID < 1) throw new ArgumentException("C_TaxCategory_ID is mandatory.");
-            Set_Value("C_TaxCategory_ID", C_TaxCategory_ID);
+            if (VAB_TaxCategory_ID < 1) throw new ArgumentException("VAB_TaxCategory_ID is mandatory.");
+            Set_Value("VAB_TaxCategory_ID", VAB_TaxCategory_ID);
         }
         /** Get Tax Category.
         @return Tax Category */
-        public int GetC_TaxCategory_ID()
+        public int GetVAB_TaxCategory_ID()
         {
-            Object ii = Get_Value("C_TaxCategory_ID");
+            Object ii = Get_Value("VAB_TaxCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Tax.
-        @param C_Tax_ID Tax identifier */
-        public void SetC_Tax_ID(int C_Tax_ID)
+        @param VAB_TaxRate_ID Tax identifier */
+        public void SetVAB_TaxRate_ID(int VAB_TaxRate_ID)
         {
-            if (C_Tax_ID < 1) throw new ArgumentException("C_Tax_ID is mandatory.");
-            Set_ValueNoCheck("C_Tax_ID", C_Tax_ID);
+            if (VAB_TaxRate_ID < 1) throw new ArgumentException("VAB_TaxRate_ID is mandatory.");
+            Set_ValueNoCheck("VAB_TaxRate_ID", VAB_TaxRate_ID);
         }
         /** Get Tax.
         @return Tax identifier */
-        public int GetC_Tax_ID()
+        public int GetVAB_TaxRate_ID()
         {
-            Object ii = Get_Value("C_Tax_ID");
+            Object ii = Get_Value("VAB_TaxRate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

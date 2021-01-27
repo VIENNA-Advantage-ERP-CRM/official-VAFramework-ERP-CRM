@@ -45,9 +45,9 @@ namespace VIS.Models
             {
                 retDic["M_AttributeSet_ID"] = Util.GetValueOfString(pc.GetM_AttributeSet_ID());
             }
-            if (pc.Get_ColumnIndex("C_TaxCategory_ID") > 0)
+            if (pc.Get_ColumnIndex("VAB_TaxCategory_ID") > 0)
             {
-                retDic["C_TaxCategory_ID"] = Util.GetValueOfString(pc.GetC_TaxCategory_ID());
+                retDic["VAB_TaxCategory_ID"] = Util.GetValueOfString(pc.GetVAB_TaxCategory_ID());
             }
             retDic["VAA_AssetGroup_ID"] = Util.GetValueOfString(pc.GetVAA_AssetGroup_ID());
             if (pc.GetVAA_AssetGroup_ID() > 0)

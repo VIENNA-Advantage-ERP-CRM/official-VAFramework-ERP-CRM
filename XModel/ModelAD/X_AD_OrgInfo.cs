@@ -134,18 +134,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Address.
-        @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+        @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

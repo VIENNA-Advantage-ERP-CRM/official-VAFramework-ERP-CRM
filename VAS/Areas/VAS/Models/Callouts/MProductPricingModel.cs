@@ -22,7 +22,7 @@ namespace VIS.Models
         public ProductDataOut GetProductPricing(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID, VAB_BusinessPartner_ID, M_PriceList_ID, M_PriceList_Version_ID, M_AttributeSetInstance_ID = 0, countED011 = 0, C_UOM_ID = 0;
+            int M_Product_ID, VAB_BusinessPartner_ID, M_PriceList_ID, M_PriceList_Version_ID, M_AttributeSetInstance_ID = 0, countED011 = 0, VAB_UOM_ID = 0;
             decimal Qty;
             bool isSOTrx;
 
@@ -46,12 +46,12 @@ namespace VIS.Models
             {
                 if (paramValue.Length == 11)
                 {
-                    C_UOM_ID = Util.GetValueOfInt(paramValue[9].ToString());
+                    VAB_UOM_ID = Util.GetValueOfInt(paramValue[9].ToString());
                     countED011 = Util.GetValueOfInt(paramValue[10].ToString());
                 }
                 else if (paramValue.Length == 10)
                 {
-                    C_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
+                    VAB_UOM_ID = Util.GetValueOfInt(paramValue[8].ToString());
                     countED011 = Util.GetValueOfInt(paramValue[9].ToString());
                 }
             }
@@ -78,7 +78,7 @@ namespace VIS.Models
 
             if (countED011 > 0)
             {
-                pp.SetC_UOM_ID(C_UOM_ID);
+                pp.SetVAB_UOM_ID(VAB_UOM_ID);
             }
 
             //Get product stock
@@ -97,7 +97,7 @@ namespace VIS.Models
                 LineAmt = pp.GetLineAmt(2),
                 VAB_Currency_ID = System.Convert.ToInt32(pp.GetVAB_Currency_ID()),
                 Discount = pp.GetDiscount(),
-                C_UOM_ID = System.Convert.ToInt32(pp.GetC_UOM_ID()),
+                VAB_UOM_ID = System.Convert.ToInt32(pp.GetVAB_UOM_ID()),
                 //QtyOrdered= mTab.GetValue("QtyEntered"));
                 EnforcePriceLimit = pp.IsEnforcePriceLimit(),
                 DiscountSchema = pp.IsDiscountSchema(),

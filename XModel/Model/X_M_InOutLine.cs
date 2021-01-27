@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (M_InOutLine_ID == 0)
             {
-            SetC_UOM_ID (0);	// @#C_UOM_ID@
+            SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
             SetIsDescription (false);	// N
             SetIsInvoiced (false);
             SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_InOutLine WHERE M_InOut_ID=@M_InOut_ID@
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         {
             /** if (M_InOutLine_ID == 0)
             {
-            SetC_UOM_ID (0);	// @#C_UOM_ID@
+            SetVAB_UOM_ID (0);	// @#VAB_UOM_ID@
             SetIsDescription (false);	// N
             SetIsInvoiced (false);
             SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_InOutLine WHERE M_InOut_ID=@M_InOut_ID@
@@ -199,81 +199,81 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Order Line.
-        @param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+        @param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_ValueNoCheck("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_ValueNoCheck("VAB_OrderLine_ID", null);
             else
-                Set_ValueNoCheck("C_OrderLine_ID", C_OrderLine_ID);
+                Set_ValueNoCheck("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }
         /** Get Order Line.
         @return Order Line */
-        public int GetC_OrderLine_ID()
+        public int GetVAB_OrderLine_ID()
         {
-            Object ii = Get_Value("C_OrderLine_ID");
+            Object ii = Get_Value("VAB_OrderLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project Phase.
-        @param C_ProjectPhase_ID Phase of a Project */
-        public void SetC_ProjectPhase_ID(int C_ProjectPhase_ID)
+        @param VAB_ProjectStage_ID Phase of a Project */
+        public void SetVAB_ProjectStage_ID(int VAB_ProjectStage_ID)
         {
-            if (C_ProjectPhase_ID <= 0) Set_Value("C_ProjectPhase_ID", null);
+            if (VAB_ProjectStage_ID <= 0) Set_Value("VAB_ProjectStage_ID", null);
             else
-                Set_Value("C_ProjectPhase_ID", C_ProjectPhase_ID);
+                Set_Value("VAB_ProjectStage_ID", VAB_ProjectStage_ID);
         }
         /** Get Project Phase.
         @return Phase of a Project */
-        public int GetC_ProjectPhase_ID()
+        public int GetVAB_ProjectStage_ID()
         {
-            Object ii = Get_Value("C_ProjectPhase_ID");
+            Object ii = Get_Value("VAB_ProjectStage_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project Task.
-        @param C_ProjectTask_ID Actual Project Task in a Phase */
-        public void SetC_ProjectTask_ID(int C_ProjectTask_ID)
+        @param VAB_ProjectJob_ID Actual Project Task in a Phase */
+        public void SetVAB_ProjectJob_ID(int VAB_ProjectJob_ID)
         {
-            if (C_ProjectTask_ID <= 0) Set_Value("C_ProjectTask_ID", null);
+            if (VAB_ProjectJob_ID <= 0) Set_Value("VAB_ProjectJob_ID", null);
             else
-                Set_Value("C_ProjectTask_ID", C_ProjectTask_ID);
+                Set_Value("VAB_ProjectJob_ID", VAB_ProjectJob_ID);
         }
         /** Get Project Task.
         @return Actual Project Task in a Phase */
-        public int GetC_ProjectTask_ID()
+        public int GetVAB_ProjectJob_ID()
         {
-            Object ii = Get_Value("C_ProjectTask_ID");
+            Object ii = Get_Value("VAB_ProjectJob_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID < 1) throw new ArgumentException("C_UOM_ID is mandatory.");
-            Set_ValueNoCheck("C_UOM_ID", C_UOM_ID);
+            if (VAB_UOM_ID < 1) throw new ArgumentException("VAB_UOM_ID is mandatory.");
+            Set_ValueNoCheck("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

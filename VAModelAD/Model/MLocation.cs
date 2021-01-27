@@ -38,16 +38,16 @@ namespace VAModelAD.Model
         /// Get Location from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Location_ID">id</param>
+        /// <param name="VAB_Address_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>MLocation</returns>
-        public static dynamic Get(Ctx ctx, int C_Location_ID, Trx trxName)
+        public static dynamic Get(Ctx ctx, int VAB_Address_ID, Trx trxName)
         {
             if (_Get == null)
                 LoadLocationType();
             if (_Get != null)
             { 
-               dynamic obj = _Get.Invoke(null, new Object[] { ctx, C_Location_ID, trxName });
+               dynamic obj = _Get.Invoke(null, new Object[] { ctx, VAB_Address_ID, trxName });
                 return obj;
             }
             return null;

@@ -332,10 +332,10 @@ namespace VAdvantage.Process
                 {
                     line.Set_Value("QtyEntered", line.GetQtyCount());
                 }
-                if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+                if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                 {
                     MProduct prd = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
-                    line.Set_Value("C_UOM_ID", prd.GetC_UOM_ID());
+                    line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                 }
 
                 if (isContainerApplicable && line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
@@ -374,10 +374,10 @@ namespace VAdvantage.Process
                     {
                         _line.Set_Value("QtyEntered", _line.GetQtyCount());
                     }
-                    if (_line.Get_ColumnIndex("C_UOM_ID") > 0)
+                    if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
                         MProduct prd = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
-                        _line.Set_Value("C_UOM_ID", prd.GetC_UOM_ID());
+                        _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                     }
                     if (isContainerApplicable && _line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
                     {
@@ -415,10 +415,10 @@ namespace VAdvantage.Process
                 {
                     _line.Set_Value("QtyEntered", _line.GetQtyCount());
                 }
-                if (_line.Get_ColumnIndex("C_UOM_ID") > 0)
+                if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                 {
                     MProduct prd = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
-                    _line.Set_Value("C_UOM_ID", prd.GetC_UOM_ID());
+                    _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
                 }
                 if (isContainerApplicable && _line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
                 {
@@ -451,10 +451,10 @@ namespace VAdvantage.Process
             {
                 _line.Set_Value("QtyEntered", _line.GetQtyCount());
             }
-            if (_line.Get_ColumnIndex("C_UOM_ID") > 0)
+            if (_line.Get_ColumnIndex("VAB_UOM_ID") > 0)
             {
                 MProduct prd = new MProduct(GetCtx(), M_Product_ID, Get_Trx());
-                _line.Set_Value("C_UOM_ID", prd.GetC_UOM_ID());
+                _line.Set_Value("VAB_UOM_ID", prd.GetVAB_UOM_ID());
             }
             if (isContainerApplicable && _line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
             {
@@ -505,9 +505,9 @@ namespace VAdvantage.Process
             string sql = @"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
                 M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType";
 
-            if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+            if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
             {
-                sql += ", QtyEntered, C_UOM_ID";
+                sql += ", QtyEntered, VAB_UOM_ID";
             }
 
             if (line.Get_ColumnIndex("IsFromProcess") > 0)
@@ -523,9 +523,9 @@ namespace VAdvantage.Process
                 GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _m_Inventory_ID + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
                 M_AttributeSetInstance_ID + "," + qtyOnHand + "," + qtyOnHand + "," + qtyOnHand + "," + qtyOnHand + "," + 0 + ",'A'";
 
-            if (line.Get_ColumnIndex("C_UOM_ID") > 0)
+            if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
             {
-                sql += "," + qtyOnHand + "," + product.GetC_UOM_ID();
+                sql += "," + qtyOnHand + "," + product.GetVAB_UOM_ID();
             }
 
             if (line.Get_ColumnIndex("IsFromProcess") > 0)

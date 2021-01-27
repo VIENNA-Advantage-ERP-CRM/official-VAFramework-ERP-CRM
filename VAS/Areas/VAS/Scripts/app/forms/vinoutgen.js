@@ -18,7 +18,7 @@
 
 
         var imgOrder, txtOrderNo;
-        var C_Order_IDSearch = null;
+        var VAB_Order_IDSearch = null;
 
         this.lblWarehouse = new VIS.Controls.VLabel();
         this.lblBPartner = new VIS.Controls.VLabel();
@@ -246,8 +246,8 @@
 
 
             //var Ordervalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search);
-            var Ordervalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "C_Order_ID", 0, false, "DocStatus='CO'");
-            $self.vSearchOrder = new VIS.Controls.VTextBoxButton("C_Order_ID", true, false, true, VIS.DisplayType.Search, Ordervalue);
+            var Ordervalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "VAB_Order_ID", 0, false, "DocStatus='CO'");
+            $self.vSearchOrder = new VIS.Controls.VTextBoxButton("VAB_Order_ID", true, false, true, VIS.DisplayType.Search, Ordervalue);
         }
 
         function dynInit(data) {
@@ -276,7 +276,7 @@
                 });
                 //$self.arrListColumns.push({ field: "TotalLines", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "TotalLines"), sortable: true, size: '20%', min: 150, hidden: false });
 
-                $self.arrListColumns.push({ field: "C_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_UOM_ID"), sortable: true, size: '150px', hidden: true });
+                $self.arrListColumns.push({ field: "VAB_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_UOM_ID"), sortable: true, size: '150px', hidden: true });
             }
             setTimeout(10);
             w2utils.encodeTags(data);
@@ -311,8 +311,8 @@
             if (VAB_BusinessPartner_ID != null) {
                 cBPartnerID = " AND ic.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             }
-            if (C_Order_IDSearch != null) {
-                cOrderIDSearch = " AND C_Order_ID=" + C_Order_IDSearch;
+            if (VAB_Order_IDSearch != null) {
+                cOrderIDSearch = " AND VAB_Order_ID=" + VAB_Order_IDSearch;
             }
 
             // set busy indecator
@@ -336,7 +336,7 @@
                             var count = 1;
                             for (var i = 0; i < ress.length; i++) {
                                 var line = {};
-                                line['C_Order_ID'] = ress[i].c_order_id,
+                                line['VAB_Order_ID'] = ress[i].VAB_Order_id,
                                     line['VAF_Org_ID'] = ress[i].ord,
                                     line['VAB_DocTypes_ID'] = ress[i].doctype,
                                     line['DocumentNo'] = VIS.Utility.encodeText(ress[i].documentno),
@@ -378,11 +378,11 @@
 
         //function executeQuery() {
         //    var data = [];
-        //    //C_Order_IDSearch = $self.vSearchOrder.getValue();
+        //    //VAB_Order_IDSearch = $self.vSearchOrder.getValue();
         //    var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
         //    //  Create SQL
         //    var sql = (
-        //        "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
+        //        "SELECT VAB_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
         //        + "FROM M_InOut_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
         //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
         //        + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
@@ -397,8 +397,8 @@
         //    if (VAB_BusinessPartner_ID != null) {
         //        sql = sql.concat(" AND ic.VAB_BusinessPartner_ID=").concat(VAB_BusinessPartner_ID);
         //    }
-        //    if (C_Order_IDSearch != null) {
-        //        sql = sql.concat(" AND C_Order_ID=").concat(C_Order_IDSearch);
+        //    if (VAB_Order_IDSearch != null) {
+        //        sql = sql.concat(" AND VAB_Order_ID=").concat(VAB_Order_IDSearch);
         //    }
         //    sql = sql.concat(" ORDER BY o.Name,bp.Name,DateOrdered");
 
@@ -407,7 +407,7 @@
         //        var count = 1;
         //        while (dr.read()) {
         //            var line = {};
-        //            line['C_Order_ID'] = dr.getInt(0);
+        //            line['VAB_Order_ID'] = dr.getInt(0);
         //            line['VAF_Org_ID'] = dr.getString(1);
         //            line['VAB_DocTypes_ID'] = dr.getString(2);
         //            line['DocumentNo'] = dr.getString(3);
@@ -447,7 +447,7 @@
 
             var splitValue = selectedItems.toString().split(',');
             for (var i = 0; i < splitValue.length; i++) {
-                results[i] = ($self.dGrid.get(splitValue[i])).C_Order_ID;//($self.dGrid.get(splitValue[i]));// //  ID in column 0
+                results[i] = ($self.dGrid.get(splitValue[i])).VAB_Order_ID;//($self.dGrid.get(splitValue[i]));// //  ID in column 0
             }
 
             if (results.length == 0) {
@@ -455,7 +455,7 @@
             }
 
             //	Query String
-            var keyColumn = "C_Order_ID";
+            var keyColumn = "VAB_Order_ID";
             var sb = keyColumn;
             if (results.length > 1) {
                 sb = sb.concat(" IN (");
@@ -549,7 +549,7 @@
 
         this.vetoablechange = function (evt) {
             VAB_BusinessPartner_ID = $self.vSearchBPartner.getValue();
-            C_Order_IDSearch = $self.vSearchOrder.getValue();
+            VAB_Order_IDSearch = $self.vSearchOrder.getValue();
             $self.okBtn.removeAttr('disabled');
             executeQuery();
         };

@@ -24,14 +24,14 @@ namespace VIS.Models
         public Dictionary<string, string> GetPayment(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Payment_ID;
+            int VAB_Payment_ID;
             //Assign parameter value
-            C_Payment_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MPayment payment = new MPayment(ctx, C_Payment_ID, null);
+            VAB_Payment_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_Charge_ID"] = payment.GetVAB_Charge_ID().ToString();
             result["VAB_Invoice_ID"] = payment.GetVAB_Invoice_ID().ToString();
-            result["C_Order_ID"] = payment.GetC_Order_ID().ToString();
+            result["VAB_Order_ID"] = payment.GetVAB_Order_ID().ToString();
             return result;
         }
 
@@ -44,10 +44,10 @@ namespace VIS.Models
         /// <returns></returns>
         public decimal GetPayAmt(Ctx ctx, string fields)
         {
-            int C_Payment_ID;
+            int VAB_Payment_ID;
             //Assign parameter value
-            C_Payment_ID = Util.GetValueOfInt(fields);
-            MPayment payment = new MPayment(ctx, C_Payment_ID, null);
+            VAB_Payment_ID = Util.GetValueOfInt(fields);
+            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
             return payment.GetPayAmt();
         }
 
@@ -62,7 +62,7 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0]);
-            int C_PaySchedule_ID = Util.GetValueOfInt(paramValue[1]);
+            int VAB_PaymentSchedule_ID = Util.GetValueOfInt(paramValue[1]);
             DateTime? trxDate = Util.GetValueOfDateTime(paramValue[2]);
             Dictionary<String, Object> retDic = null;
             string sql = "";
@@ -71,25 +71,25 @@ namespace VIS.Models
                 sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
                     //+ " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen,"
                      + " NVL(p.DueAmt , 0) - NVL(p.VA009_PaidAmntInvce , 0) as invoiceOpen,"
-                     + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
+                     + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + VAB_PaymentSchedule_ID + ") as invoiceDiscount,"
                      + " i.IsSOTrx, i.IsInDispute, i.IsReturnTrx"
                      + " FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment p ON p.VAB_Invoice_ID = i.VAB_Invoice_ID"
-                     + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + C_PaySchedule_ID;
+                     + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + VAB_PaymentSchedule_ID;
             }
             else
             {
                 sql = "SELECT i.VAB_BusinessPartner_ID, i.VAB_Currency_ID, i.VAB_CurrencyType_ID, i.VAB_BPart_Location_Id,"
                     //+ " invoiceOpen(VAB_Invoice_ID, @param1) as invoiceOpen,"
                     + " p.DueAmt as invoiceOpen,"
-                    + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + C_PaySchedule_ID + ") as invoiceDiscount,"
+                    + " invoiceDiscount(" + VAB_Invoice_ID + ",@param1," + VAB_PaymentSchedule_ID + ") as invoiceDiscount,"
                     + " i.IsSOTrx, i.IsInDispute, i.IsReturnTrx"
                     + " FROM VAB_Invoice i INNER JOIN VAB_sched_InvoicePayment p ON p.VAB_Invoice_ID = i.VAB_Invoice_ID"
-                    + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + C_PaySchedule_ID;
+                    + " WHERE i.VAB_Invoice_ID=" + VAB_Invoice_ID + " AND p.VAB_sched_InvoicePayment_ID=" + VAB_PaymentSchedule_ID;
             }
             SqlParameter[] param = new SqlParameter[1];
-            //param[0] = new SqlParameter("@param1", C_PaySchedule_ID);
+            //param[0] = new SqlParameter("@param1", VAB_PaymentSchedule_ID);
             param[0] = new SqlParameter("@param1", trxDate);
-            //param[2] = new SqlParameter("@param3", C_PaySchedule_ID);
+            //param[2] = new SqlParameter("@param3", VAB_PaymentSchedule_ID);
             //param[3] = new SqlParameter("@param4", VAB_Invoice_ID);
             DataSet ds = DB.ExecuteDataset(sql, param, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -139,9 +139,9 @@ namespace VIS.Models
                    "AND ips.duedate IS NOT NULL AND NVL(ips.dueamt,0)!=0 AND i.VAB_BusinessPartner_id = " + bp_BusinessPartner + " AND i.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(ips.duedate) <= (CASE WHEN  TRUNC(@param1) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param2) END ) " +
                    " AND TRUNC(ips.duedate) <= TRUNC(@param1) ) " +
-                   "UNION SELECT c.iso_code, paymentAvailable(p.C_Payment_ID)*p.MultiplierAP*-1 AS OpenAmt " +
-                   "FROM C_Payment_v p LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=p.VAB_Currency_ID " +
-                   "LEFT JOIN c_payment pay ON (p.c_payment_id   =pay.c_payment_ID) WHERE p.IsAllocated  ='N' " +
+                   "UNION SELECT c.iso_code, paymentAvailable(p.VAB_Payment_ID)*p.MultiplierAP*-1 AS OpenAmt " +
+                   "FROM VAB_Payment_V p LEFT JOIN VAB_Currency C ON C.VAB_Currency_ID=p.VAB_Currency_ID " +
+                   "LEFT JOIN VAB_Payment pay ON (p.VAB_Payment_id   =pay.VAB_Payment_ID) WHERE p.IsAllocated  ='N' " +
                    " AND p.VAB_BUSINESSPARTNER_ID = " + bp_BusinessPartner + " AND p.DocStatus     IN ('CO','CL') " + " AND p.VAF_Client_ID=" + Client_ID +
                     //" AND TRUNC(pay.DateTrx) <= ( CASE WHEN TRUNC(@param3) > TRUNC(sysdate) THEN TRUNC(sysdate) ELSE TRUNC(@param4) END) " +
                    " AND TRUNC(pay.DateTrx) <= TRUNC(@param2) " +
@@ -204,7 +204,7 @@ namespace VIS.Models
         {
             string[] paramValue = fields.Split(',');
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
-            int C_Order_ID = Util.GetValueOfInt(paramValue[1]);
+            int VAB_Order_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<String, Object> retDic = null;
             string sql = "SELECT";
             if (countVA009)
@@ -212,7 +212,7 @@ namespace VIS.Models
                 sql += " VA009_PaymentMethod_ID,";
             }
             sql += " VAB_BusinessPartner_ID, VAB_Currency_ID, GrandTotal, VAB_BPart_Location_ID , VAB_CurrencyType_ID"
-                + " FROM C_Order WHERE C_Order_ID = " + C_Order_ID;
+                + " FROM VAB_Order WHERE VAB_Order_ID = " + VAB_Order_ID;
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -228,7 +228,7 @@ namespace VIS.Models
                 retDic["VAB_BPart_Location_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_BPart_Location_ID"]);
                 retDic["VAB_CurrencyType_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_CurrencyType_ID"]);
                 //check weather it is PrePayment or not
-                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN VAB_DocTypes DT ON o.VAB_DocTypesTarget_ID = DT.VAB_DocTypes_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + C_Order_ID, null, null)).Equals(X_VAB_DocTypes.DOCSUBTYPESO_PrepayOrder))
+                if (Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM VAB_Order o INNER JOIN VAB_DocTypes DT ON o.VAB_DocTypesTarget_ID = DT.VAB_DocTypes_ID WHERE o.IsActive='Y' AND  VAB_Order_ID = " + VAB_Order_ID, null, null)).Equals(X_VAB_DocTypes.DOCSUBTYPESO_PrepayOrder))
                 {
                     retDic["IsPrePayOrder"] = true;
                 }

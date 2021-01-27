@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class OrderRePrice : ProcessEngine.SvrProcess
     {
         //	Order to re-price		
-        private int _C_Order_ID = 0;
+        private int _VAB_Order_ID = 0;
         // Invoice to re-price		
         private int _VAB_Invoice_ID = 0;
 
@@ -46,9 +46,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    _C_Order_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAB_Order_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("VAB_Invoice_ID"))
                 {
@@ -67,16 +67,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            log.Info("C_Order_ID=" + _C_Order_ID + ", VAB_Invoice_ID=" + _VAB_Invoice_ID);
-            if (_C_Order_ID == 0 && _VAB_Invoice_ID == 0)
+            log.Info("VAB_Order_ID=" + _VAB_Order_ID + ", VAB_Invoice_ID=" + _VAB_Invoice_ID);
+            if (_VAB_Order_ID == 0 && _VAB_Invoice_ID == 0)
             {
                 throw new Exception("Nothing to do");
             }
 
             String retValue = "";
-            if (_C_Order_ID != 0)
+            if (_VAB_Order_ID != 0)
             {
-                MOrder order = new MOrder(GetCtx(), _C_Order_ID, Get_TrxName());
+                MOrder order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
                 Decimal oldPrice = order.GetGrandTotal();
                 MOrderLine[] lines = order.GetLines();
                 for (int i = 0; i < lines.Length; i++)
@@ -84,7 +84,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     lines[i].SetPrice(order.GetM_PriceList_ID());
                     lines[i].Save();
                 }
-                order = new MOrder(GetCtx(), _C_Order_ID, Get_TrxName());
+                order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
                 Decimal newPrice = order.GetGrandTotal();
                 retValue = order.GetDocumentNo() + ":  " + oldPrice + " -> " + newPrice;
             }

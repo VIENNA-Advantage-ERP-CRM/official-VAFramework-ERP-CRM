@@ -259,7 +259,7 @@ namespace VAdvantage.Model
             //
             String dbt = GetDocBaseType();
             if (dbt.Equals(DOCBASETYPE_SALESORDER) || dbt.Equals(DOCBASETYPE_PURCHASEORDER))
-                return X_C_Order.Table_ID;
+                return X_VAB_Order.Table_ID;
             if (dbt.Equals(DOCBASETYPE_MATERIALRECEIPT) || dbt.Equals(DOCBASETYPE_MATERIALDELIVERY))
                 return X_M_InOut.Table_ID;
             if (dbt.Equals(DOCBASETYPE_APINVOICE) || dbt.Equals(DOCBASETYPE_APCREDITMEMO)
@@ -267,7 +267,7 @@ namespace VAdvantage.Model
                     || dbt.Equals(DOCBASETYPE_ARPROFORMAINVOICE))
                 return X_VAB_Invoice.Table_ID;
             if (dbt.Equals(DOCBASETYPE_APPAYMENT) || dbt.Equals(DOCBASETYPE_ARRECEIPT))
-                return X_C_Payment.Table_ID;
+                return X_VAB_Payment.Table_ID;
             if (dbt.Equals(DOCBASETYPE_PAYMENTALLOCATION))
                 return X_VAB_DocAllocation.Table_ID;
             if (dbt.Equals(DOCBASETYPE_CASHJOURNAL))
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_MATERIALPRODUCTION))
                 return X_M_Production.Table_ID;
             if (dbt.Equals(DOCBASETYPE_GLJOURNAL))
-                return X_GL_Journal.Table_ID;
+                return X_VAGL_JRNL.Table_ID;
             if (dbt.Equals(DOCBASETYPE_GLDOCUMENT))
                 return 0;
             if (dbt.Equals(DOCBASETYPE_MATCHINVOICE))
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_MATCHPO))
                 return X_M_MatchPO.Table_ID;
             if (dbt.Equals(DOCBASETYPE_PROJECTISSUE))
-                return X_C_ProjectIssue.Table_ID;
+                return X_VAB_ProjectSupply.Table_ID;
             if (dbt.Equals(DOCBASETYPE_PURCHASEREQUISITION))
                 return X_M_Requisition.Table_ID;
             /*********Manafacturing*************/
@@ -318,14 +318,14 @@ namespace VAdvantage.Model
             if (VAF_TableView_ID == 0)
                 return null;
             //
-            if (VAF_TableView_ID == X_C_Order.Table_ID)
-                return X_C_Order.Table_Name;
+            if (VAF_TableView_ID == X_VAB_Order.Table_ID)
+                return X_VAB_Order.Table_Name;
             if (VAF_TableView_ID == X_M_InOut.Table_ID)
                 return X_M_InOut.Table_Name;
             if (VAF_TableView_ID == X_VAB_Invoice.Table_ID)
                 return X_VAB_Invoice.Table_Name;
-            if (VAF_TableView_ID == X_C_Payment.Table_ID)
-                return X_C_Payment.Table_Name;
+            if (VAF_TableView_ID == X_VAB_Payment.Table_ID)
+                return X_VAB_Payment.Table_Name;
             if (VAF_TableView_ID == X_VAB_DocAllocation.Table_ID)
                 return X_VAB_DocAllocation.Table_Name;
             if (VAF_TableView_ID == X_VAB_CashJRNL.Table_ID)
@@ -336,14 +336,14 @@ namespace VAdvantage.Model
                 return X_M_Inventory.Table_Name;
             if (VAF_TableView_ID == X_M_Movement.Table_ID)
                 return X_M_Movement.Table_Name;
-            if (VAF_TableView_ID == X_GL_Journal.Table_ID)
-                return X_GL_Journal.Table_Name;
+            if (VAF_TableView_ID == X_VAGL_JRNL.Table_ID)
+                return X_VAGL_JRNL.Table_Name;
             if (VAF_TableView_ID == X_M_MatchInv.Table_ID)
                 return X_M_MatchInv.Table_Name;
             if (VAF_TableView_ID == X_M_MatchPO.Table_ID)
                 return X_M_MatchPO.Table_Name;
-            if (VAF_TableView_ID == X_C_ProjectIssue.Table_ID)
-                return X_C_ProjectIssue.Table_Name;
+            if (VAF_TableView_ID == X_VAB_ProjectSupply.Table_ID)
+                return X_VAB_ProjectSupply.Table_Name;
             if (VAF_TableView_ID == X_M_Requisition.Table_ID)
                 return X_M_Requisition.Table_Name;
 
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_SALESORDER) || dbt.Equals(DOCBASETYPE_PURCHASEORDER))
             {
                 
-                return "VAdvantage.Acct.Doc_Order";
+                return "VAdvantage.Acct.DoVAB_Order";
             }
             if (dbt.Equals(DOCBASETYPE_MATERIALRECEIPT) || dbt.Equals(DOCBASETYPE_MATERIALDELIVERY))
             {
@@ -398,7 +398,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_APPAYMENT) || dbt.Equals(DOCBASETYPE_ARRECEIPT))
             {
                 
-                return "VAdvantage.Acct.Doc_Payment";
+                return "VAdvantage.Acct.DoVAB_Payment";
             }
             if (dbt.Equals(DOCBASETYPE_PAYMENTALLOCATION))
             {

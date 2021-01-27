@@ -11,18 +11,18 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_UserRemuneration
+/** Generated Model for VAB_EmployeeCompensation
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_UserRemuneration : PO
+public class X_VAB_EmployeeCompensation : PO
 {
-public X_C_UserRemuneration (Context ctx, int C_UserRemuneration_ID, Trx trxName) : base (ctx, C_UserRemuneration_ID, trxName)
+public X_VAB_EmployeeCompensation (Context ctx, int VAB_EmployeeCompensation_ID, Trx trxName) : base (ctx, VAB_EmployeeCompensation_ID, trxName)
 {
-/** if (C_UserRemuneration_ID == 0)
+/** if (VAB_EmployeeCompensation_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_Remuneration_ID (0);
-SetC_UserRemuneration_ID (0);
+SetVAB_Compensation_ID (0);
+SetVAB_EmployeeCompensation_ID (0);
 SetGrossRAmt (0.0);
 SetGrossRCost (0.0);
 SetOvertimeAmt (0.0);
@@ -31,13 +31,13 @@ SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_C_UserRemuneration (Ctx ctx, int C_UserRemuneration_ID, Trx trxName) : base (ctx, C_UserRemuneration_ID, trxName)
+public X_VAB_EmployeeCompensation (Ctx ctx, int VAB_EmployeeCompensation_ID, Trx trxName) : base (ctx, VAB_EmployeeCompensation_ID, trxName)
 {
-/** if (C_UserRemuneration_ID == 0)
+/** if (VAB_EmployeeCompensation_ID == 0)
 {
 SetVAF_UserContact_ID (0);
-SetC_Remuneration_ID (0);
-SetC_UserRemuneration_ID (0);
+SetVAB_Compensation_ID (0);
+SetVAB_EmployeeCompensation_ID (0);
 SetGrossRAmt (0.0);
 SetGrossRCost (0.0);
 SetOvertimeAmt (0.0);
@@ -51,7 +51,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UserRemuneration (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_EmployeeCompensation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_C_UserRemuneration (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UserRemuneration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_EmployeeCompensation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_C_UserRemuneration (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_UserRemuneration (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_EmployeeCompensation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_UserRemuneration()
+static X_VAB_EmployeeCompensation()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389059034L;
 public static int Table_ID;
  // =794;
 
-/** TableName=C_UserRemuneration */
-public static String Table_Name="C_UserRemuneration";
+/** TableName=VAB_EmployeeCompensation */
+public static String Table_Name="VAB_EmployeeCompensation";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_UserRemuneration[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_EmployeeCompensation[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -146,32 +146,32 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_UserContact_ID().ToString());
 }
 /** Set Remuneration.
-@param C_Remuneration_ID Wage or Salary */
-public void SetC_Remuneration_ID (int C_Remuneration_ID)
+@param VAB_Compensation_ID Wage or Salary */
+public void SetVAB_Compensation_ID (int VAB_Compensation_ID)
 {
-if (C_Remuneration_ID < 1) throw new ArgumentException ("C_Remuneration_ID is mandatory.");
-Set_ValueNoCheck ("C_Remuneration_ID", C_Remuneration_ID);
+if (VAB_Compensation_ID < 1) throw new ArgumentException ("VAB_Compensation_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Compensation_ID", VAB_Compensation_ID);
 }
 /** Get Remuneration.
 @return Wage or Salary */
-public int GetC_Remuneration_ID() 
+public int GetVAB_Compensation_ID() 
 {
-Object ii = Get_Value("C_Remuneration_ID");
+Object ii = Get_Value("VAB_Compensation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Employee Remuneration.
-@param C_UserRemuneration_ID Employee Wage or Salary Overwrite */
-public void SetC_UserRemuneration_ID (int C_UserRemuneration_ID)
+@param VAB_EmployeeCompensation_ID Employee Wage or Salary Overwrite */
+public void SetVAB_EmployeeCompensation_ID (int VAB_EmployeeCompensation_ID)
 {
-if (C_UserRemuneration_ID < 1) throw new ArgumentException ("C_UserRemuneration_ID is mandatory.");
-Set_ValueNoCheck ("C_UserRemuneration_ID", C_UserRemuneration_ID);
+if (VAB_EmployeeCompensation_ID < 1) throw new ArgumentException ("VAB_EmployeeCompensation_ID is mandatory.");
+Set_ValueNoCheck ("VAB_EmployeeCompensation_ID", VAB_EmployeeCompensation_ID);
 }
 /** Get Employee Remuneration.
 @return Employee Wage or Salary Overwrite */
-public int GetC_UserRemuneration_ID() 
+public int GetVAB_EmployeeCompensation_ID() 
 {
-Object ii = Get_Value("C_UserRemuneration_ID");
+Object ii = Get_Value("VAB_EmployeeCompensation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

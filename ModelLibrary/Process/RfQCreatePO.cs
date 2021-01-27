@@ -32,7 +32,7 @@ namespace VAdvantage.Process
     public class RfQCreatePO : ProcessEngine.SvrProcess
     {
         //	RfQ 			
-        private int _C_RfQ_ID = 0;
+        private int _VAB_RFQ_ID = 0;
         private int _VAB_DocTypes_ID = 0;
         //Variable Declaration
         private int VA009_PaymentMethod_ID = 0;
@@ -60,7 +60,7 @@ namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_RfQ_ID = GetRecord_ID();
+            _VAB_RFQ_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _C_RfQ_ID, Get_TrxName());
+            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -159,13 +159,13 @@ namespace VAdvantage.Process
                         {
                             MOrderLine ol = new MOrderLine(order);
                             ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
-                                qty.GetRfQLineQty().GetC_UOM_ID());
+                                qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());
                             ol.SetQty(qty.GetRfQLineQty().GetQty());
                             Decimal? price = qty.GetNetAmt();
                             ol.SetPrice(price == null ? Env.ZERO : price.Value);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
-                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetC_RfQLine_ID(), null);
+                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
                             ol.SetM_AttributeSetInstance_ID(Rfqline.GetM_AttributeSetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);
@@ -174,7 +174,7 @@ namespace VAdvantage.Process
                         }
                     }
                 }
-                response.SetC_Order_ID(order.GetC_Order_ID());
+                response.SetVAB_Order_ID(order.GetVAB_Order_ID());
                 response.Save();
                 return order.GetDocumentNo();
             }
@@ -252,13 +252,13 @@ namespace VAdvantage.Process
                         {
                             MOrderLine ol = new MOrderLine(order);
                             ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
-                                qty.GetRfQLineQty().GetC_UOM_ID());
+                                qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());
                             ol.SetQty(qty.GetRfQLineQty().GetQty());
                             Decimal? price = qty.GetNetAmt();
                             ol.SetPriceActual(price);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
-                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetC_RfQLine_ID(), null);
+                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
                             ol.SetM_AttributeSetInstance_ID(Rfqline.GetM_AttributeSetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);
@@ -275,7 +275,7 @@ namespace VAdvantage.Process
                         Orderno.Append(",");
                     }
                     Orderno.Append(order.GetDocumentNo());
-                    response.SetC_Order_ID(order.GetC_Order_ID());
+                    response.SetVAB_Order_ID(order.GetVAB_Order_ID());
                     response.Save();
                 }
             }

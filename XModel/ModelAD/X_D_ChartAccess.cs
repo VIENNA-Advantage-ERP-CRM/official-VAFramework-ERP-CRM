@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for D_ChartAccess
+/** Generated Model for D_ChartRights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_D_ChartAccess : PO
+public class X_D_ChartRights : PO
 {
-public X_D_ChartAccess (Context ctx, int D_ChartAccess_ID, Trx trxName) : base (ctx, D_ChartAccess_ID, trxName)
+public X_D_ChartRights (Context ctx, int D_ChartRights_ID, Trx trxName) : base (ctx, D_ChartRights_ID, trxName)
 {
-/** if (D_ChartAccess_ID == 0)
+/** if (D_ChartRights_ID == 0)
 {
-SetD_ChartAccess_ID (0);
+SetD_ChartRights_ID (0);
 SetD_Chart_ID (0);
 }
  */
 }
-public X_D_ChartAccess (Ctx ctx, int D_ChartAccess_ID, Trx trxName) : base (ctx, D_ChartAccess_ID, trxName)
+public X_D_ChartRights (Ctx ctx, int D_ChartRights_ID, Trx trxName) : base (ctx, D_ChartRights_ID, trxName)
 {
-/** if (D_ChartAccess_ID == 0)
+/** if (D_ChartRights_ID == 0)
 {
-SetD_ChartAccess_ID (0);
+SetD_ChartRights_ID (0);
 SetD_Chart_ID (0);
 }
  */
@@ -39,7 +39,7 @@ SetD_Chart_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_D_ChartAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_D_ChartRights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_D_ChartAccess (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_D_ChartAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_D_ChartRights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_D_ChartAccess (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_D_ChartAccess (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_D_ChartRights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_D_ChartAccess()
+static X_D_ChartRights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389059222L;
 public static int Table_ID;
  // =1000006;
 
-/** TableName=D_ChartAccess */
-public static String Table_Name="D_ChartAccess";
+/** TableName=D_ChartRights */
+public static String Table_Name="D_ChartRights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_D_ChartAccess[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_D_ChartRights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -128,18 +128,18 @@ Object ii = Get_Value("VAF_Role_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set D_ChartAccess_ID.
-@param D_ChartAccess_ID D_ChartAccess_ID */
-public void SetD_ChartAccess_ID (int D_ChartAccess_ID)
+/** Set D_ChartRights_ID.
+@param D_ChartRights_ID D_ChartRights_ID */
+public void SetD_ChartRights_ID (int D_ChartRights_ID)
 {
-if (D_ChartAccess_ID < 1) throw new ArgumentException ("D_ChartAccess_ID is mandatory.");
-Set_ValueNoCheck ("D_ChartAccess_ID", D_ChartAccess_ID);
+if (D_ChartRights_ID < 1) throw new ArgumentException ("D_ChartRights_ID is mandatory.");
+Set_ValueNoCheck ("D_ChartRights_ID", D_ChartRights_ID);
 }
-/** Get D_ChartAccess_ID.
-@return D_ChartAccess_ID */
-public int GetD_ChartAccess_ID() 
+/** Get D_ChartRights_ID.
+@return D_ChartRights_ID */
+public int GetD_ChartRights_ID() 
 {
-Object ii = Get_Value("D_ChartAccess_ID");
+Object ii = Get_Value("D_ChartRights_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_PaymentProcessor
+ * Class Used     : X_VAB_PaymentHandler
  * Chronological Development
  * Veena Pandey     23-June-2009
  ******************************************************/
@@ -20,7 +20,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaymentProcessor : X_C_PaymentProcessor
+    public class MPaymentProcessor : X_VAB_PaymentHandler
     {
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MPaymentProcessor).FullName);
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_PaymentProcessor_ID">id</param>
+        /// <param name="VAB_PaymentHandler_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentProcessor(Ctx ctx, int C_PaymentProcessor_ID, Trx trxName)
-            : base(ctx, C_PaymentProcessor_ID, trxName)
+        public MPaymentProcessor(Ctx ctx, int VAB_PaymentHandler_ID, Trx trxName)
+            : base(ctx, VAB_PaymentHandler_ID, trxName)
         {
-            if (C_PaymentProcessor_ID == 0)
+            if (VAB_PaymentHandler_ID == 0)
             {
                 //	setVAB_Bank_Acct_ID (0);		//	Parent
                 //	setUserID (null);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         {
             List<MPaymentProcessor> list = new List<MPaymentProcessor>();
             StringBuilder sql = new StringBuilder("SELECT * "
-                + "FROM C_PaymentProcessor "
+                + "FROM VAB_PaymentHandler "
                 + "WHERE VAF_Client_ID=@clid AND IsActive='Y'"				//	#1
                 + " AND (VAB_Currency_ID IS NULL OR VAB_Currency_ID=@curid)"		//	#2
                 + " AND (MinimumAmt IS NULL OR MinimumAmt = 0 OR MinimumAmt <= @amot)");	//	#3

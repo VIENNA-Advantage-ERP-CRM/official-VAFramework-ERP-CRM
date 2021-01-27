@@ -66,10 +66,10 @@ namespace VIS.Models
                                         VAF_UserContact.VAF_Org_ID,
                                       VAB_Country.Name as CName
                                     FROM VAF_UserContact
-                                    LEFT OUTER JOIN C_LOcation
-                                    ON VAF_UserContact.C_Location_ID=C_Location.C_Location_ID
+                                    LEFT OUTER JOIN VAB_Address
+                                    ON VAF_UserContact.VAB_Address_ID=VAB_Address.VAB_Address_ID
                                     LEFT OUTER JOIN VAB_Country
-                                    ON VAB_Country.VAB_Country_ID=C_Location.VAB_Country_ID WHERE IsLoginUser='Y' ";
+                                    ON VAB_Country.VAB_Country_ID=VAB_Address.VAB_Country_ID WHERE IsLoginUser='Y' ";
             if (!String.IsNullOrEmpty(searchText))
             {
                 sql += " AND ( upper(VAF_UserContact.Value) like Upper('%" + searchText + "%') OR upper(VAF_UserContact.Name) like Upper('%" + searchText + "%')  OR  upper(VAF_UserContact.Email) like Upper('%" + searchText + "%'))";

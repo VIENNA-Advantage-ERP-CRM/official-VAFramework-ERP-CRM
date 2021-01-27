@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_OrderTax
+/** Generated Model for VAB_OrderTax
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_OrderTax : PO
+public class X_VAB_OrderTax : PO
 {
-public X_C_OrderTax (Context ctx, int C_OrderTax_ID, Trx trxName) : base (ctx, C_OrderTax_ID, trxName)
+public X_VAB_OrderTax (Context ctx, int VAB_OrderTax_ID, Trx trxName) : base (ctx, VAB_OrderTax_ID, trxName)
 {
-/** if (C_OrderTax_ID == 0)
+/** if (VAB_OrderTax_ID == 0)
 {
-SetC_Order_ID (0);
-SetC_Tax_ID (0);
+SetVAB_Order_ID (0);
+SetVAB_TaxRate_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
 SetTaxAmt (0.0);
@@ -29,12 +29,12 @@ SetTaxBaseAmt (0.0);
 }
  */
 }
-public X_C_OrderTax (Ctx ctx, int C_OrderTax_ID, Trx trxName) : base (ctx, C_OrderTax_ID, trxName)
+public X_VAB_OrderTax (Ctx ctx, int VAB_OrderTax_ID, Trx trxName) : base (ctx, VAB_OrderTax_ID, trxName)
 {
-/** if (C_OrderTax_ID == 0)
+/** if (VAB_OrderTax_ID == 0)
 {
-SetC_Order_ID (0);
-SetC_Tax_ID (0);
+SetVAB_Order_ID (0);
+SetVAB_TaxRate_ID (0);
 SetIsTaxIncluded (false);
 SetProcessed (false);	// N
 SetTaxAmt (0.0);
@@ -47,7 +47,7 @@ SetTaxBaseAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrderTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_OrderTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_C_OrderTax (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrderTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_OrderTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_C_OrderTax (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_OrderTax (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_OrderTax (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_OrderTax()
+static X_VAB_OrderTax()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389056636L;
 public static int Table_ID;
  // =314;
 
-/** TableName=C_OrderTax */
-public static String Table_Name="C_OrderTax";
+/** TableName=VAB_OrderTax */
+public static String Table_Name="VAB_OrderTax";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -117,21 +117,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_OrderTax[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_OrderTax[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID < 1) throw new ArgumentException ("C_Order_ID is mandatory.");
-Set_ValueNoCheck ("C_Order_ID", C_Order_ID);
+if (VAB_Order_ID < 1) throw new ArgumentException ("VAB_Order_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -139,20 +139,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_Order_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Order_ID().ToString());
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

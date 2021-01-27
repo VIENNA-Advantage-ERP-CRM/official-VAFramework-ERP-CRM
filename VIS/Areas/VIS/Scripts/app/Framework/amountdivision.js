@@ -1779,13 +1779,13 @@
 				}//Account
 				else if (DimensionTypeVal == "AY") { sql += " and VAB_BillingCode_ID =" + DimensionNameVal }//Activity
 				else if (DimensionTypeVal == "BP") { sql += " and VAB_BusinessPartner_ID=" + DimensionNameVal }//BPartner
-				else if (DimensionTypeVal == "LF" || DimensionTypeVal == "LT") { sql += " and C_Location_ID=" + DimensionNameVal }//Location From//Location To
+				else if (DimensionTypeVal == "LF" || DimensionTypeVal == "LT") { sql += " and VAB_Address_ID=" + DimensionNameVal }//Location From//Location To
 				else if (DimensionTypeVal == "MC") { sql += " and VAB_Promotion_ID=" + DimensionNameVal }//Campaign
 				else if (DimensionTypeVal == "OO" || DimensionTypeVal == "OT") { sql += " and Org_ID=" + DimensionNameVal }//Organization//Org Trx
-				else if (DimensionTypeVal == "PJ") { sql += " and C_Project_ID=" + DimensionNameVal }//Project
+				else if (DimensionTypeVal == "PJ") { sql += " and VAB_Project_ID=" + DimensionNameVal }//Project
 				else if (DimensionTypeVal == "PR") { sql += " and M_Product_ID=" + DimensionNameVal }//Product
 				else if (DimensionTypeVal == "SA") { }//Sub Account
-				else if (DimensionTypeVal == "SR") { sql += " and C_SalesRegion_ID=" + DimensionNameVal }//Sales Region
+				else if (DimensionTypeVal == "SR") { sql += " and VAB_SalesRegionState_ID=" + DimensionNameVal }//Sales Region
 				else if (DimensionTypeVal == "U1" || DimensionTypeVal == "U2") {
 					sql += " and VAB_Acct_Element_ID=" + DimensionNameVal;
 					if (VAB_BusinessPartner_ID > 0) {
@@ -1831,13 +1831,13 @@
 					}//Account
 					else if (DimensionTypeVal == "AY") { sql += " and VAB_BillingCode_ID =" + DimensionNameVal }//Activity
 					else if (DimensionTypeVal == "BP") { sql += " and VAB_BusinessPartner_ID=" + DimensionNameVal }//BPartner
-					else if (DimensionTypeVal == "LF" || DimensionTypeVal == "LT") { sql += " and C_Location_ID=" + DimensionNameVal }//Location From//Location To
+					else if (DimensionTypeVal == "LF" || DimensionTypeVal == "LT") { sql += " and VAB_Address_ID=" + DimensionNameVal }//Location From//Location To
 					else if (DimensionTypeVal == "MC") { sql += " and VAB_Promotion_ID=" + DimensionNameVal }//Campaign
 					else if (DimensionTypeVal == "OO" || DimensionTypeVal == "OT") { sql += " and Org_ID=" + DimensionNameVal }//Organization//Org Trx
-					else if (DimensionTypeVal == "PJ") { sql += " and C_Project_ID=" + DimensionNameVal }//Project
+					else if (DimensionTypeVal == "PJ") { sql += " and VAB_Project_ID=" + DimensionNameVal }//Project
 					else if (DimensionTypeVal == "PR") { sql += " and M_Product_ID=" + DimensionNameVal }//Product
 					else if (DimensionTypeVal == "SA") { }//Sub Account
-					else if (DimensionTypeVal == "SR") { sql += " and C_SalesRegion_ID=" + DimensionNameVal }//Sales Region
+					else if (DimensionTypeVal == "SR") { sql += " and VAB_SalesRegionState_ID=" + DimensionNameVal }//Sales Region
 					else if (DimensionTypeVal == "U1" || DimensionTypeVal == "U2") {
 						sql += " and VAB_Acct_Element_ID=" + DimensionNameVal;
 						if (VAB_BusinessPartner_ID > 0) {
@@ -2113,11 +2113,11 @@
 			//modalDivAmount.css("width", "33.3%");
 			lblSalesRegion = $("<label>");
 			modalLblSalesRegion = $("<label>");
-			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_SalesRegion_ID", 0, false, null);
-			var cmb = new VIS.Controls.VComboBox("C_SalesRegion_ID", false, false, true, lookup, 50);
+			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAB_SalesRegionState_ID", 0, false, null);
+			var cmb = new VIS.Controls.VComboBox("VAB_SalesRegionState_ID", false, false, true, lookup, 50);
 			cmbSalesRegion = cmb.getControl().attr('placeholder', ' ').attr('data-placeholder', '');
 			cmbSalesRegion.attr("tabindex", "4");
-			lblSalesRegion.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_SalesRegion_ID"));
+			lblSalesRegion.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_SalesRegionState_ID"));
 			divSales = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
 			divSales.css("width", "100%");
 			var divSalesCtrlWrap = $("<div class='vis-control-wrap'>");
@@ -2125,11 +2125,11 @@
 			divSalesCtrlWrap.append(cmbSalesRegion).append(lblSalesRegion);
 			generateControl.append(divSales);
 			cmbSalesRegion.focus();
-			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_SalesRegion_ID", 0, false, null);
-			var modalCmb = new VIS.Controls.VComboBox("C_SalesRegion_ID", false, false, true, modalLookup, 50);
+			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAB_SalesRegionState_ID", 0, false, null);
+			var modalCmb = new VIS.Controls.VComboBox("VAB_SalesRegionState_ID", false, false, true, modalLookup, 50);
 			modalCmbSalesRegion = modalCmb.getControl().attr('placeholder', ' ').attr('data-placeholder', '');
 			modalCmbSalesRegion.attr("tabindex", "9");
-			modalLblSalesRegion.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_SalesRegion_ID"));
+			modalLblSalesRegion.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_SalesRegionState_ID"));
 			modalDivSales = $("<div class='VIS-AMTD-formData input-group vis-input-wrap'>");
 			modalDivSales.css("width", "100%");
 			var modalDivSalesCtrlWrap = $("<div class='vis-control-wrap'>");
@@ -2249,10 +2249,10 @@
 			//modalDivAmount.css("width", "33.3%");
 			lblAddress = $("<label>");
 			var lookups = new VIS.MLocationLookup(VIS.Env.getCtx(), windowNo);
-			txtLoc = new VIS.Controls.VLocation("C_Location_ID", false, false, true, VIS.DisplayType.Location, lookups);
+			txtLoc = new VIS.Controls.VLocation("VAB_Address_ID", false, false, true, VIS.DisplayType.Location, lookups);
 			locAddress = txtLoc.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			locAddress.attr("tabindex", "4");
-			lblAddress.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Location_ID"));
+			lblAddress.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Address_ID"));
 			divLocation = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var divLocationCtrlWrap = $('<div class="vis-control-wrap">');
 			var divLocationBtnWrap = $('<div class="input-group-append">');
@@ -2264,10 +2264,10 @@
 			generateControl.append(divLocation);
 			modalLblAddress = $("<label>");
 			var modelLookups = new VIS.MLocationLookup(VIS.Env.getCtx(), windowNo);
-			modalTxtLoc = new VIS.Controls.VLocation("C_Location_ID", false, false, true, VIS.DisplayType.Location, modelLookups);
+			modalTxtLoc = new VIS.Controls.VLocation("VAB_Address_ID", false, false, true, VIS.DisplayType.Location, modelLookups);
 			modalLocAddress = modalTxtLoc.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			modalLocAddress.attr("tabindex", "9");
-			modalLblAddress.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Location_ID"));
+			modalLblAddress.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Address_ID"));
 			modalDivLocation = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var modalDivLocationCtrlWrap = $('<div class="vis-control-wrap">');
 			var modalDivLocationBtnWrap = $('<div class="input-group-append">');
@@ -2285,11 +2285,11 @@
 			//divbutton.css("width", "6%");
 			//modalDivAmount.css("width", "33.3%");
 			lblProject = $("<label>");
-			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_Project_ID", 0, false, null);
-			txtProj = new VIS.Controls.VTextBoxButton("C_Project_ID", false, false, true, VIS.DisplayType.Search, lookup);
+			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAB_Project_ID", 0, false, null);
+			txtProj = new VIS.Controls.VTextBoxButton("VAB_Project_ID", false, false, true, VIS.DisplayType.Search, lookup);
 			txtProject = txtProj.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			txtProject.attr("tabindex", "4");
-			lblProject.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Project_ID"));
+			lblProject.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Project_ID"));
 			divProject = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var divProjectCtrlWrap = $('<div class="vis-control-wrap">');
 			var divProjectBtnWrap = $('<div class="input-group-append">');
@@ -2300,11 +2300,11 @@
 			divProjectBtnWrap.append(txtProj.getBtn(0));//.append(txtProj.getBtn(1));
 			generateControl.append(divProject);
 			modalLblProject = $("<label>");
-			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "C_Project_ID", 0, false, null);
-			modalTxtProj = new VIS.Controls.VTextBoxButton("C_Project_ID", false, false, true, VIS.DisplayType.Search, modalLookup);
+			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAB_Project_ID", 0, false, null);
+			modalTxtProj = new VIS.Controls.VTextBoxButton("VAB_Project_ID", false, false, true, VIS.DisplayType.Search, modalLookup);
 			modalTxtProject = modalTxtProj.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			modalTxtProject.attr("tabindex", "9");
-			modalLblProject.append(VIS.Msg.translate(VIS.Env.getCtx(), "C_Project_ID"));
+			modalLblProject.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_Project_ID"));
 			modalDivProject = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var modalDivProjectCtrlWrap = $('<div class="vis-control-wrap">');
 			var modalDivProjectBtnWrap = $('<div class="input-group-append">');

@@ -289,9 +289,9 @@ namespace VAdvantage.Process
                 MBPartner thisBPartner = new MBPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (level.IsSetCreditStop())
                     thisBPartner.SetSOCreditStatus(X_VAB_BusinessPartner.SOCREDITSTATUS_CreditStop);
-                if (level.IsSetPaymentTerm() && level.GetC_PaymentTerm_ID() != 0)
+                if (level.IsSetPaymentTerm() && level.GetVAB_PaymentTerm_ID() != 0)
                 {
-                    thisBPartner.SetC_PaymentTerm_ID(level.GetC_PaymentTerm_ID());
+                    thisBPartner.SetVAB_PaymentTerm_ID(level.GetVAB_PaymentTerm_ID());
                 }
                 thisBPartner.Save();
             }

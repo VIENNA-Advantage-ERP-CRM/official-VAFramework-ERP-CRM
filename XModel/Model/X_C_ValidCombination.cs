@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ValidCombination
+/** Generated Model for VAB_Acct_ValidParameter
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ValidCombination : PO
+public class X_VAB_Acct_ValidParameter : PO
 {
-public X_C_ValidCombination (Context ctx, int C_ValidCombination_ID, Trx trxName) : base (ctx, C_ValidCombination_ID, trxName)
+public X_VAB_Acct_ValidParameter (Context ctx, int VAB_Acct_ValidParameter_ID, Trx trxName) : base (ctx, VAB_Acct_ValidParameter_ID, trxName)
 {
-/** if (C_ValidCombination_ID == 0)
+/** if (VAB_Acct_ValidParameter_ID == 0)
 {
 SetAccount_ID (0);
 SetVAB_AccountBook_ID (0);
-SetC_ValidCombination_ID (0);
+SetVAB_Acct_ValidParameter_ID (0);
 SetIsFullyQualified (false);
 }
  */
 }
-public X_C_ValidCombination (Ctx ctx, int C_ValidCombination_ID, Trx trxName) : base (ctx, C_ValidCombination_ID, trxName)
+public X_VAB_Acct_ValidParameter (Ctx ctx, int VAB_Acct_ValidParameter_ID, Trx trxName) : base (ctx, VAB_Acct_ValidParameter_ID, trxName)
 {
-/** if (C_ValidCombination_ID == 0)
+/** if (VAB_Acct_ValidParameter_ID == 0)
 {
 SetAccount_ID (0);
 SetVAB_AccountBook_ID (0);
-SetC_ValidCombination_ID (0);
+SetVAB_Acct_ValidParameter_ID (0);
 SetIsFullyQualified (false);
 }
  */
@@ -43,7 +43,7 @@ SetIsFullyQualified (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ValidCombination (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Acct_ValidParameter (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_C_ValidCombination (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ValidCombination (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Acct_ValidParameter (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_C_ValidCombination (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ValidCombination (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Acct_ValidParameter (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ValidCombination()
+static X_VAB_Acct_ValidParameter()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389059066L;
 public static int Table_ID;
  // =176;
 
-/** TableName=C_ValidCombination */
-public static String Table_Name="C_ValidCombination";
+/** TableName=VAB_Acct_ValidParameter */
+public static String Table_Name="VAB_Acct_ValidParameter";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ValidCombination[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Acct_ValidParameter[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -281,71 +281,71 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_Project_ID VAF_Control_Ref_ID=141 */
-public static int C_PROJECT_ID_VAF_Control_Ref_ID=141;
+/** VAB_Project_ID VAF_Control_Ref_ID=141 */
+public static int VAB_PROJECT_ID_VAF_Control_Ref_ID=141;
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_ValueNoCheck ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_ValueNoCheck ("VAB_Project_ID", null);
 else
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_SalesRegion_ID VAF_Control_Ref_ID=144 */
-public static int C_SALESREGION_ID_VAF_Control_Ref_ID=144;
+/** VAB_SalesRegionState_ID VAF_Control_Ref_ID=144 */
+public static int VAB_SALESREGIONSTATE_ID_VAF_Control_Ref_ID=144;
 /** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-public void SetC_SalesRegion_ID (int C_SalesRegion_ID)
+@param VAB_SalesRegionState_ID Sales coverage region */
+public void SetVAB_SalesRegionState_ID (int VAB_SalesRegionState_ID)
 {
-if (C_SalesRegion_ID <= 0) Set_ValueNoCheck ("C_SalesRegion_ID", null);
+if (VAB_SalesRegionState_ID <= 0) Set_ValueNoCheck ("VAB_SalesRegionState_ID", null);
 else
-Set_ValueNoCheck ("C_SalesRegion_ID", C_SalesRegion_ID);
+Set_ValueNoCheck ("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
 }
 /** Get Sales Region.
 @return Sales coverage region */
-public int GetC_SalesRegion_ID() 
+public int GetVAB_SalesRegionState_ID() 
 {
-Object ii = Get_Value("C_SalesRegion_ID");
+Object ii = Get_Value("VAB_SalesRegionState_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Sub Account.
-@param C_SubAcct_ID Sub account for Element Value */
-public void SetC_SubAcct_ID (int C_SubAcct_ID)
+@param VAB_SubAcct_ID Sub account for Element Value */
+public void SetVAB_SubAcct_ID (int VAB_SubAcct_ID)
 {
-if (C_SubAcct_ID <= 0) Set_ValueNoCheck ("C_SubAcct_ID", null);
+if (VAB_SubAcct_ID <= 0) Set_ValueNoCheck ("VAB_SubAcct_ID", null);
 else
-Set_ValueNoCheck ("C_SubAcct_ID", C_SubAcct_ID);
+Set_ValueNoCheck ("VAB_SubAcct_ID", VAB_SubAcct_ID);
 }
 /** Get Sub Account.
 @return Sub account for Element Value */
-public int GetC_SubAcct_ID() 
+public int GetVAB_SubAcct_ID() 
 {
-Object ii = Get_Value("C_SubAcct_ID");
+Object ii = Get_Value("VAB_SubAcct_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Combination.
-@param C_ValidCombination_ID Valid Account Combination */
-public void SetC_ValidCombination_ID (int C_ValidCombination_ID)
+@param VAB_Acct_ValidParameter_ID Valid Account Combination */
+public void SetVAB_Acct_ValidParameter_ID (int VAB_Acct_ValidParameter_ID)
 {
-if (C_ValidCombination_ID < 1) throw new ArgumentException ("C_ValidCombination_ID is mandatory.");
-Set_ValueNoCheck ("C_ValidCombination_ID", C_ValidCombination_ID);
+if (VAB_Acct_ValidParameter_ID < 1) throw new ArgumentException ("VAB_Acct_ValidParameter_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Acct_ValidParameter_ID", VAB_Acct_ValidParameter_ID);
 }
 /** Get Combination.
 @return Valid Account Combination */
-public int GetC_ValidCombination_ID() 
+public int GetVAB_Acct_ValidParameter_ID() 
 {
-Object ii = Get_Value("C_ValidCombination_ID");
+Object ii = Get_Value("VAB_Acct_ValidParameter_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

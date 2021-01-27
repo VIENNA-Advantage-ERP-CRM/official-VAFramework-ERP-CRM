@@ -135,8 +135,8 @@ namespace VAdvantage.Process
             //	Do not delete Cash Trx
             sql.Append(" AND al.VAB_CashJRNLLine_ID IS NULL)");
             //	Open Period
-            sql.Append(" AND EXISTS (SELECT * FROM C_Period p"
-                + " INNER JOIN C_PeriodControl pc ON (p.C_Period_ID=pc.C_Period_ID AND pc.DocBaseType='CMA') "
+            sql.Append(" AND EXISTS (SELECT * FROM VAB_YearPeriod p"
+                + " INNER JOIN VAB_YearPeriodControl pc ON (p.VAB_YearPeriod_ID=pc.VAB_YearPeriod_ID AND pc.DocBaseType='CMA') "
                 + "WHERE ah.DateAcct BETWEEN p.StartDate AND p.EndDate)");
 
             DataTable dt = null;
@@ -220,14 +220,14 @@ namespace VAdvantage.Process
         {
             /**
             UPDATE VAB_DocAllocationLine al
-            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Payment p WHERE al.C_Payment_ID=p.C_Payment_ID)
-            WHERE VAB_BusinessPartner_ID IS NULL AND C_Payment_ID IS NOT NULL;
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_Payment p WHERE al.VAB_Payment_ID=p.VAB_Payment_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Payment_ID IS NOT NULL;
             UPDATE VAB_DocAllocationLine al
             SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_Invoice i WHERE al.VAB_Invoice_ID=i.VAB_Invoice_ID)
             WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Invoice_ID IS NOT NULL;
             UPDATE VAB_DocAllocationLine al
-            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM C_Order o WHERE al.C_Order_ID=o.C_Order_ID)
-            WHERE VAB_BusinessPartner_ID IS NULL AND C_Order_ID IS NOT NULL;
+            SET VAB_BusinessPartner_ID=(SELECT VAB_BusinessPartner_ID FROM VAB_Order o WHERE al.VAB_Order_ID=o.VAB_Order_ID)
+            WHERE VAB_BusinessPartner_ID IS NULL AND VAB_Order_ID IS NOT NULL;
             COMMIT
             **/
         }

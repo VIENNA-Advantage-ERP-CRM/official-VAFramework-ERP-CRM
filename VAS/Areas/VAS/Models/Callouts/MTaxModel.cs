@@ -19,17 +19,17 @@ namespace VIS.Models
         public Decimal? CalculateTax(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Tax_ID;
+            int VAB_TaxRate_ID;
             //ecimal Qty;
             //bool isSOTrx;
             List<Decimal?> retval = new List<Decimal?>();
             //Assign parameter value
-            C_Tax_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAB_TaxRate_ID = Util.GetValueOfInt(paramValue[0].ToString());
             Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1].ToString());
             Boolean IsTaxIncluded = Convert.ToBoolean(paramValue[2]);
             int StdPrecision = Util.GetValueOfInt(paramValue[3].ToString());
             //End Assign parameter value
-            MTax tax = new MTax(ctx, C_Tax_ID, null);
+            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
             Decimal? TaxAmt = tax.CalculateTax(LineNetAmt, IsTaxIncluded, StdPrecision);
             return TaxAmt;
 
@@ -71,7 +71,7 @@ namespace VIS.Models
         public int Get_Tax_ID(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            //int C_Tax_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            //int VAB_TaxRate_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[1].ToString());
             DateTime? billDate = Util.GetValueOfDateTime(paramValue[2].ToString());
@@ -81,17 +81,17 @@ namespace VIS.Models
             int billVAB_BPart_Location_ID = Util.GetValueOfInt(paramValue[6].ToString());
             int shipVAB_BPart_Location_ID = Util.GetValueOfInt(paramValue[7].ToString());
             bool isSOTrx = Util.GetValueOfBool(paramValue[8]);
-            int C_Tax_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, VAB_Charge_ID, billDate, shipDate,
+            int VAB_TaxRate_ID = VAdvantage.Model.Tax.Get(ctx, M_Product_ID, VAB_Charge_ID, billDate, shipDate,
                VAF_Org_ID, M_Warehouse_ID, billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID,
                isSOTrx);
-            return C_Tax_ID;
+            return VAB_TaxRate_ID;
         }
 
         //Added By Bharat on 12/May/2017
         public Decimal GetTaxRate(Ctx ctx, string fields)
         {
-            int C_Tax_ID = Util.GetValueOfInt(fields);
-            MTax tax = new MTax(ctx, C_Tax_ID, null);
+            int VAB_TaxRate_ID = Util.GetValueOfInt(fields);
+            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
             return tax.GetRate();
         }
 
@@ -104,11 +104,11 @@ namespace VIS.Models
         public Dictionary<String, Object> CalculateSurcharge(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int C_Tax_ID;
+            int VAB_TaxRate_ID;
 
             Dictionary<String, Object> retval = new Dictionary<String, Object>();
             //Assign parameter value
-            C_Tax_ID = Util.GetValueOfInt(paramValue[0]);
+            VAB_TaxRate_ID = Util.GetValueOfInt(paramValue[0]);
             Decimal LineNetAmt = Util.GetValueOfDecimal(paramValue[1]);            
             int StdPrecision = Util.GetValueOfInt(paramValue[2]);
             Boolean IsTaxIncluded = true;
@@ -118,7 +118,7 @@ namespace VIS.Models
                 IsTaxIncluded = Util.GetValueOfBool(paramValue[3]);
             }
             //End Assign parameter value
-            MTax tax = new MTax(ctx, C_Tax_ID, null);
+            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
             Decimal surchargeAmt = Env.ZERO;
             Decimal TaxAmt = Env.ZERO;
             if (tax.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && tax.GetSurcharge_Tax_ID() > 0)

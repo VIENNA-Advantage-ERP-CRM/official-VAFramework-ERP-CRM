@@ -86,24 +86,24 @@ namespace VAdvantage.Model
         }/** Get Invoice Line.
 @return Invoice Detail Line */
         public int GetVAB_InvoiceLine_ID() { Object ii = Get_Value("VAB_InvoiceLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Order Line.
-@param C_OrderLine_ID Order Line */
-        public void SetC_OrderLine_ID(int C_OrderLine_ID)
+@param VAB_OrderLine_ID Order Line */
+        public void SetVAB_OrderLine_ID(int VAB_OrderLine_ID)
         {
-            if (C_OrderLine_ID <= 0) Set_Value("C_OrderLine_ID", null);
+            if (VAB_OrderLine_ID <= 0) Set_Value("VAB_OrderLine_ID", null);
             else
-                Set_Value("C_OrderLine_ID", C_OrderLine_ID);
+                Set_Value("VAB_OrderLine_ID", VAB_OrderLine_ID);
         }/** Get Order Line.
 @return Order Line */
-        public int GetC_OrderLine_ID() { Object ii = Get_Value("C_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Project Issue.
-@param C_ProjectIssue_ID Project Issues (Material, Labor) */
-        public void SetC_ProjectIssue_ID(int C_ProjectIssue_ID)
+        public int GetVAB_OrderLine_ID() { Object ii = Get_Value("VAB_OrderLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Project Issue.
+@param VAB_ProjectSupply_ID Project Issues (Material, Labor) */
+        public void SetVAB_ProjectSupply_ID(int VAB_ProjectSupply_ID)
         {
-            if (C_ProjectIssue_ID <= 0) Set_Value("C_ProjectIssue_ID", null);
+            if (VAB_ProjectSupply_ID <= 0) Set_Value("VAB_ProjectSupply_ID", null);
             else
-                Set_Value("C_ProjectIssue_ID", C_ProjectIssue_ID);
+                Set_Value("VAB_ProjectSupply_ID", VAB_ProjectSupply_ID);
         }/** Get Project Issue.
 @return Project Issues (Material, Labor) */
-        public int GetC_ProjectIssue_ID() { Object ii = Get_Value("C_ProjectIssue_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Current Cost.
+        public int GetVAB_ProjectSupply_ID() { Object ii = Get_Value("VAB_ProjectSupply_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Current Cost.
 @param CurrentCostPrice The currently used cost price */
         public void SetCurrentCostPrice(Decimal? CurrentCostPrice) { Set_Value("CurrentCostPrice", (Decimal?)CurrentCostPrice); }/** Get Current Cost.
 @return The currently used cost price */

@@ -127,14 +127,14 @@ namespace VAdvantage.Model
             //Issue ID- SI_0613 in Google Sheet Standard Issues.. On Bank account currency should not allow to change if any transcation made against bank.
             if (!newRecord && Is_ValueChanged("VAB_Currency_ID"))
             {
-                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM C_PAYMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                string sql = "SELECT SUM(total) AS TOTAL FROM (SELECT COUNT(*) AS TOTAL FROM VAB_PAYMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL SELECT COUNT(*) AS TOTAL FROM VAB_ACCT_ELEMENT WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BPart_Bank_Acct WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM VAB_BANK_ACCT_ACCT  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BANKINGJRNL WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM C_PAYMENTPROCESSOR  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM VAB_PAYMENTHANDLER  WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL  FROM VAB_CASHJRNLLINE WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
-                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM C_PAYSELECTION WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
+                               + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_PaymentOption WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS TOTAL FROM VAB_BANK_ACCTDOC WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID()
                                + " UNION ALL  SELECT COUNT(*) AS Total FROM VAB_Bank_AcctLine WHERE VAF_Client_ID= " + GetVAF_Client_ID() + " AND VAB_BANK_ACCT_ID =" + GetVAB_Bank_Acct_ID();
 
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
                         {
                             int _AcctSchema_ID = Util.GetValueOfInt(ds3.Tables[0].Rows[k]["VAB_AccountBook_ID"]);
                             _sql.Clear();
-                            _sql.Append("Select Frpt_Acctdefault_Id,C_Validcombination_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
+                            _sql.Append("Select Frpt_Acctdefault_Id,VAB_Acct_ValidParameter_Id,Frpt_Relatedto From Frpt_Acctschema_Default Where ISACTIVE='Y' AND VAF_CLIENT_ID=" + _client_ID + "AND VAB_AccountBook_Id=" + _AcctSchema_ID);
                             DataSet ds = new DataSet();
                             ds = DB.ExecuteDataset(_sql.ToString(), null);
                             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
                                         if (_relatedTo == relatedto)
                                         {
                                             _sql.Clear();
-                                            _sql.Append("Select COUNT(*) From VAB_Bank_Acct Ba Left Join FRPT_BankAccount_Acct ca On Ba.VAB_BANK_ACCT_ID=ca.VAB_BANK_ACCT_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Ba.IsActive='Y' AND Ba.VAF_Client_ID=" + _client_ID + " AND ca.C_Validcombination_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]) + " AND Ba.VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID());
+                                            _sql.Append("Select COUNT(*) From VAB_Bank_Acct Ba Left Join FRPT_BankAccount_Acct ca On Ba.VAB_BANK_ACCT_ID=ca.VAB_BANK_ACCT_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Ba.IsActive='Y' AND Ba.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Ba.VAB_Bank_Acct_ID = " + GetVAB_Bank_Acct_ID());
                                             int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                             //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                             //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -238,7 +238,7 @@ namespace VAdvantage.Model
                                                 bnkact.Set_ValueNoCheck("VAB_Bank_Acct_ID", Util.GetValueOfInt(GetVAB_Bank_Acct_ID()));
                                                 bnkact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                                 bnkact.Set_Value("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
-                                                bnkact.Set_Value("C_ValidCombination_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Validcombination_Id"]));
+                                                bnkact.Set_Value("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                                 bnkact.Set_Value("VAB_AccountBook_ID", _AcctSchema_ID);
                                                 if (!bnkact.Save())
                                                 { }

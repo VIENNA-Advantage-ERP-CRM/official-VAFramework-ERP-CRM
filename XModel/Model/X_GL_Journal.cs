@@ -11,20 +11,20 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for GL_Journal
+    /** Generated Model for VAGL_JRNL
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_GL_Journal : PO
+    public class X_VAGL_JRNL : PO
     {
-        public X_GL_Journal(Context ctx, int GL_Journal_ID, Trx trxName)
-            : base(ctx, GL_Journal_ID, trxName)
+        public X_VAGL_JRNL(Context ctx, int VAGL_JRNL_ID, Trx trxName)
+            : base(ctx, VAGL_JRNL_ID, trxName)
         {
-            /** if (GL_Journal_ID == 0)
+            /** if (VAGL_JRNL_ID == 0)
             {
             SetVAB_AccountBook_ID (0);	// @$VAB_AccountBook_ID@
             SetVAB_CurrencyType_ID (0);
             SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
-            SetC_Period_ID (0);	// @C_Period_ID@
+            SetVAB_YearPeriod_ID (0);	// @VAB_YearPeriod_ID@
             SetCurrencyRate (0.0);	// 1
             SetDateAcct (DateTime.Now);	// @DateAcct@
             SetDateDoc (DateTime.Now);	// @DateDoc@
@@ -32,8 +32,8 @@ namespace VAdvantage.Model
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
-            SetGL_Category_ID (0);	// @GL_Category_ID@
-            SetGL_Journal_ID (0);
+            SetVAGL_Group_ID (0);	// @VAGL_Group_ID@
+            SetVAGL_JRNL_ID (0);
             SetIsApproved (true);	// Y
             SetIsPrinted (false);	// N
             SetPosted (false);	// N
@@ -43,15 +43,15 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_GL_Journal(Ctx ctx, int GL_Journal_ID, Trx trxName)
-            : base(ctx, GL_Journal_ID, trxName)
+        public X_VAGL_JRNL(Ctx ctx, int VAGL_JRNL_ID, Trx trxName)
+            : base(ctx, VAGL_JRNL_ID, trxName)
         {
-            /** if (GL_Journal_ID == 0)
+            /** if (VAGL_JRNL_ID == 0)
             {
             SetVAB_AccountBook_ID (0);	// @$VAB_AccountBook_ID@
             SetVAB_CurrencyType_ID (0);
             SetVAB_DocTypes_ID (0);	// @VAB_DocTypes_ID@
-            SetC_Period_ID (0);	// @C_Period_ID@
+            SetVAB_YearPeriod_ID (0);	// @VAB_YearPeriod_ID@
             SetCurrencyRate (0.0);	// 1
             SetDateAcct (DateTime.Now);	// @DateAcct@
             SetDateDoc (DateTime.Now);	// @DateDoc@
@@ -59,8 +59,8 @@ namespace VAdvantage.Model
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
-            SetGL_Category_ID (0);	// @GL_Category_ID@
-            SetGL_Journal_ID (0);
+            SetVAGL_Group_ID (0);	// @VAGL_Group_ID@
+            SetVAGL_JRNL_ID (0);
             SetIsApproved (true);	// Y
             SetIsPrinted (false);	// N
             SetPosted (false);	// N
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_Journal(Context ctx, DataRow rs, Trx trxName)
+        public X_VAGL_JRNL(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_Journal(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAGL_JRNL(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -93,14 +93,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_GL_Journal(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAGL_JRNL(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_GL_Journal()
+        static X_VAGL_JRNL()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =224;
 
-        /** TableName=GL_Journal */
-        public static String Table_Name = "GL_Journal";
+        /** TableName=VAGL_JRNL */
+        public static String Table_Name = "VAGL_JRNL";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_GL_Journal[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAGL_JRNL[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Accounting Schema.
@@ -213,20 +213,20 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** C_Period_ID VAF_Control_Ref_ID=275 */
-        public static int C_PERIOD_ID_VAF_Control_Ref_ID = 275;
+        /** VAB_YearPeriod_ID VAF_Control_Ref_ID=275 */
+        public static int VAB_YEARPERIOD_ID_VAF_Control_Ref_ID = 275;
         /** Set Period.
-        @param C_Period_ID Period of the Calendar */
-        public void SetC_Period_ID(int C_Period_ID)
+        @param VAB_YearPeriod_ID Period of the Calendar */
+        public void SetVAB_YearPeriod_ID(int VAB_YearPeriod_ID)
         {
-            if (C_Period_ID < 1) throw new ArgumentException("C_Period_ID is mandatory.");
-            Set_Value("C_Period_ID", C_Period_ID);
+            if (VAB_YearPeriod_ID < 1) throw new ArgumentException("VAB_YearPeriod_ID is mandatory.");
+            Set_Value("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
         }
         /** Get Period.
         @return Period of the Calendar */
-        public int GetC_Period_ID()
+        public int GetVAB_YearPeriod_ID()
         {
-            Object ii = Get_Value("C_Period_ID");
+            Object ii = Get_Value("VAB_YearPeriod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -457,64 +457,64 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
         /** Set Budget.
-        @param GL_Budget_ID General Ledger Budget */
-        public void SetGL_Budget_ID(int GL_Budget_ID)
+        @param VAGL_Budget_ID General Ledger Budget */
+        public void SetVAGL_Budget_ID(int VAGL_Budget_ID)
         {
-            if (GL_Budget_ID <= 0) Set_Value("GL_Budget_ID", null);
+            if (VAGL_Budget_ID <= 0) Set_Value("VAGL_Budget_ID", null);
             else
-                Set_Value("GL_Budget_ID", GL_Budget_ID);
+                Set_Value("VAGL_Budget_ID", VAGL_Budget_ID);
         }
         /** Get Budget.
         @return General Ledger Budget */
-        public int GetGL_Budget_ID()
+        public int GetVAGL_Budget_ID()
         {
-            Object ii = Get_Value("GL_Budget_ID");
+            Object ii = Get_Value("VAGL_Budget_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set GL Category.
-        @param GL_Category_ID General Ledger Category */
-        public void SetGL_Category_ID(int GL_Category_ID)
+        @param VAGL_Group_ID General Ledger Category */
+        public void SetVAGL_Group_ID(int VAGL_Group_ID)
         {
-            if (GL_Category_ID < 1) throw new ArgumentException("GL_Category_ID is mandatory.");
-            Set_Value("GL_Category_ID", GL_Category_ID);
+            if (VAGL_Group_ID < 1) throw new ArgumentException("VAGL_Group_ID is mandatory.");
+            Set_Value("VAGL_Group_ID", VAGL_Group_ID);
         }
         /** Get GL Category.
         @return General Ledger Category */
-        public int GetGL_Category_ID()
+        public int GetVAGL_Group_ID()
         {
-            Object ii = Get_Value("GL_Category_ID");
+            Object ii = Get_Value("VAGL_Group_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Journal Batch.
-        @param GL_JournalBatch_ID General Ledger Journal Batch */
-        public void SetGL_JournalBatch_ID(int GL_JournalBatch_ID)
+        @param VAGL_BatchJRNL_ID General Ledger Journal Batch */
+        public void SetVAGL_BatchJRNL_ID(int VAGL_BatchJRNL_ID)
         {
-            if (GL_JournalBatch_ID <= 0) Set_ValueNoCheck("GL_JournalBatch_ID", null);
+            if (VAGL_BatchJRNL_ID <= 0) Set_ValueNoCheck("VAGL_BatchJRNL_ID", null);
             else
-                Set_ValueNoCheck("GL_JournalBatch_ID", GL_JournalBatch_ID);
+                Set_ValueNoCheck("VAGL_BatchJRNL_ID", VAGL_BatchJRNL_ID);
         }
         /** Get Journal Batch.
         @return General Ledger Journal Batch */
-        public int GetGL_JournalBatch_ID()
+        public int GetVAGL_BatchJRNL_ID()
         {
-            Object ii = Get_Value("GL_JournalBatch_ID");
+            Object ii = Get_Value("VAGL_BatchJRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Journal.
-        @param GL_Journal_ID General Ledger Journal */
-        public void SetGL_Journal_ID(int GL_Journal_ID)
+        @param VAGL_JRNL_ID General Ledger Journal */
+        public void SetVAGL_JRNL_ID(int VAGL_JRNL_ID)
         {
-            if (GL_Journal_ID < 1) throw new ArgumentException("GL_Journal_ID is mandatory.");
-            Set_ValueNoCheck("GL_Journal_ID", GL_Journal_ID);
+            if (VAGL_JRNL_ID < 1) throw new ArgumentException("VAGL_JRNL_ID is mandatory.");
+            Set_ValueNoCheck("VAGL_JRNL_ID", VAGL_JRNL_ID);
         }
         /** Get Journal.
         @return General Ledger Journal */
-        public int GetGL_Journal_ID()
+        public int GetVAGL_JRNL_ID()
         {
-            Object ii = Get_Value("GL_Journal_ID");
+            Object ii = Get_Value("VAGL_JRNL_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

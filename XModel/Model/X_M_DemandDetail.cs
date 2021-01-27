@@ -113,18 +113,18 @@ StringBuilder sb = new StringBuilder ("X_M_DemandDetail[").Append(Get_ID()).Appe
 return sb.ToString();
 }
 /** Set Order Line.
-@param C_OrderLine_ID Order Line */
-public void SetC_OrderLine_ID (int C_OrderLine_ID)
+@param VAB_OrderLine_ID Order Line */
+public void SetVAB_OrderLine_ID (int VAB_OrderLine_ID)
 {
-if (C_OrderLine_ID <= 0) Set_Value ("C_OrderLine_ID", null);
+if (VAB_OrderLine_ID <= 0) Set_Value ("VAB_OrderLine_ID", null);
 else
-Set_Value ("C_OrderLine_ID", C_OrderLine_ID);
+Set_Value ("VAB_OrderLine_ID", VAB_OrderLine_ID);
 }
 /** Get Order Line.
 @return Order Line */
-public int GetC_OrderLine_ID() 
+public int GetVAB_OrderLine_ID() 
 {
-Object ii = Get_Value("C_OrderLine_ID");
+Object ii = Get_Value("VAB_OrderLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

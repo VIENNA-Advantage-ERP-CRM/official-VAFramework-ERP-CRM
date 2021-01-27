@@ -32,9 +32,9 @@ namespace ViennaAdvantageServer.Process
         protected override String DoIt()
         {
             //int VAB_Contract_ID = 0;
-            String Sql = "SELECT C_Order_ID FROM C_OrderLine WHERE C_OrderLine_ID=" + orderLineID;
+            String Sql = "SELECT VAB_Order_ID FROM VAB_OrderLine WHERE VAB_OrderLine_ID=" + orderLineID;
             int orderID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, Get_TrxName()));
-            VAdvantage.Model.X_C_Order order = new VAdvantage.Model.X_C_Order(GetCtx(), orderID, Get_TrxName());
+            VAdvantage.Model.X_VAB_Order order = new VAdvantage.Model.X_VAB_Order(GetCtx(), orderID, Get_TrxName());
             // string DocStatus = order.GetDocStatus();
             //if (DocStatus != "CO")
             //{
@@ -42,7 +42,7 @@ namespace ViennaAdvantageServer.Process
             //}
 
 
-            VAdvantage.Model.X_C_OrderLine line = new VAdvantage.Model.X_C_OrderLine(GetCtx(), orderLineID, Get_TrxName());
+            VAdvantage.Model.X_VAB_OrderLine line = new VAdvantage.Model.X_VAB_OrderLine(GetCtx(), orderLineID, Get_TrxName());
 
             if (!line.IsProcessed())
             {
@@ -90,8 +90,8 @@ namespace ViennaAdvantageServer.Process
                 contact.SetVAF_Org_ID(order.GetVAF_Org_ID());
                 //---------------------End ------------------
                 contact.SetDescription(order.GetDescription());
-                contact.SetC_Order_ID(order.GetC_Order_ID());
-                contact.SetC_OrderLine_ID(line.GetC_OrderLine_ID());
+                contact.SetVAB_Order_ID(order.GetVAB_Order_ID());
+                contact.SetVAB_OrderLine_ID(line.GetVAB_OrderLine_ID());
                 contact.SetStartDate(line.GetStartDate());
                 contact.SetEndDate(line.GetEndDate());
                 contact.SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
@@ -100,7 +100,7 @@ namespace ViennaAdvantageServer.Process
                 contact.SetSalesRep_ID(order.GetSalesRep_ID());
                 contact.SetVAB_Currency_ID(line.GetVAB_Currency_ID());
                 contact.SetVAB_CurrencyType_ID(order.GetVAB_CurrencyType_ID());
-                contact.SetC_PaymentTerm_ID(order.GetC_PaymentTerm_ID());
+                contact.SetVAB_PaymentTerm_ID(order.GetVAB_PaymentTerm_ID());
                 contact.SetM_PriceList_ID(order.GetM_PriceList_ID());
                 contact.SetVAB_Frequency_ID(line.GetVAB_Frequency_ID());
                 //contact.SetPriceList(pp.GetPriceList());
@@ -131,23 +131,23 @@ namespace ViennaAdvantageServer.Process
                 contact.SetTotalInvoice(line.GetNoofCycle());
 
                 //invoice Count end
-                contact.SetC_Project_ID(order.GetC_Project_ID());
+                contact.SetVAB_Project_ID(order.GetVAB_Project_ID());
                 // contact.SetPriceList(line.GetPriceList());
                 //contact.SetPriceActual(line.GetPriceActual());
-                contact.SetC_UOM_ID(line.GetC_UOM_ID());
+                contact.SetVAB_UOM_ID(line.GetVAB_UOM_ID());
                 contact.SetM_Product_ID(line.GetM_Product_ID());
                 // Added by Vivek on 21/11/2017 asigned by Pradeep
                 contact.SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
                 // contact.SetPriceEntered(line.GetPriceEntered());
                 //contact.SetQtyEntered(line.GetQtyEntered());
                 // contact.SetDiscount(line.GetDiscount());
-                contact.SetC_Tax_ID(line.GetC_Tax_ID());
+                contact.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
                 contact.SetVAB_Promotion_ID(order.GetVAB_Promotion_ID());
 
                 contact.SetLineNetAmt(Decimal.Multiply(line.GetQtyPerCycle(), line.GetPriceActual()));
 
                 // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                MTax tax = MTax.Get(GetCtx(), line.GetC_Tax_ID());
+                MTax tax = MTax.Get(GetCtx(), line.GetVAB_TaxRate_ID());
                 if (contact.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
                 {
                     Decimal surchargeAmt = Env.ZERO;
@@ -160,7 +160,7 @@ namespace ViennaAdvantageServer.Process
                 else
                 {
                     //Neha---Calculate TaxAmt,GrandTotal,Line Amount,Bill Start Date on the basis of Actual Price(Sales Order Line)--17 Sep,2018
-                    sql = "SELECT Rate FROM C_Tax WHERE C_Tax_ID = " + line.GetC_Tax_ID();
+                    sql = "SELECT Rate FROM VAB_TaxRate WHERE VAB_TaxRate_ID = " + line.GetVAB_TaxRate_ID();
                     Decimal? rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     Decimal? amt = Decimal.Multiply(line.GetPriceActual(), (Decimal.Divide(rate.Value, 100)));
                     amt = Decimal.Round(amt.Value, 2, MidpointRounding.AwayFromZero);
@@ -208,15 +208,15 @@ namespace ViennaAdvantageServer.Process
                         throw new ArgumentException("Cannot save Order Line");
                     }
                     //Neha---Set CreateServiceContract,Order Line ID on Order Line tab---17 Sep,2018
-                    String _qry = "UPDATE C_ORDERLINE SET VAB_Contract_ID=" + contact.GetVAB_Contract_ID() + " ,CreateServiceContract='Y' WHERE C_ORDERLINE_ID=" + line.GetC_OrderLine_ID();
+                    String _qry = "UPDATE VAB_ORDERLINE SET VAB_Contract_ID=" + contact.GetVAB_Contract_ID() + " ,CreateServiceContract='Y' WHERE VAB_ORDERLINE_ID=" + line.GetVAB_OrderLine_ID();
                     DB.ExecuteScalar(_qry, null, Get_TrxName());
                 }
             }
             //Neha---Check Contarct_ID on Order line if CreateServiceContract is false then allow to create Service Contract----18 Sep,2018
-            int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(C_ORDERLINE_ID) FROM C_ORDERLINE WHERE CREATESERVICECONTRACT='N' AND IsActive='Y' AND C_ORDER_ID =" + line.GetC_Order_ID(), null, Get_TrxName()));
+            int _count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAB_ORDERLINE_ID) FROM VAB_ORDERLINE WHERE CREATESERVICECONTRACT='N' AND IsActive='Y' AND VAB_ORDER_ID =" + line.GetVAB_Order_ID(), null, Get_TrxName()));
             if (_count == 0)
             {
-                String _qry = "UPDATE C_ORDER SET CreateServiceContract='Y' WHERE C_ORDER_ID=" + line.GetC_Order_ID();
+                String _qry = "UPDATE VAB_ORDER SET CreateServiceContract='Y' WHERE VAB_ORDER_ID=" + line.GetVAB_Order_ID();
                 DB.ExecuteScalar(_qry, null, Get_TrxName());
             }
             //order.SetCreateServiceContract("Y");

@@ -18,7 +18,7 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 namespace VAdvantage.Model
 {
-    public class MProfitLoss:X_C_ProfitLoss,DocAction
+    public class MProfitLoss:X_VAB_ProfitLoss,DocAction
     {
         #region Variables
         /**	Process Message 			*/
@@ -29,10 +29,10 @@ namespace VAdvantage.Model
         private MProfitLossLines[] _lines = null;
         
         #endregion
-        public MProfitLoss(Ctx ctx, int C_ProfitLoss_ID, Trx trxName)
-            : base(ctx, C_ProfitLoss_ID, trxName)
+        public MProfitLoss(Ctx ctx, int VAB_ProfitLoss_ID, Trx trxName)
+            : base(ctx, VAB_ProfitLoss_ID, trxName)
         {
-            if (C_ProfitLoss_ID == 0)
+            if (VAB_ProfitLoss_ID == 0)
             {
                 SetDocStatus(DOCSTATUS_Drafted);
                 SetDocAction(DOCACTION_Prepare);
@@ -171,12 +171,12 @@ namespace VAdvantage.Model
             //	Mandatory Product Attribute Set Instance
             //String mandatoryType = "='Y'";	//	IN ('Y','S')
             //String sql = "SELECT COUNT(*) "
-            //    + "FROM C_OrderLine ol"
+            //    + "FROM VAB_OrderLine ol"
             //    + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
             //    + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
             //    + "WHERE pas.MandatoryType" + mandatoryType
             //    + " AND ol.M_AttributeSetInstance_ID IS NULL"
-            //    + " AND ol.C_Order_ID=" + GetC_Order_ID();
+            //    + " AND ol.VAB_Order_ID=" + GetVAB_Order_ID();
             //int no = DataBase.DB.GetSQLValue(Get_TrxName(), sql);
             //if (no != 0)
             //{
@@ -258,7 +258,7 @@ namespace VAdvantage.Model
         public MProfitLossLines[] GetLines(String whereClause)
         {
             List<MProfitLossLines> list = new List<MProfitLossLines>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_ProfitLossLines WHERE C_ProfitLoss_ID=" + GetC_ProfitLoss_ID() + "");            
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_ProfitLossLines WHERE VAB_ProfitLoss_ID=" + GetVAB_ProfitLoss_ID() + "");            
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql.ToString(), null, Get_TrxName());
@@ -326,7 +326,7 @@ namespace VAdvantage.Model
                 //    //	Waiting Payment - until we have a payment
                 //    if (!_forceCreation
                 //        && MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO)
-                //        && GetC_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
+                //        && GetVAB_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
                 //    {
                 //        SetProcessed(true);
                 //        return DocActionVariables.STATUS_WAITINGPAYMENT;
@@ -441,11 +441,11 @@ namespace VAdvantage.Model
 
         private bool CheckForPreviousCompeletedRecords()
         {
-            MProfitLoss PL = new MProfitLoss(GetCtx(), GetC_ProfitLoss_ID(), null);
-            MProfitLoss prof = new MProfitLoss(GetCtx(), GetC_ProfitLoss_ID(), Get_TrxName());
+            MProfitLoss PL = new MProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), null);
+            MProfitLoss prof = new MProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), Get_TrxName());
             StringBuilder sql = new StringBuilder();
 
-            sql.Append("SELECT distinct CP.* FROM C_ProfitLoss CP INNER JOIN Fact_Acct ft ON ft.VAB_AccountBook_ID = Cp.VAB_AccountBook_ID                             "
+            sql.Append("SELECT distinct CP.* FROM VAB_ProfitLoss CP INNER JOIN Actual_Acct_Detail ft ON ft.VAB_AccountBook_ID = Cp.VAB_AccountBook_ID                             "
                        + " INNER JOIN VAB_Acct_Element ev ON ft.account_id         = ev.VAB_Acct_Element_id                                                           "
                        + " WHERE CP.vaf_client_id    = " + +GetVAF_Client_ID());
 
@@ -507,7 +507,7 @@ namespace VAdvantage.Model
 
             ////************* Changed ***************************
             //// Set Status at Order to Rejected if it is Sales Order 
-            //MOrder ord = new MOrder(GetCtx(), GetC_Order_ID(), Get_TrxName());
+            //MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
             //if (IsSOTrx())
             //{
             //    ord.SetStatusCode("R");
@@ -760,7 +760,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *RMAs*
-                //Info.Append("@C_Order_ID@:");
+                //Info.Append("@VAB_Order_ID@:");
                 //MOrder[] rmas = GetRMAs();
                 //for (int i = 0; i < rmas.Length; i++)
                 //{
@@ -814,19 +814,19 @@ namespace VAdvantage.Model
             {
                 DateTime? stDate, eDate;
                 stDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.STARTDATE AS STARTDATE    "
-                                                                 + "    FROM C_PERIOD P  "
-                                                                 + "    INNER JOIN C_YEAR Y                "
-                                                                 + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
+                                                                 + "    FROM VAB_YEARPERIOD P  "
+                                                                 + "    INNER JOIN VAB_YEAR Y                "
+                                                                 + "    ON P.VAB_YEAR_ID    =Y.VAB_YEAR_ID     "
                                                                  + "    WHERE P.PERIODNO  ='1'             "
-                                                                 + "    AND P.C_YEAR_ID   = " + GetC_Year_ID()
+                                                                 + "    AND P.VAB_YEAR_ID   = " + GetVAB_Year_ID()
                                                                  + "    AND Y.VAF_CLIENT_ID= " + GetVAF_Client_ID()));
 
                 eDate = Util.GetValueOfDateTime(DB.ExecuteScalar(" SELECT P.ENDDATE AS ENDDATE    "
-                                                                 + "    FROM C_PERIOD P  "
-                                                                 + "    INNER JOIN C_YEAR Y                "
-                                                                 + "    ON P.C_YEAR_ID    =Y.C_YEAR_ID     "
+                                                                 + "    FROM VAB_YEARPERIOD P  "
+                                                                 + "    INNER JOIN VAB_YEAR Y                "
+                                                                 + "    ON P.VAB_YEAR_ID    =Y.VAB_YEAR_ID     "
                                                                  + "    WHERE P.PERIODNO  ='12'             "
-                                                                 + "    AND P.C_YEAR_ID   = " + GetC_Year_ID()
+                                                                 + "    AND P.VAB_YEAR_ID   = " + GetVAB_Year_ID()
                                                                  + "    AND Y.VAF_CLIENT_ID= " + GetVAF_Client_ID()));
 
                 if (GetDateFrom() != null && GetDateTo() != null)

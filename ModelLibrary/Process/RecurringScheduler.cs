@@ -39,13 +39,13 @@ namespace ViennaAdvantageServer.Process
         {
             ds = new DataSet();
 
-            ds = DB.ExecuteDataset("SELECT C_Recurring_ID From C_Recurring Where IsActive='Y' AND VAF_Client_ID=" + GetVAF_Client_ID()
+            ds = DB.ExecuteDataset("SELECT VAB_Recurring_ID From VAB_Recurring Where IsActive='Y' AND VAF_Client_ID=" + GetVAF_Client_ID()
                                   + " AND TRUNC(DateNextRun)=" + GlobalVariable.TO_DATE(DateTime.Now, true));
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (Int32 i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    Recurring = new MRecurring(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_Recurring_ID"]), Get_Trx());
+                    Recurring = new MRecurring(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Recurring_ID"]), Get_Trx());
                     dateDoc = Recurring.GetDateNextRun();
                     if (dateDoc != null && Recurring.CalculateRuns())
                     {
@@ -57,10 +57,10 @@ namespace ViennaAdvantageServer.Process
                         //	Copy
                         if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Order))
                         {
-                            MOrder from = new MOrder(GetCtx(), Recurring.GetC_Order_ID(), Get_TrxName());
+                            MOrder from = new MOrder(GetCtx(), Recurring.GetVAB_Order_ID(), Get_TrxName());
                             MOrder order = MOrder.CopyFrom(from, dateDoc,
                                 from.GetVAB_DocTypes_ID(), false, false, Get_TrxName());
-                            run.SetC_Order_ID(order.GetC_Order_ID());
+                            run.SetVAB_Order_ID(order.GetVAB_Order_ID());
                             msg += order.GetDocumentNo();
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Invoice))
@@ -73,28 +73,28 @@ namespace ViennaAdvantageServer.Process
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
                         {
-                            MProject project = MProject.CopyFrom(GetCtx(), Recurring.GetC_Project_ID(), dateDoc, Get_TrxName());
-                            run.SetC_Project_ID(project.GetC_Project_ID());
+                            MProject project = MProject.CopyFrom(GetCtx(), Recurring.GetVAB_Project_ID(), dateDoc, Get_TrxName());
+                            run.SetVAB_Project_ID(project.GetVAB_Project_ID());
                             msg += project.GetValue();
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournalBatch))
                         {
-                            MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), Recurring.GetGL_JournalBatch_ID(), dateDoc, Get_TrxName());
-                            run.SetGL_JournalBatch_ID(journal.GetGL_JournalBatch_ID());
+                            MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), Recurring.GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
+                            run.SetVAGL_BatchJRNL_ID(journal.GetVAGL_BatchJRNL_ID());
                             msg += journal.GetDocumentNo();
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_GLJournal))
                         {
-                            MJournal Journal = MJournal.CopyFrom(GetCtx(), Recurring.GetGL_Journal_ID(), dateDoc, Get_TrxName());
-                            run.SetGL_Journal_ID(Journal.GetGL_Journal_ID());
+                            MJournal Journal = MJournal.CopyFrom(GetCtx(), Recurring.GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
+                            run.SetVAGL_JRNL_ID(Journal.GetVAGL_JRNL_ID());
                             msg += Journal.GetDocumentNo();
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Payment))
                         {
-                            MPayment from = new MPayment(GetCtx(), Recurring.GetC_Payment_ID(), Get_TrxName());
+                            MPayment from = new MPayment(GetCtx(), Recurring.GetVAB_Payment_ID(), Get_TrxName());
                             MPayment payment = MPayment.CopyFrom(from, dateDoc,
                                 from.GetVAB_DocTypes_ID(), Get_TrxName());
-                            run.SetC_Payment_ID(payment.GetC_Payment_ID());
+                            run.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                             msg += payment.GetDocumentNo();
                         }
                         //else

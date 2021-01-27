@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class ProjectLinePricing : ProcessEngine.SvrProcess
     {
         /**	Project Line from Record			*/
-        private int m_C_ProjectLine_ID = 0;
+        private int m_VAB_ProjectLine_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            m_C_ProjectLine_ID = GetRecord_ID();
+            m_VAB_ProjectLine_ID = GetRecord_ID();
         }	//	prepare
 
         /// <summary>
@@ -55,18 +55,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            if (m_C_ProjectLine_ID == 0)
+            if (m_VAB_ProjectLine_ID == 0)
             {
                 throw new ArgumentException("No Project Line");
             }
-            MProjectLine projectLine = new MProjectLine(GetCtx(), m_C_ProjectLine_ID, Get_TrxName());
+            MProjectLine projectLine = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
             log.Info("doIt - " + projectLine);
             if (projectLine.GetM_Product_ID() == 0)
             {
                 throw new ArgumentException("No Product");
             }
             //
-            MProject project = new MProject(GetCtx(), projectLine.GetC_Project_ID(), Get_TrxName());
+            MProject project = new MProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
             if (project.GetM_PriceList_ID() == 0)
             {
                 throw new ArgumentException("No PriceList");

@@ -111,7 +111,7 @@
                 };
 
                 // Get Record Id
-                var recordId = VIS.context.getWindowContext($self.windowNo, "GL_LineDimension_ID", true);
+                var recordId = VIS.context.getWindowContext($self.windowNo, "VAGL_LineDimension_ID", true);
 
                 // Get Selecetd Dimenssion value
                 var paramStr = recordId.toString().concat(",", $infoUserElement.getValue().toString());

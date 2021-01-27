@@ -69,7 +69,7 @@ namespace VAdvantage.Process
                 //get data from production Line
                 dsProductionLine = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , M_ATTRIBUTESETINSTANCE_ID , M_LOCATOR_ID , 
                                        M_PRODUCT_ID ,  M_PRODUCTIONLINE_ID, M_PRODUCTIONPLAN_ID , M_PRODUCTION_ID  , PROCESSED  , MOVEMENTQTY , 
-                                       C_UOM_ID , PLANNEDQTY , M_WAREHOUSE_ID FROM M_ProductionLine 
+                                       VAB_UOM_ID , PLANNEDQTY , M_WAREHOUSE_ID FROM M_ProductionLine 
                                        WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
 
 

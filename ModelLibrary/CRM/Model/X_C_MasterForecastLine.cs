@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_MasterForecastLine
+    /** Generated Model for VAB_MasterForecastLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_MasterForecastLine : PO
+    public class X_VAB_MasterForecastLine : PO
     {
-        public X_C_MasterForecastLine(Context ctx, int C_MasterForecastLine_ID, Trx trxName)
-            : base(ctx, C_MasterForecastLine_ID, trxName)
+        public X_VAB_MasterForecastLine(Context ctx, int VAB_MasterForecastLine_ID, Trx trxName)
+            : base(ctx, VAB_MasterForecastLine_ID, trxName)
         {
-            /** if (C_MasterForecastLine_ID == 0)
+            /** if (VAB_MasterForecastLine_ID == 0)
             {
-            SetC_MasterForecastLine_ID (0);
-            SetC_MasterForecast_ID (0);
+            SetVAB_MasterForecastLine_ID (0);
+            SetVAB_MasterForecast_ID (0);
             }
              */
         }
-        public X_C_MasterForecastLine(Ctx ctx, int C_MasterForecastLine_ID, Trx trxName)
-            : base(ctx, C_MasterForecastLine_ID, trxName)
+        public X_VAB_MasterForecastLine(Ctx ctx, int VAB_MasterForecastLine_ID, Trx trxName)
+            : base(ctx, VAB_MasterForecastLine_ID, trxName)
         {
-            /** if (C_MasterForecastLine_ID == 0)
+            /** if (VAB_MasterForecastLine_ID == 0)
             {
-            SetC_MasterForecastLine_ID (0);
-            SetC_MasterForecast_ID (0);
+            SetVAB_MasterForecastLine_ID (0);
+            SetVAB_MasterForecast_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_MasterForecastLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_MasterForecastLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_MasterForecastLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_MasterForecastLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_MasterForecastLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_MasterForecastLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_MasterForecastLine()
+        static X_VAB_MasterForecastLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000248;
 
-        /** TableName=C_MasterForecastLine */
-        public static String Table_Name = "C_MasterForecastLine";
+        /** TableName=VAB_MasterForecastLine */
+        public static String Table_Name = "VAB_MasterForecastLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -114,52 +114,52 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_MasterForecastLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_MasterForecastLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
-        /** Set C_MasterForecastLine_ID.
-        @param C_MasterForecastLine_ID C_MasterForecastLine_ID */
-        public void SetC_MasterForecastLine_ID(int C_MasterForecastLine_ID)
+        /** Set VAB_MasterForecastLine_ID.
+        @param VAB_MasterForecastLine_ID VAB_MasterForecastLine_ID */
+        public void SetVAB_MasterForecastLine_ID(int VAB_MasterForecastLine_ID)
         {
-            if (C_MasterForecastLine_ID < 1) throw new ArgumentException("C_MasterForecastLine_ID is mandatory.");
-            Set_ValueNoCheck("C_MasterForecastLine_ID", C_MasterForecastLine_ID);
+            if (VAB_MasterForecastLine_ID < 1) throw new ArgumentException("VAB_MasterForecastLine_ID is mandatory.");
+            Set_ValueNoCheck("VAB_MasterForecastLine_ID", VAB_MasterForecastLine_ID);
         }
-        /** Get C_MasterForecastLine_ID.
-        @return C_MasterForecastLine_ID */
-        public int GetC_MasterForecastLine_ID()
+        /** Get VAB_MasterForecastLine_ID.
+        @return VAB_MasterForecastLine_ID */
+        public int GetVAB_MasterForecastLine_ID()
         {
-            Object ii = Get_Value("C_MasterForecastLine_ID");
+            Object ii = Get_Value("VAB_MasterForecastLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Forecast.
-        @param C_MasterForecast_ID Forecast */
-        public void SetC_MasterForecast_ID(int C_MasterForecast_ID)
+        @param VAB_MasterForecast_ID Forecast */
+        public void SetVAB_MasterForecast_ID(int VAB_MasterForecast_ID)
         {
-            if (C_MasterForecast_ID < 1) throw new ArgumentException("C_MasterForecast_ID is mandatory.");
-            Set_ValueNoCheck("C_MasterForecast_ID", C_MasterForecast_ID);
+            if (VAB_MasterForecast_ID < 1) throw new ArgumentException("VAB_MasterForecast_ID is mandatory.");
+            Set_ValueNoCheck("VAB_MasterForecast_ID", VAB_MasterForecast_ID);
         }
         /** Get Forecast.
         @return Forecast */
-        public int GetC_MasterForecast_ID()
+        public int GetVAB_MasterForecast_ID()
         {
-            Object ii = Get_Value("C_MasterForecast_ID");
+            Object ii = Get_Value("VAB_MasterForecast_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set UOM.
-        @param C_UOM_ID Unit of Measure */
-        public void SetC_UOM_ID(int C_UOM_ID)
+        @param VAB_UOM_ID Unit of Measure */
+        public void SetVAB_UOM_ID(int VAB_UOM_ID)
         {
-            if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+            if (VAB_UOM_ID <= 0) Set_Value("VAB_UOM_ID", null);
             else
-                Set_Value("C_UOM_ID", C_UOM_ID);
+                Set_Value("VAB_UOM_ID", VAB_UOM_ID);
         }
         /** Get UOM.
         @return Unit of Measure */
-        public int GetC_UOM_ID()
+        public int GetVAB_UOM_ID()
         {
-            Object ii = Get_Value("C_UOM_ID");
+            Object ii = Get_Value("VAB_UOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

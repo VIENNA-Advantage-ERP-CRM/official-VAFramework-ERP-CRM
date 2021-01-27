@@ -684,7 +684,7 @@ namespace VAdvantage.Model
             if (displayType == DisplayType.List)
                 return "Value";
             if (displayType == DisplayType.Account)
-                return "C_ValidCombination_ID";
+                return "VAB_Acct_ValidParameter_ID";
             //
             if (displayType == DisplayType.Table)
             {
@@ -710,7 +710,7 @@ namespace VAdvantage.Model
                 return MTable.Get(GetCtx(), MRefList.Table_ID);
             //	Account
             //if (displayType == DisplayType.Account)
-            //    return MTable.Get(GetCtx(), MAccount.Table_ID);	//	C_ValidCombination
+            //    return MTable.Get(GetCtx(), MAccount.Table_ID);	//	VAB_Acct_ValidParameter
 
             //	Table, TableDir, ...
             String FKTableName = GetFKColumnName();

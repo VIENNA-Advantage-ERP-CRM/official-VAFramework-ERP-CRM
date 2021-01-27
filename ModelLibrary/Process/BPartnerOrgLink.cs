@@ -94,8 +94,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             throw new ArgumentException("Business Partner has no Location");
         }
 		//	Location
-		int C_Location_ID = locs[0].GetC_Location_ID();
-        if (C_Location_ID == 0)
+		int VAB_Address_ID = locs[0].GetVAB_Address_ID();
+        if (VAB_Address_ID == 0)
         {
             throw new ArgumentException("Business Partner Location has no Address");
         }
@@ -130,7 +130,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		oInfo.SetVAF_OrgCategory_ID (_VAF_OrgCategory_ID);
         if (newOrg)
         {
-            oInfo.SetC_Location_ID(C_Location_ID);
+            oInfo.SetVAB_Address_ID(VAB_Address_ID);
         }
 		
 		//	Create Warehouse

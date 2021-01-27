@@ -28,7 +28,7 @@ namespace VAdvantage.Process
     public class CopyFromOrder : SvrProcess
     {
         /**	The Order				*/
-        private int _C_Order_ID = 0;
+        private int _VAB_Order_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -43,9 +43,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Order_ID") || name.Equals("RefOrder"))
+                else if (name.Equals("VAB_Order_ID") || name.Equals("RefOrder"))
                 {
-                    _C_Order_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
+                    _VAB_Order_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else
                 {
@@ -60,18 +60,18 @@ namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            int To_C_Order_ID = GetRecord_ID();
-            log.Info("From C_Order_ID=" + _C_Order_ID + " to " + To_C_Order_ID);
-            if (To_C_Order_ID == 0)
+            int To_VAB_Order_ID = GetRecord_ID();
+            log.Info("From VAB_Order_ID=" + _VAB_Order_ID + " to " + To_VAB_Order_ID);
+            if (To_VAB_Order_ID == 0)
             {
-                throw new ArgumentException("Target C_Order_ID == 0");
+                throw new ArgumentException("Target VAB_Order_ID == 0");
             }
-            if (_C_Order_ID == 0)
+            if (_VAB_Order_ID == 0)
             {
-                throw new ArgumentException("Source C_Order_ID == 0");
+                throw new ArgumentException("Source VAB_Order_ID == 0");
             }
-            MOrder from = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
-            MOrder to = new MOrder(GetCtx(), To_C_Order_ID, Get_Trx());
+            MOrder from = new MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+            MOrder to = new MOrder(GetCtx(), To_VAB_Order_ID, Get_Trx());
 
             //JID_0706: Need to bring the Attribute set instance value from old order to new order.
             int no = to.CopyLinesFrom(from, false, true);		//	no Attributes

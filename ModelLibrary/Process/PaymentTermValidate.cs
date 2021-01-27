@@ -54,7 +54,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns> Message</returns>
 	protected override String DoIt() 
 	{
-		log.Info ("C_PaymentTerm_ID=" + GetRecord_ID());
+		log.Info ("VAB_PaymentTerm_ID=" + GetRecord_ID());
 		MPaymentTerm pt = new MPaymentTerm (GetCtx(), GetRecord_ID(), Get_TrxName());
 		String msg = pt.Validate();
 		pt.Save();

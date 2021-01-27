@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportLine
  * Purpose        : Report Line Model
- * Class Used     : X_PA_ReportLine
+ * Class Used     : X_VAPA_FR_Row
  * Chronological    Development
  * Deepak           18-Jan-2010
   ******************************************************/
@@ -22,19 +22,19 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportLine : X_PA_ReportLine
+    public class MReportLine : X_VAPA_FR_Row
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context </param>
-        /// <param name="PA_ReportLine_ID">id</param>
+        /// <param name="VAPA_FR_Row_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportLine(Ctx ctx, int PA_ReportLine_ID, Trx trxName)
-            : base(ctx, PA_ReportLine_ID, trxName)
+        public MReportLine(Ctx ctx, int VAPA_FR_Row_ID, Trx trxName)
+            : base(ctx, VAPA_FR_Row_ID, trxName)
         {
 
-            if (PA_ReportLine_ID == 0)
+            if (VAPA_FR_Row_ID == 0)
             {
                 SetSeqNo(0);
                 //	setIsSummary (false);		//	not active in DD 
@@ -70,13 +70,13 @@ namespace VAdvantage.Report
         //private void LoadSources()
         //{
         //    List<MReportSource> list = new List<MReportSource>();
-        //    String sql = "SELECT * FROM PA_ReportSource WHERE PA_ReportLine_ID=@param AND IsActive='Y'";
+        //    String sql = "SELECT * FROM VAPA_FR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
         //    SqlParameter[] param=new SqlParameter[1];
         //    IDataReader idr=null;
         //    DataTable dt = null;
         //    try
         //    {
-        //        param[0] = new SqlParameter("@param", GetPA_ReportLine_ID());
+        //        param[0] = new SqlParameter("@param", GetVAPA_FR_Row_ID());
         //        idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
         //        dt = new DataTable();
         //        dt.Load(idr);
@@ -113,7 +113,7 @@ namespace VAdvantage.Report
         //            //
         //    _sources = new MReportSource[list.Count];
         //    _sources=list.ToArray();
-        //    log.Finest("ID=" + GetPA_ReportLine_ID()
+        //    log.Finest("ID=" + GetVAPA_FR_Row_ID()
         //        + " - Size=" + list.Count);
         //}	//	loadSources
 
@@ -126,7 +126,7 @@ namespace VAdvantage.Report
 
             //if (GetFRPT_LinkWith() == FRPT_LINKWITH_LedgerCode)
             //{
-                sql = "SELECT * FROM PA_ReportSource WHERE PA_ReportLine_ID=@param AND IsActive='Y'";
+                sql = "SELECT * FROM VAPA_FR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
             //}
             //else if (GetFRPT_LinkWith() == FRPT_LINKWITH_LedgerGroup)
             //{
@@ -134,7 +134,7 @@ namespace VAdvantage.Report
             //}
             //else
             //{
-            //    log.Warning("ID=" + GetPA_ReportLine_ID()
+            //    log.Warning("ID=" + GetVAPA_FR_Row_ID()
             //            + "Not Link With ledger AND Subgroup");
             //    return;
             //}
@@ -144,7 +144,7 @@ namespace VAdvantage.Report
             DataTable dt = null;
             try
             {
-                param[0] = new SqlParameter("@param", GetPA_ReportLine_ID());
+                param[0] = new SqlParameter("@param", GetVAPA_FR_Row_ID());
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 dt = new DataTable();
                 dt.Load(idr);
@@ -181,7 +181,7 @@ namespace VAdvantage.Report
             //
             _sources = new MReportSource[list.Count];
             _sources = list.ToArray();
-            log.Finest("ID=" + GetPA_ReportLine_ID()
+            log.Finest("ID=" + GetVAPA_FR_Row_ID()
                 + " - Size=" + list.Count);
         }	//	loadSources
 
@@ -351,9 +351,9 @@ namespace VAdvantage.Report
         /// <summary>
         ///	Get SQL where clause (sources, posting type)
         /// </summary>
-        /// <param name="PA_Hierarchy_ID">hierarchy</param>
+        /// <param name="VAPA_FinancialReportingOrder_ID">hierarchy</param>
         /// <returns>where clause</returns>
-        public String GetWhereClause(int PA_Hierarchy_ID)
+        public String GetWhereClause(int VAPA_FinancialReportingOrder_ID)
         {
             if (_sources == null)
             {
@@ -368,7 +368,7 @@ namespace VAdvantage.Report
                 }
                 else if (_sources.Length == 1)
                 {
-                    _whereClause = _sources[0].GetWhereClause(PA_Hierarchy_ID);
+                    _whereClause = _sources[0].GetWhereClause(VAPA_FinancialReportingOrder_ID);
                 }
                 else
                 {
@@ -380,7 +380,7 @@ namespace VAdvantage.Report
                         {
                             sb.Append(" OR ");
                         }
-                        sb.Append(_sources[i].GetWhereClause(PA_Hierarchy_ID));
+                        sb.Append(_sources[i].GetWhereClause(VAPA_FinancialReportingOrder_ID));
                     }
                     sb.Append(")");
                     _whereClause = sb.ToString();
@@ -526,17 +526,17 @@ namespace VAdvantage.Report
         /// <param name="ctx">context</param>
         /// <param name="VAF_Client_ID">parent</param>
         /// <param name="VAF_Org_ID">parent</param>
-        /// <param name="PA_ReportLineSet_ID">parent</param>
+        /// <param name="VAPA_FR_RowSet_ID">parent</param>
         /// <param name="source">copy source</param>
         /// <param name="trxName">transaction</param>
         /// <returns>report line</returns>
         public static MReportLine Copy(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID,
-            int PA_ReportLineSet_ID, MReportLine source, Trx trxName)
+            int VAPA_FR_RowSet_ID, MReportLine source, Trx trxName)
         {
             MReportLine retValue = new MReportLine(ctx, 0, trxName);
             MReportLine.CopyValues(source, retValue, VAF_Client_ID, VAF_Org_ID);
             //
-            retValue.SetPA_ReportLineSet_ID(PA_ReportLineSet_ID);
+            retValue.SetVAPA_FR_RowSet_ID(VAPA_FR_RowSet_ID);
             retValue.SetOper_1_ID(0);
             retValue.SetOper_2_ID(0);
             return retValue;

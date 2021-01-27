@@ -37,21 +37,21 @@ namespace VAdvantage.Model
             {
                 if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
                     return null;
-                int C_Tax_ID = line.GetC_Tax_ID();
-                if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
+                int VAB_TaxRate_ID = line.GetVAB_TaxRate_ID();
+                if (oldTax && line.Is_ValueChanged("VAB_TaxRate_ID"))
                 {
-                    Object old = line.Get_ValueOld("C_Tax_ID");
+                    Object old = line.Get_ValueOld("VAB_TaxRate_ID");
                     if (old == null)
                         return null;
-                    C_Tax_ID = int.Parse(old.ToString());
+                    VAB_TaxRate_ID = int.Parse(old.ToString());
                 }
-                if (C_Tax_ID == 0)
+                if (VAB_TaxRate_ID == 0)
                 {
-                    _log.Warning("C_Tax_ID=0");
+                    _log.Warning("VAB_TaxRate_ID=0");
                     return null;
                 }
 
-                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND VAB_TaxRate_ID=" + VAB_TaxRate_ID;
                 try
                 {
                     DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
                 retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
-                retValue.SetC_Tax_ID(line.GetC_Tax_ID());
+                retValue.SetVAB_TaxRate_ID(line.GetVAB_TaxRate_ID());
                 retValue.SetPrecision(precision);
                 // Change here to set tax Inclusive or not based on the pricelist set on Invoice
                 retValue.SetIsTaxIncluded(isTaxIncluded);
@@ -117,25 +117,25 @@ namespace VAdvantage.Model
             {
                 if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
                     return null;
-                int C_Tax_ID = line.GetC_Tax_ID();
-                if (oldTax && line.Is_ValueChanged("C_Tax_ID"))
+                int VAB_TaxRate_ID = line.GetVAB_TaxRate_ID();
+                if (oldTax && line.Is_ValueChanged("VAB_TaxRate_ID"))
                 {
-                    Object old = line.Get_ValueOld("C_Tax_ID");
+                    Object old = line.Get_ValueOld("VAB_TaxRate_ID");
                     if (old == null)
                         return null;
-                    C_Tax_ID = int.Parse(old.ToString());
+                    VAB_TaxRate_ID = int.Parse(old.ToString());
                 }
 
                 // Get Surcharge Tax ID from Tax selected on Line
-                C_Tax_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Surcharge_Tax_ID FROM C_Tax WHERE C_Tax_ID = " + C_Tax_ID, null, trxName));
+                VAB_TaxRate_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Surcharge_Tax_ID FROM VAB_TaxRate WHERE VAB_TaxRate_ID = " + VAB_TaxRate_ID, null, trxName));
 
-                if (C_Tax_ID == 0)
+                if (VAB_TaxRate_ID == 0)
                 {
-                    _log.Warning("C_Tax_ID=0");
+                    _log.Warning("VAB_TaxRate_ID=0");
                     return null;
                 }
 
-                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND C_Tax_ID=" + C_Tax_ID;
+                String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + line.GetVAB_Invoice_ID() + " AND VAB_TaxRate_ID=" + VAB_TaxRate_ID;
                 try
                 {
                     DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
                 retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
-                retValue.SetC_Tax_ID(C_Tax_ID);
+                retValue.SetVAB_TaxRate_ID(VAB_TaxRate_ID);
                 retValue.SetPrecision(precision);
                 retValue.SetIsTaxIncluded(isTaxIncluded);
                 _log.Fine("(new) " + retValue);
@@ -247,7 +247,7 @@ namespace VAdvantage.Model
         public MTax GetTax()
         {
             if (_tax == null)
-                _tax = MTax.Get(GetCtx(), GetC_Tax_ID());
+                _tax = MTax.Get(GetCtx(), GetVAB_TaxRate_ID());
             return _tax;
         }
 
@@ -267,7 +267,7 @@ namespace VAdvantage.Model
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID "
                 + "FROM VAB_InvoiceLine il"
                 + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
-                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND il.C_Tax_ID=" + GetC_Tax_ID();
+                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND il.VAB_TaxRate_ID=" + GetVAB_TaxRate_ID();
             IDataReader idr = null;
             int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
@@ -356,14 +356,14 @@ namespace VAdvantage.Model
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //
-            MTax surTax = new MTax(GetCtx(), GetC_Tax_ID(), Get_TrxName());
+            MTax surTax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
             //
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID, tax.SurchargeType "
                 + "FROM VAB_InvoiceLine il"
                 + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID) "
-                + " INNER JOIN C_Tax tax ON il.C_Tax_ID=tax.C_Tax_ID "
-                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetC_Tax_ID();
+                + " INNER JOIN VAB_TaxRate tax ON il.VAB_TaxRate_ID=tax.VAB_TaxRate_ID "
+                + "WHERE il.VAB_Invoice_ID=" + GetVAB_Invoice_ID() + " AND tax.Surcharge_Tax_ID=" + GetVAB_TaxRate_ID();
             IDataReader idr = null;
             int VAB_Currency_ID = 0;
             DateTime? dateAcct = null;
@@ -463,7 +463,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MInvoiceTax[");
             sb.Append("VAB_Invoice_ID=").Append(GetVAB_Invoice_ID())
-                .Append(",C_Tax_ID=").Append(GetC_Tax_ID())
+                .Append(",VAB_TaxRate_ID=").Append(GetVAB_TaxRate_ID())
                 .Append(", Base=").Append(GetTaxBaseAmt()).Append(",Tax=").Append(GetTaxAmt())
                 .Append("]");
             return sb.ToString();

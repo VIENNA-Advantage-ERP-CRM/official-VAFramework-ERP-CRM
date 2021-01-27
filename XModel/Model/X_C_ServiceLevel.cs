@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ServiceLevel
+/** Generated Model for VAB_SLevelCriteria
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ServiceLevel : PO
+public class X_VAB_SLevelCriteria : PO
 {
-public X_C_ServiceLevel (Context ctx, int C_ServiceLevel_ID, Trx trxName) : base (ctx, C_ServiceLevel_ID, trxName)
+public X_VAB_SLevelCriteria (Context ctx, int VAB_SLevelCriteria_ID, Trx trxName) : base (ctx, VAB_SLevelCriteria_ID, trxName)
 {
-/** if (C_ServiceLevel_ID == 0)
+/** if (VAB_SLevelCriteria_ID == 0)
 {
 SetC_RevenueRecognition_Plan_ID (0);
-SetC_ServiceLevel_ID (0);
+SetVAB_SLevelCriteria_ID (0);
 SetM_Product_ID (0);
 SetServiceLevelInvoiced (0.0);
 SetServiceLevelProvided (0.0);
 }
  */
 }
-public X_C_ServiceLevel (Ctx ctx, int C_ServiceLevel_ID, Trx trxName) : base (ctx, C_ServiceLevel_ID, trxName)
+public X_VAB_SLevelCriteria (Ctx ctx, int VAB_SLevelCriteria_ID, Trx trxName) : base (ctx, VAB_SLevelCriteria_ID, trxName)
 {
-/** if (C_ServiceLevel_ID == 0)
+/** if (VAB_SLevelCriteria_ID == 0)
 {
 SetC_RevenueRecognition_Plan_ID (0);
-SetC_ServiceLevel_ID (0);
+SetVAB_SLevelCriteria_ID (0);
 SetM_Product_ID (0);
 SetServiceLevelInvoiced (0.0);
 SetServiceLevelProvided (0.0);
@@ -45,7 +45,7 @@ SetServiceLevelProvided (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SLevelCriteria (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_C_ServiceLevel (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_SLevelCriteria (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_C_ServiceLevel (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ServiceLevel (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_SLevelCriteria (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ServiceLevel()
+static X_VAB_SLevelCriteria()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389058329L;
 public static int Table_ID;
  // =337;
 
-/** TableName=C_ServiceLevel */
-public static String Table_Name="C_ServiceLevel";
+/** TableName=VAB_SLevelCriteria */
+public static String Table_Name="VAB_SLevelCriteria";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ServiceLevel[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_SLevelCriteria[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Revenue Recognition Plan.
@@ -134,17 +134,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Service Level.
-@param C_ServiceLevel_ID Product Revenue Recognition Service Level */
-public void SetC_ServiceLevel_ID (int C_ServiceLevel_ID)
+@param VAB_SLevelCriteria_ID Product Revenue Recognition Service Level */
+public void SetVAB_SLevelCriteria_ID (int VAB_SLevelCriteria_ID)
 {
-if (C_ServiceLevel_ID < 1) throw new ArgumentException ("C_ServiceLevel_ID is mandatory.");
-Set_ValueNoCheck ("C_ServiceLevel_ID", C_ServiceLevel_ID);
+if (VAB_SLevelCriteria_ID < 1) throw new ArgumentException ("VAB_SLevelCriteria_ID is mandatory.");
+Set_ValueNoCheck ("VAB_SLevelCriteria_ID", VAB_SLevelCriteria_ID);
 }
 /** Get Service Level.
 @return Product Revenue Recognition Service Level */
-public int GetC_ServiceLevel_ID() 
+public int GetVAB_SLevelCriteria_ID() 
 {
-Object ii = Get_Value("C_ServiceLevel_ID");
+Object ii = Get_Value("VAB_SLevelCriteria_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

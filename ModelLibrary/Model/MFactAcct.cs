@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MFactAcct
  * Purpose        : Accounting Fact Model
- * Class Used     : X_Fact_Acct
+ * Class Used     : X_Actual_Acct_Detail
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MFactAcct : X_Fact_Acct
+    public class MFactAcct : X_Actual_Acct_Detail
     {
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MFactAcct).FullName);
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         public static int Delete(int VAF_TableView_ID, int Record_ID, Trx trxName)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("DELETE FROM Fact_Acct WHERE VAF_TableView_ID=").Append(VAF_TableView_ID)
+            sb.Append("DELETE FROM Actual_Acct_Detail WHERE VAF_TableView_ID=").Append(VAF_TableView_ID)
                 .Append(" AND Record_ID=").Append(Record_ID);
             int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sb.ToString(), null, trxName));
             if (no == -1)
@@ -54,11 +54,11 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param Fact_Acct_ID id
+         *	@param Actual_Acct_Detail_ID id
          *	@param trxName transaction
          */
-        public MFactAcct(Ctx ctx, int Fact_Acct_ID, Trx trxName)
-            : base(ctx, Fact_Acct_ID, trxName)
+        public MFactAcct(Ctx ctx, int Actual_Acct_Detail_ID, Trx trxName)
+            : base(ctx, Actual_Acct_Detail_ID, trxName)
         {
 
         }
@@ -102,10 +102,10 @@ namespace VAdvantage.Model
         public MAccount GetMAccount()
         {
             MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(),
-                GetVAB_AccountBook_ID(), GetAccount_ID(), GetC_SubAcct_ID(),
+                GetVAB_AccountBook_ID(), GetAccount_ID(), GetVAB_SubAcct_ID(),
                 GetM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
-                GetC_LocFrom_ID(), GetC_LocTo_ID(), GetC_SalesRegion_ID(),
-                GetC_Project_ID(), GetVAB_Promotion_ID(), GetVAB_BillingCode_ID(),
+                GetC_LocFrom_ID(), GetC_LocTo_ID(), GetVAB_SalesRegionState_ID(),
+                GetVAB_Project_ID(), GetVAB_Promotion_ID(), GetVAB_BillingCode_ID(),
                 GetUser1_ID(), GetUser2_ID(), GetUserElement1_ID(), GetUserElement2_ID());
             if (acct != null && acct.Get_ID() == 0)
                 acct.Save();

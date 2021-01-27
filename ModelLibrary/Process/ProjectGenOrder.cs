@@ -28,7 +28,7 @@ namespace VAdvantage.Process
     public class ProjectGenOrder : ProcessEngine.SvrProcess
     {
         /**	Project ID from project directly		*/
-        private int _C_Project_ID = 0;
+        private int _VAB_Project_ID = 0;
         /**StingBuilder                    */
         private StringBuilder _msg = new StringBuilder();
 
@@ -50,7 +50,7 @@ namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _C_Project_ID = GetRecord_ID();
+            _VAB_Project_ID = GetRecord_ID();
         }	//	prepare
 
         /// <summary>
@@ -59,12 +59,12 @@ namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            log.Info("C_Project_ID=" + _C_Project_ID);
-            if (_C_Project_ID == 0)
+            log.Info("VAB_Project_ID=" + _VAB_Project_ID);
+            if (_VAB_Project_ID == 0)
             {
-                throw new ArgumentException("C_Project_ID == 0");
+                throw new ArgumentException("VAB_Project_ID == 0");
             }
-            MProject fromProject = GetProject(GetCtx(), _C_Project_ID, Get_TrxName());
+            MProject fromProject = GetProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
             GetCtx().SetIsSOTrx(true);	//	Set SO context
 
             /** @todo duplicate invoice prevention */
@@ -158,11 +158,11 @@ namespace VAdvantage.Process
             }	//	Order Lines
             if (_msg != null)
             {
-                return "@C_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")" + "  " + _msg;
+                return "@VAB_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")" + "  " + _msg;
             }
             else
             {
-                return "@C_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")";
+                return "@VAB_Order_ID@ " + order.GetDocumentNo() + " (" + count + ")";
             }
         }	//	doIt
 
@@ -170,15 +170,15 @@ namespace VAdvantage.Process
         /// Get and validate Project
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Project_ID">id</param>
+        /// <param name="VAB_Project_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>valid project</returns>
-        static internal MProject GetProject(Ctx ctx, int C_Project_ID, Trx trxName)
+        static internal MProject GetProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
         {
-            MProject fromProject = new MProject(ctx, C_Project_ID, trxName);
-            if (fromProject.GetC_Project_ID() == 0)
+            MProject fromProject = new MProject(ctx, VAB_Project_ID, trxName);
+            if (fromProject.GetVAB_Project_ID() == 0)
             {
-                throw new ArgumentException("Project not found C_Project_ID=" + C_Project_ID);
+                throw new ArgumentException("Project not found VAB_Project_ID=" + VAB_Project_ID);
             }
             if (fromProject.GetM_PriceList_Version_ID() == 0)
             {

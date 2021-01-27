@@ -535,7 +535,7 @@ namespace ModelLibrary.AcctService {
         private ModelLibrary.AcctService.ArrayOfInt To_Country_IDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private ModelLibrary.AcctService.ArrayOfInt C_Region_IDField;
+        private ModelLibrary.AcctService.ArrayOfInt VAB_RegionState_IDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private ModelLibrary.AcctService.ArrayOfInt To_Region_IDField;
@@ -772,14 +772,14 @@ namespace ModelLibrary.AcctService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=17)]
-        public ModelLibrary.AcctService.ArrayOfInt C_Region_ID {
+        public ModelLibrary.AcctService.ArrayOfInt VAB_RegionState_ID {
             get {
-                return this.C_Region_IDField;
+                return this.VAB_RegionState_IDField;
             }
             set {
-                if ((object.ReferenceEquals(this.C_Region_IDField, value) != true)) {
-                    this.C_Region_IDField = value;
-                    this.RaisePropertyChanged("C_Region_ID");
+                if ((object.ReferenceEquals(this.VAB_RegionState_IDField, value) != true)) {
+                    this.VAB_RegionState_IDField = value;
+                    this.RaisePropertyChanged("VAB_RegionState_ID");
                 }
             }
         }

@@ -28,7 +28,7 @@ namespace VAdvantage.Utility
         /** Truncate Quarter - Q		*/
         public const String TRUNC_QUARTER = "Q";
         /** Truncate Year - Y			*/
-        public const String TRUNC_YEAR = "Y";
+        public const String TRUNVAB_YEAR = "Y";
 
         public const int JANUARY = 1;
         public const int FEBRUARY = 2;

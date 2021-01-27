@@ -106,7 +106,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_Order "
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_Order "
                 + "WHERE VAB_DocTypesTarget_ID=" + _VAB_DocTypesTarget_ID + " AND DocStatus='" + _DocStatus + "'");
             if (_IsSelfService != null && _IsSelfService.Length == 1)
             {

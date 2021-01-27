@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_ProjectLine
+ * Class Used     : X_VAB_ProjectLine
  * Chronological Development
  * Veena Pandey     17-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectLine : X_C_ProjectLine
+    public class MProjectLine : X_VAB_ProjectLine
     {
         /** Parent				*/
         private MProject _parent = null;
@@ -27,15 +27,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ProjectLine_ID">id</param>
+        /// <param name="VAB_ProjectLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectLine(Ctx ctx, int C_ProjectLine_ID, Trx trxName)
-            : base(ctx, C_ProjectLine_ID, trxName)
+        public MProjectLine(Ctx ctx, int VAB_ProjectLine_ID, Trx trxName)
+            : base(ctx, VAB_ProjectLine_ID, trxName)
         {
-            if (C_ProjectLine_ID == 0)
+            if (VAB_ProjectLine_ID == 0)
             {
-                //  setC_Project_ID (0);
-                //	setC_ProjectLine_ID (0);
+                //  setVAB_Project_ID (0);
+                //	setVAB_ProjectLine_ID (0);
                 SetLine(0);
                 SetIsPrinted(true);
                 SetProcessed(false);
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
             SetClientOrg(project);
-            SetC_Project_ID(project.GetC_Project_ID());	// Parent
+            SetVAB_Project_ID(project.GetVAB_Project_ID());	// Parent
             SetLine();
         }
 
@@ -132,27 +132,27 @@ namespace VAdvantage.Model
             }
 
             //	Phase/Task
-            if (Is_ValueChanged("C_ProjectTask_ID") && GetC_ProjectTask_ID() != 0)
+            if (Is_ValueChanged("VAB_ProjectJob_ID") && GetVAB_ProjectJob_ID() != 0)
             {
-                MProjectTask pt = new MProjectTask(GetCtx(), GetC_ProjectTask_ID(), Get_TrxName());
+                MProjectTask pt = new MProjectTask(GetCtx(), GetVAB_ProjectJob_ID(), Get_TrxName());
                 if (pt == null || pt.Get_ID() == 0)
                 {
-                    log.Warning("Project Task Not Found - ID=" + GetC_ProjectTask_ID());
+                    log.Warning("Project Task Not Found - ID=" + GetVAB_ProjectJob_ID());
                     return false;
                 }
                 else
-                    SetC_ProjectPhase_ID(pt.GetC_ProjectPhase_ID());
+                    SetVAB_ProjectStage_ID(pt.GetVAB_ProjectStage_ID());
             }
-            if (Is_ValueChanged("C_ProjectPhase_ID") && GetC_ProjectPhase_ID() != 0)
+            if (Is_ValueChanged("VAB_ProjectStage_ID") && GetVAB_ProjectStage_ID() != 0)
             {
-                MProjectPhase pp = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), Get_TrxName());
+                MProjectPhase pp = new MProjectPhase(GetCtx(), GetVAB_ProjectStage_ID(), Get_TrxName());
                 if (pp == null || pp.Get_ID() == 0)
                 {
-                    log.Warning("Project Phase Not Found - " + GetC_ProjectPhase_ID());
+                    log.Warning("Project Phase Not Found - " + GetVAB_ProjectStage_ID());
                     return false;
                 }
                 else
-                    SetC_Project_ID(pp.GetC_Project_ID());
+                    SetVAB_Project_ID(pp.GetVAB_Project_ID());
             }
 
             return true;
@@ -184,7 +184,7 @@ namespace VAdvantage.Model
                 GetM_Product_ID(), _parent.GetVAB_BusinessPartner_ID(), GetPlannedQty(), isSOTrx);
             pp.SetM_PriceList_ID(_parent.GetM_PriceList_ID());
             pp.SetM_PriceList_Version_ID(_parent.GetM_PriceList_Version_ID());
-            pp.SetC_UOM_ID(prd.GetC_UOM_ID());
+            pp.SetVAB_UOM_ID(prd.GetVAB_UOM_ID());
             if (pp.CalculatePrice())
                 limitPrice = pp.GetPriceLimit();
             return limitPrice;
@@ -196,9 +196,9 @@ namespace VAdvantage.Model
         /// <returns>parent</returns>
         public MProject GetProject()
         {
-            if (_parent == null && GetC_Project_ID() != 0)
+            if (_parent == null && GetVAB_Project_ID() != 0)
             {
-                _parent = new MProject(GetCtx(), GetC_Project_ID(), Get_TrxName());
+                _parent = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
                 if (Get_TrxName() != null)
                     _parent.Load(Get_TrxName());
             }
@@ -294,7 +294,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set PO
         /// </summary>
-        /// <param name="C_OrderPO_ID">po id</param>
+        /// <param name="VAB_OrderPO_ID">po id</param>
         
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace VAdvantage.Model
         private void SetLine()
         {
             SetLine(DataBase.DB.GetSQLValue(Get_TrxName(),
-                "SELECT COALESCE(MAX(Line),0)+10 FROM C_ProjectLine WHERE C_Project_ID=@param1", GetC_Project_ID()));
+                "SELECT COALESCE(MAX(Line),0)+10 FROM VAB_ProjectLine WHERE VAB_Project_ID=@param1", GetVAB_Project_ID()));
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
         /// <param name="pi">project issue</param>
         public void SetMProjectIssue(MProjectIssue pi)
         {
-            SetC_ProjectIssue_ID(pi.GetC_ProjectIssue_ID());
+            SetVAB_ProjectSupply_ID(pi.GetVAB_ProjectSupply_ID());
             SetM_Product_ID(pi.GetM_Product_ID());
             SetCommittedQty(pi.GetMovementQty());
             if (GetDescription() != null)
@@ -433,54 +433,54 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateHeader()
         {
-            int id = GetC_ProjectTask_ID();
+            int id = GetVAB_ProjectJob_ID();
             int projID = 0;
 
             if (id == 0)
             {
-                projID = GetC_Project_ID();                    // Marketing Campaign Window
+                projID = GetVAB_Project_ID();                    // Marketing Campaign Window
             }
             else
             {
-                string Sql = "SELECT C_Project_ID FROM C_ProjectPhase WHERE C_ProjectPhase_ID in(select C_ProjectPhase_ID FROM" +
-                        " C_ProjectTask WHERE C_ProjectTask_ID =" + id + ")";
+                string Sql = "SELECT VAB_Project_ID FROM VAB_ProjectStage WHERE VAB_ProjectStage_ID in(select VAB_ProjectStage_ID FROM" +
+                        " VAB_ProjectJob WHERE VAB_ProjectJob_ID =" + id + ")";
                 projID = Util.GetValueOfInt(DB.ExecuteScalar(Sql, null, null));
             }
-            string sql = "SELECT IsOpportunity FROM C_Project WHERE C_Project_ID = " + projID;
+            string sql = "SELECT IsOpportunity FROM VAB_Project WHERE VAB_Project_ID = " + projID;
             string isOpp = Util.GetValueOfString(DB.ExecuteScalar(sql, null, null));
             //Amit
-            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM C_Project WHERE C_Project_ID = " + projID));
+            string isCam = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsCampaign FROM VAB_Project WHERE VAB_Project_ID = " + projID));
             if (isOpp.Equals("N") && isCam.Equals("N") && id != 0)
             {
                 // set sum of planned Amount from task line to task
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_Trx());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectJob_ID = " + id));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }
             //Amit
-            else if (isOpp.Equals("N") && isCam.Equals("N") && id == 0 && GetC_ProjectPhase_ID() != 0)
+            else if (isOpp.Equals("N") && isCam.Equals("N") && id == 0 && GetVAB_ProjectStage_ID() != 0)
             {
-                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetC_ProjectPhase_ID(), null);
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectPhase_ID = " + GetC_ProjectPhase_ID() + " AND pl.C_Project_ID = " + projID));
+                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetVAB_ProjectStage_ID(), null);
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectStage_ID = " + GetVAB_ProjectStage_ID() + " AND pl.VAB_Project_ID = " + projID));
                 projectPhase.SetPlannedAmt(plnAmt);
                 projectPhase.Save();
             }
             else if (isOpp.Equals("Y"))                             // Opportunity Window
             {
                 MProject prj = new MProject(GetCtx(), projID, Get_TrxName());
-                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + projID));
+                decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + projID));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
 
                 if (Env.IsModuleInstalled("VA077_"))
                 {
-                    sql = @"UPDATE C_Project SET VA077_TotalMarginAmt=(SELECT ROUND(Sum(VA077_MarginAmt),2) FROM C_ProjectLine 
-                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
-                            VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
-                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
-                            VA077_MarginPercent=(SELECT ROUND(Sum(VA077_MarginPercent),2) FROM C_ProjectLine 
-                            WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') WHERE C_Project_ID=" + projID;
+                    sql = @"UPDATE VAB_Project SET VA077_TotalMarginAmt=(SELECT ROUND(Sum(VA077_MarginAmt),2) FROM VAB_ProjectLine 
+                            WHERE VAB_PROJECT_ID=" + projID + @" AND IsActive='Y'),
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM VAB_ProjectLine 
+                            WHERE VAB_PROJECT_ID=" + projID + @" AND IsActive='Y'),
+                            VA077_MarginPercent=(SELECT ROUND(Sum(VA077_MarginPercent),2) FROM VAB_ProjectLine 
+                            WHERE VAB_PROJECT_ID=" + projID + @" AND IsActive='Y') WHERE VAB_Project_ID=" + projID;
 
                     int no = DB.ExecuteQuery(sql, null, Get_TrxName());
                     if (no != 1)
@@ -492,21 +492,21 @@ namespace VAdvantage.Model
             else if (id != 0)
             {
                 MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_TrxName());
-                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_ProjectTask_ID = " + id));
+                decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectJob_ID = " + id));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
             }
             else
             {
-                sql = "UPDATE C_Project p SET " +
-   "PlannedAmt=(SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ",PlannedQty=(SELECT COALESCE(SUM(pl.PlannedQty),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ",PlannedMarginAmt=(SELECT COALESCE(SUM(pl.PlannedMarginAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ",CommittedAmt=(SELECT COALESCE(SUM(pl.CommittedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ",CommittedQty=(SELECT COALESCE(SUM(pl.CommittedQty),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ",InvoicedAmt=(SELECT COALESCE(SUM(pl.InvoicedAmt),0)  FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   ", InvoicedQty =(SELECT COALESCE(SUM(pl.InvoicedQty),0) FROM C_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.C_Project_ID = " + GetC_Project_ID() + ")" +
-   " WHERE p.C_Project_ID=" + GetC_Project_ID();
+                sql = "UPDATE VAB_Project p SET " +
+   "PlannedAmt=(SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ",PlannedQty=(SELECT COALESCE(SUM(pl.PlannedQty),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ",PlannedMarginAmt=(SELECT COALESCE(SUM(pl.PlannedMarginAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ",CommittedAmt=(SELECT COALESCE(SUM(pl.CommittedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ",CommittedQty=(SELECT COALESCE(SUM(pl.CommittedQty),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ",InvoicedAmt=(SELECT COALESCE(SUM(pl.InvoicedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   ", InvoicedQty =(SELECT COALESCE(SUM(pl.InvoicedQty),0) FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + GetVAB_Project_ID() + ")" +
+   " WHERE p.VAB_Project_ID=" + GetVAB_Project_ID();
                 int no = DB.ExecuteQuery(sql, null, Get_TrxName());
 
                 if (no != 1)
@@ -525,10 +525,10 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MProjectLine[");
             sb.Append(Get_ID()).Append("-")
                 .Append(GetLine())
-                .Append(",C_Project_ID=").Append(GetC_Project_ID())
-                .Append(",C_ProjectPhase_ID=").Append(GetC_ProjectPhase_ID())
-                .Append(",C_ProjectTask_ID=").Append(GetC_ProjectTask_ID())
-                .Append(",C_ProjectIssue_ID=").Append(GetC_ProjectIssue_ID())
+                .Append(",VAB_Project_ID=").Append(GetVAB_Project_ID())
+                .Append(",VAB_ProjectStage_ID=").Append(GetVAB_ProjectStage_ID())
+                .Append(",VAB_ProjectJob_ID=").Append(GetVAB_ProjectJob_ID())
+                .Append(",VAB_ProjectSupply_ID=").Append(GetVAB_ProjectSupply_ID())
                 .Append(", M_Product_ID=").Append(GetM_Product_ID())
                 .Append(", PlannedQty=").Append(GetPlannedQty())
                 .Append("]");

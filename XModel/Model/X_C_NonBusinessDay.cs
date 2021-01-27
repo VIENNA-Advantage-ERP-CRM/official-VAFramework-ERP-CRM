@@ -11,29 +11,29 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for C_NonBusinessDay
+    /** Generated Model for VAB_NonBusinessDay
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_C_NonBusinessDay : PO
+    public class X_VAB_NonBusinessDay : PO
     {
-        public X_C_NonBusinessDay(Context ctx, int C_NonBusinessDay_ID, Trx trxName)
-            : base(ctx, C_NonBusinessDay_ID, trxName)
+        public X_VAB_NonBusinessDay(Context ctx, int VAB_NonBusinessDay_ID, Trx trxName)
+            : base(ctx, VAB_NonBusinessDay_ID, trxName)
         {
-            /** if (C_NonBusinessDay_ID == 0)
+            /** if (VAB_NonBusinessDay_ID == 0)
             {
             SetVAB_Calender_ID (0);
-            SetC_NonBusinessDay_ID (0);
+            SetVAB_NonBusinessDay_ID (0);
             SetDate1 (DateTime.Now);
             }
              */
         }
-        public X_C_NonBusinessDay(Ctx ctx, int C_NonBusinessDay_ID, Trx trxName)
-            : base(ctx, C_NonBusinessDay_ID, trxName)
+        public X_VAB_NonBusinessDay(Ctx ctx, int VAB_NonBusinessDay_ID, Trx trxName)
+            : base(ctx, VAB_NonBusinessDay_ID, trxName)
         {
-            /** if (C_NonBusinessDay_ID == 0)
+            /** if (VAB_NonBusinessDay_ID == 0)
             {
             SetVAB_Calender_ID (0);
-            SetC_NonBusinessDay_ID (0);
+            SetVAB_NonBusinessDay_ID (0);
             SetDate1 (DateTime.Now);
             }
              */
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_NonBusinessDay(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_NonBusinessDay(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_NonBusinessDay(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_NonBusinessDay(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_C_NonBusinessDay(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_NonBusinessDay(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_C_NonBusinessDay()
+        static X_VAB_NonBusinessDay()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,8 +81,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =163;
 
-        /** TableName=C_NonBusinessDay */
-        public static String Table_Name = "C_NonBusinessDay";
+        /** TableName=VAB_NonBusinessDay */
+        public static String Table_Name = "VAB_NonBusinessDay";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_C_NonBusinessDay[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAB_NonBusinessDay[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Calendar.
@@ -135,17 +135,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Non Business Day.
-        @param C_NonBusinessDay_ID Day on which business is not transacted */
-        public void SetC_NonBusinessDay_ID(int C_NonBusinessDay_ID)
+        @param VAB_NonBusinessDay_ID Day on which business is not transacted */
+        public void SetVAB_NonBusinessDay_ID(int VAB_NonBusinessDay_ID)
         {
-            if (C_NonBusinessDay_ID < 1) throw new ArgumentException("C_NonBusinessDay_ID is mandatory.");
-            Set_ValueNoCheck("C_NonBusinessDay_ID", C_NonBusinessDay_ID);
+            if (VAB_NonBusinessDay_ID < 1) throw new ArgumentException("VAB_NonBusinessDay_ID is mandatory.");
+            Set_ValueNoCheck("VAB_NonBusinessDay_ID", VAB_NonBusinessDay_ID);
         }
         /** Get Non Business Day.
         @return Day on which business is not transacted */
-        public int GetC_NonBusinessDay_ID()
+        public int GetVAB_NonBusinessDay_ID()
         {
-            Object ii = Get_Value("C_NonBusinessDay_ID");
+            Object ii = Get_Value("VAB_NonBusinessDay_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

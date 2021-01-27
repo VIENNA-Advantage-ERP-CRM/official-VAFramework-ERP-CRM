@@ -45,7 +45,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_RfQ_ID"))
+                else if (name.Equals("VAB_RFQ_ID"))
                 {
                     _From_RfQ_ID = Convert.ToInt32(para[i].GetParameter());//.intValue();
                 }
@@ -97,7 +97,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 for (int j = 0; j < qtys.Length; j++)
                 {
                     MRfQLineQty newQty = new MRfQLineQty(newLine);
-                    newQty.SetC_UOM_ID(qtys[j].GetC_UOM_ID());
+                    newQty.SetVAB_UOM_ID(qtys[j].GetVAB_UOM_ID());
                     newQty.SetQty(qtys[j].GetQty());
                     newQty.SetIsOfferQty(qtys[j].IsOfferQty());
                     newQty.SetIsPurchaseQty(qtys[j].IsPurchaseQty());

@@ -64,7 +64,7 @@ namespace VAdvantage.Process
                 CSchedule.SetTotalAmt(contract.GetLineNetAmt());
                 CSchedule.SetGrandTotal(contract.GetGrandTotal());
                 CSchedule.SetTaxAmt(contract.GetTaxAmt());
-                CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
+                CSchedule.SetVAB_UOM_ID(contract.GetVAB_UOM_ID());
                 CSchedule.SetPriceEntered(contract.GetPriceEntered());
                 if (CSchedule.Save())
                 {
@@ -119,7 +119,7 @@ namespace VAdvantage.Process
         //        CSchedule.SetTotalAmt(contract.GetLineNetAmt());
         //        CSchedule.SetGrandTotal(contract.GetGrandTotal());
         //        CSchedule.SetTaxAmt(contract.GetTaxAmt());
-        //        CSchedule.SetC_UOM_ID(contract.GetC_UOM_ID());
+        //        CSchedule.SetVAB_UOM_ID(contract.GetVAB_UOM_ID());
         //        CSchedule.SetPriceEntered(contract.GetPriceEntered());
         //        if (CSchedule.Save())
         //        {

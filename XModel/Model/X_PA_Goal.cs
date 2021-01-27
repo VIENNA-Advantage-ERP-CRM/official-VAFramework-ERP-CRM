@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_Goal
+/** Generated Model for VAPA_Target
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_Goal : PO
+public class X_VAPA_Target : PO
 {
-public X_PA_Goal (Context ctx, int PA_Goal_ID, Trx trxName) : base (ctx, PA_Goal_ID, trxName)
+public X_VAPA_Target (Context ctx, int VAPA_Target_ID, Trx trxName) : base (ctx, VAPA_Target_ID, trxName)
 {
-/** if (PA_Goal_ID == 0)
-{
-SetIsSummary (false);
-SetMeasureScope (null);
-SetMeasureTarget (0.0);
-SetName (null);
-SetPA_ColorSchema_ID (0);
-SetPA_Goal_ID (0);
-SetSeqNo (0);
-}
- */
-}
-public X_PA_Goal (Ctx ctx, int PA_Goal_ID, Trx trxName) : base (ctx, PA_Goal_ID, trxName)
-{
-/** if (PA_Goal_ID == 0)
+/** if (VAPA_Target_ID == 0)
 {
 SetIsSummary (false);
 SetMeasureScope (null);
 SetMeasureTarget (0.0);
 SetName (null);
-SetPA_ColorSchema_ID (0);
-SetPA_Goal_ID (0);
+SetVAPA_Color_ID (0);
+SetVAPA_Target_ID (0);
+SetSeqNo (0);
+}
+ */
+}
+public X_VAPA_Target (Ctx ctx, int VAPA_Target_ID, Trx trxName) : base (ctx, VAPA_Target_ID, trxName)
+{
+/** if (VAPA_Target_ID == 0)
+{
+SetIsSummary (false);
+SetMeasureScope (null);
+SetMeasureTarget (0.0);
+SetName (null);
+SetVAPA_Color_ID (0);
+SetVAPA_Target_ID (0);
 SetSeqNo (0);
 }
  */
@@ -49,7 +49,7 @@ SetSeqNo (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Goal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Target (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_PA_Goal (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Goal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Target (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_PA_Goal (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Goal (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Target (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_Goal()
+static X_VAPA_Target()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389065021L;
 public static int Table_ID;
  // =440;
 
-/** TableName=PA_Goal */
-public static String Table_Name="PA_Goal";
+/** TableName=VAPA_Target */
+public static String Table_Name="VAPA_Target";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_Goal[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Target[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -393,67 +393,67 @@ public String GetNote()
 return (String)Get_Value("Note");
 }
 /** Set Color Schema.
-@param PA_ColorSchema_ID Performance Color Schema */
-public void SetPA_ColorSchema_ID (int PA_ColorSchema_ID)
+@param VAPA_Color_ID Performance Color Schema */
+public void SetVAPA_Color_ID (int VAPA_Color_ID)
 {
-if (PA_ColorSchema_ID < 1) throw new ArgumentException ("PA_ColorSchema_ID is mandatory.");
-Set_Value ("PA_ColorSchema_ID", PA_ColorSchema_ID);
+if (VAPA_Color_ID < 1) throw new ArgumentException ("VAPA_Color_ID is mandatory.");
+Set_Value ("VAPA_Color_ID", VAPA_Color_ID);
 }
 /** Get Color Schema.
 @return Performance Color Schema */
-public int GetPA_ColorSchema_ID() 
+public int GetVAPA_Color_ID() 
 {
-Object ii = Get_Value("PA_ColorSchema_ID");
+Object ii = Get_Value("VAPA_Color_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** PA_GoalParent_ID VAF_Control_Ref_ID=230 */
-public static int PA_GOALPARENT_ID_VAF_Control_Ref_ID=230;
+/** VAPA_TargetParent_ID VAF_Control_Ref_ID=230 */
+public static int VAPA_TARGETPARENT_ID_VAF_Control_Ref_ID=230;
 /** Set Parent Goal.
-@param PA_GoalParent_ID Parent Goal */
-public void SetPA_GoalParent_ID (int PA_GoalParent_ID)
+@param VAPA_TargetParent_ID Parent Goal */
+public void SetVAPA_TargetParent_ID (int VAPA_TargetParent_ID)
 {
-if (PA_GoalParent_ID <= 0) Set_Value ("PA_GoalParent_ID", null);
+if (VAPA_TargetParent_ID <= 0) Set_Value ("VAPA_TargetParent_ID", null);
 else
-Set_Value ("PA_GoalParent_ID", PA_GoalParent_ID);
+Set_Value ("VAPA_TargetParent_ID", VAPA_TargetParent_ID);
 }
 /** Get Parent Goal.
 @return Parent Goal */
-public int GetPA_GoalParent_ID() 
+public int GetVAPA_TargetParent_ID() 
 {
-Object ii = Get_Value("PA_GoalParent_ID");
+Object ii = Get_Value("VAPA_TargetParent_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Goal.
-@param PA_Goal_ID Performance Goal */
-public void SetPA_Goal_ID (int PA_Goal_ID)
+@param VAPA_Target_ID Performance Goal */
+public void SetVAPA_Target_ID (int VAPA_Target_ID)
 {
-if (PA_Goal_ID < 1) throw new ArgumentException ("PA_Goal_ID is mandatory.");
-Set_ValueNoCheck ("PA_Goal_ID", PA_Goal_ID);
+if (VAPA_Target_ID < 1) throw new ArgumentException ("VAPA_Target_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Target_ID", VAPA_Target_ID);
 }
 /** Get Goal.
 @return Performance Goal */
-public int GetPA_Goal_ID() 
+public int GetVAPA_Target_ID() 
 {
-Object ii = Get_Value("PA_Goal_ID");
+Object ii = Get_Value("VAPA_Target_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Measure.
-@param PA_Measure_ID Concrete Performance Measurement */
-public void SetPA_Measure_ID (int PA_Measure_ID)
+@param VAPA_Evaluate_ID Concrete Performance Measurement */
+public void SetVAPA_Evaluate_ID (int VAPA_Evaluate_ID)
 {
-if (PA_Measure_ID <= 0) Set_Value ("PA_Measure_ID", null);
+if (VAPA_Evaluate_ID <= 0) Set_Value ("VAPA_Evaluate_ID", null);
 else
-Set_Value ("PA_Measure_ID", PA_Measure_ID);
+Set_Value ("VAPA_Evaluate_ID", VAPA_Evaluate_ID);
 }
 /** Get Measure.
 @return Concrete Performance Measurement */
-public int GetPA_Measure_ID() 
+public int GetVAPA_Evaluate_ID() 
 {
-Object ii = Get_Value("PA_Measure_ID");
+Object ii = Get_Value("VAPA_Evaluate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

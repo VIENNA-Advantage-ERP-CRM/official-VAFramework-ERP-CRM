@@ -34,7 +34,7 @@ namespace VAdvantage.Acct
         //Reversal Flag		
         private bool _IsReversal = false;
         //Payment					
-        private int _C_Payment_ID = 0;
+        private int _VAB_Payment_ID = 0;
 
         private Decimal _TrxAmt = Env.ZERO;
         private Decimal _StmtAmt = Env.ZERO;
@@ -49,7 +49,7 @@ namespace VAdvantage.Acct
             : base(line, doc)
         {
 
-            _C_Payment_ID = line.GetC_Payment_ID();
+            _VAB_Payment_ID = line.GetVAB_Payment_ID();
             _IsReversal = line.IsReversal();
             //
             _StmtAmt = line.GetStmtAmt();
@@ -66,9 +66,9 @@ namespace VAdvantage.Acct
         ///  Get Payment
         /// </summary>
         /// <returns>C_Paymnet_ID</returns>
-        public int GetC_Payment_ID()
+        public int GetVAB_Payment_ID()
         {
-            return _C_Payment_ID;
+            return _VAB_Payment_ID;
         }
 
         /// <summary>
@@ -78,10 +78,10 @@ namespace VAdvantage.Acct
         /// <returns>org</returns>
         public int GetVAF_Org_ID(bool payment)
         {
-            if (payment && GetC_Payment_ID() != 0)
+            if (payment && GetVAB_Payment_ID() != 0)
             {
-                String sql = "SELECT VAF_Org_ID FROM C_Payment WHERE C_Payment_ID=@param1";
-                int id = DataBase.DB.GetSQLValue(null, sql, GetC_Payment_ID());
+                String sql = "SELECT VAF_Org_ID FROM VAB_Payment WHERE VAB_Payment_ID=@param1";
+                int id = DataBase.DB.GetSQLValue(null, sql, GetVAB_Payment_ID());
                 if (id > 0)
                 {
                     return id;

@@ -224,7 +224,7 @@
                         var tableName = VIS.Utility.encodeText(res[i].TableName);
                         var name = "";
                         // Change done to show order instead of purchase order in selection 
-                        if (tableName == "C_Order") {
+                        if (tableName == "VAB_Order") {
                             name = VIS.Msg.getMsg("Order");
                         }
                         else {
@@ -465,9 +465,9 @@
         else if (elementType.equals(this.ELEMENTTYPE_OrgTrx))
             return "VAF_OrgTrx_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Project))
-            return "C_Project_ID";
+            return "VAB_Project_ID";
         else if (elementType.equals(this.ELEMENTTYPE_SalesRegion))
-            return "C_SalesRegion_ID";
+            return "VAB_SalesRegionState_ID";
         else if (elementType.equals(this.ELEMENTTYPE_UserList1))
             return "User1_ID";
         else if (elementType.equals(this.ELEMENTTYPE_UserList2))
@@ -620,7 +620,7 @@
             orderClause = orderClause.concat(this.TABLE_ALIAS).concat(".").concat(this.sortBy4);
         }
         if (orderClause.length == 0) {
-            orderClause = orderClause.concat(this.TABLE_ALIAS).concat(".Fact_Acct_ID");
+            orderClause = orderClause.concat(this.TABLE_ALIAS).concat(".Actual_Acct_Detail_ID");
         }
 
         this.getDataModel(VAF_Client_ID, whereClause, orderClause, this.group1, this.group2, this.group3, this.group4, this.sortBy1, this.sortBy2, this.sortBy3, this.sortBy4, this.displayDocumentInfo, this.displaySourceAmt, this.displayQty, callbackGetDataModel);
@@ -688,7 +688,7 @@
 
         var PROD = "M_Product_ID";
         var BPARTNER = "VAB_BusinessPartner_ID";
-        var PROJECT = "C_Project_ID";
+        var PROJECT = "VAB_Project_ID";
         var CAMPAIGN = "VAB_Promotion_ID";
 
 
@@ -1640,7 +1640,7 @@
             sortAddItem({ 'Key': "", 'Name': "" });
             sortAddItem({ 'Key': "DateAcct", 'Name': VIS.Msg.translate(VIS.Env.getCtx(), "DateAcct") });
             sortAddItem({ 'Key': "DateTrx", 'Name': VIS.Msg.translate(VIS.Env.getCtx(), "DateTrx") });
-            sortAddItem({ 'Key': "C_Period_ID", 'Name': VIS.Msg.translate(VIS.Env.getCtx(), "C_Period_ID") });
+            sortAddItem({ 'Key': "VAB_YearPeriod_ID", 'Name': VIS.Msg.translate(VIS.Env.getCtx(), "VAB_YearPeriod_ID") });
 
             var labels = [];
 

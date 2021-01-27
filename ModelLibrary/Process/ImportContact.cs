@@ -188,7 +188,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 lead.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());
                 lead.SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
                 lead.Save();
-                imp.SetC_Lead_ID(lead.GetC_Lead_ID());
+                imp.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
             }
 
             //	Interest Area

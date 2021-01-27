@@ -30,7 +30,7 @@ namespace VAdvantage.Report
         /** AcctSchame Parameter			*/
         private int _VAB_AccountBook_ID = 0;
         /**	Period Parameter				*/
-        private int _C_Period_ID = 0;
+        private int _VAB_YearPeriod_ID = 0;
         private DateTime? _DateAcct_From = null;
         private DateTime? _DateAcct_To = null;
         /**	Org Parameter					*/
@@ -44,17 +44,17 @@ namespace VAdvantage.Report
         /**	Product Parameter				*/
         private int _M_Product_ID = 0;
         /**	Project Parameter				*/
-        private int _C_Project_ID = 0;
+        private int _VAB_Project_ID = 0;
         /**	Activity Parameter				*/
         private int _VAB_BillingCode_ID = 0;
         /**	SalesRegion Parameter			*/
-        private int _C_SalesRegion_ID = 0;
+        private int _VAB_SalesRegionState_ID = 0;
         /**	Campaign Parameter				*/
         private int _VAB_Promotion_ID = 0;
         /** Posting Type					*/
         private String _PostingType = "A";
         /** Hierarchy						*/
-        private int _PA_Hierarchy_ID = 0;
+        private int _VAPA_FinancialReportingOrder_ID = 0;
 
         private int _VAF_OrgTrx_ID = 0;
         private int _C_LocFrom_ID = 0;
@@ -72,15 +72,15 @@ namespace VAdvantage.Report
         private long m_start =CommonFunctions.CurrentTimeMillis();//  System.currentTimeMillis();
         /**	Insert Statement				*/
         private static String _insert = "INSERT INTO T_TrialBalance "
-            + "(VAF_JInstance_ID, Fact_Acct_ID,"
+            + "(VAF_JInstance_ID, Actual_Acct_Detail_ID,"
             + " VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,"
-            + " VAB_AccountBook_ID, Account_ID, AccountValue, DateTrx, DateAcct, C_Period_ID,"
+            + " VAB_AccountBook_ID, Account_ID, AccountValue, DateTrx, DateAcct, VAB_YearPeriod_ID,"
             + " VAF_TableView_ID, Record_ID, Line_ID,"
-            + " GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,"
+            + " VAGL_Group_ID, VAGL_Budget_ID, VAB_TaxRate_ID, M_Locator_ID, PostingType,"
             + " VAB_Currency_ID, AmtSourceDr, AmtSourceCr, AmtSourceBalance,"
-            + " AmtAcctDr, AmtAcctCr, AmtAcctBalance, C_UOM_ID, Qty,"
+            + " AmtAcctDr, AmtAcctCr, AmtAcctBalance, VAB_UOM_ID, Qty,"
             + " M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,"
-            + " C_SalesRegion_ID, C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,"
+            + " VAB_SalesRegionState_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,"
             + " User1_ID, User2_ID, VAA_Asset_ID, Description)";
 
 
@@ -104,18 +104,18 @@ namespace VAdvantage.Report
                 {
                     _VAB_AccountBook_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("C_Period_ID"))
+                else if (name.Equals("VAB_YearPeriod_ID"))
                 {
-                    _C_Period_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
+                    _VAB_YearPeriod_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("DateAcct"))
                 {
                     _DateAcct_From = Utility.Util.GetValueOfDateTime(para[i].GetParameter());
                     _DateAcct_To = Utility.Util.GetValueOfDateTime(para[i].GetParameter_To());
                 }
-                else if (name.Equals("PA_Hierarchy_ID"))
+                else if (name.Equals("VAPA_FinancialReportingOrder_ID"))
                 {
-                    _PA_Hierarchy_ID = para[i].GetParameterAsInt();
+                    _VAPA_FinancialReportingOrder_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAF_Org_ID"))
                 {
@@ -138,17 +138,17 @@ namespace VAdvantage.Report
                 {
                     _M_Product_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("C_Project_ID"))
+                else if (name.Equals("VAB_Project_ID"))
                 {
-                    _C_Project_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
+                    _VAB_Project_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("VAB_BillingCode_ID"))
                 {
                     _VAB_BillingCode_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
-                else if (name.Equals("C_SalesRegion_ID"))
+                else if (name.Equals("VAB_SalesRegionState_ID"))
                 {
-                    _C_SalesRegion_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
+                    _VAB_SalesRegionState_ID = Utility.Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("VAB_Promotion_ID"))
                 {
@@ -169,7 +169,7 @@ namespace VAdvantage.Report
             if (_Account_ID != 0 && _Account_ID!=-1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Account, _Account_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Account, _Account_ID));
             }
             if (_AccountValue_From != null && _AccountValue_From.Length == 0)
             {
@@ -202,31 +202,31 @@ namespace VAdvantage.Report
             if (_VAF_Org_ID != 0 && _VAF_Org_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
             }
             //	Optional Product
             if (_M_Product_ID != 0 && _M_Product_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Product, _M_Product_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Product, _M_Product_ID));
             }
             //	Optional Project
-            if (_C_Project_ID != 0 && _C_Project_ID != -1)
+            if (_VAB_Project_ID != 0 && _VAB_Project_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Project, _C_Project_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Project, _VAB_Project_ID));
             }
             //	Optional Activity
             if (_VAB_BillingCode_ID != 0 && _VAB_BillingCode_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_Activity, _VAB_BillingCode_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Activity, _VAB_BillingCode_ID));
             }
             //	Optional Campaign
             if (_VAB_Promotion_ID != 0 && _VAB_Promotion_ID != -1)
@@ -236,10 +236,10 @@ namespace VAdvantage.Report
             //	m_parameterWhere.append(" AND ").append(MReportTree.getWhereClause(getCtx(), 
             //		MAcctSchemaElement.ELEMENTTYPE_Campaign, _VAB_Promotion_ID));
             //	Optional Sales Region
-            if (_C_SalesRegion_ID != 0 && _C_SalesRegion_ID != -1)
+            if (_VAB_SalesRegionState_ID != 0 && _VAB_SalesRegionState_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _PA_Hierarchy_ID, MAcctSchemaElement.ELEMENTTYPE_SalesRegion, _C_SalesRegion_ID));
+                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_SalesRegion, _VAB_SalesRegionState_ID));
             }
             //	Mandatory Posting Type
             m_parameterWhere.Append(" AND PostingType='").Append(_PostingType).Append("'");
@@ -266,7 +266,7 @@ namespace VAdvantage.Report
                 return;
             }
             //	Get Date from Period
-            if (_C_Period_ID == 0 || _C_Period_ID == -1)
+            if (_VAB_YearPeriod_ID == 0 || _VAB_YearPeriod_ID == -1)
             {
                 //GregorianCalendar cal = new GregorianCalendar(Login.Language.GetLoginLanguage());
                 //cal.setTimeInMillis(CommonFunctions.CurrentTimeMillis());
@@ -283,15 +283,15 @@ namespace VAdvantage.Report
                 return;
             }
          
-            String sql = "SELECT StartDate, EndDate FROM C_Period WHERE C_Period_ID=@param1";
+            String sql = "SELECT StartDate, EndDate FROM VAB_YearPeriod WHERE VAB_YearPeriod_ID=@param1";
             //PreparedStatement pstmt = null;
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, null);
-                param[0] = new SqlParameter("@param1", _C_Period_ID);
-                //pstmt.setInt(1, _C_Period_ID);
+                param[0] = new SqlParameter("@param1", _VAB_YearPeriod_ID);
+                //pstmt.setInt(1, _VAB_YearPeriod_ID);
                 //ResultSet rs = pstmt.executeQuery();
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
@@ -335,7 +335,7 @@ namespace VAdvantage.Report
         private void CreateBalanceLine()
         {
             StringBuilder sql = new StringBuilder(_insert);
-            //	(VAF_JInstance_ID, Fact_Acct_ID,
+            //	(VAF_JInstance_ID, Actual_Acct_Detail_ID,
             sql.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",0,");
             //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
             sql.Append(GetVAF_Client_ID()).Append(",");
@@ -349,7 +349,7 @@ namespace VAdvantage.Report
             }
             sql.Append(", SysDate,").Append(GetVAF_UserContact_ID())
                 .Append(",SysDate,").Append(GetVAF_UserContact_ID()).Append(",");
-            //	VAB_AccountBook_ID, Account_ID, AccountValue, DateTrx, DateAcct, C_Period_ID,
+            //	VAB_AccountBook_ID, Account_ID, AccountValue, DateTrx, DateAcct, VAB_YearPeriod_ID,
             sql.Append(_VAB_AccountBook_ID).Append(",");
             if (_Account_ID == 0 || _Account_ID == -1)
             {
@@ -373,22 +373,22 @@ namespace VAdvantage.Report
             }
             DateTime? balanceDay = _DateAcct_From; // TimeUtil.addDays(_DateAcct_From, -1);
             sql.Append(",null,").Append(DataBase.DB.TO_DATE(balanceDay, true)).Append(",");
-            if (_C_Period_ID == 0 || _C_Period_ID==-1)
+            if (_VAB_YearPeriod_ID == 0 || _VAB_YearPeriod_ID==-1)
             {
                 sql.Append("null");
             }
             else
             {
-                sql.Append(_C_Period_ID);
+                sql.Append(_VAB_YearPeriod_ID);
             }
             sql.Append(",");
             //	VAF_TableView_ID, Record_ID, Line_ID,
             sql.Append("null,null,null,");
-            //	GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,
+            //	VAGL_Group_ID, VAGL_Budget_ID, VAB_TaxRate_ID, M_Locator_ID, PostingType,
             sql.Append("null,null,null,null,'").Append(_PostingType).Append("',");
             //	VAB_Currency_ID, AmtSourceDr, AmtSourceCr, AmtSourceBalance,
             sql.Append("null,null,null,null,");
-            //	AmtAcctDr, AmtAcctCr, AmtAcctBalance, C_UOM_ID, Qty,
+            //	AmtAcctDr, AmtAcctCr, AmtAcctBalance, VAB_UOM_ID, Qty,
             sql.Append(" COALESCE(SUM(AmtAcctDr),0),COALESCE(SUM(AmtAcctCr),0),"
                       + "COALESCE(SUM(AmtAcctDr),0)-COALESCE(SUM(AmtAcctCr),0),"
                 + " null,COALESCE(SUM(Qty),0),");
@@ -438,23 +438,23 @@ namespace VAdvantage.Report
                 sql.Append(_C_LocTo_ID);
             }
             sql.Append(",");
-            //	C_SalesRegion_ID, C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
-            if (_C_SalesRegion_ID == 0 || _C_SalesRegion_ID==-1)
+            //	VAB_SalesRegionState_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
+            if (_VAB_SalesRegionState_ID == 0 || _VAB_SalesRegionState_ID==-1)
             {
                 sql.Append("null");
             }
             else
             {
-                sql.Append(_C_SalesRegion_ID);
+                sql.Append(_VAB_SalesRegionState_ID);
             }
             sql.Append(",");
-            if (_C_Project_ID == 0 || _C_Project_ID==-1)
+            if (_VAB_Project_ID == 0 || _VAB_Project_ID==-1)
             {
                 sql.Append("null");
             }
             else
             {
-                sql.Append(_C_Project_ID);
+                sql.Append(_VAB_Project_ID);
             }
             sql.Append(",");
             if (_VAB_Promotion_ID == 0 || _VAB_Promotion_ID==-1)
@@ -495,7 +495,7 @@ namespace VAdvantage.Report
             }
             sql.Append(", null,null");
             //
-            sql.Append(" FROM Fact_Acct WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
+            sql.Append(" FROM Actual_Acct_Detail WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND ").Append(m_parameterWhere)
                 .Append(" AND DateAcct < ").Append(DataBase.DB.TO_DATE(_DateAcct_From, true));
             //	Start Beginning of Year
@@ -530,28 +530,28 @@ namespace VAdvantage.Report
         private void CreateDetailLines()
         {
             StringBuilder sql = new StringBuilder(_insert);
-            //	(VAF_JInstance_ID, Fact_Acct_ID,
-            sql.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",Fact_Acct_ID,");
+            //	(VAF_JInstance_ID, Actual_Acct_Detail_ID,
+            sql.Append("SELECT ").Append(GetVAF_JInstance_ID()).Append(",Actual_Acct_Detail_ID,");
             //	VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,
             sql.Append(GetVAF_Client_ID()).Append(",VAF_Org_ID,Created,CreatedBy, Updated,UpdatedBy,");
-            //	VAB_AccountBook_ID, Account_ID, DateTrx, AccountValue, DateAcct, C_Period_ID,
-            sql.Append("VAB_AccountBook_ID, Account_ID, null, DateTrx, DateAcct, C_Period_ID,");
+            //	VAB_AccountBook_ID, Account_ID, DateTrx, AccountValue, DateAcct, VAB_YearPeriod_ID,
+            sql.Append("VAB_AccountBook_ID, Account_ID, null, DateTrx, DateAcct, VAB_YearPeriod_ID,");
             //	VAF_TableView_ID, Record_ID, Line_ID,
             sql.Append("VAF_TableView_ID, Record_ID, Line_ID,");
-            //	GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,
-            sql.Append("GL_Category_ID, GL_Budget_ID, C_Tax_ID, M_Locator_ID, PostingType,");
+            //	VAGL_Group_ID, VAGL_Budget_ID, VAB_TaxRate_ID, M_Locator_ID, PostingType,
+            sql.Append("VAGL_Group_ID, VAGL_Budget_ID, VAB_TaxRate_ID, M_Locator_ID, PostingType,");
             //	VAB_Currency_ID, AmtSourceDr, AmtSourceCr, AmtSourceBalance,
             sql.Append("VAB_Currency_ID, AmtSourceDr,AmtSourceCr, AmtSourceDr-AmtSourceCr,");
-            //	AmtAcctDr, AmtAcctCr, AmtAcctBalance, C_UOM_ID, Qty,
-            sql.Append(" AmtAcctDr,AmtAcctCr, AmtAcctDr-AmtAcctCr, C_UOM_ID,Qty,");
+            //	AmtAcctDr, AmtAcctCr, AmtAcctBalance, VAB_UOM_ID, Qty,
+            sql.Append(" AmtAcctDr,AmtAcctCr, AmtAcctDr-AmtAcctCr, VAB_UOM_ID,Qty,");
             //	M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,
             sql.Append("M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID,C_LocTo_ID,");
-            //	C_SalesRegion_ID, C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
-            sql.Append("C_SalesRegion_ID, C_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,");
+            //	VAB_SalesRegionState_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
+            sql.Append("VAB_SalesRegionState_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,");
             //	User1_ID, User2_ID, VAA_Asset_ID, Description)
             sql.Append("User1_ID, User2_ID, VAA_Asset_ID, Description");
             //
-            sql.Append(" FROM Fact_Acct WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
+            sql.Append(" FROM Actual_Acct_Detail WHERE VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND ").Append(m_parameterWhere)
                 .Append(" AND DateAcct >= ").Append(DataBase.DB.TO_DATE(_DateAcct_From, true))
                 .Append(" AND TRUNC(DateAcct,'DD') <= ").Append(DataBase.DB.TO_DATE(_DateAcct_To, true));

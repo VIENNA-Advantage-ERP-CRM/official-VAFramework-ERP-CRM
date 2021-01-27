@@ -169,37 +169,37 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** C_ProjectPhaseReq_ID VAF_Control_Ref_ID=405 */
-public static int C_PROJECTPHASEREQ_ID_VAF_Control_Ref_ID=405;
+/** VAB_ProjectStageReq_ID VAF_Control_Ref_ID=405 */
+public static int VAB_PROJECTSTAGEREQ_ID_VAF_Control_Ref_ID=405;
 /** Set Requirement Phase.
-@param C_ProjectPhaseReq_ID Project Requirements Phase */
-public void SetC_ProjectPhaseReq_ID (int C_ProjectPhaseReq_ID)
+@param VAB_ProjectStageReq_ID Project Requirements Phase */
+public void SetVAB_ProjectStageReq_ID (int VAB_ProjectStageReq_ID)
 {
-if (C_ProjectPhaseReq_ID <= 0) Set_Value ("C_ProjectPhaseReq_ID", null);
+if (VAB_ProjectStageReq_ID <= 0) Set_Value ("VAB_ProjectStageReq_ID", null);
 else
-Set_Value ("C_ProjectPhaseReq_ID", C_ProjectPhaseReq_ID);
+Set_Value ("VAB_ProjectStageReq_ID", VAB_ProjectStageReq_ID);
 }
 /** Get Requirement Phase.
 @return Project Requirements Phase */
-public int GetC_ProjectPhaseReq_ID() 
+public int GetVAB_ProjectStageReq_ID() 
 {
-Object ii = Get_Value("C_ProjectPhaseReq_ID");
+Object ii = Get_Value("VAB_ProjectStageReq_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID <= 0) Set_Value ("C_Project_ID", null);
+if (VAB_Project_ID <= 0) Set_Value ("VAB_Project_ID", null);
 else
-Set_Value ("C_Project_ID", C_Project_ID);
+Set_Value ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

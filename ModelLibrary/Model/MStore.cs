@@ -325,7 +325,7 @@ namespace VAdvantage.Model
                 SetIsMenuRfQs(true);	// Y
                 SetIsMenuShipments(true);	// Y
 
-                //	setC_PaymentTerm_ID (0);
+                //	setVAB_PaymentTerm_ID (0);
                 //	setM_PriceList_ID (0);
                 //	setM_Warehouse_ID (0);
                 //	setName (null);

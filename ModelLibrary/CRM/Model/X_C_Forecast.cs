@@ -126,18 +126,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Period.
-@param C_Period_ID Period of the Calendar */
-public void SetC_Period_ID (int C_Period_ID)
+@param VAB_YearPeriod_ID Period of the Calendar */
+public void SetVAB_YearPeriod_ID (int VAB_YearPeriod_ID)
 {
-if (C_Period_ID <= 0) Set_Value ("C_Period_ID", null);
+if (VAB_YearPeriod_ID <= 0) Set_Value ("VAB_YearPeriod_ID", null);
 else
-Set_Value ("C_Period_ID", C_Period_ID);
+Set_Value ("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
 }
 /** Get Period.
 @return Period of the Calendar */
-public int GetC_Period_ID() 
+public int GetVAB_YearPeriod_ID() 
 {
-Object ii = Get_Value("C_Period_ID");
+Object ii = Get_Value("VAB_YearPeriod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

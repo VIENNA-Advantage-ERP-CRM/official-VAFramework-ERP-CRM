@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRfQLineQty
  * Purpose        : RfQ Line Qty Model
- * Class Used     : X_C_RfQLineQty
+ * Class Used     : X_VAB_RFQLine_Qty
  * Chronological    Development
  * Raghunandan     10-Aug.-2009
   ******************************************************/
@@ -25,10 +25,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQLineQty : X_C_RfQLineQty
+    public class MRfQLineQty : X_VAB_RFQLine_Qty
     {
         //	Cache	
-        private static CCache<int, MRfQLineQty> s_cache = new CCache<int, MRfQLineQty>("C_RfQLineQty", 20);
+        private static CCache<int, MRfQLineQty> s_cache = new CCache<int, MRfQLineQty>("VAB_RFQLine_Qty", 20);
         //Unit of Measure		
         private MUOM _uom = null;
 
@@ -36,18 +36,18 @@ namespace VAdvantage.Model
         /// Get MRfQLineQty from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQLineQty_ID">ID</param>
+        /// <param name="VAB_RFQLine_Qty_ID">ID</param>
         /// <param name="trxName">Transaction</param>
         /// <returns>MRfQLineQty</returns>
-        public static MRfQLineQty Get(Ctx ctx, int C_RfQLineQty_ID, Trx trxName)
+        public static MRfQLineQty Get(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
         {
-            int key = C_RfQLineQty_ID;
+            int key = VAB_RFQLine_Qty_ID;
             MRfQLineQty retValue = (MRfQLineQty)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MRfQLineQty(ctx, C_RfQLineQty_ID, trxName);
+            retValue = new MRfQLineQty(ctx, VAB_RFQLine_Qty_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -59,15 +59,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_RfQLineQty_ID">ID</param>
+        /// <param name="VAB_RFQLine_Qty_ID">ID</param>
         /// <param name="trxName">transction</param>
-        public MRfQLineQty(Ctx ctx, int C_RfQLineQty_ID, Trx trxName)
-            : base(ctx, C_RfQLineQty_ID, trxName)
+        public MRfQLineQty(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
+            : base(ctx, VAB_RFQLine_Qty_ID, trxName)
         {
-            if (C_RfQLineQty_ID == 0)
+            if (VAB_RFQLine_Qty_ID == 0)
             {
-                //	setC_RfQLine_ID (0);
-                //	setC_UOM_ID (0);
+                //	setVAB_RFQLine_ID (0);
+                //	setVAB_UOM_ID (0);
                 SetIsOfferQty(false);
                 SetIsPurchaseQty(false);
                 SetQty(Env.ONE);	// 1
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         {
             
             SetClientOrg(line);
-            SetC_RfQLine_ID(line.GetC_RfQLine_ID());
+            SetVAB_RFQLine_ID(line.GetVAB_RFQLine_ID());
         }
        
          /// <summary>
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         {
             if (_uom == null)
             {
-                _uom = MUOM.Get(GetCtx(), GetC_UOM_ID());
+                _uom = MUOM.Get(GetCtx(), GetVAB_UOM_ID());
             }
             return _uom.GetName();
         }
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
         {
             List<MRfQResponseLineQty> list = new List<MRfQResponseLineQty>();
             DataTable dt = null;
-            String sql = "SELECT * FROM C_RfQResponseLineQty WHERE C_RfQLineQty_ID=" + GetC_RfQLineQty_ID() + " AND IsActive='Y'";
+            String sql = "SELECT * FROM VAB_RFQReplyLineQty WHERE VAB_RFQLine_Qty_ID=" + GetVAB_RFQLine_Qty_ID() + " AND IsActive='Y'";
             IDataReader idr = null;
             try
             {

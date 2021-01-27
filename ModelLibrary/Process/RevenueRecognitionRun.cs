@@ -19,7 +19,7 @@ namespace VAdvantage.Process
         private MJournalLine journalLine = null;
         private int _AcctSchema_ID = 0;
         private int _Currency_ID = 0;
-        private int C_Period_ID = 0;
+        private int VAB_YearPeriod_ID = 0;
         private string DocNo = null;
         private DateTime? _RecognizeDate = null;
         private int _orgId = 0;
@@ -142,7 +142,7 @@ namespace VAdvantage.Process
                                     DocNo += ", " + journal.GetDocumentNo();
 
                                 }
-                                journal_ID[j - 1] = journal.GetGL_Journal_ID();
+                                journal_ID[j - 1] = journal.GetVAGL_JRNL_ID();
 
                             }
                             journal = new MJournal(GetCtx(), 0, Get_TrxName());
@@ -156,7 +156,7 @@ namespace VAdvantage.Process
                                 _AcctSchema_ID = journal.GetVAB_AccountBook_ID();
                                 _Currency_ID = journal.GetVAB_Currency_ID();
                                 _RecognizeDate = revenueRecognitionRun.GetRecognitionDate();
-                                lineno = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  AS DefaultValue FROM GL_JournalLine WHERE GL_Journal_ID=" + journal.GetGL_Journal_ID(), null, invoice.Get_Trx()));
+                                lineno = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(Line), 0)+10  AS DefaultValue FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID=" + journal.GetVAGL_JRNL_ID(), null, invoice.Get_Trx()));
 
                             }
                             else
@@ -184,7 +184,7 @@ namespace VAdvantage.Process
                             journalLine = GenerateJounalLine(journal, invoice, invoiceLine, revenueRecognitionPlan, revenueRecognitionRun, mRevenueRecognition.GetRecognitionType(), k);
                             if (journalLine.Save())
                             {
-                                revenueRecognitionRun.SetGL_Journal_ID(journal.GetGL_Journal_ID());
+                                revenueRecognitionRun.SetVAGL_JRNL_ID(journal.GetVAGL_JRNL_ID());
                                 revenueRecognitionRun.Save();
                                 lineno += 10;
                             }
@@ -239,7 +239,7 @@ namespace VAdvantage.Process
 
                         }
 
-                        journal_ID[journal_ID.Length - 1] = journal.GetGL_Journal_ID();
+                        journal_ID[journal_ID.Length - 1] = journal.GetVAGL_JRNL_ID();
 
                     }
                 }
@@ -283,7 +283,7 @@ namespace VAdvantage.Process
         /// <summary>
         /// Create journal line
         /// </summary>
-        /// <param name="journal">GL_Journal</param>
+        /// <param name="journal">VAGL_JRNL</param>
         /// <param name="invoice">Invoice</param>
         /// <param name="invoiceLine">Invoice Line</param>
         /// <param name="revenueRecognitionPlan">Revenue Recognition Plan</param>
@@ -329,11 +329,11 @@ namespace VAdvantage.Process
                         journalLine.SetAmtSourceCr(0);
                         journalLine.SetAmtAcctCr(0);
                     }
-                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
+                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From VAB_Acct_ValidParameter Where VAB_Acct_ValidParameter_ID=" + combination_ID));
                     journalLine.Set_ValueNoCheck("Account_ID", account_ID);
                     journalLine.Set_ValueNoCheck("VAB_BusinessPartner_ID", invoice.GetVAB_BusinessPartner_ID());
                     journalLine.SetVAF_OrgTrx_ID(invoiceLine.Get_ColumnIndex("VAF_OrgTrx_ID") > 0 ? invoiceLine.GetVAF_OrgTrx_ID() : invoice.GetVAF_OrgTrx_ID());
-                    journalLine.Set_ValueNoCheck("C_Project_ID", invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : invoice.Get_Value("C_ProjectRef_ID"));
+                    journalLine.Set_ValueNoCheck("VAB_Project_ID", invoiceLine.GetVAB_Project_ID() > 0 ? invoiceLine.GetVAB_Project_ID() : invoice.Get_Value("VAB_ProjectRef_ID"));
                     journalLine.Set_ValueNoCheck("VAB_Promotion_ID", invoiceLine.Get_ColumnIndex("VAB_Promotion_ID") > 0 ? invoiceLine.GetVAB_Promotion_ID() : invoice.GetVAB_Promotion_ID());
                     journalLine.Set_ValueNoCheck("VAB_BillingCode_ID", invoiceLine.Get_ColumnIndex("VAB_BillingCode_ID") > 0 ? invoiceLine.GetVAB_BillingCode_ID() : invoice.GetVAB_BillingCode_ID());
                     journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
@@ -342,11 +342,11 @@ namespace VAdvantage.Process
                 else
                 {
                     combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
-                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From C_ValidCombination Where C_ValidCombination_ID=" + combination_ID));
+                    int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From VAB_Acct_ValidParameter Where VAB_Acct_ValidParameter_ID=" + combination_ID));
 
                     journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetVAB_Charge_ID(),
                         invoiceLine.Get_ColumnIndex("VAB_Promotion_ID") > 0 ? invoiceLine.GetVAB_Promotion_ID() : invoice.GetVAB_Promotion_ID(),
-                    account_ID, invoiceLine.GetC_Project_ID() > 0 ? invoiceLine.GetC_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("C_ProjectRef_ID")),
+                    account_ID, invoiceLine.GetVAB_Project_ID() > 0 ? invoiceLine.GetVAB_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("VAB_ProjectRef_ID")),
                     invoiceLine.Get_ColumnIndex("VAB_BillingCode_ID") > 0 ? invoiceLine.GetVAB_BillingCode_ID() : invoice.GetVAB_BillingCode_ID(), invoice.GetVAB_BusinessPartner_ID(),
                     invoice.GetVAF_Org_ID(), invoiceLine.Get_ColumnIndex("VAF_OrgTrx_ID") > 0 ? invoiceLine.GetVAF_OrgTrx_ID() : invoice.GetVAF_OrgTrx_ID());
 
@@ -402,9 +402,9 @@ namespace VAdvantage.Process
             journal.SetDescription("Revenue Recognition Run");
             journal.SetPostingType(MJournal.POSTINGTYPE_Actual);
 
-            int GL_Category_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT GL_Category_ID From GL_Category Where CategoryType='M' 
-            AND  VAF_Client_ID= " + revenueRecognitionPlan.GetVAF_Client_ID() + " Order by GL_Category_ID desc"));
-            journal.SetGL_Category_ID(GL_Category_ID);
+            int VAGL_Group_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAGL_Group_ID From VAGL_Group Where CategoryType='M' 
+            AND  VAF_Client_ID= " + revenueRecognitionPlan.GetVAF_Client_ID() + " Order by VAGL_Group_ID desc"));
+            journal.SetVAGL_Group_ID(VAGL_Group_ID);
 
             journal.SetDateDoc(DateTime.Now);
             DateTime firstOfNextMonth = new DateTime(revenurecognitionRun.GetRecognitionDate().Value.Year, revenurecognitionRun.GetRecognitionDate().Value.Month, 1).AddMonths(1);
@@ -419,13 +419,13 @@ namespace VAdvantage.Process
                 journal.SetDateAcct(lastOfThisMonth);
             }
 
-            string periodSql = "SELECT C_Period_ID From C_Period pr  INNER JOIN c_year yr ON (yr.c_year_id = pr.c_year_id AND yr.VAB_Calender_id= " +
+            string periodSql = "SELECT VAB_YearPeriod_ID From VAB_YearPeriod pr  INNER JOIN VAB_Year yr ON (yr.VAB_Year_id = pr.VAB_Year_id AND yr.VAB_Calender_id= " +
                 "(CASE WHEN (SELECT NVL(VAB_Calender_ID,0) FROM VAF_OrgDetail WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + " ) =0 THEN (SELECT  NVL(VAB_Calender_ID,0) FROM VAF_ClientDetail WHERE VAF_Client_ID =" + revenueRecognitionPlan.GetVAF_Client_ID() + ") ELSE " +
                 "(SELECT NVL(VAB_Calender_ID,0) FROM VAF_OrgDetail WHERE vaf_org_ID =" + revenueRecognitionPlan.GetVAF_Org_ID() + ") END ) ) WHERE " + GlobalVariable.TO_DATE(revenurecognitionRun.GetRecognitionDate(), true) + " BETWEEN StartDate and EndDate";
 
-            C_Period_ID = Util.GetValueOfInt(DB.ExecuteScalar(periodSql));
+            VAB_YearPeriod_ID = Util.GetValueOfInt(DB.ExecuteScalar(periodSql));
 
-            journal.SetC_Period_ID(C_Period_ID);
+            journal.SetVAB_YearPeriod_ID(VAB_YearPeriod_ID);
             journal.SetVAB_Currency_ID(revenueRecognitionPlan.GetVAB_Currency_ID());
             int VAB_CurrencyType_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_CurrencyType_ID From VAB_CurrencyType WHERE IsDefault='Y'"));
             journal.SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
@@ -452,7 +452,7 @@ namespace VAdvantage.Process
             char isSoTrx = IssoTrx ? 'Y' : 'N';
             char isReturnTrx = IsreturnTrx ? 'Y' : 'N';
 
-            string sql = "SELECT C_ValidCombination_ID FROM ";
+            string sql = "SELECT VAB_Acct_ValidParameter_ID FROM ";
             
             if (Product_ID > 0)
             {
@@ -504,12 +504,12 @@ namespace VAdvantage.Process
         public MJournalLine GetOrCreate(MJournal Journal, MJournalLine Line, int M_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
         {
             MJournalLine retValue = null;
-            String sql = "SELECT * FROM GL_JournalLine " +
-                         " WHERE  GL_Journal_ID = " + Journal.GetGL_Journal_ID() +
+            String sql = "SELECT * FROM VAGL_JRNLLine " +
+                         " WHERE  VAGL_JRNL_ID = " + Journal.GetVAGL_JRNL_ID() +
                          " AND NVL(M_Product_ID,0)=" + M_Product_ID +                        
                          " AND NVL(ACCOUNT_ID,0)=" + Account_ID +
                          " AND NVL(VAB_PROMOTION_ID,0)=" + Campaign_ID +
-                         " AND NVL(C_PROJECT_ID,0)=" + Opprtunity_ID +
+                         " AND NVL(VAB_PROJECT_ID,0)=" + Opprtunity_ID +
                          " AND NVL(VAB_BILLINGCODE_ID,0)=" + Activity_ID +
                           " AND NVL(VAB_BUSINESSPARTNER_ID,0)=" + BPartner_ID +
                            " AND NVL(VAF_ORGTRX_ID,0)=" + trxOrg_ID +
@@ -576,7 +576,7 @@ namespace VAdvantage.Process
             Line.SetVAF_OrgTrx_ID(trxOrg_ID);
             //Line.Set_ValueNoCheck("VAB_Charge_ID", VAB_Charge_ID);
             Line.Set_ValueNoCheck("VAB_Promotion_ID", Campaign_ID);
-            Line.Set_ValueNoCheck("C_Project_ID", Opprtunity_ID);
+            Line.Set_ValueNoCheck("VAB_Project_ID", Opprtunity_ID);
             Line.Set_ValueNoCheck("VAB_BillingCode_ID", Activity_ID);
 
 
@@ -587,7 +587,7 @@ namespace VAdvantage.Process
         /// Mehtod added to complete and reverse the document and execute the workflow as well
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="Record_ID">GL_Journal_ID</param>
+        /// <param name="Record_ID">VAGL_JRNL_ID</param>
         /// <param name="Process_ID">Process</param>
         /// <param name="DocAction">Document Action</param>
         /// <returns>result of completion or reversal in a string array</returns>
@@ -597,7 +597,7 @@ namespace VAdvantage.Process
             MRole role = MRole.Get(ctx, ctx.GetVAF_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
             {
-                DB.ExecuteQuery("UPDATE GL_Journal SET DocAction = '" + DocAction + "' WHERE GL_Journal_ID = " + Record_ID);
+                DB.ExecuteQuery("UPDATE VAGL_JRNL SET DocAction = '" + DocAction + "' WHERE VAGL_JRNL_ID = " + Record_ID);
 
                 MProcess proc = new MProcess(ctx, Process_ID, null);
                 MPInstance pin = new MPInstance(proc, Record_ID);

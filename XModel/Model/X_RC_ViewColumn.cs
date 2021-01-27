@@ -11,28 +11,28 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for RC_ViewColumn
+    /** Generated Model for VARC_ViewColumn
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_RC_ViewColumn : PO
+    public class X_VARC_ViewColumn : PO
     {
-        public X_RC_ViewColumn(Context ctx, int RC_ViewColumn_ID, Trx trxName)
-            : base(ctx, RC_ViewColumn_ID, trxName)
+        public X_VARC_ViewColumn(Context ctx, int VARC_ViewColumn_ID, Trx trxName)
+            : base(ctx, VARC_ViewColumn_ID, trxName)
         {
-            /** if (RC_ViewColumn_ID == 0)
+            /** if (VARC_ViewColumn_ID == 0)
             {
-            SetRC_ViewColumn_ID (0);
-            SetRC_View_ID (0);
+            SetVARC_ViewColumn_ID (0);
+            SetVARC_View_ID (0);
             }
              */
         }
-        public X_RC_ViewColumn(Ctx ctx, int RC_ViewColumn_ID, Trx trxName)
-            : base(ctx, RC_ViewColumn_ID, trxName)
+        public X_VARC_ViewColumn(Ctx ctx, int VARC_ViewColumn_ID, Trx trxName)
+            : base(ctx, VARC_ViewColumn_ID, trxName)
         {
-            /** if (RC_ViewColumn_ID == 0)
+            /** if (VARC_ViewColumn_ID == 0)
             {
-            SetRC_ViewColumn_ID (0);
-            SetRC_View_ID (0);
+            SetVARC_ViewColumn_ID (0);
+            SetVARC_View_ID (0);
             }
              */
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ViewColumn(Context ctx, DataRow rs, Trx trxName)
+        public X_VARC_ViewColumn(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ViewColumn(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VARC_ViewColumn(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_RC_ViewColumn(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VARC_ViewColumn(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_RC_ViewColumn()
+        static X_VARC_ViewColumn()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000237;
 
-        /** TableName=RC_ViewColumn */
-        public static String Table_Name = "RC_ViewColumn";
+        /** TableName=VARC_ViewColumn */
+        public static String Table_Name = "VARC_ViewColumn";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_RC_ViewColumn[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VARC_ViewColumn[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Field.
@@ -168,32 +168,32 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
         /** Set View Column.
-        @param RC_ViewColumn_ID View Column */
-        public void SetRC_ViewColumn_ID(int RC_ViewColumn_ID)
+        @param VARC_ViewColumn_ID View Column */
+        public void SetVARC_ViewColumn_ID(int VARC_ViewColumn_ID)
         {
-            if (RC_ViewColumn_ID < 1) throw new ArgumentException("RC_ViewColumn_ID is mandatory.");
-            Set_ValueNoCheck("RC_ViewColumn_ID", RC_ViewColumn_ID);
+            if (VARC_ViewColumn_ID < 1) throw new ArgumentException("VARC_ViewColumn_ID is mandatory.");
+            Set_ValueNoCheck("VARC_ViewColumn_ID", VARC_ViewColumn_ID);
         }
         /** Get View Column.
         @return View Column */
-        public int GetRC_ViewColumn_ID()
+        public int GetVARC_ViewColumn_ID()
         {
-            Object ii = Get_Value("RC_ViewColumn_ID");
+            Object ii = Get_Value("VARC_ViewColumn_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Role Center View.
-        @param RC_View_ID Role Center View */
-        public void SetRC_View_ID(int RC_View_ID)
+        @param VARC_View_ID Role Center View */
+        public void SetVARC_View_ID(int VARC_View_ID)
         {
-            if (RC_View_ID < 1) throw new ArgumentException("RC_View_ID is mandatory.");
-            Set_ValueNoCheck("RC_View_ID", RC_View_ID);
+            if (VARC_View_ID < 1) throw new ArgumentException("VARC_View_ID is mandatory.");
+            Set_ValueNoCheck("VARC_View_ID", VARC_View_ID);
         }
         /** Get Role Center View.
         @return Role Center View */
-        public int GetRC_View_ID()
+        public int GetVARC_View_ID()
         {
-            Object ii = Get_Value("RC_View_ID");
+            Object ii = Get_Value("VARC_View_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

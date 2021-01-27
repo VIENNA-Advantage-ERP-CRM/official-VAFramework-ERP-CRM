@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public  class TaxDeclarationCreate:ProcessEngine.SvrProcess
     {
         /**	Tax Declaration			*/
-	private int 				_C_TaxDeclaration_ID = 0;
+	private int 				_VAVAB_TaxRateComputation_ID = 0;
 	/** Delete Old Lines		*/
 	private Boolean				_DeleteOld = true;
 	
@@ -57,7 +57,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
 		}
-		_C_TaxDeclaration_ID = GetRecord_ID();
+		_VAVAB_TaxRateComputation_ID = GetRecord_ID();
 	}	//	prepare
 
 	
@@ -67,11 +67,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>info</returns>
 	protected override String DoIt() 
 	{
-		log.Info("C_TaxDeclaration_ID=" + _C_TaxDeclaration_ID);
-		_td = new MTaxDeclaration (GetCtx(), _C_TaxDeclaration_ID, Get_Trx());
+		log.Info("VAVAB_TaxRateComputation_ID=" + _VAVAB_TaxRateComputation_ID);
+		_td = new MTaxDeclaration (GetCtx(), _VAVAB_TaxRateComputation_ID, Get_Trx());
 		if (_td.Get_ID() == 0)
         {
-			throw new Exception("@NotDound@ @C_TaxDeclaration_ID@ = " + _C_TaxDeclaration_ID);
+			throw new Exception("@NotDound@ @VAVAB_TaxRateComputation_ID@ = " + _VAVAB_TaxRateComputation_ID);
         }
 		
 		if (_DeleteOld)
@@ -79,17 +79,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			//	Delete old
             SqlParameter[] Param = new SqlParameter[1];
            
-			String sql = "DELETE FROM C_TaxDeclarationLine WHERE C_TaxDeclaration_ID=@Param1";
-            Param[0] = new SqlParameter("@Param1", _C_TaxDeclaration_ID);
-			//int no = DataBase.executeUpdate(sql, _C_TaxDeclaration_ID, false, Get_Trx());
+			String sql = "DELETE FROM VAB_TaxComputationLine WHERE VAVAB_TaxRateComputation_ID=@Param1";
+            Param[0] = new SqlParameter("@Param1", _VAVAB_TaxRateComputation_ID);
+			//int no = DataBase.executeUpdate(sql, _VAVAB_TaxRateComputation_ID, false, Get_Trx());
             int no = DataBase.DB.ExecuteQuery(sql, Param, Get_Trx());
             if (no != 0)
             {
                 log.Config("Delete Line #" + no);
             }
-			sql = "DELETE FROM C_TaxDeclarationAcct WHERE C_TaxDeclaration_ID=@Param1";
-            Param[0] = new SqlParameter("@Param1", _C_TaxDeclaration_ID);
-			//no = DataBase.executeUpdate(sql, _C_TaxDeclaration_ID, false, Get_Trx());
+			sql = "DELETE FROM VAB_TaxComputationAcct WHERE VAVAB_TaxRateComputation_ID=@Param1";
+            Param[0] = new SqlParameter("@Param1", _VAVAB_TaxRateComputation_ID);
+			//no = DataBase.executeUpdate(sql, _VAVAB_TaxRateComputation_ID, false, Get_Trx());
             int no1 = DataBase.DB.ExecuteQuery(sql, Param, Get_Trx());
             if (no1 != 0)
             {
@@ -101,7 +101,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		 String  sql1 = "SELECT * FROM VAB_Invoice i "
 			+ "WHERE TRUNC(i.DateInvoiced,'DD') >=@Param1 AND TRUNC(i.DateInvoiced,'DD') <=@Param2 "
 			+ " AND Processed='Y'"
-			+ " AND NOT EXISTS (SELECT * FROM C_TaxDeclarationLine tdl "
+			+ " AND NOT EXISTS (SELECT * FROM VAB_TaxComputationLine tdl "
 				+ "WHERE i.VAB_Invoice_ID=tdl.VAB_Invoice_ID)";
 		//PreparedStatement pstmt = null;
         SqlParameter[] Param1=new SqlParameter[2];
@@ -186,7 +186,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		/** **/
 
 		/**	Acct					**/
-		String sql = "SELECT * FROM Fact_Acct WHERE VAF_TableView_ID=@Param1 AND Record_ID=@Param2";
+		String sql = "SELECT * FROM Actual_Acct_Detail WHERE VAF_TableView_ID=@Param1 AND Record_ID=@Param2";
         SqlParameter[] Param=new SqlParameter[2];
         IDataReader idr=null;
         DataTable dt=null;

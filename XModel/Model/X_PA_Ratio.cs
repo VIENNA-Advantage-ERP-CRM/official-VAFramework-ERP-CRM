@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_Ratio
+/** Generated Model for VAPA_Ratio
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_Ratio : PO
+public class X_VAPA_Ratio : PO
 {
-public X_PA_Ratio (Context ctx, int PA_Ratio_ID, Trx trxName) : base (ctx, PA_Ratio_ID, trxName)
+public X_VAPA_Ratio (Context ctx, int VAPA_Ratio_ID, Trx trxName) : base (ctx, VAPA_Ratio_ID, trxName)
 {
-/** if (PA_Ratio_ID == 0)
-{
-SetVAB_AccountBook_ID (0);
-SetName (null);
-SetPA_Ratio_ID (0);
-}
- */
-}
-public X_PA_Ratio (Ctx ctx, int PA_Ratio_ID, Trx trxName) : base (ctx, PA_Ratio_ID, trxName)
-{
-/** if (PA_Ratio_ID == 0)
+/** if (VAPA_Ratio_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
 SetName (null);
-SetPA_Ratio_ID (0);
+SetVAPA_Ratio_ID (0);
+}
+ */
+}
+public X_VAPA_Ratio (Ctx ctx, int VAPA_Ratio_ID, Trx trxName) : base (ctx, VAPA_Ratio_ID, trxName)
+{
+/** if (VAPA_Ratio_ID == 0)
+{
+SetVAB_AccountBook_ID (0);
+SetName (null);
+SetVAPA_Ratio_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetPA_Ratio_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Ratio (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Ratio (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_PA_Ratio (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Ratio (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Ratio (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_PA_Ratio (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Ratio (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Ratio (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_Ratio()
+static X_VAPA_Ratio()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065194L;
 public static int Table_ID;
  // =835;
 
-/** TableName=PA_Ratio */
-public static String Table_Name="PA_Ratio";
+/** TableName=VAPA_Ratio */
+public static String Table_Name="VAPA_Ratio";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_Ratio[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Ratio[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -188,17 +188,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Ratio.
-@param PA_Ratio_ID Performace Ratio */
-public void SetPA_Ratio_ID (int PA_Ratio_ID)
+@param VAPA_Ratio_ID Performace Ratio */
+public void SetVAPA_Ratio_ID (int VAPA_Ratio_ID)
 {
-if (PA_Ratio_ID < 1) throw new ArgumentException ("PA_Ratio_ID is mandatory.");
-Set_ValueNoCheck ("PA_Ratio_ID", PA_Ratio_ID);
+if (VAPA_Ratio_ID < 1) throw new ArgumentException ("VAPA_Ratio_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Ratio_ID", VAPA_Ratio_ID);
 }
 /** Get Ratio.
 @return Performace Ratio */
-public int GetPA_Ratio_ID() 
+public int GetVAPA_Ratio_ID() 
 {
-Object ii = Get_Value("PA_Ratio_ID");
+Object ii = Get_Value("VAPA_Ratio_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

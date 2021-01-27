@@ -30,8 +30,8 @@ namespace ViennaAdvantageServer.Process
         #region Private Variables
         string msg = "";
         string sql = "";
-        int C_ProjectTask_ID = 0;
-        int C_Project_ID = 0;
+        int VAB_ProjectJob_ID = 0;
+        int VAB_Project_ID = 0;
         int count = 0;
         #endregion
 
@@ -51,14 +51,14 @@ namespace ViennaAdvantageServer.Process
         {
             sql = "select tablename from vaf_tableview where vaf_tableview_id = " + GetTable_ID();
             string tableName = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
-            if (tableName.ToUpper() == "C_PROJECTTASK")
+            if (tableName.ToUpper() == "VAB_PROJECTJOB")
             {
-                C_ProjectTask_ID = GetRecord_ID();
+                VAB_ProjectJob_ID = GetRecord_ID();
                 GenerateAppointment();
             }
-            else if (tableName.ToUpper() == "C_PROJECT")
+            else if (tableName.ToUpper() == "VAB_PROJECT")
             {
-                C_Project_ID = GetRecord_ID();
+                VAB_Project_ID = GetRecord_ID();
                 GetAllTasks();
                 if (count > 0)
                 {
@@ -77,20 +77,20 @@ namespace ViennaAdvantageServer.Process
         /// </summary>
         private void GetAllTasks()
         {
-            sql = "select C_ProjectPhase_ID from c_projectphase where c_project_id = " + C_Project_ID + " and isactive = 'Y'";
+            sql = "select VAB_ProjectStage_ID from VAB_ProjectStage where VAB_Project_ID = " + VAB_Project_ID + " and isactive = 'Y'";
             IDataReader idr = null;
             try
             {
                 idr = DB.ExecuteReader(sql, null, Get_Trx());
                 while (idr.Read())
                 {
-                    sql = "select c_projecttask_id from c_projecttask where c_projectphase_id = " + Util.GetValueOfInt(idr[0]) + " and isactive = 'Y'";
+                    sql = "select VAB_ProjectJob_id from VAB_ProjectJob where VAB_ProjectStage_id = " + Util.GetValueOfInt(idr[0]) + " and isactive = 'Y'";
                     DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
                     if (ds != null)
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            C_ProjectTask_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["C_ProjectTask_ID"]);
+                            VAB_ProjectJob_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ProjectJob_ID"]);
                             GenerateAppointment();
                         }
                     }
@@ -116,12 +116,12 @@ namespace ViennaAdvantageServer.Process
         /// </summary>
         private void GenerateAppointment()
         {
-            if (C_ProjectTask_ID != 0)
+            if (VAB_ProjectJob_ID != 0)
             {
-                sql = "select name from VAB_Promotion where VAB_Promotion_id = (select VAB_Promotion_id from c_project where c_project_id = (select c_project_id "
-                + " from c_projectphase where c_projectphase_id = (select c_projectphase_id from c_projecttask where c_projecttask_id = " + C_ProjectTask_ID + ")))";
+                sql = "select name from VAB_Promotion where VAB_Promotion_id = (select VAB_Promotion_id from VAB_Project where VAB_Project_ID = (select VAB_Project_ID "
+                + " from VAB_ProjectStage where VAB_ProjectStage_id = (select VAB_ProjectStage_id from VAB_ProjectJob where VAB_ProjectJob_id = " + VAB_ProjectJob_ID + ")))";
                 string name = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
-                VAdvantage.Model.MProjectTask task = new VAdvantage.Model.MProjectTask(GetCtx(), C_ProjectTask_ID, Get_Trx());
+                VAdvantage.Model.MProjectTask task = new VAdvantage.Model.MProjectTask(GetCtx(), VAB_ProjectJob_ID, Get_Trx());
 
                 int AppointmentsInfo_ID = Util.GetValueOfInt(task.GetAppointmentsInfo_ID());
                 sql = "select count(*) from AppointmentsInfo where AppointmentsInfo_ID = " + AppointmentsInfo_ID;

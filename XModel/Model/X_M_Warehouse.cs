@@ -21,7 +21,7 @@ namespace VAdvantage.Model
         {
             /** if (M_Warehouse_ID == 0)
             {
-            SetC_Location_ID (0);
+            SetVAB_Address_ID (0);
             SetIsDisallowNegativeInv (false);	// N
             SetIsWMSEnabled (false);	// N
             SetM_Warehouse_ID (0);
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         {
             /** if (M_Warehouse_ID == 0)
             {
-            SetC_Location_ID (0);
+            SetVAB_Address_ID (0);
             SetIsDisallowNegativeInv (false);	// N
             SetIsWMSEnabled (false);	// N
             SetM_Warehouse_ID (0);
@@ -128,17 +128,17 @@ namespace VAdvantage.Model
             return sb.ToString();
         }
         /** Set Address.
-        @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+        @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID < 1) throw new ArgumentException("C_Location_ID is mandatory.");
-            Set_Value("C_Location_ID", C_Location_ID);
+            if (VAB_Address_ID < 1) throw new ArgumentException("VAB_Address_ID is mandatory.");
+            Set_Value("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -4507,8 +4507,8 @@ namespace VAdvantage.Model
                         // sqlValues.Append (DB.TO_DATE ((DateTime)Encrypt(i,value), p_info.getColumnDisplayType (i) == DisplayTypeConstants.Date));
                         if (p_info.GetColumnDisplayType(i) == DisplayType.Date)
                         {
-                            //If condition added to store time component for the end date in C_Period table 
-                            if (!Get_TableName().Equals("C_Period"))
+                            //If condition added to store time component for the end date in VAB_YearPeriod table 
+                            if (!Get_TableName().Equals("VAB_YearPeriod"))
                             {
                                 // value = truncDate((DateTime)value);
                                 value = Convert.ToDateTime(value);
@@ -4794,8 +4794,8 @@ namespace VAdvantage.Model
                     // sql.Append(DB.TO_DATE((DateTime)Encrypt(i,value),p_info.getColumnDisplayType(i) == DisplayTypeConstants.Date));
                     if (p_info.GetColumnDisplayType(i) == DisplayType.Date)
                     {
-                        //If condition added to store time component for the end date in C_Period table 
-                        if (!Get_TableName().Equals("C_Period"))
+                        //If condition added to store time component for the end date in VAB_YearPeriod table 
+                        if (!Get_TableName().Equals("VAB_YearPeriod"))
                         {
                             //value = truncDate((DateTime)value);
                             value = Convert.ToDateTime(value);

@@ -388,7 +388,7 @@ namespace VAdvantage.Model
             }
             if (orderClause.Length == 0)
             {
-                orderClause.Append(RModel.TABLE_ALIAS).Append(".Fact_Acct_ID");
+                orderClause.Append(RModel.TABLE_ALIAS).Append(".Actual_Acct_Detail_ID");
             }
             //get grid view columns
             RModel rm = GetRModel(ctx);
@@ -427,7 +427,7 @@ namespace VAdvantage.Model
         /// <returns>Report Model</returns>
         public RModel GetRModel(Ctx ctx)
         {
-            RModel rm = new RModel("Fact_Acct");
+            RModel rm = new RModel("Actual_Acct_Detail");
             //  Add Key (Lookups)
             List<String> keys = CreateKeyColumns();
             int max = _leadingColumns;
@@ -492,13 +492,13 @@ namespace VAdvantage.Model
             {
                 rm.AddColumn(new RColumn(ctx, "DateAcct", DisplayType.Date));
             }
-            if (!keys.Contains("C_Period_ID"))
+            if (!keys.Contains("VAB_YearPeriod_ID"))
             {
-                rm.AddColumn(new RColumn(ctx, "C_Period_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAB_YearPeriod_ID", DisplayType.TableDir));
             }
             if (displayQty)
             {
-                rm.AddColumn(new RColumn(ctx, "C_UOM_ID", DisplayType.TableDir));
+                rm.AddColumn(new RColumn(ctx, "VAB_UOM_ID", DisplayType.TableDir));
                 rm.AddColumn(new RColumn(ctx, "Qty", DisplayType.Quantity));
             }
             if (displayDocumentInfo)

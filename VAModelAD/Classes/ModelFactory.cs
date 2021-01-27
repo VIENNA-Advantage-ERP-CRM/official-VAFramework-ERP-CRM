@@ -47,14 +47,14 @@ namespace VAModelAD.Classes
         "VAF_ColumnDic", "VAdvantage.Model.M_Element",
         "AD_Registration", "VAdvantage.Model.M_Registration",
         "VAF_TreeInfo", "VAdvantage.Model.MTree_Base",
-        "R_Category", "VAdvantage.Model.MRequestCategory",
-        "GL_Category", "VAdvantage.Model.MGLCategory",
+        "VAR_Category", "VAdvantage.Model.MRequestCategory",
+        "VAGL_Group", "VAdvantage.Model.MGLCategory",
         "K_Category", "VAdvantage.Model.MKCategory",
-        "C_ValidCombination", "VAdvantage.Model.MAccount",
-        "C_Phase", "VAdvantage.Model.MProjectTypePhase",
-        "C_Task", "VAdvantage.Model.MProjectTypeTask",
+        "VAB_Acct_ValidParameter", "VAdvantage.Model.MAccount",
+        "VAB_Std_Stage", "VAdvantage.Model.MProjectTypePhase",
+        "VAB_Std_Task", "VAdvantage.Model.MProjectTypeTask",
         "K_Source", "VAdvantage.Model.X_K_Source",
-        "RC_ViewColumn","VAdvantage.Model.X_RC_ViewColumn",
+        "VARC_ViewColumn","VAdvantage.Model.X_VARC_ViewColumn",
 	//	AD_Attribute_Value, VAF_TreeInfoChild
 	    };
 

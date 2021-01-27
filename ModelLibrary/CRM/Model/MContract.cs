@@ -68,7 +68,7 @@ namespace VAdvantage.Model
 
             //to.Set_TrxName(trxName);
             //VAdvantage.Model.PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
-            //to.Set_ValueNoCheck("C_Order_ID", I_ZERO);
+            //to.Set_ValueNoCheck("VAB_Order_ID", I_ZERO);
             //to.Set_ValueNoCheck("DocumentNo", null);
             ////
             //to.SetDocStatus(DOCSTATUS_Drafted);		//	Draft
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
             ////
             //to.SetIsApproved(false);
             //to.SetIsCreditApproved(false);
-            //to.SetC_Payment_ID(0);
+            //to.SetVAB_Payment_ID(0);
             //to.SetVAB_CashJRNLLine_ID(0);
             ////	Amounts are updated  when adding lines
             //to.SetGrandTotal(Env.ZERO);
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
             //to.SetProcessed(false);
             //if (counter)
             //{
-            //    to.SetRef_Order_ID(from.GetC_Order_ID());
+            //    to.SetRef_Order_ID(from.GetVAB_Order_ID());
             //}
             //else
             //{
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
             //}
             //if (counter)
             //{
-            //    from.SetRef_Order_ID(to.GetC_Order_ID());
+            //    from.SetRef_Order_ID(to.GetVAB_Order_ID());
             //}
 
             //if (to.CopyLinesFrom(from, counter, copyASI) == 0)
@@ -129,7 +129,7 @@ namespace VAdvantage.Model
         /// 
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_Order_ID"></param>
+        /// <param name="VAB_Order_ID"></param>
         /// <param name="trxName"></param>
         public MContract(Ctx ctx, int VAB_Contract_ID, Trx trxName)
             : base(ctx, VAB_Contract_ID, trxName)
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
         //    SetVAB_Promotion_ID(project.GetVAB_Promotion_ID());
         //    SetSalesRep_ID(project.GetSalesRep_ID());
         //    //
-        //    SetC_Project_ID(project.GetC_Project_ID());
+        //    SetVAB_Project_ID(project.GetVAB_Project_ID());
         //    SetDescription(project.GetName());
         //    DateTime? ts = project.GetDateContract();
         //    if (ts != null)
@@ -168,7 +168,7 @@ namespace VAdvantage.Model
         //    //
         //    SetM_Warehouse_ID(project.GetM_Warehouse_ID());
         //    SetM_PriceList_ID(project.GetM_PriceList_ID());
-        //    SetC_PaymentTerm_ID(project.GetC_PaymentTerm_ID());
+        //    SetVAB_PaymentTerm_ID(project.GetVAB_PaymentTerm_ID());
         //    //
         //    SetIsSOTrx(IsSOTrx);
         //    if (IsSOTrx)
@@ -251,11 +251,11 @@ namespace VAdvantage.Model
             ////    //	Defaults Payment Term
             ////    int ii = 0;
             ////    if (IsSOTrx())
-            ////        ii = bp.GetC_PaymentTerm_ID();
+            ////        ii = bp.GetVAB_PaymentTerm_ID();
             ////    else
             ////        ii = bp.GetPO_PaymentTerm_ID();
             ////    if (ii != 0)
-            ////        SetC_PaymentTerm_ID(ii);
+            ////        SetVAB_PaymentTerm_ID(ii);
             ////    //	Default Price List
             ////    if (IsSOTrx())
             ////        ii = bp.GetM_PriceList_ID();
@@ -344,7 +344,7 @@ namespace VAdvantage.Model
             //if (IsReturnTrx())
             //    return;
 
-            //String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
+            //String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
             //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -484,9 +484,9 @@ namespace VAdvantage.Model
             //                SetPaymentRule(s);
             //            }
             //            //	Payment Term
-            //            ii = Util.GetValueOfInt(dr[isSOTrx ? "C_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
+            //            ii = Util.GetValueOfInt(dr[isSOTrx ? "VAB_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
             //            if (ii != 0)
-            //                SetC_PaymentTerm_ID(ii);
+            //                SetVAB_PaymentTerm_ID(ii);
             //            //	InvoiceRule
             //            s = dr["InvoiceRule"].ToString();
             //            if (s != null && s.Length != 0)
@@ -533,7 +533,7 @@ namespace VAdvantage.Model
             //if (IsReturnTrx())
             //    return;
 
-            //String sql = "SELECT p.VAF_Language,p.C_PaymentTerm_ID,"
+            //String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
             //    + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
             //    + "p.SO_Description,p.IsDiscountPrinted,"
             //    + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
@@ -643,9 +643,9 @@ namespace VAdvantage.Model
             //                SetPaymentRule(s);
             //            }
             //            //	Payment Term
-            //            ii = Util.GetValueOfInt(dr[isSOTrx ? "C_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
+            //            ii = Util.GetValueOfInt(dr[isSOTrx ? "VAB_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
             //            if (ii != 0)
-            //                SetC_PaymentTerm_ID(ii);
+            //                SetVAB_PaymentTerm_ID(ii);
             //            //	InvoiceRule
             //            s = dr["InvoiceRule"].ToString();
             //            if (s != null && s.Length != 0)
@@ -773,7 +773,7 @@ namespace VAdvantage.Model
         /*	Set Target Sales Document Type - Callout.
         * 	Sets OrderType (=DocSubTypeSO), HasCharges [ctx only]
         * 	IsDropShip, DeliveryRule, InvoiceRule, PaymentRule, IsSOTrx, DocumentNo
-        * 	If BP is changed: PaymentRule, C_PaymentTerm_ID, InvoiceRule, DeliveryRule,
+        * 	If BP is changed: PaymentRule, VAB_PaymentTerm_ID, InvoiceRule, DeliveryRule,
         * 	FreightCostRule, DeliveryViaRule
         * 	@param oldVAB_DocTypesTarget_ID old ID
         * 	@param newVAB_DocTypesTarget_ID new ID
@@ -920,7 +920,7 @@ namespace VAdvantage.Model
             //      else
             //      {
             //          int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
-            //          sql = "SELECT PaymentRule,C_PaymentTerm_ID,"            //  1..2
+            //          sql = "SELECT PaymentRule,VAB_PaymentTerm_ID,"            //  1..2
             //              + "InvoiceRule,DeliveryRule,"                       //  3..4
             //              + "FreightCostRule,DeliveryViaRule, "               //  5..6
             //              + "PaymentRulePO,PO_PaymentTerm_ID "
@@ -948,9 +948,9 @@ namespace VAdvantage.Model
             //                  //SetPaymentRule(paymentRule);
             //              }
             //              //	Payment Term
-            //              int C_PaymentTerm_ID = Util.GetValueOfInt(dr[isSOTrx ? "C_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
-            //              if (C_PaymentTerm_ID != 0)
-            //                  SetC_PaymentTerm_ID(C_PaymentTerm_ID);
+            //              int VAB_PaymentTerm_ID = Util.GetValueOfInt(dr[isSOTrx ? "VAB_PaymentTerm_ID" : "PO_PaymentTerm_ID"].ToString());
+            //              if (VAB_PaymentTerm_ID != 0)
+            //                  SetVAB_PaymentTerm_ID(VAB_PaymentTerm_ID);
             //              //	InvoiceRule
             //              String invoiceRule = dr[2].ToString();
             //              //if (invoiceRule != null && invoiceRule.Length != 0)
@@ -1091,9 +1091,9 @@ namespace VAdvantage.Model
                 //{
                 //    MOrderLine line = new MOrderLine(this);
                 //    VAdvantage.Model.PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
-                //    line.SetC_Order_ID(GetC_Order_ID());
+                //    line.SetVAB_Order_ID(GetVAB_Order_ID());
                 //    line.SetOrder(this);
-                //    line.Set_ValueNoCheck("C_OrderLine_ID", I_ZERO);	//	new
+                //    line.Set_ValueNoCheck("VAB_OrderLine_ID", I_ZERO);	//	new
                 //    //	References
                 //    if (!copyASI)
                 //    {
@@ -1101,7 +1101,7 @@ namespace VAdvantage.Model
                 //        line.SetS_ResourceAssignment_ID(0);
                 //    }
                 //    if (counter)
-                //        line.SetRef_OrderLine_ID(fromLines[i].GetC_OrderLine_ID());
+                //        line.SetRef_OrderLine_ID(fromLines[i].GetVAB_OrderLine_ID());
                 //    else
                 //        line.SetRef_OrderLine_ID(0);
                 //    //
@@ -1121,7 +1121,7 @@ namespace VAdvantage.Model
                 //    //	Cross Link
                 //    if (counter)
                 //    {
-                //        fromLines[i].SetRef_OrderLine_ID(line.GetC_OrderLine_ID());
+                //        fromLines[i].SetRef_OrderLine_ID(line.GetVAB_OrderLine_ID());
                 //        fromLines[i].Save(Get_TrxName());
                 //    }
                 //}
@@ -1196,7 +1196,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public FileInfo CreatePDF(FileInfo file)
         {
-            //ReportEngine re = ReportEngine.get(GetCtx(), ReportEngine.ORDER, GetC_Order_ID());
+            //ReportEngine re = ReportEngine.get(GetCtx(), ReportEngine.ORDER, GetVAB_Order_ID());
             //if (re == null)
             //    return null;
             //return re.getPDF(file);
@@ -1324,7 +1324,7 @@ namespace VAdvantage.Model
                 if (origOrder == null || origOrder.Get_ID() == 0)
                     return;
 
-                // SetOrig_Order_ID(origOrder.GetC_Order_ID());
+                // SetOrig_Order_ID(origOrder.GetVAB_Order_ID());
                 //	Get Details from Original Order
                 MBPartner bpartner = new MBPartner(GetCtx(), origOrder.GetVAB_BusinessPartner_ID(), null);
 
@@ -1341,8 +1341,8 @@ namespace VAdvantage.Model
 
                 SetM_PriceList_ID(origOrder.GetM_PriceList_ID());
                 //SetPaymentRule(origOrder.GetPaymentRule());
-                SetC_PaymentTerm_ID(origOrder.GetC_PaymentTerm_ID());
-                //setDeliveryRule(X_C_Order.DELIVERYRULE_Manual);
+                SetVAB_PaymentTerm_ID(origOrder.GetVAB_PaymentTerm_ID());
+                //setDeliveryRule(X_VAB_Order.DELIVERYRULE_Manual);
 
                 SetBill_Location_ID(origOrder.GetBill_Location_ID());
                 //SetInvoiceRule(origOrder.GetInvoiceRule());
@@ -1403,7 +1403,7 @@ namespace VAdvantage.Model
                     return;
                 }
                 //  SetOrig_InOut_ID(origInOut.GetM_InOut_ID());
-                // SetC_Project_ID(origInOut.GetC_Project_ID());
+                // SetVAB_Project_ID(origInOut.GetVAB_Project_ID());
                 SetVAB_Promotion_ID(origInOut.GetVAB_Promotion_ID());
                 // SetVAB_BillingCode_ID(origInOut.GetVAB_BillingCode_ID());
                 // SetVAF_OrgTrx_ID(origInOut.GetVAF_OrgTrx_ID());
@@ -1455,7 +1455,7 @@ namespace VAdvantage.Model
         //public MOrderLine[] GetLines(String whereClause, String orderClause)
         //{
         //    List<MOrderLine> list = new List<MOrderLine>();
-        //    StringBuilder sql = new StringBuilder("SELECT * FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + "");
+        //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + "");
         //    if (whereClause != null)
         //        sql.Append(whereClause);
         //    if (orderClause != null)
@@ -1538,7 +1538,7 @@ namespace VAdvantage.Model
         //public MOrderLine[] GetLines(int M_Product_ID, String whereClause, String orderClause)
         //{
         //    List<MOrderLine> list = new List<MOrderLine>();
-        //    StringBuilder sql = new StringBuilder("SELECT * FROM C_OrderLine WHERE C_Order_ID=" + GetC_Order_ID() + " AND M_Product_ID=" + M_Product_ID);
+        //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND M_Product_ID=" + M_Product_ID);
 
         //    if (whereClause != null)
         //        sql.Append(" AND ").Append(whereClause);
@@ -1617,15 +1617,15 @@ namespace VAdvantage.Model
         //}
 
         /* 	Does the Order Line belong to this Order
-         *	@param C_OrderLine_ID line
+         *	@param VAB_OrderLine_ID line
          *	@return true if part of the order
          */
-        //public bool IsOrderLine(int C_OrderLine_ID)
+        //public bool IsOrderLine(int VAB_OrderLine_ID)
         //{
         //    if (_lines == null)
         //        GetLines();
         //    for (int i = 0; i < _lines.Length; i++)
-        //        if (_lines[i].GetC_OrderLine_ID() == C_OrderLine_ID)
+        //        if (_lines[i].GetVAB_OrderLine_ID() == VAB_OrderLine_ID)
         //            return true;
         //    return false;
         //}
@@ -1640,7 +1640,7 @@ namespace VAdvantage.Model
         //        return _taxes;
         //    //
         //    List<MOrderTax> list = new List<MOrderTax>();
-        //    String sql = "SELECT * FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID();
+        //    String sql = "SELECT * FROM VAB_OrderTax WHERE VAB_Order_ID=" + GetVAB_Order_ID();
         //    DataTable dt = null;
         //    try
         //    {
@@ -1676,7 +1676,7 @@ namespace VAdvantage.Model
         //{
         //    //	TODO get invoiced which are linked on line level
         //    List<MInvoice> list = new List<MInvoice>();
-        //    String sql = "SELECT * FROM VAB_Invoice WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
+        //    String sql = "SELECT * FROM VAB_Invoice WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1708,7 +1708,7 @@ namespace VAdvantage.Model
         //{
         //    int VAB_Invoice_ID = 0;
         //    String sql = "SELECT VAB_Invoice_ID FROM VAB_Invoice "
-        //        + "WHERE C_Order_ID=" + GetC_Order_ID() + " AND DocStatus IN ('CO','CL') "
+        //        + "WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND DocStatus IN ('CO','CL') "
         //        + "ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
@@ -1739,7 +1739,7 @@ namespace VAdvantage.Model
         //{
         //    //	TODO: getShipment if linked on line
         //    List<MInOut> list = new List<MInOut>();
-        //    String sql = "SELECT * FROM M_InOut WHERE C_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
+        //    String sql = "SELECT * FROM M_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1769,7 +1769,7 @@ namespace VAdvantage.Model
         //public MOrder[] GetRMAs()
         //{
         //    List<MOrder> list = new List<MOrder>();
-        //    String sql = "SELECT * FROM C_Order WHERE Orig_Order_ID=" + GetC_Order_ID() + " ORDER BY Created DESC";
+        //    String sql = "SELECT * FROM VAB_Order WHERE Orig_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1801,14 +1801,14 @@ namespace VAdvantage.Model
         //{
         //    List<MInOutLine> list = new List<MInOutLine>();
         //    String sql = "SELECT * FROM M_InOutLine iol "
-        //        + "WHERE iol.C_OrderLine_ID IN "
-        //            + "(SELECT C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID=@C_Order_ID) "
+        //        + "WHERE iol.VAB_OrderLine_ID IN "
+        //            + "(SELECT VAB_OrderLine_ID FROM VAB_OrderLine WHERE VAB_Order_ID=@VAB_Order_ID) "
         //        + "ORDER BY M_InOutLine_ID";
         //    DataTable dt = null;
         //    try
         //    {
         //        SqlParameter[] param = new SqlParameter[1];
-        //        param[0] = new SqlParameter("@C_Order_ID", GetC_Order_ID());
+        //        param[0] = new SqlParameter("@VAB_Order_ID", GetVAB_Order_ID());
         //        IDataReader idr = DB.ExecuteReader(sql, param, Get_TrxName());
         //        dt = new DataTable();
         //        dt.Load(idr);
@@ -1886,9 +1886,9 @@ namespace VAdvantage.Model
             String set = "SET Processed='"
                 + (processed ? "Y" : "N")
                 + "' WHERE VAB_Contract_ID=" + GetVAB_Contract_ID();
-            // int noLine = DB.ExecuteQuery("UPDATE C_OrderLine " + set, null, Get_TrxName());
+            // int noLine = DB.ExecuteQuery("UPDATE VAB_OrderLine " + set, null, Get_TrxName());
             int noLine = DB.ExecuteQuery("UPDATE VAB_ContractSchedule " + set, null, Get_TrxName());
-            //  int noTax = DB.ExecuteQuery("UPDATE C_OrderTax " + set, null, Get_TrxName());
+            //  int noTax = DB.ExecuteQuery("UPDATE VAB_OrderTax " + set, null, Get_TrxName());
             //_lines = null;
             //_taxes = null;
             log.Fine(processed + " - Lines=" + noLine + ", Tax=");
@@ -1908,7 +1908,7 @@ namespace VAdvantage.Model
             }
 
             // calculate tax amount and surcharge amount 
-            if (newRecord || Is_ValueChanged("C_Tax_ID") || Is_ValueChanged("M_PriceList_ID")
+            if (newRecord || Is_ValueChanged("VAB_TaxRate_ID") || Is_ValueChanged("M_PriceList_ID")
                 || Is_ValueChanged("QtyEntered") || Is_ValueChanged("PriceActual") || Is_ValueChanged("Discount"))
             {
                 CalculateAndUpdateTaxes();
@@ -1927,7 +1927,7 @@ namespace VAdvantage.Model
             // Currency Object
             MCurrency currency = MCurrency.Get(GetCtx(), priceList.GetVAB_Currency_ID());
             //Tax Object 
-            MTax tax = new MTax(GetCtx(), GetC_Tax_ID(), Get_Trx());
+            MTax tax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_Trx());
 
             Decimal surchargeAmt = Env.ZERO;
             Decimal TaxAmt = Env.ZERO;
@@ -1981,11 +1981,11 @@ namespace VAdvantage.Model
         {
             if (Is_ValueChanged(columnName))
             {
-                //String sql = "UPDATE C_OrderLine ol"
+                //String sql = "UPDATE VAB_OrderLine ol"
                 //    + " SET " + columnName + " ="
                 //        + "(SELECT " + columnName
-                //        + " FROM C_Order o WHERE ol.C_Order_ID=o.C_Order_ID) "
-                //    + "WHERE C_Order_ID=" + GetC_Order_ID();
+                //        + " FROM VAB_Order o WHERE ol.VAB_Order_ID=o.VAB_Order_ID) "
+                //    + "WHERE VAB_Order_ID=" + GetVAB_Order_ID();
                 //int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 //log.Fine(columnName + " Lines -> #" + no);
             }
@@ -2126,12 +2126,12 @@ namespace VAdvantage.Model
             //	Mandatory Product Attribute Set Instance
             //String mandatoryType = "='Y'";	//	IN ('Y','S')
             //String sql = "SELECT COUNT(*) "
-            //    + "FROM C_OrderLine ol"
+            //    + "FROM VAB_OrderLine ol"
             //    + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
             //    + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
             //    + "WHERE pas.MandatoryType" + mandatoryType
             //    + " AND ol.M_AttributeSetInstance_ID IS NULL"
-            //    + " AND ol.C_Order_ID=" + GetC_Order_ID();
+            //    + " AND ol.VAB_Order_ID=" + GetVAB_Order_ID();
             //int no = DB.GetSQLValue(Get_TrxName(), sql);
             //if (no != 0)
             //{
@@ -2197,11 +2197,11 @@ namespace VAdvantage.Model
         //{
         //    bool retValue = false;
         //    String where = "AND IsActive='Y' AND EXISTS "
-        //        + "(SELECT * FROM M_Product p WHERE C_OrderLine.M_Product_ID=p.M_Product_ID"
+        //        + "(SELECT * FROM M_Product p WHERE VAB_OrderLine.M_Product_ID=p.M_Product_ID"
         //        + " AND	p.IsBOM='Y' AND p.IsVerified='Y' AND p.IsStocked='N')";
         //    //
-        //    String sql = "SELECT COUNT(*) FROM C_OrderLine "
-        //        + "WHERE C_Order_ID=" + GetC_Order_ID() + where;
+        //    String sql = "SELECT COUNT(*) FROM VAB_OrderLine "
+        //        + "WHERE VAB_Order_ID=" + GetVAB_Order_ID() + where;
         //    int count = DB.GetSQLValue(Get_TrxName(), sql); //Convert.ToInt32(DB.ExecuteScalar(sql, null, Get_TrxName()));
         //    while (count != 0)
         //    {
@@ -2225,7 +2225,7 @@ namespace VAdvantage.Model
         //                newLine.SetLine(++lineNo);
         //                newLine.SetM_Product_ID(bom.GetProduct()
         //                    .GetM_Product_ID());
-        //                newLine.SetC_UOM_ID(bom.GetProduct().GetC_UOM_ID());
+        //                newLine.SetVAB_UOM_ID(bom.GetProduct().GetVAB_UOM_ID());
         //                newLine.SetQty(Decimal.Multiply(line.GetQtyOrdered(), bom.GetBOMQty()));
         //                if (bom.GetDescription() != null)
         //                    newLine.SetDescription(bom.GetDescription());
@@ -2382,7 +2382,7 @@ namespace VAdvantage.Model
         //    {
         //        log.Fine("");
         //        //	Delete Taxes
-        //        DB.ExecuteQuery("DELETE FROM C_OrderTax WHERE C_Order_ID=" + GetC_Order_ID(), null, Get_TrxName());
+        //        DB.ExecuteQuery("DELETE FROM VAB_OrderTax WHERE VAB_Order_ID=" + GetVAB_Order_ID(), null, Get_TrxName());
         //        _taxes = null;
 
         //        //	Lines
@@ -2392,7 +2392,7 @@ namespace VAdvantage.Model
         //        for (int i = 0; i < lines.Length; i++)
         //        {
         //            MOrderLine line = lines[i];
-        //            int taxID = line.GetC_Tax_ID();
+        //            int taxID = line.GetVAB_TaxRate_ID();
         //            if (!taxList.Contains(taxID))
         //            {
         //                MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
@@ -2424,8 +2424,8 @@ namespace VAdvantage.Model
         //                    //
         //                    MOrderTax newOTax = new MOrderTax(GetCtx(), 0, Get_TrxName());
         //                    newOTax.SetClientOrg(this);
-        //                    newOTax.SetC_Order_ID(GetC_Order_ID());
-        //                    newOTax.SetC_Tax_ID(cTax.GetC_Tax_ID());
+        //                    newOTax.SetVAB_Order_ID(GetVAB_Order_ID());
+        //                    newOTax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());
         //                    newOTax.SetPrecision(GetPrecision());
         //                    newOTax.SetIsTaxIncluded(IsTaxIncluded());
         //                    newOTax.SetTaxBaseAmt(oTax.GetTaxBaseAmt());
@@ -2874,7 +2874,7 @@ namespace VAdvantage.Model
                 //}	//	for all shipments
 
                 //	Reverse All *RMAs*
-                Info.Append("@C_Order_ID@:");
+                Info.Append("@VAB_Order_ID@:");
                 //MOrder[] rmas = GetRMAs();
                 //for (int i = 0; i < rmas.Length; i++)
                 //{
@@ -3097,7 +3097,7 @@ namespace VAdvantage.Model
         //    //	TODO: getShipment if linked on line
         //    MInOut inout = null;
         //    String sql = "SELECT M_InOut_ID " +
-        //    "FROM M_InOut WHERE C_Order_ID=" + GetC_Order_ID()
+        //    "FROM M_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID()
         //   + " AND M_Warehouse_ID=" + M_Warehouse_ID
         //   + " AND VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID
         //   + " AND VAB_BPart_Location_ID= " + VAB_BPart_Location_ID

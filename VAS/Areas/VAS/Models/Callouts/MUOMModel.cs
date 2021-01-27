@@ -20,10 +20,10 @@ namespace VIS.Models
             string[] paramValue = fields.ToString().Split(',');
 
             //Assign parameter value
-            int C_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value 
 
-            return MUOM.GetPrecision(ctx, C_UOM_To_ID);          
+            return MUOM.GetPrecision(ctx, VAB_UOM_To_ID);          
         }
         
     }

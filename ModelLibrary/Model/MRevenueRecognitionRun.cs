@@ -7,11 +7,11 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MRevenueRecognitionRun : X_C_RevenueRecognition_Run
+    public class MRevenueRecognitionRun : X_VAB_Rev_RecognitionRun
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MRevenueRecognitionRun).FullName);
-        public MRevenueRecognitionRun(Ctx ctx, int C_RevenueRecognition_Run_ID, Trx trxName)
-            : base(ctx, C_RevenueRecognition_Run_ID, trxName)
+        public MRevenueRecognitionRun(Ctx ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName)
+            : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
         {
 
         }
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         public static MRevenueRecognitionRun[] GetRecognitionRuns(MRevenueRecognition revenueRecognition, DateTime? recognitionDate, int _orgId, bool reverse)
         {
             List<MRevenueRecognitionRun> list = new List<MRevenueRecognitionRun>();
-            string sql = "Select  rn.* from C_RevenueRecognition_Run rn " +
+            string sql = "Select  rn.* from VAB_Rev_RecognitionRun rn " +
                         " JOIN c_revenuerecognition_plan pl ON pl.c_revenuerecognition_plan_id = rn.c_revenuerecognition_plan_id " +
                         " WHERE pl.c_revenuerecognition_id =" + revenueRecognition.GetC_RevenueRecognition_ID();
             if (!reverse)
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
             {
                 sql += " AND pl.VAF_Org_ID=" + _orgId;
             }
-            sql += " And NVL(GL_Journal_ID,0) <= 0 ORDER BY rn.RecognitionDate, pl.VAB_Currency_id, pl.VAB_AccountBook_id";
+            sql += " And NVL(VAGL_JRNL_ID,0) <= 0 ORDER BY rn.RecognitionDate, pl.VAB_Currency_id, pl.VAB_AccountBook_id";
 
             DataTable dt = null;
             IDataReader idr = null;

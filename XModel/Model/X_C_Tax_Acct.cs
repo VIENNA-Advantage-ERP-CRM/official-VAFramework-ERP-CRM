@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_Tax_Acct
+/** Generated Model for VAB_Tax_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_Tax_Acct : PO
+public class X_VAB_Tax_Acct : PO
 {
-public X_C_Tax_Acct (Context ctx, int C_Tax_Acct_ID, Trx trxName) : base (ctx, C_Tax_Acct_ID, trxName)
+public X_VAB_Tax_Acct (Context ctx, int VAB_Tax_Acct_ID, Trx trxName) : base (ctx, VAB_Tax_Acct_ID, trxName)
 {
-/** if (C_Tax_Acct_ID == 0)
+/** if (VAB_Tax_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetT_Credit_Acct (0);
 SetT_Due_Acct (0);
 SetT_Expense_Acct (0);
@@ -30,12 +30,12 @@ SetT_Receivables_Acct (0);
 }
  */
 }
-public X_C_Tax_Acct (Ctx ctx, int C_Tax_Acct_ID, Trx trxName) : base (ctx, C_Tax_Acct_ID, trxName)
+public X_VAB_Tax_Acct (Ctx ctx, int VAB_Tax_Acct_ID, Trx trxName) : base (ctx, VAB_Tax_Acct_ID, trxName)
 {
-/** if (C_Tax_Acct_ID == 0)
+/** if (VAB_Tax_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetC_Tax_ID (0);
+SetVAB_TaxRate_ID (0);
 SetT_Credit_Acct (0);
 SetT_Due_Acct (0);
 SetT_Expense_Acct (0);
@@ -49,7 +49,7 @@ SetT_Receivables_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Tax_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Tax_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_Tax_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Tax_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Tax_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_Tax_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_C_Tax_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Tax_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_Tax_Acct()
+static X_VAB_Tax_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389058956L;
 public static int Table_ID;
  // =399;
 
-/** TableName=C_Tax_Acct */
-public static String Table_Name="C_Tax_Acct";
+/** TableName=VAB_Tax_Acct */
+public static String Table_Name="VAB_Tax_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_Tax_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Tax_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -144,17 +144,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Tax.
-@param C_Tax_ID Tax identifier */
-public void SetC_Tax_ID (int C_Tax_ID)
+@param VAB_TaxRate_ID Tax identifier */
+public void SetVAB_TaxRate_ID (int VAB_TaxRate_ID)
 {
-if (C_Tax_ID < 1) throw new ArgumentException ("C_Tax_ID is mandatory.");
-Set_ValueNoCheck ("C_Tax_ID", C_Tax_ID);
+if (VAB_TaxRate_ID < 1) throw new ArgumentException ("VAB_TaxRate_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRate_ID", VAB_TaxRate_ID);
 }
 /** Get Tax.
 @return Tax identifier */
-public int GetC_Tax_ID() 
+public int GetVAB_TaxRate_ID() 
 {
-Object ii = Get_Value("C_Tax_ID");
+Object ii = Get_Value("VAB_TaxRate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

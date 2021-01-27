@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for PA_Measure
+/** Generated Model for VAPA_Evaluate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_PA_Measure : PO
+public class X_VAPA_Evaluate : PO
 {
-public X_PA_Measure (Context ctx, int PA_Measure_ID, Trx trxName) : base (ctx, PA_Measure_ID, trxName)
+public X_VAPA_Evaluate (Context ctx, int VAPA_Evaluate_ID, Trx trxName) : base (ctx, VAPA_Evaluate_ID, trxName)
 {
-/** if (PA_Measure_ID == 0)
-{
-SetMeasureDataType (null);	// T
-SetMeasureType (null);	// M
-SetName (null);
-SetPA_Measure_ID (0);
-}
- */
-}
-public X_PA_Measure (Ctx ctx, int PA_Measure_ID, Trx trxName) : base (ctx, PA_Measure_ID, trxName)
-{
-/** if (PA_Measure_ID == 0)
+/** if (VAPA_Evaluate_ID == 0)
 {
 SetMeasureDataType (null);	// T
 SetMeasureType (null);	// M
 SetName (null);
-SetPA_Measure_ID (0);
+SetVAPA_Evaluate_ID (0);
+}
+ */
+}
+public X_VAPA_Evaluate (Ctx ctx, int VAPA_Evaluate_ID, Trx trxName) : base (ctx, VAPA_Evaluate_ID, trxName)
+{
+/** if (VAPA_Evaluate_ID == 0)
+{
+SetMeasureDataType (null);	// T
+SetMeasureType (null);	// M
+SetName (null);
+SetVAPA_Evaluate_ID (0);
 }
  */
 }
@@ -43,7 +43,7 @@ SetPA_Measure_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Measure (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Evaluate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_PA_Measure (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Measure (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAPA_Evaluate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_PA_Measure (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_PA_Measure (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAPA_Evaluate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_PA_Measure()
+static X_VAPA_Evaluate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389065131L;
 public static int Table_ID;
  // =441;
 
-/** TableName=PA_Measure */
-public static String Table_Name="PA_Measure";
+/** TableName=VAPA_Evaluate */
+public static String Table_Name="VAPA_Evaluate";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,22 +113,22 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_PA_Measure[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAPA_Evaluate[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Project Type.
-@param C_ProjectType_ID Type of the project */
-public void SetC_ProjectType_ID (int C_ProjectType_ID)
+@param VAB_ProjectType_ID Type of the project */
+public void SetVAB_ProjectType_ID (int VAB_ProjectType_ID)
 {
-if (C_ProjectType_ID <= 0) Set_Value ("C_ProjectType_ID", null);
+if (VAB_ProjectType_ID <= 0) Set_Value ("VAB_ProjectType_ID", null);
 else
-Set_Value ("C_ProjectType_ID", C_ProjectType_ID);
+Set_Value ("VAB_ProjectType_ID", VAB_ProjectType_ID);
 }
 /** Get Project Type.
 @return Type of the project */
-public int GetC_ProjectType_ID() 
+public int GetVAB_ProjectType_ID() 
 {
-Object ii = Get_Value("C_ProjectType_ID");
+Object ii = Get_Value("VAB_ProjectType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -300,81 +300,81 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Benchmark.
-@param PA_Benchmark_ID Performance Benchmark */
-public void SetPA_Benchmark_ID (int PA_Benchmark_ID)
+@param VAPA_Std_BM_ID Performance Benchmark */
+public void SetVAPA_Std_BM_ID (int VAPA_Std_BM_ID)
 {
-if (PA_Benchmark_ID <= 0) Set_Value ("PA_Benchmark_ID", null);
+if (VAPA_Std_BM_ID <= 0) Set_Value ("VAPA_Std_BM_ID", null);
 else
-Set_Value ("PA_Benchmark_ID", PA_Benchmark_ID);
+Set_Value ("VAPA_Std_BM_ID", VAPA_Std_BM_ID);
 }
 /** Get Benchmark.
 @return Performance Benchmark */
-public int GetPA_Benchmark_ID() 
+public int GetVAPA_Std_BM_ID() 
 {
-Object ii = Get_Value("PA_Benchmark_ID");
+Object ii = Get_Value("VAPA_Std_BM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Reporting Hierarchy.
-@param PA_Hierarchy_ID Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
-public void SetPA_Hierarchy_ID (int PA_Hierarchy_ID)
+@param VAPA_FinancialReportingOrder_ID Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
+public void SetVAPA_FinancialReportingOrder_ID (int VAPA_FinancialReportingOrder_ID)
 {
-if (PA_Hierarchy_ID <= 0) Set_Value ("PA_Hierarchy_ID", null);
+if (VAPA_FinancialReportingOrder_ID <= 0) Set_Value ("VAPA_FinancialReportingOrder_ID", null);
 else
-Set_Value ("PA_Hierarchy_ID", PA_Hierarchy_ID);
+Set_Value ("VAPA_FinancialReportingOrder_ID", VAPA_FinancialReportingOrder_ID);
 }
 /** Get Reporting Hierarchy.
 @return Optional Reporting Hierarchy - If not selected the default hierarchy trees are used. */
-public int GetPA_Hierarchy_ID() 
+public int GetVAPA_FinancialReportingOrder_ID() 
 {
-Object ii = Get_Value("PA_Hierarchy_ID");
+Object ii = Get_Value("VAPA_FinancialReportingOrder_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Measure Calculation.
-@param PA_MeasureCalc_ID Calculation method for measuring performance */
-public void SetPA_MeasureCalc_ID (int PA_MeasureCalc_ID)
+@param VAPA_EvaluateCalc_ID Calculation method for measuring performance */
+public void SetVAPA_EvaluateCalc_ID (int VAPA_EvaluateCalc_ID)
 {
-if (PA_MeasureCalc_ID <= 0) Set_Value ("PA_MeasureCalc_ID", null);
+if (VAPA_EvaluateCalc_ID <= 0) Set_Value ("VAPA_EvaluateCalc_ID", null);
 else
-Set_Value ("PA_MeasureCalc_ID", PA_MeasureCalc_ID);
+Set_Value ("VAPA_EvaluateCalc_ID", VAPA_EvaluateCalc_ID);
 }
 /** Get Measure Calculation.
 @return Calculation method for measuring performance */
-public int GetPA_MeasureCalc_ID() 
+public int GetVAPA_EvaluateCalc_ID() 
 {
-Object ii = Get_Value("PA_MeasureCalc_ID");
+Object ii = Get_Value("VAPA_EvaluateCalc_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Measure.
-@param PA_Measure_ID Concrete Performance Measurement */
-public void SetPA_Measure_ID (int PA_Measure_ID)
+@param VAPA_Evaluate_ID Concrete Performance Measurement */
+public void SetVAPA_Evaluate_ID (int VAPA_Evaluate_ID)
 {
-if (PA_Measure_ID < 1) throw new ArgumentException ("PA_Measure_ID is mandatory.");
-Set_ValueNoCheck ("PA_Measure_ID", PA_Measure_ID);
+if (VAPA_Evaluate_ID < 1) throw new ArgumentException ("VAPA_Evaluate_ID is mandatory.");
+Set_ValueNoCheck ("VAPA_Evaluate_ID", VAPA_Evaluate_ID);
 }
 /** Get Measure.
 @return Concrete Performance Measurement */
-public int GetPA_Measure_ID() 
+public int GetVAPA_Evaluate_ID() 
 {
-Object ii = Get_Value("PA_Measure_ID");
+Object ii = Get_Value("VAPA_Evaluate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Ratio.
-@param PA_Ratio_ID Performace Ratio */
-public void SetPA_Ratio_ID (int PA_Ratio_ID)
+@param VAPA_Ratio_ID Performace Ratio */
+public void SetVAPA_Ratio_ID (int VAPA_Ratio_ID)
 {
-if (PA_Ratio_ID <= 0) Set_Value ("PA_Ratio_ID", null);
+if (VAPA_Ratio_ID <= 0) Set_Value ("VAPA_Ratio_ID", null);
 else
-Set_Value ("PA_Ratio_ID", PA_Ratio_ID);
+Set_Value ("VAPA_Ratio_ID", VAPA_Ratio_ID);
 }
 /** Get Ratio.
 @return Performace Ratio */
-public int GetPA_Ratio_ID() 
+public int GetVAPA_Ratio_ID() 
 {
-Object ii = Get_Value("PA_Ratio_ID");
+Object ii = Get_Value("VAPA_Ratio_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

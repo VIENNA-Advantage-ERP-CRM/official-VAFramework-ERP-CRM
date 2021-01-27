@@ -241,8 +241,8 @@
             $self.vSearchBPartner = new VIS.Controls.VTextBoxButton("VAB_BusinessPartner_ID", true, false, true, VIS.DisplayType.Search, value, 0);
 
             // var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search);
-            var orderShipmentvalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "C_Order_ID", 0, false, "DocStatus='CO'");
-            $self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("C_Order_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue, 0);
+            var orderShipmentvalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "VAB_Order_ID", 0, false, "DocStatus='CO'");
+            $self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("VAB_Order_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue, 0);
             //var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3521, VIS.DisplayType.Search);
             //$self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("M_InOut_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue);
 
@@ -281,7 +281,7 @@
                     }
                 });
 
-                $self.arrListColumns.push({ field: "C_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "C_UOM_ID"), sortable: true, size: '150px', hidden: true });
+                $self.arrListColumns.push({ field: "VAB_Order_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_UOM_ID"), sortable: true, size: '150px', hidden: true });
             }
 
             w2utils.encodeTags(data);
@@ -314,7 +314,7 @@
                 cBPartnerID = " AND ic.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             }
             if (ordershipment_id != null) {
-                ordShipmentid = " AND C_Order_ID=" + ordershipment_id;
+                ordShipmentid = " AND VAB_Order_ID=" + ordershipment_id;
             }
             // set busy indegator
             $($self.$root[0]).addClass("vis-apanel-busyVInOutGenRoot");
@@ -337,7 +337,7 @@
                             var count = 1;
                             for (var i = 0; i < ress.length; i++) {
                                 var line = {};
-                                line['C_Order_ID'] = ress[i].c_order_id,
+                                line['VAB_Order_ID'] = ress[i].VAB_Order_id,
                                     line['VAF_Org_ID'] = ress[i].ord,
                                     line['VAB_DocTypes_ID'] = ress[i].doctype,
                                     line['DocumentNo'] = ress[i].documentno,
@@ -385,7 +385,7 @@
         //    var VAF_Client_ID = VIS.Env.getCtx().getVAF_Client_ID();
         //    //  Create SQL
         //    var sql = (
-        //        "SELECT C_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
+        //        "SELECT VAB_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
         //        + "FROM VAB_Invoice_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
         //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
         //        + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
@@ -402,7 +402,7 @@
         //    }
         //    if (ordershipment_id != null)
         //    {
-        //        sql = sql.concat(" AND C_Order_ID=").concat(ordershipment_id);
+        //        sql = sql.concat(" AND VAB_Order_ID=").concat(ordershipment_id);
         //    }
         //    sql = sql.concat(" ORDER BY o.Name,bp.Name,DateOrdered");
 
@@ -411,7 +411,7 @@
         //        var count = 1;
         //        while (dr.read()) {
         //            var line = {};
-        //            line['C_Order_ID'] = dr.getInt(0);
+        //            line['VAB_Order_ID'] = dr.getInt(0);
         //            line['VAF_Org_ID'] = dr.getString(1);
         //            line['VAB_DocTypes_ID'] = dr.getString(2);
         //            line['DocumentNo'] = dr.getString(3);
@@ -446,7 +446,7 @@
             var splitValue = selectedItems.toString().split(',');
             //Changes done for invoice generation when multiple users generate the invoices at the same time. 02-May-18
             for (var i = 0; i < splitValue.length; i++) {
-                results[i] = ($self.dGrid.get(splitValue[i])).C_Order_ID;
+                results[i] = ($self.dGrid.get(splitValue[i])).VAB_Order_ID;
             }
 
             if (results.length == 0) {
@@ -454,7 +454,7 @@
             }
 
             //	Query String
-            //var keyColumn = "C_Order_ID";
+            //var keyColumn = "VAB_Order_ID";
             var sb = "";
             //var sb = keyColumn;
             //if (results.length > 1) {

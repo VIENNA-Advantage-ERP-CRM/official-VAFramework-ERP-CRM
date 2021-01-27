@@ -171,50 +171,50 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Address.
-@param C_Location_ID Location or Address */
-public void SetC_Location_ID (int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+public void SetVAB_Address_ID (int VAB_Address_ID)
 {
-if (C_Location_ID <= 0) Set_Value ("C_Location_ID", null);
+if (VAB_Address_ID <= 0) Set_Value ("VAB_Address_ID", null);
 else
-Set_Value ("C_Location_ID", C_Location_ID);
+Set_Value ("VAB_Address_ID", VAB_Address_ID);
 }
 /** Get Address.
 @return Location or Address */
-public int GetC_Location_ID() 
+public int GetVAB_Address_ID() 
 {
-Object ii = Get_Value("C_Location_ID");
+Object ii = Get_Value("VAB_Address_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment.
-@param C_Payment_ID Payment identifier */
-public void SetC_Payment_ID (int C_Payment_ID)
+@param VAB_Payment_ID Payment identifier */
+public void SetVAB_Payment_ID (int VAB_Payment_ID)
 {
-if (C_Payment_ID <= 0) Set_Value ("C_Payment_ID", null);
+if (VAB_Payment_ID <= 0) Set_Value ("VAB_Payment_ID", null);
 else
-Set_Value ("C_Payment_ID", C_Payment_ID);
+Set_Value ("VAB_Payment_ID", VAB_Payment_ID);
 }
 /** Get Payment.
 @return Payment identifier */
-public int GetC_Payment_ID() 
+public int GetVAB_Payment_ID() 
 {
-Object ii = Get_Value("C_Payment_ID");
+Object ii = Get_Value("VAB_Payment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set UOM.
-@param C_UOM_ID Unit of Measure */
-public void SetC_UOM_ID (int C_UOM_ID)
+@param VAB_UOM_ID Unit of Measure */
+public void SetVAB_UOM_ID (int VAB_UOM_ID)
 {
-if (C_UOM_ID <= 0) Set_Value ("C_UOM_ID", null);
+if (VAB_UOM_ID <= 0) Set_Value ("VAB_UOM_ID", null);
 else
-Set_Value ("C_UOM_ID", C_UOM_ID);
+Set_Value ("VAB_UOM_ID", VAB_UOM_ID);
 }
 /** Get UOM.
 @return Unit of Measure */
-public int GetC_UOM_ID() 
+public int GetVAB_UOM_ID() 
 {
-Object ii = Get_Value("C_UOM_ID");
+Object ii = Get_Value("VAB_UOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

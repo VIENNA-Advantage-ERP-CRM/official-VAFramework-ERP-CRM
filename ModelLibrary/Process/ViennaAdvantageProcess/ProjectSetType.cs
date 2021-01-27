@@ -29,9 +29,9 @@ namespace ViennaAdvantage.Process
     public class ProjectSetType:VAdvantage.ProcessEngine.SvrProcess
     {
         /**	Project directly from Project	*/
-        private int				_C_Project_ID = 0;
+        private int				_VAB_Project_ID = 0;
         /** Project Type Parameter			*/
-        private int				_C_ProjectType_ID = 0;
+        private int				_VAB_ProjectType_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -46,10 +46,10 @@ namespace ViennaAdvantage.Process
                 {
                     continue;
                 }
-                else if (name.Equals("C_ProjectType_ID"))
+                else if (name.Equals("VAB_ProjectType_ID"))
                 {
-                    //_C_ProjectType_ID = ((Decimal)para[i].GetParameter()).intValue();
-                    _C_ProjectType_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
+                    //_VAB_ProjectType_ID = ((Decimal)para[i].GetParameter()).intValue();
+                    _VAB_ProjectType_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else
                 {
@@ -64,24 +64,24 @@ namespace ViennaAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            _C_Project_ID = GetRecord_ID();
-            log.Info("doIt - C_Project_ID=" + _C_Project_ID + ", C_ProjectType_ID=" + _C_ProjectType_ID);
+            _VAB_Project_ID = GetRecord_ID();
+            log.Info("doIt - VAB_Project_ID=" + _VAB_Project_ID + ", VAB_ProjectType_ID=" + _VAB_ProjectType_ID);
             //
-            MProject project = new MProject (GetCtx(), _C_Project_ID, Get_Trx());
-            if (project.GetC_Project_ID() == 0 || project.GetC_Project_ID() != _C_Project_ID)
+            MProject project = new MProject (GetCtx(), _VAB_Project_ID, Get_Trx());
+            if (project.GetVAB_Project_ID() == 0 || project.GetVAB_Project_ID() != _VAB_Project_ID)
             {
-                throw new ArgumentException("Project not found C_Project_ID=" + _C_Project_ID);
+                throw new ArgumentException("Project not found VAB_Project_ID=" + _VAB_Project_ID);
             }
 
-            if (project.GetC_ProjectType_ID_Int() > 0)
+            if (project.GetVAB_ProjectType_ID_Int() > 0)
             {
-                throw new ArgumentException("Project already has Type (Cannot overwrite) " + project.GetC_ProjectType_ID());
+                throw new ArgumentException("Project already has Type (Cannot overwrite) " + project.GetVAB_ProjectType_ID());
             }
             //
-            MProjectType type = new MProjectType (GetCtx(), _C_ProjectType_ID, Get_Trx());
-            if (type.GetC_ProjectType_ID() == 0 || type.GetC_ProjectType_ID() != _C_ProjectType_ID)
+            MProjectType type = new MProjectType (GetCtx(), _VAB_ProjectType_ID, Get_Trx());
+            if (type.GetVAB_ProjectType_ID() == 0 || type.GetVAB_ProjectType_ID() != _VAB_ProjectType_ID)
             {
-                throw new ArgumentException("Project Type not found C_ProjectType_ID=" + _C_ProjectType_ID);
+                throw new ArgumentException("Project Type not found VAB_ProjectType_ID=" + _VAB_ProjectType_ID);
             }
             //	Set & Copy if Service
             project.SetProjectType(type);

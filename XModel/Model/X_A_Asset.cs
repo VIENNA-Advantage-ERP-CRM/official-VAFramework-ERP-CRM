@@ -265,34 +265,34 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Address.
-        @param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+        @param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }
         /** Get Address.
         @return Location or Address */
-        public int GetC_Location_ID()
+        public int GetVAB_Address_ID()
         {
-            Object ii = Get_Value("C_Location_ID");
+            Object ii = Get_Value("VAB_Address_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Project.
-        @param C_Project_ID Financial Project */
-        public void SetC_Project_ID(int C_Project_ID)
+        @param VAB_Project_ID Financial Project */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }
         /** Get Project.
         @return Financial Project */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            Object ii = Get_Value("C_Project_ID");
+            Object ii = Get_Value("VAB_Project_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -863,25 +863,25 @@ namespace VAdvantage.Model
         }
         //End
 
-        /** Set Period. @param C_Period_ID Period of the Calendar */
-        public void SetC_Period_ID(int C_Period_ID)
+        /** Set Period. @param VAB_YearPeriod_ID Period of the Calendar */
+        public void SetVAB_YearPeriod_ID(int VAB_YearPeriod_ID)
         {
-            if (C_Period_ID <= 0) Set_Value("C_Period_ID", null);
+            if (VAB_YearPeriod_ID <= 0) Set_Value("VAB_YearPeriod_ID", null);
             else
-                Set_Value("C_Period_ID", C_Period_ID);
+                Set_Value("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
         }
         /** Get Period.@return Period of the Calendar */
-        public int GetC_Period_ID() { Object ii = Get_Value("C_Period_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_YearPeriod_ID() { Object ii = Get_Value("VAB_YearPeriod_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** Set Year.@param C_Year_ID Calendar Year */
-        public void SetC_Year_ID(int C_Year_ID)
+        /** Set Year.@param VAB_Year_ID Calendar Year */
+        public void SetVAB_Year_ID(int VAB_Year_ID)
         {
-            if (C_Year_ID <= 0) Set_Value("C_Year_ID", null);
+            if (VAB_Year_ID <= 0) Set_Value("VAB_Year_ID", null);
             else
-                Set_Value("C_Year_ID", C_Year_ID);
+                Set_Value("VAB_Year_ID", VAB_Year_ID);
         }
         /** Get Year.@return Calendar Year */
-        public int GetC_Year_ID() { Object ii = Get_Value("C_Year_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_Year_ID() { Object ii = Get_Value("VAB_Year_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         ////////// Neha 9/March/2017
 

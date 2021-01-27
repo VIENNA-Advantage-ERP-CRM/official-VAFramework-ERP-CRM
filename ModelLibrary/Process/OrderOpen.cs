@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class OrderOpen : ProcessEngine.SvrProcess
     {
         //The Order				
-        private int _C_Order_ID = 0;
+        private int _VAB_Order_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -44,9 +44,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    _C_Order_ID = para[i].GetParameterAsInt();
+                    _VAB_Order_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -61,13 +61,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message</returns>
         protected override String DoIt()
         {
-            log.Info("Open C_Order_ID=" + _C_Order_ID);
-            if (_C_Order_ID == 0)
+            log.Info("Open VAB_Order_ID=" + _VAB_Order_ID);
+            if (_VAB_Order_ID == 0)
             {
-                throw new Exception("C_Order_ID == 0");
+                throw new Exception("VAB_Order_ID == 0");
             }
             //
-            MOrder order = new MOrder(GetCtx(), _C_Order_ID, Get_TrxName());
+            MOrder order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
             if (MOrder.DOCSTATUS_Closed.Equals(order.GetDocStatus()))
             {
                 order.SetDocStatus(MOrder.DOCSTATUS_Completed);

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MGoalRestriction
  * Purpose        : Performance Goal Restriction
- * Class Used     : X_PA_GoalRestriction
+ * Class Used     : X_VAPA_TargetRestriction
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -17,17 +17,17 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGoalRestriction : X_PA_GoalRestriction
+    public class MGoalRestriction : X_VAPA_TargetRestriction
     {
         /**
 	 * 	Standard Constructor
 	 *	@param ctx context
-	 *	@param PA_GoalRestriction_ID id
+	 *	@param VAPA_TargetRestriction_ID id
 	 *	@param trxName trx
 	 */
-        public MGoalRestriction(Ctx ctx, int PA_GoalRestriction_ID,
+        public MGoalRestriction(Ctx ctx, int VAPA_TargetRestriction_ID,
             Trx trxName) :
-            base(ctx, PA_GoalRestriction_ID, trxName)
+            base(ctx, VAPA_TargetRestriction_ID, trxName)
         {
             // super();
         }	//	MGoalRestriction

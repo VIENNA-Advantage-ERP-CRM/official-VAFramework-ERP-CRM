@@ -86,18 +86,18 @@ if (ii == null) return 0;
 return (int)ii;
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_Value ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_Value ("VAB_Order_ID", null);
 else
-Set_Value ("C_Order_ID", C_Order_ID);
+Set_Value ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-int? ii = (int?)Get_Value("C_Order_ID");
+int? ii = (int?)Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return (int)ii;
 }

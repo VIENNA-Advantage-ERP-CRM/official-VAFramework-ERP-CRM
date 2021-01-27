@@ -31,7 +31,7 @@ namespace ViennaAdvantageServer.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_MasterTargetList_ID"))
+                else if (name.Equals("VAB_MasterTargetList_ID"))
                 {
                     Campaign_id = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
@@ -49,25 +49,25 @@ namespace ViennaAdvantageServer.Process
 
         protected override String DoIt()
         {
-            string sql = "Select vaf_tableview_id from vaf_tableview where tablename='C_Lead'";
+            string sql = "Select vaf_tableview_id from vaf_tableview where tablename='VAB_Lead'";
             int leadTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             sql = "Select vaf_tableview_id from vaf_tableview where tablename='VAB_BusinessPartner'";
             int BPartnerTable_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
 
             VAdvantage.Model.X_C_TargetList TList = new VAdvantage.Model.X_C_TargetList(GetCtx(), 0, null);
 
-            if (Table_id == leadTable_ID)// C_Lead
+            if (Table_id == leadTable_ID)// VAB_Lead
             {
-                VAdvantage.Model.X_C_Lead lead = new VAdvantage.Model.X_C_Lead(GetCtx(), Record_ID, null);
+                VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), Record_ID, null);
 
-                TList.Set_ValueNoCheck("C_MasterTargetList_ID", Campaign_id);
-                // TList.SetC_MasterTargetList_ID(Campaign_id);
-                TList.SetC_Lead_ID(Record_ID);
+                TList.Set_ValueNoCheck("VAB_MasterTargetList_ID", Campaign_id);
+                // TList.SetVAB_MasterTargetList_ID(Campaign_id);
+                TList.SetVAB_Lead_ID(Record_ID);
                 TList.SetAddress1(lead.GetAddress1());
                 TList.SetAddress2(lead.GetAddress2());
                 TList.SetVAB_City_ID(lead.GetVAB_City_ID());
                 TList.SetCity(lead.GetCity());
-                TList.SetC_Region_ID(lead.GetC_Region_ID());
+                TList.SetVAB_RegionState_ID(lead.GetVAB_RegionState_ID());
                 TList.SetRegionName(lead.GetRegionName());
                 TList.SetVAB_Country_ID(lead.GetVAB_Country_ID());
                 TList.SetPostal(lead.GetPostal());
@@ -90,12 +90,12 @@ namespace ViennaAdvantageServer.Process
                 string P = Util.GetValueOfString(DB.ExecuteScalar(Query));
                 if (P == "Y")
                 {
-                    // TList.SetC_MasterTargetList_ID(Campaign_id);
-                    TList.Set_ValueNoCheck("C_MasterTargetList_ID", Campaign_id);
+                    // TList.SetVAB_MasterTargetList_ID(Campaign_id);
+                    TList.Set_ValueNoCheck("VAB_MasterTargetList_ID", Campaign_id);
                     TList.SetRef_BPartner_ID(Record_ID);
-                    sql = "Select C_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id=" + Record_ID;
+                    sql = "Select VAB_Address_id from VAB_BPart_Location where VAB_BusinessPartner_id=" + Record_ID;
                     object locID = DB.ExecuteScalar(sql);
-                    TList.SetC_Location_ID(Util.GetValueOfInt(locID));
+                    TList.SetVAB_Address_ID(Util.GetValueOfInt(locID));
                 }
                 else
                 {
@@ -103,12 +103,12 @@ namespace ViennaAdvantageServer.Process
                     P = Util.GetValueOfString(DB.ExecuteScalar(Query));
                     if (P == "Y")
                     {
-                        //TList.SetC_MasterTargetList_ID(Campaign_id);
-                        TList.Set_ValueNoCheck("C_MasterTargetList_ID", Campaign_id);
+                        //TList.SetVAB_MasterTargetList_ID(Campaign_id);
+                        TList.Set_ValueNoCheck("VAB_MasterTargetList_ID", Campaign_id);
                         TList.SetVAB_BusinessPartner_ID(Record_ID);
-                        sql = "Select C_Location_id from VAB_BPart_Location where VAB_BusinessPartner_id=" + Record_ID;
+                        sql = "Select VAB_Address_id from VAB_BPart_Location where VAB_BusinessPartner_id=" + Record_ID;
                         object locID = DB.ExecuteScalar(sql);
-                        TList.SetC_Location_ID(Util.GetValueOfInt(locID));
+                        TList.SetVAB_Address_ID(Util.GetValueOfInt(locID));
                     }
                     else
                         return Msg.GetMsg(GetCtx(), "TargetListNotCreate");

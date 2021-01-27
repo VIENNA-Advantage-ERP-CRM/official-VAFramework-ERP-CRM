@@ -66,7 +66,7 @@ namespace VAdvantage.Model
 
             // check Unique constraints basedon Org + Order + cost element + landed cost distribution
             String sql = "SELECT COUNT(VAB_ExpectedCost_ID) FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND VAF_Org_ID = " + GetVAF_Org_ID() +
-                @" AND C_Order_ID = " + GetC_Order_ID() + @" AND M_CostElement_ID = " + GetM_CostElement_ID() +
+                @" AND VAB_Order_ID = " + GetVAB_Order_ID() + @" AND M_CostElement_ID = " + GetM_CostElement_ID() +
                 @" AND LandedCostDistribution = '" + GetLandedCostDistribution() + "'";
             if (!newRecord)
             {
@@ -87,12 +87,12 @@ namespace VAdvantage.Model
         /// Get Expected Landed Cost Lines
         /// </summary>
         /// <returns>lines</returns>
-        public static MExpectedCost[] GetLines(Ctx ctx, int C_Order_ID, Trx trxName)
+        public static MExpectedCost[] GetLines(Ctx ctx, int VAB_Order_ID, Trx trxName)
         {
             //	Lines					
             MExpectedCost[] _lines = null;
             List<MExpectedCost> list = new List<MExpectedCost>();
-            String sql = "SELECT * FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND C_Order_ID=" + C_Order_ID;
+            String sql = "SELECT * FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND VAB_Order_ID=" + VAB_Order_ID;
             DataSet ds = null;
             DataRow dr = null;
             try
@@ -122,14 +122,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Order Lines having only product whihc is of Item type
         /// </summary>
-        /// <param name="C_Order_ID">order id</param>
+        /// <param name="VAB_Order_ID">order id</param>
         /// <returns>order lines</returns>
-        public MOrderLine[] GetLinesItemProduct(int C_Order_ID)
+        public MOrderLine[] GetLinesItemProduct(int VAB_Order_ID)
         {
             List<MOrderLine> list = new List<MOrderLine>();
-            StringBuilder sql = new StringBuilder(@"SELECT * FROM C_OrderLine ol
+            StringBuilder sql = new StringBuilder(@"SELECT * FROM VAB_OrderLine ol
                                                         INNER JOIN m_product p ON p.m_product_id = ol.m_product_id
-                                                        WHERE ol.C_Order_ID =" + C_Order_ID + @" AND ol.isactive = 'Y' 
+                                                        WHERE ol.VAB_Order_ID =" + VAB_Order_ID + @" AND ol.isactive = 'Y' 
                                                         AND  p.ProductType  = '" + MProduct.PRODUCTTYPE_Item + "'");
             IDataReader idr = null;
             try
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             }
 
             // get order lines having only product
-            MOrderLine[] orderLines = GetLinesItemProduct(GetC_Order_ID());
+            MOrderLine[] orderLines = GetLinesItemProduct(GetVAB_Order_ID());
 
             // create expected cost distribution lines
             if (orderLines != null && orderLines.Length > 0)
@@ -191,7 +191,7 @@ namespace VAdvantage.Model
                 {
                     MExpectedCostDistribution allocation = new MExpectedCostDistribution(GetCtx(), 0, Get_Trx());
                     allocation.SetVAB_ExpectedCost_ID(GetVAB_ExpectedCost_ID());
-                    allocation.SetC_OrderLine_ID(orderLines[i].GetC_OrderLine_ID());
+                    allocation.SetVAB_OrderLine_ID(orderLines[i].GetVAB_OrderLine_ID());
                     allocation.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                     allocation.SetAmt(Env.ZERO);
                     allocation.SetBase(Env.ZERO);
@@ -254,7 +254,7 @@ namespace VAdvantage.Model
                 //	Create Allocations
                 for (int i = 0; i < _expectedDistributionlines.Length; i++)
                 {
-                    MOrderLine orderLine = new MOrderLine(GetCtx(), _expectedDistributionlines[i].GetC_OrderLine_ID(), Get_Trx());
+                    MOrderLine orderLine = new MOrderLine(GetCtx(), _expectedDistributionlines[i].GetVAB_OrderLine_ID(), Get_Trx());
                     Decimal baseValue = orderLine.GetBase(GetLandedCostDistribution());
                     _expectedDistributionlines[i].SetBase(baseValue);
                     _expectedDistributionlines[i].SetQty(orderLine.GetQtyOrdered());

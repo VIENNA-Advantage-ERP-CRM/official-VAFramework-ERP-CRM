@@ -30,7 +30,7 @@ namespace VAdvantage.Process
     {
         #region Private Variable 
         //Order to Copy				
-        private int _C_Order_ID = 0;
+        private int _VAB_Order_ID = 0;
         // Document Type of new Order	
         private int _VAB_DocTypes_ID = 0;
         // New Doc Date				
@@ -52,9 +52,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("C_Order_ID"))
+                else if (name.Equals("VAB_Order_ID"))
                 {
-                    _C_Order_ID =Util.GetValueOfInt(para[i].GetParameter());//.intValue();
+                    _VAB_Order_ID =Util.GetValueOfInt(para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("VAB_DocTypes_ID"))
                 {
@@ -81,10 +81,10 @@ namespace VAdvantage.Process
         /// <returns>Message (clear text)</returns>
         protected override String DoIt()
         {
-            //log.Info("C_Order_ID=" + _C_Order_ID
+            //log.Info("VAB_Order_ID=" + _VAB_Order_ID
             //    + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
             //    + ", CloseDocument=" + _IsCloseDocument);
-            //if (_C_Order_ID == 0)
+            //if (_VAB_Order_ID == 0)
             //{
             //    throw new ArgumentException("No Order");
             //}
@@ -99,7 +99,7 @@ namespace VAdvantage.Process
             //  //Util.GetValueOfDateTime(new DateTime(CommonFunctions.CurrentTimeMillis()));
             //}
             ////
-            //MOrder from = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+            //MOrder from = new MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
             //MOrder newOrder = MOrder.CopyFrom(from, _DateDoc,
             //    dt.GetVAB_DocTypes_ID(), false, true, null);		//	copy ASI
             //newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
@@ -111,7 +111,7 @@ namespace VAdvantage.Process
             ////
             //if (_IsCloseDocument)
             //{
-            //    MOrder original = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+            //    MOrder original = new MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
             //    original.SetDocAction(MOrder.DOCACTION_Complete);
             //    original.ProcessIt(MOrder.DOCACTION_Complete);
             //    original.Save();
@@ -123,10 +123,10 @@ namespace VAdvantage.Process
             //return dt.GetName() + ": " + newOrder.GetDocumentNo();
 
 
-            log.Info("C_Order_ID=" + _C_Order_ID
+            log.Info("VAB_Order_ID=" + _VAB_Order_ID
                 + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
                 + ", CloseDocument=" + _IsCloseDocument);
-            if (_C_Order_ID == 0)
+            if (_VAB_Order_ID == 0)
             {
                 throw new ArgumentException("No Order");
             }
@@ -140,7 +140,7 @@ namespace VAdvantage.Process
                 _DateDoc = Util.GetValueOfDateTime(DateTime.Now);
             }
             //
-            VAdvantage.Model.MOrder from = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+            VAdvantage.Model.MOrder from = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
             MOrder newOrder = MOrder.CopyFrom(from, _DateDoc,
                 dt.GetVAB_DocTypes_ID(), false, true, null, true);//Pass optional parameter as True that we are going to create Order from Create Sales Order Process on Sales Quotation window---Neha
             newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
@@ -155,7 +155,7 @@ namespace VAdvantage.Process
             {
                 newOrder.SetVAB_IncoTerm_ID(from.GetVAB_IncoTerm_ID());
             }
-            String sqlbp = "update c_project set VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "  where ref_order_id=" + _C_Order_ID + "";
+            String sqlbp = "update VAB_Project set VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "  where ref_order_id=" + _VAB_Order_ID + "";
             int value = DB.ExecuteQuery(sqlbp, null, Get_Trx());
             bool OK = newOrder.Save();
             if (!OK)
@@ -164,11 +164,11 @@ namespace VAdvantage.Process
             }
             if (OK)
             {
-                string sql = "select C_Project_id from c_project where c_order_id = " + from.GetC_Order_ID();
-                int C_Project_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
-                if (C_Project_ID != 0)
+                string sql = "select VAB_Project_id from VAB_Project where VAB_Order_id = " + from.GetVAB_Order_ID();
+                int VAB_Project_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+                if (VAB_Project_ID != 0)
                 {
-                    VAdvantage.Model.X_C_Project project = new VAdvantage.Model.X_C_Project(GetCtx(), C_Project_ID, Get_Trx());
+                    VAdvantage.Model.X_VAB_Project project = new VAdvantage.Model.X_VAB_Project(GetCtx(), VAB_Project_ID, Get_Trx());
                     project.SetVAB_BusinessPartner_ID(project.GetVAB_BusinessPartnerSR_ID());
                     project.SetVAB_BusinessPartnerSR_ID(0);
                     if (!project.Save())
@@ -176,7 +176,7 @@ namespace VAdvantage.Process
 
                     }
                 }
-                from.SetRef_Order_ID(newOrder.GetC_Order_ID());
+                from.SetRef_Order_ID(newOrder.GetVAB_Order_ID());
                 from.Save();
                 int bp = newOrder.GetVAB_BusinessPartner_ID();
                 VAdvantage.Model.X_VAB_BusinessPartner prosp = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), bp, Get_Trx());
@@ -188,7 +188,7 @@ namespace VAdvantage.Process
             //
             if (_IsCloseDocument)
             {
-                VAdvantage.Model.MOrder original = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+                VAdvantage.Model.MOrder original = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
                 //Edited by Arpit Rai on 8th of Nov,2017
                 if (original.GetDocStatus() != "CO") //to check if document is already completed
                 {

@@ -45,25 +45,25 @@ namespace VAdvantage.Model
 
         /* 	Get Ship lines Of Order Line
         *	@param ctx context
-        *	@param C_OrderLine_ID line
+        *	@param VAB_OrderLine_ID line
         *	@param where optional addition where clause
         *  @param trxName transaction
         *	@return array of receipt lines
         */
         public static MInOutLine[] GetOfOrderLine(Ctx ctx,
-            int C_OrderLine_ID, String where, Trx trxName)
+            int VAB_OrderLine_ID, String where, Trx trxName)
         {
             List<MInOutLine> list = new List<MInOutLine>();
 
 
-            //String sql = "SELECT * FROM M_InOutLine WHERE C_OrderLine_ID=" + C_OrderLine_ID;    //// Commented and added following query, by SUkhwinder on 16-Nov-2017, for taking into COMPLETED/CLOSED lines only.
+            //String sql = "SELECT * FROM M_InOutLine WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;    //// Commented and added following query, by SUkhwinder on 16-Nov-2017, for taking into COMPLETED/CLOSED lines only.
 
             String sql = " SELECT M_Inoutline.*    " +
                          " FROM M_Inoutline M_Inoutline    " +
                          " INNER JOIN M_Inout M_Inout    " +
                          " ON M_inout.M_inout_ID = M_Inoutline.M_inout_ID    " +
                          " WHERE M_Inout.Docstatus       IN ('CO','CL')    " +
-                         " AND M_Inoutline.C_Orderline_Id = " + C_OrderLine_ID;
+                         " AND M_Inoutline.VAB_Orderline_Id = " + VAB_OrderLine_ID;
 
             if (where != null && where.Length > 0)
                 sql += " AND " + where;
@@ -102,14 +102,14 @@ namespace VAdvantage.Model
         /**
          * 	Get Ship lines Of Order Line
          *	@param ctx context
-         *	@param C_OrderLine_ID line
+         *	@param VAB_OrderLine_ID line
          *  @param trxName transaction
          *	@return array of receipt lines2
          */
-        public static MInOutLine[] Get(Ctx ctx, int C_OrderLine_ID, Trx trxName)
+        public static MInOutLine[] Get(Ctx ctx, int VAB_OrderLine_ID, Trx trxName)
         {
             List<MInOutLine> list = new List<MInOutLine>();
-            String sql = "SELECT * FROM M_InOutLine WHERE C_OrderLine_ID=" + C_OrderLine_ID;
+            String sql = "SELECT * FROM M_InOutLine WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
                 {
                     //	setLine (0);
                     //	setM_Locator_ID (0);
-                    //	setC_UOM_ID (0);
+                    //	setVAB_UOM_ID (0);
                     //	setM_Product_ID (0);
                     SetM_AttributeSetInstance_ID(0);
                     //	setMovementQty (Env.ZERO);
@@ -187,7 +187,7 @@ namespace VAdvantage.Model
             SetClientOrg(inout);
             SetM_InOut_ID(inout.GetM_InOut_ID());
             SetM_Warehouse_ID(inout.GetM_Warehouse_ID());
-            SetC_Project_ID(inout.GetC_Project_ID());
+            SetVAB_Project_ID(inout.GetVAB_Project_ID());
             _parent = inout;
         }
 
@@ -222,9 +222,9 @@ namespace VAdvantage.Model
      */
         public void SetOrderLine(MOrderLine oLine, int M_Locator_ID, Decimal Qty)
         {
-            SetC_OrderLine_ID(oLine.GetC_OrderLine_ID());
+            SetVAB_OrderLine_ID(oLine.GetVAB_OrderLine_ID());
             SetLine(oLine.GetLine());
-            SetC_UOM_ID(oLine.GetC_UOM_ID());
+            SetVAB_UOM_ID(oLine.GetVAB_UOM_ID());
             MProduct product = oLine.GetProduct();
             if (product == null)
             {
@@ -253,9 +253,9 @@ namespace VAdvantage.Model
             SetDescription(oLine.GetDescription());
             SetIsDescription(oLine.IsDescription());
             //
-            SetC_Project_ID(oLine.GetC_Project_ID());
-            SetC_ProjectPhase_ID(oLine.GetC_ProjectPhase_ID());
-            SetC_ProjectTask_ID(oLine.GetC_ProjectTask_ID());
+            SetVAB_Project_ID(oLine.GetVAB_Project_ID());
+            SetVAB_ProjectStage_ID(oLine.GetVAB_ProjectStage_ID());
+            SetVAB_ProjectJob_ID(oLine.GetVAB_ProjectJob_ID());
             SetVAB_BillingCode_ID(oLine.GetVAB_BillingCode_ID());
             SetVAB_Promotion_ID(oLine.GetVAB_Promotion_ID());
             SetVAF_OrgTrx_ID(oLine.GetVAF_OrgTrx_ID());
@@ -264,22 +264,22 @@ namespace VAdvantage.Model
         }
 
         /*	Set Order Line - Callout
-        *	@param oldC_OrderLine_ID old BP
-        *	@param newC_OrderLine_ID new BP
+        *	@param oldVAB_OrderLine_ID old BP
+        *	@param newVAB_OrderLine_ID new BP
         *	@param windowNo window no
         */
         //@UICallout
-        public void SetC_OrderLine_ID(String oldC_OrderLine_ID, String newC_OrderLine_ID, int windowNo)
+        public void SetVAB_OrderLine_ID(String oldVAB_OrderLine_ID, String newVAB_OrderLine_ID, int windowNo)
         {
-            if (newC_OrderLine_ID == null || newC_OrderLine_ID.Length == 0)
+            if (newVAB_OrderLine_ID == null || newVAB_OrderLine_ID.Length == 0)
                 return;
-            int C_OrderLine_ID = int.Parse(newC_OrderLine_ID);
-            if (C_OrderLine_ID == 0)
+            int VAB_OrderLine_ID = int.Parse(newVAB_OrderLine_ID);
+            if (VAB_OrderLine_ID == 0)
                 return;
-            MOrderLine ol = new MOrderLine(GetCtx(), C_OrderLine_ID, null);
+            MOrderLine ol = new MOrderLine(GetCtx(), VAB_OrderLine_ID, null);
             if (ol.Get_ID() != 0)
             {
-                SetC_OrderLine_ID(C_OrderLine_ID);
+                SetVAB_OrderLine_ID(VAB_OrderLine_ID);
                 Decimal MovementQty = Decimal.Subtract(ol.GetQtyOrdered(), ol.GetQtyDelivered());
                 SetMovementQty(MovementQty);
                 SetOrderLine(ol, 0, MovementQty);
@@ -309,9 +309,9 @@ namespace VAdvantage.Model
          */
         public void SetInvoiceLine(MInvoiceLine iLine, int M_Locator_ID, Decimal Qty)
         {
-            SetC_OrderLine_ID(iLine.GetC_OrderLine_ID());
+            SetVAB_OrderLine_ID(iLine.GetVAB_OrderLine_ID());
             SetLine(iLine.GetLine());
-            SetC_UOM_ID(iLine.GetC_UOM_ID());
+            SetVAB_UOM_ID(iLine.GetVAB_UOM_ID());
             int M_Product_ID = iLine.GetM_Product_ID();
             if (M_Product_ID == 0)
             {
@@ -332,9 +332,9 @@ namespace VAdvantage.Model
             SetDescription(iLine.GetDescription());
             SetIsDescription(iLine.IsDescription());
             //
-            SetC_Project_ID(iLine.GetC_Project_ID());
-            SetC_ProjectPhase_ID(iLine.GetC_ProjectPhase_ID());
-            SetC_ProjectTask_ID(iLine.GetC_ProjectTask_ID());
+            SetVAB_Project_ID(iLine.GetVAB_Project_ID());
+            SetVAB_ProjectStage_ID(iLine.GetVAB_ProjectStage_ID());
+            SetVAB_ProjectJob_ID(iLine.GetVAB_ProjectJob_ID());
             SetVAB_BillingCode_ID(iLine.GetVAB_BillingCode_ID());
             SetVAB_Promotion_ID(iLine.GetVAB_Promotion_ID());
             SetVAF_OrgTrx_ID(iLine.GetVAF_OrgTrx_ID());
@@ -423,9 +423,9 @@ namespace VAdvantage.Model
        */
         public void SetQtyEntered(Decimal QtyEntered)
         {
-            if (QtyEntered != 0 && GetC_UOM_ID() != 0)
+            if (QtyEntered != 0 && GetVAB_UOM_ID() != 0)
             {
-                int precision = MUOM.GetPrecision(GetCtx(), GetC_UOM_ID());
+                int precision = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
                 //QtyEntered = QtyEntered.setScale(precision, Decimal.ROUND_HALF_UP);
                 QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero);
             }
@@ -468,12 +468,12 @@ namespace VAdvantage.Model
             if (_product != null)
             {
                 SetM_Product_ID(_product.GetM_Product_ID());
-                SetC_UOM_ID(_product.GetC_UOM_ID());
+                SetVAB_UOM_ID(_product.GetVAB_UOM_ID());
             }
             else
             {
                 SetM_Product_ID(0);
-                SetC_UOM_ID(0);
+                SetVAB_UOM_ID(0);
             }
             SetM_AttributeSetInstance_ID(0);
         }
@@ -495,15 +495,15 @@ namespace VAdvantage.Model
         /**
          * 	Set Product and UOM
          *	@param M_Product_ID product
-         *	@param C_UOM_ID uom
+         *	@param VAB_UOM_ID uom
          */
-        public void SetM_Product_ID(int M_Product_ID, int C_UOM_ID)
+        public void SetM_Product_ID(int M_Product_ID, int VAB_UOM_ID)
         {
             if (M_Product_ID != 0)
             {
                 base.SetM_Product_ID(M_Product_ID);
             }
-            base.SetC_UOM_ID(C_UOM_ID);
+            base.SetVAB_UOM_ID(VAB_UOM_ID);
             SetM_AttributeSetInstance_ID(0);
             _product = null;
         }
@@ -511,16 +511,16 @@ namespace VAdvantage.Model
         /**
         * 	Set Product and UOM
         *	@param M_Product_ID product
-        *	@param C_UOM_ID uom
+        *	@param VAB_UOM_ID uom
         *	@param M_AttributeSetInstance_ID AttributeSetInstance
         */
-        public void SetM_Product_ID(int M_Product_ID, int C_UOM_ID, int M_AttributeSetInstance_ID)
+        public void SetM_Product_ID(int M_Product_ID, int VAB_UOM_ID, int M_AttributeSetInstance_ID)
         {
             if (M_Product_ID != 0)
             {
                 base.SetM_Product_ID(M_Product_ID);
             }
-            base.SetC_UOM_ID(C_UOM_ID);
+            base.SetVAB_UOM_ID(VAB_UOM_ID);
             SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
             _product = null;
         }
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
 
             //	PO - Set UOM/Locator/Qty
             MProduct product = GetProduct();
-            SetC_UOM_ID(product.GetC_UOM_ID());
+            SetVAB_UOM_ID(product.GetVAB_UOM_ID());
             Decimal QtyEntered = GetQtyEntered();
             SetMovementQty(QtyEntered);
             if (M_Locator_ID != 0)
@@ -628,23 +628,23 @@ namespace VAdvantage.Model
 
         /**
          * 	Set UOM - Callout
-         *	@param oldC_UOM_ID old value
-         *	@param newC_UOM_ID new value
+         *	@param oldVAB_UOM_ID old value
+         *	@param newVAB_UOM_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         ///@UICallout 
-        public void SetC_UOM_ID(String oldC_UOM_ID,
-                String newC_UOM_ID, int windowNo)
+        public void SetVAB_UOM_ID(String oldVAB_UOM_ID,
+                String newVAB_UOM_ID, int windowNo)
         {
-            if (newC_UOM_ID == null || newC_UOM_ID.Length == 0)
+            if (newVAB_UOM_ID == null || newVAB_UOM_ID.Length == 0)
                 return;
-            int C_UOM_ID = int.Parse(newC_UOM_ID);
-            if (C_UOM_ID == 0)
+            int VAB_UOM_ID = int.Parse(newVAB_UOM_ID);
+            if (VAB_UOM_ID == 0)
                 return;
             //
-            base.SetC_UOM_ID(C_UOM_ID);
-            SetQty(windowNo, "C_UOM_ID");
+            base.SetVAB_UOM_ID(VAB_UOM_ID);
+            SetQty(windowNo, "VAB_UOM_ID");
         }
 
         /**
@@ -691,7 +691,7 @@ namespace VAdvantage.Model
             int M_Product_ID = GetM_Product_ID();
             log.Log(Level.WARNING, "qty - init - M_Product_ID=" + M_Product_ID);
             Decimal MovementQty, QtyEntered;
-            int C_UOM_To_ID = GetC_UOM_ID();
+            int VAB_UOM_To_ID = GetVAB_UOM_ID();
 
             //	No Product
             if (M_Product_ID == 0)
@@ -700,24 +700,24 @@ namespace VAdvantage.Model
                 SetMovementQty(QtyEntered);
             }
             //	UOM Changed - convert from Entered -> Product
-            else if (columnName.Equals("C_UOM_ID"))
+            else if (columnName.Equals("VAB_UOM_ID"))
             {
                 QtyEntered = GetQtyEntered();
-                //Decimal QtyEntered1 = QtyEntered.setScale(MUOM.GetPrecision(GetCtx(), C_UOM_To_ID), Decimal.ROUND_HALF_UP);
-                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), C_UOM_To_ID), MidpointRounding.AwayFromZero);
+                //Decimal QtyEntered1 = QtyEntered.setScale(MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), Decimal.ROUND_HALF_UP);
+                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (QtyEntered.CompareTo(QtyEntered1) != 0)
                 {
-                    log.Fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                    log.Fine("Corrected QtyEntered Scale UOM=" + VAB_UOM_To_ID
                     + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
                     QtyEntered = QtyEntered1;
                     SetQtyEntered(QtyEntered);
                 }
-                MovementQty = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), M_Product_ID, C_UOM_To_ID, QtyEntered);
+                MovementQty = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), M_Product_ID, VAB_UOM_To_ID, QtyEntered);
                 if (MovementQty == null)
                     MovementQty = QtyEntered;
                 bool conversion = QtyEntered.CompareTo(MovementQty) != 0;
 
-                log.Fine("UOM=" + C_UOM_To_ID
+                log.Fine("UOM=" + VAB_UOM_To_ID
                     + ", QtyEntered=" + QtyEntered
                     + " -> " + conversion
                     + " MovementQty=" + MovementQty);
@@ -726,7 +726,7 @@ namespace VAdvantage.Model
                 SetMovementQty(MovementQty);
             }
             //	No UOM defined
-            else if (C_UOM_To_ID == 0)
+            else if (VAB_UOM_To_ID == 0)
             {
                 QtyEntered = GetQtyEntered();
                 SetMovementQty(QtyEntered);
@@ -735,21 +735,21 @@ namespace VAdvantage.Model
             else if (columnName.Equals("QtyEntered"))
             {
                 QtyEntered = GetQtyEntered();
-                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), C_UOM_To_ID), MidpointRounding.AwayFromZero);
+                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (QtyEntered.CompareTo(QtyEntered1) != 0)
                 {
-                    log.Fine("Corrected QtyEntered Scale UOM=" + C_UOM_To_ID
+                    log.Fine("Corrected QtyEntered Scale UOM=" + VAB_UOM_To_ID
                         + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
                     QtyEntered = QtyEntered1;
                     SetQtyEntered(QtyEntered);
                 }
                 MovementQty = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(),
-                    M_Product_ID, C_UOM_To_ID, QtyEntered);
+                    M_Product_ID, VAB_UOM_To_ID, QtyEntered);
                 if (MovementQty == null)
                     MovementQty = QtyEntered;
                 bool conversion = QtyEntered.CompareTo(MovementQty) != 0;
 
-                log.Fine("UOM=" + C_UOM_To_ID
+                log.Fine("UOM=" + VAB_UOM_To_ID
                    + ", QtyEntered=" + QtyEntered
                     + " -> " + conversion
                     + " MovementQty=" + MovementQty);
@@ -771,11 +771,11 @@ namespace VAdvantage.Model
                     MovementQty = MovementQty1;
                     SetMovementQty(MovementQty);
                 }
-                QtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), M_Product_ID, C_UOM_To_ID, MovementQty);
+                QtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), M_Product_ID, VAB_UOM_To_ID, MovementQty);
                 if (QtyEntered == null)
                     QtyEntered = MovementQty;
                 bool conversion = MovementQty.CompareTo(QtyEntered) != 0;
-                log.Fine("UOM=" + C_UOM_To_ID
+                log.Fine("UOM=" + VAB_UOM_To_ID
                     + ", MovementQty=" + MovementQty
                     + " -> " + conversion
                     + " QtyEntered=" + QtyEntered);
@@ -788,7 +788,7 @@ namespace VAdvantage.Model
             bool IsReturnTrx = GetParent().IsReturnTrx();
             if (M_Product_ID != 0 && IsReturnTrx)
             {
-                int oLine_ID = GetC_OrderLine_ID();
+                int oLine_ID = GetVAB_OrderLine_ID();
                 MOrderLine oLine = new MOrderLine(GetCtx(), oLine_ID, null);
                 if (oLine.Get_ID() != 0)
                 {
@@ -812,7 +812,7 @@ namespace VAdvantage.Model
                             SetMovementQty(shippedQty);
                             MovementQty = shippedQty;
                             QtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), M_Product_ID,
-                                    C_UOM_To_ID, MovementQty);
+                                    VAB_UOM_To_ID, MovementQty);
                             if (QtyEntered == null)
                                 QtyEntered = MovementQty;
                             SetQtyEntered(QtyEntered);
@@ -840,14 +840,14 @@ namespace VAdvantage.Model
 
 
         /**
-         * 	Get C_Project_ID
+         * 	Get VAB_Project_ID
          *	@return project
          */
-        public int GetC_Project_ID()
+        public int GetVAB_Project_ID()
         {
-            int ii = base.GetC_Project_ID();
+            int ii = base.GetVAB_Project_ID();
             if (ii == 0)
-                ii = GetParent().GetC_Project_ID();
+                ii = GetParent().GetVAB_Project_ID();
             return ii;
         }
 
@@ -1044,24 +1044,24 @@ namespace VAdvantage.Model
                     SetIsCostImmediate(false);
             }
             //	UOM
-            if (GetC_UOM_ID() == 0)
-                SetC_UOM_ID(GetCtx().GetContextAsInt("#C_UOM_ID"));
-            if (GetC_UOM_ID() == 0)
+            if (GetVAB_UOM_ID() == 0)
+                SetVAB_UOM_ID(GetCtx().GetContextAsInt("#VAB_UOM_ID"));
+            if (GetVAB_UOM_ID() == 0)
             {
-                int C_UOM_ID = MUOM.GetDefault_UOM_ID(GetCtx());
-                if (C_UOM_ID > 0)
-                    SetC_UOM_ID(C_UOM_ID);
+                int VAB_UOM_ID = MUOM.GetDefault_UOM_ID(GetCtx());
+                if (VAB_UOM_ID > 0)
+                    SetVAB_UOM_ID(VAB_UOM_ID);
             }
-            int gp = MUOM.GetPrecision(GetCtx(), GetC_UOM_ID());
+            int gp = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
             Decimal? QtyEntered1 = Decimal.Round(QtyEntered.Value, gp, MidpointRounding.AwayFromZero);
             if (QtyEntered != QtyEntered1)
             {
-                this.log.Fine("Corrected QtyEntered Scale UOM=" + GetC_UOM_ID()
+                this.log.Fine("Corrected QtyEntered Scale UOM=" + GetVAB_UOM_ID()
                     + "; QtyEntered=" + QtyEntered + "->" + QtyEntered1);
                 QtyEntered = QtyEntered1;
                 SetQtyEntered(QtyEntered);
             }
-            Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetC_UOM_ID(), QtyEntered);
+            Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetVAB_UOM_ID(), QtyEntered);
 
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
@@ -1076,13 +1076,13 @@ namespace VAdvantage.Model
                 _Product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
             }
 
-            if (_Product != null && GetC_UOM_ID() != _Product.GetC_UOM_ID())
+            if (_Product != null && GetVAB_UOM_ID() != _Product.GetVAB_UOM_ID())
             {
                 decimal? differenceQty = Util.GetValueOfDecimal(GetCtx().GetContext("DifferenceQty_"));
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
                 {
                     //converted qty if found any difference then the Movement qty reduces by the difference amount
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetC_UOM_ID(), QtyEntered - differenceQty);
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), GetVAB_UOM_ID(), QtyEntered - differenceQty);
                 }
             }
             movementQty = pc;
@@ -1206,17 +1206,17 @@ namespace VAdvantage.Model
             //during creating a line of M_inout, system check qty on line cannot be greater than Ordered qty (Ordered - delivered)
             if (!inO.IsReversal())
             {
-                if (GetC_OrderLine_ID() > 0 && (newRecord || Is_ValueChanged("IsActive") || Is_ValueChanged("MovementQty")))
+                if (GetVAB_OrderLine_ID() > 0 && (newRecord || Is_ValueChanged("IsActive") || Is_ValueChanged("MovementQty")))
                 {
-                    qry1 = "select  QtyOrdered - QtyDelivered from C_OrderLine where C_OrderLine_ID =" + GetC_OrderLine_ID();
+                    qry1 = "select  QtyOrdered - QtyDelivered from VAB_OrderLine where VAB_OrderLine_ID =" + GetVAB_OrderLine_ID();
                     Decimal? _result = Util.GetValueOfDecimal(DB.ExecuteScalar(qry1, null, Get_Trx()));
                     decimal QtyNotDelivered = 0;
                     if (newRecord)
                         QtyNotDelivered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(MovementQty) FROM M_Inout i INNER JOIN M_InoutLine il ON i.M_Inout_ID = il.M_Inout_ID
-                            WHERE il.C_OrderLine_ID = " + GetC_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO')", null, Get_Trx()));
+                            WHERE il.VAB_OrderLine_ID = " + GetVAB_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO')", null, Get_Trx()));
                     else
                         QtyNotDelivered = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT SUM(MovementQty) FROM M_Inout i INNER JOIN M_InoutLine il ON i.M_Inout_ID = il.M_Inout_ID
-                            WHERE il.C_OrderLine_ID = " + GetC_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO') AND il.M_InoutLine_ID <> " + GetM_InOutLine_ID(), null, Get_Trx()));
+                            WHERE il.VAB_OrderLine_ID = " + GetVAB_OrderLine_ID() + @" AND il.Isactive = 'Y' AND i.docstatus NOT IN ('RE' , 'VO' , 'CL' , 'CO') AND il.M_InoutLine_ID <> " + GetM_InOutLine_ID(), null, Get_Trx()));
                     if (GetMovementQty() > (_result - QtyNotDelivered))
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "QtyCanNotbeGreater"));
@@ -1231,11 +1231,11 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("MovementQty"))
                 SetMovementQty(GetMovementQty());
             //	Order Line
-            if (GetC_OrderLine_ID() == 0)
+            if (GetVAB_OrderLine_ID() == 0)
             {
                 if (GetParent().IsSOTrx())
                 {
-                    log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "C_Order_ID"));
+                    log.SaveError("FillMandatory", Msg.Translate(GetCtx(), "VAB_Order_ID"));
                     return false;
                 }
             }
@@ -1244,9 +1244,9 @@ namespace VAdvantage.Model
             // when record is  return transaction then price should pick from its Original record
             // now, not to set orignal record cost, system will update current cost
             //decimal currentcostprice = 0;
-            //if (inO.IsReturnTrx() && GetC_OrderLine_ID() > 0)
+            //if (inO.IsReturnTrx() && GetVAB_OrderLine_ID() > 0)
             //{
-            //    MOrderLine RMALine = new MOrderLine(GetCtx(), GetC_OrderLine_ID(), Get_Trx());
+            //    MOrderLine RMALine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
             //    if (RMALine != null)
             //    {
             //        MInOutLine origInOutLine = new MInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());

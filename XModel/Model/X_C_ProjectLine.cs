@@ -11,21 +11,21 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_ProjectLine
+/** Generated Model for VAB_ProjectLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_ProjectLine : PO
+public class X_VAB_ProjectLine : PO
 {
-public X_C_ProjectLine (Context ctx, int C_ProjectLine_ID, Trx trxName) : base (ctx, C_ProjectLine_ID, trxName)
+public X_VAB_ProjectLine (Context ctx, int VAB_ProjectLine_ID, Trx trxName) : base (ctx, VAB_ProjectLine_ID, trxName)
 {
-/** if (C_ProjectLine_ID == 0)
+/** if (VAB_ProjectLine_ID == 0)
 {
-SetC_ProjectLine_ID (0);
-SetC_Project_ID (0);
+SetVAB_ProjectLine_ID (0);
+SetVAB_Project_ID (0);
 SetInvoicedAmt (0.0);
 SetInvoicedQty (0.0);	// 0
 SetIsPrinted (true);	// Y
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_ProjectLine WHERE C_Project_ID=@C_Project_ID@
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_ProjectLine WHERE VAB_Project_ID=@VAB_Project_ID@
 SetPlannedAmt (0.0);
 SetPlannedPrice (0.0);
 SetPlannedQty (0.0);	// 1
@@ -33,16 +33,16 @@ SetProcessed (false);	// N
 }
  */
 }
-public X_C_ProjectLine (Ctx ctx, int C_ProjectLine_ID, Trx trxName) : base (ctx, C_ProjectLine_ID, trxName)
+public X_VAB_ProjectLine (Ctx ctx, int VAB_ProjectLine_ID, Trx trxName) : base (ctx, VAB_ProjectLine_ID, trxName)
 {
-/** if (C_ProjectLine_ID == 0)
+/** if (VAB_ProjectLine_ID == 0)
 {
-SetC_ProjectLine_ID (0);
-SetC_Project_ID (0);
+SetVAB_ProjectLine_ID (0);
+SetVAB_Project_ID (0);
 SetInvoicedAmt (0.0);
 SetInvoicedQty (0.0);	// 0
 SetIsPrinted (true);	// Y
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM C_ProjectLine WHERE C_Project_ID=@C_Project_ID@
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAB_ProjectLine WHERE VAB_Project_ID=@VAB_Project_ID@
 SetPlannedAmt (0.0);
 SetPlannedPrice (0.0);
 SetPlannedQty (0.0);	// 1
@@ -55,7 +55,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_C_ProjectLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_ProjectLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_C_ProjectLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_C_ProjectLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_ProjectLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_ProjectLine()
+static X_VAB_ProjectLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389057498L;
 public static int Table_ID;
  // =434;
 
-/** TableName=C_ProjectLine */
-public static String Table_Name="C_ProjectLine";
+/** TableName=VAB_ProjectLine */
+public static String Table_Name="VAB_ProjectLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -125,119 +125,119 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_ProjectLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_ProjectLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
-/** C_OrderPO_ID VAF_Control_Ref_ID=290 */
-public static int C_ORDERPO_ID_VAF_Control_Ref_ID=290;
+/** VAB_OrderPO_ID VAF_Control_Ref_ID=290 */
+public static int VAB_ORDERPO_ID_VAF_Control_Ref_ID=290;
 /** Set Purchase Order.
-@param C_OrderPO_ID Purchase Order */
-public void SetC_OrderPO_ID (int C_OrderPO_ID)
+@param VAB_OrderPO_ID Purchase Order */
+public void SetVAB_OrderPO_ID (int VAB_OrderPO_ID)
 {
-if (C_OrderPO_ID <= 0) Set_ValueNoCheck ("C_OrderPO_ID", null);
+if (VAB_OrderPO_ID <= 0) Set_ValueNoCheck ("VAB_OrderPO_ID", null);
 else
-Set_ValueNoCheck ("C_OrderPO_ID", C_OrderPO_ID);
+Set_ValueNoCheck ("VAB_OrderPO_ID", VAB_OrderPO_ID);
 }
 /** Get Purchase Order.
 @return Purchase Order */
-public int GetC_OrderPO_ID() 
+public int GetVAB_OrderPO_ID() 
 {
-Object ii = Get_Value("C_OrderPO_ID");
+Object ii = Get_Value("VAB_OrderPO_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Order.
-@param C_Order_ID Order */
-public void SetC_Order_ID (int C_Order_ID)
+@param VAB_Order_ID Order */
+public void SetVAB_Order_ID (int VAB_Order_ID)
 {
-if (C_Order_ID <= 0) Set_ValueNoCheck ("C_Order_ID", null);
+if (VAB_Order_ID <= 0) Set_ValueNoCheck ("VAB_Order_ID", null);
 else
-Set_ValueNoCheck ("C_Order_ID", C_Order_ID);
+Set_ValueNoCheck ("VAB_Order_ID", VAB_Order_ID);
 }
 /** Get Order.
 @return Order */
-public int GetC_Order_ID() 
+public int GetVAB_Order_ID() 
 {
-Object ii = Get_Value("C_Order_ID");
+Object ii = Get_Value("VAB_Order_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project Issue.
-@param C_ProjectIssue_ID Project Issues (Material, Labor) */
-public void SetC_ProjectIssue_ID (int C_ProjectIssue_ID)
+@param VAB_ProjectSupply_ID Project Issues (Material, Labor) */
+public void SetVAB_ProjectSupply_ID (int VAB_ProjectSupply_ID)
 {
-if (C_ProjectIssue_ID <= 0) Set_ValueNoCheck ("C_ProjectIssue_ID", null);
+if (VAB_ProjectSupply_ID <= 0) Set_ValueNoCheck ("VAB_ProjectSupply_ID", null);
 else
-Set_ValueNoCheck ("C_ProjectIssue_ID", C_ProjectIssue_ID);
+Set_ValueNoCheck ("VAB_ProjectSupply_ID", VAB_ProjectSupply_ID);
 }
 /** Get Project Issue.
 @return Project Issues (Material, Labor) */
-public int GetC_ProjectIssue_ID() 
+public int GetVAB_ProjectSupply_ID() 
 {
-Object ii = Get_Value("C_ProjectIssue_ID");
+Object ii = Get_Value("VAB_ProjectSupply_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project Line.
-@param C_ProjectLine_ID Task or step in a project */
-public void SetC_ProjectLine_ID (int C_ProjectLine_ID)
+@param VAB_ProjectLine_ID Task or step in a project */
+public void SetVAB_ProjectLine_ID (int VAB_ProjectLine_ID)
 {
-if (C_ProjectLine_ID < 1) throw new ArgumentException ("C_ProjectLine_ID is mandatory.");
-Set_ValueNoCheck ("C_ProjectLine_ID", C_ProjectLine_ID);
+if (VAB_ProjectLine_ID < 1) throw new ArgumentException ("VAB_ProjectLine_ID is mandatory.");
+Set_ValueNoCheck ("VAB_ProjectLine_ID", VAB_ProjectLine_ID);
 }
 /** Get Project Line.
 @return Task or step in a project */
-public int GetC_ProjectLine_ID() 
+public int GetVAB_ProjectLine_ID() 
 {
-Object ii = Get_Value("C_ProjectLine_ID");
+Object ii = Get_Value("VAB_ProjectLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project Phase.
-@param C_ProjectPhase_ID Phase of a Project */
-public void SetC_ProjectPhase_ID (int C_ProjectPhase_ID)
+@param VAB_ProjectStage_ID Phase of a Project */
+public void SetVAB_ProjectStage_ID (int VAB_ProjectStage_ID)
 {
-if (C_ProjectPhase_ID <= 0) Set_Value ("C_ProjectPhase_ID", null);
+if (VAB_ProjectStage_ID <= 0) Set_Value ("VAB_ProjectStage_ID", null);
 else
-Set_Value ("C_ProjectPhase_ID", C_ProjectPhase_ID);
+Set_Value ("VAB_ProjectStage_ID", VAB_ProjectStage_ID);
 }
 /** Get Project Phase.
 @return Phase of a Project */
-public int GetC_ProjectPhase_ID() 
+public int GetVAB_ProjectStage_ID() 
 {
-Object ii = Get_Value("C_ProjectPhase_ID");
+Object ii = Get_Value("VAB_ProjectStage_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project Task.
-@param C_ProjectTask_ID Actual Project Task in a Phase */
-public void SetC_ProjectTask_ID (int C_ProjectTask_ID)
+@param VAB_ProjectJob_ID Actual Project Task in a Phase */
+public void SetVAB_ProjectJob_ID (int VAB_ProjectJob_ID)
 {
-if (C_ProjectTask_ID <= 0) Set_Value ("C_ProjectTask_ID", null);
+if (VAB_ProjectJob_ID <= 0) Set_Value ("VAB_ProjectJob_ID", null);
 else
-Set_Value ("C_ProjectTask_ID", C_ProjectTask_ID);
+Set_Value ("VAB_ProjectJob_ID", VAB_ProjectJob_ID);
 }
 /** Get Project Task.
 @return Actual Project Task in a Phase */
-public int GetC_ProjectTask_ID() 
+public int GetVAB_ProjectJob_ID() 
 {
-Object ii = Get_Value("C_ProjectTask_ID");
+Object ii = Get_Value("VAB_ProjectJob_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Project.
-@param C_Project_ID Financial Project */
-public void SetC_Project_ID (int C_Project_ID)
+@param VAB_Project_ID Financial Project */
+public void SetVAB_Project_ID (int VAB_Project_ID)
 {
-if (C_Project_ID < 1) throw new ArgumentException ("C_Project_ID is mandatory.");
-Set_ValueNoCheck ("C_Project_ID", C_Project_ID);
+if (VAB_Project_ID < 1) throw new ArgumentException ("VAB_Project_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Project_ID", VAB_Project_ID);
 }
 /** Get Project.
 @return Financial Project */
-public int GetC_Project_ID() 
+public int GetVAB_Project_ID() 
 {
-Object ii = Get_Value("C_Project_ID");
+Object ii = Get_Value("VAB_Project_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -24,7 +24,7 @@ namespace VAdvantage.Model
             SetVAB_DocTypes_ID (0);
             SetDocBaseType (null);
             SetDocumentCopies (0);	// 1
-            SetGL_Category_ID (0);
+            SetVAGL_Group_ID (0);
             SetHasCharges (false);
             SetIsCreateCounter (true);	// Y
             SetIsDefault (false);
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
             SetVAB_DocTypes_ID (0);
             SetDocBaseType (null);
             SetDocumentCopies (0);	// 1
-            SetGL_Category_ID (0);
+            SetVAGL_Group_ID (0);
             SetHasCharges (false);
             SetIsCreateCounter (true);	// Y
             SetIsDefault (false);
@@ -392,17 +392,17 @@ namespace VAdvantage.Model
             return (String)Get_Value("DocumentNote");
         }
         /** Set GL Category.
-        @param GL_Category_ID General Ledger Category */
-        public void SetGL_Category_ID(int GL_Category_ID)
+        @param VAGL_Group_ID General Ledger Category */
+        public void SetVAGL_Group_ID(int VAGL_Group_ID)
         {
-            if (GL_Category_ID < 1) throw new ArgumentException("GL_Category_ID is mandatory.");
-            Set_Value("GL_Category_ID", GL_Category_ID);
+            if (VAGL_Group_ID < 1) throw new ArgumentException("VAGL_Group_ID is mandatory.");
+            Set_Value("VAGL_Group_ID", VAGL_Group_ID);
         }
         /** Get GL Category.
         @return General Ledger Category */
-        public int GetGL_Category_ID()
+        public int GetVAGL_Group_ID()
         {
-            Object ii = Get_Value("GL_Category_ID");
+            Object ii = Get_Value("VAGL_Group_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

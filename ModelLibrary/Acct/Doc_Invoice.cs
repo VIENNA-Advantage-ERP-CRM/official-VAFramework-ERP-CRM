@@ -89,23 +89,23 @@ namespace VAdvantage.Acct
         private DocTax[] LoadTaxes()
         {
             List<DocTax> list = new List<DocTax>();
-            String sql = "SELECT it.C_Tax_ID, t.Name, t.Rate, it.TaxBaseAmt, it.TaxAmt, t.IsSalesTax "
-                + "FROM C_Tax t, VAB_Tax_Invoice it "
-                + "WHERE t.C_Tax_ID=it.C_Tax_ID AND it.VAB_Invoice_ID=" + Get_ID();
+            String sql = "SELECT it.VAB_TaxRate_ID, t.Name, t.Rate, it.TaxBaseAmt, it.TaxAmt, t.IsSalesTax "
+                + "FROM VAB_TaxRate t, VAB_Tax_Invoice it "
+                + "WHERE t.VAB_TaxRate_ID=it.VAB_TaxRate_ID AND it.VAB_Invoice_ID=" + Get_ID();
             IDataReader idr = null;
             try
             {
                 idr = DataBase.DB.ExecuteReader(sql, null, GetTrxName());
                 while (idr.Read())
                 {
-                    int C_Tax_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
+                    int VAB_TaxRate_ID = Utility.Util.GetValueOfInt(idr[0]);//.getInt(1);
                     String name = Utility.Util.GetValueOfString(idr[1]);//.getString(2);
                     Decimal rate = Utility.Util.GetValueOfDecimal(idr[2]);//.getBigDecimal(3);
                     Decimal taxBaseAmt = Utility.Util.GetValueOfDecimal(idr[3]);//.getBigDecimal(4);
                     Decimal amount = Utility.Util.GetValueOfDecimal(idr[4]);//.getBigDecimal(5);
                     bool salesTax = "Y".Equals(Utility.Util.GetValueOfString(idr[5]));//.getString(6));
                     //
-                    DocTax taxLine = new DocTax(C_Tax_ID, name, rate, taxBaseAmt, amount, salesTax);
+                    DocTax taxLine = new DocTax(VAB_TaxRate_ID, name, rate, taxBaseAmt, amount, salesTax);
                     log.Fine(taxLine.ToString());
                     list.Add(taxLine);
                 }
@@ -155,11 +155,11 @@ namespace VAdvantage.Acct
                 //
                 Decimal LineNetAmt = line.GetLineNetAmt();
                 Decimal PriceList = line.GetPriceList();
-                int C_Tax_ID = docLine.GetC_Tax_ID();
+                int VAB_TaxRate_ID = docLine.GetVAB_TaxRate_ID();
                 //	Correct included Tax
-                if (IsTaxIncluded() && C_Tax_ID != 0)
+                if (IsTaxIncluded() && VAB_TaxRate_ID != 0)
                 {
-                    MTax tax = MTax.Get(GetCtx(), C_Tax_ID);
+                    MTax tax = MTax.Get(GetCtx(), VAB_TaxRate_ID);
                     if (!tax.IsZeroTax())
                     {
                         Decimal LineNetAmtTax = tax.CalculateTax(LineNetAmt, true, GetStdPercision());
@@ -167,7 +167,7 @@ namespace VAdvantage.Acct
                         LineNetAmt = Decimal.Subtract(LineNetAmt, LineNetAmtTax);
                         for (int t = 0; t < _taxes.Length; t++)
                         {
-                            if (_taxes[t].GetC_Tax_ID() == C_Tax_ID)
+                            if (_taxes[t].GetVAB_TaxRate_ID() == VAB_TaxRate_ID)
                             {
                                 _taxes[t].AddIncludedTax(LineNetAmtTax);
                                 break;
@@ -206,7 +206,7 @@ namespace VAdvantage.Acct
                         Decimal diff = _taxes[i].GetIncludedTaxDifference();
                         for (int j = 0; j < dls.Length; j++)
                         {
-                            if (dls[j].GetC_Tax_ID() == _taxes[i].GetC_Tax_ID())
+                            if (dls[j].GetVAB_TaxRate_ID() == _taxes[i].GetVAB_TaxRate_ID())
                             {
                                 dls[j].SetLineNetAmtDifference(diff);
                                 break;
@@ -336,8 +336,8 @@ namespace VAdvantage.Acct
                     int custCnt = 0;
 
                     //Check For Country Of Organization And Customer
-                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM VAF_OrgDetail org INNER JOIN C_Location loc ON (org.C_Location_ID=loc.C_Location_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
-                    custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM VAB_Invoice inv INNER JOIN VAB_BPart_Location bl ON (inv.VAB_BPart_Location_ID=bl.VAB_BPart_Location_ID) INNER JOIN C_Location loc ON (bl.C_Location_ID=loc.C_Location_ID) WHERE inv.VAB_Invoice_ID=" + Get_ID()));
+                    orgCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM VAF_OrgDetail org INNER JOIN VAB_Address loc ON (org.VAB_Address_ID=loc.VAB_Address_ID) WHERE org.VAF_Org_ID=" + GetVAF_Org_ID()));
+                    custCnt = Util.GetValueOfInt(DB.ExecuteScalar("SELECT loc.VAB_Country_ID FROM VAB_Invoice inv INNER JOIN VAB_BPart_Location bl ON (inv.VAB_BPart_Location_ID=bl.VAB_BPart_Location_ID) INNER JOIN VAB_Address loc ON (bl.VAB_Address_ID=loc.VAB_Address_ID) WHERE inv.VAB_Invoice_ID=" + Get_ID()));
 
                     if (orgCnt == custCnt)
                     {
@@ -361,7 +361,7 @@ namespace VAdvantage.Acct
                                     GetVAB_Currency_ID(), null, amt);
                                 if (tl != null)
                                 {
-                                    tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                                    tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                                 }
                             }
                         }
@@ -414,7 +414,7 @@ namespace VAdvantage.Acct
 
                                 amt = _lines[i].GetAmtSource();
                                 String sql = "SELECT il.LineNetAmt,tx.rate FROM VAB_InvoiceLine il"
-                                    + " INNER JOIN C_Tax tx ON (il.C_Tax_ID=tx.C_Tax_ID) "
+                                    + " INNER JOIN VAB_TaxRate tx ON (il.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) "
                                     + "WHERE il.IsActive='Y' AND il.VAB_InvoiceLine_ID=" + _lines[i].Get_ID();
                                 IDataReader idr = null;
                                 try
@@ -518,7 +518,7 @@ namespace VAdvantage.Acct
                                     GetVAB_Currency_ID(), null, amt);
                                 if (tl != null)
                                 {
-                                    tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                                    tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                                 }
                             }
                         }
@@ -570,7 +570,7 @@ namespace VAdvantage.Acct
                                 int freeProd = Util.GetValueOfInt(DB.ExecuteScalar("SELECT cod.ED005_FreeProduct_Acct FROM ED005_AccountCodes cod INNER JOIN ED005_AccountCountry cnt ON (cod.ED005_AccountCountry_ID=cnt.ED005_AccountCountry_ID) WHERE cnt.IsActive='Y' AND (cod.M_Product_Category_ID=" + prodCat + " OR cod.M_Product_Category_ID is Null) AND cnt.VAB_Country_ID=" + custCnt + " AND cod.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()));
                                 amt = _lines[i].GetAmtSource();
                                 String sql = "SELECT il.LineNetAmt,tx.rate FROM VAB_InvoiceLine il"
-                                    + " INNER JOIN C_Tax tx ON (il.C_Tax_ID=tx.C_Tax_ID) "
+                                    + " INNER JOIN VAB_TaxRate tx ON (il.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) "
                                     + "WHERE il.IsActive='Y' AND il.VAB_InvoiceLine_ID=" + _lines[i].Get_ID();
                                 IDataReader idr = null;
                                 try
@@ -680,14 +680,14 @@ namespace VAdvantage.Acct
                                 GetVAB_Currency_ID(), null, amt);
                             if (tl != null)
                             {
-                                tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                                tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                             }
                         }
                     }
 
-                    string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                    string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + Get_ID() +
-                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                     IDataReader idr = DB.ExecuteReader(sql);
                     while (idr.Read())
@@ -819,13 +819,13 @@ namespace VAdvantage.Acct
                             GetVAB_Currency_ID(), amt, null);
                         if (tl != null)
                         {
-                            tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                            tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                         }
                     }
                 }
-                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + Get_ID() +
-                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
@@ -946,12 +946,12 @@ namespace VAdvantage.Acct
                         GetVAB_Currency_ID(), _taxes[i].GetAmount(), null);
                     if (tl != null)
                     {
-                        tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                        tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                     }
                 }
-                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + Get_ID() +
-                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
@@ -1114,12 +1114,12 @@ namespace VAdvantage.Acct
                         GetVAB_Currency_ID(), null, _taxes[i].GetAmount());
                     if (tl != null)
                     {
-                        tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                        tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                     }
                 }
-                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + Get_ID() +
-                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN C_Tax tx ON (cl.C_Tax_ID=tx.C_Tax_ID) " +
+                         " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                          " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + Get_ID() + " GROUP BY tx.rate";
                 IDataReader idr = DB.ExecuteReader(sql);
                 while (idr.Read())
@@ -1370,7 +1370,7 @@ namespace VAdvantage.Acct
                 }
                 if (tl != null)
                 {
-                    tl.SetC_Tax_ID(_taxes[i].GetC_Tax_ID());
+                    tl.SetVAB_TaxRate_ID(_taxes[i].GetVAB_TaxRate_ID());
                 }
             }
             //  Set Locations

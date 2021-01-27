@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_Period
+ * Class Used     : X_VAB_YearPeriod
  * Chronological Development
  * Veena Pandey     07-May-2009
  ******************************************************/
@@ -21,10 +21,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPeriod : X_C_Period
+    public class MPeriod : X_VAB_YearPeriod
     {
         //	Cache
-        private static CCache<int, MPeriod> cache = new CCache<int, MPeriod>("C_Period", 10);
+        private static CCache<int, MPeriod> cache = new CCache<int, MPeriod>("VAB_YearPeriod", 10);
         //	Logger
         private static VLogger _log = VLogger.GetVLogger(typeof(MPeriod).FullName);
         //private static CLogger s_log = CLogger.getCLogger (MPeriod.class);
@@ -35,15 +35,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Period_ID">id</param>
+        /// <param name="VAB_YearPeriod_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPeriod(Ctx ctx, int C_Period_ID, Trx trxName)
-            : base(ctx, C_Period_ID, trxName)
+        public MPeriod(Ctx ctx, int VAB_YearPeriod_ID, Trx trxName)
+            : base(ctx, VAB_YearPeriod_ID, trxName)
         {
-            if (C_Period_ID == 0)
+            if (VAB_YearPeriod_ID == 0)
             {
-                //	setC_Period_ID (0);		//	PK
-                //  setC_Year_ID (0);		//	Parent
+                //	setVAB_YearPeriod_ID (0);		//	PK
+                //  setVAB_Year_ID (0);		//	Parent
                 //  setName (null);
                 //  setPeriodNo (0);
                 //  setStartDate (new Timestamp(System.currentTimeMillis()));
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
             : this(year.GetCtx(), 0, year.Get_TrxName())
         {
             SetClientOrg(year);
-            SetC_Year_ID(year.GetC_Year_ID());
+            SetVAB_Year_ID(year.GetVAB_Year_ID());
             SetPeriodNo(periodNo);
             SetName(name);
             SetStartDate(startDate);
@@ -85,16 +85,16 @@ namespace VAdvantage.Model
         /// Get Period from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_Period_ID">id</param>
+        /// <param name="VAB_YearPeriod_ID">id</param>
         /// <returns>MPeriod</returns>
-        public static MPeriod Get(Ctx ctx, int C_Period_ID)
+        public static MPeriod Get(Ctx ctx, int VAB_YearPeriod_ID)
         {
-            int key = C_Period_ID;
+            int key = VAB_YearPeriod_ID;
             MPeriod retValue = (MPeriod)cache[key];
             if (retValue != null)
                 return retValue;
             //
-            retValue = new MPeriod(ctx, C_Period_ID, null);
+            retValue = new MPeriod(ctx, VAB_YearPeriod_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -124,9 +124,9 @@ namespace VAdvantage.Model
             //MPeriod retValue = null;
             //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
-            //    + "FROM C_Period "
-            //    + "WHERE C_Year_ID IN "
-            //        + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= "
+            //    + "FROM VAB_YearPeriod "
+            //    + "WHERE VAB_Year_ID IN "
+            //        + "(SELECT VAB_Year_ID FROM VAB_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= "
             //            + "(SELECT VAB_Calender_ID FROM VAF_ClientDetail WHERE  IsActive = 'Y' AND VAF_Client_ID=@clientid))"
             //    + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
             //    + " AND IsActive='Y' AND PeriodType='S'";
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
             //        foreach (DataRow dr in ds.Tables[0].Rows)
             //        {
             //            MPeriod period = new MPeriod(ctx, dr, null);
-            //            int key = period.GetC_Period_ID();
+            //            int key = period.GetVAB_YearPeriod_ID();
             //            cache.Add(key, period);
             //            if (period.IsStandardPeriod())
             //                retValue = period;
@@ -215,9 +215,9 @@ namespace VAdvantage.Model
             //	Get it from DB   
             MPeriod retValue = null;
             String sql = "SELECT * "
-            + "FROM C_Period "
-            + "WHERE C_Year_ID IN "
-                + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= @calendarID)"
+            + "FROM VAB_YearPeriod "
+            + "WHERE VAB_Year_ID IN "
+                + "(SELECT VAB_Year_ID FROM VAB_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= @calendarID)"
             + " AND @dateAcc BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
             + " AND IsActive='Y' AND PeriodType='S'";
             try
@@ -236,7 +236,7 @@ namespace VAdvantage.Model
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
                         MPeriod period = new MPeriod(ctx, dr, null);
-                        int key = period.GetC_Period_ID();
+                        int key = period.GetVAB_YearPeriod_ID();
                         //cache.Add(key, period);
                         if (period.IsStandardPeriod())
                             retValue = period;
@@ -261,15 +261,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
-        /// <returns>C_Period_ID or 0</returns>
-        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct)
+        /// <returns>VAB_YearPeriod_ID or 0</returns>
+        public static int GetVAB_YearPeriod_ID(Ctx ctx, DateTime? dateAcct)
         {
             //MPeriod period = Get(ctx, dateAcct);
             //if (period == null)
             //    return 0;
-            //return period.GetC_Period_ID();
+            //return period.GetVAB_YearPeriod_ID();
 
-            return GetC_Period_ID(ctx, dateAcct, 0);
+            return GetVAB_YearPeriod_ID(ctx, dateAcct, 0);
         }
 
         /// <summary>
@@ -278,13 +278,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
         /// <param name="VAF_Org_ID">organization</param>
-        /// <returns>C_Period_ID or 0</returns>
-        public static int GetC_Period_ID(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
+        /// <returns>VAB_YearPeriod_ID or 0</returns>
+        public static int GetVAB_YearPeriod_ID(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
             MPeriod period = Get(ctx, dateAcct, VAF_Org_ID);
             if (period == null)
                 return 0;
-            return period.GetC_Period_ID();
+            return period.GetVAB_YearPeriod_ID();
         }
 
 
@@ -299,12 +299,12 @@ namespace VAdvantage.Model
             //MPeriod retValue = null;
             //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
-            //    + "FROM C_Period "
-            //    + "WHERE C_Year_ID IN "
-            //        + "(SELECT p.C_Year_ID "
+            //    + "FROM VAB_YearPeriod "
+            //    + "WHERE VAB_Year_ID IN "
+            //        + "(SELECT p.VAB_Year_ID "
             //        + "FROM VAF_ClientDetail c"
-            //        + " INNER JOIN C_Year y ON (c.VAB_Calender_ID=y.VAB_Calender_ID)"
-            //        + " INNER JOIN C_Period p ON (y.C_Year_ID=p.C_Year_ID) "
+            //        + " INNER JOIN VAB_Year y ON (c.VAB_Calender_ID=y.VAB_Calender_ID)"
+            //        + " INNER JOIN VAB_YearPeriod p ON (y.VAB_Year_ID=p.VAB_Year_ID) "
             //        + "WHERE c.VAF_Client_ID=@clientid"
             //        + "	AND @date BETWEEN StartDate AND EndDate)"
             //    + " AND IsActive='Y' AND PeriodType='S' "
@@ -368,9 +368,9 @@ namespace VAdvantage.Model
             }
 
             String sql = "SELECT * "
-                + "FROM C_Period "
-                + "WHERE C_Year_ID IN "
-                     + "(SELECT C_Year_ID FROM C_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= @calendarID)"
+                + "FROM VAB_YearPeriod "
+                + "WHERE VAB_Year_ID IN "
+                     + "(SELECT VAB_Year_ID FROM VAB_Year WHERE IsActive = 'Y' AND VAB_Calender_ID= @calendarID)"
                     + "	AND @date BETWEEN StartDate AND EndDate)"
                 + " AND IsActive='Y' AND PeriodType='S' "
                 + "ORDER BY StartDate";
@@ -405,8 +405,8 @@ namespace VAdvantage.Model
             //    return _controls;
             ////
             //List<MPeriodControl> list = new List<MPeriodControl>();
-            //String sql = "SELECT * FROM C_PeriodControl "
-            //    + "WHERE C_Period_ID=" + GetC_Period_ID();
+            //String sql = "SELECT * FROM VAB_YearPeriodControl "
+            //    + "WHERE VAB_YearPeriod_ID=" + GetVAB_YearPeriod_ID();
             //try
             //{
             //    DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -441,8 +441,8 @@ namespace VAdvantage.Model
                 return _controls;
             //
             List<MPeriodControl> list = new List<MPeriodControl>();
-            String sql = "SELECT * FROM C_PeriodControl "
-                + "WHERE IsActive = 'Y' AND C_Period_ID=" + GetC_Period_ID();
+            String sql = "SELECT * FROM VAB_YearPeriodControl "
+                + "WHERE IsActive = 'Y' AND VAB_YearPeriod_ID=" + GetVAB_YearPeriod_ID();
 
             if (VAF_Org_ID > 0)
             {
@@ -649,14 +649,14 @@ namespace VAdvantage.Model
             //	Get it from DB
             MPeriod retValue = null;
             // mohit 28-9-2015
-            //String sql = "SELECT * FROM C_Period "
-            //    + "WHERE C_Year_ID IN "
-            //    + "(SELECT C_Year_ID FROM C_Year WHERE VAB_Calender_ID=" + VAB_Calender_ID + ")"
+            //String sql = "SELECT * FROM VAB_YearPeriod "
+            //    + "WHERE VAB_Year_ID IN "
+            //    + "(SELECT VAB_Year_ID FROM VAB_Year WHERE VAB_Calender_ID=" + VAB_Calender_ID + ")"
             //    + " AND '" + TimeUtil.GetDay(DateAcct) + "' BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
             //    + " AND IsActive='Y' AND PeriodType='S'";
-            String sql = "SELECT * FROM C_Period "
-               + "WHERE C_Year_ID IN "
-               + "(SELECT C_Year_ID FROM C_Year WHERE VAB_Calender_ID=" + VAB_Calender_ID + ")"
+            String sql = "SELECT * FROM VAB_YearPeriod "
+               + "WHERE VAB_Year_ID IN "
+               + "(SELECT VAB_Year_ID FROM VAB_Year WHERE VAB_Calender_ID=" + VAB_Calender_ID + ")"
                + " AND " + GlobalVariable.TO_DATE(DateAcct, true) + " BETWEEN TRUNC(StartDate,'DD') AND TRUNC(EndDate,'DD')"
                + " AND IsActive='Y' AND PeriodType='S'";
             IDataReader idr = null;
@@ -669,7 +669,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     MPeriod period = new MPeriod(ctx, dt.Rows[i], null);
-                    int key = Util.GetValueOfInt(period.GetC_Period_ID());
+                    int key = Util.GetValueOfInt(period.GetVAB_YearPeriod_ID());
 
                     cache[key] = period;
 
@@ -784,7 +784,7 @@ namespace VAdvantage.Model
             MAcctSchema mas = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             if (mas != null && mas.IsAutoPeriodControl())
             {
-                //	if (as.getC_Period_ID() == getC_Period_ID())
+                //	if (as.getVAB_YearPeriod_ID() == getVAB_YearPeriod_ID())
                 //		return true;
                 DateTime today = DateTime.Now;// new DateTime(CommonFunctions.CurrentTimeMillis());
                 DateTime first = TimeUtil.AddDays(today, -mas.GetPeriod_OpenHistory());
@@ -804,7 +804,7 @@ namespace VAdvantage.Model
                 //	We are OK
                 if (IsInPeriod(today))
                 {
-                    mas.SetC_Period_ID(GetC_Period_ID());
+                    mas.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
                     mas.Save();
                 }
                 return true;
@@ -831,12 +831,12 @@ namespace VAdvantage.Model
         {
 
             MPeriod newPeriod = null;
-            String sql = "SELECT * FROM C_Period WHERE " +
-            "C_Period.IsActive='Y' AND PeriodType='S' " +
-            "AND C_Period.C_Year_ID IN " +
-            "(SELECT C_Year_ID FROM C_Year WHERE C_Year.VAB_Calender_ID = @param1 ) " +
-            "AND ((C_Period.C_Year_ID * 1000) + C_Period.PeriodNo) " +
-            " < ((@param2 * 1000) + @param3) ORDER BY C_Period.C_Year_ID DESC, C_Period.PeriodNo DESC";
+            String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
+            "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
+            "AND VAB_YearPeriod.VAB_Year_ID IN " +
+            "(SELECT VAB_Year_ID FROM VAB_Year WHERE VAB_Year.VAB_Calender_ID = @param1 ) " +
+            "AND ((VAB_YearPeriod.VAB_Year_ID * 1000) + VAB_YearPeriod.PeriodNo) " +
+            " < ((@param2 * 1000) + @param3) ORDER BY VAB_YearPeriod.VAB_Year_ID DESC, VAB_YearPeriod.PeriodNo DESC";
 
             SqlParameter[] param = null;
             IDataReader idr = null;
@@ -845,7 +845,7 @@ namespace VAdvantage.Model
             {
                 param = new SqlParameter[3];
                 param[0] = new SqlParameter("@param1", period.GetVAB_Calender_ID());
-                param[1] = new SqlParameter("@param2", period.GetC_Year_ID());
+                param[1] = new SqlParameter("@param2", period.GetVAB_Year_ID());
                 param[2] = new SqlParameter("@param3", period.GetPeriodNo());
                 idr = DB.ExecuteReader(sql, param, null);
                 dt.Load(idr);
@@ -875,12 +875,12 @@ namespace VAdvantage.Model
         {
 
             MPeriod newPeriod = null;
-            String sql = "SELECT * FROM C_Period WHERE " +
-            "C_Period.IsActive='Y' AND PeriodType='S' " +
-            "AND C_Period.C_Year_ID IN " +
-            "(SELECT C_Year_ID FROM C_Year WHERE C_Year.VAB_Calender_ID = @param1 ) " +
-            "AND ((C_Period.C_Year_ID * 1000) + C_Period.PeriodNo) " +
-            " > ((@param2 * 1000) + @param3) ORDER BY C_Period.C_Year_ID ASC, C_Period.PeriodNo ASC";
+            String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
+            "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
+            "AND VAB_YearPeriod.VAB_Year_ID IN " +
+            "(SELECT VAB_Year_ID FROM VAB_Year WHERE VAB_Year.VAB_Calender_ID = @param1 ) " +
+            "AND ((VAB_YearPeriod.VAB_Year_ID * 1000) + VAB_YearPeriod.PeriodNo) " +
+            " > ((@param2 * 1000) + @param3) ORDER BY VAB_YearPeriod.VAB_Year_ID ASC, VAB_YearPeriod.PeriodNo ASC";
 
             IDataReader idr = null;
             SqlParameter[] param = null;
@@ -889,7 +889,7 @@ namespace VAdvantage.Model
             {
                 param = new SqlParameter[3];
                 param[0] = new SqlParameter("@param1", period.GetVAB_Calender_ID());
-                param[1] = new SqlParameter("@param2", period.GetC_Year_ID());
+                param[1] = new SqlParameter("@param2", period.GetVAB_Year_ID());
                 param[2] = new SqlParameter("@param3", period.GetPeriodNo());
                 idr = DB.ExecuteReader(sql, param, null);
                 dt.Load(idr);
@@ -924,13 +924,13 @@ namespace VAdvantage.Model
                 return null;
             }
             List<MPeriod> periods = new List<MPeriod>();
-            String sql = "SELECT * FROM C_Period WHERE " +
-            "C_Period.IsActive='Y' AND PeriodType='S' " +
-            "AND C_Period.C_Year_ID IN " +
-            "(SELECT C_Year_ID FROM C_Year WHERE C_Year.VAB_Calender_ID = @param1 ) " + //calendar_ID
-            "AND ((C_Period.C_Year_ID * 1000) + C_Period.PeriodNo) BETWEEN" +
+            String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
+            "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
+            "AND VAB_YearPeriod.VAB_Year_ID IN " +
+            "(SELECT VAB_Year_ID FROM VAB_Year WHERE VAB_Year.VAB_Calender_ID = @param1 ) " + //calendar_ID
+            "AND ((VAB_YearPeriod.VAB_Year_ID * 1000) + VAB_YearPeriod.PeriodNo) BETWEEN" +
             " (@param2 * 1000 + @param3) AND (@param4 * 1000 + @param5 )" + //start Period year ID, Period Number , End Period Year ID, Period Number
-            " ORDER BY C_Period.C_Year_ID ASC, C_Period.PeriodNo ASC";
+            " ORDER BY VAB_YearPeriod.VAB_Year_ID ASC, VAB_YearPeriod.PeriodNo ASC";
 
             SqlParameter[] param = null;
             IDataReader idr = null;
@@ -939,9 +939,9 @@ namespace VAdvantage.Model
             {
                 param = new SqlParameter[5];
                 param[0] = new SqlParameter("@param1", calendar_ID);
-                param[1] = new SqlParameter("@param2", startPeriod.GetC_Year_ID());
+                param[1] = new SqlParameter("@param2", startPeriod.GetVAB_Year_ID());
                 param[2] = new SqlParameter("@param3", startPeriod.GetPeriodNo());
-                param[3] = new SqlParameter("@param4", endPeriod.GetC_Year_ID());
+                param[3] = new SqlParameter("@param4", endPeriod.GetVAB_Year_ID());
                 param[4] = new SqlParameter("@param5", endPeriod.GetPeriodNo());
                 idr = DB.ExecuteReader(sql, param, trx);
                 dt.Load(idr);
@@ -986,14 +986,14 @@ namespace VAdvantage.Model
         {
             if (VAB_Calender_ID == 0)
             {
-                MYear year = MYear.Get(GetCtx(), GetC_Year_ID());
+                MYear year = MYear.Get(GetCtx(), GetVAB_Year_ID());
                 if (year != null)
                 {
                     VAB_Calender_ID = year.GetVAB_Calender_ID();
                 }
                 else
                 {
-                    log.Severe("@NotFound@ C_Year_ID=" + GetC_Year_ID());
+                    log.Severe("@NotFound@ VAB_Year_ID=" + GetVAB_Year_ID());
                 }
             }
             return VAB_Calender_ID;
@@ -1070,11 +1070,11 @@ namespace VAdvantage.Model
                     MCalendar cal = MCalendar.Get(ctx, VAB_Calender_ID);
                     String date = DisplayType.GetDateFormat(DisplayType.Date).Format(DateAcct);
                     if (cal != null)
-                        return "@NotFound@ @C_Period_ID@: " + date
+                        return "@NotFound@ @VAB_YearPeriod_ID@: " + date
                         + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> " + cal.GetName();
                     else
-                        return "@NotFound@ @C_Period_ID@: " + date
+                        return "@NotFound@ @VAB_YearPeriod_ID@: " + date
                         + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> VAB_Calender_ID=" + VAB_Calender_ID;
                 }
@@ -1100,7 +1100,7 @@ namespace VAdvantage.Model
             //if (!IsActive())
             //{
             //    _log.Warning("Period not active: " + GetName());
-            //    return "@C_Period_ID@ <> @IsActive@";
+            //    return "@VAB_YearPeriod_ID@ <> @IsActive@";
             //}
 
             //MAcctSchema as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
@@ -1110,9 +1110,9 @@ namespace VAdvantage.Model
             //        return "@PeriodClosed@ - @AutoPeriodControl@";
             //    //	We are OK
             //    DateTime today = DateTime.Now.Date;
-            //    if (IsInPeriod(today) && as1.GetC_Period_ID() != GetC_Period_ID())
+            //    if (IsInPeriod(today) && as1.GetVAB_YearPeriod_ID() != GetVAB_YearPeriod_ID())
             //    {
-            //        as1.SetC_Period_ID(GetC_Period_ID());
+            //        as1.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
             //        as1.Save();
             //    }
             //    return null;
@@ -1128,12 +1128,12 @@ namespace VAdvantage.Model
             //if (pc == null)
             //{
             //    log.Warning(GetName() + " - Period Control not found for " + DocBaseType);
-            //    return "@NotFound@ @C_PeriodControl_ID@: " + DocBaseType;
+            //    return "@NotFound@ @VAB_YearPeriodControl_ID@: " + DocBaseType;
             //}
             //log.Fine(GetName() + ": " + DocBaseType);
             //if (pc.IsOpen())
             //    return null;
-            //return "@PeriodClosed@ - @C_PeriodControl_ID@ ("
+            //return "@PeriodClosed@ - @VAB_YearPeriodControl_ID@ ("
             //+ DocBaseType + ", " + dateAcct + ")";
 
             return IsOpen(DocBaseType, dateAcct, 0);
@@ -1152,7 +1152,7 @@ namespace VAdvantage.Model
             if (!IsActive())
             {
                 _log.Warning("Period not active: " + GetName());
-                return "@C_Period_ID@ <> @IsActive@";
+                return "@VAB_YearPeriod_ID@ <> @IsActive@";
             }
 
             MAcctSchema as1 = null;
@@ -1171,9 +1171,9 @@ namespace VAdvantage.Model
                     return "@PeriodClosed@ - @AutoPeriodControl@";
                 //	We are OK
                 DateTime today = DateTime.Now.Date;
-                if (IsInPeriod(today) && as1.GetC_Period_ID() != GetC_Period_ID())
+                if (IsInPeriod(today) && as1.GetVAB_YearPeriod_ID() != GetVAB_YearPeriod_ID())
                 {
-                    as1.SetC_Period_ID(GetC_Period_ID());
+                    as1.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
                     as1.Save();
                 }
                 return null;
@@ -1189,12 +1189,12 @@ namespace VAdvantage.Model
             if (pc == null)
             {
                 log.Warning(GetName() + " - Period Control not found for " + DocBaseType);
-                return "@NotFound@ @C_PeriodControl_ID@: " + DocBaseType;
+                return "@NotFound@ @VAB_YearPeriodControl_ID@: " + DocBaseType;
             }
             log.Fine(GetName() + ": " + DocBaseType);
             if (pc.IsOpen())
                 return null;
-            return "@PeriodClosed@ - @C_PeriodControl_ID@ ("
+            return "@PeriodClosed@ - @VAB_YearPeriodControl_ID@ ("
             + DocBaseType + ", " + dateAcct + ")";
         }
     }

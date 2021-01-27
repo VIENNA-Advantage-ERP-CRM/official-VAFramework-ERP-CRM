@@ -9,50 +9,50 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for PA_ReportColumn
+    using System.Data;/** Generated Model for VAPA_FR_ColumnSet
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_PA_ReportColumn : PO
+    public class X_VAPA_FR_ColumnSet : PO
     {
-        public X_PA_ReportColumn(Context ctx, int PA_ReportColumn_ID, Trx trxName)
-            : base(ctx, PA_ReportColumn_ID, trxName)
-        {/** if (PA_ReportColumn_ID == 0){SetColumnType (null);// R
+        public X_VAPA_FR_ColumnSet(Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+            : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
+        {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
-SetName (null);SetPA_ReportColumnSet_ID (0);SetPA_ReportColumn_ID (0);SetPostingType (null);// A
-SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportColumn WHERE PA_ReportColumnSet_ID=@PA_ReportColumnSet_ID@
+SetName (null);SetVAPA_FR_ColumnSet_ID (0);SetVAPA_FR_ColumnSet_ID (0);SetPostingType (null);// A
+SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@VAPA_FR_ColumnSet_ID@
 } */
         }
-        public X_PA_ReportColumn(Ctx ctx, int PA_ReportColumn_ID, Trx trxName)
-            : base(ctx, PA_ReportColumn_ID, trxName)
-        {/** if (PA_ReportColumn_ID == 0){SetColumnType (null);// R
+        public X_VAPA_FR_ColumnSet(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+            : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
+        {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
-SetName (null);SetPA_ReportColumnSet_ID (0);SetPA_ReportColumn_ID (0);SetPostingType (null);// A
-SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportColumn WHERE PA_ReportColumnSet_ID=@PA_ReportColumnSet_ID@
+SetName (null);SetVAPA_FR_ColumnSet_ID (0);SetVAPA_FR_ColumnSet_ID (0);SetPostingType (null);// A
+SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@VAPA_FR_ColumnSet_ID@
 } */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportColumn(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_ColumnSet(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportColumn(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FR_ColumnSet(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_PA_ReportColumn(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAPA_FR_ColumnSet(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_PA_ReportColumn() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAPA_FR_ColumnSet() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621420744L;/** Last Updated Timestamp 4/1/2016 1:05:03 PM */
         public static long updatedMS = 1459496103955L;/** VAF_TableView_ID=446 */
         public static int Table_ID; // =446;
-        /** TableName=PA_ReportColumn */
-        public static String Table_Name = "PA_ReportColumn";
+        /** TableName=VAPA_FR_ColumnSet */
+        public static String Table_Name = "VAPA_FR_ColumnSet";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(7);/** AccessLevel
 @return 7 - System - Client - Org 
 */
@@ -67,7 +67,7 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_PA_ReportColumn[").Append(Get_ID()).Append("]"); return sb.ToString(); }
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAPA_FR_ColumnSet[").Append(Get_ID()).Append("]"); return sb.ToString(); }
         /** AmountType VAF_Control_Ref_ID=235 */
         public static int AMOUNTTYPE_VAF_Control_Ref_ID = 235;/** Period Balance = BP */
         public static String AMOUNTTYPE_PeriodBalance = "BP";/** Total Balance = BT */
@@ -138,33 +138,33 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Account Element.
 @return Account Element */
         public int GetVAB_Acct_Element_ID() { Object ii = Get_Value("VAB_Acct_Element_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Address.
-@param C_Location_ID Location or Address */
-        public void SetC_Location_ID(int C_Location_ID)
+@param VAB_Address_ID Location or Address */
+        public void SetVAB_Address_ID(int VAB_Address_ID)
         {
-            if (C_Location_ID <= 0) Set_Value("C_Location_ID", null);
+            if (VAB_Address_ID <= 0) Set_Value("VAB_Address_ID", null);
             else
-                Set_Value("C_Location_ID", C_Location_ID);
+                Set_Value("VAB_Address_ID", VAB_Address_ID);
         }/** Get Address.
 @return Location or Address */
-        public int GetC_Location_ID() { Object ii = Get_Value("C_Location_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
-@param C_Project_ID Business Opportunity */
-        public void SetC_Project_ID(int C_Project_ID)
+        public int GetVAB_Address_ID() { Object ii = Get_Value("VAB_Address_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Opportunity.
+@param VAB_Project_ID Business Opportunity */
+        public void SetVAB_Project_ID(int VAB_Project_ID)
         {
-            if (C_Project_ID <= 0) Set_Value("C_Project_ID", null);
+            if (VAB_Project_ID <= 0) Set_Value("VAB_Project_ID", null);
             else
-                Set_Value("C_Project_ID", C_Project_ID);
+                Set_Value("VAB_Project_ID", VAB_Project_ID);
         }/** Get Opportunity.
 @return Business Opportunity */
-        public int GetC_Project_ID() { Object ii = Get_Value("C_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
-@param C_SalesRegion_ID Sales coverage region */
-        public void SetC_SalesRegion_ID(int C_SalesRegion_ID)
+        public int GetVAB_Project_ID() { Object ii = Get_Value("VAB_Project_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Sales Region.
+@param VAB_SalesRegionState_ID Sales coverage region */
+        public void SetVAB_SalesRegionState_ID(int VAB_SalesRegionState_ID)
         {
-            if (C_SalesRegion_ID <= 0) Set_Value("C_SalesRegion_ID", null);
+            if (VAB_SalesRegionState_ID <= 0) Set_Value("VAB_SalesRegionState_ID", null);
             else
-                Set_Value("C_SalesRegion_ID", C_SalesRegion_ID);
+                Set_Value("VAB_SalesRegionState_ID", VAB_SalesRegionState_ID);
         }/** Get Sales Region.
 @return Sales coverage region */
-        public int GetC_SalesRegion_ID() { Object ii = Get_Value("C_SalesRegion_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAB_SalesRegionState_ID() { Object ii = Get_Value("VAB_SalesRegionState_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** CalculationType VAF_Control_Ref_ID=236 */
         public static int CALCULATIONTYPE_VAF_Control_Ref_ID = 236;/** Add (Op1+Op2) = A */
         public static String CALCULATIONTYPE_AddOp1PlusOp2 = "A";/** Percentage (Op1 of Op2) = P */
@@ -393,15 +393,15 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         public void SetFRPT_TrxLineFormatting(int FRPT_TrxLineFormatting) { Set_Value("FRPT_TrxLineFormatting", FRPT_TrxLineFormatting); }/** Get Trx Line Formatting.
 @return Trx Line Formatting */
         public int GetFRPT_TrxLineFormatting() { Object ii = Get_Value("FRPT_TrxLineFormatting"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Budget.
-@param GL_Budget_ID General Ledger Budget */
-        public void SetGL_Budget_ID(int GL_Budget_ID)
+@param VAGL_Budget_ID General Ledger Budget */
+        public void SetVAGL_Budget_ID(int VAGL_Budget_ID)
         {
-            if (GL_Budget_ID <= 0) Set_Value("GL_Budget_ID", null);
+            if (VAGL_Budget_ID <= 0) Set_Value("VAGL_Budget_ID", null);
             else
-                Set_Value("GL_Budget_ID", GL_Budget_ID);
+                Set_Value("VAGL_Budget_ID", VAGL_Budget_ID);
         }/** Get Budget.
 @return General Ledger Budget */
-        public int GetGL_Budget_ID() { Object ii = Get_Value("GL_Budget_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Adhoc Conversion.
+        public int GetVAGL_Budget_ID() { Object ii = Get_Value("VAGL_Budget_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Adhoc Conversion.
 @param IsAdhocConversion Perform conversion for all amounts to currency */
         public void SetIsAdhocConversion(Boolean IsAdhocConversion) { Set_Value("IsAdhocConversion", IsAdhocConversion); }/** Get Adhoc Conversion.
 @return Perform conversion for all amounts to currency */
@@ -458,14 +458,14 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM PA_ReportC
         }/** Get Organization.
 @return Organizational entity within client */
         public int GetOrg_ID() { Object ii = Get_Value("Org_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Column Set.
-@param PA_ReportColumnSet_ID Collection of Columns for Report */
-        public void SetPA_ReportColumnSet_ID(int PA_ReportColumnSet_ID) { if (PA_ReportColumnSet_ID < 1) throw new ArgumentException("PA_ReportColumnSet_ID is mandatory."); Set_ValueNoCheck("PA_ReportColumnSet_ID", PA_ReportColumnSet_ID); }/** Get Report Column Set.
+@param VAPA_FR_ColumnSet_ID Collection of Columns for Report */
+        public void SetVAPA_FR_ColumnSet_ID(int VAPA_FR_ColumnSet_ID) { if (VAPA_FR_ColumnSet_ID < 1) throw new ArgumentException("VAPA_FR_ColumnSet_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID); }/** Get Report Column Set.
 @return Collection of Columns for Report */
-        public int GetPA_ReportColumnSet_ID() { Object ii = Get_Value("PA_ReportColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Column.
-@param PA_ReportColumn_ID Column in Report */
-        public void SetPA_ReportColumn_ID(int PA_ReportColumn_ID) { if (PA_ReportColumn_ID < 1) throw new ArgumentException("PA_ReportColumn_ID is mandatory."); Set_ValueNoCheck("PA_ReportColumn_ID", PA_ReportColumn_ID); }/** Get Report Column.
+        public int GetVAPA_FR_ColumnSet_ID() { Object ii = Get_Value("VAPA_FR_ColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Column.
+@param VAPA_FR_ColumnSet_ID Column in Report */
+        public void SetVAPA_FR_ColumnSet_ID(int VAPA_FR_ColumnSet_ID) { if (VAPA_FR_ColumnSet_ID < 1) throw new ArgumentException("VAPA_FR_ColumnSet_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID); }/** Get Report Column.
 @return Column in Report */
-        public int GetPA_ReportColumn_ID() { Object ii = Get_Value("PA_ReportColumn_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAPA_FR_ColumnSet_ID() { Object ii = Get_Value("VAPA_FR_ColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** PostingType VAF_Control_Ref_ID=125 */
         public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;/** Actual = A */
         public static String POSTINGTYPE_Actual = "A";/** Budget = B */

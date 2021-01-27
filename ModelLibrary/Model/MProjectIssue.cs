@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_C_ProjectIssue
+ * Class Used     : X_VAB_ProjectSupply
  * Chronological Development
  * Veena Pandey     17-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectIssue : X_C_ProjectIssue
+    public class MProjectIssue : X_VAB_ProjectSupply
     {
         /**	Parent				*/
         private MProject _parent = null;
@@ -27,14 +27,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="C_ProjectIssue_ID">id</param>
+        /// <param name="VAB_ProjectSupply_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectIssue(Ctx ctx, int C_ProjectIssue_ID, Trx trxName)
-            : base(ctx, C_ProjectIssue_ID, trxName)
+        public MProjectIssue(Ctx ctx, int VAB_ProjectSupply_ID, Trx trxName)
+            : base(ctx, VAB_ProjectSupply_ID, trxName)
         {
-            if (C_ProjectIssue_ID == 0)
+            if (VAB_ProjectSupply_ID == 0)
             {
-                //	setC_Project_ID (0);
+                //	setVAB_Project_ID (0);
                 //	setLine (0);
                 //	setM_Locator_ID (0);
                 //	setM_Product_ID (0);
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
             SetClientOrg(project.GetVAF_Client_ID(), project.GetVAF_Org_ID());
-            SetC_Project_ID(project.GetC_Project_ID());	//	Parent
+            SetVAB_Project_ID(project.GetVAB_Project_ID());	//	Parent
             SetLine(GetNextLine());
             _parent = project;
             //
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         private int GetNextLine()
         {
             return DataBase.DB.GetSQLValue(Get_TrxName(),
-                "SELECT COALESCE(MAX(Line),0)+10 FROM C_ProjectIssue WHERE C_Project_ID=@param1", GetC_Project_ID());
+                "SELECT COALESCE(MAX(Line),0)+10 FROM VAB_ProjectSupply WHERE VAB_Project_ID=@param1", GetVAB_Project_ID());
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace VAdvantage.Model
         /// <returns>project</returns>
         public MProject GetParent()
         {
-            if (_parent == null && GetC_Project_ID() != 0)
-                _parent = new MProject(GetCtx(), GetC_Project_ID(), Get_TrxName());
+            if (_parent == null && GetVAB_Project_ID() != 0)
+                _parent = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
                 MTransaction.MOVEMENTTYPE_WorkOrderPlus,
                 GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(),
                 Decimal.Negate(GetMovementQty()), GetMovementDate(), Get_TrxName());
-            mTrx.SetC_ProjectIssue_ID(GetC_ProjectIssue_ID());
+            mTrx.SetVAB_ProjectSupply_ID(GetVAB_ProjectSupply_ID());
             //
             MLocator loc = MLocator.Get(GetCtx(), GetM_Locator_ID());
             if (MStorage.Add(GetCtx(), loc.GetM_Warehouse_ID(), GetM_Locator_ID(),

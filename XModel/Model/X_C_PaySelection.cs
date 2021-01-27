@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_PaySelection
+/** Generated Model for VAB_PaymentOption
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_PaySelection : PO
+public class X_VAB_PaymentOption : PO
 {
-public X_C_PaySelection (Context ctx, int C_PaySelection_ID, Trx trxName) : base (ctx, C_PaySelection_ID, trxName)
+public X_VAB_PaymentOption (Context ctx, int VAB_PaymentOption_ID, Trx trxName) : base (ctx, VAB_PaymentOption_ID, trxName)
 {
-/** if (C_PaySelection_ID == 0)
+/** if (VAB_PaymentOption_ID == 0)
 {
 SetVAB_Bank_Acct_ID (0);
-SetC_PaySelection_ID (0);
+SetVAB_PaymentOption_ID (0);
 SetIsApproved (false);
 SetName (null);	// @#Date@
 SetPayDate (DateTime.Now);	// @#Date@
@@ -30,12 +30,12 @@ SetTotalAmt (0.0);
 }
  */
 }
-public X_C_PaySelection (Ctx ctx, int C_PaySelection_ID, Trx trxName) : base (ctx, C_PaySelection_ID, trxName)
+public X_VAB_PaymentOption (Ctx ctx, int VAB_PaymentOption_ID, Trx trxName) : base (ctx, VAB_PaymentOption_ID, trxName)
 {
-/** if (C_PaySelection_ID == 0)
+/** if (VAB_PaymentOption_ID == 0)
 {
 SetVAB_Bank_Acct_ID (0);
-SetC_PaySelection_ID (0);
+SetVAB_PaymentOption_ID (0);
 SetIsApproved (false);
 SetName (null);	// @#Date@
 SetPayDate (DateTime.Now);	// @#Date@
@@ -49,7 +49,7 @@ SetTotalAmt (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySelection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentOption (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_C_PaySelection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySelection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_PaymentOption (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_C_PaySelection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_C_PaySelection (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_PaymentOption (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_PaySelection()
+static X_VAB_PaymentOption()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389056793L;
 public static int Table_ID;
  // =426;
 
-/** TableName=C_PaySelection */
-public static String Table_Name="C_PaySelection";
+/** TableName=VAB_PaymentOption */
+public static String Table_Name="VAB_PaymentOption";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_PaySelection[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_PaymentOption[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Bank Account.
@@ -138,17 +138,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Payment Selection.
-@param C_PaySelection_ID Payment Selection */
-public void SetC_PaySelection_ID (int C_PaySelection_ID)
+@param VAB_PaymentOption_ID Payment Selection */
+public void SetVAB_PaymentOption_ID (int VAB_PaymentOption_ID)
 {
-if (C_PaySelection_ID < 1) throw new ArgumentException ("C_PaySelection_ID is mandatory.");
-Set_ValueNoCheck ("C_PaySelection_ID", C_PaySelection_ID);
+if (VAB_PaymentOption_ID < 1) throw new ArgumentException ("VAB_PaymentOption_ID is mandatory.");
+Set_ValueNoCheck ("VAB_PaymentOption_ID", VAB_PaymentOption_ID);
 }
 /** Get Payment Selection.
 @return Payment Selection */
-public int GetC_PaySelection_ID() 
+public int GetVAB_PaymentOption_ID() 
 {
-Object ii = Get_Value("C_PaySelection_ID");
+Object ii = Get_Value("VAB_PaymentOption_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

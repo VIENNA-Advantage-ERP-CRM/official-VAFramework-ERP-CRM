@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAccount
  * Purpose        : Account Object Entity to maintain all segment values.
- * Class Used     : X_C_ValidCombination
+ * Class Used     : X_VAB_Acct_ValidParameter
  * Chronological    Development
  * Raghunandan     06-Jun-2009
   ******************************************************/
@@ -23,7 +23,7 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MAccount : X_C_ValidCombination
+    public class MAccount : X_VAB_Acct_ValidParameter
     {
         /**	Logger						*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MAccount).FullName);
@@ -38,14 +38,14 @@ namespace VAdvantage.Model
         /// <param name="VAF_Org_ID"> organisation id</param>
         /// <param name="VAB_AccountBook_ID"> account schema id</param>
         /// <param name="Account_ID">account id</param>
-        /// <param name="C_SubAcct_ID">sub-Account id</param>
+        /// <param name="VAB_SubAcct_ID">sub-Account id</param>
         /// <param name="M_Product_ID">product id</param>
         /// <param name="VAB_BusinessPartner_ID">Bussness partner id</param>
         /// <param name="VAF_OrgTrx_ID"> ordTax id</param>
         /// <param name="C_LocFrom_ID">C_LocFrom_ID</param>
         /// <param name="C_LocTo_ID"></param>
-        /// <param name="C_SalesRegion_ID"></param>
-        /// <param name="C_Project_ID"></param>
+        /// <param name="VAB_SalesRegionState_ID"></param>
+        /// <param name="VAB_Project_ID"></param>
         /// <param name="VAB_Promotion_ID"></param>
         /// <param name="VAB_BillingCode_ID"></param>
         /// <param name="User1_ID"></param>
@@ -54,27 +54,27 @@ namespace VAdvantage.Model
         /// <param name="UserElement2_ID"></param>
         /// <returns>account or null</returns>
         public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID,
-            int Account_ID, int C_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
-            int C_LocFrom_ID, int C_LocTo_ID, int C_SalesRegion_ID, int C_Project_ID, int VAB_Promotion_ID,
+            int Account_ID, int VAB_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+            int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID,
             int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID)
         {
             MAccount existingAccount = null;
             //
             StringBuilder info = new StringBuilder();
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_ValidCombination "
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_Acct_ValidParameter "
                 //	Mandatory fields
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID		//	#1
                 + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID
                 + " AND Account_ID=" + Account_ID);		//	#4
             //	Optional fields
-            if (C_SubAcct_ID == 0)
+            if (VAB_SubAcct_ID == 0)
             {
-                sql.Append(" AND C_SubAcct_ID IS NULL");
+                sql.Append(" AND VAB_SubAcct_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_SubAcct_ID=" + C_SubAcct_ID);
+                sql.Append(" AND VAB_SubAcct_ID=" + VAB_SubAcct_ID);
             }
             if (M_Product_ID == 0)
             {
@@ -116,21 +116,21 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND C_LocTo_ID=" + C_LocTo_ID);
             }
-            if (C_SalesRegion_ID == 0)
+            if (VAB_SalesRegionState_ID == 0)
             {
-                sql.Append(" AND C_SalesRegion_ID IS NULL");
+                sql.Append(" AND VAB_SalesRegionState_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_SalesRegion_ID=" + C_SalesRegion_ID);
+                sql.Append(" AND VAB_SalesRegionState_ID=" + VAB_SalesRegionState_ID);
             }
-            if (C_Project_ID == 0)
+            if (VAB_Project_ID == 0)
             {
-                sql.Append(" AND C_Project_ID IS NULL");
+                sql.Append(" AND VAB_Project_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_Project_ID=" + C_Project_ID);
+                sql.Append(" AND VAB_Project_ID=" + VAB_Project_ID);
             }
             if (VAB_Promotion_ID == 0)
             {
@@ -214,14 +214,14 @@ namespace VAdvantage.Model
             newAccount.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
-            newAccount.SetC_SubAcct_ID(C_SubAcct_ID);
+            newAccount.SetVAB_SubAcct_ID(VAB_SubAcct_ID);
             newAccount.SetM_Product_ID(M_Product_ID);
             newAccount.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
             newAccount.SetC_LocTo_ID(C_LocTo_ID);
-            newAccount.SetC_SalesRegion_ID(C_SalesRegion_ID);
-            newAccount.SetC_Project_ID(C_Project_ID);
+            newAccount.SetVAB_SalesRegionState_ID(VAB_SalesRegionState_ID);
+            newAccount.SetVAB_Project_ID(VAB_Project_ID);
             newAccount.SetVAB_Promotion_ID(VAB_Promotion_ID);
             newAccount.SetVAB_BillingCode_ID(VAB_BillingCode_ID);
             newAccount.SetUser1_ID(User1_ID);
@@ -240,27 +240,27 @@ namespace VAdvantage.Model
 
 
         // Added by Bharat for New elements UserElements1 to UserElement9
-        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int C_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
-            int C_LocFrom_ID, int C_LocTo_ID, int C_SalesRegion_ID, int C_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID,
+        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int VAB_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+            int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID,
             int UserElement3_ID, int UserElement4_ID, int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID)
         {
             MAccount existingAccount = null;
             //
             StringBuilder info = new StringBuilder();
-            StringBuilder sql = new StringBuilder("SELECT * FROM C_ValidCombination "
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_Acct_ValidParameter "
                 //	Mandatory fields
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID		//	#1
                 + " AND VAF_Org_ID=" + VAF_Org_ID
                 + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID
                 + " AND Account_ID=" + Account_ID);		//	#4
             //	Optional fields
-            if (C_SubAcct_ID == 0)
+            if (VAB_SubAcct_ID == 0)
             {
-                sql.Append(" AND C_SubAcct_ID IS NULL");
+                sql.Append(" AND VAB_SubAcct_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_SubAcct_ID=" + C_SubAcct_ID);
+                sql.Append(" AND VAB_SubAcct_ID=" + VAB_SubAcct_ID);
             }
             if (M_Product_ID == 0)
             {
@@ -305,21 +305,21 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND C_LocTo_ID=" + C_LocTo_ID);
             }
-            if (C_SalesRegion_ID == 0)
+            if (VAB_SalesRegionState_ID == 0)
             {
-                sql.Append(" AND C_SalesRegion_ID IS NULL");
+                sql.Append(" AND VAB_SalesRegionState_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_SalesRegion_ID=" + C_SalesRegion_ID);
+                sql.Append(" AND VAB_SalesRegionState_ID=" + VAB_SalesRegionState_ID);
             }
-            if (C_Project_ID == 0)
+            if (VAB_Project_ID == 0)
             {
-                sql.Append(" AND C_Project_ID IS NULL");
+                sql.Append(" AND VAB_Project_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND C_Project_ID=" + C_Project_ID);
+                sql.Append(" AND VAB_Project_ID=" + VAB_Project_ID);
             }
             if (VAB_Promotion_ID == 0)
             {
@@ -459,14 +459,14 @@ namespace VAdvantage.Model
             newAccount.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
-            newAccount.SetC_SubAcct_ID(C_SubAcct_ID);
+            newAccount.SetVAB_SubAcct_ID(VAB_SubAcct_ID);
             newAccount.SetM_Product_ID(M_Product_ID);
             newAccount.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
             newAccount.SetC_LocTo_ID(C_LocTo_ID);
-            newAccount.SetC_SalesRegion_ID(C_SalesRegion_ID);
-            newAccount.SetC_Project_ID(C_Project_ID);
+            newAccount.SetVAB_SalesRegionState_ID(VAB_SalesRegionState_ID);
+            newAccount.SetVAB_Project_ID(VAB_Project_ID);
             newAccount.SetVAB_Promotion_ID(VAB_Promotion_ID);
             newAccount.SetVAB_BillingCode_ID(VAB_BillingCode_ID);
             newAccount.SetUser1_ID(User1_ID);
@@ -501,7 +501,7 @@ namespace VAdvantage.Model
         public static MAccount Get(Ctx ctx, int VAB_AccountBook_ID, String alias)
         {
             MAccount retValue = null;
-            String sql = "SELECT * FROM C_ValidCombination WHERE VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND Alias=" + alias;
+            String sql = "SELECT * FROM VAB_Acct_ValidParameter WHERE VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND Alias=" + alias;
             DataSet ds = new DataSet();
             try
             {
@@ -524,14 +524,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="fa">accounting fact</param>
         /// <returns>account</returns>
-        public static MAccount Get(X_Fact_Acct fa)
+        public static MAccount Get(X_Actual_Acct_Detail fa)
         {
             MAccount acct = Get(fa.GetCtx(),
                 fa.GetVAF_Client_ID(), fa.GetVAF_Org_ID(), fa.GetVAB_AccountBook_ID(),
-                fa.GetAccount_ID(), fa.GetC_SubAcct_ID(),
+                fa.GetAccount_ID(), fa.GetVAB_SubAcct_ID(),
                 fa.GetM_Product_ID(), fa.GetVAB_BusinessPartner_ID(), fa.GetVAF_OrgTrx_ID(),
-                fa.GetC_LocFrom_ID(), fa.GetC_LocTo_ID(), fa.GetC_SalesRegion_ID(),
-                fa.GetC_Project_ID(), fa.GetVAB_Promotion_ID(), fa.GetVAB_BillingCode_ID(),
+                fa.GetC_LocFrom_ID(), fa.GetC_LocTo_ID(), fa.GetVAB_SalesRegionState_ID(),
+                fa.GetVAB_Project_ID(), fa.GetVAB_Promotion_ID(), fa.GetVAB_BillingCode_ID(),
                 fa.GetUser1_ID(), fa.GetUser2_ID(), fa.GetUserElement1_ID(), fa.GetUserElement2_ID());
             return acct;
         }
@@ -574,7 +574,7 @@ namespace VAdvantage.Model
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Account))
                     vc.SetAccount_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SubAccount) && setValue)
-                    vc.SetC_SubAcct_ID(defaultValue);
+                    vc.SetVAB_SubAcct_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner) && setValue)
                     vc.SetVAB_BusinessPartner_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Product) && setValue)
@@ -590,9 +590,9 @@ namespace VAdvantage.Model
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx) && setValue)
                     vc.SetVAF_OrgTrx_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Project) && setValue)
-                    vc.SetC_Project_ID(defaultValue);
+                    vc.SetVAB_Project_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion) && setValue)
-                    vc.SetC_SalesRegion_ID(defaultValue);
+                    vc.SetVAB_SalesRegionState_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) && setValue)
                     vc.SetUser1_ID(defaultValue);
                 else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2) && setValue)
@@ -611,12 +611,12 @@ namespace VAdvantage.Model
         /// Get Account
         /// </summary>
         /// <param name="ctx"> context</param>
-        /// <param name="C_ValidCombination_ID">combination</param>
+        /// <param name="VAB_Acct_ValidParameter_ID">combination</param>
         /// <returns>Account</returns>
-        public static MAccount Get(Ctx ctx, int C_ValidCombination_ID)
+        public static MAccount Get(Ctx ctx, int VAB_Acct_ValidParameter_ID)
         {
             //	Maybe later cache
-            return new MAccount(ctx, C_ValidCombination_ID, null);
+            return new MAccount(ctx, VAB_Acct_ValidParameter_ID, null);
         }
 
         /// <summary>
@@ -628,10 +628,10 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         public static void UpdateValueDescription(Ctx ctx, String where, Trx trxName)
         {
-            String sql = "SELECT * FROM C_ValidCombination";
+            String sql = "SELECT * FROM VAB_Acct_ValidParameter";
             if (where != null && where.Length > 0)
                 sql += " WHERE " + where;
-            sql += " ORDER BY C_ValidCombination_ID";
+            sql += " ORDER BY VAB_Acct_ValidParameter_ID";
             int count = 0;
             int errors = 0;
             DataSet ds = new DataSet();
@@ -661,13 +661,13 @@ namespace VAdvantage.Model
         /// Default constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_ValidCombination_ID"></param>
+        /// <param name="VAB_Acct_ValidParameter_ID"></param>
         /// <param name="trxName"></param>
-        public MAccount(Ctx ctx, int C_ValidCombination_ID, Trx trxName)
-            : base(ctx, C_ValidCombination_ID, trxName)
+        public MAccount(Ctx ctx, int VAB_Acct_ValidParameter_ID, Trx trxName)
+            : base(ctx, VAB_Acct_ValidParameter_ID, trxName)
         {
 
-            if (C_ValidCombination_ID == 0)
+            if (VAB_Acct_ValidParameter_ID == 0)
             {
                 //	setAccount_ID (0);
                 //	setVAB_AccountBook_ID (0);
@@ -705,7 +705,7 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MAccount=[");
-            sb.Append(GetC_ValidCombination_ID());
+            sb.Append(GetVAB_Acct_ValidParameter_ID());
             if (GetCombination() != null)
                 sb.Append(",").Append(GetCombination());
             else
@@ -715,8 +715,8 @@ namespace VAdvantage.Model
                     .Append(",Org=").Append(GetVAF_Org_ID())
                     .Append(",Acct=").Append(GetAccount_ID())
                     .Append(" ");
-                if (GetC_SubAcct_ID() != 0)
-                    sb.Append(",C_SubAcct_ID=").Append(GetC_SubAcct_ID());
+                if (GetVAB_SubAcct_ID() != 0)
+                    sb.Append(",VAB_SubAcct_ID=").Append(GetVAB_SubAcct_ID());
                 if (GetM_Product_ID() != 0)
                     sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
                 if (GetVAB_BusinessPartner_ID() != 0)
@@ -727,10 +727,10 @@ namespace VAdvantage.Model
                     sb.Append(",C_LocFrom_ID=").Append(GetC_LocFrom_ID());
                 if (GetC_LocTo_ID() != 0)
                     sb.Append(",C_LocTo_ID=").Append(GetC_LocTo_ID());
-                if (GetC_SalesRegion_ID() != 0)
-                    sb.Append(",C_SalesRegion_ID=").Append(GetC_SalesRegion_ID());
-                if (GetC_Project_ID() != 0)
-                    sb.Append(",C_Project_ID=").Append(GetC_Project_ID());
+                if (GetVAB_SalesRegionState_ID() != 0)
+                    sb.Append(",VAB_SalesRegionState_ID=").Append(GetVAB_SalesRegionState_ID());
+                if (GetVAB_Project_ID() != 0)
+                    sb.Append(",VAB_Project_ID=").Append(GetVAB_Project_ID());
                 if (GetVAB_Promotion_ID() != 0)
                     sb.Append(",VAB_Promotion_ID=").Append(GetVAB_Promotion_ID());
                 if (GetVAB_BillingCode_ID() != 0)
@@ -874,9 +874,9 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_SubAccount.Equals(element.GetElementType()))
                 {
-                    if (GetC_SubAcct_ID() != 0)
+                    if (GetVAB_SubAcct_ID() != 0)
                     {
-                        X_C_SubAcct sa = new X_C_SubAcct(GetCtx(), GetC_SubAcct_ID(), Get_TrxName());
+                        X_VAB_SubAcct sa = new X_VAB_SubAcct(GetCtx(), GetVAB_SubAcct_ID(), Get_TrxName());
                         combiStr = sa.GetValue();
                         descrStr = sa.GetName();
                     }
@@ -953,9 +953,9 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(element.GetElementType()))
                 {
-                    if (GetC_SalesRegion_ID() != 0)
+                    if (GetVAB_SalesRegionState_ID() != 0)
                     {
-                        MSalesRegion loc = new MSalesRegion(GetCtx(), GetC_SalesRegion_ID(), Get_TrxName());
+                        MSalesRegion loc = new MSalesRegion(GetCtx(), GetVAB_SalesRegionState_ID(), Get_TrxName());
                         combiStr = loc.GetValue();
                         descrStr = loc.GetName();
                     }
@@ -967,9 +967,9 @@ namespace VAdvantage.Model
                 }
                 else if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(element.GetElementType()))
                 {
-                    if (GetC_Project_ID() != 0)
+                    if (GetVAB_Project_ID() != 0)
                     {
-                        X_C_Project project = new X_C_Project(GetCtx(), GetC_Project_ID(), Get_TrxName());
+                        X_VAB_Project project = new X_VAB_Project(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
                         combiStr = project.GetValue();
                         descrStr = project.GetName();
                     }
@@ -1352,12 +1352,12 @@ namespace VAdvantage.Model
         {
             bool ok = true;
             //	Validate Sub-Account
-            if (GetC_SubAcct_ID() != 0)
+            if (GetVAB_SubAcct_ID() != 0)
             {
-                X_C_SubAcct sa = new X_C_SubAcct(GetCtx(), GetC_SubAcct_ID(), Get_TrxName());
+                X_VAB_SubAcct sa = new X_VAB_SubAcct(GetCtx(), GetVAB_SubAcct_ID(), Get_TrxName());
                 if (sa.GetVAB_Acct_Element_ID() != GetAccount_ID())
                 {
-                    log.SaveError("Error", "C_SubAcct.VAB_Acct_Element_ID=" + sa.GetVAB_Acct_Element_ID()
+                    log.SaveError("Error", "VAB_SubAcct.VAB_Acct_Element_ID=" + sa.GetVAB_Acct_Element_ID()
                         + "<>Account_ID=" + GetAccount_ID());
                     ok = false;
                 }

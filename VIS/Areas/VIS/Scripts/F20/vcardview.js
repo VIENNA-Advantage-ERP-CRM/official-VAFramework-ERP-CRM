@@ -375,8 +375,8 @@
         VIS.dataContext.getCardViewInfo(mTab.getVAF_Screen_ID(), mTab.getVAF_Tab_ID(), function (retData) {
             //init 
             //var retData = {};
-            // retData.Group = "AccessLevel" //C_UOM_ID";
-            // retData.InCol = ['Name', 'Description', 'Help', 'C_UOM_ID']
+            // retData.Group = "AccessLevel" //VAB_UOM_ID";
+            // retData.InCol = ['Name', 'Description', 'Help', 'VAB_UOM_ID']
             // retData.Conditions = [];
             self.setCardViewData(retData);
 
