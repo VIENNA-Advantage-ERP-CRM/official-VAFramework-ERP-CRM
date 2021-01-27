@@ -1113,7 +1113,7 @@ namespace VAdvantage.Model
                 }
                 SetBPGroup(grp);	//	setDefaults
                 // Set Search Key from Serial No defined on Business Partner Group
-                if (grp.Get_ColumnIndex("M_SerNoCtl_ID") > 0)
+                if (grp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0)
                 {
                     string name = "";
                     MSerNoCtl ctl = new MSerNoCtl(GetCtx(), grp.GetM_SerNoCtl_ID(), Get_TrxName());
