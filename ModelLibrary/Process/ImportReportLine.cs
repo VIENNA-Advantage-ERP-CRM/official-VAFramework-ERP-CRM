@@ -347,7 +347,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int noUpdateSource = 0;
 
             //	****	Create ReportSource
-            sql = new StringBuilder("SELECT I_ReportLine_ID, VAPA_FR_Source_ID "
+            sql = new StringBuilder("SELECT I_ReportLine_ID, VAPA_FVAR_Source_ID "
                 + "FROM I_ReportLine "
                 + "WHERE VAPA_FR_Row_ID IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
@@ -355,8 +355,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 //	Insert ReportSource
                 //PreparedStatement pstmt_insertSource = DataBase.prepareStatement
-                String _insertSource = "INSERT INTO VAPA_FR_Source "
-                    + "(VAPA_FR_Source_ID,"
+                String _insertSource = "INSERT INTO VAPA_FVAR_Source "
+                    + "(VAPA_FVAR_Source_ID,"
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "VAPA_FR_Row_ID,ElementType,VAB_Acct_Element_ID) "
                     + "SELECT @param1,"
@@ -370,12 +370,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Update ReportSource
                 //jz 
                 /*
-                String sqlt="UPDATE VAPA_FR_Source "
+                String sqlt="UPDATE VAPA_FVAR_Source "
                     + "SET (ElementType,VAB_Acct_Element_ID,Updated,UpdatedBy)="
                     + " (SELECT 'AC',VAB_Acct_Element_ID,SysDate,UpdatedBy"
                     + " FROM I_ReportLine"
                     + " WHERE I_ReportLine_ID=?) "
-                    + "WHERE VAPA_FR_Source_ID=?"
+                    + "WHERE VAPA_FVAR_Source_ID=?"
                     + clientCheck;
                 PreparedStatement pstmt_updateSource = DataBase.prepareStatement
                     (sqlt, Get_TrxName());
@@ -384,7 +384,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Set Imported = Y
                 //PreparedStatement pstmt_setImported = DataBase.prepareStatement
                 String _setImported = "UPDATE I_ReportLine SET I_IsImported='Y',"
-                    + " VAPA_FR_Source_ID=@param1, "
+                    + " VAPA_FVAR_Source_ID=@param1, "
                     + " Updated=SysDate, Processed='Y' WHERE I_ReportLine_ID=@param2";// Get_TrxName());
 
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql.ToString(), Get_TrxName());
@@ -393,31 +393,31 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     int I_ReportLine_ID = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
-                    int VAPA_FR_Source_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
+                    int VAPA_FVAR_Source_ID = Utility.Util.GetValueOfInt(idr[1]);// rs.getInt(2);
                     //
                     SqlParameter[] param = new SqlParameter[2];
-                    if (VAPA_FR_Source_ID == 0)			//	New ReportSource
+                    if (VAPA_FVAR_Source_ID == 0)			//	New ReportSource
                     {
                         try
                         {
-                            VAPA_FR_Source_ID = DataBase.DB.GetNextID(_VAF_Client_ID, "VAPA_FR_Source", Get_TrxName());
-                            if (VAPA_FR_Source_ID <= 0)
+                            VAPA_FVAR_Source_ID = DataBase.DB.GetNextID(_VAF_Client_ID, "VAPA_FVAR_Source", Get_TrxName());
+                            if (VAPA_FVAR_Source_ID <= 0)
                             {
                                 if (idr != null)
                                 {
                                     idr.Close();
                                     idr = null;
                                 }
-                                throw new Exception("No NextID (" + VAPA_FR_Source_ID + ")");
+                                throw new Exception("No NextID (" + VAPA_FVAR_Source_ID + ")");
                             }
 
-                            //pstmt_insertSource.setInt(1, VAPA_FR_Source_ID);
-                            param[0] = new SqlParameter("@param1", VAPA_FR_Source_ID);
+                            //pstmt_insertSource.setInt(1, VAPA_FVAR_Source_ID);
+                            param[0] = new SqlParameter("@param1", VAPA_FVAR_Source_ID);
                             //pstmt_insertSource.setInt(2, I_ReportLine_ID);
                             param[1] = new SqlParameter("@param2", I_ReportLine_ID);
                             //
                             no = DataBase.DB.ExecuteQuery(_insertSource, param, Get_TrxName());// pstmt_insertSource.ExecuteQuery();
-                            log.Finest("Insert ReportSource = " + no + ", I_ReportLine_ID=" + I_ReportLine_ID + ", VAPA_FR_Source_ID=" + VAPA_FR_Source_ID);
+                            log.Finest("Insert ReportSource = " + no + ", I_ReportLine_ID=" + I_ReportLine_ID + ", VAPA_FVAR_Source_ID=" + VAPA_FVAR_Source_ID);
                             noInsertSource++;
                         }
                         catch (Exception ex)
@@ -433,22 +433,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     else								//	update Report Source
                     {
                         //jz
-                        String sqlt = "UPDATE VAPA_FR_Source "
+                        String sqlt = "UPDATE VAPA_FVAR_Source "
                             + "SET (ElementType,VAB_Acct_Element_ID,Updated,UpdatedBy)="
                             + " (SELECT CAST('AC' AS CHAR(2)),VAB_Acct_Element_ID,SysDate,UpdatedBy"  //jz
                             + " FROM I_ReportLine"
                             + " WHERE I_ReportLine_ID=" + I_ReportLine_ID + ") "
-                            + "WHERE VAPA_FR_Source_ID=" + VAPA_FR_Source_ID + " "
+                            + "WHERE VAPA_FVAR_Source_ID=" + VAPA_FVAR_Source_ID + " "
                             + clientCheck;
                         //PreparedStatement pstmt_updateSource = DataBase.prepareStatement
                         //(sqlt, Get_TrxName());
                         //pstmt_updateSource.setInt(1, I_ReportLine_ID);
-                        //pstmt_updateSource.setInt(2, VAPA_FR_Source_ID);
+                        //pstmt_updateSource.setInt(2, VAPA_FVAR_Source_ID);
                         try
                         {
                             no = DataBase.DB.ExecuteQuery(sqlt, null, Get_TrxName());// pstmt_updateSource.ExecuteQuery();
                             //no = DataBase.DB.ExecuteQuery(sqlt, Get_TrxName());
-                            log.Finest("Update ReportSource = " + no + ", I_ReportLine_ID=" + I_ReportLine_ID + ", VAPA_FR_Source_ID=" + VAPA_FR_Source_ID);
+                            log.Finest("Update ReportSource = " + no + ", I_ReportLine_ID=" + I_ReportLine_ID + ", VAPA_FVAR_Source_ID=" + VAPA_FVAR_Source_ID);
                             noUpdateSource++;
                         }
                         catch (Exception ex)
@@ -464,8 +464,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }	//	update source
 
                     //	Set Imported to Y
-                    //pstmt_setImported.setInt(1, VAPA_FR_Source_ID);
-                    param[0] = new SqlParameter("@param1", VAPA_FR_Source_ID);
+                    //pstmt_setImported.setInt(1, VAPA_FVAR_Source_ID);
+                    param[0] = new SqlParameter("@param1", VAPA_FVAR_Source_ID);
                     //pstmt_setImported.setInt(2, I_ReportLine_ID);
                     param[0] = new SqlParameter("@param1", I_ReportLine_ID);
                     no = DataBase.DB.ExecuteQuery(_setImported, param, Get_TrxName());// pstmt_setImported.ExecuteQuery();
@@ -498,8 +498,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@VAPA_FR_Row_ID@: @Inserted@");
             AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdateLine), "@VAPA_FR_Row_ID@: @Updated@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertSource), "@VAPA_FR_Source_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdateSource), "@VAPA_FR_Source_ID@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertSource), "@VAPA_FVAR_Source_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdateSource), "@VAPA_FVAR_Source_ID@: @Updated@");
 
             return "";
         }	//	doIt

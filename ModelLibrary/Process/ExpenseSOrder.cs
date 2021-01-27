@@ -76,12 +76,12 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             int index = 1;
-            StringBuilder sql = new StringBuilder("SELECT * FROM S_TimeExpenseLine el "
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAS_ExpenseReportLine el "
                 + "WHERE el.VAF_Client_ID=@param1"                       //	#1
                 + " AND el.VAB_BusinessPartner_ID>0 AND el.IsInvoiced='Y'"   //	Business Partner && to be invoiced
                 + " AND el.VAB_OrderLine_ID IS NULL"                  //	not invoiced yet
-                + " AND EXISTS (SELECT * FROM S_TimeExpense e "     //	processed only
-                    + "WHERE el.S_TimeExpense_ID=e.S_TimeExpense_ID AND e.Processed='Y')");
+                + " AND EXISTS (SELECT * FROM VAS_ExpenseReport e "     //	processed only
+                    + "WHERE el.VAS_ExpenseReport_ID=e.VAS_ExpenseReport_ID AND e.Processed='Y')");
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 index++;
@@ -90,8 +90,8 @@ namespace VAdvantage.Process
             if (_DateFrom != null || _DateTo != null)
             {
 
-                sql.Append(" AND EXISTS (SELECT * FROM S_TimeExpense e "
-                    + "WHERE el.S_TimeExpense_ID=e.S_TimeExpense_ID");
+                sql.Append(" AND EXISTS (SELECT * FROM VAS_ExpenseReport e "
+                    + "WHERE el.VAS_ExpenseReport_ID=e.VAS_ExpenseReport_ID");
                 if (_DateFrom != null)
                 {
                     index++;
@@ -105,7 +105,7 @@ namespace VAdvantage.Process
 
                 sql.Append(")");
             }
-            sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.VAB_Project_ID, el.S_TimeExpense_ID, el.Line");
+            sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.VAB_Project_ID, el.VAS_ExpenseReport_ID, el.Line");
 
             //
             MBPartner oldBPartner = null;
@@ -167,8 +167,8 @@ namespace VAdvantage.Process
                             CompleteOrder();
                             old_Project_ID = tel.GetVAB_Project_ID();
                         }
-                        if (te == null || te.GetS_TimeExpense_ID() != tel.GetS_TimeExpense_ID())
-                            te = new MTimeExpense(GetCtx(), tel.GetS_TimeExpense_ID(), Get_TrxName());
+                        if (te == null || te.GetVAS_ExpenseReport_ID() != tel.GetVAS_ExpenseReport_ID())
+                            te = new MTimeExpense(GetCtx(), tel.GetVAS_ExpenseReport_ID(), Get_TrxName());
                         //
                         ProcessLine(te, tel, oldBPartner);
 
@@ -414,9 +414,9 @@ namespace VAdvantage.Process
                 ol.SetM_Product_ID(tel.GetM_Product_ID(),
                     tel.GetVAB_UOM_ID());
             }
-            if (tel.GetS_ResourceAssignment_ID() != 0)
+            if (tel.GetVAS_Res_Assignment_ID() != 0)
             {
-                ol.SetS_ResourceAssignment_ID(tel.GetS_ResourceAssignment_ID());
+                ol.SetVAS_Res_Assignment_ID(tel.GetVAS_Res_Assignment_ID());
             }
             // Set charge ID
             if (tel.GetVAB_Charge_ID() != 0)

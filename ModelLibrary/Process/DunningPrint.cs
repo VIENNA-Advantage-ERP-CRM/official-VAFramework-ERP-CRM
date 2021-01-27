@@ -40,7 +40,7 @@ namespace VAdvantage.Process
         //	Mail PDF				
         private bool _EMailPDF = false;
         // Mail Template			
-        private int _R_MailText_ID = 0;
+        private int _VAR_MailTemplate_ID = 0;
         // Dunning Run				
         private int _VAB_DunningExe_ID = 0;
         // Print only Outstanding	
@@ -67,9 +67,9 @@ namespace VAdvantage.Process
                 {
                     _EMailPDF = "Y".Equals(para[i].GetParameter());
                 }
-                else if (name.Equals("R_MailText_ID"))
+                else if (name.Equals("VAR_MailTemplate_ID"))
                 {
-                    _R_MailText_ID = para[i].GetParameterAsInt();
+                    _VAR_MailTemplate_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_DunningExe_ID"))
                 {
@@ -92,22 +92,22 @@ namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("VAB_DunningExe_ID=" + _VAB_DunningExe_ID + ",R_MailText_ID=" + _R_MailText_ID
+            log.Info("VAB_DunningExe_ID=" + _VAB_DunningExe_ID + ",VAR_MailTemplate_ID=" + _VAR_MailTemplate_ID
                 + ", EmailPDF=" + _EMailPDF + ",IsOnlyIfBPBalance=" + _IsOnlyIfBPBalance);
 
             //	Need to have Template
-            if (_EMailPDF && _R_MailText_ID == 0)
+            if (_EMailPDF && _VAR_MailTemplate_ID == 0)
             {
-                throw new Exception("@NotFound@: @R_MailText_ID@");
+                throw new Exception("@NotFound@: @VAR_MailTemplate_ID@");
             }
             String subject = "";
             MMailText mText = null;
             if (_EMailPDF)
             {
-                mText = new MMailText(GetCtx(), _R_MailText_ID, Get_TrxName());
+                mText = new MMailText(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
                 if (_EMailPDF && mText.Get_ID() == 0)
                 {
-                    throw new Exception("@NotFound@: @R_MailText_ID@ - " + _R_MailText_ID);
+                    throw new Exception("@NotFound@: @VAR_MailTemplate_ID@ - " + _VAR_MailTemplate_ID);
                 }
                 subject = mText.GetMailHeader();
             }

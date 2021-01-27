@@ -163,7 +163,7 @@ namespace VAdvantage.Print
             m_printFont = MPrintFont.Get(format.GetVAF_Print_Rpt_Font_ID());
 
             //	Print Context
-            m_printCtx.SetContext(Page.CONTEXT_REPORTNAME, m_format.GetName());
+            m_printCtx.SetContext(Page.CONTEXVAT_REPORTNAME, m_format.GetName());
             m_printCtx.SetContext(Page.CONTEXT_HEADER, Env.GetHeader(GetCtx(), 0));
             m_printCtx.SetContext(Env.LANGUAGE, m_format.GetLanguage().GetVAF_Language());
 

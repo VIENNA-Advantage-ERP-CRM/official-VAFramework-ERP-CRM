@@ -137,8 +137,8 @@ namespace VIS.Classes
 
             queryList.VIS_34 = "SELECT COALESCE(MAX(VAB_BatchInvoiceLine_ID),0) FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID = @Param";
 
-            queryList.VIS_35 = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty FROM S_ResourceAssignment ra"
-                             + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) WHERE ra.S_ResourceAssignment_ID = @Param";
+            queryList.VIS_35 = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty FROM VAS_Res_Assignment ra"
+                             + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) WHERE ra.VAS_Res_Assignment_ID = @Param";
             queryList.VIS_36 = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
                              + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
                              + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
@@ -222,7 +222,7 @@ namespace VIS.Classes
 
             queryList.VIS_63 = "SELECT NoOfDays FROM VAB_Frequency WHERE VAB_Frequency_ID=@Param";
 
-            queryList.VIS_64 = "SELECT ProfileType FROM S_Resource WHERE VAF_UserContact_ID=@Param";
+            queryList.VIS_64 = "SELECT ProfileType FROM VAS_Resource WHERE VAF_UserContact_ID=@Param";
 
             queryList.VIS_65 = "SELECT M_Product_ID, MovementQty, M_AttributeSetInstance_ID FROM M_InOutLine WHERE M_InOutLine_ID=@Param";
 
@@ -244,7 +244,7 @@ namespace VIS.Classes
                             " AND t.M_Locator_ID = @Param3 AND t.M_Product_ID = @Param4 AND NVL(t.M_AttributeSetInstance_ID,0) = @Param5";
 
 
-            queryList.VIS_72 = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='R_Request'";
+            queryList.VIS_72 = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='VAR_Request'";
 
             queryList.VIS_73 = "SELECT Name, PO_Name FROM VAF_ColumnDic WHERE UPPER(ColumnName)=@ColumnName";
             queryList.VIS_74 = "SELECT t.Name, t.PO_Name FROM VAF_ColumnDic_TL t, VAF_ColumnDic e "

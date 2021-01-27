@@ -11,14 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_Aging
+/** Generated Model for VAT_Aging
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_T_Aging : PO
 {
-public X_T_Aging (Context ctx, int T_Aging_ID, Trx trxName) : base (ctx, T_Aging_ID, trxName)
+public X_T_Aging (Context ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
 {
-/** if (T_Aging_ID == 0)
+/** if (VAT_Aging_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetVAB_BPart_Category_ID (0);
@@ -55,9 +55,9 @@ SetStatementDate (DateTime.Now);
 }
  */
 }
-public X_T_Aging (Ctx ctx, int T_Aging_ID, Trx trxName) : base (ctx, T_Aging_ID, trxName)
+public X_T_Aging (Ctx ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
 {
-/** if (T_Aging_ID == 0)
+/** if (VAT_Aging_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetVAB_BPart_Category_ID (0);
@@ -134,8 +134,8 @@ public static long updatedMS = 1280389067341L;
 public static int Table_ID;
  // =631;
 
-/** TableName=T_Aging */
-public static String Table_Name="T_Aging";
+/** TableName=VAT_Aging */
+public static String Table_Name="VAT_Aging";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);

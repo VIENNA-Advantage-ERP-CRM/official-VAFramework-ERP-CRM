@@ -999,7 +999,7 @@ namespace VAdvantage.Model
                                 MRPriceAvPo = 0;
                                 MRPriceLastPO = 0;
                                 query.Clear();
-                                query.Append(@"SELECT amt FROM T_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
+                                query.Append(@"SELECT amt FROM VAT_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
                                              " AND VAF_Org_ID = " + VAF_Org_ID + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                              " AND M_Product_ID = " + product.GetM_Product_ID() + " AND isRecordFromForm = 'Y' " +
                                              " AND M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID());
@@ -1007,7 +1007,7 @@ namespace VAdvantage.Model
                                 if (MRPriceAvPo == 0)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT amt FROM T_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
+                                    query.Append(@"SELECT amt FROM VAT_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
                                                  " AND VAF_Org_ID = " + inoutline.GetVAF_Org_ID() + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                  " AND M_Product_ID = " + product.GetM_Product_ID() + " AND isRecordFromForm = 'Y' " +
                                                  " AND M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID());
@@ -1027,7 +1027,7 @@ namespace VAdvantage.Model
                                 MRPriceAvPo = 0;
                                 MRPriceLastPO = 0;
                                 query.Clear();
-                                query.Append(@"SELECT amt FROM T_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
+                                query.Append(@"SELECT amt FROM VAT_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
                                              " AND VAF_Org_ID = " + VAF_Org_ID + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                              " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(VAB_OrderLine_ID , 0) = 0  " +
                                              " AND M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID());
@@ -1035,7 +1035,7 @@ namespace VAdvantage.Model
                                 if (MRPriceAvPo == 0)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT amt FROM T_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
+                                    query.Append(@"SELECT amt FROM VAT_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
                                                  " AND VAF_Org_ID = " + inoutline.GetVAF_Org_ID() + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                                  " AND M_Product_ID = " + product.GetM_Product_ID() + " AND NVL(VAB_OrderLine_ID , 0) = 0  " +
                                                  " AND M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID());
@@ -1422,7 +1422,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_Organization) //(cl != "B")
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
@@ -1432,7 +1432,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
@@ -1450,7 +1450,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_Organization) //(cl != "B")
                                     {
                                         query.Clear();
-                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
@@ -1460,7 +1460,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                     {
                                         query.Clear();
-                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceLifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
@@ -1496,7 +1496,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_Organization) //(cl != "B")
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                          " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
@@ -1506,7 +1506,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                    query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = " + MatchPO_OrderLineId +
@@ -1524,7 +1524,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_Organization) //(cl != "B")
                                     {
                                         query.Clear();
-                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = 0 " +
                                              " AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
@@ -1534,7 +1534,7 @@ namespace VAdvantage.Model
                                             || cl == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                                     {
                                         query.Clear();
-                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                                        query.Append(@"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                     where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" AND cq.M_CostElement_ID = " + ceFifo + @" 
                                      AND ced.VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) = " + M_ASI_ID + @" 
                                      AND ced.M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
@@ -1566,7 +1566,7 @@ namespace VAdvantage.Model
 
                                 //get Cost Queue Record based on condition
                                 query.Clear();
-                                query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                 DataSet ds2 = DB.ExecuteDataset(query.ToString(), null, null);
 
@@ -1680,7 +1680,7 @@ namespace VAdvantage.Model
 
                                     // update cost queue with invoice amount
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     ds2 = DB.ExecuteDataset(query.ToString(), null, null);
                                     if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
@@ -1786,7 +1786,7 @@ namespace VAdvantage.Model
 
                                     // update cost queue with invoice amount
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     DataSet ds2 = DB.ExecuteDataset(query.ToString(), null, null);
 
@@ -1902,7 +1902,7 @@ namespace VAdvantage.Model
 
                                         // update cost queue with invoice amount
                                         query.Clear();
-                                        query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                        query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                                   " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
 
                                         ds2 = DB.ExecuteDataset(query.ToString(), null, null);
@@ -2933,7 +2933,7 @@ namespace VAdvantage.Model
                                 if (invoiceline.GetVAB_OrderLine_ID() > 0 && matchInoutLine != null && matchInoutLine.GetM_InOutLine_ID() > 0)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE VAB_OrderLine_ID = " + invoiceline.GetVAB_OrderLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE VAB_OrderLine_ID = " + invoiceline.GetVAB_OrderLine_ID() +
                                         " AND M_InOutLine_ID = " + matchInoutLine.GetM_InOutLine_ID() + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     DataSet ds1 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                     if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
@@ -2942,7 +2942,7 @@ namespace VAdvantage.Model
                                         {
                                             // change 9-5-2016
                                             // handle partial payment
-                                            X_T_Temp_CostDetail tempCostDetail = new X_T_Temp_CostDetail(invoiceline.GetCtx(), Util.GetValueOfInt(ds1.Tables[0].Rows[k]["T_Temp_CostDetail_ID"]), trxName);
+                                            X_VAT_Temp_CostDetail tempCostDetail = new X_VAT_Temp_CostDetail(invoiceline.GetCtx(), Util.GetValueOfInt(ds1.Tables[0].Rows[k]["VAT_Temp_CostDetail_ID"]), trxName);
                                             query.Clear();
                                             query.Append("SELECT M_CostElement_ID FROM M_CostQueue WHERE M_CostQueue_ID = " + Util.GetValueOfInt(ds1.Tables[0].Rows[k]["M_CostQueue_ID"]));
                                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
@@ -3526,7 +3526,7 @@ namespace VAdvantage.Model
                                 MRPriceAvPo = 0;
                                 MRPriceLastPO = 0;
                                 query.Clear();
-                                query.Append(@"SELECT amt FROM T_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
+                                query.Append(@"SELECT amt FROM VAT_Temp_CostDetail WHERE IsActive = 'Y' AND VAF_Client_ID = " + VAF_Client_ID +
                                              " AND VAF_Org_ID = " + VAF_Org_ID + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID() +
                                              " AND M_Product_ID = " + product.GetM_Product_ID() + " AND isRecordFromForm = 'Y' " +
                                              " AND M_InOutLine_ID =  " + inoutline.GetM_InOutLine_ID());
@@ -3888,7 +3888,7 @@ namespace VAdvantage.Model
 
                                 //get Cost Queue Record based on condition
                                 query.Clear();
-                                query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                 DataSet ds2 = DB.ExecuteDataset(query.ToString(), null, null);
 
@@ -3974,7 +3974,7 @@ namespace VAdvantage.Model
 
                                     // update cost queue with invoice amount
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     ds2 = DB.ExecuteDataset(query.ToString(), null, null);
                                     if (ds2 != null && ds2.Tables.Count > 0 && ds2.Tables[0].Rows.Count > 0)
@@ -4057,7 +4057,7 @@ namespace VAdvantage.Model
 
                                     // update cost queue with invoice amount
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                               " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     DataSet ds2 = DB.ExecuteDataset(query.ToString(), null, null);
 
@@ -4144,7 +4144,7 @@ namespace VAdvantage.Model
 
                                         // update cost queue with invoice amount
                                         query.Clear();
-                                        query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
+                                        query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE  M_InOutLine_ID = " + inoutline.GetM_InOutLine_ID() +
                                                   " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
 
                                         ds2 = DB.ExecuteDataset(query.ToString(), null, null);
@@ -4591,7 +4591,7 @@ namespace VAdvantage.Model
                                 if (invoiceline.GetVAB_OrderLine_ID() > 0 && invoiceline.GetM_InOutLine_ID() > 0)
                                 {
                                     query.Clear();
-                                    query.Append(@"SELECT * FROM T_Temp_CostDetail WHERE VAB_OrderLine_ID = " + invoiceline.GetVAB_OrderLine_ID() +
+                                    query.Append(@"SELECT * FROM VAT_Temp_CostDetail WHERE VAB_OrderLine_ID = " + invoiceline.GetVAB_OrderLine_ID() +
                                          " AND M_InOutLine_ID = " + invoiceline.GetM_InOutLine_ID() + " AND VAB_AccountBook_ID = " + acctSchema.GetVAB_AccountBook_ID());
                                     DataSet ds1 = DB.ExecuteDataset(query.ToString(), null, trxName);
                                     if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
@@ -4600,7 +4600,7 @@ namespace VAdvantage.Model
                                         {
                                             // change 9-5-2016
                                             // handle partial payment
-                                            X_T_Temp_CostDetail tempCostDetail = new X_T_Temp_CostDetail(invoiceline.GetCtx(), Util.GetValueOfInt(ds1.Tables[0].Rows[k]["T_Temp_CostDetail_ID"]), trxName);
+                                            X_VAT_Temp_CostDetail tempCostDetail = new X_VAT_Temp_CostDetail(invoiceline.GetCtx(), Util.GetValueOfInt(ds1.Tables[0].Rows[k]["VAT_Temp_CostDetail_ID"]), trxName);
                                             query.Clear();
                                             query.Append("SELECT M_CostElement_ID FROM M_CostQueue WHERE M_CostQueue_ID = " + Util.GetValueOfInt(ds1.Tables[0].Rows[k]["M_CostQueue_ID"]));
                                             costingElementId = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
@@ -5611,7 +5611,7 @@ namespace VAdvantage.Model
                 Price = Decimal.Negate(Price);
             Price = Decimal.Round(Price, acctSchema.GetCostingPrecision());
             MCostElement costElement = null;
-            X_T_Temp_CostDetail tempCostDetail = null;
+            X_VAT_Temp_CostDetail tempCostDetail = null;
             try
             {
                 #region Ist Entry Either FIFO or LIFO
@@ -5671,7 +5671,7 @@ namespace VAdvantage.Model
                 else
                 {
                     costQueueIds += costQueue.GetM_CostQueue_ID();
-                    tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
+                    tempCostDetail = new X_VAT_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetVAF_Client_ID(VAF_Client_ID);
                     tempCostDetail.SetVAF_Org_ID(VAF_Org_ID);
                     tempCostDetail.SetM_CostDetail_ID(cd.GetM_CostDetail_ID());
@@ -5768,7 +5768,7 @@ namespace VAdvantage.Model
                 else
                 {
                     costQueueIds += " , " + costQueue.GetM_CostQueue_ID();
-                    tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
+                    tempCostDetail = new X_VAT_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetVAF_Client_ID(VAF_Client_ID);
                     tempCostDetail.SetVAF_Org_ID(VAF_Org_ID);
                     tempCostDetail.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));
@@ -5822,7 +5822,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// is used to create entry for Cost Queue
-        /// also we are doing entry in temp table "T_Temp_CostDetail" -- for re-updation of cost when we received invoice
+        /// also we are doing entry in temp table "VAT_Temp_CostDetail" -- for re-updation of cost when we received invoice
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="acctSchema">accounting schema</param>
@@ -5845,7 +5845,7 @@ namespace VAdvantage.Model
                 return true;
             }
             MCostElement costElement = null;
-            X_T_Temp_CostDetail tempCostDetail = null;
+            X_VAT_Temp_CostDetail tempCostDetail = null;
             int M_CostElement_ID = 0;
             string sql = null;
             decimal amtWithSurcharge = 0;
@@ -5881,7 +5881,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
+                    tempCostDetail = new X_VAT_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetVAF_Client_ID(VAF_Client_ID);
                     tempCostDetail.SetVAF_Org_ID(VAF_Org_ID);
                     //tempCostDetail.SetM_CostDetail_ID(cd.GetM_CostDetail_ID());
@@ -5934,7 +5934,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    tempCostDetail = new X_T_Temp_CostDetail(ctx, 0, null);
+                    tempCostDetail = new X_VAT_Temp_CostDetail(ctx, 0, null);
                     tempCostDetail.SetVAF_Client_ID(VAF_Client_ID);
                     tempCostDetail.SetVAF_Org_ID(VAF_Org_ID);
                     tempCostDetail.SetVAB_AccountBook_ID(Util.GetValueOfInt(acctSchema.GetVAB_AccountBook_ID()));

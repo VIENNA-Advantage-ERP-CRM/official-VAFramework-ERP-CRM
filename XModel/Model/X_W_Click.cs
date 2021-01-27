@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for W_Click
+/** Generated Model for VAW_Tick
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_W_Click : PO
+public class X_VAW_Tick : PO
 {
-public X_W_Click (Context ctx, int W_Click_ID, Trx trxName) : base (ctx, W_Click_ID, trxName)
+public X_VAW_Tick (Context ctx, int VAW_Tick_ID, Trx trxName) : base (ctx, VAW_Tick_ID, trxName)
 {
-/** if (W_Click_ID == 0)
+/** if (VAW_Tick_ID == 0)
 {
 SetProcessed (false);	// N
-SetW_Click_ID (0);
+SetVAW_Tick_ID (0);
 }
  */
 }
-public X_W_Click (Ctx ctx, int W_Click_ID, Trx trxName) : base (ctx, W_Click_ID, trxName)
+public X_VAW_Tick (Ctx ctx, int VAW_Tick_ID, Trx trxName) : base (ctx, VAW_Tick_ID, trxName)
 {
-/** if (W_Click_ID == 0)
+/** if (VAW_Tick_ID == 0)
 {
 SetProcessed (false);	// N
-SetW_Click_ID (0);
+SetVAW_Tick_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetW_Click_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_W_Click (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_Tick (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_W_Click (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_W_Click (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_Tick (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_W_Click (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_W_Click (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAW_Tick (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_W_Click()
+static X_VAW_Tick()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389068140L;
 public static int Table_ID;
  // =550;
 
-/** TableName=W_Click */
-public static String Table_Name="W_Click";
+/** TableName=VAW_Tick */
+public static String Table_Name="VAW_Tick";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_W_Click[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAW_Tick[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -272,33 +272,33 @@ public String GetUserAgent()
 return (String)Get_Value("UserAgent");
 }
 /** Set Click Count.
-@param W_ClickCount_ID Web Click Management */
-public void SetW_ClickCount_ID (int W_ClickCount_ID)
+@param VAW_TickCount_ID Web Click Management */
+public void SetVAW_TickCount_ID (int VAW_TickCount_ID)
 {
-if (W_ClickCount_ID <= 0) Set_ValueNoCheck ("W_ClickCount_ID", null);
+if (VAW_TickCount_ID <= 0) Set_ValueNoCheck ("VAW_TickCount_ID", null);
 else
-Set_ValueNoCheck ("W_ClickCount_ID", W_ClickCount_ID);
+Set_ValueNoCheck ("VAW_TickCount_ID", VAW_TickCount_ID);
 }
 /** Get Click Count.
 @return Web Click Management */
-public int GetW_ClickCount_ID() 
+public int GetVAW_TickCount_ID() 
 {
-Object ii = Get_Value("W_ClickCount_ID");
+Object ii = Get_Value("VAW_TickCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Web Click.
-@param W_Click_ID Individual Web Click */
-public void SetW_Click_ID (int W_Click_ID)
+@param VAW_Tick_ID Individual Web Click */
+public void SetVAW_Tick_ID (int VAW_Tick_ID)
 {
-if (W_Click_ID < 1) throw new ArgumentException ("W_Click_ID is mandatory.");
-Set_ValueNoCheck ("W_Click_ID", W_Click_ID);
+if (VAW_Tick_ID < 1) throw new ArgumentException ("VAW_Tick_ID is mandatory.");
+Set_ValueNoCheck ("VAW_Tick_ID", VAW_Tick_ID);
 }
 /** Get Web Click.
 @return Individual Web Click */
-public int GetW_Click_ID() 
+public int GetVAW_Tick_ID() 
 {
-Object ii = Get_Value("W_Click_ID");
+Object ii = Get_Value("VAW_Tick_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

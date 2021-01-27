@@ -11,23 +11,23 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Resolution
+/** Generated Model for VAR_Resolution
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_R_Resolution : PO
 {
-public X_R_Resolution (Context ctx, int R_Resolution_ID, Trx trxName) : base (ctx, R_Resolution_ID, trxName)
+public X_R_Resolution (Context ctx, int VAR_Resolution_ID, Trx trxName) : base (ctx, VAR_Resolution_ID, trxName)
 {
-/** if (R_Resolution_ID == 0)
+/** if (VAR_Resolution_ID == 0)
 {
 SetName (null);
 SetR_Resolution_ID (0);
 }
  */
 }
-public X_R_Resolution (Ctx ctx, int R_Resolution_ID, Trx trxName) : base (ctx, R_Resolution_ID, trxName)
+public X_R_Resolution (Ctx ctx, int VAR_Resolution_ID, Trx trxName) : base (ctx, VAR_Resolution_ID, trxName)
 {
-/** if (R_Resolution_ID == 0)
+/** if (VAR_Resolution_ID == 0)
 {
 SetName (null);
 SetR_Resolution_ID (0);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389066635L;
 public static int Table_ID;
  // =774;
 
-/** TableName=R_Resolution */
-public static String Table_Name="R_Resolution";
+/** TableName=VAR_Resolution */
+public static String Table_Name="VAR_Resolution";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -171,17 +171,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Resolution.
-@param R_Resolution_ID Request Resolution */
-public void SetR_Resolution_ID (int R_Resolution_ID)
+@param VAR_Resolution_ID Request Resolution */
+public void SetR_Resolution_ID (int VAR_Resolution_ID)
 {
-if (R_Resolution_ID < 1) throw new ArgumentException ("R_Resolution_ID is mandatory.");
-Set_ValueNoCheck ("R_Resolution_ID", R_Resolution_ID);
+if (VAR_Resolution_ID < 1) throw new ArgumentException ("VAR_Resolution_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Resolution_ID", VAR_Resolution_ID);
 }
 /** Get Resolution.
 @return Request Resolution */
 public int GetR_Resolution_ID() 
 {
-Object ii = Get_Value("R_Resolution_ID");
+Object ii = Get_Value("VAR_Resolution_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

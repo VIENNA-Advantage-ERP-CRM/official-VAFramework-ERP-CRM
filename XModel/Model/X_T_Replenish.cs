@@ -11,33 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_Replenish
+/** Generated Model for VAT_Restock
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_Replenish : PO
+public class X_VAT_Restock : PO
 {
-public X_T_Replenish (Context ctx, int T_Replenish_ID, Trx trxName) : base (ctx, T_Replenish_ID, trxName)
+public X_VAT_Restock (Context ctx, int VAT_Restock_ID, Trx trxName) : base (ctx, VAT_Restock_ID, trxName)
 {
-/** if (T_Replenish_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetLevel_Max (0.0);
-SetLevel_Min (0.0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
-SetOrder_Min (0.0);
-SetOrder_Pack (0.0);
-SetQtyOnHand (0.0);
-SetQtyOrdered (0.0);
-SetQtyReserved (0.0);
-SetQtyToOrder (0.0);
-SetReplenishType (null);
-}
- */
-}
-public X_T_Replenish (Ctx ctx, int T_Replenish_ID, Trx trxName) : base (ctx, T_Replenish_ID, trxName)
-{
-/** if (T_Replenish_ID == 0)
+/** if (VAT_Restock_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetLevel_Max (0.0);
@@ -54,12 +35,31 @@ SetReplenishType (null);
 }
  */
 }
+public X_VAT_Restock (Ctx ctx, int VAT_Restock_ID, Trx trxName) : base (ctx, VAT_Restock_ID, trxName)
+{
+/** if (VAT_Restock_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetLevel_Max (0.0);
+SetLevel_Min (0.0);
+SetM_Product_ID (0);
+SetM_Warehouse_ID (0);
+SetOrder_Min (0.0);
+SetOrder_Pack (0.0);
+SetQtyOnHand (0.0);
+SetQtyOrdered (0.0);
+SetQtyReserved (0.0);
+SetQtyToOrder (0.0);
+SetReplenishType (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Replenish (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Restock (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,7 +67,7 @@ public X_T_Replenish (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Replenish (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Restock (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -75,13 +75,13 @@ public X_T_Replenish (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Replenish (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_Restock (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_Replenish()
+static X_VAT_Restock()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -94,8 +94,8 @@ public static long updatedMS = 1280389067529L;
 public static int Table_ID;
  // =364;
 
-/** TableName=T_Replenish */
-public static String Table_Name="T_Replenish";
+/** TableName=VAT_Restock */
+public static String Table_Name="VAT_Restock";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -129,7 +129,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_Replenish[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_Restock[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

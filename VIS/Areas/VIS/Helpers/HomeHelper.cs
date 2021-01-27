@@ -29,11 +29,11 @@ namespace VIS.Helpers
             {
                 #region Request Count
                 //To Get Request count
-                strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
-                 + " AND R_Request.Processed ='N'"
-                + " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
+                strQuery = " SELECT  count(VAR_Request.VAR_Request_ID) FROM VAR_Request  inner join  VAR_Req_Type rt on VAR_Request.VAR_Req_Type_id=rt.VAR_Req_Type_ID";
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery += " AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
+                 + " AND VAR_Request.Processed ='N'"
+                + " AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N'))";
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nRequest = 0;
@@ -973,23 +973,23 @@ namespace VIS.Helpers
             try
             {
                 //To Get Request count
-                //strQuery = " SELECT  count(R_Request.r_request_id) FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
-                strQuery = @" SELECT  count(R_Request.r_request_id) FROM R_Request
+                //strQuery = " SELECT  count(VAR_Request.VAR_Request_ID) FROM VAR_Request  inner join  VAR_Req_Type rt on VAR_Request.VAR_Req_Type_id=rt.VAR_Req_Type_ID";
+                strQuery = @" SELECT  count(VAR_Request.VAR_Request_ID) FROM VAR_Request
                         LEFT OUTER JOIN VAB_BusinessPartner
-                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
-                        LEFT OUTER JOIN r_requesttype rt
-                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
-                        LEFT OUTER JOIN R_Status rs
-                        ON rs.R_Status_ID=R_request.R_Status_ID
+                        ON VAR_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
+                        LEFT OUTER JOIN VAR_Req_Type rt
+                        ON VAR_Request.VAR_Req_Type_id = rt.VAR_Req_Type_ID
+                        LEFT OUTER JOIN VAR_Req_Status rs
+                        ON rs.VAR_Req_Status_ID=VAR_Request.VAR_Req_Status_ID
                         LEFT OUTER JOIN VAF_CtrlRef_List adl
-                        ON adl.Value=R_Request.Priority
+                        ON adl.Value=VAR_Request.Priority
                         JOIN VAF_Control_Ref adr
                         ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                strQuery += "  AND adr.Name='_PriorityRule'  AND ( R_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
-                 + " AND R_Request.Processed ='N'"
-                + " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
+                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery += "  AND adr.Name='_PriorityRule'  AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
+                 + " AND VAR_Request.Processed ='N'"
+                + " AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N'))";
 
 
                 dsData = new DataSet();
@@ -1008,90 +1008,90 @@ namespace VIS.Helpers
             List<HomeRequest> lstAlerts = new List<HomeRequest>();
 
 
-            //strQuery = "SELECT VAB_BusinessPartner.Name ,rt.Name As CaseType,R_Request.DocumentNo , R_Request.Summary ,R_Request.StartDate ,R_Request.DateNextAction,R_Request.Created,"
-            //+ "R_Request.R_Request_ID,R_Request.Priority as PriorityID,adl.Name as Priority,rs.name As Status,"
-            //+ "(SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='R_Request') TableName,"
-            //+ "(SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='R_Request') VAF_Screen_ID  FROM R_Request"
-            //+ " INNER JOIN VAB_BusinessPartner on R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID"
-            //+ " INNER JOIN r_requesttype rt ON R_Request.r_requesttype_id = rt.r_requesttype_ID"
-            //+ " Left outer JOIN  R_Status rs on rs.R_Status_ID=R_request.R_Status_ID"
-            //+ " Left Outer JOIN  VAF_CtrlRef_List adl on adl.Value=R_Request.Priority"
+            //strQuery = "SELECT VAB_BusinessPartner.Name ,rt.Name As CaseType,VAR_Request.DocumentNo , VAR_Request.Summary ,VAR_Request.StartDate ,VAR_Request.DateNextAction,VAR_Request.Created,"
+            //+ "VAR_Request.VAR_Request_ID,VAR_Request.Priority as PriorityID,adl.Name as Priority,rs.name As Status,"
+            //+ "(SELECT  VAF_TableView.TableName FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAR_Request') TableName,"
+            //+ "(SELECT  VAF_TableView.Ad_Window_ID FROM  VAF_TableView WHERE  VAF_TableView.TableName='VAR_Request') VAF_Screen_ID  FROM VAR_Request"
+            //+ " INNER JOIN VAB_BusinessPartner on VAR_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID"
+            //+ " INNER JOIN VAR_Req_Type rt ON VAR_Request.VAR_Req_Type_id = rt.VAR_Req_Type_ID"
+            //+ " Left outer JOIN  VAR_Req_Status rs on rs.VAR_Req_Status_ID=VAR_Request.VAR_Req_Status_ID"
+            //+ " Left Outer JOIN  VAF_CtrlRef_List adl on adl.Value=VAR_Request.Priority"
             //+ " JOIN  VAF_Control_Ref adr on adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID";
 
             //            strQuery = @" SELECT VAB_BusinessPartner.Name ,
             //                          rt.Name AS CaseType,
-            //                          R_Request.DocumentNo ,
-            //                          R_Request.Summary ,
-            //                          R_Request.StartDate ,
-            //                          R_Request.DateNextAction,
-            //                          R_Request.Created,
-            //                          R_Request.R_Request_ID,
-            //                          R_Request.Priority AS PriorityID,
+            //                          VAR_Request.DocumentNo ,
+            //                          VAR_Request.Summary ,
+            //                          VAR_Request.StartDate ,
+            //                          VAR_Request.DateNextAction,
+            //                          VAR_Request.Created,
+            //                          VAR_Request.VAR_Request_ID,
+            //                          VAR_Request.Priority AS PriorityID,
             //                          adl.Name           AS Priority,
             //                          rs.name            AS Status,
-            //                          (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='R_Request'
+            //                          (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAR_Request'
             //                          ) TableName,
             //                          (SELECT VAF_TableView.Ad_Window_ID
             //                          FROM VAF_TableView
-            //                          WHERE VAF_TableView.TableName='R_Request'
+            //                          WHERE VAF_TableView.TableName='VAR_Request'
             //                          ) VAF_Screen_ID
-            //                        FROM R_Request
+            //                        FROM VAR_Request
             //                        INNER JOIN VAB_BusinessPartner
-            //                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
-            //                        INNER JOIN r_requesttype rt
-            //                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
-            //                        LEFT OUTER JOIN R_Status rs
-            //                        ON rs.R_Status_ID=R_request.R_Status_ID
+            //                        ON VAR_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
+            //                        INNER JOIN VAR_Req_Type rt
+            //                        ON VAR_Request.VAR_Req_Type_id = rt.VAR_Req_Type_ID
+            //                        LEFT OUTER JOIN VAR_Req_Status rs
+            //                        ON rs.VAR_Req_Status_ID=VAR_Request.VAR_Req_Status_ID
             //                        LEFT OUTER JOIN VAF_CtrlRef_List adl
-            //                        ON adl.Value=R_Request.Priority
+            //                        ON adl.Value=VAR_Request.Priority
             //                        JOIN VAF_Control_Ref adr
             //                        ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
 
             strQuery = @" SELECT VAB_BusinessPartner.Name ,
                           rt.Name AS CaseType,
-                          R_Request.DocumentNo ,
-                          R_Request.Summary ,
-                          R_Request.StartDate ,
-                          R_Request.DateNextAction,
-                          R_Request.Created,
-                          R_Request.R_Request_ID,
-                          R_Request.Priority AS PriorityID,
+                          VAR_Request.DocumentNo ,
+                          VAR_Request.Summary ,
+                          VAR_Request.StartDate ,
+                          VAR_Request.DateNextAction,
+                          VAR_Request.Created,
+                          VAR_Request.VAR_Request_ID,
+                          VAR_Request.Priority AS PriorityID,
                           adl.Name           AS Priority,
                           rs.name            AS Status,
-                          (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='R_Request'
+                          (SELECT VAF_TableView.TableName FROM VAF_TableView WHERE VAF_TableView.TableName='VAR_Request'
                           ) TableName,
                           (SELECT VAF_TableView.Ad_Window_ID
                           FROM VAF_TableView
-                          WHERE VAF_TableView.TableName='R_Request'
+                          WHERE VAF_TableView.TableName='VAR_Request'
                           ) VAF_Screen_ID
-                        FROM R_Request
+                        FROM VAR_Request
                         LEFT OUTER JOIN VAB_BusinessPartner
-                        ON R_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
-                        LEFT OUTER JOIN r_requesttype rt
-                        ON R_Request.r_requesttype_id = rt.r_requesttype_ID
-                        LEFT OUTER JOIN R_Status rs
-                        ON rs.R_Status_ID=R_request.R_Status_ID
+                        ON VAR_Request.VAB_BusinessPartner_ID=VAB_BusinessPartner.VAB_BusinessPartner_ID
+                        LEFT OUTER JOIN VAR_Req_Type rt
+                        ON VAR_Request.VAR_Req_Type_id = rt.VAR_Req_Type_ID
+                        LEFT OUTER JOIN VAR_Req_Status rs
+                        ON rs.VAR_Req_Status_ID=VAR_Request.VAR_Req_Status_ID
                         LEFT OUTER JOIN VAF_CtrlRef_List adl
-                        ON adl.Value=R_Request.Priority
+                        ON adl.Value=VAR_Request.Priority
                         JOIN VAF_Control_Ref adr
                         ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
 
 
-            strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-            strQuery += "  AND adr.Name='_PriorityRule' AND ( R_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
-            + " AND R_Request.Processed ='N'  AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N')) ORDER By R_Request.Updated, R_Request.Priority ";
+            strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            strQuery += "  AND adr.Name='_PriorityRule' AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
+            + " AND VAR_Request.Processed ='N'  AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N')) ORDER By VAR_Request.Updated, VAR_Request.Priority ";
             // change to sort Requests based on updated date and time
 
 
             //Request
-            //strQuery = " SELECT rt.Name ,R_Request.Summary , R_Request.StartDate ,R_Request.DateNextAction,DateLastAction.Created"
-            // + " R_Request.R_Request_ID  FROM R_Request  inner join  r_requesttype rt on R_Request.r_requesttype_id=rt.r_requesttype_ID";
-            //strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "R_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-            //strQuery += " AND ( R_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR R_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
-            //+ " AND R_Request.Processed ='N' AND (R_Request.DateNextAction IS NULL OR TRUNC(R_Request.DateNextAction, 'DD') <= TRUNC(SysDate, 'DD'))"
-            //+ " AND (R_Request.R_Status_ID IS NULL OR R_Request.R_Status_ID IN (SELECT R_Status_ID FROM R_Status WHERE IsClosed='N'))";
+            //strQuery = " SELECT rt.Name ,VAR_Request.Summary , VAR_Request.StartDate ,VAR_Request.DateNextAction,DateLastAction.Created"
+            // + " VAR_Request.VAR_Request_ID  FROM VAR_Request  inner join  VAR_Req_Type rt on VAR_Request.VAR_Req_Type_id=rt.VAR_Req_Type_ID";
+            //strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            //strQuery += " AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
+            //+ " AND VAR_Request.Processed ='N' AND (VAR_Request.DateNextAction IS NULL OR TRUNC(VAR_Request.DateNextAction, 'DD') <= TRUNC(SysDate, 'DD'))"
+            //+ " AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N'))";
 
             SqlParamsIn objSP = new SqlParamsIn();
             dsData = new DataSet();
@@ -1105,7 +1105,7 @@ namespace VIS.Helpers
                 for (int i = 0; i < dsData.Tables[0].Rows.Count; i++)
                 {
                     var Alrt = new HomeRequest();
-                    Alrt.R_Request_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["R_Request_ID"].ToString());
+                    Alrt.VAR_Request_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAR_Request_ID"].ToString());
                     Alrt.VAF_Screen_ID = Util.GetValueOfInt(dsData.Tables[0].Rows[i]["VAF_Screen_ID"].ToString());
                     Alrt.TableName = dsData.Tables[0].Rows[i]["TableName"].ToString();
                     Alrt.Name = dsData.Tables[0].Rows[i]["Name"].ToString();

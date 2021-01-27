@@ -19,14 +19,14 @@ using System.Threading;
 
 namespace VAdvantage.Model
 {
-    public class MRequest : X_R_Request
+    public class MRequest : X_VAR_Request
     {
         /**
 	     * 	Get Request ID from mail text
 	     *	@param mailText mail text
 	     *	@return ID if it contains request tag otherwise 0
 	     */
-        public static int GetR_Request_ID(String mailText)
+        public static int GetVAR_Request_ID(String mailText)
         {
             if (mailText == null)
                 return 0;
@@ -39,16 +39,16 @@ namespace VAdvantage.Model
             //
             indexStart += 5;
             String idString = mailText.Substring(indexStart, indexEnd);
-            int R_Request_ID = 0;
+            int VAR_Request_ID = 0;
             try
             {
-                R_Request_ID = int.Parse(idString);
+                VAR_Request_ID = int.Parse(idString);
             }
             catch (Exception e)
             {
                 _log.Severe("Cannot parse " + idString + " Err" + e.Message);
             }
-            return R_Request_ID;
+            return VAR_Request_ID;
         }
 
         //	Static Logger					
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Constructor
          * 	@param ctx context
-         * 	@param R_Request_ID request or 0 for new
+         * 	@param VAR_Request_ID request or 0 for new
          *	@param trxName transaction
          */
-        public MRequest(Ctx ctx, int R_Request_ID, Trx trxName) :
-            base(ctx, R_Request_ID, trxName)
+        public MRequest(Ctx ctx, int VAR_Request_ID, Trx trxName) :
+            base(ctx, VAR_Request_ID, trxName)
         {
 
-            if (R_Request_ID == 0)
+            if (VAR_Request_ID == 0)
             {
                 SetDueType(DUETYPE_Due);
                 //  SetSalesRep_ID (0);
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
                 SetProcessed(false);
                 SetRequestAmt(Env.ZERO);
                 SetPriorityUser(PRIORITY_Low);
-                //  SetR_RequestType_ID (0);
+                //  SetVAR_Req_Type_ID (0);
                 //  SetSummary (null);
                 SetIsEscalated(false);
                 SetIsSelfService(false);
@@ -94,17 +94,17 @@ namespace VAdvantage.Model
          * 	SelfService Constructor
          * 	@param ctx context
          * 	@param SalesRep_ID SalesRep
-         * 	@param R_RequestType_ID request type
+         * 	@param VAR_Req_Type_ID request type
          * 	@param Summary summary
          * 	@param isSelfService self service
          *	@param trxName transaction
          */
         public MRequest(Ctx ctx, int SalesRep_ID,
-            int R_RequestType_ID, String Summary, Boolean isSelfService, Trx trxName)
+            int VAR_Req_Type_ID, String Summary, Boolean isSelfService, Trx trxName)
             : this(ctx, 0, trxName)
         {
             Set_Value("SalesRep_ID", (int)SalesRep_ID);	//	could be 0
-            Set_Value("R_RequestType_ID", (int)R_RequestType_ID);
+            Set_Value("VAR_Req_Type_ID", (int)VAR_Req_Type_ID);
             SetSummary(Summary);
             SetIsSelfService(isSelfService);
             GetRequestType();
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Set Default Request Type.
          */
-        public void SetR_RequestType_ID()
+        public void SetVAR_Req_Type_ID()
         {
             _requestType = MRequestType.GetDefault(GetCtx());
             if (_requestType == null)
@@ -178,24 +178,24 @@ namespace VAdvantage.Model
             }
             else
             {
-                base.SetR_RequestType_ID(_requestType.GetR_RequestType_ID());
+                base.SetVAR_Req_Type_ID(_requestType.GetVAR_Req_Type_ID());
             }
         }
 
         /**
          * 	Set Default Request Status.
          */
-        public void SetR_Status_ID()
+        public void SetVAR_Req_Status_ID()
         {
-            MStatus status = MStatus.GetDefault(GetCtx(), GetR_RequestType_ID());
+            MStatus status = MStatus.GetDefault(GetCtx(), GetVAR_Req_Type_ID());
             if (status == null)
             {
                 log.Warning("No default found");
-                if (GetR_Status_ID() != 0)
-                    SetR_Status_ID(0);
+                if (GetVAR_Req_Status_ID() != 0)
+                    SetVAR_Req_Status_ID(0);
             }
             else
-                SetR_Status_ID(status.GetR_Status_ID());
+                SetVAR_Req_Status_ID(status.GetVAR_Req_Status_ID());
         }
 
         /**
@@ -246,8 +246,8 @@ namespace VAdvantage.Model
          */
         public MRequestAction[] GetActions()
         {
-            String sql = "SELECT * FROM R_RequestAction "
-                + "WHERE R_Request_ID= " + GetR_Request_ID()
+            String sql = "SELECT * FROM VAR_Req_History "
+                + "WHERE VAR_Request_ID= " + GetVAR_Request_ID()
                 + " ORDER BY Created DESC";
             List<MRequestAction> list = new List<MRequestAction>();
             DataTable dt;
@@ -294,8 +294,8 @@ namespace VAdvantage.Model
          */
         public MRequestUpdate[] GetUpdates(String confidentialType)
         {
-            String sql = "SELECT * FROM R_RequestUpdate "
-                + "WHERE R_Request_ID= " + GetR_Request_ID()
+            String sql = "SELECT * FROM VAR_Req_Update "
+                + "WHERE VAR_Request_ID= " + GetVAR_Request_ID()
                 + " ORDER BY Created DESC";
             List<MRequestUpdate> list = new List<MRequestUpdate>();
             DataTable dt = null;
@@ -355,13 +355,13 @@ namespace VAdvantage.Model
         //Added By Manjot 09 July 2015
         public MRequestUpdate[] GetUpdatedRecord(String confidentialType)
         {
-            //String sql = "SELECT * FROM R_RequestUpdate "
-            //    + "WHERE R_Request_ID= " + GetR_Request_ID()
+            //String sql = "SELECT * FROM VAR_Req_Update "
+            //    + "WHERE VAR_Request_ID= " + GetVAR_Request_ID()
             //    + " ORDER BY Created DESC";
 
-            String sql = @"SELECT * FROM R_RequestUpdate
-                    WHERE R_RequestUpdate_ID = (SELECT MAX(R_RequestUpdate_ID) FROM R_RequestUpdate
-                    WHERE R_Request_ID= " + GetR_Request_ID()
+            String sql = @"SELECT * FROM VAR_Req_Update
+                    WHERE VAR_Req_Update_ID = (SELECT MAX(VAR_Req_Update_ID) FROM VAR_Req_Update
+                    WHERE VAR_Request_ID= " + GetVAR_Request_ID()
                     + " ) ORDER BY Created DESC";
 
             List<MRequestUpdate> list = new List<MRequestUpdate>();
@@ -453,13 +453,13 @@ namespace VAdvantage.Model
         {
             if (_requestType == null)
             {
-                int R_RequestType_ID = GetR_RequestType_ID();
-                if (R_RequestType_ID == 0)
+                int VAR_Req_Type_ID = GetVAR_Req_Type_ID();
+                if (VAR_Req_Type_ID == 0)
                 {
-                    SetR_RequestType_ID();
-                    R_RequestType_ID = GetR_RequestType_ID();
+                    SetVAR_Req_Type_ID();
+                    VAR_Req_Type_ID = GetVAR_Req_Type_ID();
                 }
-                _requestType = MRequestType.Get(GetCtx(), R_RequestType_ID);
+                _requestType = MRequestType.Get(GetCtx(), VAR_Req_Type_ID);
             }
             return _requestType;
         }
@@ -529,9 +529,9 @@ namespace VAdvantage.Model
          */
         public MStatus GetStatus()
         {
-            if (GetR_Status_ID() == 0)
+            if (GetVAR_Req_Status_ID() == 0)
                 return null;
-            return MStatus.Get(GetCtx(), GetR_Status_ID());
+            return MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
         }
 
         /**
@@ -736,11 +736,11 @@ namespace VAdvantage.Model
         {
             if (IsProcessed())
                 return false;
-            if (GetR_Status_ID() == 0)
-                SetR_Status_ID();
-            if (GetR_Status_ID() == 0)
+            if (GetVAR_Req_Status_ID() == 0)
+                SetVAR_Req_Status_ID();
+            if (GetVAR_Req_Status_ID() == 0)
                 return false;
-            MStatus status = MStatus.Get(GetCtx(), GetR_Status_ID());
+            MStatus status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             if (status == null)
                 return false;
             return status.IsWebCanUpdate();
@@ -832,11 +832,11 @@ namespace VAdvantage.Model
          */
         public Boolean WebUpdate(String result)
         {
-            MStatus status = MStatus.Get(GetCtx(), GetR_Status_ID());
+            MStatus status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             if (!status.IsWebCanUpdate())
                 return false;
             if (status.GetUpdate_Status_ID() > 0)
-                SetR_Status_ID(status.GetUpdate_Status_ID());
+                SetVAR_Req_Status_ID(status.GetUpdate_Status_ID());
             SetResult(result);
             return true;
         }
@@ -899,7 +899,7 @@ namespace VAdvantage.Model
         {
             //	Request Type
             GetRequestType();
-            if (newRecord || Is_ValueChanged("R_RequestType_ID"))
+            if (newRecord || Is_ValueChanged("VAR_Req_Type_ID"))
             {
                 if (_requestType != null)
                 {
@@ -910,12 +910,12 @@ namespace VAdvantage.Model
                             _requestType.GetAutoDueDateDays()));
                 }
                 //	Is Status Valid
-                if (GetR_Status_ID() != 0)
+                if (GetVAR_Req_Status_ID() != 0)
                 {
-                    MStatus sta = MStatus.Get(GetCtx(), GetR_Status_ID());
-                    MRequestType rt = MRequestType.Get(GetCtx(), GetR_RequestType_ID());
-                    if (sta.GetR_StatusCategory_ID() != rt.GetR_StatusCategory_ID())
-                        SetR_Status_ID();	//	Set to default
+                    MStatus sta = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
+                    MRequestType rt = MRequestType.Get(GetCtx(), GetVAR_Req_Type_ID());
+                    if (sta.GetVAR_Req_StatusCategory_ID() != rt.GetVAR_Req_StatusCategory_ID())
+                        SetVAR_Req_Status_ID();	//	Set to default
                 }
             }
             // Start Plan Date And End Plan Date 
@@ -930,11 +930,11 @@ namespace VAdvantage.Model
                 return false;
             }
             //	Request Status
-            if (GetR_Status_ID() == 0)
-                SetR_Status_ID();
+            if (GetVAR_Req_Status_ID() == 0)
+                SetVAR_Req_Status_ID();
             //	Validate/Update Due Type
             SetDueType();
-            MStatus status = MStatus.Get(GetCtx(), GetR_Status_ID());
+            MStatus status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             //	Close/Open
             if (status != null)
             {
@@ -982,16 +982,16 @@ namespace VAdvantage.Model
             List<String> sendInfo = new List<String>();
             MRequestAction ra = new MRequestAction(this, false);
             //
-            if (CheckChange(ra, "R_RequestType_ID"))
-                sendInfo.Add("R_RequestType_ID");
-            if (CheckChange(ra, "R_Group_ID"))
-                sendInfo.Add("R_Group_ID");
+            if (CheckChange(ra, "VAR_Req_Type_ID"))
+                sendInfo.Add("VAR_Req_Type_ID");
+            if (CheckChange(ra, "VAR_Group_ID"))
+                sendInfo.Add("VAR_Group_ID");
             if (CheckChange(ra, "VAR_Category_ID"))
                 sendInfo.Add("VAR_Category_ID");
-            if (CheckChange(ra, "R_Status_ID"))
-                sendInfo.Add("R_Status_ID");
-            if (CheckChange(ra, "R_Resolution_ID"))
-                sendInfo.Add("R_Resolution_ID");
+            if (CheckChange(ra, "VAR_Req_Status_ID"))
+                sendInfo.Add("VAR_Req_Status_ID");
+            if (CheckChange(ra, "VAR_Resolution_ID"))
+                sendInfo.Add("VAR_Resolution_ID");
             //
             if (CheckChange(ra, "SalesRep_ID"))
             {
@@ -1074,16 +1074,16 @@ namespace VAdvantage.Model
                 update = null;
             //
             // check mail templates from request or request type.
-            if (GetR_MailText_ID() > 0)
+            if (GetVAR_MailTemplate_ID() > 0)
             {
-                mailText_ID = GetR_MailText_ID();
+                mailText_ID = GetVAR_MailTemplate_ID();
             }
             if (mailText_ID == 0)
             {
-                MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
-                if (reqType.GetR_MailText_ID() > 0)
+                MRequestType reqType = new MRequestType(GetCtx(), GetVAR_Req_Type_ID(), null);
+                if (reqType.GetVAR_MailTemplate_ID() > 0)
                 {
-                    mailText_ID = reqType.GetR_MailText_ID();
+                    mailText_ID = reqType.GetVAR_MailTemplate_ID();
                 }
 
             }
@@ -1104,8 +1104,8 @@ namespace VAdvantage.Model
                     SetConfidentialTypeEntry(GetConfidentialType());
                     SetStartDate(null);
                     SetEndTime(null);
-                    SetR_StandardResponse_ID(0);
-                    SetR_MailText_ID(0);
+                    SetVAR_Req_StandardReply_ID(0);
+                    SetVAR_MailTemplate_ID(0);
                     SetResult(null);
                     //	SetQtySpent(null);
                     //	SetQtyInvoiced(null);
@@ -1196,7 +1196,7 @@ namespace VAdvantage.Model
             {
                 message = new StringBuilder();
 
-                MRequest _req = new MRequest(GetCtx(), GetR_Request_ID(), null);
+                MRequest _req = new MRequest(GetCtx(), GetVAR_Request_ID(), null);
                 MMailText text = new MMailText(GetCtx(), mailText_ID, null);
                 text.SetPO(_req, true); //Set _Po Current value
                 subject += GetDocumentNo() + ": " + text.GetMailHeader();
@@ -1226,9 +1226,9 @@ namespace VAdvantage.Model
                         ON (VAF_UserContact_Roles.VAF_UserContact_ID    =VAF_UserContact.VAF_UserContact_ID)
                         WHERE VAF_UserContact_Roles.VAF_Role_ID IN
                           (SELECT VAF_Role_ID
-                          FROM R_RequestTypeUpdates
+                          FROM VAR_Rtype_UpdatesAlert
                           WHERE VAF_Role_ID   IS NOT NULL
-                          AND R_RequestType_ID=" + GetR_RequestType_ID() + @"
+                          AND VAR_Req_Type_ID=" + GetVAR_Req_Type_ID() + @"
                           AND IsActive        ='Y'
                           )
                         AND VAF_UserContact_Roles.VAF_UserContact_ID NOT IN
@@ -1238,7 +1238,7 @@ namespace VAdvantage.Model
                           ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)
                           LEFT OUTER JOIN VAF_UserContact_Roles r
                           ON (u.VAF_UserContact_ID     =r.VAF_UserContact_ID)
-                          WHERE ru.R_Request_ID=" + GetR_Request_ID() + @"
+                          WHERE ru.VAR_Request_ID=" + GetVAR_Request_ID() + @"
                           )
                         AND VAF_UserContact.email IS NOT NULL";
 
@@ -1314,16 +1314,16 @@ namespace VAdvantage.Model
                 List<String> sendInfo = new List<String>();
                 MRequestAction ra = new MRequestAction(this, false);
                 //
-                if (CheckChange(ra, "R_RequestType_ID"))
-                    sendInfo.Add("R_RequestType_ID");
-                if (CheckChange(ra, "R_Group_ID"))
-                    sendInfo.Add("R_Group_ID");
+                if (CheckChange(ra, "VAR_Req_Type_ID"))
+                    sendInfo.Add("VAR_Req_Type_ID");
+                if (CheckChange(ra, "VAR_Group_ID"))
+                    sendInfo.Add("VAR_Group_ID");
                 if (CheckChange(ra, "VAR_Category_ID"))
                     sendInfo.Add("VAR_Category_ID");
-                if (CheckChange(ra, "R_Status_ID"))
-                    sendInfo.Add("R_Status_ID");
-                if (CheckChange(ra, "R_Resolution_ID"))
-                    sendInfo.Add("R_Resolution_ID");
+                if (CheckChange(ra, "VAR_Req_Status_ID"))
+                    sendInfo.Add("VAR_Req_Status_ID");
+                if (CheckChange(ra, "VAR_Resolution_ID"))
+                    sendInfo.Add("VAR_Resolution_ID");
                 //
                 if (CheckChange(ra, "SalesRep_ID"))
                 {
@@ -1502,23 +1502,23 @@ namespace VAdvantage.Model
 
         /**
          * 	Set MailText - Callout
-         *	@param oldR_MailText_ID old value
-         *	@param newR_MailText_ID new value
+         *	@param oldVAR_MailTemplate_ID old value
+         *	@param newVAR_MailTemplate_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout
-        public void SetR_MailText_ID(String oldR_MailText_ID, String newR_MailText_ID, int windowNo)
+        public void SetVAR_MailTemplate_ID(String oldVAR_MailTemplate_ID, String newVAR_MailTemplate_ID, int windowNo)
         {
-            if (newR_MailText_ID == null || newR_MailText_ID.Length == 0)
+            if (newVAR_MailTemplate_ID == null || newVAR_MailTemplate_ID.Length == 0)
                 return;
-            int R_MailText_ID = int.Parse(newR_MailText_ID);
-            base.SetR_MailText_ID(R_MailText_ID);
-            if (R_MailText_ID == 0)
+            int VAR_MailTemplate_ID = int.Parse(newVAR_MailTemplate_ID);
+            base.SetVAR_MailTemplate_ID(VAR_MailTemplate_ID);
+            if (VAR_MailTemplate_ID == 0)
                 return;
 
-            MMailText mt = new MMailText(GetCtx(), R_MailText_ID, null);
-            if (mt.Get_ID() == R_MailText_ID)
+            MMailText mt = new MMailText(GetCtx(), VAR_MailTemplate_ID, null);
+            if (mt.Get_ID() == VAR_MailTemplate_ID)
             {
                 String txt = mt.GetMailText();
                 txt = Env.ParseContext(GetCtx(), windowNo, txt, false, true);
@@ -1528,24 +1528,24 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Standard Response - Callout
-         *	@param oldR_StandardResponse_ID old value
-         *	@param newR_StandardResponse_ID new value
+         *	@param oldVAR_Req_StandardReply_ID old value
+         *	@param newVAR_Req_StandardReply_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout 
-        public void SetR_StandardResponse_ID(String oldR_StandardResponse_ID,
-                String newR_StandardResponse_ID, int windowNo)
+        public void SetVAR_Req_StandardReply_ID(String oldVAR_Req_StandardReply_ID,
+                String newVAR_Req_StandardReply_ID, int windowNo)
         {
-            if (newR_StandardResponse_ID == null || newR_StandardResponse_ID.Length == 0)
+            if (newVAR_Req_StandardReply_ID == null || newVAR_Req_StandardReply_ID.Length == 0)
                 return;
-            int R_StandardResponse_ID = int.Parse(newR_StandardResponse_ID);
-            base.SetR_StandardResponse_ID(R_StandardResponse_ID);
-            if (R_StandardResponse_ID == 0)
+            int VAR_Req_StandardReply_ID = int.Parse(newVAR_Req_StandardReply_ID);
+            base.SetVAR_Req_StandardReply_ID(VAR_Req_StandardReply_ID);
+            if (VAR_Req_StandardReply_ID == 0)
                 return;
 
-            MStandardResponse sr = new MStandardResponse(GetCtx(), R_StandardResponse_ID, null);
-            if (sr.Get_ID() == R_StandardResponse_ID)
+            MStandardResponse sr = new MStandardResponse(GetCtx(), VAR_Req_StandardReply_ID, null);
+            if (sr.Get_ID() == VAR_Req_StandardReply_ID)
             {
                 String txt = sr.GetResponseText();
                 txt = Env.ParseContext(GetCtx(), windowNo, txt, false, true);
@@ -1555,25 +1555,25 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Request Type - Callout
-         *	@param oldR_RequestType_ID old value
-         *	@param newR_RequestType_ID new value
+         *	@param oldVAR_Req_Type_ID old value
+         *	@param newVAR_Req_Type_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout 
-        public void SetR_RequestType_ID(String oldR_RequestType_ID,
-                String newR_RequestType_ID, int windowNo)
+        public void SetVAR_Req_Type_ID(String oldVAR_Req_Type_ID,
+                String newVAR_Req_Type_ID, int windowNo)
         {
-            if (newR_RequestType_ID == null || newR_RequestType_ID.Length == 0)
+            if (newVAR_Req_Type_ID == null || newVAR_Req_Type_ID.Length == 0)
                 return;
-            int R_RequestType_ID = int.Parse(newR_RequestType_ID);
-            base.SetR_RequestType_ID(R_RequestType_ID);
-            if (R_RequestType_ID == 0)
+            int VAR_Req_Type_ID = int.Parse(newVAR_Req_Type_ID);
+            base.SetVAR_Req_Type_ID(VAR_Req_Type_ID);
+            if (VAR_Req_Type_ID == 0)
                 return;
 
-            MRequestType rt = MRequestType.Get(GetCtx(), R_RequestType_ID);
-            int R_Status_ID = rt.GetDefaultR_Status_ID();
-            SetR_Status_ID(R_Status_ID);
+            MRequestType rt = MRequestType.Get(GetCtx(), VAR_Req_Type_ID);
+            int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
+            SetVAR_Req_Status_ID(VAR_Req_Status_ID);
         }
 
         /**
@@ -1593,7 +1593,7 @@ namespace VAdvantage.Model
                 MRequestUpdate update = new MRequestUpdate(this);
                 update.Save();
             }
-            MRequestType reqType = new MRequestType(GetCtx(), GetR_RequestType_ID(), null);
+            MRequestType reqType = new MRequestType(GetCtx(), GetVAR_Req_Type_ID(), null);
             //	Initial Mail
             if (reqType.Get_ID() > 0 && reqType.IsR_AllowSaveNotify())
             {
@@ -1603,9 +1603,9 @@ namespace VAdvantage.Model
 
             //	ChangeRequest - created in Request Processor
             if (GetM_ChangeRequest_ID() != 0
-                && Is_ValueChanged("R_Group_ID"))	//	different ECN assignment?
+                && Is_ValueChanged("VAR_Group_ID"))	//	different ECN assignment?
             {
-                int oldID = Convert.ToInt32(Get_ValueOld("R_Group_ID"));
+                int oldID = Convert.ToInt32(Get_ValueOld("VAR_Group_ID"));
                 if (GetR_Group_ID() == 0)
                     SetM_ChangeRequest_ID(0);	//	not effective as in afterSave
                 else
@@ -1681,12 +1681,12 @@ namespace VAdvantage.Model
         {
             bool isEmailSent = false;
             StringBuilder finalMsg = new StringBuilder();
-            finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
+            finalMsg.Append(Msg.Translate(GetCtx(), "VAR_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
             //	Subject
             if (mailText_ID == 0)
             {
-                subject = Msg.Translate(GetCtx(), "R_Request_ID")
-                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+                subject = Msg.Translate(GetCtx(), "VAR_Request_ID")
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             }
             //	Message
 
@@ -1712,7 +1712,7 @@ namespace VAdvantage.Model
                 + "FROM RV_RequestUpdates_Only ru"
                 + " INNER JOIN VAF_UserContact u ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)"
                 + " LEFT OUTER JOIN VAF_UserContact_Roles r ON (u.VAF_UserContact_ID=r.VAF_UserContact_ID) "
-                + "WHERE ru.R_Request_ID= " + GetR_Request_ID()
+                + "WHERE ru.VAR_Request_ID= " + GetVAR_Request_ID()
                 + " GROUP BY u.VAF_UserContact_ID, u.NotificationType, u.EMail, u.Name";
 
             IDataReader idr = null;
@@ -1830,12 +1830,12 @@ namespace VAdvantage.Model
                 if (!isEmailSent)
                 {
                     finalMsg.Clear();
-                    finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
+                    finalMsg.Append(Msg.Translate(GetCtx(), "VAR_Request_ID") + ": " + GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
                 }
 
                 int VAF_Msg_Lable_ID = 834;
                 MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetVAF_UserContact_ID(),
-                    X_R_Request.Table_ID, GetR_Request_ID(),
+                    X_VAR_Request.Table_ID, GetVAR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
                     log.Log(Level.INFO, "ProcessFinished", "");
@@ -1886,7 +1886,7 @@ namespace VAdvantage.Model
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");
-                _mAttachment.SetRecord_ID(GetR_Request_ID());
+                _mAttachment.SetRecord_ID(GetVAR_Request_ID());
                 _mAttachment.SetTextMsg(message);
                 _mAttachment.SetTitle(subject);
                 _mAttachment.SetMailAddress(to.GetEMail());
@@ -1927,7 +1927,7 @@ namespace VAdvantage.Model
             {
                 int VAF_Msg_Lable_ID = 834;
                 MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, VAF_UserContact_ID,
-                    X_R_Request.Table_ID, GetR_Request_ID(),
+                    X_VAR_Request.Table_ID, GetVAR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())
                     _notices++;
@@ -1943,7 +1943,7 @@ namespace VAdvantage.Model
         public String GetMailTrailer(String serverAddress)
         {
             StringBuilder sb = new StringBuilder("\n").Append(SEPARATOR)
-                .Append(Msg.Translate(GetCtx(), "R_Request_ID"))
+                .Append(Msg.Translate(GetCtx(), "VAR_Request_ID"))
                 .Append(": ").Append(GetDocumentNo())
                 .Append("  ").Append(GetMailTag())
                 .Append("\nSent by ViennaMail");
@@ -1968,7 +1968,7 @@ namespace VAdvantage.Model
          */
         public void DoClose()
         {
-            MStatus status = MStatus.Get(GetCtx(), GetR_Status_ID());
+            MStatus status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             if (!status.IsClosed())
             {
                 MStatus[] closed = MStatus.GetClosed(GetCtx());
@@ -1984,7 +1984,7 @@ namespace VAdvantage.Model
                 if (newStatus == null && closed.Length > 0)
                     newStatus = closed[0];
                 if (newStatus != null)
-                    SetR_Status_ID(newStatus.GetR_Status_ID());
+                    SetVAR_Req_Status_ID(newStatus.GetVAR_Req_Status_ID());
             }
         }
 

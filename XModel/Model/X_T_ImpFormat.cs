@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_ImpFormat
+/** Generated Model for VAT_ImportSetup
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_ImpFormat : PO
+public class X_VAT_ImportSetup : PO
 {
-public X_T_ImpFormat (Context ctx, int T_ImpFormat_ID, Trx trxName) : base (ctx, T_ImpFormat_ID, trxName)
+public X_VAT_ImportSetup (Context ctx, int VAT_ImportSetup_ID, Trx trxName) : base (ctx, VAT_ImportSetup_ID, trxName)
 {
-/** if (T_ImpFormat_ID == 0)
+/** if (VAT_ImportSetup_ID == 0)
 {
-SetT_ImpFormat_ID (0);
+SetVAT_ImportSetup_ID (0);
 }
  */
 }
-public X_T_ImpFormat (Ctx ctx, int T_ImpFormat_ID, Trx trxName) : base (ctx, T_ImpFormat_ID, trxName)
+public X_VAT_ImportSetup (Ctx ctx, int VAT_ImportSetup_ID, Trx trxName) : base (ctx, VAT_ImportSetup_ID, trxName)
 {
-/** if (T_ImpFormat_ID == 0)
+/** if (VAT_ImportSetup_ID == 0)
 {
-SetT_ImpFormat_ID (0);
+SetVAT_ImportSetup_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetT_ImpFormat_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ImpFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_ImportSetup (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_T_ImpFormat (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ImpFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_ImportSetup (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_T_ImpFormat (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ImpFormat (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_ImportSetup (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_ImpFormat()
+static X_VAT_ImportSetup()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1280389067419L;
 public static int Table_ID;
  // =992;
 
-/** TableName=T_ImpFormat */
-public static String Table_Name="T_ImpFormat";
+/** TableName=VAT_ImportSetup */
+public static String Table_Name="VAT_ImportSetup";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -107,7 +107,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_ImpFormat[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_ImportSetup[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set BinaryData.
@@ -146,17 +146,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Import Format.
-@param T_ImpFormat_ID Import Format */
-public void SetT_ImpFormat_ID (int T_ImpFormat_ID)
+@param VAT_ImportSetup_ID Import Format */
+public void SetVAT_ImportSetup_ID (int VAT_ImportSetup_ID)
 {
-if (T_ImpFormat_ID < 1) throw new ArgumentException ("T_ImpFormat_ID is mandatory.");
-Set_ValueNoCheck ("T_ImpFormat_ID", T_ImpFormat_ID);
+if (VAT_ImportSetup_ID < 1) throw new ArgumentException ("VAT_ImportSetup_ID is mandatory.");
+Set_ValueNoCheck ("VAT_ImportSetup_ID", VAT_ImportSetup_ID);
 }
 /** Get Import Format.
 @return Import Format */
-public int GetT_ImpFormat_ID() 
+public int GetVAT_ImportSetup_ID() 
 {
-Object ii = Get_Value("T_ImpFormat_ID");
+Object ii = Get_Value("VAT_ImportSetup_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

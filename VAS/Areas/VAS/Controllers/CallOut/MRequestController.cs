@@ -18,7 +18,7 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetDefaultR_Status_ID(string fields)
+        public JsonResult GetDefaultVAR_Req_Status_ID(string fields)
         {
 
             string retJSON = "";
@@ -26,18 +26,18 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int R_RequestType_ID;
+                int VAR_Req_Type_ID;
 
                 //Assign parameter value
-                R_RequestType_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MRequestType rt = MRequestType.Get(ctx, R_RequestType_ID);
-                int R_Status_ID = rt.GetDefaultR_Status_ID();
+                VAR_Req_Type_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+                int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
 
 
                 //List<Decimal> retlst = new List<Decimal>();
                 //retlst.Add(currentBalance);               
 
-                retJSON = JsonConvert.SerializeObject(R_Status_ID);
+                retJSON = JsonConvert.SerializeObject(VAR_Req_Status_ID);
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
@@ -49,9 +49,9 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                int R_MailText_ID;
-                R_MailText_ID = Util.GetValueOfInt(fields);
-                MMailText mt = new MMailText(ctx, R_MailText_ID, null);
+                int VAR_MailTemplate_ID;
+                VAR_MailTemplate_ID = Util.GetValueOfInt(fields);
+                MMailText mt = new MMailText(ctx, VAR_MailTemplate_ID, null);
                 string mailText = mt.GetMailText();
                 retJSON = JsonConvert.SerializeObject(mailText);
             }
@@ -65,9 +65,9 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                int R_StandardResponse_ID;
-                R_StandardResponse_ID = Util.GetValueOfInt(fields);
-                MStandardResponse mt = new MStandardResponse(ctx, R_StandardResponse_ID, null);
+                int VAR_Req_StandardReply_ID;
+                VAR_Req_StandardReply_ID = Util.GetValueOfInt(fields);
+                MStandardResponse mt = new MStandardResponse(ctx, VAR_Req_StandardReply_ID, null);
                 string mailText = mt.GetResponseText();
                 retJSON = JsonConvert.SerializeObject(mailText);
             }

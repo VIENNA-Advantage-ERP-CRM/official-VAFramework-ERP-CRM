@@ -15,19 +15,19 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MRequestUpdate : X_R_RequestUpdate
+    public class MRequestUpdate : X_VAR_Req_Update
     {
         /**
 	 * 	Standard Constructor
 	 *	@param ctx context
-	 *	@param R_RequestUpdate_ID id
+	 *	@param VAR_Req_Update_ID id
 	 *	@param trxName trx
 	 */
-        public MRequestUpdate(Ctx ctx, int R_RequestUpdate_ID,
+        public MRequestUpdate(Ctx ctx, int VAR_Req_Update_ID,
             Trx trxName) :
-            base(ctx, R_RequestUpdate_ID, trxName)
+            base(ctx, VAR_Req_Update_ID, trxName)
         {
-            //super (ctx, R_RequestUpdate_ID, trxName);
+            //super (ctx, VAR_Req_Update_ID, trxName);
         }	//	MRequestUpdate
 
         /**
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         {
             //super (parent.GetContext(), 0, parent.Get_TrxName());
             SetClientOrg(parent);
-            SetR_Request_ID(parent.GetR_Request_ID());
+            SetVAR_Request_ID(parent.GetVAR_Request_ID());
             //
             SetStartTime(parent.GetStartTime());
             SetEndTime(parent.GetEndTime());

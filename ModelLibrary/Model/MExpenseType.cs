@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MExpenseType
  * Purpose        : Expense Type Model
- * Class Used     : X_S_ExpenseType
+ * Class Used     : X_VAS_ChargeType
  * Chronological    Development
  * Raghunandan     15-Jun-2009
   ******************************************************/
@@ -24,18 +24,18 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MExpenseType : X_S_ExpenseType
+    public class MExpenseType : X_VAS_ChargeType
     {
         // Cached Product			
         private MProduct _product = null;
 
         /* 	Default Constructor
         *	@param ctx context
-        *	@param S_ExpenseType_ID id
+        *	@param VAS_ChargeType_ID id
         *	@param trxName transaction
         */
-        public MExpenseType(Ctx ctx, int S_ExpenseType_ID, Trx trxName)
-            : base(ctx, S_ExpenseType_ID, trxName)
+        public MExpenseType(Ctx ctx, int VAS_ChargeType_ID, Trx trxName)
+            : base(ctx, VAS_ChargeType_ID, trxName)
         {
 
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         {
             if (_product == null)
             {
-                MProduct[] products = MProduct.Get(GetCtx(), "S_ExpenseType_ID=" + GetS_ExpenseType_ID(), Get_TrxName());
+                MProduct[] products = MProduct.Get(GetCtx(), "VAS_ChargeType_ID=" + GetVAS_ChargeType_ID(), Get_TrxName());
                 if (products.Length > 0)
                     _product = products[0];
             }
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                 return success;
             //added by arpit on Jan 5,2015 Mentis issue no. 0000274       
             _product = new MProduct(this);
-            _product.SetS_ExpenseType_ID(GetS_ExpenseType_ID());
+            _product.SetVAS_ChargeType_ID(GetVAS_ChargeType_ID());
             if (!_product.Save(Get_TrxName()))
             {
 

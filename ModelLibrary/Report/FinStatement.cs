@@ -301,7 +301,7 @@ namespace VAdvantage.Report
         /// </summary>
         private void CreateBalanceLine()
         {
-            StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
+            StringBuilder sb = new StringBuilder("INSERT INTO VAT_ReportStatement "
                 + "(VAF_JInstance_ID, Actual_Acct_Detail_ID, LevelNo,"
                 + "DateAcct, Name, Description,"
                 + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
@@ -344,7 +344,7 @@ namespace VAdvantage.Report
         {
             decimal balnc = 0;
             decimal lastbalnc = 0;
-            StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
+            StringBuilder sb = new StringBuilder("INSERT INTO VAT_ReportStatement "
                 + "(VAF_JInstance_ID, Actual_Acct_Detail_ID, LevelNo,"
                 + "DateAcct,SeqNo, Name, Description,"
                 + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
@@ -367,7 +367,7 @@ namespace VAdvantage.Report
                 + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
                 + "WHERE r.Actual_Acct_Detail_ID=fa.Actual_Acct_Detail_ID";
             //	Translated Version ...
-            sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")
+            sb = new StringBuilder("UPDATE VAT_ReportStatement r SET (Name,Description)=(")
                 .Append(sql_select).Append(") "
                 + "WHERE Actual_Acct_Detail_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
             //
@@ -379,7 +379,7 @@ namespace VAdvantage.Report
             sb.Clear();
             DataSet ds = null;
             int _count = 0;
-            sb.Append("SELECT  levelno, seqno, dateacct, description, amtacctdr, amtacctcr, balance, name FROM T_ReportStatement WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID() + " order by  levelno,dateacct,name,description");
+            sb.Append("SELECT  levelno, seqno, dateacct, description, amtacctdr, amtacctcr, balance, name FROM VAT_ReportStatement WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID() + " order by  levelno,dateacct,name,description");
             ds = DB.ExecuteDataset(sb.ToString(), null, Get_TrxName());
             if (ds != null)
             {
@@ -414,7 +414,7 @@ namespace VAdvantage.Report
                         }
                         _count++;
                         sb.Clear();
-                        sb.Append("UPDATE T_ReportStatement  SET  Counter=" + _count + " , balance=" + lastbalnc + " WHERE VAF_JInstance_id=" + GetVAF_JInstance_ID() + " AND seqno=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["seqno"]));
+                        sb.Append("UPDATE VAT_ReportStatement  SET  Counter=" + _count + " , balance=" + lastbalnc + " WHERE VAF_JInstance_id=" + GetVAF_JInstance_ID() + " AND seqno=" + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["seqno"]));
                         DB.ExecuteQuery(sb.ToString(), null, Get_TrxName());
                     }
                 }
@@ -431,7 +431,7 @@ namespace VAdvantage.Report
 
      //private void CreateDetailLines()
      //   {
-     //       StringBuilder sb = new StringBuilder("INSERT INTO T_ReportStatement "
+     //       StringBuilder sb = new StringBuilder("INSERT INTO VAT_ReportStatement "
      //           + "(VAF_JInstance_ID, Actual_Acct_Detail_ID, LevelNo,"
      //           + "DateAcct, Name, Description,"
      //           + "AmtAcctDr, AmtAcctCr, Balance, Qty) ");
@@ -454,7 +454,7 @@ namespace VAdvantage.Report
      //           + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
      //           + "WHERE r.Actual_Acct_Detail_ID=fa.Actual_Acct_Detail_ID";
      //       //	Translated Version ...
-     //       sb = new StringBuilder("UPDATE T_ReportStatement r SET (Name,Description)=(")
+     //       sb = new StringBuilder("UPDATE VAT_ReportStatement r SET (Name,Description)=(")
      //           .Append(sql_select).Append(") "
      //           + "WHERE Actual_Acct_Detail_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
      //       //

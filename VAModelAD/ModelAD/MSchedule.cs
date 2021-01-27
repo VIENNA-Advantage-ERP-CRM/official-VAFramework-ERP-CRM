@@ -328,7 +328,7 @@ namespace VAdvantage.Model
 
 
                 /*****	DAY		******/
-                if (X_R_RequestProcessor.FREQUENCYTYPE_Day.Equals(frequencyType))
+                if (X_VAR_Req_Handler.FREQUENCYTYPE_Day.Equals(frequencyType))
                 {
                     //calNext.set(java.util.Calendar.HOUR_OF_DAY, hour);
                     //calNext.set(java.util.Calendar.MINUTE, minute);
@@ -346,7 +346,7 @@ namespace VAdvantage.Model
                 }	//	Day
 
                 /*****	HOUR	******/
-                else if (X_R_RequestProcessor.FREQUENCYTYPE_Hour.Equals(frequencyType))
+                else if (X_VAR_Req_Handler.FREQUENCYTYPE_Hour.Equals(frequencyType))
                 {
                     //calNext.set(java.util.Calendar.MINUTE, minute);
                     //calNext.add(java.util.Calendar.HOUR_OF_DAY, frequency);
@@ -358,7 +358,7 @@ namespace VAdvantage.Model
                 }	//	Hour
 
                 /*****	MINUTE	******/
-                else if (X_R_RequestProcessor.FREQUENCYTYPE_Minute.Equals(frequencyType))
+                else if (X_VAR_Req_Handler.FREQUENCYTYPE_Minute.Equals(frequencyType))
                 {
                     //calNext.add(java.util.Calendar.MINUTE, frequency);
                     if(increment)

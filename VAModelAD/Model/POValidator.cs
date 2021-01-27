@@ -35,7 +35,7 @@ namespace VAModelAD.Model
 
             //Restricts
             PORecord.AddRestricts(X_CM_Chat.Table_ID, X_CM_Chat.Table_Name);
-            PORecord.AddRestricts(X_R_Request.Table_ID, X_R_Request.Table_Name);
+            PORecord.AddRestricts(X_VAR_Request.Table_ID, X_VAR_Request.Table_Name);
         }
 
         public POValidator()

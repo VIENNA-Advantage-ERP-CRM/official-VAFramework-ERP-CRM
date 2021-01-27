@@ -11,34 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Request
+/** Generated Model for VAR_Request
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_Request : PO
+public class X_VAR_Request : PO
 {
-public X_R_Request (Context ctx, int R_Request_ID, Trx trxName) : base (ctx, R_Request_ID, trxName)
+public X_VAR_Request (Context ctx, int VAR_Request_ID, Trx trxName) : base (ctx, VAR_Request_ID, trxName)
 {
-/** if (R_Request_ID == 0)
-{
-SetConfidentialType (null);	// C
-SetConfidentialTypeEntry (null);	// C
-SetDocumentNo (null);
-SetDueType (null);	// 5
-SetIsEscalated (false);
-SetIsInvoiced (false);
-SetIsSelfService (false);	// N
-SetPriority (null);	// 5
-SetProcessed (false);	// N
-SetR_RequestType_ID (0);
-SetR_Request_ID (0);
-SetRequestAmt (0.0);
-SetSummary (null);
-}
- */
-}
-public X_R_Request (Ctx ctx, int R_Request_ID, Trx trxName) : base (ctx, R_Request_ID, trxName)
-{
-/** if (R_Request_ID == 0)
+/** if (VAR_Request_ID == 0)
 {
 SetConfidentialType (null);	// C
 SetConfidentialTypeEntry (null);	// C
@@ -49,8 +29,28 @@ SetIsInvoiced (false);
 SetIsSelfService (false);	// N
 SetPriority (null);	// 5
 SetProcessed (false);	// N
-SetR_RequestType_ID (0);
-SetR_Request_ID (0);
+SetVAR_Req_Type_ID (0);
+SetVAR_Request_ID (0);
+SetRequestAmt (0.0);
+SetSummary (null);
+}
+ */
+}
+public X_VAR_Request (Ctx ctx, int VAR_Request_ID, Trx trxName) : base (ctx, VAR_Request_ID, trxName)
+{
+/** if (VAR_Request_ID == 0)
+{
+SetConfidentialType (null);	// C
+SetConfidentialTypeEntry (null);	// C
+SetDocumentNo (null);
+SetDueType (null);	// 5
+SetIsEscalated (false);
+SetIsInvoiced (false);
+SetIsSelfService (false);	// N
+SetPriority (null);	// 5
+SetProcessed (false);	// N
+SetVAR_Req_Type_ID (0);
+SetVAR_Request_ID (0);
 SetRequestAmt (0.0);
 SetSummary (null);
 }
@@ -61,7 +61,7 @@ SetSummary (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Request (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Request (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,7 +69,7 @@ public X_R_Request (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Request (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Request (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -77,13 +77,13 @@ public X_R_Request (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Request (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Request (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_Request()
+static X_VAR_Request()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -96,8 +96,8 @@ public static long updatedMS = 1280389066259L;
 public static int Table_ID;
  // =417;
 
-/** TableName=R_Request */
-public static String Table_Name="R_Request";
+/** TableName=VAR_Request */
+public static String Table_Name="VAR_Request";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -131,7 +131,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_Request[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Request[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -946,147 +946,147 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Group.
-@param R_Group_ID Request Group */
-public void SetR_Group_ID (int R_Group_ID)
+@param VAR_Group_ID Request Group */
+public void SetR_Group_ID (int VAR_Group_ID)
 {
-if (R_Group_ID <= 0) Set_Value ("R_Group_ID", null);
+if (VAR_Group_ID <= 0) Set_Value ("VAR_Group_ID", null);
 else
-Set_Value ("R_Group_ID", R_Group_ID);
+Set_Value ("VAR_Group_ID", VAR_Group_ID);
 }
 /** Get Group.
 @return Request Group */
 public int GetR_Group_ID() 
 {
-Object ii = Get_Value("R_Group_ID");
+Object ii = Get_Value("VAR_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Mail Template.
-@param R_MailText_ID Text templates for mailings */
-public void SetR_MailText_ID (int R_MailText_ID)
+@param VAR_MailTemplate_ID Text templates for mailings */
+public void SetVAR_MailTemplate_ID (int VAR_MailTemplate_ID)
 {
-if (R_MailText_ID <= 0) Set_Value ("R_MailText_ID", null);
+if (VAR_MailTemplate_ID <= 0) Set_Value ("VAR_MailTemplate_ID", null);
 else
-Set_Value ("R_MailText_ID", R_MailText_ID);
+Set_Value ("VAR_MailTemplate_ID", VAR_MailTemplate_ID);
 }
 /** Get Mail Template.
 @return Text templates for mailings */
-public int GetR_MailText_ID() 
+public int GetVAR_MailTemplate_ID() 
 {
-Object ii = Get_Value("R_MailText_ID");
+Object ii = Get_Value("VAR_MailTemplate_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** R_RequestRelated_ID VAF_Control_Ref_ID=341 */
-public static int R_REQUESTRELATED_ID_VAF_Control_Ref_ID=341;
+/** VAR_RequestRelated_ID VAF_Control_Ref_ID=341 */
+public static int VAR_REQUESTRELATED_ID_VAF_Control_Ref_ID=341;
 /** Set Related Request.
-@param R_RequestRelated_ID Related Request (Master Issue, ..) */
-public void SetR_RequestRelated_ID (int R_RequestRelated_ID)
+@param VAR_RequestRelated_ID Related Request (Master Issue, ..) */
+public void SetVAR_RequestRelated_ID (int VAR_RequestRelated_ID)
 {
-if (R_RequestRelated_ID <= 0) Set_Value ("R_RequestRelated_ID", null);
+if (VAR_RequestRelated_ID <= 0) Set_Value ("VAR_RequestRelated_ID", null);
 else
-Set_Value ("R_RequestRelated_ID", R_RequestRelated_ID);
+Set_Value ("VAR_RequestRelated_ID", VAR_RequestRelated_ID);
 }
 /** Get Related Request.
 @return Related Request (Master Issue, ..) */
-public int GetR_RequestRelated_ID() 
+public int GetVAR_RequestRelated_ID() 
 {
-Object ii = Get_Value("R_RequestRelated_ID");
+Object ii = Get_Value("VAR_RequestRelated_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request Type.
-@param R_RequestType_ID Type of request (e.g. Inquiry, Complaint, ..) */
-public void SetR_RequestType_ID (int R_RequestType_ID)
+@param VAR_Req_Type_ID Type of request (e.g. Inquiry, Complaint, ..) */
+public void SetVAR_Req_Type_ID (int VAR_Req_Type_ID)
 {
-if (R_RequestType_ID < 1) throw new ArgumentException ("R_RequestType_ID is mandatory.");
-Set_Value ("R_RequestType_ID", R_RequestType_ID);
+if (VAR_Req_Type_ID < 1) throw new ArgumentException ("VAR_Req_Type_ID is mandatory.");
+Set_Value ("VAR_Req_Type_ID", VAR_Req_Type_ID);
 }
 /** Get Request Type.
 @return Type of request (e.g. Inquiry, Complaint, ..) */
-public int GetR_RequestType_ID() 
+public int GetVAR_Req_Type_ID() 
 {
-Object ii = Get_Value("R_RequestType_ID");
+Object ii = Get_Value("VAR_Req_Type_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request.
-@param R_Request_ID Request from a Business Partner or Prospect */
-public void SetR_Request_ID (int R_Request_ID)
+@param VAR_Request_ID Request from a Business Partner or Prospect */
+public void SetVAR_Request_ID (int VAR_Request_ID)
 {
-if (R_Request_ID < 1) throw new ArgumentException ("R_Request_ID is mandatory.");
-Set_ValueNoCheck ("R_Request_ID", R_Request_ID);
+if (VAR_Request_ID < 1) throw new ArgumentException ("VAR_Request_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Request_ID", VAR_Request_ID);
 }
 /** Get Request.
 @return Request from a Business Partner or Prospect */
-public int GetR_Request_ID() 
+public int GetVAR_Request_ID() 
 {
-Object ii = Get_Value("R_Request_ID");
+Object ii = Get_Value("VAR_Request_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Resolution.
-@param R_Resolution_ID Request Resolution */
-public void SetR_Resolution_ID (int R_Resolution_ID)
+@param VAR_Resolution_ID Request Resolution */
+public void SetR_Resolution_ID (int VAR_Resolution_ID)
 {
-if (R_Resolution_ID <= 0) Set_Value ("R_Resolution_ID", null);
+if (VAR_Resolution_ID <= 0) Set_Value ("VAR_Resolution_ID", null);
 else
-Set_Value ("R_Resolution_ID", R_Resolution_ID);
+Set_Value ("VAR_Resolution_ID", VAR_Resolution_ID);
 }
 /** Get Resolution.
 @return Request Resolution */
 public int GetR_Resolution_ID() 
 {
-Object ii = Get_Value("R_Resolution_ID");
+Object ii = Get_Value("VAR_Resolution_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Source.
-@param R_Source_ID Source for the Lead or Request */
-public void SetR_Source_ID (int R_Source_ID)
+@param VAR_Source_ID Source for the Lead or Request */
+public void SetVAR_Source_ID (int VAR_Source_ID)
 {
-if (R_Source_ID <= 0) Set_Value ("R_Source_ID", null);
+if (VAR_Source_ID <= 0) Set_Value ("VAR_Source_ID", null);
 else
-Set_Value ("R_Source_ID", R_Source_ID);
+Set_Value ("VAR_Source_ID", VAR_Source_ID);
 }
 /** Get Source.
 @return Source for the Lead or Request */
-public int GetR_Source_ID() 
+public int GetVAR_Source_ID() 
 {
-Object ii = Get_Value("R_Source_ID");
+Object ii = Get_Value("VAR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Standard Response.
-@param R_StandardResponse_ID Request Standard Response */
-public void SetR_StandardResponse_ID (int R_StandardResponse_ID)
+@param VAR_Req_StandardReply_ID Request Standard Response */
+public void SetVAR_Req_StandardReply_ID (int VAR_Req_StandardReply_ID)
 {
-if (R_StandardResponse_ID <= 0) Set_Value ("R_StandardResponse_ID", null);
+if (VAR_Req_StandardReply_ID <= 0) Set_Value ("VAR_Req_StandardReply_ID", null);
 else
-Set_Value ("R_StandardResponse_ID", R_StandardResponse_ID);
+Set_Value ("VAR_Req_StandardReply_ID", VAR_Req_StandardReply_ID);
 }
 /** Get Standard Response.
 @return Request Standard Response */
-public int GetR_StandardResponse_ID() 
+public int GetVAR_Req_StandardReply_ID() 
 {
-Object ii = Get_Value("R_StandardResponse_ID");
+Object ii = Get_Value("VAR_Req_StandardReply_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Status.
-@param R_Status_ID Request Status */
-public void SetR_Status_ID (int R_Status_ID)
+@param VAR_Req_Status_ID Request Status */
+public void SetVAR_Req_Status_ID (int VAR_Req_Status_ID)
 {
-if (R_Status_ID <= 0) Set_Value ("R_Status_ID", null);
+if (VAR_Req_Status_ID <= 0) Set_Value ("VAR_Req_Status_ID", null);
 else
-Set_Value ("R_Status_ID", R_Status_ID);
+Set_Value ("VAR_Req_Status_ID", VAR_Req_Status_ID);
 }
 /** Get Status.
 @return Request Status */
-public int GetR_Status_ID() 
+public int GetVAR_Req_Status_ID() 
 {
-Object ii = Get_Value("R_Status_ID");
+Object ii = Get_Value("VAR_Req_Status_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -302,11 +302,11 @@ namespace VAdvantage.ProcessEngine
         /// <returns>true</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            if (newRecord && GetAD_Session_ID() == 0)
+            if (newRecord && GetVAF_Session_ID() == 0)
             {
                 MSession session = MSession.Get(GetCtx(), true);
-                int AD_Session_ID = session.GetAD_Session_ID();
-                SetAD_Session_ID(AD_Session_ID);
+                int VAF_Session_ID = session.GetVAF_Session_ID();
+                SetVAF_Session_ID(VAF_Session_ID);
             }
             return true;
         }

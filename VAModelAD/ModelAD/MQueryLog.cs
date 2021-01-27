@@ -53,20 +53,20 @@ namespace VAdvantage.Model
         /// Full Constructor
         /// </summary>
         /// <param name="ctx">ctx</param>
-        /// <param name="AD_Session_ID">session</param>
+        /// <param name="VAF_Session_ID">session</param>
         /// <param name="VAF_Client_ID">login client</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="VAF_TableView_ID">table</param>
         /// <param name="WhereClause">where</param>
         /// <param name="RecordCount">count</param>
         /// <param name="Parameter">parameter</param>
-        public MQueryLog(Ctx ctx, int AD_Session_ID,
+        public MQueryLog(Ctx ctx, int VAF_Session_ID,
         int VAF_Client_ID, int VAF_Org_ID,
         int VAF_TableView_ID, String whereClause, int recordCount, String parameter)
             : this(ctx, 0, null)
         {
             //	out of trx
-            SetAD_Session_ID(AD_Session_ID);
+            SetVAF_Session_ID(VAF_Session_ID);
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
             SetVAF_TableView_ID(VAF_TableView_ID);

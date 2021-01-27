@@ -11,23 +11,23 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Group
+/** Generated Model for VAR_Group
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_R_Group : PO
 {
-public X_R_Group (Context ctx, int R_Group_ID, Trx trxName) : base (ctx, R_Group_ID, trxName)
+public X_R_Group (Context ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
 {
-/** if (R_Group_ID == 0)
+/** if (VAR_Group_ID == 0)
 {
 SetName (null);
 SetR_Group_ID (0);
 }
  */
 }
-public X_R_Group (Ctx ctx, int R_Group_ID, Trx trxName) : base (ctx, R_Group_ID, trxName)
+public X_R_Group (Ctx ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
 {
-/** if (R_Group_ID == 0)
+/** if (VAR_Group_ID == 0)
 {
 SetName (null);
 SetR_Group_ID (0);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389065962L;
 public static int Table_ID;
  // =773;
 
-/** TableName=R_Group */
-public static String Table_Name="R_Group";
+/** TableName=VAR_Group */
+public static String Table_Name="VAR_Group";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -203,17 +203,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Group.
-@param R_Group_ID Request Group */
-public void SetR_Group_ID (int R_Group_ID)
+@param VAR_Group_ID Request Group */
+public void SetR_Group_ID (int VAR_Group_ID)
 {
-if (R_Group_ID < 1) throw new ArgumentException ("R_Group_ID is mandatory.");
-Set_ValueNoCheck ("R_Group_ID", R_Group_ID);
+if (VAR_Group_ID < 1) throw new ArgumentException ("VAR_Group_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Group_ID", VAR_Group_ID);
 }
 /** Get Group.
 @return Request Group */
 public int GetR_Group_ID() 
 {
-Object ii = Get_Value("R_Group_ID");
+Object ii = Get_Value("VAR_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

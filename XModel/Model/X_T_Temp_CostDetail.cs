@@ -11,26 +11,26 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for T_Temp_CostDetail
+    /** Generated Model for VAT_Temp_CostDetail
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_T_Temp_CostDetail : PO
+    public class X_VAT_Temp_CostDetail : PO
     {
-        public X_T_Temp_CostDetail(Context ctx, int T_Temp_CostDetail_ID, Trx trxName)
-            : base(ctx, T_Temp_CostDetail_ID, trxName)
+        public X_VAT_Temp_CostDetail(Context ctx, int VAT_Temp_CostDetail_ID, Trx trxName)
+            : base(ctx, VAT_Temp_CostDetail_ID, trxName)
         {
-            /** if (T_Temp_CostDetail_ID == 0)
+            /** if (VAT_Temp_CostDetail_ID == 0)
             {
-            SetT_Temp_CostDetail_ID (0);
+            SetVAT_Temp_CostDetail_ID (0);
             }
              */
         }
-        public X_T_Temp_CostDetail(Ctx ctx, int T_Temp_CostDetail_ID, Trx trxName)
-            : base(ctx, T_Temp_CostDetail_ID, trxName)
+        public X_VAT_Temp_CostDetail(Ctx ctx, int VAT_Temp_CostDetail_ID, Trx trxName)
+            : base(ctx, VAT_Temp_CostDetail_ID, trxName)
         {
-            /** if (T_Temp_CostDetail_ID == 0)
+            /** if (VAT_Temp_CostDetail_ID == 0)
             {
-            SetT_Temp_CostDetail_ID (0);
+            SetVAT_Temp_CostDetail_ID (0);
             }
              */
         }
@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_T_Temp_CostDetail(Context ctx, DataRow rs, Trx trxName)
+        public X_VAT_Temp_CostDetail(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_T_Temp_CostDetail(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAT_Temp_CostDetail(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -57,14 +57,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_T_Temp_CostDetail(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAT_Temp_CostDetail(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_T_Temp_CostDetail()
+        static X_VAT_Temp_CostDetail()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -77,8 +77,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =1000477;
 
-        /** TableName=T_Temp_CostDetail */
-        public static String Table_Name = "T_Temp_CostDetail";
+        /** TableName=VAT_Temp_CostDetail */
+        public static String Table_Name = "VAT_Temp_CostDetail";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_T_Temp_CostDetail[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAT_Temp_CostDetail[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice Line.
@@ -290,18 +290,18 @@ namespace VAdvantage.Model
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
-        /** Set T_Temp_CostDetail_ID.
-        @param T_Temp_CostDetail_ID T_Temp_CostDetail_ID */
-        public void SetT_Temp_CostDetail_ID(int T_Temp_CostDetail_ID)
+        /** Set VAT_Temp_CostDetail_ID.
+        @param VAT_Temp_CostDetail_ID VAT_Temp_CostDetail_ID */
+        public void SetVAT_Temp_CostDetail_ID(int VAT_Temp_CostDetail_ID)
         {
-            if (T_Temp_CostDetail_ID < 1) throw new ArgumentException("T_Temp_CostDetail_ID is mandatory.");
-            Set_ValueNoCheck("T_Temp_CostDetail_ID", T_Temp_CostDetail_ID);
+            if (VAT_Temp_CostDetail_ID < 1) throw new ArgumentException("VAT_Temp_CostDetail_ID is mandatory.");
+            Set_ValueNoCheck("VAT_Temp_CostDetail_ID", VAT_Temp_CostDetail_ID);
         }
-        /** Get T_Temp_CostDetail_ID.
-        @return T_Temp_CostDetail_ID */
-        public int GetT_Temp_CostDetail_ID()
+        /** Get VAT_Temp_CostDetail_ID.
+        @return VAT_Temp_CostDetail_ID */
+        public int GetVAT_Temp_CostDetail_ID()
         {
-            Object ii = Get_Value("T_Temp_CostDetail_ID");
+            Object ii = Get_Value("VAT_Temp_CostDetail_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

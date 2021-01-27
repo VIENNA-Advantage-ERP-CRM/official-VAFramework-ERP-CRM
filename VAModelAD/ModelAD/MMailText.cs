@@ -2,7 +2,7 @@
  * Module Name    :  Email Test
  * Purpose        : Request Mail Template model.
  *	                 Cannot be cached as it holds PO/BPartner/User to parse
- * Class Used     : X_R_MailText
+ * Class Used     : X_VAR_MailTemplate
  * Chronological Development
  * raghunandan    26-March-2010
  ******************************************************/
@@ -26,7 +26,7 @@ namespace VAdvantage.Model
     /// Request Mail Template model.
     ///	Cannot be cached as it holds PO/BPartner/User to parse
     /// </summary>
-    public class MMailText : X_R_MailText
+    public class MMailText : X_VAR_MailTemplate
     {
         /**	Parse User			*/
         private MUser _user = null;
@@ -52,10 +52,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="R_MailText_ID">id</param>
+        /// <param name="VAR_MailTemplate_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMailText(Ctx ctx, int R_MailText_ID, Trx trxName)
-            : base(ctx, R_MailText_ID, trxName)
+        public MMailText(Ctx ctx, int VAR_MailTemplate_ID, Trx trxName)
+            : base(ctx, VAR_MailTemplate_ID, trxName)
         {
         }
 
@@ -146,12 +146,12 @@ namespace VAdvantage.Model
         private MMailTextTrl GetTranslation(String VAF_Language)
         {
             MMailTextTrl trl = null;
-            String sql = "SELECT * FROM R_MailText_Trl WHERE R_MailText_ID=@textid AND VAF_Language=@lang";
+            String sql = "SELECT * FROM VAR_MailTemplate_TL WHERE VAR_MailTemplate_ID=@textid AND VAF_Language=@lang";
             IDataReader dr = null;
             try
             {
                 SqlParameter[] param = new SqlParameter[2];
-                param[0] = new SqlParameter("@textid", GetR_MailText_ID());
+                param[0] = new SqlParameter("@textid", GetVAR_MailTemplate_ID());
                 param[1] = new SqlParameter("@lang", VAF_Language);
                 dr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param);
                 if (dr.Read())

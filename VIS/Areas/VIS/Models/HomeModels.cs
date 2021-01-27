@@ -141,7 +141,7 @@ namespace VIS.Models
     #region Request
     public class HomeRequest
     {
-        public int R_Request_ID { get; set; }
+        public int VAR_Request_ID { get; set; }
         public int VAF_Screen_ID { get; set; }
         public string DocumentNo { get; set; }
         public string TableName { get; set; }

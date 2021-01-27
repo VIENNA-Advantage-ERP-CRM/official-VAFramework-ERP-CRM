@@ -11,15 +11,15 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-    /** Generated Model for S_TimeExpense
+    /** Generated Model for VAS_ExpenseReport
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_S_TimeExpense : PO
+    public class X_VAS_ExpenseReport : PO
     {
-        public X_S_TimeExpense(Context ctx, int S_TimeExpense_ID, Trx trxName)
-            : base(ctx, S_TimeExpense_ID, trxName)
+        public X_VAS_ExpenseReport(Context ctx, int VAS_ExpenseReport_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReport_ID, trxName)
         {
-            /** if (S_TimeExpense_ID == 0)
+            /** if (VAS_ExpenseReport_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetDateReport (DateTime.Now);	// @#Date@
@@ -30,14 +30,14 @@ using System.Data;
             SetM_PriceList_ID (0);
             SetM_Warehouse_ID (0);
             SetProcessed (false);	// N
-            SetS_TimeExpense_ID (0);
+            SetVAS_ExpenseReport_ID (0);
             }
              */
         }
-        public X_S_TimeExpense(Ctx ctx, int S_TimeExpense_ID, Trx trxName)
-            : base(ctx, S_TimeExpense_ID, trxName)
+        public X_VAS_ExpenseReport(Ctx ctx, int VAS_ExpenseReport_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReport_ID, trxName)
         {
-            /** if (S_TimeExpense_ID == 0)
+            /** if (VAS_ExpenseReport_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetDateReport (DateTime.Now);	// @#Date@
@@ -48,7 +48,7 @@ using System.Data;
             SetM_PriceList_ID (0);
             SetM_Warehouse_ID (0);
             SetProcessed (false);	// N
-            SetS_TimeExpense_ID (0);
+            SetVAS_ExpenseReport_ID (0);
             }
              */
         }
@@ -57,7 +57,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpense(Context ctx, DataRow rs, Trx trxName)
+        public X_VAS_ExpenseReport(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -66,7 +66,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpense(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAS_ExpenseReport(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -75,14 +75,14 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpense(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAS_ExpenseReport(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_S_TimeExpense()
+        static X_VAS_ExpenseReport()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -95,8 +95,8 @@ using System.Data;
         public static int Table_ID;
         // =486;
 
-        /** TableName=S_TimeExpense */
-        public static String Table_Name = "S_TimeExpense";
+        /** TableName=VAS_ExpenseReport */
+        public static String Table_Name = "VAS_ExpenseReport";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -130,7 +130,7 @@ using System.Data;
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_S_TimeExpense[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAS_ExpenseReport[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set User/Contact.
@@ -462,17 +462,17 @@ using System.Data;
             return false;
         }
         /** Set Expense Report.
-        @param S_TimeExpense_ID Time and Expense Report */
-        public void SetS_TimeExpense_ID(int S_TimeExpense_ID)
+        @param VAS_ExpenseReport_ID Time and Expense Report */
+        public void SetVAS_ExpenseReport_ID(int VAS_ExpenseReport_ID)
         {
-            if (S_TimeExpense_ID < 1) throw new ArgumentException("S_TimeExpense_ID is mandatory.");
-            Set_ValueNoCheck("S_TimeExpense_ID", S_TimeExpense_ID);
+            if (VAS_ExpenseReport_ID < 1) throw new ArgumentException("VAS_ExpenseReport_ID is mandatory.");
+            Set_ValueNoCheck("VAS_ExpenseReport_ID", VAS_ExpenseReport_ID);
         }
         /** Get Expense Report.
         @return Time and Expense Report */
-        public int GetS_TimeExpense_ID()
+        public int GetVAS_ExpenseReport_ID()
         {
-            Object ii = Get_Value("S_TimeExpense_ID");
+            Object ii = Get_Value("VAS_ExpenseReport_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

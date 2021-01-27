@@ -7144,7 +7144,7 @@
         //// gwu: modified to enforce validation even when the new value      null
         mTable.setValueAt(e.newValue, row, col);	//	-> dataStatusChanged -> dynamicDisplay
         ////	Force Callout
-        //if (e.getPropertyName().equals("S_ResourceAssignment_ID")) {
+        //if (e.getPropertyName().equals("VAS_Res_Assignment_ID")) {
         //    //GridField mField = m_mTab.getField(col);
         //    // if ((mField != null) && (mField.getCallout().length() > 0))
         //    //   m_mTab.processFieldChange(mField);     //  Dependencies & Callout

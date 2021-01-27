@@ -512,9 +512,9 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_EMail))
             {
-                if (GetR_MailText_ID() == 0)
+                if (GetVAR_MailTemplate_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "R_MailText_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAR_MailTemplate_ID"));
                     return false;
                 }
             }

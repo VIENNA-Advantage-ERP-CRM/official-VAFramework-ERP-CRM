@@ -16,32 +16,32 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MStatus : X_R_Status
+    public class MStatus : X_VAR_Req_Status
     {
         // Static Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MStatus).FullName);
         //private static CLogger s_log = CLogger.GetCLogger(MStatus.class);
         /**	Cache							*/
-        static private CCache<int, MStatus> _cache = new CCache<int, MStatus>("R_Status", 10);
+        static private CCache<int, MStatus> _cache = new CCache<int, MStatus>("VAR_Req_Status", 10);
         /**	Default Cache (Key=Client)		*/
-        static private CCache<int, MStatus> _cacheDefault = new CCache<int, MStatus>("R_Status", 10);
+        static private CCache<int, MStatus> _cacheDefault = new CCache<int, MStatus>("VAR_Req_Status", 10);
 
 
         /**
 	 * 	Get Request Status (cached)
 	 *	@param ctx context
-	 *	@param R_Status_ID id
+	 *	@param VAR_Req_Status_ID id
 	 *	@return Request Status or null
 	 */
-        public static MStatus Get(Ctx ctx, int R_Status_ID)
+        public static MStatus Get(Ctx ctx, int VAR_Req_Status_ID)
         {
-            if (R_Status_ID == 0)
+            if (VAR_Req_Status_ID == 0)
                 return null;
-            int key = R_Status_ID;
+            int key = VAR_Req_Status_ID;
             MStatus retValue = (MStatus)_cache[key];
             if (retValue == null)
             {
-                retValue = new MStatus(ctx, R_Status_ID, null);
+                retValue = new MStatus(ctx, VAR_Req_Status_ID, null);
                 _cache.Add(key, retValue);
             }
             return retValue;
@@ -50,20 +50,20 @@ namespace VAdvantage.Model
         /**
          * 	Get Default Request Status
          *	@param ctx context
-         *	@param R_RequestType_ID request type
+         *	@param VAR_Req_Type_ID request type
          *	@return Request Type
          */
-        public static MStatus GetDefault(Ctx ctx, int R_RequestType_ID)
+        public static MStatus GetDefault(Ctx ctx, int VAR_Req_Type_ID)
         {
-            int key = R_RequestType_ID;
+            int key = VAR_Req_Type_ID;
             MStatus retValue = (MStatus)_cacheDefault[key];
             if (retValue != null)
                 return retValue;
             //	Get New
-            String sql = "SELECT * FROM R_Status s "
-                + "WHERE EXISTS (SELECT * FROM R_RequestType rt "
-                    + "WHERE rt.R_StatusCategory_ID=s.R_StatusCategory_ID"
-                    + " AND rt.R_RequestType_ID=@R_RequestType_ID)"
+            String sql = "SELECT * FROM VAR_Req_Status s "
+                + "WHERE EXISTS (SELECT * FROM VAR_Req_Type rt "
+                    + "WHERE rt.VAR_Req_StatusCategory_ID=s.VAR_Req_StatusCategory_ID"
+                    + " AND rt.VAR_Req_Type_ID=@VAR_Req_Type_ID)"
                 + " AND IsDefault='Y' "
                 + "ORDER BY SeqNo";
             //PreparedStatement pstmt = null;
@@ -72,9 +72,9 @@ namespace VAdvantage.Model
             try
             {
                 //	pstmt = DataBase.prepareStatement (sql, null);
-                //	pstmt.SetInt(1, R_RequestType_ID);
+                //	pstmt.SetInt(1, VAR_Req_Type_ID);
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@R_RequestType_ID", R_RequestType_ID);
+                param[0] = new SqlParameter("@VAR_Req_Type_ID", VAR_Req_Type_ID);
                 idr = DataBase.DB.ExecuteReader(sql, param);
                 dt = new DataTable();
                 dt.Load(idr);
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
         public static MStatus[] GetClosed(Ctx ctx)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM R_Status "
+            String sql = "SELECT * FROM VAR_Req_Status "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsActive='Y' AND IsClosed='Y' "
                 + "ORDER BY Value";
             List<MStatus> list = new List<MStatus>();
@@ -157,14 +157,14 @@ namespace VAdvantage.Model
         /***
          * 	Default Constructor
          *	@param ctx context
-         *	@param R_Status_ID is
+         *	@param VAR_Req_Status_ID is
          *	@param trxName trx
          */
-        public MStatus(Ctx ctx, int R_Status_ID, Trx trxName) :
-            base(ctx, R_Status_ID, trxName)
+        public MStatus(Ctx ctx, int VAR_Req_Status_ID, Trx trxName) :
+            base(ctx, VAR_Req_Status_ID, trxName)
         {
-            //super (ctx, R_Status_ID, trxName);
-            if (R_Status_ID == 0)
+            //super (ctx, VAR_Req_Status_ID, trxName);
+            if (VAR_Req_Status_ID == 0)
             {
                 //	SetValue (null);
                 //	SetName (null);

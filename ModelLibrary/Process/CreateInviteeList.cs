@@ -174,7 +174,7 @@ namespace ViennaAdvantageServer.Process
                     if (MCapTarget.GetR_InterestArea_ID() != 0)
                     {
 
-                        query = "Select VAB_BusinessPartner_ID from VAR_InterestedUser where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_BusinessPartner_ID is not null";
+                        query = "Select VAB_BusinessPartner_ID from VAR_InterestedUser where VAR_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_BusinessPartner_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {
@@ -183,7 +183,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         dr.Close();
 
-                        //query = "Select VAB_BusinessPartner_ID from C_TargetList where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID();
+                        //query = "Select VAB_BusinessPartner_ID from C_TargetList where VAR_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID();
                         //dr = DB.ExecuteReader(query);
                         //while (dr.Read())
                         //{
@@ -192,7 +192,7 @@ namespace ViennaAdvantageServer.Process
                         //}
                         //dr.Close();
 
-                        query = "Select VAB_Lead_ID from vss_lead_interestarea where R_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_Lead_ID is not null";
+                        query = "Select VAB_Lead_ID from vss_lead_interestarea where VAR_InterestArea_ID=" + MCapTarget.GetR_InterestArea_ID() + " and VAB_Lead_ID is not null";
                         dr = DB.ExecuteReader(query, null, Get_Trx());
                         while (dr.Read())
                         {

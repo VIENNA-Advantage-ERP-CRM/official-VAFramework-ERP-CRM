@@ -111,7 +111,7 @@ namespace VAdvantage.Model
             // Don't log Log entries
             if (CHANGELOGTYPE_Insert.Equals(type)
              && (tableName.IndexOf("Log") != -1
-              || VAF_TableView_ID == X_AD_Session.Table_ID))
+              || VAF_TableView_ID == X_VAF_Session.Table_ID))
                 return true;
             //
             return false;
@@ -231,7 +231,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAF_AlterLog_ID">VAF_AlterLog_ID 0 for new change log</param>
         /// <param name="TrxName">TrxName change transaction name</param>
-        /// <param name="AD_Session_ID">AD_Session_ID session</param>
+        /// <param name="VAF_Session_ID">VAF_Session_ID session</param>
         /// <param name="VAF_TableView_ID">VAF_TableView_ID table</param>
         /// <param name="VAF_Column_ID">column</param>
         /// <param name="keyInfo">keyInfo record key(s)</param>
@@ -240,7 +240,7 @@ namespace VAdvantage.Model
         /// <param name="OldValue">old</param>
         /// <param name="NewValue">new</param>
         public MChangeLog(Ctx ctx, int VAF_AlterLog_ID, String trxName,
-        int AD_Session_ID,
+        int VAF_Session_ID,
         int VAF_TableView_ID, int VAF_Column_ID, Object keyInfo,
         int VAF_Client_ID, int VAF_Org_ID,
         Object oldValue, Object newValue)
@@ -257,7 +257,7 @@ namespace VAdvantage.Model
             }
             SetVAF_AlterLog_ID(VAF_AlterLog_ID);
             SetTrxName(trxName);
-            SetAD_Session_ID(AD_Session_ID);
+            SetVAF_Session_ID(VAF_Session_ID);
             //
             SetVAF_TableView_ID(VAF_TableView_ID);
             SetVAF_Column_ID(VAF_Column_ID);

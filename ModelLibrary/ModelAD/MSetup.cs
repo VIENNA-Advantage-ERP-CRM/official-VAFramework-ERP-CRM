@@ -410,7 +410,7 @@ namespace VAdvantage.Model
                 MAcctProcessor ap = new MAcctProcessor(m_client, VAF_UserContact_ID);
                 ap.Save();
             }
-            if (lstTableName.Contains("R_RequestProcessor")) // Update by Paramjeet Singh
+            if (lstTableName.Contains("VAR_Req_Handler")) // Update by Paramjeet Singh
             {
                 MRequestProcessor rp = new MRequestProcessor(m_client, VAF_UserContact_ID);
                 rp.Save();

@@ -22,7 +22,7 @@ namespace VAdvantage.Process
         StringBuilder message = null;
         public const String SEPARATOR =
           "\n---------.----------.----------.----------.----------.----------\n";
-        public static String Table_Name = "R_Request";
+        public static String Table_Name = "VAR_Request";
         private int _success = 0;
         private int _failure = 0;
         private int _notices = 0;
@@ -35,13 +35,13 @@ namespace VAdvantage.Process
             _req = new MRequest(GetCtx(), GetRecord_ID(), null);
 
             // check mail template if found on request or request type.
-            mailText_ID = _req.GetR_MailText_ID();
+            mailText_ID = _req.GetVAR_MailTemplate_ID();
             if (mailText_ID == 0)
             {
-                MRequestType reqType = new MRequestType(GetCtx(), _req.GetR_RequestType_ID(), null);
-                if (reqType.GetR_MailText_ID() > 0)
+                MRequestType reqType = new MRequestType(GetCtx(), _req.GetVAR_Req_Type_ID(), null);
+                if (reqType.GetVAR_MailTemplate_ID() > 0)
                 {
-                    mailText_ID = reqType.GetR_MailText_ID();
+                    mailText_ID = reqType.GetVAR_MailTemplate_ID();
                 }
 
             }
@@ -71,30 +71,30 @@ namespace VAdvantage.Process
 
                 #region commented
                 //
-                //if (_req.GetR_RequestType_ID() != _reqAction.GetR_RequestType_ID() && _reqAction.GetR_RequestType_ID() > 0)
+                //if (_req.GetVAR_Req_Type_ID() != _reqAction.GetVAR_Req_Type_ID() && _reqAction.GetVAR_Req_Type_ID() > 0)
                 //{
                 //    _changed = true;
-                //    sendInfo.Add("R_RequestType_ID");
+                //    sendInfo.Add("VAR_Req_Type_ID");
                 //}
                 //if (_req.GetR_Group_ID() != _reqAction.GetR_Group_ID() && _reqAction.GetR_Group_ID() > 0)
                 //{
                 //    _changed = true;
-                //    sendInfo.Add("R_Group_ID");
+                //    sendInfo.Add("VAR_Group_ID");
                 //}
                 //if (_req.GetVAR_Category_ID() != _reqAction.GetVAR_Category_ID() && _reqAction.GetVAR_Category_ID() > 0)
                 //{
                 //    _changed = true;
                 //    sendInfo.Add("VAR_Category_ID");
                 //}
-                //if (_req.GetR_Status_ID() != _reqAction.GetR_Status_ID() && _reqAction.GetR_Status_ID() > 0)
+                //if (_req.GetVAR_Req_Status_ID() != _reqAction.GetVAR_Req_Status_ID() && _reqAction.GetVAR_Req_Status_ID() > 0)
                 //{
                 //    _changed = true;
-                //    sendInfo.Add("R_Status_ID");
+                //    sendInfo.Add("VAR_Req_Status_ID");
                 //}
                 //if (_req.GetR_Resolution_ID() != _reqAction.GetR_Resolution_ID() && _reqAction.GetR_Resolution_ID() > 0)
                 //{
                 //    _changed = true;
-                //    sendInfo.Add("R_Resolution_ID");
+                //    sendInfo.Add("VAR_Resolution_ID");
                 //}
                 ////
                 //if (_req.GetSalesRep_ID() != _reqAction.GetSalesRep_ID() && _reqAction.GetSalesRep_ID() > 0)
@@ -152,12 +152,12 @@ namespace VAdvantage.Process
         {
             bool isEmailSent = false;
             StringBuilder finalMsg = new StringBuilder();
-            finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
+            finalMsg.Append(Msg.Translate(GetCtx(), "VAR_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NotificSent"));
             //	Subject
             if (mailText_ID == 0)
             {
-                subject = Msg.Translate(GetCtx(), "R_Request_ID")
-                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + _req.GetR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+                subject = Msg.Translate(GetCtx(), "VAR_Request_ID")
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + _req.GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             }
             //	Message
 
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
                 + "FROM RV_RequestUpdates_Only ru"
                 + " INNER JOIN VAF_UserContact u ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)"
                 + " LEFT OUTER JOIN VAF_UserContact_Roles r ON (u.VAF_UserContact_ID=r.VAF_UserContact_ID) "
-                + "WHERE ru.R_Request_ID= " + _req.GetR_Request_ID()
+                + "WHERE ru.VAR_Request_ID= " + _req.GetVAR_Request_ID()
                 + " GROUP BY u.VAF_UserContact_ID, u.NotificationType, u.EMail, u.Name";
 
             IDataReader idr = null;
@@ -217,8 +217,8 @@ namespace VAdvantage.Process
 
                     //	No confidential to externals
                     if (VAF_Role_ID == -1
-                        && (_req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_Internal)
-                            || _req.GetConfidentialTypeEntry().Equals(X_R_Request.CONFIDENTIALTYPE_PrivateInformation)))
+                        && (_req.GetConfidentialTypeEntry().Equals(X_VAR_Request.CONFIDENTIALTYPE_Internal)
+                            || _req.GetConfidentialTypeEntry().Equals(X_VAR_Request.CONFIDENTIALTYPE_PrivateInformation)))
                         continue;
 
                     if (X_VAF_UserContact.NOTIFICATIONTYPE_None.Equals(NotificationType))
@@ -302,12 +302,12 @@ namespace VAdvantage.Process
                 if (!isEmailSent)
                 {
                     finalMsg.Clear();
-                    finalMsg.Append(Msg.Translate(GetCtx(), "R_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
+                    finalMsg.Append(Msg.Translate(GetCtx(), "VAR_Request_ID") + ": " + _req.GetDocumentNo()).Append("\n").Append(Msg.Translate(GetCtx(), "R_NoNotificationSent"));
                 }
 
                 int VAF_Msg_Lable_ID = 834;
                 MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetVAF_UserContact_ID(),
-                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
+                    X_VAR_Request.Table_ID, _req.GetVAR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
                     log.Log(Level.INFO, "ProcessFinished", "");
@@ -336,7 +336,7 @@ namespace VAdvantage.Process
         private void GetReqHistory()
         {
             int _reqAction_ID = 0;
-            string sql = "SELECT R_RequestAction_ID FROM R_RequestAction WHERE R_Request_ID=" + _req.GetR_Request_ID() + " AND IsActive='Y'  ORDER BY R_RequestAction_ID DESC";
+            string sql = "SELECT VAR_Req_History_ID FROM VAR_Req_History WHERE VAR_Request_ID=" + _req.GetVAR_Request_ID() + " AND IsActive='Y'  ORDER BY VAR_Req_History_ID DESC";
             _reqAction_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql));
             if (_reqAction_ID > 0)
             {
@@ -370,7 +370,7 @@ namespace VAdvantage.Process
                 //	Changes
                 for (int i = 0; i < list.Count; i++)
                 {
-                    X_R_Request req = new X_R_Request(GetCtx(), 0, null);
+                    X_VAR_Request req = new X_VAR_Request(GetCtx(), 0, null);
 
                     String columnName = (String)list[i];
                     message.Append("\n").Append(Msg.GetElement(GetCtx(), columnName))
@@ -457,7 +457,7 @@ namespace VAdvantage.Process
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");
-                _mAttachment.SetRecord_ID(_req.GetR_Request_ID());
+                _mAttachment.SetRecord_ID(_req.GetVAR_Request_ID());
                 _mAttachment.SetTextMsg(message);
                 _mAttachment.SetTitle(subject);
                 _mAttachment.SetMailAddress(to.GetEMail());
@@ -498,7 +498,7 @@ namespace VAdvantage.Process
             {
                 int VAF_Msg_Lable_ID = 834;
                 MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, VAF_UserContact_ID,
-                    X_R_Request.Table_ID, _req.GetR_Request_ID(),
+                    X_VAR_Request.Table_ID, _req.GetVAR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())
                     _notices++;
@@ -520,9 +520,9 @@ namespace VAdvantage.Process
                         ON (VAF_UserContact_Roles.VAF_UserContact_ID    =VAF_UserContact.VAF_UserContact_ID)
                         WHERE VAF_UserContact_Roles.VAF_Role_ID IN
                           (SELECT VAF_Role_ID
-                          FROM R_RequestTypeUpdates
+                          FROM VAR_Rtype_UpdatesAlert
                           WHERE VAF_Role_ID   IS NOT NULL
-                          AND R_RequestType_ID=" + _req.GetR_RequestType_ID() + @"
+                          AND VAR_Req_Type_ID=" + _req.GetVAR_Req_Type_ID() + @"
                           AND IsActive        ='Y'
                           )
                         AND VAF_UserContact_Roles.VAF_UserContact_ID NOT IN
@@ -532,7 +532,7 @@ namespace VAdvantage.Process
                           ON (ru.VAF_UserContact_ID=u.VAF_UserContact_ID)
                           LEFT OUTER JOIN VAF_UserContact_Roles r
                           ON (u.VAF_UserContact_ID     =r.VAF_UserContact_ID)
-                          WHERE ru.R_Request_ID=" + _req.GetR_Request_ID() + @"
+                          WHERE ru.VAR_Request_ID=" + _req.GetVAR_Request_ID() + @"
                           )
                         AND VAF_UserContact.email IS NOT NULL";
 

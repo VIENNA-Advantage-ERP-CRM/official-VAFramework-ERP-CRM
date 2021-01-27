@@ -1047,18 +1047,18 @@ namespace VAdvantage.Model
         }
 
         /** Set Source.
-        @param R_Source_ID Source for the Lead or Request */
-        public void SetR_Source_ID(int R_Source_ID)
+        @param VAR_Source_ID Source for the Lead or Request */
+        public void SetVAR_Source_ID(int VAR_Source_ID)
         {
-            if (R_Source_ID <= 0) Set_Value("R_Source_ID", null);
+            if (VAR_Source_ID <= 0) Set_Value("VAR_Source_ID", null);
             else
-                Set_Value("R_Source_ID", R_Source_ID);
+                Set_Value("VAR_Source_ID", VAR_Source_ID);
         }
         /** Get Source.
         @return Source for the Lead or Request */
-        public int GetR_Source_ID()
+        public int GetVAR_Source_ID()
         {
-            Object ii = Get_Value("R_Source_ID");
+            Object ii = Get_Value("VAR_Source_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

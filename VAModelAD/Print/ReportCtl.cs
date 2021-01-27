@@ -169,7 +169,7 @@ namespace VAdvantage.Print
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
 
             //  Create Query from Parameters
-            String TableName = pi.GetVAF_Job_ID() == 202 ? "T_Report" : "T_ReportStatement";
+            String TableName = pi.GetVAF_Job_ID() == 202 ? "VAT_Report" : "VAT_ReportStatement";
             Query query = Query.Get(ctx, pi.GetVAF_JInstance_ID(), TableName);
 
             //	Get PrintFormat

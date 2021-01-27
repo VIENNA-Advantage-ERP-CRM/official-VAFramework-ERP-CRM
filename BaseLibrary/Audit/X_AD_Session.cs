@@ -11,27 +11,27 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for AD_Session
+    /** Generated Model for VAF_Session
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_AD_Session : PO
+    public class X_VAF_Session : PO
     {
-        public X_AD_Session(Context ctx, int AD_Session_ID, Trx trxName)
-            : base(ctx, AD_Session_ID, trxName)
+        public X_VAF_Session(Context ctx, int VAF_Session_ID, Trx trxName)
+            : base(ctx, VAF_Session_ID, trxName)
         {
-            /** if (AD_Session_ID == 0)
+            /** if (VAF_Session_ID == 0)
             {
-            SetAD_Session_ID (0);
+            SetVAF_Session_ID (0);
             SetProcessed (false);	// N
             }
              */
         }
-        public X_AD_Session(Ctx ctx, int AD_Session_ID, Trx trxName)
-            : base(ctx, AD_Session_ID, trxName)
+        public X_VAF_Session(Ctx ctx, int VAF_Session_ID, Trx trxName)
+            : base(ctx, VAF_Session_ID, trxName)
         {
-            /** if (AD_Session_ID == 0)
+            /** if (VAF_Session_ID == 0)
             {
-            SetAD_Session_ID (0);
+            SetVAF_Session_ID (0);
             SetProcessed (false);	// N
             }
              */
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Session(Context ctx, DataRow rs, Trx trxName)
+        public X_VAF_Session(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Session(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAF_Session(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_AD_Session(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAF_Session(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_AD_Session()
+        static X_VAF_Session()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -79,8 +79,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =566;
 
-        /** TableName=AD_Session */
-        public static String Table_Name = "AD_Session";
+        /** TableName=VAF_Session */
+        public static String Table_Name = "VAF_Session";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(6);
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_AD_Session[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAF_Session[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Role.
@@ -134,17 +134,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Session.
-        @param AD_Session_ID User Session Online or Web */
-        public void SetAD_Session_ID(int AD_Session_ID)
+        @param VAF_Session_ID User Session Online or Web */
+        public void SetVAF_Session_ID(int VAF_Session_ID)
         {
-            if (AD_Session_ID < 1) throw new ArgumentException("AD_Session_ID is mandatory.");
-            Set_ValueNoCheck("AD_Session_ID", AD_Session_ID);
+            if (VAF_Session_ID < 1) throw new ArgumentException("VAF_Session_ID is mandatory.");
+            Set_ValueNoCheck("VAF_Session_ID", VAF_Session_ID);
         }
         /** Get Session.
         @return User Session Online or Web */
-        public int GetAD_Session_ID()
+        public int GetVAF_Session_ID()
         {
-            Object ii = Get_Value("AD_Session_ID");
+            Object ii = Get_Value("VAF_Session_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -152,7 +152,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetAD_Session_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAF_Session_ID().ToString());
         }
         /** Set Description.
         @param Description Optional short description of the record */

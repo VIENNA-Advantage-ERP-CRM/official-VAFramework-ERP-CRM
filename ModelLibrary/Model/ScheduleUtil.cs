@@ -25,7 +25,7 @@ namespace VAdvantage.Model
         private Ctx _ctx;
         private int _S_Resource_ID;
         private bool _isAvailable = true;
-        private int _S_ResourceType_ID = 0;
+        private int _VAS_Res_Type_ID = 0;
         private int _VAB_UOM_ID = 0;
 
         private DateTime? _startDate = null;
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
          * 		- NonBusinessDay
          * 		- ResourceType Available
          *  </pre>
-         *  @param S_Resource_ID resource
+         *  @param VAS_Resource_ID resource
          *  @param start_Date start date
          *  @param end_Date optional end date, need to provide qty to calculate it
          *  @param qty optional qty in ResourceType UOM - ignored, if end date is not null
@@ -68,13 +68,13 @@ namespace VAdvantage.Model
          *  @return Array of existing Assigments or null - if free
          */
         //@SuppressWarnings("unchecked")
-        public MAssignmentSlot[] GetAssignmentSlots(int S_Resource_ID,
+        public MAssignmentSlot[] GetAssignmentSlots(int VAS_Resource_ID,
             DateTime? start_Date, DateTime? end_Date,
             Decimal? qty, bool getAll, Trx trxName)
 	{
 		log.Config(start_Date.ToString());
-		if (_S_Resource_ID != S_Resource_ID)
-			GetBaseInfo (S_Resource_ID);
+		if (_S_Resource_ID != VAS_Resource_ID)
+			GetBaseInfo (VAS_Resource_ID);
 		//
 		List<MAssignmentSlot> list = new List<MAssignmentSlot>();
 		MAssignmentSlot ma = null;
@@ -98,8 +98,8 @@ namespace VAdvantage.Model
 		//	Resource Unavailability -------------------------------------------
 	//	log.fine( "- Unavailability -");
 		String sql = "SELECT Description, DateFrom, DateTo "
-		  + "FROM S_ResourceUnavailable "
-		  + "WHERE S_Resource_ID=@1"					//	#1
+		  + "FROM VAS_Res_Unavailable "
+		  + "WHERE VAS_Resource_ID=@1"					//	#1
 		  + " AND DateTo >= @2"						//	#2	start
 		  + " AND DateFrom <= @3"					//	#3	end
 		  + " AND IsActive='Y'";
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
         System.Data.SqlClient.SqlParameter[] param = null;
 		try
 		{
-	//		log.fine( sql, "ID=" + S_Resource_ID + ", Start=" + m_startDate + ", End=" + m_endDate);
+	//		log.fine( sql, "ID=" + VAS_Resource_ID + ", Start=" + m_startDate + ", End=" + m_endDate);
             param = new System.Data.SqlClient.SqlParameter[3];
             param[0] = new System.Data.SqlClient.SqlParameter("@1",_S_Resource_ID);
             param[1] = new System.Data.SqlClient.SqlParameter("@2",_startDate);
@@ -202,12 +202,12 @@ namespace VAdvantage.Model
 		sql = "SELECT Name, IsTimeSlot,TimeSlotStart,TimeSlotEnd, "	//	1..4
 			+ "IsDateSlot,OnMonday,OnTuesday,OnWednesday,"			//	5..8
 			+ "OnThursday,OnFriday,OnSaturday,OnSunday "			//	9..12
-			+ "FROM S_ResourceType "
-			+ "WHERE S_ResourceType_ID=@1";
+			+ "FROM VAS_Res_Type "
+			+ "WHERE VAS_Res_Type_ID=@1";
 		try
 		{
             param  = new System.Data.SqlClient.SqlParameter[1];
-            param[0] =new System.Data.SqlClient.SqlParameter("@1",_S_ResourceType_ID);
+            param[0] =new System.Data.SqlClient.SqlParameter("@1",_VAS_Res_Type_ID);
 			
             dr = CoreLibrary.DataBase.DB.ExecuteReader(sql,param,trxName);
             
@@ -272,9 +272,9 @@ namespace VAdvantage.Model
 			return new MAssignmentSlot[] {ma};
 
 		//	Assignments -------------------------------------------------------
-		sql = "SELECT S_ResourceAssignment_ID "
-			+ "FROM S_ResourceAssignment "
-			+ "WHERE S_Resource_ID=@1"					//	#1
+		sql = "SELECT VAS_Res_Assignment_ID "
+			+ "FROM VAS_Res_Assignment "
+			+ "WHERE VAS_Resource_ID=@1"					//	#1
 			+ " AND AssignDateTo >= @2"					//	#2	start
 			+ " AND AssignDateFrom <= @3"				//	#3	end
 			+ " AND IsActive='Y'";
@@ -567,17 +567,17 @@ namespace VAdvantage.Model
 
         /**
          * 	Get Basic Info
-         *  @param S_Resource_ID resource
+         *  @param VAS_Resource_ID resource
          */
-        private void GetBaseInfo(int S_Resource_ID)
+        private void GetBaseInfo(int VAS_Resource_ID)
         {
             //	Resource is Active and Available
             String sql = MRole.GetDefault(_ctx, false).AddAccessSQL(
                 "SELECT r.IsActive,r.IsAvailable,NULL,"	//	r.IsSingleAssignment,"
-                + "r.S_ResourceType_ID,rt.VAB_UOM_ID "
-                + "FROM S_Resource r, S_ResourceType rt "
-                + "WHERE r.S_Resource_ID=" + S_Resource_ID + " "
-                + " AND r.S_ResourceType_ID=rt.S_ResourceType_ID",
+                + "r.VAS_Res_Type_ID,rt.VAB_UOM_ID "
+                + "FROM VAS_Resource r, VAS_Res_Type rt "
+                + "WHERE r.VAS_Resource_ID=" + VAS_Resource_ID + " "
+                + " AND r.VAS_Res_Type_ID=rt.VAS_Res_Type_ID",
                 "r", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
             //
             IDataReader dr = null;
@@ -592,9 +592,9 @@ namespace VAdvantage.Model
                     if (_isAvailable && !"Y".Equals(Utility.Util.GetValueOfString(dr[1])))	//	Available
                         _isAvailable = false;
                     //
-                    _S_ResourceType_ID = Utility.Util.GetValueOfInt(dr[3]);
+                    _VAS_Res_Type_ID = Utility.Util.GetValueOfInt(dr[3]);
                     _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[4]);
-                    //	log.fine( "- Resource_ID=" + m_S_ResourceType_ID + ",IsAvailable=" + m_isAvailable);
+                    //	log.fine( "- Resource_ID=" + m_VAS_Res_Type_ID + ",IsAvailable=" + m_isAvailable);
                 }
                 else
                     _isAvailable = false;
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
                 _isAvailable = false;
             }
-            _S_Resource_ID = S_Resource_ID;
+            _S_Resource_ID = VAS_Resource_ID;
         }
 
         /**

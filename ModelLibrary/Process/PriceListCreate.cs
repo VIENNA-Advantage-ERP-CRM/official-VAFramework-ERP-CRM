@@ -203,7 +203,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     message += " " + dd;
                 }
                 //	Clear Temporary Table
-                int noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM T_Selection", null, Get_TrxName());
+                int noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAVAT_Selection", null, Get_TrxName());
                 //	Create Selection in Temporary Table
                 String sql = null;
                 int M_DiscountSchemaLine_ID = dsLine.GetM_DiscountSchemaLine_ID();
@@ -211,7 +211,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (p2 == 0)	//	Create from PO
                 {
                     p2 = dsLine.GetVAF_Client_ID();
-                    sql = "INSERT INTO T_Selection (T_Selection_ID) "
+                    sql = "INSERT INTO VAVAT_Selection (VAT_Selection_ID) "
                         + "SELECT DISTINCT po.M_Product_ID "
                         + "FROM M_Product_PO po "
                         + " INNER JOIN M_Product p ON (p.M_Product_ID=po.M_Product_ID)"
@@ -225,7 +225,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
                 else			//	Create from Price List **
                 {
-                    sql = "INSERT INTO T_Selection (T_Selection_ID) "
+                    sql = "INSERT INTO VAVAT_Selection (VAT_Selection_ID) "
                         + "SELECT DISTINCT p.M_Product_ID "
                         + "FROM M_ProductPrice pp"
                         + " INNER JOIN M_Product p ON (p.M_Product_ID=pp.M_Product_ID)"
@@ -248,7 +248,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     sql = "DELETE FROM M_ProductPrice pp "
                         + "WHERE pp.M_PriceList_Version_ID=" + _M_PriceList_Version_ID
-                        + " AND EXISTS (SELECT * FROM T_Selection s WHERE pp.M_Product_ID=s.T_Selection_ID)";
+                        + " AND EXISTS (SELECT * FROM VAVAT_Selection s WHERE pp.M_Product_ID=s.VAT_Selection_ID)";
                     noDeleted = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                     message += ", @Deleted@=" + noDeleted;
                 }
@@ -283,7 +283,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " INNER JOIN M_PriceList pl ON (pl.M_PriceList_ID=plv.M_PriceList_ID)"
                         + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#2
                         //
-                        + "WHERE EXISTS (SELECT * FROM T_Selection s WHERE po.M_Product_ID=s.T_Selection_ID)"
+                        + "WHERE EXISTS (SELECT * FROM VAVAT_Selection s WHERE po.M_Product_ID=s.VAT_Selection_ID)"
                         + " AND po.IsCurrentVendor='Y' AND po.IsActive='Y'";
                 }
                 else
@@ -313,7 +313,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         sql += "pp.M_PriceList_Version_ID=" + M_Pricelist_Version_Base_ID + " AND";	//	#3 M_PriceList_Version_Base_ID
                     }
-                    sql += "  EXISTS (SELECT * FROM T_Selection s WHERE pp.M_Product_ID=s.T_Selection_ID)"
+                    sql += "  EXISTS (SELECT * FROM VAVAT_Selection s WHERE pp.M_Product_ID=s.VAT_Selection_ID)"
                         + " AND pp.IsActive='Y'";
                 }
                 if (sql != null)
@@ -331,8 +331,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 /** Calculations	**/
                 MProductPrice[] pp = _plv.GetProductPrice(
-                    "AND EXISTS (SELECT * FROM T_Selection s "
-                    + "WHERE s.T_Selection_ID=M_ProductPrice.M_Product_ID)");
+                    "AND EXISTS (SELECT * FROM VAVAT_Selection s "
+                    + "WHERE s.VAT_Selection_ID=M_ProductPrice.M_Product_ID)");
                 for (int j = 0; j < pp.Length; j++)
                 {
                     MProductPrice price = pp[j];
@@ -358,7 +358,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }	//	for all products
 
                 //	Clear Temporary Table
-                noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM T_Selection", null, Get_TrxName());
+                noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAVAT_Selection", null, Get_TrxName());
                 //
                 AddLog(message);
             }	//	for all lines

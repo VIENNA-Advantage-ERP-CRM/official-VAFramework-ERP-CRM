@@ -244,7 +244,7 @@ namespace VAdvantage.Model
                 SetIsDropShip(oLine.IsDropShip());
                 SetM_Product_ID(oLine.GetM_Product_ID());
                 SetM_AttributeSetInstance_ID(oLine.GetM_AttributeSetInstance_ID());
-                SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                SetVAS_Res_Assignment_ID(oLine.GetVAS_Res_Assignment_ID());
                 SetVAB_UOM_ID(oLine.GetVAB_UOM_ID());
                 //
                 SetPriceEntered(oLine.GetPriceEntered());
@@ -295,14 +295,14 @@ namespace VAdvantage.Model
                 SetM_Product_ID(sLine.GetM_Product_ID());
                 SetVAB_UOM_ID(sLine.GetVAB_UOM_ID());
                 SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
-                //	SetS_ResourceAssignment_ID(sLine.GetS_ResourceAssignment_ID());
+                //	SetVAS_Res_Assignment_ID(sLine.GetVAS_Res_Assignment_ID());
                 SetVAB_Charge_ID(sLine.GetVAB_Charge_ID());
                 int VAB_OrderLine_ID = sLine.GetVAB_OrderLine_ID();
                 if (VAB_OrderLine_ID != 0)
                 {
                     MOrderLine oLine = new MOrderLine(GetCtx(), VAB_OrderLine_ID, Get_TrxName());
                     MOrder ord = new MOrder(GetCtx(), oLine.GetVAB_Order_ID(), Get_TrxName());          //Added By Bharat
-                    SetS_ResourceAssignment_ID(oLine.GetS_ResourceAssignment_ID());
+                    SetVAS_Res_Assignment_ID(oLine.GetVAS_Res_Assignment_ID());
                     M_AttributeSetInstance_ID = sLine.GetM_AttributeSetInstance_ID();               //Added By Bharat
                     VAB_UOM_ID = oLine.GetVAB_UOM_ID();
                     string docsubTypeSO = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM VAB_DocTypes WHERE VAB_DocTypes_ID = " + ord.GetVAB_DocTypesTarget_ID()));
@@ -3189,12 +3189,12 @@ namespace VAdvantage.Model
         {
             try
             {
-                if (GetProduct() == null || _product.GetR_Source_ID() == 0)
+                if (GetProduct() == null || _product.GetVAR_Source_ID() == 0)
                     return;
                 String summary = "Purchased: " + _product.GetName()
                     + " - " + GetQtyEntered() + " * " + GetPriceEntered();
                 //
-                MSource source = MSource.Get(GetCtx(), _product.GetR_Source_ID());
+                MSource source = MSource.Get(GetCtx(), _product.GetVAR_Source_ID());
                 //	Create Request
                 if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
                     || MSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))
@@ -3211,7 +3211,7 @@ namespace VAdvantage.Model
                     request.SetVAB_Project_ID(invoice.GetVAB_Project_ID());
                     //
                     request.SetM_Product_ID(GetM_Product_ID());
-                    request.SetR_Source_ID(source.GetR_Source_ID());
+                    request.SetVAR_Source_ID(source.GetVAR_Source_ID());
                     request.Save();
                 }
                 //	Create Lead
@@ -3239,7 +3239,7 @@ namespace VAdvantage.Model
                     lead.SetVAB_City_ID(loc.GetVAB_City_ID());
                     lead.SetVAB_Country_ID(loc.GetVAB_Country_ID());
                     //
-                    lead.SetR_Source_ID(source.GetR_Source_ID());
+                    lead.SetVAR_Source_ID(source.GetVAR_Source_ID());
                     lead.Save();
                 }
             }
@@ -3252,36 +3252,36 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Resource Assignment - Callout
-         *	@param oldS_ResourceAssignment_ID old value
-         *	@param newS_ResourceAssignment_ID new value
+         *	@param oldVAS_Res_Assignment_ID old value
+         *	@param newVAS_Res_Assignment_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout 
-        public void SetS_ResourceAssignment_ID(String oldS_ResourceAssignment_ID,
-            String newS_ResourceAssignment_ID, int windowNo)
+        public void SetVAS_Res_Assignment_ID(String oldVAS_Res_Assignment_ID,
+            String newVAS_Res_Assignment_ID, int windowNo)
         {
-            if (newS_ResourceAssignment_ID == null || newS_ResourceAssignment_ID.Length == 0)
+            if (newVAS_Res_Assignment_ID == null || newVAS_Res_Assignment_ID.Length == 0)
                 return;
-            int S_ResourceAssignment_ID = int.Parse(newS_ResourceAssignment_ID);
-            if (S_ResourceAssignment_ID == 0)
+            int VAS_Res_Assignment_ID = int.Parse(newVAS_Res_Assignment_ID);
+            if (VAS_Res_Assignment_ID == 0)
                 return;
             //
-            base.SetS_ResourceAssignment_ID(S_ResourceAssignment_ID);
+            base.SetVAS_Res_Assignment_ID(VAS_Res_Assignment_ID);
 
             int M_Product_ID = 0;
             String Name = null;
             String Description = null;
             Decimal? Qty = null;
             String sql = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty "
-                + "FROM S_ResourceAssignment ra"
-                + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) "
-                + "WHERE ra.S_ResourceAssignment_ID= " + S_ResourceAssignment_ID;
+                + "FROM VAS_Res_Assignment ra"
+                + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
+                + "WHERE ra.VAS_Res_Assignment_ID= " + VAS_Res_Assignment_ID;
             IDataReader idr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.SetInt(1, S_ResourceAssignment_ID);
+                //pstmt.SetInt(1, VAS_Res_Assignment_ID);
                 //ResultSet rs = pstmt.executeQuery();
                 idr = DataBase.DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
@@ -3305,7 +3305,7 @@ namespace VAdvantage.Model
             }
 
 
-            log.Fine("S_ResourceAssignment_ID=" + S_ResourceAssignment_ID
+            log.Fine("VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID
                     + " - M_Product_ID=" + M_Product_ID);
             if (M_Product_ID != 0)
             {
@@ -6006,7 +6006,7 @@ namespace VAdvantage.Model
                 //addError( Msg.GetMsg( GetCtx(), "ChargeExclusively" ) );
             }
             SetM_AttributeSetInstance_ID(-1);
-            SetS_ResourceAssignment_ID(0);
+            SetVAS_Res_Assignment_ID(0);
             SetVAB_UOM_ID(100);	//	EA
 
             SetContext(WindowNo, "DiscountSchema", "N");

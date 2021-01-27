@@ -279,7 +279,7 @@ namespace VAdvantage.Report
         //	** Create Temporary and empty Report Lines from VAPA_FR_Row
         //	- VAF_JInstance_ID, VAPA_FR_Row_ID, 0, 0
         int VAPA_FR_RowSet_ID = _report.GetLineSet().GetVAPA_FR_RowSet_ID();
-        StringBuilder sql = new StringBuilder ("INSERT INTO T_Report "
+        StringBuilder sql = new StringBuilder ("INSERT INTO VAT_Report "
             + "(VAF_JInstance_ID, VAPA_FR_Row_ID, Record_ID,Actual_Acct_Detail_ID, SeqNo,LevelNo, Name,Description) "
             + "SELECT ").Append(GetVAF_JInstance_ID()).Append(", VAPA_FR_Row_ID, 0,0, SeqNo,0, Name,Description "
             + "FROM VAPA_FR_Row "
@@ -482,7 +482,7 @@ namespace VAdvantage.Report
         //	Update Line Values
         if (update.Length> 0)
         {
-            update.Insert (0, "UPDATE T_Report SET ");
+            update.Insert (0, "UPDATE VAT_Report SET ");
             update.Append(" WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(" AND VAPA_FR_Row_ID=").Append(_lines[line.Value].GetVAPA_FR_Row_ID())
                 .Append(" AND ABS(LevelNo)<2");		//	0=Line 1=Acct
@@ -525,7 +525,7 @@ namespace VAdvantage.Report
                     oper_1 = oper_2;
                     oper_2 = temp;
                 }
-                StringBuilder sb = new StringBuilder("UPDATE T_Report SET ");
+                StringBuilder sb = new StringBuilder("UPDATE VAT_Report SET ");
                 for (int col = 0; col < _columns.Length; col++)
                 {
                     //if (col > 0)
@@ -539,7 +539,7 @@ namespace VAdvantage.Report
                       //  sb.Append(", ");
                     sb.Append("COALESCE(SUM(Col_").Append(col).Append("),0)");
                 //}
-                    sb.Append(" FROM T_Report WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
+                    sb.Append(" FROM VAT_Report WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND VAPA_FR_Row_ID IN (");
                 if (_lines[line].IsCalculationTypeAdd())
                 {
@@ -575,7 +575,7 @@ namespace VAdvantage.Report
             else	//	No Add (subtract, percent)
             {
                 //	Step 1 - get First Value or 0 in there
-                StringBuilder sb = new StringBuilder("UPDATE T_Report SET ");
+                StringBuilder sb = new StringBuilder("UPDATE VAT_Report SET ");
                 for (int col = 0; col < _columns.Length; col++)
                 {
                   // if (col > 0)
@@ -585,7 +585,7 @@ namespace VAdvantage.Report
                     sb.Append("Col_").Append(col);
                     sb.Append(" = (SELECT ");
                     sb.Append("COALESCE(r2.Col_").Append(col).Append(",0)");
-                    sb.Append(" FROM T_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
+                    sb.Append(" FROM VAT_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND r2.VAPA_FR_Row_ID=").Append(oper_1)
                     .Append(" AND r2.Record_ID=0 AND r2.Actual_Acct_Detail_ID=0)");
                     if (col < (_columns.Length - 1))
@@ -615,7 +615,7 @@ namespace VAdvantage.Report
                 }
 
                 //	Step 2 - do Calculation with Second Value
-                sb = new StringBuilder("UPDATE T_Report r1 SET ");
+                sb = new StringBuilder("UPDATE VAT_Report r1 SET ");
                 for (int col = 0; col < _columns.Length; col++)
                 {
                     //if (col > 0)
@@ -638,7 +638,7 @@ namespace VAdvantage.Report
                     {
                         sb.Append(" *100");
                     }
-                     sb.Append(" FROM T_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
+                     sb.Append(" FROM VAT_Report r2 WHERE r2.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                     .Append(" AND r2.VAPA_FR_Row_ID=").Append(oper_2)
                     .Append(" AND r2.Record_ID=0 AND r2.Actual_Acct_Detail_ID=0)");
                      if (col < (_columns.Length - 1))
@@ -679,7 +679,7 @@ namespace VAdvantage.Report
             if (!_columns[col].IsColumnTypeCalculation())
                 continue;
 
-            StringBuilder sb = new StringBuilder("UPDATE T_Report SET ");
+            StringBuilder sb = new StringBuilder("UPDATE VAT_Report SET ");
             //	Column to set
             sb.Append("Col_").Append(col).Append("=");
             //	First Operand
@@ -866,16 +866,16 @@ namespace VAdvantage.Report
         }
 
         //	Clean up empty rows
-        StringBuilder sql = new StringBuilder ("DELETE FROM T_Report WHERE LevelNo<>0")
+        StringBuilder sql = new StringBuilder ("DELETE FROM VAT_Report WHERE LevelNo<>0")
             .Append(" AND Col_0 IS NULL AND Col_1 IS NULL AND Col_2 IS NULL AND Col_3 IS NULL AND Col_4 IS NULL AND Col_5 IS NULL AND Col_6 IS NULL AND Col_7 IS NULL AND Col_8 IS NULL AND Col_9 IS NULL")
             .Append(" AND Col_10 IS NULL AND Col_11 IS NULL AND Col_12 IS NULL AND Col_13 IS NULL AND Col_14 IS NULL AND Col_15 IS NULL AND Col_16 IS NULL AND Col_17 IS NULL AND Col_18 IS NULL AND Col_19 IS NULL AND Col_20 IS NULL"); 
         int no = DataBase.DB.ExecuteQuery(sql.ToString(),null, Get_TrxName());
         log.Fine("Deleted empty #=" + no);
 
         //	Set SeqNo
-        sql = new StringBuilder ("UPDATE T_Report r1 "
+        sql = new StringBuilder ("UPDATE VAT_Report r1 "
             + "SET SeqNo = (SELECT SeqNo "
-                + "FROM T_Report r2 "
+                + "FROM VAT_Report r2 "
                 + "WHERE r1.VAF_JInstance_ID=r2.VAF_JInstance_ID AND r1.VAPA_FR_Row_ID=r2.VAPA_FR_Row_ID"
                 + " AND r2.Record_ID=0 AND r2.Actual_Acct_Detail_ID=0)"
             + "WHERE SeqNo IS NULL");
@@ -892,7 +892,7 @@ namespace VAdvantage.Report
             + " INNER JOIN VAF_ColumnDic e ON (t.TableName||'_ID'=e.ColumnName) "
             + "WHERE r.Actual_Acct_Detail_ID=fa.Actual_Acct_Detail_ID";
         //	Translated Version ...
-        sql = new StringBuilder ("UPDATE T_Report r SET (Name,Description)=(")
+        sql = new StringBuilder ("UPDATE VAT_Report r SET (Name,Description)=(")
             .Append(sql_select).Append(") "
             + "WHERE Actual_Acct_Detail_ID <> 0 AND VAF_JInstance_ID=")
             .Append(GetVAF_JInstance_ID());
@@ -920,7 +920,7 @@ namespace VAdvantage.Report
 
 
         //	Insert
-        StringBuilder insert = new StringBuilder("INSERT INTO T_Report "
+        StringBuilder insert = new StringBuilder("INSERT INTO VAT_Report "
             + "(VAF_JInstance_ID, VAPA_FR_Row_ID, Record_ID,Actual_Acct_Detail_ID,LevelNo ");
         for (int col = 0; col < _columns.Length; col++)
             insert.Append(",Col_").Append(col);
@@ -1028,7 +1028,7 @@ namespace VAdvantage.Report
             return;
 
         //	Set Name,Description
-        StringBuilder sql = new StringBuilder ("UPDATE T_Report SET (Name,Description)=(")
+        StringBuilder sql = new StringBuilder ("UPDATE VAT_Report SET (Name,Description)=(")
             .Append(_lines[line].GetSourceValueQuery()).Append("Record_ID) "
             //
             + "WHERE Record_ID <> 0 AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
@@ -1053,7 +1053,7 @@ namespace VAdvantage.Report
         MReportLine rLine = _lines[line];
 
         //	Insert
-        StringBuilder insert = new StringBuilder("INSERT INTO T_Report "
+        StringBuilder insert = new StringBuilder("INSERT INTO VAT_Report "
             + "(VAF_JInstance_ID, VAPA_FR_Row_ID, Record_ID,Actual_Acct_Detail_ID,LevelNo ");
         for (int col = 0; col < _columns.Length; col++)
             insert.Append(",Col_").Append(col);
@@ -1139,7 +1139,7 @@ namespace VAdvantage.Report
             //	Not Printed - Delete in T
             if (!_lines[line].IsPrinted())
             {
-                String sql = "DELETE FROM T_Report WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
+                String sql = "DELETE FROM VAT_Report WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                     + " AND VAPA_FR_Row_ID=" + _lines[line].GetVAPA_FR_Row_ID();
                 int no = DataBase.DB.ExecuteQuery(sql,null, Get_TrxName());
                 if (no > 0)
@@ -1163,7 +1163,7 @@ namespace VAdvantage.Report
         //	Create New
         if (createNew)
         {
-            int VAF_TableView_ID = 544;		//	T_Report
+            int VAF_TableView_ID = 544;		//	VAT_Report
             pf = MPrintFormat.CreateFromTable(GetCtx(), VAF_TableView_ID);
             VAF_Print_Rpt_Layout_ID = pf.GetVAF_Print_Rpt_Layout_ID();
             _report.SetVAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);

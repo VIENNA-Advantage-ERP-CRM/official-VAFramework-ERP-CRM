@@ -284,7 +284,7 @@ return new KeyNamePair(Get_ID(), GetName());
 }
 
 /** Order_MailText_ID VAF_Control_Ref_ID=274 */
-public static int ORDER_MAILTEXT_ID_VAF_Control_Ref_ID=274;
+public static int ORDEVAR_MAILTEMPLATE_ID_VAF_Control_Ref_ID=274;
 /** Set Order Mail Text.
 @param Order_MailText_ID Email text used for sending order acknowledgements or quotations */
 public void SetOrder_MailText_ID (int Order_MailText_ID)

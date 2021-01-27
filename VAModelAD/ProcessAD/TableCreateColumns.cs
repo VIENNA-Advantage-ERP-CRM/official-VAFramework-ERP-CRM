@@ -118,7 +118,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (table == null)
                 {
                     String tn = tableName.ToUpper();
-                    if (tn.StartsWith("T_SELECTION")	//	temp table
+                    if (tn.StartsWith("VAT_SELECTION")	//	temp table
                         || tn.EndsWith("_VT")			//	print trl views
                         || tn.EndsWith("_V")			//	views
                         || tn.EndsWith("_V1")			//	views

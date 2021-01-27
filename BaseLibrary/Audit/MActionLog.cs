@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// Action log
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="AD_Session_ID">session id</param>
+        /// <param name="VAF_Session_ID">session id</param>
         /// <param name="VAF_Client_ID"> client id</param>
         /// <param name="VAF_Org_ID">org id</param>
         /// <param name="action">menu action </param>
@@ -38,13 +38,13 @@ namespace VAdvantage.Model
         /// <param name="desc">additional info</param>
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
-        public MActionLog(Ctx ctx, int AD_Session_ID,
+        public MActionLog(Ctx ctx, int VAF_Session_ID,
     int VAF_Client_ID, int VAF_Org_ID,
     String action, string actionType, String actionOrigin, string desc, int VAF_TableView_ID, int Record_ID)
         : this(ctx, 0, null)
         {
             //	out of trx
-            SetAD_Session_ID(AD_Session_ID);
+            SetVAF_Session_ID(VAF_Session_ID);
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             SetAction(action);
             SetActionType(actionType);

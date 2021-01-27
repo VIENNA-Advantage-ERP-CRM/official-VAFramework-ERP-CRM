@@ -152,10 +152,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Request Type
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_RequestType_ID = "
-                      + " (SELECT R_RequestType_ID FROM R_RequestType rt WHERE rt.Name = r.ReqTypeName)"
+                      + " SET VAR_Req_Type_ID = "
+                      + " (SELECT VAR_Req_Type_ID FROM VAR_Req_Type rt WHERE rt.Name = r.ReqTypeName)"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_RequestType_ID is NULL"
+                      + " AND r.VAR_Req_Type_ID is NULL"
                       + " AND r.ReqTypeName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set RequestType=" + no);
@@ -164,17 +164,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid RequestTypeName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_RequestType_ID is NULL").Append(clientCheck);
+                      + " AND r.VAR_Req_Type_ID is NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("Invalid ReqType=" + no);
 
             // Set Group
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_Group_ID = "
-                      + " (SELECT R_Group_ID FROM R_Group g WHERE g.Name = r.GroupName)"
+                      + " SET VAR_Group_ID = "
+                      + " (SELECT VAR_Group_ID FROM VAR_Group g WHERE g.Name = r.GroupName)"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Group_ID is NULL"
+                      + " AND r.VAR_Group_ID is NULL"
                       + " AND r.GroupName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Group=" + no);
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid GroupName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Group_ID is NULL"
+                      + " AND r.VAR_Group_ID is NULL"
                       + " AND r.GroupName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -212,12 +212,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Status
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_Status_ID = "
-                      + " (SELECT R_Status_ID FROM R_Status s, R_StatusCategory sc, R_RequestType t "
-                      + " WHERE s.Name = r.StatusName and t.R_RequestType_ID = r.R_RequestType_ID and t.R_StatusCategory_ID = sc.R_StatusCategory_ID"
-                      + " AND s.R_StatusCategory_ID = sc.R_StatusCategory_ID)"
+                      + " SET VAR_Req_Status_ID = "
+                      + " (SELECT VAR_Req_Status_ID FROM VAR_Req_Status s, VAR_Req_StatusCategory sc, VAR_Req_Type t "
+                      + " WHERE s.Name = r.StatusName and t.VAR_Req_Type_ID = r.VAR_Req_Type_ID and t.VAR_Req_StatusCategory_ID = sc.VAR_Req_StatusCategory_ID"
+                      + " AND s.VAR_Req_StatusCategory_ID = sc.VAR_Req_StatusCategory_ID)"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Status_ID is NULL"
+                      + " AND r.VAR_Req_Status_ID is NULL"
                       + " AND r.StatusName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Status=" + no);
@@ -226,7 +226,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid StatusName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Status_ID is NULL"
+                      + " AND r.VAR_Req_Status_ID is NULL"
                       + " AND r.StatusName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -235,11 +235,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Resolution
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_Resolution_ID = "
-                      + " (SELECT R_Resolution_ID FROM R_Resolution rr "
+                      + " SET VAR_Resolution_ID = "
+                      + " (SELECT VAR_Resolution_ID FROM VAR_Resolution rr "
                       + " WHERE rr.Name = r.ResolutionName )"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Resolution_ID is NULL"
+                      + " AND r.VAR_Resolution_ID is NULL"
                       + " AND r.ResolutionName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Resolution=" + no);
@@ -248,7 +248,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ResolutionName, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Resolution_ID is NULL"
+                      + " AND r.VAR_Resolution_ID is NULL"
                       + " AND r.ResolutionName is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -385,11 +385,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // Set Related Request
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_RequestRelated_ID = "
-                      + " (SELECT R_Request_ID FROM R_Request rr "
+                      + " SET VAR_RequestRelated_ID = "
+                      + " (SELECT VAR_Request_ID FROM VAR_Request rr "
                       + " WHERE rr.DocumentNo = r.RequestRelatedDocNo )"
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_RequestRelated_ID is NULL"
+                      + " AND r.VAR_RequestRelated_ID is NULL"
                       + " AND r.RequestRelatedDocNo is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Resolution=" + no);
@@ -398,7 +398,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Rel, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_RequestRelated_ID is NULL"
+                      + " AND r.VAR_RequestRelated_ID is NULL"
                       + " AND r.RequestRelatedDocNo is NOT NULL").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -406,22 +406,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Source from SourceKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET R_Source_ID = (SELECT R_Source_ID FROM R_Source s"
+                      + " SET VAR_Source_ID = (SELECT VAR_Source_ID FROM VAR_Source s"
                       + " WHERE r.SourceValue=s.Value AND r.VAF_Client_ID=s.VAF_Client_ID ), "
-                      + " SourceName = (SELECT name FROM R_Source s"
+                      + " SourceName = (SELECT name FROM VAR_Source s"
                       + " WHERE r.SourceValue=s.Value AND r.VAF_Client_ID=s.VAF_Client_ID )"
-                      + " WHERE R_Source_ID IS NULL AND SourceValue IS NOT NULL"
+                      + " WHERE VAR_Source_ID IS NULL AND SourceValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Source from SourceValue =" + no);
 
             //	Set Source from SourceName
             sql = new StringBuilder("UPDATE I_Request r"
-                  + " SET R_Source_ID=(SELECT R_Source_ID FROM R_Source s"
+                  + " SET VAR_Source_ID=(SELECT VAR_Source_ID FROM VAR_Source s"
                   + " WHERE r.SourceName=s.Name AND r.VAF_Client_ID=s.VAF_Client_ID ), "
-                  + " SourceValue = (SELECT value FROM R_Source s"
+                  + " SourceValue = (SELECT value FROM VAR_Source s"
                   + " WHERE r.SourceName=s.Name AND r.VAF_Client_ID=s.VAF_Client_ID ) "
-                  + " WHERE R_Source_ID IS NULL AND SourceName IS NOT NULL"
+                  + " WHERE VAR_Source_ID IS NULL AND SourceName IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Source from SourceName=" + no);
@@ -431,7 +431,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Source, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.R_Source_ID IS NULL"
+                      + " AND r.VAR_Source_ID IS NULL"
                       + " AND (r.SourceName IS NOT NULL OR r.SourceValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -890,7 +890,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
 
                     noProcessed++;
-                    imp.SetR_Request_ID(request.GetR_Request_ID());
+                    imp.SetVAR_Request_ID(request.GetVAR_Request_ID());
                     imp.SetI_IsImported(X_I_Order.I_ISIMPORTED_Yes);
                     imp.SetProcessed(true);
                     imp.Save();
@@ -912,7 +912,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
-            //addLog (0, null, new BigDecimal (noInsert), "@R_Request_ID@: @Inserted@");
+            //addLog (0, null, new BigDecimal (noInsert), "@VAR_Request_ID@: @Inserted@");
             AddLog(0, null, Utility.Util.GetValueOfDecimal(noProcessed), " @Processed@");
             return "#" + noInsert + "/" + noProcessed;
         }

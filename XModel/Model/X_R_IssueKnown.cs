@@ -263,18 +263,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request.
-@param R_Request_ID Request from a Business Partner or Prospect */
-public void SetR_Request_ID (int R_Request_ID)
+@param VAR_Request_ID Request from a Business Partner or Prospect */
+public void SetVAR_Request_ID (int VAR_Request_ID)
 {
-if (R_Request_ID <= 0) Set_Value ("R_Request_ID", null);
+if (VAR_Request_ID <= 0) Set_Value ("VAR_Request_ID", null);
 else
-Set_Value ("R_Request_ID", R_Request_ID);
+Set_Value ("VAR_Request_ID", VAR_Request_ID);
 }
 /** Get Request.
 @return Request from a Business Partner or Prospect */
-public int GetR_Request_ID() 
+public int GetVAR_Request_ID() 
 {
-Object ii = Get_Value("R_Request_ID");
+Object ii = Get_Value("VAR_Request_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -204,18 +204,18 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetKeyword());
 }
 /** Set Request Type.
-@param R_RequestType_ID Type of request (e.g. Inquiry, Complaint, ..) */
-public void SetR_RequestType_ID (int R_RequestType_ID)
+@param VAR_Req_Type_ID Type of request (e.g. Inquiry, Complaint, ..) */
+public void SetVAR_Req_Type_ID (int VAR_Req_Type_ID)
 {
-if (R_RequestType_ID <= 0) Set_Value ("R_RequestType_ID", null);
+if (VAR_Req_Type_ID <= 0) Set_Value ("VAR_Req_Type_ID", null);
 else
-Set_Value ("R_RequestType_ID", R_RequestType_ID);
+Set_Value ("VAR_Req_Type_ID", VAR_Req_Type_ID);
 }
 /** Get Request Type.
 @return Type of request (e.g. Inquiry, Complaint, ..) */
-public int GetR_RequestType_ID() 
+public int GetVAR_Req_Type_ID() 
 {
-Object ii = Get_Value("R_RequestType_ID");
+Object ii = Get_Value("VAR_Req_Type_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

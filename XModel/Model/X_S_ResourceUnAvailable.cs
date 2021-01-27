@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_ResourceUnAvailable
+/** Generated Model for VAS_Res_Unavailable
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_S_ResourceUnAvailable : PO
+public class X_VAS_Res_Unavailable : PO
 {
-public X_S_ResourceUnAvailable (Context ctx, int S_ResourceUnAvailable_ID, Trx trxName) : base (ctx, S_ResourceUnAvailable_ID, trxName)
+public X_VAS_Res_Unavailable (Context ctx, int VAS_Res_Unavailable_ID, Trx trxName) : base (ctx, VAS_Res_Unavailable_ID, trxName)
 {
-/** if (S_ResourceUnAvailable_ID == 0)
+/** if (VAS_Res_Unavailable_ID == 0)
 {
 SetDateFrom (DateTime.Now);
-SetS_ResourceUnAvailable_ID (0);
+SetVAS_Res_Unavailable_ID (0);
 SetS_Resource_ID (0);
 }
  */
 }
-public X_S_ResourceUnAvailable (Ctx ctx, int S_ResourceUnAvailable_ID, Trx trxName) : base (ctx, S_ResourceUnAvailable_ID, trxName)
+public X_VAS_Res_Unavailable (Ctx ctx, int VAS_Res_Unavailable_ID, Trx trxName) : base (ctx, VAS_Res_Unavailable_ID, trxName)
 {
-/** if (S_ResourceUnAvailable_ID == 0)
+/** if (VAS_Res_Unavailable_ID == 0)
 {
 SetDateFrom (DateTime.Now);
-SetS_ResourceUnAvailable_ID (0);
+SetVAS_Res_Unavailable_ID (0);
 SetS_Resource_ID (0);
 }
  */
@@ -41,7 +41,7 @@ SetS_Resource_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceUnAvailable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Unavailable (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_S_ResourceUnAvailable (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceUnAvailable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Unavailable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_S_ResourceUnAvailable (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceUnAvailable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAS_Res_Unavailable (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_S_ResourceUnAvailable()
+static X_VAS_Res_Unavailable()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389067012L;
 public static int Table_ID;
  // =482;
 
-/** TableName=S_ResourceUnAvailable */
-public static String Table_Name="S_ResourceUnAvailable";
+/** TableName=VAS_Res_Unavailable */
+public static String Table_Name="VAS_Res_Unavailable";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_S_ResourceUnAvailable[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAS_Res_Unavailable[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Date From.
@@ -157,32 +157,32 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Resource Unavailability.
-@param S_ResourceUnAvailable_ID Resource Unavailability */
-public void SetS_ResourceUnAvailable_ID (int S_ResourceUnAvailable_ID)
+@param VAS_Res_Unavailable_ID Resource Unavailability */
+public void SetVAS_Res_Unavailable_ID (int VAS_Res_Unavailable_ID)
 {
-if (S_ResourceUnAvailable_ID < 1) throw new ArgumentException ("S_ResourceUnAvailable_ID is mandatory.");
-Set_ValueNoCheck ("S_ResourceUnAvailable_ID", S_ResourceUnAvailable_ID);
+if (VAS_Res_Unavailable_ID < 1) throw new ArgumentException ("VAS_Res_Unavailable_ID is mandatory.");
+Set_ValueNoCheck ("VAS_Res_Unavailable_ID", VAS_Res_Unavailable_ID);
 }
 /** Get Resource Unavailability.
 @return Resource Unavailability */
-public int GetS_ResourceUnAvailable_ID() 
+public int GetVAS_Res_Unavailable_ID() 
 {
-Object ii = Get_Value("S_ResourceUnAvailable_ID");
+Object ii = Get_Value("VAS_Res_Unavailable_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Resource.
-@param S_Resource_ID Resource */
-public void SetS_Resource_ID (int S_Resource_ID)
+@param VAS_Resource_ID Resource */
+public void SetS_Resource_ID (int VAS_Resource_ID)
 {
-if (S_Resource_ID < 1) throw new ArgumentException ("S_Resource_ID is mandatory.");
-Set_ValueNoCheck ("S_Resource_ID", S_Resource_ID);
+if (VAS_Resource_ID < 1) throw new ArgumentException ("VAS_Resource_ID is mandatory.");
+Set_ValueNoCheck ("VAS_Resource_ID", VAS_Resource_ID);
 }
 /** Get Resource.
 @return Resource */
 public int GetS_Resource_ID() 
 {
-Object ii = Get_Value("S_Resource_ID");
+Object ii = Get_Value("VAS_Resource_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

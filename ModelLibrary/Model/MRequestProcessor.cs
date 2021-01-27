@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRequestProcessor
  * Purpose        : Request Processor Model
- * Class Used     : X_R_RequestProcessor,ViennaProcessor
+ * Class Used     : X_VAR_Req_Handler,ViennaProcessor
  * Chronological    Development
  * Raghunandan      21-Jan-2010
   *****************************************************/
@@ -26,7 +26,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRequestProcessor : X_R_RequestProcessor, ViennaProcessor
+    public class MRequestProcessor : X_VAR_Req_Handler, ViennaProcessor
     {
         //Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MRequestProcessor).FullName);
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         public static MRequestProcessor[] GetActive(Ctx ctx)
         {
             List<MRequestProcessor> list = new List<MRequestProcessor>();
-            String sql = "SELECT * FROM R_RequestProcessor WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAR_Req_Handler WHERE IsActive='Y'";
             IDataReader idr = null;
 
             //Changed By Karan.....
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
                 while (idr.Read())
                 {
                     scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
-                                                       VAF_Plan_ID = (SELECT VAF_Plan_ID FROM R_RequestProcessor WHERE R_RequestProcessor_ID =" + idr["R_RequestProcessor_ID"] + " )"));
+                                                       VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAR_Req_Handler WHERE VAR_Req_Handler_ID =" + idr["VAR_Req_Handler_ID"] + " )"));
 
                     //list.Add(new MAcctProcessor(ctx, idr, null));
 
@@ -94,12 +94,12 @@ namespace VAdvantage.Model
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="R_RequestProcessor_ID"></param>
+        /// <param name="VAR_Req_Handler_ID"></param>
         /// <param name="trxName"></param>
-        public MRequestProcessor(Ctx ctx, int R_RequestProcessor_ID, Trx trxName)
-            : base(ctx, R_RequestProcessor_ID, trxName)
+        public MRequestProcessor(Ctx ctx, int VAR_Req_Handler_ID, Trx trxName)
+            : base(ctx, VAR_Req_Handler_ID, trxName)
         {
-            if (R_RequestProcessor_ID == 0)
+            if (VAR_Req_Handler_ID == 0)
             {
                 //	setName (null);
                 SetFrequencyType(FREQUENCYTYPE_Day);
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(parent);
             SetName(parent.GetName() + " - "
-                + Msg.Translate(GetCtx(), "R_RequestProcessor_ID"));
+                + Msg.Translate(GetCtx(), "VAR_Req_Handler_ID"));
             SetSupervisor_ID(Supervisor_ID);
         }
 
@@ -150,7 +150,7 @@ namespace VAdvantage.Model
                 return _routes;
             }
 
-            String sql = "SELECT * FROM R_RequestProcessor_Route WHERE R_RequestProcessor_ID=" + GetR_RequestProcessor_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAR_Req_Handler_Route WHERE VAR_Req_Handler_ID=" + GetVAR_Req_Handler_ID() + " ORDER BY SeqNo";
             List<MRequestProcessorRoute> list = new List<MRequestProcessorRoute>();
             IDataReader idr = null;
             try
@@ -186,8 +186,8 @@ namespace VAdvantage.Model
         {
             List<MRequestProcessorLog> list = new List<MRequestProcessorLog>();
             String sql = "SELECT * "
-                + "FROM R_RequestProcessorLog "
-                + "WHERE R_RequestProcessor_ID=" + GetR_RequestProcessor_ID()
+                + "FROM VAR_Req_HandlerLog "
+                + "WHERE VAR_Req_Handler_ID=" + GetVAR_Req_Handler_ID()
                 + "ORDER BY Created DESC";
             IDataReader idr = null;
             try
@@ -224,8 +224,8 @@ namespace VAdvantage.Model
             {
                 return 0;
             }
-            String sql = "DELETE FROM R_RequestProcessorLog "
-                + "WHERE R_RequestProcessor_ID=" + GetR_RequestProcessor_ID()
+            String sql = "DELETE FROM VAR_Req_HandlerLog "
+                + "WHERE VAR_Req_Handler_ID=" + GetVAR_Req_Handler_ID()
                 //jz + " AND (Created+" + getKeepLogDays() + ") < SysDate";
                 + " AND addDays(Created," + GetKeepLogDays() + ") < SysDate";
 

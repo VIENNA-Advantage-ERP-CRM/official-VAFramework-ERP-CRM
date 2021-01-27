@@ -11,38 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_ResourceType
+/** Generated Model for VAS_Res_Type
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_S_ResourceType : PO
+public class X_VAS_Res_Type : PO
 {
-public X_S_ResourceType (Context ctx, int S_ResourceType_ID, Trx trxName) : base (ctx, S_ResourceType_ID, trxName)
+public X_VAS_Res_Type (Context ctx, int VAS_Res_Type_ID, Trx trxName) : base (ctx, VAS_Res_Type_ID, trxName)
 {
-/** if (S_ResourceType_ID == 0)
-{
-SetAllowUoMFractions (false);	// N
-SetVAB_TaxCategory_ID (0);
-SetVAB_UOM_ID (0);
-SetIsDateSlot (false);
-SetIsSingleAssignment (false);
-SetIsTimeSlot (false);
-SetM_Product_Category_ID (0);
-SetName (null);
-SetOnFriday (true);	// Y
-SetOnMonday (true);	// Y
-SetOnSaturday (false);
-SetOnSunday (false);
-SetOnThursday (true);	// Y
-SetOnTuesday (true);	// Y
-SetOnWednesday (true);	// Y
-SetS_ResourceType_ID (0);
-SetValue (null);
-}
- */
-}
-public X_S_ResourceType (Ctx ctx, int S_ResourceType_ID, Trx trxName) : base (ctx, S_ResourceType_ID, trxName)
-{
-/** if (S_ResourceType_ID == 0)
+/** if (VAS_Res_Type_ID == 0)
 {
 SetAllowUoMFractions (false);	// N
 SetVAB_TaxCategory_ID (0);
@@ -59,7 +35,31 @@ SetOnSunday (false);
 SetOnThursday (true);	// Y
 SetOnTuesday (true);	// Y
 SetOnWednesday (true);	// Y
-SetS_ResourceType_ID (0);
+SetVAS_Res_Type_ID (0);
+SetValue (null);
+}
+ */
+}
+public X_VAS_Res_Type (Ctx ctx, int VAS_Res_Type_ID, Trx trxName) : base (ctx, VAS_Res_Type_ID, trxName)
+{
+/** if (VAS_Res_Type_ID == 0)
+{
+SetAllowUoMFractions (false);	// N
+SetVAB_TaxCategory_ID (0);
+SetVAB_UOM_ID (0);
+SetIsDateSlot (false);
+SetIsSingleAssignment (false);
+SetIsTimeSlot (false);
+SetM_Product_Category_ID (0);
+SetName (null);
+SetOnFriday (true);	// Y
+SetOnMonday (true);	// Y
+SetOnSaturday (false);
+SetOnSunday (false);
+SetOnThursday (true);	// Y
+SetOnTuesday (true);	// Y
+SetOnWednesday (true);	// Y
+SetVAS_Res_Type_ID (0);
 SetValue (null);
 }
  */
@@ -69,7 +69,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Type (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -77,7 +77,7 @@ public X_S_ResourceType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Type (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -85,13 +85,13 @@ public X_S_ResourceType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAS_Res_Type (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_S_ResourceType()
+static X_VAS_Res_Type()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -104,8 +104,8 @@ public static long updatedMS = 1280389066980L;
 public static int Table_ID;
  // =480;
 
-/** TableName=S_ResourceType */
-public static String Table_Name="S_ResourceType";
+/** TableName=VAS_Res_Type */
+public static String Table_Name="VAS_Res_Type";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -139,7 +139,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_S_ResourceType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAS_Res_Type[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Allow UoM Fractions.
@@ -441,17 +441,17 @@ if (oo != null)
 return false;
 }
 /** Set Resource Type.
-@param S_ResourceType_ID Resource Type */
-public void SetS_ResourceType_ID (int S_ResourceType_ID)
+@param VAS_Res_Type_ID Resource Type */
+public void SetVAS_Res_Type_ID (int VAS_Res_Type_ID)
 {
-if (S_ResourceType_ID < 1) throw new ArgumentException ("S_ResourceType_ID is mandatory.");
-Set_ValueNoCheck ("S_ResourceType_ID", S_ResourceType_ID);
+if (VAS_Res_Type_ID < 1) throw new ArgumentException ("VAS_Res_Type_ID is mandatory.");
+Set_ValueNoCheck ("VAS_Res_Type_ID", VAS_Res_Type_ID);
 }
 /** Get Resource Type.
 @return Resource Type */
-public int GetS_ResourceType_ID() 
+public int GetVAS_Res_Type_ID() 
 {
-Object ii = Get_Value("S_ResourceType_ID");
+Object ii = Get_Value("VAS_Res_Type_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

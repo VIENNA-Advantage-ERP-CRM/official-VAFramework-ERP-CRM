@@ -8,17 +8,17 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-    public class MStandardResponse : X_R_StandardResponse
+    public class MStandardResponse : X_VAR_Req_StandardReply
     {
 
         /**
          * 	Default Constructor
          *	@param ctx context
-         *	@param R_StandardResponse_ID id
+         *	@param VAR_Req_StandardReply_ID id
          * 	@param trxName trx
          */
-        public MStandardResponse(Ctx ctx, int R_StandardResponse_ID, Trx trxName):
-            base(ctx, R_StandardResponse_ID, trxName)
+        public MStandardResponse(Ctx ctx, int VAR_Req_StandardReply_ID, Trx trxName):
+            base(ctx, VAR_Req_StandardReply_ID, trxName)
         {
             
         }	//	MStandardResponse

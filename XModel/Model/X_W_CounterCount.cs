@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for W_CounterCount
+/** Generated Model for VAW_CounterCount
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_W_CounterCount : PO
+public class X_VAW_CounterCount : PO
 {
-public X_W_CounterCount (Context ctx, int W_CounterCount_ID, Trx trxName) : base (ctx, W_CounterCount_ID, trxName)
+public X_VAW_CounterCount (Context ctx, int VAW_CounterCount_ID, Trx trxName) : base (ctx, VAW_CounterCount_ID, trxName)
 {
-/** if (W_CounterCount_ID == 0)
-{
-SetName (null);
-SetPageURL (null);
-SetW_CounterCount_ID (0);
-}
- */
-}
-public X_W_CounterCount (Ctx ctx, int W_CounterCount_ID, Trx trxName) : base (ctx, W_CounterCount_ID, trxName)
-{
-/** if (W_CounterCount_ID == 0)
+/** if (VAW_CounterCount_ID == 0)
 {
 SetName (null);
 SetPageURL (null);
-SetW_CounterCount_ID (0);
+SetVAW_CounterCount_ID (0);
+}
+ */
+}
+public X_VAW_CounterCount (Ctx ctx, int VAW_CounterCount_ID, Trx trxName) : base (ctx, VAW_CounterCount_ID, trxName)
+{
+/** if (VAW_CounterCount_ID == 0)
+{
+SetName (null);
+SetPageURL (null);
+SetVAW_CounterCount_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetW_CounterCount_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_W_CounterCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_CounterCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_W_CounterCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_W_CounterCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_CounterCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_W_CounterCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_W_CounterCount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAW_CounterCount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_W_CounterCount()
+static X_VAW_CounterCount()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389068218L;
 public static int Table_ID;
  // =552;
 
-/** TableName=W_CounterCount */
-public static String Table_Name="W_CounterCount";
+/** TableName=VAW_CounterCount */
+public static String Table_Name="VAW_CounterCount";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_W_CounterCount[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAW_CounterCount[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -207,17 +207,17 @@ public String GetPageURL()
 return (String)Get_Value("PageURL");
 }
 /** Set Counter Count.
-@param W_CounterCount_ID Web Counter Count Management */
-public void SetW_CounterCount_ID (int W_CounterCount_ID)
+@param VAW_CounterCount_ID Web Counter Count Management */
+public void SetVAW_CounterCount_ID (int VAW_CounterCount_ID)
 {
-if (W_CounterCount_ID < 1) throw new ArgumentException ("W_CounterCount_ID is mandatory.");
-Set_ValueNoCheck ("W_CounterCount_ID", W_CounterCount_ID);
+if (VAW_CounterCount_ID < 1) throw new ArgumentException ("VAW_CounterCount_ID is mandatory.");
+Set_ValueNoCheck ("VAW_CounterCount_ID", VAW_CounterCount_ID);
 }
 /** Get Counter Count.
 @return Web Counter Count Management */
-public int GetW_CounterCount_ID() 
+public int GetVAW_CounterCount_ID() 
 {
-Object ii = Get_Value("W_CounterCount_ID");
+Object ii = Get_Value("VAW_CounterCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -31,7 +31,7 @@ namespace VAdvantage.Process
     public class RequestInvoice : ProcessEngine.SvrProcess
     {
         // Request Type				
-        private int _R_RequestType_ID = 0;
+        private int _VAR_Req_Type_ID = 0;
         //	Request Group (opt)		
         private int _R_Group_ID = 0;
         // Request Categpry (opt)		
@@ -61,11 +61,11 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("R_RequestType_ID"))
+                else if (name.Equals("VAR_Req_Type_ID"))
                 {
-                    _R_RequestType_ID = para[i].GetParameterAsInt();
+                    _VAR_Req_Type_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("R_Group_ID"))
+                else if (name.Equals("VAR_Group_ID"))
                 {
                     _R_Group_ID = para[i].GetParameterAsInt();
                 }
@@ -96,29 +96,29 @@ namespace VAdvantage.Process
         {
 
             int lenth = 1;
-            log.Info("R_RequestType_ID=" + _R_RequestType_ID + ", R_Group_ID=" + _R_Group_ID
+            log.Info("VAR_Req_Type_ID=" + _VAR_Req_Type_ID + ", VAR_Group_ID=" + _R_Group_ID
                 + ", VAR_Category_ID=" + _VAR_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", _M_Product_ID=" + _M_Product_ID);
 
-            MRequestType type = MRequestType.Get(GetCtx(), _R_RequestType_ID);
+            MRequestType type = MRequestType.Get(GetCtx(), _VAR_Req_Type_ID);
             if (type.Get_ID() == 0)
             {
-                throw new Exception("@R_RequestType_ID@ @NotFound@ " + _R_RequestType_ID);
+                throw new Exception("@VAR_Req_Type_ID@ @NotFound@ " + _VAR_Req_Type_ID);
             }
 
             if (!type.IsInvoiced())
             {
-                throw new Exception("@R_RequestType_ID@ <> @IsInvoiced@");
+                throw new Exception("@VAR_Req_Type_ID@ <> @IsInvoiced@");
             }
 
-            String sql = "SELECT * FROM R_Request r"
-                + " INNER JOIN R_Status s ON (r.R_Status_ID=s.R_Status_ID) "
+            String sql = "SELECT * FROM VAR_Request r"
+                + " INNER JOIN VAR_Req_Status s ON (r.VAR_Req_Status_ID=s.VAR_Req_Status_ID) "
                 + "WHERE s.IsClosed='Y'"
                 + " AND r.VAB_Invoice_ID IS null"
-                + " AND r.R_RequestType_ID=@Param1";
+                + " AND r.VAR_Req_Type_ID=@Param1";
             if (_R_Group_ID != 0 && _R_Group_ID != -1)
             {
-                sql += " AND r.R_Group_ID=@Param2";
+                sql += " AND r.VAR_Group_ID=@Param2";
                 lenth = lenth + 1;
 
             }
@@ -141,7 +141,7 @@ namespace VAdvantage.Process
             try
             {
                 int index = 0;
-                Param[index] = new SqlParameter("@Param1", _R_RequestType_ID);
+                Param[index] = new SqlParameter("@Param1", _VAR_Req_Type_ID);
                 if (_R_Group_ID != 0 && _R_Group_ID != -1)
                 {
                     index++;

@@ -911,18 +911,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Mail Template.
-        @param R_MailText_ID Text templates for mailings */
-        public void SetR_MailText_ID(int R_MailText_ID)
+        @param VAR_MailTemplate_ID Text templates for mailings */
+        public void SetVAR_MailTemplate_ID(int VAR_MailTemplate_ID)
         {
-            if (R_MailText_ID <= 0) Set_Value("R_MailText_ID", null);
+            if (VAR_MailTemplate_ID <= 0) Set_Value("VAR_MailTemplate_ID", null);
             else
-                Set_Value("R_MailText_ID", R_MailText_ID);
+                Set_Value("VAR_MailTemplate_ID", VAR_MailTemplate_ID);
         }
         /** Get Mail Template.
         @return Text templates for mailings */
-        public int GetR_MailText_ID()
+        public int GetVAR_MailTemplate_ID()
         {
-            Object ii = Get_Value("R_MailText_ID");
+            Object ii = Get_Value("VAR_MailTemplate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

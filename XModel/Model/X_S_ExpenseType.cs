@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_ExpenseType
+/** Generated Model for VAS_ChargeType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_S_ExpenseType : PO
+public class X_VAS_ChargeType : PO
 {
-public X_S_ExpenseType (Context ctx, int S_ExpenseType_ID, Trx trxName) : base (ctx, S_ExpenseType_ID, trxName)
+public X_VAS_ChargeType (Context ctx, int VAS_ChargeType_ID, Trx trxName) : base (ctx, VAS_ChargeType_ID, trxName)
 {
-/** if (S_ExpenseType_ID == 0)
-{
-SetVAB_TaxCategory_ID (0);
-SetVAB_UOM_ID (0);
-SetIsInvoiced (false);
-SetM_Product_Category_ID (0);
-SetName (null);
-SetS_ExpenseType_ID (0);
-SetValue (null);
-}
- */
-}
-public X_S_ExpenseType (Ctx ctx, int S_ExpenseType_ID, Trx trxName) : base (ctx, S_ExpenseType_ID, trxName)
-{
-/** if (S_ExpenseType_ID == 0)
+/** if (VAS_ChargeType_ID == 0)
 {
 SetVAB_TaxCategory_ID (0);
 SetVAB_UOM_ID (0);
 SetIsInvoiced (false);
 SetM_Product_Category_ID (0);
 SetName (null);
-SetS_ExpenseType_ID (0);
+SetVAS_ChargeType_ID (0);
+SetValue (null);
+}
+ */
+}
+public X_VAS_ChargeType (Ctx ctx, int VAS_ChargeType_ID, Trx trxName) : base (ctx, VAS_ChargeType_ID, trxName)
+{
+/** if (VAS_ChargeType_ID == 0)
+{
+SetVAB_TaxCategory_ID (0);
+SetVAB_UOM_ID (0);
+SetIsInvoiced (false);
+SetM_Product_Category_ID (0);
+SetName (null);
+SetVAS_ChargeType_ID (0);
 SetValue (null);
 }
  */
@@ -49,7 +49,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ExpenseType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_ChargeType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_S_ExpenseType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ExpenseType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_ChargeType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_S_ExpenseType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ExpenseType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAS_ChargeType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_S_ExpenseType()
+static X_VAS_ChargeType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389066761L;
 public static int Table_ID;
  // =481;
 
-/** TableName=S_ExpenseType */
-public static String Table_Name="S_ExpenseType";
+/** TableName=VAS_ChargeType */
+public static String Table_Name="VAS_ChargeType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_S_ExpenseType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAS_ChargeType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Tax Category.
@@ -227,17 +227,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Expense Type.
-@param S_ExpenseType_ID Expense report type */
-public void SetS_ExpenseType_ID (int S_ExpenseType_ID)
+@param VAS_ChargeType_ID Expense report type */
+public void SetVAS_ChargeType_ID (int VAS_ChargeType_ID)
 {
-if (S_ExpenseType_ID < 1) throw new ArgumentException ("S_ExpenseType_ID is mandatory.");
-Set_ValueNoCheck ("S_ExpenseType_ID", S_ExpenseType_ID);
+if (VAS_ChargeType_ID < 1) throw new ArgumentException ("VAS_ChargeType_ID is mandatory.");
+Set_ValueNoCheck ("VAS_ChargeType_ID", VAS_ChargeType_ID);
 }
 /** Get Expense Type.
 @return Expense report type */
-public int GetS_ExpenseType_ID() 
+public int GetVAS_ChargeType_ID() 
 {
-Object ii = Get_Value("S_ExpenseType_ID");
+Object ii = Get_Value("VAS_ChargeType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_RequestTypeUpdates
+/** Generated Model for VAR_Rtype_UpdatesAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_RequestTypeUpdates : PO
+public class X_VAR_Rtype_UpdatesAlert : PO
 {
-public X_R_RequestTypeUpdates (Context ctx, int R_RequestTypeUpdates_ID, Trx trxName) : base (ctx, R_RequestTypeUpdates_ID, trxName)
+public X_VAR_Rtype_UpdatesAlert (Context ctx, int VAR_Rtype_UpdatesAlert_ID, Trx trxName) : base (ctx, VAR_Rtype_UpdatesAlert_ID, trxName)
 {
-/** if (R_RequestTypeUpdates_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetIsSelfService (false);
-SetR_RequestType_ID (0);
-}
- */
-}
-public X_R_RequestTypeUpdates (Ctx ctx, int R_RequestTypeUpdates_ID, Trx trxName) : base (ctx, R_RequestTypeUpdates_ID, trxName)
-{
-/** if (R_RequestTypeUpdates_ID == 0)
+/** if (VAR_Rtype_UpdatesAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
-SetR_RequestType_ID (0);
+SetVAR_Req_Type_ID (0);
+}
+ */
+}
+public X_VAR_Rtype_UpdatesAlert (Ctx ctx, int VAR_Rtype_UpdatesAlert_ID, Trx trxName) : base (ctx, VAR_Rtype_UpdatesAlert_ID, trxName)
+{
+/** if (VAR_Rtype_UpdatesAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetIsSelfService (false);
+SetVAR_Req_Type_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetR_RequestType_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestTypeUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Rtype_UpdatesAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_RequestTypeUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestTypeUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Rtype_UpdatesAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_RequestTypeUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestTypeUpdates (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Rtype_UpdatesAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_RequestTypeUpdates()
+static X_VAR_Rtype_UpdatesAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066557L;
 public static int Table_ID;
  // =784;
 
-/** TableName=R_RequestTypeUpdates */
-public static String Table_Name="R_RequestTypeUpdates";
+/** TableName=VAR_Rtype_UpdatesAlert */
+public static String Table_Name="VAR_Rtype_UpdatesAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_RequestTypeUpdates[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Rtype_UpdatesAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -148,17 +148,17 @@ if (oo != null)
 return false;
 }
 /** Set Request Type.
-@param R_RequestType_ID Type of request (e.g. Inquiry, Complaint, ..) */
-public void SetR_RequestType_ID (int R_RequestType_ID)
+@param VAR_Req_Type_ID Type of request (e.g. Inquiry, Complaint, ..) */
+public void SetVAR_Req_Type_ID (int VAR_Req_Type_ID)
 {
-if (R_RequestType_ID < 1) throw new ArgumentException ("R_RequestType_ID is mandatory.");
-Set_ValueNoCheck ("R_RequestType_ID", R_RequestType_ID);
+if (VAR_Req_Type_ID < 1) throw new ArgumentException ("VAR_Req_Type_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_Type_ID", VAR_Req_Type_ID);
 }
 /** Get Request Type.
 @return Type of request (e.g. Inquiry, Complaint, ..) */
-public int GetR_RequestType_ID() 
+public int GetVAR_Req_Type_ID() 
 {
-Object ii = Get_Value("R_RequestType_ID");
+Object ii = Get_Value("VAR_Req_Type_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,7 +166,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetR_RequestType_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAR_Req_Type_ID().ToString());
 }
 }
 

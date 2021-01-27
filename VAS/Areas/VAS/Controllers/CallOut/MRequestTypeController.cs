@@ -20,7 +20,7 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetDefaultR_Status_ID(string fields)
+        public JsonResult GetDefaultVAR_Req_Status_ID(string fields)
         {
             
             string retJSON = "";
@@ -28,8 +28,8 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MRequestTypeModel rt = new MRequestTypeModel();
-                int R_Status_ID = rt.GetDefaultR_Status_ID(ctx,fields);
-                retJSON = JsonConvert.SerializeObject(R_Status_ID);
+                int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID(ctx,fields);
+                retJSON = JsonConvert.SerializeObject(VAR_Req_Status_ID);
             }        
             return Json(retJSON , JsonRequestBehavior.AllowGet);
         }

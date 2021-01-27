@@ -50,7 +50,7 @@ namespace ViennaAdvantage.Process
                 opp.SetSalesRep_ID(lead.GetSalesRep_ID());
                 opp.SetDateContract(DateTime.Today);
                 opp.SetVAB_Promotion_ID(lead.GetVAB_Promotion_ID());
-                //opp.SetR_Source_ID (lead.GetR_Source_ID());
+                //opp.SetVAR_Source_ID (lead.GetVAR_Source_ID());
                 // opp.SetOpportunityStatus("N");
                 opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                 VAdvantage.Model.X_VAB_BusinessPartner bp = new VAdvantage.Model.X_VAB_BusinessPartner(GetCtx(), ExCustomer, Get_TrxName());
@@ -98,7 +98,7 @@ namespace ViennaAdvantage.Process
                 opp.SetSalesRep_ID(lead.GetSalesRep_ID());
                 opp.SetDateContract(DateTime.Today);
                 opp.SetVAB_Promotion_ID(lead.GetVAB_Promotion_ID());
-                // opp.SetR_Source_ID (lead.GetR_Source_ID());
+                // opp.SetVAR_Source_ID (lead.GetVAR_Source_ID());
                 //opp.SetOpportunityStatus ("N");
                 // opp.SetVAF_Client_ID(GetVAF_Client_ID());
                 opp.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());

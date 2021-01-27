@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTimeExpense
  * Purpose        : Time + Expense Model
- * Class Used     : X_S_TimeExpense,DocAction
+ * Class Used     : X_VAS_ExpenseReport,DocAction
  * Chronological    Development
  * Deepak          31-Dec-2009
   ******************************************************/
@@ -26,19 +26,19 @@ using System.IO;
 
 namespace VAdvantage.Model
 {
-    public class MTimeExpense : X_S_TimeExpense, VAdvantage.Process.DocAction
+    public class MTimeExpense : X_VAS_ExpenseReport, VAdvantage.Process.DocAction
     {
         /// <summary>
         /// Default Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="S_TimeExpense_ID">id</param>
+        /// <param name="VAS_ExpenseReport_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MTimeExpense(Ctx ctx, int S_TimeExpense_ID, Trx trxName)
-            : base(ctx, S_TimeExpense_ID, trxName)
+        public MTimeExpense(Ctx ctx, int VAS_ExpenseReport_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReport_ID, trxName)
         {
-            //super(ctx, S_TimeExpense_ID, trxName);
-            if (S_TimeExpense_ID == 0)
+            //super(ctx, VAS_ExpenseReport_ID, trxName);
+            if (VAS_ExpenseReport_ID == 0)
             {
                 //	setVAB_BusinessPartner_ID (0);
                 //setDateReport(new Timestamp(System.currentTimeMillis()));
@@ -121,16 +121,16 @@ namespace VAdvantage.Model
             int VAB_Currency_ID = GetVAB_Currency_ID();
             List<MTimeExpenseLine> list = new List<MTimeExpenseLine>();
             //
-            String sql = "SELECT * FROM S_TimeExpenseLine WHERE S_TimeExpense_ID=@param ORDER BY Line";
+            String sql = "SELECT * FROM VAS_ExpenseReportLine WHERE VAS_ExpenseReport_ID=@param ORDER BY Line";
             //PreparedStatement pstmt = null;
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             DataTable dt = null;
             try
             {
-                param[0] = new SqlParameter("@param", GetS_TimeExpense_ID());
+                param[0] = new SqlParameter("@param", GetVAS_ExpenseReport_ID());
                 //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                //pstmt.setInt(1, getS_TimeExpense_ID());
+                //pstmt.setInt(1, getVAS_ExpenseReport_ID());
                 idr = DB.ExecuteReader(sql, param, Get_TrxName());
                 //ResultSet rs = pstmt.executeQuery();
                 dt = new DataTable();
@@ -237,9 +237,9 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            String sql = "UPDATE S_TimeExpenseLine SET Processed='"
+            String sql = "UPDATE VAS_ExpenseReportLine SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE S_TimeExpense_ID=" + GetS_TimeExpense_ID();
+                + "' WHERE VAS_ExpenseReport_ID=" + GetVAS_ExpenseReport_ID();
             int noLine = DB.ExecuteQuery(sql, null, Get_TrxName());
             _lines = null;
             log.Fine(processed + " - Lines=" + noLine);
@@ -251,7 +251,7 @@ namespace VAdvantage.Model
         /// <returns>document info</returns>
         public String GetDocumentInfo()
         {
-            return Msg.GetElement(GetCtx(), "S_TimeExpense_ID") + " " + GetDocumentNo();
+            return Msg.GetElement(GetCtx(), "VAS_ExpenseReport_ID") + " " + GetDocumentNo();
         }	//	getDocumentInfo
 
         /// <summary>

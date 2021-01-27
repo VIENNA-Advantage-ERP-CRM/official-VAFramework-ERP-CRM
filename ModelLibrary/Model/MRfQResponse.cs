@@ -238,7 +238,7 @@ namespace VAdvantage.Model
             {
                 MUser to = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
                 MClient client = MClient.Get(GetCtx());
-                MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetR_MailText_ID(), Get_TrxName());
+                MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetVAR_MailTemplate_ID(), Get_TrxName());
 
                 if (to.Get_ID() == 0 || to.GetEMail() == null || to.GetEMail().Length == 0)
                 {
@@ -247,12 +247,12 @@ namespace VAdvantage.Model
                 }
 
                 // Check if mail template is set for RfQ window, if not then get from RfQ Topic window.
-                if (mtext.GetR_MailText_ID() == 0)
+                if (mtext.GetVAR_MailTemplate_ID() == 0)
                 {
                     MRfQTopic mRfQTopic = new MRfQTopic(GetCtx(), GetRfQ().GetVAB_RFQ_Subject_ID(), Get_TrxName());
                     if (mRfQTopic.GetVAB_RFQ_Subject_ID() > 0)
                     {
-                        mtext = new MMailText(GetCtx(), mRfQTopic.GetR_MailText_ID(), Get_TrxName());
+                        mtext = new MMailText(GetCtx(), mRfQTopic.GetVAR_MailTemplate_ID(), Get_TrxName());
                     }
                 }
 

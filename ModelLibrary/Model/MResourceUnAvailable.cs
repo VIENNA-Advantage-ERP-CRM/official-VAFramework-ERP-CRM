@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MResourceUnAvailable
  * Purpose        : Resource Unavailable
- * Class Used     : X_S_ResourceUnAvailable
+ * Class Used     : X_VAS_Res_Unavailable
  * Chronological    Development
  * Deepak           2-Jan-2010
   ******************************************************/
@@ -27,17 +27,17 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MResourceUnAvailable : X_S_ResourceUnAvailable
+    public class MResourceUnAvailable : X_VAS_Res_Unavailable
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="S_ResourceUnAvailable_ID">id</param>
+        /// <param name="VAS_Res_Unavailable_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MResourceUnAvailable(Ctx ctx, int S_ResourceUnAvailable_ID, Trx trxName):base(ctx, S_ResourceUnAvailable_ID, trxName)
+        public MResourceUnAvailable(Ctx ctx, int VAS_Res_Unavailable_ID, Trx trxName):base(ctx, VAS_Res_Unavailable_ID, trxName)
         {
-            //super(ctx, S_ResourceUnAvailable_ID, trxName);
+            //super(ctx, VAS_Res_Unavailable_ID, trxName);
         }	//	MResourceUnAvailable
 
         /// <summary>

@@ -9,42 +9,42 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for VAPA_FR_Source
+    using System.Data;/** Generated Model for VAPA_FVAR_Source
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAPA_FR_Source : PO
+    public class X_VAPA_FVAR_Source : PO
     {
-        public X_VAPA_FR_Source(Context ctx, int VAPA_FR_Source_ID, Trx trxName)
-            : base(ctx, VAPA_FR_Source_ID, trxName)
-        {/** if (VAPA_FR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FR_Source_ID (0);} */
+        public X_VAPA_FVAR_Source(Context ctx, int VAPA_FVAR_Source_ID, Trx trxName)
+            : base(ctx, VAPA_FVAR_Source_ID, trxName)
+        {/** if (VAPA_FVAR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FVAR_Source_ID (0);} */
         }
-        public X_VAPA_FR_Source(Ctx ctx, int VAPA_FR_Source_ID, Trx trxName)
-            : base(ctx, VAPA_FR_Source_ID, trxName)
-        {/** if (VAPA_FR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FR_Source_ID (0);} */
+        public X_VAPA_FVAR_Source(Ctx ctx, int VAPA_FVAR_Source_ID, Trx trxName)
+            : base(ctx, VAPA_FVAR_Source_ID, trxName)
+        {/** if (VAPA_FVAR_Source_ID == 0){SetElementType (null);SetVAPA_FR_Row_ID (0);SetVAPA_FVAR_Source_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_Source(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FVAR_Source(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_Source(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAPA_FVAR_Source(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_Source(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAPA_FVAR_Source(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_VAPA_FR_Source() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAPA_FVAR_Source() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621498829L;/** Last Updated Timestamp 4/1/2016 1:06:22 PM */
         public static long updatedMS = 1459496182040L;/** VAF_TableView_ID=450 */
         public static int Table_ID; // =450;
-        /** TableName=VAPA_FR_Source */
-        public static String Table_Name = "VAPA_FR_Source";
+        /** TableName=VAPA_FVAR_Source */
+        public static String Table_Name = "VAPA_FVAR_Source";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAPA_FR_Source[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Activity.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAPA_FVAR_Source[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Activity.
 @param VAB_BillingCode_ID Business Activity */
         public void SetVAB_BillingCode_ID(int VAB_BillingCode_ID)
         {
@@ -195,9 +195,9 @@ namespace VAdvantage.Model
         public void SetVAPA_FR_Row_ID(int VAPA_FR_Row_ID) { if (VAPA_FR_Row_ID < 1) throw new ArgumentException("VAPA_FR_Row_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_Row_ID", VAPA_FR_Row_ID); }/** Get Report Line.
 @return Report Line */
         public int GetVAPA_FR_Row_ID() { Object ii = Get_Value("VAPA_FR_Row_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Source.
-@param VAPA_FR_Source_ID Restriction of what will be shown in Report Line */
-        public void SetVAPA_FR_Source_ID(int VAPA_FR_Source_ID) { if (VAPA_FR_Source_ID < 1) throw new ArgumentException("VAPA_FR_Source_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_Source_ID", VAPA_FR_Source_ID); }/** Get Report Source.
+@param VAPA_FVAR_Source_ID Restriction of what will be shown in Report Line */
+        public void SetVAPA_FVAR_Source_ID(int VAPA_FVAR_Source_ID) { if (VAPA_FVAR_Source_ID < 1) throw new ArgumentException("VAPA_FVAR_Source_ID is mandatory."); Set_ValueNoCheck("VAPA_FVAR_Source_ID", VAPA_FVAR_Source_ID); }/** Get Report Source.
 @return Restriction of what will be shown in Report Line */
-        public int GetVAPA_FR_Source_ID() { Object ii = Get_Value("VAPA_FR_Source_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAPA_FVAR_Source_ID() { Object ii = Get_Value("VAPA_FVAR_Source_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }

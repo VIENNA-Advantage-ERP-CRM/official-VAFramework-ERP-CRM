@@ -947,7 +947,7 @@ namespace VAdvantage.Model
                 // on storage. If we set ASI as 0, then system not find qty and not able to save record
                 if (!counter && !IsReversal())
                     line.SetM_AttributeSetInstance_ID(0);
-                //	line.setS_ResourceAssignment_ID(0);
+                //	line.setVAS_Res_Assignment_ID(0);
                 line.SetRef_InOutLine_ID(0);
                 line.SetIsInvoiced(false);
                 //

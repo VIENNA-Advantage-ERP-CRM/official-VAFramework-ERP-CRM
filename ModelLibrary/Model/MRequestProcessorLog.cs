@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRequestProcessorLog
  * Purpose        : Request Processor Log
- * Class Used     : X_R_RequestProcessorLog,ViennaProcessorLog
+ * Class Used     : X_VAR_Req_HandlerLog,ViennaProcessorLog
  * Chronological    Development
  * Raghunandan      21-Jan-2010
   *****************************************************/
@@ -26,19 +26,19 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRequestProcessorLog : X_R_RequestProcessorLog, ViennaProcessorLog
+    public class MRequestProcessorLog : X_VAR_Req_HandlerLog, ViennaProcessorLog
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="R_RequestProcessorLog_ID"></param>
+        /// <param name="VAR_Req_HandlerLog_ID"></param>
         /// <param name="trxName"></param>
-        public MRequestProcessorLog(Ctx ctx, int R_RequestProcessorLog_ID, Trx trxName)
-            : base(ctx, R_RequestProcessorLog_ID, trxName)
+        public MRequestProcessorLog(Ctx ctx, int VAR_Req_HandlerLog_ID, Trx trxName)
+            : base(ctx, VAR_Req_HandlerLog_ID, trxName)
         {
 
-            if (R_RequestProcessorLog_ID == 0)
+            if (VAR_Req_HandlerLog_ID == 0)
             {
                 SetIsError(false);
             }
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetR_RequestProcessor_ID(parent.GetR_RequestProcessor_ID());
+            SetVAR_Req_Handler_ID(parent.GetVAR_Req_Handler_ID());
             SetSummary(summary);
         }
     }

@@ -11,14 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_InterestArea
+/** Generated Model for VAR_InterestArea
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_R_InterestArea : PO
 {
-public X_R_InterestArea (Context ctx, int R_InterestArea_ID, Trx trxName) : base (ctx, R_InterestArea_ID, trxName)
+public X_R_InterestArea (Context ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
 {
-/** if (R_InterestArea_ID == 0)
+/** if (VAR_InterestArea_ID == 0)
 {
 SetIsSelfService (true);	// Y
 SetName (null);
@@ -27,9 +27,9 @@ SetValue (null);
 }
  */
 }
-public X_R_InterestArea (Ctx ctx, int R_InterestArea_ID, Trx trxName) : base (ctx, R_InterestArea_ID, trxName)
+public X_R_InterestArea (Ctx ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
 {
-/** if (R_InterestArea_ID == 0)
+/** if (VAR_InterestArea_ID == 0)
 {
 SetIsSelfService (true);	// Y
 SetName (null);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389066009L;
 public static int Table_ID;
  // =530;
 
-/** TableName=R_InterestArea */
-public static String Table_Name="R_InterestArea";
+/** TableName=VAR_InterestArea */
+public static String Table_Name="VAR_InterestArea";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -176,33 +176,33 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Interest Area.
-@param R_InterestArea_ID Interest Area or Topic */
-public void SetR_InterestArea_ID (int R_InterestArea_ID)
+@param VAR_InterestArea_ID Interest Area or Topic */
+public void SetR_InterestArea_ID (int VAR_InterestArea_ID)
 {
-if (R_InterestArea_ID < 1) throw new ArgumentException ("R_InterestArea_ID is mandatory.");
-Set_ValueNoCheck ("R_InterestArea_ID", R_InterestArea_ID);
+if (VAR_InterestArea_ID < 1) throw new ArgumentException ("VAR_InterestArea_ID is mandatory.");
+Set_ValueNoCheck ("VAR_InterestArea_ID", VAR_InterestArea_ID);
 }
 /** Get Interest Area.
 @return Interest Area or Topic */
 public int GetR_InterestArea_ID() 
 {
-Object ii = Get_Value("R_InterestArea_ID");
+Object ii = Get_Value("VAR_InterestArea_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Source.
-@param R_Source_ID Source for the Lead or Request */
-public void SetR_Source_ID (int R_Source_ID)
+@param VAR_Source_ID Source for the Lead or Request */
+public void SetVAR_Source_ID (int VAR_Source_ID)
 {
-if (R_Source_ID <= 0) Set_Value ("R_Source_ID", null);
+if (VAR_Source_ID <= 0) Set_Value ("VAR_Source_ID", null);
 else
-Set_Value ("R_Source_ID", R_Source_ID);
+Set_Value ("VAR_Source_ID", VAR_Source_ID);
 }
 /** Get Source.
 @return Source for the Lead or Request */
-public int GetR_Source_ID() 
+public int GetVAR_Source_ID() 
 {
-Object ii = Get_Value("R_Source_ID");
+Object ii = Get_Value("VAR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

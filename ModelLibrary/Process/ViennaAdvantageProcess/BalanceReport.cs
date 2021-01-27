@@ -89,12 +89,12 @@ namespace ViennaAdvantage.Process
         StringBuilder _sqlAccount = new StringBuilder();
      //   int _NoOfRecord = 0;
         string IsIntermediate = "N";
-        private static String _Insert = @"INSERT INTO  T_BALSHEET "
+        private static String _Insert = @"INSERT INTO  VAT_BALSHEET "
              + "( parent_id, AccountType,VAB_PROJECT_ID,node_id,VAF_Client_ID, VAF_Org_ID,"
              + "  LedgerCode, LedgerName, CrMonVal ,"
              + "  TPMonValue,  TotalValue,ISSUMMARY,PMCREDIT,PMDEBIT,CMCREDIT,CMDEBIT,TOTALDEBIT,TOTALCREDIT,DIFFDEBIT,DIFFCREDIT,isintermediatecode)";
 
-       // private static String _InsertAccount = @"INSERT INTO  T_BALSHEET "
+       // private static String _InsertAccount = @"INSERT INTO  VAT_BALSHEET "
       //       + "( vaf_client_id, vaf_org_id,ACCGRPNAME,VAB_ACCOUNTGROUP_ID,ACCGRPNAME,PARENTID,NODEID)";
         #endregion
 
@@ -115,11 +115,11 @@ namespace ViennaAdvantage.Process
                 CreateViewAsTree();
 
             }
-            string query = "Select count(*) from  T_BALSHEET";
+            string query = "Select count(*) from  VAT_BALSHEET";
             int no = Util.GetValueOfInt(DB.ExecuteScalar(query, null, null));
             if (no > 0)
             {
-                query = "Delete from  T_BALSHEET";
+                query = "Delete from  VAT_BALSHEET";
 
                 no = DB.ExecuteQuery(query, null, null);
 
@@ -128,7 +128,7 @@ namespace ViennaAdvantage.Process
             //_NoOfRecord = Util.GetValueOfInt(DB.ExecuteScalar(query, null, null));
             //if (_NoOfRecord > 0)
             //{
-            //    query = "Delete  from   T_BALSHEET";
+            //    query = "Delete  from   VAT_BALSHEET";
 
             //    _NoOfRecord = DB.ExecuteQuery(query, null, null);
 
@@ -191,7 +191,7 @@ namespace ViennaAdvantage.Process
             }
             if (_VAB_YearPeriod_ID != 0 )
             {
-                string Sql_Period = "UPDATE t_balsheet set VAB_YearPeriod_id =" + _VAB_YearPeriod_ID + "";
+                string Sql_Period = "UPDATE VAT_BALSHEET set VAB_YearPeriod_id =" + _VAB_YearPeriod_ID + "";
                 DB.ExecuteQuery(Sql_Period);
             }
             log.Fine("#" + no + " (Account_ID=" + _Account_ID + ")");
@@ -210,7 +210,7 @@ namespace ViennaAdvantage.Process
             // if (_SummaryLevel == "N" || _LedgerType=="A")
             if (_LedgerType == "N" || _LedgerType == "A")
             {
-                sqlnew = "Select * from T_BALSHEET where issummary='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
+                sqlnew = "Select * from VAT_BALSHEET where issummary='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                 DataSet dsrecord = DB.ExecuteDataset(sqlnew, null, null);
                 if (dsrecord.Tables[0].Rows.Count > 0)
                 {
@@ -232,7 +232,7 @@ namespace ViennaAdvantage.Process
                                 _Gl_Totalvalue = _Gl_Totalvalue + _Gl_budgetvalue;
                             }
                         }
-                        sqlnew = "Select TOTALVALUE from T_BALSHEET where  vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
+                        sqlnew = "Select TOTALVALUE from VAT_BALSHEET where  vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
                         _totalBudgetValue = Util.GetValueOfDecimal(DB.ExecuteScalar(sqlnew, null, null));
                         if (_Gl_budgetvalue != 0)
                         {
@@ -242,21 +242,21 @@ namespace ViennaAdvantage.Process
                         {
                             _totalBudgetValue = 0;
                         }
-                        _sqlUpdate = "Update T_BALSHEET set VAGL_Budget_ID=" + VAGL_Budget_ID + ",BUDGETVAL=" + _Gl_budgetvalue + ",VARINPERCENT=" + _totalBudgetValue + "  where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
+                        _sqlUpdate = "Update VAT_BALSHEET set VAGL_Budget_ID=" + VAGL_Budget_ID + ",BUDGETVAL=" + _Gl_budgetvalue + ",VARINPERCENT=" + _totalBudgetValue + "  where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Node_id;
                         int count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
 
                         if (!_ListOfParentId.Contains(_Parent_id))
                         {
 
                             _ListOfParentId.Add(_Parent_id);
-                            sqlcount = "select sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from T_BALSHEET where parent_id=" + _Parent_id + " and ISSUMMARY='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
+                            sqlcount = "select sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from VAT_BALSHEET where parent_id=" + _Parent_id + " and ISSUMMARY='N' and vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                             DataSet dscountotal = DB.ExecuteDataset(sqlcount, null, null);
                             if (dscountotal.Tables[0].Rows.Count > 0)
                             {
                                 _totalAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]);
                                 _currentAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]);
                                 _PreviousAmount = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]);
-                                _sqlUpdate = "Update T_BALSHEET set TOTALVALUE=" + _totalAmount + ",TPMONVALUE=" + _PreviousAmount + ",CRMONVAL=" + _currentAmount + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Parent_id;
+                                _sqlUpdate = "Update VAT_BALSHEET set TOTALVALUE=" + _totalAmount + ",TPMONVALUE=" + _PreviousAmount + ",CRMONVAL=" + _currentAmount + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + _Parent_id;
                                 count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                 if (count != -1)
                                 {
@@ -284,12 +284,12 @@ namespace ViennaAdvantage.Process
             //if(_SummaryLevel=="Y" || _LedgerType=="A")
             {
                 Decimal BudgetValue = 0;
-                sqlnew = "Select * from  T_BALSHEET where vaf_client_id=" + GetCtx().GetVAF_Client_ID();
+                sqlnew = "Select * from  VAT_BALSHEET where vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                 DataSet dsrecord1 = DB.ExecuteDataset(sqlnew, null, null);
 
                 //for (int l = 0; l < dsrecord1.Tables[0].Rows.Count; l++)
                 //{
-                sqlnew = "Select * from  T_BALSHEET where parent_ID = 0 ";
+                sqlnew = "Select * from  VAT_BALSHEET where parent_ID = 0 ";
                 DataSet ds1 = DB.ExecuteDataset(sqlnew, null, null);
                 List<int> roots1 = new List<int>();
                 if (ds1 != null)
@@ -298,7 +298,7 @@ namespace ViennaAdvantage.Process
                     {
                         for (int k = 0; k < ds1.Tables[0].Rows.Count; k++)
                         {
-                            sqlnew = "Select * from  T_BALSHEET where parent_id = " + ds1.Tables[0].Rows[k]["Node_ID"];
+                            sqlnew = "Select * from  VAT_BALSHEET where parent_id = " + ds1.Tables[0].Rows[k]["Node_ID"];
                             DataSet ds2 = DB.ExecuteDataset(sqlnew, null, null);
                             List<int> roots2 = new List<int>();
                             if (ds2 != null)
@@ -307,7 +307,7 @@ namespace ViennaAdvantage.Process
                                 {
                                     for (int m = 0; m < ds2.Tables[0].Rows.Count; m++)
                                     {
-                                        sqlnew = "Select * from  T_BALSHEET where parent_id = " + ds2.Tables[0].Rows[m]["Node_ID"];
+                                        sqlnew = "Select * from  VAT_BALSHEET where parent_id = " + ds2.Tables[0].Rows[m]["Node_ID"];
                                         DataSet ds3 = DB.ExecuteDataset(sqlnew, null, null);
                                         List<int> roots3 = new List<int>();
                                         if (ds3 != null)
@@ -317,7 +317,7 @@ namespace ViennaAdvantage.Process
                                                 for (int n = 0; n < ds3.Tables[0].Rows.Count; n++)
                                                 {
 
-                                                    sqlnew = "Select * from  T_BALSHEET where parent_id = " + ds3.Tables[0].Rows[n]["Node_ID"];
+                                                    sqlnew = "Select * from  VAT_BALSHEET where parent_id = " + ds3.Tables[0].Rows[n]["Node_ID"];
                                                     DataSet ds4 = DB.ExecuteDataset(sqlnew, null, null);
                                                     if (ds4 != null)
                                                     {
@@ -326,7 +326,7 @@ namespace ViennaAdvantage.Process
                                                             for (int l = 0; l < ds4.Tables[0].Rows.Count; l++)
                                                             {
 
-                                                                sqlnew = "Select * from  T_BALSHEET where parent_id = " + ds4.Tables[0].Rows[l]["Node_ID"];
+                                                                sqlnew = "Select * from  VAT_BALSHEET where parent_id = " + ds4.Tables[0].Rows[l]["Node_ID"];
                                                                 DataSet ds5 = DB.ExecuteDataset(sqlnew, null, null);
                                                                 if (ds5 != null)
                                                                 {
@@ -335,7 +335,7 @@ namespace ViennaAdvantage.Process
                                                                         for (int p = 0; p < ds5.Tables[0].Rows.Count; p++)
                                                                         {
 
-                                                                            sqlnew = "Select * from  T_BALSHEET where parent_id = " + ds5.Tables[0].Rows[p]["Node_ID"];
+                                                                            sqlnew = "Select * from  VAT_BALSHEET where parent_id = " + ds5.Tables[0].Rows[p]["Node_ID"];
                                                                             DataSet ds6 = DB.ExecuteDataset(sqlnew, null, null);
                                                                             if (ds6 != null)
                                                                             {
@@ -343,7 +343,7 @@ namespace ViennaAdvantage.Process
                                                                                 {
                                                                                     for (int q = 0; q < ds6.Tables[0].Rows.Count; q++)
                                                                                     {
-                                                                                        sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  T_BALSHEET where parent_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
+                                                                                        sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  VAT_BALSHEET where parent_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
                                                                                         DataSet dscountotal6 = DB.ExecuteDataset(sqlcount, null, null);
 
                                                                                         if (Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["totalamount"]) != 0)
@@ -356,14 +356,14 @@ namespace ViennaAdvantage.Process
                                                                                             {
                                                                                                 BudgetValue = Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["BudgetValue"]);
                                                                                             }
-                                                                                            _sqlUpdate = "Update  T_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
+                                                                                            _sqlUpdate = "Update  VAT_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal6.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds6.Tables[0].Rows[q]["Parent_ID"];
                                                                                             int count5 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                                         }
                                                                                     }
 
                                                                                 }
                                                                             }
-                                                                            sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  T_BALSHEET where parent_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
+                                                                            sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  VAT_BALSHEET where parent_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
                                                                             DataSet dscountotal5 = DB.ExecuteDataset(sqlcount, null, null);
 
                                                                             if (Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["totalamount"]) != 0)
@@ -376,14 +376,14 @@ namespace ViennaAdvantage.Process
                                                                                 {
                                                                                     BudgetValue = Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["BudgetValue"]);
                                                                                 }
-                                                                                _sqlUpdate = "Update  T_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
+                                                                                _sqlUpdate = "Update  VAT_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["totalamount"]) + ", TPMONVALUE=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["previousamont"]) + ", CRMONVAL=" + Convert.ToDecimal(dscountotal5.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds5.Tables[0].Rows[p]["Parent_ID"];
                                                                                 int count5 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                             }
 
                                                                         }
                                                                     }
                                                                 }
-                                                                sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  T_BALSHEET where parent_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
+                                                                sqlcount = "select sum( budgetval) as BudgetValue,sum( TOTALVALUE)as totalamount,sum( CRMONVAL) as currentamount,sum( TPMONVALUE) as previousamont from  VAT_BALSHEET where parent_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
                                                                 DataSet dscountotal4 = DB.ExecuteDataset(sqlcount, null, null);
 
                                                                 if (Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["totalamount"]) != 0)
@@ -396,7 +396,7 @@ namespace ViennaAdvantage.Process
                                                                     {
                                                                         BudgetValue = Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["BudgetValue"]);
                                                                     }
-                                                                    _sqlUpdate = "Update  T_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
+                                                                    _sqlUpdate = "Update  VAT_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal4.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds4.Tables[0].Rows[l]["Parent_ID"];
                                                                     int count4 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                                 }
                                                             }
@@ -404,7 +404,7 @@ namespace ViennaAdvantage.Process
 
                                                     }
                                                     roots3.Add(Util.GetValueOfInt(ds3.Tables[0].Rows[n]["Parent_ID"]));
-                                                    sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from T_BALSHEET where parent_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
+                                                    sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from VAT_BALSHEET where parent_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
                                                     DataSet dscountotal3 = DB.ExecuteDataset(sqlcount, null, null);
                                                     if (Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["totalamount"]) != 0)
                                                     {
@@ -416,13 +416,13 @@ namespace ViennaAdvantage.Process
                                                         {
                                                             BudgetValue = Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["BudgetValue"]);
                                                         }
-                                                        _sqlUpdate = "Update T_BALSHEET set budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
+                                                        _sqlUpdate = "Update VAT_BALSHEET set budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal3.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds3.Tables[0].Rows[n]["Parent_ID"];
                                                         int count3 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                                     }
                                                 }
                                             }
                                         }
-                                        sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from T_BALSHEET where parent_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
+                                        sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from VAT_BALSHEET where parent_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
                                         DataSet dscountotal2 = DB.ExecuteDataset(sqlcount, null, null);
                                         if (Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["totalamount"]) != 0)
                                         {
@@ -434,14 +434,14 @@ namespace ViennaAdvantage.Process
                                             {
                                                 BudgetValue = Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["BudgetValue"]);
                                             }
-                                            _sqlUpdate = "Update T_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Util.GetValueOfInt(dscountotal2.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
+                                            _sqlUpdate = "Update VAT_BALSHEET set  budgetval=" + BudgetValue + ", TOTALVALUE=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Util.GetValueOfInt(dscountotal2.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal2.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds2.Tables[0].Rows[m]["Parent_ID"];
                                             int count2 = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                                         }
                                         //}
                                     }
                                 }
                             }
-                            sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from T_BALSHEET where parent_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
+                            sqlcount = "select sum(budgetval) as BudgetValue,sum(TOTALVALUE)as totalamount,sum(CRMONVAL) as currentamount,sum(TPMONVALUE) as previousamont from VAT_BALSHEET where parent_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
                             DataSet dscountotal = DB.ExecuteDataset(sqlcount, null, null);
                             if (Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]) != 0)
                             {
@@ -453,7 +453,7 @@ namespace ViennaAdvantage.Process
                                 {
                                     BudgetValue = Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["BudgetValue"]);
                                 }
-                                _sqlUpdate = "Update T_BALSHEET set  budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
+                                _sqlUpdate = "Update VAT_BALSHEET set  budgetval=" + BudgetValue + ",TOTALVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["totalamount"]) + ",TPMONVALUE=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["previousamont"]) + ",CRMONVAL=" + Convert.ToDecimal(dscountotal.Tables[0].Rows[0]["currentamount"]) + " where vaf_client_id=" + GetCtx().GetVAF_Client_ID() + " and node_id=" + ds1.Tables[0].Rows[k]["Parent_ID"];
                                 int count = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
                             }
                             //}
@@ -463,7 +463,7 @@ namespace ViennaAdvantage.Process
             }
             #endregion
 
-            _sqlUpdate = "Update T_BALSHEET set LedgerType='" + _LedgerType + "'";
+            _sqlUpdate = "Update VAT_BALSHEET set LedgerType='" + _LedgerType + "'";
             int countledger = Util.GetValueOfInt(DB.ExecuteQuery(_sqlUpdate, null, null));
             if (countledger == -1)
             {
@@ -592,12 +592,12 @@ namespace ViennaAdvantage.Process
 
         private void CreateView()
         {
-            string _sqlview = @"CREATE OR REPLACE FORCE VIEW BALSHEET_V  as SELECT vaf_client_id            ,  accounttype                   ,  vaf_org_id                     ,  Rownum AS BalSheet_V_ID       ,  VAB_PROJECT_ID                  ,  VAB_YEARPERIOD_ID                   ,  ledgertype              AS LedgerType      ,  LEDGERNAME              AS LEDGER          ,  issummary               AS ShowSummaryLevel,  NVL(ABS(PMDEBIT),0)     AS PreMonDebit     ,  NVL(ABS(PMCREDIT),0)    AS PreMonCredit    ,  NVL(ABS(CMDEBIT),0)     AS CRMonDebit      ,  NVL(ABS(CMCREDIT),0)    AS CRMonCredit     ,  NVL(ABS(TOTALDEBIT),0)  AS TotalDebit      ,  NVL(ABS(TOTALCREDIT),0) AS TotalCredit     ,  NVL(ABS(DIFFDEBIT),0)   AS DiffDebitVal    ,  NVL(ABS(DIFFCREDIT),0)  AS DiffCreditVal   ,  ledgercode                                 ,  SUBSTR( ledgercode,1,1)  AS ledgercode1     ,  SUBSTR( ledgercode,2,2)  AS ledgercode2     ,  SUBSTR( ledgercode,4,2)  AS ledgercode3     ,  SUBSTR( ledgercode,6,2)  AS ledgercode4     ,  SUBSTR( ledgercode,8,2)  AS ledgercode5     ,  SUBSTR( ledgercode,10,2) AS ledgercode6     ,  SUBSTR( ledgercode,12,2) AS ledgercode7   FROM t_Balsheet  WHERE accounttype ='A' OR accounttype      ='L' OR accounttype      ='O' ORDER BY LEDGERCODE";
+            string _sqlview = @"CREATE OR REPLACE FORCE VIEW BALSHEET_V  as SELECT vaf_client_id            ,  accounttype                   ,  vaf_org_id                     ,  Rownum AS BalSheet_V_ID       ,  VAB_PROJECT_ID                  ,  VAB_YEARPERIOD_ID                   ,  ledgertype              AS LedgerType      ,  LEDGERNAME              AS LEDGER          ,  issummary               AS ShowSummaryLevel,  NVL(ABS(PMDEBIT),0)     AS PreMonDebit     ,  NVL(ABS(PMCREDIT),0)    AS PreMonCredit    ,  NVL(ABS(CMDEBIT),0)     AS CRMonDebit      ,  NVL(ABS(CMCREDIT),0)    AS CRMonCredit     ,  NVL(ABS(TOTALDEBIT),0)  AS TotalDebit      ,  NVL(ABS(TOTALCREDIT),0) AS TotalCredit     ,  NVL(ABS(DIFFDEBIT),0)   AS DiffDebitVal    ,  NVL(ABS(DIFFCREDIT),0)  AS DiffCreditVal   ,  ledgercode                                 ,  SUBSTR( ledgercode,1,1)  AS ledgercode1     ,  SUBSTR( ledgercode,2,2)  AS ledgercode2     ,  SUBSTR( ledgercode,4,2)  AS ledgercode3     ,  SUBSTR( ledgercode,6,2)  AS ledgercode4     ,  SUBSTR( ledgercode,8,2)  AS ledgercode5     ,  SUBSTR( ledgercode,10,2) AS ledgercode6     ,  SUBSTR( ledgercode,12,2) AS ledgercode7   FROM VAT_BALSHEET  WHERE accounttype ='A' OR accounttype      ='L' OR accounttype      ='O' ORDER BY LEDGERCODE";
             DB.ExecuteQuery(_sqlview, null, null);
         }
         private void CreateViewAsTree()
         {
-            string _sqlview = @"CREATE OR REPLACE FORCE VIEW BALSHEET_V AS  SELECT vaf_client_id      ,  accounttype             ,  vaf_org_id               ,  Rownum AS BalSheet_V_ID ,  VAB_PROJECT_ID            ,  VAB_YEARPERIOD_ID             ,  ledgertype AS LedgerType,  '.'  || LPAD (' ', LEVEL * 3)  || LEDGERNAME           AS LEDGER          ,  issummary               AS ShowSummaryLevel,  NVL(ABS(PMDEBIT),0)     AS PreMonDebit     ,  NVL(ABS(PMCREDIT),0)    AS PreMonCredit    ,  NVL(ABS(CMDEBIT),0)     AS CRMonDebit      ,  NVL(ABS(CMCREDIT),0)    AS CRMonCredit     ,  NVL(ABS(TOTALDEBIT),0)  AS TotalDebit      ,  NVL(ABS(TOTALCREDIT),0) AS TotalCredit     ,  NVL(ABS(DIFFDEBIT),0)   AS DiffDebitVal    ,  NVL(ABS(DIFFCREDIT),0)  AS DiffCreditVal   ,  ledgercode                                 ,  SUBSTR( ledgercode,1,1)  AS ledgercode1     ,  SUBSTR( ledgercode,2,2)  AS ledgercode2     ,  SUBSTR( ledgercode,4,2)  AS ledgercode3     ,  SUBSTR( ledgercode,6,2)  AS ledgercode4     ,  SUBSTR( ledgercode,8,2)  AS ledgercode5     ,  SUBSTR( ledgercode,10,2) AS ledgercode6     ,  SUBSTR( ledgercode,12,2) AS ledgercode7   FROM t_Balsheet  WHERE accounttype ='A' OR accounttype      ='L' OR accounttype      ='O' START WITH parent_id      =0 CONNECT BY parent_id = PRIOR node_id ORDER SIBLINGS BY LEDGERCODE";
+            string _sqlview = @"CREATE OR REPLACE FORCE VIEW BALSHEET_V AS  SELECT vaf_client_id      ,  accounttype             ,  vaf_org_id               ,  Rownum AS BalSheet_V_ID ,  VAB_PROJECT_ID            ,  VAB_YEARPERIOD_ID             ,  ledgertype AS LedgerType,  '.'  || LPAD (' ', LEVEL * 3)  || LEDGERNAME           AS LEDGER          ,  issummary               AS ShowSummaryLevel,  NVL(ABS(PMDEBIT),0)     AS PreMonDebit     ,  NVL(ABS(PMCREDIT),0)    AS PreMonCredit    ,  NVL(ABS(CMDEBIT),0)     AS CRMonDebit      ,  NVL(ABS(CMCREDIT),0)    AS CRMonCredit     ,  NVL(ABS(TOTALDEBIT),0)  AS TotalDebit      ,  NVL(ABS(TOTALCREDIT),0) AS TotalCredit     ,  NVL(ABS(DIFFDEBIT),0)   AS DiffDebitVal    ,  NVL(ABS(DIFFCREDIT),0)  AS DiffCreditVal   ,  ledgercode                                 ,  SUBSTR( ledgercode,1,1)  AS ledgercode1     ,  SUBSTR( ledgercode,2,2)  AS ledgercode2     ,  SUBSTR( ledgercode,4,2)  AS ledgercode3     ,  SUBSTR( ledgercode,6,2)  AS ledgercode4     ,  SUBSTR( ledgercode,8,2)  AS ledgercode5     ,  SUBSTR( ledgercode,10,2) AS ledgercode6     ,  SUBSTR( ledgercode,12,2) AS ledgercode7   FROM VAT_BALSHEET  WHERE accounttype ='A' OR accounttype      ='L' OR accounttype      ='O' START WITH parent_id      =0 CONNECT BY parent_id = PRIOR node_id ORDER SIBLINGS BY LEDGERCODE";
             DB.ExecuteQuery(_sqlview, null, null);
         }
         private void CreateBalanceLine()

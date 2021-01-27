@@ -372,34 +372,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Click Count.
-@param W_ClickCount_ID Web Click Management */
-public void SetW_ClickCount_ID (int W_ClickCount_ID)
+@param VAW_TickCount_ID Web Click Management */
+public void SetVAW_TickCount_ID (int VAW_TickCount_ID)
 {
-if (W_ClickCount_ID <= 0) Set_Value ("W_ClickCount_ID", null);
+if (VAW_TickCount_ID <= 0) Set_Value ("VAW_TickCount_ID", null);
 else
-Set_Value ("W_ClickCount_ID", W_ClickCount_ID);
+Set_Value ("VAW_TickCount_ID", VAW_TickCount_ID);
 }
 /** Get Click Count.
 @return Web Click Management */
-public int GetW_ClickCount_ID() 
+public int GetVAW_TickCount_ID() 
 {
-Object ii = Get_Value("W_ClickCount_ID");
+Object ii = Get_Value("VAW_TickCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Counter Count.
-@param W_CounterCount_ID Web Counter Count Management */
-public void SetW_CounterCount_ID (int W_CounterCount_ID)
+@param VAW_CounterCount_ID Web Counter Count Management */
+public void SetVAW_CounterCount_ID (int VAW_CounterCount_ID)
 {
-if (W_CounterCount_ID <= 0) Set_Value ("W_CounterCount_ID", null);
+if (VAW_CounterCount_ID <= 0) Set_Value ("VAW_CounterCount_ID", null);
 else
-Set_Value ("W_CounterCount_ID", W_CounterCount_ID);
+Set_Value ("VAW_CounterCount_ID", VAW_CounterCount_ID);
 }
 /** Get Counter Count.
 @return Web Counter Count Management */
-public int GetW_CounterCount_ID() 
+public int GetVAW_CounterCount_ID() 
 {
-Object ii = Get_Value("W_CounterCount_ID");
+Object ii = Get_Value("VAW_CounterCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

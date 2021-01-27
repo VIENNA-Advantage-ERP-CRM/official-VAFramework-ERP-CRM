@@ -173,10 +173,10 @@ namespace VAdvantage.Process
 	/// Send No Guarantee EMail	 
 	/// </summary>
 	/// <param name="VAA_Asset_ID">asset</param>
-	/// <param name="R_MailText_ID">mail to send</param>
+	/// <param name="VAR_MailTemplate_ID">mail to send</param>
 	/// <param name="trxName">trx</param>
 	/// <returns>message - delivery errors start with **</returns>
-	private String SendNoGuaranteeMail (int VAA_Asset_ID, int R_MailText_ID, Trx trxName)
+	private String SendNoGuaranteeMail (int VAA_Asset_ID, int VAR_MailTemplate_ID, Trx trxName)
 	{
 		MAsset asset = new MAsset (GetCtx(), VAA_Asset_ID, trxName);
 		if (asset.GetVAF_UserContact_ID() == 0)
@@ -184,8 +184,8 @@ namespace VAdvantage.Process
 		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
-		if (_MailText == null || _MailText.GetR_MailText_ID() != R_MailText_ID)
-			_MailText = new VAdvantage.Model.MMailText (GetCtx(), R_MailText_ID, Get_Trx());
+		if (_MailText == null || _MailText.GetVAR_MailTemplate_ID() != VAR_MailTemplate_ID)
+			_MailText = new VAdvantage.Model.MMailText (GetCtx(), VAR_MailTemplate_ID, Get_Trx());
 		if (_MailText.GetMailHeader() == null || _MailText.GetMailHeader().Length == 0)
 			return "** No Subject";
 
@@ -228,10 +228,10 @@ namespace VAdvantage.Process
 		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
-		if (asset.GetProductR_MailText_ID() == 0)
+		if (asset.GetProductVAR_MailTemplate_ID() == 0)
 			return "** Product Mail Text";
-		if (_MailText == null || _MailText.GetR_MailText_ID() != asset.GetProductR_MailText_ID())
-			_MailText = new VAdvantage.Model.MMailText (GetCtx(), asset.GetProductR_MailText_ID(), Get_Trx());
+		if (_MailText == null || _MailText.GetVAR_MailTemplate_ID() != asset.GetProductVAR_MailTemplate_ID())
+			_MailText = new VAdvantage.Model.MMailText (GetCtx(), asset.GetProductVAR_MailTemplate_ID(), Get_Trx());
 		if (_MailText.GetMailHeader() == null || _MailText.GetMailHeader().Length == 0)
 			return "** No Subject";
 

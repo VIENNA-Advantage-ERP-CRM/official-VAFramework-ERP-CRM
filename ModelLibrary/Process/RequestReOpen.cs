@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     {
 
    /** Request					*/
-	private int	_R_Request_ID = 0;
+	private int	_VAR_Request_ID = 0;
 	
 	/// <summary>
 	///	Prepare
@@ -45,9 +45,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
 				;
             }
-			else if (name.Equals("R_Request_ID"))
+			else if (name.Equals("VAR_Request_ID"))
             {
-				_R_Request_ID = para[i].GetParameterAsInt();
+				_VAR_Request_ID = para[i].GetParameterAsInt();
             }
 			else
 				log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
@@ -60,14 +60,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>message</returns>
 	protected override String DoIt()
 	{
-		MRequest request = new MRequest (GetCtx(), _R_Request_ID, Get_TrxName());
+		MRequest request = new MRequest (GetCtx(), _VAR_Request_ID, Get_TrxName());
 		log.Info(request.ToString());
         if (request.Get_ID() == 0)
         {
-            throw new Exception("@NoRequsetFound@ " + _R_Request_ID);
+            throw new Exception("@NoRequsetFound@ " + _VAR_Request_ID);
         }
 		
-		request.SetR_Status_ID();	//	set default status
+		request.SetVAR_Req_Status_ID();	//	set default status
 		request.SetProcessed(false);
         if (request.Save() && !request.IsProcessed())
         {

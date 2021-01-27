@@ -11,35 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_InvoiceGL
+/** Generated Model for VAT_InvoiceGL
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_InvoiceGL : PO
+public class X_VAT_InvoiceGL : PO
 {
-public X_T_InvoiceGL (Context ctx, int T_InvoiceGL_ID, Trx trxName) : base (ctx, T_InvoiceGL_ID, trxName)
+public X_VAT_InvoiceGL (Context ctx, int VAT_InvoiceGL_ID, Trx trxName) : base (ctx, VAT_InvoiceGL_ID, trxName)
 {
-/** if (T_InvoiceGL_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetAmtAcctBalance (0.0);
-SetAmtRevalCr (0.0);
-SetAmtRevalCrDiff (0.0);
-SetAmtRevalDr (0.0);
-SetAmtRevalDrDiff (0.0);
-SetAmtSourceBalance (0.0);
-SetVAB_CurrencyTypeReval_ID (0);
-SetVAB_Invoice_ID (0);
-SetDateReval (DateTime.Now);
-SetActual_Acct_Detail_ID (0);
-SetGrandTotal (0.0);
-SetIsAllCurrencies (false);
-SetOpenAmt (0.0);
-}
- */
-}
-public X_T_InvoiceGL (Ctx ctx, int T_InvoiceGL_ID, Trx trxName) : base (ctx, T_InvoiceGL_ID, trxName)
-{
-/** if (T_InvoiceGL_ID == 0)
+/** if (VAT_InvoiceGL_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
@@ -58,12 +37,33 @@ SetOpenAmt (0.0);
 }
  */
 }
+public X_VAT_InvoiceGL (Ctx ctx, int VAT_InvoiceGL_ID, Trx trxName) : base (ctx, VAT_InvoiceGL_ID, trxName)
+{
+/** if (VAT_InvoiceGL_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetAmtAcctBalance (0.0);
+SetAmtRevalCr (0.0);
+SetAmtRevalCrDiff (0.0);
+SetAmtRevalDr (0.0);
+SetAmtRevalDrDiff (0.0);
+SetAmtSourceBalance (0.0);
+SetVAB_CurrencyTypeReval_ID (0);
+SetVAB_Invoice_ID (0);
+SetDateReval (DateTime.Now);
+SetActual_Acct_Detail_ID (0);
+SetGrandTotal (0.0);
+SetIsAllCurrencies (false);
+SetOpenAmt (0.0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InvoiceGL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_InvoiceGL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,7 +71,7 @@ public X_T_InvoiceGL (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InvoiceGL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_InvoiceGL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -79,13 +79,13 @@ public X_T_InvoiceGL (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InvoiceGL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_InvoiceGL (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_InvoiceGL()
+static X_VAT_InvoiceGL()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -98,8 +98,8 @@ public static long updatedMS = 1280389067482L;
 public static int Table_ID;
  // =803;
 
-/** TableName=T_InvoiceGL */
-public static String Table_Name="T_InvoiceGL";
+/** TableName=VAT_InvoiceGL */
+public static String Table_Name="VAT_InvoiceGL";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -133,7 +133,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_InvoiceGL[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_InvoiceGL[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

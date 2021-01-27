@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_Spool
+/** Generated Model for VAT_Spool
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_Spool : PO
+public class X_VAT_Spool : PO
 {
-public X_T_Spool (Context ctx, int T_Spool_ID, Trx trxName) : base (ctx, T_Spool_ID, trxName)
+public X_VAT_Spool (Context ctx, int VAT_Spool_ID, Trx trxName) : base (ctx, VAT_Spool_ID, trxName)
 {
-/** if (T_Spool_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetMsgText (null);
-SetSeqNo (0);
-}
- */
-}
-public X_T_Spool (Ctx ctx, int T_Spool_ID, Trx trxName) : base (ctx, T_Spool_ID, trxName)
-{
-/** if (T_Spool_ID == 0)
+/** if (VAT_Spool_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetMsgText (null);
@@ -36,12 +26,22 @@ SetSeqNo (0);
 }
  */
 }
+public X_VAT_Spool (Ctx ctx, int VAT_Spool_ID, Trx trxName) : base (ctx, VAT_Spool_ID, trxName)
+{
+/** if (VAT_Spool_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetMsgText (null);
+SetSeqNo (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Spool (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Spool (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_T_Spool (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Spool (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Spool (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_T_Spool (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Spool (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_Spool (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_Spool()
+static X_VAT_Spool()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389067717L;
 public static int Table_ID;
  // =365;
 
-/** TableName=T_Spool */
-public static String Table_Name="T_Spool";
+/** TableName=VAT_Spool */
+public static String Table_Name="VAT_Spool";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_Spool[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_Spool[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

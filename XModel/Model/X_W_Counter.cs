@@ -11,7 +11,7 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for W_Counter
+/** Generated Model for VAW_HitCounter
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
 public class X_W_Counter : PO
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389068187L;
 public static int Table_ID;
  // =403;
 
-/** TableName=W_Counter */
-public static String Table_Name="W_Counter";
+/** TableName=VAW_HitCounter */
+public static String Table_Name="VAW_HitCounter";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -275,18 +275,18 @@ public String GetUserAgent()
 return (String)Get_Value("UserAgent");
 }
 /** Set Counter Count.
-@param W_CounterCount_ID Web Counter Count Management */
-public void SetW_CounterCount_ID (int W_CounterCount_ID)
+@param VAW_CounterCount_ID Web Counter Count Management */
+public void SetVAW_CounterCount_ID (int VAW_CounterCount_ID)
 {
-if (W_CounterCount_ID <= 0) Set_ValueNoCheck ("W_CounterCount_ID", null);
+if (VAW_CounterCount_ID <= 0) Set_ValueNoCheck ("VAW_CounterCount_ID", null);
 else
-Set_ValueNoCheck ("W_CounterCount_ID", W_CounterCount_ID);
+Set_ValueNoCheck ("VAW_CounterCount_ID", VAW_CounterCount_ID);
 }
 /** Get Counter Count.
 @return Web Counter Count Management */
-public int GetW_CounterCount_ID() 
+public int GetVAW_CounterCount_ID() 
 {
-Object ii = Get_Value("W_CounterCount_ID");
+Object ii = Get_Value("VAW_CounterCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

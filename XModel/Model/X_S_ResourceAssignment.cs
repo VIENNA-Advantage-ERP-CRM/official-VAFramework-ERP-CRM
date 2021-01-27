@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_ResourceAssignment
+/** Generated Model for VAS_Res_Assignment
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_S_ResourceAssignment : PO
+public class X_VAS_Res_Assignment : PO
 {
-public X_S_ResourceAssignment (Context ctx, int S_ResourceAssignment_ID, Trx trxName) : base (ctx, S_ResourceAssignment_ID, trxName)
+public X_VAS_Res_Assignment (Context ctx, int VAS_Res_Assignment_ID, Trx trxName) : base (ctx, VAS_Res_Assignment_ID, trxName)
 {
-/** if (S_ResourceAssignment_ID == 0)
-{
-SetAssignDateFrom (DateTime.Now);
-SetIsConfirmed (false);
-SetName (null);
-SetS_ResourceAssignment_ID (0);
-SetS_Resource_ID (0);
-}
- */
-}
-public X_S_ResourceAssignment (Ctx ctx, int S_ResourceAssignment_ID, Trx trxName) : base (ctx, S_ResourceAssignment_ID, trxName)
-{
-/** if (S_ResourceAssignment_ID == 0)
+/** if (VAS_Res_Assignment_ID == 0)
 {
 SetAssignDateFrom (DateTime.Now);
 SetIsConfirmed (false);
 SetName (null);
-SetS_ResourceAssignment_ID (0);
+SetVAS_Res_Assignment_ID (0);
+SetS_Resource_ID (0);
+}
+ */
+}
+public X_VAS_Res_Assignment (Ctx ctx, int VAS_Res_Assignment_ID, Trx trxName) : base (ctx, VAS_Res_Assignment_ID, trxName)
+{
+/** if (VAS_Res_Assignment_ID == 0)
+{
+SetAssignDateFrom (DateTime.Now);
+SetIsConfirmed (false);
+SetName (null);
+SetVAS_Res_Assignment_ID (0);
 SetS_Resource_ID (0);
 }
  */
@@ -45,7 +45,7 @@ SetS_Resource_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Assignment (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_S_ResourceAssignment (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_Res_Assignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_S_ResourceAssignment (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_S_ResourceAssignment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAS_Res_Assignment (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_S_ResourceAssignment()
+static X_VAS_Res_Assignment()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389066965L;
 public static int Table_ID;
  // =485;
 
-/** TableName=S_ResourceAssignment */
-public static String Table_Name="S_ResourceAssignment";
+/** TableName=VAS_Res_Assignment */
+public static String Table_Name="VAS_Res_Assignment";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_S_ResourceAssignment[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAS_Res_Assignment[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Assign From.
@@ -211,32 +211,32 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Assigned Resource.
-@param S_ResourceAssignment_ID Assigned Resource */
-public void SetS_ResourceAssignment_ID (int S_ResourceAssignment_ID)
+@param VAS_Res_Assignment_ID Assigned Resource */
+public void SetVAS_Res_Assignment_ID (int VAS_Res_Assignment_ID)
 {
-if (S_ResourceAssignment_ID < 1) throw new ArgumentException ("S_ResourceAssignment_ID is mandatory.");
-Set_ValueNoCheck ("S_ResourceAssignment_ID", S_ResourceAssignment_ID);
+if (VAS_Res_Assignment_ID < 1) throw new ArgumentException ("VAS_Res_Assignment_ID is mandatory.");
+Set_ValueNoCheck ("VAS_Res_Assignment_ID", VAS_Res_Assignment_ID);
 }
 /** Get Assigned Resource.
 @return Assigned Resource */
-public int GetS_ResourceAssignment_ID() 
+public int GetVAS_Res_Assignment_ID() 
 {
-Object ii = Get_Value("S_ResourceAssignment_ID");
+Object ii = Get_Value("VAS_Res_Assignment_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Resource.
-@param S_Resource_ID Resource */
-public void SetS_Resource_ID (int S_Resource_ID)
+@param VAS_Resource_ID Resource */
+public void SetS_Resource_ID (int VAS_Resource_ID)
 {
-if (S_Resource_ID < 1) throw new ArgumentException ("S_Resource_ID is mandatory.");
-Set_ValueNoCheck ("S_Resource_ID", S_Resource_ID);
+if (VAS_Resource_ID < 1) throw new ArgumentException ("VAS_Resource_ID is mandatory.");
+Set_ValueNoCheck ("VAS_Resource_ID", VAS_Resource_ID);
 }
 /** Get Resource.
 @return Resource */
 public int GetS_Resource_ID() 
 {
-Object ii = Get_Value("S_Resource_ID");
+Object ii = Get_Value("VAS_Resource_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_RequestUpdate
+/** Generated Model for VAR_Req_Update
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_RequestUpdate : PO
+public class X_VAR_Req_Update : PO
 {
-public X_R_RequestUpdate (Context ctx, int R_RequestUpdate_ID, Trx trxName) : base (ctx, R_RequestUpdate_ID, trxName)
+public X_VAR_Req_Update (Context ctx, int VAR_Req_Update_ID, Trx trxName) : base (ctx, VAR_Req_Update_ID, trxName)
 {
-/** if (R_RequestUpdate_ID == 0)
+/** if (VAR_Req_Update_ID == 0)
 {
 SetConfidentialTypeEntry (null);
-SetR_RequestUpdate_ID (0);
-SetR_Request_ID (0);
+SetVAR_Req_Update_ID (0);
+SetVAR_Request_ID (0);
 }
  */
 }
-public X_R_RequestUpdate (Ctx ctx, int R_RequestUpdate_ID, Trx trxName) : base (ctx, R_RequestUpdate_ID, trxName)
+public X_VAR_Req_Update (Ctx ctx, int VAR_Req_Update_ID, Trx trxName) : base (ctx, VAR_Req_Update_ID, trxName)
 {
-/** if (R_RequestUpdate_ID == 0)
+/** if (VAR_Req_Update_ID == 0)
 {
 SetConfidentialTypeEntry (null);
-SetR_RequestUpdate_ID (0);
-SetR_Request_ID (0);
+SetVAR_Req_Update_ID (0);
+SetVAR_Request_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetR_Request_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Update (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_RequestUpdate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Update (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_RequestUpdate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_Update (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_RequestUpdate()
+static X_VAR_Req_Update()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066573L;
 public static int Table_ID;
  // =802;
 
-/** TableName=R_RequestUpdate */
-public static String Table_Name="R_RequestUpdate";
+/** TableName=VAR_Req_Update */
+public static String Table_Name="VAR_Req_Update";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_RequestUpdate[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_Update[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -212,17 +212,17 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Request Update.
-@param R_RequestUpdate_ID Request Updates */
-public void SetR_RequestUpdate_ID (int R_RequestUpdate_ID)
+@param VAR_Req_Update_ID Request Updates */
+public void SetVAR_Req_Update_ID (int VAR_Req_Update_ID)
 {
-if (R_RequestUpdate_ID < 1) throw new ArgumentException ("R_RequestUpdate_ID is mandatory.");
-Set_ValueNoCheck ("R_RequestUpdate_ID", R_RequestUpdate_ID);
+if (VAR_Req_Update_ID < 1) throw new ArgumentException ("VAR_Req_Update_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_Update_ID", VAR_Req_Update_ID);
 }
 /** Get Request Update.
 @return Request Updates */
-public int GetR_RequestUpdate_ID() 
+public int GetVAR_Req_Update_ID() 
 {
-Object ii = Get_Value("R_RequestUpdate_ID");
+Object ii = Get_Value("VAR_Req_Update_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -230,20 +230,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetR_RequestUpdate_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAR_Req_Update_ID().ToString());
 }
 /** Set Request.
-@param R_Request_ID Request from a Business Partner or Prospect */
-public void SetR_Request_ID (int R_Request_ID)
+@param VAR_Request_ID Request from a Business Partner or Prospect */
+public void SetVAR_Request_ID (int VAR_Request_ID)
 {
-if (R_Request_ID < 1) throw new ArgumentException ("R_Request_ID is mandatory.");
-Set_ValueNoCheck ("R_Request_ID", R_Request_ID);
+if (VAR_Request_ID < 1) throw new ArgumentException ("VAR_Request_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Request_ID", VAR_Request_ID);
 }
 /** Get Request.
 @return Request from a Business Partner or Prospect */
-public int GetR_Request_ID() 
+public int GetVAR_Request_ID() 
 {
-Object ii = Get_Value("R_Request_ID");
+Object ii = Get_Value("VAR_Request_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

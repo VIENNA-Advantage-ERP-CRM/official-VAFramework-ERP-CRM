@@ -29,7 +29,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class SendMailText : ProcessEngine.SvrProcess
     {
         // What to send			
-        private int _R_MailText_ID = -1;
+        private int _VAR_MailTemplate_ID = -1;
         //	Mail Text				
         private MMailText _MailText = null;
 
@@ -67,13 +67,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("R_InterestArea_ID"))
+                else if (name.Equals("VAR_InterestArea_ID"))
                 {
                     _R_InterestArea_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("R_MailText_ID"))
+                else if (name.Equals("VAR_MailTemplate_ID"))
                 {
-                    _R_MailText_ID = para[i].GetParameterAsInt();
+                    _VAR_MailTemplate_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_BPart_Category_ID"))
                 {
@@ -96,12 +96,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns> Message</returns>
         protected override String DoIt()
         {
-            log.Info("R_MailText_ID=" + _R_MailText_ID);
+            log.Info("VAR_MailTemplate_ID=" + _VAR_MailTemplate_ID);
             //	Mail Test
-            _MailText = new MMailText(GetCtx(),_R_MailText_ID, Get_TrxName());
-            if (_MailText.GetR_MailText_ID() == 0)
+            _MailText = new MMailText(GetCtx(),_VAR_MailTemplate_ID, Get_TrxName());
+            if (_MailText.GetVAR_MailTemplate_ID() == 0)
             {
-                throw new Exception("Not found @R_MailText_ID@=" + _R_MailText_ID);
+                throw new Exception("Not found @VAR_MailTemplate_ID@=" + _VAR_MailTemplate_ID);
             }
             //	Client Info
             _client = MClient.Get(GetCtx());
@@ -143,13 +143,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         private void SendInterestArea()
         {
-            log.Info("R_InterestArea_ID=" + _R_InterestArea_ID);
+            log.Info("VAR_InterestArea_ID=" + _R_InterestArea_ID);
             _ia = MInterestArea.Get(GetCtx(), _R_InterestArea_ID);
             String unsubscribe = null;
             if (_ia.IsSelfService())
             {
                 unsubscribe = "\n\n---------.----------.----------.----------.----------.----------\n"
-                    + Msg.GetElement(GetCtx(), "R_InterestArea_ID")
+                    + Msg.GetElement(GetCtx(), "VAR_InterestArea_ID")
                     + ": " + _ia.GetName()
                     + "\n" + Msg.GetMsg(GetCtx(), "UnsubscribeInfo")
                     + "\n";
@@ -175,7 +175,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "WHERE ci.IsActive='Y' AND u.IsActive='Y'"
                 + " AND ci.OptOutDate IS NULL"
                 + " AND u.EMail IS NOT NULL"
-                + " AND ci.R_InterestArea_ID=@param1";
+                + " AND ci.VAR_InterestArea_ID=@param1";
 
             SqlParameter[] param = new SqlParameter[1];
             DataTable dt = null;

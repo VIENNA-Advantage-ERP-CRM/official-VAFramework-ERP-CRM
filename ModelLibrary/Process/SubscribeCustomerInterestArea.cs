@@ -15,7 +15,7 @@ namespace VAdvantage.Process
     {
 
         int _VAB_BusinessPartner_ID;
-        int R_InterestArea_ID;
+        int VAR_InterestArea_ID;
         protected override void Prepare()
         {
             _VAB_BusinessPartner_ID = GetRecord_ID();
@@ -27,9 +27,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("R_InterestArea_ID"))
+                else if (name.Equals("VAR_InterestArea_ID"))
                 {
-                    R_InterestArea_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
+                    VAR_InterestArea_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else
                 {
@@ -41,14 +41,14 @@ namespace VAdvantage.Process
         }
         protected override String DoIt()
         {           
-            if (!(R_InterestArea_ID > 0))
+            if (!(VAR_InterestArea_ID > 0))
             {
                 return Msg.GetMsg(GetCtx(), "NoInterestAreaIsSelected");
             }
             else
             {
                 X_VAR_InterestedUser customer = new X_VAR_InterestedUser(GetCtx(), 0, Get_TrxName());
-                customer.SetR_InterestArea_ID(R_InterestArea_ID);
+                customer.SetR_InterestArea_ID(VAR_InterestArea_ID);
                 customer.SetVAB_BusinessPartner_ID(_VAB_BusinessPartner_ID);
                 String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + _VAB_BusinessPartner_ID;
                 int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query));

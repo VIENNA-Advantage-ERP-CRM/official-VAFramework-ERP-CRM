@@ -101,7 +101,7 @@ namespace VAdvantage.Process
             if (ConsolidateDocument == "Y")
             {
 
-                string sqlSelect = "select * from s_timeexpenseline where processed = 'Y' and (ARInvoice = 'Y' or billtocustomer = 'Y')  and Ref_VAB_Invoice_ID is null";
+                string sqlSelect = "select * from VAS_ExpenseReportline where processed = 'Y' and (ARInvoice = 'Y' or billtocustomer = 'Y')  and Ref_VAB_Invoice_ID is null";
                 StringBuilder sqlWhere = new StringBuilder();
                 if (VAB_Order_ID != 0)
                 {
@@ -152,8 +152,8 @@ namespace VAdvantage.Process
                             }
                             if (!chk)
                             {
-                                VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
-                                VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+                                VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), null);
+                                VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
                                 int VAB_Invoice_ID = GenerateInvoice(tLine, tExp, isExpense);
                                 invoices.Add(VAB_Invoice_ID);
                             }
@@ -161,8 +161,8 @@ namespace VAdvantage.Process
                         else
                         {
                             VAB_BusinessPartner_ID.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]));
-                            VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
-                            VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+                            VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), null);
+                            VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
                             int VAB_Invoice_ID = GenerateInvoice(tLine, tExp, isExpense);
                             invoices.Add(VAB_Invoice_ID);
                         }
@@ -231,8 +231,8 @@ namespace VAdvantage.Process
                                         }
                                         if (chk1)
                                         {
-                                            //CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["S_TimeExpenseLine_ID"]), Util.GetValueOfInt(pair.Value));
-                                            CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["S_TimeExpenseLine_ID"]), invID);
+                                            //CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAS_ExpenseReportLine_ID"]), Util.GetValueOfInt(pair.Value));
+                                            CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAS_ExpenseReportLine_ID"]), invID);
                                         }
                                     }
 
@@ -276,7 +276,7 @@ namespace VAdvantage.Process
             // If Consolidate Document is Not Checked
             else
             {
-                string sqlSelect = "select * from s_timeexpenseline where processed = 'Y' and (ARInvoice = 'Y' or billtocustomer = 'Y')  and Ref_VAB_Invoice_ID is null";
+                string sqlSelect = "select * from VAS_ExpenseReportline where processed = 'Y' and (ARInvoice = 'Y' or billtocustomer = 'Y')  and Ref_VAB_Invoice_ID is null";
                 StringBuilder sqlWhere = new StringBuilder();
                 if (VAB_Order_ID != 0)
                 {
@@ -313,16 +313,16 @@ namespace VAdvantage.Process
                     {
                         if (orders.Contains(Util.GetValueOfInt(idr["VAB_Order_ID"])))
                         {
-                            CreateLine(Util.GetValueOfInt(idr["s_timeexpenseline_id"]), VAB_Invoice_ID);
+                            CreateLine(Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), VAB_Invoice_ID);
                         }
                         else
                         {
                             orders.Add(Util.GetValueOfInt(idr["VAB_Order_ID"]));
-                            VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
-                            VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+                            VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), null);
+                            VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
                             VAB_Invoice_ID = GenerateInvoice(tLine, tExp, isExpense);
                             invoices.Add(VAB_Invoice_ID);
-                            CreateLine(Util.GetValueOfInt(idr["s_timeexpenseline_id"]), VAB_Invoice_ID);
+                            CreateLine(Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), VAB_Invoice_ID);
                         }
                     }
                     for (int m = 0; m < invoices.Count; m++)
@@ -385,10 +385,10 @@ namespace VAdvantage.Process
         /// 
         /// </summary>
         /// <param name="p"></param>
-        private void CreateLine(int S_TimeExpenseLine_ID, int VAB_Invoice_ID)
+        private void CreateLine(int VAS_ExpenseReportLine_ID, int VAB_Invoice_ID)
         {
-            VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), S_TimeExpenseLine_ID, null);
-            VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+            VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), VAS_ExpenseReportLine_ID, null);
+            VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
 
             if (tLine.IsARInvoice())
             {
@@ -469,7 +469,7 @@ namespace VAdvantage.Process
 
                         }
                     }
-                    sql = "update S_TimeExpenseLine set Ref_VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update VAS_ExpenseReportLine set Ref_VAB_Invoice_ID = " + VAB_Invoice_ID + " where VAS_ExpenseReportLine_ID = " + VAS_ExpenseReportLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -526,7 +526,7 @@ namespace VAdvantage.Process
 
                     }
 
-                    sql = "update S_TimeExpenseLine set Ref_VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update VAS_ExpenseReportLine set Ref_VAB_Invoice_ID = " + VAB_Invoice_ID + " where VAS_ExpenseReportLine_ID = " + VAS_ExpenseReportLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -536,7 +536,7 @@ namespace VAdvantage.Process
         /// 
         /// </summary>
         /// <param name="tLine"></param>
-        private int GenerateInvoice(VAdvantage.Model.X_S_TimeExpenseLine tLine, VAdvantage.Model.X_S_TimeExpense tExp, bool IsExpense)
+        private int GenerateInvoice(VAdvantage.Model.X_VAS_ExpenseReportLine tLine, VAdvantage.Model.X_VAS_ExpenseReport tExp, bool IsExpense)
         {
             int VAB_PaymentTerm_ID = 0;
             VAdvantage.Model.X_VAB_Order ord = null;
@@ -624,10 +624,10 @@ namespace VAdvantage.Process
         ///// 
         ///// </summary>
         ///// <param name="p"></param>
-        //private void CreateLine2(int S_TimeExpenseLine_ID, int VAB_Invoice_ID)
+        //private void CreateLine2(int VAS_ExpenseReportLine_ID, int VAB_Invoice_ID)
         //{
-        //    X_S_TimeExpenseLine tLine = new X_S_TimeExpenseLine(GetCtx(), S_TimeExpenseLine_ID, null);
-        //    X_S_TimeExpense tExp = new X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+        //    X_VAS_ExpenseReportLine tLine = new X_VAS_ExpenseReportLine(GetCtx(), VAS_ExpenseReportLine_ID, null);
+        //    X_VAS_ExpenseReport tExp = new X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
 
         //    // Case to Generate AP in Generation of AR Invoice
         //    if (tLine.IsExpenseInvoice())

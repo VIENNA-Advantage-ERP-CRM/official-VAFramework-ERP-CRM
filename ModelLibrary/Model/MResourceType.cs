@@ -24,14 +24,14 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MResourceType : X_S_ResourceType
+    public class MResourceType : X_VAS_Res_Type
     {
         /* 	Standard Constructor
          *	@param ctx context
-         *	@param S_ResourceType_ID id
+         *	@param VAS_Res_Type_ID id
          */
-        public MResourceType(Ctx ctx, int S_ResourceType_ID, Trx trxName)
-            : base(ctx, S_ResourceType_ID, trxName)
+        public MResourceType(Ctx ctx, int VAS_Res_Type_ID, Trx trxName)
+            : base(ctx, VAS_Res_Type_ID, trxName)
         {
             
         }	
@@ -61,9 +61,9 @@ namespace VAdvantage.Model
             //	Update Products
             if (!newRecord)
             {
-                MProduct[] products = MProduct.Get(GetCtx(), "S_Resource_ID IN "
-                    + "(SELECT S_Resource_ID FROM S_Resource WHERE S_ResourceType_ID="
-                    + GetS_ResourceType_ID() + ")", Get_TrxName());
+                MProduct[] products = MProduct.Get(GetCtx(), "VAS_Resource_ID IN "
+                    + "(SELECT VAS_Resource_ID FROM VAS_Resource WHERE VAS_Res_Type_ID="
+                    + GetVAS_Res_Type_ID() + ")", Get_TrxName());
                 for (int i = 0; i < products.Length; i++)
                 {
                     MProduct product = products[i];

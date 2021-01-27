@@ -2265,14 +2265,14 @@ namespace VAdvantage.Model
             {
                 StringBuilder adLog = null;
                 //string adLog = p_ctx.GetContext("VAF_AlterLogBatch");
-                if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                if (session != null && logbatch.ContainsKey(session.GetVAF_Session_ID()))
                 {
-                    adLog = logbatch[session.GetAD_Session_ID()];
+                    adLog = logbatch[session.GetVAF_Session_ID()];
                 }
                 else if (session != null)
                 {
                     adLog = new StringBuilder();
-                    logbatch[session.GetAD_Session_ID()] = adLog;
+                    logbatch[session.GetVAF_Session_ID()] = adLog;
                 }
 
 
@@ -2663,9 +2663,9 @@ namespace VAdvantage.Model
                 try
                 {
                     StringBuilder adLog = null;
-                    if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                    if (session != null && logbatch.ContainsKey(session.GetVAF_Session_ID()))
                     {
-                        adLog = logbatch[session.GetAD_Session_ID()];
+                        adLog = logbatch[session.GetVAF_Session_ID()];
                     }
 
                     if (adLog != null && adLog.Length > 6)
@@ -2676,7 +2676,7 @@ namespace VAdvantage.Model
                         }
 
                         //p_ctx.SetContext("VAF_AlterLogBatch", "");
-                        //logbatch[session.GetAD_Session_ID()].Clear();
+                        //logbatch[session.GetVAF_Session_ID()].Clear();
                         adLog.Replace("TO_DATE", "TO_TIMESTAMP");
                         no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
                         adLog.Clear();
@@ -3366,9 +3366,9 @@ namespace VAdvantage.Model
                 //    no = DB.ExecuteQuery(adLogDB, null, null);
                 //}
                 StringBuilder adLog = null;
-                if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                if (session != null && logbatch.ContainsKey(session.GetVAF_Session_ID()))
                 {
-                    adLog = logbatch[session.GetAD_Session_ID()];
+                    adLog = logbatch[session.GetVAF_Session_ID()];
                 }
                 if (adLog != null && adLog.Length > 6)
                 {

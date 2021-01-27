@@ -338,18 +338,18 @@ if (oo != null)
 return false;
 }
 /** Set Expense Line.
-@param S_TimeExpenseLine_ID Time and Expense Report Line */
-public void SetS_TimeExpenseLine_ID (int S_TimeExpenseLine_ID)
+@param VAS_ExpenseReportLine_ID Time and Expense Report Line */
+public void SetVAS_ExpenseReportLine_ID (int VAS_ExpenseReportLine_ID)
 {
-if (S_TimeExpenseLine_ID <= 0) Set_Value ("S_TimeExpenseLine_ID", null);
+if (VAS_ExpenseReportLine_ID <= 0) Set_Value ("VAS_ExpenseReportLine_ID", null);
 else
-Set_Value ("S_TimeExpenseLine_ID", S_TimeExpenseLine_ID);
+Set_Value ("VAS_ExpenseReportLine_ID", VAS_ExpenseReportLine_ID);
 }
 /** Get Expense Line.
 @return Time and Expense Report Line */
-public int GetS_TimeExpenseLine_ID() 
+public int GetVAS_ExpenseReportLine_ID() 
 {
-Object ii = Get_Value("S_TimeExpenseLine_ID");
+Object ii = Get_Value("VAS_ExpenseReportLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

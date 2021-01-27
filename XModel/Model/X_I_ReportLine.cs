@@ -445,18 +445,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Report Source.
-@param VAPA_FR_Source_ID Restriction of what will be shown in Report Line */
-public void SetVAPA_FR_Source_ID (int VAPA_FR_Source_ID)
+@param VAPA_FVAR_Source_ID Restriction of what will be shown in Report Line */
+public void SetVAPA_FVAR_Source_ID (int VAPA_FVAR_Source_ID)
 {
-if (VAPA_FR_Source_ID <= 0) Set_Value ("VAPA_FR_Source_ID", null);
+if (VAPA_FVAR_Source_ID <= 0) Set_Value ("VAPA_FVAR_Source_ID", null);
 else
-Set_Value ("VAPA_FR_Source_ID", VAPA_FR_Source_ID);
+Set_Value ("VAPA_FVAR_Source_ID", VAPA_FVAR_Source_ID);
 }
 /** Get Report Source.
 @return Restriction of what will be shown in Report Line */
-public int GetVAPA_FR_Source_ID() 
+public int GetVAPA_FVAR_Source_ID() 
 {
-Object ii = Get_Value("VAPA_FR_Source_ID");
+Object ii = Get_Value("VAPA_FVAR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

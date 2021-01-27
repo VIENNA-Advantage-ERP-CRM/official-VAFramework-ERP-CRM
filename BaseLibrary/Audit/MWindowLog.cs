@@ -52,18 +52,18 @@ namespace VAdvantage.Model
         /// 	Window Log
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="AD_Session_ID"></param>
+        /// <param name="VAF_Session_ID"></param>
         /// <param name="VAF_Client_ID"></param>
         /// <param name="VAF_Org_ID"></param>
         /// <param name="VAF_Screen_ID"></param>
         /// <param name="VAF_Page_ID"></param>
-        public MWindowLog(Ctx ctx, int AD_Session_ID,
+        public MWindowLog(Ctx ctx, int VAF_Session_ID,
         int VAF_Client_ID, int VAF_Org_ID,
         int VAF_Screen_ID, int VAF_Page_ID)
             : this(ctx, 0, null)
         {
 
-            SetAD_Session_ID(AD_Session_ID);
+            SetVAF_Session_ID(VAF_Session_ID);
             SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             //
             if (VAF_Screen_ID != 0)

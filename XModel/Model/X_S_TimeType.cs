@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_TimeType
+/** Generated Model for VAS_TimeType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_S_TimeType : PO
+public class X_VAS_TimeType : PO
 {
-public X_S_TimeType (Context ctx, int S_TimeType_ID, Trx trxName) : base (ctx, S_TimeType_ID, trxName)
+public X_VAS_TimeType (Context ctx, int VAS_TimeType_ID, Trx trxName) : base (ctx, VAS_TimeType_ID, trxName)
 {
-/** if (S_TimeType_ID == 0)
+/** if (VAS_TimeType_ID == 0)
 {
 SetName (null);
-SetS_TimeType_ID (0);
+SetVAS_TimeType_ID (0);
 }
  */
 }
-public X_S_TimeType (Ctx ctx, int S_TimeType_ID, Trx trxName) : base (ctx, S_TimeType_ID, trxName)
+public X_VAS_TimeType (Ctx ctx, int VAS_TimeType_ID, Trx trxName) : base (ctx, VAS_TimeType_ID, trxName)
 {
-/** if (S_TimeType_ID == 0)
+/** if (VAS_TimeType_ID == 0)
 {
 SetName (null);
-SetS_TimeType_ID (0);
+SetVAS_TimeType_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetS_TimeType_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_S_TimeType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_TimeType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_S_TimeType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_S_TimeType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAS_TimeType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_S_TimeType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_S_TimeType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAS_TimeType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_S_TimeType()
+static X_VAS_TimeType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389067106L;
 public static int Table_ID;
  // =581;
 
-/** TableName=S_TimeType */
-public static String Table_Name="S_TimeType";
+/** TableName=VAS_TimeType */
+public static String Table_Name="VAS_TimeType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_S_TimeType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAS_TimeType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -171,17 +171,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Time Type.
-@param S_TimeType_ID Type of time recorded */
-public void SetS_TimeType_ID (int S_TimeType_ID)
+@param VAS_TimeType_ID Type of time recorded */
+public void SetVAS_TimeType_ID (int VAS_TimeType_ID)
 {
-if (S_TimeType_ID < 1) throw new ArgumentException ("S_TimeType_ID is mandatory.");
-Set_ValueNoCheck ("S_TimeType_ID", S_TimeType_ID);
+if (VAS_TimeType_ID < 1) throw new ArgumentException ("VAS_TimeType_ID is mandatory.");
+Set_ValueNoCheck ("VAS_TimeType_ID", VAS_TimeType_ID);
 }
 /** Get Time Type.
 @return Type of time recorded */
-public int GetS_TimeType_ID() 
+public int GetVAS_TimeType_ID() 
 {
-Object ii = Get_Value("S_TimeType_ID");
+Object ii = Get_Value("VAS_TimeType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

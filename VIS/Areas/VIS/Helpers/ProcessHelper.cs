@@ -134,7 +134,7 @@ namespace VIS.Helpers
 
             // Get Locks from Dictionary
             string lockedid = processInfo["Process_ID"].ToString() + "_" + processInfo["Record_ID"].ToString();
-            //string lockedidlog = lockedid + " -UserID- " + ctx.GetVAF_UserContact_ID() + " -SesstionID- " + ctx.GetAD_Session_ID();
+            //string lockedidlog = lockedid + " -UserID- " + ctx.GetVAF_UserContact_ID() + " -SesstionID- " + ctx.GetVAF_Session_ID();
             var isBackground = processInfo["IsBackground"].Equals("True", StringComparison.OrdinalIgnoreCase);
             var currentLock = GetLock(lockedid);
             lock (currentLock)
@@ -198,7 +198,7 @@ namespace VIS.Helpers
                             ret.Result = ret.Result.Substring(0, 100) + "...";
                         }
 
-                        VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetAD_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
+                        VIS.Controllers.JsonDataController.AddMessageForToastr(Convert.ToInt32(processInfo["Process_ID"]) + "_P_" + ctx.GetVAF_Session_ID(), pro.GetName() + " " + Msg.GetMsg(ctx, "Completed") + ": " + ret.Result);
 
                     });
                 }

@@ -1967,7 +1967,7 @@
                 //return "ChargeExclusively";
             }
             mTab.setValue("M_AttributeSetInstance_ID", null);
-            mTab.setValue("S_ResourceAssignment_ID", null);
+            mTab.setValue("VAS_Res_Assignment_ID", null);
 
             //JID_0054: Currently System setting the Each as UOM after selecting the cahrge. Need to set default UOM for charge.
             var VAB_UOM_id = ctx.getContextAsInt("#VAB_UOM_ID");
@@ -4086,7 +4086,7 @@
 
     /// <summary>
     /// Assignment_Product.
-    /// - called from S_ResourceAssignment_ID
+    /// - called from VAS_Res_Assignment_ID
     /// - sets M_Product_ID, Description
     /// - Qty.. 
     /// </summary>
@@ -4106,8 +4106,8 @@
         if (this.isCalloutActive() || value == null)
             return "";
         //	get value
-        var S_ResourceAssignment_ID = Util.getValueOfInt(value);
-        if (S_ResourceAssignment_ID == 0) {
+        var VAS_Res_Assignment_ID = Util.getValueOfInt(value);
+        if (VAS_Res_Assignment_ID == 0) {
             return "";
         }
         this.setCalloutActive(true);
@@ -4117,9 +4117,9 @@
         var description = null;
         var Qty = null;
         var sql = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty "
-            + "FROM S_ResourceAssignment ra"
-            + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) "
-            + "WHERE ra.S_ResourceAssignment_ID=" + S_ResourceAssignment_ID;
+            + "FROM VAS_Res_Assignment ra"
+            + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
+            + "WHERE ra.VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID;
         var idr = null;
         try {
             idr = VIS.DB.executeReader(sql, null, null);
@@ -4140,7 +4140,7 @@
             this.log.log(Level.SEVERE, "product", err);
         }
 
-        this.log.fine("S_ResourceAssignment_ID=" + S_ResourceAssignment_ID + " - M_Product_ID=" + M_Product_ID);
+        this.log.fine("VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID + " - M_Product_ID=" + M_Product_ID);
         if (M_Product_ID != 0) {
             mTab.setValue("M_Product_ID", Util.getValueOfInt(M_Product_ID));
             if (description != null) {
@@ -12424,12 +12424,12 @@
             //    {
             //        object f = pqtyAll.GetValue(x);
 
-            //        int AD_Session_ID = Util.getValueOfInt(((VAdvantage.Classes.InfoLines)f)._AD_Session_ID);
+            //        int VAF_Session_ID = Util.getValueOfInt(((VAdvantage.Classes.InfoLines)f)._VAF_Session_ID);
             //        int winNo = Util.getValueOfInt(((VAdvantage.Classes.InfoLines)f)._windowNo);
             //        Dictionary<int, Decimal> ProductQty = ((VAdvantage.Classes.InfoLines)f)._prodQty;
 
             //        List<int> key = ProductQty.Keys.ToList();
-            //        if (AD_Session_ID == Env.GetCtx().GetAD_Session_ID() && winNo == windowNo && Util.getValueOfInt(value) == Util.getValueOfInt(key[0]))
+            //        if (VAF_Session_ID == Env.GetCtx().GetVAF_Session_ID() && winNo == windowNo && Util.getValueOfInt(value) == Util.getValueOfInt(key[0]))
             //        {
             //            Decimal qty = Util.getValueOfDecimal(ProductQty[Util.getValueOfInt(value)]);
             //            mTab.setValue("QtyEntered", qty);
@@ -12841,7 +12841,7 @@
                 return "ChargeExclusively";
             }
             mTab.setValue("M_AttributeSetInstance_ID", null);
-            mTab.setValue("S_ResourceAssignment_ID", null);
+            mTab.setValue("VAS_Res_Assignment_ID", null);
 
             //JID_0054: Currently System setting the Each as UOM after selecting the cahrge. Need to set default UOM for charge.
             var VAB_UOM_id = ctx.getContextAsInt("#VAB_UOM_ID");
@@ -15362,17 +15362,17 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var R_MailText_ID = Util.getValueOfInt(value);
-        var sql = "SELECT MailHeader, MailText FROM R_MailText "
-            + "WHERE R_MailText_ID=@Param1";
+        var VAR_MailTemplate_ID = Util.getValueOfInt(value);
+        var sql = "SELECT MailHeader, MailText FROM VAR_MailTemplate "
+            + "WHERE VAR_MailTemplate_ID=@Param1";
         var Param = [];
         //SqlParameter[] Param = new SqlParameter[1];
         var idr = null;
         try {
             //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
 
-            //pstmt.setInt(1, R_MailText_ID.intValue());
-            Param[0] = new VIS.DB.SqlParam("@Param1", Util.getValueOfInt(R_MailText_ID));
+            //pstmt.setInt(1, VAR_MailTemplate_ID.intValue());
+            Param[0] = new VIS.DB.SqlParam("@Param1", Util.getValueOfInt(VAR_MailTemplate_ID));
             //ResultSet rs = pstmt.executeQuery();
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
@@ -15412,16 +15412,16 @@
         if (value == null || value.toString() == "") {
             return "";
         }
-        var R_StandardResponse_ID = Util.getValueOfInt(value);
-        var sql = "SELECT Name, ResponseText FROM R_StandardResponse "
-            + "WHERE R_StandardResponse_ID=@Param1";
+        var VAR_Req_StandardReply_ID = Util.getValueOfInt(value);
+        var sql = "SELECT Name, ResponseText FROM VAR_Req_StandardReply "
+            + "WHERE VAR_Req_StandardReply_ID=@Param1";
         var Param = [];
         //SqlParameter[] Param = new SqlParameter[1];
         var idr = null;
         try {
             //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-            Param[0] = new VIS.DB.SqlParam("@Param1", Util.getValueOfInt(R_StandardResponse_ID));
-            //pstmt.setInt(1, R_StandardResponse_ID.intValue());
+            Param[0] = new VIS.DB.SqlParam("@Param1", Util.getValueOfInt(VAR_Req_StandardReply_ID));
+            //pstmt.setInt(1, VAR_Req_StandardReply_ID.intValue());
             //ResultSet rs = pstmt.executeQuery();
             idr = VIS.DB.executeReader(sql, Param, null);
             if (idr.read()) {
@@ -15458,26 +15458,26 @@
         //  
         var colName = mField.getColumnName();
         this.log.info(colName + "=" + value);
-        mTab.setValue("R_Status_ID", null);
+        mTab.setValue("VAR_Req_Status_ID", null);
         if (value == null || value.toString() == "") {
             return "";
         }
-        //var R_RequestType_ID = ((Integer)value).intValue();
-        var R_RequestType_ID = Util.getValueOfInt(value);
-        if (R_RequestType_ID == 0) {
+        //var VAR_Req_Type_ID = ((Integer)value).intValue();
+        var VAR_Req_Type_ID = Util.getValueOfInt(value);
+        if (VAR_Req_Type_ID == 0) {
             return "";
         }
-        var paramString = R_RequestType_ID.toString();
+        var paramString = VAR_Req_Type_ID.toString();
 
 
         //Get BankAccount information
 
-        var R_Status_ID = VIS.dataContext.getJSONRecord("MRequestType/GetDefaultR_Status_ID", paramString);
-        //MRequestType rt = MRequestType.Get(ctx, R_RequestType_ID);
-        // var R_Status_ID = rt.GetDefaultR_Status_ID();
-        if (R_Status_ID != 0) {
-            //mTab.setValue("R_Status_ID", new Integer(R_Status_ID));
-            mTab.setValue("R_Status_ID", Util.getValueOfInt(R_Status_ID));
+        var VAR_Req_Status_ID = VIS.dataContext.getJSONRecord("MRequestType/GetDefaultVAR_Req_Status_ID", paramString);
+        //MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+        // var VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
+        if (VAR_Req_Status_ID != 0) {
+            //mTab.setValue("VAR_Req_Status_ID", new Integer(VAR_Req_Status_ID));
+            mTab.setValue("VAR_Req_Status_ID", Util.getValueOfInt(VAR_Req_Status_ID));
 
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
@@ -16413,7 +16413,7 @@
         try {
             this.setCalloutActive(true);
             // Util.getValueOfInt(value);
-            var sql = "select ProfileType from S_Resource where VAF_UserContact_ID = " + Util.getValueOfInt(value);
+            var sql = "select ProfileType from VAS_Resource where VAF_UserContact_ID = " + Util.getValueOfInt(value);
             var pType = Util.getValueOfString(VIS.DB.executeScalar(sql, null, null));
             if (pType != "") {
                 if (pType.toUpper() == "I") {
@@ -16444,7 +16444,7 @@
 
     /// <summary>
     /// Expense Report Line
-    //- called from M_Product_ID, S_ResourceAssignment_ID
+    //- called from M_Product_ID, VAS_Res_Assignment_ID
     //set ExpenseAmt
 
     /// </summary>
@@ -16609,7 +16609,7 @@
         //var VAB_Currency_To_ID = ctx.getContextAsInt(windowNo, "$VAB_Currency_ID");
         var VAB_Currency_To_ID = 0;
         var VAB_Currency_From_ID = mTab.getValue("VAB_Currency_ID");
-        VAB_Currency_To_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("S_TimeExpense_ID"));
+        VAB_Currency_To_ID = VIS.dataContext.getJSONRecord("MExpenseReport/GetPriceListCurrency", mTab.getValue("VAS_ExpenseReport_ID"));
         //DateTime DateExpense = new DateTime(ctx.getContextAsTime(windowNo, "DateExpense"));
         var DateExpense = ctx.getContext(windowNo, "DateExpense");
         //

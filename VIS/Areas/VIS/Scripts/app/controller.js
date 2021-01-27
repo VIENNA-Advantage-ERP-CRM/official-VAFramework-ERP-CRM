@@ -1453,8 +1453,8 @@
 
         //	Zooms to the same Window (Parents, ..)
         var refColName = null;
-        if (colName.equals("R_RequestRelated_ID"))
-            refColName = "R_Request_ID";
+        if (colName.equals("VAR_RequestRelated_ID"))
+            refColName = "VAR_Request_ID";
         else if (colName.startsWith("VAB_DocTypes"))
             refColName = "VAB_DocTypes_ID";
         else if (colName.equals("CreatedBy") || colName.equals("UpdatedBy"))

@@ -29,13 +29,13 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="T_Aging_ID">id</param>
+        /// <param name="VAT_Aging_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAging(Ctx ctx, int T_Aging_ID, Trx trxName)
-            : base(ctx, T_Aging_ID, trxName)
+        public MAging(Ctx ctx, int VAT_Aging_ID, Trx trxName)
+            : base(ctx, VAT_Aging_ID, trxName)
         {
-            //base(ctx, T_Aging_ID, trxName);
-            if (T_Aging_ID == 0)
+            //base(ctx, VAT_Aging_ID, trxName);
+            if (VAT_Aging_ID == 0)
             {
                 //	setVAF_JInstance_ID (0);
                 //	setVAB_BPart_Category_ID (0);
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
                 //	setDueDate (new Timestamp(System.currentTimeMillis()));
                 //	setStatementDate (new Timestamp(System.currentTimeMillis()));
             }
-        }	//	T_Aging
+        }	//	VAT_Aging
 
         /// <summary>
         /// Full Constructor

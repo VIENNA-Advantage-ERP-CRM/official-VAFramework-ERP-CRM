@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MReportSource
  * Purpose        : Report Source Model
- * Class Used     : X_VAPA_FR_Source
+ * Class Used     : X_VAPA_FVAR_Source
  * Chronological    Development
  * Deepak           19-Jan-2010
   ******************************************************/
@@ -22,18 +22,18 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportSource : X_VAPA_FR_Source
+    public class MReportSource : X_VAPA_FVAR_Source
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="VAPA_FR_Source_ID">id</param>
+        /// <param name="VAPA_FVAR_Source_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReportSource(Ctx ctx, int VAPA_FR_Source_ID, Trx trxName):base(ctx, VAPA_FR_Source_ID, trxName)
+        public MReportSource(Ctx ctx, int VAPA_FVAR_Source_ID, Trx trxName):base(ctx, VAPA_FVAR_Source_ID, trxName)
         {
             
-            if (VAPA_FR_Source_ID == 0)
+            if (VAPA_FVAR_Source_ID == 0)
             {
             }
         }	//	MReportSource

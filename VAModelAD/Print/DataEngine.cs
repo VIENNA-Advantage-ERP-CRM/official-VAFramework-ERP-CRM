@@ -591,7 +591,7 @@ namespace VAdvantage.Print
             }
 
             bool hasLevelNo = false;
-            if (tableName.StartsWith("T_Report"))
+            if (tableName.StartsWith("VAT_Report"))
             {
                 hasLevelNo = true;
                 if (sqlSELECT.ToString().IndexOf("LevelNo") == -1)
@@ -606,7 +606,7 @@ namespace VAdvantage.Print
                 .Append(sqlFROM);
 
             //	WHERE clause
-            if (tableName.StartsWith("T_Report"))
+            if (tableName.StartsWith("VAT_Report"))
             {
                 finalSQL.Append(" WHERE ");
                 for (int i = 0; i < query.GetRestrictionCount(); i++)
@@ -848,7 +848,7 @@ namespace VAdvantage.Print
         private void LoadPrintData(Ctx ctx, PrintData pd, MPrintFormat format)
         {
             //	Translate Spool Output
-            bool translateSpool = pd.GetTableName().Equals("T_Spool");
+            bool translateSpool = pd.GetTableName().Equals("VAT_Spool");
             _runningTotalString = Utility.Msg.GetMsg(Env.GetContext(), "RunningTotal", true);
             int rowNo = 0;
             PrintDataColumn pdc = null;

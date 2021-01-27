@@ -146,17 +146,17 @@ public DateTime? GetOptOutDate()
 return (DateTime?)Get_Value("OptOutDate");
 }
 /** Set Interest Area.
-@param R_InterestArea_ID Interest Area or Topic */
-public void SetR_InterestArea_ID (int R_InterestArea_ID)
+@param VAR_InterestArea_ID Interest Area or Topic */
+public void SetR_InterestArea_ID (int VAR_InterestArea_ID)
 {
-if (R_InterestArea_ID < 1) throw new ArgumentException ("R_InterestArea_ID is mandatory.");
-Set_ValueNoCheck ("R_InterestArea_ID", R_InterestArea_ID);
+if (VAR_InterestArea_ID < 1) throw new ArgumentException ("VAR_InterestArea_ID is mandatory.");
+Set_ValueNoCheck ("VAR_InterestArea_ID", VAR_InterestArea_ID);
 }
 /** Get Interest Area.
 @return Interest Area or Topic */
 public int GetR_InterestArea_ID() 
 {
-Object ii = Get_Value("R_InterestArea_ID");
+Object ii = Get_Value("VAR_InterestArea_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

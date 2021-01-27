@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Source
+/** Generated Model for VAR_Source
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_Source : PO
+public class X_VAR_Source : PO
 {
-public X_R_Source (Context ctx, int R_Source_ID, Trx trxName) : base (ctx, R_Source_ID, trxName)
+public X_VAR_Source (Context ctx, int VAR_Source_ID, Trx trxName) : base (ctx, VAR_Source_ID, trxName)
 {
-/** if (R_Source_ID == 0)
+/** if (VAR_Source_ID == 0)
 {
 SetName (null);
-SetR_Source_ID (0);
+SetVAR_Source_ID (0);
 SetSourceCreateType (null);	// L
 SetValue (null);
 }
  */
 }
-public X_R_Source (Ctx ctx, int R_Source_ID, Trx trxName) : base (ctx, R_Source_ID, trxName)
+public X_VAR_Source (Ctx ctx, int VAR_Source_ID, Trx trxName) : base (ctx, VAR_Source_ID, trxName)
 {
-/** if (R_Source_ID == 0)
+/** if (VAR_Source_ID == 0)
 {
 SetName (null);
-SetR_Source_ID (0);
+SetVAR_Source_ID (0);
 SetSourceCreateType (null);	// L
 SetValue (null);
 }
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Source (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Source (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_R_Source (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Source (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Source (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_R_Source (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Source (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Source (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_Source()
+static X_VAR_Source()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389066651L;
 public static int Table_ID;
  // =914;
 
-/** TableName=R_Source */
-public static String Table_Name="R_Source";
+/** TableName=VAR_Source */
+public static String Table_Name="VAR_Source";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_Source[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Source[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -175,17 +175,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Source.
-@param R_Source_ID Source for the Lead or Request */
-public void SetR_Source_ID (int R_Source_ID)
+@param VAR_Source_ID Source for the Lead or Request */
+public void SetVAR_Source_ID (int VAR_Source_ID)
 {
-if (R_Source_ID < 1) throw new ArgumentException ("R_Source_ID is mandatory.");
-Set_ValueNoCheck ("R_Source_ID", R_Source_ID);
+if (VAR_Source_ID < 1) throw new ArgumentException ("VAR_Source_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Source_ID", VAR_Source_ID);
 }
 /** Get Source.
 @return Source for the Lead or Request */
-public int GetR_Source_ID() 
+public int GetVAR_Source_ID() 
 {
-Object ii = Get_Value("R_Source_ID");
+Object ii = Get_Value("VAR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

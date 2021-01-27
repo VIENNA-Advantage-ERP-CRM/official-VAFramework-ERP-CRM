@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_RequestProcessor
+/** Generated Model for VAR_Req_Handler
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_RequestProcessor : PO
+public class X_VAR_Req_Handler : PO
 {
-public X_R_RequestProcessor (Context ctx, int R_RequestProcessor_ID, Trx trxName) : base (ctx, R_RequestProcessor_ID, trxName)
+public X_VAR_Req_Handler (Context ctx, int VAR_Req_Handler_ID, Trx trxName) : base (ctx, VAR_Req_Handler_ID, trxName)
 {
-/** if (R_RequestProcessor_ID == 0)
-{
-SetInactivityAlertDays (0);	// 0
-SetKeepLogDays (0);	// 7
-SetName (null);
-SetOverdueAlertDays (0);	// 0
-SetOverdueAssignDays (0);	// 0
-SetR_RequestProcessor_ID (0);
-SetRemindDays (0);	// 0
-SetSupervisor_ID (0);
-}
- */
-}
-public X_R_RequestProcessor (Ctx ctx, int R_RequestProcessor_ID, Trx trxName) : base (ctx, R_RequestProcessor_ID, trxName)
-{
-/** if (R_RequestProcessor_ID == 0)
+/** if (VAR_Req_Handler_ID == 0)
 {
 SetInactivityAlertDays (0);	// 0
 SetKeepLogDays (0);	// 7
 SetName (null);
 SetOverdueAlertDays (0);	// 0
 SetOverdueAssignDays (0);	// 0
-SetR_RequestProcessor_ID (0);
+SetVAR_Req_Handler_ID (0);
+SetRemindDays (0);	// 0
+SetSupervisor_ID (0);
+}
+ */
+}
+public X_VAR_Req_Handler (Ctx ctx, int VAR_Req_Handler_ID, Trx trxName) : base (ctx, VAR_Req_Handler_ID, trxName)
+{
+/** if (VAR_Req_Handler_ID == 0)
+{
+SetInactivityAlertDays (0);	// 0
+SetKeepLogDays (0);	// 7
+SetName (null);
+SetOverdueAlertDays (0);	// 0
+SetOverdueAssignDays (0);	// 0
+SetVAR_Req_Handler_ID (0);
 SetRemindDays (0);	// 0
 SetSupervisor_ID (0);
 }
@@ -51,7 +51,7 @@ SetSupervisor_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Handler (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_R_RequestProcessor (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Handler (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_R_RequestProcessor (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessor (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_Handler (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_RequestProcessor()
+static X_VAR_Req_Handler()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389066416L;
 public static int Table_ID;
  // =420;
 
-/** TableName=R_RequestProcessor */
-public static String Table_Name="R_RequestProcessor";
+/** TableName=VAR_Req_Handler */
+public static String Table_Name="VAR_Req_Handler";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_RequestProcessor[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_Handler[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Schedule.
@@ -329,33 +329,33 @@ if (oo != null)
 return false;
 }
 /** Set Request Processor.
-@param R_RequestProcessor_ID Processor for Requests */
-public void SetR_RequestProcessor_ID (int R_RequestProcessor_ID)
+@param VAR_Req_Handler_ID Processor for Requests */
+public void SetVAR_Req_Handler_ID (int VAR_Req_Handler_ID)
 {
-if (R_RequestProcessor_ID < 1) throw new ArgumentException ("R_RequestProcessor_ID is mandatory.");
-Set_ValueNoCheck ("R_RequestProcessor_ID", R_RequestProcessor_ID);
+if (VAR_Req_Handler_ID < 1) throw new ArgumentException ("VAR_Req_Handler_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_Handler_ID", VAR_Req_Handler_ID);
 }
 /** Get Request Processor.
 @return Processor for Requests */
-public int GetR_RequestProcessor_ID() 
+public int GetVAR_Req_Handler_ID() 
 {
-Object ii = Get_Value("R_RequestProcessor_ID");
+Object ii = Get_Value("VAR_Req_Handler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request Type.
-@param R_RequestType_ID Type of request (e.g. Inquiry, Complaint, ..) */
-public void SetR_RequestType_ID (int R_RequestType_ID)
+@param VAR_Req_Type_ID Type of request (e.g. Inquiry, Complaint, ..) */
+public void SetVAR_Req_Type_ID (int VAR_Req_Type_ID)
 {
-if (R_RequestType_ID <= 0) Set_Value ("R_RequestType_ID", null);
+if (VAR_Req_Type_ID <= 0) Set_Value ("VAR_Req_Type_ID", null);
 else
-Set_Value ("R_RequestType_ID", R_RequestType_ID);
+Set_Value ("VAR_Req_Type_ID", VAR_Req_Type_ID);
 }
 /** Get Request Type.
 @return Type of request (e.g. Inquiry, Complaint, ..) */
-public int GetR_RequestType_ID() 
+public int GetVAR_Req_Type_ID() 
 {
-Object ii = Get_Value("R_RequestType_ID");
+Object ii = Get_Value("VAR_Req_Type_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

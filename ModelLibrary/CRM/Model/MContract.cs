@@ -1098,7 +1098,7 @@ namespace VAdvantage.Model
                 //    if (!copyASI)
                 //    {
                 //        line.SetM_AttributeSetInstance_ID(0);
-                //        line.SetS_ResourceAssignment_ID(0);
+                //        line.SetVAS_Res_Assignment_ID(0);
                 //    }
                 //    if (counter)
                 //        line.SetRef_OrderLine_ID(fromLines[i].GetVAB_OrderLine_ID());

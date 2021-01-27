@@ -978,7 +978,7 @@ namespace VAdvantage.Common
             }
 
             MSession sess = MSession.Get(ctx);
-            sess.ActionLog(ctx, sess.GetAD_Session_ID(), ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
+            sess.ActionLog(ctx, sess.GetVAF_Session_ID(), ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, VAF_TableView_ID, Record_ID);
         }
 

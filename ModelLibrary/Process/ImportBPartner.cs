@@ -238,9 +238,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Interest Area
             sql = new StringBuilder("UPDATE I_BPartner i "
-                + "SET R_InterestArea_ID=(SELECT R_InterestArea_ID FROM R_InterestArea ia "
+                + "SET VAR_InterestArea_ID=(SELECT VAR_InterestArea_ID FROM VAR_InterestArea ia "
                     + "WHERE i.InterestAreaName=ia.Name AND ia.VAF_Client_ID=i.VAF_Client_ID) "
-                + "WHERE R_InterestArea_ID IS NULL AND InterestAreaName IS NOT NULL"
+                + "WHERE VAR_InterestArea_ID IS NULL AND InterestAreaName IS NOT NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Interest Area=" + no);

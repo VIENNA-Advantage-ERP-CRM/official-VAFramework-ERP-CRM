@@ -71,7 +71,7 @@ namespace VAdvantage.Report
         /**	Start Time						*/
         private long m_start =CommonFunctions.CurrentTimeMillis();//  System.currentTimeMillis();
         /**	Insert Statement				*/
-        private static String _insert = "INSERT INTO T_TrialBalance "
+        private static String _insert = "INSERT INTO VAT_TrailBalance "
             + "(VAF_JInstance_ID, Actual_Acct_Detail_ID,"
             + " VAF_Client_ID, VAF_Org_ID, Created,CreatedBy, Updated,UpdatedBy,"
             + " VAB_AccountBook_ID, Account_ID, AccountValue, DateTrx, DateAcct, VAB_YearPeriod_ID,"
@@ -564,7 +564,7 @@ namespace VAdvantage.Report
             log.Fine("#" + no + " (Account_ID=" + _Account_ID + ")");
 
             //	Update AccountValue
-            String sql2 = "UPDATE T_TrialBalance tb SET AccountValue = "
+            String sql2 = "UPDATE VAT_TrailBalance tb SET AccountValue = "
                 + "(SELECT Value FROM VAB_Acct_Element ev WHERE ev.VAB_Acct_Element_ID=tb.Account_ID) "
                 + "WHERE tb.Account_ID IS NOT NULL";
             no = DataBase.DB.ExecuteQuery(sql2,null, Get_Trx());

@@ -621,12 +621,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get Product R_MailText_ID
-         *	@return R_MailText_ID
+         * 	Get Product VAR_MailTemplate_ID
+         *	@return VAR_MailTemplate_ID
          */
-        public int GetProductR_MailText_ID()
+        public int GetProductVAR_MailTemplate_ID()
         {
-            return GetProduct().GetR_MailText_ID();
+            return GetProduct().GetVAR_MailTemplate_ID();
         }
 
         /**

@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         private MContactInterest _ci = null;
         /**	Cache						*/
         private static CCache<int, MInterestArea> _cache =
-            new CCache<int, MInterestArea>("R_InterestArea", 5);
+            new CCache<int, MInterestArea>("VAR_InterestArea", 5);
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MInterestArea).FullName);
 
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         public static MInterestArea[] GetAll(Ctx ctx)
         {
             List<MInterestArea> list = new List<MInterestArea>();
-            String sql = "SELECT * FROM R_InterestArea WHERE IsActive='Y'";
+            String sql = "SELECT * FROM VAR_InterestArea WHERE IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -81,16 +81,16 @@ namespace VAdvantage.Model
         /**
          * 	Get MInterestArea from Cache
          *	@param ctx context
-         *	@param R_InterestArea_ID id
+         *	@param VAR_InterestArea_ID id
          *	@return MInterestArea
          */
-        public static MInterestArea Get(Ctx ctx, int R_InterestArea_ID)
+        public static MInterestArea Get(Ctx ctx, int VAR_InterestArea_ID)
         {
-            int key = R_InterestArea_ID;
+            int key = VAR_InterestArea_ID;
             MInterestArea retValue = (MInterestArea)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MInterestArea(ctx, R_InterestArea_ID, null);
+            retValue = new MInterestArea(ctx, VAR_InterestArea_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -99,14 +99,14 @@ namespace VAdvantage.Model
         /**
          * 	Constructor
          *	@param ctx context
-         *	@param R_InterestArea_ID interest area
+         *	@param VAR_InterestArea_ID interest area
          *	@param trxName transaction
          */
-        public MInterestArea(Ctx ctx, int R_InterestArea_ID, Trx trxName)
-            : base(ctx, R_InterestArea_ID, trxName)
+        public MInterestArea(Ctx ctx, int VAR_InterestArea_ID, Trx trxName)
+            : base(ctx, VAR_InterestArea_ID, trxName)
         {
             
-            if (R_InterestArea_ID == 0)
+            if (VAR_InterestArea_ID == 0)
             {
                 //	setName (null);
                 //	setR_InterestArea_ID (0);

@@ -1301,9 +1301,9 @@ namespace VAdvantage.Model
 
             //	Zooms to the same Window (Parents, ..)
             String refColName = null;
-            if (colName.Equals("R_RequestRelated_ID"))
+            if (colName.Equals("VAR_RequestRelated_ID"))
             {
-                refColName = "R_Request_ID";
+                refColName = "VAR_Request_ID";
             }
             else if (colName.StartsWith("VAB_DocTypes"))
             {
@@ -3142,9 +3142,9 @@ namespace VAdvantage.Model
 
 
             ////	Expense Report
-            else if (_vo.TableName.StartsWith("S_TimeExpense") && _vo.tabNo == 0)
+            else if (_vo.TableName.StartsWith("VAS_ExpenseReport") && _vo.tabNo == 0)
             {
-                int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "S_TimeExpense_ID");
+                int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, "VAS_ExpenseReport_ID");
                 log.Fine(_vo.TableName + " - " + Record_ID);
                 MessageFormat mf = null;
                 try
@@ -3169,8 +3169,8 @@ namespace VAdvantage.Model
                 bool filled = false;
                 //    //
                 String SQL = "SELECT COUNT(*) AS Lines, SUM(ConvertedAmt*Qty) "
-                     + "FROM S_TimeExpenseLine "
-                     + "WHERE S_TimeExpense_ID=" + Record_ID;
+                     + "FROM VAS_ExpenseReportLine "
+                     + "WHERE VAS_ExpenseReport_ID=" + Record_ID;
 
                 //    //
                 IDataReader dr = null;

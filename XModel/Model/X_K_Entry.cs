@@ -121,18 +121,18 @@ StringBuilder sb = new StringBuilder ("X_K_Entry[").Append(Get_ID()).Append("]")
 return sb.ToString();
 }
 /** Set Session.
-@param AD_Session_ID User Session Online or Web */
-public void SetAD_Session_ID (int AD_Session_ID)
+@param VAF_Session_ID User Session Online or Web */
+public void SetVAF_Session_ID (int VAF_Session_ID)
 {
-if (AD_Session_ID <= 0) Set_ValueNoCheck ("AD_Session_ID", null);
+if (VAF_Session_ID <= 0) Set_ValueNoCheck ("VAF_Session_ID", null);
 else
-Set_ValueNoCheck ("AD_Session_ID", AD_Session_ID);
+Set_ValueNoCheck ("VAF_Session_ID", VAF_Session_ID);
 }
 /** Get Session.
 @return User Session Online or Web */
-public int GetAD_Session_ID() 
+public int GetVAF_Session_ID() 
 {
-Object ii = Get_Value("AD_Session_ID");
+Object ii = Get_Value("VAF_Session_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -11,29 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_TrialBalance
+/** Generated Model for VAT_TrailBalance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_TrialBalance : PO
+public class X_VAT_TrailBalance : PO
 {
-public X_T_TrialBalance (Context ctx, int T_TrialBalance_ID, Trx trxName) : base (ctx, T_TrialBalance_ID, trxName)
+public X_VAT_TrailBalance (Context ctx, int VAT_TrailBalance_ID, Trx trxName) : base (ctx, VAT_TrailBalance_ID, trxName)
 {
-/** if (T_TrialBalance_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetAmtAcctBalance (0.0);
-SetAmtAcctCr (0.0);
-SetAmtAcctDr (0.0);
-SetVAB_AccountBook_ID (0);
-SetDateAcct (DateTime.Now);
-SetActual_Acct_Detail_ID (0);
-SetPostingType (null);
-}
- */
-}
-public X_T_TrialBalance (Ctx ctx, int T_TrialBalance_ID, Trx trxName) : base (ctx, T_TrialBalance_ID, trxName)
-{
-/** if (T_TrialBalance_ID == 0)
+/** if (VAT_TrailBalance_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetAmtAcctBalance (0.0);
@@ -46,12 +31,27 @@ SetPostingType (null);
 }
  */
 }
+public X_VAT_TrailBalance (Ctx ctx, int VAT_TrailBalance_ID, Trx trxName) : base (ctx, VAT_TrailBalance_ID, trxName)
+{
+/** if (VAT_TrailBalance_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetAmtAcctBalance (0.0);
+SetAmtAcctCr (0.0);
+SetAmtAcctDr (0.0);
+SetVAB_AccountBook_ID (0);
+SetDateAcct (DateTime.Now);
+SetActual_Acct_Detail_ID (0);
+SetPostingType (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_TrialBalance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_TrailBalance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_T_TrialBalance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_T_TrialBalance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_TrailBalance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_T_TrialBalance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_T_TrialBalance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_TrailBalance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_TrialBalance()
+static X_VAT_TrailBalance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389067827L;
 public static int Table_ID;
  // =753;
 
-/** TableName=T_TrialBalance */
-public static String Table_Name="T_TrialBalance";
+/** TableName=VAT_TrailBalance */
+public static String Table_Name="VAT_TrailBalance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_TrialBalance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_TrailBalance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 

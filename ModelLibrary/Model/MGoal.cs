@@ -510,7 +510,7 @@ namespace VAdvantage.Model
                 && MMeasure.MEASUREDATATYPE_StatusQtyAmount.Equals(measure.GetMeasureDataType()))
             {
                 if (MMeasure.MEASURETYPE_Request.Equals(measure.GetMeasureType()))
-                    return Msg.GetElement(GetCtx(), "R_Status_ID");
+                    return Msg.GetElement(GetCtx(), "VAR_Req_Status_ID");
                 if (MMeasure.MEASURETYPE_Project.Equals(measure.GetMeasureType()))
                     return Msg.GetElement(GetCtx(), "VAB_Std_Stage_ID");
             }

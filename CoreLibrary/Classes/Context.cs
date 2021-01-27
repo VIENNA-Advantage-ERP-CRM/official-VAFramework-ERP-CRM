@@ -321,9 +321,9 @@ namespace VAdvantage.Classes
         /// Get Session Id from List
         /// </summary>
         /// <returns></returns>
-        public int GetAD_Session_ID()
+        public int GetVAF_Session_ID()
         {
-            return GetContextAsInt("#AD_Session_ID");
+            return GetContextAsInt("#VAF_Session_ID");
         }
 
         /// <summary>

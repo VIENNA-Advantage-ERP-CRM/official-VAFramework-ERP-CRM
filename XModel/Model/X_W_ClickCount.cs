@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for W_ClickCount
+/** Generated Model for VAW_TickCount
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_W_ClickCount : PO
+public class X_VAW_TickCount : PO
 {
-public X_W_ClickCount (Context ctx, int W_ClickCount_ID, Trx trxName) : base (ctx, W_ClickCount_ID, trxName)
+public X_VAW_TickCount (Context ctx, int VAW_TickCount_ID, Trx trxName) : base (ctx, VAW_TickCount_ID, trxName)
 {
-/** if (W_ClickCount_ID == 0)
-{
-SetName (null);
-SetTargetURL (null);
-SetW_ClickCount_ID (0);
-}
- */
-}
-public X_W_ClickCount (Ctx ctx, int W_ClickCount_ID, Trx trxName) : base (ctx, W_ClickCount_ID, trxName)
-{
-/** if (W_ClickCount_ID == 0)
+/** if (VAW_TickCount_ID == 0)
 {
 SetName (null);
 SetTargetURL (null);
-SetW_ClickCount_ID (0);
+SetVAW_TickCount_ID (0);
+}
+ */
+}
+public X_VAW_TickCount (Ctx ctx, int VAW_TickCount_ID, Trx trxName) : base (ctx, VAW_TickCount_ID, trxName)
+{
+/** if (VAW_TickCount_ID == 0)
+{
+SetName (null);
+SetTargetURL (null);
+SetVAW_TickCount_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetW_ClickCount_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_W_ClickCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_TickCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_W_ClickCount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_W_ClickCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAW_TickCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_W_ClickCount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_W_ClickCount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAW_TickCount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_W_ClickCount()
+static X_VAW_TickCount()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389068171L;
 public static int Table_ID;
  // =553;
 
-/** TableName=W_ClickCount */
-public static String Table_Name="W_ClickCount";
+/** TableName=VAW_TickCount */
+public static String Table_Name="VAW_TickCount";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_W_ClickCount[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAW_TickCount[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -207,17 +207,17 @@ public String GetTargetURL()
 return (String)Get_Value("TargetURL");
 }
 /** Set Click Count.
-@param W_ClickCount_ID Web Click Management */
-public void SetW_ClickCount_ID (int W_ClickCount_ID)
+@param VAW_TickCount_ID Web Click Management */
+public void SetVAW_TickCount_ID (int VAW_TickCount_ID)
 {
-if (W_ClickCount_ID < 1) throw new ArgumentException ("W_ClickCount_ID is mandatory.");
-Set_ValueNoCheck ("W_ClickCount_ID", W_ClickCount_ID);
+if (VAW_TickCount_ID < 1) throw new ArgumentException ("VAW_TickCount_ID is mandatory.");
+Set_ValueNoCheck ("VAW_TickCount_ID", VAW_TickCount_ID);
 }
 /** Get Click Count.
 @return Web Click Management */
-public int GetW_ClickCount_ID() 
+public int GetVAW_TickCount_ID() 
 {
-Object ii = Get_Value("W_ClickCount_ID");
+Object ii = Get_Value("VAW_TickCount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

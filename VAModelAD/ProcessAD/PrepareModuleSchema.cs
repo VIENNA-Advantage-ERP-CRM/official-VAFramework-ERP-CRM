@@ -1362,11 +1362,11 @@ namespace VAdvantage.Process
                         CheckImage(sNode.GetVAF_Image_ID());
                     }
 
-                    if (sNode.GetR_MailText_ID() != 0)
+                    if (sNode.GetVAR_MailTemplate_ID() != 0)
                     {
-                        if (HasModulePrefix("Name", "R_MailText", "R_MailText_ID =" + sNode.GetR_MailText_ID(), out name))
+                        if (HasModulePrefix("Name", "VAR_MailTemplate", "VAR_MailTemplate_ID =" + sNode.GetVAR_MailTemplate_ID(), out name))
                         {
-                            InsertIntoDBSchema(X_R_MailText.Table_ID, sNode.GetR_MailText_ID(), X_R_MailText.Table_Name, name, "R_MailText_ID =" + sNode.GetR_MailText_ID());
+                            InsertIntoDBSchema(X_VAR_MailTemplate.Table_ID, sNode.GetVAR_MailTemplate_ID(), X_VAR_MailTemplate.Table_Name, name, "VAR_MailTemplate_ID =" + sNode.GetVAR_MailTemplate_ID());
                         }
                     }
 
@@ -1379,11 +1379,11 @@ namespace VAdvantage.Process
                     }
                     //else if (sNode.GetAction() == X_VAF_WFlow_Node.ACTION_EMail)
                     //{
-                    //    if (sNode.GetR_MailText_ID() != 0)
+                    //    if (sNode.GetVAR_MailTemplate_ID() != 0)
                     //    {
-                    //        if (HasModulePrefix("Name", "R_MailText", "R_MailText_ID =" + sNode.GetR_MailText_ID(), out name))
+                    //        if (HasModulePrefix("Name", "VAR_MailTemplate", "VAR_MailTemplate_ID =" + sNode.GetVAR_MailTemplate_ID(), out name))
                     //        {
-                    //            InsertIntoDBSchema(X_R_MailText.Table_ID, sNode.GetR_MailText_ID(), X_R_MailText.Table_Name, name, "R_MailText_ID =" + sNode.GetR_MailText_ID());
+                    //            InsertIntoDBSchema(X_VAR_MailTemplate.Table_ID, sNode.GetVAR_MailTemplate_ID(), X_VAR_MailTemplate.Table_Name, name, "VAR_MailTemplate_ID =" + sNode.GetVAR_MailTemplate_ID());
                     //        }
                     //    }
                     //}

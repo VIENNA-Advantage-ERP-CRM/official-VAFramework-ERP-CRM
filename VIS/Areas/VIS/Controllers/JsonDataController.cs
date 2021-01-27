@@ -1073,7 +1073,7 @@ namespace VIS.Controllers
             string serializedObject = null;
             if (ctx != null)
             {
-                string sessionID = ctx.GetAD_Session_ID().ToString();
+                string sessionID = ctx.GetVAF_Session_ID().ToString();
                 JavaScriptSerializer ser = new JavaScriptSerializer();
 
                 IEnumerable<KeyValuePair<string, string>> newDic = toastrMessage.Where(kvp => kvp.Key.Contains(sessionID));

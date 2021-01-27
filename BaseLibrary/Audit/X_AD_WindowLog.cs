@@ -20,7 +20,7 @@ public X_VAF_ScreenLog (Context ctx, int VAF_ScreenLog_ID, Trx trxName) : base (
 {
 /** if (VAF_ScreenLog_ID == 0)
 {
-SetAD_Session_ID (0);
+SetVAF_Session_ID (0);
 SetVAF_ScreenLog_ID (0);
 }
  */
@@ -29,7 +29,7 @@ public X_VAF_ScreenLog (Ctx ctx, int VAF_ScreenLog_ID, Trx trxName) : base (ctx,
 {
 /** if (VAF_ScreenLog_ID == 0)
 {
-SetAD_Session_ID (0);
+SetVAF_Session_ID (0);
 SetVAF_ScreenLog_ID (0);
 }
  */
@@ -145,17 +145,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Session.
-@param AD_Session_ID User Session Online or Web */
-public void SetAD_Session_ID (int AD_Session_ID)
+@param VAF_Session_ID User Session Online or Web */
+public void SetVAF_Session_ID (int VAF_Session_ID)
 {
-if (AD_Session_ID < 1) throw new ArgumentException ("AD_Session_ID is mandatory.");
-Set_ValueNoCheck ("AD_Session_ID", AD_Session_ID);
+if (VAF_Session_ID < 1) throw new ArgumentException ("VAF_Session_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Session_ID", VAF_Session_ID);
 }
 /** Get Session.
 @return User Session Online or Web */
-public int GetAD_Session_ID() 
+public int GetVAF_Session_ID() 
 {
-Object ii = Get_Value("AD_Session_ID");
+Object ii = Get_Value("VAF_Session_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

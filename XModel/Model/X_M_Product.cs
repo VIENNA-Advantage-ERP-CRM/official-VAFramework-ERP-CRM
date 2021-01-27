@@ -1159,34 +1159,34 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Mail Template.
-        @param R_MailText_ID Text templates for mailings */
-        public void SetR_MailText_ID(int R_MailText_ID)
+        @param VAR_MailTemplate_ID Text templates for mailings */
+        public void SetVAR_MailTemplate_ID(int VAR_MailTemplate_ID)
         {
-            if (R_MailText_ID <= 0) Set_Value("R_MailText_ID", null);
+            if (VAR_MailTemplate_ID <= 0) Set_Value("VAR_MailTemplate_ID", null);
             else
-                Set_Value("R_MailText_ID", R_MailText_ID);
+                Set_Value("VAR_MailTemplate_ID", VAR_MailTemplate_ID);
         }
         /** Get Mail Template.
         @return Text templates for mailings */
-        public int GetR_MailText_ID()
+        public int GetVAR_MailTemplate_ID()
         {
-            Object ii = Get_Value("R_MailText_ID");
+            Object ii = Get_Value("VAR_MailTemplate_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Source.
-        @param R_Source_ID Source for the Lead or Request */
-        public void SetR_Source_ID(int R_Source_ID)
+        @param VAR_Source_ID Source for the Lead or Request */
+        public void SetVAR_Source_ID(int VAR_Source_ID)
         {
-            if (R_Source_ID <= 0) Set_Value("R_Source_ID", null);
+            if (VAR_Source_ID <= 0) Set_Value("VAR_Source_ID", null);
             else
-                Set_Value("R_Source_ID", R_Source_ID);
+                Set_Value("VAR_Source_ID", VAR_Source_ID);
         }
         /** Get Source.
         @return Source for the Lead or Request */
-        public int GetR_Source_ID()
+        public int GetVAR_Source_ID()
         {
-            Object ii = Get_Value("R_Source_ID");
+            Object ii = Get_Value("VAR_Source_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1243,34 +1243,34 @@ namespace VAdvantage.Model
             return (String)Get_Value("SKU");
         }
         /** Set Expense Type.
-        @param S_ExpenseType_ID Expense report type */
-        public void SetS_ExpenseType_ID(int S_ExpenseType_ID)
+        @param VAS_ChargeType_ID Expense report type */
+        public void SetVAS_ChargeType_ID(int VAS_ChargeType_ID)
         {
-            if (S_ExpenseType_ID <= 0) Set_ValueNoCheck("S_ExpenseType_ID", null);
+            if (VAS_ChargeType_ID <= 0) Set_ValueNoCheck("VAS_ChargeType_ID", null);
             else
-                Set_ValueNoCheck("S_ExpenseType_ID", S_ExpenseType_ID);
+                Set_ValueNoCheck("VAS_ChargeType_ID", VAS_ChargeType_ID);
         }
         /** Get Expense Type.
         @return Expense report type */
-        public int GetS_ExpenseType_ID()
+        public int GetVAS_ChargeType_ID()
         {
-            Object ii = Get_Value("S_ExpenseType_ID");
+            Object ii = Get_Value("VAS_ChargeType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Resource.
-        @param S_Resource_ID Resource */
-        public void SetS_Resource_ID(int S_Resource_ID)
+        @param VAS_Resource_ID Resource */
+        public void SetS_Resource_ID(int VAS_Resource_ID)
         {
-            if (S_Resource_ID <= 0) Set_ValueNoCheck("S_Resource_ID", null);
+            if (VAS_Resource_ID <= 0) Set_ValueNoCheck("VAS_Resource_ID", null);
             else
-                Set_ValueNoCheck("S_Resource_ID", S_Resource_ID);
+                Set_ValueNoCheck("VAS_Resource_ID", VAS_Resource_ID);
         }
         /** Get Resource.
         @return Resource */
         public int GetS_Resource_ID()
         {
-            Object ii = Get_Value("S_Resource_ID");
+            Object ii = Get_Value("VAS_Resource_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

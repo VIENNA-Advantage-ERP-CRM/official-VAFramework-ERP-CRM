@@ -479,7 +479,7 @@ namespace VAdvantage.Model
                     //MClient client = MClient.Get(GetCtx(), cd.GetVAF_Client_ID());
                     if (ce.IsFifo() || ce.IsLifo())
                     {
-                        sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                        sql = @"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +
@@ -488,7 +488,7 @@ namespace VAdvantage.Model
                         MRPrice = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         if (MRPrice == 0)
                         {
-                            sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id
+                            sql = @"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced INNER JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                      @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) =  " + cd.GetVAB_OrderLine_ID() +
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
                         if (MRPrice == 0)
                         {
                             // this is used because we remove the cost queue
-                            sql = @"SELECT  Amt as currentCostAmount  FROM T_Temp_CostDetail ced LEFT JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
+                            sql = @"SELECT  Amt as currentCostAmount  FROM VAT_Temp_CostDetail ced LEFT JOIN m_costqueue cq ON cq.m_costqueue_id = ced.m_costqueue_id 
                                      where  ced.IsActive = 'Y' AND ced.M_Product_ID = " + product.GetM_Product_ID() + @" 
                                      AND ced.VAB_AccountBook_ID = " + mas.GetVAB_AccountBook_ID() + @" AND  NVL(ced.M_AttributeSetInstance_ID , 0) =  " + M_ASI_ID +
                                         @" AND ced.M_InOutLine_ID =  " + cd.GetM_InOutLine_ID() + @" AND NVL(ced.VAB_OrderLIne_ID , 0) = 0 " +

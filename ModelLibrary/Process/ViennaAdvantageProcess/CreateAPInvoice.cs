@@ -77,9 +77,9 @@ namespace ViennaAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            //string sqlSelect = "select * from s_timeexpenseline where processed = 'Y' and (APInvoice = 'Y' or expenseinvoice = 'Y') and VAB_Invoice_ID is null";
-            //string sqlSelect = "select * from s_timeexpenseline where APInvoice = 'Y' and VAB_Invoice_ID is null";
-            string sqlSelect = "SELECT res.VAB_BusinessPartner_ID, tl.s_timeexpenseline_ID FROM s_timeexpenseline tl inner join s_resource res on (res.s_resource_id = tl.s_resource_id) "
+            //string sqlSelect = "select * from VAS_ExpenseReportline where processed = 'Y' and (APInvoice = 'Y' or expenseinvoice = 'Y') and VAB_Invoice_ID is null";
+            //string sqlSelect = "select * from VAS_ExpenseReportline where APInvoice = 'Y' and VAB_Invoice_ID is null";
+            string sqlSelect = "SELECT res.VAB_BusinessPartner_ID, tl.VAS_ExpenseReportline_ID FROM VAS_ExpenseReportline tl inner join VAS_Resource res on (res.VAS_Resource_ID = tl.VAS_Resource_ID) "
                            + " WHERE tl.processed = 'Y' AND (tl.APInvoice = 'Y' OR tl.expenseinvoice = 'Y') AND tl.VAB_Invoice_ID IS NULL";
             StringBuilder sqlWhere = new StringBuilder();
             if (_VAB_BusinessPartner_ID != 0)
@@ -128,8 +128,8 @@ namespace ViennaAdvantage.Process
                     else
                     {
                         VAB_BusinessPartner_ID.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]));
-                        VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), Util.GetValueOfInt(idr["s_timeexpenseline_id"]), null);
-                        VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+                        VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), Util.GetValueOfInt(idr["VAS_ExpenseReportline_id"]), null);
+                        VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
                         int VAB_Invoice_ID = GenerateInvoice(tLine, tExp);
 
                         BPInvoice.Add(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]), VAB_Invoice_ID);
@@ -177,7 +177,7 @@ namespace ViennaAdvantage.Process
                             {
                                 for (int j = 0; j < ds.Tables[0].Rows.Count; j++)
                                 {
-                                    CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["S_TimeExpenseLine_ID"]), Util.GetValueOfInt(pair.Value));
+                                    CreateLine(Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAS_ExpenseReportLine_ID"]), Util.GetValueOfInt(pair.Value));
                                 }
                             }
                         }
@@ -212,10 +212,10 @@ namespace ViennaAdvantage.Process
         /// 
         /// </summary>
         /// <param name="p"></param>
-        private void CreateLine(int S_TimeExpenseLine_ID, int VAB_Invoice_ID)
+        private void CreateLine(int VAS_ExpenseReportLine_ID, int VAB_Invoice_ID)
         {
-            VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), S_TimeExpenseLine_ID, null);
-            VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), Util.GetValueOfInt(tLine.GetS_TimeExpense_ID()), null);
+            VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), VAS_ExpenseReportLine_ID, null);
+            VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), Util.GetValueOfInt(tLine.GetVAS_ExpenseReport_ID()), null);
 
             if (tLine.IsAPInvoice())
             {
@@ -258,9 +258,9 @@ namespace ViennaAdvantage.Process
                     {
                         lineNo = lineNo + 10;
                         Decimal? price = 0;
-                        //sql = "select s_resource_id from s_resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
+                        //sql = "select VAS_Resource_ID from VAS_Resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
                         //    + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
-                        //sql = "select s_resource_id from  where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID();
+                        //sql = "select VAS_Resource_ID from  where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID();
 
 
 
@@ -280,11 +280,11 @@ namespace ViennaAdvantage.Process
                         //Decimal? qty4 = MUOMConversion.GetProductRateFrom(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_ID);
 
 
-                        int S_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
+                        int VAS_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
 
-                        if (S_Resource_ID != 0)
+                        if (VAS_Resource_ID != 0)
                         {
-                            sql = "select HourlyRate from s_resource where s_resource_id = " + S_Resource_ID;
+                            sql = "select HourlyRate from VAS_Resource where VAS_Resource_ID = " + VAS_Resource_ID;
                             price = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                             price = VAdvantage.Model.MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, price.Value);
                         }
@@ -325,7 +325,7 @@ namespace ViennaAdvantage.Process
 
                         }
                     }
-                    sql = "update S_TimeExpenseLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update VAS_ExpenseReportLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where VAS_ExpenseReportLine_ID = " + VAS_ExpenseReportLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -382,7 +382,7 @@ namespace ViennaAdvantage.Process
 
                     }
 
-                    sql = "update S_TimeExpenseLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where S_TimeExpenseLine_ID = " + S_TimeExpenseLine_ID;
+                    sql = "update VAS_ExpenseReportLine set VAB_Invoice_ID = " + VAB_Invoice_ID + " where VAS_ExpenseReportLine_ID = " + VAS_ExpenseReportLine_ID;
                     int res = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, null));
                 }
             }
@@ -392,7 +392,7 @@ namespace ViennaAdvantage.Process
         /// 
         /// </summary>
         /// <param name="tLine"></param>
-        private int GenerateInvoice(VAdvantage.Model.X_S_TimeExpenseLine tLine, VAdvantage.Model.X_S_TimeExpense tExp)
+        private int GenerateInvoice(VAdvantage.Model.X_VAS_ExpenseReportLine tLine, VAdvantage.Model.X_VAS_ExpenseReport tExp)
         {
             int VAB_PaymentTerm_ID = 0;
             VAdvantage.Model.X_VAB_Order ord = null;
@@ -401,18 +401,18 @@ namespace ViennaAdvantage.Process
                 ord = new VAdvantage.Model.X_VAB_Order(GetCtx(), tLine.GetVAB_Order_ID(), null);
             }
 
-            //sql = "select s_resource_id from s_resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
+            //sql = "select VAS_Resource_ID from VAS_Resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
             //               + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
-            //int S_Resource_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            int S_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
+            //int VAS_Resource_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            int VAS_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
             int VAB_Currency_ID = 0;
             int VAB_BusinessPartner_ID = 0;
-            if (S_Resource_ID != 0)
+            if (VAS_Resource_ID != 0)
             {
-                sql = "select VAB_Currency_ID from s_resource where s_resource_id = " + S_Resource_ID;
+                sql = "select VAB_Currency_ID from VAS_Resource where VAS_Resource_ID = " + VAS_Resource_ID;
                 VAB_Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                sql = "select VAB_BusinessPartner_ID from s_resource where s_resource_id = " + S_Resource_ID;
+                sql = "select VAB_BusinessPartner_ID from VAS_Resource where VAS_Resource_ID = " + VAS_Resource_ID;
                 VAB_BusinessPartner_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
             else

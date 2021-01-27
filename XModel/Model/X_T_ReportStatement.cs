@@ -11,25 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_ReportStatement
+/** Generated Model for VAT_ReportStatement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_ReportStatement : PO
+public class X_VAT_ReportStatement : PO
 {
-public X_T_ReportStatement (Context ctx, int T_ReportStatement_ID, Trx trxName) : base (ctx, T_ReportStatement_ID, trxName)
+public X_VAT_ReportStatement (Context ctx, int VAT_ReportStatement_ID, Trx trxName) : base (ctx, VAT_ReportStatement_ID, trxName)
 {
-/** if (T_ReportStatement_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetDateAcct (DateTime.Now);
-SetActual_Acct_Detail_ID (0);
-SetLevelNo (0);
-}
- */
-}
-public X_T_ReportStatement (Ctx ctx, int T_ReportStatement_ID, Trx trxName) : base (ctx, T_ReportStatement_ID, trxName)
-{
-/** if (T_ReportStatement_ID == 0)
+/** if (VAT_ReportStatement_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetDateAcct (DateTime.Now);
@@ -38,12 +27,23 @@ SetLevelNo (0);
 }
  */
 }
+public X_VAT_ReportStatement (Ctx ctx, int VAT_ReportStatement_ID, Trx trxName) : base (ctx, VAT_ReportStatement_ID, trxName)
+{
+/** if (VAT_ReportStatement_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetDateAcct (DateTime.Now);
+SetActual_Acct_Detail_ID (0);
+SetLevelNo (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ReportStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_ReportStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_T_ReportStatement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ReportStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_ReportStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_T_ReportStatement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_T_ReportStatement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_ReportStatement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_ReportStatement()
+static X_VAT_ReportStatement()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389067607L;
 public static int Table_ID;
  // =545;
 
-/** TableName=T_ReportStatement */
-public static String Table_Name="T_ReportStatement";
+/** TableName=VAT_ReportStatement */
+public static String Table_Name="VAT_ReportStatement";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_ReportStatement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_ReportStatement[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

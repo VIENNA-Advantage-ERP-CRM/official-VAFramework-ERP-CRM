@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         {
 
             SetClientOrg(request);
-            SetName(Msg.GetElement(GetCtx(), "R_Request_ID") + ": " + request.GetDocumentNo());
+            SetName(Msg.GetElement(GetCtx(), "VAR_Request_ID") + ": " + request.GetDocumentNo());
             SetHelp(request.GetSummary());
             //
             SetM_BOM_ID(group.GetM_BOM_ID());
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
          */
         public MRequest[] GetRequests()
         {
-           // String sql = "SELECT * FROM R_Request WHERE M_ChangeRequest_ID=?";//Code not found by raghu 3-march-2011
+           // String sql = "SELECT * FROM VAR_Request WHERE M_ChangeRequest_ID=?";//Code not found by raghu 3-march-2011
             return null;
         }	//	GetRequests
 

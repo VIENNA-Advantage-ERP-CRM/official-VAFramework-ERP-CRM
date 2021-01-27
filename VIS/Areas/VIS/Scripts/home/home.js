@@ -1235,7 +1235,7 @@
                             }
 
                             + "<li class='vis-home-request-BP'>" + data[s].Name + "</li>"
-                            str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].R_Request_ID + "|" + data[s].TableName + "|" + data[s].VAF_Screen_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
+                            str += "<li data-vishomercrd='liview'><a href='javascript:void(0)' data-vishomercrd='view' id=" + data[s].VAR_Request_ID + "|" + data[s].TableName + "|" + data[s].VAF_Screen_ID + "  title='" + VIS.Msg.getMsg("View") + "'  class='vis vis-find'></a></li>"
                                 + "</ul>"
                                 + "</div>"
                                 + "</div>"
@@ -1741,7 +1741,7 @@
                         var n_win = executeScalar(sql);
 
                         var zoomQuery = new VIS.Query();
-                        zoomQuery.addRestriction("R_Request_ID", VIS.Query.prototype.EQUAL, 0);
+                        zoomQuery.addRestriction("VAR_Request_ID", VIS.Query.prototype.EQUAL, 0);
                         VIS.viewManager.startWindow(n_win, zoomQuery);
 
                     });

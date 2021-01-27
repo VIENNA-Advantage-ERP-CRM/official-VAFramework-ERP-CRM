@@ -27,7 +27,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class LeadRequest : ProcessEngine.SvrProcess
     {
     /** Request Type		*/
-	//private int _R_RequestType_ID = 0;
+	//private int _VAR_Req_Type_ID = 0;
 	/** Lead				*/
 	private int _VAB_Lead_ID = 0;
 
@@ -64,7 +64,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		lead.Save();
 		MRequest request = lead.GetRequest();
 		//
-		return "@R_Request_ID@ " + request.GetDocumentNo();
+		return "@VAR_Request_ID@ " + request.GetDocumentNo();
 	}	//	doIt
 
 }	//	LeadRequest

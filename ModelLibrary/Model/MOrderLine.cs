@@ -2940,24 +2940,24 @@ namespace VAdvantage.Model
         /// <param name="newM_Product_ID">new value</param>
         /// <param name="windowNo">window</param>
         //@UICallout
-        public void SetS_ResourceAssignment_ID(String oldS_ResourceAssignment_ID, String newS_ResourceAssignment_ID, int windowNo)
+        public void SetVAS_Res_Assignment_ID(String oldVAS_Res_Assignment_ID, String newVAS_Res_Assignment_ID, int windowNo)
         {
-            if (newS_ResourceAssignment_ID == null || newS_ResourceAssignment_ID.Length == 0)
+            if (newVAS_Res_Assignment_ID == null || newVAS_Res_Assignment_ID.Length == 0)
                 return;
-            int S_ResourceAssignment_ID = int.Parse(newS_ResourceAssignment_ID);
-            if (S_ResourceAssignment_ID == 0)
+            int VAS_Res_Assignment_ID = int.Parse(newVAS_Res_Assignment_ID);
+            if (VAS_Res_Assignment_ID == 0)
                 return;
             //
-            base.SetS_ResourceAssignment_ID(S_ResourceAssignment_ID);
+            base.SetVAS_Res_Assignment_ID(VAS_Res_Assignment_ID);
 
             int M_Product_ID = 0;
             String Name = null;
             String Description = null;
             Decimal? Qty = null;
             String sql = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty "
-                + "FROM S_ResourceAssignment ra"
-                + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) "
-                + "WHERE ra.S_ResourceAssignment_ID=" + S_ResourceAssignment_ID;
+                + "FROM VAS_Res_Assignment ra"
+                + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
+                + "WHERE ra.VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, null);
@@ -2975,7 +2975,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            log.Fine("S_ResourceAssignment_ID=" + S_ResourceAssignment_ID
+            log.Fine("VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID
                     + " - M_Product_ID=" + M_Product_ID);
             if (M_Product_ID != 0)
             {
@@ -3560,7 +3560,7 @@ namespace VAdvantage.Model
 
             base.SetVAB_Charge_ID(VAB_Charge_ID);
             SetM_AttributeSetInstance_ID(0);
-            SetS_ResourceAssignment_ID(0);
+            SetVAS_Res_Assignment_ID(0);
             SetVAB_UOM_ID(100);	//	EA
             //p_changeVO.setContext(GetCtx(), windowNo, "DiscountSchema", "N");
             String sql = "SELECT ChargeAmt FROM VAB_Charge WHERE VAB_Charge_ID=" + VAB_Charge_ID;
@@ -4601,10 +4601,10 @@ namespace VAdvantage.Model
             if (!success)
                 return success;
 
-            if (GetS_ResourceAssignment_ID() != 0)
+            if (GetVAS_Res_Assignment_ID() != 0)
             {
                 /////////////////////////////////////////////////////////////
-                MResourceAssignment ra = new MResourceAssignment(GetCtx(), GetS_ResourceAssignment_ID(), Get_TrxName());
+                MResourceAssignment ra = new MResourceAssignment(GetCtx(), GetVAS_Res_Assignment_ID(), Get_TrxName());
                 ra.Delete(true);
             }
 

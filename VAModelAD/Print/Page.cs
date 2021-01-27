@@ -38,7 +38,7 @@ namespace VAdvantage.Print
         public static String CONTEXT_COPY = "*CopyInfo";
 
         /** Report Name (set in Layout Engine)		*/
-        public static String CONTEXT_REPORTNAME = "*ReportName";
+        public static String CONTEXVAT_REPORTNAME = "*ReportName";
         /** Report Header (set in Layout Engine)	*/
         public static String CONTEXT_HEADER = "*Header";
         /**	Current Date (set in Layout Engine)		*/

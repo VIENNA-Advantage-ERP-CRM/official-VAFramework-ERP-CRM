@@ -107,9 +107,9 @@ namespace VAdvantage.Model
                 return false;
             }
             else if (MEASURETYPE_Request.Equals(GetMeasureType())
-                && GetR_RequestType_ID() == 0)
+                && GetVAR_Req_Type_ID() == 0)
             {
-                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "R_RequestType_ID"));
+                log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAR_Req_Type_ID"));
                 return false;
             }
             else if (MEASURETYPE_Project.Equals(GetMeasureType())
@@ -310,7 +310,7 @@ namespace VAdvantage.Model
         private Boolean UpdateRequests()
         {
             if (!MEASURETYPE_Request.Equals(GetMeasureType())
-                || GetR_RequestType_ID() == 0)
+                || GetVAR_Req_Type_ID() == 0)
                 return false;
             MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
@@ -331,7 +331,7 @@ namespace VAdvantage.Model
                     role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
-                MRequestType rt = MRequestType.Get(GetCtx(), GetR_RequestType_ID());
+                MRequestType rt = MRequestType.Get(GetCtx(), GetVAR_Req_Type_ID());
                 String sql = rt.GetSqlPI(goal.GetRestrictions(false),
                     goal.GetMeasureScope(), GetMeasureDataType(), null, role);
                 //PreparedStatement pstmt = null;

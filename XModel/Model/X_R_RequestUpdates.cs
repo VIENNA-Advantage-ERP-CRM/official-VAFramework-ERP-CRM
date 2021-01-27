@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_RequestUpdates
+/** Generated Model for VAR_Req_UpdatesAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_RequestUpdates : PO
+public class X_VAR_Req_UpdatesAlert : PO
 {
-public X_R_RequestUpdates (Context ctx, int R_RequestUpdates_ID, Trx trxName) : base (ctx, R_RequestUpdates_ID, trxName)
+public X_VAR_Req_UpdatesAlert (Context ctx, int VAR_Req_UpdatesAlert_ID, Trx trxName) : base (ctx, VAR_Req_UpdatesAlert_ID, trxName)
 {
-/** if (R_RequestUpdates_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetIsSelfService (false);
-SetR_Request_ID (0);
-}
- */
-}
-public X_R_RequestUpdates (Ctx ctx, int R_RequestUpdates_ID, Trx trxName) : base (ctx, R_RequestUpdates_ID, trxName)
-{
-/** if (R_RequestUpdates_ID == 0)
+/** if (VAR_Req_UpdatesAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
-SetR_Request_ID (0);
+SetVAR_Request_ID (0);
+}
+ */
+}
+public X_VAR_Req_UpdatesAlert (Ctx ctx, int VAR_Req_UpdatesAlert_ID, Trx trxName) : base (ctx, VAR_Req_UpdatesAlert_ID, trxName)
+{
+/** if (VAR_Req_UpdatesAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetIsSelfService (false);
+SetVAR_Request_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetR_Request_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_UpdatesAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_RequestUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_UpdatesAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_RequestUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestUpdates (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_UpdatesAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_RequestUpdates()
+static X_VAR_Req_UpdatesAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066620L;
 public static int Table_ID;
  // =783;
 
-/** TableName=R_RequestUpdates */
-public static String Table_Name="R_RequestUpdates";
+/** TableName=VAR_Req_UpdatesAlert */
+public static String Table_Name="VAR_Req_UpdatesAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_RequestUpdates[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_UpdatesAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -148,17 +148,17 @@ if (oo != null)
 return false;
 }
 /** Set Request.
-@param R_Request_ID Request from a Business Partner or Prospect */
-public void SetR_Request_ID (int R_Request_ID)
+@param VAR_Request_ID Request from a Business Partner or Prospect */
+public void SetVAR_Request_ID (int VAR_Request_ID)
 {
-if (R_Request_ID < 1) throw new ArgumentException ("R_Request_ID is mandatory.");
-Set_ValueNoCheck ("R_Request_ID", R_Request_ID);
+if (VAR_Request_ID < 1) throw new ArgumentException ("VAR_Request_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Request_ID", VAR_Request_ID);
 }
 /** Get Request.
 @return Request from a Business Partner or Prospect */
-public int GetR_Request_ID() 
+public int GetVAR_Request_ID() 
 {
-Object ii = Get_Value("R_Request_ID");
+Object ii = Get_Value("VAR_Request_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -166,7 +166,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetR_Request_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAR_Request_ID().ToString());
 }
 }
 

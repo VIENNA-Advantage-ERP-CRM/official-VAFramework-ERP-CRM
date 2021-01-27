@@ -817,66 +817,66 @@ if (oo != null)
 return false;
 }
 /** Set Interest Area.
-@param R_InterestArea_ID Interest Area or Topic */
-public void SetR_InterestArea_ID (int R_InterestArea_ID)
+@param VAR_InterestArea_ID Interest Area or Topic */
+public void SetR_InterestArea_ID (int VAR_InterestArea_ID)
 {
-if (R_InterestArea_ID <= 0) Set_Value ("R_InterestArea_ID", null);
+if (VAR_InterestArea_ID <= 0) Set_Value ("VAR_InterestArea_ID", null);
 else
-Set_Value ("R_InterestArea_ID", R_InterestArea_ID);
+Set_Value ("VAR_InterestArea_ID", VAR_InterestArea_ID);
 }
 /** Get Interest Area.
 @return Interest Area or Topic */
 public int GetR_InterestArea_ID() 
 {
-Object ii = Get_Value("R_InterestArea_ID");
+Object ii = Get_Value("VAR_InterestArea_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request.
-@param R_Request_ID Request from a Business Partner or Prospect */
-public void SetR_Request_ID (int R_Request_ID)
+@param VAR_Request_ID Request from a Business Partner or Prospect */
+public void SetVAR_Request_ID (int VAR_Request_ID)
 {
-if (R_Request_ID <= 0) Set_Value ("R_Request_ID", null);
+if (VAR_Request_ID <= 0) Set_Value ("VAR_Request_ID", null);
 else
-Set_Value ("R_Request_ID", R_Request_ID);
+Set_Value ("VAR_Request_ID", VAR_Request_ID);
 }
 /** Get Request.
 @return Request from a Business Partner or Prospect */
-public int GetR_Request_ID() 
+public int GetVAR_Request_ID() 
 {
-Object ii = Get_Value("R_Request_ID");
+Object ii = Get_Value("VAR_Request_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Source.
-@param R_Source_ID Source for the Lead or Request */
-public void SetR_Source_ID (int R_Source_ID)
+@param VAR_Source_ID Source for the Lead or Request */
+public void SetVAR_Source_ID (int VAR_Source_ID)
 {
-if (R_Source_ID <= 0) Set_Value ("R_Source_ID", null);
+if (VAR_Source_ID <= 0) Set_Value ("VAR_Source_ID", null);
 else
-Set_Value ("R_Source_ID", R_Source_ID);
+Set_Value ("VAR_Source_ID", VAR_Source_ID);
 }
 /** Get Source.
 @return Source for the Lead or Request */
-public int GetR_Source_ID() 
+public int GetVAR_Source_ID() 
 {
-Object ii = Get_Value("R_Source_ID");
+Object ii = Get_Value("VAR_Source_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Status.
-@param R_Status_ID Request Status */
-public void SetR_Status_ID (int R_Status_ID)
+@param VAR_Req_Status_ID Request Status */
+public void SetVAR_Req_Status_ID (int VAR_Req_Status_ID)
 {
-if (R_Status_ID <= 0) Set_Value ("R_Status_ID", null);
+if (VAR_Req_Status_ID <= 0) Set_Value ("VAR_Req_Status_ID", null);
 else
-Set_Value ("R_Status_ID", R_Status_ID);
+Set_Value ("VAR_Req_Status_ID", VAR_Req_Status_ID);
 }
 /** Get Status.
 @return Request Status */
-public int GetR_Status_ID() 
+public int GetVAR_Req_Status_ID() 
 {
-Object ii = Get_Value("R_Status_ID");
+Object ii = Get_Value("VAR_Req_Status_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

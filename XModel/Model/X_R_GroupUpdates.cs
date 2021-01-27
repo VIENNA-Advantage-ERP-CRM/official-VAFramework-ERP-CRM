@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_GroupUpdates
+/** Generated Model for VAR_GroupUpdateAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_GroupUpdates : PO
+public class X_VAR_GroupUpdateAlert : PO
 {
-public X_R_GroupUpdates (Context ctx, int R_GroupUpdates_ID, Trx trxName) : base (ctx, R_GroupUpdates_ID, trxName)
+public X_VAR_GroupUpdateAlert (Context ctx, int VAR_GroupUpdateAlert_ID, Trx trxName) : base (ctx, VAR_GroupUpdateAlert_ID, trxName)
 {
-/** if (R_GroupUpdates_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetIsSelfService (false);
-SetR_Group_ID (0);
-}
- */
-}
-public X_R_GroupUpdates (Ctx ctx, int R_GroupUpdates_ID, Trx trxName) : base (ctx, R_GroupUpdates_ID, trxName)
-{
-/** if (R_GroupUpdates_ID == 0)
+/** if (VAR_GroupUpdateAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
@@ -36,12 +26,22 @@ SetR_Group_ID (0);
 }
  */
 }
+public X_VAR_GroupUpdateAlert (Ctx ctx, int VAR_GroupUpdateAlert_ID, Trx trxName) : base (ctx, VAR_GroupUpdateAlert_ID, trxName)
+{
+/** if (VAR_GroupUpdateAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetIsSelfService (false);
+SetR_Group_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_R_GroupUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_GroupUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_GroupUpdates (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_R_GroupUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_GroupUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_GroupUpdates (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_R_GroupUpdates (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_GroupUpdateAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_GroupUpdates()
+static X_VAR_GroupUpdateAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065993L;
 public static int Table_ID;
  // =786;
 
-/** TableName=R_GroupUpdates */
-public static String Table_Name="R_GroupUpdates";
+/** TableName=VAR_GroupUpdateAlert */
+public static String Table_Name="VAR_GroupUpdateAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_GroupUpdates[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_GroupUpdateAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -148,17 +148,17 @@ if (oo != null)
 return false;
 }
 /** Set Group.
-@param R_Group_ID Request Group */
-public void SetR_Group_ID (int R_Group_ID)
+@param VAR_Group_ID Request Group */
+public void SetR_Group_ID (int VAR_Group_ID)
 {
-if (R_Group_ID < 1) throw new ArgumentException ("R_Group_ID is mandatory.");
-Set_ValueNoCheck ("R_Group_ID", R_Group_ID);
+if (VAR_Group_ID < 1) throw new ArgumentException ("VAR_Group_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Group_ID", VAR_Group_ID);
 }
 /** Get Group.
 @return Request Group */
 public int GetR_Group_ID() 
 {
-Object ii = Get_Value("R_Group_ID");
+Object ii = Get_Value("VAR_Group_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

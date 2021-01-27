@@ -33,10 +33,10 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param S_Resource_ID id
+         *	@param VAS_Resource_ID id
          */
-        public MResource(Ctx ctx, int S_Resource_ID, Trx trxName)
-            : base(ctx, S_Resource_ID, trxName)
+        public MResource(Ctx ctx, int VAS_Resource_ID, Trx trxName)
+            : base(ctx, VAS_Resource_ID, trxName)
         {
             
         }	
@@ -58,8 +58,8 @@ namespace VAdvantage.Model
          */
         public MResourceType GetResourceType()
         {
-            if (_resourceType == null && GetS_ResourceType_ID() != 0)
-                _resourceType = new MResourceType(GetCtx(), GetS_ResourceType_ID(), Get_TrxName());
+            if (_resourceType == null && GetVAS_Res_Type_ID() != 0)
+                _resourceType = new MResourceType(GetCtx(), GetVAS_Res_Type_ID(), Get_TrxName());
             return _resourceType;
         }	
 
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
         {
             if (_product == null)
             {
-                MProduct[] products = MProduct.Get(GetCtx(), "S_Resource_ID=" + GetS_Resource_ID(), Get_TrxName());
+                MProduct[] products = MProduct.Get(GetCtx(), "VAS_Resource_ID=" + GetS_Resource_ID(), Get_TrxName());
                 if (products.Length > 0)
                     _product = products[0];
             }
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
         */
         protected override bool BeforeSave(bool newRecord)
         {
-            string sql = "select count(*) from s_resource where VAF_UserContact_ID = " + GetVAF_UserContact_ID() + " and isactive = 'Y' and s_resource_ID <> " + GetS_Resource_ID();
+            string sql = "select count(*) from VAS_Resource where VAF_UserContact_ID = " + GetVAF_UserContact_ID() + " and isactive = 'Y' and VAS_Resource_ID <> " + GetS_Resource_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (count > 0)
             {

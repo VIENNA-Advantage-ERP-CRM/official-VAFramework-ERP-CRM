@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_RequestProcessorLog
+/** Generated Model for VAR_Req_HandlerLog
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_RequestProcessorLog : PO
+public class X_VAR_Req_HandlerLog : PO
 {
-public X_R_RequestProcessorLog (Context ctx, int R_RequestProcessorLog_ID, Trx trxName) : base (ctx, R_RequestProcessorLog_ID, trxName)
+public X_VAR_Req_HandlerLog (Context ctx, int VAR_Req_HandlerLog_ID, Trx trxName) : base (ctx, VAR_Req_HandlerLog_ID, trxName)
 {
-/** if (R_RequestProcessorLog_ID == 0)
+/** if (VAR_Req_HandlerLog_ID == 0)
 {
 SetIsError (false);
-SetR_RequestProcessorLog_ID (0);
-SetR_RequestProcessor_ID (0);
+SetVAR_Req_HandlerLog_ID (0);
+SetVAR_Req_Handler_ID (0);
 }
  */
 }
-public X_R_RequestProcessorLog (Ctx ctx, int R_RequestProcessorLog_ID, Trx trxName) : base (ctx, R_RequestProcessorLog_ID, trxName)
+public X_VAR_Req_HandlerLog (Ctx ctx, int VAR_Req_HandlerLog_ID, Trx trxName) : base (ctx, VAR_Req_HandlerLog_ID, trxName)
 {
-/** if (R_RequestProcessorLog_ID == 0)
+/** if (VAR_Req_HandlerLog_ID == 0)
 {
 SetIsError (false);
-SetR_RequestProcessorLog_ID (0);
-SetR_RequestProcessor_ID (0);
+SetVAR_Req_HandlerLog_ID (0);
+SetVAR_Req_Handler_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetR_RequestProcessor_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_HandlerLog (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_RequestProcessorLog (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_HandlerLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_RequestProcessorLog (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_R_RequestProcessorLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_HandlerLog (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_RequestProcessorLog()
+static X_VAR_Req_HandlerLog()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066463L;
 public static int Table_ID;
  // =659;
 
-/** TableName=R_RequestProcessorLog */
-public static String Table_Name="R_RequestProcessorLog";
+/** TableName=VAR_Req_HandlerLog */
+public static String Table_Name="VAR_Req_HandlerLog";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_RequestProcessorLog[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_HandlerLog[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set BinaryData.
@@ -162,32 +162,32 @@ if (oo != null)
 return false;
 }
 /** Set Request Processor Log.
-@param R_RequestProcessorLog_ID Result of the execution of the Request Processor */
-public void SetR_RequestProcessorLog_ID (int R_RequestProcessorLog_ID)
+@param VAR_Req_HandlerLog_ID Result of the execution of the Request Processor */
+public void SetVAR_Req_HandlerLog_ID (int VAR_Req_HandlerLog_ID)
 {
-if (R_RequestProcessorLog_ID < 1) throw new ArgumentException ("R_RequestProcessorLog_ID is mandatory.");
-Set_ValueNoCheck ("R_RequestProcessorLog_ID", R_RequestProcessorLog_ID);
+if (VAR_Req_HandlerLog_ID < 1) throw new ArgumentException ("VAR_Req_HandlerLog_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_HandlerLog_ID", VAR_Req_HandlerLog_ID);
 }
 /** Get Request Processor Log.
 @return Result of the execution of the Request Processor */
-public int GetR_RequestProcessorLog_ID() 
+public int GetVAR_Req_HandlerLog_ID() 
 {
-Object ii = Get_Value("R_RequestProcessorLog_ID");
+Object ii = Get_Value("VAR_Req_HandlerLog_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Request Processor.
-@param R_RequestProcessor_ID Processor for Requests */
-public void SetR_RequestProcessor_ID (int R_RequestProcessor_ID)
+@param VAR_Req_Handler_ID Processor for Requests */
+public void SetVAR_Req_Handler_ID (int VAR_Req_Handler_ID)
 {
-if (R_RequestProcessor_ID < 1) throw new ArgumentException ("R_RequestProcessor_ID is mandatory.");
-Set_ValueNoCheck ("R_RequestProcessor_ID", R_RequestProcessor_ID);
+if (VAR_Req_Handler_ID < 1) throw new ArgumentException ("VAR_Req_Handler_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_Handler_ID", VAR_Req_Handler_ID);
 }
 /** Get Request Processor.
 @return Processor for Requests */
-public int GetR_RequestProcessor_ID() 
+public int GetVAR_Req_Handler_ID() 
 {
-Object ii = Get_Value("R_RequestProcessor_ID");
+Object ii = Get_Value("VAR_Req_Handler_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

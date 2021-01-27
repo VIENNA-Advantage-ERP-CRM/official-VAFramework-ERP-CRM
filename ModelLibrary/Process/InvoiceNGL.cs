@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : InvoiceNGL
- * Purpose        : Invoice Not realized Gain & Loss.The actual data shown is T_InvoiceGL_v
+ * Purpose        : Invoice Not realized Gain & Loss.The actual data shown is VAT_InvoiceGL_v
  * Class Used     : ProcessEngine.SvrProcess
  * Chronological    Development
  * Deepak           15-Jan-2010
@@ -113,7 +113,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 _DateReval = DateTime.Now; //new Timestamp(System.currentTimeMillis());
             }
             //	Delete - just to be sure
-            String sql = "DELETE FROM T_InvoiceGL WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();  //jz FROM
+            String sql = "DELETE FROM VAT_InvoiceGL WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();  //jz FROM
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
             {
@@ -122,7 +122,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Insert Trx
             String dateStr = DataBase.DB.TO_DATE(_DateReval, true);
-            sql = "INSERT INTO T_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
+            sql = "INSERT INTO VAT_InvoiceGL (VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
              + " VAF_JInstance_ID, VAB_Invoice_ID, GrandTotal, OpenAmt, "
              + " Actual_Acct_Detail_ID, AmtSourceBalance, AmtAcctBalance, "
              + " AmtRevalDr, AmtRevalCr, VAB_DocTypesReval_ID, IsAllCurrencies, "
@@ -178,7 +178,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Calculate Difference
-            sql = "UPDATE T_InvoiceGL gl "
+            sql = "UPDATE VAT_InvoiceGL gl "
                 + "SET (AmtRevalDrDiff,AmtRevalCrDiff)="
                     + "(SELECT gl.AmtRevalDr-fa.AmtAcctDr, gl.AmtRevalCr-fa.AmtAcctCr "
                     + "FROM Actual_Acct_Detail fa "
@@ -191,7 +191,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Percentage
-            sql = "UPDATE T_InvoiceGL SET PercentGL = 100 "
+            sql = "UPDATE VAT_InvoiceGL SET PercentGL = 100 "
                 + "WHERE GrandTotal=OpenAmt AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
@@ -199,7 +199,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Info("Not Paid #" + no);
             }
 
-            sql = "UPDATE T_InvoiceGL SET PercentGL = ROUND(OpenAmt*100/GrandTotal,6) "
+            sql = "UPDATE VAT_InvoiceGL SET PercentGL = ROUND(OpenAmt*100/GrandTotal,6) "
                 + "WHERE GrandTotal<>OpenAmt AND GrandTotal <> 0 AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no > 0)
@@ -207,7 +207,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Info("Partial Paid #" + no);
             }
 
-            sql = "UPDATE T_InvoiceGL SET AmtRevalDr = AmtRevalDr * PercentGL/100,"
+            sql = "UPDATE VAT_InvoiceGL SET AmtRevalDr = AmtRevalDr * PercentGL/100,"
                 + " AmtRevalCr = AmtRevalCr * PercentGL/100,"
                 + " AmtRevalDrDiff = AmtRevalDrDiff * PercentGL/100,"
                 + " AmtRevalCrDiff = AmtRevalCrDiff * PercentGL/100 "
@@ -240,8 +240,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>document info</returns>
         private String CreateGLJournal()
         {
-            List<X_T_InvoiceGL> list = new List<X_T_InvoiceGL>();
-            String sql = "SELECT * FROM T_InvoiceGL "
+            List<X_VAT_InvoiceGL> list = new List<X_VAT_InvoiceGL>();
+            String sql = "SELECT * FROM VAT_InvoiceGL "
                 + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                 + " ORDER BY VAF_Org_ID";
             IDataReader idr = null;
@@ -250,7 +250,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
                 while (idr.Read())
                 {
-                    list.Add(new X_T_InvoiceGL(GetCtx(), idr, Get_TrxName()));
+                    list.Add(new X_VAT_InvoiceGL(GetCtx(), idr, Get_TrxName()));
                 }
                 idr.Close();
             }
@@ -295,7 +295,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int VAF_Org_ID = 0;
             for (int i = 0; i < list.Count; i++)
             {
-                X_T_InvoiceGL gl = list[i];//.get(i);
+                X_VAT_InvoiceGL gl = list[i];//.get(i);
                 if (Env.Signum(gl.GetAmtRevalDrDiff()) == 0 && Env.Signum(gl.GetAmtRevalCrDiff()) == 0)
                 {
                     continue;

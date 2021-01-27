@@ -11,34 +11,34 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for S_Resource
+/** Generated Model for VAS_Resource
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
     public class X_S_Resource : PO
     {
-        public X_S_Resource(Context ctx, int S_Resource_ID, Trx trxName)
-            : base(ctx, S_Resource_ID, trxName)
+        public X_S_Resource(Context ctx, int VAS_Resource_ID, Trx trxName)
+            : base(ctx, VAS_Resource_ID, trxName)
         {
-            /** if (S_Resource_ID == 0)
+            /** if (VAS_Resource_ID == 0)
             {
             SetIsAvailable (true);	// Y
             SetM_Warehouse_ID (0);
             SetName (null);
-            SetS_ResourceType_ID (0);
+            SetVAS_Res_Type_ID (0);
             SetS_Resource_ID (0);
             SetValue (null);
             }
              */
         }
-        public X_S_Resource(Ctx ctx, int S_Resource_ID, Trx trxName)
-            : base(ctx, S_Resource_ID, trxName)
+        public X_S_Resource(Ctx ctx, int VAS_Resource_ID, Trx trxName)
+            : base(ctx, VAS_Resource_ID, trxName)
         {
-            /** if (S_Resource_ID == 0)
+            /** if (VAS_Resource_ID == 0)
             {
             SetIsAvailable (true);	// Y
             SetM_Warehouse_ID (0);
             SetName (null);
-            SetS_ResourceType_ID (0);
+            SetVAS_Res_Type_ID (0);
             SetS_Resource_ID (0);
             SetValue (null);
             }
@@ -87,8 +87,8 @@ using System.Data;
         public static int Table_ID;
         // =487;
 
-        /** TableName=S_Resource */
-        public static String Table_Name = "S_Resource";
+        /** TableName=VAS_Resource */
+        public static String Table_Name = "VAS_Resource";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -230,32 +230,32 @@ using System.Data;
             return new KeyNamePair(Get_ID(), GetName());
         }
         /** Set Resource Type.
-        @param S_ResourceType_ID Resource Type */
-        public void SetS_ResourceType_ID(int S_ResourceType_ID)
+        @param VAS_Res_Type_ID Resource Type */
+        public void SetVAS_Res_Type_ID(int VAS_Res_Type_ID)
         {
-            if (S_ResourceType_ID < 1) throw new ArgumentException("S_ResourceType_ID is mandatory.");
-            Set_Value("S_ResourceType_ID", S_ResourceType_ID);
+            if (VAS_Res_Type_ID < 1) throw new ArgumentException("VAS_Res_Type_ID is mandatory.");
+            Set_Value("VAS_Res_Type_ID", VAS_Res_Type_ID);
         }
         /** Get Resource Type.
         @return Resource Type */
-        public int GetS_ResourceType_ID()
+        public int GetVAS_Res_Type_ID()
         {
-            Object ii = Get_Value("S_ResourceType_ID");
+            Object ii = Get_Value("VAS_Res_Type_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Resource.
-        @param S_Resource_ID Resource */
-        public void SetS_Resource_ID(int S_Resource_ID)
+        @param VAS_Resource_ID Resource */
+        public void SetS_Resource_ID(int VAS_Resource_ID)
         {
-            if (S_Resource_ID < 1) throw new ArgumentException("S_Resource_ID is mandatory.");
-            Set_ValueNoCheck("S_Resource_ID", S_Resource_ID);
+            if (VAS_Resource_ID < 1) throw new ArgumentException("VAS_Resource_ID is mandatory.");
+            Set_ValueNoCheck("VAS_Resource_ID", VAS_Resource_ID);
         }
         /** Get Resource.
         @return Resource */
         public int GetS_Resource_ID()
         {
-            Object ii = Get_Value("S_Resource_ID");
+            Object ii = Get_Value("VAS_Resource_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

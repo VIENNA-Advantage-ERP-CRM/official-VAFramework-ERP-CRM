@@ -36,7 +36,7 @@ namespace VAdvantage.Process
     //	Mail PDF			
 	private Boolean		_EMailPDF = false;
 	// Mail Template		
-	private int			_R_MailText_ID = 0;
+	private int			_VAR_MailTemplate_ID = 0;
 	
 	private DateTime?	_dateInvoiced_From = null;
 	private DateTime?	_dateInvoiced_To = null;
@@ -69,9 +69,9 @@ namespace VAdvantage.Process
             {
                 _EMailPDF = "Y".Equals(para[i].GetParameter());
             }
-            else if (name.Equals("R_MailText_ID"))
+            else if (name.Equals("VAR_MailTemplate_ID"))
             {
-                _R_MailText_ID = para[i].GetParameterAsInt();
+                _VAR_MailTemplate_ID = para[i].GetParameterAsInt();
             }
             else if (name.Equals("VAB_BusinessPartner_ID"))
             {
@@ -116,25 +116,25 @@ namespace VAdvantage.Process
 	protected override String DoIt() 
 	{
 		//	Need to have Template
-        if (_EMailPDF && _R_MailText_ID == 0)
+        if (_EMailPDF && _VAR_MailTemplate_ID == 0)
         {
-            throw new Exception("@NotFound@: @R_MailText_ID@");
+            throw new Exception("@NotFound@: @VAR_MailTemplate_ID@");
         }
 		log.Info ("VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
 			+ ", VAB_Invoice_ID=" + _VAB_Invoice_ID
 			+ ", IsSOTrx=" + _IsSOTrx
-			+ ", EmailPDF=" + _EMailPDF + ",R_MailText_ID=" + _R_MailText_ID
+			+ ", EmailPDF=" + _EMailPDF + ",VAR_MailTemplate_ID=" + _VAR_MailTemplate_ID
 			+ ", DateInvoiced=" + _dateInvoiced_From + "-" + _dateInvoiced_To
 			+ ", DocumentNo=" + _DocumentNo_From + "-" + _DocumentNo_To
 			+ ", IncludeDrafts="+_IncludeDraftInvoices);
 		
 		MMailText mText = null;
-		if (_R_MailText_ID != 0)
+		if (_VAR_MailTemplate_ID != 0)
 		{
-			mText = new MMailText(GetCtx(), _R_MailText_ID, Get_TrxName());
-            if (mText.Get_ID() != _R_MailText_ID)
+			mText = new MMailText(GetCtx(), _VAR_MailTemplate_ID, Get_TrxName());
+            if (mText.Get_ID() != _VAR_MailTemplate_ID)
             {
-                throw new Exception("@NotFound@: @R_MailText_ID@ - " + _R_MailText_ID);
+                throw new Exception("@NotFound@: @VAR_MailTemplate_ID@ - " + _VAR_MailTemplate_ID);
             }
 		}
 

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRequestProcessorRoute
  * Purpose        : Request Processor Route
- * Class Used     : X_R_RequestProcessor_Route
+ * Class Used     : X_VAR_Req_Handler_Route
  * Chronological    Development
  * Raghunandan      21-Jan-2010
   *****************************************************/
@@ -26,16 +26,16 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRequestProcessorRoute : X_R_RequestProcessor_Route
+    public class MRequestProcessorRoute : X_VAR_Req_Handler_Route
     {
         /// <summary>
         /// Standard Constructorbase
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="R_RequestProcessor_Route_ID"></param>
+        /// <param name="VAR_Req_Handler_Route_ID"></param>
         /// <param name="trxName"></param>
-        public MRequestProcessorRoute(Ctx ctx, int R_RequestProcessor_Route_ID, Trx trxName)
-            : base(ctx, R_RequestProcessor_Route_ID, trxName)
+        public MRequestProcessorRoute(Ctx ctx, int VAR_Req_Handler_Route_ID, Trx trxName)
+            : base(ctx, VAR_Req_Handler_Route_ID, trxName)
         {
 
         }

@@ -69,7 +69,7 @@ namespace BaseLibrary.CloudService {
                     string web_url, 
                     int no_of_emp, 
                     int VAB_Currency_id, 
-                    int r_source_id, 
+                    int VAR_Source_ID, 
                     int industry_ID, 
                     string city, 
                     int country_ID, 
@@ -80,7 +80,7 @@ namespace BaseLibrary.CloudService {
                     string support, 
                     int bpgroup_ID, 
                     int VAB_Promotion_ID, 
-                    int R_STATUS_ID, 
+                    int VAR_REQ_STATUS_ID, 
                     int VAB_RegionState_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
@@ -295,7 +295,7 @@ namespace BaseLibrary.CloudService {
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         string SaveErrorInLog(string customerValue, int errorNumber, string accessKey);
         
-        // CODEGEN: Parameter 'R_Request_ID' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
+        // CODEGEN: Parameter 'VAR_Request_ID' requires additional schema information that cannot be captured using the parameter mode. The specific attribute is 'System.Xml.Serialization.XmlElementAttribute'.
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SaveErrorInLogM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
         BaseLibrary.CloudService.SaveErrorInLogM1Response SaveErrorInLogM1(BaseLibrary.CloudService.SaveErrorInLogM1Request request);
@@ -464,7 +464,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SetCustomerAssociationWithPartner", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string SetCustomerAssociationWithPartner(int R_Request_ID, string Action, string Remarks, int VAF_UserContact_ID, string accessKey);
+        string SetCustomerAssociationWithPartner(int VAR_Request_ID, string Action, string Remarks, int VAF_UserContact_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerBillingDetail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -573,7 +573,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancellAssociationRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string CancellAssociationRequest(int R_Request_ID, string Remarks, int VAF_UserContact_ID, string accessKey);
+        string CancellAssociationRequest(int VAR_Request_ID, string Remarks, int VAF_UserContact_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/DeletePartnerLink", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -601,7 +601,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerStatusSupportTicket", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetCustomerStatusSupportTicket(int r_status_id, int VAF_UserContact_id, string orderby, string AccessKey);
+        string GetCustomerStatusSupportTicket(int VAR_Req_Status_id, int VAF_UserContact_id, string orderby, string AccessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerSupportTickets", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -823,7 +823,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/DeleteDBBackUp", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string DeleteDBBackUp(int VAF_UserContact_ID, string FileName, int R_Request_ID, string ipaddress, string accessKey);
+        string DeleteDBBackUp(int VAF_UserContact_ID, string FileName, int VAR_Request_ID, string ipaddress, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CreateBackUp", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -868,11 +868,11 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CloseRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string CloseRequest(int R_Request_ID, string accessKey);
+        string CloseRequest(int VAR_Request_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/FailedRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string FailedRequest(int R_Request_ID, string accessKey);
+        string FailedRequest(int VAR_Request_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerSpaceM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -5269,7 +5269,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=4)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public System.Nullable<int> R_Request_ID;
+        public System.Nullable<int> VAR_Request_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=5)]
         public string InnerError;
@@ -5280,12 +5280,12 @@ namespace BaseLibrary.CloudService {
         public SaveErrorLogRequest() {
         }
         
-        public SaveErrorLogRequest(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
+        public SaveErrorLogRequest(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> VAR_Request_ID, string InnerError, string accessKey) {
             this.VAF_UserContact_ID = VAF_UserContact_ID;
             this.VAA_Asset_ID = VAA_Asset_ID;
             this.CS_CustomerTenantInfo_ID = CS_CustomerTenantInfo_ID;
             this.errorNo = errorNo;
-            this.R_Request_ID = R_Request_ID;
+            this.VAR_Request_ID = VAR_Request_ID;
             this.InnerError = InnerError;
             this.accessKey = accessKey;
         }
@@ -5322,7 +5322,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
         [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public System.Nullable<int> R_Request_ID;
+        public System.Nullable<int> VAR_Request_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=3)]
         public string accessKey;
@@ -5330,10 +5330,10 @@ namespace BaseLibrary.CloudService {
         public SaveErrorInLogM1Request() {
         }
         
-        public SaveErrorInLogM1Request(string customerValue, int errorNumber, System.Nullable<int> R_Request_ID, string accessKey) {
+        public SaveErrorInLogM1Request(string customerValue, int errorNumber, System.Nullable<int> VAR_Request_ID, string accessKey) {
             this.customerValue = customerValue;
             this.errorNumber = errorNumber;
-            this.R_Request_ID = R_Request_ID;
+            this.VAR_Request_ID = VAR_Request_ID;
             this.accessKey = accessKey;
         }
     }
@@ -5408,7 +5408,7 @@ namespace BaseLibrary.CloudService {
         public int VAF_UserContact_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
-        public int R_Request_ID;
+        public int VAR_Request_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
         public string remarks;
@@ -5429,9 +5429,9 @@ namespace BaseLibrary.CloudService {
         public SetForwardTicketsRequest() {
         }
         
-        public SetForwardTicketsRequest(int VAF_UserContact_ID, int R_Request_ID, string remarks, byte[] Attachment, int docno, string fileName, string accessKey) {
+        public SetForwardTicketsRequest(int VAF_UserContact_ID, int VAR_Request_ID, string remarks, byte[] Attachment, int docno, string fileName, string accessKey) {
             this.VAF_UserContact_ID = VAF_UserContact_ID;
-            this.R_Request_ID = R_Request_ID;
+            this.VAR_Request_ID = VAR_Request_ID;
             this.remarks = remarks;
             this.Attachment = Attachment;
             this.docno = docno;
@@ -6311,7 +6311,7 @@ namespace BaseLibrary.CloudService {
                     string web_url, 
                     int no_of_emp, 
                     int VAB_Currency_id, 
-                    int r_source_id, 
+                    int VAR_Source_ID, 
                     int industry_ID, 
                     string city, 
                     int country_ID, 
@@ -6322,7 +6322,7 @@ namespace BaseLibrary.CloudService {
                     string support, 
                     int bpgroup_ID, 
                     int VAB_Promotion_ID, 
-                    int R_STATUS_ID, 
+                    int VAR_REQ_STATUS_ID, 
                     int VAB_RegionState_ID, 
                     int CreatedBy, 
                     int salesrep_id, 
@@ -6330,7 +6330,7 @@ namespace BaseLibrary.CloudService {
                     int vaf_client_id, 
                     int UpdatedBy, 
                     string AccessKey) {
-            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, VAB_Currency_id, r_source_id, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, VAB_Promotion_ID, R_STATUS_ID, VAB_RegionState_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
+            return base.Channel.SetLead(CompanyName, name, title, email, phone, web_url, no_of_emp, VAB_Currency_id, VAR_Source_ID, industry_ID, city, country_ID, cur_solution, pur_timeline, comments, year_sell_erp, support, bpgroup_ID, VAB_Promotion_ID, VAR_REQ_STATUS_ID, VAB_RegionState_ID, CreatedBy, salesrep_id, vaf_org_id, vaf_client_id, UpdatedBy, AccessKey);
         }
         
         public System.Data.DataSet GetTopicInfo(out string error, string url, bool isInitConfig, string langCode, string searchText, string option) {
@@ -6544,13 +6544,13 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SaveErrorLog(request);
         }
         
-        public string SaveErrorLog(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> R_Request_ID, string InnerError, string accessKey) {
+        public string SaveErrorLog(int VAF_UserContact_ID, int VAA_Asset_ID, System.Nullable<int> CS_CustomerTenantInfo_ID, int errorNo, System.Nullable<int> VAR_Request_ID, string InnerError, string accessKey) {
             BaseLibrary.CloudService.SaveErrorLogRequest inValue = new BaseLibrary.CloudService.SaveErrorLogRequest();
             inValue.VAF_UserContact_ID = VAF_UserContact_ID;
             inValue.VAA_Asset_ID = VAA_Asset_ID;
             inValue.CS_CustomerTenantInfo_ID = CS_CustomerTenantInfo_ID;
             inValue.errorNo = errorNo;
-            inValue.R_Request_ID = R_Request_ID;
+            inValue.VAR_Request_ID = VAR_Request_ID;
             inValue.InnerError = InnerError;
             inValue.accessKey = accessKey;
             BaseLibrary.CloudService.SaveErrorLogResponse retVal = ((BaseLibrary.CloudService.ServiceSoap)(this)).SaveErrorLog(inValue);
@@ -6566,11 +6566,11 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SaveErrorInLogM1(request);
         }
         
-        public string SaveErrorInLogM1(string customerValue, int errorNumber, System.Nullable<int> R_Request_ID, string accessKey) {
+        public string SaveErrorInLogM1(string customerValue, int errorNumber, System.Nullable<int> VAR_Request_ID, string accessKey) {
             BaseLibrary.CloudService.SaveErrorInLogM1Request inValue = new BaseLibrary.CloudService.SaveErrorInLogM1Request();
             inValue.customerValue = customerValue;
             inValue.errorNumber = errorNumber;
-            inValue.R_Request_ID = R_Request_ID;
+            inValue.VAR_Request_ID = VAR_Request_ID;
             inValue.accessKey = accessKey;
             BaseLibrary.CloudService.SaveErrorInLogM1Response retVal = ((BaseLibrary.CloudService.ServiceSoap)(this)).SaveErrorInLogM1(inValue);
             return retVal.SaveErrorInLogM1Result;
@@ -6747,8 +6747,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetPartnerRecentTickets(VAF_UserContact_ID, accessKey);
         }
         
-        public string SetCustomerAssociationWithPartner(int R_Request_ID, string Action, string Remarks, int VAF_UserContact_ID, string accessKey) {
-            return base.Channel.SetCustomerAssociationWithPartner(R_Request_ID, Action, Remarks, VAF_UserContact_ID, accessKey);
+        public string SetCustomerAssociationWithPartner(int VAR_Request_ID, string Action, string Remarks, int VAF_UserContact_ID, string accessKey) {
+            return base.Channel.SetCustomerAssociationWithPartner(VAR_Request_ID, Action, Remarks, VAF_UserContact_ID, accessKey);
         }
         
         public string GetCustomerBillingDetail(int Customer_ID, int VAF_UserContact_ID, string accessKey) {
@@ -6816,10 +6816,10 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SetForwardTickets(request);
         }
         
-        public string SetForwardTickets(int VAF_UserContact_ID, int R_Request_ID, string remarks, byte[] Attachment, int docno, string fileName, string accessKey) {
+        public string SetForwardTickets(int VAF_UserContact_ID, int VAR_Request_ID, string remarks, byte[] Attachment, int docno, string fileName, string accessKey) {
             BaseLibrary.CloudService.SetForwardTicketsRequest inValue = new BaseLibrary.CloudService.SetForwardTicketsRequest();
             inValue.VAF_UserContact_ID = VAF_UserContact_ID;
-            inValue.R_Request_ID = R_Request_ID;
+            inValue.VAR_Request_ID = VAR_Request_ID;
             inValue.remarks = remarks;
             inValue.Attachment = Attachment;
             inValue.docno = docno;
@@ -6869,8 +6869,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetPartnerLeadDetails(VAB_Lead_ID, accessKey);
         }
         
-        public string CancellAssociationRequest(int R_Request_ID, string Remarks, int VAF_UserContact_ID, string accessKey) {
-            return base.Channel.CancellAssociationRequest(R_Request_ID, Remarks, VAF_UserContact_ID, accessKey);
+        public string CancellAssociationRequest(int VAR_Request_ID, string Remarks, int VAF_UserContact_ID, string accessKey) {
+            return base.Channel.CancellAssociationRequest(VAR_Request_ID, Remarks, VAF_UserContact_ID, accessKey);
         }
         
         public string DeletePartnerLink(int DemoLinkID, string accessKey) {
@@ -6897,8 +6897,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetSupportTicketStatus(AccessKey);
         }
         
-        public string GetCustomerStatusSupportTicket(int r_status_id, int VAF_UserContact_id, string orderby, string AccessKey) {
-            return base.Channel.GetCustomerStatusSupportTicket(r_status_id, VAF_UserContact_id, orderby, AccessKey);
+        public string GetCustomerStatusSupportTicket(int VAR_Req_Status_id, int VAF_UserContact_id, string orderby, string AccessKey) {
+            return base.Channel.GetCustomerStatusSupportTicket(VAR_Req_Status_id, VAF_UserContact_id, orderby, AccessKey);
         }
         
         public string GetCustomerSupportTickets(int VAF_UserContact_id, string AccessKey) {
@@ -7336,8 +7336,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.VerifyUserM4(LicenseKey, accessKey);
         }
         
-        public string DeleteDBBackUp(int VAF_UserContact_ID, string FileName, int R_Request_ID, string ipaddress, string accessKey) {
-            return base.Channel.DeleteDBBackUp(VAF_UserContact_ID, FileName, R_Request_ID, ipaddress, accessKey);
+        public string DeleteDBBackUp(int VAF_UserContact_ID, string FileName, int VAR_Request_ID, string ipaddress, string accessKey) {
+            return base.Channel.DeleteDBBackUp(VAF_UserContact_ID, FileName, VAR_Request_ID, ipaddress, accessKey);
         }
         
         public string CreateBackUp(int VAF_UserContact_ID, string Comment, string ipaddress, string accessKey) {
@@ -7393,12 +7393,12 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAllDBBackupRequest(zoneCode, accessKey);
         }
         
-        public string CloseRequest(int R_Request_ID, string accessKey) {
-            return base.Channel.CloseRequest(R_Request_ID, accessKey);
+        public string CloseRequest(int VAR_Request_ID, string accessKey) {
+            return base.Channel.CloseRequest(VAR_Request_ID, accessKey);
         }
         
-        public string FailedRequest(int R_Request_ID, string accessKey) {
-            return base.Channel.FailedRequest(R_Request_ID, accessKey);
+        public string FailedRequest(int VAR_Request_ID, string accessKey) {
+            return base.Channel.FailedRequest(VAR_Request_ID, accessKey);
         }
         
         public string GetCustomerSpaceM1(int VAF_UserContact_ID, string accessKey) {

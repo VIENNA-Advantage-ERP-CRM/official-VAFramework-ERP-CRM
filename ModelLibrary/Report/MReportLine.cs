@@ -70,7 +70,7 @@ namespace VAdvantage.Report
         //private void LoadSources()
         //{
         //    List<MReportSource> list = new List<MReportSource>();
-        //    String sql = "SELECT * FROM VAPA_FR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
+        //    String sql = "SELECT * FROM VAPA_FVAR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
         //    SqlParameter[] param=new SqlParameter[1];
         //    IDataReader idr=null;
         //    DataTable dt = null;
@@ -126,7 +126,7 @@ namespace VAdvantage.Report
 
             //if (GetFRPT_LinkWith() == FRPT_LINKWITH_LedgerCode)
             //{
-                sql = "SELECT * FROM VAPA_FR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
+                sql = "SELECT * FROM VAPA_FVAR_Source WHERE VAPA_FR_Row_ID=@param AND IsActive='Y'";
             //}
             //else if (GetFRPT_LinkWith() == FRPT_LINKWITH_LedgerGroup)
             //{

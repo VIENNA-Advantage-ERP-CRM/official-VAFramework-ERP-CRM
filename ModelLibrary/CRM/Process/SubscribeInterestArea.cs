@@ -15,7 +15,7 @@ namespace VAdvantage.Process
     {
 
         int _VAB_Lead_ID;
-        int R_InterestArea_ID;
+        int VAR_InterestArea_ID;
         protected override void Prepare()
         {
             _VAB_Lead_ID = GetRecord_ID();
@@ -27,9 +27,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("R_InterestArea_ID"))
+                else if (name.Equals("VAR_InterestArea_ID"))
                 {
-                    R_InterestArea_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
+                    VAR_InterestArea_ID = Util.GetValueOfInt(Util.GetValueOfDecimal(para[i].GetParameter()));
                 }
                 else
                 {
@@ -43,7 +43,7 @@ namespace VAdvantage.Process
         {
 
             VAdvantage.Model.X_VAB_Lead lead = new VAdvantage.Model.X_VAB_Lead(GetCtx(), _VAB_Lead_ID, Get_Trx());
-            if (!(R_InterestArea_ID > 0))
+            if (!(VAR_InterestArea_ID > 0))
             {
                 return Msg.GetMsg(GetCtx(), "NoInterestAreaIsSelected");
                
@@ -53,7 +53,7 @@ namespace VAdvantage.Process
             {
                 
                 VAdvantage.Model.X_VAR_InterestedUser customer = new VAdvantage.Model.X_VAR_InterestedUser(GetCtx(), 0, Get_Trx());
-                customer.SetR_InterestArea_ID(R_InterestArea_ID);
+                customer.SetR_InterestArea_ID(VAR_InterestArea_ID);
                 customer.SetVAB_BusinessPartner_ID(lead.GetVAB_BusinessPartner_ID());
                 String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + lead.GetVAB_BusinessPartner_ID();
                 int UserId=Util.GetValueOfInt( DB.ExecuteScalar(query));
@@ -89,7 +89,7 @@ namespace VAdvantage.Process
             else if (lead.GetRef_BPartner_ID() != 0)
             {
                 VAdvantage.Model.X_VAR_InterestedUser Prospect = new VAdvantage.Model.X_VAR_InterestedUser(GetCtx(), 0, Get_Trx());
-                Prospect.SetR_InterestArea_ID(R_InterestArea_ID);
+                Prospect.SetR_InterestArea_ID(VAR_InterestArea_ID);
                 Prospect.SetVAB_BusinessPartner_ID(lead.GetRef_BPartner_ID());
                 String query = "Select VAF_UserContact_id from VAF_UserContact where VAB_BusinessPartner_id= " + lead.GetRef_BPartner_ID();
                 int UserId = Util.GetValueOfInt(DB.ExecuteScalar(query));
@@ -124,7 +124,7 @@ namespace VAdvantage.Process
 
                 VAdvantage.Model.X_vss_lead_interestarea Ilead = new VAdvantage.Model.X_vss_lead_interestarea(GetCtx(), 0, Get_Trx());
                 Ilead.SetVAB_Lead_ID(lead.GetVAB_Lead_ID());
-                Ilead.SetR_InterestArea_ID(R_InterestArea_ID);
+                Ilead.SetR_InterestArea_ID(VAR_InterestArea_ID);
                 Ilead.SetVAF_UserContact_ID(lead.GetVAF_UserContact_ID());
                 Ilead.SetBPName(lead.GetBPName());
                 Ilead.SetEMail(lead.GetEMail());

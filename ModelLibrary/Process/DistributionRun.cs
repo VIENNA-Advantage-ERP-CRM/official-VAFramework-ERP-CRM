@@ -184,12 +184,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
 
             //	Delete Old
-            sql = "DELETE FROM T_DistributionRunDetail WHERE M_DistributionRun_ID="
+            sql = "DELETE FROM VAT_CirculationDetail WHERE M_DistributionRun_ID="
                 + _M_DistributionRun_ID;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Fine("insertDetails - deleted #" + no);
             //	Insert New
-            sql = "INSERT INTO T_DistributionRunDetail "
+            sql = "INSERT INTO VAT_CirculationDetail "
                 + "(M_DistributionRun_ID, M_DistributionRunLine_ID, M_DistributionList_ID, M_DistributionListLine_ID,"
                 + "VAF_Client_ID,VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
                 + "VAB_BusinessPartner_ID, VAB_BPart_Location_ID, M_Product_ID,"

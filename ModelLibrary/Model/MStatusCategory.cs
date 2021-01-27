@@ -16,7 +16,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MStatusCategory : X_R_StatusCategory
+    public class MStatusCategory : X_VAR_Req_StatusCategory
     {
         /**
          * 	Get Default Status Categpru for Client
@@ -26,7 +26,7 @@ namespace VAdvantage.Model
         public static MStatusCategory GetDefault(Ctx ctx)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM R_StatusCategory "
+            String sql = "SELECT * FROM VAR_Req_StatusCategory "
                 + "WHERE VAF_Client_ID in (0,@VAF_Client_ID) AND IsDefault='Y' "
                 + "ORDER BY VAF_Client_ID DESC";
             MStatusCategory retValue = null;
@@ -95,8 +95,8 @@ namespace VAdvantage.Model
             retValue.SetIsDefault(true);
             if (!retValue.Save())
                 return null;
-            String sql = "UPDATE R_Status SET R_StatusCategory_ID=" + retValue.GetR_StatusCategory_ID()
-                + " WHERE R_StatusCategory_ID IS NULL AND VAF_Client_ID=" + VAF_Client_ID;
+            String sql = "UPDATE VAR_Req_Status SET VAR_Req_StatusCategory_ID=" + retValue.GetVAR_Req_StatusCategory_ID()
+                + " WHERE VAR_Req_StatusCategory_ID IS NULL AND VAF_Client_ID=" + VAF_Client_ID;
             int no = DataBase.DB.ExecuteQuery(sql, null, null);
             _log.Info("Default for VAF_Client_ID=" + VAF_Client_ID + " - Status #" + no);
             return retValue;
@@ -105,16 +105,16 @@ namespace VAdvantage.Model
         /**
          * 	Get Request Status Category from Cache
          *	@param ctx context
-         *	@param R_StatusCategory_ID id
+         *	@param VAR_Req_StatusCategory_ID id
          *	@return RStatusCategory
          */
-        public static MStatusCategory Get(Ctx ctx, int R_StatusCategory_ID)
+        public static MStatusCategory Get(Ctx ctx, int VAR_Req_StatusCategory_ID)
         {
-            int key = R_StatusCategory_ID;
+            int key = VAR_Req_StatusCategory_ID;
             MStatusCategory retValue = (MStatusCategory)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MStatusCategory(ctx, R_StatusCategory_ID, null);
+            retValue = new MStatusCategory(ctx, VAR_Req_StatusCategory_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
 
         /**	Cache						*/
         private static CCache<int, MStatusCategory> _cache
-            = new CCache<int, MStatusCategory>("R_StatusCategory", 20);
+            = new CCache<int, MStatusCategory>("VAR_Req_StatusCategory", 20);
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MStatusCategory).FullName);
 
@@ -130,14 +130,14 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Default Constructor
          *	@param ctx context
-         *	@param R_StatusCategory_ID id
+         *	@param VAR_Req_StatusCategory_ID id
          *	@param trxName trx
          */
-        public MStatusCategory(Ctx ctx, int R_StatusCategory_ID, Trx trxName) :
-            base(ctx, R_StatusCategory_ID, trxName)
+        public MStatusCategory(Ctx ctx, int VAR_Req_StatusCategory_ID, Trx trxName) :
+            base(ctx, VAR_Req_StatusCategory_ID, trxName)
         {
-            //super (ctx, R_StatusCategory_ID, trxName);
-            if (R_StatusCategory_ID == 0)
+            //super (ctx, VAR_Req_StatusCategory_ID, trxName);
+            if (VAR_Req_StatusCategory_ID == 0)
             {
                 //	SetName (null);
                 SetIsDefault(false);
@@ -168,8 +168,8 @@ namespace VAdvantage.Model
         {
             if (_status != null && !reload)
                 return _status;
-            String sql = "SELECT * FROM R_Status "
-                + "WHERE R_StatusCategory_ID= " + GetR_StatusCategory_ID()
+            String sql = "SELECT * FROM VAR_Req_Status "
+                + "WHERE VAR_Req_StatusCategory_ID= " + GetVAR_Req_StatusCategory_ID()
                 + " ORDER BY SeqNo";
             List<MStatus> list = new List<MStatus>();
             DataTable dt = null;
@@ -211,23 +211,23 @@ namespace VAdvantage.Model
         }	//	GetStatus
 
         /**
-         * 	Get Default R_Status_ID
+         * 	Get Default VAR_Req_Status_ID
          *	@return id or 0
          */
-        public int GetDefaultR_Status_ID()
+        public int GetDefaultVAR_Req_Status_ID()
         {
             if (_status == null)
                 GetStatus(false);
             for (int i = 0; i < _status.Length; i++)
             {
                 if (_status[i].IsDefault() && _status[i].IsActive())
-                    return _status[i].GetR_Status_ID();
+                    return _status[i].GetVAR_Req_Status_ID();
             }
             if (_status.Length > 0
                 && _status[0].IsActive())
-                return _status[0].GetR_Status_ID();
+                return _status[0].GetVAR_Req_Status_ID();
             return 0;
-        }	//	GetDefaultR_Status_ID
+        }	//	GetDefaultVAR_Req_Status_ID
 
         /**
          * 	String Representation

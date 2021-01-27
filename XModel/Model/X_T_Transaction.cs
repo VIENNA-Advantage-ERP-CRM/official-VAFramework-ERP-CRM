@@ -11,29 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_Transaction
+/** Generated Model for VAT_Transaction
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_Transaction : PO
+public class X_VAT_Transaction : PO
 {
-public X_T_Transaction (Context ctx, int T_Transaction_ID, Trx trxName) : base (ctx, T_Transaction_ID, trxName)
+public X_VAT_Transaction (Context ctx, int VAT_Transaction_ID, Trx trxName) : base (ctx, VAT_Transaction_ID, trxName)
 {
-/** if (T_Transaction_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Locator_ID (0);
-SetM_Product_ID (0);
-SetM_Transaction_ID (0);
-SetMovementDate (DateTime.Now);
-SetMovementQty (0.0);
-SetMovementType (null);
-}
- */
-}
-public X_T_Transaction (Ctx ctx, int T_Transaction_ID, Trx trxName) : base (ctx, T_Transaction_ID, trxName)
-{
-/** if (T_Transaction_ID == 0)
+/** if (VAT_Transaction_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
@@ -46,12 +31,27 @@ SetMovementType (null);
 }
  */
 }
+public X_VAT_Transaction (Ctx ctx, int VAT_Transaction_ID, Trx trxName) : base (ctx, VAT_Transaction_ID, trxName)
+{
+/** if (VAT_Transaction_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetM_AttributeSetInstance_ID (0);
+SetM_Locator_ID (0);
+SetM_Product_ID (0);
+SetM_Transaction_ID (0);
+SetMovementDate (DateTime.Now);
+SetMovementQty (0.0);
+SetMovementType (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Transaction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Transaction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_T_Transaction (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Transaction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Transaction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_T_Transaction (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Transaction (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_Transaction (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_Transaction()
+static X_VAT_Transaction()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389067780L;
 public static int Table_ID;
  // =758;
 
-/** TableName=T_Transaction */
-public static String Table_Name="T_Transaction";
+/** TableName=VAT_Transaction */
+public static String Table_Name="VAT_Transaction";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_Transaction[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_Transaction[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

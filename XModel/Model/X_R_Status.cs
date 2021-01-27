@@ -11,31 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_Status
+/** Generated Model for VAR_Req_Status
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_Status : PO
+public class X_VAR_Req_Status : PO
 {
-public X_R_Status (Context ctx, int R_Status_ID, Trx trxName) : base (ctx, R_Status_ID, trxName)
+public X_VAR_Req_Status (Context ctx, int VAR_Req_Status_ID, Trx trxName) : base (ctx, VAR_Req_Status_ID, trxName)
 {
-/** if (R_Status_ID == 0)
-{
-SetIsClosed (false);	// N
-SetIsDefault (false);
-SetIsFinalClose (false);	// N
-SetIsOpen (false);
-SetIsWebCanUpdate (false);
-SetName (null);
-SetR_StatusCategory_ID (0);
-SetR_Status_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM R_Status WHERE R_StatusCategory_ID=@R_StatusCategory_ID@
-SetValue (null);
-}
- */
-}
-public X_R_Status (Ctx ctx, int R_Status_ID, Trx trxName) : base (ctx, R_Status_ID, trxName)
-{
-/** if (R_Status_ID == 0)
+/** if (VAR_Req_Status_ID == 0)
 {
 SetIsClosed (false);	// N
 SetIsDefault (false);
@@ -43,9 +26,26 @@ SetIsFinalClose (false);	// N
 SetIsOpen (false);
 SetIsWebCanUpdate (false);
 SetName (null);
-SetR_StatusCategory_ID (0);
-SetR_Status_ID (0);
-SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM R_Status WHERE R_StatusCategory_ID=@R_StatusCategory_ID@
+SetVAR_Req_StatusCategory_ID (0);
+SetVAR_Req_Status_ID (0);
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAR_Req_Status WHERE VAR_Req_StatusCategory_ID=@VAR_Req_StatusCategory_ID@
+SetValue (null);
+}
+ */
+}
+public X_VAR_Req_Status (Ctx ctx, int VAR_Req_Status_ID, Trx trxName) : base (ctx, VAR_Req_Status_ID, trxName)
+{
+/** if (VAR_Req_Status_ID == 0)
+{
+SetIsClosed (false);	// N
+SetIsDefault (false);
+SetIsFinalClose (false);	// N
+SetIsOpen (false);
+SetIsWebCanUpdate (false);
+SetName (null);
+SetVAR_Req_StatusCategory_ID (0);
+SetVAR_Req_Status_ID (0);
+SetSeqNo (0);	// @SQL=SELECT COALESCE(MAX(SeqNo),0)+10 AS DefaultValue FROM VAR_Req_Status WHERE VAR_Req_StatusCategory_ID=@VAR_Req_StatusCategory_ID@
 SetValue (null);
 }
  */
@@ -55,7 +55,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_R_Status (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_R_Status (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Status (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_Status (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_Status()
+static X_VAR_Req_Status()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389066682L;
 public static int Table_ID;
  // =776;
 
-/** TableName=R_Status */
-public static String Table_Name="R_Status";
+/** TableName=VAR_Req_Status */
+public static String Table_Name="VAR_Req_Status";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -125,7 +125,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_Status[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_Status[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -290,32 +290,32 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Status Category.
-@param R_StatusCategory_ID Request Status Category */
-public void SetR_StatusCategory_ID (int R_StatusCategory_ID)
+@param VAR_Req_StatusCategory_ID Request Status Category */
+public void SetVAR_Req_StatusCategory_ID (int VAR_Req_StatusCategory_ID)
 {
-if (R_StatusCategory_ID < 1) throw new ArgumentException ("R_StatusCategory_ID is mandatory.");
-Set_ValueNoCheck ("R_StatusCategory_ID", R_StatusCategory_ID);
+if (VAR_Req_StatusCategory_ID < 1) throw new ArgumentException ("VAR_Req_StatusCategory_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_StatusCategory_ID", VAR_Req_StatusCategory_ID);
 }
 /** Get Status Category.
 @return Request Status Category */
-public int GetR_StatusCategory_ID() 
+public int GetVAR_Req_StatusCategory_ID() 
 {
-Object ii = Get_Value("R_StatusCategory_ID");
+Object ii = Get_Value("VAR_Req_StatusCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Status.
-@param R_Status_ID Request Status */
-public void SetR_Status_ID (int R_Status_ID)
+@param VAR_Req_Status_ID Request Status */
+public void SetVAR_Req_Status_ID (int VAR_Req_Status_ID)
 {
-if (R_Status_ID < 1) throw new ArgumentException ("R_Status_ID is mandatory.");
-Set_ValueNoCheck ("R_Status_ID", R_Status_ID);
+if (VAR_Req_Status_ID < 1) throw new ArgumentException ("VAR_Req_Status_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_Status_ID", VAR_Req_Status_ID);
 }
 /** Get Status.
 @return Request Status */
-public int GetR_Status_ID() 
+public int GetVAR_Req_Status_ID() 
 {
-Object ii = Get_Value("R_Status_ID");
+Object ii = Get_Value("VAR_Req_Status_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

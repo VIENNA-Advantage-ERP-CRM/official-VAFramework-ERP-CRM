@@ -159,7 +159,7 @@ namespace VAdvantage.CrystalReport
                         ProcessInfoParameter[] parameters = _pi.GetParameter();
                         if (parameters.Count() > 0)
                         {
-                            MTable table = MTable.Get(_ctx, "T_CrystalParameters");
+                            MTable table = MTable.Get(_ctx, "VAT_CrystalParameters");
                             pos = table.GetPO(_ctx, 0, null);
                             int loopCount = 0;
                             int paraCount = 1;
@@ -503,7 +503,7 @@ namespace VAdvantage.CrystalReport
 
                     string sqlQ = sqls[0].ToUpper();
 
-                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
+                    if (sqlQ.Contains("VAT_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                     {
                         // sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                         if (sqlQ.Contains("WHERE"))
@@ -702,11 +702,11 @@ namespace VAdvantage.CrystalReport
 
                                 sqlQ = GetObscureSql(sqlQ);
 
-                                //if (sqlQ.ToUpper().Contains("T_CrystalParameters"))
+                                //if (sqlQ.ToUpper().Contains("VAT_CrystalParameters"))
                                 //{
                                 //    sqlQ = sqlQ + " AND VAF_JInstance_ID=" + _pi.GetVAF_JInstance_ID();
                                 //}
-                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
+                                if (sqlQ.Contains("VAT_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                                 {
                                     if (sqlQ.Contains("WHERE"))
                                     {
@@ -1041,7 +1041,7 @@ namespace VAdvantage.CrystalReport
 
                         if (parameters.Count() > 0)
                         {
-                            MTable table = MTable.Get(_ctx, "T_CrystalParameters");
+                            MTable table = MTable.Get(_ctx, "VAT_CrystalParameters");
                             pos = table.GetPO(_ctx, 0, null);
                             int loopCount = 0;
                             int paraCount = 1;
@@ -1258,7 +1258,7 @@ namespace VAdvantage.CrystalReport
                     sql = string.Join(";", sqls);
                     string sqlQ = sqls[0].ToUpper();
 
-                    if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
+                    if (sqlQ.Contains("VAT_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                     {
                         if (sqlQ.Contains("WHERE"))
                         {
@@ -1414,7 +1414,7 @@ namespace VAdvantage.CrystalReport
                                 //Check if VAF_JInstance_ID exist in query, only then apply VAF_JInstance_ID in where clause.
                                 sqlQ = sqlQ.ToUpper();
 
-                                if (sqlQ.Contains("T_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
+                                if (sqlQ.Contains("VAT_CRYSTALPARAMETERS") || sqlQ.Contains("VAF_JINSTANCE_ID"))
                                 {
                                     if (sqlQ.Contains("WHERE"))
                                     {

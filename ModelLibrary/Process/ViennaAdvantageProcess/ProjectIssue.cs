@@ -24,7 +24,7 @@ namespace ViennaAdvantage.Process
         /**	Receipt - Option 1					*/
         private int m_M_InOut_ID = 0;
         /**	Expenses - Option 2					*/
-        private int m_S_TimeExpense_ID = 0;
+        private int m_VAS_ExpenseReport_ID = 0;
         /** Locator - Option 3,4				*/
         private int m_M_Locator_ID = 0;
         /** Project Line - Option 3				*/
@@ -66,10 +66,10 @@ namespace ViennaAdvantage.Process
                     //m_M_InOut_ID = ((BigDecimal)para[i].getParameter()).intValue();
                     m_M_InOut_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("S_TimeExpense_ID"))
+                else if (name.Equals("VAS_ExpenseReport_ID"))
                 {
-                    // m_S_TimeExpense_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    m_S_TimeExpense_ID = para[i].GetParameterAsInt();
+                    // m_VAS_ExpenseReport_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    m_VAS_ExpenseReport_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("M_Locator_ID"))
                 {
@@ -131,7 +131,7 @@ namespace ViennaAdvantage.Process
             {
                 return IssueReceipt();
             }
-            if (m_S_TimeExpense_ID != 0)
+            if (m_VAS_ExpenseReport_ID != 0)
             {
                 return IssueExpense();
             }
@@ -240,7 +240,7 @@ namespace ViennaAdvantage.Process
         private String IssueExpense()
         {
             //	Get Expense Report
-            MTimeExpense expense = new MTimeExpense(GetCtx(), m_S_TimeExpense_ID, Get_TrxName());
+            MTimeExpense expense = new MTimeExpense(GetCtx(), m_VAS_ExpenseReport_ID, Get_TrxName());
             if (!expense.IsProcessed())
             {
                 throw new ArgumentException("Time+Expense not processed - " + expense);
@@ -261,7 +261,7 @@ namespace ViennaAdvantage.Process
                 if (expenseLines[i].GetVAB_Project_ID() != m_project.GetVAB_Project_ID())
                     continue;
                 //	not issued yet
-                if (ProjectIssueHasExpense(expenseLines[i].GetS_TimeExpenseLine_ID()))
+                if (ProjectIssueHasExpense(expenseLines[i].GetVAS_ExpenseReportLine_ID()))
                     continue;
 
                 //	Find Location
@@ -283,7 +283,7 @@ namespace ViennaAdvantage.Process
                     pi.SetDescription(m_Description);
                 else if (expenseLines[i].GetDescription() != null)
                     pi.SetDescription(expenseLines[i].GetDescription());
-                pi.SetS_TimeExpenseLine_ID(expenseLines[i].GetS_TimeExpenseLine_ID());
+                pi.SetVAS_ExpenseReportLine_ID(expenseLines[i].GetVAS_ExpenseReportLine_ID());
                 pi.Process();
                 //	Find/Create Project Line
                 MProjectLine pl = new MProjectLine(m_project);
@@ -388,10 +388,10 @@ namespace ViennaAdvantage.Process
 
         /**
          * 	Check if Project Issue already has Expense
-         *	@param S_TimeExpenseLine_ID line
+         *	@param VAS_ExpenseReportLine_ID line
          *	@return true if exists
          */
-        private Boolean ProjectIssueHasExpense(int S_TimeExpenseLine_ID)
+        private Boolean ProjectIssueHasExpense(int VAS_ExpenseReportLine_ID)
         {
             if (m_projectIssues == null)
             {
@@ -399,7 +399,7 @@ namespace ViennaAdvantage.Process
             }
             for (int i = 0; i < m_projectIssues.Length; i++)
             {
-                if (m_projectIssues[i].GetS_TimeExpenseLine_ID() == S_TimeExpenseLine_ID)
+                if (m_projectIssues[i].GetVAS_ExpenseReportLine_ID() == VAS_ExpenseReportLine_ID)
                 {
                     return true;
                 }

@@ -943,7 +943,7 @@ namespace VAdvantage.Model
                 //end
                 line.SetA_Asset_ID(0);
 
-                line.SetS_ResourceAssignment_ID(0);
+                line.SetVAS_Res_Assignment_ID(0);
                 //	New Tax
                 if (GetVAB_BusinessPartner_ID() != otherInvoice.GetVAB_BusinessPartner_ID())
                     line.SetTax();	//	recalculate

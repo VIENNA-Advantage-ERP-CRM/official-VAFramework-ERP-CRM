@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Module  Name   : 
- * Purpose        : Inventory Valuation. Process to fill T_InventoryValue
+ * Purpose        : Inventory Valuation. Process to fill VAT_StockData
  * Class Used     : ProcessEngine.SvrProcess
  * Chronological    Development
  * Veena        20-Oct-2009
@@ -23,7 +23,7 @@ namespace VAdvantage.Process
 {
     /// <summary>
     /// Inventory Valuation.
-    /// Process to fill T_InventoryValue
+    /// Process to fill VAT_StockData
     /// </summary>
     public class InventoryValue : ProcessEngine.SvrProcess
     {
@@ -85,7 +85,7 @@ namespace VAdvantage.Process
             MAcctSchema mas = c.GetAcctSchema();
 
             //  Delete (just to be sure)
-            StringBuilder sql = new StringBuilder("DELETE FROM T_InventoryValue WHERE VAF_JInstance_ID=");
+            StringBuilder sql = new StringBuilder("DELETE FROM VAT_StockData WHERE VAF_JInstance_ID=");
             sql.Append(GetVAF_JInstance_ID());
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             MPInstance instance = new MPInstance(GetCtx(), GetVAF_JInstance_ID(), null);
@@ -95,10 +95,10 @@ namespace VAdvantage.Process
             string qry = "select MAX(VAF_JINSTANCE_ID) from VAF_JINSTANCE WHERE VAF_Job_ID=" + instance.GetVAF_Job_ID() + " AND created<  TO_Date('" + Createddate.ToString("MM/dd/yyyy HH:mm:ss") + "', 'MM-DD-YYYY HH24:MI:SS')";
             int MaxInstance_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, null));
 
-           int no1= DB.ExecuteQuery("DELETE FROM T_InventoryValue WHERE VAF_JInstance_ID <=" + MaxInstance_ID);
+           int no1= DB.ExecuteQuery("DELETE FROM VAT_StockData WHERE VAF_JInstance_ID <=" + MaxInstance_ID);
 
             //	Insert Standard Costs
-            sql = new StringBuilder("INSERT INTO T_InventoryValue "
+            sql = new StringBuilder("INSERT INTO VAT_StockData "
                 + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
                 + " VAF_Client_ID, VAF_Org_ID, CostStandard) "
                 + "SELECT ").Append(GetVAF_JInstance_ID())
@@ -119,7 +119,7 @@ namespace VAdvantage.Process
             int noInsertCost = 0;
             if (_M_CostElement_ID != 0)
             {
-                sql = new StringBuilder("INSERT INTO T_InventoryValue "
+                sql = new StringBuilder("INSERT INTO VAT_StockData "
                     + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
                     + " VAF_Client_ID, VAF_Org_ID, CostStandard, Cost, M_CostElement_ID) "
                     + "SELECT ").Append(GetVAF_JInstance_ID())
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                     + " INNER JOIN M_Cost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
                     + "WHERE w.M_Warehouse_ID=").Append(_M_Warehouse_ID)
                     .Append(" AND c.M_CostElement_ID=").Append(_M_CostElement_ID)
-                    .Append(" AND NOT EXISTS (SELECT * FROM T_InventoryValue iv "
+                    .Append(" AND NOT EXISTS (SELECT * FROM VAT_StockData iv "
                         + "WHERE iv.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                         .Append(" AND iv.M_Warehouse_ID=w.M_Warehouse_ID"
                         + " AND iv.M_Product_ID=c.M_Product_ID"
@@ -139,7 +139,7 @@ namespace VAdvantage.Process
                 noInsertCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Inserted Cost=" + noInsertCost);
                 //	Update Std Cost Records
-                sql = new StringBuilder("UPDATE T_InventoryValue iv "
+                sql = new StringBuilder("UPDATE VAT_StockData iv "
                     + "SET (Cost, M_CostElement_ID)="
                         + "(SELECT c.CurrentCostPrice, c.M_CostElement_ID "
                         + "FROM M_Warehouse w"
@@ -151,7 +151,7 @@ namespace VAdvantage.Process
                         + " AND w.M_Warehouse_ID=iv.M_Warehouse_ID"
                         + " AND c.M_Product_ID=iv.M_Product_ID"
                         + " AND c.M_AttributeSetInstance_ID=iv.M_AttributeSetInstance_ID AND rownum=1 AND w.m_warehouse_ID=" + _M_Warehouse_ID + ") "
-                    + "WHERE EXISTS (SELECT * FROM T_InventoryValue ivv "
+                    + "WHERE EXISTS (SELECT * FROM VAT_StockData ivv "
                         + "WHERE ivv.VAF_JInstance_ID=" + GetVAF_JInstance_ID()
                         + " AND ivv.M_CostElement_ID IS NULL) AND iv.VAF_JInstance_ID ="+GetVAF_JInstance_ID());
                 int noUpdatedCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -163,7 +163,7 @@ namespace VAdvantage.Process
             //  Update Constants
             //  YYYY-MM-DD HH24:MI:SS.mmmm  JDBC Timestamp format
             // String myDate = _DateValue.ToString();
-            sql = new StringBuilder("UPDATE T_InventoryValue SET ")
+            sql = new StringBuilder("UPDATE VAT_StockData SET ")
                 //.Append("DateValue=To_Date('").Append(myDate.Substring(0,10))
                 //.Append("23:59:59','MM-DD-YYYY HH24:MI:SS'),")
              .Append("DateValue=").Append(GlobalVariable.TO_DATE(_DateValue, true)).Append(",")
@@ -177,7 +177,7 @@ namespace VAdvantage.Process
             log.Fine("Constants=" + no);
 
             //  Get current QtyOnHand with ASI
-            sql = new StringBuilder("UPDATE T_InventoryValue iv SET QtyOnHand = "
+            sql = new StringBuilder("UPDATE VAT_StockData iv SET QtyOnHand = "
                     + "(SELECT SUM(QtyOnHand) FROM M_Storage s"
                     + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
                     + "WHERE iv.M_Product_ID=s.M_Product_ID"
@@ -188,7 +188,7 @@ namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("QtHand with ASI=" + no);
             //  Get current QtyOnHand without ASI
-            sql = new StringBuilder("UPDATE T_InventoryValue iv SET QtyOnHand = "
+            sql = new StringBuilder("UPDATE VAT_StockData iv SET QtyOnHand = "
                     + "(SELECT SUM(QtyOnHand) FROM M_Storage s"
                     + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
                     + "WHERE iv.M_Product_ID=s.M_Product_ID"
@@ -199,7 +199,7 @@ namespace VAdvantage.Process
             log.Fine("QtHand w/o ASI=" + no);
 
             //  Adjust for Valuation Date
-            sql = new StringBuilder("UPDATE T_InventoryValue iv "
+            sql = new StringBuilder("UPDATE VAT_StockData iv "
                 + "SET QtyOnHand="
                     + "(SELECT iv.QtyOnHand - NVL(SUM(t.MovementQty), 0) "
                     + "FROM M_Transaction t"
@@ -212,7 +212,7 @@ namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Update with ASI=" + no);
             //
-            sql = new StringBuilder("UPDATE T_InventoryValue iv "
+            sql = new StringBuilder("UPDATE VAT_StockData iv "
                 + "SET QtyOnHand="
                     + "(SELECT iv.QtyOnHand - NVL(SUM(t.MovementQty), 0) "
                     + "FROM M_Transaction t"
@@ -225,13 +225,13 @@ namespace VAdvantage.Process
             log.Fine("Update w/o ASI=" + no);
 
             //  Delete Records w/o OnHand Qty
-            sql = new StringBuilder("DELETE FROM T_InventoryValue "
+            sql = new StringBuilder("DELETE FROM VAT_StockData "
                 + "WHERE (QtyOnHand=0 OR QtyOnHand IS NULL) AND VAF_JInstance_ID=").Append(GetVAF_JInstance_ID());
             int noQty = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("NoQty Deleted=" + noQty);
 
             //  Update Prices
-            no = DataBase.DB.ExecuteQuery("UPDATE T_InventoryValue iv "
+            no = DataBase.DB.ExecuteQuery("UPDATE VAT_StockData iv "
                 + "SET PricePO = "
                     + "(SELECT MAX(currencyConvert (po.PriceList,po.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, po.VAF_Client_ID,po.VAF_Org_ID))"
                     + " FROM M_Product_PO po WHERE po.M_Product_ID=iv.M_Product_ID"
@@ -262,7 +262,7 @@ namespace VAdvantage.Process
             //	Convert if different Currency
             if (mas.GetVAB_Currency_ID() != _VAB_Currency_ID)
             {
-                sql = new StringBuilder("UPDATE T_InventoryValue iv "
+                sql = new StringBuilder("UPDATE VAT_StockData iv "
                     + "SET CostStandard= "
                         + "(SELECT currencyConvert(iv.CostStandard,acs.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, iv.VAF_Client_ID,iv.VAF_Org_ID) "
                         + "FROM VAB_AccountBook acs WHERE acs.VAB_AccountBook_ID=" + mas.GetVAB_AccountBook_ID() + "),"
@@ -275,7 +275,7 @@ namespace VAdvantage.Process
             }
 
             //  Update Values
-            no = DataBase.DB.ExecuteQuery("UPDATE T_InventoryValue SET "
+            no = DataBase.DB.ExecuteQuery("UPDATE VAT_StockData SET "
                 + "PricePOAmt = QtyOnHand * PricePO, "
                 + "PriceListAmt = QtyOnHand * PriceList, "
                 + "PriceStdAmt = QtyOnHand * PriceStd, "

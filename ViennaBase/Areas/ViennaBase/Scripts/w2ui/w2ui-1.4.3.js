@@ -3309,13 +3309,13 @@ w2utils.keyboard = (function (obj) {
                             if (this.last.xhr_offset == 0) {
                                 this.records = [];
                                 this.summary = [];
-                                //data.xhr_status=data.status;
+                                //data.xhVAR_Req_Status=data.status;
                                 delete data.status;
                                 $.extend(true, this, data);
                             } else {
                                 var records = data.records;
                                 delete data.records;
-                                //data.xhr_status=data.status;
+                                //data.xhVAR_Req_Status=data.status;
                                 delete data.status;
                                 $.extend(true, this, data);
                                 for (var r in records) {

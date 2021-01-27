@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionRunDetail : X_T_DistributionRunDetail
+    public class MDistributionRunDetail : X_VAT_CirculationDetail
     {
         //Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MDistributionRunDetail).FullName);
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
                 bool orderBP, Trx trxName)
         {
             List<MDistributionRunDetail> list = new List<MDistributionRunDetail>();
-            String sql = "SELECT * FROM T_DistributionRunDetail WHERE M_DistributionRun_ID=" + M_DistributionRun_ID;
+            String sql = "SELECT * FROM VAT_CirculationDetail WHERE M_DistributionRun_ID=" + M_DistributionRun_ID;
             if (orderBP)
             {
                 sql += " ORDER BY VAB_BusinessPartner_ID, VAB_BPart_Location_ID";
@@ -94,10 +94,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="T_DistributionRunDetail_ID">id</param>
+        /// <param name="VAT_CirculationDetail_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MDistributionRunDetail(Ctx ctx, int T_DistributionRunDetail_ID, Trx trxName)
-            : base(ctx, T_DistributionRunDetail_ID, trxName)
+        public MDistributionRunDetail(Ctx ctx, int VAT_CirculationDetail_ID, Trx trxName)
+            : base(ctx, VAT_CirculationDetail_ID, trxName)
         {
 
         }

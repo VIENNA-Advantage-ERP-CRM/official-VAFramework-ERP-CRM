@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_StandardResponse
+/** Generated Model for VAR_Req_StandardReply
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_StandardResponse : PO
+public class X_VAR_Req_StandardReply : PO
 {
-public X_R_StandardResponse (Context ctx, int R_StandardResponse_ID, Trx trxName) : base (ctx, R_StandardResponse_ID, trxName)
+public X_VAR_Req_StandardReply (Context ctx, int VAR_Req_StandardReply_ID, Trx trxName) : base (ctx, VAR_Req_StandardReply_ID, trxName)
 {
-/** if (R_StandardResponse_ID == 0)
+/** if (VAR_Req_StandardReply_ID == 0)
 {
 SetName (null);
-SetR_StandardResponse_ID (0);
+SetVAR_Req_StandardReply_ID (0);
 SetResponseText (null);
 }
  */
 }
-public X_R_StandardResponse (Ctx ctx, int R_StandardResponse_ID, Trx trxName) : base (ctx, R_StandardResponse_ID, trxName)
+public X_VAR_Req_StandardReply (Ctx ctx, int VAR_Req_StandardReply_ID, Trx trxName) : base (ctx, VAR_Req_StandardReply_ID, trxName)
 {
-/** if (R_StandardResponse_ID == 0)
+/** if (VAR_Req_StandardReply_ID == 0)
 {
 SetName (null);
-SetR_StandardResponse_ID (0);
+SetVAR_Req_StandardReply_ID (0);
 SetResponseText (null);
 }
  */
@@ -41,7 +41,7 @@ SetResponseText (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StandardResponse (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_StandardReply (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_StandardResponse (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StandardResponse (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_StandardReply (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_StandardResponse (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StandardResponse (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_StandardReply (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_StandardResponse()
+static X_VAR_Req_StandardReply()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066667L;
 public static int Table_ID;
  // =775;
 
-/** TableName=R_StandardResponse */
-public static String Table_Name="R_StandardResponse";
+/** TableName=VAR_Req_StandardReply */
+public static String Table_Name="VAR_Req_StandardReply";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_StandardResponse[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_StandardReply[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Name.
@@ -139,17 +139,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Standard Response.
-@param R_StandardResponse_ID Request Standard Response */
-public void SetR_StandardResponse_ID (int R_StandardResponse_ID)
+@param VAR_Req_StandardReply_ID Request Standard Response */
+public void SetVAR_Req_StandardReply_ID (int VAR_Req_StandardReply_ID)
 {
-if (R_StandardResponse_ID < 1) throw new ArgumentException ("R_StandardResponse_ID is mandatory.");
-Set_ValueNoCheck ("R_StandardResponse_ID", R_StandardResponse_ID);
+if (VAR_Req_StandardReply_ID < 1) throw new ArgumentException ("VAR_Req_StandardReply_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_StandardReply_ID", VAR_Req_StandardReply_ID);
 }
 /** Get Standard Response.
 @return Request Standard Response */
-public int GetR_StandardResponse_ID() 
+public int GetVAR_Req_StandardReply_ID() 
 {
-Object ii = Get_Value("R_StandardResponse_ID");
+Object ii = Get_Value("VAR_Req_StandardReply_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

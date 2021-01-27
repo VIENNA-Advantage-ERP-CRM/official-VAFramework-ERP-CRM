@@ -109,13 +109,13 @@ public static void AddRestricts(int table_id, string table_name)
 //	Restrict Table ID
 //private static int[] _restricts = new int[]{
 //        //X_CM_Chat.Table_ID,
-//        //X_R_Request.Table_ID
+//        //X_VAR_Request.Table_ID
 //        };
 
         //	Restrict Table Names
         //private static string[] _restrictNames = new string[]{
         ////X_CM_Chat.Table_Name,
-        ////    X_R_Request.Table_Name
+        ////    X_VAR_Request.Table_Name
         //};
 
         /// <summary>

@@ -59,7 +59,7 @@ namespace VIS.Models
                 m_where += " OR VAA_Asset_ID=" + Record_ID;
             }
             string sql = "SELECT Processed, COUNT(*) "
-                  + "FROM R_Request WHERE " + m_where
+                  + "FROM VAR_Request WHERE " + m_where
                   + " GROUP BY Processed "
                   + "ORDER BY Processed DESC";
 
@@ -844,7 +844,7 @@ namespace VIS.Models
                     sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
                         _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], 0);
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();
@@ -859,7 +859,7 @@ namespace VIS.Models
                     sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetAD_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
                         _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], (yesCount + 1) + "0");
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();

@@ -11,20 +11,20 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MSession : X_AD_Session
+    public class MSession : X_VAF_Session
     {
         //Sessions			
-        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("AD_Session_ID", 30);   //	no
+        private static CCache<int, MSession> s_sessions = new CCache<int, MSession>("VAF_Session_ID", 30);   //	no
                                                                                                             /**	Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MSession).FullName);
 
         //	get
         /**	Sessions					*/
         private static CCache<int, MSession> cache = false
-            ? new CCache<int, MSession>("AD_Session_ID", 1, 0)		//	one client session 
-            : new CCache<int, MSession>("AD_Session_ID", 30, 0);    //	no time-out	
+            ? new CCache<int, MSession>("VAF_Session_ID", 1, 0)		//	one client session 
+            : new CCache<int, MSession>("VAF_Session_ID", 30, 0);    //	no time-out	
 
-        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("AD_Session_RoleLog", 10, 0);
+        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("VAF_Session_RoleLog", 10, 0);
 
         /* Do-not use CCache class :: cacahe list get clear at time cache reset process*/
         //private static Dictionary<int, MSession> cache = new Dictionary<int, MSession>(10);
@@ -37,18 +37,18 @@ namespace VAdvantage.Model
         /// <returns>session</returns>
         public static MSession Get(Ctx ctx, Boolean createNew)
         {
-            //int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
+            //int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
             //MSession session = null;
-            //if (AD_Session_ID > 0)
-            //    session = cache[AD_Session_ID];
+            //if (VAF_Session_ID > 0)
+            //    session = cache[VAF_Session_ID];
 
             //if (session == null && createNew)
             //{
             //    session = new MSession(ctx, null);	//	local session
             //    session.Save();
-            //    AD_Session_ID = session.GetAD_Session_ID();
-            //    ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
-            //    cache.Add(AD_Session_ID, session);
+            //    VAF_Session_ID = session.GetVAF_Session_ID();
+            //    ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+            //    cache.Add(VAF_Session_ID, session);
             //}
             //return session;
             return Get(ctx, createNew, "");
@@ -63,26 +63,26 @@ namespace VAdvantage.Model
         /// <returns>session</returns>
         public static MSession Get(Ctx ctx, Boolean createNew, String requestAddr)
         {
-            int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
             MSession session = null;
-            if (AD_Session_ID > 0)
-                session = cache[AD_Session_ID];
+            if (VAF_Session_ID > 0)
+                session = cache[VAF_Session_ID];
 
-            if (session == null && AD_Session_ID > 0)
+            if (session == null && VAF_Session_ID > 0)
             {
                 // check from DB
-                session = new MSession(ctx, AD_Session_ID, null);
-                if (session.Get_ID() != AD_Session_ID)
+                session = new MSession(ctx, VAF_Session_ID, null);
+                if (session.Get_ID() != VAF_Session_ID)
                     session = null;
                 else
-                    cache.Add(AD_Session_ID, session);
+                    cache.Add(VAF_Session_ID, session);
             }
 
             if (session != null && session.IsProcessed())
             {
                 s_log.Log(Level.WARNING, "Session Processed=" + session);
 
-                cache.Remove(AD_Session_ID);
+                cache.Remove(VAF_Session_ID);
                 session = null;
             }
 
@@ -95,9 +95,9 @@ namespace VAdvantage.Model
                     session.SetRequest_Addr(requestAddr);
                 }
                 session.Save();
-                AD_Session_ID = session.GetAD_Session_ID();
-                ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
-                cache.Add(AD_Session_ID, session);
+                VAF_Session_ID = session.GetVAF_Session_ID();
+                ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+                cache.Add(VAF_Session_ID, session);
             }
 
             if (session == null)
@@ -121,17 +121,17 @@ namespace VAdvantage.Model
         /// <returns>session</returns>
         public static MSession Get(Ctx ctx, String remoteAddr, String remoteHost, String WebSession)
         {
-            int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
             MSession session = null;
-            if (AD_Session_ID > 0)
-                session = cache[AD_Session_ID];
+            if (VAF_Session_ID > 0)
+                session = cache[VAF_Session_ID];
             if (session == null)
             {
                 session = new MSession(ctx, remoteAddr, remoteHost, WebSession, null);	//	remote session
                 session.Save();
-                AD_Session_ID = session.GetAD_Session_ID();
-                ctx.SetContext("#AD_Session_ID", AD_Session_ID.ToString());
-                cache.Add(AD_Session_ID, session);
+                VAF_Session_ID = session.GetVAF_Session_ID();
+                ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+                cache.Add(VAF_Session_ID, session);
             }
             return session;
         }
@@ -139,17 +139,17 @@ namespace VAdvantage.Model
 
         public static MSession Get(Ctx ctx, String SessionType, bool createNew, String Remote_Addr, String Remote_Host, String WebSession)
         {
-            int AD_Session_ID = ctx.GetContextAsInt("#AD_Session_ID");
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
             MSession session = null;
-            if (AD_Session_ID > 0)
+            if (VAF_Session_ID > 0)
             {
-                session = s_sessions.Get(ctx, AD_Session_ID);
+                session = s_sessions.Get(ctx, VAF_Session_ID);
                 if (session == null)
-                    session = new MSession(ctx, AD_Session_ID, null);
+                    session = new MSession(ctx, VAF_Session_ID, null);
                 if (session.IsProcessed())
                 {
                     s_log.Log(Level.WARNING, "Processed=" + session, new ArgumentException("Processed"));
-                    s_sessions.Remove(AD_Session_ID);
+                    s_sessions.Remove(VAF_Session_ID);
                     return null;
                 }
             }
@@ -159,13 +159,13 @@ namespace VAdvantage.Model
                 {
                     session = new MSession(ctx, SessionType, Remote_Addr, Remote_Host, null);
                     session.Save();
-                    AD_Session_ID = session.GetAD_Session_ID();
-                    ctx.SetContext("#AD_Session_ID", AD_Session_ID);
-                    cache.Add(AD_Session_ID, session);
-                    if (s_sessions.ContainsKey(AD_Session_ID))
-                        s_sessions[AD_Session_ID] = session;
+                    VAF_Session_ID = session.GetVAF_Session_ID();
+                    ctx.SetContext("#VAF_Session_ID", VAF_Session_ID);
+                    cache.Add(VAF_Session_ID, session);
+                    if (s_sessions.ContainsKey(VAF_Session_ID))
+                        s_sessions[VAF_Session_ID] = session;
                     else
-                        s_sessions.Add(AD_Session_ID, session);
+                        s_sessions.Add(VAF_Session_ID, session);
                 }
                 else
                     s_log.Warning("No Session!");
@@ -179,13 +179,13 @@ namespace VAdvantage.Model
         /// 	 * 	Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Session_ID">id</param>
+        /// <param name="VAF_Session_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MSession(Ctx ctx, int AD_Session_ID, Trx trxName)
-            : base(ctx, AD_Session_ID, trxName)
+        public MSession(Ctx ctx, int VAF_Session_ID, Trx trxName)
+            : base(ctx, VAF_Session_ID, trxName)
         {
 
-            if (AD_Session_ID == 0)
+            if (VAF_Session_ID == 0)
             {
                 SetProcessed(false);
                 int VAF_Role_ID = ctx.GetVAF_Role_ID();
@@ -296,8 +296,8 @@ namespace VAdvantage.Model
         {
             SetProcessed(true);
             Save();
-            cache.Remove(GetAD_Session_ID());
-            //(GetAD_Session_ID());
+            cache.Remove(GetVAF_Session_ID());
+            //(GetVAF_Session_ID());
             log.Info(TimeUtil.FormatElapsed(GetCreated(), GetUpdated()));
         }
 
@@ -363,7 +363,7 @@ namespace VAdvantage.Model
             }
             //
             log.Finest("VAF_AlterLog_ID=" + VAF_AlterLog_ID
-                    + ", AD_Session_ID=" + GetAD_Session_ID()
+                    + ", VAF_Session_ID=" + GetVAF_Session_ID()
                     + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
                    + ": " + oldValue + " -> " + newValue);
             //Boolean success = false;
@@ -374,7 +374,7 @@ namespace VAdvantage.Model
                 if (trx != null)
                     trxName = trx.GetTrxName();
                 MChangeLog cl = new MChangeLog(GetCtx(),
-                    VAF_AlterLog_ID, trxName, GetAD_Session_ID(),
+                    VAF_AlterLog_ID, trxName, GetVAF_Session_ID(),
                     VAF_TableView_ID, VAF_Column_ID, keyInfo, VAF_Client_ID, VAF_Org_ID,
                     oldValue, newValue);
                 if (cl.Save())
@@ -383,12 +383,12 @@ namespace VAdvantage.Model
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
-                    + ", AD_Session_ID=" + GetAD_Session_ID()
+                    + ", VAF_Session_ID=" + GetVAF_Session_ID()
                     + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID, e);
                 return null;
             }
             log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
-               + ", AD_Session_ID=" + GetAD_Session_ID()
+               + ", VAF_Session_ID=" + GetVAF_Session_ID()
                + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID);
             return null;
         }
@@ -409,14 +409,14 @@ namespace VAdvantage.Model
             MQueryLog qlog = null;
             try
             {
-                qlog = new MQueryLog(GetCtx(), GetAD_Session_ID(),
+                qlog = new MQueryLog(GetCtx(), GetVAF_Session_ID(),
                     VAF_Client_ID, VAF_Org_ID,
                     VAF_TableView_ID, whereClause, recordCount, parameter);
                 qlog.Save();
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
                     + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Where=" + whereClause
                    , e);
             }
@@ -505,14 +505,14 @@ namespace VAdvantage.Model
             MWindowLog wlog = null;
             try
             {
-                wlog = new MWindowLog(GetCtx(), GetAD_Session_ID(),
+                wlog = new MWindowLog(GetCtx(), GetVAF_Session_ID(),
                     VAF_Client_ID, VAF_Org_ID,
                     VAF_Screen_ID, VAF_Page_ID);
                 wlog.Save();
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
                     + ", VAF_Screen_ID=" + VAF_Screen_ID + ", VAF_Page_ID=" + VAF_Page_ID
                     , e);
             }
@@ -563,7 +563,7 @@ namespace VAdvantage.Model
         /// Log view/download action events
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Session_ID">sessioni id</param>
+        /// <param name="VAF_Session_ID">sessioni id</param>
         /// <param name="VAF_Client_ID"client id></param>
         /// <param name="VAF_Org_ID">org id</param>
         /// <param name="action">menu action (window.proces etc)</param>
@@ -573,7 +573,7 @@ namespace VAdvantage.Model
         /// <param name="VAF_TableView_ID">table id</param>
         /// <param name="Record_ID">record id</param>
         /// <returns></returns>
-        public MActionLog ActionLog(Ctx ctx, int AD_Session_ID,
+        public MActionLog ActionLog(Ctx ctx, int VAF_Session_ID,
     int VAF_Client_ID, int VAF_Org_ID,
     String actionOrigin, string actionType, String OriginName, string desc, int VAF_TableView_ID, int Record_ID = 0)
         {
@@ -582,14 +582,14 @@ namespace VAdvantage.Model
             MActionLog alog = null;
             try
             {
-                alog = new MActionLog(GetCtx(), GetAD_Session_ID(),
+                alog = new MActionLog(GetCtx(), GetVAF_Session_ID(),
                     VAF_Client_ID, VAF_Org_ID, actionOrigin, actionType, OriginName, desc, VAF_TableView_ID, Record_ID);
 
                 alog.Save();
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "AD_Session_ID=" + GetAD_Session_ID()
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
                     + ", VAF_TableView_ID=" + VAF_TableView_ID + ", actionOrigin=" + OriginName
                    , e);
             }

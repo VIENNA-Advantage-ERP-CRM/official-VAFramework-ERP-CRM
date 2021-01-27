@@ -133,7 +133,7 @@ namespace VAdvantage.Acct
             {
                 cost = GetPOCost(as1);
             }
-            else if (_issue.GetS_TimeExpenseLine_ID() != 0)
+            else if (_issue.GetVAS_ExpenseReportLine_ID() != 0)
             {
                 cost = GetLaborCost(as1);
             }

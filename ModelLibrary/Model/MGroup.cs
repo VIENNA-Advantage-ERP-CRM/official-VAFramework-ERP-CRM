@@ -22,35 +22,35 @@ namespace VAdvantage.Model
         /**
          * 	Get MGroup from Cache
          *	@param ctx context
-         *	@param R_Group_ID id
+         *	@param VAR_Group_ID id
          *	@return MGroup
          */
-        public static MGroup Get(Ctx ctx, int R_Group_ID)
+        public static MGroup Get(Ctx ctx, int VAR_Group_ID)
         {
-            int key = R_Group_ID;
+            int key = VAR_Group_ID;
             MGroup retValue = (MGroup)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MGroup(ctx, R_Group_ID, null);
+            retValue = new MGroup(ctx, VAR_Group_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         } //	get
 
         /**	Cache						*/
-        private static CCache<int, MGroup> _cache = new CCache<int, MGroup>("R_Group", 20);
+        private static CCache<int, MGroup> _cache = new CCache<int, MGroup>("VAR_Group", 20);
 
 
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param R_Group_ID group
+         *	@param VAR_Group_ID group
          *	@param trxName trx
          */
-        public MGroup(Ctx ctx, int R_Group_ID, Trx trxName) :
-            base(ctx, R_Group_ID, trxName)
+        public MGroup(Ctx ctx, int VAR_Group_ID, Trx trxName) :
+            base(ctx, VAR_Group_ID, trxName)
         {
-            //super(ctx, R_Group_ID, trxName);
+            //super(ctx, VAR_Group_ID, trxName);
         }	//	MGroup
 
         /**

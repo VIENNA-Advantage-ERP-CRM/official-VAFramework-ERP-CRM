@@ -655,7 +655,7 @@ namespace VAdvantage.Print
                     String TableName = dr[0].ToString();
                     String ColumnName = TableName + "_ID";
                     s = ColumnName;
-                    if (!ColumnName.Equals("T_Report_ID"))
+                    if (!ColumnName.Equals("VAT_Report_ID"))
                     {
                         s = Msg.Translate(ctx, ColumnName);
                         if (ColumnName.Equals(s)) //	not found
@@ -780,7 +780,7 @@ namespace VAdvantage.Print
                         String TableName = dr[0].ToString();
                         String ColumnName = TableName + "_ID";
                         s = ColumnName;
-                        if (!ColumnName.Equals("T_Report_ID"))
+                        if (!ColumnName.Equals("VAT_Report_ID"))
                         {
                             s = Msg.Translate(ctx, ColumnName);
                             if (ColumnName.Equals(s)) //	not found

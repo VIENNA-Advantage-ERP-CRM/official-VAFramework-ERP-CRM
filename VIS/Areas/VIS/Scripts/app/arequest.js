@@ -85,7 +85,7 @@
                 m_where += " OR VAA_Asset_ID=" + Record_ID;
             }
             //sql = "SELECT Processed, COUNT(*) "
-            //    + "FROM R_Request WHERE " + m_where
+            //    + "FROM VAR_Request WHERE " + m_where
             //    + " GROUP BY Processed "
             //    + "ORDER BY Processed DESC";
 

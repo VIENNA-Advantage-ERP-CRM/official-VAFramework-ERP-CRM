@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for R_StatusCategory
+/** Generated Model for VAR_Req_StatusCategory
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_StatusCategory : PO
+public class X_VAR_Req_StatusCategory : PO
 {
-public X_R_StatusCategory (Context ctx, int R_StatusCategory_ID, Trx trxName) : base (ctx, R_StatusCategory_ID, trxName)
+public X_VAR_Req_StatusCategory (Context ctx, int VAR_Req_StatusCategory_ID, Trx trxName) : base (ctx, VAR_Req_StatusCategory_ID, trxName)
 {
-/** if (R_StatusCategory_ID == 0)
-{
-SetIsDefault (false);
-SetName (null);
-SetR_StatusCategory_ID (0);
-}
- */
-}
-public X_R_StatusCategory (Ctx ctx, int R_StatusCategory_ID, Trx trxName) : base (ctx, R_StatusCategory_ID, trxName)
-{
-/** if (R_StatusCategory_ID == 0)
+/** if (VAR_Req_StatusCategory_ID == 0)
 {
 SetIsDefault (false);
 SetName (null);
-SetR_StatusCategory_ID (0);
+SetVAR_Req_StatusCategory_ID (0);
+}
+ */
+}
+public X_VAR_Req_StatusCategory (Ctx ctx, int VAR_Req_StatusCategory_ID, Trx trxName) : base (ctx, VAR_Req_StatusCategory_ID, trxName)
+{
+/** if (VAR_Req_StatusCategory_ID == 0)
+{
+SetIsDefault (false);
+SetName (null);
+SetVAR_Req_StatusCategory_ID (0);
 }
  */
 }
@@ -41,7 +41,7 @@ SetR_StatusCategory_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StatusCategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_StatusCategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_R_StatusCategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StatusCategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Req_StatusCategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_R_StatusCategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_R_StatusCategory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Req_StatusCategory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_StatusCategory()
+static X_VAR_Req_StatusCategory()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389066729L;
 public static int Table_ID;
  // =844;
 
-/** TableName=R_StatusCategory */
-public static String Table_Name="R_StatusCategory";
+/** TableName=VAR_Req_StatusCategory */
+public static String Table_Name="VAR_Req_StatusCategory";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_StatusCategory[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Req_StatusCategory[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -191,17 +191,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetName());
 }
 /** Set Status Category.
-@param R_StatusCategory_ID Request Status Category */
-public void SetR_StatusCategory_ID (int R_StatusCategory_ID)
+@param VAR_Req_StatusCategory_ID Request Status Category */
+public void SetVAR_Req_StatusCategory_ID (int VAR_Req_StatusCategory_ID)
 {
-if (R_StatusCategory_ID < 1) throw new ArgumentException ("R_StatusCategory_ID is mandatory.");
-Set_ValueNoCheck ("R_StatusCategory_ID", R_StatusCategory_ID);
+if (VAR_Req_StatusCategory_ID < 1) throw new ArgumentException ("VAR_Req_StatusCategory_ID is mandatory.");
+Set_ValueNoCheck ("VAR_Req_StatusCategory_ID", VAR_Req_StatusCategory_ID);
 }
 /** Get Status Category.
 @return Request Status Category */
-public int GetR_StatusCategory_ID() 
+public int GetVAR_Req_StatusCategory_ID() 
 {
-Object ii = Get_Value("R_StatusCategory_ID");
+Object ii = Get_Value("VAR_Req_StatusCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

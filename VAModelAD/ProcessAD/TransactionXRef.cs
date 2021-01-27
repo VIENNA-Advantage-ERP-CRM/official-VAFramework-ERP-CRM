@@ -112,7 +112,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <param name="sqlSubSelect">sql</param>
 	private void InsertTrx (String sqlSubSelect)
 	{
-		String sql = "INSERT INTO T_Transaction "
+		String sql = "INSERT INTO VAT_Transaction "
 			+ "(VAF_JInstance_ID, M_Transaction_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
 			+ " MovementType, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"

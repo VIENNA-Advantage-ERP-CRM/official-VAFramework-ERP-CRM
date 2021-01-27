@@ -11,31 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_DistributionRunDetail
+/** Generated Model for VAT_CirculationDetail
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_DistributionRunDetail : PO
+public class X_VAT_CirculationDetail : PO
 {
-public X_T_DistributionRunDetail (Context ctx, int T_DistributionRunDetail_ID, Trx trxName) : base (ctx, T_DistributionRunDetail_ID, trxName)
+public X_VAT_CirculationDetail (Context ctx, int VAT_CirculationDetail_ID, Trx trxName) : base (ctx, VAT_CirculationDetail_ID, trxName)
 {
-/** if (T_DistributionRunDetail_ID == 0)
-{
-SetVAB_BusinessPartner_ID (0);
-SetVAB_BPart_Location_ID (0);
-SetM_DistributionListLine_ID (0);
-SetM_DistributionList_ID (0);
-SetM_DistributionRunLine_ID (0);
-SetM_DistributionRun_ID (0);
-SetM_Product_ID (0);
-SetMinQty (0.0);
-SetQty (0.0);
-SetRatio (0.0);
-}
- */
-}
-public X_T_DistributionRunDetail (Ctx ctx, int T_DistributionRunDetail_ID, Trx trxName) : base (ctx, T_DistributionRunDetail_ID, trxName)
-{
-/** if (T_DistributionRunDetail_ID == 0)
+/** if (VAT_CirculationDetail_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_BPart_Location_ID (0);
@@ -50,12 +33,29 @@ SetRatio (0.0);
 }
  */
 }
+public X_VAT_CirculationDetail (Ctx ctx, int VAT_CirculationDetail_ID, Trx trxName) : base (ctx, VAT_CirculationDetail_ID, trxName)
+{
+/** if (VAT_CirculationDetail_ID == 0)
+{
+SetVAB_BusinessPartner_ID (0);
+SetVAB_BPart_Location_ID (0);
+SetM_DistributionListLine_ID (0);
+SetM_DistributionList_ID (0);
+SetM_DistributionRunLine_ID (0);
+SetM_DistributionRun_ID (0);
+SetM_Product_ID (0);
+SetMinQty (0.0);
+SetQty (0.0);
+SetRatio (0.0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_DistributionRunDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_CirculationDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_T_DistributionRunDetail (Context ctx, DataRow rs, Trx trxName) : base(c
 @param rs result set 
 @param trxName transaction
 */
-public X_T_DistributionRunDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_CirculationDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_T_DistributionRunDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_T_DistributionRunDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_CirculationDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_DistributionRunDetail()
+static X_VAT_CirculationDetail()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389067388L;
 public static int Table_ID;
  // =714;
 
-/** TableName=T_DistributionRunDetail */
-public static String Table_Name="T_DistributionRunDetail";
+/** TableName=VAT_CirculationDetail */
+public static String Table_Name="VAT_CirculationDetail";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -125,7 +125,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_DistributionRunDetail[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_CirculationDetail[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.

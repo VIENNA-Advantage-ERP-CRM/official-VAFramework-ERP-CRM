@@ -157,12 +157,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Set R_Request_ID
-         *	@param R_Request_ID
+         * 	Set VAR_Request_ID
+         *	@param VAR_Request_ID
          */
-        public new void SetR_Request_ID(int R_Request_ID)
+        public new void SetVAR_Request_ID(int VAR_Request_ID)
         {
-            base.SetR_Request_ID(R_Request_ID);
+            base.SetVAR_Request_ID(VAR_Request_ID);
             GetRequest();
         }
 
@@ -172,78 +172,78 @@ namespace VAdvantage.Model
          */
         public MRequest GetRequest()
         {
-            if (GetR_Request_ID() == 0)
+            if (GetVAR_Request_ID() == 0)
                 _request = null;
             else if (_request == null
-                || _request.GetR_Request_ID() != GetR_Request_ID())
-                _request = new MRequest(GetCtx(), GetR_Request_ID(), Get_TrxName());
+                || _request.GetVAR_Request_ID() != GetVAR_Request_ID())
+                _request = new MRequest(GetCtx(), GetVAR_Request_ID(), Get_TrxName());
             return _request;
         }
 
         /**
-         * 	Set R_Status_ID
-         *	@see Model.X_VAB_Lead#SetR_Status_ID(int)
-         *	@param R_Status_ID
+         * 	Set VAR_Req_Status_ID
+         *	@see Model.X_VAB_Lead#SetVAR_Req_Status_ID(int)
+         *	@param VAR_Req_Status_ID
          */
-        public new void SetR_Status_ID(int R_Status_ID)
+        public new void SetVAR_Req_Status_ID(int VAR_Req_Status_ID)
         {
-            if (IsR_Status_IDValid(R_Status_ID))
-                base.SetR_Status_ID(R_Status_ID);
+            if (IsVAR_Req_Status_IDValid(VAR_Req_Status_ID))
+                base.SetVAR_Req_Status_ID(VAR_Req_Status_ID);
             else
-                base.SetR_Status_ID(0);
+                base.SetVAR_Req_Status_ID(0);
             GetStatus();
         }
 
         /**
-         * 	Is R_Status_ID Valid
-         *	@param R_Status_ID id
+         * 	Is VAR_Req_Status_ID Valid
+         *	@param VAR_Req_Status_ID id
          *	@return true if valid
          */
-        public bool IsR_Status_IDValid(int R_Status_ID)
+        public bool IsVAR_Req_Status_IDValid(int VAR_Req_Status_ID)
         {
-            if (R_Status_ID == 0)
+            if (VAR_Req_Status_ID == 0)
                 return true;
 
-            _Status = MStatus.Get(GetCtx(), R_Status_ID);
-            int R_StatusCategory_ID = _Status.GetR_StatusCategory_ID();
+            _Status = MStatus.Get(GetCtx(), VAR_Req_Status_ID);
+            int VAR_Req_StatusCategory_ID = _Status.GetVAR_Req_StatusCategory_ID();
             //
-            int R_RequestType_ID = GetR_RequestType_ID();
-            if (R_RequestType_ID == 0)
+            int VAR_Req_Type_ID = GetVAR_Req_Type_ID();
+            if (VAR_Req_Type_ID == 0)
             {
                 log.Warning("No Client Request Type");
                 return false;
             }
-            MRequestType rt = MRequestType.Get(GetCtx(), R_RequestType_ID);
-            if (rt.GetR_StatusCategory_ID() != R_StatusCategory_ID)
+            MRequestType rt = MRequestType.Get(GetCtx(), VAR_Req_Type_ID);
+            if (rt.GetVAR_Req_StatusCategory_ID() != VAR_Req_StatusCategory_ID)
             {
                 log.Warning("Status Category different - Status("
-                    + R_StatusCategory_ID + ") <> RequestType("
-                    + rt.GetR_StatusCategory_ID() + ")");
+                    + VAR_Req_StatusCategory_ID + ") <> RequestType("
+                    + rt.GetVAR_Req_StatusCategory_ID() + ")");
                 return false;
             }
             return true;
         }
 
         /**
-         * 	Get R_RequestType_ID
+         * 	Get VAR_Req_Type_ID
          *	@return Request Type
          */
-        private int GetR_RequestType_ID()
+        private int GetVAR_Req_Type_ID()
         {
             MClientInfo ci = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
-            int R_RequestType_ID = ci.GetR_RequestType_ID();
-            if (R_RequestType_ID != 0)
-                return R_RequestType_ID;
+            int VAR_Req_Type_ID = ci.GetVAR_Req_Type_ID();
+            if (VAR_Req_Type_ID != 0)
+                return VAR_Req_Type_ID;
             log.Warning("Set Request Type in Window Client Info");
 
             //	Default
             MRequestType rt = MRequestType.GetDefault(GetCtx());
             if (rt != null)
             {
-                R_RequestType_ID = rt.GetR_RequestType_ID();
-                ci.SetR_RequestType_ID(R_RequestType_ID);
+                VAR_Req_Type_ID = rt.GetVAR_Req_Type_ID();
+                ci.SetVAR_Req_Type_ID(VAR_Req_Type_ID);
                 ci.Save();
-                return R_RequestType_ID;
+                return VAR_Req_Type_ID;
             }
             //
             return 0;
@@ -255,11 +255,11 @@ namespace VAdvantage.Model
          */
         public new MStatus GetStatus()
         {
-            if (GetR_Status_ID() == 0)
+            if (GetVAR_Req_Status_ID() == 0)
                 _Status = null;
             else if (_Status == null
-                || _Status.GetR_Status_ID() != GetR_Status_ID())
-                _Status = MStatus.Get(GetCtx(), GetR_Status_ID());
+                || _Status.GetVAR_Req_Status_ID() != GetVAR_Req_Status_ID())
+                _Status = MStatus.Get(GetCtx(), GetVAR_Req_Status_ID());
             return _Status;
         }
 
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
 
                 if (GetR_InterestArea_ID() != 0)
                 {
-                    string sql = "Select R_InterestArea_ID from vss_lead_interestarea where VAB_Lead_ID=" + GetVAB_Lead_ID();
+                    string sql = "Select VAR_InterestArea_ID from vss_lead_interestarea where VAB_Lead_ID=" + GetVAB_Lead_ID();
                     IDataReader dr = DB.ExecuteReader(sql, null, Get_TrxName());
                     while (dr.Read())
                     {
@@ -606,26 +606,26 @@ namespace VAdvantage.Model
 
         /**
          * 	Create Request from Lead
-         * 	@param R_RequestType_ID request type
+         * 	@param VAR_Req_Type_ID request type
          *	@return error message
          */
         public String CreateRequest()
         {
-            int R_RequestType_ID = GetR_RequestType_ID();
-            if (R_RequestType_ID == 0)
-                return "@NotFound@: @R_RequestType_ID@ (@VAF_Client_ID@)";
-            return CreateRequest(R_RequestType_ID);
+            int VAR_Req_Type_ID = GetVAR_Req_Type_ID();
+            if (VAR_Req_Type_ID == 0)
+                return "@NotFound@: @VAR_Req_Type_ID@ (@VAF_Client_ID@)";
+            return CreateRequest(VAR_Req_Type_ID);
         }
 
         /**
          * 	Create Request from Lead
-         * 	@param R_RequestType_ID request type
+         * 	@param VAR_Req_Type_ID request type
          *	@return error message
          */
-        private String CreateRequest(int R_RequestType_ID)
+        private String CreateRequest(int VAR_Req_Type_ID)
         {
-            if (GetR_Request_ID() != 0)
-                return "@AlreadyExists@: @R_Request_ID@ (ID=" + GetR_Request_ID() + ")";
+            if (GetVAR_Request_ID() != 0)
+                return "@AlreadyExists@: @VAR_Request_ID@ (ID=" + GetVAR_Request_ID() + ")";
             if (GetVAB_BusinessPartner_ID() == 0)
             {
                 String retValue = CreateBP();
@@ -643,11 +643,11 @@ namespace VAdvantage.Model
                 summary = GetDescription();
             _request.SetSummary(summary);
             //
-            _request.SetR_RequestType_ID(R_RequestType_ID);
-            if (IsR_Status_IDValid(GetR_Status_ID()))
-                _request.SetR_Status_ID(GetR_Status_ID());
+            _request.SetVAR_Req_Type_ID(VAR_Req_Type_ID);
+            if (IsVAR_Req_Status_IDValid(GetVAR_Req_Status_ID()))
+                _request.SetVAR_Req_Status_ID(GetVAR_Req_Status_ID());
             else
-                _request.SetR_Status_ID();
+                _request.SetVAR_Req_Status_ID();
             //
             _request.SetVAB_Lead_ID(GetVAB_Lead_ID());
             //
@@ -655,7 +655,7 @@ namespace VAdvantage.Model
             _request.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
             _request.SetVAB_Project_ID(GetVAB_Project_ID());
             _request.SetVAB_Promotion_ID(GetVAB_Promotion_ID());
-            _request.SetR_Source_ID(GetR_Source_ID());
+            _request.SetVAR_Source_ID(GetVAR_Source_ID());
             _request.SetVAB_BusinessPartnerSR_ID(GetVAB_BusinessPartnerSR_ID());
             _request.SetVAB_SalesRegionState_ID(GetVAB_SalesRegionState_ID());
 
@@ -663,7 +663,7 @@ namespace VAdvantage.Model
             if (!_request.Save())
                 return "@SaveError@";
             //
-            SetR_Request_ID(_request.GetR_Request_ID());
+            SetVAR_Request_ID(_request.GetVAR_Request_ID());
             return null;
         }
 
@@ -678,10 +678,10 @@ namespace VAdvantage.Model
             if (GetEMail() != null && GetVAF_UserContact_ID() == 0)
                 SetVAF_UserContact_ID();
 
-            if (newRecord || Is_ValueChanged("R_Status_ID"))
+            if (newRecord || Is_ValueChanged("VAR_Req_Status_ID"))
             {
-                if (!IsR_Status_IDValid(GetR_Status_ID()))
-                    SetR_Status_ID(0);
+                if (!IsVAR_Req_Status_IDValid(GetVAR_Req_Status_ID()))
+                    SetVAR_Req_Status_ID(0);
                 else if (_Status != null)
                     SetProcessed(_Status.IsClosed());
             }
@@ -702,7 +702,7 @@ namespace VAdvantage.Model
 
             //	Create Contact Interest
             if (GetVAF_UserContact_ID() != 0 && GetR_InterestArea_ID() != 0
-                && (Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("R_InterestArea_ID")))
+                && (Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("VAR_InterestArea_ID")))
             {
                 MContactInterest ci = MContactInterest.Get(GetCtx(),
                     GetR_InterestArea_ID(), GetVAF_UserContact_ID(),

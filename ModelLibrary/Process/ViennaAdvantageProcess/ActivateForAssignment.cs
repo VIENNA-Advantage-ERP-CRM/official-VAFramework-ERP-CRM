@@ -27,24 +27,24 @@ namespace ViennaAdvantage.Process
     public class ActivateForAssignment : SvrProcess
     {
         #region Private Variable
-        private int S_Resource_id = 0;
+        private int VAS_Resource_ID = 0;
         private int VAB_BusinessPartner_ID = 0;
         #endregion
         protected override void Prepare()
         {
             // C_ResourcePeriod_ID = Util.GetValueOfInt(GetRecord_ID());
-            S_Resource_id = GetRecord_ID();
+            VAS_Resource_ID = GetRecord_ID();
 
         }
 
         protected override String DoIt()
         {
-            if (S_Resource_id == 0)
+            if (VAS_Resource_ID == 0)
             {
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
-            VAdvantage.Model.MResource Resource = new VAdvantage.Model.MResource(GetCtx(), S_Resource_id, Get_Trx());
-            string sql = "select ProfileType from s_resource where s_resource_id=" + S_Resource_id + "";
+            VAdvantage.Model.MResource Resource = new VAdvantage.Model.MResource(GetCtx(), VAS_Resource_ID, Get_Trx());
+            string sql = "select ProfileType from VAS_Resource where VAS_Resource_ID=" + VAS_Resource_ID + "";
             string ProfileType = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sql));
             VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), 0, Get_Trx());
             VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_Trx());

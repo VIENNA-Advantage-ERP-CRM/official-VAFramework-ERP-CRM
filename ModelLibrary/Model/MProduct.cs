@@ -260,9 +260,9 @@ namespace VAdvantage.Model
                 SetProductType(PRODUCTTYPE_ExpenseType);
                 changed = true;
             }
-            if (parent.GetS_ExpenseType_ID() != GetS_ExpenseType_ID())
+            if (parent.GetVAS_ChargeType_ID() != GetVAS_ChargeType_ID())
             {
-                SetS_ExpenseType_ID(parent.GetS_ExpenseType_ID());
+                SetVAS_ChargeType_ID(parent.GetVAS_ChargeType_ID());
                 changed = true;
             }
             if (parent.IsActive() != IsActive())

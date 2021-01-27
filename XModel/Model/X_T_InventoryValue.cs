@@ -11,25 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_InventoryValue
+/** Generated Model for VAT_StockData
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_InventoryValue : PO
+public class X_VAT_StockData : PO
 {
-public X_T_InventoryValue (Context ctx, int T_InventoryValue_ID, Trx trxName) : base (ctx, T_InventoryValue_ID, trxName)
+public X_VAT_StockData (Context ctx, int VAT_StockData_ID, Trx trxName) : base (ctx, VAT_StockData_ID, trxName)
 {
-/** if (T_InventoryValue_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
-}
- */
-}
-public X_T_InventoryValue (Ctx ctx, int T_InventoryValue_ID, Trx trxName) : base (ctx, T_InventoryValue_ID, trxName)
-{
-/** if (T_InventoryValue_ID == 0)
+/** if (VAT_StockData_ID == 0)
 {
 SetVAF_JInstance_ID (0);
 SetM_AttributeSetInstance_ID (0);
@@ -38,12 +27,23 @@ SetM_Warehouse_ID (0);
 }
  */
 }
+public X_VAT_StockData (Ctx ctx, int VAT_StockData_ID, Trx trxName) : base (ctx, VAT_StockData_ID, trxName)
+{
+/** if (VAT_StockData_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetM_AttributeSetInstance_ID (0);
+SetM_Product_ID (0);
+SetM_Warehouse_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InventoryValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_StockData (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_T_InventoryValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InventoryValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_StockData (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_T_InventoryValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_T_InventoryValue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_StockData (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_InventoryValue()
+static X_VAT_StockData()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389067466L;
 public static int Table_ID;
  // =478;
 
-/** TableName=T_InventoryValue */
-public static String Table_Name="T_InventoryValue";
+/** TableName=VAT_StockData */
+public static String Table_Name="VAT_StockData";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_InventoryValue[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_StockData[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

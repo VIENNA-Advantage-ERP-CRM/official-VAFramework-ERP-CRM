@@ -2420,7 +2420,7 @@ namespace VIS.Models
         public string _IsLotSerial { get; set; }
         public int _Locator_ID { get; set; }
         public int _countID { get; set; }
-        public string _AD_Session_ID { get; set; }
+        public string _VAF_Session_ID { get; set; }
         public int _windowNo { get; set; }
     }
 

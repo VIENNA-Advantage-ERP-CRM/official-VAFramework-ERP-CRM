@@ -18,21 +18,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRequestType : X_R_RequestType
+    public class MRequestType : X_VAR_Req_Type
     {
         /**
          * 	Get Request Type (cached)
          *	@param ctx context
-         *	@param R_RequestType_ID id
+         *	@param VAR_Req_Type_ID id
          *	@return Request Type
          */
-        public static MRequestType Get(Ctx ctx, int R_RequestType_ID)
+        public static MRequestType Get(Ctx ctx, int VAR_Req_Type_ID)
         {
-            int key = R_RequestType_ID;
+            int key = VAR_Req_Type_ID;
             MRequestType retValue = (MRequestType)_cache[key];
             if (retValue == null)
             {
-                retValue = new MRequestType(ctx, R_RequestType_ID, null);
+                retValue = new MRequestType(ctx, VAR_Req_Type_ID, null);
                 _cache.Add(key, retValue);
             }
             return retValue;
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         // Static Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MRequestType).FullName);
         /**	Cache							*/
-        static private CCache<int, MRequestType> _cache = new CCache<int, MRequestType>("R_RequestType", 10);
+        static private CCache<int, MRequestType> _cache = new CCache<int, MRequestType>("VAR_Req_Type", 10);
 
         /**
          * 	Get Default Request Type
@@ -52,9 +52,9 @@ namespace VAdvantage.Model
         {
             MRequestType retValue = null;
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM R_RequestType "
+            String sql = "SELECT * FROM VAR_Req_Type "
                 + "WHERE VAF_Client_ID IN (0,11) AND IsActive='Y'"
-                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, R_Request_ID DESC";
+                + "ORDER BY IsDefault DESC, VAF_Client_ID DESC, VAR_Request_ID DESC";
             DataSet ds;
             try
             {
@@ -84,15 +84,15 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param R_RequestType_ID id
+         *	@param VAR_Req_Type_ID id
          *	@param trxName transaction
          */
-        public MRequestType(Ctx ctx, int R_RequestType_ID, Trx trxName) :
-            base(ctx, R_RequestType_ID, trxName)
+        public MRequestType(Ctx ctx, int VAR_Req_Type_ID, Trx trxName) :
+            base(ctx, VAR_Req_Type_ID, trxName)
         {
-            if (R_RequestType_ID == 0)
+            if (VAR_Req_Type_ID == 0)
             {
-                //	SetR_RequestType_ID (0);
+                //	SetVAR_Req_Type_ID (0);
                 //	SetName (null);
                 SetDueDateTolerance(7);
                 SetIsDefault(false);
@@ -140,20 +140,20 @@ namespace VAdvantage.Model
                 return;
 
             String sql = "SELECT "
-                + "(SELECT COUNT(*) FROM R_Request r"
-                + " INNER JOIN R_Status s ON (r.R_Status_ID=s.R_Status_ID AND s.IsOpen='Y') "
-                + "WHERE r.R_RequestType_ID=x.R_RequestType_ID) AS OpenNo, "
-                + "(SELECT COUNT(*) FROM R_Request r "
-                + "WHERE r.R_RequestType_ID=x.R_RequestType_ID) AS TotalNo, "
-                + "(SELECT COUNT(*) FROM R_Request r "
-                //jz + "WHERE r.R_RequestType_ID=x.R_RequestType_ID AND Created>SysDate-30) AS New30No, "
-                + "WHERE r.R_RequestType_ID=x.R_RequestType_ID AND Created>addDays(SysDate,-30)) AS New30No, "
-                + "(SELECT COUNT(*) FROM R_Request r"
-                + " INNER JOIN R_Status s ON (r.R_Status_ID=s.R_Status_ID AND s.IsClosed='Y') "
-                //jz + "WHERE r.R_RequestType_ID=x.R_RequestType_ID AND r.Updated>SysDate-30) AS Closed30No "
-                + "WHERE r.R_RequestType_ID=x.R_RequestType_ID AND r.Updated>addDays(SysDate,-30)) AS Closed30No "
+                + "(SELECT COUNT(*) FROM VAR_Request r"
+                + " INNER JOIN VAR_Req_Status s ON (r.VAR_Req_Status_ID=s.VAR_Req_Status_ID AND s.IsOpen='Y') "
+                + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID) AS OpenNo, "
+                + "(SELECT COUNT(*) FROM VAR_Request r "
+                + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID) AS TotalNo, "
+                + "(SELECT COUNT(*) FROM VAR_Request r "
+                //jz + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID AND Created>SysDate-30) AS New30No, "
+                + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID AND Created>addDays(SysDate,-30)) AS New30No, "
+                + "(SELECT COUNT(*) FROM VAR_Request r"
+                + " INNER JOIN VAR_Req_Status s ON (r.VAR_Req_Status_ID=s.VAR_Req_Status_ID AND s.IsClosed='Y') "
+                //jz + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID AND r.Updated>SysDate-30) AS Closed30No "
+                + "WHERE r.VAR_Req_Type_ID=x.VAR_Req_Type_ID AND r.Updated>addDays(SysDate,-30)) AS Closed30No "
                 //
-                + "FROM R_RequestType x WHERE R_RequestType_ID=" + GetR_RequestType_ID();
+                + "FROM VAR_Req_Type x WHERE VAR_Req_Type_ID=" + GetVAR_Req_Type_ID();
             
             IDataReader idr=null;
             try
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
          */
         public MRequest[] GetRequests(Boolean selfService, int VAB_BusinessPartner_ID)
         {
-            String sql = "SELECT * FROM R_Request WHERE R_RequestType_ID=" + GetR_RequestType_ID();
+            String sql = "SELECT * FROM VAR_Request WHERE VAR_Req_Type_ID=" + GetVAR_Req_Type_ID();
             if (selfService)
                 sql += " AND IsSelfService='Y'";
             if (VAB_BusinessPartner_ID == 0)
@@ -270,23 +270,23 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get Default R_Status_ID for Type
+         * 	Get Default VAR_Req_Status_ID for Type
          *	@return status or 0
          */
-        public int GetDefaultR_Status_ID()
+        public int GetDefaultVAR_Req_Status_ID()
         {
-            if (GetR_StatusCategory_ID() == 0)
+            if (GetVAR_Req_StatusCategory_ID() == 0)
             {
                 MStatusCategory sc = MStatusCategory.GetDefault(GetCtx());
                 if (sc == null)
                     sc = MStatusCategory.CreateDefault(GetCtx());
-                if (sc != null && sc.GetR_StatusCategory_ID() != 0)
-                    SetR_StatusCategory_ID(sc.GetR_StatusCategory_ID());
+                if (sc != null && sc.GetVAR_Req_StatusCategory_ID() != 0)
+                    SetVAR_Req_StatusCategory_ID(sc.GetVAR_Req_StatusCategory_ID());
             }
-            if (GetR_StatusCategory_ID() != 0)
+            if (GetVAR_Req_StatusCategory_ID() != 0)
             {
-                MStatusCategory sc = MStatusCategory.Get(GetCtx(), GetR_StatusCategory_ID());
-                return sc.GetDefaultR_Status_ID();
+                MStatusCategory sc = MStatusCategory.Get(GetCtx(), GetVAR_Req_StatusCategory_ID());
+                return sc.GetDefaultVAR_Req_Status_ID();
             }
             return 0;
         }
@@ -298,11 +298,11 @@ namespace VAdvantage.Model
          */
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            if (GetR_StatusCategory_ID() == 0)
+            if (GetVAR_Req_StatusCategory_ID() == 0)
             {
                 MStatusCategory sc = MStatusCategory.GetDefault(GetCtx());
-                if (sc != null && sc.GetR_StatusCategory_ID() != 0)
-                    SetR_StatusCategory_ID(sc.GetR_StatusCategory_ID());
+                if (sc != null && sc.GetVAR_Req_StatusCategory_ID() != 0)
+                    SetVAR_Req_StatusCategory_ID(sc.GetVAR_Req_StatusCategory_ID());
             }
             return true;
         }
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
             String pColumn = "M_Product_ID";
             //	PlannedAmt -> PlannedQty -> Count
             StringBuilder sb = new StringBuilder("SELECT COUNT(*) "
-                + "FROM R_Request WHERE R_RequestType_ID=" + GetR_RequestType_ID()
+                + "FROM VAR_Request WHERE VAR_Req_Type_ID=" + GetVAR_Req_Type_ID()
                 + " AND Processed<>'Y'");
             //	Date Restriction
 
@@ -364,7 +364,7 @@ namespace VAdvantage.Model
             }	//	date
             //
             String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
-                "R_Request", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
 
             log.Fine(sql);
             return sql;
@@ -411,18 +411,18 @@ namespace VAdvantage.Model
                 //			sb.append(groupBy)
                 groupBy = orderBy + ", CAST(0 AS INTEGER) ";
                 sb.Append(groupBy)
-                    .Append("FROM R_Request ");
+                    .Append("FROM VAR_Request ");
             }
             else
             {
                 orderBy = "s.SeqNo";
-                groupBy = "COALESCE(s.Name,TO_NCHAR('-')), s.R_Status_ID, s.SeqNo ";
+                groupBy = "COALESCE(s.Name,TO_NCHAR('-')), s.VAR_Req_Status_ID, s.SeqNo ";
                 sb.Append(groupBy)
-                    .Append("FROM R_Request LEFT OUTER JOIN R_Status s ON (R_Request.R_Status_ID=s.R_Status_ID) ");
+                    .Append("FROM VAR_Request LEFT OUTER JOIN VAR_Req_Status s ON (VAR_Request.VAR_Req_Status_ID=s.VAR_Req_Status_ID) ");
             }
             //	Where
-            sb.Append("WHERE R_Request.R_RequestType_ID=").Append(GetR_RequestType_ID())
-                .Append(" AND R_Request.Processed<>'Y'");
+            sb.Append("WHERE VAR_Request.VAR_Req_Type_ID=").Append(GetVAR_Req_Type_ID())
+                .Append(" AND VAR_Request.Processed<>'Y'");
             //	Date Restriction
             if (startDate != null
                 && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
@@ -433,7 +433,7 @@ namespace VAdvantage.Model
             }	//	date
             //
             String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
-                "R_Request", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
             if (groupBy != null)
                 sql += " GROUP BY " + groupBy + " ORDER BY " + orderBy;
             //
@@ -446,24 +446,24 @@ namespace VAdvantage.Model
          * 	@param restrictions array of restrictions
          * 	@param MeasureDisplay display
          * 	@param date date
-         * 	@param R_Status_ID status
+         * 	@param VAR_Req_Status_ID status
          * 	@param role role
          *	@return query
          */
         public Query GetQuery(MGoalRestriction[] restrictions, String measureDisplay, 
-            DateTime? date, int R_Status_ID, MRole role)
+            DateTime? date, int VAR_Req_Status_ID, MRole role)
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
             String bpColumn = "VAB_BusinessPartner_ID";
             String pColumn = "M_Product_ID";
             //
-            Query query = new Query("R_Request");
-            query.AddRestriction("R_RequestType_ID", "=", GetR_RequestType_ID());
+            Query query = new Query("VAR_Request");
+            query.AddRestriction("VAR_Req_Type_ID", "=", GetVAR_Req_Type_ID());
             //
             String where = null;
-            if (R_Status_ID != 0)
-                where = "R_Status_ID=" + R_Status_ID;
+            if (VAR_Req_Status_ID != 0)
+                where = "VAR_Req_Status_ID=" + VAR_Req_Status_ID;
             else
             {
                 String trunc = "D";
@@ -482,7 +482,7 @@ namespace VAdvantage.Model
             }
             String whereRestriction = MMeasureCalc.AddRestrictions(where + " AND Processed<>'Y' ",
                 true, restrictions, role,
-                "R_Request", orgColumn, bpColumn, pColumn,GetCtx());
+                "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
             query.AddRestriction(whereRestriction);
             query.SetRecordCount(1);
             return query;

@@ -70,15 +70,15 @@ namespace VAdvantage.Model
         }/** Get Role.
 @return Responsibility Role */
         public int GetVAF_Role_ID() { Object ii = Get_Value("VAF_Role_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Session.
-@param AD_Session_ID User Session Online or Web */
-        public void SetAD_Session_ID(int AD_Session_ID)
+@param VAF_Session_ID User Session Online or Web */
+        public void SetVAF_Session_ID(int VAF_Session_ID)
         {
-            if (AD_Session_ID <= 0) Set_Value("AD_Session_ID", null);
+            if (VAF_Session_ID <= 0) Set_Value("VAF_Session_ID", null);
             else
-                Set_Value("AD_Session_ID", AD_Session_ID);
+                Set_Value("VAF_Session_ID", VAF_Session_ID);
         }/** Get Session.
 @return User Session Online or Web */
-        public int GetAD_Session_ID() { Object ii = Get_Value("AD_Session_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Table/View.
+        public int GetVAF_Session_ID() { Object ii = Get_Value("VAF_Session_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Table/View.
 @param VAF_TableView_ID Database Table information */
         public void SetVAF_TableView_ID(int VAF_TableView_ID)
         {

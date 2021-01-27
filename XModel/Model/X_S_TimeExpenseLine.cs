@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-    /** Generated Model for S_TimeExpenseLine
+    /** Generated Model for VAS_ExpenseReportLine
          *  @author Jagmohan Bhatt (generated) 
          *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_S_TimeExpenseLine : PO
+    public class X_VAS_ExpenseReportLine : PO
     {
-        public X_S_TimeExpenseLine(Context ctx, int S_TimeExpenseLine_ID, Trx trxName)
-            : base(ctx, S_TimeExpenseLine_ID, trxName)
+        public X_VAS_ExpenseReportLine(Context ctx, int VAS_ExpenseReportLine_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReportLine_ID, trxName)
         {
-            /** if (S_TimeExpenseLine_ID == 0)
+            /** if (VAS_ExpenseReportLine_ID == 0)
             {
             SetIsInvoiced (false);
             SetIsTimeReport (true);	// Y
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM S_TimeExpenseLine WHERE S_TimeExpense_ID=@S_TimeExpense_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAS_ExpenseReportLine WHERE VAS_ExpenseReport_ID=@VAS_ExpenseReport_ID@
             SetProcessed (false);	// N
-            SetS_TimeExpenseLine_ID (0);
-            SetS_TimeExpense_ID (0);
+            SetVAS_ExpenseReportLine_ID (0);
+            SetVAS_ExpenseReport_ID (0);
             }
              */
         }
-        public X_S_TimeExpenseLine(Ctx ctx, int S_TimeExpenseLine_ID, Trx trxName)
-            : base(ctx, S_TimeExpenseLine_ID, trxName)
+        public X_VAS_ExpenseReportLine(Ctx ctx, int VAS_ExpenseReportLine_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReportLine_ID, trxName)
         {
-            /** if (S_TimeExpenseLine_ID == 0)
+            /** if (VAS_ExpenseReportLine_ID == 0)
             {
             SetIsInvoiced (false);
             SetIsTimeReport (true);	// Y
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM S_TimeExpenseLine WHERE S_TimeExpense_ID=@S_TimeExpense_ID@
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAS_ExpenseReportLine WHERE VAS_ExpenseReport_ID=@VAS_ExpenseReport_ID@
             SetProcessed (false);	// N
-            SetS_TimeExpenseLine_ID (0);
-            SetS_TimeExpense_ID (0);
+            SetVAS_ExpenseReportLine_ID (0);
+            SetVAS_ExpenseReport_ID (0);
             }
              */
         }
@@ -49,7 +49,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpenseLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAS_ExpenseReportLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpenseLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAS_ExpenseReportLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_S_TimeExpenseLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAS_ExpenseReportLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_S_TimeExpenseLine()
+        static X_VAS_ExpenseReportLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ using System.Data;
         public static int Table_ID;
         // =488;
 
-        /** TableName=S_TimeExpenseLine */
-        public static String Table_Name = "S_TimeExpenseLine";
+        /** TableName=VAS_ExpenseReportLine */
+        public static String Table_Name = "VAS_ExpenseReportLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -122,7 +122,7 @@ using System.Data;
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_S_TimeExpenseLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAS_ExpenseReportLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set AP Actual Hrs.
@@ -800,64 +800,64 @@ using System.Data;
             return Convert.ToInt32(ii);
         }
         /** Set Assigned Resource.
-        @param S_ResourceAssignment_ID Assigned Resource */
-        public void SetS_ResourceAssignment_ID(int S_ResourceAssignment_ID)
+        @param VAS_Res_Assignment_ID Assigned Resource */
+        public void SetVAS_Res_Assignment_ID(int VAS_Res_Assignment_ID)
         {
-            if (S_ResourceAssignment_ID <= 0) Set_Value("S_ResourceAssignment_ID", null);
+            if (VAS_Res_Assignment_ID <= 0) Set_Value("VAS_Res_Assignment_ID", null);
             else
-                Set_Value("S_ResourceAssignment_ID", S_ResourceAssignment_ID);
+                Set_Value("VAS_Res_Assignment_ID", VAS_Res_Assignment_ID);
         }
         /** Get Assigned Resource.
         @return Assigned Resource */
-        public int GetS_ResourceAssignment_ID()
+        public int GetVAS_Res_Assignment_ID()
         {
-            Object ii = Get_Value("S_ResourceAssignment_ID");
+            Object ii = Get_Value("VAS_Res_Assignment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Expense Line.
-        @param S_TimeExpenseLine_ID Time and Expense Report Line */
-        public void SetS_TimeExpenseLine_ID(int S_TimeExpenseLine_ID)
+        @param VAS_ExpenseReportLine_ID Time and Expense Report Line */
+        public void SetVAS_ExpenseReportLine_ID(int VAS_ExpenseReportLine_ID)
         {
-            if (S_TimeExpenseLine_ID < 1) throw new ArgumentException("S_TimeExpenseLine_ID is mandatory.");
-            Set_ValueNoCheck("S_TimeExpenseLine_ID", S_TimeExpenseLine_ID);
+            if (VAS_ExpenseReportLine_ID < 1) throw new ArgumentException("VAS_ExpenseReportLine_ID is mandatory.");
+            Set_ValueNoCheck("VAS_ExpenseReportLine_ID", VAS_ExpenseReportLine_ID);
         }
         /** Get Expense Line.
         @return Time and Expense Report Line */
-        public int GetS_TimeExpenseLine_ID()
+        public int GetVAS_ExpenseReportLine_ID()
         {
-            Object ii = Get_Value("S_TimeExpenseLine_ID");
+            Object ii = Get_Value("VAS_ExpenseReportLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Expense Report.
-        @param S_TimeExpense_ID Time and Expense Report */
-        public void SetS_TimeExpense_ID(int S_TimeExpense_ID)
+        @param VAS_ExpenseReport_ID Time and Expense Report */
+        public void SetVAS_ExpenseReport_ID(int VAS_ExpenseReport_ID)
         {
-            if (S_TimeExpense_ID < 1) throw new ArgumentException("S_TimeExpense_ID is mandatory.");
-            Set_ValueNoCheck("S_TimeExpense_ID", S_TimeExpense_ID);
+            if (VAS_ExpenseReport_ID < 1) throw new ArgumentException("VAS_ExpenseReport_ID is mandatory.");
+            Set_ValueNoCheck("VAS_ExpenseReport_ID", VAS_ExpenseReport_ID);
         }
         /** Get Expense Report.
         @return Time and Expense Report */
-        public int GetS_TimeExpense_ID()
+        public int GetVAS_ExpenseReport_ID()
         {
-            Object ii = Get_Value("S_TimeExpense_ID");
+            Object ii = Get_Value("VAS_ExpenseReport_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Time Type.
-        @param S_TimeType_ID Type of time recorded */
-        public void SetS_TimeType_ID(int S_TimeType_ID)
+        @param VAS_TimeType_ID Type of time recorded */
+        public void SetVAS_TimeType_ID(int VAS_TimeType_ID)
         {
-            if (S_TimeType_ID <= 0) Set_Value("S_TimeType_ID", null);
+            if (VAS_TimeType_ID <= 0) Set_Value("VAS_TimeType_ID", null);
             else
-                Set_Value("S_TimeType_ID", S_TimeType_ID);
+                Set_Value("VAS_TimeType_ID", VAS_TimeType_ID);
         }
         /** Get Time Type.
         @return Type of time recorded */
-        public int GetS_TimeType_ID()
+        public int GetVAS_TimeType_ID()
         {
-            Object ii = Get_Value("S_TimeType_ID");
+            Object ii = Get_Value("VAS_TimeType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -877,18 +877,18 @@ using System.Data;
         }
 
         /** Set Resource.
-    @param S_Resource_ID Resource */
-        public void SetS_Resource_ID(int S_Resource_ID)
+    @param VAS_Resource_ID Resource */
+        public void SetS_Resource_ID(int VAS_Resource_ID)
         {
-            if (S_Resource_ID <= 0) Set_Value("S_Resource_ID", null);
+            if (VAS_Resource_ID <= 0) Set_Value("VAS_Resource_ID", null);
             else
-                Set_Value("S_Resource_ID", S_Resource_ID);
+                Set_Value("VAS_Resource_ID", VAS_Resource_ID);
         }
         /** Get Resource.
         @return Resource */
         public int GetS_Resource_ID()
         {
-            Object ii = Get_Value("S_Resource_ID");
+            Object ii = Get_Value("VAS_Resource_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

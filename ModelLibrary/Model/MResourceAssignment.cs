@@ -23,20 +23,20 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MResourceAssignment : X_S_ResourceAssignment
+    public class MResourceAssignment : X_VAS_Res_Assignment
     {
         /// <summary>
         /// Stnadard Constructor
         /// </summary>
         /// <param name="ctx">ctx</param>
-        /// <param name="s_ResourceAssignment_ID">id</param>
+        /// <param name="VAS_Res_Assignment_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MResourceAssignment(Ctx ctx, int s_ResourceAssignment_ID, Trx trxName)
-            : base(ctx, s_ResourceAssignment_ID, trxName)
+        public MResourceAssignment(Ctx ctx, int VAS_Res_Assignment_ID, Trx trxName)
+            : base(ctx, VAS_Res_Assignment_ID, trxName)
         {
             p_info.SetUpdateable(true);		//	default table is not updateable
             //	Default values
-            if (s_ResourceAssignment_ID == 0)
+            if (VAS_Res_Assignment_ID == 0)
             {
                 SetAssignDateFrom(DateTime.Now);
                 SetQty((Decimal)(1.0));
@@ -72,24 +72,24 @@ namespace VAdvantage.Model
         END IF;
 	
         -- Update Expense Line
-        UPDATE S_TimeExpenseLine
+        UPDATE VAS_ExpenseReportLine
           SET  Description = v_Description,
             Qty = :new.Qty
-        WHERE s_ResourceAssignment_ID = :new.s_ResourceAssignment_ID
+        WHERE VAS_Res_Assignment_ID = :new.VAS_Res_Assignment_ID
           AND (Description <> v_Description OR Qty <> :new.Qty);
 	  
         -- Update Order Line
         UPDATE VAB_OrderLine
           SET  Description = v_Description,
             QtyOrdered = :new.Qty
-        WHERE s_ResourceAssignment_ID = :new.s_ResourceAssignment_ID
+        WHERE VAS_Res_Assignment_ID = :new.VAS_Res_Assignment_ID
           AND (Description <> v_Description OR QtyOrdered <> :new.Qty);
 
         -- Update Invoice Line
         UPDATE VAB_InvoiceLine
           SET  Description = v_Description,
             QtyInvoiced = :new.Qty
-        WHERE s_ResourceAssignment_ID = :new.s_ResourceAssignment_ID
+        WHERE VAS_Res_Assignment_ID = :new.VAS_Res_Assignment_ID
           AND (Description <> v_Description OR QtyInvoiced <> :new.Qty);
           */
             return success;
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MResourceAssignment[ID=");
             sb.Append(Get_ID())
-                .Append(",S_Resource_ID=").Append(GetS_Resource_ID())
+                .Append(",VAS_Resource_ID=").Append(GetS_Resource_ID())
                 .Append(",From=").Append(GetAssignDateFrom())
                 .Append(",To=").Append(GetAssignDateTo())
                 .Append(",Qty=").Append(GetQty())

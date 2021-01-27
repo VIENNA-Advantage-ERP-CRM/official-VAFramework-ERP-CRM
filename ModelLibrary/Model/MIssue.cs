@@ -318,7 +318,7 @@ namespace VAdvantage.Model
 		MIssueUser.Get(this);
 		//
 	//	setR_IssueKnown_ID(0);
-	//	setR_Request_ID(0);
+	//	setVAR_Request_ID(0);
 		return CreateAnswer();
 	}	//	process
 	
@@ -335,7 +335,7 @@ namespace VAdvantage.Model
 		{
 			if (GetR_IssueKnown_ID() != 0)
 				sb.Append("Known Issue\n");
-			if (GetR_Request_ID() != 0)
+			if (GetVAR_Request_ID() != 0)
 				sb.Append("Request: ")
 					.Append(GetRequest().GetDocumentNo())
 					.Append("\n");
@@ -347,11 +347,11 @@ namespace VAdvantage.Model
     /// 	Get Request
 	/// </summary>
 	/// <returns>request or null</returns>
-	public X_R_Request GetRequest()
+	public X_VAR_Request GetRequest()
 	{
-		if (GetR_Request_ID() == 0)
+		if (GetVAR_Request_ID() == 0)
 			return null;
-		return new X_R_Request(GetCtx(), GetR_Request_ID(), null);
+		return new X_VAR_Request(GetCtx(), GetVAR_Request_ID(), null);
 	}	//	getRequestDocumentNo
 
 	/// <summary>
@@ -360,9 +360,9 @@ namespace VAdvantage.Model
     /// <returns> Request Document No</returns>
 	public new String GetRequestDocumentNo()
 	{
-		if (GetR_Request_ID() == 0)
+		if (GetVAR_Request_ID() == 0)
 			return "";
-		X_R_Request r = GetRequest();
+		X_VAR_Request r = GetRequest();
 		return r.GetDocumentNo();
 	}	//	getRequestDocumentNo
 	

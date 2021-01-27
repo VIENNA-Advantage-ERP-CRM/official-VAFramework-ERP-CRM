@@ -67,7 +67,7 @@ namespace VAdvantage.Model
 
             SetClientOrg(parent);
             SetVAF_UserContact_ID(VAF_UserContact_ID);
-            SetR_MailText_ID(parent.GetR_MailText_ID());
+            SetVAR_MailTemplate_ID(parent.GetVAR_MailTemplate_ID());
             //
             if (mail.IsSentOK())
             {

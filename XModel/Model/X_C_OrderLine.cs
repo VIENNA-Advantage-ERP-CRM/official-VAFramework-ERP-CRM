@@ -931,18 +931,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Assigned Resource.
-        @param S_ResourceAssignment_ID Assigned Resource */
-        public void SetS_ResourceAssignment_ID(int S_ResourceAssignment_ID)
+        @param VAS_Res_Assignment_ID Assigned Resource */
+        public void SetVAS_Res_Assignment_ID(int VAS_Res_Assignment_ID)
         {
-            if (S_ResourceAssignment_ID <= 0) Set_Value("S_ResourceAssignment_ID", null);
+            if (VAS_Res_Assignment_ID <= 0) Set_Value("VAS_Res_Assignment_ID", null);
             else
-                Set_Value("S_ResourceAssignment_ID", S_ResourceAssignment_ID);
+                Set_Value("VAS_Res_Assignment_ID", VAS_Res_Assignment_ID);
         }
         /** Get Assigned Resource.
         @return Assigned Resource */
-        public int GetS_ResourceAssignment_ID()
+        public int GetVAS_Res_Assignment_ID()
         {
-            Object ii = Get_Value("S_ResourceAssignment_ID");
+            Object ii = Get_Value("VAS_Res_Assignment_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

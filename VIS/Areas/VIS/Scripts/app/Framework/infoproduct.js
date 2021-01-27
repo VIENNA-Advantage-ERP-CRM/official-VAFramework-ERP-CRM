@@ -988,7 +988,7 @@
                 window.setTimeout(function () {
                     chkDelCart = chk;
                     invCount_ID = count_ID;
-                    var session = VIS.Env.getCtx().getContext("#AD_Session_ID");
+                    var session = VIS.Env.getCtx().getContext("#VAF_Session_ID");
                     //while (drProd.read()) {
                     if (drProd && drProd.length > 0) {
                         for (var i in drProd) {
@@ -1034,7 +1034,7 @@
                                             _value: value,
                                             _uom: uom_ID,
                                             _uomName: uom,
-                                            _AD_Session_ID: session,
+                                            _VAF_Session_ID: session,
                                             _windowNo: WindowNo,
                                             _RefNo: "",
                                             _Attribute: attr_ID,
@@ -1054,7 +1054,7 @@
                                         _value: value,
                                         _uom: uom_ID,
                                         _uomName: uom,
-                                        _AD_Session_ID: session,
+                                        _VAF_Session_ID: session,
                                         _windowNo: WindowNo,
                                         _RefNo: "",
                                         _Attribute: attr_ID,
@@ -1083,7 +1083,7 @@
                 bsyDiv[0].style.visibility = "visible";
                 chkDelCart = chk;
                 invCount_ID = count_ID;
-                var session = VIS.Env.getCtx().getContext("#AD_Session_ID");
+                var session = VIS.Env.getCtx().getContext("#VAF_Session_ID");
                 //while (drProd.read()) {
                 if (drProd && drProd.length > 0) {
                     for (var i in drProd) {
@@ -1131,7 +1131,7 @@
                                         _value: value,
                                         _uom: uom_ID,
                                         _uomName: uom,
-                                        _AD_Session_ID: session,
+                                        _VAF_Session_ID: session,
                                         _windowNo: WindowNo,
                                         _RefNo: RefNo,
                                         _Attribute: attr_ID,
@@ -1151,7 +1151,7 @@
                                     _value: value,
                                     _uom: uom_ID,
                                     _uomName: uom,
-                                    _AD_Session_ID: session,
+                                    _VAF_Session_ID: session,
                                     _windowNo: WindowNo,
                                     _RefNo: RefNo,
                                     _Attribute: attr_ID,
@@ -1378,7 +1378,7 @@
                             _value: savedProduct[savedProduct.length - 1].Value,
                             _uom: savedProduct[savedProduct.length - 1].UOM_ID,
                             _uomName: savedProduct[savedProduct.length - 1].UOM,
-                            _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                            _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                             _windowNo: WindowNo,
                             _RefNo: "",
                             _Attribute: 0,
@@ -1489,7 +1489,7 @@
                                         _value: w2ui[grdname].records[selection[i] - 1].NAME,
                                         _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
                                         _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                         _windowNo: WindowNo,
                                         _RefNo: "",
                                         _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
@@ -1510,7 +1510,7 @@
                                     _value: w2ui[grdname].records[selection[i] - 1].NAME,
                                     _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
                                     _uomName: w2ui[grdname].records[selection[i] - 1].UOM,
-                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                    _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                     _windowNo: WindowNo,
                                     _RefNo: "",
                                     _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
@@ -2551,7 +2551,7 @@
                                         _value: multiValues[item].VALUE,
                                         _uom: multiValues[item].VAB_UOM_ID,
                                         _uomName: multiValues[item].UOM,
-                                        _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                        _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                         _windowNo: WindowNo,
                                         _RefNo: "",
                                         _Attribute: multiValues[item].M_AttributeSetInstance_ID,
@@ -2572,7 +2572,7 @@
                                     _value: multiValues[item].VALUE,
                                     _uom: multiValues[item].VAB_UOM_ID,
                                     _uomName: multiValues[item].UOM,
-                                    _AD_Session_ID: VIS.Env.getCtx().getContext("#AD_Session_ID"),
+                                    _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                     _windowNo: WindowNo,
                                     _RefNo: "",
                                     _Attribute: multiValues[item].M_AttributeSetInstance_ID,

@@ -15,15 +15,15 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MRequestAction : X_R_RequestAction
+    public class MRequestAction : X_VAR_Req_History
     {
         /**
 	     * 	Persistency Constructor
 	     *	@param ctx context
-	     *	@param R_RequestAction_ID id
+	     *	@param VAR_Req_History_ID id
 	     */
-        public MRequestAction(Ctx ctx, int R_RequestAction_ID, Trx trxName) :
-            base(ctx, R_RequestAction_ID, trxName)
+        public MRequestAction(Ctx ctx, int VAR_Req_History_ID, Trx trxName) :
+            base(ctx, VAR_Req_History_ID, trxName)
         {
         }
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             : this(request.GetCtx(), 0, request.Get_TrxName())
         {
             SetClientOrg(request);
-            SetR_Request_ID(request.GetR_Request_ID());
+            SetVAR_Request_ID(request.GetVAR_Request_ID());
         }
 
         /**
@@ -82,10 +82,10 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "Priority");
             GetChangeHTML(sb, "PriorityUser");
             GetChangeHTML(sb, "VAR_Category_ID");
-            GetChangeHTML(sb, "R_Group_ID");
-            GetChangeHTML(sb, "R_RequestType_ID");
-            GetChangeHTML(sb, "R_Resolution_ID");
-            GetChangeHTML(sb, "R_Status_ID");
+            GetChangeHTML(sb, "VAR_Group_ID");
+            GetChangeHTML(sb, "VAR_Req_Type_ID");
+            GetChangeHTML(sb, "VAR_Resolution_ID");
+            GetChangeHTML(sb, "VAR_Req_Status_ID");
             GetChangeHTML(sb, "SalesRep_ID");
             GetChangeHTML(sb, "Summary");
             //

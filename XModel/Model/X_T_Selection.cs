@@ -11,24 +11,24 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for T_Selection
+/** Generated Model for VAVAT_Selection
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_Selection : PO
+public class X_VAVAT_Selection : PO
 {
-public X_T_Selection (Context ctx, int T_Selection_ID, Trx trxName) : base (ctx, T_Selection_ID, trxName)
+public X_VAVAT_Selection (Context ctx, int VAT_Selection_ID, Trx trxName) : base (ctx, VAT_Selection_ID, trxName)
 {
-/** if (T_Selection_ID == 0)
+/** if (VAT_Selection_ID == 0)
 {
-SetT_Selection_ID (0);
+SetVAT_Selection_ID (0);
 }
  */
 }
-public X_T_Selection (Ctx ctx, int T_Selection_ID, Trx trxName) : base (ctx, T_Selection_ID, trxName)
+public X_VAVAT_Selection (Ctx ctx, int VAT_Selection_ID, Trx trxName) : base (ctx, VAT_Selection_ID, trxName)
 {
-/** if (T_Selection_ID == 0)
+/** if (VAT_Selection_ID == 0)
 {
-SetT_Selection_ID (0);
+SetVAT_Selection_ID (0);
 }
  */
 }
@@ -37,7 +37,7 @@ SetT_Selection_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Selection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVAT_Selection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -45,7 +45,7 @@ public X_T_Selection (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Selection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAVAT_Selection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,13 +53,13 @@ public X_T_Selection (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Selection (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAVAT_Selection (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_Selection()
+static X_VAVAT_Selection()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -72,8 +72,8 @@ public static long updatedMS = 1280389067670L;
 public static int Table_ID;
  // =917;
 
-/** TableName=T_Selection */
-public static String Table_Name="T_Selection";
+/** TableName=VAVAT_Selection */
+public static String Table_Name="VAVAT_Selection";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(4);
@@ -107,21 +107,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_Selection[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAVAT_Selection[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Selection.
-@param T_Selection_ID *** DO NOT USE *** */
-public void SetT_Selection_ID (int T_Selection_ID)
+@param VAT_Selection_ID *** DO NOT USE *** */
+public void SetVAT_Selection_ID (int VAT_Selection_ID)
 {
-if (T_Selection_ID < 1) throw new ArgumentException ("T_Selection_ID is mandatory.");
-Set_ValueNoCheck ("T_Selection_ID", T_Selection_ID);
+if (VAT_Selection_ID < 1) throw new ArgumentException ("VAT_Selection_ID is mandatory.");
+Set_ValueNoCheck ("VAT_Selection_ID", VAT_Selection_ID);
 }
 /** Get Selection.
 @return *** DO NOT USE *** */
-public int GetT_Selection_ID() 
+public int GetVAT_Selection_ID() 
 {
-Object ii = Get_Value("T_Selection_ID");
+Object ii = Get_Value("VAT_Selection_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

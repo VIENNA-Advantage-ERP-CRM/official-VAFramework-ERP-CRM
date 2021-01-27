@@ -171,7 +171,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="web_url" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="no_of_emp" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAB_Currency_id" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="r_source_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Source_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="industry_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="city" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="country_ID" type="s:int" />
@@ -182,7 +182,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="support" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="bpgroup_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAB_Promotion_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="R_STATUS_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_REQ_STATUS_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAB_RegionState_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="CreatedBy" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="salesrep_id" type="s:int" />
@@ -1127,7 +1127,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="VAA_Asset_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="CS_CustomerTenantInfo_ID" nillable="true" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="errorNo" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" nillable="true" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="InnerError" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
@@ -1161,7 +1161,7 @@
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="customerValue" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="errorNumber" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" nillable="true" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -1876,7 +1876,7 @@
       <s:element name="SetCustomerAssociationWithPartner">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="Action" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="Remarks" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
@@ -2152,7 +2152,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="remarks" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="Attachment" type="s:base64Binary" />
             <s:element minOccurs="1" maxOccurs="1" name="docno" type="s:int" />
@@ -2343,7 +2343,7 @@
       <s:element name="CancellAssociationRequest">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="Remarks" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
@@ -2456,7 +2456,7 @@
       <s:element name="GetCustomerStatusSupportTicket">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="r_status_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Req_Status_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_id" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="orderby" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="AccessKey" type="s:string" />
@@ -3386,7 +3386,7 @@
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="FileName" type="s:string" />
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="ipaddress" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
@@ -3565,7 +3565,7 @@
       <s:element name="CloseRequest">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -3580,7 +3580,7 @@
       <s:element name="FailedRequest">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="R_Request_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAR_Request_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>

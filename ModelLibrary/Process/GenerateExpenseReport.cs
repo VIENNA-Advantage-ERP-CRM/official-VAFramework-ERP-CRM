@@ -85,7 +85,7 @@ namespace ViennaAdvantage.Process
         /// </summary>
         private int GenerateTimeExpense()
         {
-            VAdvantage.Model.X_S_TimeExpense tExp = new VAdvantage.Model.X_S_TimeExpense(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.X_VAS_ExpenseReport tExp = new VAdvantage.Model.X_VAS_ExpenseReport(GetCtx(), 0, Get_TrxName());
             tExp.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             tExp.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             tExp.SetDateReport(Util.GetValueOfDateTime(System.DateTime.Now));
@@ -116,10 +116,10 @@ namespace ViennaAdvantage.Process
         /// <param name="rTime"></param>
         private void GenerateExpenseReportLine(int S_TimeExpence_ID, VAdvantage.Model.X_C_ResourceTime rTime)
         {
-            VAdvantage.Model.X_S_TimeExpenseLine tLine = new VAdvantage.Model.X_S_TimeExpenseLine(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.X_VAS_ExpenseReportLine tLine = new VAdvantage.Model.X_VAS_ExpenseReportLine(GetCtx(), 0, Get_TrxName());
             tLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             tLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-            tLine.SetS_TimeExpense_ID(S_TimeExpence_ID);
+            tLine.SetVAS_ExpenseReport_ID(S_TimeExpence_ID);
             tLine.SetDateExpense(rTime.GetDate1());
             tLine.SetM_Product_ID(rTime.GetM_Product_ID());
             tLine.SetVAB_OrderLine_ID(rTime.GetVAB_OrderLine_ID());

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTimeExpenseLine
  * Purpose        : Time + Expense Line Model
- * Class Used     : X_S_TimeExpenseLine
+ * Class Used     : X_VAS_ExpenseReportLine
  * Chronological    Development
  * Deepak          31-Dec-2009
   ******************************************************/
@@ -25,22 +25,22 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MTimeExpenseLine : X_S_TimeExpenseLine
+    public class MTimeExpenseLine : X_VAS_ExpenseReportLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="S_TimeExpenseLine_ID"></param>
+        /// <param name="VAS_ExpenseReportLine_ID"></param>
         /// <param name="trxName">transaction</param>
-        public MTimeExpenseLine(Ctx ctx, int S_TimeExpenseLine_ID, Trx trxName)
-            : base(ctx, S_TimeExpenseLine_ID, trxName)
+        public MTimeExpenseLine(Ctx ctx, int VAS_ExpenseReportLine_ID, Trx trxName)
+            : base(ctx, VAS_ExpenseReportLine_ID, trxName)
         {
-            //super (ctx, S_TimeExpenseLine_ID, trxName);
-            if (S_TimeExpenseLine_ID == 0)
+            //super (ctx, VAS_ExpenseReportLine_ID, trxName);
+            if (VAS_ExpenseReportLine_ID == 0)
             {
-                //	setS_TimeExpenseLine_ID (0);		//	PK
-                //	setS_TimeExpense_ID (0);			//	Parent
+                //	setVAS_ExpenseReportLine_ID (0);		//	PK
+                //	setVAS_ExpenseReport_ID (0);			//	Parent
                 SetQty(Env.ONE);
                 SetQtyInvoiced(Env.ZERO);
                 SetQtyReimbursed(Env.ZERO);
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
                 return _VAB_Currency_Report_ID;
             }
             //	Get it from header
-            MTimeExpense te = new MTimeExpense(GetCtx(), GetS_TimeExpense_ID(), Get_TrxName());
+            MTimeExpense te = new MTimeExpense(GetCtx(), GetVAS_ExpenseReport_ID(), Get_TrxName());
             _VAB_Currency_Report_ID = te.GetVAB_Currency_ID();
             return _VAB_Currency_Report_ID;
         }	//	getVAB_Currency_Report_ID
@@ -173,40 +173,40 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Resource Assignment - Callout
         /// </summary>
-        /// <param name="oldS_ResourceAssignment_ID">old value</param>
-        /// <param name="newS_ResourceAssignment_ID">new value</param>
+        /// <param name="oldVAS_Res_Assignment_ID">old value</param>
+        /// <param name="newVAS_Res_Assignment_ID">new value</param>
         /// <param name="windowNo">window</param>
-        public void SetS_ResourceAssignment_ID(String oldS_ResourceAssignment_ID,
-               String newS_ResourceAssignment_ID, int windowNo)
+        public void SetVAS_Res_Assignment_ID(String oldVAS_Res_Assignment_ID,
+               String newVAS_Res_Assignment_ID, int windowNo)
         {
-            if (newS_ResourceAssignment_ID == null || newS_ResourceAssignment_ID.Length == 0)
+            if (newVAS_Res_Assignment_ID == null || newVAS_Res_Assignment_ID.Length == 0)
             {
                 return;
             }
-            //int S_ResourceAssignment_ID = Integer.parseInt(newS_ResourceAssignment_ID);
-            int S_ResourceAssignment_ID = Util.GetValueOfInt(newS_ResourceAssignment_ID);
-            if (S_ResourceAssignment_ID == 0)
+            //int VAS_Res_Assignment_ID = Integer.parseInt(newVAS_Res_Assignment_ID);
+            int VAS_Res_Assignment_ID = Util.GetValueOfInt(newVAS_Res_Assignment_ID);
+            if (VAS_Res_Assignment_ID == 0)
             {
                 return;
             }
             //
-            base.SetS_ResourceAssignment_ID(S_ResourceAssignment_ID);
+            base.SetVAS_Res_Assignment_ID(VAS_Res_Assignment_ID);
 
             int M_Product_ID = 0;
             String Name = null;
             String Description = null;
             Decimal? Qty = null;
             String sql = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty "
-                + "FROM S_ResourceAssignment ra"
-                + " INNER JOIN M_Product p ON (p.S_Resource_ID=ra.S_Resource_ID) "
-                + "WHERE ra.S_ResourceAssignment_ID=@param";
+                + "FROM VAS_Res_Assignment ra"
+                + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
+                + "WHERE ra.VAS_Res_Assignment_ID=@param";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader dr = null;
             try
             {
                 //PreparedStatement pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setInt(1, S_ResourceAssignment_ID);
-                param[0] = new SqlParameter("@param", S_ResourceAssignment_ID);
+                //pstmt.setInt(1, VAS_Res_Assignment_ID);
+                param[0] = new SqlParameter("@param", VAS_Res_Assignment_ID);
                 //ResultSet rs = pstmt.executeQuery();
                 dr = DB.ExecuteReader(sql, param, null);
                 if (dr.Read())
@@ -227,7 +227,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            log.Fine("S_ResourceAssignment_ID=" + S_ResourceAssignment_ID
+            log.Fine("VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID
                     + " - M_Product_ID=" + M_Product_ID);
             if (M_Product_ID != 0)
             {
@@ -245,7 +245,7 @@ namespace VAdvantage.Model
                     SetQty(Qty);
                 }
             }
-        }	//	setS_ResourceAssignment_ID
+        }	//	setVAS_Res_Assignment_ID
 
         /// <summary>
         /// Set Product - Callout
@@ -269,7 +269,7 @@ namespace VAdvantage.Model
             }
 
             //	Employee
-            MTimeExpense hdr = new MTimeExpense(GetCtx(), GetS_TimeExpense_ID(), null);
+            MTimeExpense hdr = new MTimeExpense(GetCtx(), GetVAS_ExpenseReport_ID(), null);
             int VAB_BusinessPartner_ID = hdr.GetVAB_BusinessPartner_ID();
             Decimal Qty = GetQty();
             Boolean IsSOTrx = true;
@@ -410,33 +410,33 @@ namespace VAdvantage.Model
             if (success)
             {
                 UpdateHeader();
-                if (newRecord || Is_ValueChanged("S_ResourceAssignment_ID"))
+                if (newRecord || Is_ValueChanged("VAS_Res_Assignment_ID"))
                 {
-                    int S_ResourceAssignment_ID = GetS_ResourceAssignment_ID();
-                    int old_S_ResourceAssignment_ID = 0;
+                    int VAS_Res_Assignment_ID = GetVAS_Res_Assignment_ID();
+                    int old_VAS_Res_Assignment_ID = 0;
                     if (!newRecord)
                     {
-                        Object ii = Get_ValueOld("S_ResourceAssignment_ID");
+                        Object ii = Get_ValueOld("VAS_Res_Assignment_ID");
                         //if (ii instanceof Integer)
                         if (ii is int)
                         {
-                            //old_S_ResourceAssignment_ID = ((Integer)ii).intValue();
-                            old_S_ResourceAssignment_ID = Util.GetValueOfInt((int)ii);
+                            //old_VAS_Res_Assignment_ID = ((Integer)ii).intValue();
+                            old_VAS_Res_Assignment_ID = Util.GetValueOfInt((int)ii);
                             //	Changed Assignment
-                            if (old_S_ResourceAssignment_ID != S_ResourceAssignment_ID
-                                && old_S_ResourceAssignment_ID != 0)
+                            if (old_VAS_Res_Assignment_ID != VAS_Res_Assignment_ID
+                                && old_VAS_Res_Assignment_ID != 0)
                             {
                                 MResourceAssignment ra = new MResourceAssignment(GetCtx(),
-                                    old_S_ResourceAssignment_ID, Get_TrxName());
+                                    old_VAS_Res_Assignment_ID, Get_TrxName());
                                 ra.Delete(false);
                             }
                         }
                     }
                     //	Sync Assignment
-                    if (S_ResourceAssignment_ID != 0)
+                    if (VAS_Res_Assignment_ID != 0)
                     {
                         MResourceAssignment ra = new MResourceAssignment(GetCtx(),
-                            S_ResourceAssignment_ID, Get_TrxName());
+                            VAS_Res_Assignment_ID, Get_TrxName());
                         if (GetQty().CompareTo(ra.GetQty()) != 0)
                         {
                             ra.SetQty(GetQty());
@@ -464,15 +464,15 @@ namespace VAdvantage.Model
             {
                 UpdateHeader();
                 //
-                Object ii = Get_ValueOld("S_ResourceAssignment_ID");
+                Object ii = Get_ValueOld("VAS_Res_Assignment_ID");
                 if (ii is int)
                 {
-                    int old_S_ResourceAssignment_ID = Util.GetValueOfInt((int)ii);
+                    int old_VAS_Res_Assignment_ID = Util.GetValueOfInt((int)ii);
                     //	Deleted Assignment
-                    if (old_S_ResourceAssignment_ID != 0)
+                    if (old_VAS_Res_Assignment_ID != 0)
                     {
                         MResourceAssignment ra = new MResourceAssignment(GetCtx(),
-                            old_S_ResourceAssignment_ID, Get_TrxName());
+                            old_VAS_Res_Assignment_ID, Get_TrxName());
                         ra.Delete(false);
                     }
                 }
@@ -485,11 +485,11 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateHeader()
         {
-            String sql = "UPDATE S_TimeExpense te"
+            String sql = "UPDATE VAS_ExpenseReport te"
                 + " SET ApprovalAmt = "
-                    + "(SELECT SUM(Qty*ConvertedAmt) FROM S_TimeExpenseLine tel "
-                    + "WHERE te.S_TimeExpense_ID=tel.S_TimeExpense_ID) "
-                + "WHERE S_TimeExpense_ID=" + GetS_TimeExpense_ID();
+                    + "(SELECT SUM(Qty*ConvertedAmt) FROM VAS_ExpenseReportLine tel "
+                    + "WHERE te.VAS_ExpenseReport_ID=tel.VAS_ExpenseReport_ID) "
+                + "WHERE VAS_ExpenseReport_ID=" + GetVAS_ExpenseReport_ID();
             DB.ExecuteQuery(sql, null, Get_TrxName());
         }	//	updateHeader
 

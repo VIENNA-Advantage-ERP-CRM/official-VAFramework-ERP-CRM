@@ -80,7 +80,7 @@ namespace VAdvantage.Process
         {
             int index = 1;
             StringBuilder sql = new StringBuilder("SELECT * "
-                + "FROM S_TimeExpense e "
+                + "FROM VAS_ExpenseReport e "
                 + "WHERE e.Processed='Y'"
                 + " AND e.VAF_Client_ID=@param1");				//	#1
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
@@ -100,11 +100,11 @@ namespace VAdvantage.Process
             }
             // JID_0868
             // chanegs done by Bharat on 12 September 2018 to handle the case if invoice is created with an expense for the selected Business Partner
-            sql.Append(" AND EXISTS (SELECT * FROM S_TimeExpenseLine el "
-                + "WHERE e.S_TimeExpense_ID=el.S_TimeExpense_ID"
+            sql.Append(" AND EXISTS (SELECT * FROM VAS_ExpenseReportLine el "
+                + "WHERE e.VAS_ExpenseReport_ID=el.VAS_ExpenseReport_ID"
                 + " AND el.VAB_InvoiceLine_ID IS NULL"
                 + " AND el.ConvertedAmt<>0) "
-                + "ORDER BY e.VAB_BusinessPartner_ID, e.S_TimeExpense_ID");
+                + "ORDER BY e.VAB_BusinessPartner_ID, e.VAS_ExpenseReport_ID");
 
             //
             int old_BPartner_ID = -1;
@@ -307,7 +307,7 @@ namespace VAdvantage.Process
                             }
                             invoice.SetM_PriceList_ID(te.GetM_PriceList_ID());
                             invoice.SetSalesRep_ID(te.GetDoc_User_ID());
-                            String descr = Msg.Translate(GetCtx(), "S_TimeExpense_ID")
+                            String descr = Msg.Translate(GetCtx(), "VAS_ExpenseReport_ID")
                                 + ": " + te.GetDocumentNo() + " "
                                 + DisplayType.GetDateFormat(DisplayType.Date).Format(te.GetDateReport());
                             invoice.SetDescription(descr);
@@ -327,7 +327,7 @@ namespace VAdvantage.Process
                         //Description include all document numbers which is come from Time And Expense Recording window to expense invoice in case of multiple records
                         else if (old_BPartner_ID > 0)
                         {
-                            String descr = invoice.GetDescription() + "\n" + Msg.Translate(GetCtx(), "S_TimeExpense_ID")
+                            String descr = invoice.GetDescription() + "\n" + Msg.Translate(GetCtx(), "VAS_ExpenseReport_ID")
                                 + ": " + te.GetDocumentNo() + " "
                                 + DisplayType.GetDateFormat(DisplayType.Date).Format(te.GetDateReport());
                             invoice.SetDescription(descr);
@@ -510,9 +510,9 @@ namespace VAdvantage.Process
             if (!invoice.Save())
             {
                 //Added By Siddheshwar
-                if (!IncompleteInvoice.Contains(te.GetS_TimeExpense_ID()))
+                if (!IncompleteInvoice.Contains(te.GetVAS_ExpenseReport_ID()))
                 {
-                    IncompleteInvoice.Add(te.GetS_TimeExpense_ID());
+                    IncompleteInvoice.Add(te.GetVAS_ExpenseReport_ID());
                     if (string.IsNullOrEmpty(bpNameInvoice))
                     {
                         bpNameInvoice = te.GetDocumentNo();

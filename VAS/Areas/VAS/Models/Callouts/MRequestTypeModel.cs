@@ -10,23 +10,23 @@ namespace VIS.Models
     public class MRequestTypeModel
     {
         /// <summary>
-        /// GetDefault R_Status_ID
+        /// GetDefault VAR_Req_Status_ID
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public int GetDefaultR_Status_ID(Ctx ctx,string fields)
+        public int GetDefaultVAR_Req_Status_ID(Ctx ctx,string fields)
         {            
             string[] paramValue = fields.Split(',');
-            int R_RequestType_ID;
+            int VAR_Req_Type_ID;
 
             //Assign parameter value
-            R_RequestType_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAR_Req_Type_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
 
-            MRequestType rt = MRequestType.Get(ctx, R_RequestType_ID);
-            int R_Status_ID = rt.GetDefaultR_Status_ID();
-            return R_Status_ID;
+            MRequestType rt = MRequestType.Get(ctx, VAR_Req_Type_ID);
+            int VAR_Req_Status_ID = rt.GetDefaultVAR_Req_Status_ID();
+            return VAR_Req_Status_ID;
         }
      
     }
