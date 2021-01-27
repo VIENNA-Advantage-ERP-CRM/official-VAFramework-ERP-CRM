@@ -458,7 +458,7 @@ namespace VAdvantage.Model
                 X_VAF_Job_Rights processAcess = null;
                 X_VAF_Page_Rights formAcess = null;
                 X_VAF_WFlow_Rights workAccess = null;
-                X_AD_Task_Access taskAcess = null;
+                X_VAF_Task_Rights taskAcess = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     role = new MRole(m_ctx, 0, m_trx);
@@ -738,12 +738,12 @@ namespace VAdvantage.Model
                             }
                         }
                         /////////Save TaskAcess
-                        dsComm = DB.ExecuteDataset("Select * From AD_Task_Access WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
+                        dsComm = DB.ExecuteDataset("Select * From VAF_Task_Rights WHERE VAF_Role_ID=" + ds.Tables[0].Rows[i]["VAF_Role_ID"]);
                         if (dsComm != null)
                         {
                             for (int j = 0; j < dsComm.Tables[0].Rows.Count; j++)
                             {
-                                taskAcess = new X_AD_Task_Access(m_ctx, 0, m_trx);
+                                taskAcess = new X_VAF_Task_Rights(m_ctx, 0, m_trx);
                                 taskAcess.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 taskAcess.SetIsActive(true);
                                 taskAcess.SetVAF_Org_ID(0);
@@ -756,9 +756,9 @@ namespace VAdvantage.Model
                                 {
                                     taskAcess.SetIsReadWrite(false);
                                 }
-                                if (dsComm.Tables[0].Rows[j]["AD_Task_ID"] != null && dsComm.Tables[0].Rows[j]["AD_Task_ID"] != DBNull.Value)
+                                if (dsComm.Tables[0].Rows[j]["VAF_Task_ID"] != null && dsComm.Tables[0].Rows[j]["VAF_Task_ID"] != DBNull.Value)
                                 {
-                                    taskAcess.SetAD_Task_ID(Util.GetValueOfInt(dsComm.Tables[0].Rows[j]["AD_Task_ID"]));
+                                    taskAcess.SetVAF_Task_ID(Util.GetValueOfInt(dsComm.Tables[0].Rows[j]["VAF_Task_ID"]));
                                 }
                                 if (!taskAcess.Save(m_trx))
                                 {

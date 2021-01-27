@@ -80,7 +80,7 @@ namespace VAdvantage.Model
     /** Workflow ID     */
     private int         VAF_Workflow_ID;
     /** Task ID         */
-    private int         AD_Task_ID;
+    private int         VAF_Task_ID;
     /** Workbench ID    */
     private int         AD_Workbench_ID;
 	/** Index to Icon               */
@@ -208,18 +208,18 @@ namespace VAdvantage.Model
     /**
      * Get Task ID
      */
-    public int GetAD_Task_ID()
+    public int GetVAF_Task_ID()
     {
-        return AD_Task_ID;
+        return VAF_Task_ID;
     }
     
     /**
      * Set Task ID
      * @param int taskID
      */
-    public void SetAD_Task_ID(int taskID)
+    public void SetVAF_Task_ID(int taskID)
     {
-        this.AD_Task_ID = taskID;
+        this.VAF_Task_ID = taskID;
     }
     
     /**

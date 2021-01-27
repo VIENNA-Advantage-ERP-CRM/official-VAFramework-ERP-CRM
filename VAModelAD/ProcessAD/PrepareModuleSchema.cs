@@ -1397,9 +1397,9 @@ namespace VAdvantage.Process
                     }
                     else if (sNode.GetAction() == X_VAF_WFlow_Node.ACTION_AppsTask)
                     {
-                        if (sNode.GetAD_Task_ID() != 0)
+                        if (sNode.GetVAF_Task_ID() != 0)
                         {
-                            GetTask(sNode.GetAD_Task_ID());
+                            GetTask(sNode.GetVAF_Task_ID());
                         }
                     }
 
@@ -1439,12 +1439,12 @@ namespace VAdvantage.Process
 
 
 
-        private void GetTask(int sAD_Task_ID)
+        private void GetTask(int sVAF_Task_ID)
         {
             string name;
-            if (HasModulePrefix("Name", "AD_Task", "AD_Task_ID =" + sAD_Task_ID, out name))
+            if (HasModulePrefix("Name", "VAF_Task", "VAF_Task_ID =" + sVAF_Task_ID, out name))
             {
-                InsertIntoDBSchema(X_AD_Task.Table_ID, sAD_Task_ID, X_AD_Task.Table_Name, name, "AD_Task_ID =" + sAD_Task_ID);
+                InsertIntoDBSchema(X_VAF_Task.Table_ID, sVAF_Task_ID, X_VAF_Task.Table_Name, name, "VAF_Task_ID =" + sVAF_Task_ID);
             }
         }
 

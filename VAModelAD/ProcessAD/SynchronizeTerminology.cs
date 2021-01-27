@@ -1470,52 +1470,52 @@ namespace VAdvantage.Process
             --	Sync Names = Task
             DBMS_OUTPUT.PUT_LINE('Synchronizing Menu with Tasks');
             UPDATE	VAF_MenuConfig m
-            SET		Name = (SELECT Name FROM AD_Task f WHERE m.AD_Task_ID=f.AD_Task_ID),
-                    Description = (SELECT Description FROM AD_Task f WHERE m.AD_Task_ID=f.AD_Task_ID)
-            WHERE	AD_Task_ID IS NOT NULL
+            SET		Name = (SELECT Name FROM VAF_Task f WHERE m.VAF_Task_ID=f.VAF_Task_ID),
+                    Description = (SELECT Description FROM VAF_Task f WHERE m.VAF_Task_ID=f.VAF_Task_ID)
+            WHERE	VAF_Task_ID IS NOT NULL
               AND	Action = 'T';
             DBMS_OUTPUT.PUT_LINE('  rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE VAF_MenuConfig m " +
-                    "	SET Name = (SELECT Name FROM AD_Task f WHERE m.AD_Task_ID=f.AD_Task_ID), " +
-                    "			Description = (SELECT Description FROM AD_Task f WHERE m.AD_Task_ID=f.AD_Task_ID) " +
-                    "	WHERE AD_Task_ID IS NOT NULL " +
+                    "	SET Name = (SELECT Name FROM VAF_Task f WHERE m.VAF_Task_ID=f.VAF_Task_ID), " +
+                    "			Description = (SELECT Description FROM VAF_Task f WHERE m.VAF_Task_ID=f.VAF_Task_ID) " +
+                    "	WHERE VAF_Task_ID IS NOT NULL " +
                     "	  AND Action = 'T'";
             Execute("Synchronize Menu with Tasks", sql, "  rows updated: ");
 
             /*
 
             UPDATE	VAF_MenuConfig_TL mt
-            SET		Name = (SELECT ft.Name FROM AD_Task_Trl ft, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID
+            SET		Name = (SELECT ft.Name FROM VAF_Task_Tl ft, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID
                             AND mt.VAF_Language=ft.VAF_Language),
-                    Description = (SELECT ft.Description FROM AD_Task_Trl ft, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID
+                    Description = (SELECT ft.Description FROM VAF_Task_Tl ft, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID
                             AND mt.VAF_Language=ft.VAF_Language),
-                    IsTranslated = (SELECT ft.IsTranslated FROM AD_Task_Trl ft, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID
+                    IsTranslated = (SELECT ft.IsTranslated FROM VAF_Task_Tl ft, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID
                             AND mt.VAF_Language=ft.VAF_Language)
-            WHERE EXISTS (SELECT * FROM AD_Task_Trl ft, VAF_MenuConfig m
-                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID
+            WHERE EXISTS (SELECT * FROM VAF_Task_Tl ft, VAF_MenuConfig m
+                            WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID
                             AND mt.VAF_Language=ft.VAF_Language
-                            AND m.AD_Task_ID IS NOT NULL
+                            AND m.VAF_Task_ID IS NOT NULL
                             AND	Action = 'T');
             DBMS_OUTPUT.PUT_LINE('  trl rows updated: ' || SQL%ROWCOUNT);
             */
             sql = "	UPDATE VAF_MenuConfig_TL mt " +
-                    "	SET Name = (SELECT ft.Name FROM AD_Task_Trl ft, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID " +
+                    "	SET Name = (SELECT ft.Name FROM VAF_Task_Tl ft, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID " +
                     "					AND mt.VAF_Language=ft.VAF_Language), " +
-                    "			Description = (SELECT ft.Description FROM AD_Task_Trl ft, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID " +
+                    "			Description = (SELECT ft.Description FROM VAF_Task_Tl ft, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID " +
                     "					AND mt.VAF_Language=ft.VAF_Language), " +
-                    "			IsTranslated = (SELECT ft.IsTranslated FROM AD_Task_Trl ft, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID " +
+                    "			IsTranslated = (SELECT ft.IsTranslated FROM VAF_Task_Tl ft, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID " +
                     "					AND mt.VAF_Language=ft.VAF_Language) " +
-                    "	WHERE EXISTS (SELECT * FROM AD_Task_Trl ft, VAF_MenuConfig m " +
-                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.AD_Task_ID=ft.AD_Task_ID " +
+                    "	WHERE EXISTS (SELECT * FROM VAF_Task_Tl ft, VAF_MenuConfig m " +
+                    "					WHERE mt.VAF_MenuConfig_ID=m.VAF_MenuConfig_ID AND m.VAF_Task_ID=ft.VAF_Task_ID " +
                     "					AND mt.VAF_Language=ft.VAF_Language " +
-                    "					AND m.AD_Task_ID IS NOT NULL " +
+                    "					AND m.VAF_Task_ID IS NOT NULL " +
                     "					AND  Action = 'T')";
             Execute("Synchronize Menu with Tasks Trl", sql, "  rows updated: ");
 

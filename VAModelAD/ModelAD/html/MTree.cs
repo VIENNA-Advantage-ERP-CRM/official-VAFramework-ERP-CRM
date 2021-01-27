@@ -394,7 +394,7 @@ namespace VAdvantage.Model
         {
             String nodeTableName = "VAF_TreeInfoChild";
             if (TREETYPE_Menu.Equals(treeType))
-                nodeTableName += "MM";
+                nodeTableName += "Menu";
             else if (TREETYPE_BPartner.Equals(treeType))
                 nodeTableName += "BP";
             else if (TREETYPE_Product.Equals(treeType))
@@ -775,11 +775,11 @@ namespace VAdvantage.Model
                 sourceTable = "VAF_MenuConfig";
                 if (baseLang)
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID, VAF_MenuConfig.Name,VAF_MenuConfig.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig");
                 else
                     sqlNode.Append("SELECT VAF_MenuConfig.VAF_MenuConfig_ID,  t.Name,t.Description,VAF_MenuConfig.IsSummary,VAF_MenuConfig.Action, "
-                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.AD_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
+                        + "VAF_MenuConfig.VAF_Screen_ID, VAF_MenuConfig.VAF_Job_ID, VAF_MenuConfig.VAF_Page_ID, VAF_MenuConfig.VAF_Workflow_ID, VAF_MenuConfig.VAF_Task_ID, VAF_MenuConfig.AD_Workbench_ID "
                         + "FROM VAF_MenuConfig VAF_MenuConfig JOIN  VAF_MenuConfig_TL t ON VAF_MenuConfig.VAF_MenuConfig_ID=t.VAF_MenuConfig_ID ");
                 if (!baseLang)
                 {
@@ -1280,7 +1280,7 @@ namespace VAdvantage.Model
             int VAF_Job_ID = 0;
             int VAF_Page_ID = 0;
             int VAF_Workflow_ID = 0;
-            int AD_Task_ID = 0;
+            int VAF_Task_ID = 0;
             int AD_Workbench_ID = 0;
 
             VTreeNode retValue = null;
@@ -1317,7 +1317,7 @@ namespace VAdvantage.Model
                         index++;
                         VAF_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
-                        AD_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
+                        VAF_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
                         AD_Workbench_ID = Utility.Util.GetValueOfInt(dr[index]);
                         index++;
@@ -1336,7 +1336,7 @@ namespace VAdvantage.Model
                         else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
                             blnAccess = role.GetWorkflowAccess(VAF_Workflow_ID);
                         else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
-                            blnAccess = role.GetTaskAccess(AD_Task_ID);
+                            blnAccess = role.GetTaskAccess(VAF_Task_ID);
 
                         if (blnAccess != null || m_editable)		//	rw or ro for Role 
                         {
@@ -1373,7 +1373,7 @@ namespace VAdvantage.Model
                 retValue.VAF_Job_ID = VAF_Job_ID;
                 retValue.VAF_Page_ID = VAF_Page_ID;
                 retValue.VAF_Workflow_ID = VAF_Workflow_ID;
-                retValue.AD_Task_ID = AD_Task_ID;
+                retValue.VAF_Task_ID = VAF_Task_ID;
                 retValue.AD_Workbench_ID = AD_Workbench_ID;
             }
             return retValue;
@@ -1816,7 +1816,7 @@ namespace VAdvantage.Model
         //    int VAF_Job_ID = 0;
         //    int VAF_Page_ID = 0;
         //    int VAF_Workflow_ID = 0;
-        //    int AD_Task_ID = 0;
+        //    int VAF_Task_ID = 0;
         //    int AD_Workbench_ID = 0;
 
         //    VToolStripMenuItem retValue = null;
@@ -1853,7 +1853,7 @@ namespace VAdvantage.Model
         //                index++;
         //                VAF_Workflow_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
-        //                AD_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
+        //                VAF_Task_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
         //                AD_Workbench_ID = Utility.Util.GetValueOfInt(dr[index]);
         //                index++;
@@ -1872,7 +1872,7 @@ namespace VAdvantage.Model
         //                else if (X_VAF_MenuConfig.ACTION_WorkFlow.Equals(actionColor))
         //                    blnAccess = role.GetWorkflowAccess(VAF_Workflow_ID);
         //                else if (X_VAF_MenuConfig.ACTION_Task.Equals(actionColor))
-        //                    blnAccess = role.GetTaskAccess(AD_Task_ID);
+        //                    blnAccess = role.GetTaskAccess(VAF_Task_ID);
 
         //                if (blnAccess != null || m_editable)		//	rw or ro for Role 
         //                {
@@ -1909,7 +1909,7 @@ namespace VAdvantage.Model
         //        retValue.VAF_Job_ID = VAF_Job_ID;
         //        retValue.VAF_Page_ID = VAF_Page_ID;
         //        retValue.VAF_Workflow_ID = VAF_Workflow_ID;
-        //        retValue.AD_Task_ID = AD_Task_ID;
+        //        retValue.VAF_Task_ID = VAF_Task_ID;
         //        retValue.AD_Workbench_ID = AD_Workbench_ID;
         //    }
         //    return retValue;

@@ -12,9 +12,9 @@ namespace VAdvantage.Model
     using System.Data;/** Generated Model for VAPA_FR_ColumnSet
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAPA_FR_ColumnSet : PO
+    public class VAPA_FR_Column : PO
     {
-        public X_VAPA_FR_ColumnSet(Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+        public VAPA_FR_Column(Context ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
             : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
         {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
@@ -22,7 +22,7 @@ SetName (null);SetVAPA_FR_ColumnSet_ID (0);SetVAPA_FR_ColumnSet_ID (0);SetPostin
 SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_ColumnSet WHERE VAPA_FR_ColumnSet_ID=@VAPA_FR_ColumnSet_ID@
 } */
         }
-        public X_VAPA_FR_ColumnSet(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
+        public VAPA_FR_Column(Ctx ctx, int VAPA_FR_ColumnSet_ID, Trx trxName)
             : base(ctx, VAPA_FR_ColumnSet_ID, trxName)
         {/** if (VAPA_FR_ColumnSet_ID == 0){SetColumnType (null);// R
 SetIsPrinted (true);// Y
@@ -34,20 +34,20 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_Co
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_ColumnSet(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public VAPA_FR_Column(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_ColumnSet(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public VAPA_FR_Column(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_VAPA_FR_ColumnSet(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public VAPA_FR_Column(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_VAPA_FR_ColumnSet() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static VAPA_FR_Column() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27741621420744L;/** Last Updated Timestamp 4/1/2016 1:05:03 PM */
         public static long updatedMS = 1459496103955L;/** VAF_TableView_ID=446 */
         public static int Table_ID; // =446;
@@ -463,9 +463,9 @@ SetSeqNo (0);// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAPA_FR_Co
 @return Collection of Columns for Report */
         public int GetVAPA_FR_ColumnSet_ID() { Object ii = Get_Value("VAPA_FR_ColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Report Column.
 @param VAPA_FR_ColumnSet_ID Column in Report */
-        public void SetVAPA_FR_ColumnSet_ID(int VAPA_FR_ColumnSet_ID) { if (VAPA_FR_ColumnSet_ID < 1) throw new ArgumentException("VAPA_FR_ColumnSet_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID); }/** Get Report Column.
+        public void SetVAPA_FR_Column_ID(int VAPA_FR_ColumnSet_ID) { if (VAPA_FR_ColumnSet_ID < 1) throw new ArgumentException("VAPA_FR_ColumnSet_ID is mandatory."); Set_ValueNoCheck("VAPA_FR_ColumnSet_ID", VAPA_FR_ColumnSet_ID); }/** Get Report Column.
 @return Column in Report */
-        public int GetVAPA_FR_ColumnSet_ID() { Object ii = Get_Value("VAPA_FR_ColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAPA_FR_Column_ID() { Object ii = Get_Value("VAPA_FR_ColumnSet_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** PostingType VAF_Control_Ref_ID=125 */
         public static int POSTINGTYPE_VAF_Control_Ref_ID = 125;/** Actual = A */
         public static String POSTINGTYPE_Actual = "A";/** Budget = B */

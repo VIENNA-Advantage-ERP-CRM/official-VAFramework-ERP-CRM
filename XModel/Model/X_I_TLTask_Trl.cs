@@ -20,7 +20,7 @@ public X_I_TLTask_Trl (Context ctx, int I_TLTask_Trl_ID, Trx trxName) : base (ct
 {
 /** if (I_TLTask_Trl_ID == 0)
 {
-SetAD_Task_ID (0);
+SetVAF_Task_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -31,7 +31,7 @@ public X_I_TLTask_Trl (Ctx ctx, int I_TLTask_Trl_ID, Trx trxName) : base (ctx, I
 {
 /** if (I_TLTask_Trl_ID == 0)
 {
-SetAD_Task_ID (0);
+SetVAF_Task_ID (0);
 SetI_TLLanguage_ID (0);
 SetIsTranslated (false);
 SetName (null);
@@ -117,17 +117,17 @@ StringBuilder sb = new StringBuilder ("X_I_TLTask_Trl[").Append(Get_ID()).Append
 return sb.ToString();
 }
 /** Set OS Task.
-@param AD_Task_ID Operation System Task */
-public void SetAD_Task_ID (int AD_Task_ID)
+@param VAF_Task_ID Operation System Task */
+public void SetVAF_Task_ID (int VAF_Task_ID)
 {
-if (AD_Task_ID < 1) throw new ArgumentException ("AD_Task_ID is mandatory.");
-Set_ValueNoCheck ("AD_Task_ID", AD_Task_ID);
+if (VAF_Task_ID < 1) throw new ArgumentException ("VAF_Task_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Task_ID", VAF_Task_ID);
 }
 /** Get OS Task.
 @return Operation System Task */
-public int GetAD_Task_ID() 
+public int GetVAF_Task_ID() 
 {
-Object ii = Get_Value("AD_Task_ID");
+Object ii = Get_Value("VAF_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

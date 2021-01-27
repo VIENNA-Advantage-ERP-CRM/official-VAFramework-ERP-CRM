@@ -289,7 +289,7 @@ namespace VAdvantage.WF
             else if (ACTION_AppsReport.Equals(action))
                 return "Report:VAF_Job_ID=" + GetVAF_Job_ID();
             else if (ACTION_AppsTask.Equals(action))
-                return "Task:AD_Task_ID=" + GetAD_Task_ID();
+                return "Task:VAF_Task_ID=" + GetVAF_Task_ID();
             else if (ACTION_SetVariable.Equals(action))
                 return "SetVariable:VAF_Column_ID=" + GetVAF_Column_ID();
             else if (ACTION_SubWorkflow.Equals(action))
@@ -496,9 +496,9 @@ namespace VAdvantage.WF
             }
             else if (action.Equals(ACTION_AppsTask))
             {
-                if (GetAD_Task_ID() == 0)
+                if (GetVAF_Task_ID() == 0)
                 {
-                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "AD_Task_ID"));
+                    log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAF_Task_ID"));
                     return false;
                 }
             }

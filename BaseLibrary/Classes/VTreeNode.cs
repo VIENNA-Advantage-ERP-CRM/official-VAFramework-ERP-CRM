@@ -37,7 +37,7 @@ namespace VAdvantage.Classes
         /** Workflow ID     */
         private int _VAF_Workflow_ID;
         /** Task ID         */
-        private int _AD_Task_ID;
+        private int _VAF_Task_ID;
         /** Workbench ID    */
         private int _AD_Workbench_ID;
         /** Index to Icon               */
@@ -165,7 +165,7 @@ namespace VAdvantage.Classes
 
             _VAF_Workflow_ID = node.VAF_Workflow_ID;
 
-            _AD_Task_ID = node.AD_Task_ID;
+            _VAF_Task_ID = node.VAF_Task_ID;
 
             _AD_Workbench_ID = node.VAF_Workflow_ID;
 
@@ -210,7 +210,7 @@ namespace VAdvantage.Classes
 
             _VAF_Workflow_ID = node.VAF_Workflow_ID;
 
-            _AD_Task_ID = node.AD_Task_ID;
+            _VAF_Task_ID = node.VAF_Task_ID;
 
             _AD_Workbench_ID = node.VAF_Workflow_ID;
 
@@ -335,15 +335,15 @@ namespace VAdvantage.Classes
         /// <summary>
         /// get and set task id
         /// </summary>
-        public int AD_Task_ID
+        public int VAF_Task_ID
         {
             get
             {
-                return _AD_Task_ID;
+                return _VAF_Task_ID;
             }
             set
             {
-                this._AD_Task_ID = value;
+                this._VAF_Task_ID = value;
             }
         }
 
@@ -608,7 +608,7 @@ namespace VAdvantage.Classes
             }
             else if (ACTION_TASK == _imageIndicator)
             {
-                id = AD_Task_ID;
+                id = VAF_Task_ID;
             }
             else if (ACTION_WORKBENCH == _imageIndicator)
             {

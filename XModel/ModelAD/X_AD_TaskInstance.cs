@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_TaskInstance
+/** Generated Model for VAF_TaskInstance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_TaskInstance : PO
+public class X_VAF_TaskInstance : PO
 {
-public X_AD_TaskInstance (Context ctx, int AD_TaskInstance_ID, Trx trxName) : base (ctx, AD_TaskInstance_ID, trxName)
+public X_VAF_TaskInstance (Context ctx, int VAF_TaskInstance_ID, Trx trxName) : base (ctx, VAF_TaskInstance_ID, trxName)
 {
-/** if (AD_TaskInstance_ID == 0)
+/** if (VAF_TaskInstance_ID == 0)
 {
-SetAD_TaskInstance_ID (0);
-SetAD_Task_ID (0);
+SetVAF_TaskInstance_ID (0);
+SetVAF_Task_ID (0);
 }
  */
 }
-public X_AD_TaskInstance (Ctx ctx, int AD_TaskInstance_ID, Trx trxName) : base (ctx, AD_TaskInstance_ID, trxName)
+public X_VAF_TaskInstance (Ctx ctx, int VAF_TaskInstance_ID, Trx trxName) : base (ctx, VAF_TaskInstance_ID, trxName)
 {
-/** if (AD_TaskInstance_ID == 0)
+/** if (VAF_TaskInstance_ID == 0)
 {
-SetAD_TaskInstance_ID (0);
-SetAD_Task_ID (0);
+SetVAF_TaskInstance_ID (0);
+SetVAF_Task_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetAD_Task_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TaskInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TaskInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_AD_TaskInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TaskInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_TaskInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_AD_TaskInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_TaskInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_TaskInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_TaskInstance()
+static X_VAF_TaskInstance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389047719L;
 public static int Table_ID;
  // =125;
 
-/** TableName=AD_TaskInstance */
-public static String Table_Name="AD_TaskInstance";
+/** TableName=VAF_TaskInstance */
+public static String Table_Name="VAF_TaskInstance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -109,21 +109,21 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_TaskInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_TaskInstance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Task Instance.
-@param AD_TaskInstance_ID Task Instance */
-public void SetAD_TaskInstance_ID (int AD_TaskInstance_ID)
+@param VAF_TaskInstance_ID Task Instance */
+public void SetVAF_TaskInstance_ID (int VAF_TaskInstance_ID)
 {
-if (AD_TaskInstance_ID < 1) throw new ArgumentException ("AD_TaskInstance_ID is mandatory.");
-Set_ValueNoCheck ("AD_TaskInstance_ID", AD_TaskInstance_ID);
+if (VAF_TaskInstance_ID < 1) throw new ArgumentException ("VAF_TaskInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAF_TaskInstance_ID", VAF_TaskInstance_ID);
 }
 /** Get Task Instance.
 @return Task Instance */
-public int GetAD_TaskInstance_ID() 
+public int GetVAF_TaskInstance_ID() 
 {
-Object ii = Get_Value("AD_TaskInstance_ID");
+Object ii = Get_Value("VAF_TaskInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -131,20 +131,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetAD_TaskInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAF_TaskInstance_ID().ToString());
 }
 /** Set OS Task.
-@param AD_Task_ID Operation System Task */
-public void SetAD_Task_ID (int AD_Task_ID)
+@param VAF_Task_ID Operation System Task */
+public void SetVAF_Task_ID (int VAF_Task_ID)
 {
-if (AD_Task_ID < 1) throw new ArgumentException ("AD_Task_ID is mandatory.");
-Set_Value ("AD_Task_ID", AD_Task_ID);
+if (VAF_Task_ID < 1) throw new ArgumentException ("VAF_Task_ID is mandatory.");
+Set_Value ("VAF_Task_ID", VAF_Task_ID);
 }
 /** Get OS Task.
 @return Operation System Task */
-public int GetAD_Task_ID() 
+public int GetVAF_Task_ID() 
 {
-Object ii = Get_Value("AD_Task_ID");
+Object ii = Get_Value("VAF_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

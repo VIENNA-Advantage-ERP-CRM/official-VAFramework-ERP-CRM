@@ -462,15 +462,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Task Access Against role
         /// </summary>
-        /// <param name="AD_Task_ID"></param>
+        /// <param name="VAF_Task_ID"></param>
         /// <returns></returns>
-        //public static bool? GetTaskAccess1(int AD_Task_ID)
+        //public static bool? GetTaskAccess1(int VAF_Task_ID)
         //{
         //    bool? blnReturn = null;
         //    if (_dcTask_access == null)
         //    {
         //        _dcTask_access = new Dictionary<string, string>();
-        //        string strQry = "SELECT AD_Task_ID, IsReadWrite FROM AD_Task_Access "
+        //        string strQry = "SELECT VAF_Task_ID, IsReadWrite FROM VAF_Task_Access "
         //         + "WHERE VAF_Role_ID=" + ctx.GetVAF_Role_ID() + " AND IsActive='Y'";
         //        try
         //        {
@@ -487,7 +487,7 @@ namespace VAdvantage.Model
         //            _dcTask_access = null;
         //        }
         //    }
-        //    if (_dcTask_access.ContainsKey(AD_Task_ID.ToString()))
+        //    if (_dcTask_access.ContainsKey(VAF_Task_ID.ToString()))
         //    {
         //        blnReturn = true;
         //    }
@@ -977,39 +977,40 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check Task Access Against role
         /// </summary>
-        /// <param name="AD_Task_ID"></param>
+        /// <param name="VAF_Task_ID"></param>
         /// <returns></returns>
-        public bool? GetTaskAccess(int AD_Task_ID)
+        public bool? GetTaskAccess(int VAF_Task_ID)
         {
             bool? blnReturn = null;
-            if (_dcTask_access == null)
-            {
-                _dcTask_access = new Dictionary<string, string>();
-                string strQry = "SELECT AD_Task_ID, IsReadWrite FROM AD_Task_Access "
-                 + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
-                IDataReader dr = null;
-                try
-                {
-                    dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
-                    while (dr.Read())
-                    {
-                        _dcTask_access.Add(dr[0].ToString(), dr[1].ToString());
-                    }
-                    dr.Close();
-                    dr = null;
-                }
-                catch (Exception e)
-                {
-                    if (dr != null)
-                    {
-                        dr.Close();
-                        dr = null;
-                    }
-                    log.Log(Level.SEVERE, strQry, e);
-                    _dcTask_access = null;
-                }
-            }
-            if (_dcTask_access.ContainsKey(AD_Task_ID.ToString()))
+            _dcTask_access = new Dictionary<string, string>();
+            //if (_dcTask_access == null)
+            //{
+            //    _dcTask_access = new Dictionary<string, string>();
+            //    string strQry = "SELECT VAF_Task_ID, IsReadWrite FROM VAF_Task_Access "
+            //     + "WHERE VAF_Role_ID=" + GetCtx().GetVAF_Role_ID() + " AND IsActive='Y'";
+            //    IDataReader dr = null;
+            //    try
+            //    {
+            //        dr = CoreLibrary.DataBase.DB.ExecuteReader(strQry, null, Get_TrxName());
+            //        while (dr.Read())
+            //        {
+            //            _dcTask_access.Add(dr[0].ToString(), dr[1].ToString());
+            //        }
+            //        dr.Close();
+            //        dr = null;
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        if (dr != null)
+            //        {
+            //            dr.Close();
+            //            dr = null;
+            //        }
+            //        log.Log(Level.SEVERE, strQry, e);
+            //        _dcTask_access = null;
+            //    }
+            //}
+            if (_dcTask_access.ContainsKey(VAF_Task_ID.ToString()))
             {
                 blnReturn = true;
             }

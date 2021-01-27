@@ -151,18 +151,18 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set OS Task.
-@param AD_Task_ID Operation System Task */
-public void SetAD_Task_ID (int AD_Task_ID)
+@param VAF_Task_ID Operation System Task */
+public void SetVAF_Task_ID (int VAF_Task_ID)
 {
-if (AD_Task_ID <= 0) Set_Value ("AD_Task_ID", null);
+if (VAF_Task_ID <= 0) Set_Value ("VAF_Task_ID", null);
 else
-Set_Value ("AD_Task_ID", AD_Task_ID);
+Set_Value ("VAF_Task_ID", VAF_Task_ID);
 }
 /** Get OS Task.
 @return Operation System Task */
-public int GetAD_Task_ID() 
+public int GetVAF_Task_ID() 
 {
-Object ii = Get_Value("AD_Task_ID");
+Object ii = Get_Value("VAF_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

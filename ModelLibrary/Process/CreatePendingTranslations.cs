@@ -548,15 +548,15 @@ namespace VAdvantage.Process
                         param[2] = new System.Data.SqlClient.SqlParameter("@help", help);
                     }
                     sql.Clear();
-                    sql.Append(@"Update AD_Task_TRL 
+                    sql.Append(@"Update VAF_Task_Tl 
                                         SET Name=@cname,
                                             IsTranslated='Y',
                                             Description=@description,
                                             Help=@help                                          
-                                        WHERE AD_Task_ID=" + tlps.GetAD_Task_ID() + " AND VAF_LANGUAGE='" + lang + "'");
+                                        WHERE VAF_Task_ID=" + tlps.GetVAF_Task_ID() + " AND VAF_LANGUAGE='" + lang + "'");
                     if (DB.ExecuteQuery(sql.ToString(), param, trx) == -1)
                     {
-                        res.Append(tlps.GetAD_Task_ID() + " ProcessNotTranslated.");
+                        res.Append(tlps.GetVAF_Task_ID() + " ProcessNotTranslated.");
                         break;
                     }
                     tlps.SetIsTranslated(true);

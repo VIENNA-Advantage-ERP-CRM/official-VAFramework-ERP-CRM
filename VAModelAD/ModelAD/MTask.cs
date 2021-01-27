@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTask
  * Purpose        : Operating Task Model
- * Class Used     : X_AD_Task
+ * Class Used     : X_VAF_Task
  * Chronological    Development
  * Deepak           29-Jan-2010
   ******************************************************/
@@ -23,16 +23,16 @@ using System.Threading;
 
 namespace VAdvantage.Model
 {
-    public class MTask : X_AD_Task
+    public class MTask : X_VAF_Task
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="AD_Task_ID">id</param>
+        /// <param name="VAF_Task_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTask(Ctx ctx, int AD_Task_ID, Trx trxName)
-            : base(ctx, AD_Task_ID, trxName)
+        public MTask(Ctx ctx, int VAF_Task_ID, Trx trxName)
+            : base(ctx, VAF_Task_ID, trxName)
         {
             
         }	//	MTask

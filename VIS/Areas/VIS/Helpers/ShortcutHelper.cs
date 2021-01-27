@@ -38,7 +38,7 @@ namespace VIS.Helpers
                                     WHEN o.Action = 'B'
                                     THEN o.AD_Workbench_ID
                                     WHEN o.Action = 'T'
-                                    THEN o.AD_Task_ID
+                                    THEN o.VAF_Task_ID
                                     WHEN o.Action = 'X'
                                     THEN o.VAF_Page_ID
                                     WHEN o.Action ='F'
@@ -290,7 +290,7 @@ namespace VIS.Helpers
                                     WHEN o.action = 'B'
                                     THEN o.ad_workbench_id
                                     WHEN o.action = 'T'
-                                    THEN o.ad_task_id
+                                    THEN o.VAF_Task_id
                                     WHEN o.action = 'X'
                                     THEN o.ad_form_id
                                     WHEN o.action ='F'

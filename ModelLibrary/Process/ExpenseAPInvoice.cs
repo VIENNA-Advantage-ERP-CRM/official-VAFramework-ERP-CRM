@@ -163,7 +163,7 @@ namespace VAdvantage.Process
                             invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
 
                             invoice.SetBPartner(bp);
-                            if (invoice.GetC_BPartner_Location_ID() == 0)
+                            if (invoice.GetVAB_BPart_Location_ID() == 0)
                             {
                                 log.Log(Level.SEVERE, "No BP Location: " + bp);
                                 AddLog(0, te.GetDateReport(),

@@ -663,7 +663,7 @@ namespace VAdvantage.Model
                 // done by Vivek Kumar on 05/07/2017 as per discussion with Mandeep sir
                 //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
                 //JID_1469 prepayment should be true in case of order and independent business partner.
-                if ((GetC_BPartner_ID() != 0 && GetVAB_Invoice_ID() == 0 && GetC_Charge_ID() == 0 && GetVAB_Project_ID() == 0))
+                if ((GetVAB_BusinessPartner_ID() != 0 && GetVAB_Invoice_ID() == 0 && GetVAB_Charge_ID() == 0 && GetVAB_Project_ID() == 0))
                 {
                     SetIsPrepayment(true);
                 }
@@ -3905,7 +3905,7 @@ namespace VAdvantage.Model
                     int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     MTable tbl = new MTable(GetCtx(), tableId, null);
                     po = tbl.GetPO(GetCtx(), Util.GetValueOfInt(GetVA026_LCDetail_ID()), Get_Trx());
-                    currencyTo = UtVAF_TABLEVIEWlueOfInt(pVAF_TABLEVIEWlue("VAB_Currency_ID"));
+                    currencyTo = Util.GetValueOfInt(po.Get_Value("VAB_Currency_ID"));
 
                     if (Util.GetValueOfString(po.Get_Value("VA026_Realized")) == "Y")
                     {

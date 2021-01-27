@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for AD_Task_Access
+/** Generated Model for VAF_Task_Rights
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_AD_Task_Access : PO
+public class X_VAF_Task_Rights : PO
 {
-public X_AD_Task_Access (Context ctx, int AD_Task_Access_ID, Trx trxName) : base (ctx, AD_Task_Access_ID, trxName)
+public X_VAF_Task_Rights (Context ctx, int VAF_Task_Rights_ID, Trx trxName) : base (ctx, VAF_Task_Rights_ID, trxName)
 {
-/** if (AD_Task_Access_ID == 0)
+/** if (VAF_Task_Rights_ID == 0)
 {
 SetVAF_Role_ID (0);
-SetAD_Task_ID (0);
+SetVAF_Task_ID (0);
 SetIsReadWrite (false);
 }
  */
 }
-public X_AD_Task_Access (Ctx ctx, int AD_Task_Access_ID, Trx trxName) : base (ctx, AD_Task_Access_ID, trxName)
+public X_VAF_Task_Rights (Ctx ctx, int VAF_Task_Rights_ID, Trx trxName) : base (ctx, VAF_Task_Rights_ID, trxName)
 {
-/** if (AD_Task_Access_ID == 0)
+/** if (VAF_Task_Rights_ID == 0)
 {
 SetVAF_Role_ID (0);
-SetAD_Task_ID (0);
+SetVAF_Task_ID (0);
 SetIsReadWrite (false);
 }
  */
@@ -41,7 +41,7 @@ SetIsReadWrite (false);
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Task_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Task_Rights (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_AD_Task_Access (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Task_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAF_Task_Rights (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_AD_Task_Access (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_AD_Task_Access (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAF_Task_Rights (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_AD_Task_Access()
+static X_VAF_Task_Rights()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389047734L;
 public static int Table_ID;
  // =199;
 
-/** TableName=AD_Task_Access */
-public static String Table_Name="AD_Task_Access";
+/** TableName=VAF_Task_Rights */
+public static String Table_Name="VAF_Task_Rights";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(6);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_AD_Task_Access[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAF_Task_Rights[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Role.
@@ -136,17 +136,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAF_Role_ID().ToString());
 }
 /** Set OS Task.
-@param AD_Task_ID Operation System Task */
-public void SetAD_Task_ID (int AD_Task_ID)
+@param VAF_Task_ID Operation System Task */
+public void SetVAF_Task_ID (int VAF_Task_ID)
 {
-if (AD_Task_ID < 1) throw new ArgumentException ("AD_Task_ID is mandatory.");
-Set_ValueNoCheck ("AD_Task_ID", AD_Task_ID);
+if (VAF_Task_ID < 1) throw new ArgumentException ("VAF_Task_ID is mandatory.");
+Set_ValueNoCheck ("VAF_Task_ID", VAF_Task_ID);
 }
 /** Get OS Task.
 @return Operation System Task */
-public int GetAD_Task_ID() 
+public int GetVAF_Task_ID() 
 {
-Object ii = Get_Value("AD_Task_ID");
+Object ii = Get_Value("VAF_Task_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

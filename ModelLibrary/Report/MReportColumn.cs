@@ -22,8 +22,8 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Report
 {
-    public class MReportColumn:X_VAPA_FR_ColumnSet
-    {
+    public class MReportColumn: VAPA_FR_Column
+	{
    /// <summary>
    /// 	Copy
     /// </summary>

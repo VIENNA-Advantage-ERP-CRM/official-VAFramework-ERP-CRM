@@ -75,9 +75,9 @@ namespace VAdvantage.Utility
          *  @param VAF_Language Language Key
          *  @return HashMap of Language
          */
-        public CCache<String, String> GetMsgMap(String VAF_Language)
+        public CCache<String, String> GetMsgMap(String vaf_Language)
         {
-            String VAF_Language = VAF_Language;
+            String VAF_Language = vaf_Language;
             if (VAF_Language == null || VAF_Language.Length == 0)
                 VAF_Language = Language.GetBaseVAF_Language();
 
@@ -288,13 +288,13 @@ namespace VAdvantage.Utility
          *  @param	VAF_Msg_Lable - Message Key
          *  @return translated text
          */
-        public static String GetMsg(String VAF_Language, String VAF_Msg_Lable)
+        public static String GetMsg(String vaf_Language, String VAF_Msg_Lable)
         {
            // return GetMsg(VAF_Language, VAF_Msg_Lable, 1);
             if (VAF_Msg_Lable == null || VAF_Msg_Lable.Length == 0)
                 return "";
             //
-            String VAF_Language = VAF_Language;
+            String VAF_Language = vaf_Language;
             if (VAF_Language == null || VAF_Language.Length == 0)
                 VAF_Language = Language.GetBaseVAF_Language();
             //
@@ -660,11 +660,11 @@ namespace VAdvantage.Utility
          *  @param isSOTrx if false PO terminology is used (if exists)
          *  @return Name of the Column or "" if not found
          */
-        public static String GetElement(String VAF_Language, String ColumnName, Boolean isSOTrx)
+        public static String GetElement(String vaf_Language, String ColumnName, Boolean isSOTrx)
         {
             if (ColumnName == null || ColumnName.Equals(""))
                 return "";
-            String VAF_Language = VAF_Language;
+            String VAF_Language = vaf_Language;
             if (VAF_Language == null || VAF_Language.Length == 0)
                 VAF_Language = Language.GetBaseVAF_Language();
 
@@ -779,11 +779,11 @@ namespace VAdvantage.Utility
          *  @param text	Text - MsgText or Element Name
          *  @return translated text or original text if not found
          */
-        public static String Translate(String VAF_Language, Boolean isSOTrx, String text)
+        public static String Translate(String vaf_Language, Boolean isSOTrx, String text)
         {
             if (text == null || text.Equals(""))
                 return "";
-            String VAF_Language = VAF_Language;
+            String VAF_Language = vaf_Language;
             if (VAF_Language == null || VAF_Language.Length == 0)
                 VAF_Language = Language.GetBaseVAF_Language();
 

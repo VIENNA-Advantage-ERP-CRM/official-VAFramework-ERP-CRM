@@ -3036,18 +3036,18 @@ namespace VIS.Models
             }
         }
 
-        private int VAF_UserContact_ID;
+        private int vaf_UserContact_ID;
         public int VAF_UserContact_ID
         {
             get
             {
-                return VAF_UserContact_ID;
+                return vaf_UserContact_ID;
             }
             set
             {
-                if (value != VAF_UserContact_ID)
+                if (value != vaf_UserContact_ID)
                 {
-                    VAF_UserContact_ID = value;
+                    vaf_UserContact_ID = value;
                     //NotifyProperty("VAF_UserContact_ID");
                 }
             }

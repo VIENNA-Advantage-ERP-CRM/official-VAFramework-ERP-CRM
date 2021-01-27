@@ -1048,7 +1048,7 @@ namespace VAdvantage.WF
             /******	TODO Start Task				******/
             else if (MWFNode.ACTION_AppsTask.Equals(action))
             {
-                log.Warning("Task:AD_Task_ID=" + _node.GetAD_Task_ID());
+                log.Warning("Task:VAF_Task_ID=" + _node.GetVAF_Task_ID());
             }
 
             /******	EMail						******/

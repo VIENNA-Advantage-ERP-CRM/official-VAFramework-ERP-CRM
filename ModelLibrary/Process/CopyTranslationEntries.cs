@@ -809,13 +809,13 @@ namespace VAdvantage.Process
 
             /////////TASK Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_task_id,
+            sql.Append(@" SELECT VAF_Task_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_task_trl
+                                               FROM VAF_Task_Tl
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -826,9 +826,9 @@ namespace VAdvantage.Process
                     task.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     task.SetVAF_Client_ID(0);
                     task.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_task_id"] != null && dsTab.Tables[0].Rows[j]["ad_task_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_Task_id"] != null && dsTab.Tables[0].Rows[j]["VAF_Task_id"] != DBNull.Value)
                     {
-                        task.SetAD_Task_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_task_id"]));
+                        task.SetVAF_Task_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_Task_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
@@ -1870,13 +1870,13 @@ namespace VAdvantage.Process
 
             /////////TASK Trl
             sql.Clear();
-            sql.Append(@" SELECT ad_task_id,
+            sql.Append(@" SELECT VAF_Task_id,
                                               istranslated      ,
                                               isactive          ,
                                               name              ,
                                               description       ,
                                               help
-                                               FROM ad_task_trl
+                                               FROM VAF_Task_Tl
                                               where VAF_Language='" + VAF_Language + "' and vaf_client_id=0");
             dsTab = DB.ExecuteDataset(sql.ToString());
             if (dsTab != null)
@@ -1884,7 +1884,7 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsTab.Tables[0].Rows.Count; j++)
                 {
                     sql.Clear();
-                    sql.Append("SELECT Count(*) FROM I_TLTASK_Trl WHERE AD_TASK_ID=" + dsTab.Tables[0].Rows[j]["AD_Task_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
+                    sql.Append("SELECT Count(*) FROM I_TLTASK_Trl WHERE VAF_TASK_ID=" + dsTab.Tables[0].Rows[j]["VAF_Task_ID"] + " AND I_TLLanguage_ID =" + I_TLLanguage_ID);
                     count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
                     if (count > 0)
                     {
@@ -1894,9 +1894,9 @@ namespace VAdvantage.Process
                     task.SetI_TLLanguage_ID(lang.GetI_TLLanguage_ID());
                     task.SetVAF_Client_ID(0);
                     task.SetVAF_Org_ID(0);
-                    if (dsTab.Tables[0].Rows[j]["ad_task_id"] != null && dsTab.Tables[0].Rows[j]["ad_task_id"] != DBNull.Value)
+                    if (dsTab.Tables[0].Rows[j]["VAF_Task_id"] != null && dsTab.Tables[0].Rows[j]["VAF_Task_id"] != DBNull.Value)
                     {
-                        task.SetAD_Task_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["ad_task_id"]));
+                        task.SetVAF_Task_ID(Util.GetValueOfInt(dsTab.Tables[0].Rows[j]["VAF_Task_id"]));
                     }
                     if (dsTab.Tables[0].Rows[j]["istranslated"] != null && dsTab.Tables[0].Rows[j]["istranslated"] != DBNull.Value)
                     {
