@@ -584,6 +584,25 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
+            // Set Search Key from Serial No defined on Product Category.
+            MProductCategory pc = new MProductCategory(GetCtx(), GetM_Product_Category_ID(), Get_TrxName());
+            if (newRecord && pc.Get_ColumnIndex("M_SerNoCtl_ID") >= 0)
+            {
+                string name = "";
+                MSerNoCtl ctl = new MSerNoCtl(GetCtx(), pc.GetM_SerNoCtl_ID(), Get_TrxName());
+
+                // if Organization level check box is true on Serila No Control, then Get Current next from Serila No tab.
+                if (ctl.Get_ColumnIndex("IsOrgLevelSequence") >= 0)
+                {
+                    name = ctl.CreateDefiniteSerNo(this);
+                }
+                else
+                {
+                    name = ctl.CreateSerNo();
+                }
+                SetValue(name);
+            }
+
             //	Check Storage
             if (!newRecord && 	//	
                 ((Is_ValueChanged("IsActive") && !IsActive())		//	now not active 
