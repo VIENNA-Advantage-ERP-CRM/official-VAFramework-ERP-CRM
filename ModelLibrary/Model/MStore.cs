@@ -196,7 +196,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="client">client</param>
         /// <returns>array of web stores</returns>
-        public static MStore[] GetOfClient(MClient client)
+        public static MStore[] GetOfClient(MVAFClient client)
         {
             //ArrayList<MStore> list = new ArrayList<MStore>();
             List<MStore> list = new List<MStore>();
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
 
             //
             EMail email = null;
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
             if (client.IsServerEMail() && Ini.IsClient())
             {
                 //MessageBox.Show("Get Connection Problem");

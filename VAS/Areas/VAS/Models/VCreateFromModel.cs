@@ -31,7 +31,7 @@ namespace VIS.Models
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
             var dis = display;
-            MClient tenant = MClient.Get(ctx);
+            MVAFClient tenant = MVAFClient.Get(ctx);
 
             // JID_0976
             string whereCondition = "";
@@ -200,7 +200,7 @@ namespace VIS.Models
         public List<VCreateFromGetCOrder> GetInvoicesVCreate(Ctx ctx, string displays, int cBPartnerId, bool isReturnTrxs, bool IsDrop)
         {
             List<VCreateFromGetCOrder> obj = new List<VCreateFromGetCOrder>();
-            MClient tenant = MClient.Get(ctx);
+            MVAFClient tenant = MVAFClient.Get(ctx);
 
             StringBuilder sql = new StringBuilder("SELECT i.VAB_Invoice_ID," + displays + " AS displays FROM VAB_Invoice i INNER JOIN VAB_DocTypes d ON (i.VAB_DocTypes_ID = d.VAB_DocTypes_ID) "
                         // New column added to fill invoice which drop ship is true

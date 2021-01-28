@@ -29,7 +29,7 @@ namespace VAdvantage.Process
             }
 
             MWindow window = new MWindow(GetCtx(), _windowNo, null);
-            MTab[] tabs = window.GetTabs(false, null);
+            MVAFTab[] tabs = window.GetTabs(false, null);
             if (tabs == null || tabs.Length == 0)
             {
                 return Msg.GetMsg(GetCtx(), "VIS_TabNotFound");
@@ -74,8 +74,8 @@ namespace VAdvantage.Process
 
         private string InsertORUpdateFields(int VAF_Tab_ID, MModuleTab mTab)
         {
-            MTab tab = new MTab(GetCtx(), VAF_Tab_ID, null);
-            MField[] fields = tab.GetFields(true, null);
+            MVAFTab tab = new MVAFTab(GetCtx(), VAF_Tab_ID, null);
+            MVAFField[] fields = tab.GetFields(true, null);
             if (fields == null || fields.Length == 0)
             {
                 return Msg.GetMsg(GetCtx(), "VIS_FieldsNotFound" + " " + tab.GetName());

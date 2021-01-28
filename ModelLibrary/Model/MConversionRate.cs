@@ -99,7 +99,7 @@ namespace VAdvantage.Model
         public static Decimal ConvertBase(Ctx ctx, Decimal amt, int CurFrom_ID,
             DateTime? convDate, int VAB_CurrencyType_ID, int VAF_Client_ID, int VAF_Org_ID)
         {
-            return Convert(ctx, amt, CurFrom_ID, VAdvantage.Model.MClient.Get(ctx).GetVAB_Currency_ID(),
+            return Convert(ctx, amt, CurFrom_ID, VAdvantage.Model.MVAFClient.Get(ctx).GetVAB_Currency_ID(),
                 convDate, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
         }
 

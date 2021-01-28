@@ -131,7 +131,7 @@ namespace VAdvantage.Model
         {
             if (_userPricing == null)
             {
-                MClientInfo client = MClientInfo.Get(Env.GetContext(), _VAF_Client_ID);
+                MVAFClientDetail client = MVAFClientDetail.Get(Env.GetContext(), _VAF_Client_ID);
                 String userClass = client.GetPricingEngineClass();
                 try
                 {

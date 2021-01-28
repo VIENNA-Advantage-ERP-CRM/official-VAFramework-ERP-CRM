@@ -58,7 +58,7 @@ namespace VIS.Controllers
             Ctx ctx = Session["ctx"] as Ctx;
             string res = "No";
 
-            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID);
+            MVAFClientDetail info = MVAFClientDetail.Get(ctx, VAF_Client_ID);
             MAcctSchema ass = new MAcctSchema(ctx, info.GetVAB_AccountBook1_ID(), null);
             if (ass.GetFRPT_LocAcct_ID() > 0)
             {

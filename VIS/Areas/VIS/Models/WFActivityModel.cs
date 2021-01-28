@@ -40,7 +40,7 @@ namespace VIS.Models
         public WFInfo GetActivities(Ctx ctx, int VAF_UserContact_ID, int VAF_Client_ID, int pageNo, int pageSize, bool refresh, string searchText, int VAF_Screen_ID, DateTime? dateFrom, DateTime? dateTo, int AD_Node_ID)
         {
             string sql = "";
-            List<MTable> mtable = new List<MTable>();
+            List<MVAFTableView> mtable = new List<MVAFTableView>();
             int count = 0;
 
             // If window is selected or search text is available..
@@ -61,7 +61,7 @@ namespace VIS.Models
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         count++;
-                        MTable table = new MTable(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
+                        MVAFTableView table = new MVAFTableView(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
 
                         GetFromClause(ctx, table.GetTableName(), "", "", "");
                         GetWhereClause(ctx, table, searchText, VAF_Screen_ID, AD_Node_ID);
@@ -386,7 +386,7 @@ OR
         /// <param name="table"></param>
         /// <param name="searchText"></param>
         /// <param name="VAF_Screen_ID"></param>
-        private void GetWhereClause(Ctx ctx, MTable table, string searchText, int VAF_Screen_ID, int AD_Node_ID)
+        private void GetWhereClause(Ctx ctx, MVAFTableView table, string searchText, int VAF_Screen_ID, int AD_Node_ID)
         {
             if (whereClause.Length > 7 && searchText.Length > 0)
             {
@@ -594,7 +594,7 @@ OR
                 info.NodeName = node.GetName();
                 if (MWFNode.ACTION_UserChoice.Equals(node.GetAction()))
                 {
-                    MColumn col = node.GetColumn();
+                    MVAFColumn col = node.GetColumn();
                     info.ColID = col.GetVAF_Column_ID();
                     info.ColReference = col.GetVAF_Control_Ref_ID();
                     info.ColReferenceValue = col.GetVAF_Control_Ref_Value_ID();
@@ -710,7 +710,7 @@ OR
                         activity.SetVAF_Screen_ID(node.GetZoomWindow_ID());
                     int approvalLevel = node.GetApprovalLeval();
                     int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
-                    MColumn column = node.GetColumn();
+                    MVAFColumn column = node.GetColumn();
 
                     if (forward != null) // Prefer Forward 
                     {
@@ -942,7 +942,7 @@ OR
 
         private PO GetPO(int tableID, int recordID, Ctx ctx)
         {
-            MTable table = MTable.Get(ctx, tableID);
+            MVAFTableView table = MVAFTableView.Get(ctx, tableID);
             return table.GetPO(ctx, recordID, null);
 
         }
@@ -950,7 +950,7 @@ OR
         private PO GetPO(string tableName, int recordID, Ctx ctx)
         {
             //throw new NotImplementedException();
-            MTable table = MTable.Get(ctx, Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='" + tableName + "'")));
+            MVAFTableView table = MVAFTableView.Get(ctx, Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='" + tableName + "'")));
             return table.GetPO(ctx, recordID, null);
         }
 

@@ -535,7 +535,7 @@ and ai.record_id = " + _Record_ID;
 
             //select all tables where VAF_UserContact_ID is used and have an entry in attachment(appointmentinfo OR mailattachment1)
 
-            int userTableID = MTable.Get_Table_ID("VAF_UserContact");
+            int userTableID = MVAFTableView.Get_Table_ID("VAF_UserContact");
 
             var sql = @"SELECT VAF_TableView_ID,Record_ID,Attachtype,TableName FROM (SELECT DISTINCT vaf_tableview_id, record_ID, 'A' AS Attachtype,'VAF_UserContact' as TableName FROM appointmentsinfo
                             WHERE vaf_tableview_id IN(" + userTableID + @") UNION SELECT DISTINCT vaf_tableview_id, record_ID, 'M' AS Attachtype,'VAF_UserContact' as TableName FROM mailattachment1
@@ -1537,7 +1537,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
 
                     if (uimgId > 0)
                     {
-                        MImage mimg = new MImage(ctx, uimgId, null);
+                        MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                         var imgfll = mimg.GetThumbnailURL(46, 46);
                         inf.UserImage = imgfll;
                     }
@@ -1600,7 +1600,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
 
                     if (uimgId > 0)
                     {
-                        MImage mimg = new MImage(ctx, uimgId, null);
+                        MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                         var imgfll = mimg.GetThumbnailURL(46, 46);
                         inf.UserImage = imgfll;
                     }
@@ -1764,7 +1764,7 @@ where cd.IsActive = 'Y' and cd.VA048_CallDetails_ID = " + ID;
                 string attachemntsql = @"
 select att.VAF_Attachment_ID, att.FileLocation, atl.VAF_AttachmentLine_ID, atl.FileName, atl.FileType from VAF_Attachment att 
 left join VAF_AttachmentLine atl on att.VAF_Attachment_ID = atl.VAF_Attachment_ID
-where att.vaf_tableview_ID = " + MTable.Get_Table_ID("VA048_CallDetails") + @" and att.Record_ID = " + ID;
+where att.vaf_tableview_ID = " + MVAFTableView.Get_Table_ID("VA048_CallDetails") + @" and att.Record_ID = " + ID;
 
                 var dsatt = DB.ExecuteDataset(attachemntsql);
 

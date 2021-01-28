@@ -107,8 +107,8 @@ namespace VAdvantage.Model
         /// <param name="ctx">Ctx</param>
         private static void LoadAllCountries(Ctx ctx)
         {
-            MClient client = MClient.Get(ctx);
-            MLanguage lang = MLanguage.Get(ctx, client.GetVAF_Language());
+            MVAFClient client = MVAFClient.Get(ctx);
+            MVAFLanguage lang = MVAFLanguage.Get(ctx, client.GetVAF_Language());
             MCountry usa = null;
             //
 

@@ -733,7 +733,7 @@ namespace VAdvantage.Model
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             //obj = new MFRPTProductAcct(GetCtx(), 0, null);
-                            obj = MTable.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
+                            obj = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                             obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
                             obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
@@ -758,7 +758,7 @@ namespace VAdvantage.Model
                 //            {
                 //                for (int j = 0; j < _dsAcct.Tables[0].Rows.Count; j++)
                 //                {
-                //                    obj = MTable.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
+                //                    obj = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                 //                    obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                 //                    obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
                 //                    obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_AccountBook_ID"]));

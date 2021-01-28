@@ -331,7 +331,7 @@ namespace VIS.Helpers
                         //***** If User Image saved in FileSystem
                         try
                         {
-                            MImage objImage = new MImage(ctx, Util.GetValueOfInt(dsData.Tables[0].Rows[0]["VAF_Image_ID"]), null);
+                            MVAFImage objImage = new MVAFImage(ctx, Util.GetValueOfInt(dsData.Tables[0].Rows[0]["VAF_Image_ID"]), null);
                             objHome.UsrImage = Convert.ToBase64String(objImage.GetThumbnailByte(140, 120));
                         }
                         catch
@@ -389,7 +389,7 @@ namespace VIS.Helpers
                 objHome.UsrEmail = dsData.Tables[0].Rows[0]["email"].ToString();
                 var uimgId = Util.GetValueOfInt(dsData.Tables[0].Rows[0]["VAF_Image_ID"].ToString());
 
-                MImage mimg = new MImage(ctx, uimgId, null);
+                MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                 var imgfll = mimg.GetThumbnailURL(height, width);
                 objHome.UsrImage = imgfll;
 
@@ -545,7 +545,7 @@ namespace VIS.Helpers
                         {
                             var uimsg = new FllUsrImages();
                             uimsg.VAF_Image_ID = uimgId;
-                            MImage mimg = new MImage(ctx, uimgId, null);
+                            MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                             var imgfll = mimg.GetThumbnailURL(46, 46);
                             uimsg.UserImg = imgfll;
                             lstUImg.Add(uimsg);
@@ -675,7 +675,7 @@ namespace VIS.Helpers
                         {
                             var uimsg = new FllUsrImages();
                             uimsg.VAF_Image_ID = uimgId;
-                            MImage mimg = new MImage(ctx, uimgId, null);
+                            MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                             var imgfll = mimg.GetThumbnailURL(46, 46);
                             uimsg.UserImg = imgfll;
                             lstUImg.Add(uimsg);
@@ -801,7 +801,7 @@ namespace VIS.Helpers
                         {
                             var uimsg = new FllUsrImages();
                             uimsg.VAF_Image_ID = uimgId;
-                            MImage mimg = new MImage(ctx, uimgId, null);
+                            MVAFImage mimg = new MVAFImage(ctx, uimgId, null);
                             var imgfll = mimg.GetThumbnailURL(46, 46);
                             uimsg.UserImg = imgfll;
                             lstUImg.Add(uimsg);
@@ -900,7 +900,7 @@ namespace VIS.Helpers
                 strQuery += "  AND VAF_Notice.VAF_UserContact_ID IN (0," + ctx.GetVAF_UserContact_ID() + ")"
                 + " AND VAF_Notice.Processed='N' ORDER BY VAF_Notice.Created DESC";
 
-                int PResultTableID = MTable.Get_Table_ID("VAF_JInstance_Result");
+                int PResultTableID = MVAFTableView.Get_Table_ID("VAF_JInstance_Result");
 
                 dsData = VIS.DBase.DB.ExecuteDatasetPaging(strQuery, page, PageSize);
                 dsData = VAdvantage.DataBase.DB.SetUtcDateTime(dsData);

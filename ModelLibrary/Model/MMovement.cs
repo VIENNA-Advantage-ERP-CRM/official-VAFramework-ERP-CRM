@@ -690,7 +690,7 @@ namespace VAdvantage.Model
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
             //int countVA024 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE ISACTIVE = 'Y' AND  PREFIX='VA024_'"));
             //int tableId = 0;
@@ -2855,7 +2855,7 @@ namespace VAdvantage.Model
                 log.Config("Delete old #" + no);
             MMovementLine[] lines = GetLines(false);
 
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
 
             //	Check Lines
             for (int i = 0; i < lines.Length; i++)
@@ -2875,7 +2875,7 @@ namespace VAdvantage.Model
                     //
                     MStorage[] storages = MStorage.GetAllWithASI(GetCtx(),
                         line.GetM_Product_ID(), line.GetM_Locator_ID(),
-                        MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
+                        MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                     Decimal qtyToDeliver = line.GetMovementQty();
                     for (int ii = 0; ii < storages.Length; ii++)
                     {
@@ -2960,7 +2960,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
             Boolean needSave = false;
             //bool isLifoChecked = false;
 
@@ -2980,14 +2980,14 @@ namespace VAdvantage.Model
                 storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                  line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                  line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                 MClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
+                 MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
             }
             else
             {
                 storages = MStorage.GetWarehouse(GetCtx(), GetDTD001_MWarehouseSource_ID(), line.GetM_Product_ID(),
                          line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                             line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                            MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
+                            MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
             }
 
             Decimal qtyToDeliver = line.GetMovementQty();
@@ -3041,12 +3041,12 @@ namespace VAdvantage.Model
                 if (Env.Signum(qtyToDeliver) == 0)
                     break;
 
-                if (isContainerApplicable && ii == storages.Length - 1 && !MClient.MMPOLICY_FiFo.Equals(MMPolicy))
+                if (isContainerApplicable && ii == storages.Length - 1 && !MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy))
                 {
                     storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                                  line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                                  line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                                 MClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
+                                 MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
                     ii = -1;
                 }
             }	//	 for all storages

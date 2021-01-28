@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="attach">attachment</param>
         /// <param name="Title">title</param>
         /// <param name="TextMsg">text message</param>
-        public MAttachmentNote(MAttachment attach, string Title, string TextMsg)
+        public MAttachmentNote(MVAFAttachment attach, string Title, string TextMsg)
             : this(attach.GetCtx(), 0, attach.Get_TrxName())
         {
             SetClientOrg(attach);

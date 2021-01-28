@@ -117,7 +117,7 @@ namespace VIS.Models
             // var config = "";
             if (config == null)
             {
-                MClient client = new MClient(ctx, VAF_Client_ID, null);
+                MVAFClient client = new MVAFClient(ctx, VAF_Client_ID, null);
                 userinfo.Email = client.GetRequestEMail();
             }
             else
@@ -427,7 +427,7 @@ namespace VIS.Models
             byte[] byteArray = null;
             string filepath = string.Empty;
             List<AttachedFileInfo> lstAttchment = new List<AttachedFileInfo>();
-            MAttachment attachment = new MAttachment(ctx, Convert.ToInt32(attachmentID), null, "", Convert.ToInt32(ctx.GetVAF_Client_ID()));
+            MVAFAttachment attachment = new MVAFAttachment(ctx, Convert.ToInt32(attachmentID), null, "", Convert.ToInt32(ctx.GetVAF_Client_ID()));
             attachment.FolderKey = "";
             attachment.GetLines();
             if (attachment._lines != null && attachment._lines.Count > 0)

@@ -189,26 +189,26 @@ namespace VAdvantage.Model
         public string GetSql(bool isFiltered, string specialWhere)
         {
             StringBuilder sb = new StringBuilder("SELECT ");    //start the SELECT QUERY
-            MTable m_Table = null;// MTable.Get(GetCtx(), GetVAF_TableView_ID());
+            MVAFTableView m_Table = null;// MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             //get the table name
 
             if (IsView())
             {
-                m_Table = MTable.Get(GetCtx(), GetTableView_ID());
+                m_Table = MVAFTableView.Get(GetCtx(), GetTableView_ID());
             }
             else
             {
-                m_Table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
+                m_Table = MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             }
 
 
             string s_tableName = m_Table.GetTableName();
 
             //get X Column Name
-            MColumn column = MColumn.Get(GetCtx(), this.GetVAF_Column_X_ID());
+            MVAFColumn column = MVAFColumn.Get(GetCtx(), this.GetVAF_Column_X_ID());
             string s_colX = column.GetFKColumnName();
 
-            column = MColumn.Get(GetCtx(), this.GetVAF_Column_Y_ID());
+            column = MVAFColumn.Get(GetCtx(), this.GetVAF_Column_Y_ID());
 
             string s_colY = column.GetFKColumnName();
             m_XFilter = GetDateTimeTypes();
@@ -300,7 +300,7 @@ namespace VAdvantage.Model
                 {
                     if (!val.Equals(" WHERE "))
                         sqlFilter.Append(" AND ");
-                    string colValue = MColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).GetColumnName();
+                    string colValue = MVAFColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).GetColumnName();
                     sqlFilter.Append(colValue);
 
                     if (filter[i].GetWhereCondition() == "1")
@@ -318,7 +318,7 @@ namespace VAdvantage.Model
                     }
 
                     //put value
-                    if (MColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
+                    if (MVAFColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
                     {
                         sqlFilter.Append("TO_DATE('").Append(filter[0].GetWhereValue()).Append("','dd/mm/RRRR'").Append(")");
                     }
@@ -326,7 +326,7 @@ namespace VAdvantage.Model
                         sqlFilter.Append("'").Append(Env.ParseContext(GetCtx(), 0, filter[i].GetWhereValue(), false)).Append("'");
                     if (ifBetween)
                     {
-                        if (MColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
+                        if (MVAFColumn.Get(GetCtx(), filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
                         {
                             //sqlFilter.Append("TO_DATE('").Append(colValue).Append("','dd/mm/yyyy'").Append(")");
                             sqlFilter.Append(" AND ");
@@ -411,12 +411,12 @@ namespace VAdvantage.Model
                 string fkTableName = "";
                 if (s_colX.EndsWith("_ID"))
                 {
-                    MTable table = MColumn.Get(GetCtx(), this.GetVAF_Column_X_ID()).GetFKTable();
+                    MVAFTableView table = MVAFColumn.Get(GetCtx(), this.GetVAF_Column_X_ID()).GetFKTable();
                     fkTableName = table.GetTableName();
-                    MColumn[] columns = table.GetColumns(false);
+                    MVAFColumn[] columns = table.GetColumns(false);
                     for (int i = 0; i <= columns.Length - 1; i++)
                     {
-                        MColumn idn_column = MColumn.Get(GetCtx(), columns[i].Get_ID());
+                        MVAFColumn idn_column = MVAFColumn.Get(GetCtx(), columns[i].Get_ID());
                         if (idn_column.IsIdentifier())
                         {
                             s_identifierCol = idn_column.GetName();
@@ -493,25 +493,25 @@ namespace VAdvantage.Model
         public string GetSql(bool isFiltered, string specialWhere, Ctx _Ctx)
         {
             StringBuilder sb = new StringBuilder("SELECT ");    //start the SELECT QUERY
-            MTable m_Table = null;// MTable.Get(GetCtx(), GetVAF_TableView_ID());
+            MVAFTableView m_Table = null;// MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             //get the table name
 
             if (IsView())
             {
-                m_Table = MTable.Get(GetCtx(), GetTableView_ID());
+                m_Table = MVAFTableView.Get(GetCtx(), GetTableView_ID());
             }
             else
             {
-                m_Table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
+                m_Table = MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             }
             //get the table name
             string s_tableName = m_Table.GetTableName();
 
             //get X Column Name
-            MColumn column = MColumn.Get(_Ctx, this.GetVAF_Column_X_ID());
+            MVAFColumn column = MVAFColumn.Get(_Ctx, this.GetVAF_Column_X_ID());
             string s_colX = column.GetFKColumnName();
 
-            column = MColumn.Get(_Ctx, this.GetVAF_Column_Y_ID());
+            column = MVAFColumn.Get(_Ctx, this.GetVAF_Column_Y_ID());
 
             string s_colY = column.GetFKColumnName();
             m_XFilter = GetDateTimeTypes();
@@ -609,7 +609,7 @@ namespace VAdvantage.Model
 
                     if (!val.Equals(" WHERE "))
                         sqlFilter.Append(" AND ");
-                    string colValue = MColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).GetColumnName();
+                    string colValue = MVAFColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).GetColumnName();
                     sqlFilter.Append(colValue);
 
                     if (filter[i].GetWhereCondition() == "1")
@@ -627,7 +627,7 @@ namespace VAdvantage.Model
                     }
 
                     //put value
-                    if (MColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
+                    if (MVAFColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
                     {
                         sqlFilter.Append("TO_DATE('").Append(filter[0].GetWhereValue()).Append("','dd/mm/RRRR'").Append(")");
                     }
@@ -635,7 +635,7 @@ namespace VAdvantage.Model
                         sqlFilter.Append("'").Append(Env.ParseContext(_Ctx, 0, filter[i].GetWhereValue(), false)).Append("'");
                     if (ifBetween)
                     {
-                        if (MColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
+                        if (MVAFColumn.Get(_Ctx, filter[i].GetVAF_Column_ID()).getSQLDataType() == "DATE")
                         {
                             //sqlFilter.Append("TO_DATE('").Append(colValue).Append("','dd/mm/yyyy'").Append(")");
                             sqlFilter.Append(" AND ");
@@ -720,12 +720,12 @@ namespace VAdvantage.Model
                 string fkTableName = "";
                 if (s_colX.EndsWith("_ID"))
                 {
-                    MTable table = MColumn.Get(_Ctx, this.GetVAF_Column_X_ID()).GetFKTable();
+                    MVAFTableView table = MVAFColumn.Get(_Ctx, this.GetVAF_Column_X_ID()).GetFKTable();
                     fkTableName = table.GetTableName();
-                    MColumn[] columns = table.GetColumns(false);
+                    MVAFColumn[] columns = table.GetColumns(false);
                     for (int i = 0; i <= columns.Length - 1; i++)
                     {
-                        MColumn idn_column = MColumn.Get(_Ctx, columns[i].Get_ID());
+                        MVAFColumn idn_column = MVAFColumn.Get(_Ctx, columns[i].Get_ID());
                         if (idn_column.IsIdentifier())
                         {
                             s_identifierCol = idn_column.GetColumnName();
@@ -1230,7 +1230,7 @@ namespace VAdvantage.Model
 
                 if (IsIdentifier_X() || IsString_X())
                 {
-                    MColumn dateCol = MColumn.Get(GetCtx(), GetAD_DateColumn_ID());
+                    MVAFColumn dateCol = MVAFColumn.Get(GetCtx(), GetAD_DateColumn_ID());
                     sb.Append(dateCol.GetFKColumnName()).Append(" BETWEEN ");
                 }
                 else
@@ -1607,7 +1607,7 @@ namespace VAdvantage.Model
 
         public string GetColumnName(int VAF_Column_ID)
         {
-            MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
+            MVAFColumn column = MVAFColumn.Get(GetCtx(), VAF_Column_ID);
             return column.GetFKColumnName();
         }
 

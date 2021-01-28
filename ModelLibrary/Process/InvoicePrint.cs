@@ -145,7 +145,7 @@ namespace VAdvantage.Process
             throw new Exception("@RestrictSelection@");
         }
 
-		MClient client = MClient.Get(GetCtx());
+		MVAFClient client = MVAFClient.Get(GetCtx());
 		
 		//	Get Info
 		StringBuilder sql = new StringBuilder (

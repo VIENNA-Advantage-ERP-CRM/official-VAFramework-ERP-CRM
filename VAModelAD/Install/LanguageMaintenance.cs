@@ -33,7 +33,7 @@ namespace VAdvantage.Install
         public static String MAINTENANCEMODE_Add = "A";//Add
         public static String MAINTENANCEMODE_Delete = "D";// Delete
         public static String MAINTENANCEMODE_ReCreate = "R";// Re-Create				
-        private MLanguage _language = null;//	The Language			
+        private MVAFLanguage _language = null;//	The Language			
         #endregion
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace VAdvantage.Install
         {
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
             //_language = MLanguage.Get(GetCtx(), _VAF_Language_ID, trx.ToString());
-            _language = MLanguage.Get(GetCtx(), _VAF_Language_ID, Get_TrxName());
+            _language = MVAFLanguage.Get(GetCtx(), _VAF_Language_ID, Get_TrxName());
             log.Info("Mode=" + _MaintenanceMode + ", ID=" + _VAF_Language_ID + " - " + _language);
 
             if (_language.IsBaseLanguage())

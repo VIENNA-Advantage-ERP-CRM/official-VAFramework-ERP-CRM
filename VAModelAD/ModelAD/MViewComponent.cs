@@ -54,7 +54,7 @@ namespace VAdvantage.Model
 	/// Parent Constructor	
 	/// </summary>
 	/// <param name="parent">parent</param>
-	public MViewComponent(MTable parent):this (parent.GetCtx(), 0, parent.Get_TrxName())
+	public MViewComponent(MVAFTableView parent):this (parent.GetCtx(), 0, parent.Get_TrxName())
 	{		       
 		SetClientOrg (parent);
 		SetVAF_TableView_ID (parent.GetVAF_TableView_ID());

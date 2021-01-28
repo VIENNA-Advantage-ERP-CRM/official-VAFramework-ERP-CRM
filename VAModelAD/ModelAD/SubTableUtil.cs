@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         private SubTableUtil(Context Context, String tableName, bool userDef, bool history)
         {
             m_ctx = Context;
-            m_baseTable = MTable.Get(Context, tableName);
+            m_baseTable = MVAFTableView.Get(Context, tableName);
             if (m_baseTable == null)
                 throw new ArgumentException("Not found: " + tableName);
             m_userDef = userDef;
@@ -78,13 +78,13 @@ namespace VAdvantage.Model
         /** The base table		*/
         private Context m_ctx;
         /** The base table		*/
-        private MTable m_baseTable;
+        private MVAFTableView m_baseTable;
         /** The derived table		*/
-        private MTable m_derivedTable;
+        private MVAFTableView m_derivedTable;
         /**	Sub Table Type			*/
         private String m_derivedTableType = X_VAF_TableView.SUBTABLETYPE_History_Each;
         /** The view table		*/
-        private MTable m_viewTable;
+        private MVAFTableView m_viewTable;
         /** UserDef or SysDef Delta	*/
         private bool m_userDef;
         /** History				*/
@@ -130,9 +130,9 @@ namespace VAdvantage.Model
         private bool GenerateTable()
         {
             //	Table
-            m_derivedTable = MTable.Get(m_ctx, m_dTableName);
+            m_derivedTable = MVAFTableView.Get(m_ctx, m_dTableName);
             if (m_derivedTable == null)
-                m_derivedTable = new MTable(m_ctx, 0, null);
+                m_derivedTable = new MVAFTableView(m_ctx, 0, null);
 
             PO.CopyValues(m_baseTable, m_derivedTable);
             m_derivedTable.SetTableName(m_dTableName);
@@ -142,11 +142,11 @@ namespace VAdvantage.Model
             if (!m_derivedTable.Save())
                 throw new Exception("Cannot save " + m_dTableName);
 
-            MColumn[] dCols = SyncMColumns(true);
+            MVAFColumn[] dCols = SyncMColumns(true);
 
             //	Sync Columns in Database
-            List<MColumn> list = new List<MColumn>(dCols.Length);
-            foreach (MColumn element in dCols)
+            List<MVAFColumn> list = new List<MVAFColumn>(dCols.Length);
+            foreach (MVAFColumn element in dCols)
                 list.Add(element);
             Trx trx = Trx.Get("getDatabaseMetaData");
             //
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
                 bool found = false;
                 for (int i = 0; i < list.Count; i++)
                 {
-                    MColumn dCol = list[i];
+                    MVAFColumn dCol = list[i];
                     if (columnName.Equals(dCol.GetColumnName(), StringComparison.OrdinalIgnoreCase))
                     {
                         String sql = dCol.GetSQLModify(m_derivedTable, false);
@@ -197,7 +197,7 @@ namespace VAdvantage.Model
             //	New Columns
             for (int i = 0; i < list.Count(); i++)
             {
-                MColumn dCol = list[i];
+                MVAFColumn dCol = list[i];
                 if (dCol.IsVirtualColumn())
                     continue;
                 String sql = dCol.GetSQLAdd(m_derivedTable);
@@ -215,9 +215,9 @@ namespace VAdvantage.Model
         private bool GenerateView()
         {
             //	View
-            m_viewTable = MTable.Get(m_ctx, m_vTableName);
+            m_viewTable = MVAFTableView.Get(m_ctx, m_vTableName);
             if (m_viewTable == null)
-                m_viewTable = new MTable(m_ctx, 0, null);
+                m_viewTable = new MVAFTableView(m_ctx, 0, null);
 
             PO.CopyValues(m_baseTable, m_viewTable);
             m_viewTable.SetTableName(m_vTableName);
@@ -226,7 +226,7 @@ namespace VAdvantage.Model
             if (!m_viewTable.Save())
                 throw new Exception("Cannot save " + m_vTableName);
 
-            MColumn[] vCols = SyncMColumns(false);
+            MVAFColumn[] vCols = SyncMColumns(false);
 
             //ColumnSync
             //	Create View
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
             {
                 if (i > 0)
                     sql.Append(",");
-                MColumn column = vCols[i];
+                MVAFColumn column = vCols[i];
                 String columnName = column.GetColumnName();
                 if (column.IsStandardColumn()
                     || column.IsKey())
@@ -267,17 +267,17 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="derived">is derived</param>
         /// <returns></returns>
-        private MColumn[] SyncMColumns(bool derived)
+        private MVAFColumn[] SyncMColumns(bool derived)
         {
-            MTable target = derived ? m_derivedTable : m_viewTable;
-            MTable source = derived ? m_baseTable : m_derivedTable;
-            MColumn[] sCols = source.GetColumns(false);
-            MColumn[] tCols = target.GetColumns(false);
+            MVAFTableView target = derived ? m_derivedTable : m_viewTable;
+            MVAFTableView source = derived ? m_baseTable : m_derivedTable;
+            MVAFColumn[] sCols = source.GetColumns(false);
+            MVAFColumn[] tCols = target.GetColumns(false);
             //	Base Columns
-            foreach (MColumn sCol in sCols)
+            foreach (MVAFColumn sCol in sCols)
             {
-                MColumn tCol = null;
-                foreach (MColumn column in tCols)
+                MVAFColumn tCol = null;
+                foreach (MVAFColumn column in tCols)
                 {
                     if (sCol.GetColumnName().Equals(column.GetColumnName()))
                     {
@@ -286,7 +286,7 @@ namespace VAdvantage.Model
                     }
                 }
                 if (tCol == null)
-                    tCol = new MColumn(target);
+                    tCol = new MVAFColumn(target);
                 PO.CopyValues(sCol, tCol);
                 tCol.SetVAF_TableView_ID(target.GetVAF_TableView_ID());	//	reset parent
                 tCol.SetIsCallout(false);
@@ -310,14 +310,14 @@ namespace VAdvantage.Model
             {
                 //	KeyColumn
                 String keyColumnName = target.GetTableName() + "_ID";
-                MColumn key = target.GetColumn(keyColumnName);
+                MVAFColumn key = target.GetColumn(keyColumnName);
                 if (key == null)
                 {
-                    key = new MColumn(target);
-                    M_Element ele = M_Element.Get(m_ctx, keyColumnName, target.Get_TrxName());
+                    key = new MVAFColumn(target);
+                    M_VAFColumnDic ele = M_VAFColumnDic.Get(m_ctx, keyColumnName, target.Get_TrxName());
                     if (ele == null)
                     {
-                        ele = new M_Element(m_ctx, keyColumnName, target.GetEntityType(), null);
+                        ele = new M_VAFColumnDic(m_ctx, keyColumnName, target.GetEntityType(), null);
                         ele.Save();
                     }
                     key.SetVAF_ColumnDic_ID(ele.GetVAF_ColumnDic_ID());
@@ -332,7 +332,7 @@ namespace VAdvantage.Model
                     addlColumns.Add(colName);
                     if (target.GetColumn(colName) == null)
                     {
-                        MColumn col = new MColumn(target);
+                        MVAFColumn col = new MVAFColumn(target);
                         col.SetColumnName(colName);
                         col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                         CreateColumn(col, target, false);
@@ -343,7 +343,7 @@ namespace VAdvantage.Model
                     addlColumns.Add(colName);
                     if (target.GetColumn(colName) == null)
                     {
-                        MColumn col = new MColumn(target);
+                        MVAFColumn col = new MVAFColumn(target);
                         col.SetColumnName(colName);
                         col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                         col.SetIsUpdateable(false);
@@ -357,7 +357,7 @@ namespace VAdvantage.Model
                     addlColumns.Add(colName);
                     if (target.GetColumn(colName) == null)
                     {
-                        MColumn col = new MColumn(target);
+                        MVAFColumn col = new MVAFColumn(target);
                         col.SetColumnName(colName);
                         col.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                         col.SetDefaultValue("N");
@@ -370,10 +370,10 @@ namespace VAdvantage.Model
 
 
             //	Delete
-            foreach (MColumn tCol in tCols)
+            foreach (MVAFColumn tCol in tCols)
             {
-                MColumn sCol = null;
-                foreach (MColumn column in sCols)
+                MVAFColumn sCol = null;
+                foreach (MVAFColumn column in sCols)
                 {
                     if (tCol.GetColumnName().Equals(column.GetColumnName()))
                     {
@@ -402,7 +402,7 @@ namespace VAdvantage.Model
         /// <param name="tableName">name of the  table</param>
         static void CheckStandardColumns(Context Context, String tableName)
         {
-            MTable table = MTable.Get(Context, tableName);
+            MVAFTableView table = MVAFTableView.Get(Context, tableName);
             CheckStandardColumns(table, null);
         }
 
@@ -411,7 +411,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="table">name of the table</param>
         /// <param name="EntityType">Entity Type</param>
-        public static void CheckStandardColumns(MTable table, String EntityType)
+        public static void CheckStandardColumns(MVAFTableView table, String EntityType)
         {
             if (table == null)
                 return;
@@ -422,7 +422,7 @@ namespace VAdvantage.Model
             String colName = table.GetTableName() + "_ID";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.ID);
                 col.SetIsKey(true);
@@ -435,7 +435,7 @@ namespace VAdvantage.Model
             colName = "VAF_Client_ID";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                 col.SetIsUpdateable(false);
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
             colName = "VAF_Org_ID";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.TableDir);
                 col.SetIsUpdateable(false);
@@ -466,7 +466,7 @@ namespace VAdvantage.Model
             colName = "Created";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
@@ -478,7 +478,7 @@ namespace VAdvantage.Model
             colName = "Updated";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.DateTime);
                 col.SetIsUpdateable(false);
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
             colName = "CreatedBy";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.Table);
                 col.SetVAF_Control_Ref_Value_ID(110);
@@ -504,7 +504,7 @@ namespace VAdvantage.Model
             colName = "UpdatedBy";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.Table);
                 col.SetVAF_Control_Ref_Value_ID(110);
@@ -518,7 +518,7 @@ namespace VAdvantage.Model
             colName = "IsActive";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.YesNo);
                 col.SetDefaultValue("Y");
@@ -531,7 +531,7 @@ namespace VAdvantage.Model
             colName = "Export_ID";
             if (table.GetColumn(colName) == null)
             {
-                MColumn col = new MColumn(table);
+                MVAFColumn col = new MVAFColumn(table);
                 col.SetColumnName(colName);
                 col.SetVAF_Control_Ref_ID(DisplayType.String);
                 col.SetIsUpdateable(true);
@@ -551,13 +551,13 @@ namespace VAdvantage.Model
         /// <param name="table">Table Object</param>
         /// <param name="alsoInDB">Also in DB</param>
         /// <returns></returns>
-        private static bool CreateColumn(MColumn col, MTable table, bool alsoInDB)
+        private static bool CreateColumn(MVAFColumn col, MVAFTableView table, bool alsoInDB)
         {
             //	Element
-            M_Element element = M_Element.Get(col.GetCtx(), col.GetColumnName(), col.Get_TrxName());
+            M_VAFColumnDic element = M_VAFColumnDic.Get(col.GetCtx(), col.GetColumnName(), col.Get_TrxName());
             if (element == null)
             {
-                element = new M_Element(col.GetCtx(), col.GetColumnName(), col.GetEntityType(), null);
+                element = new M_VAFColumnDic(col.GetCtx(), col.GetColumnName(), col.GetEntityType(), null);
                 if (!element.Save())
                     return false;
                 log.Info("Created Element: " + element.GetColumnName());

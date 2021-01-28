@@ -67,13 +67,13 @@ namespace VAdvantage.Process
                 throw new Exception("@No@ @VAF_Column_ID@");
             }
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
-            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
+            MVAFColumn column = new MVAFColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
             if (column.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @VAF_Column_ID@" + p_VAF_Column_ID);
             }
 
-            MTable table = MTable.Get(GetCtx(), column.GetVAF_TableView_ID());
+            MVAFTableView table = MVAFTableView.Get(GetCtx(), column.GetVAF_TableView_ID());
             if (table.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @VAF_TableView_ID@" + column.GetVAF_TableView_ID());
@@ -247,11 +247,11 @@ namespace VAdvantage.Process
             if (p_VAF_Column_ID == 0)
                 throw new Exception("@No@ @VAF_Column_ID@");
 
-            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
+            MVAFColumn column = new MVAFColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
             if (column.Get_ID() == 0)
                 throw new Exception("@NotFound@ @VAF_Column_ID@ " + p_VAF_Column_ID);
 
-            MTable table = MTable.Get(GetCtx(), column.GetVAF_TableView_ID());
+            MVAFTableView table = MVAFTableView.Get(GetCtx(), column.GetVAF_TableView_ID());
             if (table.Get_ID() == 0)
                 throw new Exception("@NotFound@ @VAF_TableView_ID@ " + column.GetVAF_TableView_ID());
 
@@ -263,7 +263,7 @@ namespace VAdvantage.Process
             // then get all columns of table and add to list
             if (noColumns == 0)
             {
-                int[] AllCols = MColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + column.GetVAF_TableView_ID(), Get_Trx());
+                int[] AllCols = MVAFColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + column.GetVAF_TableView_ID(), Get_Trx());
                 cols = AllCols.ToList();
             }
 
@@ -304,7 +304,7 @@ namespace VAdvantage.Process
 
                 foreach (int col in cols)
                 {
-                    column = new MColumn(GetCtx(), col, Get_Trx());
+                    column = new MVAFColumn(GetCtx(), col, Get_Trx());
 
                     dropsql.Clear();
                     fk.Clear();

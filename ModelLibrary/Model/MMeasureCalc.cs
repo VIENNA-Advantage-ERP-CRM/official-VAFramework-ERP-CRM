@@ -421,7 +421,7 @@ namespace VAdvantage.Model
          */
         public String GetTableName()
         {
-            return MTable.GetTableName(GetCtx(), GetVAF_TableView_ID());
+            return MVAFTableView.GetTableName(GetCtx(), GetVAF_TableView_ID());
         }
 
         /**

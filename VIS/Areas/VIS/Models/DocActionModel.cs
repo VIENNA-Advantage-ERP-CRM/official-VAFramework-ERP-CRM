@@ -372,7 +372,7 @@ namespace VIS.Models
             // and the setting "Check Document Action Access" on Role window
             int VAB_DocTypes_ID = 0;
             int VAB_DocTypesTarget_ID = 0;
-            MTable table = MTable.Get(ctx, VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(ctx, VAF_TableView_ID);
             PO po = table.GetPO(ctx, Record_ID, null);
             if (Util.GetValueOfInt(po.Get_Value("VAB_DocTypes_ID")) > 0)
             {
@@ -447,7 +447,7 @@ namespace VIS.Models
 
             #region GetActionFromModuleClass
 
-            MTable mTable = new MTable(ctx, VAF_TableView_ID, null);
+            MVAFTableView mTable = new MVAFTableView(ctx, VAF_TableView_ID, null);
             //	Strip table name prefix (e.g. AD_) Customizations are 3/4
             String classNm = "DocActionSpecification";
 

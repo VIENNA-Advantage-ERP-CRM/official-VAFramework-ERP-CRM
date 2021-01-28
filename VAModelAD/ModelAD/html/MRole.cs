@@ -1081,7 +1081,7 @@ namespace VAdvantage.Model
         private MTableAccess[] _tableAccess = null;
 
         //List-Array OF Column Access
-        private MColumnAccess[] _columnAccess = null;
+        private MVAFColumnRights[] _columnAccess = null;
 
         // List-Array of Record Access
         private MRecordAccess[] _recordAccess = null;
@@ -1545,7 +1545,7 @@ namespace VAdvantage.Model
         {
             if (_columnAccess != null && !reload)
                 return;
-            List<MColumnAccess> list = new List<MColumnAccess>();
+            List<MVAFColumnRights> list = new List<MVAFColumnRights>();
 
             string sql = "SELECT * FROM VAF_Column_Rights "
                 + "WHERE VAF_Role_ID=" + GetVAF_Role_ID() + " AND IsActive='Y'";
@@ -1559,7 +1559,7 @@ namespace VAdvantage.Model
                 dr.Close();
                 foreach (DataRow rs in dt.Rows)
                 {
-                    list.Add(new MColumnAccess(GetCtx(), rs, Get_TrxName()));
+                    list.Add(new MVAFColumnRights(GetCtx(), rs, Get_TrxName()));
                 }
 
 
@@ -1586,7 +1586,7 @@ namespace VAdvantage.Model
         }	//	loadColumnAccess
 
 
-        public MColumnAccess[] GetColumnAccess()
+        public MVAFColumnRights[] GetColumnAccess()
         {
             return _columnAccess;
         }
@@ -2317,7 +2317,7 @@ namespace VAdvantage.Model
             if (!IsPersonalAccess())
             {
                 //Lakhwinder
-                MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), VAF_TableView_ID);
                 if (!table.IsView() && table.Haskey(VAF_TableView_ID))
                 {
                     string lockedIDs = MPrivateAccess.GetLockedRecordWhere(VAF_TableView_ID, _VAF_UserContact_ID);

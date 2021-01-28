@@ -230,7 +230,7 @@ namespace VAdvantage.Model
          */
         private int GetVAR_Req_Type_ID()
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClientDetail ci = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID());
             int VAR_Req_Type_ID = ci.GetVAR_Req_Type_ID();
             if (VAR_Req_Type_ID != 0)
                 return VAR_Req_Type_ID;

@@ -21,10 +21,10 @@ namespace VIS.Models
 
             //   string sqlQuery = " SELECT * FROM VAF_CardView c WHERE c.VAF_Screen_id=" + ad_Window_ID + " and c.VAF_Tab_id=" + vaf_tab_ID + " AND c.VAF_Client_ID  =" + ctx.GetVAF_Client_ID();
 
-            string sqlQuery = @"SELECT VAF_CardView.*,AD_DefaultCardView.AD_DefaultCardView_ID,AD_DefaultCardView.VAF_UserContact_ID as userID
+            string sqlQuery = @"SELECT VAF_CardView.*,VAF_DefaultCardView.VAF_DefaultCardView_ID,VAF_DefaultCardView.VAF_UserContact_ID as userID
                             FROM VAF_CardView
-                            LEFT OUTER JOIN AD_DefaultCardView
-                            ON VAF_CardView.VAF_CardView_ID=AD_DefaultCardView.VAF_CardView_ID
+                            LEFT OUTER JOIN VAF_DefaultCardView
+                            ON VAF_CardView.VAF_CardView_ID=VAF_DefaultCardView.VAF_CardView_ID
                             WHERE VAF_CardView.VAF_Screen_id=" + ad_Window_ID + " and VAF_CardView.VAF_Tab_id=" + vaf_tab_ID + " AND VAF_CardView.VAF_Client_ID  =" + ctx.GetVAF_Client_ID() + @" 
                             ORDER BY VAF_CardView.Name Asc";
 
@@ -36,7 +36,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     bool isDefault=false;
-                    if(ds.Tables[0].Rows[i]["AD_DefaultCardView_ID"] != null && ds.Tables[0].Rows[i]["AD_DefaultCardView_ID"] != DBNull.Value
+                    if(ds.Tables[0].Rows[i]["VAF_DefaultCardView_ID"] != null && ds.Tables[0].Rows[i]["VAF_DefaultCardView_ID"] != DBNull.Value
                        && ds.Tables[0].Rows[i]["userID"] != null && ds.Tables[0].Rows[i]["userID"] != DBNull.Value 
                        && ctx.GetVAF_UserContact_ID() == Util.GetValueOfInt(ds.Tables[0].Rows[i]["userID"]))
                     {
@@ -203,15 +203,15 @@ namespace VIS.Models
             string conditionValue = string.Empty;
             string conditionText = string.Empty;
             bool isupdate = false;
-            MCardView objCardView = null;
+            MVAFCardView objCardView = null;
             if (cardViewID <= 0)
             {
-                objCardView = new MCardView(ctx, 0, null);
+                objCardView = new MVAFCardView(ctx, 0, null);
 
             }
             else
             {
-                objCardView = new MCardView(ctx, cardViewID, null);
+                objCardView = new MVAFCardView(ctx, cardViewID, null);
                 isupdate = true;
             }
             objCardView.SetVAF_Screen_ID(ad_Window_ID);
@@ -231,7 +231,7 @@ namespace VIS.Models
             {
                 for (int i = 0; i < lstRoleId.Count; i++)
                 {
-                    MCardViewRole objMCVR = new MCardViewRole(ctx, 0, null);
+                    MVAFCardViewRole objMCVR = new MVAFCardViewRole(ctx, 0, null);
                     objMCVR.SetVAF_CardView_ID(objCardView.Get_ID());
                     objMCVR.SetVAF_Role_ID(lstRoleId[i].VAF_Role_ID);
                     if (!objMCVR.Save())
@@ -248,7 +248,7 @@ namespace VIS.Models
                     {
                         conditionValue = lstCVCondition[i].ConditionValue.Trim();
                         conditionText = lstCVCondition[i].ConditionText.Trim();
-                        MCardViewCondition objMCVR = new MCardViewCondition(ctx, 0, null);
+                        MVAFCardViewCondition objMCVR = new MVAFCardViewCondition(ctx, 0, null);
                         objMCVR.SetVAF_CardView_ID(objCardView.Get_ID());
                         objMCVR.SetColor(lstCVCondition[i].Color);
                         objMCVR.SetConditionValue(conditionValue.Trim());
@@ -264,16 +264,16 @@ namespace VIS.Models
 
         public void SetDefaultCardView(Ctx ctx, int cardViewID, int VAF_Tab_ID)
         {
-            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
+            string sql = "SELECT VAF_DefaultCardView_ID FROM VAF_DefaultCardView WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
             object id = DB.ExecuteScalar(sql);
 
-            int AD_DefaultCardView_ID = 0;
+            int VAF_DefaultCardView_ID = 0;
             if (id != null && id != DBNull.Value)
             {
-                AD_DefaultCardView_ID = Convert.ToInt32(id);
+                VAF_DefaultCardView_ID = Convert.ToInt32(id);
             }
 
-            X_AD_DefaultCardView cardView = new X_AD_DefaultCardView(ctx, AD_DefaultCardView_ID, null);
+            X_VAF_DefaultCardView cardView = new X_VAF_DefaultCardView(ctx, VAF_DefaultCardView_ID, null);
             cardView.SetVAF_Tab_ID(VAF_Tab_ID);
             cardView.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             cardView.SetVAF_CardView_ID(Convert.ToInt32(cardViewID));
@@ -284,7 +284,7 @@ namespace VIS.Models
         public void SaveCardViewColumns(int VAF_CardView_id, int vaf_field_ID, int sqNo, Ctx ctx)
         {
 
-            MCardViewColumn objCardViewColumn = new MCardViewColumn(ctx, 0, null);
+            MVAFCardViewColumn objCardViewColumn = new MVAFCardViewColumn(ctx, 0, null);
             objCardViewColumn.SetVAF_CardView_ID(VAF_CardView_id);
             objCardViewColumn.SetVAF_Field_ID(vaf_field_ID);
             objCardViewColumn.SetSeqNo(sqNo);
@@ -351,7 +351,7 @@ namespace VIS.Models
             string query = "SELECT VAF_CardView_column_ID FROM VAF_CardView_column WHERE VAF_CardView_id=" + VAF_CardView_ID + " AND seqno =" + seqNo1;
             id = Util.GetValueOfInt(DB.ExecuteScalar(query));
 
-            MCardViewColumn objCardViewColumn = new MCardViewColumn(ctx, VAF_CardViewColumn_ID, null);
+            MVAFCardViewColumn objCardViewColumn = new MVAFCardViewColumn(ctx, VAF_CardViewColumn_ID, null);
             if (isUp)
             {
                 objCardViewColumn.SetSeqNo(seqNo - 10);
@@ -363,7 +363,7 @@ namespace VIS.Models
             if (!objCardViewColumn.Save())
             {
             }
-            MCardViewColumn objCardViewColumn1 = new MCardViewColumn(ctx, id, null);
+            MVAFCardViewColumn objCardViewColumn1 = new MVAFCardViewColumn(ctx, id, null);
             if (isUp)
             {
                 objCardViewColumn1.SetSeqNo(seqNo);
@@ -387,7 +387,7 @@ namespace VIS.Models
         public void SetDefaultView(Ctx ctx, int VAF_Tab_ID, int cardView)
         {
 
-            string sql = "SELECT AD_DefaultCardView_ID FROM AD_DefaultCardView WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
+            string sql = "SELECT VAF_DefaultCardView_ID FROM VAF_DefaultCardView WHERE VAF_Tab_ID=" + VAF_Tab_ID + " AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID();
             object id = DB.ExecuteScalar(sql);
             int AD_DefaultcarView_ID = 0;
             if (id != null && id != DBNull.Value)
@@ -396,7 +396,7 @@ namespace VIS.Models
             }
 
 
-            X_AD_DefaultCardView userQuery = new X_AD_DefaultCardView(ctx, AD_DefaultcarView_ID, null);
+            X_VAF_DefaultCardView userQuery = new X_VAF_DefaultCardView(ctx, AD_DefaultcarView_ID, null);
             userQuery.SetVAF_Tab_ID(VAF_Tab_ID);
             userQuery.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());
             userQuery.SetVAF_CardView_ID(cardView);

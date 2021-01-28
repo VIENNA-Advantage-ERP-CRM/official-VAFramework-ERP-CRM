@@ -32,7 +32,7 @@ namespace VIS.Controllers
 
             if (!int.TryParse(result[0], out outvalue))
             {
-                string script = result[1] + "JsAPI?clientOrg=" + MClient.Get(ctx).GetValue() + "&" + extraInfo.Replace("@recordid", recID.ToString()) + "&token=" + result[0];
+                string script = result[1] + "JsAPI?clientOrg=" + MVAFClient.Get(ctx).GetValue() + "&" + extraInfo.Replace("@recordid", recID.ToString()) + "&token=" + result[0];
                 ViewBag.scriptt = script;
             }
             else

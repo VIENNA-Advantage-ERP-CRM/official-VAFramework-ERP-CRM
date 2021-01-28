@@ -114,9 +114,9 @@ namespace VAdvantage.Process
                 StringBuilder sqlSB = new StringBuilder("");
                 bool recordProcessed = false;
                 // create object of Master Table
-                MTable tbl = new MTable(GetCtx(), BaseTableID, null);
+                MVAFTableView tbl = new MVAFTableView(GetCtx(), BaseTableID, null);
                 // create object of Version table
-                MTable tblVer = new MTable(GetCtx(), VerTableID, null);
+                MVAFTableView tblVer = new MVAFTableView(GetCtx(), VerTableID, null);
 
                 // check whether master table has Single key
                 bool isSingleKey = tbl.IsSingleKey();
@@ -136,7 +136,7 @@ namespace VAdvantage.Process
                     if (isSingleKey)
                     {
                         // Create object of PO Class from TableName and Record ID
-                        poDest = MTable.GetPO(GetCtx(), BaseTblName, Util.GetValueOfInt(dr[BaseTblName + "_ID"]), null);
+                        poDest = MVAFTableView.GetPO(GetCtx(), BaseTblName, Util.GetValueOfInt(dr[BaseTblName + "_ID"]), null);
                         sbKey.Append(Util.GetValueOfInt(dr[BaseTblName + "_ID"]));
                         whereCond.Append(BaseTblName + "_ID = " + Util.GetValueOfInt(dr[BaseTblName + "_ID"]));
                     }

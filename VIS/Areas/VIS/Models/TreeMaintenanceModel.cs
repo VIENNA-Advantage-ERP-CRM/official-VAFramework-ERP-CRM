@@ -68,7 +68,7 @@ namespace VIS.Models
 
             MTree tree = new MTree(_ctx, VAF_TreeInfo_ID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
 
             string sql = "";
@@ -478,7 +478,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string[] stringArray = dragMenuNodeID.Split(',');
             string[] existitem = IsExistItem.Split(',');
@@ -701,7 +701,7 @@ namespace VIS.Models
         //            List<GetDataTreeNodeSelect> obj = new List<GetDataTreeNodeSelect>();
         //            MTree tree = new MTree(_ctx, treeID, null);
         //            int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-        //            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+        //            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
         //            string type = tree.GetTreeType();
         //            string qry = "";
 
@@ -975,7 +975,7 @@ namespace VIS.Models
             List<GetDataTreeNodeSelect> obj = new List<GetDataTreeNodeSelect>();
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string qry = "";
 
@@ -1086,7 +1086,7 @@ namespace VIS.Models
             List<GetDataTreeNodeSelect> obj = new List<GetDataTreeNodeSelect>();
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string qry = "";
             string qryPaging = "";
@@ -1252,7 +1252,7 @@ namespace VIS.Models
 
             object otput = "";
 
-            string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
+            string tableName = MVAFTableView.GetTableName(ctx, tree.GetVAF_TableView_ID());
             string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetVAF_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
 
             otput = DB.ExecuteScalar(sql, null, null);
@@ -1289,7 +1289,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             tree.GetNodeTableName();
 
@@ -1356,7 +1356,7 @@ namespace VIS.Models
             menuArrays = menuArray;
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string nodeTreeTableName = tree.GetNodeTableName();
             string _result = "";
@@ -1668,7 +1668,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string tbName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string tbName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
 
             DataSet dst = new DataSet();
             DataSet dsts = new DataSet();
@@ -1743,7 +1743,7 @@ namespace VIS.Models
             menuArrays = menuArray;
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             tree.GetNodeTableName();
 
@@ -1849,7 +1849,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string tblName = tree.GetNodeTableName();
             return tblName;
@@ -1859,7 +1859,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string treeTblName = tree.GetNodeTableName();
             string[] stringArray = itemsid.Split(',');
@@ -1907,7 +1907,7 @@ namespace VIS.Models
         {
             MTree tree = new MTree(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
-            string TableName = MTable.GetTableName(_ctx, VAF_TableView_ID);
+            string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string treeTblName = tree.GetNodeTableName();
 
              bindornot = "true";

@@ -677,7 +677,7 @@ namespace ViennaAdvantage.Process
                 {
                     int PAcctSchema_ID = 0;
                     int pCurrency_ID = 0;
-                    MAcctSchema as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
+                    MAcctSchema as1 = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
                     if (as1 != null)
                     {
                         PAcctSchema_ID = as1.GetVAB_AccountBook_ID();

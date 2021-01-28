@@ -209,7 +209,7 @@ namespace VAdvantage.Model
                     if (!media[i].IsSummary() && media[i].GetMediaType() != null)
                     {
                         log.Log(Level.INFO, " Deploying Media Item: " + media[i].ToString());
-                        MImage thisImage = media[i].GetImage();
+                        MVAFImage thisImage = media[i].GetImage();
 
                         // Open the file and output streams
                         byte[] buffer = thisImage.GetData();

@@ -576,7 +576,7 @@ namespace VAdvantage.Process
             int noMoves = 0;
             String info = "";
             //
-            MClient client = null;
+            MVAFClient client = null;
             MMovement move = null;
             int M_Warehouse_ID = 0;
             int M_WarehouseSource_ID = 0;
@@ -606,7 +606,7 @@ namespace VAdvantage.Process
                 }
                 if (client == null || client.GetVAF_Client_ID() != whSource.GetVAF_Client_ID())
                 {
-                    client = MClient.Get(GetCtx(), whSource.GetVAF_Client_ID());
+                    client = MVAFClient.Get(GetCtx(), whSource.GetVAF_Client_ID());
                 }
                 //
                 if (move == null
@@ -645,7 +645,7 @@ namespace VAdvantage.Process
                 MStorage[] storages = MStorage.GetWarehouse(GetCtx(),
                     whSource.GetM_Warehouse_ID(), replenish.GetM_Product_ID(), 0, 0,
                     true, null,
-                    MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
+                    MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                 if (storages == null || storages.Length == 0)
                 {
                     AddLog("No Inventory in " + whSource.GetName()

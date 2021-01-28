@@ -149,7 +149,7 @@ namespace VAdvantage.Model
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
-                                        assetGroupAcct = MTable.GetPO(GetCtx(), "FRPT_Asset_Group_Acct", 0, null);
+                                        assetGroupAcct = MVAFTableView.GetPO(GetCtx(), "FRPT_Asset_Group_Acct", 0, null);
                                         assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         assetGroupAcct.Set_ValueNoCheck("VAA_AssetGroup_ID", Util.GetValueOfInt(GetVAA_AssetGroup_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

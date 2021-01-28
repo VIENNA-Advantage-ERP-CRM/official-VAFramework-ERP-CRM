@@ -224,7 +224,7 @@ namespace VIS.Models
             string image = string.Empty;
             if (imageID > 0)
             {
-                MImage objImage = new MImage(ctx, imageID, null);
+                MVAFImage objImage = new MVAFImage(ctx, imageID, null);
                 // byte[] imageByte = objImage.GetThumbnailByte(320, 185);
                 byte[] imageByte = objImage.GetThumbnailByte(320, 240);
                 if (imageByte != null)

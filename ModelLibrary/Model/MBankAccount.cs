@@ -234,7 +234,7 @@ namespace VAdvantage.Model
                                             //bnkact = new X_FRPT_BankAccount_Acct(GetCtx(), 0, null);
                                             if (recordFound == 0)
                                             {
-                                                bnkact = MTable.GetPO(GetCtx(), "FRPT_BankAccount_Acct", 0, null);
+                                                bnkact = MVAFTableView.GetPO(GetCtx(), "FRPT_BankAccount_Acct", 0, null);
                                                 bnkact.Set_ValueNoCheck("VAB_Bank_Acct_ID", Util.GetValueOfInt(GetVAB_Bank_Acct_ID()));
                                                 bnkact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                                 bnkact.Set_Value("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

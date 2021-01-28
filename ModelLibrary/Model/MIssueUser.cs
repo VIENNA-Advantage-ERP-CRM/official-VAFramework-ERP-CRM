@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MIssueUser
+ * Class Name     : MVAFIssueUser
  * Purpose        : Issue User Model
  * Class Used     : X_R_IssueUser
  * Chronological    Development
@@ -22,20 +22,20 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MIssueUser : X_R_IssueUser
+    public class MVAFIssueUser : X_R_IssueUser
     {
    /// <summary>
    /// Get/Set User for Issue
    /// </summary>
    /// <param name="issue">issue</param>
    /// <returns>user</returns>
-	static public MIssueUser Get(MIssue issue)
+	static public MVAFIssueUser Get(MVAFIssue issue)
 	{
 		if (issue.GetUserName() == null)
         {
 			return null;
         }
-		MIssueUser user = null;
+		MVAFIssueUser user = null;
 		//	Find Issue User
 		String sql = "SELECT * FROM R_IssueUser WHERE UserName=@param";
 		SqlParameter[] param=new SqlParameter[1];
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
 			idr=DataBase.DB.ExecuteReader(sql,param,null);
 			if (idr.Read())
             {
-				user = new MIssueUser (issue.GetCtx(), idr, null);
+				user = new MVAFIssueUser (issue.GetCtx(), idr, null);
             }
 			idr.Close();
 		}
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
 		//	New
 		if (user == null)
 		{
-			user = new MIssueUser(issue.GetCtx(), 0, null);
+			user = new MVAFIssueUser(issue.GetCtx(), 0, null);
 			user.SetUserName(issue.GetUserName());
 			user.SetVAF_UserContact_ID();
 			if (!user.Save())
@@ -75,10 +75,10 @@ namespace VAdvantage.Model
 		
 		issue.SetR_IssueUser_ID(user.GetR_IssueUser_ID());
 		return user;
-	}	//	MIssueUser
+	}	//	MVAFIssueUser
 	
 	/**	Logger	*/
-    private static VLogger _log = VLogger.GetVLogger(typeof(MIssueUser).FullName);
+    private static VLogger _log = VLogger.GetVLogger(typeof(MVAFIssueUser).FullName);
 	
 	    /// <summary>
         ///Standard Constructor
@@ -86,10 +86,10 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="R_IssueUser_ID">id</param>
         /// <param name="trxName">trx</param>
-	public MIssueUser (Ctx ctx, int R_IssueUser_ID, Trx trxName):base(ctx, R_IssueUser_ID, trxName)
+	public MVAFIssueUser (Ctx ctx, int R_IssueUser_ID, Trx trxName):base(ctx, R_IssueUser_ID, trxName)
 	{
 		//super (ctx, R_IssueUser_ID, trxName);
-	}	//	MIssueUser
+	}	//	MVAFIssueUser
 
 	/// <summary>
     /// Load Constructor
@@ -97,12 +97,12 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">trx</param>
-	public MIssueUser (Ctx ctx, DataRow dr, Trx trxName):base(ctx, dr, trxName)
+	public MVAFIssueUser (Ctx ctx, DataRow dr, Trx trxName):base(ctx, dr, trxName)
 	{
 		
-	}	//	MIssueUser
+	}	//	MVAFIssueUser
 
-    public MIssueUser(Ctx ctx,IDataReader idr, Trx trxName)
+    public MVAFIssueUser(Ctx ctx,IDataReader idr, Trx trxName)
         : base(ctx, idr, trxName)
     { }
 	/// <summary>
@@ -124,13 +124,13 @@ namespace VAdvantage.Model
     /// <returns>info</returns>
 	public override String ToString ()
 	{
-		StringBuilder sb = new StringBuilder ("MIssueUser[");
+		StringBuilder sb = new StringBuilder ("MVAFIssueUser[");
 		sb.Append (Get_ID())
 			.Append ("-").Append(GetUserName())
 			.Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
 			.Append ("]");
 		return sb.ToString ();
 	}	//	toString
-}	//	MIssueUser
+}	//	MVAFIssueUser
 
 }

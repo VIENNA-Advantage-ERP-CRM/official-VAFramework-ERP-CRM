@@ -1226,7 +1226,7 @@ namespace VAdvantage.Model
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 //obj = new MFRPTBPCustomerAcct(GetCtx(), 0, null);
-                                obj = MTable.GetPO(GetCtx(), "FRPT_BP_Customer_Acct", 0, null);
+                                obj = MVAFTableView.GetPO(GetCtx(), "FRPT_BP_Customer_Acct", 0, null);
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Customer_ID);
                                 obj.Set_ValueNoCheck("VAF_Org_ID", 0);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
@@ -1272,7 +1272,7 @@ namespace VAdvantage.Model
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 //obj = new MFRPTBPVendorAcct(GetCtx(), 0, null);
-                                obj = MTable.GetPO(GetCtx(), "FRPT_BP_Vendor_Acct", 0, null);
+                                obj = MVAFTableView.GetPO(GetCtx(), "FRPT_BP_Vendor_Acct", 0, null);
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Vendor_ID);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                                 obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
@@ -1318,7 +1318,7 @@ namespace VAdvantage.Model
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 //obj = new MFRPTBPEmployeeAcct(GetCtx(), 0, null);
-                                var obj = MTable.GetPO(GetCtx(), "FRPT_BP_Employee_Acct", 0, null);
+                                var obj = MVAFTableView.GetPO(GetCtx(), "FRPT_BP_Employee_Acct", 0, null);
                                 obj.Set_ValueNoCheck("VAB_BusinessPartner_ID", Employee_ID);
                                 obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                                 obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));

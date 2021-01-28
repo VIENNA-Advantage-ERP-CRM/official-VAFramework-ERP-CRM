@@ -267,7 +267,7 @@ namespace VAdvantage.Model
                         #region when we not found record of "Cash" then we will create a new rcord on Payment Method for Cash
                         string sql = @"SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename LIKE 'VA009_PaymentMethod' AND IsActive = 'Y'";
                         int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                        MTable tbl = new MTable(GetCtx(), tableId, Get_Trx());
+                        MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId, Get_Trx());
                         PO po = tbl.GetPO(GetCtx(), 0, Get_Trx());
                         po.SetVAF_Client_ID(GetVAF_Client_ID());
                         po.SetVAF_Org_ID(0); // Recod will be created in (*) Organization

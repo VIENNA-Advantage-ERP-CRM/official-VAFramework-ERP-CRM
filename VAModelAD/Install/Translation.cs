@@ -325,7 +325,7 @@ namespace VAdvantage.Install
 		String sql = "SELECT * "
 			+ "FROM VAF_Language "
 			+ "WHERE VAF_Language=@param";
-		MLanguage language = null;
+		MVAFLanguage language = null;
         IDataReader idr = null;
         SqlParameter[] param = new SqlParameter[1];
 		try
@@ -334,7 +334,7 @@ namespace VAdvantage.Install
             idr = DataBase.DB.ExecuteReader(sql, param, null);
 			
 			if (idr.Read())
-				language = new MLanguage (_ctx,idr, null);
+				language = new MVAFLanguage (_ctx,idr, null);
             idr.Close();
 		}
 		catch (Exception e)

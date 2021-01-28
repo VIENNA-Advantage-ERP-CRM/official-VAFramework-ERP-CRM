@@ -144,7 +144,7 @@ namespace VAModelAD.Model
             if (po.GetVAF_Org_ID() == 0
                 && (po.GetAccessLevel() == PO.ACCESSLEVEL_ORG
                     || (po.GetAccessLevel() == PO.ACCESSLEVEL_CLIENTORG
-                        && MClientShare.IsOrgLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))))
+                        && MVAFClientShare.IsOrgLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))))
             {
                 po.GetLog().SaveError("FillMandatory", Msg.GetElement(po.GetCtx(), "VAF_Org_ID"));
                 return false;
@@ -154,7 +154,7 @@ namespace VAModelAD.Model
             if (po.GetVAF_Org_ID() != 0)
             {
                 bool reset = po.GetAccessLevel() == PO.ACCESSLEVEL_SYSTEM;
-                if (!reset && MClientShare.IsClientLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))
+                if (!reset && MVAFClientShare.IsClientLevelOnly(po.GetVAF_Client_ID(), po.Get_Table_ID()))
                 {
                     reset = po.GetAccessLevel() == PO.ACCESSLEVEL_CLIENT
                         || po.GetAccessLevel() == PO.ACCESSLEVEL_SYSTEMCLIENT
@@ -168,7 +168,7 @@ namespace VAModelAD.Model
             }
 
             //	Before Save
-            MAssignSet.Execute(po, po.Is_New());	//	Automatic Assignment
+            MVAFAllotSet.Execute(po, po.Is_New());	//	Automatic Assignment
             return true;
         }
 
@@ -190,7 +190,7 @@ namespace VAModelAD.Model
                 if (MasterDetails != null && MasterDetails.VAF_TableView_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
                 {
                     // create object of parent table
-                    MTable tbl = MTable.Get(p_ctx, MasterDetails.VAF_TableView_ID);
+                    MVAFTableView tbl = MVAFTableView.Get(p_ctx, MasterDetails.VAF_TableView_ID);
                     PO _po = null;
                     bool updateMasID = false;
                     // check if Master table has single key or multiple keys or single key
@@ -271,14 +271,14 @@ namespace VAModelAD.Model
 
             if(po.Get_Table_ID() == X_VAF_Attachment.Table_ID)
             {
-                MAttachment.DeleteFileData(po.Get_Table_ID().ToString() + "_" + po.Get_ID().ToString());
+                MVAFAttachment.DeleteFileData(po.Get_Table_ID().ToString() + "_" + po.Get_ID().ToString());
             }
             return success;
         }
 
         public bool IsAutoUpdateTrl(Ctx ctx,string tableName)
         {
-            MClient client = MClient.Get(ctx);
+            MVAFClient client = MVAFClient.Get(ctx);
             return client.IsAutoUpdateTrl(tableName);
         }
 
@@ -356,72 +356,72 @@ namespace VAModelAD.Model
             }
 
             tableName = tblName.Replace("I_", "AD_");
-            int tableID = MTable.Get_Table_ID(tableName);
+            int tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "M_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "C_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "R_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "MRP_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "A_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "B_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "CM_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "GL_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "K_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "PA_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "S_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "T_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
             tableName = tblName.Replace("I_", "W_");
-            tableID = MTable.Get_Table_ID(tableName);
+            tableID = MVAFTableView.Get_Table_ID(tableName);
             if (tableID > 0)
                 return tableName;
 
@@ -436,12 +436,12 @@ namespace VAModelAD.Model
 
         public dynamic GetAttachment(Ctx ctx, int vaf_tableview_ID, int id)
         {
-           return  MAttachment.Get(ctx, vaf_tableview_ID, id);
+           return  MVAFAttachment.Get(ctx, vaf_tableview_ID, id);
         }
 
         public dynamic CreateAttachment(Ctx ctx, int vaf_tableview_ID, int id, Trx trx)
         {
-            return new  MAttachment(ctx, vaf_tableview_ID, id, trx);
+            return new  MVAFAttachment(ctx, vaf_tableview_ID, id, trx);
         }
     }
 }

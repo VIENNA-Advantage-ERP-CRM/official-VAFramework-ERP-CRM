@@ -695,7 +695,7 @@ namespace VAdvantage.Model
                     {
                         object[] parametersArray = new object[] { GetCtx(),
                                                                 Util.GetValueOfInt(GetVAF_Client_ID()),
-                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MTable.Get(GetCtx() , "M_Requisition").GetVAF_TableView_ID()
+                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MVAFTableView.Get(GetCtx() , "M_Requisition").GetVAF_TableView_ID()
                                                                 Util.GetValueOfInt(GetM_Requisition_ID()),
                                                                 true,
                                                                 Util.GetValueOfInt(GetVAF_Org_ID()),

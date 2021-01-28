@@ -235,7 +235,7 @@ namespace ViennaAdvantage.Process
         /// <returns>info</returns>
         private String Generate(DataTable dt)
         {
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
 
             foreach (DataRow dr in dt.Rows)		//	Order
             {
@@ -433,7 +433,7 @@ namespace ViennaAdvantage.Process
                                product.GetM_AttributeSet_ID(),
                                line.GetM_AttributeSetInstance_ID() == 0,
                                (DateTime?)minGuaranteeDate,
-                               MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                               MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         else
                         {
@@ -442,7 +442,7 @@ namespace ViennaAdvantage.Process
                               product.GetM_AttributeSet_ID(),
                               line.GetM_AttributeSetInstance_ID() == 0,
                               (DateTime?)minGuaranteeDate,
-                              MClient.MMPOLICY_FiFo.Equals(MMPolicy), false, false);
+                              MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, false);
                         }
 
                         for (int j = 0; j < storages.Length; j++)
@@ -470,7 +470,7 @@ namespace ViennaAdvantage.Process
                                 + " (Unconfirmed=" + unconfirmedShippedQty
                                 + ", ToDeliver=" + toDeliver + " - " + line);
                             //	
-                            CreateLine(order, line, toDeliver, storages, false, MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                            CreateLine(order, line, toDeliver, storages, false, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Availability
                         else if (MOrder.DELIVERYRULE_Availability.Equals(order.GetDeliveryRule())
@@ -485,7 +485,7 @@ namespace ViennaAdvantage.Process
                                 + "), ToDeliver=" + toDeliver
                                 + ", Delivering=" + deliver + " - " + line);
                             //	
-                            CreateLine(order, line, deliver, storages, false, MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                            CreateLine(order, line, deliver, storages, false, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Force
                         else if (MOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
@@ -496,7 +496,7 @@ namespace ViennaAdvantage.Process
                                 + "), ToDeliver=" + toDeliver
                                 + ", Delivering=" + deliver + " - " + line);
                             //	
-                            CreateLine(order, line, deliver, storages, true, MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                            CreateLine(order, line, deliver, storages, true, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Manual
                         else if (MOrder.DELIVERYRULE_Manual.Equals(order.GetDeliveryRule()))
@@ -541,7 +541,7 @@ namespace ViennaAdvantage.Process
                                         line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
                                         product.GetM_AttributeSet_ID(),
                                         line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)minGuaranteeDate,
-                                        MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                                        MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                                 }
                                 else
                                 {
@@ -550,11 +550,11 @@ namespace ViennaAdvantage.Process
                                       product.GetM_AttributeSet_ID(),
                                       line.GetM_AttributeSetInstance_ID() == 0,
                                       (DateTime?)minGuaranteeDate,
-                                      MClient.MMPOLICY_FiFo.Equals(MMPolicy), false, false);
+                                      MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, false);
                                 }
                             }
                             //	
-                            CreateLine(order, line, toDeliver, storages, false, MClient.MMPOLICY_FiFo.Equals(MMPolicy));
+                            CreateLine(order, line, toDeliver, storages, false, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                     }
                 }

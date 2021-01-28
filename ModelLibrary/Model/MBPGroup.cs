@@ -273,7 +273,7 @@ namespace VAdvantage.Model
                                         //gpact = new X_FRPT_BP_Group_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
-                                            gpact = MTable.GetPO(GetCtx(), "FRPT_BP_Group_Acct", 0, null);
+                                            gpact = MVAFTableView.GetPO(GetCtx(), "FRPT_BP_Group_Acct", 0, null);
                                             //gpact.Set_ValueNoCheck("VAB_BPart_Category_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["VAB_BPart_Category_ID"]));
                                             gpact.Set_ValueNoCheck("VAB_BPart_Category_ID", Util.GetValueOfInt(GetVAB_BPart_Category_ID()));
                                             gpact.Set_ValueNoCheck("VAF_Org_ID", 0);

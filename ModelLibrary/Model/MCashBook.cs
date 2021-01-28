@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                                         //cshbkact = new X_FRPT_Cashbook_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
-                                            cshbkact = MTable.GetPO(GetCtx(), "FRPT_Cashbook_Acct", 0, null);
+                                            cshbkact = MVAFTableView.GetPO(GetCtx(), "FRPT_Cashbook_Acct", 0, null);
                                             cshbkact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             cshbkact.Set_ValueNoCheck("VAB_CashBook_ID", Util.GetValueOfInt(GetVAB_CashBook_ID()));
                                             cshbkact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

@@ -56,7 +56,7 @@ namespace VAdvantage.Process
 	/// <returns>Message</returns>
 	protected override String DoIt()
 	{
-		MClient client = MClient.Get(GetCtx());
+		MVAFClient client = MVAFClient.Get(GetCtx());
         if (client.IsMultiLingualDocument())
         {
             throw new Exception("@VAF_Client_ID@: @IsMultiLingualDocument@");
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
             dt.Load(idr);
             foreach (DataRow dr in dt.Rows)
             {
-                ProcessTable(new MTable(GetCtx(), dr, null), client.GetVAF_Client_ID());
+                ProcessTable(new MVAFTableView(GetCtx(), dr, null), client.GetVAF_Client_ID());
             }
 
         }
@@ -99,13 +99,13 @@ namespace VAdvantage.Process
 	/// </summary>
 	/// <param name="table">table</param>
 	/// <param name="VAF_Client_ID">VAF_Client_ID</param>
-	private void ProcessTable (MTable table, int VAF_Client_ID)
+	private void ProcessTable (MVAFTableView table, int VAF_Client_ID)
 	{
 		StringBuilder sql = new StringBuilder();
-		MColumn[] columns = table.GetColumns(false);
+		MVAFColumn[] columns = table.GetColumns(false);
 		for (int i = 0; i < columns.Length; i++)
 		{
-			MColumn column = columns[i];
+			MVAFColumn column = columns[i];
 			if (column.GetVAF_Control_Ref_ID() == DisplayType.String
 				|| column.GetVAF_Control_Ref_ID() == DisplayType.Text)
 			{

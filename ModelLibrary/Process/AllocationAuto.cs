@@ -614,7 +614,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>allocations</returns>
         private int AllocateBPartnerAll()
         {
-            int _VAB_Currency_ID = MClient.Get(GetCtx()).GetVAB_Currency_ID();
+            int _VAB_Currency_ID = MVAFClient.Get(GetCtx()).GetVAB_Currency_ID();
             DateTime? _dateAcct = null;
             //	Payments
             Decimal _totalPayments = Env.ZERO;
@@ -755,7 +755,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>allocations</returns>
         private int AllocateBPOldestFirst()
         {
-            int _VAB_Currency_ID = MClient.Get(GetCtx()).GetVAB_Currency_ID();
+            int _VAB_Currency_ID = MVAFClient.Get(GetCtx()).GetVAB_Currency_ID();
             DateTime? _dateAcct = null;
             //	Payments
             Decimal _totalPayments = Env.ZERO;

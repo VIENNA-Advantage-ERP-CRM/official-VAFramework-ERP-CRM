@@ -23,7 +23,7 @@ namespace VAdvantage.Model
             
         }	//	MAlertProcessorLog
 
-        public MAlertProcessorLog(MAlertProcessor parent, String summary)
+        public MAlertProcessorLog(MVAFAlertHandler parent, String summary)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

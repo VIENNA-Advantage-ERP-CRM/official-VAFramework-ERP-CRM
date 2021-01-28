@@ -120,7 +120,7 @@ namespace VAdvantage.Print
 
         private void LoadAttachment(int VAF_Print_Rpt_LItem_ID)
         {
-            MAttachment attachment = MAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MPrintFormatItem.Table_ID, VAF_Print_Rpt_LItem_ID);
+            MVAFAttachment attachment = MVAFAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MPrintFormatItem.Table_ID, VAF_Print_Rpt_LItem_ID);
             if (attachment == null)
             {
                 log.Log(Level.WARNING, "No Attachment - VAF_Print_Rpt_LItem_ID=" + VAF_Print_Rpt_LItem_ID);

@@ -245,7 +245,7 @@ namespace VAdvantage.Model
         //    if (m_columns.Length > 0)
         //    {
         //        _querySQL.Append("SELECT ");
-        //        MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
+        //        MVAFTableView tbl = new MVAFTableView(m_ctx, _VAF_TableView_ID, null);
         //        // append all columns from table and get comma separated string
         //        _querySQL.Append(tbl.GetSelectColumns());
         //        foreach (var column in m_columns)

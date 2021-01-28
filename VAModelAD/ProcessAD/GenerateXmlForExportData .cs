@@ -118,7 +118,7 @@ namespace VAdvantage.Process
                 //Parse through the marked record one by one
                 foreach (ExportDataRecords exportdata in _ExportRecordList)
                 {
-                    MTable currentTable = MTable.Get(GetCtx(), exportdata.VAF_TableView_ID);
+                    MVAFTableView currentTable = MVAFTableView.Get(GetCtx(), exportdata.VAF_TableView_ID);
                     if (currentTable == null)   //should not be null
                     {
                         continue;   //skip the record and move further for next record
@@ -396,7 +396,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="currentTable">Current table to be parsed</param>
         /// <param name="exportdata">Exportdata info</param>
-        private string GetForeignData(MTable currentTable, ExportDataRecords exportdata)
+        private string GetForeignData(MVAFTableView currentTable, ExportDataRecords exportdata)
         {
             try
             {
@@ -421,7 +421,7 @@ namespace VAdvantage.Process
                             int found = 0;
                             if (ds.Tables[tableName] != null)
                                 found = ds.Tables[tableName].Select(tableName + "_ID = " + exportdata.Record_ID).Count();
-                            MColumn[] columns = currentTable.GetColumns(true); //Fetch column details
+                            MVAFColumn[] columns = currentTable.GetColumns(true); //Fetch column details
                             if (columns.Length > 0)
                             {
 
@@ -468,7 +468,7 @@ namespace VAdvantage.Process
                                                 {
                                                     if (!String.IsNullOrEmpty(colValue.ToString()))
                                                     {
-                                                        MTable fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
+                                                        MVAFTableView fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
                                                         if (fkTable != null)
                                                             GetForeignData(fkTable, new ExportDataRecords() { VAF_TableView_ID = fkTable.GetVAF_TableView_ID(), Record_ID = Convert.ToInt32(colValue) });
                                                     }
@@ -478,17 +478,17 @@ namespace VAdvantage.Process
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
                                             Object colValue = tmpDS.Tables[0].Rows[0][colName];
-                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
+                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MVAFTableView.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
 
                                             if (refTable != null && colValue != null && colValue.ToString() != "")
                                             {
 
                                                 try
                                                 {
-                                                    MTable tbl = MTable.Get(GetCtx(), refTable.GetVAF_TableView_ID());
+                                                    MVAFTableView tbl = MVAFTableView.Get(GetCtx(), refTable.GetVAF_TableView_ID());
 
-                                                    //string tName  =  MTable.GetTableName(GetCtx(), refTable.GetVAF_TableView_ID());
-                                                    string cName = MColumn.GetColumnName(GetCtx(), refTable.GetColumn_Key_ID());
+                                                    //string tName  =  MVAFTableView.GetTableName(GetCtx(), refTable.GetVAF_TableView_ID());
+                                                    string cName = MVAFColumn.GetColumnName(GetCtx(), refTable.GetColumn_Key_ID());
 
                                                     int recordId;
                                                     if (int.TryParse(colValue.ToString(), out recordId)) //If Value is type of int
@@ -524,7 +524,7 @@ namespace VAdvantage.Process
                         }
                         else
                         {
-                            MColumn[] columns = currentTable.GetColumns(true); //Fetch column details
+                            MVAFColumn[] columns = currentTable.GetColumns(true); //Fetch column details
                             if (columns.Length > 0)
                             {
                                 string sql = GetSql(currentTable.GetVAF_TableView_ID(), currentTable.GetTableName(), exportdata);
@@ -566,7 +566,7 @@ namespace VAdvantage.Process
                                                 {
                                                     if (!String.IsNullOrEmpty(colValue.ToString()))
                                                     {
-                                                        MTable fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
+                                                        MVAFTableView fkTable = columns[cols].GetFKTable(); //Get the Parent table of the FK Column
                                                         if (fkTable != null)
                                                             GetForeignData(fkTable, new ExportDataRecords() { VAF_TableView_ID = fkTable.GetVAF_TableView_ID(), Record_ID = Convert.ToInt32(colValue) });
                                                     }
@@ -575,7 +575,7 @@ namespace VAdvantage.Process
                                         }
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
-                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MTable.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
+                                            CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MVAFTableView.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
                                         }
                                         else
                                         {
@@ -640,7 +640,7 @@ namespace VAdvantage.Process
             //string _Sql = "select columnname from vaf_field_V where vaf_tableview_id=" + _TableID + " and isparent='Y' order by isdisplayed desc, seqno";
             //string _Sql = "SELECT * FROM VAF_Column WHERE VAF_TableView_ID=" + _TableID + " ORDER BY ColumnName";
             //return DB.ExecuteDataset(_Sql);
-            string[] keyColumns = new MTable(GetCtx(), _TableID, null).GetKeyColumns();
+            string[] keyColumns = new MVAFTableView(GetCtx(), _TableID, null).GetKeyColumns();
             return keyColumns;
         }
 

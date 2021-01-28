@@ -170,8 +170,8 @@ namespace VAdvantage.Process
                 else
                     sql += " AND AccessLevel NOT IN ('1','2','3')";	// Org/Client/Both
                 sql += " ORDER BY TableName";
-                List<MTable> tables = MTable.GetTablesByQuery(_ctx, sql);
-                foreach (MTable table in tables)
+                List<MVAFTableView> tables = MVAFTableView.GetTablesByQuery(_ctx, sql);
+                foreach (MVAFTableView table in tables)
                 {
                     String tableName = table.GetTableName();
                     msg = null;
@@ -184,7 +184,7 @@ namespace VAdvantage.Process
             }
             else	//	single table
             {
-                MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
+                MVAFTableView table = MVAFTableView.Get(_ctx, _VAF_TableView_ID);
                 msg = null;
                 msg = imp
                     ? t.ImportTrl(_Directory, table.GetTableName())

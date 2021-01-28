@@ -542,13 +542,13 @@
             //  Confirm Error
             if (e.getIsError() && !e.getIsConfirmed()) {
                 VIS.ADialog.error(e.getVAF_Msg_Lable(), true, e.getInfo());
-                e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
+                e.setConfirmed(true);   //  show just once - if MVAFTableView.setCurrentRow is involved the status event is re-issued
                 this.errorDisplayed = true;
             }
             //  Confirm Warning
             else if (e.getIsWarning() && !e.getIsConfirmed()) {
                 VIS.ADialog.warn(e.getVAF_Msg_Lable(), true, e.getInfo());
-                e.setConfirmed(true);   //  show just once - if MTable.setCurrentRow is involved the status event is re-issued
+                e.setConfirmed(true);   //  show just once - if MVAFTableView.setCurrentRow is involved the status event is re-issued
             }
 
 

@@ -36,7 +36,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	From (sender)			
         private int _VAF_UserContact_ID = -1;
         // Client Info				
-        private MClient _client = null;
+        private MVAFClient _client = null;
         //	From					
         private MUser _from = null;
         // Recipient List to prevent duplicate mails	
@@ -104,7 +104,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("Not found @VAR_MailTemplate_ID@=" + _VAR_MailTemplate_ID);
             }
             //	Client Info
-            _client = MClient.Get(GetCtx());
+            _client = MVAFClient.Get(GetCtx());
             if (_client.GetVAF_Client_ID() == 0)
             {
                 throw new Exception("Not found @VAF_Client_ID@");

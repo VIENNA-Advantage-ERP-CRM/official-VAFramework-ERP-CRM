@@ -592,7 +592,7 @@ namespace VAdvantage.Model
             MProductCategory pc = null;
             bool isPOcostingMethod = false;
             string costingMethod = null;
-            MClient client = MClient.Get(ctx, VAF_Client_ID);
+            MVAFClient client = MVAFClient.Get(ctx, VAF_Client_ID);
             MProduct product = MProduct.Get(ctx, M_Product_ID);
 
             if (product != null)
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
                 if (String.IsNullOrEmpty(costingMethod))
                 {
                     // check costing method against primary accounting schema
-                    MClientInfo clientInfo = MClientInfo.Get(ctx, VAF_Client_ID);
+                    MVAFClientDetail clientInfo = MVAFClientDetail.Get(ctx, VAF_Client_ID);
                     MAcctSchema actSchema = MAcctSchema.Get(ctx, clientInfo.GetVAB_AccountBook1_ID());
                     if (actSchema != null)
                     {

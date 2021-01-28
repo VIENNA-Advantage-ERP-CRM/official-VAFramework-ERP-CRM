@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="client">client</param>
         /// <param name="name">name</param>
-        public MOrg(MClient client, String name)
+        public MOrg(MVAFClient client, String name)
             : this(client.GetCtx(), 0, client.Get_Trx())
         {
             SetVAF_Client_ID(client.GetVAF_Client_ID());
@@ -210,7 +210,7 @@ namespace VAdvantage.Model
                 if (!IsSummary())
                 {
 
-                    int orgTableID = MTable.Get_Table_ID("VAF_Org");
+                    int orgTableID = MVAFTableView.Get_Table_ID("VAF_Org");
 
                     string sql = "SELECT VAF_TreeInfo_ID FROM VAF_TreeInfo "
                       + "WHERE VAF_Client_ID=" + GetCtx().GetVAF_Client_ID() + " AND VAF_TableView_ID=" + orgTableID + " AND IsActive='Y' AND IsAllNodes='Y' "

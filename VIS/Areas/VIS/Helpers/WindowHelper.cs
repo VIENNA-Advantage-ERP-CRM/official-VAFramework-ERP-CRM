@@ -1128,7 +1128,7 @@ namespace VIS.Helpers
             bool hasSingleKey = true;
             if (inn.MaintainVersions)
             {
-                MTable tblParent = new MTable(ctx, VAF_TableView_ID, trx);
+                MVAFTableView tblParent = new MVAFTableView(ctx, VAF_TableView_ID, trx);
                 hasSingleKey = tblParent.IsSingleKey();
                 po.SetMasterDetails(versionInfo);
                 po.SetVAF_Screen_ID(Ver_Window_ID);
@@ -1339,7 +1339,7 @@ namespace VIS.Helpers
 
         private PO GetPO(Ctx ctx, int VAF_TableView_ID, int Record_ID, string whereClause, Trx trx, int CurrWindow_ID, int CurrTable_ID, bool isMaintainVer, out int VAF_Screen_ID)
         {
-            MTable table = MTable.Get(ctx, VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(ctx, VAF_TableView_ID);
             PO po = null;
             if (table.IsSingleKey() || Record_ID == 0)
             {
@@ -1879,7 +1879,7 @@ namespace VIS.Helpers
         {
             DeleteRecordOut outt = new DeleteRecordOut();
 
-            MTable table = MTable.Get(ctx, dInn.VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(ctx, dInn.VAF_TableView_ID);
             PO po = null;
 
             List<int> singleKeyWhere = dInn.SingleKeyWhere;
@@ -2154,7 +2154,7 @@ namespace VIS.Helpers
         /// <param name="sqlIn"></param>
         private void SetTreeRecordSql(Ctx ctx, int VAF_TableView_ID, SqlParamsIn sqlIn)
         {
-            string tableName = MTable.GetTableName(ctx, VAF_TableView_ID);
+            string tableName = MVAFTableView.GetTableName(ctx, VAF_TableView_ID);
             MTree tree = new MTree(ctx, sqlIn.tree_id, null);
 
             if (sqlIn.tree_id > 0)
@@ -2301,7 +2301,7 @@ namespace VIS.Helpers
                 sqlCount, rowCount);
 
 
-            string tableName = MTable.GetTableName(ctx, VAF_TableView_ID);
+            string tableName = MVAFTableView.GetTableName(ctx, VAF_TableView_ID);
 
             MTree tree = new MTree(ctx, treeID, null);
 
@@ -2526,11 +2526,11 @@ namespace VIS.Helpers
             {
                 if (treeNodeID > 0)
                 {
-                    GetChildNodesCount(treeNodeID, tree.GetNodeTableName(), treeID, MTable.GetTableName(ctx, VAF_TableView_ID), whereClause, ShowSummaryNodes);
+                    GetChildNodesCount(treeNodeID, tree.GetNodeTableName(), treeID, MVAFTableView.GetTableName(ctx, VAF_TableView_ID), whereClause, ShowSummaryNodes);
                 }
                 else
                 {
-                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MTable.GetTableName(ctx, VAF_TableView_ID) + "_ID FROM " + MTable.GetTableName(ctx, VAF_TableView_ID) + " WHERE  IsSummary='N' ";
+                    string sql = "SELECT Count(*) FROM " + tree.GetNodeTableName() + " WHERE VAF_TreeInfo_ID=" + treeID + " AND Parent_ID = " + 0 + " AND NODE_ID IN (SELECT " + MVAFTableView.GetTableName(ctx, VAF_TableView_ID) + "_ID FROM " + MVAFTableView.GetTableName(ctx, VAF_TableView_ID) + " WHERE  IsSummary='N' ";
 
                     if (whereClause.Length > 0)
                     {
@@ -2637,13 +2637,13 @@ namespace VIS.Helpers
         {
             var line = new RecordRow();
             //	Column
-            MColumn column = MColumn.Get(ctx, VAF_Column_ID);
+            MVAFColumn column = MVAFColumn.Get(ctx, VAF_Column_ID);
             line.VAF_Column_ID = column.GetName();
             //
-            if (OldValue != null && OldValue.Equals(MChangeLog.NULL))
+            if (OldValue != null && OldValue.Equals(MVAFAlterLog.NULL))
                 OldValue = null;
             String showOldValue = OldValue;
-            if (NewValue != null && NewValue.Equals(MChangeLog.NULL))
+            if (NewValue != null && NewValue.Equals(MVAFAlterLog.NULL))
                 NewValue = null;
             String showNewValue = NewValue;
             //
@@ -2867,7 +2867,7 @@ namespace VIS.Helpers
         //    OracleParameter pNodeTableName = new OracleParameter("nodeTableName", tree.GetNodeTableName());
         //    cmd.Parameters.Add(pNodeTableName);
 
-        //    string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
+        //    string tableName = MVAFTableView.GetTableName(ctx, tree.GetVAF_TableView_ID());
 
         //    OracleParameter pRecordTableName = new OracleParameter("recordTableName", tableName);
         //    cmd.Parameters.Add(pRecordTableName);
@@ -2936,7 +2936,7 @@ namespace VIS.Helpers
 
             object otput = "";
 
-            string tableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
+            string tableName = MVAFTableView.GetTableName(ctx, tree.GetVAF_TableView_ID());
             string sql = "select gettreenodepaths(" + node_ID + ",'" + ctx.GetVAF_Language() + "','" + tree.GetNodeTableName() + "','" + tableName + "','" + tableName + "_ID', " + TreeID + ") from dual";
 
             otput = DB.ExecuteScalar(sql, null, null);

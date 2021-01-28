@@ -358,7 +358,7 @@ namespace VAdvantage.Model
                 return X_M_CostUpdate.Table_Name;
             /*********Manafacturing*************/
             //
-            return MTable.GetTableName(GetCtx(), VAF_TableView_ID);
+            return MVAFTableView.GetTableName(GetCtx(), VAF_TableView_ID);
         }
 
         /// <summary>

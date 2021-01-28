@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         //
         private NaturalAccountMap<String, MElementValue> m_nap = null;
         //
-        private MClient m_client;
+        private MVAFClient m_client;
         private MOrg m_org;
         private MAcctSchema m_as;
         //
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
             if (name == null || name.Length == 0)
                 name = "newClient";
             m_clientName = name;
-            m_client = new MClient(m_ctx, 0, true, m_trx);
+            m_client = new MVAFClient(m_ctx, 0, true, m_trx);
             m_client.SetValue(m_clientName);
             m_client.SetName(m_clientName);
             m_client.SetIsPostImmediate(true);
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
 
             ///Change by Sukhwinder on 28-Oct-2016 for password encryption when tenant creation.
 
-            var isPwdEncrypted = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISENCRYPTED FROM VAF_COLUMN WHERE  VAF_TABLEVIEW_ID=" + MTable.Get_Table_ID("VAF_UserContact") + " AND ColumnName = 'Password' AND EXPORT_ID = 'VIS_417'"));
+            var isPwdEncrypted = Util.GetValueOfString(DB.ExecuteScalar("SELECT ISENCRYPTED FROM VAF_COLUMN WHERE  VAF_TABLEVIEW_ID=" + MVAFTableView.Get_Table_ID("VAF_UserContact") + " AND ColumnName = 'Password' AND EXPORT_ID = 'VIS_417'"));
             string password = "";
             if (isPwdEncrypted == "Y")
             {

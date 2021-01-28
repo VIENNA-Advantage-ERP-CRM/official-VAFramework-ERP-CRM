@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                                         //prdctact = new X_FRPT_Product_Category_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
-                                            prdctact = MTable.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
+                                            prdctact = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
                                             prdctact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             //prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["M_Product_Category_ID"]));
                                             prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(GetM_Product_Category_ID()));

@@ -513,7 +513,7 @@ namespace VAdvantage.WF
             if (GetRecord_ID() == 0)
                 return null;
 
-            MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
+            MVAFTableView table = MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             _po = table.GetPO(GetCtx(), GetRecord_ID(), Get_TrxName());
             return _po;
         }

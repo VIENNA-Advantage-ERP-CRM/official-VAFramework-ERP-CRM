@@ -19,14 +19,14 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             return initialData;
         }
 
-        private MAttachment GetFileAttachment(int VAF_TableView_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
+        private MVAFAttachment GetFileAttachment(int VAF_TableView_ID, int Record_ID, VAdvantage.Utility.Ctx ctx)
         {
             int VAF_Attachment_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Attachment_ID from VAF_Attachment WHERE vaf_tableview_id =" + VAF_TableView_ID + " AND record_id=" + Record_ID, null, null));
             if (VAF_Attachment_ID == 0)
             {
                 return null;
             }
-            MAttachment att = new MAttachment(ctx, VAF_Attachment_ID, null);
+            MVAFAttachment att = new MVAFAttachment(ctx, VAF_Attachment_ID, null);
             att.VAF_Attachment_ID = VAF_Attachment_ID;
             return att;
         }
@@ -47,15 +47,15 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
         {
             AttachmentInfo info = new AttachmentInfo();
 
-            MAttachment att = null;
+            MVAFAttachment att = null;
             if (newRecord_ID > 0)           //This is to copy old reocrd's attachment in new record. will work only in case of DMS..
             {
-                att = new MAttachment(ctx, 0, null);
+                att = new MVAFAttachment(ctx, 0, null);
                 att.SetRecord_ID(newRecord_ID);
             }
             else
             {
-                att = new MAttachment(ctx, VAF_Attachment_ID, null);
+                att = new MVAFAttachment(ctx, VAF_Attachment_ID, null);
                 att.SetRecord_ID(Record_ID);
             }
 
@@ -75,9 +75,9 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             return info;
         }
 
-        private void CopyRecord(MAttachment att, int VAF_TableView_ID, int newRecord_ID, Ctx ctx)
+        private void CopyRecord(MVAFAttachment att, int VAF_TableView_ID, int newRecord_ID, Ctx ctx)
         {
-            MAttachment newAttachment = new MAttachment(ctx, VAF_TableView_ID, newRecord_ID, null);
+            MVAFAttachment newAttachment = new MVAFAttachment(ctx, VAF_TableView_ID, newRecord_ID, null);
             att.CopyTo(newAttachment);
 
             //for (int i = 0; i < att.GetEntryCount(); i++)
@@ -94,14 +94,14 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, actionOrigin, originName, VAF_TableView_ID, recordID, 0, "", "", "Attachment Downloaded:->" + fileName, MActionLog.ACTIONTYPE_Download);
 
-            MAttachment att = new MAttachment(_ctx, VAF_Attachment_ID, null);
+            MVAFAttachment att = new MVAFAttachment(_ctx, VAF_Attachment_ID, null);
 
             return att.GetFile(VAF_AttachmentLine_ID);
         }
 
         public string DownloadAttachment(Ctx ctx, string fileName, int VAF_Attachment_ID, int VAF_AttachmentLine_ID)
         {
-            MAttachment att = new MAttachment(ctx, VAF_Attachment_ID, null);
+            MVAFAttachment att = new MVAFAttachment(ctx, VAF_Attachment_ID, null);
 
             return att.GetFile(VAF_AttachmentLine_ID);
         }
@@ -145,7 +145,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
 
     public class InitAttachment
     {
-        public MAttachment Attachment
+        public MVAFAttachment Attachment
         {
             get;
             set;

@@ -264,7 +264,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
                     && !Ini.IsClient())		//	Post Immediate if on Server
                 {
 
-                    MClient client = MClient.Get(_document.GetCtx(), _document.GetVAF_Client_ID());
+                    MVAFClient client = MVAFClient.Get(_document.GetCtx(), _document.GetVAF_Client_ID());
                     if (STATUS_COMPLETED.Equals(status) && client.IsPostImmediate())
                     {
                         _document.Save();

@@ -25,7 +25,7 @@ namespace VAdvantage.Process
 {
     public class AssetDelivery:SvrProcess
     {
-     	private VAdvantage.Model.MClient		_client = null;
+     	private VAdvantage.Model.MVAFClient		_client = null;
 
 	private int			_VAA_AssetGroup_ID = 0;
 	private int			_M_Product_ID = 0;
@@ -71,7 +71,7 @@ namespace VAdvantage.Process
 		if (_GuaranteeDate == null)
 			_GuaranteeDate =DateTime.Now;//(  new Timestamp (System.currentTimeMillis());
 		//
-		_client = VAdvantage.Model.MClient.Get(GetCtx());
+		_client = VAdvantage.Model.MVAFClient.Get(GetCtx());
 	}	//	prepare
 
 	/// <summary>

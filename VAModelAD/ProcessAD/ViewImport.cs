@@ -175,7 +175,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             _VAF_TableView_ID = (GetProcessInfo() != null) ? GetRecord_ID() : 0;
             if (_VAF_TableView_ID > 0)
             {
-                MTable targetTable = MTable.Get(Env.GetCtx(), _VAF_TableView_ID);
+                MVAFTableView targetTable = MVAFTableView.Get(Env.GetCtx(), _VAF_TableView_ID);
                 targetViewName = targetTable.GetTableName();
                 entityType = targetTable.GetEntityType();
             }
@@ -273,7 +273,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //int itc = tc.substring(tc.length()-1).hashCode();
 
                         //insert into/update vaf_tableview for each view
-                        MTable mt = MTable.Get(Env.GetCtx(), tableName);
+                        MVAFTableView mt = MVAFTableView.Get(Env.GetCtx(), tableName);
                         if (mt != null && !mt.IsView())
                         {
                             log.Severe("Duplicated view name with an existing table for the SQL: " + command);
@@ -285,10 +285,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (mt == null)
                         //mt.delete(true,  null);
                         {
-                            mt = new MTable(Env.GetCtx(), 0, null);
+                            mt = new MVAFTableView(Env.GetCtx(), 0, null);
                             //mt.delete(true,  myTrx.getTrxName());
-                            //mt = new MTable(Env.getCtx(), 0, myTrx.getTrxName());
-                            //MTable mt = MTable.get(Env.getCtx(), 0);
+                            //mt = new MVAFTableView(Env.getCtx(), 0, myTrx.getTrxName());
+                            //MVAFTableView mt = MVAFTableView.get(Env.getCtx(), 0);
                             mt.SetTableName(tableName);
                             //mt.setVAF_Org_ID(0);
                             //mt.setVAF_Client_ID(0); also updatedby, createdby. jz: all default is 0 in PO
@@ -451,7 +451,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 rtix = from1.Length;
                             String refTab = from1.Substring(0, rtix);
                             refTab = Trim(refTab);
-                            MTable rt = MTable.Get(Env.GetCtx(), refTab);
+                            MVAFTableView rt = MVAFTableView.Get(Env.GetCtx(), refTab);
                             if (rt != null)
                                 mvc.SetReferenced_Table_ID(rt.Get_ID());
                             else

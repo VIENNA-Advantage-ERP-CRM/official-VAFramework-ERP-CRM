@@ -249,7 +249,7 @@ namespace VAdvantage.Model
                             for (int j = 0; j < _ds.Tables[0].Rows.Count; j++)
                             {
                                 //Created Table object because not to use Mclass of Quality Control Module in our Base
-                                MTable table = MTable.Get(ctx, "VA010_ShipConfParameters");
+                                MVAFTableView table = MVAFTableView.Get(ctx, "VA010_ShipConfParameters");
                                 PO pos = table.GetPO(ctx, 0, Trx_Name);
                                 pos.Set_ValueNoCheck("M_Product_ID", Util.GetValueOfInt(_ProductList[i]));
                                 pos.Set_ValueNoCheck("VA010_QualityParameters_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_QualityParameters_ID"]));
@@ -1433,7 +1433,7 @@ namespace VAdvantage.Model
             {
                 String sql = "Select VA010_ShipConfParameters_ID from VA010_ShipConfParameters Where M_InOutLineConfirm_ID IN ("
                     + " SELECT M_InOutLineConfirm_ID FROM M_InOutLineConfirm Where M_InOutConfirm_ID=" + Get_ID() + ")";
-                MTable table = MTable.Get(GetCtx(), "VA010_ShipConfParameters");
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), "VA010_ShipConfParameters");
                 PO pos = null;
                 try
                 {

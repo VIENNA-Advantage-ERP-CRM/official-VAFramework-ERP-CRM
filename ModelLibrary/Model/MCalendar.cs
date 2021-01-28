@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="client">parent</param>
-        public MCalendar(MClient client)
+        public MCalendar(MVAFClient client)
             : base(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
         /// <returns>MCalendar</returns>
         public static MCalendar GetDefault(Context ctx, int VAF_Client_ID)
         {
-            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID);
+            MVAFClientDetail info = MVAFClientDetail.Get(ctx, VAF_Client_ID);
             return Get(ctx, info.GetVAB_Calender_ID());
         }
 

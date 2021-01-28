@@ -66,7 +66,7 @@ namespace VAdvantage.Process
             int Ver_VAF_Tab_ID = 0;
 
             // Created object of MTab with Tab ID (either selected from parameter or from Record ID)
-            MTab tab = new MTab(GetCtx(), _VAF_Tab_ID, Get_TrxName());
+            MVAFTab tab = new MVAFTab(GetCtx(), _VAF_Tab_ID, Get_TrxName());
 
             if (!(Util.GetValueOfString(DB.ExecuteScalar("SELECT IsMaintainVersions FROM VAF_TableView WHERE VAF_TableView_ID = " + tab.GetVAF_TableView_ID(), null, Get_TrxName())) == "Y"))
             {
@@ -115,7 +115,7 @@ namespace VAdvantage.Process
                 Ver_VAF_Tab_ID = CreateVerTab(tab, Ver_VAF_Screen_ID, Ver_VAF_TableView_ID);
             else
             {
-                MTab verTab = new MTab(GetCtx(), Ver_VAF_Tab_ID, Get_TrxName());
+                MVAFTab verTab = new MVAFTab(GetCtx(), Ver_VAF_Tab_ID, Get_TrxName());
                 CreateVerTabPanel(verTab);
             }
 
@@ -175,9 +175,9 @@ namespace VAdvantage.Process
         /// <param name="ver_VAF_Screen_ID">Version Window ID</param>
         /// <param name="Ver_VAF_TableView_ID">Version Table ID</param>
         /// <returns>int (Version Tab ID)</returns>
-        private int CreateVerTab(MTab tab, int ver_VAF_Screen_ID, int Ver_VAF_TableView_ID)
+        private int CreateVerTab(MVAFTab tab, int ver_VAF_Screen_ID, int Ver_VAF_TableView_ID)
         {
-            MTab verTab = new MTab(GetCtx(), 0, Get_TrxName());
+            MVAFTab verTab = new MVAFTab(GetCtx(), 0, Get_TrxName());
             // copy Master table tab to Version tab
             tab.CopyTo(verTab);
             verTab.SetVAF_Screen_ID(ver_VAF_Screen_ID);
@@ -219,7 +219,7 @@ namespace VAdvantage.Process
         /// Create tab panel for Version window's Tab
         /// </summary>
         /// <param name="tab"></param>
-        public void CreateVerTabPanel(MTab tab)
+        public void CreateVerTabPanel(MVAFTab tab)
         {
             int VAF_TabPanel_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TabPanel_ID FROM VAF_TabPanel WHERE Classname = '" + className + "' AND VAF_Tab_ID = " + tab.GetVAF_Tab_ID(), null, null));
             if (VAF_TabPanel_ID <= 0)
@@ -247,10 +247,10 @@ namespace VAdvantage.Process
         /// <param name="Ver_VAF_Tab_ID"> Tab ID of Version window </param>
         /// <param name="Ver_VAF_TableView_ID"> Table ID of Version </param>
         /// <returns>string (Message)</returns>
-        private string CreateVerFields(MTab tab, int Ver_VAF_Tab_ID, int Ver_VAF_TableView_ID)
+        private string CreateVerFields(MVAFTab tab, int Ver_VAF_Tab_ID, int Ver_VAF_TableView_ID)
         {
             // Get all fields from Master Tab
-            int[] fields = MTable.GetAllIDs("VAF_Field", "VAF_Tab_ID = " + tab.GetVAF_Tab_ID(), Get_TrxName());
+            int[] fields = MVAFTableView.GetAllIDs("VAF_Field", "VAF_Tab_ID = " + tab.GetVAF_Tab_ID(), Get_TrxName());
 
             bool hasOrigCols = false;
             bool hasVerFields = false;
@@ -275,7 +275,7 @@ namespace VAdvantage.Process
             foreach (int fld in fields)
             {
                 bool createNew = true;
-                MField origFld = new MField(GetCtx(), fld, Get_TrxName());
+                MVAFField origFld = new MVAFField(GetCtx(), fld, Get_TrxName());
 
                 // check if Field already exist for Version Tab else create new
                 if (hasVerFields)
@@ -325,7 +325,7 @@ namespace VAdvantage.Process
                         if (fldID <= 0)
                         {
                             // Create Field for Column, copy field from Master tables Field tab on Version Field against Version Tab
-                            MField verFld = new MField(GetCtx(), 0, Get_TrxName());
+                            MVAFField verFld = new MVAFField(GetCtx(), 0, Get_TrxName());
                             origFld.CopyTo(verFld);
                             verFld.SetVAF_Tab_ID(Ver_VAF_Tab_ID);
                             verFld.SetVAF_Column_ID(VerColID);
@@ -393,7 +393,7 @@ namespace VAdvantage.Process
                 if (drVerFld.Length <= 0)
                 {
                     int VerColID = 0;
-                    MField verFld = new MField(GetCtx(), 0, Get_TrxName());
+                    MVAFField verFld = new MVAFField(GetCtx(), 0, Get_TrxName());
                     verFld.SetVAF_Tab_ID(ver_VAF_Tab_ID);
 
                     DataRow[] drVerCol = verColumnsDS.Tables[0].Select("ColumnName = '" + listDefVerCols[i].ToString() + "'");
@@ -513,7 +513,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        M_Element ele = new M_Element(GetCtx(), 0, Get_Trx());
+                        M_VAFColumnDic ele = new M_VAFColumnDic(GetCtx(), 0, Get_Trx());
                         ele.SetVAF_Client_ID(0);
                         ele.SetVAF_Org_ID(0);
                         ele.SetName(listDefVerCols[i]);

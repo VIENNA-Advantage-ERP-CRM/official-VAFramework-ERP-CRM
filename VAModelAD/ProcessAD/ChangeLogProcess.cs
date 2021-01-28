@@ -46,9 +46,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private StringBuilder	_sqlInsertValue = null;
 	
 	/** The Table					*/
-	private MTable			_table = null;
+	private MVAFTableView			_table = null;
 	/** The Column					*/
-	private MColumn 		_column = null;
+	private MVAFColumn 		_column = null;
 	/** Old Record ID				*/
 	private int				_oldRecord_ID = 0;
 	/**	Old Record2 ID				*/
@@ -142,7 +142,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             idr.Close();
 			foreach(DataRow dr in dt.Rows)
 			{
-				CreateStatement (new MChangeLog(GetCtx(), dr, Get_Trx()), Get_Trx());
+				CreateStatement (new MVAFAlterLog(GetCtx(), dr, Get_Trx()), Get_Trx());
 			}
             dt = null;
 		}
@@ -170,7 +170,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// </summary>
 	/// <param name="cLog">log</param>
 	/// <param name="trxName">trx</param>
-	private void CreateStatement (MChangeLog cLog, Trx trxName)
+	private void CreateStatement (MVAFAlterLog cLog, Trx trxName)
 	{
 		//	New Table 
 		if (_table != null)
@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
         if (_table == null)
         {
-            _table = new MTable(GetCtx(), cLog.GetVAF_TableView_ID(), trxName);
+            _table = new MVAFTableView(GetCtx(), cLog.GetVAF_TableView_ID(), trxName);
         }
 		//	New Record
         if (_sqlUpdate != null
@@ -193,7 +193,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             ExecuteStatement();
         }
 		//	Column Info
-		_column = new MColumn (GetCtx(), cLog.GetVAF_Column_ID(), Get_Trx());
+		_column = new MVAFColumn (GetCtx(), cLog.GetVAF_Column_ID(), Get_Trx());
 		//	Same Column twice
         if (_columns.Contains(_column.GetColumnName()))
         {
@@ -416,7 +416,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             idr.Close();
 			foreach(DataRow dr in dt.Rows)
             {
-				MTable table = new MTable (GetCtx(),dr, Get_Trx());
+				MVAFTableView table = new MVAFTableView (GetCtx(),dr, Get_Trx());
 				
 				String tableName = table.GetTableName();
 				String columnName = tableName + "_ID";

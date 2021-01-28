@@ -272,7 +272,7 @@ namespace VAdvantage.Model
                             for (int j = 0; j < _ds.Tables[0].Rows.Count; j++)
                             {
                                 //Created Table object because not to use Mclass of Quality Control Module in our Base
-                                MTable table = MTable.Get(ctx, "VA010_MoveConfParameters");
+                                MVAFTableView table = MVAFTableView.Get(ctx, "VA010_MoveConfParameters");
                                 PO pos = table.GetPO(ctx, 0, Trx_Name);
                                 pos.Set_ValueNoCheck("M_Product_ID", Util.GetValueOfInt(_ProductList[i]));
                                 pos.Set_ValueNoCheck("VA010_QualityParameters_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_QualityParameters_ID"]));

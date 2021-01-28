@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         /// <param name="Name">name</param>
         /// <param name="ElementType">type</param>
         /// <param name="VAF_TreeInfo_ID">tree</param>
-        public MElement(MClient client, string name, string elementType, int VAF_TreeInfo_ID)
+        public MElement(MVAFClient client, string name, string elementType, int VAF_TreeInfo_ID)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);

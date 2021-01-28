@@ -56,7 +56,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Info("VAF_TableView_ID=" + _VAF_TableView_ID);
             //	get Table Info
-            MTable table = new MTable(GetCtx(), _VAF_TableView_ID, Get_TrxName());
+            MVAFTableView table = new MVAFTableView(GetCtx(), _VAF_TableView_ID, Get_TrxName());
             if (table.Get_ID() == 0)
             {
                 throw new ArgumentException("No VAF_TableView_ID=" + _VAF_TableView_ID);

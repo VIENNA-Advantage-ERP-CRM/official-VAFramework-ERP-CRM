@@ -928,7 +928,7 @@ namespace VAdvantage.Model
          * 	Handles Transaction if not in a transaction
          *	@param client client
          */
-        public static void Create(VAdvantage.Model.MClient client)
+        public static void Create(VAdvantage.Model.MVAFClient client)
         {
             VAdvantage.Model.MAcctSchema[] ass = VAdvantage.Model.MAcctSchema.GetClientAcctSchema(client.GetCtx(), client.GetVAF_Client_ID());
             Trx trx = client.Get_Trx();

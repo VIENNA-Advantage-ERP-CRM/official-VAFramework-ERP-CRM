@@ -422,7 +422,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">accounting schema</param>
         private void UpdateProductPO(MAcctSchema as1)
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
+            MVAFClientDetail ci = MVAFClientDetail.Get(GetCtx(), as1.GetVAF_Client_ID());
             if (ci.GetVAB_AccountBook1_ID() != as1.GetVAB_AccountBook_ID())
             {
                 return;

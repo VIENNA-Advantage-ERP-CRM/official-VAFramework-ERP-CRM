@@ -2200,7 +2200,7 @@ namespace VAdvantage.Model
                         keyInfo = Get_WhereClause(true);
                     if ((this.Get_TableName() != "VAF_JInstance_Para") && (this.Get_TableName() != "VAF_JInstance"))
                     {
-                        MChangeLog cLog = session.ChangeLog(
+                        MVAFAlterLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
                                 p_info.getVAF_TableView_ID(), p_info.GetColumn(i).VAF_Column_ID,
                                 keyInfo, GetVAF_Client_ID(), GetVAF_Org_ID(), null, value,
@@ -2246,11 +2246,11 @@ namespace VAdvantage.Model
                         && !"Password".Equals(columnName)
                         )
                     {
-                        MChangeLog cLog = session.ChangeLog(
+                        MVAFAlterLog cLog = session.ChangeLog(
                             _trx, VAF_AlterLog_ID,
                             p_info.getVAF_TableView_ID(), p_info.GetColumn(index).VAF_Column_ID,
                             _mIDs, GetVAF_Client_ID(), GetVAF_Org_ID(), null, value,
-                            Get_TableName(), MChangeLog.CHANGELOGTYPE_Insert);
+                            Get_TableName(), MVAFAlterLog.CHANGELOGTYPE_Insert);
                         if (cLog != null)
                             VAF_AlterLog_ID = cLog.GetVAF_AlterLog_ID();
                     }
@@ -2609,7 +2609,7 @@ namespace VAdvantage.Model
                     if ((this.Get_TableName() != "VAF_JInstance_Para") && (this.Get_TableName() != "VAF_JInstance"))
                     {
 
-                        MChangeLog cLog = session.ChangeLog(
+                        MVAFAlterLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
                                 p_info.getVAF_TableView_ID(), p_info.GetColumn(i).VAF_Column_ID,
                                 keyInfo, GetVAF_Client_ID(), GetVAF_Org_ID(), oldV, newV,
@@ -3331,7 +3331,7 @@ namespace VAdvantage.Model
                     log.Fine("No Session found");
                 }
                 else if (session.IsWebStoreSession()
-                    || MChangeLog.IsLogged(VAF_TableView_ID, MChangeLog.CHANGELOGTYPE_Delete))
+                    || MVAFAlterLog.IsLogged(VAF_TableView_ID, MVAFAlterLog.CHANGELOGTYPE_Delete))
                 {
                     int VAF_AlterLog_ID = 0;
                     int size = Get_ColumnCount();
@@ -3347,11 +3347,11 @@ namespace VAdvantage.Model
                             Object keyInfo = Get_ID();
                             if (_mIDs.Length != 1)
                                 keyInfo = Get_WhereClause(true);
-                            MChangeLog cLog = session.ChangeLog(
+                            MVAFAlterLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
                                 VAF_TableView_ID, p_info.GetColumn(i).VAF_Column_ID,
                                 keyInfo, GetVAF_Client_ID(), GetVAF_Org_ID(), value, null,
-                                Get_TableName(), MChangeLog.CHANGELOGTYPE_Delete);
+                                Get_TableName(), MVAFAlterLog.CHANGELOGTYPE_Delete);
                             if (cLog != null)
                                 VAF_AlterLog_ID = cLog.GetVAF_AlterLog_ID();
                         }
@@ -4277,7 +4277,7 @@ namespace VAdvantage.Model
             //{
             //    if (!orgRequired)
             //    {
-            //        Boolean? shared = MClientShare.IsShared(po.GetVAF_Client_ID(), po.Get_Table_ID());
+            //        Boolean? shared = MVAFClientShare.IsShared(po.GetVAF_Client_ID(), po.Get_Table_ID());
             //        orgRequired = shared != null && !Util.GetValueOfBool(shared);
             //    }
             //    if (orgRequired)
@@ -4291,7 +4291,7 @@ namespace VAdvantage.Model
             //    Boolean reset = X_VAF_TableView.TABLETRXTYPE_NoOrganization.Equals(TableTrxType);
             //    if (!reset)
             //    {
-            //        Boolean? shared = MClientShare.IsShared(po.GetVAF_Client_ID(), po.Get_Table_ID());
+            //        Boolean? shared = MVAFClientShare.IsShared(po.GetVAF_Client_ID(), po.Get_Table_ID());
             //        reset = shared != null && Util.GetValueOfBool(shared);
             //    }
             //    if (reset)
@@ -4557,7 +4557,7 @@ namespace VAdvantage.Model
                     Object keyInfo = Get_ID();
                     if (_mIDs.Length != 1)
                         keyInfo = Get_WhereClause(true);
-                    MChangeLog cLog = session.ChangeLog(_trx, VAF_AlterLog_ID,
+                    MVAFAlterLog cLog = session.ChangeLog(_trx, VAF_AlterLog_ID,
                             p_info.GetVAF_TableView_ID(), p_info.GetColumn(i).VAF_Column_ID,
                             keyInfo, GetVAF_Client_ID(), GetVAF_Org_ID(), null, value,
                             Get_TableName(), X_VAF_AlterLog.CHANGELOGTYPE_Insert);
@@ -4600,7 +4600,7 @@ namespace VAdvantage.Model
                             && !"CreditCardNumber".Equals(columnName2)
                     )
                     {
-                        MChangeLog cLog = session.ChangeLog(
+                        MVAFAlterLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
                                 p_info.GetVAF_TableView_ID(), p_info.GetColumn(index1).VAF_Column_ID,
                                 _mIDs, GetVAF_Client_ID(), GetVAF_Org_ID(), null, value,
@@ -4831,7 +4831,7 @@ namespace VAdvantage.Model
                     Object keyInfo = Get_ID();
                     if (_mIDs.Length != 1)
                         keyInfo = Get_WhereClause(true);
-                    MChangeLog cLog = session.ChangeLog(
+                    MVAFAlterLog cLog = session.ChangeLog(
                             _trx, VAF_AlterLog_ID,
                             p_info.GetVAF_TableView_ID(), p_info.GetColumn(i).VAF_Column_ID,
                             keyInfo, GetVAF_Client_ID(), GetVAF_Org_ID(), oldV, newV,
@@ -4880,7 +4880,7 @@ namespace VAdvantage.Model
                         if (oldV != null && oldV == Null.NULL)
                             oldV = null;
                         //
-                        MChangeLog cLog = session.ChangeLog(
+                        MVAFAlterLog cLog = session.ChangeLog(
                                 _trx, VAF_AlterLog_ID,
                                 p_info.GetVAF_TableView_ID(), p_info.GetColumn(index).VAF_Column_ID,
                                 _mIDs, GetVAF_Client_ID(), GetVAF_Org_ID(), oldV, newV,

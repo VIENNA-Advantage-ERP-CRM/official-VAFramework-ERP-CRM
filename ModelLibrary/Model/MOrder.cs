@@ -4020,7 +4020,7 @@ namespace VAdvantage.Model
                     {
                         object[] parametersArray = new object[] { GetCtx(),
                                                                 Util.GetValueOfInt(GetVAF_Client_ID()),
-                                                                Util.GetValueOfInt(X_VAB_Order.Table_ID),//MTable.Get(GetCtx() , "VAB_Order").GetVAF_TableView_ID()
+                                                                Util.GetValueOfInt(X_VAB_Order.Table_ID),//MVAFTableView.Get(GetCtx() , "VAB_Order").GetVAF_TableView_ID()
                                                                 Util.GetValueOfInt(GetVAB_Order_ID()),
                                                                 true,
                                                                 Util.GetValueOfInt(GetVAF_Org_ID()),
@@ -4538,7 +4538,7 @@ namespace VAdvantage.Model
         //Changes by abhishek suggested by lokesh on 7/1/2016
         //public void SaveDayEndRecord(Ctx ctx, int Terminal_ID, string CashAmt, string CreditAmt, int DocType_ID, string[] Tax_ID, string[] TaxAmts, string OrderTotal, string[] DiscountLine)
         //{
-        //    MTable tblDayEnd = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReport'")), null);
+        //    MVAFTableView tblDayEnd = new MVAFTableView(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReport'")), null);
 
         //    int DayEnd_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreport_id from vapos_dayendreport where to_date(vapos_trxdate, 'DD-MM-YYYY') =to_date(sysdate, 'DD-MM-YYYY') and vapos_posterminal_id=" + Terminal_ID));
         //    if (DayEnd_ID > 0)
@@ -4598,7 +4598,7 @@ namespace VAdvantage.Model
         //        {
         //            for (int j = 0; j < Tax_ID.Length; j++)
         //            {
-        //                MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
+        //                MVAFTableView tblTax = new MVAFTableView(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
         //                int DayEndTax_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreporttax_ID from vapos_dayendreporttax where vapos_dayendreport_id=" + Util.GetValueOfInt(poDayEnd.Get_Value("VAPOS_DayEndReport_ID")) + " and VAB_TaxRate_id=" + Util.GetValueOfInt(Tax_ID[j])));
         //                if (DayEndTax_ID > 0)
         //                {
@@ -4689,7 +4689,7 @@ namespace VAdvantage.Model
         //            {
         //                for (int j = 0; j < Tax_ID.Length; j++)
         //                {
-        //                    MTable tblTax = new MTable(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
+        //                    MVAFTableView tblTax = new MVAFTableView(ctx, Util.GetValueOfInt(DB.ExecuteScalar("select VAF_TableView_ID from vaf_tableview where  tablename = 'VAPOS_DayEndReportTax'")), null);
         //                    int DayEndTax_ID = Util.GetValueOfInt(DB.ExecuteScalar("select vapos_dayendreporttax_ID from vapos_dayendreporttax where vapos_dayendreport_id=" + Util.GetValueOfInt(poDayEnd.Get_Value("VAPOS_DayEndReport_ID")) + " and VAB_TaxRate_id=" + Util.GetValueOfInt(Tax_ID[j])));
         //                    if (DayEndTax_ID > 0)
         //                    {

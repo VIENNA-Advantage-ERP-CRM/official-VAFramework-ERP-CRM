@@ -186,7 +186,7 @@ namespace VAdvantage.Logging
                         )
                     {
                         m_issueError = false;
-                        //MIssue.create(record);
+                        //MVAFIssue.create(record);
                         m_issueError = true;
                     }
                 }

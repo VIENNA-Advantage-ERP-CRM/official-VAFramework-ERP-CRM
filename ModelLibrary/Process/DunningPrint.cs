@@ -121,7 +121,7 @@ namespace VAdvantage.Process
             MDunningLevel level = new MDunningLevel(GetCtx(), run.GetVAB_DunningStep_ID(), Get_TrxName());
             MPrintFormat format = MPrintFormat.Get(GetCtx(), level.GetDunning_PrintFormat_ID(), false);
 
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
 
             int count = 0;
             int errors = 0;

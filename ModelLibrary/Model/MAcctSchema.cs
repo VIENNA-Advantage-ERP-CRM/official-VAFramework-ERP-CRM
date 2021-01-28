@@ -132,7 +132,7 @@ namespace VAdvantage.Model
 
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
-            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
+            MVAFClientDetail info = MVAFClientDetail.Get(ctx, VAF_Client_ID, trxName);
             MAcctSchema ass = MAcctSchema.Get(ctx, info.GetVAB_AccountBook1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
 
             //  Create New
             List<MAcctSchema> list = new List<MAcctSchema>();
-            MClientInfo info = MClientInfo.Get(ctx, VAF_Client_ID, trxName);
+            MVAFClientDetail info = MVAFClientDetail.Get(ctx, VAF_Client_ID, trxName);
             MAcctSchema ass = MAcctSchema.Get(ctx, info.GetVAB_AccountBook1_ID(), trxName);
             if (ass.Get_ID() != 0 && trxName == null)
                 list.Add(ass);
@@ -267,7 +267,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="client"></param>
         /// <param name="currency"></param>
-        public MAcctSchema(MClient client, KeyNamePair currency)
+        public MAcctSchema(MVAFClient client, KeyNamePair currency)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
             //	Check Primary
             if (GetVAF_OrgOnly_ID() != 0)
             {
-                MClientInfo info = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
+                MVAFClientDetail info = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID());
                 if (info.GetVAB_AccountBook1_ID() == GetVAB_AccountBook_ID())
                     SetVAF_OrgOnly_ID(0);
             }

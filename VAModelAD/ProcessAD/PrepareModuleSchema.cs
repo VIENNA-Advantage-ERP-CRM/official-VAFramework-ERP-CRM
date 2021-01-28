@@ -610,20 +610,20 @@ namespace VAdvantage.Process
         private void GetTabsFields(int sVAF_Screen_ID, List<int> lstModuleTab)
         {
             //DataTable dt = GetTable("SELECT * FROM VAF_Tab WHERE VAF_Screen_ID=" + sWindowObj.GetVAF_Screen_ID() + " ORDER BY SeqNo");
-            MTab sTab = null;
+            MVAFTab sTab = null;
             int sVAF_Tab_ID = 0;
             for (int i = 0; i < lstModuleTab.Count; i++)
             {
                 sVAF_Tab_ID = GetID("VAF_ModuleTab", "VAF_Tab_ID", "VAF_ModuleTab_ID = " + lstModuleTab[i]);
 
                 bool newTable = false;
-                sTab = new MTab(GetCtx(), sVAF_Tab_ID, null);
+                sTab = new MVAFTab(GetCtx(), sVAF_Tab_ID, null);
                 string name;
 
                 if (HasModulePrefix("TableName", "VAF_TableView", " VAF_TableView_ID = " + sTab.GetVAF_TableView_ID(), out name))
                 {
 
-                    MTable sTable = new MTable(_ctx, sTab.GetVAF_TableView_ID(), null);
+                    MVAFTableView sTable = new MVAFTableView(_ctx, sTab.GetVAF_TableView_ID(), null);
 
                     if (sTable.GetVAF_Screen_ID() > 0 && sVAF_Screen_ID != sTable.GetVAF_Screen_ID())
                     {
@@ -682,13 +682,13 @@ namespace VAdvantage.Process
 
                 if (sTab.GetReferenced_Tab_ID() != 0)
                 {
-                    MTab rTab = new MTab(GetCtx(), sTab.GetReferenced_Tab_ID(), null);
+                    MVAFTab rTab = new MVAFTab(GetCtx(), sTab.GetReferenced_Tab_ID(), null);
 
                     if (HasModulePrefix("TableName", "VAF_TableView", " VAF_TableView_ID = " + rTab.GetVAF_TableView_ID(), out name))
                     {
                         InsertIntoDBSchema(X_VAF_TableView.Table_ID, rTab.GetVAF_TableView_ID(), X_VAF_TableView.Table_Name, name, "VAF_TableView_ID = " + rTab.GetVAF_TableView_ID());
                     }
-                    InsertIntoDBSchema(MTab.Table_ID, rTab.GetVAF_Tab_ID(), MTab.Table_Name, rTab.GetName(), " VAF_Tab_ID = " + rTab.GetVAF_Tab_ID());
+                    InsertIntoDBSchema(MVAFTab.Table_ID, rTab.GetVAF_Tab_ID(), MVAFTab.Table_Name, rTab.GetName(), " VAF_Tab_ID = " + rTab.GetVAF_Tab_ID());
                 }
 
                 if (sTab.GetVAF_Job_ID() != 0)
@@ -702,7 +702,7 @@ namespace VAdvantage.Process
                     GetHeaderLayout(sTab.GetVAF_HeaderLayout_ID());
                 }
 
-                InsertIntoDBSchema(MTab.Table_ID, sVAF_Tab_ID, MTab.Table_Name, sTab.GetName(), " VAF_Tab_ID = " + sVAF_Tab_ID);
+                InsertIntoDBSchema(MVAFTab.Table_ID, sVAF_Tab_ID, MVAFTab.Table_Name, sTab.GetName(), " VAF_Tab_ID = " + sVAF_Tab_ID);
 
 
                 GetTabPanel(sVAF_Tab_ID);
@@ -736,7 +736,7 @@ namespace VAdvantage.Process
                 if (lstModuleField.Count > 0) // run only if at least one field is binded in modulefield and new tab created
                 {
                     IDataReader dr = DB.ExecuteReader(@" SELECT Name, VAF_Field_ID FROM VAF_Field WHERE VAF_Column_ID IN
-                                                        ( SELECT VAF_Column_ID FROM VAF_Column WHERE ColumnName IN ('IsActive','VAF_Client_ID', 'VAF_Org_ID','" + MTable.Get(_ctx, sTab.GetVAF_TableView_ID()).GetTableName() + @"_ID',
+                                                        ( SELECT VAF_Column_ID FROM VAF_Column WHERE ColumnName IN ('IsActive','VAF_Client_ID', 'VAF_Org_ID','" + MVAFTableView.Get(_ctx, sTab.GetVAF_TableView_ID()).GetTableName() + @"_ID',
                                                                                                                  'Export_ID')
                                                         AND VAF_TableView_ID = " + sTab.GetVAF_TableView_ID() + @") AND VAF_Tab_ID =" + sTab.GetVAF_Tab_ID());
                     while (dr.Read())
@@ -801,7 +801,7 @@ namespace VAdvantage.Process
 
         private string InsertField(bool newTable, string name, int sVAF_Field_ID)
         {
-            MField sField = new MField(_ctx, sVAF_Field_ID, null);
+            MVAFField sField = new MVAFField(_ctx, sVAF_Field_ID, null);
 
             GetColumn(sField.GetVAF_Column_ID(), true, !newTable);
 
@@ -890,7 +890,7 @@ namespace VAdvantage.Process
             string name;
             if (HasModulePrefix("TableName", "VAF_TableView", "VAF_TableView_ID=" + sVAF_TableView_ID, out name))
             {
-                MTable sTable = new MTable(_ctx, sVAF_TableView_ID, null);
+                MVAFTableView sTable = new MVAFTableView(_ctx, sVAF_TableView_ID, null);
 
                 if (sTable.GetVAF_Screen_ID() > 0)
                 {
@@ -972,7 +972,7 @@ namespace VAdvantage.Process
 
         private void CheckReferenceAndProcess(int svaf_column_id)
         {
-            MColumn sColumn = new MColumn(_ctx, svaf_column_id, null);
+            MVAFColumn sColumn = new MVAFColumn(_ctx, svaf_column_id, null);
             if (DisplayType.IsLookup(sColumn.GetVAF_Control_Ref_ID()) || DisplayType.Button == sColumn.GetVAF_Control_Ref_ID())
             {
 

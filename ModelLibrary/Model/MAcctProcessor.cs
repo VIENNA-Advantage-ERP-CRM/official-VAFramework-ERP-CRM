@@ -112,7 +112,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="client">parent</param>
         /// <param name="Supervisor_ID">admin</param>
-        public MAcctProcessor(MClient client, int Supervisor_ID)
+        public MAcctProcessor(MVAFClient client, int Supervisor_ID)
             : this(client.GetCtx(), 0, client.Get_TrxName())
         {
             SetClientOrg(client);

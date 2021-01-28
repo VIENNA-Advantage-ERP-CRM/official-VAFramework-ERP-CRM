@@ -218,7 +218,7 @@ namespace VAdvantage.Model
                                                     //chrgact = new X_FRPT_Charge_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
-                                            chrgact = MTable.GetPO(GetCtx(), "FRPT_Charge_Acct", 0, null);
+                                            chrgact = MVAFTableView.GetPO(GetCtx(), "FRPT_Charge_Acct", 0, null);
                                             chrgact.Set_ValueNoCheck("VAB_Charge_ID", Util.GetValueOfInt(GetVAB_Charge_ID()));
                                             chrgact.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             chrgact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

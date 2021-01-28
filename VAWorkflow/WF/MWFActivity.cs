@@ -318,7 +318,7 @@ namespace VAdvantage.WF
         //    if (_po != null)
         //        return _po;
 
-        //    MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
+        //    MVAFTableView table = MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
         //    _po = table.GetPO(GetCtx(), GetRecord_ID(), trxName);
         //    return _po;
         //}
@@ -343,7 +343,7 @@ namespace VAdvantage.WF
                 return _po;
             }
 
-            MTable table = MTable.Get(GetCtx(), GetVAF_TableView_ID());
+            MVAFTableView table = MVAFTableView.Get(GetCtx(), GetVAF_TableView_ID());
             _po = table.GetPO(GetCtx(), GetRecord_ID(), trx);
             return _po;
 
@@ -924,7 +924,7 @@ namespace VAdvantage.WF
                     //	Post Immediate
                     if (success && DocActionVariables.ACTION_COMPLETE.Equals(_node.GetDocAction()))
                     {
-                        MClient client = MClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
+                        MVAFClient client = MVAFClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
                         if (client.IsPostImmediate())
                             _postImmediate = doc;
                     }
@@ -1105,7 +1105,7 @@ namespace VAdvantage.WF
             {
                 String value = _node.GetAttributeValue();
                 log.Fine("SetVariable:VAF_Column_ID=" + _node.GetVAF_Column_ID() + " to " + value);
-                MColumn column = _node.GetColumn();
+                MVAFColumn column = _node.GetColumn();
                 int dt = column.GetVAF_Control_Ref_ID();
                 return SetVariable(value, dt, null);
             }
@@ -1198,7 +1198,7 @@ namespace VAdvantage.WF
                     int nextVAF_UserContact_ID = 0;
                     if (_node.GetVAF_Column_ID_3() > 0)
                     {
-                        startVAF_UserContact_ID = Util.GetValueOfInt(_po.Get_Value((new MColumn(GetCtx(), _node.GetVAF_Column_ID_3(), null).GetColumnName())));
+                        startVAF_UserContact_ID = Util.GetValueOfInt(_po.Get_Value((new MVAFColumn(GetCtx(), _node.GetVAF_Column_ID_3(), null).GetColumnName())));
                     }
                     // Added check to handle approver in case of workflow Responsible
                     else if (_node.GetVAF_WFlow_Incharge_ID() > 0 || _node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
@@ -1382,7 +1382,7 @@ namespace VAdvantage.WF
                 }
                 else
                 {
-                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+                    MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
                     MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                     String subject = GetNode().GetDescription()
@@ -1469,7 +1469,7 @@ namespace VAdvantage.WF
                 }
                 else
                 {
-                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+                    MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
                     MMailText mailtext = new MMailText(GetCtx(), GetNode().GetVAR_MailTemplate_ID(), null);
 
                     String subject = GetNode().GetDescription()
@@ -1919,7 +1919,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             //    stream.Read(data, 0, data.Length);
             //}
             //
-            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
 
             //	Explicit EMail
 
@@ -1952,7 +1952,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                         ////	Attachment
                         if (report != null)
                         {
-                            MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), trx);
+                            MVAFAttachment attachment = new MVAFAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), trx);
                             if (isDocxFile)
                             {
                                 attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".Docx", report);
@@ -2006,7 +2006,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     + GetVAF_TableView_ID() + ", Record_ID=" + GetRecord_ID());
 
             //Check For Genral Attribute 
-            MColumn column = new MColumn(GetCtx(), GetNode().GetVAF_Column_ID(), Get_TrxName());
+            MVAFColumn column = new MVAFColumn(GetCtx(), GetNode().GetVAF_Column_ID(), Get_TrxName());
             if (column.GetColumnName().ToString().ToLower().Equals("VAB_GenFeaturesetinstance_id"))
             {
 
@@ -2095,7 +2095,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 // on tab MaintainVerOnApproval is marked as true and Tab Level is 0
                 if (CheckMaintainVerCol(GetVAF_TableView_ID()) && maintainVerOnApp == "Y" && tabLevel == 0)
                 {
-                    MTable tbl = new MTable(GetCtx(), GetVAF_TableView_ID(), Get_TrxName());
+                    MVAFTableView tbl = new MVAFTableView(GetCtx(), GetVAF_TableView_ID(), Get_TrxName());
                     // Get Key Column Name of First Tab
                     string KeyColName = tbl.GetTableName() + "_ID";
                     // Get ID of kEy column name for first tab
@@ -2108,11 +2108,11 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     {
                         StringBuilder sbPLCols = new StringBuilder("");
                         // Get all tabs in window except first tab (as data is already inserted into version table for first tab) order by seq number
-                        int[] allTabs = MTab.GetAllIDs("VAF_Tab", "VAF_Screen_ID = " + GetVAF_Screen_ID() + " AND SeqNo > " + SeqNo + " ORDER BY SeqNo", Get_TrxName());
+                        int[] allTabs = MVAFTab.GetAllIDs("VAF_Tab", "VAF_Screen_ID = " + GetVAF_Screen_ID() + " AND SeqNo > " + SeqNo + " ORDER BY SeqNo", Get_TrxName());
                         // Loop through all tabs
                         for (int i = 0; i < allTabs.Length; i++)
                         {
-                            MTab tb = new MTab(GetCtx(), Util.GetValueOfInt(allTabs[i]), Get_TrxName());
+                            MVAFTab tb = new MVAFTab(GetCtx(), Util.GetValueOfInt(allTabs[i]), Get_TrxName());
                             sbPLCols.Clear();
 
                             // Check MaintainVersions column in current tab and setting of MaintainVerOnApproval column on tab
@@ -2149,7 +2149,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                                     }
                                 }
 
-                                tbl = new MTable(GetCtx(), tabTableID, Get_TrxName());
+                                tbl = new MVAFTableView(GetCtx(), tabTableID, Get_TrxName());
                                 string ChildLinkCol = Util.GetValueOfString(DB.ExecuteScalar("SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID = " + linkColumnID, null, null));
                                 // case if this tab is child tab of First tab itself
                                 if (ChildLinkCol == KeyColName)
@@ -2203,7 +2203,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <param name="ColName"></param>
         /// <param name="Cols"></param>
         /// <returns></returns>
-        public bool InsertTabData(MTable tbl, Dictionary<string, string> keyIDs, string ColName, string Cols)
+        public bool InsertTabData(MVAFTableView tbl, Dictionary<string, string> keyIDs, string ColName, string Cols)
         {
             DataSet dsTabData = DB.ExecuteDataset("SELECT * FROM " + tbl.GetTableName() + " WHERE " + ColName + " IN (" + Cols + ")");
             if (dsTabData != null && dsTabData.Tables[0].Rows.Count > 0)
@@ -2237,14 +2237,14 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <param name="tbl"></param>
         /// <param name="keyIDs"></param>
         /// <returns></returns>
-        private bool InsertVersionData(PO oldPO, MTable tbl, Dictionary<string, string> keyIDs)
+        private bool InsertVersionData(PO oldPO, MVAFTableView tbl, Dictionary<string, string> keyIDs)
         {
             string TableName = tbl.GetTableName();
             string[] keyCols = oldPO.Get_KeyColumns();
 
-            MColumn[] cols = tbl.GetColumns(true);
+            MVAFColumn[] cols = tbl.GetColumns(true);
 
-            PO poNew = MTable.GetPO(GetCtx(), TableName + "_Ver", 0, Get_TrxName());
+            PO poNew = MVAFTableView.GetPO(GetCtx(), TableName + "_Ver", 0, Get_TrxName());
 
             for (int i = 0; i < cols.Length; i++)
             {
@@ -2454,7 +2454,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 //	Send Approval Notification
                 if (newState.Equals(StateEngine.STATE_ABORTED))
                 {
-                    MClient client = MClient.Get(GetCtx(), doc.GetVAF_Client_ID());
+                    MVAFClient client = MVAFClient.Get(GetCtx(), doc.GetVAF_Client_ID());
                     client.SendEMail(doc.GetDoc_User_ID(),
                         doc.GetDocumentInfo() + ": " + Utility.Msg.GetMsg(GetCtx(), "NotApproved", true),
                         doc.GetSummary()
@@ -2802,7 +2802,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
 
             //
-            MClient client = MClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(_po.GetCtx(), isPOAsDocAction ? doc.GetVAF_Client_ID() : _po.GetVAF_Client_ID());
 
             //	Explicit EMail
 
@@ -2835,7 +2835,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 int bpID = 0, VAF_UserContact_ID = 0;
                 if (_node.GetVAF_Column_ID_1() > 0) //get c_Bpparner column id
                 {
-                    string colName = MColumn.Get(_po.GetCtx(), _node.GetVAF_Column_ID_1()).GetColumnName(); //Get binded column name
+                    string colName = MVAFColumn.Get(_po.GetCtx(), _node.GetVAF_Column_ID_1()).GetColumnName(); //Get binded column name
 
                     Object oo = _po.Get_Value(_po.Get_ColumnIndex(colName));  // Getvalue of binded column from PO
                     if (oo is int)
@@ -2903,7 +2903,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
             {
                 if (_node.GetVAF_Column_ID_2() > 0) //Node's User column
                 {
-                    string colName = MColumn.GetColumnName(_po.GetCtx(), _node.GetVAF_Column_ID_2()); //get binded user column name
+                    string colName = MVAFColumn.GetColumnName(_po.GetCtx(), _node.GetVAF_Column_ID_2()); //get binded user column name
 
                     int index = _po.Get_ColumnIndex(colName); //get index of column
 
@@ -3099,7 +3099,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <param name="message"></param>
         /// <param name="pdf"></param>
         /// <param name="isHTML"></param>
-        private void SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
+        private void SendEMail(MVAFClient client, int VAF_UserContact_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, string action, byte[] bArray = null)
         {
             // create/update message based on the setting on node
@@ -3251,7 +3251,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         }
 
         // Save email to database and call singleton call object to start its working, if node is set as run background otherwise run simply
-        public bool SendEMailBack(MClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int VAF_TableView_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
+        public bool SendEMailBack(MVAFClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int VAF_TableView_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")
         {
             if ((MWFNode.ACTION_EMail.Equals(_node.GetAction()) || MWFNode.ACTION_EMailPlusFaxEMail.Equals(_node.GetAction())) && _node != null && _node.IsBackground())
             {
@@ -3480,7 +3480,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 + "\n" + doc.GetSummary();
             FileInfo pdf = doc.CreatePDF();
             //
-            MClient client = MClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(_po.GetCtx(), doc.GetVAF_Client_ID());
 
             //	Explicit EMail
             SendFaxEMail(client, 0, _node.GetEMail(), subject, message, pdf, isHTML);
@@ -3584,7 +3584,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         /// <param name="subject">subject</param>
         /// <param name="message">message</param>
         /// <param name="pdf">attachment</param>
-        private void SendFaxEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
+        private void SendFaxEMail(MVAFClient client, int VAF_UserContact_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML)
         {
             // create/update message based on the setting on node

@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Prepare
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
             _ce = MCostElement.GetMaterialCostElement(client, MAcctSchema.COSTINGMETHOD_StandardCosting);
             if (_ce.Get_ID() == 0)
             {

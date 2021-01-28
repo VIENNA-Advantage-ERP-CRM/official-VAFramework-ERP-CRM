@@ -88,7 +88,7 @@ namespace VAdvantage.Process
             {
                 int VAF_TableView_ID = Util.GetValueOfInt(tableIDs[i]);
 
-                MTable table = MTable.Get(GetCtx(), VAF_TableView_ID);
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), VAF_TableView_ID);
 
                 // Check on table whether it has single or multiple keys
                 bool hasSingleKey = true;
@@ -120,7 +120,7 @@ namespace VAdvantage.Process
                     hasDBCols = true;
 
                 // get all columns from table
-                MColumn[] columnsAD = table.GetColumns(true);
+                MVAFColumn[] columnsAD = table.GetColumns(true);
 
                 // variables to create HTML as string for both AD and in DB
                 StringBuilder adColName = new StringBuilder("");

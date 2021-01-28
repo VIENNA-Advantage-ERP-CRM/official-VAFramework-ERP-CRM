@@ -653,7 +653,7 @@ namespace VAdvantage.WF
             else if (Is_ValueChanged("IsActive") || Is_ValueChanged("Name")
                 || Is_ValueChanged("Description") || Is_ValueChanged("Help"))
             {
-                MMenu[] menues = MMenu.Get(GetCtx(), "VAF_Workflow_ID=" + GetVAF_Workflow_ID());
+                MVAFMenuConfig[] menues = MVAFMenuConfig.Get(GetCtx(), "VAF_Workflow_ID=" + GetVAF_Workflow_ID());
                 for (int i = 0; i < menues.Length; i++)
                 {
                     menues[i].SetIsActive(IsActive());

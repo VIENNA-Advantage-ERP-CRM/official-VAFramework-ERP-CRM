@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MIssueSystem
+ * Class Name     : MVAFIssueSystem
  * Purpose        : Issue System Model
  * Class Used     : X_R_IssueSystem
  * Chronological    Development
@@ -22,20 +22,20 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MIssueSystem : X_R_IssueSystem
+    public class MVAFIssueSystem : X_R_IssueSystem
     {
    /// <summary>
    /// Get/Set System
    /// </summary>
    /// <param name="issue">issue</param>
    /// <returns>system</returns>
-	static public MIssueSystem Get(MIssue issue)
+	static public MVAFIssueSystem Get(MVAFIssue issue)
 	{
 		if (issue.GetDBAddress() == null)
         {
 			return null;
         }
-		MIssueSystem system = null;
+		MVAFIssueSystem system = null;
 		SqlParameter[] param=new SqlParameter[1];
         IDataReader idr=null;
 		String sql = "SELECT * FROM R_IssueSystem WHERE DBAddress=@param";
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
             idr=DataBase.DB.ExecuteReader(sql,param,null);
 			if (idr.Read())
             {
-				system = new MIssueSystem(issue.GetCtx(),idr, null);
+				system = new MVAFIssueSystem(issue.GetCtx(),idr, null);
             }
             idr.Close();
 		}
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
 		//	New
 		if (system == null)
 		{
-			system = new MIssueSystem(issue.GetCtx(), 0, null);
+			system = new MVAFIssueSystem(issue.GetCtx(), 0, null);
 			system.SetDBAddress(issue.GetDBAddress());
 			system.SetA_Asset_ID(issue.GetA_Asset_ID());
 		}
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
 	}	//	get
 	
 	/**	Logger	*/
-	private static VLogger _log = VLogger.GetVLogger (typeof(MIssueSystem).FullName);
+	private static VLogger _log = VLogger.GetVLogger (typeof(MVAFIssueSystem).FullName);
 	
 	/// <summary>
 	/// Standard Constructor
@@ -97,10 +97,10 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="R_IssueSystem_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MIssueSystem (Ctx ctx, int R_IssueSystem_ID, Trx trxName):base (ctx, R_IssueSystem_ID, trxName)
+	public MVAFIssueSystem (Ctx ctx, int R_IssueSystem_ID, Trx trxName):base (ctx, R_IssueSystem_ID, trxName)
 	{
 		//super (ctx, R_IssueSystem_ID, trxName);
-	}	//	MIssueSystem
+	}	//	MVAFIssueSystem
 
 	/// <summary>
     ///	Load Constructor
@@ -108,11 +108,11 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">trx</param>
-	public MIssueSystem (Ctx ctx, DataRow dr, Trx trxName):base(ctx,dr,trxName)
+	public MVAFIssueSystem (Ctx ctx, DataRow dr, Trx trxName):base(ctx,dr,trxName)
 	{
 		//super (ctx, rs, trxName);
-	}	//	MIssueSystem
-    public MIssueSystem(Ctx ctx,IDataReader idr, Trx trxName)
+	}	//	MVAFIssueSystem
+    public MVAFIssueSystem(Ctx ctx,IDataReader idr, Trx trxName)
         : base(ctx, idr, trxName)
     { }
 
@@ -122,13 +122,13 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
 	{
-		StringBuilder sb = new StringBuilder ("MIssueSystem[");
+		StringBuilder sb = new StringBuilder ("MVAFIssueSystem[");
 		sb.Append(Get_ID())
 			.Append ("-").Append (GetDBAddress())
 			.Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
 			.Append ("]");
 		return sb.ToString ();
 	}	//	toString
-}	//	MIssueSystem
+}	//	MVAFIssueSystem
 
 }

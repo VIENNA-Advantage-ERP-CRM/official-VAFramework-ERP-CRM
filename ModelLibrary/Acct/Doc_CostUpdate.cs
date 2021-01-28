@@ -46,7 +46,7 @@ namespace VAdvantage.Acct
                 mpc = MProductCategory.Get(GetCtx(), costupdate.GetM_Product_Category_ID());
 
             _lines = LoadLines(costupdate);
-            m_ce = MCostElement.GetMaterialCostElement(MClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
+            m_ce = MCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
             SetDateAcct(costupdate.GetDateAcct());
             SetDateDoc(costupdate.GetDateAcct());
             return null;

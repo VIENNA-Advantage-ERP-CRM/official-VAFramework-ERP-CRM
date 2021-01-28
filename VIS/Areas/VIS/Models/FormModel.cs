@@ -827,7 +827,7 @@ namespace VIS.Models
         {
             StringBuilder sql = new StringBuilder();
             int yesCount = 0;
-            int tableID = MTable.Get_Table_ID(tableName);
+            int tableID = MVAFTableView.Get_Table_ID(tableName);
 
             sql.Append("SELECT VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID=" + tableID + " AND ColumnName='" + columnSortName + "'");
             int colID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
@@ -844,7 +844,7 @@ namespace VIS.Models
                     sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + " WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                    MVAFAlterLog log = new MVAFAlterLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
                         _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], 0);
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();
@@ -859,7 +859,7 @@ namespace VIS.Models
                     sql.Append(", Updated=SYS_EXTRACT_UTC(SYSTIMESTAMP) ,UpdatedBy=" + _ctx.GetVAF_UserContact_ID() + "  WHERE " + keyColumnName + "=" + columnIDs[i]);
                     DB.ExecuteQuery(sql.ToString());
 
-                    MChangeLog log = new MChangeLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
+                    MVAFAlterLog log = new MVAFAlterLog(_ctx, 0, null, _ctx.GetVAF_Session_ID(), tableID, colID, keyColumnName, _ctx.GetVAF_Client_ID(),
                         _ctx.GetVAF_Org_ID(), oldValue[columnIDs[i]], (yesCount + 1) + "0");
                     log.SetRecord_ID(Convert.ToInt32(columnIDs[i]));
                     log.Save();
@@ -1262,7 +1262,7 @@ namespace VIS.Models
             var RecID = od.RID.Value;
             // Get parent table ID
             int VAF_TableView_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = '" + origTableName + "'", null, null));
-            MTable tbl = new MTable(ctx, VAF_TableView_ID, null);
+            MVAFTableView tbl = new MVAFTableView(ctx, VAF_TableView_ID, null);
             DataSet dsColumns = null;
             // check if Maintain Version is marked on table
             if (tbl.IsMaintainVersions())
@@ -1370,7 +1370,7 @@ namespace VIS.Models
             if (m_columns.Length > 0)
             {
                 _querySQL.Append("SELECT ");
-                MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
+                MVAFTableView tbl = new MVAFTableView(m_ctx, _VAF_TableView_ID, null);
                 // append all columns from table and get comma separated string
                 _querySQL.Append(tbl.GetSelectColumns());
                 foreach (var column in m_columns)

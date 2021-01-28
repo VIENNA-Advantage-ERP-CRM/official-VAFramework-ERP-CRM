@@ -245,7 +245,7 @@ namespace VAModelAD.Classes
             }
             catch (Exception e)
             {
-                ////ErrorLog.FillErrorLog("MTable.GetPO", "(rs) - Table=" + tableName + ",Class=" + clazz, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                ////ErrorLog.FillErrorLog("MVAFTableView.GetPO", "(rs) - Table=" + tableName + ",Class=" + clazz, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
                 log.Log(Level.SEVERE, "(rs) - Table=" + tableName + ",Class=" + clazz, e);
                 errorLogged = true;
                 log.SaveError("Error", "Table=" + tableName + ",Class=" + clazz);
@@ -274,7 +274,7 @@ namespace VAModelAD.Classes
             }
             catch (Exception e)
             {
-                ////ErrorLog.FillErrorLog("MTable.GetPO", "(rs) - Table=" + tableName + ",Class=" + clazz, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                ////ErrorLog.FillErrorLog("MVAFTableView.GetPO", "(rs) - Table=" + tableName + ",Class=" + clazz, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
                 log.Log(Level.SEVERE, "(rs) - Table=" + tableName + ",Class=" + clazz, e);
                 errorLogged = true;
                 log.SaveError("Error", "Table=" + tableName + ",Class=" + clazz);

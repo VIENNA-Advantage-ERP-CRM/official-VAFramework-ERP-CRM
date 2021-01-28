@@ -111,7 +111,7 @@ namespace VAdvantage.Process
             // marked as "Maintain Versions", then proceed else return
             if (hasMainVerCol)
             {
-                MTable tbl = new MTable(GetCtx(), _VAF_TableView_ID, _trx);
+                MVAFTableView tbl = new MVAFTableView(GetCtx(), _VAF_TableView_ID, _trx);
 
                 string VerTblName = tbl.GetTableName() + "_Ver";
 
@@ -124,12 +124,12 @@ namespace VAdvantage.Process
 
                 // check whether version table is already present in system
                 // if not present then create table 
-                MTable tblVer = null;
+                MVAFTableView tblVer = null;
                 if (Ver_VAF_TableView_ID <= 0)
                 {
                     string tableName = tbl.GetTableName();
                     // create new Version table for parent table
-                    tblVer = new MTable(GetCtx(), 0, _trx);
+                    tblVer = new MVAFTableView(GetCtx(), 0, _trx);
                     tbl.CopyTo(tblVer);
                     tblVer.SetTableName(tableName + "_Ver");
                     tblVer.SetName(tableName + " Ver");
@@ -167,7 +167,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    tblVer = new MTable(GetCtx(), Ver_VAF_TableView_ID, _trx);
+                    tblVer = new MVAFTableView(GetCtx(), Ver_VAF_TableView_ID, _trx);
                     // Create Default Version Columns
                     retMsg = CreateDefaultVerCols(Ver_VAF_TableView_ID);
                     if (retMsg != "")
@@ -179,7 +179,7 @@ namespace VAdvantage.Process
                 if (Ver_VAF_TableView_ID > 0)
                 {
                     // Get all columns from Version Table
-                    int[] ColIDs = MColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + _VAF_TableView_ID, _trx);
+                    int[] ColIDs = MVAFColumn.GetAllIDs("VAF_Column", "VAF_TableView_ID = " + _VAF_TableView_ID, _trx);
 
                     bool hasCols = false;
                     DataSet dsDestCols = DB.ExecuteDataset("SELECT ColumnName, VAF_Column_ID FROM VAF_Column WHERE VAF_TableView_ID = " + Ver_VAF_TableView_ID, null, _trx);
@@ -191,7 +191,7 @@ namespace VAdvantage.Process
                     {
                         bool createNew = true;
                         // object of Column from source table (Master Table)
-                        MColumn sCol = new MColumn(GetCtx(), columnID, _trx);
+                        MVAFColumn sCol = new MVAFColumn(GetCtx(), columnID, _trx);
                         // check if source column is not Virtual Column, proceed in that case only
                         if (!sCol.IsVirtualColumn())
                         {
@@ -203,19 +203,19 @@ namespace VAdvantage.Process
                                     createNew = false;
                             }
                             // Version Column object
-                            MColumn colVer = null;
+                            MVAFColumn colVer = null;
                             int AD_Col_ID = 0;
                             // if column not present in Version table then create new
                             if (createNew)
                             {
-                                colVer = new MColumn(GetCtx(), AD_Col_ID, _trx);
+                                colVer = new MVAFColumn(GetCtx(), AD_Col_ID, _trx);
                             }
                             // if column already present and user pressed sync button on same column of Master table
                             // then create object of existing column (in case of change in any column fields)
                             else if (!createNew && (_VAF_Column_ID == columnID))
                             {
                                 AD_Col_ID = Util.GetValueOfInt(dr[0]["VAF_Column_ID"]);
-                                colVer = new MColumn(GetCtx(), Util.GetValueOfInt(dr[0]["VAF_Column_ID"]), _trx);
+                                colVer = new MVAFColumn(GetCtx(), Util.GetValueOfInt(dr[0]["VAF_Column_ID"]), _trx);
                             }
                             if (colVer != null)
                             {
@@ -352,7 +352,7 @@ namespace VAdvantage.Process
                     }
                     else
                     {
-                        M_Element ele = new M_Element(GetCtx(), 0, _trx);
+                        M_VAFColumnDic ele = new M_VAFColumnDic(GetCtx(), 0, _trx);
                         ele.SetVAF_Client_ID(0);
                         ele.SetVAF_Org_ID(0);
                         ele.SetName(listDefVerCols[i]);
@@ -395,7 +395,7 @@ namespace VAdvantage.Process
         /// <param name="keyCols"></param>
         /// <param name="tblVer"></param>
         /// <returns></returns>
-        private string InsertMKVersionData(MTable baseTbl, string[] keyCols, MTable tblVer)
+        private string InsertMKVersionData(MVAFTableView baseTbl, string[] keyCols, MVAFTableView tblVer)
         {
             string retMsg = "";
             // Get data from Master table
@@ -529,11 +529,11 @@ namespace VAdvantage.Process
         /// <param name="table"></param>
         /// <param name="VAF_Column_ID"></param>
         /// <returns>Message (String)</returns>
-        private string SyncVersionTable(MTable table, int VAF_Column_ID, out bool Success)
+        private string SyncVersionTable(MVAFTableView table, int VAF_Column_ID, out bool Success)
         {
             // create object of Column passed in parameter
             Success = true;
-            MColumn column = new MColumn(GetCtx(), VAF_Column_ID, _trx);
+            MVAFColumn column = new MVAFColumn(GetCtx(), VAF_Column_ID, _trx);
             int noColumns = 0;
             // sync table in database
             string sql = Common.Common.SyncColumn(table, column, out noColumns);
@@ -606,7 +606,7 @@ namespace VAdvantage.Process
                 }
                 if (hasCol)
                     continue;
-                MColumn colVer = new MColumn(GetCtx(), 0, _trx);
+                MVAFColumn colVer = new MVAFColumn(GetCtx(), 0, _trx);
                 colVer.SetExport_ID(null);
                 colVer.SetVAF_TableView_ID(Ver_VAF_TableView_ID);
                 colVer.SetColumnName(listDefVerCols[i]);

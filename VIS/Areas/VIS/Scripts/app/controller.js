@@ -400,7 +400,7 @@
  *  - The Tab maintains the bound property: CurrentRow
  *
  *  Event Hierarchies:
- *      - dataChanged (from MTable)
+ *      - dataChanged (from MVAFTableView)
  *          - setCurrentRow
  *              - Update all Field Values
  *
@@ -6424,7 +6424,7 @@
         //	true NULL
         if ((value == null) || (value.length == 0))
             return null;
-        //	see also MTable.readData
+        //	see also MVAFTableView.readData
         try {
             //	IDs & Integer & CreatedBy/UpdatedBy
             if (this.vo.ColumnName.endsWith("atedBy")

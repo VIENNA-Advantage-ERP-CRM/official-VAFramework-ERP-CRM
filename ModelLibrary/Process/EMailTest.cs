@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            MClient client = MClient.Get(GetCtx(), _VAF_Client_ID);
+            MVAFClient client = MVAFClient.Get(GetCtx(), _VAF_Client_ID);
             log.Info(client.ToString());
 
             //	 Test Client Mail

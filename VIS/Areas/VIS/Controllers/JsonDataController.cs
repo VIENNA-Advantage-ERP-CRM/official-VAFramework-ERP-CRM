@@ -479,7 +479,7 @@ namespace VIS.Controllers
             if (id > 0)
             {
 
-                string tableName = MTable.GetTableName(ctx, tableID);
+                string tableName = MVAFTableView.GetTableName(ctx, tableID);
                 sql1 = "SELECT " + colName + ", VAF_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 

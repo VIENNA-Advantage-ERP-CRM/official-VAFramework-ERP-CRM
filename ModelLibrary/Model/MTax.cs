@@ -483,7 +483,7 @@ namespace VAdvantage.Model
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
-                                        tax = MTable.GetPO(GetCtx(), "FRPT_TaxRate_Acct", 0, null);
+                                        tax = MVAFTableView.GetPO(GetCtx(), "FRPT_TaxRate_Acct", 0, null);
                                         tax.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         tax.Set_ValueNoCheck("VAB_TaxRate_ID", Util.GetValueOfInt(GetVAB_TaxRate_ID()));
                                         tax.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

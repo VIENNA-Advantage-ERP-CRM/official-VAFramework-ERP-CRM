@@ -93,7 +93,7 @@ namespace VAdvantage.Model
             //PropertiesWrapper wrapper = (PropertiesWrapper)ctx.GetCtx();
             //p_ctx = wrapper.source;
             //tableName = wrapper.tableName;
-            //tableID = MTable.Get_Table_ID(tableName);
+            //tableID = MVAFTableView.Get_Table_ID(tableName);
             //// log.info("Table_ID: "+Table_ID);
             //POInfo poi = POInfo.GetPOInfo(ctx, tableID);
             //return poi;

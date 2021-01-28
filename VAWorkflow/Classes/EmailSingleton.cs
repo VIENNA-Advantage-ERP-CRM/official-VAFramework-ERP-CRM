@@ -96,7 +96,7 @@ namespace VAWorkflow.Classes
                                 node = new X_VAF_WFlow_Node(_ctx, Convert.ToInt32(nodeID), null);
                             }
                             FileInfo pdf = null;
-                            MTable table = MTable.Get(_ctx, VAF_TableView_ID);
+                            MVAFTableView table = MVAFTableView.Get(_ctx, VAF_TableView_ID);
                             PO po = table.GetPO(_ctx, Record_ID, null);
                             if (node.IsAttachReport())
                             {
@@ -110,7 +110,7 @@ namespace VAWorkflow.Classes
                                 attachment = doc.CreatePDF();
                             }
                             // Check if there is m class for the record and table and fetch attachment from that class 
-                            //MTable table = MTable.Get(_ctx, VAF_TableView_ID);
+                            //MVAFTableView table = MVAFTableView.Get(_ctx, VAF_TableView_ID);
                             //PO po = table.GetPO(_ctx, Record_ID, null);
 
                             //if (po is VAdvantage.Process.DocAction) // MClass Implement DocAction
@@ -128,7 +128,7 @@ namespace VAWorkflow.Classes
                             //}
 
                             // Create Mclient object and send Email 
-                            MClient client = MClient.Get(_ctx, VAF_Client_ID);
+                            MVAFClient client = MVAFClient.Get(_ctx, VAF_Client_ID);
                             bool mailsent = client.SendEMail(toEMail, toName, subject, message, attachment, isHtml, VAF_TableView_ID, Record_ID, array, fileName);
 
                             ViennaAdvantage.Model.X_VAF_MailQueue mailQueue = new ViennaAdvantage.Model.X_VAF_MailQueue(_ctx, VAF_MailQueue_ID, null);

@@ -9,9 +9,9 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MAlert : X_VAF_Alert
+    public class MVAFAlert : X_VAF_Alert
     {
-        public MAlert(Ctx ctx, int VAF_Alert_ID, Trx trx)
+        public MVAFAlert(Ctx ctx, int VAF_Alert_ID, Trx trx)
             : base(ctx, VAF_Alert_ID, trx)
         {
             if (VAF_Alert_ID == 0)
@@ -26,33 +26,33 @@ namespace VAdvantage.Model
             }
         }	//	MAlert
 
-        public MAlert(Ctx ctx, DataRow rs, Trx trx)
+        public MVAFAlert(Ctx ctx, DataRow rs, Trx trx)
             : base(ctx, rs, trx)
         {
         }	//	MAlert
 
         /**	The Rules						*/
-        private MAlertRule[] m_rules = null;
+        private MVAFAlertSetting[] m_rules = null;
         /**	The Recipients					*/
         private MAlertRecipient[] m_recipients = null;
 
 
-        public MAlertRule[] GetRules(bool reload)
+        public MVAFAlertSetting[] GetRules(bool reload)
         {
             if (m_rules != null && !reload)
                 return m_rules;
             String sql = "SELECT * FROM VAF_AlertSetting "
                 + "WHERE isactive='Y' AND VAF_Alert_ID=" + GetVAF_Alert_ID();
-            List<MAlertRule> list = new List<MAlertRule>();
+            List<MVAFAlertSetting> list = new List<MVAFAlertSetting>();
 
             DataSet ds = DB.ExecuteDataset(sql);
             try
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MAlertRule mAlertRule = new MAlertRule(GetCtx(), dr, null);
-                    ValidateAlertRuleCondition(mAlertRule);
-                    list.Add(mAlertRule);
+                    MVAFAlertSetting MVAFAlertSetting = new MVAFAlertSetting(GetCtx(), dr, null);
+                    ValidateAlertRuleCondition(MVAFAlertSetting);
+                    list.Add(MVAFAlertSetting);
                 }
             }
             catch (Exception e)
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
             //
-            m_rules = new MAlertRule[list.Count()];
+            m_rules = new MVAFAlertSetting[list.Count()];
             m_rules = list.ToArray();
             return m_rules;
         }	//	getRules
@@ -150,7 +150,7 @@ namespace VAdvantage.Model
         *	@param alert alert
         *	@return true if processed
         */
-        public bool ValidateAlertRuleCondition(MAlertRule AlertRule)
+        public bool ValidateAlertRuleCondition(MVAFAlertSetting AlertRule)
         {
             bool returnConditionValue = true;
             int errorType = 0;

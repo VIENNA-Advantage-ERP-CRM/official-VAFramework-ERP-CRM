@@ -156,7 +156,7 @@ namespace VAdvantage.Common
             if (id > 0)
             {
 
-                string tableName = MTable.GetTableName(ctx, tableID);
+                string tableName = MVAFTableView.GetTableName(ctx, tableID);
                 sql1 = "SELECT " + colName + ", VAF_Org_ID FROM " + tableName + " WHERE " + tableName + "_ID =" + Util.GetValueOfString(record_ID);
                 DataSet ds = DB.ExecuteDataset(sql1);
 
@@ -528,7 +528,7 @@ namespace VAdvantage.Common
         /// <param name="column"></param>
         /// <param name="noColumns">OUT parameter, returns 0 if table is being synched for the first time</param>
         /// <returns>string message</returns>
-        public static string SyncColumn(MTable table, MColumn column, out int noColumns)
+        public static string SyncColumn(MVAFTableView table, MVAFColumn column, out int noColumns)
         {
             DatabaseMetaData md = new DatabaseMetaData();
             String catalog = "";
@@ -697,7 +697,7 @@ namespace VAdvantage.Common
 
             POInfo _poInfo = POInfo.GetPOInfo(po.GetCtx(), po.Get_Table_ID());
 
-            MColumn column = (new MTable(po.GetCtx(), po.Get_Table_ID(), null)).GetColumn(variable);
+            MVAFColumn column = (new MVAFTableView(po.GetCtx(), po.Get_Table_ID(), null)).GetColumn(variable);
             if (column.GetVAF_Control_Ref_ID() == DisplayType.Location)
             {
                 StringBuilder sb = new StringBuilder();
@@ -908,7 +908,7 @@ namespace VAdvantage.Common
 
         public static bool IsMultiLingualDocument(Ctx ctx)
         {
-            return VAModelAD.Model.MClient.Get((Ctx)ctx).IsMultiLingualDocument();//
+            return VAModelAD.Model.MVAFClient.Get((Ctx)ctx).IsMultiLingualDocument();//
             //MClient.get(ctx).isMultiLingualDocument();
         }
 

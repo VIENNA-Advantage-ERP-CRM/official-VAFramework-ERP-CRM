@@ -78,14 +78,14 @@ namespace VAdvantage.Process
         X_M_MatchInvCostTrack matchInvCostReverse = null;
 
         int table_WrkOdrTrnsctionLine = 0;
-        MTable tbl_WrkOdrTrnsctionLine = null;
+        MVAFTableView tbl_WrkOdrTrnsctionLine = null;
         int table_WrkOdrTransaction = 0;
-        MTable tbl_WrkOdrTransaction = null;
+        MVAFTableView tbl_WrkOdrTransaction = null;
         PO po_WrkOdrTransaction = null;
         String woTrxType = null;
         PO po_WrkOdrTrnsctionLine = null;
         int table_AssetDisposal = 0;
-        MTable tbl_AssetDisposal = null;
+        MVAFTableView tbl_AssetDisposal = null;
         PO po_AssetDisposal = null;
 
 
@@ -140,15 +140,15 @@ namespace VAdvantage.Process
                 if (count > 0)
                 {
                     table_WrkOdrTransaction = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename = 'VAMFG_M_WrkOdrTransaction' AND IsActive = 'Y' "));
-                    tbl_WrkOdrTransaction = new MTable(GetCtx(), table_WrkOdrTransaction, null);
+                    tbl_WrkOdrTransaction = new MVAFTableView(GetCtx(), table_WrkOdrTransaction, null);
 
                     table_WrkOdrTrnsctionLine = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename = 'VAMFG_M_WrkOdrTrnsctionLine' AND IsActive = 'Y' "));
-                    tbl_WrkOdrTrnsctionLine = new MTable(GetCtx(), table_WrkOdrTrnsctionLine, null);
+                    tbl_WrkOdrTrnsctionLine = new MVAFTableView(GetCtx(), table_WrkOdrTrnsctionLine, null);
                 }
                 if (countVAFAM > 0)
                 {
                     table_AssetDisposal = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TABLEVIEW_ID  FROM VAF_TABLEVIEW WHERE tablename = 'VAFAM_AssetDisposal' AND IsActive = 'Y' "));
-                    tbl_AssetDisposal = new MTable(GetCtx(), table_AssetDisposal, null);
+                    tbl_AssetDisposal = new MVAFTableView(GetCtx(), table_AssetDisposal, null);
                 }
 
                 int diff = (int)(Math.Ceiling((DateTime.Now.Date - minDateRecord.Value.Date).TotalDays));
@@ -242,7 +242,7 @@ namespace VAdvantage.Process
                         {
                             // for checking - costing calculate on completion or not
                             // IsCostImmediate = true - calculate cost on completion else through process
-                            MClient client = MClient.Get(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["vaf_client_id"]));
+                            MVAFClient client = MVAFClient.Get(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["vaf_client_id"]));
 
                             #region Cost Calculation For Material Receipt
                             try

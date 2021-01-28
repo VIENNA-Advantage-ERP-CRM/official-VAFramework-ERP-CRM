@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MIssueProject
+ * Class Name     : MVAFIssueProject
  * Purpose        : Issue Project Model
  * Class Used     : X_R_IssueProject
  * Chronological    Development
@@ -21,20 +21,20 @@ using VAdvantage.Logging;
 using VAdvantage.Utility;
 namespace VAdvantage.Model
 {
-    public class MIssueProject : X_R_IssueProject
+    public class MVAFIssueProject : X_R_IssueProject
     {
   /// <summary>
   /// Get/Set Project
   /// </summary>
   /// <param name="issue">issue</param>
   /// <returns>project</returns>
-	static public MIssueProject Get (MIssue issue)
+	static public MVAFIssueProject Get (MVAFIssue issue)
 	{
 		if (issue.GetName() == null)
         {
 			return null;
         }
-		MIssueProject pj = null;
+		MVAFIssueProject pj = null;
 		String sql = "SELECT * FROM R_IssueProject WHERE Name=@param";
 		SqlParameter[] param=new SqlParameter[1];
         IDataReader idr=null;
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             idr=DataBase.DB.ExecuteReader(sql,param,null);
             if (idr.Read())
             {
-				pj = new MIssueProject(issue.GetCtx(),idr, null);
+				pj = new MVAFIssueProject(issue.GetCtx(),idr, null);
             }
 			idr.Close();
 		}
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
 			//	New
 		if (pj == null)
 		{
-			pj = new MIssueProject(issue.GetCtx(), 0, null);
+			pj = new MVAFIssueProject(issue.GetCtx(), 0, null);
 			pj.SetName(issue.GetName());
 			pj.SetA_Asset_ID(issue);
 		}
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
 	}	//	get
 	
 	/**	Logger	*/
-	private static VLogger _log = VLogger.GetVLogger (typeof(MIssueProject).FullName);
+	private static VLogger _log = VLogger.GetVLogger (typeof(MVAFIssueProject).FullName);
 	
 	
 	/// <summary>
@@ -92,10 +92,10 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="R_IssueProject_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MIssueProject (Ctx ctx, int R_IssueProject_ID, Trx trxName):base(ctx, R_IssueProject_ID, trxName)
+	public MVAFIssueProject (Ctx ctx, int R_IssueProject_ID, Trx trxName):base(ctx, R_IssueProject_ID, trxName)
 	{
 		//super (ctx, R_IssueProject_ID, trxName);
-	}	//	MIssueProject
+	}	//	MVAFIssueProject
 
 	/// <summary>
 	/// Load Constructor
@@ -103,10 +103,10 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">trx</param>
-	public MIssueProject (Ctx ctx, DataRow dr, Trx trxName):base (ctx, dr, trxName)
+	public MVAFIssueProject (Ctx ctx, DataRow dr, Trx trxName):base (ctx, dr, trxName)
 	{
 		//super (ctx, rs, trxName)
-	}	//	MIssueProject
+	}	//	MVAFIssueProject
 
         /// <summary>
 	/// Load Constructor
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">trx</param>
-	public MIssueProject (Ctx ctx,IDataReader idr, Trx trxName):base(ctx, idr, trxName)
+	public MVAFIssueProject (Ctx ctx,IDataReader idr, Trx trxName):base(ctx, idr, trxName)
 	{
 		//super (ctx, rs, trxName);
 	}
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
 	///	Set VAA_Asset_ID
 	/// </summary>
 	/// <param name="issue"></param>
-	public void SetA_Asset_ID (MIssue issue)
+	public void SetA_Asset_ID (MVAFIssue issue)
 	{
 		int VAA_Asset_ID = 0;
         //String sql = "SELECT * FROM VAA_Asset a "
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
 	/// <returns>info</returns>
 	public override String ToString ()
 	{
-		StringBuilder sb = new StringBuilder ("MIssueProject[");
+		StringBuilder sb = new StringBuilder ("MVAFIssueProject[");
 		sb.Append (Get_ID())
 			.Append ("-").Append (GetName())
 			.Append(",VAA_Asset_ID=").Append(GetA_Asset_ID())
@@ -154,6 +154,6 @@ namespace VAdvantage.Model
 		return sb.ToString ();
 	}	//	toString
 	
-}	//	MIssueProject
+}	//	MVAFIssueProject
 
 }

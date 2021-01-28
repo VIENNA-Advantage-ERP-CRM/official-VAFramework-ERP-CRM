@@ -1625,7 +1625,7 @@ namespace VAdvantage.Model
                     {
                         MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                         retMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                         log.SaveWarning("Warning", retMsg);
                     }
@@ -2201,7 +2201,7 @@ namespace VAdvantage.Model
                 {
                     MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                     _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                        + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                     return DocActionVariables.STATUS_INVALID;
                 }
@@ -2671,7 +2671,7 @@ namespace VAdvantage.Model
 
                 // for checking - costing calculate on completion or not
                 // IsCostImmediate = true - calculate cost on completion
-                MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -3013,7 +3013,7 @@ namespace VAdvantage.Model
                             }
                             //Added by Bharat on 12-April-2017 for Asset Expenses
                             #region To Mark Entry on Asset Expenses
-                            PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
+                            PO po = MVAFTableView.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
                             if (po != null)
                             {
                                 po.SetVAF_Client_ID(GetVAF_Client_ID());
@@ -5185,7 +5185,7 @@ namespace VAdvantage.Model
                         {
                             if (Util.GetValueOfBool(rLine.Get_Value("VAFAM_IsAssetRelated")))
                             {
-                                PO po = MTable.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
+                                PO po = MVAFTableView.GetPO(GetCtx(), "VAFAM_Expense", 0, Get_Trx());
                                 if (po != null)
                                 {
                                     CreateExpenseAgainstReverseInvoice(rLine, oldline, po);
@@ -5366,7 +5366,7 @@ namespace VAdvantage.Model
                 {
                     while (idr.Read())
                     {
-                        PO oldPO = MTable.GetPO(GetCtx(), "VAFAM_Expense", Util.GetValueOfInt(idr["VAFAM_Expense_ID"]), Get_Trx());
+                        PO oldPO = MVAFTableView.GetPO(GetCtx(), "VAFAM_Expense", Util.GetValueOfInt(idr["VAFAM_Expense_ID"]), Get_Trx());
                         MInvoice iv = new MInvoice(GetCtx(), rLine.GetVAB_Invoice_ID(), Get_TrxName());
                         oldPO.Set_Value("Description", "(" + iv.GetDocumentNo() + "<-)");
                         oldPO.Save(Get_TrxName());

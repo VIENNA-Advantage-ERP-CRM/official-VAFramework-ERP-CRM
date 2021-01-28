@@ -333,7 +333,7 @@ namespace VAdvantage.Model
         /// <param name="tableName"></param>
         /// <param name="type"></param>
         /// <returns>change log or null</returns>
-        public MChangeLog ChangeLog(Trx trx, int VAF_AlterLog_ID,
+        public MVAFAlterLog ChangeLog(Trx trx, int VAF_AlterLog_ID,
         int VAF_TableView_ID, int VAF_Column_ID, Object keyInfo,
         int VAF_Client_ID, int VAF_Org_ID,
         Object oldValue, Object newValue,
@@ -347,14 +347,14 @@ namespace VAdvantage.Model
                 return null;
 
             //	No Log
-            if (MChangeLog.IsNotLogged(VAF_TableView_ID, tableName, VAF_Column_ID, type))
+            if (MVAFAlterLog.IsNotLogged(VAF_TableView_ID, tableName, VAF_Column_ID, type))
                 return null;
 
             //	Role Logging
             // MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (_webStoreSession						//	log if WebStore
-                || MChangeLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
+                || MVAFAlterLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
                 || (IsRoleChangeLog(GetCtx())))//	Role Logging
             {; }
             else
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
                 String trxName = null;
                 if (trx != null)
                     trxName = trx.GetTrxName();
-                MChangeLog cl = new MChangeLog(GetCtx(),
+                MVAFAlterLog cl = new MVAFAlterLog(GetCtx(),
                     VAF_AlterLog_ID, trxName, GetVAF_Session_ID(),
                     VAF_TableView_ID, VAF_Column_ID, keyInfo, VAF_Client_ID, VAF_Org_ID,
                     oldValue, newValue);
@@ -546,13 +546,13 @@ namespace VAdvantage.Model
         public Boolean IsLogged(int VAF_TableView_ID, String tableName, String type)
         {
             //	No Log
-            if (MChangeLog.IsNotLogged(VAF_TableView_ID, tableName, 0, type))
+            if (MVAFAlterLog.IsNotLogged(VAF_TableView_ID, tableName, 0, type))
                 return false;
             //	Role Logging
             //MRole role = MRole.GetDefault(GetCtx(), false);
             //	Do we need to log
             if (IsWebStoreSession()						//	log if WebStore
-                || MChangeLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
+                || MVAFAlterLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
                 || IsRoleChangeLog(GetCtx()))	//	Role Logging
                 return true;
             //

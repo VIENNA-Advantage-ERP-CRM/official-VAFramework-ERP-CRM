@@ -430,7 +430,7 @@ namespace VAdvantage.Model
             int MatchPO_OrderLineId = 0;
             StringBuilder query = new StringBuilder();
             conversionNotFound = "";
-            MClient client = MClient.Get(ctx, VAF_Client_ID);
+            MVAFClient client = MVAFClient.Get(ctx, VAF_Client_ID);
             string costQueuseIds = null;
             int M_Warehouse_Id = 0; // is used to manage costing at warehouse level
             int SourceM_Warehouse_Id = 0; // is used to manage costing at warehouse level during Inventory Move

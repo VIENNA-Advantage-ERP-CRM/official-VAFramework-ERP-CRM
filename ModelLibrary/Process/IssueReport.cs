@@ -55,7 +55,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return "NOT reported - Enable Error Reporting in Window System";
             }
             //
-            MIssue issue = new MIssue(GetCtx(), _VAF_Issue_ID, Get_TrxName());
+            MVAFIssue issue = new MVAFIssue(GetCtx(), _VAF_Issue_ID, Get_TrxName());
             if (issue.Get_ID() == 0)
             {
                 return "No Issue to report - ID=" + _VAF_Issue_ID;

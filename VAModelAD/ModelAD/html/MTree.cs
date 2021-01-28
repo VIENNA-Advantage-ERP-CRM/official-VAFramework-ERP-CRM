@@ -888,7 +888,7 @@ namespace VAdvantage.Model
             {
                 if (VAF_Tab_ID > 0)
                 {
-                    MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
+                    MVAFTab tab = new MVAFTab(p_ctx, VAF_Tab_ID, null);
                     if (!String.IsNullOrEmpty(tab.GetWhereClause()))
                     {
                         sql += " AND " + tab.GetWhereClause();
@@ -899,7 +899,7 @@ namespace VAdvantage.Model
             {
                 if (VAF_Tab_ID > 0)
                 {
-                    MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
+                    MVAFTab tab = new MVAFTab(p_ctx, VAF_Tab_ID, null);
                     if (!String.IsNullOrEmpty(tab.GetWhereClause()))
                     {
                         sql += " WHERE " + tab.GetWhereClause();
@@ -965,7 +965,7 @@ namespace VAdvantage.Model
                 + " LEFT OUTER JOIN VAF_TreeInfoBar tb ON (tn.VAF_TreeInfo_ID=tb.VAF_TreeInfo_ID"
                 + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) ");	//	#1
 
-            string tblName = MTable.GetTableName(p_ctx, GetVAF_TableView_ID());
+            string tblName = MVAFTableView.GetTableName(p_ctx, GetVAF_TableView_ID());
             //on (mp.M_Product_ID= tn.Node_ID)
 
             //if (onDemand || VAF_Tab_ID > 0)
@@ -1005,7 +1005,7 @@ namespace VAdvantage.Model
             string sqls = sql.ToString();
             if (VAF_Tab_ID > 0)
             {
-                MTab tab = new MTab(p_ctx, VAF_Tab_ID, null);
+                MVAFTab tab = new MVAFTab(p_ctx, VAF_Tab_ID, null);
                 string _whareCaluse = tab.GetWhereClause();
 
                 _whareCaluse = Env.ParseContext(p_ctx, windowNo, _whareCaluse, false);
@@ -1441,7 +1441,7 @@ namespace VAdvantage.Model
         public String GetSourceTableName(bool tableNameOnly)
         {
             int VAF_TableView_ID = GetVAF_TableView_ID();
-            String tableName = MTable.GetTableName(GetCtx(), VAF_TableView_ID);
+            String tableName = MVAFTableView.GetTableName(GetCtx(), VAF_TableView_ID);
             //
             if (tableNameOnly)
                 return tableName;
@@ -1524,7 +1524,7 @@ namespace VAdvantage.Model
         public String GetActionColorName()
         {
             int VAF_TableView_ID = GetVAF_TableView_ID();
-            String tableName = MTable.GetTableName(GetCtx(), VAF_TableView_ID);
+            String tableName = MVAFTableView.GetTableName(GetCtx(), VAF_TableView_ID);
             //
             if ("VAF_MenuConfig".Equals(tableName))
                 return "t.Action";

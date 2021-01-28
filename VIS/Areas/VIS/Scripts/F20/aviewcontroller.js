@@ -545,7 +545,7 @@
                         //  MField => VEditor - New Field value to be updated to editor
                         iControl.setReadOnly(true);
                         mField.setPropertyChangeListener(iControl);
-                        //  VEditor => this - New Editor value to be updated here (MTable)
+                        //  VEditor => this - New Editor value to be updated here (MVAFTableView)
                         iControl.addVetoableChangeListener(this);
                     }
                     this.vGridPanel.addField(iControl, mField);

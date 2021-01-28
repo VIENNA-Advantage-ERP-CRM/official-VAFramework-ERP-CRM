@@ -286,10 +286,10 @@ namespace VAdvantage.Process
                 trxName = sp.Get_Trx();
             }
             //	Sequence for DocumentNo/Value
-            MClient[] clients = MClient.GetAll(ctx);
+            MVAFClient[] clients = MVAFClient.GetAll(ctx);
             for (int i = 0; i < clients.Length; i++)
             {
-                MClient client = clients[i];
+                MVAFClient client = clients[i];
                 if (!client.IsActive())
                 {
                     continue;

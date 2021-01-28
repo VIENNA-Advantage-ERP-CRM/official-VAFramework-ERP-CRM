@@ -351,10 +351,10 @@ namespace VAdvantage.Model
         /// Get Image
         /// </summary>
         /// <returns>image or null</returns>
-        public MImage GetImage()
+        public MVAFImage GetImage()
         {
             if (GetVAF_Image_ID() != 0)
-                return MImage.Get(GetCtx(), GetVAF_Image_ID());
+                return MVAFImage.Get(GetCtx(), GetVAF_Image_ID());
             return null;
         }	//	getImage
 
@@ -364,7 +364,7 @@ namespace VAdvantage.Model
         /// <returns>data or null</returns>
         public byte[] GetData()
         {
-            MImage image = GetImage();
+            MVAFImage image = GetImage();
             if (image != null)
             {
                 byte[] data = image.GetData();
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
             }
 
             //	Attachment
-            MAttachment att = GetAttachment();
+            MVAFAttachment att = GetAttachment();
             if (att == null || att.GetEntryCount() == 0)
             {
                 log.Config("No Attachment");
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
         /// <returns>update or null if no attachment</returns>
         public DateTime? GetAttachmentUpdated()
         {
-            MAttachment att = GetAttachment();
+            MVAFAttachment att = GetAttachment();
             if (att == null)
                 return null;
             return att.GetUpdated();

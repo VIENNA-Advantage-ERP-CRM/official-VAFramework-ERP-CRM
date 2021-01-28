@@ -2331,7 +2331,7 @@ namespace VAdvantage.Model
         {
             log.Fine("ID=" + Record_ID);
 
-            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             if (table.IsSingleKey() || Record_ID == 0)
             {
@@ -2695,7 +2695,7 @@ namespace VAdvantage.Model
         /// <returns>ID or -1</returns>
         public int GetKeyID(int row)
         {
-            //	Log.info("MTable.GetKeyID - row=" + row + ", keyColIdx=" + m_indexKeyColumn);
+            //	Log.info("MVAFTableView.GetKeyID - row=" + row + ", keyColIdx=" + m_indexKeyColumn);
             if (_indexKeyColumn != -1)
             {
 
@@ -2741,7 +2741,7 @@ namespace VAdvantage.Model
         /// <returns>Object of that row/column</returns>
         public object GetValueAt(int row, int col)
         {
-            //	log.config( "MTable.getValueAt r=" + row + " c=" + col);
+            //	log.config( "MVAFTableView.getValueAt r=" + row + " c=" + col);
             if (!_open || row < 0 || col < 0 || row >= _bufferTable.Rows.Count)// _buffer.Tables[0].Rows.Count)
             {
                 //	log.fine( "Out of bounds - Open=" + m_open + ", RowCount=" + m_rowCount);
@@ -2924,7 +2924,7 @@ namespace VAdvantage.Model
 
             DataRow rowData = _bufferTable.Rows[row];// _buffer.Tables[0].Rows[row];
             //
-            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             int recordId = GetKeyID(row);
             if (recordId != -1)
@@ -3035,7 +3035,7 @@ namespace VAdvantage.Model
 
             // DataRow rowData = _bufferTable.Rows[row];// _buffer.Tables[0].Rows[row];
             //
-            MTable table = MTable.Get(_ctx, _VAF_TableView_ID);
+            MVAFTableView table = MVAFTableView.Get(_ctx, _VAF_TableView_ID);
             PO po = null;
             int recordId = GetKeyID(-1);
             if (recordId != -1)

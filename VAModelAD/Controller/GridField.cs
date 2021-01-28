@@ -1181,7 +1181,7 @@ namespace VAdvantage.Model
             //	true NULL
             if (value == null || value.Length == 0)
                 return DBNull.Value;
-            //	see also MTable.readData
+            //	see also MVAFTableView.readData
             try
             {
                 //	IDs & Integer & CreatedBy/UpdatedBy

@@ -157,7 +157,7 @@ namespace VAdvantage.Process
             if (mailText_ID == 0)
             {
                 subject = Msg.Translate(GetCtx(), "VAR_Request_ID")
-                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + _req.GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + _req.GetDocumentNo() + " (●" + MVAFTableView.Get_Table_ID(Table_Name) + "-" + _req.GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             }
             //	Message
 
@@ -169,7 +169,7 @@ namespace VAdvantage.Process
             log.Finer(message.ToString());
 
             //	Prepare sending Notice/Mail
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
             //	ReSet from if external
             if (from.GetEMailUser() == null || from.GetEMailUserPW() == null)
                 from = null;
@@ -441,7 +441,7 @@ namespace VAdvantage.Process
         /// <param name="message">Message to be sent to user</param>
         /// <param name="pdf"> Attachment</param>
         private void SendNoticeNow(int VAF_UserContact_ID, String NotificationType,
-          MClient client, MUser from, String subject, String message, FileInfo pdf)
+          MVAFClient client, MUser from, String subject, String message, FileInfo pdf)
         {
             MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
             if (NotificationType == null)
@@ -453,7 +453,7 @@ namespace VAdvantage.Process
                 VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
                 _mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 _mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-                _mAttachment.SetVAF_TableView_ID(MTable.Get_Table_ID(Table_Name));
+                _mAttachment.SetVAF_TableView_ID(MVAFTableView.Get_Table_ID(Table_Name));
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");

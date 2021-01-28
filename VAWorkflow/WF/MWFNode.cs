@@ -41,7 +41,7 @@ namespace VAdvantage.WF
         //Translation Flag
         private bool _translated = false;
         //Column
-        private MColumn _column = null;
+        private MVAFColumn _column = null;
         //Process Parameters
         private MWFNodePara[] _paras = null;
         //Duration Base MS	
@@ -329,12 +329,12 @@ namespace VAdvantage.WF
         ///Get Column
         /// </summary>
         /// <returns>column if valid</returns>
-        public MColumn GetColumn()
+        public MVAFColumn GetColumn()
         {
             if (GetVAF_Column_ID() == 0)
                 return null;
             if (_column == null)
-                _column = MColumn.Get(GetCtx(), GetVAF_Column_ID());
+                _column = MVAFColumn.Get(GetCtx(), GetVAF_Column_ID());
             return _column;
         }
 

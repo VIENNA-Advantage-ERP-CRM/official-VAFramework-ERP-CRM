@@ -78,7 +78,7 @@ namespace VAdvantage.Model
         public String GetTableName()
         {
             int VAF_TableView_ID = GetVAF_TableView_ID();
-            return MTable.GetTableName(GetCtx(), VAF_TableView_ID);
+            return MVAFTableView.GetTableName(GetCtx(), VAF_TableView_ID);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
         public String GetKeyColumnName()
         {
             int VAF_Column_ID = GetColumn_Key_ID();
-            return MColumn.GetColumnName(GetCtx(), VAF_Column_ID);
+            return MVAFColumn.GetColumnName(GetCtx(), VAF_Column_ID);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         public String GetDisplayColumnName()
         {
             int VAF_Column_ID = GetColumn_Display_ID();
-            return MColumn.GetColumnName(GetCtx(), VAF_Column_ID);
+            return MVAFColumn.GetColumnName(GetCtx(), VAF_Column_ID);
         }
 
         /// <summary>

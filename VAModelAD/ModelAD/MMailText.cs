@@ -274,7 +274,7 @@ namespace VAdvantage.Model
             if (value == null)
                 return "";
 
-            MColumn column = (new MTable(GetCtx(), po.Get_Table_ID(), Get_Trx())).GetColumn(variable);
+            MVAFColumn column = (new MVAFTableView(GetCtx(), po.Get_Table_ID(), Get_Trx())).GetColumn(variable);
             if (column.GetVAF_Control_Ref_ID() == DisplayType.Location)
             {
                 StringBuilder sb = new StringBuilder();

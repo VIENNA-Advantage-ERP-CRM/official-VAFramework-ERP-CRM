@@ -483,7 +483,7 @@ namespace VAdvantage.Print
                     return GetIndex(_columnInfo[i].GetColumnName());
             }
             //	OK for virtual Columns with TableDirect, Search
-            MColumn col = MColumn.Get(GetCtx(), VAF_Column_ID);
+            MVAFColumn col = MVAFColumn.Get(GetCtx(), VAF_Column_ID);
             if (col != null && col.IsVirtualColumn())
                 return -1;		//	not found, but OK		
 

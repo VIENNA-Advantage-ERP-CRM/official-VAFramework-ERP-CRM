@@ -40,7 +40,7 @@ namespace ViennaAdvantage.Model
                     {
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
-                            //MTable table = MTable.Get(GetCtx(), "VADMS_Team_Access");
+                            //MVAFTableView table = MVAFTableView.Get(GetCtx(), "VADMS_Team_Access");
                             //PO pos = table.GetPO(GetCtx(), 0, null);
 
                             //pos.Set_Value("VAF_TableView_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]));
@@ -67,7 +67,7 @@ namespace ViennaAdvantage.Model
                             if (documentAccess == 0)
                             {
 
-                                MTable tableUserAccess = MTable.Get(GetCtx(), "VADMS_User_Access");
+                                MVAFTableView tableUserAccess = MVAFTableView.Get(GetCtx(), "VADMS_User_Access");
                                 PO posUserAccess = tableUserAccess.GetPO(GetCtx(), 0, null);
 
                                 posUserAccess.Set_Value("VAF_TableView_ID", Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]));

@@ -242,7 +242,7 @@ namespace VIS.Helpers
                 int VAF_Image_ID = Util.GetValueOfInt(dr["VAF_Image_ID"]);
                 if (VAF_Image_ID > 0)
                 {
-                    var img = new VAdvantage.Model.MImage(ctx, VAF_Image_ID, null);
+                    var img = new VAdvantage.Model.MVAFImage(ctx, VAF_Image_ID, null);
 
                     if (img.GetFontName() != null && img.GetFontName().Length > 0)
                     {

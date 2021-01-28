@@ -781,7 +781,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MAcctSchema mas = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
+            MAcctSchema mas = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             if (mas != null && mas.IsAutoPeriodControl())
             {
                 //	if (as.getVAB_YearPeriod_ID() == getVAB_YearPeriod_ID())
@@ -1020,7 +1020,7 @@ namespace VAdvantage.Model
             if (DocBaseType == null)
                 return "@NotFound@ @DocBaseType@";
 
-            MAcctSchema as1 = MClient.Get(ctx, VAF_Client_ID).GetAcctSchema();
+            MAcctSchema as1 = MVAFClient.Get(ctx, VAF_Client_ID).GetAcctSchema();
             if (as1 == null)
                 return "@NotFound@ @VAB_AccountBook_ID@ for VAF_Client_ID=" + VAF_Client_ID;
             if (as1.IsAutoPeriodControl())
@@ -1032,7 +1032,7 @@ namespace VAdvantage.Model
             }
 
             //	Get all Calendars in line with Organizations
-            MClientInfo clientInfo = MClientInfo.Get(ctx, VAF_Client_ID, null);
+            MVAFClientDetail clientInfo = MVAFClientDetail.Get(ctx, VAF_Client_ID, null);
             List<int> orgCalendars = new List<int>();
             List<int> calendars = new List<int>();
             foreach (int org in orgs)
@@ -1163,7 +1163,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                as1 = MClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
+                as1 = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             }
             if (as1 != null && as1.IsAutoPeriodControl())
             {

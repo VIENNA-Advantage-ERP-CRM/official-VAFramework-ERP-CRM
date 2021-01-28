@@ -168,7 +168,7 @@ namespace VAdvantage.Model
             if (_vo.VAF_Image_ID == 0)
                 return null;
             //
-            Model.MImage mImage = MImage.Get((Context)_vo.GetCtx(), _vo.VAF_Image_ID);
+            Model.MVAFImage mImage = MVAFImage.Get((Context)_vo.GetCtx(), _vo.VAF_Image_ID);
             return mImage.GetImage();
             
         }   //  getImage

@@ -61,13 +61,13 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("doIt = From=" + from_VAF_ImportFormat_ID + " To=" + to_VAF_ImportFormat_ID);
-            MImpFormat from = new MImpFormat(GetCtx(), from_VAF_ImportFormat_ID, Get_Trx());
+            MVAFImportFormat from = new MVAFImportFormat(GetCtx(), from_VAF_ImportFormat_ID, Get_Trx());
             if (from.GetVAF_ImportFormat_ID() != from_VAF_ImportFormat_ID)
             {
                 throw new Exception("From Format not found - " + from_VAF_ImportFormat_ID);
             }
             //
-            MImpFormat to = new MImpFormat(GetCtx(), to_VAF_ImportFormat_ID, Get_Trx());
+            MVAFImportFormat to = new MVAFImportFormat(GetCtx(), to_VAF_ImportFormat_ID, Get_Trx());
             if (to.GetVAF_ImportFormat_ID() != to_VAF_ImportFormat_ID)
             {
                 throw new Exception("To Format not found - " + from_VAF_ImportFormat_ID);
@@ -78,11 +78,11 @@ namespace VAdvantage.Process
                 throw new Exception("From-To do Not have same Format Table");
             }
             //
-            MImpFormatRow[] rows = from.GetRows();	//	incl. inactive
+            MVAFImportFormatRow[] rows = from.GetRows();	//	incl. inactive
             for (int i = 0; i < rows.Length; i++)
             {
-                MImpFormatRow row = rows[i];
-                MImpFormatRow copy = new MImpFormatRow(to, row);
+                MVAFImportFormatRow row = rows[i];
+                MVAFImportFormatRow copy = new MVAFImportFormatRow(to, row);
                 if (!copy.Save())
                 {
                     throw new Exception("Copy error");

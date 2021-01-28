@@ -279,7 +279,7 @@ namespace VAdvantage.Model
                                         //wrhus = new X_FRPT_Warehouse_Acct(GetCtx(), 0, null);
                                         if (recordFound == 0)
                                         {
-                                            wrhus = MTable.GetPO(GetCtx(), "FRPT_Warehouse_Acct", 0, null);
+                                            wrhus = MVAFTableView.GetPO(GetCtx(), "FRPT_Warehouse_Acct", 0, null);
                                             wrhus.Set_ValueNoCheck("VAF_Org_ID", 0);
                                             wrhus.Set_ValueNoCheck("M_Warehouse_ID", Util.GetValueOfInt(GetM_Warehouse_ID()));
                                             wrhus.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
@@ -372,7 +372,7 @@ namespace VAdvantage.Model
             // Added by Vivek on 21/09/2017 suggested by Ravikant
             // Check if Drop ship warehouse already exist for the same organization
             // Check Column exist in DB -- Vivek on 17/10/2017 by Mukesh sir
-            MTable tab = MTable.Get(GetCtx(), "M_Warehouse");
+            MVAFTableView tab = MVAFTableView.Get(GetCtx(), "M_Warehouse");
             if (tab.Get_ColumnIndex("IsDropShip") > 0)
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From M_WareHouse Where VAF_Org_ID=" + GetVAF_Org_ID() + " AND IsDropShip='Y' AND IsActive='Y'")) > 0)

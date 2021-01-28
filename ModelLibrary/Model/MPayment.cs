@@ -1165,7 +1165,7 @@ namespace VAdvantage.Model
                             // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
                             MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                             _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                                + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         }
                     }
 
@@ -1728,7 +1728,7 @@ namespace VAdvantage.Model
         public void SetAmount(int VAB_Currency_ID, Decimal payAmt)
         {
             if (VAB_Currency_ID == 0)
-                VAB_Currency_ID = MClient.Get(GetCtx()).GetVAB_Currency_ID();
+                VAB_Currency_ID = MVAFClient.Get(GetCtx()).GetVAB_Currency_ID();
             SetVAB_Currency_ID(VAB_Currency_ID);
             SetPayAmt(payAmt);
         }
@@ -2742,7 +2742,7 @@ namespace VAdvantage.Model
                             // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
                             MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                             _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                                + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                             return DocActionVariables.STATUS_INVALID;
                         }
@@ -2988,7 +2988,7 @@ namespace VAdvantage.Model
                     {
                         string sql = @"SELECT vaf_tableview_ID  FROM vaf_tableview WHERE tablename LIKE 'VA026_TRLoanApplication' AND IsActive = 'Y'";
                         int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                        MTable tbl = new MTable(GetCtx(), tableId, null);
+                        MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId, null);
                         PO po = tbl.GetPO(GetCtx(), Get_ValueAsInt("VA026_TRLoanApplication_ID"), Get_Trx());
                         decimal conversionAmt = 0;
                         conversionAmt = Util.GetValueOfDecimal(Get_Value("PayAmt"));
@@ -3047,7 +3047,7 @@ namespace VAdvantage.Model
                         // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
                         MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                         _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }
@@ -3128,7 +3128,7 @@ namespace VAdvantage.Model
                                         // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
                                         MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
                                         _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                                         return DocActionVariables.STATUS_INVALID;
                                     }
                                 }
@@ -3299,7 +3299,7 @@ namespace VAdvantage.Model
                         Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
-                        MClientInfo client = MClientInfo.Get(GetCtx(), GetVAF_Client_ID());
+                        MVAFClientDetail client = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID());
                         MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetVAB_AccountBook1_ID());
 
                         if (order.GetVAB_Currency_ID() != GetVAB_Currency_ID())
@@ -3665,10 +3665,10 @@ namespace VAdvantage.Model
         /// <returns>True when record created successfully</returns>
         private bool SpiltOrderSchedule(Ctx ctx, MPayment payment, int VA009_OrderPaySchedule_ID, int BaseCurrency, Decimal Amt, Trx TrxName)
         {
-            PO poOrignal = MTable.GetPO(ctx, "VA009_OrderPaySchedule", VA009_OrderPaySchedule_ID, TrxName);
+            PO poOrignal = MVAFTableView.GetPO(ctx, "VA009_OrderPaySchedule", VA009_OrderPaySchedule_ID, TrxName);
             if (poOrignal != null && poOrignal.Get_ID() > 0)
             {
-                PO poNew = MTable.GetPO(ctx, "VA009_OrderPaySchedule", 0, TrxName);
+                PO poNew = MVAFTableView.GetPO(ctx, "VA009_OrderPaySchedule", 0, TrxName);
                 poNew.Set_TrxName(TrxName);
                 PO.CopyValues(poOrignal, poNew, poOrignal.GetVAF_Client_ID(), poOrignal.GetVAF_Org_ID());
                 poNew.Set_Value("VA009_Variance", 0);
@@ -3903,7 +3903,7 @@ namespace VAdvantage.Model
                 {
                     sql = @"SELECT vaf_tableview_ID  FROM vaf_tableview WHERE tablename LIKE 'VA026_LCDetail' AND IsActive = 'Y'";
                     int tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    MTable tbl = new MTable(GetCtx(), tableId, null);
+                    MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId, null);
                     po = tbl.GetPO(GetCtx(), Util.GetValueOfInt(GetVA026_LCDetail_ID()), Get_Trx());
                     currencyTo = Util.GetValueOfInt(po.Get_Value("VAB_Currency_ID"));
 

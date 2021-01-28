@@ -181,11 +181,11 @@ namespace VIS.Helpers
         public int VAF_TableView_ID;
         public int VAF_Column_ID;
         public bool IsReadOnly;
-        public static List<ColumnAccess> Get(MColumnAccess[] colAccess)
+        public static List<ColumnAccess> Get(MVAFColumnRights[] colAccess)
         {
             List<ColumnAccess> cl = new List<ColumnAccess>();
             ColumnAccess ca = null;
-            foreach (MColumnAccess c in colAccess)
+            foreach (MVAFColumnRights c in colAccess)
             {
                 ca = new ColumnAccess();
                 ca.IsExclude = c.IsExclude();

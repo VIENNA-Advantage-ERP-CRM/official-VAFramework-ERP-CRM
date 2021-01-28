@@ -357,7 +357,7 @@ namespace VIS.Controllers
                 ViewBag.WarehouseList = new List<KeyNamePair>();
                 ViewBag.ClientList = new List<KeyNamePair>();
 
-                ViewBag.Languages = Language.GetLanguages(MLanguage.GetSystemLanguage());
+                ViewBag.Languages = Language.GetLanguages(MVAFLanguage.GetSystemLanguage());
 
                 Session["ctx"] = null;
                 ViewBag.direction = "ltr";
@@ -654,7 +654,7 @@ namespace VIS.Controllers
                 {
                     return Json(JsonConvert.SerializeObject(null), JsonRequestBehavior.AllowGet);
                 }
-                MImage objImage = new MImage(ctx, imageID, null);
+                MVAFImage objImage = new MVAFImage(ctx, imageID, null);
                 string imgByte = Convert.ToBase64String(objImage.GetThumbnailByte(140, 120));
                 return Json(JsonConvert.SerializeObject(imgByte), JsonRequestBehavior.AllowGet);
             }

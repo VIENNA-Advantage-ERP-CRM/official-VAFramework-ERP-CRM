@@ -26,7 +26,7 @@ namespace VIS.Controllers
         public JsonResult ColumnName(String fields)
         {
             Ctx ctx = Session["ctx"] as Ctx;
-            String columnName = VAdvantage.Model.MColumn.GetColumnName(ctx, Util.GetValueOfInt(fields));
+            String columnName = VAdvantage.Model.MVAFColumn.GetColumnName(ctx, Util.GetValueOfInt(fields));
             return Json(JsonConvert.SerializeObject(columnName), JsonRequestBehavior.AllowGet);
         }
 

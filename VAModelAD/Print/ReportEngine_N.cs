@@ -951,7 +951,7 @@ namespace VAdvantage.Print
             int copies = 1;
 
             //	Language
-            VAModelAD.Model.MClient client = VAModelAD.Model.MClient.Get(ctx);
+            VAModelAD.Model.MVAFClient client = VAModelAD.Model.MVAFClient.Get(ctx);
             Language language = client.GetLanguage();
             //	Get Document Info
             String sql = null;

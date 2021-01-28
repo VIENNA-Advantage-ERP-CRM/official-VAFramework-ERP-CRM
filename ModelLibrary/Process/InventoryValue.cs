@@ -81,7 +81,7 @@ namespace VAdvantage.Process
                 + ",M_CostElement_ID=" + _M_CostElement_ID);
 
             MWarehouse wh = MWarehouse.Get(GetCtx(), _M_Warehouse_ID);
-            MClient c = MClient.Get(GetCtx(), wh.GetVAF_Client_ID());
+            MVAFClient c = MVAFClient.Get(GetCtx(), wh.GetVAF_Client_ID());
             MAcctSchema mas = c.GetAcctSchema();
 
             //  Delete (just to be sure)

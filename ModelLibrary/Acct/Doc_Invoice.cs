@@ -1497,7 +1497,7 @@ namespace VAdvantage.Acct
                     bool ok = cd.Save();
                     if (ok && !cd.IsProcessed())
                     {
-                        MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
+                        MVAFClient client = MVAFClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                         if (client.IsCostImmediate())
                         {
                             cd.Process();
@@ -1516,7 +1516,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">accounting schema</param>
         private void UpdateProductPO(MAcctSchema as1)
         {
-            MClientInfo ci = MClientInfo.Get(GetCtx(), as1.GetVAF_Client_ID());
+            MVAFClientDetail ci = MVAFClientDetail.Get(GetCtx(), as1.GetVAF_Client_ID());
             if (ci.GetVAB_AccountBook1_ID() != as1.GetVAB_AccountBook_ID())
             {
                 return;

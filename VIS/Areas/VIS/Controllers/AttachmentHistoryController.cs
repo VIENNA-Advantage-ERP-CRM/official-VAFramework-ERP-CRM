@@ -115,7 +115,7 @@ namespace VIS.Controllers
             //string path = "";
             var fName = "";
 
-            MAttachment att = new MAttachment(ct, AttID, null);
+            MVAFAttachment att = new MVAFAttachment(ct, AttID, null);
             fName = att.GetFile(ID);
 
             if (!fName.StartsWith("ERROR:"))

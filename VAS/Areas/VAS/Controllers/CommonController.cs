@@ -366,7 +366,7 @@ namespace VIS.Controllers
                 if (Util.GetValueOfBool(paramValue[1]))
                     TableName = TableName + "_Ver";
 
-                int VAF_TableView_ID = MTable.Get_Table_ID(TableName);
+                int VAF_TableView_ID = MVAFTableView.Get_Table_ID(TableName);
 
                 CommonModel objCommonModel = new CommonModel();
 
@@ -981,9 +981,9 @@ namespace VIS.Controllers
                 inout = new MInOut(ctx, M_InOut_ID, null);
             }
             // Added By Bharat for ViennaAdvantage Compatiability. Code not called from ViennaAdvantage.
-            MTable tbl = null;
+            MVAFTableView tbl = null;
             PO po = null;
-            tbl = new MTable(ctx, 320, null);
+            tbl = new MVAFTableView(ctx, 320, null);
             /**
              *  Selected        - 0
              *  QtyEntered      - 1
@@ -2346,7 +2346,7 @@ namespace VIS.Controllers
             Trx trx = null;     // Trx.GetTrx("MatchPO");
             string msg = "";
             string conversionNotFoundMatch = "";
-            MClient client = null;
+            MVAFClient client = null;
             decimal qty = 0;
             bool success = false;
             int M_InOutLine_ID = 0;
@@ -2943,7 +2943,7 @@ namespace VIS.Controllers
 
         public bool UpdateArchive(Ctx ctx, string name, string des, string help, int archiveId)
         {
-            MArchive ar = new MArchive(ctx, archiveId, null);//  m_archives[m_index];
+            MVAFArchive ar = new MVAFArchive(ctx, archiveId, null);//  m_archives[m_index];
             ar.SetName(name);
             ar.SetDescription(des);
             ar.SetHelp(help);
@@ -2956,7 +2956,7 @@ namespace VIS.Controllers
 
         public string DownloadPdf(Ctx ctx, int archiveId)
         {
-            MArchive ar = new MArchive(ctx, archiveId, null);//  m_archives[m_index];
+            MVAFArchive ar = new MVAFArchive(ctx, archiveId, null);//  m_archives[m_index];
             MSession sess = MSession.Get(ctx);
 
             //Save Action Log
@@ -3256,7 +3256,7 @@ namespace VIS.Controllers
             Dictionary<string, string> retRes = new Dictionary<string, string>();
             retRes["Success"] = "Y";
             retRes["Msg"] = "";
-            PO _po = MTable.GetPO(ctx, TableName, Record_ID, null);
+            PO _po = MVAFTableView.GetPO(ctx, TableName, Record_ID, null);
             // PO delete function
             if (!_po.Delete(true))
             {
@@ -3286,7 +3286,7 @@ namespace VIS.Controllers
         {
             if (rowData != null)
             {
-                MTable tbl = new MTable(ctx, rowData.VAF_TableView_ID, null);
+                MVAFTableView tbl = new MVAFTableView(ctx, rowData.VAF_TableView_ID, null);
 
                 StringBuilder sbSql = new StringBuilder("SELECT COUNT(VAF_TableView_ID) FROM VAF_TableView WHERE TableName = '" + rowData.TableName + "_Ver'");
 
@@ -3353,7 +3353,7 @@ namespace VIS.Controllers
             if (m_columns.Length > 0)
             {
                 _querySQL.Append("SELECT ");
-                MTable tbl = new MTable(m_ctx, _VAF_TableView_ID, null);
+                MVAFTableView tbl = new MVAFTableView(m_ctx, _VAF_TableView_ID, null);
                 // append all columns from table and get comma separated string
                 _querySQL.Append(tbl.GetSelectColumns());
                 foreach (var column in m_columns)

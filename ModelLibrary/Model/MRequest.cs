@@ -1455,7 +1455,7 @@ namespace VAdvantage.Model
         private String CheckEMail()
         {
             //  Mail Host
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
             if (client == null
                 || client.GetSmtpHost() == null
                 || client.GetSmtpHost().Length == 0)
@@ -1666,7 +1666,7 @@ namespace VAdvantage.Model
                     };
             String subject = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
             String message = subject + "\n" + GetSummary();
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
             MUser from = MUser.Get(GetCtx(), VAF_UserContact_ID);
             MUser to = MUser.Get(GetCtx(), GetSalesRep_ID());
             //
@@ -1686,7 +1686,7 @@ namespace VAdvantage.Model
             if (mailText_ID == 0)
             {
                 subject = Msg.Translate(GetCtx(), "VAR_Request_ID")
-                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MTable.Get_Table_ID(Table_Name) + "-" + GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
+                   + " " + Msg.GetMsg(GetCtx(), "Updated", true) + ": " + GetDocumentNo() + " (●" + MVAFTableView.Get_Table_ID(Table_Name) + "-" + GetVAR_Request_ID() + "●) " + Msg.GetMsg(GetCtx(), "DoNotChange");
             }
             //	Message
 
@@ -1698,7 +1698,7 @@ namespace VAdvantage.Model
             log.Finer(message.ToString());
 
             //	Prepare sending Notice/Mail
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
             //	ReSet from if external
             if (from.GetEMailUser() == null || from.GetEMailUserPW() == null)
                 from = null;
@@ -1870,7 +1870,7 @@ namespace VAdvantage.Model
          *	@param pdf optional attachment
          */
         private void SendNoticeNow(int VAF_UserContact_ID, String NotificationType,
-            MClient client, MUser from, String subject, String message, FileInfo pdf)
+            MVAFClient client, MUser from, String subject, String message, FileInfo pdf)
         {
             MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
             if (NotificationType == null)
@@ -1882,7 +1882,7 @@ namespace VAdvantage.Model
                 VAdvantage.Model.MMailAttachment1 _mAttachment = new VAdvantage.Model.MMailAttachment1(GetCtx(), 0, null);
                 _mAttachment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 _mAttachment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
-                _mAttachment.SetVAF_TableView_ID(MTable.Get_Table_ID(Table_Name));
+                _mAttachment.SetVAF_TableView_ID(MVAFTableView.Get_Table_ID(Table_Name));
                 _mAttachment.IsActive();
                 _mAttachment.SetMailAddress("");
                 _mAttachment.SetAttachmentType("M");

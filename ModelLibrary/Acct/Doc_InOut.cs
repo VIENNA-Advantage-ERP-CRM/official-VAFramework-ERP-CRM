@@ -68,7 +68,7 @@ namespace VAdvantage.Acct
             _MatchRequirementR = X_VAF_ClientDetail.MATCHREQUIREMENTR_None;
             if (!inout.IsSOTrx())
             {
-                _MatchRequirementR = MClientInfo.Get(GetCtx(), inout.GetVAF_Client_ID())
+                _MatchRequirementR = MVAFClientDetail.Get(GetCtx(), inout.GetVAF_Client_ID())
                     .GetMatchRequirementR();
                 String mr = inout.GetMatchRequirementR();
                 if (mr == null)

@@ -510,7 +510,7 @@ namespace VAdvantage.Print
                         }
                         else if (index == -1)
                         {
-                            MColumn col = new MColumn(ctx, VAF_Column_ID, null);
+                            MVAFColumn col = new MVAFColumn(ctx, VAF_Column_ID, null);
                             string obscureType = col.GetObscureType();
                             if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetVAF_TableView_ID(),VAF_Column_ID,false))
                             {
@@ -648,7 +648,7 @@ namespace VAdvantage.Print
 
             if (VAF_Tab_ID > 0)
             {
-                MTab tab = new MTab(ctx, VAF_Tab_ID, null);
+                MVAFTab tab = new MVAFTab(ctx, VAF_Tab_ID, null);
                 string where = tab.GetWhereClause();
                 if (where != null && where.Length > 0)
                 {
@@ -662,8 +662,8 @@ namespace VAdvantage.Print
                 }
             }
 
-            MTable tableNaam = MTable.Get(ctx, tableName);
-            MColumn cols = tableNaam.GetColumn("VAF_JInstance_ID");
+            MVAFTableView tableNaam = MVAFTableView.Get(ctx, tableName);
+            MVAFColumn cols = tableNaam.GetColumn("VAF_JInstance_ID");
             if (cols != null && _printInfo.GetVAF_JInstance_ID() > 0)
             {
                 if (finalSQL.ToString().ToUpper().Contains(" WHERE "))

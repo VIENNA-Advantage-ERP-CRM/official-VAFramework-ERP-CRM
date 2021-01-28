@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         ///	Parent Constructor
         /// </summary>
         /// <param name="parent">parent parent</param>
-       public MTabPanel(MTab parent)
+       public MTabPanel(MVAFTab parent)
             : base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //this(parent.GetCtx(), 0, parent.Get_TrxName());

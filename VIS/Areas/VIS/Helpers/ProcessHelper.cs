@@ -510,7 +510,7 @@ namespace VIS.Helpers
             {
                 parentIDs.Append(",").Append(currentnode);
             }
-            string adtableName = MTable.GetTableName(ctx, tree.GetVAF_TableView_ID());
+            string adtableName = MVAFTableView.GetTableName(ctx, tree.GetVAF_TableView_ID());
 
             string tableName = tree.GetNodeTableName();
 
@@ -592,7 +592,7 @@ namespace VIS.Helpers
                 if (nodeID > 0)
                 {
                     MTree tree = new MTree(_ctx, Convert.ToInt32(treeID), null);
-                    string tableName = MTable.GetTableName(_ctx, tree.GetVAF_TableView_ID());
+                    string tableName = MVAFTableView.GetTableName(_ctx, tree.GetVAF_TableView_ID());
 
                     _query = new Query(tableName);
 
@@ -955,7 +955,7 @@ namespace VIS.Helpers
         /// <returns></returns>
         public static bool ArchiveDoc(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int VAB_BusinessPartner_ID, bool isReport, byte[] binaryData, string reportPath)
         {
-            MArchive archive = new MArchive(ctx, 0, null);
+            MVAFArchive archive = new MVAFArchive(ctx, 0, null);
             archive.SetName(Name);
             archive.SetIsReport(isReport);
             archive.SetVAF_Job_ID(VAF_Job_ID);

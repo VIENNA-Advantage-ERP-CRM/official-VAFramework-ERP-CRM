@@ -113,15 +113,15 @@ namespace VAdvantage.Model
         /// </summary>
         private void InitColumns()
         {
-            //MTable table = null;
-            //MTable table = MTable.get(Env.getCtx(), m_trlTableName);
-            MTable table = MTable.Get(Utility.Env.GetContext(), _trlTableName);
+            //MVAFTableView table = null;
+            //MVAFTableView table = MVAFTableView.get(Env.getCtx(), m_trlTableName);
+            MVAFTableView table = MVAFTableView.Get(Utility.Env.GetContext(), _trlTableName);
             if (table == null)
                 throw new ArgumentException("Table Not found=" + _trlTableName);
-            MColumn[] columns = table.GetColumns(false);
+            MVAFColumn[] columns = table.GetColumns(false);
             for (int i = 0; i < columns.Length; i++)
             {
-                MColumn column = columns[i];
+                MVAFColumn column = columns[i];
                 if (column.IsStandardColumn())
                     continue;
                 String columnName = column.GetColumnName();

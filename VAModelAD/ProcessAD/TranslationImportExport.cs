@@ -132,8 +132,8 @@ namespace VAdvantage.Process
                 else
                     sql += " AND AccessLevel NOT IN ('1','2','3')";	// Org/Client/Both
                 sql += " ORDER BY TableName";
-                List<MTable> tables = MTable.GetTablesByQuery(GetCtx(), sql);
-                foreach (MTable table in tables)
+                List<MVAFTableView> tables = MVAFTableView.GetTablesByQuery(GetCtx(), sql);
+                foreach (MVAFTableView table in tables)
                 {
                     String tableName = table.GetTableName();
                     msg = null;
@@ -159,7 +159,7 @@ namespace VAdvantage.Process
             }
             else	//	single table
             {
-                MTable table = MTable.Get(GetCtx(), _VAF_TableView_ID);
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), _VAF_TableView_ID);
                 msg = null;
 
                 //msg = imp ? t.ImportTrl(_Directory, table.GetTableName()) : t.ExportTrl(_Directory, table.GetTableName(), _TranslationLevel);   // Commented and added following code in IF-ELSE on the basis of Module parameter.(Sukhwinder)

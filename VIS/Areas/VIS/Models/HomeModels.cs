@@ -41,7 +41,7 @@ namespace VIS.Models
             MUser user = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
             int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
-            MImage mimg = new MImage(ctx, imageID, null);
+            MVAFImage mimg = new MVAFImage(ctx, imageID, null);
             mimg.ByteArray = buffer;
             mimg.ImageFormat = imageName.Substring(imageName.LastIndexOf('.'));
             mimg.SetName(imageName);

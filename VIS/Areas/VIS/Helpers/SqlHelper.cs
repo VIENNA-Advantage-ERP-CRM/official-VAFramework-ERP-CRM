@@ -367,7 +367,7 @@ namespace VIS.Helpers
                 {
                     continue;
                 }
-                int tableID = MTable.Get_Table_ID(tableName);
+                int tableID = MVAFTableView.Get_Table_ID(tableName);
                 if (tableID <= 0)
                 {
                     return false;
@@ -396,7 +396,7 @@ namespace VIS.Helpers
                 string tableName = sqlArray[1];
                 if (!string.IsNullOrEmpty(tableName))
                 {
-                    int tableID = MTable.Get_Table_ID(tableName);
+                    int tableID = MVAFTableView.Get_Table_ID(tableName);
                     if (tableID <= 0)
                     {
                         return false;

@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         //
         private NaturalAccountMap<String, MElementValue> m_nap = null;
         //
-        private MClient m_client;
+        private MVAFClient m_client;
         private MOrg m_org;
         private MAcctSchema m_as;
         //
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
             if (name == null || name.Length == 0)
                 name = "newClient";
             m_clientName = name;
-            m_client = new MClient(m_ctx, 0, true, m_trx);
+            m_client = new MVAFClient(m_ctx, 0, true, m_trx);
             m_client.SetValue(m_clientName);
             m_client.SetName(m_clientName);
             if (!m_client.Save())
@@ -374,7 +374,7 @@ namespace VAdvantage.Model
             if (name == null || name.Length == 0)
                 name = "newClient";
             m_clientName = name;
-            m_client = new MClient(m_ctx, 0, true, m_trx);
+            m_client = new MVAFClient(m_ctx, 0, true, m_trx);
             m_client.SetValue(m_clientName);
             m_client.SetName(m_clientName);
             m_client.SetIsPostImmediate(true);

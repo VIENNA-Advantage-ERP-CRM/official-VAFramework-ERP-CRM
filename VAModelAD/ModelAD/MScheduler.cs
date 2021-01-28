@@ -598,7 +598,7 @@ namespace VAdvantage.Model
 
                     if (report != null)
                     {
-                        MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
+                        MVAFAttachment attachment = new MVAFAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
                         attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
 
                         if (isDocxFile)
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
                         attachment.SetTextMsg(GetName());
                         attachment.Save();
                     }
-                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+                    MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
                     success = SendEMail(client, userIDs[i], null, GetName(), GetDescription(), null, true, 0, 0, report);
 
@@ -634,7 +634,7 @@ namespace VAdvantage.Model
         /// <param name="message"></param>
         /// <param name="pdf"></param>
         /// <param name="isHTML"></param>
-        private bool SendEMail(MClient client, int VAF_UserContact_ID, String email, String subject,
+        private bool SendEMail(MVAFClient client, int VAF_UserContact_ID, String email, String subject,
             String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, byte[] bArray = null)
         {
             if (VAF_UserContact_ID != 0)
@@ -1110,7 +1110,7 @@ namespace VAdvantage.Model
             //	Send Mail
             // if (m_supervisor.IsNotificationEMail())
             //{
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
             String subject = client.GetName() + ": " + GetName();
 
             SendEMail(client, GetSupervisor_ID(), null, subject, message, null, false, 0, 0, report);
@@ -1129,7 +1129,7 @@ namespace VAdvantage.Model
             //	Attachment
             if (ok && (report != null))
             {
-                MAttachment attachment = new MAttachment(GetCtx(), X_VAF_Notice.Table_ID, note.GetVAF_Notice_ID(), null);
+                MVAFAttachment attachment = new MVAFAttachment(GetCtx(), X_VAF_Notice.Table_ID, note.GetVAF_Notice_ID(), null);
                 attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
                 // attachment.AddEntry(attachmentFile.FullName);
                 if (isDocxFile)

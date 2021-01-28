@@ -131,7 +131,7 @@ namespace VAdvantage.Model
                                 int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                 if (recordFound == 0)
                                 {
-                                    withholdingAcct = MTable.GetPO(GetCtx(), "FRPT_Withholding_Acct", 0, null);
+                                    withholdingAcct = MVAFTableView.GetPO(GetCtx(), "FRPT_Withholding_Acct", 0, null);
                                     withholdingAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
                                     withholdingAcct.Set_ValueNoCheck("VAB_Withholding_ID", Util.GetValueOfInt(GetVAB_Withholding_ID()));
                                     withholdingAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(dsDefaultAcct.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

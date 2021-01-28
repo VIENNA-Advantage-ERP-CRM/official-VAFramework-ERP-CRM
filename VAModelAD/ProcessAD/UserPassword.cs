@@ -115,7 +115,7 @@ namespace VAdvantage.Process
 
             if (!string.IsNullOrEmpty(p_NewPassword))
             {
-                MColumn column = MColumn.Get(GetCtx(), 417); // Password Column 
+                MVAFColumn column = MVAFColumn.Get(GetCtx(), 417); // Password Column 
                 if (column.IsEncrypted())
                     p_NewPassword = SecureEngine.Encrypt(p_NewPassword);
                 sql += ", Password=" + GlobalVariable.TO_STRING(p_NewPassword);

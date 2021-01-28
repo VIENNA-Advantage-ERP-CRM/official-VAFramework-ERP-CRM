@@ -61,7 +61,7 @@ namespace VAdvantage.Process
         override protected string DoIt()
         {
             //IDbTransaction trx = ExecuteQuery.GerServerTransaction();
-            MTab tab = new MTab(GetCtx(), p_VAF_Tab_ID, Get_Trx());
+            MVAFTab tab = new MVAFTab(GetCtx(), p_VAF_Tab_ID, Get_Trx());
             //MTab tab = new MTab(GetCtx(), p_VAF_Tab_ID, trx.ToString());
             if (p_VAF_Tab_ID == 0 || tab == null || tab.Get_ID() == 0)
             {
@@ -94,9 +94,9 @@ namespace VAdvantage.Process
                     DataRow dr = ds.Tables[0].Rows[i];
                     //MColumn column = new MColumn (getCtx(),dr, Get_Trx());
                     //MColumn column = new MColumn(GetCtx(), dr, null);
-                    MColumn column = new MColumn(GetCtx(), dr, Get_Trx());
+                    MVAFColumn column = new MVAFColumn(GetCtx(), dr, Get_Trx());
                     //
-                    MField field = new MField(tab);
+                    MVAFField field = new MVAFField(tab);
                     field.SetColumn(column);
                     field.SetMRIsDisplayed("Y");
                     if (column.IsKey())

@@ -180,8 +180,8 @@
     <Compile Include="Interface\BankVerificationInterface.cs" />
     <Compile Include="Interface\ReplenishInterface.cs" />
     <Compile Include="Interface\UserPricingInterface.cs" />
-    <Compile Include="ModelAD\MClient.cs" />
-    <Compile Include="ModelAD\MClientInfo.cs" />
+    <Compile Include="ModelAD\MVAFClient.cs" />
+    <Compile Include="ModelAD\MVAFClientDetail.cs" />
     <Compile Include="ModelAD\MCloudSetup.cs" />
     <Compile Include="ModelAD\MOrg.cs" />
     <Compile Include="ModelAD\MOrgInfo.cs" />
@@ -207,10 +207,10 @@
     <Compile Include="Model\MAd.cs" />
     <Compile Include="Model\MAging.cs" />
     <Compile Include="Model\MAlert.cs" />
-    <Compile Include="Model\MAlertProcessor.cs" />
+    <Compile Include="Model\MVAFAlertHandler.cs" />
     <Compile Include="Model\MAlertProcessorLog.cs" />
     <Compile Include="Model\MAlertRecipient.cs" />
-    <Compile Include="Model\MAlertRule.cs" />
+    <Compile Include="Model\MVAFAlertSetting.cs" />
     <Compile Include="Model\MAllocationHdr.cs" />
     <Compile Include="Model\MAllocationLine.cs" />
     <Compile Include="Model\MAsset.cs" />
@@ -274,7 +274,7 @@
     <Compile Include="Model\MCountry.cs" />
     <Compile Include="Model\MCStage.cs" />
     <Compile Include="Model\MCStageElement.cs" />
-    <Compile Include="Model\MCtxArea.cs" />
+    <Compile Include="Model\MContextScope.cs" />
     <Compile Include="Model\MCurrCrossRate.cs" />
     <Compile Include="Model\MCurrency.cs" />
     <Compile Include="Model\MCurrencyAcct.cs" />
@@ -344,7 +344,7 @@
     <Compile Include="Model\MInvoicePaySchedule.cs" />
     <Compile Include="Model\MInvoiceSchedule.cs" />
     <Compile Include="Model\MInvoiceTax.cs" />
-    <Compile Include="Model\MIssue.cs" />
+    <Compile Include="Model\MVAFIssue.cs" />
     <Compile Include="Model\MIssueProject.cs" />
     <Compile Include="Model\MIssueSystem.cs" />
     <Compile Include="Model\MIssueUser.cs" />
@@ -354,9 +354,9 @@
     <Compile Include="Model\MKPI.cs" />
     <Compile Include="Model\MLandedCost.cs" />
     <Compile Include="Model\MLandedCostAllocation.cs" />
-    <Compile Include="Model\MLdapAccess.cs" />
-    <Compile Include="Model\MLdapProcessor.cs" />
-    <Compile Include="Model\MLdapProcessorLog.cs" />
+    <Compile Include="Model\MVAFLdapRights.cs" />
+    <Compile Include="Model\MVAFLdapHandler.cs" />
+    <Compile Include="Model\MVAFLdapHandlerLog.cs" />
     <Compile Include="Model\MLdapUser.cs" />
     <Compile Include="Model\MLead.cs" />
     <Compile Include="Model\MLineDimension.cs" />

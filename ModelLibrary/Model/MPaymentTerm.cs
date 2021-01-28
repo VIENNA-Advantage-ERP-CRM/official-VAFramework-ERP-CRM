@@ -1284,7 +1284,7 @@ namespace VAdvantage.Model
             //                                 INNER JOIN vaf_client c ON c.vaf_client_id = ci.vaf_client_id INNER JOIN VAB_Invoice i ON c.vaf_client_id    = i.vaf_client_id
             //                                 WHERE i.vaf_client_id = " + invoice.GetVAF_Client_ID());
             //            BaseCurrency = Util.GetValueOfInt(DB.ExecuteScalar(_sqlBsCrrncy.ToString(), null, null));
-            BaseCurrency = MClientInfo.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetVAB_Currency_ID();
+            BaseCurrency = MVAFClientDetail.Get(GetCtx(), invoice.GetVAF_Client_ID()).GetVAB_Currency_ID();
             if (BaseCurrency != invoice.GetVAB_Currency_ID())
             {
                 decimal multiplyRate = MConversionRate.GetRate(invoice.GetVAB_Currency_ID(), BaseCurrency, invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());

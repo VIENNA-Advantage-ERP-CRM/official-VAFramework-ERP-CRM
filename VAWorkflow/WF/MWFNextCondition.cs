@@ -94,7 +94,7 @@ namespace VAdvantage.WF
                 value2 = "";
 
             // If column is of bool type and user insert y or n in condition, then convert them to true or false to match with value got from PO.
-            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetVAF_Control_Ref_ID().Equals(DisplayType.YesNo))
+            if (MVAFColumn.Get(GetCtx(), GetVAF_Column_ID()).GetVAF_Control_Ref_ID().Equals(DisplayType.YesNo))
             {
                 if (value1.ToLower().Equals("y"))
                 {
@@ -126,7 +126,7 @@ namespace VAdvantage.WF
             bool result = false;
 
             //Lakhwinder
-            if (MColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("VAB_GENFEATURESETINSTANCE_ID"))
+            if (MVAFColumn.Get(GetCtx(), GetVAF_Column_ID()).GetColumnName().ToUpper().Equals("VAB_GENFEATURESETINSTANCE_ID"))
             {
                 return EvaluateAttributeCondition(po);
             }

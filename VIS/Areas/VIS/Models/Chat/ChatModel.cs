@@ -212,7 +212,7 @@ namespace VIS.Models
                     {
                         UserImages uimsg = new UserImages();
                         uimsg.VAF_Image_ID = imgID;
-                        MImage mimg = new MImage(ctx, imgID, null);
+                        MVAFImage mimg = new MVAFImage(ctx, imgID, null);
                         uimsg.UserImg = mimg.GetThumbnailURL(46, 46);
                         imgIds.Add(uimsg);
                     }

@@ -81,7 +81,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else
             {
 
-                MTable table = new MTable(GetCtx(), p_VAF_TableView_ID, Get_Trx());
+                MVAFTableView table = new MVAFTableView(GetCtx(), p_VAF_TableView_ID, Get_Trx());
                 if ((table == null) || (table.Get_ID() == 0))
                     throw new Exception("@NotFound@ @VAF_TableView_ID@ " + p_VAF_TableView_ID);
                 log.Info(table.GetTableName() + ", EntityType=" + p_EntityType);
@@ -113,7 +113,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 String tableType = ds.Tables[0].Rows[i]["TABLE_TYPE"].ToString();
 
                 //	Try to find
-                MTable table = MTable.Get(GetCtx(), tableName);
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), tableName);
                 //	Create new ?
                 if (table == null)
                 {
@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Info(tableName + " - " + tableType);
 
                     //	Create New
-                    table = new MTable(GetCtx(), 0, Get_Trx());
+                    table = new MVAFTableView(GetCtx(), 0, Get_Trx());
                     table.SetEntityType(p_EntityType);
                     table.SetName(tableName);
                     table.SetTableName(tableName);
@@ -161,9 +161,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="table">Table Object</param>
         /// <param name="entityType">Entity type</param>
         /// <returns></returns>
-        protected List<String> AddTableColumn(Ctx ctx, DataSet rs, MTable table, String entityType)
+        protected List<String> AddTableColumn(Ctx ctx, DataSet rs, MVAFTableView table, String entityType)
         {
-            //MClientShare
+            //MVAFClientShare
             List<String> colName = new List<String>();
             String tableName = table.GetTableName();
             if (DatabaseType.IsOracle)
@@ -177,7 +177,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         continue;
                     String columnName = rs.Tables[0].Rows[i]["COLUMN_NAME"].ToString();
                     colName.Add(columnName);
-                    MColumn column = table.GetColumn(columnName);
+                    MVAFColumn column = table.GetColumn(columnName);
                     if (column != null)
                         continue;
                     //int dataType = Utility.Util.GetValueOfInt(rs.Tables[0].Rows[i]["DATATYPE"].ToString());
@@ -190,13 +190,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + ", Nullable=" + nullable + ", Size=" + size + ", Digits="
                         + digits);
                     //
-                    column = new MColumn(table);
+                    column = new MVAFColumn(table);
                     column.SetEntityType(entityType);
                     //	Element
-                    M_Element element = M_Element.Get(ctx, columnName, Get_Trx());
+                    M_VAFColumnDic element = M_VAFColumnDic.Get(ctx, columnName, Get_Trx());
                     if (element == null)
                     {
-                        element = new M_Element(ctx, columnName, entityType, Get_Trx());
+                        element = new M_VAFColumnDic(ctx, columnName, entityType, Get_Trx());
                         element.Save();
                     }
                     //	Column Sync

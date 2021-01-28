@@ -159,14 +159,14 @@ namespace VAdvantage.Model
                     String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
-                        MClient client = MClient.Get(order.GetCtx());
+                        MVAFClient client = MVAFClient.Get(order.GetCtx());
                         MMPolicy = client.GetMMPolicy();
                     }
                     storages = MStorage.GetWarehouse(order.GetCtx(), order.GetM_Warehouse_ID(),
                         oLines[i].GetM_Product_ID(), oLines[i].GetM_AttributeSetInstance_ID(),
                         product.GetM_AttributeSet_ID(),
                         allAttributeInstances, minGuaranteeDate,
-                        MClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
+                        MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
                 }
                 if (!forceDelivery)
                 {
@@ -268,14 +268,14 @@ namespace VAdvantage.Model
                     String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
-                        MClient client = MClient.Get(order.GetCtx());
+                        MVAFClient client = MVAFClient.Get(order.GetCtx());
                         MMPolicy = client.GetMMPolicy();
                     }
                     storages = MStorage.GetWarehouse(order.GetCtx(), M_Warehouse_ID,
                         olines.GetM_Product_ID(), olines.GetM_AttributeSetInstance_ID(),
                         product.GetM_AttributeSet_ID(),
                         allAttributeInstances, minGuaranteeDate,
-                        MClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
+                        MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
                 }
                 if (!forceDelivery)
                 {
@@ -2151,7 +2151,7 @@ namespace VAdvantage.Model
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
             //	Outstanding (not processed) Incoming Confirmations ?
             MInOutConfirm[] confirmations = GetConfirmations(true);
@@ -3608,7 +3608,7 @@ namespace VAdvantage.Model
                             if (dsObsoleteInventory != null && dsObsoleteInventory.Tables.Count > 0 && dsObsoleteInventory.Tables[0].Rows.Count > 0)
                             {
                                 Decimal remainigQty = sLine.GetQtyEntered();
-                                MTable tbl = new MTable(GetCtx(), tableId, null);
+                                MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId, null);
                                 PO po = null;
                                 for (int oi = 0; oi < dsObsoleteInventory.Tables[0].Rows.Count; oi++)
                                 {
@@ -3691,7 +3691,7 @@ namespace VAdvantage.Model
                                 _processMsg = "Could not Update Letter of Credit";
                                 return DocActionVariables.STATUS_INVALID;
                             }
-                            MTable tbl = new MTable(GetCtx(), tableId1, null);
+                            MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId1, null);
                             // Change By Mohit- to pick payment base type from VA009_PaymentMthod----------------------
                             PaymentBaseType = Util.GetValueOfString(DB.ExecuteScalar("SELECT VA009_PaymentBaseType FROM VA009_PaymentMethod  WHERE VA009_PaymentMethod_ID=" + ord.GetVA009_PaymentMethod_ID(), null, null));
                             //End change--------------------------------------------------------------------------------
@@ -4551,7 +4551,7 @@ namespace VAdvantage.Model
             String MovementType = GetMovementType();
             //bool inTrx = MovementType.charAt(1) == '+';	//	V+ Vendor Receipt, C+ Customer Return
             bool inTrx = MovementType.IndexOf('+') == 1;	//	V+ Vendor Receipt, C+ Customer Return
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
 
             bool needSave = false;
             MProduct product = line.GetProduct();
@@ -4734,14 +4734,14 @@ namespace VAdvantage.Model
                         storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                       line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                       line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                      MClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
+                      MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
                     }
                     else
                     {
                         storages = MStorage.GetWarehouse(GetCtx(), GetM_Warehouse_ID(), line.GetM_Product_ID(),
                             line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                                line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                               MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
+                               MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                     }
 
                     // qty which is need to handle
@@ -4802,12 +4802,12 @@ namespace VAdvantage.Model
                         if (qtyToDeliver == 0)
                             break;
 
-                        if (isContainrApplicable && ii == storages.Length - 1 && !MClient.MMPOLICY_FiFo.Equals(MMPolicy))
+                        if (isContainrApplicable && ii == storages.Length - 1 && !MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy))
                         {
                             storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                                          line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                                          line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                                         MClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
+                                         MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
                             ii = -1;
                         }
                     }
@@ -4865,7 +4865,7 @@ namespace VAdvantage.Model
             // Is Used to get all Negative records from Contaner Storage
             X_M_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetM_Warehouse_ID(), line.GetM_Locator_ID(),
                                               line.GetM_ProductContainer_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
-                    null, MClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
+                    null, MVAFClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
 
             DateTime? dateMPolicy = null;
 

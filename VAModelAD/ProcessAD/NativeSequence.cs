@@ -73,7 +73,7 @@ namespace VAdvantage.Process
                 CreateSequence("VAF_AlterLog", null);
                 //
                 String whereClause = "TableName NOT IN ('VAF_Record_Seq', 'VAF_Issue', 'VAF_AlterLog')";
-                //List<MTable> tables = new Query(GetCtx(),X_VAF_TableView.Table_Name, whereClause, Get_TrxName().GetTrxName())
+                //List<MVAFTableView> tables = new Query(GetCtx(),X_VAF_TableView.Table_Name, whereClause, Get_TrxName().GetTrxName())
                 //    .SetOrderBy("TableName")
                 //    .list();
                  sql = "SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName NOT IN ('VAF_Record_Seq', 'VAF_Issue', 'VAF_AlterLog') AND IsActive='Y'";
@@ -82,13 +82,13 @@ namespace VAdvantage.Process
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MTable table = new MTable(GetCtx(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
+                        MVAFTableView table = new MVAFTableView(GetCtx(), Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_TableView_ID"]), null);
                         CreateSequence(table, Get_TrxName());
                     }
 
                 }
 
-                //foreach(MTable table in tables)
+                //foreach(MVAFTableView table in tables)
                 //{
                 //    CreateSequence(table, Get_TrxName());
                 //}
@@ -105,7 +105,7 @@ namespace VAdvantage.Process
             return "@OK@";
         }
 
-        private void CreateSequence(MTable table, Trx trxName)
+        private void CreateSequence(MVAFTableView table, Trx trxName)
         {
             if (!table.IsView())
             {
@@ -122,7 +122,7 @@ namespace VAdvantage.Process
         }
         private void CreateSequence(String tableName, Trx trxName)
         {
-            CreateSequence(MTable.Get(GetCtx(), tableName), trxName);
+            CreateSequence(MVAFTableView.Get(GetCtx(), tableName), trxName);
         }
 
         private void SetSystemNativeSequence(bool value)

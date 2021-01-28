@@ -216,7 +216,7 @@ namespace VAdvantage.Model
             String cl = null;
             string costingMethod = null;
             int costElementId = 0;
-            MClient client = MClient.Get(GetCtx(), cd.GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), cd.GetVAF_Client_ID());
             int M_Warehouse_ID = 0; // is used to calculate cost with warehouse level or not
 
             if (product != null)
@@ -4180,22 +4180,22 @@ namespace VAdvantage.Model
             int recordId = 0;
             if (windowName == "Shipment")
             {
-                tableId = MTable.Get_Table_ID("M_InOut");
+                tableId = MVAFTableView.Get_Table_ID("M_InOut");
                 recordId = cd.GetM_InOutLine_ID();
             }
             else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
             {
-                tableId = MTable.Get_Table_ID("M_Inventory");
+                tableId = MVAFTableView.Get_Table_ID("M_Inventory");
                 recordId = cd.GetM_InventoryLine_ID();
             }
             else if (windowName == "Production Execution")
             {
-                tableId = MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
+                tableId = MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
                 recordId = cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID();
             }
             else if (windowName == "Inventory Move")
             {
-                tableId = MTable.Get_Table_ID("M_Movement");
+                tableId = MVAFTableView.Get_Table_ID("M_Movement");
                 recordId = cd.GetM_MovementLine_ID();
             }
 
@@ -4235,25 +4235,25 @@ namespace VAdvantage.Model
             String sql = "";
             if (windowName == "Shipment")
             {
-                tableId = MTable.Get_Table_ID("M_InOut");
+                tableId = MVAFTableView.Get_Table_ID("M_InOut");
                 sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                       @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_InOutline WHERE M_InOutLine_ID =" + cd.GetM_InOutLine_ID() + " )";
             }
             else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
             {
-                tableId = MTable.Get_Table_ID("M_Inventory");
+                tableId = MVAFTableView.Get_Table_ID("M_Inventory");
                 sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                      @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_Inventoryline WHERE M_InventoryLine_ID =" + cd.GetM_InventoryLine_ID() + " )";
             }
             else if (windowName == "Production Execution") // not handled its reverse
             {
-                tableId = MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
+                tableId = MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
                 sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                       @" AND Record_ID = (SELECT ReversalDoc_ID FROM VAMFG_M_WrkOdrTrnsctionLine WHERE VAMFG_M_WrkOdrTrnsctionLine_ID =" + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID() + " )";
             }
             else if (windowName == "Inventory Move")
             {
-                tableId = MTable.Get_Table_ID("M_Movement");
+                tableId = MVAFTableView.Get_Table_ID("M_Movement");
                 sql = @"SELECT Qty FROM M_FreightImpact WHERE VAF_TableView_ID = " + tableId +
                     @" AND Record_ID = (SELECT ReversalDoc_ID FROM M_Movementline WHERE M_MovementLine_ID =" + cd.GetM_MovementLine_ID() + " )";
             }
@@ -4276,7 +4276,7 @@ namespace VAdvantage.Model
             int recordId = 0;
             if (windowName == "Shipment")
             {
-                tableId = MTable.Get_Table_ID("M_InOut");
+                tableId = MVAFTableView.Get_Table_ID("M_InOut");
                 if (cd.GetQty() > 0)
                 {
                     recordId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT ReversalDoc_ID FROM M_InOutline WHERE M_InOutLine_ID =" + cd.GetM_InOutLine_ID(), null, Get_Trx()));
@@ -4288,7 +4288,7 @@ namespace VAdvantage.Model
             }
             else if (windowName == "Physical Inventory" || windowName == "Internal Use Inventory")
             {
-                tableId = MTable.Get_Table_ID("M_Inventory");
+                tableId = MVAFTableView.Get_Table_ID("M_Inventory");
                 if (cd.GetQty() > 0)
                 {
                     recordId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT ReversalDoc_ID FROM M_Inventoryline WHERE M_InventoryLine_ID =" + cd.GetM_InventoryLine_ID(), null, Get_Trx()));
@@ -4300,7 +4300,7 @@ namespace VAdvantage.Model
             }
             else if (windowName == "Production Execution")
             {
-                tableId = MTable.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
+                tableId = MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction");
                 if (cd.GetQty() > 0)
                 {
                     recordId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT ReversalDoc_ID FROM VAMFG_M_WrkOdrTrnsctionLine WHERE VAMFG_M_WrkOdrTrnsctionLine_ID =" + cd.GetVAMFG_M_WrkOdrTrnsctionLine_ID(), null, Get_Trx()));
@@ -4312,7 +4312,7 @@ namespace VAdvantage.Model
             }
             else if (windowName == "Inventory Move")
             {
-                tableId = MTable.Get_Table_ID("M_Movement");
+                tableId = MVAFTableView.Get_Table_ID("M_Movement");
                 if (cd.GetQty() > 0)
                 {
                     recordId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT ReversalDoc_ID FROM M_Movementline WHERE M_MovementLine_ID =" + cd.GetM_MovementLine_ID(), null, Get_Trx()));
@@ -4422,7 +4422,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4502,7 +4502,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4587,7 +4587,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4666,7 +4666,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                 {
                     try
@@ -4782,7 +4782,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -4865,7 +4865,7 @@ namespace VAdvantage.Model
             bool ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(mas.GetCtx(), mas.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -5953,7 +5953,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -6039,7 +6039,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }
@@ -6120,7 +6120,7 @@ namespace VAdvantage.Model
             Boolean ok = cd.Save();
             if (ok && !cd.IsProcessed())
             {
-                MClient client = MClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
+                MVAFClient client = MVAFClient.Get(as1.GetCtx(), as1.GetVAF_Client_ID());
                 if (client.IsCostImmediate())
                     cd.Process();
             }

@@ -396,7 +396,7 @@ namespace VAdvantage.Model
                 ELEMENTTYPE_UserElement9.Equals(et))
             {
                 if (_ColumnName == null)
-                    _ColumnName = MColumn.GetColumnName(GetCtx(), GetVAF_Column_ID());
+                    _ColumnName = MVAFColumn.GetColumnName(GetCtx(), GetVAF_Column_ID());
                 return _ColumnName;
             }
             return GetColumnName(et);

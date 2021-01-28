@@ -531,7 +531,7 @@ namespace VAdvantage.Model
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
-                                        project = MTable.GetPO(GetCtx(), "FRPT_Project_Acct", 0, null);
+                                        project = MVAFTableView.GetPO(GetCtx(), "FRPT_Project_Acct", 0, null);
                                         project.Set_ValueNoCheck("VAF_Org_ID", 0);
                                         project.Set_ValueNoCheck("VAB_Project_ID", Util.GetValueOfInt(GetVAB_Project_ID()));
                                         project.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));

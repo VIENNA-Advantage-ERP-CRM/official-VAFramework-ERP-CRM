@@ -480,7 +480,7 @@ namespace VAdvantage.Model
             if (Tbl != null)
             {
                 int Table_ID = Util.GetValueOfInt(Tbl);
-                MTable table = MTable.Get(GetCtx(), Table_ID);
+                MVAFTableView table = MVAFTableView.Get(GetCtx(), Table_ID);
                 PO po = null;
                 po = table.GetPO(GetCtx(), 0, null);
                 po.Set_Value("M_InventoryLine_ID", Util.GetValueOfInt(ol.GetM_InventoryLine_ID()));
@@ -858,7 +858,7 @@ namespace VAdvantage.Model
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion
-            MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
             MInventoryLine[] lines = GetLines(false);
             log.Info("total Lines=" + lines.Count());
@@ -1780,7 +1780,7 @@ namespace VAdvantage.Model
                                 remainigQty = 0;
                             }
 
-                            MTable tbl = new MTable(GetCtx(), tableId, null);
+                            MVAFTableView tbl = new MVAFTableView(GetCtx(), tableId, null);
                             PO po = null;
                             for (int oi = 0; oi < dsObsoleteInventory.Tables[0].Rows.Count; oi++)
                             {
@@ -2607,7 +2607,7 @@ namespace VAdvantage.Model
             }
 
             //	Incoming Trx
-            MClient client = MClient.Get(GetCtx());
+            MVAFClient client = MVAFClient.Get(GetCtx());
             bool needSave = false;
 
             MProduct product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
@@ -2656,14 +2656,14 @@ namespace VAdvantage.Model
                     storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                        line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                        line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                       MClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
+                       MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
                 }
                 else
                 {
                     storages = MStorage.GetWarehouse(GetCtx(), GetM_Warehouse_ID(), line.GetM_Product_ID(),
                         line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                            line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                           MClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
+                           MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                 }
 
                 Decimal qtyToDeliver = qtyDiff;
@@ -2714,12 +2714,12 @@ namespace VAdvantage.Model
                     if (Env.Signum(qtyToDeliver) == 0)
                         break;
 
-                    if (isContainerApplicable && ii == storages.Length - 1 && !MClient.MMPOLICY_FiFo.Equals(MMPolicy))
+                    if (isContainerApplicable && ii == storages.Length - 1 && !MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy))
                     {
                         storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
                                      line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
                                      line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
-                                     MClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
+                                     MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
                         ii = -1;
                     }
                 }
@@ -2772,7 +2772,7 @@ namespace VAdvantage.Model
             // Is Used to get all Negative records from Contaner Storage
             X_M_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetM_Warehouse_ID(), line.GetM_Locator_ID(),
                                               line.GetM_ProductContainer_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
-                    null, MClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
+                    null, MVAFClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
 
             DateTime? dateMPolicy = null;
 

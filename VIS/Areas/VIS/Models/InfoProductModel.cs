@@ -46,7 +46,7 @@ namespace VIS.Models
             s_headerPriceList = Msg.Translate(ctx, "M_PriceList_Version_ID");
             s_headerWarehouse = Msg.Translate(ctx, "M_Warehouse_ID");
             //  Euro 13
-            MClient client = MClient.Get(ctx);
+            MVAFClient client = MVAFClient.Get(ctx);
             if ("FRIE".Equals(client.GetValue()))
             {
                 InfoColumn[] frieLayout =
@@ -356,7 +356,7 @@ namespace VIS.Models
             #region local Variables
             InfoSave info = new InfoSave();
             string error = "";
-            MTable tbl = null;
+            MVAFTableView tbl = null;
             PO po = null;
             int count = 0;
 
@@ -479,7 +479,7 @@ namespace VIS.Models
             #region Order Table
             if (keyColName.ToUpper().Trim() == "VAB_ORDER_ID")
             {
-                tbl = new MTable(ctx, 260, null);
+                tbl = new MVAFTableView(ctx, 260, null);
                 MOrder ord = new MOrder(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
@@ -537,7 +537,7 @@ namespace VIS.Models
             #region Invoice
             else if (keyColName.ToUpper().Trim() == "VAB_INVOICE_ID")
             {
-                tbl = new MTable(ctx, 333, null);
+                tbl = new MVAFTableView(ctx, 333, null);
                 MInvoice inv = new MInvoice(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
@@ -595,7 +595,7 @@ namespace VIS.Models
             #region MR/Shipment
             else if (keyColName.ToUpper().Trim() == "M_INOUT_ID")
             {
-                tbl = new MTable(ctx, 320, null);
+                tbl = new MVAFTableView(ctx, 320, null);
 
                 int ordID = 0;
 
@@ -819,7 +819,7 @@ namespace VIS.Models
                 DataSet dsMoves = null;
                 bool hasMoveLines = false;
 
-                tbl = new MTable(ctx, 663, null);
+                tbl = new MVAFTableView(ctx, 663, null);
 
                 MPackage pkg = new MPackage(ctx, recordID, null);
                 string RefNo = ReferenceNo[0];
@@ -888,7 +888,7 @@ namespace VIS.Models
             #region Inventory
             else if (keyColName.ToUpper().Trim() == "M_INVENTORY_ID")
             {
-                tbl = new MTable(ctx, 322, null);
+                tbl = new MVAFTableView(ctx, 322, null);
                 MInventory inv = new MInventory(ctx, recordID, null);
 
                 if (Locator_ID <= 0)
@@ -1082,7 +1082,7 @@ namespace VIS.Models
             #region Project
             else if (keyColName.ToUpper().Trim() == "VAB_PROJECT_ID")
             {
-                tbl = new MTable(ctx, 434, null);
+                tbl = new MVAFTableView(ctx, 434, null);
                 MProject proj = new MProject(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
@@ -1179,7 +1179,7 @@ namespace VIS.Models
             #region Requisition
             else if (keyColName.ToUpper().Trim() == "M_REQUISITION_ID")
             {
-                tbl = new MTable(ctx, 703, null);
+                tbl = new MVAFTableView(ctx, 703, null);
                 MRequisition inv = new MRequisition(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
@@ -1247,7 +1247,7 @@ namespace VIS.Models
                 DataSet dsAssets = null;
                 bool hasAssets = false;
 
-                tbl = new MTable(ctx, 324, null);
+                tbl = new MVAFTableView(ctx, 324, null);
                 MMovement mov = new MMovement(ctx, recordID, null);
 
                 if (Locator_ID <= 0)
@@ -1470,7 +1470,7 @@ namespace VIS.Models
         //        {
         //            InfoSave info = new InfoSave();
         //            string error = "";
-        //            MTable tbl = null;
+        //            MVAFTableView tbl = null;
         //            PO po = null;
         //            int count = 0;
 
@@ -1485,7 +1485,7 @@ namespace VIS.Models
 
         //                int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
-        //                tbl = new MTable(ctx, 322, null);
+        //                tbl = new MVAFTableView(ctx, 322, null);
         //                MInventory inv = new MInventory(ctx, recordID, null);
 
         //                if (Locator_ID <= 0)
@@ -1577,10 +1577,10 @@ namespace VIS.Models
 
         public bool SetProductQtyStockTrasfer(int recordID, string keyColName, int VAF_TableView_ID, List<string> product, List<string> uom, List<string> attribute, List<string> qty, List<string> locID, int LocToID, int lineID, int ContainerID, VAdvantage.Utility.Ctx ctx)
         {
-            MTable tbl = null;
+            MVAFTableView tbl = null;
             PO po = null;
 
-            tbl = new MTable(ctx, VAF_TableView_ID, null);
+            tbl = new MVAFTableView(ctx, VAF_TableView_ID, null);
             for (int i = 0; i < product.Count; i++)
             {
                 po = tbl.GetPO(ctx, lineID, null);

@@ -129,7 +129,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent"></param>
         /// <param name="Supervisor_ID"></param>
-        public MRequestProcessor(MClient parent, int Supervisor_ID)
+        public MRequestProcessor(MVAFClient parent, int Supervisor_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

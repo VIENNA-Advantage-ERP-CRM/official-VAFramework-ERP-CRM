@@ -22,8 +22,8 @@ namespace VIS.Classes
 
         public static string [] GetKeyColumns(int VAF_TableView_ID,Ctx ctx)
         {
-            //return new MTable(ctx, VAF_TableView_ID, null).GetKeyColumns();
-            return MTable.Get(ctx, VAF_TableView_ID).GetKeyColumns();
+            //return new MVAFTableView(ctx, VAF_TableView_ID, null).GetKeyColumns();
+            return MVAFTableView.Get(ctx, VAF_TableView_ID).GetKeyColumns();
         }
     }
 
@@ -41,7 +41,7 @@ namespace VIS.Classes
         /// <returns></returns>
         public static int SaveImage(Ctx ctx, byte[] buffer, int imageID, string imageName, bool isSaveInDB)
         {
-            MImage mimg = new MImage(ctx, imageID, null);
+            MVAFImage mimg = new MVAFImage(ctx, imageID, null);
             mimg.ByteArray = buffer;
             mimg.ImageFormat = imageName.Substring(imageName.LastIndexOf('.'));
             mimg.SetName(imageName);
@@ -76,7 +76,7 @@ namespace VIS.Classes
         /// <returns></returns>
         public static int DeleteImage(Ctx ctx, int VAF_Image_id)
         {
-            MImage mimg = new MImage(ctx, VAF_Image_id, null);
+            MVAFImage mimg = new MVAFImage(ctx, VAF_Image_id, null);
             if (mimg.Delete(true))
                 return 1;
             else
@@ -90,7 +90,7 @@ namespace VIS.Classes
             MUser user = new MUser(ctx, userID, null);
             int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
-            MImage mimg = new MImage(ctx, imageID, null);
+            MVAFImage mimg = new MVAFImage(ctx, imageID, null);
             mimg.ByteArray = buffer;
             mimg.ImageFormat = imageName.Substring(imageName.LastIndexOf('.'));
             mimg.SetName(imageName);

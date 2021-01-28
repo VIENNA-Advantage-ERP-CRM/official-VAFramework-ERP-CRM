@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         //Cache
         private static CCache<int, MWindow> s_cache = new CCache<int, MWindow>("VAF_Screen_ID", 20);
         //The Lines						
-        private MTab[] _tabs = null;
+        private MVAFTab[] _tabs = null;
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MWindow).FullName);
 
@@ -141,12 +141,12 @@ namespace VAdvantage.Model
         /// <param name="reload">reload data</param>
         /// <param name="trxName">array of lines</param>
         /// <returns>transaction</returns>
-        public MTab[] GetTabs(bool reload, Trx trxName)
+        public MVAFTab[] GetTabs(bool reload, Trx trxName)
         {
             if (_tabs != null && !reload)
                 return _tabs;
             String sql = "SELECT * FROM VAF_Tab WHERE VAF_Screen_ID=" + GetVAF_Screen_ID() + " ORDER BY SeqNo";
-            List<MTab> list = new List<MTab>();
+            List<MVAFTab> list = new List<MVAFTab>();
             DataSet ds = null;
             try
             {
@@ -154,14 +154,14 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    list.Add(new MTab(GetCtx(), rs, trxName));
+                    list.Add(new MVAFTab(GetCtx(), rs, trxName));
                 }
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            _tabs = new MTab[list.Count];
+            _tabs = new MVAFTab[list.Count];
             _tabs = list.ToArray();
             return _tabs;
         }
@@ -171,9 +171,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Tab_ID">id</param>
         /// <returns>tab or null</returns>
-        public MTab GetTab(int VAF_Tab_ID)
+        public MVAFTab GetTab(int VAF_Tab_ID)
         {
-            MTab[] tabs = GetTabs(false, Get_TrxName());
+            MVAFTab[] tabs = GetTabs(false, Get_TrxName());
             for (int i = 0; i < tabs.Length; i++)
             {
                 if (tabs[i].GetVAF_Tab_ID() == VAF_Tab_ID)
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
             else if (Is_ValueChanged("IsActive") || Is_ValueChanged("Name")
                 || Is_ValueChanged("Description") || Is_ValueChanged("Help"))
             {
-                MMenu[] menues = MMenu.Get(GetCtx(), "VAF_Screen_ID=" + GetVAF_Screen_ID());
+                MVAFMenuConfig[] menues = MVAFMenuConfig.Get(GetCtx(), "VAF_Screen_ID=" + GetVAF_Screen_ID());
                 for (int i = 0; i < menues.Length; i++)
                 {
                     menues[i].SetName(GetName());

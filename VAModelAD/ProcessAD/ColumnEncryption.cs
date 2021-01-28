@@ -63,7 +63,7 @@ namespace VAdvantage.Process
                 + ", IsEncrypted=" + p_IsEncrypted
                 + ", ChangeSetting=" + p_ChangeSetting
                 + ", MaxLength=" + p_MaxLength);
-            MColumn column = new MColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
+            MVAFColumn column = new MVAFColumn(GetCtx(), p_VAF_Column_ID, Get_Trx());
             if (column.Get_ID() == 0 || column.Get_ID() != p_VAF_Column_ID)
                 throw new Exception("@NotFound@ @VAF_Column_ID@ - " + p_VAF_Column_ID);
             //
@@ -170,7 +170,7 @@ namespace VAdvantage.Process
                 // if (colID != null && colID != DBNull.Value && Convert.ToInt32(colID) == column.GetVAF_Column_ID())
                 //{
 
-                string tableName = MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID());
+                string tableName = MVAFTableView.GetTableName(GetCtx(), column.GetVAF_TableView_ID());
 
                 DataSet ds = DB.ExecuteDataset("SELECT " + column.GetColumnName() + "," + tableName
                                                                 + "_ID FROM " + tableName, null, Get_Trx());
@@ -183,14 +183,14 @@ namespace VAdvantage.Process
                             if (ds.Tables[0].Rows[i][column.GetColumnName()] != null && ds.Tables[0].Rows[i][column.GetColumnName()] != DBNull.Value
                                 && !SecureEngine.IsEncrypted(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()))
                             {
-                                //MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID()) + "_ID"]), Get_Trx());
+                                //MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MVAFTableView.GetTableName(GetCtx(), column.GetVAF_TableView_ID()) + "_ID"]), Get_Trx());
                                 //user.SetPassword(SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()));
 
                                 int encLength = SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()).Length;
 
                                 if (encLength <= column.GetFieldLength())
                                 {
-                                    //PO tab = MTable.GetPO(GetCtx(), tableName,
+                                    //PO tab = MVAFTableView.GetPO(GetCtx(), tableName,
                                     //    Util.GetValueOfInt(ds.Tables[0].Rows[i][tableName + "_ID"]), Get_Trx());
 
                                     //tab.Set_Value(column.GetColumnName(), (SecureEngine.Encrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString())));
@@ -228,9 +228,9 @@ namespace VAdvantage.Process
                             if (ds.Tables[0].Rows[i][column.GetColumnName()] != null && ds.Tables[0].Rows[i][column.GetColumnName()] != DBNull.Value
                                 && SecureEngine.IsEncrypted(ds.Tables[0].Rows[i][column.GetColumnName()].ToString()))
                             {
-                                // MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MTable.GetTableName(GetCtx(), column.GetVAF_TableView_ID())+"_ID"]), Get_Trx());
+                                // MUser user = new MUser(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i][MVAFTableView.GetTableName(GetCtx(), column.GetVAF_TableView_ID())+"_ID"]), Get_Trx());
 
-                                //PO tab = MTable.GetPO(GetCtx(), tableName,
+                                //PO tab = MVAFTableView.GetPO(GetCtx(), tableName,
                                 //   Util.GetValueOfInt(ds.Tables[0].Rows[i][tableName + "_ID"]), Get_Trx());
 
                                 //tab.Set_Value(column.GetColumnName(), (SecureEngine.Decrypt(ds.Tables[0].Rows[i][column.GetColumnName()].ToString())));

@@ -82,8 +82,8 @@ namespace VAdvantage.WF
                 //JID_0278 : To mark processing checkbox false.
                 // Mohit 
                 // Date : 22 May 2019
-                MTable table = new MTable(GetCtx(), activity.GetVAF_TableView_ID(), null);
-                PO po = MTable.GetPO(GetCtx(), table.GetTableName(), activity.GetRecord_ID(), Get_Trx());
+                MVAFTableView table = new MVAFTableView(GetCtx(), activity.GetVAF_TableView_ID(), null);
+                PO po = MVAFTableView.GetPO(GetCtx(), table.GetTableName(), activity.GetRecord_ID(), Get_Trx());
                 if (po != null && po.Get_ColumnIndex("Processing") >= 0)
                 {
                     po.Set_Value("Processing", false);

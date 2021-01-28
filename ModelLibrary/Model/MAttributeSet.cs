@@ -228,7 +228,7 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludes != null && _excludes.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
+                MVAFColumn column = MVAFColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludes.Length; i++)
                 {
                     if (_excludes[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()
@@ -275,7 +275,7 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludeLots != null && _excludeLots.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
+                MVAFColumn column = MVAFColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludeLots.Length; i++)
                 {
                     if (_excludeLots[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()
@@ -322,7 +322,7 @@ namespace VAdvantage.Model
             //	Find it
             if (_excludeSerNos != null && _excludeSerNos.Length > 0)
             {
-                MColumn column = MColumn.Get(GetCtx(), VAF_Column_ID);
+                MVAFColumn column = MVAFColumn.Get(GetCtx(), VAF_Column_ID);
                 for (int i = 0; i < _excludeSerNos.Length; i++)
                 {
                     if (_excludeSerNos[i].GetVAF_TableView_ID() == column.GetVAF_TableView_ID()

@@ -43,7 +43,7 @@ namespace VIS.Models
         public List<UserInfo> GetUserInfo(string searchText, int sortBy, int pageNo, int pageSize)
         {
             List<UserInfo> uInfo = new List<UserInfo>();
-            int UserTableID = MTable.Get_Table_ID("VAF_UserContact");
+            int UserTableID = MVAFTableView.Get_Table_ID("VAF_UserContact");
             int UserWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='User'", null, null));
 
             if (!(bool)MRole.GetDefault(ctx).GetWindowAccess(UserWindowID))
@@ -114,7 +114,7 @@ namespace VIS.Models
 
                     if (ds.Tables[0].Rows[i]["VAF_Image_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_Image_ID"] != null && Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Image_ID"]) > 0)
                     {
-                        MImage mimg = new MImage(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Image_ID"]), null);
+                        MVAFImage mimg = new MVAFImage(ctx, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Image_ID"]), null);
                         var imgfll = mimg.GetThumbnailURL(46, 46);
                         userInfo.UserImage = imgfll;
 
@@ -172,7 +172,7 @@ namespace VIS.Models
                 return rInfo;
             }
 
-            int UserTableID = MTable.Get_Table_ID("VAF_UserContact");
+            int UserTableID = MVAFTableView.Get_Table_ID("VAF_UserContact");
             bool IsUpdate = true;
             String sql = "SELECT VAF_Client_ID, vaf_org_ID from VAF_UserContact WHERE VAF_UserContact_ID=" + VAF_UserContact_ID;
             DataSet ds = DB.ExecuteDataset(sql);
@@ -615,8 +615,8 @@ namespace VIS.Models
 
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
-                    MForm wind = new MForm(ctx, groupWindowIDs[i], null);
-                    MFormAccess wAccess = new MFormAccess(wind, VAF_Role_ID);
+                    MVAFPage wind = new MVAFPage(ctx, groupWindowIDs[i], null);
+                    MVAFPageRights wAccess = new MVAFPageRights(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)

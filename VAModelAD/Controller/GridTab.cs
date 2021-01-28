@@ -317,7 +317,7 @@ namespace VAdvantage.Model
         }	//	getOrderByClause
 
         /// <summary>
-        /// Get Field data and add to MTable, if it's required or displayed.
+        /// Get Field data and add to MVAFTableView, if it's required or displayed.
         /// </summary>
         /// <returns></returns>
         protected bool LoadFields()
@@ -2784,7 +2784,7 @@ namespace VAdvantage.Model
 
 
         /// <summary>
-        /// Assemble whereClause and query MTable and position to row 0.
+        /// Assemble whereClause and query MVAFTableView and position to row 0.
         /// <pre>
         /// Scenarios:
         /// 	- Never opened 					(full query)
@@ -2800,7 +2800,7 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Assemble whereClause and query MTable and position to row 0.
+        /// Assemble whereClause and query MVAFTableView and position to row 0.
         /// <pre>
         /// Scenarios:
         /// 	- Never opened 					(full query)

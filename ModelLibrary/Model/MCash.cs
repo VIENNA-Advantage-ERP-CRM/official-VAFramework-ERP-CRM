@@ -1579,7 +1579,7 @@ namespace VAdvantage.Model
                         //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
                         MConversionType conv = new MConversionType(GetCtx(), line.GetVAB_CurrencyType_ID(), Get_TrxName());
                         errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return errorMsg;
                     }
                     UpdatedBal = Decimal.Subtract((Decimal)bp.GetTotalOpenBalance(), (Decimal)cashAmt);
@@ -1619,7 +1619,7 @@ namespace VAdvantage.Model
                         //JID_0821: If Cashbook currency conversion is not found. On completion of cash journal System give error "IN".
                         MConversionType conv = new MConversionType(GetCtx(), line.GetVAB_CurrencyType_ID(), Get_TrxName());
                         errorMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), line.GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return errorMsg;
                     }
                     UpdatedBal = Decimal.Subtract((Decimal)bp.GetTotalOpenBalance(), (Decimal)cashAmt);

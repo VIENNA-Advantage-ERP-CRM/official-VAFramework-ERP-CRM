@@ -159,7 +159,7 @@ namespace VAdvantage.CrystalReport
                         ProcessInfoParameter[] parameters = _pi.GetParameter();
                         if (parameters.Count() > 0)
                         {
-                            MTable table = MTable.Get(_ctx, "VAT_CrystalParameters");
+                            MVAFTableView table = MVAFTableView.Get(_ctx, "VAT_CrystalParameters");
                             pos = table.GetPO(_ctx, 0, null);
                             int loopCount = 0;
                             int paraCount = 1;
@@ -1041,7 +1041,7 @@ namespace VAdvantage.CrystalReport
 
                         if (parameters.Count() > 0)
                         {
-                            MTable table = MTable.Get(_ctx, "VAT_CrystalParameters");
+                            MVAFTableView table = MVAFTableView.Get(_ctx, "VAT_CrystalParameters");
                             pos = table.GetPO(_ctx, 0, null);
                             int loopCount = 0;
                             int paraCount = 1;
@@ -1518,15 +1518,15 @@ namespace VAdvantage.CrystalReport
         {
             string tableName = sql.Substring(sql.IndexOf("FROM") + 4).Trim().Split(' ')[0].ToString().Trim();
 
-            MTable table = MTable.Get(_ctx, tableName);
+            MVAFTableView table = MVAFTableView.Get(_ctx, tableName);
             if (table == null)
                 return sql;
 
-            MColumn[] columns = table.GetColumns(true);
-            List<MColumn> cols = columns.Where(a => a.GetObscureType() != null && a.GetObscureType().Length > 0).ToList<MColumn>();
+            MVAFColumn[] columns = table.GetColumns(true);
+            List<MVAFColumn> cols = columns.Where(a => a.GetObscureType() != null && a.GetObscureType().Length > 0).ToList<MVAFColumn>();
             if (cols != null && cols.Count > 0)
             {
-                foreach (MColumn col in cols)
+                foreach (MVAFColumn col in cols)
                 {
                     string Name = col.GetColumnName();
                     if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetVAF_TableView_ID(), col.GetVAF_Column_ID(), false))

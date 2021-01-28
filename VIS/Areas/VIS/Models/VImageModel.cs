@@ -18,7 +18,7 @@ namespace VIS.Models
 
         public ImagePathInfo GetImage(Ctx ctx, int VAF_Image_id, int height, int width, string URI)
         {
-            MImage mimg = new MImage(ctx, VAF_Image_id, null);
+            MVAFImage mimg = new MVAFImage(ctx, VAF_Image_id, null);
             bool url = false;
             var value = mimg.GetThumbnail(height, width, out url);
             if (url)
@@ -95,7 +95,7 @@ namespace VIS.Models
                     // update database with image blob, this occurs when save in db check box changed
                     if (imageID > 0)
                     {
-                        string imageUrl = new MImage(ctx, imageID, null).GetImageURL();
+                        string imageUrl = new MVAFImage(ctx, imageID, null).GetImageURL();
                         if (imageUrl != null)
                         {
                             string imageName = imageUrl.Substring(imageUrl.LastIndexOf('/') + 1);

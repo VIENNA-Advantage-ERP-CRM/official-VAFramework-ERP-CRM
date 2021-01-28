@@ -35,8 +35,8 @@ namespace VAdvantage.Process
 
         private string InsertORUpdateFields(int VAF_Tab_ID, MModuleTab mTab)
         {
-            MTab tab = new MTab(GetCtx(), VAF_Tab_ID, null);
-            MField[] fields = tab.GetFields(true, null);
+            MVAFTab tab = new MVAFTab(GetCtx(), VAF_Tab_ID, null);
+            MVAFField[] fields = tab.GetFields(true, null);
             if (fields == null || fields.Length == 0)
             {
                 return Msg.GetMsg(GetCtx(), "VIS_FieldsNotFound" + " " + tab.GetName());
