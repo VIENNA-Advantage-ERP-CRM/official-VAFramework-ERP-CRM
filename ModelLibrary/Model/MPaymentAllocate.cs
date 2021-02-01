@@ -469,10 +469,11 @@ namespace VAdvantage.Model
 
             if (Env.IsModuleInstalled("VA009_"))
             {
+                //changes done to avoid null Exception
                 // consider record which are active
                 String sql = "UPDATE VAB_Payment i"
                     + " SET PayAmt= ((SELECT COALESCE(SUM(Amount),0) FROM VAB_PaymentAllotment il WHERE il.IsActive = 'Y' AND i.VAB_Payment_ID=il.VAB_Payment_ID) "
-                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? " - (BackupWithholdingAmount + WithholdingAmt)),  " : "), ")
+                    + (pay.Get_ColumnIndex("PaymentAmount") > 0 ? " - (NVL(BackupWithholdingAmount,0) + NVL(WithholdingAmt,0))),  " : "), ")
                     + "     DiscountAmt= (SELECT COALESCE(SUM(DiscountAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) ,  "
                     + "     WriteOffAmt= (SELECT COALESCE(SUM(WriteOffAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID) , "
                     + "     OverUnderAmt= (SELECT COALESCE(SUM(OverUnderAmt),0) FROM VAB_PaymentAllotment il WHERE  il.IsActive = 'Y' AND  i.VAB_Payment_ID=il.VAB_Payment_ID)  "
