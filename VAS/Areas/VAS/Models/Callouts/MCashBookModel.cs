@@ -23,7 +23,7 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_CashBook_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MCashBook cBook = new MCashBook(ctx, VAB_CashBook_ID, null);
+            MVABCashBook cBook = new MVABCashBook(ctx, VAB_CashBook_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_Currency_ID"] = cBook.GetVAB_Currency_ID().ToString();
             return result;
@@ -36,7 +36,7 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_CashJRNLJournal_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MCash cash = new MCash(ctx, VAB_CashJRNLJournal_ID, null);
+            MVABCashJRNL cash = new MVABCashJRNL(ctx, VAB_CashJRNLJournal_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_Currency_ID"] = cash.GetVAB_Currency_ID().ToString();
             result["DateAcct"] = cash.GetDateAcct().ToString();

@@ -65,7 +65,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _m_M_Product_ID = 0;
         private int _m_M_AttributeSetInstance_ID = 0;
         // BPartner				
-        private MBPartner _m_bpartner = null;
+        private MVABBusinessPartner _m_bpartner = null;
 #endregion
 
         /// <summary>
@@ -311,7 +311,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	BPartner
             if (_m_bpartner == null || VAB_BusinessPartner_ID != _m_bpartner.GetVAB_BusinessPartner_ID())
             {
-                _m_bpartner = new MBPartner(GetCtx(), VAB_BusinessPartner_ID, null);
+                _m_bpartner = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, null);
             }
             //	Order
             _order = new MOrder(GetCtx(), 0, Get_TrxName());

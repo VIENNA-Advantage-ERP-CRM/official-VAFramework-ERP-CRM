@@ -317,7 +317,7 @@ namespace VAdvantage.Model
                         //  Payment Info
                         .Append(x).Append(mpp.GetDocumentNo()).Append(x).Append(",")    // DocumentNo
                         .Append(mpp.GetParent().GetPayDate()).Append(",")               // PayDate
-                        .Append(x).Append(MCurrency.GetISO_Code(Env.GetContext(), mpp.GetParent().GetVAB_Currency_ID())).Append(x).Append(",")    // Currency
+                        .Append(x).Append(MVABCurrency.GetISO_Code(Env.GetContext(), mpp.GetParent().GetVAB_Currency_ID())).Append(x).Append(",")    // Currency
                         .Append(mpp.GetPayAmt()).Append(",")                // PayAmount
                         .Append(x).Append(comment.ToString()).Append(x)     // Comment
                         .Append(Env.NL);
@@ -462,7 +462,7 @@ namespace VAdvantage.Model
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BPart_Bank_Acct bpba "
-                + "LEFT OUTER JOIN C_Bank ba ON (bpba.C_Bank_ID = ba.C_Bank_ID) "
+                + "LEFT OUTER JOIN VAB_Bank ba ON (bpba.VAB_Bank_ID = ba.VAB_Bank_ID) "
                 + "WHERE bpba.VAB_BPart_Bank_Acct_ID=" + VAB_BPart_Bank_Acct_ID;        // #1
 
             IDataReader idr = null;
@@ -936,10 +936,10 @@ namespace VAdvantage.Model
             //
             if (X_VAB_Order.PAYMENTRULE_DirectDebit.Equals(PaymentRule))
             {
-                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
+                MVABBPartBankAcct[] bas = MVABBPartBankAcct.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
                 {
-                    MBPBankAccount account = bas[i];
+                    MVABBPartBankAcct account = bas[i];
                     if (account.IsDirectDebit())
                     {
                         SetVAB_BPart_Bank_Acct_ID(account.GetVAB_BPart_Bank_Acct_ID());
@@ -949,10 +949,10 @@ namespace VAdvantage.Model
             }
             else if (X_VAB_Order.PAYMENTRULE_DirectDeposit.Equals(PaymentRule))
             {
-                MBPBankAccount[] bas = MBPBankAccount.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
+                MVABBPartBankAcct[] bas = MVABBPartBankAcct.GetOfBPartner(line.GetCtx(), VAB_BusinessPartner_ID);
                 for (int i = 0; i < bas.Length; i++)
                 {
-                    MBPBankAccount account = bas[i];
+                    MVABBPartBankAcct account = bas[i];
                     if (account.IsDirectDeposit())
                     {
                         SetVAB_BPart_Bank_Acct_ID(account.GetVAB_BPart_Bank_Acct_ID());

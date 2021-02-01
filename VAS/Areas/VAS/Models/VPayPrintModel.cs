@@ -149,7 +149,7 @@ namespace VIS.Models
                + " c.ISO_Code, CurrentBalance "										//	3..4
                + "FROM VAB_PaymentOption ps"
                + " INNER JOIN VAB_Bank_Acct ba ON (ps.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID)"
-               + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID)"
+               + " INNER JOIN VAB_Bank b ON (ba.VAB_Bank_ID=b.VAB_Bank_ID)"
                + " INNER JOIN VAB_Currency c ON (ba.VAB_Currency_ID=c.VAB_Currency_ID) "
                + "WHERE ps.VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID + " AND ps.Processed='Y' AND ba.IsActive='Y'";
             DataSet ds = new DataSet();
@@ -472,7 +472,7 @@ namespace VIS.Models
                 comm.Add(comment.ToString());
                 DocumentNo.Add(mpp.GetDocumentNo());
                 PayDate.Add(mpp.GetParent().GetPayDate().ToString());
-                ISOCode.Add(VAdvantage.Model.MCurrency.GetISO_Code(ctx, mpp.GetParent().GetVAB_Currency_ID()));
+                ISOCode.Add(VAdvantage.Model.MVABCurrency.GetISO_Code(ctx, mpp.GetParent().GetVAB_Currency_ID()));
                 PayAmt.Add(mpp.GetPayAmt().ToString());
             }
 
@@ -724,7 +724,7 @@ namespace VIS.Models
                 + " AND a.VAB_Country_ID=cc.VAB_Country_ID "
                 */
                 + "FROM VAB_BPart_Bank_Acct bpba "
-                + "LEFT OUTER JOIN C_Bank ba ON (bpba.C_Bank_ID = ba.C_Bank_ID) "
+                + "LEFT OUTER JOIN VAB_Bank ba ON (bpba.VAB_Bank_ID = ba.VAB_Bank_ID) "
                 + "WHERE bpba.VAB_BPart_Bank_Acct_ID=" + VAB_BPart_Bank_Acct_ID;        // #1
 
             IDataReader idr = null;

@@ -21,7 +21,7 @@ namespace VIS.Models
 
             //Assign parameter value
             VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MBPartner bpartner = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
+            MVABBusinessPartner bpartner = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
             Dictionary<String, String> retDic = new Dictionary<string, string>();
 
             retDic["M_ReturnPolicy_ID"] = bpartner.GetM_ReturnPolicy_ID().ToString();
@@ -84,7 +84,7 @@ namespace VIS.Models
             int C_BPGroup_ID = 0;
             //Assign parameter value
             C_BPGroup_ID = Util.GetValueOfInt(fields);
-            MBPGroup bpartner = new MBPGroup(ctx, C_BPGroup_ID, null);
+            MVABBPartCategory bpartner = new MVABBPartCategory(ctx, C_BPGroup_ID, null);
             Dictionary<String, String> retDic = new Dictionary<string, string>();
 
             retDic["M_ReturnPolicy_ID"] = bpartner.GetM_ReturnPolicy_ID().ToString();
@@ -325,7 +325,7 @@ namespace VIS.Models
         {
             int VAB_BusinessPartner_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> retDic = new Dictionary<string, object>();
-            MBPartner bp = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
             retDic["VAB_PaymentTerm_ID"] = bp.GetVAB_PaymentTerm_ID();
             retDic["PaymentRule"] = bp.GetPaymentRule();
             retDic["InvoiceRule"] = bp.GetInvoiceRule();

@@ -98,7 +98,7 @@ namespace VAdvantage.Process
 
             if (_VAB_DocAllocation_ID != 0)
             {
-                MAllocationHdr hdr = new MAllocationHdr(GetCtx(), _VAB_DocAllocation_ID, _m_trx);
+                MVABDocAllocation hdr = new MVABDocAllocation(GetCtx(), _VAB_DocAllocation_ID, _m_trx);
                 if (Delete(hdr))
                 {
                     count++;
@@ -150,7 +150,7 @@ namespace VAdvantage.Process
                 foreach (DataRow dr in dt.Rows)
                 {
                     count++;
-                    Delete(new MAllocationHdr(GetCtx(), dr, _m_trx));
+                    Delete(new MVABDocAllocation(GetCtx(), dr, _m_trx));
                 }
             }
             catch (Exception e)
@@ -181,7 +181,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="hdr"></param>
         /// <returns>Bool type</returns>
-        private Boolean Delete(MAllocationHdr hdr)
+        private Boolean Delete(MVABDocAllocation hdr)
         {
             //	_m_trx.start();
             Boolean success = false;

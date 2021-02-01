@@ -42,7 +42,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="line"></param>
         /// <param name="doc"></param>
-        public DocLine_Allocation(MAllocationLine line, Doc doc)
+        public DocLine_Allocation(MVABDocAllocationLine line, Doc doc)
             : base(line, doc)
         {
 

@@ -53,7 +53,7 @@ namespace VAdvantage.Model
 
         /**Create Counter Document **/
         //private int havingPriceList;
-        private MBPartner counterBPartner = null;
+        private MVABBusinessPartner counterBPartner = null;
         private int counterOrgId = 0;
         private int counterWarehouseId = 0;
         /** Sales Order Sub Type - SO	*/
@@ -369,7 +369,7 @@ namespace VAdvantage.Model
          * 	SOTrx should be set.
          * 	@param bp business partner
          */
-        public void SetBPartner(MBPartner bp)
+        public void SetBPartner(MVABBusinessPartner bp)
         {
             try
             {
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
 
 
                 //	Set Locations
-                MBPartnerLocation[] locs = bp.GetLocations(false);
+                MVABBPartLocation[] locs = bp.GetLocations(false);
                 if (locs != null)
                 {
                     for (int i = 0; i < locs.Length; i++)
@@ -1525,7 +1525,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MBPartner bpartner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
+                MVABBusinessPartner bpartner = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
                 if (bpartner.Get_ID() != 0)
                 {
                     if (IsSOTrx())
@@ -1558,7 +1558,7 @@ namespace VAdvantage.Model
 
                 SetOrig_Order_ID(origOrder.GetVAB_Order_ID());
                 //	Get Details from Original Order
-                MBPartner bpartner = new MBPartner(GetCtx(), origOrder.GetVAB_BusinessPartner_ID(), null);
+                MVABBusinessPartner bpartner = new MVABBusinessPartner(GetCtx(), origOrder.GetVAB_BusinessPartner_ID(), null);
 
                 // Reset Original Shipment
                 SetOrig_InOut_ID(-1);
@@ -2117,7 +2117,7 @@ namespace VAdvantage.Model
         */
         public String GetCurrencyISO()
         {
-            return MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID());
+            return MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID());
         }
 
         /// <summary>
@@ -2126,7 +2126,7 @@ namespace VAdvantage.Model
         /// <returns>precision</returns>
         public int GetPrecision()
         {
-            return MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+            return MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
         }
 
         /*	Get Document Status
@@ -2266,9 +2266,9 @@ namespace VAdvantage.Model
 
                 //	No Partner Info - set Template
                 if (GetVAB_BusinessPartner_ID() == 0)
-                    SetBPartner(MBPartner.GetTemplate(GetCtx(), GetVAF_Client_ID()));
+                    SetBPartner(MVABBusinessPartner.GetTemplate(GetCtx(), GetVAF_Client_ID()));
                 if (GetVAB_BPart_Location_ID() == 0)
-                    SetBPartner(MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID()));
+                    SetBPartner(MVABBusinessPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID()));
                 //	No Bill - get from Ship
                 if (GetBill_BPartner_ID() == 0)
                 {
@@ -2281,7 +2281,7 @@ namespace VAdvantage.Model
                 //	BP Active check
                 if (newRecord || Is_ValueChanged("VAB_BusinessPartner_ID"))
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
+                    MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "VAB_BusinessPartner_ID"));
@@ -2291,7 +2291,7 @@ namespace VAdvantage.Model
                 if ((newRecord || Is_ValueChanged("Bill_BPartner_ID"))
                         && GetBill_BPartner_ID() != GetVAB_BusinessPartner_ID())
                 {
-                    MBPartner bp = MBPartner.Get(GetCtx(), GetBill_BPartner_ID());
+                    MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), GetBill_BPartner_ID());
                     if (!bp.IsActive())
                     {
                         log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "Bill_BPartner_ID"));
@@ -2537,11 +2537,11 @@ namespace VAdvantage.Model
                                                 VAB_DocTypes_ID = " + GetVAB_DocTypesTarget_ID() + " AND DocBaseType = 'SOO'", null, Get_TrxName()));
                     if (!(docSubType == "ON" || docSubType == "OB"))
                     {
-                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                        Decimal grandTotal = MVABExchangeRate.ConvertBase(GetCtx(),
                             GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
                             GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                        MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+                        MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
                         string retMsg = "";
                         bool crdAll = bp.IsCreditAllowed(GetVAB_BPart_Location_ID(), grandTotal, out retMsg);
                         if (!crdAll)
@@ -2846,26 +2846,26 @@ namespace VAdvantage.Model
                 {
                     if (Util.GetValueOfDecimal(GetVAPOS_CreditAmt()) > 0)
                     {
-                        MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
-                        if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
+                        MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
+                        if (MVABBusinessPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
                         {
                             _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
                                 + bp.GetTotalOpenBalance()
                                 + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
                             return DocActionVariables.STATUS_INVALID;
                         }
-                        if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()))
+                        if (MVABBusinessPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus()))
                         {
                             _processMsg = "@BPartnerCreditHold@ - @TotalOpenBalance@="
                                 + bp.GetTotalOpenBalance()
                                 + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
                             return DocActionVariables.STATUS_INVALID;
                         }
-                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                        Decimal grandTotal = MVABExchangeRate.ConvertBase(GetCtx(),
                             GetVAPOS_CreditAmt(), GetVAB_Currency_ID(), GetDateOrdered(),
                             GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                        if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
+                        if (MVABBusinessPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
                         {
                             _processMsg = "@BPartnerOverOCreditHold@ - @TotalOpenBalance@="
                                 + bp.GetTotalOpenBalance() + ", @GrandTotal@=" + grandTotal
@@ -2880,7 +2880,7 @@ namespace VAdvantage.Model
                                                 VAB_DocTypes_ID = " + GetVAB_DocTypesTarget_ID() + " AND DocBaseType = 'SOO'", null, Get_TrxName()));
                     if (!(docSubType == "ON" || docSubType == "OB"))
                     {
-                        MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
+                        MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
                         //if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
                         //{
                         //    _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
@@ -2895,7 +2895,7 @@ namespace VAdvantage.Model
                         //        + ", @SO_CreditLimit@=" + bp.GetSO_CreditLimit();
                         //    return DocActionVariables.STATUS_INVALID;
                         //}
-                        Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                        Decimal grandTotal = MVABExchangeRate.ConvertBase(GetCtx(),
                            GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
                             GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         //if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(grandTotal)))
@@ -5371,13 +5371,13 @@ namespace VAdvantage.Model
                 return null;
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = MBPartner.get (GetCtx(), getVAB_BusinessPartner_ID());
-            MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             int counterVAF_Org_ID = bp.GetVAF_OrgBP_ID_Int();
             if (counterVAF_Org_ID == 0)
                 return null;
 
             //jz MBPartner counterBP = MBPartner.get (GetCtx(), counterVAB_BusinessPartner_ID);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
+            MVABBusinessPartner counterBP = new MVABBusinessPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
             MVAFOrgDetail counterOrgInfo = MVAFOrgDetail.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
@@ -6103,14 +6103,14 @@ namespace VAdvantage.Model
             _processMsg = processMsg;
         }
 
-        private void SetCounterBPartner(MBPartner BPartner, int counterAdOrgId, int counterMWarehouseId)
+        private void SetCounterBPartner(MVABBusinessPartner BPartner, int counterAdOrgId, int counterMWarehouseId)
         {
             counterBPartner = BPartner;
             counterOrgId = counterAdOrgId;
             counterWarehouseId = counterMWarehouseId;
         }
 
-        private MBPartner GetCounterBPartner()
+        private MVABBusinessPartner GetCounterBPartner()
         {
             return counterBPartner;
         }

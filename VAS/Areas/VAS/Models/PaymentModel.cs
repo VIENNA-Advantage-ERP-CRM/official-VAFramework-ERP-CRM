@@ -40,7 +40,7 @@ namespace VIS.Models
         int _VAB_Payment_ID = 0;
         // Start CashBook Line      
         private int _VAB_CashJRNLLine_ID = 0;
-        private MCashLine _cashLine = null;
+        private MVABCashJRNLLine _cashLine = null;
         // Start CashBook           
         private int _VAB_CashBook_ID = 0;
         int _VAB_Bank_Acct_ID = 0;
@@ -99,7 +99,7 @@ namespace VIS.Models
             }
             else
             {
-                _cashLine = new MCashLine(ctx, _VAB_CashJRNLLine_ID, null);
+                _cashLine = new MVABCashJRNLLine(ctx, _VAB_CashJRNLLine_ID, null);
                 pDetails._DateAcct = DateTime.SpecifyKind(Convert.ToDateTime(_cashLine.GetStatementDate()), DateTimeKind.Utc);
             }
             if (pDetails._Currencies == null)
@@ -162,7 +162,7 @@ namespace VIS.Models
 
             //Load Accounts
             SQL = "SELECT a.VAB_BPart_Bank_Acct_ID, NVL(b.Name, ' ')||a.AccountNo AS Acct "
-                + "FROM VAB_BPart_Bank_Acct a,C_Bank b "
+                + "FROM VAB_BPart_Bank_Acct a,VAB_Bank b "
                 + "WHERE VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID + " AND a.IsActive='Y'";
             kp = null;
             IDataReader idr1 = null;
@@ -216,7 +216,7 @@ namespace VIS.Models
             SQL = MVAFRole.GetDefault(ctx).AddAccessSQL(
                 "SELECT VAB_Bank_Acct_ID, Name || ' ' || AccountNo, IsDefault "
                 + "FROM VAB_Bank_Acct ba"
-                + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID) "
+                + " INNER JOIN VAB_Bank b ON (ba.VAB_Bank_ID=b.VAB_Bank_ID) "
                 + "WHERE b.IsActive='Y'",
                 "ba", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             kp = null;
@@ -522,7 +522,7 @@ namespace VIS.Models
                         //log.fine("Old Cash - " + _cashLine);
                         if (_cashLine != null)
                         {
-                            MCashLine cl = _cashLine.CreateReversal();
+                            MVABCashJRNLLine cl = _cashLine.CreateReversal();
                             if (cl.Save())
                             {
                                 // log.Config("CashCancelled");
@@ -630,7 +630,7 @@ namespace VIS.Models
                         //  Changed Amount
                         if (inputs._VAB_CashJRNLLine_ID > 0)
                         {
-                            _cashLine = new MCashLine(ctx, inputs._VAB_CashJRNLLine_ID, null);
+                            _cashLine = new MVABCashJRNLLine(ctx, inputs._VAB_CashJRNLLine_ID, null);
                         }
 
 
@@ -650,7 +650,7 @@ namespace VIS.Models
                                 || !TimeUtil.IsSameDay(_cashLine.GetStatementDate(), newDateAcct)))
                         {
                             //log.Config("Changed CashBook/Date: " + _VAB_CashBook_ID + "->" + newVAB_CashBook_ID);
-                            MCashLine reverse = _cashLine.CreateReversal();
+                            MVABCashJRNLLine reverse = _cashLine.CreateReversal();
                             if (!reverse.Save())
                             {
                                 errorMsg.Append("PaymentError---" + Msg.GetMsg(ctx, "CashNotCancelled", true) + Environment.NewLine);
@@ -672,14 +672,14 @@ namespace VIS.Models
                             {
                                 VAB_Currency_ID = order.GetVAB_Currency_ID();
                             }
-                            MCash cash = null;
+                            MVABCashJRNL cash = null;
                             if (newVAB_CashBook_ID != 0)
                             {
-                                cash = MCash.Get(ctx, newVAB_CashBook_ID, newDateAcct, null);
+                                cash = MVABCashJRNL.Get(ctx, newVAB_CashBook_ID, newDateAcct, null);
                             }
                             else	//	Default
                             {
-                                cash = MCash.Get(ctx, inputs._VAF_Org_ID, newDateAcct, VAB_Currency_ID, null);
+                                cash = MVABCashJRNL.Get(ctx, inputs._VAF_Org_ID, newDateAcct, VAB_Currency_ID, null);
                             }
                             if (cash == null || cash.Get_ID() == 0)
                             {
@@ -688,7 +688,7 @@ namespace VIS.Models
                             }
                             else
                             {
-                                MCashLine cl = new MCashLine(cash);
+                                MVABCashJRNLLine cl = new MVABCashJRNLLine(cash);
                                 if (invoice != null)
                                 {
                                     cl.SetInvoice(invoice);

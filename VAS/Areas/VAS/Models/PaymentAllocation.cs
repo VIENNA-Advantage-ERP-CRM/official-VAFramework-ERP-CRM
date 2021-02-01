@@ -160,7 +160,7 @@ namespace VIS.Models
             List<int> cashList = new List<int>(rowsCash.Count);
             List<Decimal> CashAmtList = new List<Decimal>(rowsCash.Count);
             Decimal cashAppliedAmt = Env.ZERO;
-            MCash cashobj = null;
+            MVABCashJRNL cashobj = null;
 
             List<Dictionary<string, string>> negInvList = new List<Dictionary<string, string>>();
             Decimal negInvtotAmt = 0;
@@ -219,7 +219,7 @@ namespace VIS.Models
 
             //	Create Allocation - but don't save yet
             // allocation should be created with current date 
-            MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
+            MVABDocAllocation alloc = new MVABDocAllocation(ctx, true,	//	manual
                 DateTime.Now, VAB_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
             alloc.SetVAF_Org_ID(VAF_Org_ID);
             alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
@@ -274,7 +274,7 @@ namespace VIS.Models
                     //  loop through all payments until invoice applied
                     int noCashlines = 0;
                     MInvoicePaySchedule mpay2 = null;
-                    MCashLine objCashline = null;
+                    MVABCashJRNLLine objCashline = null;
                     for (int j = 0; j < cashList.Count && Env.Signum(AppliedAmt) != 0; j++)
                     {
                         mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -285,9 +285,9 @@ namespace VIS.Models
                         #region cash to invoice matching
                         mpay2 = null;
                         VAB_CashJRNLLine_ID = Util.GetValueOfInt(cashList[j]);
-                        objCashline = new MCashLine(ctx, VAB_CashJRNLLine_ID, trx);
+                        objCashline = new MVABCashJRNLLine(ctx, VAB_CashJRNLLine_ID, trx);
 
-                        cashobj = new MCash(ctx, objCashline.GetVAB_CashJRNL_ID(), trx);
+                        cashobj = new MVABCashJRNL(ctx, objCashline.GetVAB_CashJRNL_ID(), trx);
                         Decimal PaymentAmt = Util.GetValueOfDecimal(CashAmtList[j]);
 
                         // check match receipt with receipt && payment with payment
@@ -345,7 +345,7 @@ namespace VIS.Models
                                 isScheduleAllocated = true;
                                 if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(DiscountAmt, WriteOffAmt)), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                    var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(DiscountAmt, WriteOffAmt)), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                     if (AppliedAmt == amount)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -381,7 +381,7 @@ namespace VIS.Models
                                 mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                 if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                    var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(), cashobj.GetDateAcct(), objCashline.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                     if (AppliedAmt == amount)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -415,7 +415,7 @@ namespace VIS.Models
                             //    VAB_BusinessPartner_ID = invPay.GetVAB_BusinessPartner_ID();
                             //}
                             //	Allocation Line // Changed PaymentAmt to AppliedAmt 17/4/18
-                            MAllocationLine aLine = new MAllocationLine(alloc, amount,
+                            MVABDocAllocationLine aLine = new MVABDocAllocationLine(alloc, amount,
                                 DiscountAmt, WriteOffAmt, OverUnderAmt);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                             aLine.SetPaymentInfo(0, VAB_CashJRNLLine_ID); //payment for payment allocation is zero
@@ -491,7 +491,7 @@ namespace VIS.Models
                         if (AppliedAmt > 0)
                         {
                             Decimal value;
-                            MAllocationLine aLine;
+                            MVABDocAllocationLine aLine;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -529,7 +529,7 @@ namespace VIS.Models
                                     isScheduleAllocated = true;
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
@@ -566,7 +566,7 @@ namespace VIS.Models
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
@@ -607,7 +607,7 @@ namespace VIS.Models
 
                                 VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                 //allocation for positive Appliedamount Invoice
-                                aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
+                                aLine = new MVABDocAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
@@ -654,7 +654,7 @@ namespace VIS.Models
                                     is_NegScheduleAllocated = true;
                                     if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
@@ -692,7 +692,7 @@ namespace VIS.Models
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
@@ -725,7 +725,7 @@ namespace VIS.Models
                                 Ref_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                                 //allocation for negative Amount Invoice
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
+                                aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                 aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
@@ -751,7 +751,7 @@ namespace VIS.Models
                                 }
 
                                 //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
-                                aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                aLine = new MVABDocAllocationLine(ctx, aLine_ID, trx);
                                 aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
                                 if (!aLine.Save())
                                 {
@@ -831,7 +831,7 @@ namespace VIS.Models
                         if (AppliedAmt > 0)
                         {
                             Decimal value = 0;
-                            MAllocationLine aLine = null;
+                            MVABDocAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
                                 mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -869,7 +869,7 @@ namespace VIS.Models
                                     isScheduleAllocated = true;
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
@@ -907,7 +907,7 @@ namespace VIS.Models
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
@@ -947,7 +947,7 @@ namespace VIS.Models
 
                                 VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                 //allocation for positive Appliedamount Invoice
-                                aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
+                                aLine = new MVABDocAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
 
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
@@ -995,7 +995,7 @@ namespace VIS.Models
                                     is_NegScheduleAllocated = true;
                                     if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
@@ -1032,7 +1032,7 @@ namespace VIS.Models
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                         if (Math.Abs(postAppliedAmt) == amount)
                                         {
@@ -1068,7 +1068,7 @@ namespace VIS.Models
                                 Ref_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                                 //allocation for negative Amount Invoice
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
+                                aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                 aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
@@ -1094,7 +1094,7 @@ namespace VIS.Models
                                 }
 
                                 //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
-                                aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                aLine = new MVABDocAllocationLine(ctx, aLine_ID, trx);
                                 aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
                                 if (!aLine.Save())
                                 {
@@ -1182,7 +1182,7 @@ namespace VIS.Models
                     if (PaymentAmt > 0)
                     {
                         Decimal value = 0;
-                        MAllocationLine aLine = null;
+                        MVABDocAllocationLine aLine = null;
                         for (int c = 0; c < negCashList.Count; c++)
                         {
                             //break the loop if PaymentAmt is Zero
@@ -1214,7 +1214,7 @@ namespace VIS.Models
                             int Ref_CashLine_ID = Util.GetValueOfInt(negCashList[c]["ccashlineid"]);
 
                             //allocation for positive Appliedamount for Payment
-                            aLine = new MAllocationLine(alloc, Math.Abs(amount), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, Math.Abs(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetPaymentInfo(0, VAB_CashJRNLLine_ID);
                             aLine.SetRef_CashLine_ID(Ref_CashLine_ID);
@@ -1232,7 +1232,7 @@ namespace VIS.Models
                             Ref_CashLine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
 
                             //for negative Amount Payment matched with +ve amount
-                            aLine = new MAllocationLine(alloc, Decimal.Negate(amount), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetPaymentInfo(0, VAB_CashJRNLLine_ID);//set the cashline and Payment to Zero
                             aLine.SetRef_CashLine_ID(Ref_CashLine_ID);
@@ -1347,7 +1347,7 @@ namespace VIS.Models
                 for (int i = 0; i < rowsCash.Count; i++)
                 {
                     int _cashine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
-                    MCashLine cash = new MCashLine(ctx, _cashine_ID, trx);
+                    MVABCashJRNLLine cash = new MVABCashJRNLLine(ctx, _cashine_ID, trx);
 
                     string sqlGetOpenPayments = "SELECT  ALLOCCASHAVAILABLE(cl.VAB_CashJRNLLine_ID)  FROM VAB_CashJRNLLine cl Where VAB_CashJRNLLine_ID = " + _cashine_ID;
                     object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
@@ -1460,7 +1460,7 @@ namespace VIS.Models
         /// <param name="DateTrx"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public string InvAlloc(int invoicePaySchedule_ID, MInvoicePaySchedule mpay2, MAllocationLine aLine, DateTime DateTrx, Trx trx)
+        public string InvAlloc(int invoicePaySchedule_ID, MInvoicePaySchedule mpay2, MVABDocAllocationLine aLine, DateTime DateTrx, Trx trx)
         {
             //change for Schedule Management
             if (Env.IsModuleInstalled("VA009_"))
@@ -1695,7 +1695,7 @@ namespace VIS.Models
                 _log.SaveError("First Allocation", "First Allocation");
                 //	Create Allocation - but don't save yet
                 // to be save Current date on allocation -- not to pick either payment or schedule date (on behalf of mukesh sir)
-                MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
+                MVABDocAllocation alloc = new MVABDocAllocation(ctx, true,	//	manual
                     DateTime.Now, VAB_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
                 alloc.SetVAF_Org_ID(VAF_Org_ID);
                 //to set transaction and account date on allocation header
@@ -1833,7 +1833,7 @@ namespace VIS.Models
                                     isScheduleAllocated = true;
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -1870,7 +1870,7 @@ namespace VIS.Models
 
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(), objPayment.GetDateAcct(), objPayment.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (AppliedAmt == amount)
                                         {
                                             //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -1913,7 +1913,7 @@ namespace VIS.Models
                                 VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
 
                                 //	Allocation Line
-                                MAllocationLine aLine = new MAllocationLine(alloc, amount,
+                                MVABDocAllocationLine aLine = new MVABDocAllocationLine(alloc, amount,
                                     DiscountAmt, WriteOffAmt, OverUnderAmt);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
 
@@ -2014,7 +2014,7 @@ namespace VIS.Models
                             if (AppliedAmt > 0)
                             {
                                 Decimal value = 0;
-                                MAllocationLine aLine = null;
+                                MVABDocAllocationLine aLine = null;
                                 for (int c = 0; c < negInvList.Count; c++)
                                 {
                                     mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -2056,7 +2056,7 @@ namespace VIS.Models
 
                                         if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                             if (AppliedAmt == amount)
                                             {
@@ -2094,7 +2094,7 @@ namespace VIS.Models
 
                                         if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                             //Decimal withHoldingAmt = invoice.GetGrandTotalAfterWithholding();
                                             if (AppliedAmt == amount)
@@ -2135,7 +2135,7 @@ namespace VIS.Models
 
                                     VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                     //allocation for positive Appliedamount Invoice
-                                    aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
+                                    aLine = new MVABDocAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
                                     aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     //aLine.SetRef_Invoiceschedule_ID(Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]));
@@ -2180,7 +2180,7 @@ namespace VIS.Models
                                         is_NegScheduleAllocated = true;
                                         if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                             if (Math.Abs(postAppliedAmt) == amount)
                                             {
@@ -2218,7 +2218,7 @@ namespace VIS.Models
 
                                         if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                             if (Math.Abs(postAppliedAmt) == amount)
                                             {
@@ -2253,7 +2253,7 @@ namespace VIS.Models
                                     Ref_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                                     //allocation for negative Amount Invoice
-                                    aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
+                                    aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                     aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
@@ -2278,7 +2278,7 @@ namespace VIS.Models
                                     }
 
                                     //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
-                                    aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                    aLine = new MVABDocAllocationLine(ctx, aLine_ID, trx);
                                     aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
                                     if (!aLine.Save())
                                     {
@@ -2357,7 +2357,7 @@ namespace VIS.Models
                             if (AppliedAmt > 0)
                             {
                                 Decimal value = 0;
-                                MAllocationLine aLine = null;
+                                MVABDocAllocationLine aLine = null;
                                 for (int c = 0; c < negInvList.Count; c++)
                                 {
                                     mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -2395,7 +2395,7 @@ namespace VIS.Models
                                         isScheduleAllocated = true;
                                         if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(OverUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                             if (AppliedAmt == amount)
                                             {
@@ -2434,7 +2434,7 @@ namespace VIS.Models
                                         mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                         if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : Neg_invoice.GetDateAcct()), Neg_invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                             if (AppliedAmt == amount)
                                             {
@@ -2476,7 +2476,7 @@ namespace VIS.Models
 
                                     VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
                                     //allocation for positive Appliedamount Invoice
-                                    aLine = new MAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
+                                    aLine = new MVABDocAllocationLine(alloc, amount, DiscountAmt, WriteOffAmt, OverUnderAmt);
                                     aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
@@ -2526,7 +2526,7 @@ namespace VIS.Models
                                         is_NegScheduleAllocated = true;
                                         if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(amount), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                             if (Math.Abs(postAppliedAmt) == amount)
                                             {
@@ -2565,7 +2565,7 @@ namespace VIS.Models
                                         mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                         if (Neg_invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                         {
-                                            var conertedAmount = MConversionRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
+                                            var conertedAmount = MVABExchangeRate.Convert(ctx, amount, VAB_Currency_ID, Neg_invoice.GetVAB_Currency_ID(),
                                                 (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), Neg_invoice.GetVAF_Client_ID(), Neg_invoice.GetVAF_Org_ID());
                                             if (Math.Abs(postAppliedAmt) == amount)
                                             {
@@ -2599,7 +2599,7 @@ namespace VIS.Models
                                     Ref_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                                     //allocation for negative Amount Invoice
-                                    aLine = new MAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
+                                    aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), NDiscountAmt, NWriteOffAmt, NOverUnderAmt);
                                     aLine.SetDocInfo(VAB_BusinessPartner_ID, VAB_Order_ID, VAB_Invoice_ID);
                                     aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                     aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
@@ -2625,7 +2625,7 @@ namespace VIS.Models
                                     }
 
                                     //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
-                                    aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                    aLine = new MVABDocAllocationLine(ctx, aLine_ID, trx);
                                     aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
                                     if (!aLine.Save())
                                     {
@@ -2719,7 +2719,7 @@ namespace VIS.Models
                         if (PaymentAmt > 0)
                         {
                             Decimal value = 0;
-                            MAllocationLine aLine = null;
+                            MVABDocAllocationLine aLine = null;
                             for (int c = 0; c < negPayList.Count; c++)
                             {
                                 if (PaymentAmt == Env.ZERO)
@@ -2750,7 +2750,7 @@ namespace VIS.Models
                                 int Ref_Payment_ID = Util.GetValueOfInt(negPayList[c]["cpaymentid"]);
 
                                 //for positive Appliedamount Invoice
-                                aLine = new MAllocationLine(alloc, Math.Abs(amount), Env.ZERO, Env.ZERO, Env.ZERO);
+                                aLine = new MVABDocAllocationLine(alloc, Math.Abs(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                                 aLine.SetPaymentInfo(VAB_Payment_ID, 0);
                                 aLine.SetRef_Payment_ID(Ref_Payment_ID);
@@ -2769,7 +2769,7 @@ namespace VIS.Models
                                 Ref_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
 
                                 //for negative Amount Invoice
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(amount), Env.ZERO, Env.ZERO, Env.ZERO);
+                                aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(amount), Env.ZERO, Env.ZERO, Env.ZERO);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                                 aLine.SetPaymentInfo(VAB_Payment_ID, 0);
                                 aLine.SetRef_Payment_ID(Ref_Payment_ID);
@@ -3003,7 +3003,7 @@ namespace VIS.Models
             //}
             int countRecord = 0;
             // used to create for preciosion handling
-            MCurrency objCurrency = MCurrency.Get(ctx, _VAB_Currency_ID);
+            MVABCurrency objCurrency = MVABCurrency.Get(ctx, _VAB_Currency_ID);
 
             //Changed DateTrx to DateAcct because we have to convert currency on Account Date Not on Transaction Date 
             string sql = "SELECT 'false' as SELECTROW, TO_CHAR(p.DateTrx,'YYYY-MM-DD') as DATE1,p.DocumentNo As DOCUMENTNO,p.VAB_Payment_ID As CPAYMENTID,"  //  1..3
@@ -3359,7 +3359,7 @@ namespace VIS.Models
 
             int countRecord = 0;
             // used to create for preciosion handling
-            MCurrency objCurrency = MCurrency.Get(ctx, _VAB_Currency_ID);
+            MVABCurrency objCurrency = MVABCurrency.Get(ctx, _VAB_Currency_ID);
 
             //Changed created date to DateAcct because we have to convert currency on Account Date Not on Created Date 
             string sqlCash = "SELECT 'false' as SELECTROW, TO_CHAR(cn.DATEACCT ,'YYYY-MM-DD') as CREATED, cn.receiptno AS RECEIPTNO, cn.VAB_CashJRNLLine_id AS CCASHLINEID,cl.VSS_PaymentType "
@@ -3540,7 +3540,7 @@ namespace VIS.Models
 
             int countRecord = 0;
             // used to create for preciosion handling
-            MCurrency objCurrency = MCurrency.Get(ctx, _VAB_Currency_ID);
+            MVABCurrency objCurrency = MVABCurrency.Get(ctx, _VAB_Currency_ID);
 
             //Changed DateInvoiced to DateAcct because we have to convert currency on Account Date Not on Invoiced Date 
             //Query Replaced with new optimized query
@@ -3868,7 +3868,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         public int GetCurrencyPrecision(int _VAB_Currency_ID)
         {
             int precision = 0;
-            MCurrency cr = new MCurrency(ctx, _VAB_Currency_ID, null);
+            MVABCurrency cr = new MVABCurrency(ctx, _VAB_Currency_ID, null);
             precision = cr.GetStdPrecision();
             return precision;
         }
@@ -4073,7 +4073,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         {
             List<GLData> glData = new List<GLData>();
             StringBuilder sql = new StringBuilder();
-            MCurrency objCurrency = MCurrency.Get(ctx, _VAB_Currency_ID);
+            MVABCurrency objCurrency = MVABCurrency.Get(ctx, _VAB_Currency_ID);
             sql.Append(@" SELECT EV.AccountType, JL.VAB_BUSINESSPARTNER_ID,  CB.ISCUSTOMER,  CB.ISVENDOR, J.DATEDOC, J.DATEACCT, J.DOCUMENTNO,  NVL(JL.AMTSOURCEDR, 0),  NVL(JL.AMTSOURCECR,0),c.ISO_Code AS ISO_CODE,
                 JL.VAB_CurrencyType_ID, CT.name as CONVERSIONNAME, o.VAF_Org_ID, o.Name, EV.Name AS Account,
                 NVL(ROUND(CURRENCYCONVERT(JL.AMTSOURCEDR ,JL.VAB_CURRENCY_ID ," + _VAB_Currency_ID + @",J.DATEACCT ,Jl.VAB_CurrencyType_ID ,J.VAF_CLIENT_ID ,J.VAF_ORG_ID ), " + objCurrency.GetStdPrecision() + @"),0) as AMTACCTDR, 
@@ -4453,7 +4453,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
             List<int> neg_Invoice_IDs = new List<int>(negList.Count);
 
-            MAllocationHdr alloc = new MAllocationHdr(ctx, true,	//	manual
+            MVABDocAllocation alloc = new MVABDocAllocation(ctx, true,	//	manual
                DateTime.Now, VAB_Currency_ID, ctx.GetContext("#VAF_UserContact_Name"), trx);
             alloc.SetVAF_Org_ID(VAF_Org_ID);
             alloc.SetDateAcct(DateAcct);// to set Account date on allocation header because posting and conversion are calculating on the basis of Date Account
@@ -4486,7 +4486,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                     if (remainingAmt > 0)
                     {
-                        MAllocationLine aLine = null;
+                        MVABDocAllocationLine aLine = null;
                         for (int j = 0; j < negList.Count; j++)
                         {
                             if (Util.GetValueOfBool(negList[j]["IsPaid"]))
@@ -4505,7 +4505,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 balanceAmt = actualAmt - remainingAmt;
                                 remainingAmt = 0;
                             }
-                            aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetRef_CashLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
                             aLine.SetDateTrx(DateTrx);
@@ -4529,7 +4529,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 return msg;
                             }
                             //for -ve Value of Cash journal
-                            aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetVAB_CashJRNLLine_ID(Util.GetValueOfInt(negList[j]["ccashlineid"]));
                             aLine.SetDateTrx(DateTrx);
@@ -4602,7 +4602,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             balanceAmt = actualAmt - remainingAmt;
                             remainingAmt = 0;
                         }
-                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                        MVABDocAllocationLine aLine = new MVABDocAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                         aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                         aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
@@ -4655,7 +4655,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                     if (remainingAmt > 0)
                     {
-                        MAllocationLine aLine = null;
+                        MVABDocAllocationLine aLine = null;
                         for (int j = 0; j < negList.Count; j++)
                         {
                             if (Util.GetValueOfBool(negList[j]["IsPaid"]))
@@ -4676,7 +4676,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 balanceAmt = actualAmt - remainingAmt;
                                 remainingAmt = 0;
                             }
-                            aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetRef_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
                             aLine.SetDateTrx(DateTrx);
@@ -4716,7 +4716,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                             objPayment = new MPayment(ctx, Util.GetValueOfInt(negList[j]["cpaymentid"]), trx);
 
-                            aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
+                            aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.SetVAB_Payment_ID(Util.GetValueOfInt(negList[j]["cpaymentid"]));
                             aLine.SetDateTrx(DateTrx);
@@ -4805,7 +4805,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             balanceAmt = actualAmt - remainingAmt;
                             remainingAmt = 0;
                         }
-                        MAllocationLine aLine = new MAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
+                        MVABDocAllocationLine aLine = new MVABDocAllocationLine(alloc, netAmt, Env.ZERO, Env.ZERO, Env.ZERO);
                         aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                         aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                         aLine.SetDateTrx(DateTrx);
@@ -4883,7 +4883,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     if (Util.GetValueOfBool(rowsInvoice[i]["IsPaid"]))
                         continue;
 
-                    MAllocationLine aLine = null;
+                    MVABDocAllocationLine aLine = null;
                     MInvoicePaySchedule mpay2 = null;
                     Decimal diffAmt = Env.ZERO;
 
@@ -4970,7 +4970,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 isScheduleAllocated = true;
                                 if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                    var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                     if (remainingAmt == Env.ZERO)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -5007,7 +5007,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                 if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                 {
-                                    var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                                    var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(), journalLine.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                     if (remainingAmt == Env.ZERO)
                                     {
                                         //get the difference DueAmt by Compare with Total Invoice Amount with sum of Schedule DueAmt's
@@ -5039,7 +5039,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 //neg_Invoice_IDs.Add(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
                             }
 
-                            aLine = new MAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
+                            aLine = new MVABDocAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
                             aLine.Set_Value("VAGL_JRNLLine_ID", Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]));
                             aLine.SetVAB_Invoice_ID(Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]));
@@ -5139,7 +5139,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                     isScheduleAllocated = true;
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : neg_InvoiceObj.GetDateAcct()), neg_InvoiceObj.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (remainingAmt == Env.ZERO)
                                         {
@@ -5177,7 +5177,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (invoice.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(overUnderAmt)), Decimal.Add(Math.Abs(DiscountAmt), Math.Abs(WriteOffAmt))), VAB_Currency_ID, invoice.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : neg_InvoiceObj.GetDateAcct()), neg_InvoiceObj.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                                         if (remainingAmt == Env.ZERO)
                                         {
@@ -5211,7 +5211,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                                 VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
 
-                                aLine = new MAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
+                                aLine = new MVABDocAllocationLine(alloc, netAmt, DiscountAmt, WriteOffAmt, overUnderAmt);
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
 
@@ -5276,7 +5276,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                     is_NegScheduleAllocated = true;
                                     if (neg_InvoiceObj.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, neg_InvoiceObj.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, neg_InvoiceObj.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), neg_InvoiceObj.GetVAF_Client_ID(), neg_InvoiceObj.GetVAF_Org_ID());
                                         if (balanceAmt == Env.ZERO)
                                         {
@@ -5314,7 +5314,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                     mpay2.SetVAF_Org_ID(mpay.GetVAF_Org_ID());
                                     if (neg_InvoiceObj.GetVAB_Currency_ID() != VAB_Currency_ID)
                                     {
-                                        var conertedAmount = MConversionRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, neg_InvoiceObj.GetVAB_Currency_ID(),
+                                        var conertedAmount = MVABExchangeRate.Convert(ctx, Decimal.Add(Decimal.Add(Math.Abs(netAmt), Math.Abs(NOverUnderAmt)), Decimal.Add(Math.Abs(NDiscountAmt), Math.Abs(NWriteOffAmt))), VAB_Currency_ID, neg_InvoiceObj.GetVAB_Currency_ID(),
                                             (alloc.GetConversionDate() != null ? alloc.GetConversionDate() : invoice.GetDateAcct()), invoice.GetVAB_CurrencyType_ID(), neg_InvoiceObj.GetVAF_Client_ID(), neg_InvoiceObj.GetVAF_Org_ID());
                                         if (balanceAmt == Env.ZERO)
                                         {
@@ -5346,7 +5346,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 Ref_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
 
                                 //allocation for negative Amount Invoice
-                                aLine = new MAllocationLine(alloc, Decimal.Negate(netAmt), NDiscountAmt, NWriteOffAmt, Decimal.Negate(NOverUnderAmt));
+                                aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(netAmt), NDiscountAmt, NWriteOffAmt, Decimal.Negate(NOverUnderAmt));
                                 aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, VAB_Invoice_ID);
                                 aLine.SetRef_VAB_Invoice_ID(Ref_Invoice_ID);
                                 aLine.SetRef_Invoiceschedule_ID(positiveAmtInvSchdle_ID);
@@ -5370,7 +5370,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 }
 
                                 //Updating +ve Invoice allocationLine to set Ref_InvoicePaySchedule_ID
-                                aLine = new MAllocationLine(ctx, aLine_ID, trx);
+                                aLine = new MVABDocAllocationLine(ctx, aLine_ID, trx);
                                 aLine.SetRef_Invoiceschedule_ID(negtiveAmtInvSchdle_ID);
                                 if (!aLine.Save())
                                 {
@@ -5554,7 +5554,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     for (int i = 0; i < rowsCash.Count; i++)
                     {
                         int _cashine_ID = Util.GetValueOfInt(rowsCash[i]["ccashlineid"]);
-                        MCashLine cash = new MCashLine(ctx, _cashine_ID, trx);
+                        MVABCashJRNLLine cash = new MVABCashJRNLLine(ctx, _cashine_ID, trx);
 
                         string sqlGetOpenPayments = "SELECT  ALLOCCASHAVAILABLE(cl.VAB_CashJRNLLine_ID)  FROM VAB_CashJRNLLine cl Where VAB_CashJRNLLine_ID = " + _cashine_ID;
                         object result = DB.ExecuteScalar(sqlGetOpenPayments, null, trx);
@@ -5694,7 +5694,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         /// <param name="amount">Amount to create schedule</param>
         /// <param name="trx">Transaction Object</param>
         /// <returns>Return new schedule object</returns>
-        public MInvoicePaySchedule CreateNewSchedule(MInvoicePaySchedule mpay, MInvoice invoice, MJournalLine journalLine, MAllocationLine aLine, Decimal amount, Trx trx)
+        public MInvoicePaySchedule CreateNewSchedule(MInvoicePaySchedule mpay, MInvoice invoice, MJournalLine journalLine, MVABDocAllocationLine aLine, Decimal amount, Trx trx)
         {
             MInvoicePaySchedule mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
             MJournal journal = new MJournal(ctx, journalLine.GetVAGL_JRNL_ID(), trx);
@@ -5707,7 +5707,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             mpay2.Set_Value("VAGL_JRNLLine_ID", 0);
             if (invoice.GetVAB_Currency_ID() != journalLine.GetVAB_Currency_ID())
             {
-                var conertedAmount = MConversionRate.Convert(ctx, amount, journalLine.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), journal.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                var conertedAmount = MVABExchangeRate.Convert(ctx, amount, journalLine.GetVAB_Currency_ID(), invoice.GetVAB_Currency_ID(), journal.GetDateAcct(), journalLine.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
                 mpay2.SetDueAmt(Math.Abs(conertedAmount));
             }
             else

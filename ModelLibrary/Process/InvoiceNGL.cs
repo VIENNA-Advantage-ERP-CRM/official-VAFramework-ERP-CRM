@@ -268,8 +268,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //
-            MAcctSchema aas = MAcctSchema.Get(GetCtx(), _VAB_AccountBook_ID);
-            MAcctSchemaDefault asDefaultAccts = MAcctSchemaDefault.Get(GetCtx(), _VAB_AccountBook_ID);
+            MVABAccountBook aas = MVABAccountBook.Get(GetCtx(), _VAB_AccountBook_ID);
+            MVABAccountBookDefault asDefaultAccts = MVABAccountBookDefault.Get(GetCtx(), _VAB_AccountBook_ID);
             MGLCategory cat = MGLCategory.GetDefaultSystem(GetCtx());
             if (cat == null)
             {
@@ -367,7 +367,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="crTotal">cr</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="lineNo">lineno base line no</param>
-        private void CreateBalancing(MAcctSchemaDefault asDefaultAccts, MJournal journal,
+        private void CreateBalancing(MVABAccountBookDefault asDefaultAccts, MJournal journal,
             Decimal drTotal, Decimal crTotal, int VAF_Org_ID, int lineNo)
         {
             if (journal == null)

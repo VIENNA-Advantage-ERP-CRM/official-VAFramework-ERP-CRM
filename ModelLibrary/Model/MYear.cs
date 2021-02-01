@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="calendar">parent</param>
-        public MYear(MCalendar calendar)
+        public MYear(MVABCalendar calendar)
             : this(calendar.GetCtx(), 0, calendar.Get_TrxName())
         {
             SetClientOrg(calendar);

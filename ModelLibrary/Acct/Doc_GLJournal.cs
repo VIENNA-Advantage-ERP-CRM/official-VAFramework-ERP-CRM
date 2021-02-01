@@ -43,12 +43,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_GLJournal(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_GLJournal(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MJournal), idr, null, trxName)
         {
 
         }
-        public Doc_GLJournal(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_GLJournal(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MJournal), dr, null, trxName)
         {
 
@@ -77,7 +77,7 @@ namespace VAdvantage.Acct
         /// <returns>DocLine Array</returns>
         private DocLine[] LoadLines(MJournal journal)
         {
-            MAcctSchema mSc = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, null);
+            MVABAccountBook mSc = new MVABAccountBook(GetCtx(), _VAB_AccountBook_ID, null);
             List<DocLine> list = new List<DocLine>();
             MJournalLine[] lines = journal.GetLines(false);
             record_Id = lines[0].GetVAGL_JRNL_ID();
@@ -272,7 +272,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns>fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
             //	Other Acct Schema

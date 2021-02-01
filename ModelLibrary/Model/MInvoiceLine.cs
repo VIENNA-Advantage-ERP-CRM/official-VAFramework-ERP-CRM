@@ -638,7 +638,7 @@ namespace VAdvantage.Model
                     if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
                     {
                         int VAB_TaxRate_ID = 0, taxCategory = 0;
-                        MBPartner bp = new MBPartner(GetCtx(), inv.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                        MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), inv.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         if (bp.IsTaxExempt())
                         {
                             VAB_TaxRate_ID = GetExemptTax(GetCtx(), GetVAF_Org_ID());
@@ -1144,9 +1144,9 @@ namespace VAdvantage.Model
                 #region Set Discount Values
                 MInvoice invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(GetVAB_Invoice_ID()), null);
                 MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetM_Product_ID()), null);
-                MBPartner bPartner = new MBPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
+                MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
                 MDiscountSchema discountSchema = new MDiscountSchema(GetCtx(), bPartner.GetM_DiscountSchema_ID(), null);
-                int precision = MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
+                int precision = MVABCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
                 String epl = GetCtx().GetContext("EnforcePriceLimit");
                 bool enforce = invoice.IsSOTrx() && epl != null && epl.Equals("Y");
                 decimal valueBasedDiscount = 0;
@@ -3227,7 +3227,7 @@ namespace VAdvantage.Model
                     lead.SetVAB_Promotion_ID(invoice.GetVAB_Promotion_ID());
                     lead.SetVAB_Project_ID(invoice.GetVAB_Project_ID());
                     //
-                    MBPartnerLocation bpLoc = new MBPartnerLocation(GetCtx(), invoice.GetVAB_BPart_Location_ID(), null);
+                    MVABBPartLocation bpLoc = new MVABBPartLocation(GetCtx(), invoice.GetVAB_BPart_Location_ID(), null);
                     MLocation loc = bpLoc.GetLocation(false);
                     lead.SetAddress1(loc.GetAddress1());
                     lead.SetAddress2(loc.GetAddress2());
@@ -3387,7 +3387,7 @@ namespace VAdvantage.Model
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (inv.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
                     {
-                        currentcostprice = MConversionRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, inv.GetVAB_Currency_ID(),
+                        currentcostprice = MVABExchangeRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, inv.GetVAB_Currency_ID(),
                                                                                     inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                     if (inv.GetDescription() != null && inv.GetDescription().Contains("{->"))
@@ -3732,7 +3732,7 @@ namespace VAdvantage.Model
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (inv.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
                     {
-                        taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, inv.GetVAB_Currency_ID(),
+                        taxAmt = MVABExchangeRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, inv.GetVAB_Currency_ID(),
                                                                                    inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                     else
@@ -4253,7 +4253,7 @@ namespace VAdvantage.Model
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (invoice.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
                     {
-                        baseTaxAmt = MConversionRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency, invoice.GetVAB_Currency_ID(),
+                        baseTaxAmt = MVABExchangeRate.Convert(GetCtx(), taxAmt, primaryAcctSchemaCurrency, invoice.GetVAB_Currency_ID(),
                                                                                    invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                     newITax.Set_Value("TaxBaseCurrencyAmt", baseTaxAmt);

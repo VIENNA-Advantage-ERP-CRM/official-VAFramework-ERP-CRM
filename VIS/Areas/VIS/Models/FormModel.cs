@@ -886,7 +886,7 @@ namespace VIS.Models
                 var type = Elements[i].Type;
                 //
 
-                if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Organization))
+                if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Organization))
                 {
                     sql = sql.Append("VAF_Org_ID");
                     if (value != null)
@@ -898,7 +898,7 @@ namespace VIS.Models
                     //else
                     //    sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Account))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Account))
                 {
                     sql = sql.Append("Account_ID");
                     if (string.IsNullOrEmpty(value))
@@ -906,7 +906,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_SubAccount))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_SubAccount))
                 {
                     sql = sql.Append("VAB_SubAcct_ID");
                     if (string.IsNullOrEmpty(value))
@@ -914,7 +914,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Product))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Product))
                 {
                     sql = sql.Append("M_Product_ID");
                     if (string.IsNullOrEmpty(value))
@@ -922,7 +922,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_BPartner))
                 {
                     sql = sql.Append("VAB_BusinessPartner_ID");
                     if (string.IsNullOrEmpty(value))
@@ -930,7 +930,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Campaign))
                 {
                     sql = sql.Append("VAB_Promotion_ID");
                     if (string.IsNullOrEmpty(value))
@@ -938,7 +938,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_LocationFrom))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationFrom))
                 {
                     sql = sql.Append("C_LocFrom_ID");
                     if (string.IsNullOrEmpty(value))
@@ -946,7 +946,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_LocationTo))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationTo))
                 {
                     sql = sql.Append("C_LocTo_ID");
                     if (string.IsNullOrEmpty(value))
@@ -954,7 +954,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Project))
                 {
                     sql = sql.Append("VAB_Project_ID");
                     if (string.IsNullOrEmpty(value))
@@ -962,7 +962,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_SalesRegion))
                 {
                     sql = sql.Append("VAB_SalesRegionState_ID");
                     if (string.IsNullOrEmpty(value))
@@ -970,7 +970,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_OrgTrx))
                 {
                     sql = sql.Append("VAF_OrgTrx_ID");
                     if (string.IsNullOrEmpty(value))
@@ -978,7 +978,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_Activity))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Activity))
                 {
                     sql = sql.Append("VAB_BillingCode_ID");
                     if (string.IsNullOrEmpty(value))
@@ -986,7 +986,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserList1))
                 {
                     sql = sql.Append("User1_ID");
                     if (string.IsNullOrEmpty(value))
@@ -994,7 +994,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserList2))
                 {
                     sql = sql.Append("User2_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1002,7 +1002,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement1))
                 {
                     sql = sql.Append("UserElement1_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1010,7 +1010,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement2))
                 {
                     sql = sql.Append("UserElement2_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1018,7 +1018,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement3))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement3))
                 {
                     sql = sql.Append("UserElement3_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1026,7 +1026,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement4))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement4))
                 {
                     sql = sql.Append("UserElement4_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1034,7 +1034,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement5))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement5))
                 {
                     sql = sql.Append("UserElement5_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1042,7 +1042,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement6))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement6))
                 {
                     sql = sql.Append("UserElement6_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1050,7 +1050,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement7))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement7))
                 {
                     sql = sql.Append("UserElement7_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1058,7 +1058,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement8))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement8))
                 {
                     sql = sql.Append("UserElement8_ID");
                     if (string.IsNullOrEmpty(value))
@@ -1066,7 +1066,7 @@ namespace VIS.Models
                     else
                         sql = sql.Append("=").Append(value).Append(" AND ");
                 }
-                else if (type.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement9))
+                else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement9))
                 {
                     sql = sql.Append("UserElement9_ID");
                     if (string.IsNullOrEmpty(value))

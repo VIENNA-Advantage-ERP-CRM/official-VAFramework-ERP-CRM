@@ -683,7 +683,7 @@ namespace VAdvantage.WF
                     if (VAB_Currency_ID != role.GetVAB_Currency_ID()
                         && role.GetVAB_Currency_ID() != 0)			//	No currency = amt only
                     {
-                        roleAmt = MConversionRate.Convert(GetCtx(),//	today & default rate 
+                        roleAmt = MVABExchangeRate.Convert(GetCtx(),//	today & default rate 
                             roleAmt, role.GetVAB_Currency_ID(),
                             VAB_Currency_ID, GetVAF_Client_ID(), VAF_Org_ID);
                         if (Math.Sign(roleAmt) == 0)
@@ -4208,7 +4208,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                     int? bp = (int?)po.Get_Value(index);
                     if (bp != null)
                     {
-                        MBPartner partner = MBPartner.Get(GetCtx(), bp.Value);
+                        MVABBusinessPartner partner = MVABBusinessPartner.Get(GetCtx(), bp.Value);
                         if (partner != null)
                             sb.Append(partner.GetName()).Append(" ");
                     }

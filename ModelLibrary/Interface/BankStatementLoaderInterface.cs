@@ -22,7 +22,7 @@ namespace VAdvantage.Interface
         /// </summary>
         /// <param name="controller">controller Reference to the MBankStatementLoader controller object</param>
         /// <returns>Initialized succesfully</returns>
-        bool Init(MBankStatementLoader controller);
+        bool Init(MVABBankingJRNLLoader controller);
        
         /// <summary>
         /// Verify whether the data to be imported is valid      

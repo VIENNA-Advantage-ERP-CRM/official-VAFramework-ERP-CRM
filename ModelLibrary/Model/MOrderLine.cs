@@ -370,7 +370,7 @@ namespace VAdvantage.Model
                 {
                     int VAB_TaxRate_ID = 0;
                     int taxCategory = 0;
-                    MBPartner bp = new MBPartner(GetCtx(), inv.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), inv.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     if (bp.IsTaxExempt())
                     {
                         VAB_TaxRate_ID = GetExemptTax(GetCtx(), GetVAF_Org_ID());
@@ -963,9 +963,9 @@ namespace VAdvantage.Model
                     #region Set Discount Values
                     MOrder order = new MOrder(GetCtx(), Util.GetValueOfInt(GetVAB_Order_ID()), null);
                     MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetM_Product_ID()), null);
-                    MBPartner bPartner = new MBPartner(GetCtx(), order.GetVAB_BusinessPartner_ID(), null);
+                    MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), order.GetVAB_BusinessPartner_ID(), null);
                     MDiscountSchema discountSchema = new MDiscountSchema(GetCtx(), bPartner.GetM_DiscountSchema_ID(), null);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), order.GetVAB_Currency_ID());
+                    int precision = MVABCurrency.GetStdPrecision(GetCtx(), order.GetVAB_Currency_ID());
                     String epl = GetCtx().GetContext("EnforcePriceLimit");
                     bool enforce = order.IsSOTrx() && epl != null && epl.Equals("Y");
                     decimal valueBasedDiscount = 0;
@@ -2471,7 +2471,7 @@ namespace VAdvantage.Model
             }
             if (GetVAB_Currency_ID() != 0)
             {
-                MCurrency cur = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
+                MVABCurrency cur = MVABCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 if (cur.Get_ID() != 0)
                 {
                     _precision = (int)(cur.GetStdPrecision());
@@ -3907,7 +3907,7 @@ namespace VAdvantage.Model
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (Ord.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
                     {
-                        currentcostprice = MConversionRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, Ord.GetVAB_Currency_ID(),
+                        currentcostprice = MVABExchangeRate.Convert(GetCtx(), currentcostprice, primaryAcctSchemaCurrency, Ord.GetVAB_Currency_ID(),
                                                                                     Ord.GetDateAcct(), Ord.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                 }
@@ -4226,7 +4226,7 @@ namespace VAdvantage.Model
                 primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$VAB_Currency_ID");
                 if (Ord.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
                 {
-                    taxAmt = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetVAB_Currency_ID(),
+                    taxAmt = MVABExchangeRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, Ord.GetVAB_Currency_ID(),
                                                                                Ord.GetDateAcct(), Ord.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 else
@@ -4272,7 +4272,7 @@ namespace VAdvantage.Model
 
             if (Get_ColumnIndex("VAPOS_DiscountAmount") >= 0)
             {
-                MCurrency currency = MCurrency.Get(GetCtx(), Ord.GetVAB_Currency_ID());
+                MVABCurrency currency = MVABCurrency.Get(GetCtx(), Ord.GetVAB_Currency_ID());
                 SetVAPOS_DiscountAmount(Decimal.Round(GetQtyEntered() * Decimal.Subtract(GetPriceList(), GetPriceEntered()), currency.GetStdPrecision()));
             }
 

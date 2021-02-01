@@ -31,7 +31,7 @@ namespace VAdvantage.Acct
         //Account					
         private MAccount _acct = null;
         // Accounting Schema		
-        private MAcctSchema _acctSchema = null;
+        private MVABAccountBook _acctSchema = null;
         // Document Header			
         private Doc _doc = null;
         // Document Line 			
@@ -103,7 +103,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="acctSchema">account schema</param>
         /// <param name="acct">account</param>
-        public void SetAccount(MAcctSchema acctSchema, MAccount acct)
+        public void SetAccount(MVABAccountBook acctSchema, MAccount acct)
         {
             _acctSchema = acctSchema;
             SetVAB_AccountBook_ID(acctSchema.GetVAB_AccountBook_ID());
@@ -117,7 +117,7 @@ namespace VAdvantage.Acct
             SetVAB_SubAcct_ID(_acct.GetVAB_SubAcct_ID());
 
             //	User Defined References
-            MAcctSchemaElement ud1 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud1 = _acctSchema.GetAcctSchemaElement(
                     X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement1);
             if (ud1 != null && GetUserElement1_ID() <= 0)
             {
@@ -143,7 +143,7 @@ namespace VAdvantage.Acct
                     }
                 }
             }
-            MAcctSchemaElement ud2 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud2 = _acctSchema.GetAcctSchemaElement(
                     X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement2);
             if (ud2 != null && GetUserElement2_ID() <= 0)
             {
@@ -173,7 +173,7 @@ namespace VAdvantage.Acct
             #region change by mohit to consider userelements3 to userelements9 16/12/2016
 
             //user element 3
-            MAcctSchemaElement ud3 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud3 = _acctSchema.GetAcctSchemaElement(
                    X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement3);
             if (ud3 != null && GetUserElement3_ID() <= 0)
             {
@@ -200,7 +200,7 @@ namespace VAdvantage.Acct
                 }
             }
             //user element 4
-            MAcctSchemaElement ud4 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud4 = _acctSchema.GetAcctSchemaElement(
                    X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement4);
             if (ud4 != null && GetUserElement4_ID() <= 0)
             {
@@ -228,7 +228,7 @@ namespace VAdvantage.Acct
             }
 
             //user element 5
-            MAcctSchemaElement ud5 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud5 = _acctSchema.GetAcctSchemaElement(
                    X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement5);
             if (ud5 != null && GetUserElement5_ID() <= 0)
             {
@@ -255,7 +255,7 @@ namespace VAdvantage.Acct
                 }
             }
             //user element 6
-            MAcctSchemaElement ud6 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud6 = _acctSchema.GetAcctSchemaElement(
                  X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement6);
             if (ud6 != null && GetUserElement6_ID() <= 0)
             {
@@ -282,7 +282,7 @@ namespace VAdvantage.Acct
                 }
             }
             //user element 7
-            MAcctSchemaElement ud7 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud7 = _acctSchema.GetAcctSchemaElement(
                  X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement7);
             if (ud7 != null && GetUserElement7_ID() <= 0)
             {
@@ -310,7 +310,7 @@ namespace VAdvantage.Acct
             }
 
             //user element 8
-            MAcctSchemaElement ud8 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud8 = _acctSchema.GetAcctSchemaElement(
                  X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement8);
             if (ud8 != null && GetUserElement8_ID() <= 0)
             {
@@ -338,7 +338,7 @@ namespace VAdvantage.Acct
             }
 
             //user element 9
-            MAcctSchemaElement ud9 = _acctSchema.GetAcctSchemaElement(
+            MVABAccountBookElement ud9 = _acctSchema.GetAcctSchemaElement(
                  X_VAB_AccountBook_Element.ELEMENTTYPE_UserElement9);
             if (ud9 != null && GetUserElement9_ID() <= 0)
             {
@@ -393,7 +393,7 @@ namespace VAdvantage.Acct
                 return false;
             }
             //	Currency Precision
-            int precision = MCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
+            int precision = MVABCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
             if (AmtSourceDr != null && Env.Scale(AmtSourceDr.Value) > precision)
             {
                 Decimal AmtSourceDr1 = Decimal.Round(AmtSourceDr.Value, precision, MidpointRounding.AwayFromZero);
@@ -532,7 +532,7 @@ namespace VAdvantage.Acct
             SetVAGL_Group_ID(_doc.GetVAGL_Group_ID());
 
             //	Product
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Product))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_Product))
             {
                 if (_docLine != null)
                 {
@@ -558,7 +558,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_LocationFrom))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_LocationFrom))
             {
                 //	Loc From (maybe set earlier)
                 if (GetC_LocFrom_ID() == 0 && _docLine != null)
@@ -571,7 +571,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_LocationTo))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_LocationTo))
             {
                 //	Loc To (maybe set earlier)
                 if (GetC_LocTo_ID() == 0 && _docLine != null)
@@ -584,7 +584,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_BPartner))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_BPartner))
             {
                 //	BPartner
                 if (_docLine != null)
@@ -597,7 +597,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_OrgTrx))
             {
                 //	Sales Region from BPLocation/Sales Rep
                 //	Trx Org
@@ -612,39 +612,39 @@ namespace VAdvantage.Acct
             }
 
             //	Set User Dimension
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement1) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement1) && _docLine != null)
             {
                 SetUserElement1_ID(_docLine.GetUserElement1());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement2) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement2) && _docLine != null)
             {
                 SetUserElement2_ID(_docLine.GetUserElement2());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement3) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement3) && _docLine != null)
             {
                 SetUserElement3_ID(_docLine.GetUserElement3());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement4) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement4) && _docLine != null)
             {
                 SetUserElement4_ID(_docLine.GetUserElement4());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement5) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement5) && _docLine != null)
             {
                 SetUserElement5_ID(_docLine.GetUserElement5());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement6) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement6) && _docLine != null)
             {
                 SetUserElement6_ID(_docLine.GetUserElement6());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement7) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement7) && _docLine != null)
             {
                 SetUserElement7_ID(_docLine.GetUserElement7());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement8) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement8) && _docLine != null)
             {
                 SetUserElement8_ID(_docLine.GetUserElement8());
             }
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_UserElement9) && _docLine != null)
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_UserElement9) && _docLine != null)
             {
                 SetUserElement9_ID(_docLine.GetUserElement9());
             }
@@ -653,7 +653,7 @@ namespace VAdvantage.Acct
                 SetConversionRate(_docLine.GetConversionRate());
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Project))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_Project))
             {
                 //	Project
                 if (_docLine != null)
@@ -666,7 +666,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Campaign))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_Campaign))
             {
                 //	Campaign
                 if (_docLine != null)
@@ -679,7 +679,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            if (acctSchemaElementRecord.ContainsKey(MAcctSchemaElement.ELEMENTTYPE_Activity))
+            if (acctSchemaElementRecord.ContainsKey(MVABAccountBookElement.ELEMENTTYPE_Activity))
             {
                 //	Activity
                 if (_docLine != null)
@@ -1114,14 +1114,14 @@ namespace VAdvantage.Acct
                 return true;
             }
 
-            SetAmtAcctDr(MConversionRate.Convert(GetCtx(),
+            SetAmtAcctDr(MVABExchangeRate.Convert(GetCtx(),
                 GetAmtSourceDr(), GetVAB_Currency_ID(), _acctSchema.GetVAB_Currency_ID(),
                 convDate, VAB_CurrencyType_ID, _doc.GetVAF_Client_ID(), VAF_Org_ID));
             //if (GetAmtAcctDr() == null)
             //{
             //    return false;
             //}
-            SetAmtAcctCr(MConversionRate.Convert(GetCtx(),
+            SetAmtAcctCr(MVABExchangeRate.Convert(GetCtx(),
                 GetAmtSourceCr(), GetVAB_Currency_ID(), _acctSchema.GetVAB_Currency_ID(),
                 convDate, VAB_CurrencyType_ID, _doc.GetVAF_Client_ID(), VAF_Org_ID));
             return true;

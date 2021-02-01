@@ -478,7 +478,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Requested Product Account</returns>
-        public MAccount GetAccount(int AcctType, MAcctSchema as1)
+        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             //	Charge Account
             if (GetM_Product_ID() == 0 && GetVAB_Charge_ID() != 0)
@@ -522,7 +522,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">account schema</param>
         /// <param name="amount">amount for expense(+)/revenue(-)</param>
         /// <returns>Charge Account or null</returns>
-        public MAccount GetChargeAccount(MAcctSchema as1, Decimal? amount)
+        public MAccount GetChargeAccount(MVABAccountBook as1, Decimal? amount)
         {
             int VAB_Charge_ID = GetVAB_Charge_ID();
             if (VAB_Charge_ID == 0)
@@ -832,7 +832,7 @@ namespace VAdvantage.Acct
         /// <param name="VAF_Org_ID"></param>
         /// <param name="zeroCostsOK">zero/no costs are OK</param>
         /// <returns>costs</returns>
-        public Decimal GetProductCosts(MAcctSchema as1, int VAF_Org_ID, bool zeroCostsOK)
+        public Decimal GetProductCosts(MVABAccountBook as1, int VAF_Org_ID, bool zeroCostsOK)
         {
             ProductCost pc = GetProductCost();
             int VAB_OrderLine_ID = GetVAB_OrderLine_ID();

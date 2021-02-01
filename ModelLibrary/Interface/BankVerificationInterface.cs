@@ -38,7 +38,7 @@ namespace VAdvantage.Model
          *	@param BBAN Basic Bank Account Number
          *	@return error message or null
          */
-        String VerifyBBAN(MBank bank, String BBAN);
+        String VerifyBBAN(MVABBank bank, String BBAN);
 
         /**
          * 	Verify International Bank Account Number
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
          *	@param IBAN International Bank Account Number
          *	@return error message or null
          */
-        String VerifyIBAN(MBank bank, String IBAN);
+        String VerifyIBAN(MVABBank bank, String IBAN);
 
         /**
          * 	Verify Account Number.
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
          *	@param AccountNo Bank Account Number
          *	@return error message or null
          */
-        String VerifyAccountNo(MBank bank, String AccountNo);
+        String VerifyAccountNo(MVABBank bank, String AccountNo);
 
 
         /**

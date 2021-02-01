@@ -566,7 +566,7 @@ namespace VAdvantage.Model
                 MAccount.UpdateValueDescription(GetCtx(), "VAB_Project_ID=" + GetVAB_Project_ID(), Get_TrxName());
             if (GetVAB_Promotion_ID() != 0)
             {
-                MCampaign cam = new MCampaign(GetCtx(), GetVAB_Promotion_ID(), null);
+                MVABPromotion cam = new MVABPromotion(GetCtx(), GetVAB_Promotion_ID(), null);
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_Project pl WHERE pl.IsActive = 'Y' AND pl.VAB_Promotion_ID = " + GetVAB_Promotion_ID()));
                 cam.SetCosts(plnAmt);
                 cam.Save();

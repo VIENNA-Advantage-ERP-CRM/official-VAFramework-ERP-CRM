@@ -71,7 +71,7 @@ namespace VAdvantage.Process
             //Added by Vivek for Credit Limit on 24/08/2016
             if (fromProject.GetVAB_BusinessPartner_ID() != 0)
             {
-                VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), fromProject.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                VAdvantage.Model.MVABBusinessPartner bp = new VAdvantage.Model.MVABBusinessPartner(GetCtx(), fromProject.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     if (bp.GetCreditValidation() == "A" || bp.GetCreditValidation() == "D" || bp.GetCreditValidation() == "E")
@@ -91,7 +91,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    VAdvantage.Model.MBPartnerLocation loc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), fromProject.GetVAB_BPart_Location_ID(), Get_TrxName());
+                    VAdvantage.Model.MVABBPartLocation loc = new VAdvantage.Model.MVABBPartLocation(GetCtx(), fromProject.GetVAB_BPart_Location_ID(), Get_TrxName());
                     if (loc.GetCreditValidation() == "A" || loc.GetCreditValidation() == "D" || loc.GetCreditValidation() == "E")
                     {
                         log.SaveError("StopOrder", "");

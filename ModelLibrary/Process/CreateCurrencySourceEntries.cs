@@ -46,7 +46,7 @@ namespace VAdvantage.Process
                 int count=0;
                 for (int i = 0; i < urlInfo.IDs.Count; i++)
                 {
-                    MCurrencySource src = new MCurrencySource(GetCtx(), 0, null);
+                    MVABCurrencySource src = new MVABCurrencySource(GetCtx(), 0, null);
                     src.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                     src.SetVAF_Org_ID(0);
                     src.SetName(urlInfo.Names[i]);

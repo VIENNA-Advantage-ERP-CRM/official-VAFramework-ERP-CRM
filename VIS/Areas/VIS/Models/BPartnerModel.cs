@@ -107,7 +107,7 @@ namespace VIS.Models
                 //return true;
             }
 
-            _partner = new MBPartner(Env.GetCtx(), bPartnerID, null);
+            _partner = new MVABBusinessPartner(Env.GetCtx(), bPartnerID, null);
             if (_partner.Get_ID() != 0)
             {
                 //	Contact - Load values
@@ -122,7 +122,7 @@ namespace VIS.Models
             isEmployee = _partner.IsEmployee();
             _readOnly = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                 Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
-                MBPartner.Table_ID, 0, false);
+                MVABBusinessPartner.Table_ID, 0, false);
             log.Info("R/O=" + _readOnly);
 
             //	Get Data
@@ -137,7 +137,7 @@ namespace VIS.Models
             if (!ro)
                 ro = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
-                    MBPartnerLocation.Table_ID, 0, false);
+                    MVABBPartLocation.Table_ID, 0, false);
             if (!ro)
                 ro = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
@@ -402,8 +402,8 @@ namespace VIS.Models
 
 
 
-        private MBPartnerLocation _pLocation = null;
-        private MBPartner _partner = null;
+        private MVABBPartLocation _pLocation = null;
+        private MVABBusinessPartner _partner = null;
 
         private MVAFUserContact _user = null;
         X_VAB_BPart_Relation _bprelation = null;
@@ -438,11 +438,11 @@ namespace VIS.Models
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             if (VAB_BusinessPartner_ID > 0)
             {
-                _partner = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
+                _partner = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
             }
             else
             {
-                _partner = MBPartner.GetTemplate(ctx, VAF_Client_ID);
+                _partner = MVABBusinessPartner.GetTemplate(ctx, VAF_Client_ID);
             }
             bool isSOTrx = ctx.IsSOTrx(_windowNo);
             _partner.SetIsCustomer(isSOTrx);
@@ -570,15 +570,15 @@ namespace VIS.Models
             if (_pLocation == null)
                 if (VAB_BusinessPartner_ID > 0)
                 {
-                    _pLocation = new MBPartnerLocation(ctx, GetBPartnerLocationID(_partner.Get_ID()), null);
+                    _pLocation = new MVABBPartLocation(ctx, GetBPartnerLocationID(_partner.Get_ID()), null);
                     if (_pLocation.Get_ID() <= 0)
                     {
-                        _pLocation = new MBPartnerLocation(_partner);
+                        _pLocation = new MVABBPartLocation(_partner);
                     }
                 }
                 else
                 {
-                    _pLocation = new MBPartnerLocation(_partner);
+                    _pLocation = new MVABBPartLocation(_partner);
                 }
             if (address != string.Empty)
             {

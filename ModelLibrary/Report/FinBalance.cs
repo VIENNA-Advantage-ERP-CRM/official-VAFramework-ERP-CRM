@@ -499,8 +499,8 @@ namespace VAdvantage.Report
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             StringBuilder Info = new StringBuilder();
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
-            foreach (MAcctSchema as1 in ass)
+            MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(ctx, VAF_Client_ID);
+            foreach (MVABAccountBook as1 in ass)
             {
                 if (Info.Length > 0)
                     Info.Append(" - ");

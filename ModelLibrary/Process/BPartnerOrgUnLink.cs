@@ -65,7 +65,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             throw new ArgumentException("No Business Partner ID");
         }
-		MBPartner bp = new MBPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
+		MVABBusinessPartner bp = new MVABBusinessPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
         if (bp.Get_ID() == 0)
         {
             throw new ArgumentException("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);

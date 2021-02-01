@@ -74,7 +74,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="line"></param>
         /// <param name="doc"></param>
-        public DocLine_Cash(MCashLine line, DoVAB_CashBook doc)
+        public DocLine_Cash(MVABCashJRNLLine line, DoVAB_CashBook doc)
             : base(line, doc)
         {
             _CashType = line.GetCashType();

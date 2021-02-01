@@ -53,10 +53,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
 	    {
 		    log.Info("doIt - VAB_WorkCommission_ID=" + _VAB_WorkCommission_ID + " - copy to " + _VAB_WorkCommissionTo_ID);
-		    MCommission comFrom = new MCommission (GetCtx(), _VAB_WorkCommission_ID, Get_Trx());
+		    MVABWorkCommission comFrom = new MVABWorkCommission (GetCtx(), _VAB_WorkCommission_ID, Get_Trx());
 		    if (comFrom.Get_ID() == 0)
 			    throw new Exception ("No From Commission");
-		    MCommission comTo = new MCommission (GetCtx(), _VAB_WorkCommissionTo_ID, Get_Trx());
+		    MVABWorkCommission comTo = new MVABWorkCommission (GetCtx(), _VAB_WorkCommissionTo_ID, Get_Trx());
 		    if (comTo.Get_ID() == 0)
 			    throw new Exception ("No To Commission");
     		

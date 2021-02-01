@@ -29,12 +29,12 @@ namespace VAdvantage.Acct
 
         #endregion
 
-        public Doc_CostUpdate(MAcctSchema[] ass, DataRow dr, Trx trx)
+        public Doc_CostUpdate(MVABAccountBook[] ass, DataRow dr, Trx trx)
             : base(ass, typeof(MCostUpdate), dr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
-        public Doc_CostUpdate(MAcctSchema[] ass, IDataReader idr, Trx trx)
+        public Doc_CostUpdate(MVABAccountBook[] ass, IDataReader idr, Trx trx)
             : base(ass, typeof(MCostUpdate), idr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
@@ -73,7 +73,7 @@ namespace VAdvantage.Acct
             return Env.ZERO;
         }
 
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
             MProductCategoryAcct pca = null;

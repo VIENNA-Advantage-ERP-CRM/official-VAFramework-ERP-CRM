@@ -172,7 +172,7 @@ namespace VAdvantage.Model
          *	@param country country
          *	@param regionName Region Name
          */
-        public MRegion(MCountry country, String regionName)
+        public MRegion(MVABCountry country, String regionName)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
             SetVAB_Country_ID(country.GetVAB_Country_ID());

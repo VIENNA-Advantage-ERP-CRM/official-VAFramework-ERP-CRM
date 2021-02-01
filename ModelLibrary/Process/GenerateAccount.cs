@@ -29,7 +29,7 @@ namespace ViennaAdvantageServer.Process
         protected override String DoIt()
         {
             int value = 0;
-            VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
+            VAdvantage.Model.MVABBusinessPartner bp = new VAdvantage.Model.MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
             //BPartner.SetVAB_Greeting_ID(
             String sqlbp = "update VAB_BusinessPartner set iscustomer='Y', isprospect='N' where VAB_BusinessPartner_id=" + VAB_BusinessPartner_ID + "";
             value = DB.ExecuteQuery(sqlbp, null, Get_TrxName());

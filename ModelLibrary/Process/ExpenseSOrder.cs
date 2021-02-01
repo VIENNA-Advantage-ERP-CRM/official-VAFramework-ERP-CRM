@@ -108,7 +108,7 @@ namespace VAdvantage.Process
             sql.Append(" ORDER BY el.VAB_BusinessPartner_ID, el.VAB_Project_ID, el.VAS_ExpenseReport_ID, el.Line");
 
             //
-            MBPartner oldBPartner = null;
+            MVABBusinessPartner oldBPartner = null;
             int old_Project_ID = -1;
             MTimeExpense te = null;
             //
@@ -159,7 +159,7 @@ namespace VAdvantage.Process
                             || oldBPartner.GetVAB_BusinessPartner_ID() != tel.GetVAB_BusinessPartner_ID())
                         {
                             CompleteOrder();
-                            oldBPartner = new MBPartner(GetCtx(), tel.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                            oldBPartner = new MVABBusinessPartner(GetCtx(), tel.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         }
                         //	New Project - New Order
                         if (old_Project_ID != tel.GetVAB_Project_ID())
@@ -225,7 +225,7 @@ namespace VAdvantage.Process
         /// <param name="te">header</param>
         /// <param name="tel">line</param>
         /// <param name="bp">bp</param>
-        private void ProcessLine(MTimeExpense te, MTimeExpenseLine tel, MBPartner bp)
+        private void ProcessLine(MTimeExpense te, MTimeExpenseLine tel, MVABBusinessPartner bp)
         {
             if (_order == null)
             {
@@ -438,7 +438,7 @@ namespace VAdvantage.Process
             if (price.CompareTo(Env.ZERO) != 0)
             {
                 if (tel.GetVAB_Currency_ID() != _order.GetVAB_Currency_ID())
-                    price = MConversionRate.Convert(GetCtx(), price,
+                    price = MVABExchangeRate.Convert(GetCtx(), price,
                         tel.GetVAB_Currency_ID(), _order.GetVAB_Currency_ID(),
                         _order.GetVAF_Client_ID(), _order.GetVAF_Org_ID());
                 ol.SetPrice(price);

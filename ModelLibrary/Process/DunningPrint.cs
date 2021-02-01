@@ -134,7 +134,7 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //	To BPartner
-                MBPartner bp = new MBPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.Get_ID() == 0)
                 {
                     AddLog(entry.Get_ID(), null, null, "@NotFound@: @VAB_BusinessPartner_ID@ " + entry.GetVAB_BusinessPartner_ID());
@@ -286,7 +286,7 @@ namespace VAdvantage.Process
             //	Update Business Partner based on Level
             if (level.IsSetCreditStop() || level.IsSetPaymentTerm())
             {
-                MBPartner thisBPartner = new MBPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                MVABBusinessPartner thisBPartner = new MVABBusinessPartner(GetCtx(), entry.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (level.IsSetCreditStop())
                     thisBPartner.SetSOCreditStatus(X_VAB_BusinessPartner.SOCREDITSTATUS_CreditStop);
                 if (level.IsSetPaymentTerm() && level.GetVAB_PaymentTerm_ID() != 0)

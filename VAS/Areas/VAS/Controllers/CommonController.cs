@@ -1954,7 +1954,7 @@ namespace VIS.Controllers
 
         public bool SaveStatmentData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int VAB_BankingJRNL_ID)
         {
-            MBankStatement bs = new MBankStatement(ctx, VAB_BankingJRNL_ID, null);
+            MVABBankingJRNL bs = new MVABBankingJRNL(ctx, VAB_BankingJRNL_ID, null);
             //  Lines
             for (int i = 0; i < model.Count; i++)
             {
@@ -1965,7 +1965,7 @@ namespace VIS.Controllers
                 int VAB_Currency_ID = Convert.ToInt32(model[i]["VAB_Currency_ID_K"]); //  3-Currency
                 Decimal TrxAmt = Convert.ToDecimal(model[i]["ConvertedAmount"]);           //  4-PayAmt
                 string type = Util.GetValueOfString(model[i]["Type"]);
-                MBankStatementLine bsl = new MBankStatementLine(bs);
+                MVABBankingJRNLLine bsl = new MVABBankingJRNLLine(bs);
                 bsl.SetStatementLineDate(trxDate);
                 //bsl.SetPayment(new MPayment(ctx, VAB_Payment_ID, null));
                 MPayment pmt = new MPayment(ctx, VAB_Payment_ID, null);
@@ -2650,8 +2650,8 @@ namespace VIS.Controllers
         private String _ref9 = null;
         public String PostingType = "";
         public 
-            MAcctSchema[] ASchemas = null;
-        public MAcctSchema ASchema = null;
+            MVABAccountBook[] ASchemas = null;
+        public MVABAccountBook ASchema = null;
 
 
         public AccountViewClass GetDataQuery(Ctx ctx, int VAF_Client_ID, string whereClause, string orderClause, bool gr1, bool gr2, bool gr3, bool gr4,
@@ -2659,7 +2659,7 @@ namespace VIS.Controllers
         {
             group1 = gr1; group2 = gr2; group3 = gr3; group4 = gr4;
             sortBy1 = sort1; sortBy2 = sort2; sortBy3 = sort3; sortBy4 = sort4;
-            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
+            ASchemas = MVABAccountBook.GetClientAcctSchema(ctx, VAF_Client_ID);
             ASchema = ASchemas[0];
             displayDocumentInfo = displayDocInfo;
             displaySourceAmt = displaySrcAmt;
@@ -2875,7 +2875,7 @@ namespace VIS.Controllers
 
 
             //  Add Account Segments
-            MAcctSchemaElement[] elements = ASchema.GetAcctSchemaElements();
+            MVABAccountBookElement[] elements = ASchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
             {
                 if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
@@ -2883,7 +2883,7 @@ namespace VIS.Controllers
                     _leadingColumns = columns.Count;
                 }
                 //
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 String columnName = ase.GetColumnName();
                 if (columnName.StartsWith("UserElement"))
                 {

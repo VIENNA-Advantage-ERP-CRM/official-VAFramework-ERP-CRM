@@ -38,12 +38,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Inventory(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_Inventory(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MInventory), idr, MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
         }
-        public Doc_Inventory(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_Inventory(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MInventory), dr, MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
@@ -129,7 +129,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns> Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);

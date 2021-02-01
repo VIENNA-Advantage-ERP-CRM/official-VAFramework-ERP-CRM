@@ -80,7 +80,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             if (_VAB_BPart_Category_ID == 0)
             {
-                MBPartner bp = new MBPartner(GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
                 if (bp.Get_ID() == 0)
                 {
                     throw new Exception("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     idr.Close();
                     foreach (DataRow dr in dt.Rows)
                     {
-                        MBPartner bp = new MBPartner(GetCtx(), dr, Get_Trx());
+                        MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), dr, Get_Trx());
 
                         CheckBP(bp);
                     }
@@ -132,7 +132,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Check BP
         /// </summary>
         /// <param name="bp">bp bp</param>
-        private void CheckBP(MBPartner bp)
+        private void CheckBP(MVABBusinessPartner bp)
         {
             AddLog(0, null, null, bp.GetName() + ":");
             //	See also VMerge.postMerge
@@ -157,7 +157,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Check Payments
         /// </summary>
         /// <param name="bp">bp business partner</param>
-        private void CheckPayments(MBPartner bp)
+        private void CheckPayments(MVABBusinessPartner bp)
         {
             //	See also VMerge.postMerge
             int changed = 0;
@@ -182,7 +182,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Check Invoices
         /// </summary>
         /// <param name="bp">bp business partner</param>
-        private void CheckInvoices(MBPartner bp)
+        private void CheckInvoices(MVABBusinessPartner bp)
         {
             //	See also VMerge.postMerge
             int changed = 0;

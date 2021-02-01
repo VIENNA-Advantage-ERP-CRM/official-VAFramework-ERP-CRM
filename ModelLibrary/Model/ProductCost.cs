@@ -155,7 +155,7 @@ namespace VAdvantage.Model
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Requested Product Account</returns>
-        public MAccount GetAccount(int AcctType, MAcctSchema as1)
+        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
 
             //if (AcctType < 1 || AcctType > 10)
@@ -230,7 +230,7 @@ namespace VAdvantage.Model
         /// <param name="AcctType"></param>
         /// <param name="as1">accounting schema</param>
         /// <returns> Requested Product Account</returns>
-        public MAccount GetAccountDefault(int AcctType, MAcctSchema as1)
+        public MAccount GetAccountDefault(int AcctType, MVABAccountBook as1)
         {
             // if (AcctType < 1 || AcctType > 10)
             //Updated By raghu 7,jun,2011
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_OrderLine_ID">optional order line</param>
         /// <param name="zeroCostsOK">zero/no costs are OK</param>
         /// <returns>cost or null, if qty or costs cannot be determined</returns>
-        public Decimal? GetProductCosts(MAcctSchema as1, int VAF_Org_ID, String costingMethod, int VAB_OrderLine_ID, bool zeroCostsOK)
+        public Decimal? GetProductCosts(MVABAccountBook as1, int VAF_Org_ID, String costingMethod, int VAB_OrderLine_ID, bool zeroCostsOK)
         {
             if (_qty == null)
             {
@@ -338,20 +338,20 @@ namespace VAdvantage.Model
         /// <param name="as1"></param>
         /// <param name="costType">if null uses Accounting Schema Costs - see AcctSchema.COSTING_*</param>
         /// <returns>product costs</returns>
-        private Decimal? GetProductItemCostOld(MAcctSchema as1, String costType)
+        private Decimal? GetProductItemCostOld(MVABAccountBook as1, String costType)
         {
             Decimal? current = null;
             Decimal? cost = null;
             String cm = as1.GetCostingMethod();
             StringBuilder sql = new StringBuilder("SELECT CurrentCostPrice,");	//	1
             //
-            if ((costType == null && MAcctSchema.COSTINGMETHOD_AveragePO.Equals(cm))
-                    || MAcctSchema.COSTINGMETHOD_AveragePO.Equals(costType))
+            if ((costType == null && MVABAccountBook.COSTINGMETHOD_AveragePO.Equals(cm))
+                    || MVABAccountBook.COSTINGMETHOD_AveragePO.Equals(costType))
             {
                 sql.Append("COSTAVERAGE");										//	2
             }
-            else if ((costType == null && MAcctSchema.COSTINGMETHOD_LastPOPrice.Equals(cm))
-                    || MAcctSchema.COSTINGMETHOD_LastPOPrice.Equals(costType))
+            else if ((costType == null && MVABAccountBook.COSTINGMETHOD_LastPOPrice.Equals(cm))
+                    || MVABAccountBook.COSTINGMETHOD_LastPOPrice.Equals(costType))
             {
                 sql.Append("PRICELASTPO");
             }
@@ -402,7 +402,7 @@ namespace VAdvantage.Model
         /// <param name="as1">accounting schema</param>
         /// <param name="create">create record</param>
         /// <returns>costs</returns>
-        private Decimal? UpdateCostsOld(MAcctSchema as1, bool create)
+        private Decimal? UpdateCostsOld(MVABAccountBook as1, bool create)
         {
             //  Create Zero Record
             if (create)
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
         /// <param name="as1">accounting schema</param>
         /// <param name="onlyPOPriceList">use only PO price list</param>
         /// <returns>po price</returns>
-        private Decimal? GetPriceList(MAcctSchema as1, bool onlyPOPriceList)
+        private Decimal? GetPriceList(MVABAccountBook as1, bool onlyPOPriceList)
         {
             StringBuilder sql = new StringBuilder(
                 "SELECT pl.VAB_Currency_ID, pp.PriceList, pp.PriceStd, pp.PriceLimit "
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
             //  Convert
             if (price != null && !price.Equals(Env.ZERO))
             {
-                price = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(price), VAB_Currency_ID, as1.GetVAB_Currency_ID(),
+                price = MVABExchangeRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(price), VAB_Currency_ID, as1.GetVAB_Currency_ID(),
                     as1.GetVAF_Client_ID(), 0);
             }
             return price;
@@ -528,7 +528,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="as1">accounting schema</param>
         /// <returns>po cost</returns>
-        private Decimal? GetPOCost(MAcctSchema as1)
+        private Decimal? GetPOCost(MVABAccountBook as1)
         {
             String sql = "SELECT VAB_Currency_ID, PriceList,PricePO,PriceLastPO "
                 + "FROM M_Product_PO WHERE M_Product_ID=" + _M_Product_ID
@@ -578,7 +578,7 @@ namespace VAdvantage.Model
             //  Convert - standard precision!! - should be costing precision
             if (cost != null && !cost.Equals(Env.ZERO))
             {
-                cost = MConversionRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), VAB_Currency_ID, as1.GetVAB_Currency_ID(), as1.GetVAF_Client_ID(), as1.GetVAF_Org_ID());
+                cost = MVABExchangeRate.Convert(as1.GetCtx(), Utility.Util.GetValueOfDecimal(cost), VAB_Currency_ID, as1.GetVAB_Currency_ID(), as1.GetVAF_Client_ID(), as1.GetVAF_Org_ID());
             }
             return cost;
         }

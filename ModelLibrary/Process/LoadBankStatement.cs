@@ -24,7 +24,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int _VAF_Org_ID = 0;
 
         /** Ban Statement Loader				*/
-        private int _C_BankStmtLoader_ID = 0;
+        private int _VAB_BankStmtLoader_ID = 0;
 
         /** File to be imported					*/
         private String fileName = "";
@@ -33,7 +33,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private Ctx m_ctx;
 
         /** Current context					*/
-        private MBankStatementLoader _controller = null;
+        private MVABBankingJRNLLoader _controller = null;
 
 
         /// <summary>
@@ -48,7 +48,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 String name = para[i].GetParameterName();
                 if (name.Equals("VAB_BankingJRNLLoader_ID"))
-                    _C_BankStmtLoader_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
+                    _VAB_BankStmtLoader_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());
                 else if (name.Equals("FileName"))
                     fileName = Utility.Util.GetValueOfString(para[i].GetParameter());
                 else
@@ -58,7 +58,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("VAF_Client_ID=" + _VAF_Client_ID);
             _VAF_Org_ID = m_ctx.GetVAF_Org_ID();
             log.Info("VAF_Org_ID=" + _VAF_Org_ID);
-            log.Info("VAB_BankingJRNLLoader_ID=" + _C_BankStmtLoader_ID);
+            log.Info("VAB_BankingJRNLLoader_ID=" + _VAB_BankStmtLoader_ID);
         }	//	prepare
 
 
@@ -71,7 +71,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("LoadBankStatement.doIt");
             String message = "@Error@";
 
-            _controller = new MBankStatementLoader(m_ctx, _C_BankStmtLoader_ID, fileName, Get_TrxName());
+            _controller = new MVABBankingJRNLLoader(m_ctx, _VAB_BankStmtLoader_ID, fileName, Get_TrxName());
             log.Info(_controller.ToString());
 
             if (_controller == null || _controller.Get_ID() == 0)

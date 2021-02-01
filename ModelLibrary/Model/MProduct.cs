@@ -815,7 +815,7 @@ namespace VAdvantage.Model
                     }
 
                     //
-                    MAcctSchema[] mass = MAcctSchema.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
+                    MVABAccountBook[] mass = MVABAccountBook.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
                     for (int i = 0; i < mass.Length; i++)
                     {
                         //	Old

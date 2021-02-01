@@ -77,7 +77,7 @@ namespace VAdvantage.Process
                         defaultconversionType = Convert.ToInt32(DB.ExecuteScalar("select VAB_CurrencyType_id from VAB_CurrencyType where isdefault='Y' and isactive='Y'"));
                     }
                     catch { }
-                    MConversionRate conversion = null;
+                    MVABExchangeRate conversion = null;
                     Decimal rate1=0;
                     Decimal rate2 = 0;
                     Decimal one = new Decimal(1.0);
@@ -95,7 +95,7 @@ namespace VAdvantage.Process
 
                             if (!String.IsNullOrEmpty(result))
                             {
-                                conversion = new MConversionRate(GetCtx(), 0, trx);
+                                conversion = new MVABExchangeRate(GetCtx(), 0, trx);
                                 conversion.SetVAF_Org_ID(0);
                                 conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);
@@ -123,7 +123,7 @@ namespace VAdvantage.Process
 
                             if (!String.IsNullOrEmpty(result))
                             {
-                                conversion = new MConversionRate(GetCtx(), 0, trx);
+                                conversion = new MVABExchangeRate(GetCtx(), 0, trx);
                                 conversion.SetVAF_Org_ID(0);
                                 conversion.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                                 conversion.SetValidFrom(DateTime.Now);

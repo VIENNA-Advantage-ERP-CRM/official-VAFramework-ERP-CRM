@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         }
 
         public static bool CreateCostElementDetail(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, MProduct Product, int M_ASI_ID,
-                                                     MAcctSchema mas, int M_costElement_ID, string windowName, MCostDetail cd, decimal amt, decimal qty)
+                                                     MVABAccountBook mas, int M_costElement_ID, string windowName, MCostDetail cd, decimal amt, decimal qty)
         {
             try
             {

@@ -47,7 +47,7 @@ namespace ViennaAdvantage.Process
             string sql = "select ProfileType from VAS_Resource where VAS_Resource_ID=" + VAS_Resource_ID + "";
             string ProfileType = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sql));
             VAdvantage.Model.X_VAF_UserContact user = new VAdvantage.Model.X_VAF_UserContact(GetCtx(), 0, Get_Trx());
-            VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_Trx());
+            VAdvantage.Model.MVABBusinessPartner bp = new VAdvantage.Model.MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, Get_Trx());
             if (ProfileType == "")
             {
                 return Msg.GetMsg(GetCtx(), "ProfileTypeNotSelected");
@@ -90,7 +90,7 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError(bp, "BusinessPartnerNotSaved");
                             }
 
-                            VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
+                            VAdvantage.Model.MVABBPartLocation bploc = new VAdvantage.Model.MVABBPartLocation(GetCtx(), 0, Get_Trx());
                             bploc.SetVAF_Client_ID(bp.GetVAF_Client_ID());
                             bploc.SetVAF_Org_ID(bp.GetVAF_Org_ID());
                             bploc.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
@@ -243,7 +243,7 @@ namespace ViennaAdvantage.Process
                                 return GetRetrievedError( bp, "BusinessPartnerNotSaved"); 
                             }
 
-                            VAdvantage.Model.MBPartnerLocation bploc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), 0, Get_Trx());
+                            VAdvantage.Model.MVABBPartLocation bploc = new VAdvantage.Model.MVABBPartLocation(GetCtx(), 0, Get_Trx());
                             bploc.SetVAF_Client_ID(bp.GetVAF_Client_ID());
                             bploc.SetVAF_Org_ID(bp.GetVAF_Org_ID());
                             bploc.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());

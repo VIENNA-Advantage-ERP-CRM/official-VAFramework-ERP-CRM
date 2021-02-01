@@ -485,7 +485,7 @@ namespace VAdvantage.Process
                     order = new MOrder(GetCtx(), 0, Get_TrxName());
                     order.SetIsSOTrx(false);
                     order.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
-                    MBPartner bp = new MBPartner(GetCtx(), replenish.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), replenish.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     order.SetBPartner(bp);
                     order.SetSalesRep_ID(GetVAF_UserContact_ID());
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));

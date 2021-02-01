@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         #region Private Variable
         //	Cache						
         private static CCache<int, MLocation> s_cache = new CCache<int, MLocation>("VAB_Address", 100, 30);
-        private MCountry _country = null;
+        private MVABCountry _country = null;
         private MRegion _region = null;
         //	Static Logger				
         private static VLogger _log = VLogger.GetVLogger(typeof(MLocation).FullName);
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
         {
             if (VAB_Address_ID == 0)
             {
-                MCountry defaultCountry = MCountry.GetDefault(GetCtx());
+                MVABCountry defaultCountry = MVABCountry.GetDefault(GetCtx());
                 SetCountry(defaultCountry);
                 MRegion defaultRegion = MRegion.GetDefault(GetCtx());
                 if (defaultRegion != null
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="country">mandatory country</param>
         /// <param name="region">optional region</param>
-        public MLocation(MCountry country, MRegion region)
+        public MLocation(MVABCountry country, MRegion region)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
             SetCountry(country);
@@ -163,7 +163,7 @@ namespace VAdvantage.Model
         /// Set Country
         /// </summary>
         /// <param name="country">country</param>
-        public void SetCountry(MCountry country)
+        public void SetCountry(MVABCountry country)
         {
             if (country != null)
             {
@@ -171,7 +171,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                _country = MCountry.GetDefault(GetCtx());
+                _country = MVABCountry.GetDefault(GetCtx());
             }
             base.SetVAB_Country_ID(_country.GetVAB_Country_ID());
         }
@@ -186,20 +186,20 @@ namespace VAdvantage.Model
             {
                 SetRegion(null);
             }
-            SetCountry(MCountry.Get(GetCtx(), VAB_Country_ID));
+            SetCountry(MVABCountry.Get(GetCtx(), VAB_Country_ID));
         }
 
         /// <summary>
         /// Get Country
         /// </summary>
-        public MCountry GetCountry()
+        public MVABCountry GetCountry()
         {
             if (_country == null)
             {
                 if (GetVAB_Country_ID() != 0)
-                    _country = MCountry.Get(GetCtx(), GetVAB_Country_ID());
+                    _country = MVABCountry.Get(GetCtx(), GetVAB_Country_ID());
                 else
-                    _country = MCountry.GetDefault(GetCtx());
+                    _country = MVABCountry.GetDefault(GetCtx());
             }
             return _country;
         }
@@ -220,7 +220,7 @@ namespace VAdvantage.Model
          */
         public String GetCountry(bool local)
         {
-            if (local && GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
+            if (local && GetVAB_Country_ID() == MVABCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
                 return null;
             return GetCountryName();
         }
@@ -257,7 +257,7 @@ namespace VAdvantage.Model
             //	Country defined
             else if (GetVAB_Country_ID() != 0)
             {
-                MCountry cc = GetCountry();
+                MVABCountry cc = GetCountry();
                 if (cc.IsValidRegion(VAB_RegionState_ID))
                     base.SetVAB_RegionState_ID(VAB_RegionState_ID);
                 else
@@ -391,7 +391,7 @@ namespace VAdvantage.Model
         public bool IsAddressLinesReverse()
         {
             //	Local
-            if (GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
+            if (GetVAB_Country_ID() == MVABCountry.GetDefault(GetCtx()).GetVAB_Country_ID())
                 return GetCountry().IsAddressLinesLocalReverse();
             return GetCountry().IsAddressLinesReverse();
         }
@@ -411,13 +411,13 @@ namespace VAdvantage.Model
          *  @param c country
          *  @return parsed String
          */
-        private String ParseCRP(MCountry c)
+        private String ParseCRP(MVABCountry c)
         {
             if (c == null)
             {
                 return "CountryNotFound";
             }
-            bool local = GetVAB_Country_ID() == MCountry.GetDefault(GetCtx()).GetVAB_Country_ID();
+            bool local = GetVAB_Country_ID() == MVABCountry.GetDefault(GetCtx()).GetVAB_Country_ID();
             String inStr = local ? c.GetDisplaySequenceLocal() : c.GetDisplaySequence();
             StringBuilder outStr = new StringBuilder();
 

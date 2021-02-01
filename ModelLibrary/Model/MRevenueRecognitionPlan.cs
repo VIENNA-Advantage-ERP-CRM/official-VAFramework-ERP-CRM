@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
             if (invoice.GetVAB_Currency_ID() != ToCurrency)
             {
-                Amount = MConversionRate.Convert(GetCtx(), Amount, invoice.GetVAB_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
+                Amount = MVABExchangeRate.Convert(GetCtx(), Amount, invoice.GetVAB_Currency_ID(), ToCurrency, invoice.GetDateInvoiced(), invoice.GetVAB_CurrencyType_ID(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
             }
             SetTotalAmt(Amount);
             SetRecognizedAmt(Env.ZERO);

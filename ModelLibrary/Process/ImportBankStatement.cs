@@ -116,10 +116,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAB_Bank_Acct_ID="
                 + "( "
                 + " SELECT VAB_Bank_Acct_ID "
-                + " FROM VAB_Bank_Acct a, C_Bank b "
+                + " FROM VAB_Bank_Acct a, VAB_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
-                + " AND a.C_Bank_ID=b.C_Bank_ID "
+                + " AND a.VAB_Bank_ID=b.VAB_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND b.RoutingNo=i.RoutingNo "
                 + " OR b.SwiftCode=i.RoutingNo "
@@ -135,9 +135,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAB_Bank_Acct_ID="
                 + "( "
                 + " SELECT VAB_Bank_Acct_ID "
-                + " FROM VAB_Bank_Acct a, C_Bank b "
+                + " FROM VAB_Bank_Acct a, VAB_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
-                + " AND a.C_Bank_ID=b.C_Bank_ID "
+                + " AND a.VAB_Bank_ID=b.VAB_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + ") "
@@ -358,8 +358,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " WHERE I_IsImported='N'"
                 + " ORDER BY VAB_Bank_Acct_ID, Name, EftStatementDate, EftStatementReference");
 
-            MBankStatement statement = null;
-            MBankAccount account = null;
+            MVABBankingJRNL statement = null;
+            MVABBankAcct account = null;
             //PreparedStatement pstmt = null;
             int lineNo = 10;
             int noInsert = 0;
@@ -375,14 +375,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Get the bank account for the first statement
                     if (account == null)
                     {
-                        account = MBankAccount.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
+                        account = MVABBankAcct.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
                         statement = null;
                         log.Info("New Statement, Account=" + account.GetAccountNo());
                     }
                     //	Create a new Bank Statement for every account
                     else if (account.GetVAB_Bank_Acct_ID() != imp.GetVAB_Bank_Acct_ID())
                     {
-                        account = MBankAccount.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
+                        account = MVABBankAcct.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
                         statement = null;
                         log.Info("New Statement, Account=" + account.GetAccountNo());
                     }
@@ -417,7 +417,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	New Statement
                     if (statement == null)
                     {
-                        statement = new MBankStatement(account);
+                        statement = new MVABBankingJRNL(account);
                         statement.SetEndingBalance(Env.ZERO);
 
                         //	Copy statement data
@@ -440,7 +440,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
 
                     //	New StatementLine
-                    MBankStatementLine line = new MBankStatementLine(statement, lineNo);
+                    MVABBankingJRNLLine line = new MVABBankingJRNLLine(statement, lineNo);
 
                     //	Copy statement line data
                     //line.setVAB_BusinessPartner_ID(imp.getVAB_BusinessPartner_ID());

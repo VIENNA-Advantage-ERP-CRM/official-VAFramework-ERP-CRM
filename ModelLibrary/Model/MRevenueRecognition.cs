@@ -431,7 +431,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_AccountBook ID</returns>
         public static int GetDefaultActSchema(Ctx ctx, int vaf_client_ID, int VAF_Org_ID)
         {
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             if (VAF_Org_ID > 0)
             {
                 acctSchema = MVAFOrg.Get(ctx, VAF_Org_ID).GetAcctSchema();

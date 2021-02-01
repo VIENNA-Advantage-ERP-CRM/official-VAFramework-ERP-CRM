@@ -38,12 +38,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Movement(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_Movement(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MMovement), idr, MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
         }
-        public Doc_Movement(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_Movement(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MMovement), dr, MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
@@ -111,7 +111,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -159,7 +159,7 @@ namespace VAdvantage.Acct
                     {
                         costingLevel = pca.GetCostingLevel();
                     }
-                    if (!MAcctSchema.COSTINGLEVEL_Organization.Equals(costingLevel))
+                    if (!MVABAccountBook.COSTINGLEVEL_Organization.Equals(costingLevel))
                     {
                         continue;
                     }

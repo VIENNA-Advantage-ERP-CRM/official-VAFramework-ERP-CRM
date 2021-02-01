@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
                                     int defaultconversionType = 0;
                                     defaultconversionType = Convert.ToInt32(dsConversion.Tables[0].Rows[x]["VAB_CurrencyType_id"]);
 
-                                    MConversionRate conversion = null;
+                                    MVABExchangeRate conversion = null;
                                     Decimal rate1 = 0;
                                     Decimal rate2 = 0;
                                     Decimal one = new Decimal(1.0);
@@ -197,7 +197,7 @@ namespace ViennaAdvantage.Process
                                                     continue;
                                                 }
 
-                                                conversion = new MConversionRate(GetCtx(), 0, Get_Trx());
+                                                conversion = new MVABExchangeRate(GetCtx(), 0, Get_Trx());
                                                 conversion.SetVAF_Org_ID((_lstCurr[k].VAF_Org_ID));
                                                 conversion.SetVAF_Client_ID(_lstCurr[k].VAF_Client_ID);
                                                 //conversion.SetValidFrom(DateTime.Now.AddDays(-1));
@@ -253,7 +253,7 @@ namespace ViennaAdvantage.Process
 
                                                 if (exchangeRate != 0)
                                                 {
-                                                    conversion = new MConversionRate(GetCtx(), 0, Get_Trx());
+                                                    conversion = new MVABExchangeRate(GetCtx(), 0, Get_Trx());
                                                     conversion.SetVAF_Org_ID((_lstCurr[k].VAF_Org_ID));
                                                     conversion.SetVAF_Client_ID(_lstCurr[k].VAF_Client_ID);
                                                     //conversion.SetValidFrom(DateTime.Now.AddDays(-1));
@@ -302,7 +302,7 @@ namespace ViennaAdvantage.Process
                                                     String result = GetConvertedCurrencyValue(_lstCurr[k].baseCurrency, myCurrency, currencySourceName, apiKey);
                                                     if (!String.IsNullOrEmpty(result))
                                                     {
-                                                        conversion = new MConversionRate(GetCtx(), 0, Get_Trx());
+                                                        conversion = new MVABExchangeRate(GetCtx(), 0, Get_Trx());
                                                         conversion.SetVAF_Org_ID((_lstCurr[k].VAF_Org_ID));
                                                         conversion.SetVAF_Client_ID(_lstCurr[k].VAF_Client_ID);
                                                         //conversion.SetValidFrom(DateTime.Now.AddDays(-1));

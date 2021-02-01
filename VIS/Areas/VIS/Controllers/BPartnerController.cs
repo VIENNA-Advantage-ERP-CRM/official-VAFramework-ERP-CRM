@@ -33,7 +33,7 @@ namespace VIS.Controllers
 
                 //Assign parameter value
                 VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MBPartner bpartner = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
+                MVABBusinessPartner bpartner = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
 
 
 

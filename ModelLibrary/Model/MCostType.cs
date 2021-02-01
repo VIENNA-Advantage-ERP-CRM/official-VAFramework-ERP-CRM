@@ -34,7 +34,7 @@ namespace VAdvantage.Model
 
         protected override bool BeforeDelete()
         {
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
+            MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
             for (int i = 0; i < ass.Length; i++)
             {
                 if (ass[i].GetM_CostType_ID() == GetM_CostType_ID())

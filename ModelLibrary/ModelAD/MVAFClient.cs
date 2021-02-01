@@ -173,7 +173,7 @@ namespace VAdvantage.Model
         /// Get Primary Accounting Schema
         /// </summary>
         /// <returns>Acct Schema or null</returns>
-        internal MAcctSchema GetAcctSchema()
+        internal MVABAccountBook GetAcctSchema()
         {
             if (_info == null)
                 _info = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID(), Get_TrxName());
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             {
                 int VAB_AccountBook_ID = _info.GetVAB_AccountBook1_ID();
                 if (VAB_AccountBook_ID != 0)
-                    return MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID);
+                    return MVABAccountBook.Get(GetCtx(), VAB_AccountBook_ID);
             }
             return null;
         }

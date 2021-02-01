@@ -69,31 +69,31 @@ namespace VIS.Controllers
                 return 0;
             }
 
-            MAcctSchema m_acctSchema = null;
+            MVABAccountBook m_acctSchema = null;
             //  Get Primary AcctSchama
             if (m_acctSchema == null)
             {
-                m_acctSchema = new MAcctSchema(ctx, m_VAB_AccountBook_ID, null);
+                m_acctSchema = new MVABAccountBook(ctx, m_VAB_AccountBook_ID, null);
             }
             if (m_acctSchema == null || m_acctSchema.GetVAB_AccountBook_ID() == 0)
             {
                 ID = 0;
                 return 0;
             }
-            MAcctSchemaElement primary_ase = m_acctSchema.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
+            MVABAccountBookElement primary_ase = m_acctSchema.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
 
             //	Get All
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, charge.GetVAF_Client_ID());
-            foreach (MAcctSchema ac in ass)
+            MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(ctx, charge.GetVAF_Client_ID());
+            foreach (MVABAccountBook ac in ass)
             {
                 //	Target Account
                 MAccount defaultAcct = MAccount.GetDefault(ac, true);	//	optional null
                 //	Natural Account
                 int VAB_Acct_Element_ID = primaryVAB_Acct_Element_ID;
-                MAcctSchemaElement ase = ac.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
+                MVABAccountBookElement ase = ac.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
                 if (primary_ase.GetVAB_Element_ID() != ase.GetVAB_Element_ID())
                 {
-                    MAcctSchemaDefault defAccts = MAcctSchemaDefault.Get(ctx, ac.GetVAB_AccountBook_ID());
+                    MVABAccountBookDefault defAccts = MVABAccountBookDefault.Get(ctx, ac.GetVAB_AccountBook_ID());
                     int VAB_Acct_ValidParameter_ID = defAccts.GetCh_Expense_Acct();
                     if (!expense)
                     {

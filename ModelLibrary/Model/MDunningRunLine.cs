@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                 _VAB_CurrencyFrom_ID = invoice.GetVAB_Currency_ID();
                 SetAmt(invoice.GetGrandTotal());
                 SetOpenAmt(GetAmt());	//	not correct
-                SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+                SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                     GetVAB_CurrencyFrom_ID(), GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
             }
             else
@@ -162,7 +162,7 @@ namespace VAdvantage.Model
             SetAmt(grandTotal);
             SetOpenAmt(open);
             SetFeeAmt(feeAmount);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                 VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
             SetIsInDispute(isInDispute);
             SetDaysDue(daysDue);
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
             SetAmt(feeAmount);
             SetOpenAmt(feeAmount);
             SetFeeAmt(feeAmount);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                 VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
         }
 
@@ -213,7 +213,7 @@ namespace VAdvantage.Model
                 _VAB_CurrencyFrom_ID = payment.GetVAB_Currency_ID();
                 SetAmt(payment.GetPayAmt());	//	need to reverse
                 SetOpenAmt(GetAmt());	//	not correct
-                SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+                SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                     GetVAB_CurrencyFrom_ID(), GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
             }
             else
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(payAmt);
             SetOpenAmt(openAmt);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                 VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
             if (Env.IsModuleInstalled("VA027_") && VA027_PostDatedCheck_ID > 0)
             {
@@ -275,7 +275,7 @@ namespace VAdvantage.Model
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(payAmt);
             SetOpenAmt(openAmt);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
            VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
         }
         /// <summary>
@@ -291,7 +291,7 @@ namespace VAdvantage.Model
             _VAB_CurrencyFrom_ID = VAB_Currency_ID;
             SetAmt(Amount);
             SetOpenAmt(Amount);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
            VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
         }
         /// <summary>
@@ -308,7 +308,7 @@ namespace VAdvantage.Model
             SetAmt(Amount);
             //openAmount same as Amount in PDC  whose payment is not generated
             SetOpenAmt(Amount);
-            SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+            SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
             VAB_Currency_ID, GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
         }
 
@@ -365,7 +365,7 @@ namespace VAdvantage.Model
             }
             else if (Env.ZERO.CompareTo(GetConvertedAmt()) == 0)
             {
-                SetConvertedAmt(MConversionRate.Convert(GetCtx(), GetOpenAmt(),
+                SetConvertedAmt(MVABExchangeRate.Convert(GetCtx(), GetOpenAmt(),
                     GetVAB_CurrencyFrom_ID(), GetVAB_CurrencyTo_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
             }
             //	Total

@@ -130,7 +130,7 @@ namespace VAdvantage.Process
             if (order == null)	//	create new Order
             {
                 //	Vendor
-                MBPartner bp = new MBPartner(GetCtx(), pos[0].GetVAB_BusinessPartner_ID(), Get_TrxName());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), pos[0].GetVAB_BusinessPartner_ID(), Get_TrxName());
                 //	New Order
                 order = new MOrder(project, false, null);
                 int VAF_Org_ID = projectLine.GetVAF_Org_ID();
@@ -172,7 +172,7 @@ namespace VAdvantage.Process
                 if ( Env.Signum(poPrice) != 0)
                 {
                     if (order.GetVAB_Currency_ID() != VAB_Currency_ID)
-                        poPrice = VAdvantage.Model.MConversionRate.Convert(GetCtx(), poPrice,
+                        poPrice = VAdvantage.Model.MVABExchangeRate.Convert(GetCtx(), poPrice,
                             VAB_Currency_ID, order.GetVAB_Currency_ID(),
                             order.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                             order.GetVAF_Client_ID(), order.GetVAF_Org_ID());

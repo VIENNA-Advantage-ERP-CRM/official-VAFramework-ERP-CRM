@@ -428,7 +428,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else if (ColumnName.Equals(VAB_BUSINESSPARTNER_ID))
             {
-                MBPartner bp = new MBPartner(GetCtx(), to_ID, Get_TrxName());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), to_ID, Get_TrxName());
                 if (bp.Get_ID() != 0)
                 {
                     MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());

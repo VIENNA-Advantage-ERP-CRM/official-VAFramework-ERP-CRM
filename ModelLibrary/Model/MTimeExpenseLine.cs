@@ -343,7 +343,7 @@ namespace VAdvantage.Model
             //if (ConvertedAmt.signum() != 0 && VAB_Currency_To_ID != VAB_Currency_From_ID)
             if (Env.Signum(ConvertedAmt) != 0 && VAB_Currency_To_ID != VAB_Currency_From_ID)
             {
-                ConvertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
+                ConvertedAmt = VAdvantage.Model.MVABExchangeRate.Convert(GetCtx(),
                     ConvertedAmt, VAB_Currency_From_ID, VAB_Currency_To_ID,
                     DateExpense, 0, GetVAF_Client_ID(), GetVAF_Org_ID());
             }
@@ -368,7 +368,7 @@ namespace VAdvantage.Model
                 else
                 {
                     // did changes to give error message when conversion is not found.-Mohit
-                    decimal convertedAmt = VAdvantage.Model.MConversionRate.Convert(GetCtx(),
+                    decimal convertedAmt = VAdvantage.Model.MVABExchangeRate.Convert(GetCtx(),
                         GetExpenseAmt(), GetVAB_Currency_ID(), GetVAB_Currency_Report_ID(), 
                         GetDateExpense(), 0, GetVAF_Client_ID(), GetVAF_Org_ID());
                     if (convertedAmt.Equals(0))

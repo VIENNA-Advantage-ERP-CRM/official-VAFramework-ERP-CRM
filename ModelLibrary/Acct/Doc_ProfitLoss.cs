@@ -28,12 +28,12 @@ namespace ModelLibrary.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_ProfitLoss(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_ProfitLoss(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MProfitLoss), idr, null, trxName)
         {
 
         }
-        public Doc_ProfitLoss(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_ProfitLoss(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MProfitLoss), dr, null, trxName)
         {
 
@@ -139,7 +139,7 @@ namespace ModelLibrary.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns>Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
 
 
@@ -152,7 +152,7 @@ namespace ModelLibrary.Acct
                 // Get Assigned Accounting Schemas based on organization                
                 MProfitLossLines PLossline = new MProfitLossLines(GetCtx(), _lines[0].Get_ID(), null);
                 MProfitLoss PLoss = new MProfitLoss(GetCtx(), PLossline.GetVAB_ProfitLoss_ID(), null);
-                MAcctSchema HeaderAcctSchema = new MAcctSchema(GetCtx(), Util.GetValueOfInt(PLoss.Get_Value("VAB_AccountBook_ID")), null);
+                MVABAccountBook HeaderAcctSchema = new MVABAccountBook(GetCtx(), Util.GetValueOfInt(PLoss.Get_Value("VAB_AccountBook_ID")), null);
                 List<int> _ListAcctSch = new List<int>();
                 // Profit & Loss account shall be posted only in accounting schema selected on header (By Ashish - discussed with Mukesh sir)
                 //_ListAcctSch = GetAcctSchemas(PLoss.GetVAF_Org_ID());
@@ -166,7 +166,7 @@ namespace ModelLibrary.Acct
                     int CurrencyType_ID = GetDefaultConversionType(GetVAF_Client_ID(), GetVAF_Org_ID());
                     for (int asch = 0; asch < _ListAcctSch.Count; asch++)
                     {
-                        MAcctSchema AccountingSchema = new MAcctSchema(GetCtx(), _ListAcctSch[asch], null);
+                        MVABAccountBook AccountingSchema = new MVABAccountBook(GetCtx(), _ListAcctSch[asch], null);
                         //	Decimal grossAmt = getAmount(Doc.AMTTYPE_Gross);
                         SetVAB_Currency_ID(GetCurrency(AccountingSchema.GetVAB_AccountBook_ID()));
                         //  Commitment
@@ -186,10 +186,10 @@ namespace ModelLibrary.Acct
                             }
                             else
                             {
-                                credit = MConversionRate.Convert(GetCtx(), Util.GetValueOfDecimal(dline.GetAmtSourceCr()), HeaderAcctSchema.GetVAB_Currency_ID(), AccountingSchema.GetVAB_Currency_ID(),
+                                credit = MVABExchangeRate.Convert(GetCtx(), Util.GetValueOfDecimal(dline.GetAmtSourceCr()), HeaderAcctSchema.GetVAB_Currency_ID(), AccountingSchema.GetVAB_Currency_ID(),
                                                                      PLoss.GetDateAcct(), CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                                debit = MConversionRate.Convert(GetCtx(), Util.GetValueOfDecimal(dline.GetAmtSourceDr()), HeaderAcctSchema.GetVAB_Currency_ID(), AccountingSchema.GetVAB_Currency_ID(),
+                                debit = MVABExchangeRate.Convert(GetCtx(), Util.GetValueOfDecimal(dline.GetAmtSourceDr()), HeaderAcctSchema.GetVAB_Currency_ID(), AccountingSchema.GetVAB_Currency_ID(),
                                                                      PLoss.GetDateAcct(), CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                                 Util.GetValueOfDecimal(dline.GetAmtAcctDr());

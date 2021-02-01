@@ -243,7 +243,7 @@ namespace VAdvantage.Model
             SetVAB_Bank_Acct_ID(preparedPayment.GetParent().GetVAB_Bank_Acct_ID());
             //	TarGet Bank
             int VAB_BPart_Bank_Acct_ID = preparedPayment.GetVAB_BPart_Bank_Acct_ID();
-            MBPBankAccount ba = new MBPBankAccount(preparedPayment.GetCtx(), VAB_BPart_Bank_Acct_ID, null);
+            MVABBPartBankAcct ba = new MVABBPartBankAcct(preparedPayment.GetCtx(), VAB_BPart_Bank_Acct_ID, null);
             SetRoutingNo(ba.GetRoutingNo());
             SetAccountNo(ba.GetAccountNo());
             SetIsReceipt(X_VAB_Order.PAYMENTRULE_DirectDebit.Equals	//	AR only
@@ -346,7 +346,7 @@ namespace VAdvantage.Model
             //
             String sql = "SELECT b.RoutingNo, ba.AccountNo "
                 + "FROM VAB_Bank_Acct ba"
-                + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID) "
+                + " INNER JOIN VAB_Bank b ON (ba.VAB_Bank_ID=b.VAB_Bank_ID) "
                 + "WHERE VAB_Bank_Acct_ID=" + VAB_Bank_Acct_ID;
             IDataReader idr = null;
             try
@@ -759,7 +759,7 @@ namespace VAdvantage.Model
                 if ((newRecord || Is_ValueChanged("VAB_Bank_Acct_ID"))
                     && GetVAB_Charge_ID() == 0)	//	allow different org for charge
                 {
-                    MBankAccount ba = MBankAccount.Get(GetCtx(), GetVAB_Bank_Acct_ID());
+                    MVABBankAcct ba = MVABBankAcct.Get(GetCtx(), GetVAB_Bank_Acct_ID());
                     if (ba.GetVAF_Org_ID() != 0)
                         SetVAF_Org_ID(ba.GetVAF_Org_ID());
                 }
@@ -947,10 +947,10 @@ namespace VAdvantage.Model
                         // check on first tab
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  VA027_PostDatedCheck pdc 
                                                         INNER JOIN  VAB_Bank_Acct ba ON ba.VAB_Bank_Acct_ID = pdc.VAB_Bank_Acct_ID 
-                                                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID 
+                                                        INNER JOIN VAB_Bank b ON b.VAB_Bank_ID = ba.VAB_Bank_ID 
                                                         INNER JOIN VAB_DocTypes dt ON dt.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID
                                                         WHERE pdc.IsActive = 'Y' AND pdc.DocStatus NOT IN ('RE', 'VO') AND dt.DocBaseType <> 'PDR'
-                                                        AND b.C_Bank_ID = (SELECT C_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
+                                                        AND b.VAB_Bank_ID = (SELECT VAB_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
                                     @" ) AND pdc.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExistOnPDC"));
@@ -961,11 +961,11 @@ namespace VAdvantage.Model
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VA027_ChequeDetails cd 
                                                     INNER JOIN VA027_PostDatedCheck pdc ON pdc.VA027_PostDatedCheck_ID = cd.VA027_PostDatedCheck_ID
                                                     INNER JOIN  VAB_Bank_Acct ba ON ba.VAB_Bank_Acct_ID = pdc.VAB_Bank_Acct_ID 
-                                                    INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID  
+                                                    INNER JOIN VAB_Bank b ON b.VAB_Bank_ID = ba.VAB_Bank_ID  
                                                     INNER JOIN VAB_DocTypes dt ON dt.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID 
                                                     WHERE cd.IsActive = 'Y' AND pdc.IsActive = 'Y' AND pdc.VA027_MultiCheque = 'Y' 
                                                     AND pdc.DocStatus NOT IN ('RE', 'VO') AND dt.DocBaseType <> 'PDR' AND
-                                                    b.C_Bank_ID = (SELECT C_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
+                                                    b.VAB_Bank_ID = (SELECT VAB_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
                                 @" ) AND cd.VA027_CheckNo = '" + GetCheckNo() + @"'", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExistOnPDC"));
@@ -984,10 +984,10 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  VAB_Payment pdc
                         INNER JOIN  VAB_Bank_Acct ba ON ba.VAB_Bank_Acct_ID = pdc.VAB_Bank_Acct_ID 
-                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID  
+                        INNER JOIN VAB_Bank b ON b.VAB_Bank_ID = ba.VAB_Bank_ID  
                         INNER JOIN VAB_DocTypes dt ON dt.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID
                         WHERE  pdc.IsActive = 'Y' AND
-                        b.C_Bank_ID = (SELECT C_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
+                        b.VAB_Bank_ID = (SELECT VAB_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
                                 @" ) AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR' AND DocStatus NOT IN ('RE', 'VO')", null, Get_Trx())) > 0)
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_CheckNoAlreadyExist"));
@@ -998,10 +998,10 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM  VAB_Payment pdc
                         INNER JOIN  VAB_Bank_Acct ba ON ba.VAB_Bank_Acct_ID = pdc.VAB_Bank_Acct_ID 
-                        INNER JOIN C_Bank b ON b.C_Bank_ID = ba.C_Bank_ID 
+                        INNER JOIN VAB_Bank b ON b.VAB_Bank_ID = ba.VAB_Bank_ID 
                         INNER JOIN VAB_DocTypes dt ON dt.VAB_DocTypes_ID = pdc.VAB_DocTypes_ID
                         WHERE  pdc.IsActive = 'Y' AND
-                        b.C_Bank_ID = (SELECT C_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
+                        b.VAB_Bank_ID = (SELECT VAB_Bank_ID FROM VAB_Bank_Acct WHERE VAB_Bank_Acct_ID =" + GetVAB_Bank_Acct_ID() +
                         @" ) AND pdc.CheckNo = '" + GetCheckNo() + @"' AND dt.DocBaseType <> 'ARR'  AND DocStatus NOT IN ('RE', 'VO') 
                         AND pdc.VAB_Payment_ID <> " + GetVAB_Payment_ID(), null, Get_Trx())) > 0)
                         {
@@ -1152,20 +1152,20 @@ namespace VAdvantage.Model
 
                 if (!isRev && GetVAB_BusinessPartner_ID() != 0)
                 {
-                    MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
 
                     Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
-                        payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+                        payAmt = MVABExchangeRate.ConvertBase(GetCtx(), payAmt,
                         GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         if (payAmt == 0)
                         {
                             // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                            MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                + MVABCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         }
                     }
 
@@ -1774,7 +1774,7 @@ namespace VAdvantage.Model
          * 	Set Info from BP Bank Account
          *	@param ba BP bank account
          */
-        public void SetBP_BankAccount(MBPBankAccount ba)
+        public void SetBP_BankAccount(MVABBPartBankAcct ba)
         {
             log.Fine("" + ba);
             if (ba == null)
@@ -1806,7 +1806,7 @@ namespace VAdvantage.Model
          *	@param ba BP bank account
          * 	@return true if saved
          */
-        public bool SaveToBP_BankAccount(MBPBankAccount ba)
+        public bool SaveToBP_BankAccount(MVABBPartBankAcct ba)
         {
             if (ba == null)
                 return false;
@@ -2420,7 +2420,7 @@ namespace VAdvantage.Model
             log.Fine("Pay=" + payAmt + ", Discount=" + enteredDiscountAmt
                + ", WriteOff=" + writeOffAmt + ", OverUnderAmt=" + overUnderAmt);
             //	Get Currency Info
-            MCurrency currency = MCurrency.Get(GetCtx(), VAB_Currency_ID);
+            MVABCurrency currency = MVABCurrency.Get(GetCtx(), VAB_Currency_ID);
             DateTime? convDate = GetDateTrx();
             int VAB_CurrencyType_ID = GetVAB_CurrencyType_ID();
             int VAF_Client_ID = GetVAF_Client_ID();
@@ -2434,7 +2434,7 @@ namespace VAdvantage.Model
                 log.Fine("InvCurrency=" + VAB_Currency_Invoice_ID
                     + ", PayCurrency=" + VAB_Currency_ID
                     + ", Date=" + convDate + ", Type=" + VAB_CurrencyType_ID);
-                currencyRate = MConversionRate.GetRate(VAB_Currency_Invoice_ID, VAB_Currency_ID,
+                currencyRate = MVABExchangeRate.GetRate(VAB_Currency_Invoice_ID, VAB_Currency_ID,
                     convDate, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
                 if (currencyRate.CompareTo(Env.ZERO) == 0)
                 {
@@ -2520,7 +2520,7 @@ namespace VAdvantage.Model
          */
         public String GetCurrencyISO()
         {
-            return MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID());
+            return MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID());
         }
 
         /**
@@ -2729,20 +2729,20 @@ namespace VAdvantage.Model
 
                 if (!isRev && GetVAB_BusinessPartner_ID() != 0)
                 {
-                    MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
 
                     Decimal payAmt = Decimal.Add(Decimal.Add(GetPayAmt(false), GetDiscountAmt()), GetWriteOffAmt());
                     // If Amount is ZERO then no need to check currency conversion
                     if (!payAmt.Equals(Env.ZERO))
                     {
-                        payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+                        payAmt = MVABExchangeRate.ConvertBase(GetCtx(), payAmt,
                         GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         if (payAmt == 0)
                         {
                             // JID_0084: On payment window if conversion not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                            MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                + MVABCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                             return DocActionVariables.STATUS_INVALID;
                         }
@@ -3025,11 +3025,11 @@ namespace VAdvantage.Model
             //Added by Vivek for Credit Limit on 25/08/2016
             if (GetVAB_BusinessPartner_ID() != 0)
             {
-                MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
 
                 // JID_0556 :: // Change by Lokesh Chauhan to validate watch % from BP Group, 
                 // if it is 0 on BP Group then default to 90 // 12 July 2019
-                MBPGroup bpg = new MBPGroup(GetCtx(), bp.GetVAB_BPart_Category_ID(), Get_Trx());
+                MVABBPartCategory bpg = new MVABBPartCategory(GetCtx(), bp.GetVAB_BPart_Category_ID(), Get_Trx());
                 Decimal? watchPer = bpg.GetCreditWatchPercent();
                 if (watchPer == 0)
                     watchPer = 90;
@@ -3040,14 +3040,14 @@ namespace VAdvantage.Model
                 // If Amount is ZERO then no need to check currency conversion
                 if (!payAmt.Equals(Env.ZERO))
                 {
-                    payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+                    payAmt = MVABExchangeRate.ConvertBase(GetCtx(), payAmt,
                     GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     if (payAmt == 0)
                     {
                         // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                        MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                        MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MVABCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                         return DocActionVariables.STATUS_INVALID;
                     }
                 }
@@ -3098,7 +3098,7 @@ namespace VAdvantage.Model
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
                 else if (bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
-                    MBPartnerLocation loc;
+                    MVABBPartLocation loc;
                     //Based on Location need to Update the Open Balance--> JID_1148
                     //when PaymentAllocate tab have records at that time this condition will execute 
                     //becoz Invoice may have diff. Location apart from Payment(Parent Tab) BP Location.
@@ -3114,21 +3114,21 @@ namespace VAdvantage.Model
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
-                                loc = new MBPartnerLocation(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_BPart_Location_ID"]), Get_Trx());
+                                loc = new MVABBPartLocation(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_BPart_Location_ID"]), Get_Trx());
 
                                 payAmt = Decimal.Add(Decimal.Add(Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["amount"]),
                                     Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])), Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"]));
                                 // If Amount is ZERO then no need to check currency conversion
                                 if (!payAmt.Equals(Env.ZERO))
                                 {
-                                    payAmt = MConversionRate.ConvertBase(GetCtx(), payAmt,
+                                    payAmt = MVABExchangeRate.ConvertBase(GetCtx(), payAmt,
                                     GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                     if (payAmt == 0)
                                     {
                                         // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                                        MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                                            + MCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                                        MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                                        _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                                            + MVABCurrency.GetISO_Code(GetCtx(), MVAFClient.Get(GetCtx()).GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
                                         return DocActionVariables.STATUS_INVALID;
                                     }
                                 }
@@ -3175,7 +3175,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        loc = new MBPartnerLocation(GetCtx(), GetVAB_BPart_Location_ID(), Get_Trx());
+                        loc = new MVABBPartLocation(GetCtx(), GetVAB_BPart_Location_ID(), Get_Trx());
 
                         //	Total Balance
                         Decimal? newBalance = loc.GetTotalOpenBalance();
@@ -3300,15 +3300,15 @@ namespace VAdvantage.Model
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         MVAFClientDetail client = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID());
-                        MAcctSchema asch = MAcctSchema.Get(GetCtx(), client.GetVAB_AccountBook1_ID());
+                        MVABAccountBook asch = MVABAccountBook.Get(GetCtx(), client.GetVAB_AccountBook1_ID());
 
                         if (order.GetVAB_Currency_ID() != GetVAB_Currency_ID())
                         {
-                            orderPaidAmt = MConversionRate.Convert(GetCtx(), orderPaidAmt, GetVAB_Currency_ID(), order.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                            orderPaidAmt = MVABExchangeRate.Convert(GetCtx(), orderPaidAmt, GetVAB_Currency_ID(), order.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         }
                         if (asch.GetVAB_Currency_ID() != GetVAB_Currency_ID())
                         {
-                            basePaidAmt = MConversionRate.Convert(GetCtx(), basePaidAmt, GetVAB_Currency_ID(), asch.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
+                            basePaidAmt = MVABExchangeRate.Convert(GetCtx(), basePaidAmt, GetVAB_Currency_ID(), asch.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                         }
                         // update variance amount as ( Due amount - paid amount )
                         DB.ExecuteQuery("Update VA009_OrderPaySchedule set VA009_ISPAID='Y',VAB_Payment_ID=" + GetVAB_Payment_ID() +
@@ -3409,7 +3409,7 @@ namespace VAdvantage.Model
             ////if (!UpdateUnMatchedBalanceForAccount(false))
             // Auto check work-Mohit-7 March 2020
 
-            MBankAccount bnkAct = MBankAccount.Get(GetCtx(), GetVAB_Bank_Acct_ID());
+            MVABBankAcct bnkAct = MVABBankAcct.Get(GetCtx(), GetVAB_Bank_Acct_ID());
             MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
 
@@ -3625,11 +3625,11 @@ namespace VAdvantage.Model
                                      , 100);
                     if (isBackupWithholding)
                     {
-                        SetBackupWithholdingAmount(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID())));
+                        SetBackupWithholdingAmount(Decimal.Round(withholdingAmt, MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID())));
                     }
                     else
                     {
-                        SetWithholdingAmt(Decimal.Round(withholdingAmt, MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID())));
+                        SetWithholdingAmt(Decimal.Round(withholdingAmt, MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID())));
                         if (GetVAB_Withholding_ID() <= 0)
                         {
                             SetVAB_Withholding_ID(withholding_ID);
@@ -3679,12 +3679,12 @@ namespace VAdvantage.Model
                 poNew.Set_Value("VA009_PaidAmnt", 0);
                 poNew.Set_Value("VA009_PaidAmntInvce", 0);
                 // convert amount into Order Currency
-                Decimal InfoAmount = MConversionRate.Convert(ctx, Amt, payment.GetVAB_Currency_ID(), Util.GetValueOfInt(poOrignal.Get_Value("VAB_Currency_ID")),
+                Decimal InfoAmount = MVABExchangeRate.Convert(ctx, Amt, payment.GetVAB_Currency_ID(), Util.GetValueOfInt(poOrignal.Get_Value("VAB_Currency_ID")),
                     payment.GetDateAcct(), payment.GetVAB_CurrencyType_ID(), payment.GetVAF_Client_ID(), payment.GetVAF_Org_ID());
                 poNew.Set_Value("DueAmt", InfoAmount);
                 poNew.Set_Value("VA009_OpnAmntInvce", InfoAmount);
                 // convert amount into Base Currency
-                InfoAmount = MConversionRate.Convert(ctx, Amt, payment.GetVAB_Currency_ID(), BaseCurrency,
+                InfoAmount = MVABExchangeRate.Convert(ctx, Amt, payment.GetVAB_Currency_ID(), BaseCurrency,
                     payment.GetDateAcct(), payment.GetVAB_CurrencyType_ID(), payment.GetVAF_Client_ID(), payment.GetVAF_Org_ID());
                 poNew.Set_Value("VA009_OpenAmnt", InfoAmount);
                 if (!poNew.Save(TrxName))
@@ -3934,7 +3934,7 @@ namespace VAdvantage.Model
                             {
                                 if (currencyTo != Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]))
                                 {
-                                    price += MConversionRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
+                                    price += MVABExchangeRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
                                           Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]), currencyTo, GetDateAcct(),
                                           invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                 }
@@ -4054,7 +4054,7 @@ namespace VAdvantage.Model
                             {
                                 if (currencyTo != Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]))
                                 {
-                                    price += MConversionRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
+                                    price += MVABExchangeRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
                                           Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]), currencyTo, GetDateAcct(),
                                           order.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                 }
@@ -4192,7 +4192,7 @@ namespace VAdvantage.Model
                                             {
                                                 if (currencyTo != Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]))
                                                 {
-                                                    price += MConversionRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
+                                                    price += MVABExchangeRate.Convert(GetCtx(), Util.GetValueOfDecimal(dsInvoicePayment.Tables[0].Rows[i]["paidinvamount"]),
                                                           Util.GetValueOfInt(dsInvoicePayment.Tables[0].Rows[i]["VAB_Currency_ID"]), currencyTo, GetDateAcct(),
                                                           invoice.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                                                 }
@@ -4305,7 +4305,7 @@ namespace VAdvantage.Model
                                 price = Decimal.Negate(price);
                             if (currencyTo != Util.GetValueOfInt(GetVAB_Currency_ID()))
                             {
-                                price = MConversionRate.Convert(GetCtx(), price,
+                                price = MVABExchangeRate.Convert(GetCtx(), price,
                                       Util.GetValueOfInt(GetVAB_Currency_ID()), currencyTo, GetDateAcct(),
                                       GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                             }
@@ -4528,13 +4528,13 @@ namespace VAdvantage.Model
                 return null;
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (GetCtx(), GetVAB_BusinessPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
             int counterVAF_Org_ID = bp.GetVAF_OrgBP_ID_Int();
             if (counterVAF_Org_ID == 0)
                 return null;
 
             //jz MBPartner counterBP = new MBPartner (GetCtx(), counterVAB_BusinessPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_Trx());
+            MVABBusinessPartner counterBP = new MVABBusinessPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_Trx());
             //	MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID);
             log.Info("Counter BP=" + counterBP.GetName());
 
@@ -4651,7 +4651,7 @@ namespace VAdvantage.Model
             if (pAllocs.Length == 0)
                 return false;
 
-            MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
+            MVABDocAllocation alloc = new MVABDocAllocation(GetCtx(), false,
                 GetDateTrx(), GetVAB_Currency_ID(),
                     Msg.Translate(GetCtx(), "VAB_Payment_ID") + ": " + GetDocumentNo(),
                     Get_TrxName());
@@ -4677,7 +4677,7 @@ namespace VAdvantage.Model
             DataRow[] dr = null;
             if (Get_ColumnIndex("BackupWithholding_ID") > 0 && (GetVAB_Withholding_ID() > 0 || GetBackupWithholding_ID() > 0))
             {
-                int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                 ds = DB.ExecuteDataset(@"SELECT VAB_PaymentAllotment.VAB_PaymentAllotment_ID,  
                             (SELECT ROUND((VAB_PaymentAllotment.amount * paypercentage)/100 , " + precision + @") as withholdingAmt 
                             FROM VAB_Withholding where VAB_Withholding_id = VAB_Payment.VAB_Withholding_ID) as withholdingAmt,
@@ -4697,10 +4697,10 @@ namespace VAdvantage.Model
                     dr = ds.Tables[0].Select("VAB_PAYMENTALLOTMENT_ID = " + Util.GetValueOfString(pa.GetVAB_PaymentAllotment_ID()));
                 }
 
-                MAllocationLine aLine = null;
+                MVABDocAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, pa.GetAmount(),
+                    aLine = new MVABDocAllocationLine(alloc, pa.GetAmount(),
                         pa.GetDiscountAmt(), pa.GetWriteOffAmt(), pa.GetOverUnderAmt());
                     if (dr != null)
                     {
@@ -4710,7 +4710,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    aLine = new MAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
+                    aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(pa.GetAmount()),
                         Decimal.Negate(pa.GetDiscountAmt()), Decimal.Negate(pa.GetWriteOffAmt()), Decimal.Negate(pa.GetOverUnderAmt()));
                     if (dr != null)
                     {
@@ -4753,7 +4753,7 @@ namespace VAdvantage.Model
                 if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPaymentAmount()) > 0)
                     allocationAmt = Decimal.Add(allocationAmt, GetOverUnderAmt());	//	overpayment (negative)
 
-                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
+                MVABDocAllocation alloc = new MVABDocAllocation(GetCtx(), false,
                     GetDateTrx(), GetVAB_Currency_ID(),
                     Msg.Translate(GetCtx(), "VAB_Payment_ID") + ": " + GetDocumentNo() + " [1]", Get_TrxName());
 
@@ -4770,10 +4770,10 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "Could not create Allocation Hdr");
                     return false;
                 }
-                MAllocationLine aLine = null;
+                MVABDocAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, allocationAmt,
+                    aLine = new MVABDocAllocationLine(alloc, allocationAmt,
                         GetDiscountAmt(), GetWriteOffAmt(), GetOverUnderAmt());
                     if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
                     {
@@ -4783,7 +4783,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    aLine = new MAllocationLine(alloc, Decimal.Negate(allocationAmt),
+                    aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(allocationAmt),
                         Decimal.Negate(GetDiscountAmt()), Decimal.Negate(GetWriteOffAmt()), Decimal.Negate(GetOverUnderAmt()));
                     if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
                     {
@@ -4844,7 +4844,7 @@ namespace VAdvantage.Model
                 if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPaymentAmount()) > 0)
                     allocationAmt = Decimal.Add(allocationAmt, GetOverUnderAmt());	//	overpayment (negative)
 
-                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
+                MVABDocAllocation alloc = new MVABDocAllocation(GetCtx(), false,
                     GetDateTrx(), GetVAB_Currency_ID(),
                     Msg.Translate(GetCtx(), "VAB_Payment_ID") + ": " + GetDocumentNo() + " [1]", Get_TrxName());
 
@@ -4862,10 +4862,10 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "CouldnotCrtAllocHdr"));
                     return false;
                 }
-                MAllocationLine aLine = null;
+                MVABDocAllocationLine aLine = null;
                 if (IsReceipt())
                 {
-                    aLine = new MAllocationLine(alloc, allocationAmt,
+                    aLine = new MVABDocAllocationLine(alloc, allocationAmt,
                         GetDiscountAmt(), GetWriteOffAmt(), GetOverUnderAmt());
                     if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
                     {
@@ -4936,7 +4936,7 @@ namespace VAdvantage.Model
         /// <returns>return true if allocated</returns>
         private Boolean AllocatePaySelection()
         {
-            MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
+            MVABDocAllocation alloc = new MVABDocAllocation(GetCtx(), false,
                 GetDateTrx(), GetVAB_Currency_ID(),
                 Msg.Translate(GetCtx(), "VAB_Payment_ID") + ": " + GetDocumentNo() + " [n]", Get_Trx());
             alloc.SetVAF_Org_ID(GetVAF_Org_ID());
@@ -4998,12 +4998,12 @@ namespace VAdvantage.Model
                         idr.Close();
                         return false;
                     }
-                    MAllocationLine aLine = null;
+                    MVABDocAllocationLine aLine = null;
                     if (isSOTrx)
-                        aLine = new MAllocationLine(alloc, payAmt,
+                        aLine = new MVABDocAllocationLine(alloc, payAmt,
                             discountAmt, writeOffAmt, overUnderAmt);
                     else
-                        aLine = new MAllocationLine(alloc, Decimal.Negate(payAmt),
+                        aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(payAmt),
                             Decimal.Negate(discountAmt), Decimal.Negate(writeOffAmt), Decimal.Negate(overUnderAmt));
                     aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, VAB_Invoice_ID);
                     if (Env.IsModuleInstalled("VA009_"))
@@ -5065,7 +5065,7 @@ namespace VAdvantage.Model
             //	if (GetVAB_Invoice_ID() == 0)
             //		return;
             //	De-Allocate all 
-            MAllocationHdr[] allocations = MAllocationHdr.GetOfPayment(GetCtx(),
+            MVABDocAllocation[] allocations = MVABDocAllocation.GetOfPayment(GetCtx(),
                 GetVAB_Payment_ID(), Get_Trx());
             log.Fine("#" + allocations.Length);
             for (int i = 0; i < allocations.Length; i++)
@@ -5467,10 +5467,10 @@ namespace VAdvantage.Model
             int Alline_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT al.VAB_DocAllocationLine_id FROM VAB_DocAllocationLine al "
                                                                 + " INNER JOIN VAB_DocAllocation alhdr ON alhdr.VAB_DocAllocation_ID=al.VAB_DocAllocation_ID WHERE al.VAB_Payment_ID         =" + GetVAB_Payment_ID()
                                                                 + " and alhdr.docstatus in ('CO','CL')"));
-            MAllocationHdr alloc = null;
+            MVABDocAllocation alloc = null;
             if (Alline_ID > 0)
             {
-                alloc = new MAllocationHdr(GetCtx(), false,
+                alloc = new MVABDocAllocation(GetCtx(), false,
                 GetDateTrx(), GetVAB_Currency_ID(),
                 Msg.Translate(GetCtx(), "VAB_Payment_ID") + ": " + reversal.GetDocumentNo(), Get_Trx());
                 alloc.SetVAF_Org_ID(GetVAF_Org_ID());
@@ -5489,7 +5489,7 @@ namespace VAdvantage.Model
                 else
                 {
                     //	Original Allocation
-                    MAllocationLine aLine = new MAllocationLine(alloc, GetPayAmt(true) -
+                    MVABDocAllocationLine aLine = new MVABDocAllocationLine(alloc, GetPayAmt(true) -
                         (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
                         Env.ZERO, Env.ZERO, Env.ZERO);
                     aLine.SetDocInfo(GetVAB_BusinessPartner_ID(), 0, 0);
@@ -5499,7 +5499,7 @@ namespace VAdvantage.Model
                         log.Warning("Automatic allocation - line not saved");
                     }
                     //	Reversal Allocation
-                    aLine = new MAllocationLine(alloc, reversal.GetPayAmt(true) +
+                    aLine = new MVABDocAllocationLine(alloc, reversal.GetPayAmt(true) +
                         (Get_ColumnIndex("BackupWithholdingAmount") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0),
                         Env.ZERO, Env.ZERO, Env.ZERO);
                     aLine.SetDocInfo(reversal.GetVAB_BusinessPartner_ID(), 0, 0);
@@ -5825,7 +5825,7 @@ namespace VAdvantage.Model
         public bool UpdateUnMatchedBalanceForAccount()
         {
 
-            MBankAccount BankAccount_ = new MBankAccount(GetCtx(), GetVAB_Bank_Acct_ID(), Get_TrxName());
+            MVABBankAcct BankAccount_ = new MVABBankAcct(GetCtx(), GetVAB_Bank_Acct_ID(), Get_TrxName());
 
             Decimal convertedAmt = GetPayAmt();
             //if (_Negate) //Handled In Case of Void the Payment
@@ -5841,14 +5841,14 @@ namespace VAdvantage.Model
                         BankAccount_.SetUnMatchedBalance(Decimal.Add(BankAccount_.GetUnMatchedBalance(), convertedAmt));
                     else
                     {
-                        convertedAmt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), convertedAmt, GetVAB_Currency_ID(), BankAccount_.GetVAB_Currency_ID(), GetDateAcct(),
+                        convertedAmt = Util.GetValueOfDecimal(MVABExchangeRate.Convert(GetCtx(), convertedAmt, GetVAB_Currency_ID(), BankAccount_.GetVAB_Currency_ID(), GetDateAcct(),
                             GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
                         if (convertedAmt == 0)
                         {
                             // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                            MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), BankAccount_.GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MVABCurrency.GetISO_Code(GetCtx(), BankAccount_.GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                             //_processMsg = "Could not convert VAB_Currency_ID=" + GetVAB_Currency_ID()
                             //    + " to Bank Account VAB_Currency_ID=" + BankAccount_.GetVAB_Currency_ID();
@@ -5869,13 +5869,13 @@ namespace VAdvantage.Model
                         BankAccount_.SetUnMatchedBalance(Decimal.Add(BankAccount_.GetUnMatchedBalance(), Decimal.Negate(convertedAmt)));
                     else
                     {
-                        convertedAmt = Util.GetValueOfDecimal(MConversionRate.Convert(GetCtx(), convertedAmt, GetVAB_Currency_ID(), BankAccount_.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
+                        convertedAmt = Util.GetValueOfDecimal(MVABExchangeRate.Convert(GetCtx(), convertedAmt, GetVAB_Currency_ID(), BankAccount_.GetVAB_Currency_ID(), GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID()));
                         if (convertedAmt == 0)
                         {
                             // JID_0084: On payment window if conversin not found system will give message Correct Message: Could not convert currency to base currency - Conversion type: XXXX
-                            MConversionType conv = new MConversionType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
-                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
-                            + MCurrency.GetISO_Code(GetCtx(), BankAccount_.GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
+                            MVABCurrencyType conv = new MVABCurrencyType(GetCtx(), GetVAB_CurrencyType_ID(), Get_TrxName());
+                            _processMsg = Msg.GetMsg(GetCtx(), "NoConversion") + MVABCurrency.GetISO_Code(GetCtx(), GetVAB_Currency_ID()) + Msg.GetMsg(GetCtx(), "ToBaseCurrency")
+                            + MVABCurrency.GetISO_Code(GetCtx(), BankAccount_.GetVAB_Currency_ID()) + " - " + Msg.GetMsg(GetCtx(), "ConversionType") + conv.GetName();
 
                             //_processMsg = "Could not convert VAB_Currency_ID=" + GetVAB_Currency_ID()
                             //    + " to Bank Account VAB_Currency_ID=" + BankAccount_.GetVAB_Currency_ID();

@@ -547,7 +547,7 @@ namespace VAdvantage.Model
         public static MAccount GetDefault(Ctx ctx, int VAB_AccountBook_ID,
             bool optionalNull, Trx trxName)
         {
-            MAcctSchema acctSchema = new MAcctSchema(ctx, VAB_AccountBook_ID, trxName);
+            MVABAccountBook acctSchema = new MVABAccountBook(ctx, VAB_AccountBook_ID, trxName);
             return GetDefault(acctSchema, optionalNull);
         }
 
@@ -557,49 +557,49 @@ namespace VAdvantage.Model
         /// <param name="acctSchema">accounting schema</param>
         /// <param name="optionalNull">if true, the optional values are null</param>
         /// <returns>Account</returns>
-        public static MAccount GetDefault(MAcctSchema acctSchema, bool optionalNull)
+        public static MAccount GetDefault(MVABAccountBook acctSchema, bool optionalNull)
         {
             MAccount vc = new MAccount(acctSchema);
             //  Active Elements
-            MAcctSchemaElement[] elements = acctSchema.GetAcctSchemaElements();
+            MVABAccountBookElement[] elements = acctSchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
             {
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 String elementType = ase.GetElementType();
                 int defaultValue = ase.GetDefaultValue();
                 bool setValue = ase.IsMandatory() || (!ase.IsMandatory() && !optionalNull);
                 //
-                if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Organization))
+                if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Organization))
                     vc.SetVAF_Org_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Account))
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Account))
                     vc.SetAccount_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SubAccount) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_SubAccount) && setValue)
                     vc.SetVAB_SubAcct_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_BPartner) && setValue)
                     vc.SetVAB_BusinessPartner_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Product) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Product) && setValue)
                     vc.SetM_Product_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Activity) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Activity) && setValue)
                     vc.SetVAB_BillingCode_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_LocationFrom) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationFrom) && setValue)
                     vc.SetC_LocFrom_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_LocationTo) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationTo) && setValue)
                     vc.SetC_LocTo_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Campaign) && setValue)
                     vc.SetVAB_Promotion_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_OrgTrx) && setValue)
                     vc.SetVAF_OrgTrx_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_Project) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Project) && setValue)
                     vc.SetVAB_Project_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_SalesRegion) && setValue)
                     vc.SetVAB_SalesRegionState_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_UserList1) && setValue)
                     vc.SetUser1_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_UserList2) && setValue)
                     vc.SetUser2_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement1) && setValue)
                     vc.SetUserElement1_ID(defaultValue);
-                else if (elementType.Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) && setValue)
+                else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement2) && setValue)
                     vc.SetUserElement2_ID(defaultValue);
             }
             _log.Fine("Client_ID=" + vc.GetVAF_Client_ID() + ", Org_ID=" + vc.GetVAF_Org_ID()
@@ -691,7 +691,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="as1">as account schema</param>
-        public MAccount(MAcctSchema as1)
+        public MAccount(MVABAccountBook as1)
             : this(as1.GetCtx(), 0, as1.Get_TrxName())
         {
             SetClientOrg(as1);
@@ -829,8 +829,8 @@ namespace VAdvantage.Model
             StringBuilder descr = new StringBuilder();
             bool fullyQualified = true;
             //
-            MAcctSchema as1 = new MAcctSchema(GetCtx(), GetVAB_AccountBook_ID(), Get_TrxName());	//	In Trx!
-            MAcctSchemaElement[] elements = MAcctSchemaElement.GetAcctSchemaElements(as1);
+            MVABAccountBook as1 = new MVABAccountBook(GetCtx(), GetVAB_AccountBook_ID(), Get_TrxName());	//	In Trx!
+            MVABAccountBookElement[] elements = MVABAccountBookElement.GetAcctSchemaElements(as1);
             for (int i = 0; i < elements.Length; i++)
             {
                 if (i > 0)
@@ -838,11 +838,11 @@ namespace VAdvantage.Model
                     combi.Append(as1.GetSeparator());
                     descr.Append(as1.GetSeparator());
                 }
-                MAcctSchemaElement element = elements[i];
+                MVABAccountBookElement element = elements[i];
                 String combiStr = "_";		//	not defined
                 String descrStr = "_";
 
-                if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(element.GetElementType()))
+                if (MVABAccountBookElement.ELEMENTTYPE_Organization.Equals(element.GetElementType()))
                 {
                     if (GetVAF_Org_ID() != 0)
                     {
@@ -857,7 +857,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;                        
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_Account.Equals(element.GetElementType()))
                 {
                     if (GetAccount_ID() != 0)
                     {
@@ -872,7 +872,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_SubAccount.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_SubAccount.Equals(element.GetElementType()))
                 {
                     if (GetVAB_SubAcct_ID() != 0)
                     {
@@ -881,7 +881,7 @@ namespace VAdvantage.Model
                         descrStr = sa.GetName();
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(element.GetElementType()))
                 {
                     if (GetM_Product_ID() != 0)
                     {
@@ -895,7 +895,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_BPartner.Equals(element.GetElementType()))
                 {
                     if (GetVAB_BusinessPartner_ID() != 0)
                     {
@@ -909,7 +909,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_OrgTrx.Equals(element.GetElementType()))
                 {
                     if (GetVAF_OrgTrx_ID() != 0)
                     {
@@ -923,7 +923,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_LocationFrom.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_LocationFrom.Equals(element.GetElementType()))
                 {
                     if (GetC_LocFrom_ID() != 0)
                     {
@@ -937,7 +937,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_LocationTo.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_LocationTo.Equals(element.GetElementType()))
                 {
                     if (GetC_LocTo_ID() != 0)
                     {
@@ -951,7 +951,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_SalesRegion.Equals(element.GetElementType()))
                 {
                     if (GetVAB_SalesRegionState_ID() != 0)
                     {
@@ -965,7 +965,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(element.GetElementType()))
                 {
                     if (GetVAB_Project_ID() != 0)
                     {
@@ -979,7 +979,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_Campaign.Equals(element.GetElementType()))
                 {
                     if (GetVAB_Promotion_ID() != 0)
                     {
@@ -993,7 +993,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_Activity.Equals(element.GetElementType()))
                 {
                     if (GetVAB_BillingCode_ID() != 0)
                     {
@@ -1007,7 +1007,7 @@ namespace VAdvantage.Model
                         fullyQualified = false;
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserList1.Equals(element.GetElementType()))
                 {
                     if (GetUser1_ID() != 0)
                     {
@@ -1016,7 +1016,7 @@ namespace VAdvantage.Model
                         descrStr = ev.GetName();
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserList2.Equals(element.GetElementType()))
                 {
                     if (GetUser2_ID() != 0)
                     {
@@ -1025,7 +1025,7 @@ namespace VAdvantage.Model
                         descrStr = ev.GetName();
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement1.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement1.Equals(element.GetElementType()))
                 {
                     if (GetUserElement1_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1059,7 +1059,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement2.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement2.Equals(element.GetElementType()))
                 {
                     if (GetUserElement2_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1093,7 +1093,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement3.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement3.Equals(element.GetElementType()))
                 {
                     if (GetUserElement3_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1127,7 +1127,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement4.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement4.Equals(element.GetElementType()))
                 {
                     if (GetUserElement4_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1161,7 +1161,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement5.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement5.Equals(element.GetElementType()))
                 {
                     if (GetUserElement5_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1195,7 +1195,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement6.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement6.Equals(element.GetElementType()))
                 {
                     if (GetUserElement6_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1229,7 +1229,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement7.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement7.Equals(element.GetElementType()))
                 {
                     if (GetUserElement7_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1263,7 +1263,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement8.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement8.Equals(element.GetElementType()))
                 {
                     if (GetUserElement8_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {
@@ -1297,7 +1297,7 @@ namespace VAdvantage.Model
                         }
                     }
                 }
-                else if (MAcctSchemaElement.ELEMENTTYPE_UserElement9.Equals(element.GetElementType()))
+                else if (MVABAccountBookElement.ELEMENTTYPE_UserElement9.Equals(element.GetElementType()))
                 {
                     if (GetUserElement9_ID() != 0 && element.GetVAF_Column_ID() > 0)
                     {

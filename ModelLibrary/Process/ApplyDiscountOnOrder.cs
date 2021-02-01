@@ -68,7 +68,7 @@ namespace VAdvantage.Process
             MOrder obj = new MOrder(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
-            MCurrency currency = new MCurrency(GetCtx(), obj.GetVAB_Currency_ID(), Get_Trx());
+            MVABCurrency currency = new MVABCurrency(GetCtx(), obj.GetVAB_Currency_ID(), Get_Trx());
             precision = currency.GetStdPrecision();
 
             MOrderLine[] lines = obj.GetLines();

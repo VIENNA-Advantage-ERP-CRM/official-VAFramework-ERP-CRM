@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Invoices				
         private MInvoice[] _invoices = null;
         //	Allocation				
-        private MAllocationHdr _allocation = null;
+        private MVABDocAllocation _allocation = null;
         #endregion
 
         /// <summary>
@@ -963,7 +963,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	New Allocation
             if (_allocation == null)
             {
-                _allocation = new MAllocationHdr(GetCtx(), false, _dateAcct,	//	automatic 
+                _allocation = new MVABDocAllocation(GetCtx(), false, _dateAcct,	//	automatic 
                     _VAB_Currency_ID, "Auto " + description, Get_Trx());
                 _allocation.SetVAF_Org_ID(VAF_Org_ID);
                 if (!_allocation.Save())
@@ -973,7 +973,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	New Allocation Line
-            MAllocationLine aLine = new MAllocationLine(_allocation, Amount,
+            MVABDocAllocationLine aLine = new MVABDocAllocationLine(_allocation, Amount,
                 DiscountAmt, WriteOffAmt, OverUnderAmt);
             aLine.SetVAB_BusinessPartner_ID(_VAB_BusinessPartner_ID);
             aLine.SetVAB_Payment_ID(VAB_Payment_ID);
@@ -989,7 +989,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             if (_allocation == null)
                 return true;
-            Boolean _success = _allocation.ProcessIt(MAllocationHdr.DOCACTION_Complete);
+            Boolean _success = _allocation.ProcessIt(MVABDocAllocation.DOCACTION_Complete);
             if (_success)
             {
                 _success = _allocation.Save();

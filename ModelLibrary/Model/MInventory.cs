@@ -42,7 +42,7 @@ namespace VAdvantage.Model
         private Decimal? trxQty = 0;
         private bool isGetFromStorage = false;
 
-        MAcctSchema acctSchema = null;
+        MVABAccountBook acctSchema = null;
         MProduct product1 = null;
         decimal currentCostPrice = 0;
         string conversionNotFoundInOut = "";
@@ -1950,7 +1950,7 @@ namespace VAdvantage.Model
 
 
         // amit not used 24-12-2015
-        private void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        private void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
            int Org_ID, MCostElement ce, decimal movementQty)
         {
             //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetM_AttributeSetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);

@@ -69,7 +69,7 @@ namespace VIS.Models
         public Dictionary<string, object> GetAccountData(Ctx ctx, int VAB_Bank_Acct_ID)
         {
             Dictionary<string, object> retValue = new Dictionary<string, object>();
-            DataSet _ds = DB.ExecuteDataset(@" SELECT ac.AccountNo, b.RoutingNo FROM VAB_Bank_Acct ac INNER JOIN C_Bank b ON b.C_Bank_ID= ac.C_Bank_ID WHERE ac.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID);
+            DataSet _ds = DB.ExecuteDataset(@" SELECT ac.AccountNo, b.RoutingNo FROM VAB_Bank_Acct ac INNER JOIN VAB_Bank b ON b.VAB_Bank_ID= ac.VAB_Bank_ID WHERE ac.VAB_Bank_Acct_ID = " + VAB_Bank_Acct_ID);
             if (_ds != null && _ds.Tables[0].Rows.Count > 0)
             {
                 retValue["AccountNo"] = Util.GetValueOfString(_ds.Tables[0].Rows[0]["AccountNo"]);

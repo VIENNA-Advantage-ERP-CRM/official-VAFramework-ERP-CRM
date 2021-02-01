@@ -98,7 +98,7 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //
-                MBPartner bp = new MBPartner(GetCtx(), response.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), response.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 log.Config("Winner=" + bp);
                 MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
                 order.SetIsSOTrx(false);
@@ -186,7 +186,7 @@ namespace VAdvantage.Process
             for (int i = 0; i < responses.Length; i++)
             {
                 MRfQResponse response = responses[i];
-                MBPartner bp = null;
+                MVABBusinessPartner bp = null;
                 MOrder order = null;
                 //	For all Response Lines
                 MRfQResponseLine[] lines = response.GetLines(false);
@@ -198,7 +198,7 @@ namespace VAdvantage.Process
                     //	New/different BP
                     if (bp == null)
                     {
-                        bp = new MBPartner(GetCtx(), response.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                        bp = new MVABBusinessPartner(GetCtx(), response.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         order = null;
                     }
                     log.Config("Line=" + line + ", Winner=" + bp);

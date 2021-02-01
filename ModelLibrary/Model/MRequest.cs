@@ -151,7 +151,7 @@ namespace VAdvantage.Model
         /**	Changed						*/
         private bool _changed = false;
         /**	BPartner					*/
-        private MBPartner _partner = null;
+        private MVABBusinessPartner _partner = null;
         /** User/Contact				*/
         private MVAFUserContact _user = null;
         /** List of EMail Notices		*/
@@ -717,14 +717,14 @@ namespace VAdvantage.Model
          * 	Get BPartner (may be not defined)
          *	@return Sales Rep User
          */
-        public MBPartner GetBPartner()
+        public MVABBusinessPartner GetBPartner()
         {
             if (GetVAB_BusinessPartner_ID() == 0)
                 return null;
             if (_partner != null && _partner.GetVAB_BusinessPartner_ID() != GetVAB_BusinessPartner_ID())
                 _partner = null;
             if (_partner == null)
-                _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
+                _partner = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _partner;
         }
 
@@ -756,7 +756,7 @@ namespace VAdvantage.Model
             //
             if (GetBPartner() != null)
             {
-                MBPGroup bpg = MBPGroup.Get(GetCtx(), GetBPartner().GetVAB_BPart_Category_ID());
+                MVABBPartCategory bpg = MVABBPartCategory.Get(GetCtx(), GetBPartner().GetVAB_BPart_Category_ID());
                 String prioBase = bpg.GetPriorityBase();
                 if (prioBase != null && !prioBase.Equals(X_VAB_BPart_Category.PRIORITYBASE_Same))
                 {

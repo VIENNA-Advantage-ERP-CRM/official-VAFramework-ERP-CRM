@@ -243,7 +243,7 @@ namespace VAdvantage.Model
         {
             if (_precision == null)
             {
-                MCurrency c = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
+                MVABCurrency c = MVABCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 _precision = c.GetStdPrecision();
             }
             return (int)_precision;

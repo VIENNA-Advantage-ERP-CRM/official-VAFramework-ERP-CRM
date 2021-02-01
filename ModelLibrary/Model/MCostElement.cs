@@ -346,7 +346,7 @@ namespace VAdvantage.Model
             }
 
             //	Costing Methods on AS level
-            MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
+            MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
             for (int i = 0; i < ass.Length; i++)
             {
                 if (ass[i].GetCostingMethod().Equals(GetCostingMethod()))
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
                 {
                     // check costing method against primary accounting schema
                     MVAFClientDetail clientInfo = MVAFClientDetail.Get(ctx, VAF_Client_ID);
-                    MAcctSchema actSchema = MAcctSchema.Get(ctx, clientInfo.GetVAB_AccountBook1_ID());
+                    MVABAccountBook actSchema = MVABAccountBook.Get(ctx, clientInfo.GetVAB_AccountBook1_ID());
                     if (actSchema != null)
                     {
                         costingMethod = actSchema.GetCostingMethod();

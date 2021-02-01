@@ -87,7 +87,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("No Business Partner/Location");
             }
-            MBPartner bp = new MBPartner(GetCtx(), rfq.GetVAB_BusinessPartner_ID(), Get_TrxName());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), rfq.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
             MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
             order.SetIsSOTrx(true);

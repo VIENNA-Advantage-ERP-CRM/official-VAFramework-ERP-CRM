@@ -165,7 +165,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 if (user.GetVAB_BusinessPartner_ID() == 0)
                 {
-                    MBPartner bp = new MBPartner(GetCtx(), 0, Get_TrxName());
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), 0, Get_TrxName());
                     bp.SetName(user.GetName());
                     if (!bp.Save())
                         return ProcessFail(imp, "Cannot create BPartner");

@@ -406,7 +406,7 @@ namespace VAdvantage.Model
 	{
 		log.Info("Amt=" + Amt + " - " + acct);
 		GetLines(false);
-		int precision = MCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
+		int precision = MVABCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
 		//	First Round
 		Decimal total = Env.ZERO;
 		int indexBiggest = -1;

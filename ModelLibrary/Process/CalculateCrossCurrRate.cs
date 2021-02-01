@@ -24,7 +24,7 @@ namespace VAdvantage.Process
         Decimal MulRate1, MulRate2 = 0;
         DateTime newValidFrom = new DateTime();
         DateTime newValidTo = new DateTime();
-        MConversionRate conobj;
+        MVABExchangeRate conobj;
         MCurrCrossRate Currobj;
         DataSet dsobj;
 
@@ -121,7 +121,7 @@ namespace VAdvantage.Process
                         //    Msg.GetMsg("Record Inserted","");
                         //}
                         // Inserting new conversion in the currency rate
-                        conobj = new MConversionRate(GetCtx(), 0, Get_Trx());
+                        conobj = new MVABExchangeRate(GetCtx(), 0, Get_Trx());
                         conobj.SetVAF_Client_ID(Currobj.GetVAF_Client_ID());
                         conobj.SetVAF_Org_ID(Currobj.GetVAF_Org_ID());
                         conobj.SetVAB_Currency_ID(Currobj.GetVAB_Currency_From_ID());

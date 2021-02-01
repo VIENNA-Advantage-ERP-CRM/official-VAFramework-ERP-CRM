@@ -48,8 +48,8 @@ namespace VIS.Models
                  + "b.Name || ' ' || ba.AccountNo AS Name, "          //  2
                    + "ba.VAB_Currency_ID, c.ISO_Code,"                   //  3..4
                    + "ba.CurrentBalance "                              //  5
-                 + "FROM C_Bank b "
-                 + "INNER JOIN VAB_Bank_Acct ba ON (b.C_Bank_ID=ba.C_Bank_ID) "
+                 + "FROM VAB_Bank b "
+                 + "INNER JOIN VAB_Bank_Acct ba ON (b.VAB_Bank_ID=ba.VAB_Bank_ID) "
                  + "INNER JOIN VAB_Currency c ON (ba.VAB_Currency_ID=c.VAB_Currency_ID) "
                  + " AND ba.IsActive = 'Y'"
                  + " AND EXISTS (SELECT * FROM VAB_Bank_AcctDoc d WHERE d.VAB_Bank_Acct_ID=ba.VAB_Bank_Acct_ID) "
@@ -446,7 +446,7 @@ namespace VIS.Models
             if (!check1.IsValid())
             {
                 int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();
-                MBPartner bp = MBPartner.Get(ctx, VAB_BusinessPartner_ID);
+                MVABBusinessPartner bp = MVABBusinessPartner.Get(ctx, VAB_BusinessPartner_ID);
                 String msg = "@NotFound@ @VAB_BPart_Bank_Acct@: " + bp.GetName();
                 throw new Exception(msg);
             }

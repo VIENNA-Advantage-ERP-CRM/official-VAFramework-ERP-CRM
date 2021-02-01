@@ -110,7 +110,7 @@ namespace VAdvantage.Model
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
             MProduct product = null;
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             MCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
 
                 acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
                                     ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
-                acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
+                acctSchema = new MVABAccountBook(ctx, acctSchema_ID, trx);
 
                 if (acctSchema.GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
                 {
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
             MProduct product = null;
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             MCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
 
                 acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
                                     ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
-                acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
+                acctSchema = new MVABAccountBook(ctx, acctSchema_ID, trx);
 
                 if (acctSchema.GetVAB_Currency_ID() != order.GetVAB_Currency_ID())
                 {
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
             MProduct product = null;
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             MCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
@@ -330,7 +330,7 @@ namespace VAdvantage.Model
                 {
                     acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
                                     ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + invoice.GetVAF_Client_ID()));
-                    acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
+                    acctSchema = new MVABAccountBook(ctx, acctSchema_ID, trx);
 
                     if (acctSchema.GetVAB_Currency_ID() != invoice.GetVAB_Currency_ID())
                     {
@@ -408,7 +408,7 @@ namespace VAdvantage.Model
             int VAF_Org_ID = 0;
             int M_ASI_ID = 0;
             MProduct product = null;
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             MCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
                 {
                     acctSchema_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT asch.VAB_AccountBook_id FROM VAB_AccountBook asch INNER JOIN VAF_ClientDetail ci
                                     ON ci.VAB_AccountBook1_id = asch.VAB_AccountBook_id WHERE ci.vaf_client_id  = " + order.GetVAF_Client_ID()));
-                    acctSchema = new MAcctSchema(ctx, acctSchema_ID, trx);
+                    acctSchema = new MVABAccountBook(ctx, acctSchema_ID, trx);
 
                     if (acctSchema.GetVAB_Currency_ID() != order.GetVAB_Currency_ID())
                     {

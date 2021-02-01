@@ -86,7 +86,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MAcctSchema as1)
+        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             if (AcctType < 0 || AcctType > 4)
             {

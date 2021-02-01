@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         /// <param name="M_CostElement_ID">cost element</param>
         /// <param name="trxName">transaction</param>
         public MCostQueue(MProduct product, int M_AttributeSetInstance_ID,
-            MAcctSchema mas, int VAF_Org_ID, int M_CostElement_ID, Trx trxName)
+            MVABAccountBook mas, int VAF_Org_ID, int M_CostElement_ID, Trx trxName)
             : this(product.GetCtx(), 0, trxName)
         {
             SetClientOrg(product.GetVAF_Client_ID(), VAF_Org_ID);
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
         /// <param name="Qty">quantity to be reduced</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost price reduced or null of error</returns>
-        public static Decimal? AdjustQty(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        public static Decimal? AdjustQty(MProduct product, int M_ASI_ID, MVABAccountBook mas,
                 int Org_ID, MCostElement ce, Decimal Qty, Trx trxName)
         {
             if (Env.Signum(Qty) == 0)
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         /// <returns>cost queue or null</returns>
         public static MCostQueue Get(MProduct product, int M_AttributeSetInstance_ID,
-            MAcctSchema mas, int VAF_Org_ID, int M_CostElement_ID, Trx trxName)
+            MVABAccountBook mas, int VAF_Org_ID, int M_CostElement_ID, Trx trxName)
         {
             MCostQueue costQ = null;
             String sql = "SELECT * FROM M_CostQueue "
@@ -212,7 +212,7 @@ namespace VAdvantage.Model
         /// <param name="Qty">quantity to be reduced</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost for qty or null of error</returns>
-        public static Decimal? GetCosts(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        public static Decimal? GetCosts(MProduct product, int M_ASI_ID, MVABAccountBook mas,
             int Org_ID, MCostElement ce, Decimal Qty, Trx trxName)
         {
             if (Env.Signum(Qty) == 0)
@@ -292,7 +292,7 @@ namespace VAdvantage.Model
         /// <param name="ce">Cost Element</param>
         /// <param name="trxName">transaction</param>
         /// <returns>cost queue or null</returns>
-        public static MCostQueue[] GetQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        public static MCostQueue[] GetQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
             int Org_ID, MCostElement ce, Trx trxName, int M_Warehouse_ID = 0)
         {
             List<MCostQueue> list = new List<MCostQueue>();
@@ -395,7 +395,7 @@ namespace VAdvantage.Model
                      MInvoiceLine invoiceline, PO po, Decimal Price, Decimal Qty, Trx trxName, out string conversionNotFound,
                      string optionalstr = "process")
         {
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             dynamic pca = null;
             string costingMethodMatchPO = null;
             MCostElement costElement = null;
@@ -475,7 +475,7 @@ namespace VAdvantage.Model
                         Price = receivedPrice;
                         Qty = receivedQty;
                         VAF_Org_ID = VAF_Org_ID2;
-                        acctSchema = new MAcctSchema(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]), trxName);
+                        acctSchema = new MVABAccountBook(ctx, Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]), trxName);
                         if (product != null)
                         {
                             #region Costing Level
@@ -589,7 +589,7 @@ namespace VAdvantage.Model
                                 if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
                                     // convert amount on account date of M_Inout (discussed with Ashish, Suya, Mukesh sir)
-                                    Price = MConversionRate.Convert(ctx, Price, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Price, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                      inout.GetDateAcct(), order.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -651,7 +651,7 @@ namespace VAdvantage.Model
                                         if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                         {
                                             // convert amount on account date of M_Inout (discussed with Ashish, Suya, Mukesh sir)
-                                            Price = MConversionRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                            Price = MVABExchangeRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                 inout.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                         }
                                         invoice = null;
@@ -688,7 +688,7 @@ namespace VAdvantage.Model
                             }
                             if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
-                                Price = MConversionRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                Price = MVABExchangeRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                          invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                 if (Price == 0)
                                 {
@@ -829,7 +829,7 @@ namespace VAdvantage.Model
                             Decimal ProductOrderLineCost = orderline.GetProductLineCost(orderline);
                             if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
-                                Price = MConversionRate.Convert(ctx, Decimal.Divide(ProductOrderLineCost, orderline.GetQtyOrdered()), order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                Price = MVABExchangeRate.Convert(ctx, Decimal.Divide(ProductOrderLineCost, orderline.GetQtyOrdered()), order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                     (inout != null ? inout.GetDateAcct() : order.GetDateAcct()), order.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                 if (Price == 0)
                                 {
@@ -1652,7 +1652,7 @@ namespace VAdvantage.Model
                                             inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                             if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                             {
-                                                Price += MConversionRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
+                                                Price += MVABExchangeRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
                                                                                  inv.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                                  inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                                 if (Price == 0)
@@ -1741,7 +1741,7 @@ namespace VAdvantage.Model
                                 invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(ProductLineCost, invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(ProductLineCost, invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                              invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -1874,7 +1874,7 @@ namespace VAdvantage.Model
                                                 inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                                 if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                                 {
-                                                    Price += MConversionRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
+                                                    Price += MVABExchangeRate.Convert(ctx, decimal.Multiply(PriceActualIncludedTax, Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
                                                                                      inv.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                                      inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                                     if (Price == 0)
@@ -2130,7 +2130,7 @@ namespace VAdvantage.Model
 
                                 if (VAB_Currency_ID != 0 && VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
                                                                             inventory.GetMovementDate(), 0, VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -2199,7 +2199,7 @@ namespace VAdvantage.Model
                                 // checking price for Finished Good
                                 if (acctSchema.GetVAB_Currency_ID() != Util.GetValueOfInt(ctx.GetContextAsInt("$VAB_Currency_ID")))
                                 {
-                                    price = MConversionRate.Convert(ctx, price, Util.GetValueOfInt(ctx.GetContext("$VAB_Currency_ID")), acctSchema.GetVAB_Currency_ID(),
+                                    price = MVABExchangeRate.Convert(ctx, price, Util.GetValueOfInt(ctx.GetContext("$VAB_Currency_ID")), acctSchema.GetVAB_Currency_ID(),
                                                                         VAMFG_DateAcct, 0, VAF_Client_ID, VAF_Org_ID);
                                 }
                                 if (price == 0)
@@ -2330,7 +2330,7 @@ namespace VAdvantage.Model
 
                                     if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                     {
-                                        expectedAmt = MConversionRate.Convert(ctx, expectedAmt, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                        expectedAmt = MVABExchangeRate.Convert(ctx, expectedAmt, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                     inout.GetDateAcct(), order.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                         if (expectedAmt == 0)
                                         {
@@ -2466,7 +2466,7 @@ namespace VAdvantage.Model
                                     // conversion required
                                     if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                     {
-                                        amt = MConversionRate.Convert(ctx, amt, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                        amt = MVABExchangeRate.Convert(ctx, amt, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                              invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                         if (amt == 0)
                                         {
@@ -3209,7 +3209,7 @@ namespace VAdvantage.Model
                      string windowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
                      MInvoiceLine invoiceline, Decimal Price, Decimal Qty, Trx trxName, int[] acctSchemaRecord, out string conversionNotFound)
         {
-            MAcctSchema acctSchema = null;
+            MVABAccountBook acctSchema = null;
             dynamic pca = null;
             MCostElement costElement = null;
             MProduct productLca = null;
@@ -3261,7 +3261,7 @@ namespace VAdvantage.Model
                         Price = receivedPrice;
                         Qty = receivedQty;
                         VAF_Org_ID = VAF_Org_ID2;
-                        acctSchema = new MAcctSchema(ctx, acctSchemaRecord[i], trxName);
+                        acctSchema = new MVABAccountBook(ctx, acctSchemaRecord[i], trxName);
                         if (product != null)
                         {
                             #region Costing Level
@@ -3305,7 +3305,7 @@ namespace VAdvantage.Model
                                 order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                                 if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Price, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Price, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                      order.GetDateAcct(), order.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -3341,7 +3341,7 @@ namespace VAdvantage.Model
                             invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                             if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
-                                Price = MConversionRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                Price = MVABExchangeRate.Convert(ctx, Price, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                          invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
 
                                 if (Price == 0)
@@ -3426,7 +3426,7 @@ namespace VAdvantage.Model
                             order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                             if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
-                                Price = MConversionRate.Convert(ctx, Decimal.Divide(orderline.GetLineNetAmt(), orderline.GetQtyOrdered()), order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                Price = MVABExchangeRate.Convert(ctx, Decimal.Divide(orderline.GetLineNetAmt(), orderline.GetQtyOrdered()), order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                  order.GetDateAcct(), order.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                 if (Price == 0)
                                 {
@@ -3948,7 +3948,7 @@ namespace VAdvantage.Model
                                             inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                             if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                             {
-                                                Price += MConversionRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
+                                                Price += MVABExchangeRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
                                                                                  inv.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                                  inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                                 if (Price == 0)
@@ -4022,7 +4022,7 @@ namespace VAdvantage.Model
                                 invoice = new MInvoice(ctx, invoiceline.GetVAB_Invoice_ID(), trxName);
                                 if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(invoiceline.GetLineNetAmt(), invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Decimal.Multiply(Qty, Decimal.Round(Decimal.Divide(invoiceline.GetLineNetAmt(), invoiceline.GetQtyInvoiced()), 2)), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                              invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -4118,7 +4118,7 @@ namespace VAdvantage.Model
                                                 inv = new MInvoice(ctx, Util.GetValueOfInt(ds2.Tables[0].Rows[n]["VAB_Invoice_id"]), trxName);
                                                 if (inv.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                                 {
-                                                    Price += MConversionRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
+                                                    Price += MVABExchangeRate.Convert(ctx, decimal.Multiply(Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["priceactual"]), Util.GetValueOfDecimal(ds2.Tables[0].Rows[n]["qty"])),
                                                                                      inv.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                                      inv.GetDateAcct(), inv.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                                     if (Price == 0)
@@ -4308,7 +4308,7 @@ namespace VAdvantage.Model
                                 inventory = new MInventory(ctx, inventoryLine.GetM_Inventory_ID(), trxName);
                                 if (VAB_Currency_ID != 0 && VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
                                                                             inventory.GetMovementDate(), 0, VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -4323,7 +4323,7 @@ namespace VAdvantage.Model
                                 movement = new MMovement(ctx, movementline.GetM_Movement_ID(), trxName);
                                 if (VAB_Currency_ID != 0 && VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                                 {
-                                    Price = MConversionRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
+                                    Price = MVABExchangeRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
                                                                             movement.GetMovementDate(), 0, VAF_Client_ID, VAF_Org_ID);
                                     if (Price == 0)
                                     {
@@ -4397,7 +4397,7 @@ namespace VAdvantage.Model
                                     // conversion required
                                     if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                     {
-                                        amt = MConversionRate.Convert(ctx, amt, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                        amt = MVABExchangeRate.Convert(ctx, amt, invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                              invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                         if (amt == 0)
                                         {
@@ -4756,7 +4756,7 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">attributesetinstance</param>
         /// <param name="M_Warehouse_ID">M_Warehouse_ID</param>
         /// <returns>qty</returns>
-        public static decimal CheckQtyAvailablity(Ctx ctx, MAcctSchema acctSchema, int VAF_Client_ID, int VAF_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
+        public static decimal CheckQtyAvailablity(Ctx ctx, MVABAccountBook acctSchema, int VAF_Client_ID, int VAF_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
         {
             decimal qty = 0;
             try
@@ -4793,7 +4793,7 @@ namespace VAdvantage.Model
             return qty;
         }
 
-        public static Decimal CalculateCostQueuePrice(MInvoice invoice, MInvoiceLine invoiceLine, Decimal price, MAcctSchema acctSchema, int VAF_Client_ID, int VAF_Org_ID, MCostElement ce, Trx trxName, bool iscostImmdiate, string optionalStr, MInOutLine matchInoutLine)
+        public static Decimal CalculateCostQueuePrice(MInvoice invoice, MInvoiceLine invoiceLine, Decimal price, MVABAccountBook acctSchema, int VAF_Client_ID, int VAF_Org_ID, MCostElement ce, Trx trxName, bool iscostImmdiate, string optionalStr, MInOutLine matchInoutLine)
         {
             // if inoutline not available the return 0
             if (matchInoutLine == null)
@@ -4879,7 +4879,7 @@ namespace VAdvantage.Model
                         }
                         if (Util.GetValueOfInt(dsInvoiceRecord.Tables[0].Rows[i]["VAB_Currency_id"]) != acctSchema.GetVAB_Currency_ID())
                         {
-                            surchargeAmount = MConversionRate.Convert(invoiceLine.GetCtx(),
+                            surchargeAmount = MVABExchangeRate.Convert(invoiceLine.GetCtx(),
                                 isCostAdjustmentOnLost == "Y" && MRQtyConsumed < Util.GetValueOfDecimal(dsInvoiceRecord.Tables[0].Rows[i]["qtyentered"]) ? decimal.Multiply(PriceActual, MRQtyConsumed)
                                 : decimal.Multiply(PriceActual, Util.GetValueOfDecimal(dsInvoiceRecord.Tables[0].Rows[i]["qtyentered"])),
                                                   Util.GetValueOfInt(dsInvoiceRecord.Tables[0].Rows[i]["VAB_Currency_id"]), acctSchema.GetVAB_Currency_ID(),
@@ -4913,7 +4913,7 @@ namespace VAdvantage.Model
                                     PriceLifoOrFifo -= price * invoiceLine.GetQtyEntered();
                                     if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                     {
-                                        PriceLifoOrFifo += MConversionRate.Convert(invoiceLine.GetCtx(), (ProductInvoicePriceActual * invoiceLine.GetQtyEntered()), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                                        PriceLifoOrFifo += MVABExchangeRate.Convert(invoiceLine.GetCtx(), (ProductInvoicePriceActual * invoiceLine.GetQtyEntered()), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                                  invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                                     }
                                     else
@@ -4952,7 +4952,7 @@ namespace VAdvantage.Model
 
                         if (invoice.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                         {
-                            surchargeAmount = MConversionRate.Convert(invoiceLine.GetCtx(), (ProductLineCost), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
+                            surchargeAmount = MVABExchangeRate.Convert(invoiceLine.GetCtx(), (ProductLineCost), invoice.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
                                                                      invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(), VAF_Client_ID, VAF_Org_ID);
                             if (ProductLineCost > 0 && surchargeAmount == 0)
                             {
@@ -5009,7 +5009,7 @@ namespace VAdvantage.Model
             {
                 inout = new MInOut(inoutline.GetCtx(), inoutline.GetM_InOut_ID(), inoutline.Get_Trx());
             }
-            MBPartner bpartner = new MBPartner(inout.GetCtx(), inout.GetVAB_BusinessPartner_ID(), inout.Get_Trx());
+            MVABBusinessPartner bpartner = new MVABBusinessPartner(inout.GetCtx(), inout.GetVAB_BusinessPartner_ID(), inout.Get_Trx());
             if (bpartner.GetPO_PriceList_ID() > 0)
             {
                 MPriceList pl = new MPriceList(bpartner.GetCtx(), bpartner.GetPO_PriceList_ID(), bpartner.Get_Trx());
@@ -5162,7 +5162,7 @@ namespace VAdvantage.Model
                 // conversion of amount
                 if (VAB_Currency_id != 0 && VAB_Currency_id != CurrencyTo)
                 {
-                    amount = MConversionRate.Convert(inout.GetCtx(), amount, VAB_Currency_id, CurrencyTo,
+                    amount = MVABExchangeRate.Convert(inout.GetCtx(), amount, VAB_Currency_id, CurrencyTo,
                                                                             inout.GetDateAcct(), 0, inout.GetVAF_Client_ID(), inout.GetVAF_Org_ID());
                 }
             }
@@ -5197,7 +5197,7 @@ namespace VAdvantage.Model
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <returns>PRICE</returns>
-        private static Decimal CalculateCost(Ctx ctx, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID, int VAF_Org_ID, int M_Warehouse_ID)
+        private static Decimal CalculateCost(Ctx ctx, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID, int VAF_Org_ID, int M_Warehouse_ID)
         {
             Decimal price = 0;
             int costElementID = 0;
@@ -5289,7 +5289,7 @@ namespace VAdvantage.Model
             return price;
         }
 
-        private static bool CreateCostQueue(Ctx ctx, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID, int VAF_Org_ID, Decimal Price, Decimal Qty,
+        private static bool CreateCostQueue(Ctx ctx, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID, int VAF_Org_ID, Decimal Price, Decimal Qty,
                                string windowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
                                MInvoiceLine invoiceline, MCostDetail cd, Trx trxName, out string costQueueIds)
         {
@@ -5837,7 +5837,7 @@ namespace VAdvantage.Model
         /// <param name="optionalStrPO">calling from process or manual</param>
         /// <param name="M_Warehouse_ID">warehouse</param>
         /// <returns>TRUE - if success</returns>
-        private static bool CreateCostQueueForMatchPO(Ctx ctx, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID,
+        private static bool CreateCostQueueForMatchPO(Ctx ctx, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID,
                                                       int VAF_Org_ID, Decimal Price, Decimal Qty, MInOutLine inoutline, Trx trxName, int M_Warehouse_ID, string optionalStrPO = "process")
         {
             if (optionalStrPO == "window")
@@ -5963,7 +5963,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        private static void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        private static void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
          int Org_ID, MCostElement ce, decimal movementQty, int M_Warehouse_ID = 0)
         {
             Decimal qty = movementQty;

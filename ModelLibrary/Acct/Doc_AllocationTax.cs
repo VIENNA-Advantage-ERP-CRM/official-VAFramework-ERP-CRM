@@ -85,7 +85,7 @@ namespace VAdvantage.Acct
         /// <param name="fact">fact to add lines</param>
         /// <param name="line">line</param>
         /// <returns>true if created</returns>
-        public bool CreateEntries(MAcctSchema as1, Fact fact, DocLine line)
+        public bool CreateEntries(MVABAccountBook as1, Fact fact, DocLine line)
         {
             //	get total index (the Receivables/Liabilities line)
             Decimal total = Env.ZERO;

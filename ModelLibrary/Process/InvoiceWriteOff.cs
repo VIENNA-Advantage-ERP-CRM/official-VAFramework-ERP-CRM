@@ -57,7 +57,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private Boolean		_IsSimulation = true;
 
 	//	Allocation Hdr			
-	private MAllocationHdr	_m_alloc = null;
+	private MVABDocAllocation	_m_alloc = null;
 	//	Payment					
 	private MPayment		_m_payment = null;
 	
@@ -271,7 +271,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		if (_m_alloc == null || VAB_Currency_ID != _m_alloc.GetVAB_Currency_ID())
 		{
 			ProcessAllocation();
-			_m_alloc = new MAllocationHdr (GetCtx(), true, 
+			_m_alloc = new MVABDocAllocation (GetCtx(), true, 
 				_DateAcct, VAB_Currency_ID,
 				GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID(), Get_TrxName());
 			_m_alloc.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
@@ -306,16 +306,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 
 		//	Line
-		MAllocationLine aLine = null;
+		MVABDocAllocationLine aLine = null;
 		if (_CreatePayment)
 		{
-			aLine = new MAllocationLine (_m_alloc, OpenAmt,
+			aLine = new MVABDocAllocationLine (_m_alloc, OpenAmt,
 				Env.ZERO, Env.ZERO, Env.ZERO);
 			_m_payment.SetPayAmt(Decimal.Add( _m_payment.GetPayAmt(),OpenAmt));
 			aLine.SetVAB_Payment_ID(_m_payment.GetVAB_Payment_ID());
 		}
 		else
-			aLine = new MAllocationLine (_m_alloc, Env.ZERO, 
+			aLine = new MVABDocAllocationLine (_m_alloc, Env.ZERO, 
 				Env.ZERO, OpenAmt, Env.ZERO);
 		aLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
 		if (aLine.Save())

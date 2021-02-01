@@ -42,12 +42,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_ProjectIssue(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_ProjectIssue(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MProjectIssue), idr, MDocBaseType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
         }
-        public Doc_ProjectIssue(MAcctSchema[] ass,DataRow dr, Trx trxName)
+        public Doc_ProjectIssue(MVABAccountBook[] ass,DataRow dr, Trx trxName)
             : base(ass, typeof(MProjectIssue), dr, MDocBaseType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
@@ -113,7 +113,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns>fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -172,7 +172,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>Unit PO Cost</returns>
-        private Decimal? GetPOCost(MAcctSchema as1)
+        private Decimal? GetPOCost(MVABAccountBook as1)
         {
             Decimal? retValue = null;
             //	Uses PO Date
@@ -221,7 +221,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>Unit Labor Cost</returns>
-        private Decimal? GetLaborCost(MAcctSchema as1)
+        private Decimal? GetLaborCost(MVABAccountBook as1)
         {
             Decimal? retValue = null;
             /** TODO Labor Cost	*/

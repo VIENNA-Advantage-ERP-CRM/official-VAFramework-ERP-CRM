@@ -45,7 +45,7 @@ namespace VIS.Models
                 VAF_Org_ID = Util.GetValueOfInt(paramValue[5].ToString());
                //End Assign parameter value
 
-                Decimal rate = MConversionRate.GetRate(CurFrom_ID, CurTo_ID, convDate, ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+                Decimal rate = MVABExchangeRate.GetRate(CurFrom_ID, CurTo_ID, convDate, ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
                 return rate;
                 
         }
@@ -74,7 +74,7 @@ namespace VIS.Models
                 VAF_Client_ID = Util.GetValueOfInt(paramValue[3].ToString());
                 VAF_Org_ID = Util.GetValueOfInt(paramValue[4].ToString());
             
-                Decimal convert = MConversionRate.Convert(ctx, amt, CurFrom_ID, CurTo_ID, VAF_Client_ID, VAF_Org_ID);
+                Decimal convert = MVABExchangeRate.Convert(ctx, amt, CurFrom_ID, CurTo_ID, VAF_Client_ID, VAF_Org_ID);
                 return convert;
         }
 
@@ -110,7 +110,7 @@ namespace VIS.Models
             VAF_Client_ID = Util.GetValueOfInt(paramValue[5].ToString());
             VAF_Org_ID = Util.GetValueOfInt(paramValue[6].ToString());
 
-            Decimal convert = MConversionRate.Convert(ctx, amt, CurFrom_ID, CurTo_ID, convDate,ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
+            Decimal convert = MVABExchangeRate.Convert(ctx, amt, CurFrom_ID, CurTo_ID, convDate,ConversionType_ID, VAF_Client_ID, VAF_Org_ID);
             return convert;
         }
     }

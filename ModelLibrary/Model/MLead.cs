@@ -28,7 +28,7 @@ namespace VAdvantage.Model
     {
         #region private variables
         /** BPartner			*/
-        private MBPartner _bp = null;
+        private MVABBusinessPartner _bp = null;
         /** User				*/
         private MVAFUserContact _user = null;
         /** Request				*/
@@ -146,13 +146,13 @@ namespace VAdvantage.Model
          * 	Get BPartner
          *	@return bp or null
          */
-        public MBPartner GetBPartner()
+        public MVABBusinessPartner GetBPartner()
         {
             if (GetVAB_BusinessPartner_ID() == 0)
                 _bp = null;
             else if (_bp == null
                 || _bp.GetVAB_BusinessPartner_ID() != GetVAB_BusinessPartner_ID())
-                _bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
+                _bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _bp;
         }
 
@@ -348,7 +348,7 @@ namespace VAdvantage.Model
                     }
                 }
                 //
-                _bp = new MBPartner(GetCtx(), Get_TrxName());	//	Template
+                _bp = new MVABBusinessPartner(GetCtx(), Get_TrxName());	//	Template
                 _bp.SetVAF_Org_ID(GetVAF_Org_ID());
                 //_bp.SetValue(GetBPName());
                 _bp.SetName(GetBPName());
@@ -369,7 +369,7 @@ namespace VAdvantage.Model
                 {
                     _bp.SetVAB_BPart_Category_ID(GetVAB_BPart_Category_ID());
                 }
-                MBPGroup gp = new MBPGroup(GetCtx(), GetVAB_BPart_Category_ID(), Get_TrxName());
+                MVABBPartCategory gp = new MVABBPartCategory(GetCtx(), GetVAB_BPart_Category_ID(), Get_TrxName());
                 _bp.SetM_PriceList_ID(gp.GetM_PriceList_ID());
                 if (GetVAB_BPart_Strength_ID() != 0)
                     _bp.SetVAB_BPart_Strength_ID(GetVAB_BPart_Strength_ID());
@@ -549,7 +549,7 @@ namespace VAdvantage.Model
             location.SetRegionName(GetRegionName());
             if (location.Save())
             {
-                MBPartnerLocation bpl = new MBPartnerLocation(_bp);
+                MVABBPartLocation bpl = new MVABBPartLocation(_bp);
                 bpl.SetVAB_Address_ID(location.GetVAB_Address_ID());
                 bpl.SetPhone(GetPhone());
                 bpl.SetPhone2(GetPhone2());

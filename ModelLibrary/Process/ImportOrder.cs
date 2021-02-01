@@ -489,10 +489,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             imp.SetName(imp.GetBPartnerValue());
                     }
                     //	BPartner
-                    MBPartner bp = MBPartner.Get(GetCtx(), imp.GetBPartnerValue());
+                    MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), imp.GetBPartnerValue());
                     if (bp == null)
                     {
-                        bp = new MBPartner(GetCtx(), -1, Get_TrxName());
+                        bp = new MVABBusinessPartner(GetCtx(), -1, Get_TrxName());
                         bp.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         bp.SetValue(imp.GetBPartnerValue());
                         bp.SetName(imp.GetName());
@@ -502,8 +502,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     imp.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
 
                     //	BP Location
-                    MBPartnerLocation bpl = null;
-                    MBPartnerLocation[] bpls = bp.GetLocations(true);
+                    MVABBPartLocation bpl = null;
+                    MVABBPartLocation[] bpls = bp.GetLocations(true);
                     for (int i = 0; bpl == null && i < bpls.Length; i++)
                     {
                         if (imp.GetVAB_BPart_Location_ID() == bpls[i].GetVAB_BPart_Location_ID())
@@ -535,7 +535,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (!loc.Save())
                             continue;
                         //
-                        bpl = new MBPartnerLocation(bp);
+                        bpl = new MVABBPartLocation(bp);
                         bpl.SetVAB_Address_ID(imp.GetVAB_Address_ID());
                         if (!bpl.Save())
                             continue;

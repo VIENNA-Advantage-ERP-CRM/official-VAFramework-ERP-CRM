@@ -50,9 +50,9 @@ namespace VIS.Models
         public AccountSchema AccountSchemaLoad(Ctx ctx, int windowNo, int VAB_AccountBook_ID)
         {
             AccountSchema objSchema = new AccountSchema();
-            MAcctSchemaElement[] elements = null;
+            MVABAccountBookElement[] elements = null;
 
-            var _AcctSchema = new MAcctSchema(ctx, VAB_AccountBook_ID, null);
+            var _AcctSchema = new MVABAccountBook(ctx, VAB_AccountBook_ID, null);
             ctx.GetCtx(windowNo).SetContext(windowNo, "VAB_AccountBook_ID", VAB_AccountBook_ID);
             elements = _AcctSchema.GetAcctSchemaElements();
 
@@ -61,7 +61,7 @@ namespace VIS.Models
             for (int i = 0; i < elements.Length; i++)
             {
                 AccountingElements obj = new AccountingElements();
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 obj.Type = ase.GetElementType();
                 obj.IsMandatory = ase.IsMandatory();
                 obj.ID = ase.Get_ID();

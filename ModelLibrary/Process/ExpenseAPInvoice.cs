@@ -157,7 +157,7 @@ namespace VAdvantage.Process
                         {
 
                             CompleteInvoice(invoice, te);
-                            MBPartner bp = new MBPartner(GetCtx(), te.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), te.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
                             log.Info("New Invoice for " + bp);
                             invoice = new MInvoice(GetCtx(), 0, Get_TrxName());

@@ -63,7 +63,7 @@ namespace VIS.Models
             }
             DataSet dsLoc = null;
             MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
-            MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
@@ -526,7 +526,7 @@ namespace VIS.Models
             _VAB_BusinessPartner_Id = Util.GetValueOfInt(order["VAB_BusinessPartner_ID"]);
             _c_Bill_Location_Id = Util.GetValueOfInt(order["VAB_BPart_Location_ID"]);
 
-            MBPartner bp = new MBPartner(ctx, _VAB_BusinessPartner_Id, null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, _VAB_BusinessPartner_Id, null);
             retDic["TaxExempt"] = bp.IsTaxExempt() ? "Y" : "N";
 
             if (_CountVATAX > 0)
@@ -587,7 +587,7 @@ namespace VIS.Models
             }
             DataSet dsLoc = null;
             MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
-            MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());

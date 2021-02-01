@@ -363,11 +363,11 @@ namespace VAdvantage.Model
             }
             //
             int VAB_AccountBook_ID = GetVAB_AccountBook_ID();
-            MAcctSchema a = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID);
+            MVABAccountBook a = MVABAccountBook.Get(GetCtx(), VAB_AccountBook_ID);
             int VAF_Client_ID = GetVAF_Client_ID();
             int VAF_Org_ID = GetVAF_Org_ID();
 
-            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(VAB_Currency_ID, a.GetVAB_Currency_ID(),
+            Decimal? CurrencyRate = (Decimal?)MVABExchangeRate.GetRate(VAB_Currency_ID, a.GetVAB_Currency_ID(),
                 DateAcct, VAB_CurrencyType_ID, VAF_Client_ID, VAF_Org_ID);
             log.Fine("rate = " + CurrencyRate);
             //if (CurrencyRate.Value == null)
@@ -647,7 +647,7 @@ namespace VAdvantage.Model
 
 
             // set currency of selected accounting schema
-            MAcctSchema acctSchema = MAcctSchema.Get(GetCtx(), GetVAB_AccountBook_ID());
+            MVABAccountBook acctSchema = MVABAccountBook.Get(GetCtx(), GetVAB_AccountBook_ID());
             int VAB_Currency_ID = acctSchema.GetVAB_Currency_ID();
             SetVAB_Currency_ID(VAB_Currency_ID);
             SetCurrencyRate(1);
@@ -686,10 +686,10 @@ namespace VAdvantage.Model
         private void CreateAssignAccountingSchemaRecord()
         {
             // default conversion type 
-            int C_DefaultCurrencyType_ID = MConversionType.GetDefault(GetVAF_Client_ID());
+            int C_DefaultCurrencyType_ID = MVABCurrencyType.GetDefault(GetVAF_Client_ID());
 
             // selected accounting schema currency
-            int selectedAcctSchemaCurrency = MAcctSchema.Get(GetCtx(), GetVAB_AccountBook_ID()).GetVAB_Currency_ID();
+            int selectedAcctSchemaCurrency = MVABAccountBook.Get(GetCtx(), GetVAB_AccountBook_ID()).GetVAB_Currency_ID();
 
             // this query return a record of assigned org accounting schema having same chart of account
             String sql = @"SELECT DISTINCT CA.VAB_ACCOUNTBOOK_ID , Ca.VAB_Currency_ID , " + C_DefaultCurrencyType_ID + @" AS VAB_CurrencyType_ID , 
@@ -939,7 +939,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             //	Unbalanced Jornal & Not Suspense
             if (AmtSourceDr.CompareTo(AmtSourceCr) != 0)
             {
-                MAcctSchemaGL gl = MAcctSchemaGL.Get(GetCtx(), GetVAB_AccountBook_ID());
+                MVABAccountBookGL gl = MVABAccountBookGL.Get(GetCtx(), GetVAB_AccountBook_ID());
                 if (gl == null || !gl.IsUseSuspenseBalancing())
                 {
                     m_processMsg = "@UnbalancedJornal@";

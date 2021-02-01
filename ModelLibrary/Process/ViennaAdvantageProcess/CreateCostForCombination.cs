@@ -86,7 +86,7 @@ namespace ViennaAdvantageServer.Process
                             _m_Attributesetinstance_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_attributesetinstance_id"]);
                             _VAB_AccountBook_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]);
                             MProduct product = new MProduct(GetCtx(), _m_Product_ID, Get_TrxName());
-                            MAcctSchema acctSchema = new MAcctSchema(GetCtx(), _VAB_AccountBook_ID, Get_TrxName());
+                            MVABAccountBook acctSchema = new MVABAccountBook(GetCtx(), _VAB_AccountBook_ID, Get_TrxName());
                             costcombination = MCost.Get(product, _m_Attributesetinstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["M_CostElement_ID"]));
                         }
 

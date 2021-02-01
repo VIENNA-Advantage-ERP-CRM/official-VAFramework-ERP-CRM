@@ -64,7 +64,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("VAB_Bank_Acct_ID" + _VAB_Bank_Acct_ID);
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
+            MVABBankAcct ba = MVABBankAcct.Get(GetCtx(), _VAB_Bank_Acct_ID);
             if (_VAB_Bank_Acct_ID == 0 || ba.Get_ID() != _VAB_Bank_Acct_ID)
                 throw new Exception("@NotFound@ @VAB_Bank_Acct_ID@ - " + _VAB_Bank_Acct_ID);
             if (_VAF_Org_ID != ba.GetVAF_Org_ID() && ba.GetVAF_Org_ID() != 0)
@@ -116,10 +116,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAB_Bank_Acct_ID="
                 + "( "
                 + " SELECT VAB_Bank_Acct_ID "
-                + " FROM VAB_Bank_Acct a, C_Bank b "
+                + " FROM VAB_Bank_Acct a, VAB_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
-                + " AND a.C_Bank_ID=b.C_Bank_ID "
+                + " AND a.VAB_Bank_ID=b.VAB_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND b.RoutingNo=i.RoutingNo "
                 + " OR b.SwiftCode=i.RoutingNo "
@@ -135,9 +135,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + "SET VAB_Bank_Acct_ID="
                 + "( "
                 + " SELECT VAB_Bank_Acct_ID "
-                + " FROM VAB_Bank_Acct a, C_Bank b "
+                + " FROM VAB_Bank_Acct a, VAB_Bank b "
                 + " WHERE b.IsOwnBank='Y' "
-                + " AND a.C_Bank_ID=b.C_Bank_ID "
+                + " AND a.VAB_Bank_ID=b.VAB_Bank_ID "
                 + " AND a.AccountNo=i.BankAccountNo "
                 + " AND a.VAF_Client_ID=i.VAF_Client_ID "
                 + ") "
@@ -394,7 +394,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + " WHERE I_IsImported='N'"
                 + " ORDER BY VAB_Bank_Acct_ID, CheckNo, DateTrx, R_AuthCode");
 
-            MBankAccount account = null;
+            MVABBankAcct account = null;
             IDataReader idr = null;
            // int lineNo = 10;
             int noInsert = 0;
@@ -411,7 +411,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Get the bank account
                     if (account == null || account.GetVAB_Bank_Acct_ID() != imp.GetVAB_Bank_Acct_ID())
                     {
-                        account = MBankAccount.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
+                        account = MVABBankAcct.Get(_ctx, imp.GetVAB_Bank_Acct_ID());
                         log.Info("New Account=" + account.GetAccountNo());
                     }
 

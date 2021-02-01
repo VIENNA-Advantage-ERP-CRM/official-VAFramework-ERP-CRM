@@ -332,7 +332,7 @@ namespace VAdvantage.Login
 
             Ini.SaveProperties(Ini.IsClient());
             //	Country
-            m_ctx.SetContext("#VAB_Country_ID", MCountry.GetDefault(m_ctx).GetVAB_Country_ID());
+            m_ctx.SetContext("#VAB_Country_ID", MVABCountry.GetDefault(m_ctx).GetVAB_Country_ID());
 
             m_ctx.SetShowClientOrg(Ini.IsShowClientOrg() ? "Y" : "N");
             m_ctx.SetShowMiniGrid(Ini.GetProperty(Ini.P_Show_Mini_Grid));
@@ -1047,7 +1047,7 @@ namespace VAdvantage.Login
 
             //Ini.SaveProperties(Ini.IsClient());
             //	Country
-            m_ctx.SetContext("#VAB_Country_ID", MCountry.GetDefault(m_ctx).GetVAB_Country_ID());
+            m_ctx.SetContext("#VAB_Country_ID", MVABCountry.GetDefault(m_ctx).GetVAB_Country_ID());
 
             m_ctx.SetShowClientOrg(Ini.IsShowClientOrg() ? "Y" : "N");
             m_ctx.SetShowMiniGrid(Ini.GetProperty(Ini.P_Show_Mini_Grid));

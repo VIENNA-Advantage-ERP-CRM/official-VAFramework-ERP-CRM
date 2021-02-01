@@ -21,7 +21,7 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_Currency_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter
-            MCurrency currency = MCurrency.Get(ctx, VAB_Currency_ID);
+            MVABCurrency currency = MVABCurrency.Get(ctx, VAB_Currency_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["StdPrecision"] = currency.GetStdPrecision().ToString();
             return result;

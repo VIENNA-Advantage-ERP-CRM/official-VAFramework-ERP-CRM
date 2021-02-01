@@ -25,7 +25,7 @@ namespace VAdvantage.Process
         private DateTime p_StartDate;
         //
         private DateTime m_EndDate;
-        private MCommission m_com;
+        private MVABWorkCommission m_com;
 
         /// <summary>
         /// Prapare - e.g., Get Parameters.
@@ -57,12 +57,12 @@ namespace VAdvantage.Process
             log.Info("VAB_WorkCommission_ID=" + GetRecord_ID() + ", StartDate=" + p_StartDate);
             if (p_StartDate == null)
                 p_StartDate = DateTime.Now;
-            m_com = new MCommission(GetCtx(), GetRecord_ID(), Get_Trx());
+            m_com = new MVABWorkCommission(GetCtx(), GetRecord_ID(), Get_Trx());
             if (m_com.Get_ID() == 0)
                 throw new Exception("No Commission");
 
             //	Create Commission	
-            MCommissionRun comRun = new MCommissionRun(m_com);
+            MVABWorkCommissionCalc comRun = new MVABWorkCommissionCalc(m_com);
             SetStartEndDate();
             comRun.SetStartDate(p_StartDate);
             System.Threading.Thread.CurrentThread.CurrentCulture = Utility.Env.GetLanguage(GetCtx()).GetCulture(Utility.Env.GetLoginLanguage(GetCtx()).GetVAF_Language());
@@ -71,7 +71,7 @@ namespace VAdvantage.Process
             Classes.SimpleDateFormat format = Classes.DisplayType.GetDateFormat(Classes.DisplayType.Date);
             String description = format.Format(p_StartDate)
                 + " - " + format.Format(m_EndDate)
-                + " - " + MCurrency.GetISO_Code(GetCtx(), m_com.GetVAB_Currency_ID());
+                + " - " + MVABCurrency.GetISO_Code(GetCtx(), m_com.GetVAB_Currency_ID());
 
             //string description = p_StartDate
             //    + " - " + m_EndDate
@@ -84,7 +84,7 @@ namespace VAdvantage.Process
             if (!comRun.Save())
                 throw new Exception("Could not save Commission Run please check Organization");
 
-            MCommissionLine[] lines = m_com.GetLines();
+            MVABWorkCommissionLine[] lines = m_com.GetLines();
             //should not generate commission if there is no active commission lines
             if (lines.Length <= 0)
             {
@@ -96,12 +96,12 @@ namespace VAdvantage.Process
                 #region
                 #endregion
                 //	Amt for Line - Updated By Trigger
-                MCommissionAmt comAmt = new MCommissionAmt(comRun, lines[i].GetVAB_WorkCommissionLine_ID());
+                MVABWorkCommissionAmt comAmt = new MVABWorkCommissionAmt(comRun, lines[i].GetVAB_WorkCommissionLine_ID());
                 if (!comAmt.Save())
                     throw new SystemException("Could not save Commission Amt");
                 //
                 StringBuilder sql = new StringBuilder();
-                if (MCommission.DOCBASISTYPE_Receipt.Equals(m_com.GetDocBasisType()))
+                if (MVABWorkCommission.DOCBASISTYPE_Receipt.Equals(m_com.GetDocBasisType()))
                 {
                     if (m_com.IsListDetails())
                     {
@@ -136,7 +136,7 @@ namespace VAdvantage.Process
                             + " AND p.DateTrx BETWEEN @sdate AND @edate");
                     }
                 }
-                else if (MCommission.DOCBASISTYPE_Order.Equals(m_com.GetDocBasisType()))
+                else if (MVABWorkCommission.DOCBASISTYPE_Order.Equals(m_com.GetDocBasisType()))
                 {
                     if (m_com.IsListDetails())
                     {
@@ -302,13 +302,13 @@ namespace VAdvantage.Process
             DateTime dtCal = p_StartDate.Date;
 
             //	Yearly
-            if (MCommission.FREQUENCYTYPE_Yearly.Equals(m_com.GetFrequencyType()))
+            if (MVABWorkCommission.FREQUENCYTYPE_Yearly.Equals(m_com.GetFrequencyType()))
             {
                 dtCal = new DateTime(dtCal.Year, 12, 31);
                 m_EndDate = dtCal;
             }
             //	Quarterly
-            else if (MCommission.FREQUENCYTYPE_Quarterly.Equals(m_com.GetFrequencyType()))
+            else if (MVABWorkCommission.FREQUENCYTYPE_Quarterly.Equals(m_com.GetFrequencyType()))
             {
                 dtCal = new DateTime(dtCal.Year, dtCal.Month, 01);
                 int month1 = dtCal.Month;
@@ -331,7 +331,7 @@ namespace VAdvantage.Process
                 m_EndDate = dtCal;
             }
             //	Weekly
-            else if (MCommission.FREQUENCYTYPE_Weekly.Equals(m_com.GetFrequencyType()))
+            else if (MVABWorkCommission.FREQUENCYTYPE_Weekly.Equals(m_com.GetFrequencyType()))
             {
                 dtCal = TimeUtil.Trunc(dtCal, TimeUtil.TRUNC_WEEK);
                 p_StartDate = dtCal;
@@ -366,7 +366,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="sql">sql statement</param>
         /// <param name="comAmt">parent</param>
-        private void CreateDetail(String sql, MCommissionAmt comAmt)
+        private void CreateDetail(String sql, MVABWorkCommissionAmt comAmt)
         {
             IDataReader idr = null;
             DataTable dt = null;
@@ -385,7 +385,7 @@ namespace VAdvantage.Process
                 //while (idr.Read())
                 {
                     //	CommissionAmount, VAB_Currency_ID, Amt, Qty,
-                    MCommissionDetail cd = new MCommissionDetail(comAmt,
+                    MVABWorkCommissionDetail cd = new MVABWorkCommissionDetail(comAmt,
                         Utility.Util.GetValueOfInt(dr[0]), Utility.Util.GetValueOfDecimal(dr[1]), Utility.Util.GetValueOfDecimal(dr[2]));
 
                     //	VAB_OrderLine_ID, VAB_InvoiceLine_ID,

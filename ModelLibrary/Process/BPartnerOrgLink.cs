@@ -82,13 +82,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             throw new Exception("No Business Partner ID");
         }
-		MBPartner bp = new MBPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
+		MVABBusinessPartner bp = new MVABBusinessPartner (GetCtx(), _VAB_BusinessPartner_ID, Get_Trx());
         if (bp.Get_ID() == 0)
         {
             throw new Exception("Business Partner not found - VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
         }
 		//	BP Location
-		MBPartnerLocation[] locs = bp.GetLocations(false);
+		MVABBPartLocation[] locs = bp.GetLocations(false);
         if (locs == null || locs.Length == 0)
         {
             throw new ArgumentException("Business Partner has no Location");

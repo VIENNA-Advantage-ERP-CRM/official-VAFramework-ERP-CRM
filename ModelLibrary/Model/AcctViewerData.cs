@@ -33,9 +33,9 @@ namespace VAdvantage.Model
         //Client				
         public int VAF_Client_ID;
         //All Acct Schema		
-        public MAcctSchema[] ASchemas = null;
+        public MVABAccountBook[] ASchemas = null;
         //This Acct Schema	
-        public MAcctSchema ASchema = null;
+        public MVABAccountBook ASchema = null;
 
         //  Selection Info
         //Document Query		
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
             }
             VAF_TableView_ID = vaf_tableview_ID;
             //
-            ASchemas = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
+            ASchemas = MVABAccountBook.GetClientAcctSchema(ctx, VAF_Client_ID);
             ASchema = ASchemas[0];
             _ctx = ctx;
         }
@@ -539,7 +539,7 @@ namespace VAdvantage.Model
             }
 
             //  Add Account Segments
-            MAcctSchemaElement[] elements = ASchema.GetAcctSchemaElements();
+            MVABAccountBookElement[] elements = ASchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
             {
                 if (_leadingColumns == 0 && columns.Contains("VAF_Org_ID") && columns.Contains("Account_ID"))
@@ -547,7 +547,7 @@ namespace VAdvantage.Model
                     _leadingColumns = columns.Count;
                 }
                 //
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 String columnName = ase.GetColumnName();
                 if (columnName.StartsWith("UserElement"))
                 {

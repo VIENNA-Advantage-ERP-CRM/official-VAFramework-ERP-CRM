@@ -138,7 +138,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (!check1.IsValid())
             {
                 int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();
-                MBPartner bp = MBPartner.Get(GetCtx(), VAB_BusinessPartner_ID);
+                MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), VAB_BusinessPartner_ID);
                 String msg = "@NotFound@ @VAB_BPart_Bank_Acct@: " + bp.GetName();
                 throw new Exception(msg);
             }

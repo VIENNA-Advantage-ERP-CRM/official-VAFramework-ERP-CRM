@@ -238,7 +238,7 @@ namespace VAdvantage.Process
         {
             _m_invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
             _m_invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
-            MBPartner partner = new MBPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
+            MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
             _m_invoice.SetM_PriceList_ID(partner.GetM_PriceList_ID());
             int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));

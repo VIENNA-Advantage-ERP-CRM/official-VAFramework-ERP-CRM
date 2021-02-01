@@ -51,7 +51,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //Standard Cost Element		
         private MCostElement _ce = null;
         // Client Accounting SChema	
-        private MAcctSchema[] _ass = null;
+        private MVABAccountBook[] _ass = null;
         // Map of Cost Elements		
         private Dictionary<String, MCostElement> _ces = new Dictionary<String, MCostElement>();
         #endregion
@@ -135,13 +135,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Prepare
             MVAFClient client = MVAFClient.Get(GetCtx());
-            _ce = MCostElement.GetMaterialCostElement(client, MAcctSchema.COSTINGMETHOD_StandardCosting);
+            _ce = MCostElement.GetMaterialCostElement(client, MVABAccountBook.COSTINGMETHOD_StandardCosting);
             if (_ce.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @M_CostElement_ID@ (StdCost)");
             }
             log.Config(_ce.ToString());
-            _ass = MAcctSchema.GetClientAcctSchema(GetCtx(), client.GetVAF_Client_ID());
+            _ass = MVABAccountBook.GetClientAcctSchema(GetCtx(), client.GetVAF_Client_ID());
             for (int i = 0; i < _ass.Length; i++)
             {
                 CreateNew(_ass[i]);
@@ -196,9 +196,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Create New Standard Costs
         /// </summary>
         /// <param name="as1">accounting schema</param>
-        private void CreateNew(MAcctSchema as1)
+        private void CreateNew(MVABAccountBook as1)
         {
-            if (!as1.GetCostingLevel().Equals(MAcctSchema.COSTINGLEVEL_Client))
+            if (!as1.GetCostingLevel().Equals(MVABAccountBook.COSTINGLEVEL_Client))
             {
                 String txt = "Costing Level prevents creating new Costing records for " + as1.GetName();
                 log.Warning(txt);
@@ -259,7 +259,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="product">product</param>
         /// <param name="?">acct schema</param>
         /// <returns>true if created</returns>
-        private bool CreateNew(MProduct product, MAcctSchema as1)
+        private bool CreateNew(MProduct product, MVABAccountBook as1)
         {
             MCost cost = MCost.Get(product, 0, as1, 0, _ce.GetM_CostElement_ID());
             if (cost.Is_New())
@@ -484,7 +484,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (retValue == null)
                 {
                     MProduct product = MProduct.Get(GetCtx(), cost.GetM_Product_ID());
-                    MAcctSchema as1 = MAcctSchema.Get(GetCtx(), cost.GetVAB_AccountBook_ID());
+                    MVABAccountBook as1 = MVABAccountBook.Get(GetCtx(), cost.GetVAB_AccountBook_ID());
                     retValue = MCost.GetLastInvoicePrice(product,
                         cost.GetM_AttributeSetInstance_ID(), cost.GetVAF_Org_ID(), as1.GetVAB_Currency_ID());
                 }
@@ -505,7 +505,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (retValue == null)
                 {
                     MProduct product = MProduct.Get(GetCtx(), cost.GetM_Product_ID());
-                    MAcctSchema as1 = MAcctSchema.Get(GetCtx(), cost.GetVAB_AccountBook_ID());
+                    MVABAccountBook as1 = MVABAccountBook.Get(GetCtx(), cost.GetVAB_AccountBook_ID());
                     retValue = MCost.GetLastPOPrice(product,
                         cost.GetM_AttributeSetInstance_ID(), cost.GetVAF_Org_ID(), as1.GetVAB_Currency_ID());
                 }

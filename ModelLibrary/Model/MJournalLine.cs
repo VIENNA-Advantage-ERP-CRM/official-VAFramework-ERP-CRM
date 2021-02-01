@@ -122,7 +122,7 @@ namespace VAdvantage.Model
                 return;
             }
             base.SetVAB_Currency_ID(VAB_Currency_ID);
-            m_precision = MCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
+            m_precision = MVABCurrency.GetStdPrecision(GetCtx(), VAB_Currency_ID);
         }	//	setVAB_Currency_ID
 
         /// <summary>
@@ -222,11 +222,11 @@ namespace VAdvantage.Model
             }
             //
             int? VAB_AccountBook_ID = GetCtx().GetContextAsInt(windowNo, "VAB_AccountBook_ID");
-            MAcctSchema ass = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID.Value);
+            MVABAccountBook ass = MVABAccountBook.Get(GetCtx(), VAB_AccountBook_ID.Value);
             int? VAF_Client_ID = GetVAF_Client_ID();
             int? VAF_Org_ID = GetVAF_Org_ID();
 
-            Decimal? CurrencyRate = (Decimal?)MConversionRate.GetRate(VAB_Currency_ID.Value, ass.GetVAB_Currency_ID(),
+            Decimal? CurrencyRate = (Decimal?)MVABExchangeRate.GetRate(VAB_Currency_ID.Value, ass.GetVAB_Currency_ID(),
                 DateAcct, VAB_CurrencyType_ID.Value, VAF_Client_ID.Value, VAF_Org_ID.Value);
             log.Fine("rate = " + CurrencyRate);
             if (CurrencyRate == null)
@@ -348,7 +348,7 @@ namespace VAdvantage.Model
         {
             //  Get Target Currency & Precision from VAB_AccountBook.VAB_Currency_ID
             int? VAB_AccountBook_ID = GetCtx().GetContextAsInt(windowNo, "VAB_AccountBook_ID");
-            MAcctSchema ass = MAcctSchema.Get(GetCtx(), VAB_AccountBook_ID.Value);
+            MVABAccountBook ass = MVABAccountBook.Get(GetCtx(), VAB_AccountBook_ID.Value);
             int? Precision = ass.GetStdPrecision();
 
             Decimal? CurrencyRate = GetCurrencyRate();
@@ -609,41 +609,41 @@ namespace VAdvantage.Model
                 MJournal gl = new MJournal(GetCtx(), GetVAGL_JRNL_ID(), Get_TrxName());
 
                 // Validate all mandatory combinations are set
-                MAcctSchema asc = MAcctSchema.Get(GetCtx(), gl.GetVAB_AccountBook_ID());
-                MAcctSchemaElement[] elements = MAcctSchemaElement.GetAcctSchemaElements(asc);
+                MVABAccountBook asc = MVABAccountBook.Get(GetCtx(), gl.GetVAB_AccountBook_ID());
+                MVABAccountBookElement[] elements = MVABAccountBookElement.GetAcctSchemaElements(asc);
                 for (int i = 0; i < elements.Length; i++)
                 {
-                    MAcctSchemaElement elem = elements[i];
+                    MVABAccountBookElement elem = elements[i];
                     String et = elem.GetElementType();
-                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") >= 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("Account_ID") >= 0)
                         Account_ID = Util.GetValueOfInt(Get_Value("Account_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("VAB_SubAcct_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Account.Equals(et) && Get_ColumnIndex("VAB_SubAcct_ID") > 0)
                         VAB_SubAcct_ID = Util.GetValueOfInt(Get_Value("VAB_SubAcct_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et) && Get_ColumnIndex("VAB_BillingCode_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Activity.Equals(et) && Get_ColumnIndex("VAB_BillingCode_ID") > 0)
                         VAB_BillingCode_ID = Util.GetValueOfInt(Get_Value("VAB_BillingCode_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_BPartner.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
                         VAB_BusinessPartner_ID = Util.GetValueOfInt(Get_Value("VAB_BusinessPartner_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Campaign.Equals(et) && Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
                         VAB_BusinessPartner_ID = Util.GetValueOfInt(Get_Value("VAB_BusinessPartner_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(et))
+                    if (MVABAccountBookElement.ELEMENTTYPE_Organization.Equals(et))
                         VAF_Org_ID = GetVAF_Org_ID();
-                    if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_OrgTrx.Equals(et) && Get_ColumnIndex("VAF_OrgTrx_ID") > 0)
                         VAF_OrgTrx_ID = Util.GetValueOfInt(Get_Value("VAF_OrgTrx_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocFrom_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocFrom_ID") > 0)
                         C_LocFrom_ID = Util.GetValueOfInt(Get_Value("C_LocFrom_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocTo_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocTo_ID") > 0)
                         C_LocTo_ID = Util.GetValueOfInt(Get_Value("C_LocTo_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("M_Product_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("M_Product_ID") > 0)
                         M_Product_ID = Util.GetValueOfInt(Get_Value("M_Product_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Project_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Project_ID") > 0)
                         VAB_Project_ID = Util.GetValueOfInt(Get_Value("VAB_Project_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Promotion_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Promotion_ID") > 0)
                         VAB_Promotion_ID = Util.GetValueOfInt(Get_Value("VAB_Promotion_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et) && Get_ColumnIndex("VAB_SalesRegionState_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_SalesRegion.Equals(et) && Get_ColumnIndex("VAB_SalesRegionState_ID") > 0)
                         VAB_SalesRegionState_ID = Util.GetValueOfInt(Get_Value("VAB_SalesRegionState_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(et) && Get_ColumnIndex("User1_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_UserList1.Equals(et) && Get_ColumnIndex("User1_ID") > 0)
                         User1_ID = Util.GetValueOfInt(Get_Value("User1_ID"));
-                    if (MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(et) && Get_ColumnIndex("User2_ID") > 0)
+                    if (MVABAccountBookElement.ELEMENTTYPE_UserList2.Equals(et) && Get_ColumnIndex("User2_ID") > 0)
                         User2_ID = Util.GetValueOfInt(Get_Value("User2_ID"));
                 }
 

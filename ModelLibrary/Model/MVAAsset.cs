@@ -100,7 +100,7 @@ namespace VAdvantage.Model
             asset.SetIsOwned(false);
             asset.SetIsTrialPhase(true);
             //
-            MBPartner partner = new MBPartner(ctx, user.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner partner = new MVABBusinessPartner(ctx, user.GetVAB_BusinessPartner_ID(), null);
             String documentNo = "Trial";
             //	Value
             String value = partner.GetValue() + "_" + product.GetValue();
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
         public void SetValueNameDescription(MInOut shipment, MInOutLine line, int deliveryCount)
         {
             MProduct product = line.GetProduct();
-            MBPartner partner = shipment.GetBPartner();
+            MVABBusinessPartner partner = shipment.GetBPartner();
             SetValueNameDescription(shipment, deliveryCount, product, partner);
         }
 
@@ -291,7 +291,7 @@ namespace VAdvantage.Model
         *	@param partner partner
         */
         public void SetValueNameDescription(MInOut shipment,
-            int deliveryCount, MProduct product, MBPartner partner)
+            int deliveryCount, MProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + shipment.GetDocumentNo();
             if (deliveryCount > 1)
@@ -429,7 +429,7 @@ namespace VAdvantage.Model
         public void SetValueNameDescription(MInvoice invoice, MInvoiceLine line, int deliveryCount)
         {
             MProduct product = line.GetProduct();
-            MBPartner partner = new MBPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
             SetValueNameDescription(invoice, deliveryCount, product, partner);
         }
 
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
         *	@param partner partner
         */
         public void SetValueNameDescription(MInvoice invoice,
-            int deliveryCount, MProduct product, MBPartner partner)
+            int deliveryCount, MProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + invoice.GetDocumentNo();
             if (deliveryCount > 1)

@@ -83,7 +83,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="rfq">rfq</param>
         /// <param name="partner">web response</param>
-        public MRfQResponse(MRfQ rfq, MBPartner partner)
+        public MRfQResponse(MRfQ rfq, MVABBusinessPartner partner)
             : this(rfq, null,
                 partner.GetVAB_BusinessPartner_ID(),
                 partner.GetPrimaryVAB_BPart_Location_ID(),

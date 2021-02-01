@@ -242,7 +242,7 @@ namespace ViennaAdvantage.Process
                 order = new MOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
-                MBPartner bp = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
+                MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     decimal creditLimit = bp.GetSO_CreditLimit();
@@ -272,7 +272,7 @@ namespace ViennaAdvantage.Process
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
                 else if (bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
-                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
+                    MVABBPartLocation bpl = new MVABBPartLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
                     //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                     //if (bpl.GetCreditStatusSettingOn() == "CL")
                     //{

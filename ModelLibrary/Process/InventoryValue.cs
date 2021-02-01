@@ -82,7 +82,7 @@ namespace VAdvantage.Process
 
             MWarehouse wh = MWarehouse.Get(GetCtx(), _M_Warehouse_ID);
             MVAFClient c = MVAFClient.Get(GetCtx(), wh.GetVAF_Client_ID());
-            MAcctSchema mas = c.GetAcctSchema();
+            MVABAccountBook mas = c.GetAcctSchema();
 
             //  Delete (just to be sure)
             StringBuilder sql = new StringBuilder("DELETE FROM VAT_StockData WHERE VAF_JInstance_ID=");

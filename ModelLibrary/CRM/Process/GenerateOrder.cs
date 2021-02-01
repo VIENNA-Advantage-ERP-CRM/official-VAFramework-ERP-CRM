@@ -60,7 +60,7 @@ namespace VAdvantage.Process
             VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
             VAB_BusinessPartnerSR_ID = fromProject.GetVAB_BusinessPartnerSR_ID();
            // MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartner_id, Get_TrxName());
-            VAdvantage.Model.MBPartnerLocation bpartnerloc = new VAdvantage.Model.MBPartnerLocation(GetCtx(), VAB_BPart_Location_id, Get_TrxName());
+            VAdvantage.Model.MVABBPartLocation bpartnerloc = new VAdvantage.Model.MVABBPartLocation(GetCtx(), VAB_BPart_Location_id, Get_TrxName());
             String currentdate = DateTime.Now.ToString();
             String sqlprjln = " select VAB_ProjectLine_ID from VAB_ProjectLine where VAB_Project_ID=" + _VAB_Project_ID + "";
             VAB_ProjectLine_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln));
@@ -123,7 +123,7 @@ namespace VAdvantage.Process
                 order.SetVAB_Currency_ID(fromProject.GetVAB_Currency_ID());
                 if (VAB_BusinessPartner_id != 0)
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartner_id, Get_TrxName());
+                    VAdvantage.Model.MVABBusinessPartner bp = new VAdvantage.Model.MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_id, Get_TrxName());
                     bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
@@ -142,7 +142,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    VAdvantage.Model.MBPartner bp = new VAdvantage.Model.MBPartner(GetCtx(), VAB_BusinessPartnerSR_ID, Get_TrxName());
+                    VAdvantage.Model.MVABBusinessPartner bp = new VAdvantage.Model.MVABBusinessPartner(GetCtx(), VAB_BusinessPartnerSR_ID, Get_TrxName());
                     bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
                     bp.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());

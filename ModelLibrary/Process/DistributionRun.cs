@@ -410,7 +410,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             bool counter = !_run.IsCreateSingleOrder()	//	no single Order 
                 && runVAB_BusinessPartner_ID > 0						//	Org linked to BP
                 && !_docType.IsSOTrx();					//	PO
-            MBPartner runBPartner = counter ? new MBPartner(GetCtx(), runVAB_BusinessPartner_ID, Get_TrxName()) : null;
+            MVABBusinessPartner runBPartner = counter ? new MVABBusinessPartner(GetCtx(), runVAB_BusinessPartner_ID, Get_TrxName()) : null;
             if (!counter || runBPartner == null || runBPartner.Get_ID() != runVAB_BusinessPartner_ID)
             {
                 counter = false;
@@ -425,13 +425,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Fine("Counter=" + counter
                 + ",VAB_BusinessPartner_ID=" + runVAB_BusinessPartner_ID + "," + runBPartner);
             //
-            MBPartner bp = null;
+            MVABBusinessPartner bp = null;
             MOrder singleOrder = null;
             MProduct product = null;
             //	Consolidated Order
             if (_run.IsCreateSingleOrder())
             {
-                bp = new MBPartner(GetCtx(), _run.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                bp = new MVABBusinessPartner(GetCtx(), _run.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 if (bp.Get_ID() == 0)
                 {
                     throw new ArgumentException("Business Partner not found - VAB_BusinessPartner_ID=" + _run.GetVAB_BusinessPartner_ID());
@@ -486,7 +486,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	New Order
                 if (order == null)
                 {
-                    bp = new MBPartner(GetCtx(), detail.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                    bp = new MVABBusinessPartner(GetCtx(), detail.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     if (!_IsTest)
                     {
                         order = new MOrder(GetCtx(), 0, Get_TrxName());

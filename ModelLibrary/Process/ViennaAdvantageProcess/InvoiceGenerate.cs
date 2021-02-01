@@ -54,7 +54,7 @@ namespace ViennaAdvantage.Process
         /**	Line Number				*/
         private int _line = 0;
         /**	Business Partner		*/
-        private MBPartner _bp = null;
+        private MVABBusinessPartner _bp = null;
         //StringBuilder
         private StringBuilder _msg = new StringBuilder();
         // default conversion type
@@ -127,7 +127,7 @@ namespace ViennaAdvantage.Process
          */
         protected override String DoIt()
         {
-            defaultConversionType = MConversionType.GetDefault(GetVAF_Client_ID());
+            defaultConversionType = MVABCurrencyType.GetDefault(GetVAF_Client_ID());
             log.Info("Selection=" + _Selection + ", DateInvoiced=" + _DateInvoiced
                 + ", VAF_Org_ID=" + _VAF_Org_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + ", VAB_Order_ID=" + _VAB_Order_ID + ",  VAdvantage.Process.DocAction=" + _docAction
@@ -209,7 +209,7 @@ namespace ViennaAdvantage.Process
                 MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
-                MBPartner bp = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
+                MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                 if (bp.GetCreditStatusSettingOn() == "CH")
                 {
                     decimal creditLimit = bp.GetSO_CreditLimit();
@@ -239,7 +239,7 @@ namespace ViennaAdvantage.Process
                 // JID_0161 // change here now will check credit settings on field only on Business Partner Header // Lokesh Chauhan 15 July 2019
                 else if (bp.GetCreditStatusSettingOn() == X_VAB_BusinessPartner.CREDITSTATUSSETTINGON_CustomerLocation)
                 {
-                    MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
+                    MVABBPartLocation bpl = new MVABBPartLocation(GetCtx(), order.GetVAB_BPart_Location_ID(), null);
                     //MBPartner bpartner = MBPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
                     //if (bpl.GetCreditStatusSettingOn() == "CL")
                     //{
@@ -290,7 +290,7 @@ namespace ViennaAdvantage.Process
                 bool doInvoice = false;
                 if (MOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
                 {
-                    _bp = new MBPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
+                    _bp = new MVABBusinessPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
                     if (_bp.GetVAB_sched_Invoice_ID() == 0)
                     {
                         log.Warning("BPartner has no Schedule - set to After Delivery");
@@ -677,7 +677,7 @@ namespace ViennaAdvantage.Process
                 {
                     int PAcctSchema_ID = 0;
                     int pCurrency_ID = 0;
-                    MAcctSchema as1 = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
+                    MVABAccountBook as1 = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
                     if (as1 != null)
                     {
                         PAcctSchema_ID = as1.GetVAB_AccountBook_ID();
@@ -688,7 +688,7 @@ namespace ViennaAdvantage.Process
                     AssetCost = Decimal.Multiply(AssetCost, line1.GetQtyEntered());
                     if (LineNetAmt > 0)
                     {
-                        LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt, _invoice.GetVAB_Currency_ID(), pCurrency_ID, _invoice.GetVAF_Client_ID(), _invoice.GetVAF_Org_ID());
+                        LineNetAmt = MVABExchangeRate.Convert(GetCtx(), LineNetAmt, _invoice.GetVAB_Currency_ID(), pCurrency_ID, _invoice.GetVAF_Client_ID(), _invoice.GetVAF_Org_ID());
                     }
                     decimal Diff = LineNetAmt - AssetCost;
                     line1.Set_Value("VAFAM_AssetCost", AssetCost);

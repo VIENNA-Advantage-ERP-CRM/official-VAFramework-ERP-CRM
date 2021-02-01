@@ -36,7 +36,7 @@ namespace ViennaAdvantageServer.Process
         VAdvantage.Model.X_VAB_Contract cont = null;
         VAdvantage.Model.X_VAB_ContractSchedule contSchedule = null;
         VAdvantage.Model.MInvoice inv = null;
-        MBPartner bp = null;
+        MVABBusinessPartner bp = null;
         #endregion
 
         protected override void Prepare()
@@ -54,7 +54,7 @@ namespace ViennaAdvantageServer.Process
             if (VAB_Contract_ID != 0)
             {
                 cont = new VAdvantage.Model.X_VAB_Contract(GetCtx(), VAB_Contract_ID, Get_TrxName());
-                bp = new MBPartner(GetCtx(), cont.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                bp = new MVABBusinessPartner(GetCtx(), cont.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 string date = System.DateTime.Now.ToString("dd-MMM-yyyy");
                 int[] contSch = VAdvantage.Model.X_VAB_ContractSchedule.GetAllIDs("VAB_ContractSchedule", "VAB_Contract_ID = " + VAB_Contract_ID + " AND FROMDATE <= '" + date 
                     + "' AND NVL(VAB_INVOICE_ID,0) = 0", Get_TrxName());

@@ -269,10 +269,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
                     //	****	Create/Update BPartner	****
-                    MBPartner bp = null;
+                    MVABBusinessPartner bp = null;
                     if (impBP.GetVAB_BusinessPartner_ID() == 0)	//	Insert new BPartner
                     {
-                        bp = new MBPartner(impBP);
+                        bp = new MVABBusinessPartner(impBP);
                         if (bp.Save())
                         {
                             impBP.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
@@ -291,7 +291,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else				//	Update existing BPartner
                     {
-                        bp = new MBPartner(GetCtx(), impBP.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                        bp = new MVABBusinessPartner(GetCtx(), impBP.GetVAB_BusinessPartner_ID(), Get_TrxName());
                         //	if (impBP.getValue() != null)			//	not to overwite
                         //		bp.setValue(impBP.getValue());
                         if (impBP.GetName() != null)
@@ -327,10 +327,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
 
                     //	****	Create/Update BPartner Location	****
-                    MBPartnerLocation bpl = null;
+                    MVABBPartLocation bpl = null;
                     if (impBP.GetVAB_BPart_Location_ID() != 0)		//	Update Location
                     {
-                        bpl = new MBPartnerLocation(GetCtx(), impBP.GetVAB_BPart_Location_ID(), Get_TrxName());
+                        bpl = new MVABBPartLocation(GetCtx(), impBP.GetVAB_BPart_Location_ID(), Get_TrxName());
                         MLocation location = new MLocation(GetCtx(), bpl.GetVAB_Address_ID(), Get_TrxName());
                         location.SetVAB_Country_ID(impBP.GetVAB_Country_ID());
                         location.SetVAB_RegionState_ID(impBP.GetVAB_RegionState_ID());
@@ -378,7 +378,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 continue;
                             }
                             //
-                            bpl = new MBPartnerLocation(bp);
+                            bpl = new MVABBPartLocation(bp);
                             bpl.SetVAB_Address_ID(location.GetVAB_Address_ID());
                             bpl.SetPhone(impBP.GetPhone());
                             bpl.SetPhone2(impBP.GetPhone2());

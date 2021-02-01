@@ -433,7 +433,7 @@ namespace VAdvantage.Process
             // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep for drop shipment
             //po.SetM_Warehouse_ID(so.GetM_Warehouse_ID());
             //	Set Vendor
-            MBPartner vendor = new MBPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
+            MVABBusinessPartner vendor = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // Set PO Payment Method from Vendor

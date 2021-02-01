@@ -34,7 +34,7 @@ namespace VAdvantage.Interface
         /// </summary>
         /// <param name="bsl">bank statement line</param>
         /// <returns>found matches or null</returns>
-        BankStatementMatchInfo FindMatch(MBankStatementLine bsl);
+        BankStatementMatchInfo FindMatch(MVABBankingJRNLLine bsl);
 
 
         /// <summary>

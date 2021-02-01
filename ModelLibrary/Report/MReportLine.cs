@@ -229,7 +229,7 @@ namespace VAdvantage.Report
             String ColumnName = null;
             for (int i = 0; i < _sources.Length; i++)
             {
-                String col = MAcctSchemaElement.GetColumnName(_sources[i].GetElementType());
+                String col = MVABAccountBookElement.GetColumnName(_sources[i].GetElementType());
                 if (ColumnName == null || ColumnName.Length == 0)
                 {
                     ColumnName = col;
@@ -251,7 +251,7 @@ namespace VAdvantage.Report
         {
             if (_sources != null && _sources.Length > 0)
             {
-                return MAcctSchemaElement.GetValueQuery(_sources[0].GetElementType());
+                return MVABAccountBookElement.GetValueQuery(_sources[0].GetElementType());
             }
             return null;
         }	//

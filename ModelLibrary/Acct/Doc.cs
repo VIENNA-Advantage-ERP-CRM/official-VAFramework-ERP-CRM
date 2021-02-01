@@ -53,7 +53,7 @@ namespace VAdvantage.Acct
         //Log	per Document			
         protected VLogger log = null;
         //Accounting Schema Array     
-        private MAcctSchema[] _ass = null;
+        private MVABAccountBook[] _ass = null;
         // Context						
         private Ctx _ctx = null;
         //Transaction Name			
@@ -224,7 +224,7 @@ namespace VAdvantage.Acct
         /// <param name="Record_ID">record ID to load</param>
         /// <param name="trxName">transaction name</param>
         /// <returns>Document or null</returns>
-        public static Doc Get(MAcctSchema[] ass, int VAF_TableView_ID, int Record_ID, Trx trxName)
+        public static Doc Get(MVABAccountBook[] ass, int VAF_TableView_ID, int Record_ID, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
             MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
@@ -286,7 +286,7 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         /// <returns>Document</returns>
-        public static Doc Get(MAcctSchema[] ass, int VAF_TableView_ID, DataRow idr, Trx trxName)
+        public static Doc Get(MVABAccountBook[] ass, int VAF_TableView_ID, DataRow idr, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
             MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
@@ -316,7 +316,7 @@ namespace VAdvantage.Acct
         /// <param name="force">force posting</param>
         /// <param name="trxName">transaction</param>
         /// <returns>null if the document was posted or error message</returns>
-        public static String PostImmediate(MAcctSchema[] ass, int VAF_TableView_ID, int Record_ID, bool force, Trx trxName)
+        public static String PostImmediate(MVABAccountBook[] ass, int VAF_TableView_ID, int Record_ID, bool force, Trx trxName)
         {
             Doc doc = Get(ass, VAF_TableView_ID, Record_ID, trxName);
             if (doc != null)
@@ -335,7 +335,7 @@ namespace VAdvantage.Acct
         /// <param name="defaultDocumentType"></param>
         /// <param name="trxName"></param>
         /// ///public Doc (MAcctSchema[] ass, Class<?> clazz, ResultSet idr, String defaultDocumentType, Trx trxName)
-        public Doc(MAcctSchema[] ass, Type clazz, IDataReader idr, String defaultDocumentType, Trx trxName)
+        public Doc(MVABAccountBook[] ass, Type clazz, IDataReader idr, String defaultDocumentType, Trx trxName)
         {
 
             log = VLogger.GetVLogger(this.GetType().FullName);
@@ -385,7 +385,7 @@ namespace VAdvantage.Acct
         }
 
 
-        public Doc(MAcctSchema[] ass, Type clazz, DataRow idr, String defaultDocumentType, Trx trxName)
+        public Doc(MVABAccountBook[] ass, Type clazz, DataRow idr, String defaultDocumentType, Trx trxName)
         {
 
             log = VLogger.GetVLogger(this.GetType().FullName);
@@ -596,7 +596,7 @@ namespace VAdvantage.Acct
                     if (_ass[i].GetVAF_OrgOnly_ID() != 0)
                     {
                         if (_ass[i].GetOnlyOrgs() == null)
-                            _ass[i].SetOnlyOrgs(MReportTree.GetChildIDs(GetCtx(), 0, MAcctSchemaElement.ELEMENTTYPE_Organization, _ass[i].GetVAF_OrgOnly_ID()));
+                            _ass[i].SetOnlyOrgs(MReportTree.GetChildIDs(GetCtx(), 0, MVABAccountBookElement.ELEMENTTYPE_Organization, _ass[i].GetVAF_OrgOnly_ID()));
 
                         //	Header Level Org
                         skip = _ass[i].IsSkipOrg(GetVAF_Org_ID());
@@ -1064,7 +1064,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="acctSchema">accounting schema</param>
         /// <returns>true, if vonvertable to accounting currency</returns>
-        public bool IsConvertible(MAcctSchema acctSchema)
+        public bool IsConvertible(MVABAccountBook acctSchema)
         {
             //  No Currency in document
             if (GetVAB_Currency_ID() == NO_CURRENCY)
@@ -1100,7 +1100,7 @@ namespace VAdvantage.Acct
                 int VAB_Currency_ID = Utility.Util.GetValueOfInt((int)it.Current);//.intValue();
                 if (VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                 {
-                    Decimal amt = MConversionRate.GetRate(VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
+                    Decimal amt = MVABExchangeRate.GetRate(VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
                         GetDateAcct(), GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
                     //if (amt == null)
                     //{
@@ -1272,7 +1272,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns> VAB_Acct_ValidParameter_ID</returns>
-        public int GetValidCombination_ID(int AcctType, MAcctSchema as1)
+        public int GetValidCombination_ID(int AcctType, MVABAccountBook as1)
         {
             int para_1 = 0;     //  first parameter (second is always AcctSchema)
             String sql = null;
@@ -1629,7 +1629,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns> VAB_Acct_ValidParameter_ID</returns>
-        public int GetValidCombination_ID(int AcctType, MAcctSchema as1, int BPartner_ID)
+        public int GetValidCombination_ID(int AcctType, MVABAccountBook as1, int BPartner_ID)
         {
             int para_1 = 0;     //  first parameter (second is always AcctSchema)
             String sql = null;
@@ -2022,7 +2022,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MAcctSchema as1)
+        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1);
             if (VAB_Acct_ValidParameter_ID == 0)
@@ -2041,7 +2041,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MAcctSchema as1, int BPartner_ID)
+        public MAccount GetAccount(int AcctType, MVABAccountBook as1, int BPartner_ID)
         {
             int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1, BPartner_ID);
             if (VAB_Acct_ValidParameter_ID == 0)
@@ -2895,6 +2895,6 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1">accounting schema</param>
         /// <returns>Facts</returns>
-        public abstract List<Fact> CreateFacts(MAcctSchema as1);
+        public abstract List<Fact> CreateFacts(MVABAccountBook as1);
     }
 }

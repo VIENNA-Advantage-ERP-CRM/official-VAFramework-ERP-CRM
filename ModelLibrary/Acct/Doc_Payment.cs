@@ -45,12 +45,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public DoVAB_Payment(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public DoVAB_Payment(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MPayment), idr, null, trxName)
         {
 
         }
-        public DoVAB_Payment(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public DoVAB_Payment(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MPayment), dr, null, trxName)
         {
 
@@ -101,7 +101,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -569,7 +569,7 @@ namespace VAdvantage.Acct
                 return 0;
             }
             //
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
+            MVABBankAcct ba = MVABBankAcct.Get(GetCtx(), _VAB_Bank_Acct_ID);
             return ba.GetVAF_Org_ID();
         }
 

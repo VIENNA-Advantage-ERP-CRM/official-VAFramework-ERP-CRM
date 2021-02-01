@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class BankStatementMatcher : ProcessEngine.SvrProcess
     {
         //Matchers					
-        MBankStatementMatcher[] _matchers = null;
+        MVABBankingJRNLMatcher[] _matchers = null;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _matchers = MBankStatementMatcher.GetMatchers(GetCtx(), Get_Trx());
+            _matchers = MVABBankingJRNLMatcher.GetMatchers(GetCtx(), Get_Trx());
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 return Match(new X_I_BankStatement(GetCtx(), Record_ID, Get_Trx()));
             }
-            else if (Table_ID == MBankStatement.Table_ID)
+            else if (Table_ID == MVABBankingJRNL.Table_ID)
             {
-                return Match(new MBankStatement(GetCtx(), Record_ID, Get_Trx()));
+                return Match(new MVABBankingJRNL(GetCtx(), Record_ID, Get_Trx()));
             }
-            else if (Table_ID == MBankStatementLine.Table_ID)
+            else if (Table_ID == MVABBankingJRNLLine.Table_ID)
             {
-                return Match(new MBankStatementLine(GetCtx(), Record_ID, Get_Trx()));
+                return Match(new MVABBankingJRNLLine(GetCtx(), Record_ID, Get_Trx()));
             }
 
             return "??";
@@ -132,7 +132,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="bsl">bank statement line</param>
         /// <returns>Message</returns>
-        private String Match(MBankStatementLine bsl)
+        private String Match(MVABBankingJRNLLine bsl)
         {
             if (_matchers == null || bsl == null || bsl.GetVAB_Payment_ID() != 0)
             {
@@ -173,7 +173,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="bs">bank statement</param>
         /// <returns>Message</returns>
-        private String Match(MBankStatement bs)
+        private String Match(MVABBankingJRNL bs)
         {
             if (_matchers == null || bs == null)
             {
@@ -181,7 +181,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             log.Fine("match - " + bs);
             int count = 0;
-            MBankStatementLine[] lines = bs.GetLines(false);
+            MVABBankingJRNLLine[] lines = bs.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
                 if (lines[i].GetVAB_Payment_ID() == 0)

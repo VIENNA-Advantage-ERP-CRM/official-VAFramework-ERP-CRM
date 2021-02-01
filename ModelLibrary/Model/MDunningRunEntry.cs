@@ -79,15 +79,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="bp">partner</param>
         /// <param name="isSOTrx">SO</param>
-        public void SetBPartner(MBPartner bp, bool isSOTrx)
+        public void SetBPartner(MVABBusinessPartner bp, bool isSOTrx)
         {
             SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
-            MBPartnerLocation[] locations = GetLocations();
+            MVABBPartLocation[] locations = GetLocations();
             //	Location
 
             for (int i = 0; i < locations.Length; i++)
             {
-                MBPartnerLocation location = locations[i];
+                MVABBPartLocation location = locations[i];
                 if (!location.IsActive())
                 {
                     continue;
@@ -189,11 +189,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <returns>locations</returns>
         /// Writer - Mohit, Date - * May 2019.
-        public MBPartnerLocation[] GetLocations()
+        public MVABBPartLocation[] GetLocations()
         {
-            MBPartnerLocation[] _locations = null;
+            MVABBPartLocation[] _locations = null;
 
-            List<MBPartnerLocation> list = new List<MBPartnerLocation>();
+            List<MVABBPartLocation> list = new List<MVABBPartLocation>();
             String sql = "SELECT * FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID() + " AND IsActive='Y' ORDER BY Updated DESC ";
             DataSet ds = null;
             try
@@ -202,7 +202,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MBPartnerLocation(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABBPartLocation(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            _locations = new MBPartnerLocation[list.Count];
+            _locations = new MVABBPartLocation[list.Count];
             _locations = list.ToArray();
             return _locations;
         }

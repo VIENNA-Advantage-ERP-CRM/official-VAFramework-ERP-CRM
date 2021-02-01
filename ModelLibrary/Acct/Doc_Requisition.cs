@@ -38,12 +38,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Requisition(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_Requisition(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MRequisition), idr, MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
         }
-        public Doc_Requisition(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_Requisition(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MRequisition), dr, MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
@@ -116,7 +116,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
             Fact fact = new Fact(this, as1, Fact.POST_Reservation);

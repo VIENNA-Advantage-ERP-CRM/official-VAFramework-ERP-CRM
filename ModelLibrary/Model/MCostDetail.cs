@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         /// <param name="Qty">quantity</param>
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
-        public MCostDetail(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public MCostDetail(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName)
             : this(mas.GetCtx(), 0, trxName)
         {
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
         /// <param name="trxName">trasnaction</param>
         /// <param name="M_Warehouse_ID">Optional parameter -- Warehouse ID</param>
         /// <returns>MCostDetail Object</returns>
-        public static MCostDetail CreateCostDetail(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static MCostDetail CreateCostDetail(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, string WindowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
             MInvoiceLine invoiceline, PO po, int M_CostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int M_Warehouse_ID = 0)
         {
@@ -208,7 +208,7 @@ namespace VAdvantage.Model
             }
         }
 
-        public bool UpdateProductCost(String windowName, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string optionalStrCd = "process")
+        public bool UpdateProductCost(String windowName, MCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string optionalStrCd = "process")
         {
             int VAF_Org_ID = 0;
             // Get Org based on Costing Level
@@ -385,7 +385,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        private bool UpdateCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID, int cq_VAF_Org_ID,
+        private bool UpdateCost(MVABAccountBook mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID, int cq_VAF_Org_ID,
                                 string windowName, MCostDetail cd, string costingMethod = "", int costCominationelement = 0, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
@@ -1877,7 +1877,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            Decimal convertAmount = MConversionRate.Convert(GetCtx(), movementline.GetCurrentCostPrice(),
+                            Decimal convertAmount = MVABExchangeRate.Convert(GetCtx(), movementline.GetCurrentCostPrice(),
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(convertAmount, qty)));
@@ -2188,7 +2188,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -2457,7 +2457,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -2784,7 +2784,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -2997,7 +2997,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -3225,7 +3225,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -3416,7 +3416,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -3641,7 +3641,7 @@ namespace VAdvantage.Model
                         else
                         {
                             // convert currenctCostPrice on movementline in accounting schema currency
-                            affectedAmount = MConversionRate.Convert(GetCtx(), affectedAmount,
+                            affectedAmount = MVABExchangeRate.Convert(GetCtx(), affectedAmount,
                                 GetCtx().GetContextAsInt("$VAB_Currency_ID"), mas.GetVAB_Currency_ID(), movement.GetMovementDate(),
                                 0, movement.GetVAF_Client_ID(), cost.GetVAF_Org_ID());
                             cost.SetCumulatedAmt(Decimal.Add(cost.GetCumulatedAmt(), Decimal.Multiply(affectedAmount, qty)));
@@ -3766,7 +3766,7 @@ namespace VAdvantage.Model
         /// <param name="windowName">window name</param>
         /// <param name="optionalStrcc">optional para : process or window</param>
         /// <returns>true, when calculated</returns>
-        public bool CreateCostForCombination(MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string windowName, string optionalStrcc = "process")
+        public bool CreateCostForCombination(MCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int cq_VAF_Org_ID, string windowName, string optionalStrcc = "process")
         {
             string sql;
             int VAF_Org_ID = 0;
@@ -4009,7 +4009,7 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">Attribute set instance</param>
         /// <param name="M_Warehouse_ID">warehouse reference</param>
         /// <returns>true when success</returns>
-        public bool FreightDistribution(String windowName, MCostDetail cd, MAcctSchema acctSchema, int VAF_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
+        public bool FreightDistribution(String windowName, MCostDetail cd, MVABAccountBook acctSchema, int VAF_Org_ID, MProduct product, int M_ASI_ID, int M_Warehouse_ID)
         {
             // is used to get current qty of defined costing method on Product category or Accounting schema
             Decimal Qty = MCost.GetproductCostAndQtyMaterial(cd.GetVAF_Client_ID(), VAF_Org_ID, product.GetM_Product_ID(), M_ASI_ID, cd.Get_Trx(), M_Warehouse_ID, true);
@@ -4102,7 +4102,7 @@ namespace VAdvantage.Model
         /// <param name="M_ASI_ID">Attribute Set Instance, whose cost is to be calculated</param>
         /// <param name="windowName">consume/Increase by which window</param>
         /// <returns>true or false</returns>
-        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int VAF_Org_ID, MCostDetail cd, MAcctSchema acctSchema, MProduct product, int M_ASI_ID, string windowName, int M_Warehouse_ID = 0)
+        public bool UpdateFreightWithActualQty(DataSet dsCostElementLine, int VAF_Org_ID, MCostDetail cd, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, string windowName, int M_Warehouse_ID = 0)
         {
             MCost cost = null;
             for (int i = 0; i < dsCostElementLine.Tables[0].Rows.Count; i++)
@@ -4363,7 +4363,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateInventory(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateInventory(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_InventoryLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4445,7 +4445,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
-        public static bool CreateInvoice(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateInvoice(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int VAB_InvoiceLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4526,7 +4526,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateMovement(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateMovement(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_MovementLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, bool from, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4610,7 +4610,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if created</returns>
-        public static bool CreateOrder(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateOrder(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int VAB_OrderLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4725,7 +4725,7 @@ namespace VAdvantage.Model
         /// <param name="Description">optional description</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateProduction(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateProduction(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_ProductionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Trx trxName, bool RectifyPostedRecords)
         {
@@ -4806,7 +4806,7 @@ namespace VAdvantage.Model
         /// <param name="IsSOTrx">is sales order</param>
         /// <param name="trxName">transaction</param>
         /// <returns>true if no error</returns>
-        public static bool CreateShipment(MAcctSchema mas, int VAF_Org_ID, int M_Product_ID,
+        public static bool CreateShipment(MVABAccountBook mas, int VAF_Org_ID, int M_Product_ID,
             int M_AttributeSetInstance_ID, int M_InOutLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, bool IsSOTrx, Trx trxName, bool RectifyPostedRecords)
         {
@@ -5019,7 +5019,7 @@ namespace VAdvantage.Model
             bool ok = false;
 
             //	get costing level for product
-            MAcctSchema mas = new MAcctSchema(GetCtx(), GetVAB_AccountBook_ID(), null);
+            MVABAccountBook mas = new MVABAccountBook(GetCtx(), GetVAB_AccountBook_ID(), null);
             String CostingLevel = mas.GetCostingLevel();
             MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
 
@@ -5052,14 +5052,14 @@ namespace VAdvantage.Model
             //	Org Element
             int Org_ID = GetVAF_Org_ID();
             int M_ASI_ID = GetM_AttributeSetInstance_ID();
-            if (MAcctSchema.COSTINGLEVEL_Client.Equals(CostingLevel))
+            if (MVABAccountBook.COSTINGLEVEL_Client.Equals(CostingLevel))
             {
                 Org_ID = 0;
                 M_ASI_ID = 0;
             }
-            else if (MAcctSchema.COSTINGLEVEL_Organization.Equals(CostingLevel))
+            else if (MVABAccountBook.COSTINGLEVEL_Organization.Equals(CostingLevel))
                 M_ASI_ID = 0;
-            else if (MAcctSchema.COSTINGLEVEL_BatchLot.Equals(CostingLevel))
+            else if (MVABAccountBook.COSTINGLEVEL_BatchLot.Equals(CostingLevel))
                 Org_ID = 0;
 
             //	Create Material Cost elements
@@ -5105,7 +5105,7 @@ namespace VAdvantage.Model
         /// <param name="Org_ID">org - corrected for costing level</param>
         /// <param name="M_ASI_ID">asi corrected for costing level</param>
         /// <returns>true if cost ok</returns>
-        private bool Process(MAcctSchema mas, MProduct product, MCostElement ce,
+        private bool Process(MVABAccountBook mas, MProduct product, MCostElement ce,
             int Org_ID, int M_ASI_ID)
         {
             string qry = "";
@@ -5150,7 +5150,7 @@ namespace VAdvantage.Model
             }
         }
 
-        private bool SaveCost(MAcctSchema mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID)
+        private bool SaveCost(MVABAccountBook mas, MProduct product, MCostElement ce, int Org_ID, int M_ASI_ID, int VAA_Asset_ID)
         {
             MCost cost = null;
             if (VAA_Asset_ID == 0)
@@ -5550,7 +5550,7 @@ namespace VAdvantage.Model
         /// <param name="Org_ID">org - corrected for costing level</param>
         /// <param name="M_ASI_ID">asi corrected for costing level</param>
         /// <returns>true if cost ok</returns>
-        public bool ProcessReversedCost(VAdvantage.Model.MAcctSchema mas, MProduct product, VAdvantage.Model.MCostElement ce,
+        public bool ProcessReversedCost(VAdvantage.Model.MVABAccountBook mas, MProduct product, VAdvantage.Model.MCostElement ce,
             int Org_ID, int M_ASI_ID)
         {
             MCost cost = MCost.Get(product, M_ASI_ID, mas, Org_ID, ce.GetM_CostElement_ID());
@@ -5892,7 +5892,7 @@ namespace VAdvantage.Model
        *	@param trx transaction
        *	@return true if no error
        */
-        public static Boolean CreateWorkOrderResourceTransaction(MAcctSchema as1, int VAF_Org_ID,
+        public static Boolean CreateWorkOrderResourceTransaction(MVABAccountBook as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_WorkOrderResourceTransactionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
@@ -5977,7 +5977,7 @@ namespace VAdvantage.Model
         /// <param name="IsSOTrx">sales order</param>
         /// <param name="trx">transaction</param>
         /// <returns>true if no error</returns>
-        public static Boolean CreateWorkOrderTransaction(MAcctSchema as1, int VAF_Org_ID,
+        public static Boolean CreateWorkOrderTransaction(MVABAccountBook as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID,
             int M_WorkOrderTransactionLine_ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
@@ -6067,7 +6067,7 @@ namespace VAdvantage.Model
         /// <returns>on success true else false</returns>
         /// <Created by>Raghu</Created>
         /// <date>25-09-2015</date>
-        public static Boolean CreateCostTransaction(MAcctSchema as1, int VAF_Org_ID,
+        public static Boolean CreateCostTransaction(MVABAccountBook as1, int VAF_Org_ID,
             int M_Product_ID, int M_AttributeSetInstance_ID, string costLineColName, int ID, int M_CostElement_ID,
             Decimal Amt, Decimal Qty, String Description, Boolean IsSOTrx, Trx trx, bool RectifyPostedRecords)
         {

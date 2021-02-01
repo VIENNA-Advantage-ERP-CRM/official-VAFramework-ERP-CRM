@@ -183,7 +183,7 @@ namespace VAdvantage.Model
             }
             //	New Entry
             MDunningRunEntry entry1 = new MDunningRunEntry(this);
-            MBPartner bp = new MBPartner(GetCtx(), VAB_BusinessPartnerRelated_ID, Get_TrxName());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartnerRelated_ID, Get_TrxName());
             entry1.SetBPartner(bp, true);	//	AR hardcoded
             //
             //if (entry1.GetSalesRep_ID() == 0)

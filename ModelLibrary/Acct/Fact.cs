@@ -35,7 +35,7 @@ namespace VAdvantage.Acct
         //Document            
         private Doc _doc = null;
         // Accounting Schema   
-        private MAcctSchema _acctSchema = null;
+        private MVABAccountBook _acctSchema = null;
         // Transaction			
         //private String _trxName;
 
@@ -70,7 +70,7 @@ namespace VAdvantage.Acct
         /// <param name="document">pointer to document</param>
         /// <param name="acctSchema">Account Schema to create accounts</param>
         /// <param name="defaultPostingType">the default Posting type (actual,..) for this posting</param>
-        public Fact(Doc document, MAcctSchema acctSchema, String defaultPostingType)
+        public Fact(Doc document, MVABAccountBook acctSchema, String defaultPostingType)
         {
             log = VLogger.GetVLogger(this.GetType().FullName);
             _doc = document;
@@ -308,7 +308,7 @@ namespace VAdvantage.Acct
         /// Get AcctSchema
         /// </summary>
         /// <returns>AcctSchema</returns>
-        public MAcctSchema GetAcctSchema()
+        public MVABAccountBook GetAcctSchema()
         {
             return _acctSchema;
         }
@@ -413,11 +413,11 @@ namespace VAdvantage.Acct
                 return true;
             }
 
-            MAcctSchemaElement[] elements = _acctSchema.GetAcctSchemaElements();
+            MVABAccountBookElement[] elements = _acctSchema.GetAcctSchemaElements();
             //  check all balancing segments
             for (int i = 0; i < elements.Length; i++)
             {
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 if (ase.IsBalanced() && !IsSegmentBalanced(ase.GetElementType()))
                 {
                     return false;
@@ -507,11 +507,11 @@ namespace VAdvantage.Acct
         /// </summary>
         public void BalanceSegments()
         {
-            MAcctSchemaElement[] elements = _acctSchema.GetAcctSchemaElements();
+            MVABAccountBookElement[] elements = _acctSchema.GetAcctSchemaElements();
             //  check all balancing segments
             for (int i = 0; i < elements.Length; i++)
             {
-                MAcctSchemaElement ase = elements[i];
+                MVABAccountBookElement ase = elements[i];
                 if (ase.IsBalanced())
                 {
                     BalanceSegment(ase.GetElementType());

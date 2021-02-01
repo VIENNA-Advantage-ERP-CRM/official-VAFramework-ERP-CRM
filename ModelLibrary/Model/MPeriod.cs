@@ -781,7 +781,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MAcctSchema mas = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
+            MVABAccountBook mas = MVAFClient.Get(GetCtx(), GetVAF_Client_ID()).GetAcctSchema();
             if (mas != null && mas.IsAutoPeriodControl())
             {
                 //	if (as.getVAB_YearPeriod_ID() == getVAB_YearPeriod_ID())
@@ -1020,7 +1020,7 @@ namespace VAdvantage.Model
             if (DocBaseType == null)
                 return "@NotFound@ @DocBaseType@";
 
-            MAcctSchema as1 = MVAFClient.Get(ctx, VAF_Client_ID).GetAcctSchema();
+            MVABAccountBook as1 = MVAFClient.Get(ctx, VAF_Client_ID).GetAcctSchema();
             if (as1 == null)
                 return "@NotFound@ @VAB_AccountBook_ID@ for VAF_Client_ID=" + VAF_Client_ID;
             if (as1.IsAutoPeriodControl())
@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
                 }
                 if (period == null)
                 {
-                    MCalendar cal = MCalendar.Get(ctx, VAB_Calender_ID);
+                    MVABCalendar cal = MVABCalendar.Get(ctx, VAB_Calender_ID);
                     String date = DisplayType.GetDateFormat(DisplayType.Date).Format(DateAcct);
                     if (cal != null)
                         return "@NotFound@ @VAB_YearPeriod_ID@: " + date
@@ -1082,7 +1082,7 @@ namespace VAdvantage.Model
                 if (error != null)
                     return error
                     + " - " + MVAFOrg.Get(ctx, VAF_Org_ID).GetName()
-                    + " -> " + MCalendar.Get(ctx, VAB_Calender_ID).GetName();
+                    + " -> " + MVABCalendar.Get(ctx, VAB_Calender_ID).GetName();
             }
             return null;	//	open
         }
@@ -1155,7 +1155,7 @@ namespace VAdvantage.Model
                 return "@VAB_YearPeriod_ID@ <> @IsActive@";
             }
 
-            MAcctSchema as1 = null;
+            MVABAccountBook as1 = null;
 
             if (VAF_Org_ID > 0)
             {

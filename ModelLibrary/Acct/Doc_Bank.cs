@@ -44,13 +44,13 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Bank(MAcctSchema[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MBankStatement), idr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
+        public Doc_Bank(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
+            : base(ass, typeof(MVABBankingJRNL), idr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
         {
 
         }
-        public Doc_Bank(MAcctSchema[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MBankStatement), dr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
+        public Doc_Bank(MVABAccountBook[] ass, DataRow dr, Trx trxName)
+            : base(ass, typeof(MVABBankingJRNL), dr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
         {
 
         }
@@ -61,7 +61,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MBankStatement bs = (MBankStatement)GetPO();
+            MVABBankingJRNL bs = (MVABBankingJRNL)GetPO();
             SetDateDoc(bs.GetStatementDate());
             SetDateAcct(bs.GetStatementDate());	//	Overwritten on Line Level
 
@@ -70,7 +70,7 @@ namespace VAdvantage.Acct
             SetAmount(AMTTYPE_Gross, bs.GetStatementDifference());
 
             //  Set Bank Account Info (Currency)
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
+            MVABBankAcct ba = MVABBankAcct.Get(GetCtx(), _VAB_Bank_Acct_ID);
             SetVAB_Currency_ID(ba.GetVAB_Currency_ID());
 
             //	Contained Objects
@@ -89,13 +89,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="bs">bank statement</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MBankStatement bs)
+        private DocLine[] LoadLines(MVABBankingJRNL bs)
         {
             List<DocLine> list = new List<DocLine>();
-            MBankStatementLine[] lines = bs.GetLines(false);
+            MVABBankingJRNLLine[] lines = bs.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MBankStatementLine line = lines[i];
+                MVABBankingJRNLLine line = lines[i];
                 DocLine_Bank docLine = new DocLine_Bank(line, this);
                 //	Set Date Acct
                 if (i == 0)
@@ -153,7 +153,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns></returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -371,7 +371,7 @@ namespace VAdvantage.Acct
                 return 0;
             }
             //
-            MBankAccount ba = MBankAccount.Get(GetCtx(), _VAB_Bank_Acct_ID);
+            MVABBankAcct ba = MVABBankAcct.Get(GetCtx(), _VAB_Bank_Acct_ID);
             return ba.GetVAF_Org_ID();
         }
 

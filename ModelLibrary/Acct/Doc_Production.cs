@@ -38,12 +38,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_Production(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_Production(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(X_M_Production), idr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
         }
-        public Doc_Production(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_Production(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(X_M_Production), dr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
@@ -170,7 +170,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns>fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);

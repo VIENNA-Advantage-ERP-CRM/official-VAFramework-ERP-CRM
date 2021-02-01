@@ -23,7 +23,7 @@ namespace VIS.Models
             //Assign parameter value
             VAB_AccountBook_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MAcctSchema aas = MAcctSchema.Get(ctx, VAB_AccountBook_ID);
+            MVABAccountBook aas = MVABAccountBook.Get(ctx, VAB_AccountBook_ID);
             retDic["StdPrecision"] = aas.GetStdPrecision().ToString();
             retDic["VAB_Currency_ID"] = aas.GetVAB_Currency_ID().ToString();
             return retDic;

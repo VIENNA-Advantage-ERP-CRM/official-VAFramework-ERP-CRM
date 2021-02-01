@@ -45,7 +45,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="line"></param>
         /// <param name="doc"></param>
-        public DocLine_Bank(MBankStatementLine line, Doc_Bank doc)
+        public DocLine_Bank(MVABBankingJRNLLine line, Doc_Bank doc)
             : base(line, doc)
         {
 

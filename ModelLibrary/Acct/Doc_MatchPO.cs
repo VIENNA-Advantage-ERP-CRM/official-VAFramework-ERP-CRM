@@ -46,12 +46,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_MatchPO(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_MatchPO(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MMatchPO), idr, MDocBaseType.DOCBASETYPE_MATCHPO, trxName)
         {
 
         }
-        public Doc_MatchPO(MAcctSchema[] ass,DataRow dr, Trx trxName)
+        public Doc_MatchPO(MVABAccountBook[] ass,DataRow dr, Trx trxName)
             : base(ass, typeof(MMatchPO), dr, MDocBaseType.DOCBASETYPE_MATCHPO, trxName)
         {
 
@@ -104,7 +104,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns></returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
             //
@@ -132,7 +132,7 @@ namespace VAdvantage.Acct
             if (_oLine.GetVAB_Currency_ID() != as1.GetVAB_Currency_ID())
             {
                 MOrder order = _oLine.GetParent();
-                Decimal rate = MConversionRate.GetRate(
+                Decimal rate = MVABExchangeRate.GetRate(
                     order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                     order.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                     _oLine.GetVAF_Client_ID(), _oLine.GetVAF_Org_ID());

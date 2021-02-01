@@ -23,7 +23,7 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_Bank_Acct_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MBankAccount ba = MBankAccount.Get(ctx, VAB_Bank_Acct_ID);
+            MVABBankAcct ba = MVABBankAcct.Get(ctx, VAB_Bank_Acct_ID);
             return ba.GetCurrentBalance();
 
         }
@@ -53,7 +53,7 @@ namespace VIS.Models
                 int VAB_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
                 int VAB_CurrencyType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
                 DateTime? dateAcct = Util.GetValueOfDateTime(ds.Tables[0].Rows[0][3]);          // JID_0333: Currency conversion should be based on Payment Account Date and Currency type
-                rate = MConversionRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, dateAcct, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                rate = MVABExchangeRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, dateAcct, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
             }
             return rate;
         }
@@ -82,7 +82,7 @@ namespace VIS.Models
                 decimal payAmt = Util.GetValueOfDecimal(ds.Tables[0].Rows[0][0]);
                 int VAB_Currency_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][1]);
                 int VAB_CurrencyType_ID = Util.GetValueOfInt(ds.Tables[0].Rows[0][2]);
-                rate = MConversionRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, convDate, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
+                rate = MVABExchangeRate.Convert(ctx, payAmt, VAB_Currency_ID, CurTo_ID, convDate, VAB_CurrencyType_ID, ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
             }
             return rate;
         }

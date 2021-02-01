@@ -487,7 +487,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Config("VAB_AccountBook_ID=" + VAB_AccountBook_ID);
 
-            MAcctSchema aas = new MAcctSchema(GetCtx(), VAB_AccountBook_ID, null);
+            MVABAccountBook aas = new MVABAccountBook(GetCtx(), VAB_AccountBook_ID, null);
             if (aas.GetAcctSchemaElement("AC").GetVAB_Element_ID() != _VAB_Element_ID)
             {
                 log.Log(Level.SEVERE, "VAB_Element_ID=" + _VAB_Element_ID + " not in AcctSchema=" + aas);

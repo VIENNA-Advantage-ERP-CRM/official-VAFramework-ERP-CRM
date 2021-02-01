@@ -68,7 +68,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     throw new SystemException("VAB_AccountBook_ID=0");
                 }
-                MAcctSchema ass = MAcctSchema.Get(GetCtx(), _VAB_AccountBook_ID);
+                MVABAccountBook ass = MVABAccountBook.Get(GetCtx(), _VAB_AccountBook_ID);
                 if (ass.Get_ID() == 0)
                 {
                     throw new SystemException("Not Found - VAB_AccountBook_ID=" + _VAB_AccountBook_ID);

@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
 
             // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
             // JID_0976 - For conversion Type
-            if (ship.GetVAB_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  VAB_Order.m_pricelist_id) +  count(distinct VAB_Order.VAB_Paymentterm_id) + count(distinct COALESCE( VAB_Order.VAB_CurrencyType_ID , " + MConversionType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
+            if (ship.GetVAB_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  VAB_Order.m_pricelist_id) +  count(distinct VAB_Order.VAB_Paymentterm_id) + count(distinct COALESCE( VAB_Order.VAB_CurrencyType_ID , " + MVABCurrencyType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
                             FROM m_inoutline INNER JOIN VAB_Orderline ON m_inoutline.VAB_Orderline_id = VAB_Orderline.VAB_Orderline_id
                             INNER JOIN VAB_Order ON VAB_Order.VAB_Order_id = VAB_Orderline.VAB_Order_id
                             WHERE m_inoutline.m_inout_id = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 3)

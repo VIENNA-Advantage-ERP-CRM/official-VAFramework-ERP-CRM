@@ -24,7 +24,7 @@ namespace VAdvantage.Model
          private static VLogger _log = VLogger.GetVLogger(typeof(MVAFOrgDetail).FullName);
 
         //Account Schema				
-        private MAcctSchema _acctSchema = null;
+        private MVABAccountBook _acctSchema = null;
         /// <summary>
         /// Standard Constructor
         /// </summary>
@@ -111,10 +111,10 @@ namespace VAdvantage.Model
         ///Get primary Acct Schema
         /// </summary>
         /// <returns>acct schema</returns>
-        public MAcctSchema GetMAcctSchema()
+        public MVABAccountBook GetMAcctSchema()
         {
             if (_acctSchema == null && GetVAB_AccountBook_ID() != 0)
-                _acctSchema = new MAcctSchema(GetCtx(), GetVAB_AccountBook_ID(), null);
+                _acctSchema = new MVABAccountBook(GetCtx(), GetVAB_AccountBook_ID(), null);
             return _acctSchema;
         }
 

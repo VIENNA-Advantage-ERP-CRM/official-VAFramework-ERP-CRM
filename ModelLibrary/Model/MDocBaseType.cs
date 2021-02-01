@@ -519,7 +519,7 @@ namespace VAdvantage.Model
         /// <param name="dr">result set</param>
         /// <param name="trxName">trx</param>
         /// <returns>instance or null</returns>
-        public AccountingInterface GetAccountingInstance(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public AccountingInterface GetAccountingInstance(MVABAccountBook[] ass, DataRow dr, Trx trxName)
         {
             //Class<?> clazz = getAccountingClass();
             Type clazz = GetAccountingClass();
@@ -530,7 +530,7 @@ namespace VAdvantage.Model
             try
             {
                 //Constructor<?> constr = clazz.getConstructor(MAcctSchema[].class, ResultSet.class, String.class);
-                System.Reflection.ConstructorInfo constr = clazz.GetConstructor(new Type[] { typeof(MAcctSchema[]), typeof(DataRow), typeof(Trx) });
+                System.Reflection.ConstructorInfo constr = clazz.GetConstructor(new Type[] { typeof(MVABAccountBook[]), typeof(DataRow), typeof(Trx) });
                 log.Info(constr.Name + ": Constructor check ");
                 //AccountingInterface retValue = (AccountingInterface)constr.newInstance(ass, rs, trxName);
                 AccountingInterface retValue = (AccountingInterface)constr.Invoke(new object[] { ass, dr, trxName });

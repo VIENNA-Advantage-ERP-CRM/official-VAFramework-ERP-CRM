@@ -374,7 +374,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
             else
             {
-                amt = VAdvantage.Model.MConversionRate.Convert(GetCtx(), lineAmt.Value, VAB_Currency_ID, accCurrency, _VAF_Client_ID, _VAF_Org_ID);
+                amt = VAdvantage.Model.MVABExchangeRate.Convert(GetCtx(), lineAmt.Value, VAB_Currency_ID, accCurrency, _VAF_Client_ID, _VAF_Org_ID);
                 return amt;
             }
         }

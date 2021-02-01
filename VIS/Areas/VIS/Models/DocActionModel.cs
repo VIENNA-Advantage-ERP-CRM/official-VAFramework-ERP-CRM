@@ -213,7 +213,7 @@ namespace VIS.Models
             /********************
              *  Allocation
              */
-            else if (VAF_TableView_ID == MAllocationHdr.Table_ID)
+            else if (VAF_TableView_ID == MVABDocAllocation.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -225,7 +225,7 @@ namespace VIS.Models
             /********************
              *  Bank Statement
              */
-            else if (VAF_TableView_ID == MBankStatement.Table_ID)
+            else if (VAF_TableView_ID == MVABBankingJRNL.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))

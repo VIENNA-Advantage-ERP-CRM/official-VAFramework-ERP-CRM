@@ -236,7 +236,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     X_I_Conversion_Rate imp = new X_I_Conversion_Rate(GetCtx(), idr, Get_TrxName());
-                    MConversionRate rate = new MConversionRate(imp,
+                    MVABExchangeRate rate = new MVABExchangeRate(imp,
                         imp.GetVAB_CurrencyType_ID(),
                         imp.GetVAB_Currency_ID(), imp.GetVAB_Currency_To_ID(),
                         imp.GetMultiplyRate(), imp.GetValidFrom());
@@ -252,7 +252,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //
                         if (imp.IsCreateReciprocalRate())
                         {
-                            rate = new MConversionRate(imp,
+                            rate = new MVABExchangeRate(imp,
                                 imp.GetVAB_CurrencyType_ID(),
                                 imp.GetVAB_Currency_To_ID(), imp.GetVAB_Currency_ID(),
                                 imp.GetDivideRate(), imp.GetValidFrom());

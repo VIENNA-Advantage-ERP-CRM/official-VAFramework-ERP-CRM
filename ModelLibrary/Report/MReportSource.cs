@@ -61,55 +61,55 @@ namespace VAdvantage.Report
             //	ID for Tree Leaf Value
             int ID = 0;
             //
-            if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(et))
+            if (MVABAccountBookElement.ELEMENTTYPE_Account.Equals(et))
             {
                 ID = GetVAB_Acct_Element_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_Activity.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_Activity.Equals(et))
             {
                 ID = GetVAB_BillingCode_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_BPartner.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_BPartner.Equals(et))
             {
                 ID = GetVAB_BusinessPartner_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_Campaign.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_Campaign.Equals(et))
             {
                 ID = GetVAB_Promotion_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_LocationFrom.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_LocationFrom.Equals(et))
             {
                 ID = GetVAB_Address_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_LocationTo.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_LocationTo.Equals(et))
             {
                 ID = GetVAB_Address_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_Organization.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_Organization.Equals(et))
             {
                 ID = GetOrg_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_Product.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et))
             {
                 ID = GetM_Product_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_Project.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et))
             {
                 ID = GetVAB_Project_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_SalesRegion.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_SalesRegion.Equals(et))
             {
                 ID = GetVAB_SalesRegionState_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_OrgTrx.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_OrgTrx.Equals(et))
             {
                 ID = GetOrg_ID();	//	(re)uses Org_ID
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_UserList1.Equals(et))
             {
                 ID = GetVAB_Acct_Element_ID();
             }
-            else if (MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(et))
+            else if (MVABAccountBookElement.ELEMENTTYPE_UserList2.Equals(et))
             {
                 ID = GetVAB_Acct_Element_ID();
             }

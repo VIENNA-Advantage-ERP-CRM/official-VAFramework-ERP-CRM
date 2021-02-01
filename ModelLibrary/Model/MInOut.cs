@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         // Confirmations			
         private MInOutConfirm[] _confirms = null;
         // BPartner				
-        private MBPartner _partner = null;
+        private MVABBusinessPartner _partner = null;
         // Reversal Flag		
         public bool _reversal = false;
         private bool set = false;
@@ -1110,10 +1110,10 @@ namespace VAdvantage.Model
          * 	Get BPartner
          *	@return partner
          */
-        public MBPartner GetBPartner()
+        public MVABBusinessPartner GetBPartner()
         {
             if (_partner == null)
-                _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
+                _partner = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             return _partner;
         }
 
@@ -1239,7 +1239,7 @@ namespace VAdvantage.Model
          * 	Set Business Partner Defaults & Details
          * 	@param bp business partner
          */
-        public void SetBPartner(MBPartner bp)
+        public void SetBPartner(MVABBusinessPartner bp)
         {
             if (bp == null)
                 return;
@@ -1247,7 +1247,7 @@ namespace VAdvantage.Model
             SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
 
             //	Set Locations*******************************************************************************
-            MBPartnerLocation[] locs = bp.GetLocations(false);
+            MVABBPartLocation[] locs = bp.GetLocations(false);
             if (locs != null)
             {
                 for (int i = 0; i < locs.Length; i++)
@@ -1524,7 +1524,7 @@ namespace VAdvantage.Model
             }
             if (newRecord || Is_ValueChanged("VAB_BusinessPartner_ID"))
             {
-                MBPartner bp = MBPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
+                MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), GetVAB_BusinessPartner_ID());
                 if (!bp.IsActive())
                 {
                     log.SaveError("NotActive", Msg.GetMsg(GetCtx(), "VAB_BusinessPartner_ID"));
@@ -1629,11 +1629,11 @@ namespace VAdvantage.Model
             if (((IsSOTrx() && !IsReturnTrx()) || GetMovementType() == "V-") && !IsReversal())
             {
                 MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
-                Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                Decimal grandTotal = MVABExchangeRate.ConvertBase(GetCtx(),
                         ord.GetGrandTotal(), GetVAB_Currency_ID(), GetDateOrdered(),
                         ord.GetVAB_CurrencyType_ID(), GetVAF_Client_ID(), GetVAF_Org_ID());
 
-                MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
+                MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_Trx());
                 string retMsg = "";
                 bool crdAll = bp.IsCreditAllowed(GetVAB_BPart_Location_ID(), grandTotal, out retMsg);
                 if (!crdAll)
@@ -1749,7 +1749,7 @@ namespace VAdvantage.Model
                 }
                 if (checkCreditStatus)
                 {
-                    MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
+                    MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
                     //if (MBPartner.SOCREDITSTATUS_CreditStop.Equals(bp.GetSOCreditStatus()))
                     //{
                     //    _processMsg = "@BPartnerCreditStop@ - @TotalOpenBalance@="
@@ -1765,8 +1765,8 @@ namespace VAdvantage.Model
                     //    return DocActionVariables.STATUS_INVALID;
                     //}
 
-                    Decimal notInvoicedAmt = MBPartner.GetNotInvoicedAmt(GetVAB_BusinessPartner_ID());
-                    if (MBPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(notInvoicedAmt)))
+                    Decimal notInvoicedAmt = MVABBusinessPartner.GetNotInvoicedAmt(GetVAB_BusinessPartner_ID());
+                    if (MVABBusinessPartner.SOCREDITSTATUS_CreditHold.Equals(bp.GetSOCreditStatus(notInvoicedAmt)))
                     {
                         _processMsg = "@BPartnerOverSCreditHold@ - @TotalOpenBalance@="
                             + bp.GetTotalOpenBalance() + ", @NotInvoicedAmt@=" + notInvoicedAmt
@@ -3179,7 +3179,7 @@ namespace VAdvantage.Model
                         //}
                         //}
 
-                        _partner = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
+                        _partner = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), null);
                         orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         if (!IsSOTrx() && !IsReturnTrx()) // Material Receipt
                         {
@@ -3933,7 +3933,7 @@ namespace VAdvantage.Model
         }
 
         // Amit not used 24-12-2015
-        private void updateCostQueue(MProduct product, int M_ASI_ID, MAcctSchema mas,
+        private void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
             int Org_ID, MCostElement ce, decimal movementQty)
         {
             //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetM_AttributeSetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
@@ -4915,13 +4915,13 @@ namespace VAdvantage.Model
                 return null;
             //	Business Partner needs to be linked to Org
             //jz MBPartner bp = new MBPartner (getCtx(), getVAB_BusinessPartner_ID(), null);
-            MBPartner bp = new MBPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), GetVAB_BusinessPartner_ID(), Get_TrxName());
             int counterVAF_Org_ID = bp.GetVAF_OrgBP_ID_Int();
             if (counterVAF_Org_ID == 0)
                 return null;
 
             //jz MBPartner counterBP = new MBPartner (getCtx(), counterVAB_BusinessPartner_ID, null);
-            MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
+            MVABBusinessPartner counterBP = new MVABBusinessPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
             MVAFOrgDetail counterOrgInfo = MVAFOrgDetail.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 

@@ -43,13 +43,13 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public DoVAB_CashBook(MAcctSchema[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MCash), idr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
+        public DoVAB_CashBook(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
+            : base(ass, typeof(MVABCashJRNL), idr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
         }
-        public DoVAB_CashBook(MAcctSchema[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MCash), dr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
+        public DoVAB_CashBook(MVABAccountBook[] ass, DataRow dr, Trx trxName)
+            : base(ass, typeof(MVABCashJRNL), dr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MCash cash = (MCash)GetPO();
+            MVABCashJRNL cash = (MVABCashJRNL)GetPO();
             SetDateDoc(cash.GetStatementDate());
             BeginningBalance = cash.GetBeginningBalance();
             HeaderCasbookID = cash.GetVAB_CashBook_ID();
@@ -69,7 +69,7 @@ namespace VAdvantage.Acct
             SetAmount(Doc.AMTTYPE_Gross, cash.GetStatementDifference());
 
             //  Set CashBook Org & Currency
-            MCashBook cb = MCashBook.Get(GetCtx(), cash.GetVAB_CashBook_ID());
+            MVABCashBook cb = MVABCashBook.Get(GetCtx(), cash.GetVAB_CashBook_ID());
             SetVAB_CashBook_ID(cb.GetVAB_CashBook_ID());
             SetVAB_Currency_ID(cb.GetVAB_Currency_ID());
 
@@ -86,13 +86,13 @@ namespace VAdvantage.Acct
         /// <param name="cash">journal</param>
         /// <param name="cb">cash book</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MCash cash, MCashBook cb)
+        private DocLine[] LoadLines(MVABCashJRNL cash, MVABCashBook cb)
         {
             List<DocLine> list = new List<DocLine>();
-            MCashLine[] lines = cash.GetLines(false);
+            MVABCashJRNLLine[] lines = cash.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MCashLine line = lines[i];
+                MVABCashJRNLLine line = lines[i];
                 DocLine_Cash docLine = new DocLine_Cash(line, this);
                 //
                 list.Add(docLine);
@@ -155,7 +155,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns>Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  Need to have CashBook
             if (GetVAB_CashBook_ID() == 0)
@@ -287,7 +287,7 @@ namespace VAdvantage.Acct
                     //  CashAsset       DR      dr      --   Invoice is in Invoice Currency !
                     //  CashTransfer    cr      CR
 
-                    MBPartner bPartner = new MBPartner(Env.GetCtx(), line.GetVAB_BusinessPartner_ID(), null);
+                    MVABBusinessPartner bPartner = new MVABBusinessPartner(Env.GetCtx(), line.GetVAB_BusinessPartner_ID(), null);
                     if (bPartner != null)
                     {
                         if (bPartner.IsEmployee())
@@ -414,7 +414,7 @@ namespace VAdvantage.Acct
                         //    line.GetVAB_Currency_ID(), decimal.Negate(line.GetAmount()));
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
-                            (new MCashBook(Env.GetCtx(), HeaderCasbookID, null)).GetVAB_Currency_ID(), decimal.Negate(line.GetAmount()));
+                            (new MVABCashBook(Env.GetCtx(), HeaderCasbookID, null)).GetVAB_Currency_ID(), decimal.Negate(line.GetAmount()));
                         SetVAB_CashBook_ID(temp);
                         //if (line.GetVAB_Currency_ID() == (new MCashBook(Env.GetCtx(), GetVAB_CashBook_ID(), null)).GetVAB_Currency_ID())// GetVAB_Currency_ID())
                         //{
@@ -450,17 +450,17 @@ namespace VAdvantage.Acct
                     //        GetAccount(Doc.ACCTTYPE_CashAsset, as1),
                     //        line.GetVAB_Currency_ID(), line.GetAmount());
                     //}
-                    headerCashCurrency = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAB_Currency_ID());
-                    childCashCurrency = (new MCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAB_Currency_ID());
-                    headerCashOrg = (new MCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAF_Org_ID());
-                    childCashOrg = (new MCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAF_Org_ID());
+                    headerCashCurrency = (new MVABCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAB_Currency_ID());
+                    childCashCurrency = (new MVABCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAB_Currency_ID());
+                    headerCashOrg = (new MVABCashBook(Env.GetCtx(), HeaderCasbookID, null).GetVAF_Org_ID());
+                    childCashOrg = (new MVABCashBook(Env.GetCtx(), line.Get_VAB_CashBook_ID(), null).GetVAF_Org_ID());
 
                     //else
                     //{
                     if (headerCashCurrency != childCashCurrency)
                     {
                         Decimal transferdAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT Amount FROM VAB_CashJRNLLine WHERE VAB_CashJRNLLine_ID =" + line.Get_VAB_CashJRNLLine_Ref_ID()));
-                        Decimal recievedAmt = MConversionRate.Convert(Env.GetCtx(), line.GetAmount(), headerCashCurrency, childCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
+                        Decimal recievedAmt = MVABExchangeRate.Convert(Env.GetCtx(), line.GetAmount(), headerCashCurrency, childCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         Decimal res = Decimal.Subtract(recievedAmt, Math.Abs(transferdAmt));
                         if (res > 0)
                         {
@@ -481,7 +481,7 @@ namespace VAdvantage.Acct
                         }
                         //else
                         //{
-                        transferdAmt = MConversionRate.Convert(Env.GetCtx(), transferdAmt, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
+                        transferdAmt = MVABExchangeRate.Convert(Env.GetCtx(), transferdAmt, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         //}
                         fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_CashTransfer, as1),
@@ -539,7 +539,7 @@ namespace VAdvantage.Acct
             {
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
-                TotalCurrGain = MConversionRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
+                TotalCurrGain = MVABExchangeRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,
@@ -551,7 +551,7 @@ namespace VAdvantage.Acct
             {
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
                 MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
-                TotalCurrLoss = MConversionRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
+                TotalCurrLoss = MVABExchangeRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
                 fact.CreateLine(null, acct,
@@ -572,7 +572,7 @@ namespace VAdvantage.Acct
             return facts;
         }
 
-        private void CreateFactLine(Fact fact, DocLine_Cash line, MAcctSchema as1, decimal assetAmt)
+        private void CreateFactLine(Fact fact, DocLine_Cash line, MVABAccountBook as1, decimal assetAmt)
         {
             fact.CreateLine(line, GetAccount(Doc.ACCTTYPE_CashAsset, as1),
                    GetVAB_Currency_ID(), assetAmt);

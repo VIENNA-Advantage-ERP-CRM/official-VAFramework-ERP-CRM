@@ -50,12 +50,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public DoVAB_Invoice(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public DoVAB_Invoice(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MInvoice), idr, null, trxName)
         {
 
         }
-        public DoVAB_Invoice(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public DoVAB_Invoice(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MInvoice), dr, null, trxName)
         {
 
@@ -228,7 +228,7 @@ namespace VAdvantage.Acct
         {
             if (_precision == -1)
             {
-                _precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                _precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
             }
             return _precision;
         }
@@ -296,7 +296,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1">accounting schema</param>
         /// <returns> Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //
             List<Fact> facts = new List<Fact>();
@@ -427,7 +427,7 @@ namespace VAdvantage.Acct
                                         rate = Utility.Util.GetValueOfDecimal(idr[1]);
                                         //	TaxAmt                                   
                                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                                        int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                         if (taxAmt != null && Env.Scale(taxAmt) > precision)
                                         {
                                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -583,7 +583,7 @@ namespace VAdvantage.Acct
                                         rate = Utility.Util.GetValueOfDecimal(idr[1]);
                                         //	TaxAmt                                   
                                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                                        int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                                         if (taxAmt != null && Env.Scale(taxAmt) > precision)
                                         {
                                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -697,7 +697,7 @@ namespace VAdvantage.Acct
                         rate = Utility.Util.GetValueOfDecimal(idr[2]);
                         //	TaxAmt                                   
                         taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                        int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                        int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                         if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                         {
                             taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -835,7 +835,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                    int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -961,7 +961,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                    int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -1129,7 +1129,7 @@ namespace VAdvantage.Acct
                     rate = Utility.Util.GetValueOfDecimal(idr[2]);
                     //	TaxAmt                                   
                     taxAmt = Util.GetValueOfDecimal((baseAmt * rate) / 100);
-                    int precision = MCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
+                    int precision = MVABCurrency.GetStdPrecision(GetCtx(), GetVAB_Currency_ID());
                     if (taxAmt != 0 && Env.Scale(taxAmt) > precision)
                     {
                         taxAmt = Decimal.Round(taxAmt, precision, MidpointRounding.AwayFromZero);
@@ -1277,7 +1277,7 @@ namespace VAdvantage.Acct
         /// <param name="fact">fact to add lines to</param>
         /// <param name="multiplier">source amount multiplier</param>
         /// <returns>accounted amount</returns>
-        public Decimal CreateFactCash(MAcctSchema as1, Fact fact, Decimal multiplier)
+        public Decimal CreateFactCash(MVABAccountBook as1, Fact fact, Decimal multiplier)
         {
             bool creditMemo = GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO)
                 || GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
@@ -1403,7 +1403,7 @@ namespace VAdvantage.Acct
         /// <param name="line">document line</param>
         /// <param name="dr">DR entry (normal api)</param>
         /// <returns>true if landed costs were created</returns>
-        private bool LandedCost(MAcctSchema as1, Fact fact, DocLine line, bool dr)
+        private bool LandedCost(MVABAccountBook as1, Fact fact, DocLine line, bool dr)
         {
             int VAB_InvoiceLine_ID = line.Get_ID();
             MLandedCostAllocation[] lcas = MLandedCostAllocation.GetOfInvoiceLine(
@@ -1471,7 +1471,7 @@ namespace VAdvantage.Acct
                 Decimal allocationAmt = lca.GetAmt();
                 if (GetVAB_Currency_ID() != as1.GetVAB_Currency_ID())
                 {
-                    allocationAmt = MConversionRate.Convert(GetCtx(), allocationAmt,
+                    allocationAmt = MVABExchangeRate.Convert(GetCtx(), allocationAmt,
                         GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                         GetDateAcct(), GetVAB_CurrencyType_ID(),
                         GetVAF_Client_ID(), GetVAF_Org_ID());
@@ -1514,7 +1514,7 @@ namespace VAdvantage.Acct
         /// Update ProductPO PriceLastInv
         /// </summary>
         /// <param name="as1">accounting schema</param>
-        private void UpdateProductPO(MAcctSchema as1)
+        private void UpdateProductPO(MVABAccountBook as1)
         {
             MVAFClientDetail ci = MVAFClientDetail.Get(GetCtx(), as1.GetVAF_Client_ID());
             if (ci.GetVAB_AccountBook1_ID() != as1.GetVAB_AccountBook_ID())

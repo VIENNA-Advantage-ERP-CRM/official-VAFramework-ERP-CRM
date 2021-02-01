@@ -49,7 +49,7 @@ namespace ViennaAdvantageServer.Process
            // Int32 value = 0;
             string msg = "";
             ValueNamePair vp = null;
-            MBPartner bp = null;
+            MVABBusinessPartner bp = null;
             MOrderLine ol = null;
 
             log.Info("VAB_Project_ID=" + _VAB_Project_ID);
@@ -88,7 +88,7 @@ namespace ViennaAdvantageServer.Process
             VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
             VAB_BusinessPartnerSR_ID = fromProject.GetVAB_BusinessPartnerSR_ID();
             
-            MBPartnerLocation bpartnerloc = new MBPartnerLocation(GetCtx(), VAB_BPart_Location_id, Get_TrxName());
+            MVABBPartLocation bpartnerloc = new MVABBPartLocation(GetCtx(), VAB_BPart_Location_id, Get_TrxName());
             //String currentdate = DateTime.Now.ToString();
             String sqlprjln = "SELECT COUNT(VAB_ProjectLine_ID) FROM VAB_ProjectLine WHERE VAB_Project_ID=" + _VAB_Project_ID;
             VAB_ProjectLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sqlprjln, null, Get_TrxName()));
@@ -138,7 +138,7 @@ namespace ViennaAdvantageServer.Process
                 order.SetVAB_Currency_ID(fromProject.GetVAB_Currency_ID());
                 if (VAB_BusinessPartner_id != 0)
                 {
-                    bp = new MBPartner(GetCtx(), VAB_BusinessPartner_id, Get_TrxName());
+                    bp = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_id, Get_TrxName());
                     if (bp.GetVAB_Promotion_ID() == 0 && fromProject.GetVAB_Promotion_ID() > 0)
                         bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
@@ -157,7 +157,7 @@ namespace ViennaAdvantageServer.Process
                 }
                 else
                 {
-                    bp = new MBPartner(GetCtx(), VAB_BusinessPartnerSR_ID, Get_TrxName());
+                    bp = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartnerSR_ID, Get_TrxName());
                     if (bp.GetVAB_Promotion_ID() == 0 && fromProject.GetVAB_Promotion_ID() > 0)
                         bp.SetVAB_Promotion_ID(fromProject.GetVAB_Promotion_ID());
                     //bp.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());

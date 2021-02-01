@@ -91,9 +91,9 @@ namespace VAdvantage.Report
             log = VLogger.GetVLogger(this.GetType().FullName);
             _ElementType = ElementType;
             _TreeType = _ElementType;
-            if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(_ElementType)
-                || MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(_ElementType)
-                || MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(_ElementType))
+            if (MVABAccountBookElement.ELEMENTTYPE_Account.Equals(_ElementType)
+                || MVABAccountBookElement.ELEMENTTYPE_UserList1.Equals(_ElementType)
+                || MVABAccountBookElement.ELEMENTTYPE_UserList2.Equals(_ElementType))
                 _TreeType = MVAFTreeInfo.TREETYPE_ElementValue;
             _VAPA_FinancialReportingOrder_ID = VAPA_FinancialReportingOrder_ID;
             _ctx = ctx;
@@ -223,7 +223,7 @@ namespace VAdvantage.Report
         public String GetWhereClause(int ID)
 	{
 		log.Fine("(" + _ElementType + ") ID=" + ID);
-		String ColumnName = MAcctSchemaElement.GetColumnName(_ElementType);
+		String ColumnName = MVABAccountBookElement.GetColumnName(_ElementType);
 		if (ID == 0)	//	All
         {
 			return ColumnName + " IS NOT NULL";

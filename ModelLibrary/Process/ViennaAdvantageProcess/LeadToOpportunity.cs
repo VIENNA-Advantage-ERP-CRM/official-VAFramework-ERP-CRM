@@ -205,7 +205,7 @@ namespace ViennaAdvantage.Process
             }
             lead.Save();
             //
-            VAdvantage.Model.MBPartner bp = lead.GetBPartner();
+            VAdvantage.Model.MVABBusinessPartner bp = lead.GetBPartner();
             if (bp != null)
             {
                 return "@VAB_BusinessPartner_ID@: " + bp.GetName();

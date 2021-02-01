@@ -44,12 +44,12 @@ namespace VAdvantage.Acct
         /// <param name="ass">accounting schemata</param>
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
-        public Doc_InOut(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_InOut(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MInOut), idr, null, trxName)
         {
 
         }
-        public Doc_InOut(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_InOut(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MInOut), dr, null, trxName)
         {
 
@@ -182,7 +182,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1">accounting schema</param>
         /// <returns>Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -339,7 +339,7 @@ namespace VAdvantage.Acct
                         {
                             MOrderLine oLine = new MOrderLine(product.GetCtx(), line.GetVAB_OrderLine_ID(), null);
                             MOrder order = new MOrder(product.GetCtx(), oLine.GetVAB_Order_ID(), null);
-                            Decimal convertedCost = MConversionRate.Convert(product.GetCtx(),
+                            Decimal convertedCost = MVABExchangeRate.Convert(product.GetCtx(),
                                 oLine.GetPriceEntered(), order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                                 line.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
                                 oLine.GetVAF_Client_ID(), line.GetVAF_Org_ID());

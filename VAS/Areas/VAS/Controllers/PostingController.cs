@@ -37,7 +37,7 @@ namespace VIS.Controllers
                 //VLogMgt.Initialize(true, storedPath);
 
 
-                MAcctSchema[] ass = MAcctSchema.GetClientAcctSchema(ctx, VAF_Client_ID);
+                MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(ctx, VAF_Client_ID);
                 res = Doc.PostImmediate(ass, VAF_TableView_ID, Record_ID, force, null);
                 if (res == null || res.Trim().Length > 0)
                 {
@@ -59,7 +59,7 @@ namespace VIS.Controllers
             string res = "No";
 
             MVAFClientDetail info = MVAFClientDetail.Get(ctx, VAF_Client_ID);
-            MAcctSchema ass = new MAcctSchema(ctx, info.GetVAB_AccountBook1_ID(), null);
+            MVABAccountBook ass = new MVABAccountBook(ctx, info.GetVAB_AccountBook1_ID(), null);
             if (ass.GetFRPT_LocAcct_ID() > 0)
             {
                 res = "Yes";

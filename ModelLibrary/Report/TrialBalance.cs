@@ -169,7 +169,7 @@ namespace VAdvantage.Report
             if (_Account_ID != 0 && _Account_ID!=-1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Account, _Account_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Account, _Account_ID));
             }
             if (_AccountValue_From != null && _AccountValue_From.Length == 0)
             {
@@ -202,31 +202,31 @@ namespace VAdvantage.Report
             if (_VAF_Org_ID != 0 && _VAF_Org_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Organization, _VAF_Org_ID));
             }
             //	Optional BPartner
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
             }
             //	Optional Product
             if (_M_Product_ID != 0 && _M_Product_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Product, _M_Product_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Product, _M_Product_ID));
             }
             //	Optional Project
             if (_VAB_Project_ID != 0 && _VAB_Project_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Project, _VAB_Project_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Project, _VAB_Project_ID));
             }
             //	Optional Activity
             if (_VAB_BillingCode_ID != 0 && _VAB_BillingCode_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_Activity, _VAB_BillingCode_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Activity, _VAB_BillingCode_ID));
             }
             //	Optional Campaign
             if (_VAB_Promotion_ID != 0 && _VAB_Promotion_ID != -1)
@@ -239,7 +239,7 @@ namespace VAdvantage.Report
             if (_VAB_SalesRegionState_ID != 0 && _VAB_SalesRegionState_ID != -1)
             {
                 m_parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MAcctSchemaElement.ELEMENTTYPE_SalesRegion, _VAB_SalesRegionState_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_SalesRegion, _VAB_SalesRegionState_ID));
             }
             //	Mandatory Posting Type
             m_parameterWhere.Append(" AND PostingType='").Append(_PostingType).Append("'");

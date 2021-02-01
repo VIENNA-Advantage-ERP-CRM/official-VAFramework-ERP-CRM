@@ -47,12 +47,12 @@ namespace VAdvantage.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_MatchInv(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_MatchInv(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MMatchInv), idr, MDocBaseType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
         }
-        public Doc_MatchInv(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_MatchInv(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MMatchInv), dr, MDocBaseType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
@@ -109,7 +109,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="as1"></param>
         /// <returns></returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             List<Fact> facts = new List<Fact>();
             //  Nothing to do
@@ -210,7 +210,7 @@ namespace VAdvantage.Acct
                 MInvoice invoice = _invoiceLine.GetParent();
                 if (as1.GetVAB_Currency_ID() == invoice.GetVAB_Currency_ID())
                 {
-                    LineNetAmt = MConversionRate.Convert(GetCtx(), LineNetAmt,
+                    LineNetAmt = MVABExchangeRate.Convert(GetCtx(), LineNetAmt,
                         invoice.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                         invoice.GetDateAcct(), invoice.GetVAB_CurrencyType_ID(),
                         invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID());
@@ -258,7 +258,7 @@ namespace VAdvantage.Acct
 
                 //  Update Costing
                 UpdateProductInfo(as1.GetVAB_AccountBook_ID(),
-                    MAcctSchema.COSTINGMETHOD_StandardCosting.Equals(as1.GetCostingMethod()));
+                    MVABAccountBook.COSTINGMETHOD_StandardCosting.Equals(as1.GetCostingMethod()));
             }
             //
             facts.Add(fact);

@@ -124,7 +124,7 @@ namespace VIS.Controllers
                 dt.Columns.Add("TotalAmount", typeof(decimal));
                 decimal totalAmt = 0.0M;
                 decimal docAmount = Util.GetValueOfDecimal(param[3]);
-                if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Activity))
+                if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Activity))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -148,7 +148,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_BPartner))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_BPartner))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -172,7 +172,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Campaign))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Campaign))
                 {
                     dt.Columns.Add("Campaign_ID", typeof(int));
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -197,7 +197,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Organization) || param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_OrgTrx))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Organization) || param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_OrgTrx))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -221,7 +221,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Project))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Project))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -245,7 +245,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Product))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Product))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -269,7 +269,7 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_SalesRegion))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_SalesRegion))
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
@@ -293,9 +293,9 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_Account) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList1) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserList2))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_Account) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserList1) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserList2))
                 {
                     int bpid = 0;
                     dt.Columns.Add("AccoutId", typeof(int));
@@ -325,15 +325,15 @@ namespace VIS.Controllers
                         }
                     }
                 }
-                else if (param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement1) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement2) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement3) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement4) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement5) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement6) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement7) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement8) ||
-                     param[1].ToString().Equals(MAcctSchemaElement.ELEMENTTYPE_UserElement9))
+                else if (param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement1) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement2) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement3) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement4) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement5) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement6) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement7) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement8) ||
+                     param[1].ToString().Equals(MVABAccountBookElement.ELEMENTTYPE_UserElement9))
                 {
                     string columName = "";
                     string tableName = "";

@@ -69,12 +69,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
 			throw new Exception("VAB_AccountBook_ID=0");
         }
-		MAcctSchema a = MAcctSchema.Get(GetCtx(), _VAB_AccountBook_ID);
+		MVABAccountBook a = MVABAccountBook.Get(GetCtx(), _VAB_AccountBook_ID);
         if (a.Get_ID() == 0)
         {
             throw new Exception("Not Found - VAB_AccountBook_ID=" + _VAB_AccountBook_ID);
         }
-		MAcctSchemaDefault acct = MAcctSchemaDefault.Get (GetCtx(), _VAB_AccountBook_ID);
+		MVABAccountBookDefault acct = MVABAccountBookDefault.Get (GetCtx(), _VAB_AccountBook_ID);
         if (acct == null || acct.Get_ID() == 0)
         {
             throw new Exception("Default Not Found - VAB_AccountBook_ID=" + _VAB_AccountBook_ID);

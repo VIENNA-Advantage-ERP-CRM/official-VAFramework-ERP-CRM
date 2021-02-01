@@ -63,7 +63,7 @@ namespace VAdvantage.Process
         {
             log.Info("doIt - VAB_WorkCommission_Calc_ID=" + GetRecord_ID());
             //	Load Data
-            MCommissionRun comRun = new MCommissionRun(GetCtx(), GetRecord_ID(), Get_Trx());
+            MVABWorkCommissionCalc comRun = new MVABWorkCommissionCalc(GetCtx(), GetRecord_ID(), Get_Trx());
             if (comRun.Get_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No Commission Run");
@@ -72,7 +72,7 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("@GrandTotal@ = 0");
             }
-            MCommission com = new MCommission(GetCtx(), comRun.GetVAB_WorkCommission_ID(), Get_Trx());
+            MVABWorkCommission com = new MVABWorkCommission(GetCtx(), comRun.GetVAB_WorkCommission_ID(), Get_Trx());
             if (com.Get_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No Commission");
@@ -81,7 +81,7 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("CommissionAPInvoice - No Charge on Commission");
             }
-            MBPartner bp = new MBPartner(GetCtx(), com.GetVAB_BusinessPartner_ID(), Get_Trx());
+            MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), com.GetVAB_BusinessPartner_ID(), Get_Trx());
             if (bp.Get_ID() == 0)
             {
                 throw new ArgumentException("CommissionAPInvoice - No BPartner");

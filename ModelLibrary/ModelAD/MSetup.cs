@@ -74,13 +74,13 @@ namespace VAdvantage.Model
         //
         private MVAFClient m_client;
         private MVAFOrg m_org;
-        private MAcctSchema m_as;
+        private MVABAccountBook m_as;
         //
         private int VAF_UserContact_ID;
         private String VAF_UserContact_Name;
         private int VAF_UserContact_U_ID;
         private String VAF_UserContact_U_Name;
-        private MCalendar m_calendar;
+        private MVABCalendar m_calendar;
         private int m_VAF_TreeInfo_Account_ID;
         private int VAB_ProjectCycle_ID;
         //
@@ -407,7 +407,7 @@ namespace VAdvantage.Model
             //	Processors
             if (lstTableName.Contains("VAB_AccountHanlder")) // Update by Paramjeet Singh
             {
-                MAcctProcessor ap = new MAcctProcessor(m_client, VAF_UserContact_ID);
+                MVA_AccountHanlder ap = new MVA_AccountHanlder(m_client, VAF_UserContact_ID);
                 ap.Save();
             }
             if (lstTableName.Contains("VAR_Req_Handler")) // Update by Paramjeet Singh
@@ -779,12 +779,12 @@ namespace VAdvantage.Model
                 DataSet dsBatch = DB.ExecuteDataset(sqlBatch);
                 if (dsBatch != null)
                 {
-                    MAccountGroupBatch acctGrpBatch = null;
+                    MVABAccountGroupBatch acctGrpBatch = null;
 
                     for (int bat = 0; bat < dsBatch.Tables[0].Rows.Count; bat++)
                     {
 
-                        acctGrpBatch = new MAccountGroupBatch(m_ctx, 0, m_trx);
+                        acctGrpBatch = new MVABAccountGroupBatch(m_ctx, 0, m_trx);
                         acctGrpBatch.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                         acctGrpBatch.SetVAF_Org_ID(0);
                         if (dsBatch.Tables[0].Rows[bat]["Value"] != null && dsBatch.Tables[0].Rows[bat]["Value"] != DBNull.Value)
@@ -814,19 +814,19 @@ namespace VAdvantage.Model
                                 if (ds != null)
                                 {
 
-                                    MAccountGroup acct = null;
+                                    MVABAccountGroup acct = null;
                                     string sqlTrl = "";
                                     DataSet dstrl = null;
                                     string sqlSub = "";
                                     DataSet dsSub = null;
                                     string sqlSubTrl = "";
                                     DataSet dsSubTrl = null;
-                                    MAccountGroupTrl acctTrl = null;
-                                    MAccountSubGroup acctS = null;
-                                    MAccountSubGroupTrl acctStrl = null;
+                                    MVABAccountGroupTL acctTrl = null;
+                                    MVABAccountSubGroup acctS = null;
+                                    MVABAccountSubGroupTL acctStrl = null;
                                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                                     {
-                                        acct = new MAccountGroup(m_ctx, 0, m_trx);
+                                        acct = new MVABAccountGroup(m_ctx, 0, m_trx);
                                         acct.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                         acct.SetVAF_Org_ID(0);
 
@@ -885,7 +885,7 @@ namespace VAdvantage.Model
                                                 {
                                                     for (int j = 0; j < dstrl.Tables[0].Rows.Count; j++)
                                                     {
-                                                        acctTrl = new MAccountGroupTrl(m_ctx, 0, m_trx);
+                                                        acctTrl = new MVABAccountGroupTL(m_ctx, 0, m_trx);
                                                         acctTrl.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                                         acctTrl.SetVAF_Org_ID(0);
                                                         if (dstrl.Tables[0].Rows[j]["VAF_Language"] != null && dstrl.Tables[0].Rows[j]["VAF_Language"] != DBNull.Value)
@@ -919,7 +919,7 @@ namespace VAdvantage.Model
                                                 {
                                                     for (int j = 0; j < dsSub.Tables[0].Rows.Count; j++)
                                                     {
-                                                        acctS = new MAccountSubGroup(m_ctx, 0, m_trx);
+                                                        acctS = new MVABAccountSubGroup(m_ctx, 0, m_trx);
                                                         acctS.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                                         acctS.SetVAF_Org_ID(0);
                                                         acctS.SetVAB_AccountGroup_ID(acct.Get_ID());
@@ -2533,7 +2533,7 @@ namespace VAdvantage.Model
                 int count = 0;
                 for (int i = 0; i < urlInfo.IDs.Count; i++)
                 {
-                    MCurrencySource src = new MCurrencySource(m_ctx, 0, m_trx);
+                    MVABCurrencySource src = new MVABCurrencySource(m_ctx, 0, m_trx);
                     src.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                     src.SetVAF_Org_ID(0);
                     src.SetName(urlInfo.Names[i]);
@@ -2572,7 +2572,7 @@ namespace VAdvantage.Model
              */
             if (Common.Common.lstTableName.Contains("VAB_Calender")) // Update by Paramjeet Singh
             {
-                m_calendar = new MCalendar(m_client);
+                m_calendar = new MVABCalendar(m_client);
 
 
 
@@ -2657,7 +2657,7 @@ namespace VAdvantage.Model
              */
             if (Common.Common.lstTableName.Contains("VAB_AccountBook"))// Update by Paramjeet Singh
             {
-                m_as = new MAcctSchema(m_client, currency);
+                m_as = new MVABAccountBook(m_client, currency);
                 if (!m_as.Save())
                 {
                     String err = "AcctSchema NOT inserted";
@@ -3120,7 +3120,7 @@ namespace VAdvantage.Model
                     MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, null, 0, 0,
                     900000, GL_None, MDocType.POSTINGCODE_PURCHASEREQUISITION);
 
-                CreateDocType("Bank Statement", Msg.GetElement(m_ctx, "C_BankStatemet_ID", true),
+                CreateDocType("Bank Statement", Msg.GetElement(m_ctx, "VAB_BankStatemet_ID", true),
                     MDocBaseType.DOCBASETYPE_BANKSTATEMENT, null, 0, 0,
                     700000, GL_CASH, MDocType.POSTINGCODE_BANKSTATEMENT);
                 CreateDocType("Cash Journal", Msg.GetElement(m_ctx, "VAB_CashJRNL_ID", true),
@@ -3486,11 +3486,11 @@ namespace VAdvantage.Model
              *  Business Partner
              */
             //  Create BP Group
-            MBPartner bp = null;
-            MBPGroup bpg = null;
+            MVABBusinessPartner bp = null;
+            MVABBPartCategory bpg = null;
             if (lstTableName.Contains("VAB_BPart_Category"))// Update by Paramjeet Singh
             {
-                bpg = new MBPGroup(m_ctx, 0, m_trx);
+                bpg = new MVABBPartCategory(m_ctx, 0, m_trx);
 
 
 
@@ -3503,7 +3503,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "BP Group NOT inserted");
 
                 //	Create BPartner
-                bp = new MBPartner(m_ctx, 0, m_trx);
+                bp = new MVABBusinessPartner(m_ctx, 0, m_trx);
                 bp.SetValue(defaultName);
                 bp.SetName(defaultName);
                 bp.SetBPGroup(bpg);
@@ -3520,7 +3520,7 @@ namespace VAdvantage.Model
             {
 
 
-                MBPartnerLocation bpl = new MBPartnerLocation(bp);
+                MVABBPartLocation bpl = new MVABBPartLocation(bp);
                 bpl.SetVAB_Address_ID(bpLoc.GetVAB_Address_ID());
                 if (!bpl.Save())
                     log.Log(Level.SEVERE, "BP_Location (Standard) NOT inserted");
@@ -3708,10 +3708,10 @@ namespace VAdvantage.Model
 
             }
             //	Create Sales Rep for Client-User
-            MBPartner bpCU = null;
+            MVABBusinessPartner bpCU = null;
             if (lstTableName.Contains("VAB_BusinessPartner"))
             {
-                bpCU = new MBPartner(m_ctx, 0, m_trx);
+                bpCU = new MVABBusinessPartner(m_ctx, 0, m_trx);
                 bpCU.SetValue(VAF_UserContact_U_Name);
                 bpCU.SetName(VAF_UserContact_U_Name);
 
@@ -3728,7 +3728,7 @@ namespace VAdvantage.Model
                     //  Location for Client-User
                     MLocation bpLocCU = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
                     bpLocCU.Save();
-                    MBPartnerLocation bplCU = new MBPartnerLocation(bpCU);
+                    MVABBPartLocation bplCU = new MVABBPartLocation(bpCU);
                     bplCU.SetVAB_Address_ID(bpLocCU.GetVAB_Address_ID());
                     if (!bplCU.Save())
                         log.Log(Level.SEVERE, "BP_Location (User) NOT inserted");
@@ -3747,10 +3747,10 @@ namespace VAdvantage.Model
 
 
             //	Create Sales Rep for Client-Admin
-            MBPartner bpCA = null;
+            MVABBusinessPartner bpCA = null;
             if (lstTableName.Contains("VAB_BusinessPartner"))
             {
-                bpCA = new MBPartner(m_ctx, 0, m_trx);
+                bpCA = new MVABBusinessPartner(m_ctx, 0, m_trx);
                 bpCA.SetValue(VAF_UserContact_Name);
                 bpCA.SetName(VAF_UserContact_Name);
                 bpCA.SetBPGroup(bpg);
@@ -3766,7 +3766,7 @@ namespace VAdvantage.Model
                     //  Location for Client-Admin
                     MLocation bpLocCA = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
                     bpLocCA.Save();
-                    MBPartnerLocation bplCA = new MBPartnerLocation(bpCA);
+                    MVABBPartLocation bplCA = new MVABBPartLocation(bpCA);
                     bplCA.SetVAB_Address_ID(bpLocCA.GetVAB_Address_ID());
                     if (!bplCA.Save())
                         log.Log(Level.SEVERE, "BP_Location (Admin) NOT inserted");
@@ -3846,7 +3846,7 @@ namespace VAdvantage.Model
             //  CashBook
             if (lstTableName.Contains("VAB_CashBook"))
             {
-                MCashBook cb = new MCashBook(m_ctx, 0, m_trx);
+                MVABCashBook cb = new MVABCashBook(m_ctx, 0, m_trx);
                 cb.SetName(defaultName);
                 cb.SetVAB_Currency_ID(VAB_Currency_ID);
                 if (cb.Save())

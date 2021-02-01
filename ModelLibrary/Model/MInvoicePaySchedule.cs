@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             SetVAB_PaymentSchedule_ID(paySchedule.GetVAB_PaymentSchedule_ID());
 
             //	Amounts
-            int scale = MCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
+            int scale = MVABCurrency.GetStdPrecision(GetCtx(), invoice.GetVAB_Currency_ID());
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
             Decimal due = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                             && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
             if (Env.IsModuleInstalled("VA009_"))
             {
                 // get invoice currency for rounding
-                MCurrency currency = MCurrency.Get(GetCtx(), GetVAB_Currency_ID());
+                MVABCurrency currency = MVABCurrency.Get(GetCtx(), GetVAB_Currency_ID());
                 SetDueAmt(Decimal.Round(GetDueAmt(), currency.GetStdPrecision()));
                 SetVA009_PaidAmntInvce(Decimal.Round(GetVA009_PaidAmntInvce(), currency.GetStdPrecision()));
 

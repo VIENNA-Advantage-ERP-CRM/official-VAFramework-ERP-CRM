@@ -25,7 +25,7 @@ namespace VAdvantage.Model
     public class MVAFClientDetail : X_VAF_ClientDetail
     {
         //Account Schema				
-        private MAcctSchema _acctSchema = null;
+        private MVABAccountBook _acctSchema = null;
         //New Record
         private bool _createNew = false;
         /**	Cache						*/
@@ -162,10 +162,10 @@ namespace VAdvantage.Model
         ///Get primary Acct Schema
         /// </summary>
         /// <returns>acct schema</returns>
-        public MAcctSchema GetMAcctSchema1()
+        public MVABAccountBook GetMAcctSchema1()
         {
             if (_acctSchema == null && GetVAB_AccountBook1_ID() != 0)
-                _acctSchema = new MAcctSchema(GetCtx(), GetVAB_AccountBook1_ID(), null);
+                _acctSchema = new MVABAccountBook(GetCtx(), GetVAB_AccountBook1_ID(), null);
             return _acctSchema;
         }	
 

@@ -333,7 +333,7 @@ namespace VAdvantage.Model
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                 if (VAB_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
+                    taxAmtBaseCurrency = MVABExchangeRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
                                                                                dateAcct, VAB_CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);
@@ -444,7 +444,7 @@ namespace VAdvantage.Model
                 int primaryAcctSchemaCurrency = GetCtx().GetContextAsInt("$VAB_Currency_ID");
                 if (VAB_Currency_ID != primaryAcctSchemaCurrency)
                 {
-                    taxAmtBaseCurrency = MConversionRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
+                    taxAmtBaseCurrency = MVABExchangeRate.Convert(GetCtx(), GetTaxAmt(), primaryAcctSchemaCurrency, VAB_Currency_ID,
                                                                                dateAcct, VAB_CurrencyType_ID, GetVAF_Client_ID(), GetVAF_Org_ID());
                 }
                 SetTaxBaseCurrencyAmt(taxAmtBaseCurrency);

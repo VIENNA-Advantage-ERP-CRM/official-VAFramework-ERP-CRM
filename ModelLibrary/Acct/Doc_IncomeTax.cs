@@ -28,12 +28,12 @@ namespace ModelLibrary.Acct
         /// <param name="ass"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public Doc_IncomeTax(MAcctSchema[] ass, IDataReader idr, Trx trxName)
+        public Doc_IncomeTax(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MIncomeTax), idr, null, trxName)
         {
 
         }
-        public Doc_IncomeTax(MAcctSchema[] ass, DataRow dr, Trx trxName)
+        public Doc_IncomeTax(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MIncomeTax), dr, null, trxName)
         {
 
@@ -104,7 +104,7 @@ namespace ModelLibrary.Acct
         /// </summary>
         /// <param name="?"></param>
         /// <returns>Fact</returns>
-        public override List<Fact> CreateFacts(MAcctSchema as1)
+        public override List<Fact> CreateFacts(MVABAccountBook as1)
         {
             //  create Fact Header
             List<Fact> facts = new List<Fact>();

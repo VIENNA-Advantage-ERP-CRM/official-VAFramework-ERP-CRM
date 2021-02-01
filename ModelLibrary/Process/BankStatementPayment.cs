@@ -64,9 +64,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 return CreatePayment(new X_I_BankStatement(GetCtx(), Record_ID, Get_Trx()));
             }
-            else if (Table_ID == MBankStatementLine.Table_ID)
+            else if (Table_ID == MVABBankingJRNLLine.Table_ID)
             {
-                return CreatePayment(new MBankStatementLine(GetCtx(), Record_ID, Get_Trx()));
+                return CreatePayment(new MVABBankingJRNLLine(GetCtx(), Record_ID, Get_Trx()));
             }
 
             throw new Exception("??");
@@ -120,7 +120,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="bsl">bank statement Line</param>
         /// <returns>Message</returns>
-        private String CreatePayment(MBankStatementLine bsl)
+        private String CreatePayment(MVABBankingJRNLLine bsl)
         {
             if (bsl == null || bsl.GetVAB_Payment_ID() != 0)
             {
@@ -132,7 +132,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("@NotFound@ @VAB_Invoice_ID@ / @VAB_BusinessPartner_ID@");
             }
             //
-            MBankStatement bs = new MBankStatement(GetCtx(), bsl.GetVAB_BankingJRNL_ID(), Get_Trx());
+            MVABBankingJRNL bs = new MVABBankingJRNL(GetCtx(), bsl.GetVAB_BankingJRNL_ID(), Get_Trx());
             //
             MPayment payment = CreatePayment(bsl.GetVAB_Invoice_ID(), bsl.GetVAB_BusinessPartner_ID(),
                 bsl.GetVAB_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),

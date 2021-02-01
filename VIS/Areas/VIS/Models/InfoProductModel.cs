@@ -383,7 +383,7 @@ namespace VIS.Models
             int VAB_BusinessPartner_ID = 0;
             int M_DiscountSchema_ID = 0;
             Decimal? bpFlatDiscount = 0;
-            MBPartner bp = null;
+            MVABBusinessPartner bp = null;
             StringBuilder prodName = new StringBuilder("");
             List<string> errorKeys = new List<string>();
             List<string> errorProdLines = new List<string>();
@@ -435,7 +435,7 @@ namespace VIS.Models
                 // if business partner found on parent then get Discount Schema ID and Flat Discount amount
                 if (VAB_BusinessPartner_ID > 0)
                 {
-                    bp = new MBPartner(ctx, VAB_BusinessPartner_ID, null);
+                    bp = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
                     M_DiscountSchema_ID = bp.GetM_DiscountSchema_ID();
                     bpFlatDiscount = bp.GetFlatDiscount();
                 }

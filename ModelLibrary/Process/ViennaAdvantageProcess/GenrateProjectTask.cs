@@ -45,13 +45,13 @@ namespace ViennaAdvantage.Process
 
             //String msg = "";
             _VAB_Promotion_ID = GetRecord_ID();
-            VAdvantage.Model.MCampaign Campaign = new VAdvantage.Model.MCampaign(GetCtx(), _VAB_Promotion_ID, Get_TrxName());
+            VAdvantage.Model.MVABPromotion Campaign = new VAdvantage.Model.MVABPromotion(GetCtx(), _VAB_Promotion_ID, Get_TrxName());
             //VAB_ProjectType_ID = Campaign.GetVAB_ProjectType_ID();
             VAB_PromotionType_ID = Campaign.GetVAB_PromotionType_ID();
-            VAdvantage.Model.MCampaignType CampaignType = new VAdvantage.Model.MCampaignType(GetCtx(), VAB_PromotionType_ID, Get_TrxName());
+            VAdvantage.Model.MVABPromotionType CampaignType = new VAdvantage.Model.MVABPromotionType(GetCtx(), VAB_PromotionType_ID, Get_TrxName());
             //MProjectType type = new MProjectType(GetCtx(), VAB_ProjectType_ID, Get_TrxName());
             VAdvantage.Model.MProject Project = new VAdvantage.Model.MProject(GetCtx(), 0, Get_TrxName());
-            VAdvantage.Model.MCampaignPhase CampaignPhase = new VAdvantage.Model.MCampaignPhase(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.MVABPromotionPhase CampaignPhase = new VAdvantage.Model.MVABPromotionPhase(GetCtx(), 0, Get_TrxName());
 
 
             // MPhase Phase = new MPhase(GetCtx(), 0, Get_TrxName());

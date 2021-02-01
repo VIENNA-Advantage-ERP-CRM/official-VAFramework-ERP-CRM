@@ -111,7 +111,7 @@ namespace VIS.Models
             }
             DataSet dsLoc = null;
             MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
-            MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
@@ -579,7 +579,7 @@ namespace VIS.Models
             }
             DataSet dsLoc = null;
             MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
-            MBPartner bp = new MBPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
@@ -2011,7 +2011,7 @@ namespace VIS.Models
             _c_Bill_Location_Id = Util.GetValueOfInt(order["Bill_Location_ID"]);
 
             // Added by Bharat on 26 Feb 2018 to check Exempt Tax on Business Partner
-            MBPartner bp = new MBPartner(ctx, _VAB_BusinessPartner_Id, null);
+            MVABBusinessPartner bp = new MVABBusinessPartner(ctx, _VAB_BusinessPartner_Id, null);
             retDic["TaxExempt"] = bp.IsTaxExempt() ? "Y" : "N";
 
             if (_CountVATAX > 0)
