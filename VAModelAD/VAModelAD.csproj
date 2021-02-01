@@ -133,7 +133,7 @@
     <Compile Include="ModelAD\MVAFAttachment.cs" />
     <Compile Include="ModelAD\MAttachmentEntry.cs" />
     <Compile Include="ModelAD\MVAFAttachmentLine.cs" />
-    <Compile Include="ModelAD\MAttachmentNote.cs" />
+    <Compile Include="ModelAD\MVAFAttachmentNote.cs" />
     <Compile Include="ModelAD\MVAFAttachmentReference.cs" />
     <Compile Include="ModelAD\MVAFCardView.cs" />
     <Compile Include="ModelAD\MVAFCardViewColumn.cs" />
