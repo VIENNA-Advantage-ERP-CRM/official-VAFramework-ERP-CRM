@@ -12,11 +12,15 @@ namespace VA073.Process
 {
     class PeriodCloseScheduler : SvrProcess
     {
-       private String OrgId=null;
+        private String OrgId=null;
         private int day = 0;
         private int calendar_id = 0;
         DateTime date = DateTime.Today;
 
+
+        /// <summary>
+        /// prepare
+        /// </summary>
         protected override void Prepare()
         {
             ProcessInfoParameter[] para = GetParameter();
@@ -41,18 +45,24 @@ namespace VA073.Process
                 }
             }
         }
+
+        /// <summary>
+        /// Close the periods for all dcocument type except Gl Journal of previous month
+        /// </summary>
+        /// <returns>info</returns>
         protected override string DoIt()
         {
             int currentDay=date.Day;
             DateTime month = new DateTime(date.Year, date.Month, 1);
             DateTime lastMonth = month.AddMonths(-1);          
         
+            //close period if scheduler date is a current date.here day is scheduled day
             if (currentDay == day)
             {                  
                string sql = "UPDATE C_PeriodControl SET PeriodStatus= '" + MPeriodControl.PERIODSTATUS_Closed + "'" +
                     " WHERE C_Period_ID= (SELECT C_period_ID FROM C_Period p INNER JOIN C_year y ON y.c_year_ID = p.C_year_ID " +
                     "WHERE y.C_Calendar_ID=" + calendar_id + " AND Startdate=" + GlobalVariable.TO_DATE(lastMonth, true)+ ") AND DocBaseType NOT IN ('" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "')"+
-                   " AND PeriodStatus<>'P' AND AD_Org_ID IN (" + OrgId + ")";
+                   " AND PeriodStatus<>'"+MPeriodControl.PERIODSTATUS_PermanentlyClosed+"' AND AD_Org_ID IN (" + OrgId + ")";
 
                 sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, false); // fully qualified - RO
                 if ( Util.GetValueOfInt( DB.ExecuteQuery(sql, null, null)) == 0)
