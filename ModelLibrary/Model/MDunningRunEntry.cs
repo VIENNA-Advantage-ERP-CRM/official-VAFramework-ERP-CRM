@@ -118,11 +118,11 @@ namespace VAdvantage.Model
 
             //	User with location
             // Change done by mohit to pick users sorted by date updated. 7 May 2019.
-            MUser[] users = GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID());
+            MVAFUserContact[] users = GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID());
             if (users.Length == 1)
             {
-                if (users[0].IsEmail() || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
-                        || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice || users[0].GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail)
+                if (users[0].IsEmail() || users[0].GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMail
+                        || users[0].GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMailPlusNotice || users[0].GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail)
                 {
                     SetVAF_UserContact_ID(users[0].GetVAF_UserContact_ID());
                 }
@@ -131,9 +131,9 @@ namespace VAdvantage.Model
             {
                 for (int i = 0; i < users.Length; i++)
                 {
-                    MUser user = users[i];
-                    if (user.GetVAB_BPart_Location_ID() == GetVAB_BPart_Location_ID() && (user.IsEmail() || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMail
-                        || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusNotice || user.GetNotificationType() == MUser.NOTIFICATIONTYPE_EMailPlusFaxEMail))
+                    MVAFUserContact user = users[i];
+                    if (user.GetVAB_BPart_Location_ID() == GetVAB_BPart_Location_ID() && (user.IsEmail() || user.GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMail
+                        || user.GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMailPlusNotice || user.GetNotificationType() == MVAFUserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail))
                     {
                         SetVAF_UserContact_ID(users[i].GetVAF_UserContact_ID());
                         break;
@@ -157,9 +157,9 @@ namespace VAdvantage.Model
         /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <returns>array of users</returns>
         /// Writer - Mohit , Date - 7 may 2019
-        public static MUser[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID)
+        public static MVAFUserContact[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID)
         {
-            List<MUser> list = new List<MUser>();
+            List<MVAFUserContact> list = new List<MVAFUserContact>();
             String sql = "SELECT * FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND IsActive='Y' ORDER BY Updated DESC ";
 
             try
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MUser(ctx, dr, null));
+                        list.Add(new MVAFUserContact(ctx, dr, null));
                     }
                 }
             }
@@ -178,7 +178,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MUser[] retValue = new MUser[list.Count];
+            MVAFUserContact[] retValue = new MVAFUserContact[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

@@ -38,7 +38,7 @@ namespace VIS.Models
         public int SaveUserImage(Ctx ctx, byte[] buffer, string imageName, bool isSaveInDB)
         {
 
-            MUser user = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
+            MVAFUserContact user = new MVAFUserContact(ctx, ctx.GetVAF_UserContact_ID(), null);
             int imageID = Util.GetValueOfInt(user.GetVAF_Image_ID());
 
             MVAFImage mimg = new MVAFImage(ctx, imageID, null);

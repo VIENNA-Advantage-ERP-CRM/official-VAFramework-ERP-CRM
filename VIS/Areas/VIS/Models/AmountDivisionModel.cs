@@ -38,7 +38,7 @@ namespace VIS.Models
         {
             List<InfoRefList> list = new List<InfoRefList>();
             int Reference_ID = Convert.ToInt32(VAdvantage.DataBase.DB.ExecuteScalar("SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE Export_ID='VIS_2663'"));
-            ValueNamePair[] refList = MRefList.GetList(Reference_ID, true, ctx);
+            ValueNamePair[] refList = MVAFCtrlRefList.GetList(Reference_ID, true, ctx);
             InfoRefList itm = null;// new InfoRefList();
             // itm.Key = "";
             // itm.Value = "";
@@ -90,7 +90,7 @@ namespace VIS.Models
                 Sql = "SELECT distinct VAB_AccountBook.Name, VAB_AccountBook.VAB_AccountBook_id, c.StdPrecision FROM VAB_AccountBook INNER JOIN VAB_Currency c ON VAB_AccountBook.VAB_Currency_ID = c.VAB_Currency_ID WHERE VAB_AccountBook.isactive='Y' AND VAB_AccountBook.Costing='N'";
             }
 
-            Sql = MRole.GetDefault(ctx).AddAccessSQL(Sql, "VAB_AccountBook", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RW);
+            Sql = MVAFRole.GetDefault(ctx).AddAccessSQL(Sql, "VAB_AccountBook", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RW);
 
             DataSet dsAcctSchema = DB.ExecuteDataset(Sql);
             if (dsAcctSchema != null && dsAcctSchema.Tables[0].Rows.Count > 0)

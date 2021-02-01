@@ -140,8 +140,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql.Append(" ORDER BY oi.VAB_BusinessPartner_ID, oi.VAB_Currency_ID, oi.VAB_Invoice_ID");
 
             log.Finest(sql.ToString());
-            String finalSql = MRole.GetDefault(GetCtx(), false).AddAccessSQL(
-                sql.ToString(), "oi", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            String finalSql = MVAFRole.GetDefault(GetCtx(), false).AddAccessSQL(
+                sql.ToString(), "oi", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             log.Finer(finalSql);
             DataSet ds = null;
 

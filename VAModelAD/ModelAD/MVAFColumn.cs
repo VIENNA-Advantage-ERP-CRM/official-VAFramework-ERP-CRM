@@ -689,7 +689,7 @@ namespace VAdvantage.Model
             if (displayType == DisplayType.Table)
             {
                 int VAF_Control_Ref_ID = GetVAF_Control_Ref_Value_ID();
-                MRefTable rt = MRefTable.Get(GetCtx(), VAF_Control_Ref_ID);
+                MVAFCtrlRefTable rt = MVAFCtrlRefTable.Get(GetCtx(), VAF_Control_Ref_ID);
                 return rt.GetKeyColumnName();
             }
             return keyColumnName;
@@ -707,7 +707,7 @@ namespace VAdvantage.Model
             int displayType = GetVAF_Control_Ref_ID();
             //	Lists
             if (displayType == DisplayType.List)
-                return MVAFTableView.Get(GetCtx(), MRefList.Table_ID);
+                return MVAFTableView.Get(GetCtx(), MVAFCtrlRefList.Table_ID);
             //	Account
             //if (displayType == DisplayType.Account)
             //    return MVAFTableView.Get(GetCtx(), MAccount.Table_ID);	//	VAB_Acct_ValidParameter

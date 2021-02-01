@@ -418,7 +418,7 @@ namespace VAdvantage.Model
          */
         public String GetConfirmTypeName()
         {
-            return MRefList.GetListName(GetCtx(), CONFIRMTYPE_VAF_Control_Ref_ID, GetConfirmType());
+            return MVAFCtrlRefList.GetListName(GetCtx(), CONFIRMTYPE_VAF_Control_Ref_ID, GetConfirmType());
         }
 
         /**
@@ -501,7 +501,7 @@ namespace VAdvantage.Model
             if (isApproved && !IsApproved())
             {
                 int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
-                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
+                MVAFUserContact user = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
                 String Info = user.GetName()
                     + ": "
                     + Msg.Translate(GetCtx(), "IsApproved")

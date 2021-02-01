@@ -178,10 +178,10 @@ namespace VAdvantage.Process
 	/// <returns>message - delivery errors start with **</returns>
 	private String SendNoGuaranteeMail (int VAA_Asset_ID, int VAR_MailTemplate_ID, Trx trxName)
 	{
-		MAsset asset = new MAsset (GetCtx(), VAA_Asset_ID, trxName);
+		MVAAsset asset = new MVAAsset (GetCtx(), VAA_Asset_ID, trxName);
 		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
-		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
+		VAdvantage.Model.MVAFUserContact user = new VAdvantage.Model.MVAFUserContact (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
 		if (_MailText == null || _MailText.GetVAR_MailTemplate_ID() != VAR_MailTemplate_ID)
@@ -204,7 +204,7 @@ namespace VAdvantage.Process
 			email.SetMessageText (message);
 		}
 		String msg = email.Send();
-		new MUserMail(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
+		new MVAFUserMailLog(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
 		if (!EMail.SENT_OK.Equals(msg))
 			return "** Not delivered: " + user.GetEMail() + " - " + msg;
 		//
@@ -222,10 +222,10 @@ namespace VAdvantage.Process
 		log.Fine("VAA_Asset_ID=" + VAA_Asset_ID);
 		long start =CommonFunctions.CurrentTimeMillis();
 		//
-		MAsset asset = new MAsset (GetCtx(), VAA_Asset_ID, Get_Trx());
+		MVAAsset asset = new MVAAsset (GetCtx(), VAA_Asset_ID, Get_Trx());
 		if (asset.GetVAF_UserContact_ID() == 0)
 			return "** No Asset User";
-		VAdvantage.Model.MUser user = new VAdvantage.Model.MUser (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
+		VAdvantage.Model.MVAFUserContact user = new VAdvantage.Model.MVAFUserContact (GetCtx(), asset.GetVAF_UserContact_ID(), Get_Trx());
 		if (user.GetEMail() == null || user.GetEMail().Length == 0)
 			return "** No Asset User Email";
 		if (asset.GetProductVAR_MailTemplate_ID() == 0)
@@ -272,11 +272,11 @@ namespace VAdvantage.Process
 				log.Warning("No DowloadURL for VAA_Asset_ID=" + VAA_Asset_ID);
 		}
 		String msg = email.Send();
-		new MUserMail(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
+		new MVAFUserMailLog(_MailText, asset.GetVAF_UserContact_ID(), email).Save();
 		if (!EMail.SENT_OK.Equals(msg))
 			return "** Not delivered: " + user.GetEMail() + " - " + msg;
 
-		MAssetDelivery ad = asset.ConfirmDelivery(email, user.GetVAF_UserContact_ID());
+		MVAAAssetDelivery ad = asset.ConfirmDelivery(email, user.GetVAF_UserContact_ID());
 		ad.Save();
 		asset.Save();
 		//

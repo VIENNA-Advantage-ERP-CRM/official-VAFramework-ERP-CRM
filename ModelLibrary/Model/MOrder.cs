@@ -442,7 +442,7 @@ namespace VAdvantage.Model
                 }
 
                 //	Set Contact
-                MUser[] contacts = bp.GetContacts(false);
+                MVAFUserContact[] contacts = bp.GetContacts(false);
                 if (contacts != null && contacts.Length == 1)
                 {
                     SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
@@ -2134,7 +2134,7 @@ namespace VAdvantage.Model
         */
         public String GetDocStatusName()
         {
-            return MRefList.GetListName(GetCtx(), 131, GetDocStatus());
+            return MVAFCtrlRefList.GetListName(GetCtx(), 131, GetDocStatus());
         }
 
         /// <summary>
@@ -2207,7 +2207,7 @@ namespace VAdvantage.Model
                 //	Default Warehouse
                 if (GetM_Warehouse_ID() == 0)
                 {
-                    MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+                    MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
                     SetM_Warehouse_ID(org.GetM_Warehouse_ID());
                 }
 
@@ -2456,7 +2456,7 @@ namespace VAdvantage.Model
 
                     if (!withinPolicy)
                     {
-                        if (!MRole.GetDefault(GetCtx()).IsOverrideReturnPolicy())
+                        if (!MVAFRole.GetDefault(GetCtx()).IsOverrideReturnPolicy())
                         {
                             log.SaveError("Error", Msg.GetMsg(GetCtx(), "ReturnPolicyExceeded"));
                             return false;
@@ -3807,7 +3807,7 @@ namespace VAdvantage.Model
                             int UnitID = Util.GetValueOfInt(orderlines.Tables[0].Rows[i]["VAA_Asset_ID"]); //AssetID is UnitID
                             if (UnitID > 0)
                             {
-                                MAsset asset = new MAsset(GetCtx(), UnitID, Get_Trx());
+                                MVAAsset asset = new MVAAsset(GetCtx(), UnitID, Get_Trx());
                                 asset.Set_Value("VA052_Status", "SO");
                                 asset.Set_Value("VA052_LoanAmount", Util.GetValueOfDecimal(orderlines.Tables[0].Rows[i]["VA052_LoanAmount"]));
                                 asset.Set_Value("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
@@ -4365,7 +4365,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -5364,7 +5364,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+            MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
             //jz int counterVAB_BusinessPartner_ID = org.getLinkedVAB_BusinessPartner_ID(Get_TrxName()); 
             int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(Get_TrxName());
             if (counterVAB_BusinessPartner_ID == 0)
@@ -5378,7 +5378,7 @@ namespace VAdvantage.Model
 
             //jz MBPartner counterBP = MBPartner.get (GetCtx(), counterVAB_BusinessPartner_ID);
             MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID, null);
+            MVAFOrgDetail counterOrgInfo = MVAFOrgDetail.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type

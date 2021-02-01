@@ -75,7 +75,7 @@ namespace VAdvantage.Model
          *	@return sql for performance indicator
          */
         public String GetSqlPI(MGoalRestriction[] restrictions,
-            String MeasureScope, String MeasureDataType, DateTime? reportDate, MRole role)
+            String MeasureScope, String MeasureDataType, DateTime? reportDate, MVAFRole role)
         {
             StringBuilder sb = new StringBuilder(GetSelectClause())
                 .Append(" ")
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
          *	@return sql for Bar Chart
          */
         public String GetSqlBarChart(MGoalRestriction[] restrictions,
-            String measureDisplay, DateTime? startDate, MRole role)
+            String measureDisplay, DateTime? startDate, MVAFRole role)
         {
             StringBuilder sb = new StringBuilder();
             String dateCol = null;
@@ -183,7 +183,7 @@ namespace VAdvantage.Model
          *	@return query
          */
         public Query GetQuery(MGoalRestriction[] restrictions,
-            String measureDisplay, DateTime? date, MRole role)
+            String measureDisplay, DateTime? date, MVAFRole role)
         {
             Query query = new Query(GetVAF_TableView_ID().ToString());
             //
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return updated sql
          */
-        private String AddRestrictions(String sql, MGoalRestriction[] restrictions, MRole role)
+        private String AddRestrictions(String sql, MGoalRestriction[] restrictions, MVAFRole role)
         {
             return AddRestrictions(sql, false, restrictions, role,
                 GetTableName(), GetOrgColumn(), GetBPartnerColumn(), GetProductColumn(), GetCtx());
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
          *	@return updated sql
          */
         public static String AddRestrictions(String sql, Boolean queryOnly,
-            MGoalRestriction[] restrictions, MRole role,
+            MGoalRestriction[] restrictions, MVAFRole role,
             String tableName, String orgColumn, String bpColumn, String pColumn, Ctx ctx)
         {
             StringBuilder sb = new StringBuilder(sql);
@@ -410,7 +410,7 @@ namespace VAdvantage.Model
             if (queryOnly)
                 return finalSQL;
             if (role == null)
-                role = MRole.GetDefault(ctx);
+                role = MVAFRole.GetDefault(ctx);
             String retValue = role.AddAccessSQL(finalSQL, tableName, true, false);
             return retValue;
         }

@@ -713,12 +713,12 @@ namespace VAdvantage.Model
                     keyColumn += "_ID";			//	VAF_Language_ID
                 int Record_ID = _vo.GetCtx().GetContextAsInt(_vo.windowNo, _vo.tabNo, keyColumn);
                 int VAF_TableView_ID = _vo.VAF_TableView_ID;
-                if (!MRole.GetDefault((Context)_vo.GetCtx(), false).CanUpdate(
+                if (!MVAFRole.GetDefault((Context)_vo.GetCtx(), false).CanUpdate(
                     VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID, Record_ID, false))
                 {
                     return false;
                 }
-                if (!MRole.GetDefault((Context)_vo.GetCtx(), false).IsColumnAccess(VAF_TableView_ID, _vo.VAF_Column_ID, false))
+                if (!MVAFRole.GetDefault((Context)_vo.GetCtx(), false).IsColumnAccess(VAF_TableView_ID, _vo.VAF_Column_ID, false))
                 {
                     return false;
                 }

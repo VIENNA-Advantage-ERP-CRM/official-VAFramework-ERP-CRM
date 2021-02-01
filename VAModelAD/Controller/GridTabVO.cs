@@ -327,7 +327,7 @@ namespace VAdvantage.Controller
         /// <returns>true if successful</returns>
         private static bool LoadTabDetails(GridTabVO vo, IDataReader dr)
         {
-            MRole role = MRole.GetDefault(vo.ctx, false);
+            MVAFRole role = MVAFRole.GetDefault(vo.ctx, false);
             bool showTrl = "Y".Equals(vo.ctx.GetContext("#ShowTrl")) || DataBase.GlobalVariable.IsVisualEditor;
             bool showAcct = "Y".Equals(vo.ctx.GetContext("#ShowAcct")) || DataBase.GlobalVariable.IsVisualEditor;
             bool showAdvanced = "Y".Equals(vo.ctx.GetContext("#ShowAdvanced")) || DataBase.GlobalVariable.IsVisualEditor;

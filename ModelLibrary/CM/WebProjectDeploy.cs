@@ -103,7 +103,7 @@ namespace VAdvantage.CM
                 _map.Add(Utility.Util.GetValueOfInt(stages[i].GetCM_CStage_ID()), stages[i]);
 
             //	Copy Stage Tree
-            MTree treeS = new MTree(GetCtx(), _project.GetVAF_TreeInfoCMS_ID(), false, false, Get_Trx());
+            MVAFTreeInfo treeS = new MVAFTreeInfo(GetCtx(), _project.GetVAF_TreeInfoCMS_ID(), false, false, Get_Trx());
             VTreeNode root = treeS.GetRootNode();
             CopyStage(root, "/", _isRedeploy);
 
@@ -128,15 +128,15 @@ namespace VAdvantage.CM
             }	//	Delete Inactive
 
             //	Sync Stage & Container Tree
-            MTreeNodeCMS[] nodesCMS = MTreeNodeCMS.GetTree(GetCtx(), _project.GetVAF_TreeInfoCMS_ID(), Get_Trx());
-            MTreeNodeCMC[] nodesCMC = MTreeNodeCMC.GetTree(GetCtx(), _project.GetVAF_TreeInfoCMC_ID(), Get_Trx());
+            MVAFTreeInfoChildCMS[] nodesCMS = MVAFTreeInfoChildCMS.GetTree(GetCtx(), _project.GetVAF_TreeInfoCMS_ID(), Get_Trx());
+            MVAFTreeInfoChildCMC[] nodesCMC = MVAFTreeInfoChildCMC.GetTree(GetCtx(), _project.GetVAF_TreeInfoCMC_ID(), Get_Trx());
             for (int s = 0; s < nodesCMS.Length; s++)
             {
-                MTreeNodeCMS nodeCMS = nodesCMS[s];
+                MVAFTreeInfoChildCMS nodeCMS = nodesCMS[s];
                 int Node_ID = nodeCMS.GetNode_ID();
                 for (int c = 0; c < nodesCMC.Length; c++)
                 {
-                    MTreeNodeCMC nodeCMC = nodesCMC[c];
+                    MVAFTreeInfoChildCMC nodeCMC = nodesCMC[c];
                     if (nodeCMC.GetNode_ID() == Node_ID)
                     {
                         //if (nodeCMS.getParent_ID()!=0) 

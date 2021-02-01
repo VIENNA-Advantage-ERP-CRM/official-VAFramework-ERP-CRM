@@ -301,7 +301,7 @@ namespace VIS.Models
                 List<InfoRefList> list = new List<InfoRefList>();
                 try
                 {
-                    ValueNamePair[] refList = MRefList.GetList(VAF_Control_Ref_ID, true, ctx);
+                    ValueNamePair[] refList = MVAFCtrlRefList.GetList(VAF_Control_Ref_ID, true, ctx);
                     //ds = DB.ExecuteDataset(sql, null, null);
                     InfoRefList itm = null;// new InfoRefList();
                    // itm.Key = "";
@@ -338,8 +338,8 @@ namespace VIS.Models
             {
                 sql = sql.Replace('●', '%');
                 sql = ParseContext(sql, ctx);
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
-                               MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
+                               MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
                 
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( "+sql+" ) t",null,null));

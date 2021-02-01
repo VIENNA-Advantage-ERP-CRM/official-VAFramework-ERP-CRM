@@ -9,7 +9,7 @@ namespace VAdvantage.Print
 {
     public class ParameterElement : GridElement
     {
-        public ParameterElement(Query query, Ctx ctx, MPrintTableFormat tFormat)
+        public ParameterElement(Query query, Ctx ctx, MVAFPrintRptTblLayout tFormat)
             : base(query.GetRestrictionCount(), 4)
         {
             
@@ -23,7 +23,7 @@ namespace VAdvantage.Print
             }
         }	//	ParameterElement
 
-        public ParameterElement(Query query, Ctx ctx, MPrintTableFormat tFormat,out string html)
+        public ParameterElement(Query query, Ctx ctx, MVAFPrintRptTblLayout tFormat,out string html)
             : base(query.GetRestrictionCount(), 4)
         {
             

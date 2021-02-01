@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (imp.GetEMail() == null || imp.GetEMail().Length == 0)
                 return ProcessFail(imp, "No EMail");
 
-            MUser user = MUser.Get(GetCtx(), imp.GetEMail(), Get_TrxName());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), imp.GetEMail(), Get_TrxName());
             //	New User
             if (user == null || user.GetVAF_UserContact_ID() == 0)
             {
@@ -143,7 +143,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (imp.GetContactName() == null || imp.GetContactName().Length == 0)
                     return ProcessFail(imp, "No Name for User/Contact");
 
-                user = new MUser(GetCtx(), 0, Get_TrxName());
+                user = new MVAFUserContact(GetCtx(), 0, Get_TrxName());
                 user.SetName(imp.GetContactName());
                 user.SetDescription(imp.GetContactDescription());
                 user.SetEMail(imp.GetEMail());

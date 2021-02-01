@@ -42,7 +42,7 @@ namespace VAdvantage.Print
     Object[,] data, KeyNamePair[] pk, String pkColumnName,
     int pageNoStart, Rectangle firstPage, Rectangle nextPages, int repeatedColumns, HashMap<int, int> additionalLines,
     HashMap<Point, Font> rowColFont, HashMap<Point, Color> rowColColor, HashMap<Point, Color> rowColBackground,
-    MPrintTableFormat tFormat, List<int> pageBreak)
+    MVAFPrintRptTblLayout tFormat, List<int> pageBreak)
             : base()
         {
             p_info = "Table:R=" + data.Length + ",C=" + columnHeader.Length;
@@ -147,7 +147,7 @@ namespace VAdvantage.Print
         /** Dictionary with Point as key with background Color overwrite	*/
         private HashMap<Point, Color> m_rowColBackground;
         /**	Format of Table				*/
-        private MPrintTableFormat m_tFormat;
+        private MVAFPrintRptTblLayout m_tFormat;
         /**	Page Break Rows				*/
         private List<int> m_pageBreak;
 
@@ -729,17 +729,17 @@ namespace VAdvantage.Print
                     if (m_columnMaxHeight[col] <= 0		//	-1 = FirstLineOnly  
                         || (usedHeight + lineHeight) <= m_columnMaxHeight[col])
                     {
-                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Block))
+                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Block))
                         {
                             //layout = layout.getJustifiedLayout(netWidth + 2);
                             fastDraw = false;
                         }
                         curY += (int)layout.GetAscent();
                         float penX = curX;
-                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center))
                             penX += (netWidth - layout.GetAdvance()) / 2;
-                        else if ((alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
-                            || (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
+                        else if ((alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
+                            || (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
                             penX += netWidth - layout.GetAdvance();
                         //
                         if (fastDraw)
@@ -874,17 +874,17 @@ namespace VAdvantage.Print
                                             || (usedHeight + lineHeight) <= m_columnMaxHeight[col])
                                         && (usedHeight + lineHeight) <= netHeight)
                                     {
-                                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Block) && measurer.GetPosition() < iter.GetEndIndex())
+                                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Block) && measurer.GetPosition() < iter.GetEndIndex())
                                         {
                                             //layout = layout.getJustifiedLayout(netWidth + 2);
                                             fastDraw = false;
                                         }
                                         penY += layout.GetAscent();
                                         float penX = curX;
-                                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center))
                                             penX += (netWidth - layout.GetAdvance()) / 2;
-                                        else if ((alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
-                                            || (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
+                                        else if ((alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
+                                            || (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
                                             penX += netWidth - layout.GetAdvance();
                                         //
 
@@ -1461,17 +1461,17 @@ namespace VAdvantage.Print
                     if (m_columnMaxHeight[col] <= 0		//	-1 = FirstLineOnly  
                         || (usedHeight + lineHeight) <= m_columnMaxHeight[col])
                     {
-                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Block))
+                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Block))
                         {
                             //layout = layout.getJustifiedLayout(netWidth + 2);
                             fastDraw = false;
                         }
                         curY += (int)layout.GetAscent();
                         float penX = curX;
-                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center))
                             penX += (netWidth - layout.GetAdvance()) / 2;
-                        else if ((alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
-                            || (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
+                        else if ((alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
+                            || (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
                             penX += netWidth - layout.GetAdvance();
                         //
                         if (fastDraw)
@@ -1603,17 +1603,17 @@ namespace VAdvantage.Print
                                             || (usedHeight + lineHeight) <= m_columnMaxHeight[col])
                                         && (usedHeight + lineHeight) <= netHeight)
                                     {
-                                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Block) && measurer.GetPosition() < iter.GetEndIndex())
+                                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Block) && measurer.GetPosition() < iter.GetEndIndex())
                                         {
                                             //layout = layout.getJustifiedLayout(netWidth + 2);
                                             fastDraw = false;
                                         }
                                         penY += layout.GetAscent();
                                         float penX = curX;
-                                        if (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Center))
+                                        if (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center))
                                             penX += (netWidth - layout.GetAdvance()) / 2;
-                                        else if ((alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
-                                            || (alignment.Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
+                                        else if ((alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight) && layout.IsLeftToRight())
+                                            || (alignment.Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft) && !layout.IsLeftToRight()))
                                             penX += netWidth - layout.GetAdvance();
                                         //
 

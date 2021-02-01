@@ -25,7 +25,7 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "VIS_TabNotFound");
             }
 
-            MModuleTab mTab = new MModuleTab(GetCtx(), GetRecord_ID(), null);
+            MVAFModuleTab mTab = new MVAFModuleTab(GetCtx(), GetRecord_ID(), null);
 
             InsertORUpdateFields(mTab.GetVAF_Tab_ID(), mTab);
 
@@ -33,7 +33,7 @@ namespace VAdvantage.Process
         }
 
 
-        private string InsertORUpdateFields(int VAF_Tab_ID, MModuleTab mTab)
+        private string InsertORUpdateFields(int VAF_Tab_ID, MVAFModuleTab mTab)
         {
             MVAFTab tab = new MVAFTab(GetCtx(), VAF_Tab_ID, null);
             MVAFField[] fields = tab.GetFields(true, null);
@@ -60,14 +60,14 @@ namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MModuleField mField = null;
+                MVAFModuleField mField = null;
                 if (existingFields.ContainsKey(fields[i].GetVAF_Field_ID()))
                 {
-                    mField = new MModuleField(GetCtx(), existingFields[fields[i].GetVAF_Field_ID()], null);
+                    mField = new MVAFModuleField(GetCtx(), existingFields[fields[i].GetVAF_Field_ID()], null);
                 }
                 else
                 {
-                    mField = new MModuleField(GetCtx(), 0, null);
+                    mField = new MVAFModuleField(GetCtx(), 0, null);
                     mField.SetVAF_Field_ID(fields[i].GetVAF_Field_ID());
                     mField.SetVAF_ModuleTab_ID(mTab.GetVAF_ModuleTab_ID());
                 }

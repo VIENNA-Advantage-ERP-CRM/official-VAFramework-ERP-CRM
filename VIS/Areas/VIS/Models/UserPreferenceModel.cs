@@ -63,7 +63,7 @@ namespace VIS.Models
 
         public UserPreferenceModel GetUserSettings(Ctx ctx, int VAF_UserContact_Id)
         {
-            MUser user = new MUser(ctx, VAF_UserContact_Id, null);
+            MVAFUserContact user = new MVAFUserContact(ctx, VAF_UserContact_Id, null);
             UserPreferenceModel obj = new UserPreferenceModel();
             obj.EmailUserName = user.GetEMailUser();
             obj.EmailPws = user.GetEMailUserPW();
@@ -115,8 +115,8 @@ namespace VIS.Models
         /// <returns></returns>
         public bool SavePrefrence(Ctx ctx, Dictionary<string, object> pref)
         {
-            MUserPreference preference = null;
-            MUser user = MUser.Get(ctx);
+            MVAFUserPrefInfo preference = null;
+            MVAFUserContact user = MVAFUserContact.Get(ctx);
             preference = user.GetPreference();
             preference.SetIsAutoCommit(pref["IsAutoCommit"].Equals("Y") ? true : false);
             ctx.SetAutoCommit(pref["IsAutoCommit"].Equals("Y") ? true : false);
@@ -134,7 +134,7 @@ namespace VIS.Models
         {
             UserSetting obj = new UserSetting();
             obj.Msg = Msg.GetMsg(ctx, "RecordSaved");
-            MUser user = new MUser(ctx, VAF_UserContact_ID, null);
+            MVAFUserContact user = new MVAFUserContact(ctx, VAF_UserContact_ID, null);
             obj.IsSaved = false;
             if (currentPws.Length > 0 && newPws.Length > 0)
             {
@@ -158,7 +158,7 @@ namespace VIS.Models
         {
             UserSetting obj = new UserSetting();
             obj.Msg = Msg.GetMsg(ctx, "RecordSaved");
-            MUser user = new MUser(ctx, VAF_UserContact_ID, null);
+            MVAFUserContact user = new MVAFUserContact(ctx, VAF_UserContact_ID, null);
             obj.IsSaved = false;
             //if (currentPws.Length > 0 && newPws.Length > 0)
             //{
@@ -275,7 +275,7 @@ namespace VIS.Models
                 }
                 else//Insert
                 {
-                    VAF_LoginSetting_ID = MSequence.GetNextID(ctx.GetVAF_Client_ID(), "VAF_LoginSetting", null);
+                    VAF_LoginSetting_ID = MVAFRecordSeq.GetNextID(ctx.GetVAF_Client_ID(), "VAF_LoginSetting", null);
                     sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,VAF_ROLE_ID,VAF_USERCONTACT_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
                     sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + VAF_Role_ID + "," + VAF_UserContact_ID + ",");
                     sql.Append(GlobalVariable.TO_DATE(DateTime.Now, false) + "," + ctx.GetVAF_UserContact_ID() + ",NULL,");

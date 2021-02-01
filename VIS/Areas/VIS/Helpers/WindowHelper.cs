@@ -329,7 +329,7 @@ namespace VIS.Helpers
                                 if (!newDocNo && docNo != null && docNo.Length > 0)
                                     insertDoc = docNo;
                                 else //  get a number from DocType or Table
-                                    insertDoc = MSequence.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
+                                    insertDoc = MVAFRecordSeq.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
                                 //m_tableName, false, null);	//	no trx
                                 /****************************************Check********************************************************/
                             }
@@ -371,7 +371,7 @@ namespace VIS.Helpers
                         if (value == null || value.Length == 0)
                         {
                             /***************************************Check**************************************************/
-                            value = MSequence.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
+                            value = MVAFRecordSeq.GetDocumentNo(VAF_Client_ID, tableName, null, ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
                             //  No Value
                             if (value == null || value.Length == 0)
                             {
@@ -1197,7 +1197,7 @@ namespace VIS.Helpers
 
             if (inn.ParentNodeID > 0 && po.Get_ID() != inn.ParentNodeID)
             {
-                MTree tre = new MTree(ctx, inn.TreeID, null);
+                MVAFTreeInfo tre = new MVAFTreeInfo(ctx, inn.TreeID, null);
 
                 string sql = "Update " + tre.GetNodeTableName() + " SET SeqNo=Seqno+1, updated=SYSDATE WHERE VAF_TreeInfo_ID=" + inn.TreeID + " AND Parent_ID=" + inn.ParentNodeID;
                 DB.ExecuteQuery(sql, null, trx);
@@ -2033,7 +2033,7 @@ namespace VIS.Helpers
 
             JTable obj = null;
 
-            MSession session = MSession.Get(ctx, true);
+            MVAFSession session = MVAFSession.Get(ctx, true);
             session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 sqlCount, rowCount);
 
@@ -2155,7 +2155,7 @@ namespace VIS.Helpers
         private void SetTreeRecordSql(Ctx ctx, int VAF_TableView_ID, SqlParamsIn sqlIn)
         {
             string tableName = MVAFTableView.GetTableName(ctx, VAF_TableView_ID);
-            MTree tree = new MTree(ctx, sqlIn.tree_id, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, sqlIn.tree_id, null);
 
             if (sqlIn.tree_id > 0)
             {
@@ -2296,14 +2296,14 @@ namespace VIS.Helpers
             JTable obj = null;
 
 
-            MSession session = MSession.Get(ctx, true);
+            MVAFSession session = MVAFSession.Get(ctx, true);
             session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 sqlCount, rowCount);
 
 
             string tableName = MVAFTableView.GetTableName(ctx, VAF_TableView_ID);
 
-            MTree tree = new MTree(ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, treeID, null);
 
             if (treeNodeID > 0)
             {
@@ -2507,11 +2507,11 @@ namespace VIS.Helpers
         /// <returns>Json cutom equalvalent to dataset</returns>
         internal int GetRecordCountForTreeNode(string whereClause, Ctx ctx, int VAF_TableView_ID, int treeID, int treeNodeID, int windowNo, bool ShowSummaryNodes)
         {
-            MSession session = MSession.Get(ctx, true);
+            MVAFSession session = MVAFSession.Get(ctx, true);
             session.QueryLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), VAF_TableView_ID,
                 "", 0);
 
-            MTree tree = new MTree(ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, treeID, null);
 
             if (whereClause.Length > 0)
             {
@@ -2563,7 +2563,7 @@ namespace VIS.Helpers
 
                 return outt;
             //  Info
-            MUser user = MUser.Get(ctx, dse.CreatedBy);
+            MVAFUserContact user = MVAFUserContact.Get(ctx, dse.CreatedBy);
             _info.Append(" ")
                 .Append(Msg.Translate(ctx, "CreatedBy"))
                 .Append(": ").Append(user.GetName())
@@ -2573,7 +2573,7 @@ namespace VIS.Helpers
                 || !dse.CreatedBy.Equals(dse.UpdatedBy))
             {
                 if (!dse.CreatedBy.Equals(dse.UpdatedBy))
-                    user = MUser.Get(ctx, dse.UpdatedBy);
+                    user = MVAFUserContact.Get(ctx, dse.UpdatedBy);
                 _info.Append(" ")
                     .Append(Msg.Translate(ctx, "UpdatedBy"))
                     .Append(": ").Append(user.GetName())
@@ -2584,7 +2584,7 @@ namespace VIS.Helpers
 
             outt.Info = _info.ToString();
             //	Only Client Preference can view Change Log
-            if (!MRole.PREFERENCETYPE_Client.Equals(MRole.GetDefault(ctx).GetPreferenceType()))
+            if (!MVAFRole.PREFERENCETYPE_Client.Equals(MVAFRole.GetDefault(ctx).GetPreferenceType()))
                 return outt;
 
             int Record_ID = 0;
@@ -2761,7 +2761,7 @@ namespace VIS.Helpers
             line.NewValue = showNewValue;
             line.OldValue = showOldValue;
             //	UpdatedBy
-            MUser user = MUser.Get(ctx, UpdatedBy);
+            MVAFUserContact user = MVAFUserContact.Get(ctx, UpdatedBy);
             line.UpdatedBy = user.GetName();
             //	Updated
             line.Updated = Convert.ToDateTime(Updated);
@@ -2932,7 +2932,7 @@ namespace VIS.Helpers
 
         public string GetTreeNodePath(Ctx ctx, int node_ID, int TreeID)
         {
-            MTree tree = new MTree(ctx, TreeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, TreeID, null);
 
             object otput = "";
 

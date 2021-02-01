@@ -59,13 +59,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             throw new ArgumentException("Tree_ID = 0");
         }
-		MTree tree = new MTree (GetCtx(), m_VAF_TreeInfo_ID, Get_Trx());
+		MVAFTreeInfo tree = new MVAFTreeInfo (GetCtx(), m_VAF_TreeInfo_ID, Get_Trx());
         if (tree == null || tree.GetVAF_TreeInfo_ID() == 0)
         {
             throw new ArgumentException("No Tree -" + tree);
         }
 		//
-        if (MTree.TREETYPE_BoM.Equals(tree.GetTreeType()))
+        if (MVAFTreeInfo.TREETYPE_BoM.Equals(tree.GetTreeType()))
         {
             return "BOM Trees not implemented";
         }
@@ -77,7 +77,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// </summary>
     /// <param name="tree">tree</param>
 	/// <returns>message</returns>
-	private String VerifyTree (MTree tree)
+	private String VerifyTree (MVAFTreeInfo tree)
 	{
         if (tree.GetVAF_TableView_ID(true) == 0)
         {
@@ -88,7 +88,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		String sourceTableKey = sourceTableName + "_ID";
 		int VAF_Client_ID = tree.GetVAF_Client_ID();
 		int VAB_Element_ID = 0;
-		if (MTree.TREETYPE_ElementValue.Equals(tree.GetTreeType()))
+		if (MVAFTreeInfo.TREETYPE_ElementValue.Equals(tree.GetTreeType()))
 		{
 			String sql = "SELECT VAB_Element_ID FROM VAB_Element "
 				+ "WHERE VAF_TreeInfo_ID=" + tree.GetVAF_TreeInfo_ID();
@@ -157,11 +157,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 PO node = null;
                 if (nodeTableName.Equals("VAF_TreeInfoChild"))
                 {
-                  // node = new MTreeNode(tree, Node_ID);
+                  // node = new MVAFTreeInfoChild(tree, Node_ID);
 
                    //Manish
                    setSeqManually += 1;
-                   node = new MTreeNode(tree, Node_ID, setSeqManually);
+                   node = new MVAFTreeInfoChild(tree, Node_ID, setSeqManually);
                     //end
 
                 }
@@ -171,7 +171,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                    //Manish
                    setSeqManually += 1;
-                   node = new MTreeNodeBP(tree, Node_ID, setSeqManually);
+                   node = new MVAFTreeInfoChildBPart(tree, Node_ID, setSeqManually);
                     //end
 
                 }
@@ -181,18 +181,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                   //Manish
                   setSeqManually += 1;
-                  node = new MTreeNodePR(tree, Node_ID, setSeqManually);
+                  node = new MVAFTreeInfoChildProd(tree, Node_ID, setSeqManually);
                     //end
 
 
                 }
                 else if (nodeTableName.Equals("VAF_TreeInfoChildCMC"))
                 {
-                   //node = new MTreeNodeCMC(tree, Node_ID);
+                   //node = new MVAFTreeInfoChildCMC(tree, Node_ID);
 
                    //Manish
                    setSeqManually += 1;
-                   node = new MTreeNodeCMC(tree, Node_ID, setSeqManually);
+                   node = new MVAFTreeInfoChildCMC(tree, Node_ID, setSeqManually);
                     //end
 
 
@@ -203,7 +203,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                   //Manish
                   setSeqManually += 1;
-                  node = new MTreeNodeCMM(tree, Node_ID, setSeqManually);
+                  node = new MVAFTreeInfoChildCMM(tree, Node_ID, setSeqManually);
                     //end
 
 
@@ -214,27 +214,27 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                    //Manish
                    setSeqManually += 1;
-                   node = new MTreeNodeCMS(tree, Node_ID, setSeqManually);
+                   node = new MVAFTreeInfoChildCMS(tree, Node_ID, setSeqManually);
                     //end
 
                 }
                 else if (nodeTableName.Equals("VAF_TreeInfoChildCMT"))
                 {
-                   //node = new MTreeNodeCMT(tree, Node_ID);
+                   //node = new MVAFTreeInfoChildCMT(tree, Node_ID);
 
                    //Manish
                    setSeqManually += 1;
-                   node = new MTreeNodeCMT(tree, Node_ID, setSeqManually);
+                   node = new MVAFTreeInfoChildCMT(tree, Node_ID, setSeqManually);
                     //end
 
                 }
                 else if (nodeTableName.Equals("VAF_TreeInfoChildMenu"))
                 {
-                   // node = new MTreeNodeMM(tree, Node_ID);
+                   // node = new MVAFTreeInfoChildMenu(tree, Node_ID);
                     
                     //Manish
                     setSeqManually += 1;
-                    node = new MTreeNodeMM(tree, Node_ID, setSeqManually);
+                    node = new MVAFTreeInfoChildMenu(tree, Node_ID, setSeqManually);
                     //end
                    
                   

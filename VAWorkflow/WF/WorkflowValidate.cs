@@ -38,7 +38,7 @@ namespace VAdvantage.WF
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            MWorkflow WF = MWorkflow.Get(GetCtx(), p_AD_Worlflow_ID);
+            MVAFWorkflow WF = MVAFWorkflow.Get(GetCtx(), p_AD_Worlflow_ID);
             log.Info("WF=" + WF);
             String msg = WF.Validate();
             WF.Save();

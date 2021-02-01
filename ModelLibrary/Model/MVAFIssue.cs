@@ -37,7 +37,7 @@ namespace VAdvantage.Model
    public static MVAFIssue Create(LogRecord record)
 	{
 		_log.Config(record.message);
-		MSystem system = MSystem.Get(Env.GetCtx()); 
+		MVAFSystem system = MVAFSystem.Get(Env.GetCtx()); 
 		if (!DataBase.DB.IsConnected() 
 			|| system == null
 			|| !system.IsAutoErrorReport())
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	private void Init(Ctx ctx) 
 	{
-		MSystem system = MSystem.Get(ctx);
+		MVAFSystem system = MVAFSystem.Get(ctx);
 		SetName(system.GetName());
 		SetUserName(system.GetUserName());
 		SetDBAddress(system.GetDBAddress(true));

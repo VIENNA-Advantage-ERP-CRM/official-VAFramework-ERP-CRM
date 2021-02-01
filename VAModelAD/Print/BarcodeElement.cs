@@ -11,7 +11,7 @@ namespace VAdvantage.Print
 {
     public class BarcodeElement : PrintElement
     {
-        public BarcodeElement(String code, MPrintFormatItem item)
+        public BarcodeElement(String code, MVAFPrintRptLItem item)
             : base()
         {
             if (code == null || code.Length == 0
@@ -28,60 +28,60 @@ namespace VAdvantage.Print
         /**	 Barcode				*/
         private BarcodeGenerator m_barcode = null;
 
-        private void CreateBarcode(String code, MPrintFormatItem item)
+        private void CreateBarcode(String code, MVAFPrintRptLItem item)
         {
             String type = item.GetBarcodeType();
             try
             {
-                if (type.Equals(MPrintFormatItem.BARCODETYPE_Codabar2Of7Linear))
+                if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Codabar2Of7Linear))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_CodabarMonarchLinear))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_CodabarMonarchLinear))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_CodabarNW_7Linear))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_CodabarNW_7Linear))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_CodabarUSD_4Linear))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_CodabarUSD_4Linear))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code128ACharacterSet))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code128ACharacterSet))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code128BCharacterSet))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code128BCharacterSet))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code128CCharacterSet))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code128CCharacterSet))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code128DynamicallySwitching))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code128DynamicallySwitching))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code393Of9LinearWithChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code393Of9LinearWithChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code393Of9LinearWOChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code393Of9LinearWOChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code39LinearWithChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code39LinearWithChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code39LinearWOChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code39LinearWOChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code39USD3WithChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code39USD3WithChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_Code39USD3WOChecksum))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_Code39USD3WOChecksum))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_CodeabarLinear))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_CodeabarLinear))
                 { }
 
                 //	http://www.idautomation.com/code128faq.html
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_EAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_EAN128))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_GlobalTradeItemNoGTINUCCEAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_GlobalTradeItemNoGTINUCCEAN128))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_PDF417TwoDimensional))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_PDF417TwoDimensional))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_SCC_14ShippingCodeUCCEAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_SCC_14ShippingCodeUCCEAN128))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_ShipmentIDNumberUCCEAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_ShipmentIDNumberUCCEAN128))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_SSCC_18NumberUCCEAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_SSCC_18NumberUCCEAN128))
                 { }
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_UCC128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_UCC128))
                 { }
 
                 //	http://www.usps.com/cpim/ftp/pubs/pub97/97apxs_006.html#_Toc481397331
-                else if (type.Equals(MPrintFormatItem.BARCODETYPE_USPostalServiceUCCEAN128))
+                else if (type.Equals(MVAFPrintRptLItem.BARCODETYPE_USPostalServiceUCCEAN128))
                 {
                     //m_barcode = BarcodeFactory.createUSPS(code);
                     //m_barcode.setDrawingText(false);
@@ -143,9 +143,9 @@ namespace VAdvantage.Print
             //	Position
             PointF location = GetAbsoluteLocation(pageStart);
             int x = (int)location.X;
-            if (MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
+            if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
                 x += (int)p_maxWidth - (int)p_width;
-            else if (MPrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+            else if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                 x += ((int)p_maxWidth - (int)p_width) / 2;
             int y = (int)location.Y;
 
@@ -160,9 +160,9 @@ namespace VAdvantage.Print
             //	Position
             PointF location = GetAbsoluteLocation(pageStart);
             int x = (int)location.X;
-            if (MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
+            if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
                 x += (int)p_maxWidth - (int)p_width;
-            else if (MPrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+            else if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                 x += ((int)p_maxWidth - (int)p_width) / 2;
             int y = (int)location.Y;
 

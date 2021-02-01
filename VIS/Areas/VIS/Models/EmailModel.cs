@@ -377,7 +377,7 @@ namespace VIS.Models
 
             if (notify)             //  make an entry in Notice window.....
             {
-                MNote note = new MNote(ctx, "SentMailNotice", VAF_UserContact_ID,
+                MVAFNotice note = new MVAFNotice(ctx, "SentMailNotice", VAF_UserContact_ID,
                     VAF_Client_ID, VAF_Org_ID, null);
                 //  Reference
                 note.SetReference(ToString());	//	Document
@@ -845,7 +845,7 @@ namespace VIS.Models
                 sql += " OR VAF_Screen_ID=" + window_ID;
             }
             sql += ")";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_TextTemplate", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_TextTemplate", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)

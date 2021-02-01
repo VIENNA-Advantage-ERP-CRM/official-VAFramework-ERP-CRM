@@ -77,7 +77,7 @@ namespace VAdvantage.Model
          */
         public String GetCreatedByName()
         {
-            MUser user = MUser.Get(GetCtx(), GetCreatedBy());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetCreatedBy());
             return user.GetName();
         }	//	GetCreatedByName
 
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialEntryText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
+            return MVAFCtrlRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
         }	//	GetConfidentialTextEntry
 
         /**

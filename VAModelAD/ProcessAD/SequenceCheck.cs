@@ -96,7 +96,7 @@ namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     String tableName = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
-                    if (MSequence.CreateTableSequence(ctx, tableName, trxName))
+                    if (MVAFRecordSeq.CreateTableSequence(ctx, tableName, trxName))
                     {
                         if (sp != null)
                         {
@@ -215,7 +215,7 @@ namespace VAdvantage.Process
                 //while (idr.Read())
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
+                    MVAFRecordSeq seq = new MVAFRecordSeq(ctx, ds.Tables[0].Rows[i], trxName);
                     int old = seq.GetCurrentNext();
                     int oldSys = seq.GetCurrentNextSys();
                     if (seq.ValidateTableIDValue())
@@ -294,7 +294,7 @@ namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MSequence.CheckClientSequences(ctx, client.GetVAF_Client_ID(), trxName);
+                MVAFRecordSeq.CheckClientSequences(ctx, client.GetVAF_Client_ID(), trxName);
             }	//	for all clients
 
         }	//	checkClientSequences

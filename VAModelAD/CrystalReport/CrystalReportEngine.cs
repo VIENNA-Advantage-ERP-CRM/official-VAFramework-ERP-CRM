@@ -1529,7 +1529,7 @@ namespace VAdvantage.CrystalReport
                 foreach (MVAFColumn col in cols)
                 {
                     string Name = col.GetColumnName();
-                    if (sql.Contains(Name) && !MRole.GetDefault(_ctx).IsColumnAccess(col.GetVAF_TableView_ID(), col.GetVAF_Column_ID(), false))
+                    if (sql.Contains(Name) && !MVAFRole.GetDefault(_ctx).IsColumnAccess(col.GetVAF_TableView_ID(), col.GetVAF_Column_ID(), false))
                     {
                         string obscureColumn = DBFunctionCollections.GetObscureColumn(col.GetObscureType(), tableName, Name) + " as " + Name;
                         sql = sql.Replace(Name, obscureColumn);

@@ -285,11 +285,11 @@ namespace VAdvantage.Report
             int VAF_Print_Rpt_Layout_ID = 134;
             if (Ini.IsClient())
             {
-                GetProcessInfo().SetTransientObject(MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
+                GetProcessInfo().SetTransientObject(MVAFPrintRptLayout.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
             }
             else
             {
-                GetProcessInfo().SetSerializableObject(MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
+                GetProcessInfo().SetSerializableObject(MVAFPrintRptLayout.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false));
             }
 
             log.Fine((CommonFunctions.CurrentTimeMillis() - _start) + " ms");

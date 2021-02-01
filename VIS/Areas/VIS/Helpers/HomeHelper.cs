@@ -30,7 +30,7 @@ namespace VIS.Helpers
                 #region Request Count
                 //To Get Request count
                 strQuery = " SELECT  count(VAR_Request.VAR_Request_ID) FROM VAR_Request  inner join  VAR_Req_Type rt on VAR_Request.VAR_Req_Type_id=rt.VAR_Req_Type_ID";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += " AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
                  + " AND VAR_Request.Processed ='N'"
                 + " AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N'))";
@@ -46,8 +46,8 @@ namespace VIS.Helpers
 
                 # region Notice Count
                 //To get Notice Count
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
-                    , "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
+                    , "VAF_Notice", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += " AND VAF_UserContact_ID IN (" + ctx.GetVAF_UserContact_ID() + ")"
                   + " AND Processed='N'";
                 dsData = new DataSet();
@@ -140,7 +140,7 @@ namespace VIS.Helpers
                               ) )
                            ";
                 // Applied Role access on workflow Activities
-                strQuery = MRole.GetDefault(ctx).AddAccessSQL(strQuery, "a", true, true);
+                strQuery = MVAFRole.GetDefault(ctx).AddAccessSQL(strQuery, "a", true, true);
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nWorkFlow = 0;
@@ -179,7 +179,7 @@ namespace VIS.Helpers
 
                 #region Notes
                 //To get The Notes count
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT COUNT(wsp_note_id) As NCount FROM WSP_Note", "WSP_Note", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " AND VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID() + " Order BY Created DESC";
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT COUNT(wsp_note_id) As NCount FROM WSP_Note", "WSP_Note", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO) + " AND VAF_USERCONTACT_ID=" + ctx.GetVAF_UserContact_ID() + " Order BY Created DESC";
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
                 int nNotes = 0;
@@ -206,7 +206,7 @@ namespace VIS.Helpers
                 //DateTime.UtcNow.AddDays(1).ToShortDateString() 
                 strQuery += " 23.59','mm/dd/yy HH24:MI') "
                           + "  OR  to_date('" + DateTime.Now.ToString("M/dd/yy") + "','mm/dd/yy')  BETWEEN  AppointmentsInfo.startDate  AND AppointmentsInfo.endDate  AND  AppointmentsInfo.CreatedBy  !=" + ctx.GetVAF_UserContact_ID() + " AND AppointmentsInfo.VAF_UserContact_ID  = " + ctx.GetVAF_UserContact_ID() + ") AppointmentsInfo";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
                 dsData = new DataSet();
                 dsData = DB.ExecuteDataset(strQuery);
@@ -225,7 +225,7 @@ namespace VIS.Helpers
                 #region Task Assign By me count
 
                 strQuery = " SELECT COUNT(AppointmentsInfo.Appointmentsinfo_id)   FROM AppointmentsInfo ";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += "  AND  AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='Y'  AND AppointmentsInfo.isClosed ='N'  AND  AppointmentsInfo.CreatedBy =" + ctx.GetVAF_UserContact_ID() + "  AND  AppointmentsInfo.VAF_UserContact_ID !=" + ctx.GetVAF_UserContact_ID() + "";
 
                 dsData = new DataSet();
@@ -242,7 +242,7 @@ namespace VIS.Helpers
 
 
                 strQuery = " SELECT COUNT(AppointmentsInfo.Appointmentsinfo_id)   FROM AppointmentsInfo ";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "AppointmentsInfo", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += "  AND   AppointmentsInfo.IsRead='N' AND AppointmentsInfo.istask ='Y' AND AppointmentsInfo.isClosed ='N'  AND AppointmentsInfo.VAF_UserContact_ID =" + ctx.GetVAF_UserContact_ID() + " ";
 
                 dsData = new DataSet();
@@ -824,8 +824,8 @@ namespace VIS.Helpers
         //Save Folloups Comment
         public void SaveFllupsCmnt(Ctx ctx, int ChatID, int SubscriberID, string txt)
         {
-            MChat _chat = new MChat(ctx, ChatID, null);
-            MChatEntry entry = new MChatEntry(_chat, txt);
+            MVACMChat _chat = new MVACMChat(ctx, ChatID, null);
+            MVACMChatLine entry = new MVACMChatLine(_chat, txt);
             if (entry.Save())
             {
                 //strQuery = "  UPDATE VACM_Subscribe SET isRead='N' WHERE isRead='Y' AND VACM_Subscribe_id=" + SubscriberID;
@@ -844,8 +844,8 @@ namespace VIS.Helpers
             try
             {
                 //To get Notice Count
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
-                    , "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL("SELECT count(VAF_Notice_ID) FROM VAF_Notice "
+                    , "VAF_Notice", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += " AND VAF_UserContact_ID IN (" + ctx.GetVAF_UserContact_ID() + ")"
                   + " AND Processed='N'";
 
@@ -895,7 +895,7 @@ namespace VIS.Helpers
                             FROM VAF_Notice
                             INNER JOIN VAF_Msg_Lable
                             ON VAF_Msg_Lable.VAF_Msg_Lable_ID         =VAF_Notice.VAF_Msg_Lable_ID";
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAF_Notice", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAF_Notice", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
                 strQuery += "  AND VAF_Notice.VAF_UserContact_ID IN (0," + ctx.GetVAF_UserContact_ID() + ")"
                 + " AND VAF_Notice.Processed='N' ORDER BY VAF_Notice.Created DESC";
@@ -950,7 +950,7 @@ namespace VIS.Helpers
         //Approve Notice
         public bool ApproveNotice(Ctx ctx, int VAF_Notice_ID, bool isAcknowldge)
         {
-            MNote objNote = new MNote(ctx, VAF_Notice_ID, null);
+            MVAFNotice objNote = new MVAFNotice(ctx, VAF_Notice_ID, null);
             objNote.SetProcessed(isAcknowldge);
             if (objNote.Save())
             {
@@ -986,7 +986,7 @@ namespace VIS.Helpers
                         JOIN VAF_Control_Ref adr
                         ON adr.VAF_Control_Ref_ID=adl.VAF_Control_Ref_ID ";
 
-                strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 strQuery += "  AND adr.Name='_PriorityRule'  AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
                  + " AND VAR_Request.Processed ='N'"
                 + " AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N'))";
@@ -1079,7 +1079,7 @@ namespace VIS.Helpers
 
 
 
-            strQuery = MRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            strQuery = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID()).AddAccessSQL(strQuery, "VAR_Request", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             strQuery += "  AND adr.Name='_PriorityRule' AND ( VAR_Request.SalesRep_ID =" + ctx.GetVAF_UserContact_ID() + " OR VAR_Request.VAF_Role_ID =" + ctx.GetVAF_Role_ID() + ")"
             + " AND VAR_Request.Processed ='N'  AND (VAR_Request.VAR_Req_Status_ID IS NULL OR VAR_Request.VAR_Req_Status_ID IN (SELECT VAR_Req_Status_ID FROM VAR_Req_Status WHERE IsClosed='N')) ORDER By VAR_Request.Updated, VAR_Request.Priority ";
             // change to sort Requests based on updated date and time

@@ -432,13 +432,13 @@ namespace VAdvantage.ProcessEngine
             _pi = pi;
             report = null;
 
-            MPInstance instance = null;
+            MVAFJInstance instance = null;
 
             if (_pi.GetVAF_JInstance_ID() < 1)
             {
                 try
                 {
-                    instance = new MPInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
+                    instance = new MVAFJInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
 
                 }
                 catch (Exception e)
@@ -660,13 +660,13 @@ namespace VAdvantage.ProcessEngine
             _pi = pi;
             report = null;
 
-            MPInstance instance = null;
+            MVAFJInstance instance = null;
 
             if (_pi.GetVAF_JInstance_ID() < 1)
             {
                 try
                 {
-                    instance = new MPInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
+                    instance = new MVAFJInstance(ctx, _pi.GetVAF_Job_ID(), _pi.GetRecord_ID());
 
                 }
                 catch (Exception e)

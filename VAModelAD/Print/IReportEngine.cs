@@ -19,7 +19,7 @@ namespace VAdvantage.Print
     public interface IReportView
     {
         View GetView();
-        MPrintFormat GetPrintFormat();
-        void SetPrintFormat(MPrintFormat pf);
+        MVAFPrintRptLayout GetPrintFormat();
+        void SetPrintFormat(MVAFPrintRptLayout pf);
     }
 }

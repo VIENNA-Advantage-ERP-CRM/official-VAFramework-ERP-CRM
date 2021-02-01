@@ -634,7 +634,7 @@ namespace VAdvantage.Model
          */
         public String GetDocStatusName()
         {
-            return MRefList.GetListName(GetCtx(), 131, GetDocStatus());
+            return MVAFCtrlRefList.GetListName(GetCtx(), 131, GetDocStatus());
         }
 
         /**
@@ -1265,7 +1265,7 @@ namespace VAdvantage.Model
             }
 
             //	Set Contact
-            MUser[] contacts = bp.GetContacts(false);
+            MVAFUserContact[] contacts = bp.GetContacts(false);
             if (contacts != null && contacts.Length > 0)	//	get first User
                 SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
         }
@@ -2275,7 +2275,7 @@ namespace VAdvantage.Model
                     {
                         if (IsSOTrx() && sLine.GetA_Asset_ID() != 0)
                         {
-                            MAsset ast = new MAsset(Env.GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
+                            MVAAsset ast = new MVAAsset(Env.GetCtx(), sLine.GetA_Asset_ID(), Get_TrxName());
                             ast.SetIsDisposed(true);
                             ast.SetAssetDisposalDate(GetDateAcct());
                             if (!ast.Save(Get_TrxName()))
@@ -3545,7 +3545,7 @@ namespace VAdvantage.Model
                                 int deliveryCount = i + 1;
                                 if (product.IsOneAssetPerUOM())
                                     deliveryCount = 0;
-                                MAsset asset = new MAsset(this, sLine, deliveryCount);
+                                MVAAsset asset = new MVAAsset(this, sLine, deliveryCount);
                                 if (!asset.Save(Get_TrxName()))
                                 {
                                     _processMsg = "Could not create Asset";
@@ -3564,7 +3564,7 @@ namespace VAdvantage.Model
                             #region[Added by Sukhwinder (mantis ID: 1762, point 1)]
                             if (noAssets > 0)
                             {
-                                MAsset asset = new MAsset(this, sLine, noAssets);
+                                MVAAsset asset = new MVAAsset(this, sLine, noAssets);
                                 if (!asset.Save(Get_TrxName()))
                                 {
                                     _processMsg = "Could not create Asset";
@@ -3924,7 +3924,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -4908,7 +4908,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+            MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
             //jz int counterVAB_BusinessPartner_ID = org.getLinkedVAB_BusinessPartner_ID(get_TrxName()); 
             int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(Get_TrxName());
             if (counterVAB_BusinessPartner_ID == 0)
@@ -4922,7 +4922,7 @@ namespace VAdvantage.Model
 
             //jz MBPartner counterBP = new MBPartner (getCtx(), counterVAB_BusinessPartner_ID, null);
             MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, Get_TrxName());
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID, null);
+            MVAFOrgDetail counterOrgInfo = MVAFOrgDetail.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type
@@ -5294,8 +5294,8 @@ namespace VAdvantage.Model
                 }
                 //	De-Activate Asset 
 
-                List<MAsset> asset = MAsset.GetFromShipment(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
-                foreach (MAsset ass in asset)
+                List<MVAAsset> asset = MVAAsset.GetFromShipment(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                foreach (MVAAsset ass in asset)
                 {
                     ass.SetIsActive(false);
                     ass.AddDescription("(" + reversal.GetDocumentNo() + " #" + rLine.GetLine() + "<-)");

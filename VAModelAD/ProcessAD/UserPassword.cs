@@ -67,8 +67,8 @@ namespace VAdvantage.Process
             if (p_VAF_UserContact_ID == -1)
                 p_VAF_UserContact_ID = GetVAF_UserContact_ID();
 
-            MUser user = MUser.Get(GetCtx(), p_VAF_UserContact_ID);
-            MUser current = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), p_VAF_UserContact_ID);
+            MVAFUserContact current = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
 
 
             if (!current.IsAdministrator() && p_VAF_UserContact_ID != GetVAF_UserContact_ID() && user.HasRole())

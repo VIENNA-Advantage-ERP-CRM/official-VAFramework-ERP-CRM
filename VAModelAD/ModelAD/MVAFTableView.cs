@@ -647,12 +647,12 @@ namespace VAdvantage.Model
                 return false;
             //	Sync Table ID
             if (newRecord)
-                MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
+                MVAFRecordSeq.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
             else
             {
-                MSequence seq = MSequence.Get(GetCtx(), GetTableName(), Get_TrxName());
+                MVAFRecordSeq seq = MVAFRecordSeq.Get(GetCtx(), GetTableName(), Get_TrxName());
                 if (seq == null || seq.Get_ID() == 0)
-                    MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
+                    MVAFRecordSeq.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
                 else if (!seq.GetName().Equals(GetTableName()))
                 {
                     seq.SetName(GetTableName());
@@ -684,7 +684,7 @@ namespace VAdvantage.Model
         protected override Boolean AfterDelete(Boolean success)
         {
             if (success)
-                MSequence.DeleteTableSequence(GetCtx(), GetTableName(), Get_TrxName());
+                MVAFRecordSeq.DeleteTableSequence(GetCtx(), GetTableName(), Get_TrxName());
             return success;
         }	//	afterDelete
         /**********************END**********************************/

@@ -173,9 +173,9 @@ namespace VAdvantage.Print
             Query query = Query.Get(ctx, pi.GetVAF_JInstance_ID(), TableName);
 
             //	Get PrintFormat
-            MPrintFormat format = (MPrintFormat)pi.GetTransientObject();
+            MVAFPrintRptLayout format = (MVAFPrintRptLayout)pi.GetTransientObject();
             if (format == null)
-                format = (MPrintFormat)pi.GetSerializableObject();
+                format = (MVAFPrintRptLayout)pi.GetSerializableObject();
             if (format == null)
             {
                 s_log.Log(Level.SEVERE, "startFinReport - No PrintFormat");

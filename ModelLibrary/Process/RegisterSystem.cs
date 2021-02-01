@@ -56,7 +56,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		int AD_Registration_ID = GetRecord_ID();
 		log.Info("doIt - AD_Registration_ID=" + AD_Registration_ID);
 		//	Check Ststem
-		MSystem sys = MSystem.Get(GetCtx());
+		MVAFSystem sys = MVAFSystem.Get(GetCtx());
 		if (sys.GetName().Equals("?") || sys.GetName().Length<2)
         {
 			throw new Exception("Set System Name in System Record");

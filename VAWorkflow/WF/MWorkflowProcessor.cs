@@ -109,7 +109,7 @@ namespace VAdvantage.WF
         /// <returns>logs</returns>
         public ViennaProcessorLog[] GetLogs()
         {
-            List<MWorkflowProcessorLog> list = new List<MWorkflowProcessorLog>();
+            List<MVAFWFlowHandlerLog> list = new List<MVAFWFlowHandlerLog>();
             String sql = "SELECT * "
                 + "FROM VAF_WFlowHandlerLog "
                 + "WHERE VAF_WFlowHandler_ID=" + GetVAF_WFlowHandler_ID() + "ORDER BY Created DESC";
@@ -120,7 +120,7 @@ namespace VAdvantage.WF
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = pstmt.Tables[0].Rows[i];
-                    list.Add(new MWorkflowProcessorLog(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAFWFlowHandlerLog(GetCtx(), dr, Get_TrxName()));
                 }
                 pstmt = null;
             }
@@ -132,7 +132,7 @@ namespace VAdvantage.WF
                 }
                 log.Log(Level.SEVERE, sql, e);
             }
-            MWorkflowProcessorLog[] retValue = new MWorkflowProcessorLog[list.Count];
+            MVAFWFlowHandlerLog[] retValue = new MVAFWFlowHandlerLog[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

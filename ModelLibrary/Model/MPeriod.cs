@@ -194,7 +194,7 @@ namespace VAdvantage.Model
 
             if (VAF_Org_ID > 0)
             {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, VAF_Org_ID, null);
+                MVAFOrgDetail orgInfo = MVAFOrgDetail.Get(ctx, VAF_Org_ID, null);
                 if (orgInfo.Get_ColumnIndex("VAB_Calender_ID") >= 0)
                 {
                     Calender_ID = orgInfo.GetVAB_Calender_ID();
@@ -349,7 +349,7 @@ namespace VAdvantage.Model
 
             if (VAF_Org_ID > 0)
             {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, VAF_Org_ID, null);
+                MVAFOrgDetail orgInfo = MVAFOrgDetail.Get(ctx, VAF_Org_ID, null);
                 if (orgInfo.Get_ColumnIndex("VAB_Calender_ID") >= 0)
                 {
                     Calender_ID = orgInfo.GetVAB_Calender_ID();
@@ -1037,7 +1037,7 @@ namespace VAdvantage.Model
             List<int> calendars = new List<int>();
             foreach (int org in orgs)
             {
-                MOrgInfo orgInfo = MOrgInfo.Get(ctx, org, null);
+                MVAFOrgDetail orgInfo = MVAFOrgDetail.Get(ctx, org, null);
 
                 int VAB_Calender_ID = orgInfo.GetVAB_Calender_ID();
                 if (VAB_Calender_ID == 0)
@@ -1071,17 +1071,17 @@ namespace VAdvantage.Model
                     String date = DisplayType.GetDateFormat(DisplayType.Date).Format(DateAcct);
                     if (cal != null)
                         return "@NotFound@ @VAB_YearPeriod_ID@: " + date
-                        + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
+                        + " - " + MVAFOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> " + cal.GetName();
                     else
                         return "@NotFound@ @VAB_YearPeriod_ID@: " + date
-                        + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
+                        + " - " + MVAFOrg.Get(ctx, VAF_Org_ID).GetName()
                         + " -> VAB_Calender_ID=" + VAB_Calender_ID;
                 }
                 String error = period.IsOpen(DocBaseType, DateAcct);
                 if (error != null)
                     return error
-                    + " - " + MOrg.Get(ctx, VAF_Org_ID).GetName()
+                    + " - " + MVAFOrg.Get(ctx, VAF_Org_ID).GetName()
                     + " -> " + MCalendar.Get(ctx, VAB_Calender_ID).GetName();
             }
             return null;	//	open
@@ -1159,7 +1159,7 @@ namespace VAdvantage.Model
 
             if (VAF_Org_ID > 0)
             {
-                as1 = MOrg.Get(GetCtx(), VAF_Org_ID).GetAcctSchema();
+                as1 = MVAFOrg.Get(GetCtx(), VAF_Org_ID).GetAcctSchema();
             }
             else
             {

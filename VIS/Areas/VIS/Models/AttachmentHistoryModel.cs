@@ -684,8 +684,8 @@ and ai.record_id = " + _Record_ID;
                 sql += "    AND  aa.VAF_UserContact_ID IN( " + users + ") ";
             }
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
-                            MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
+                            MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
 
             DataSet dsRecords = DB.ExecuteDataset(sql);
@@ -812,8 +812,8 @@ and ai.record_id = " + _Record_ID;
 
 
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
-                            MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
+                            MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
 
             DataSet dsRecords = DB.ExecuteDataset(sql);
@@ -1632,7 +1632,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
                 {
                     chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='appointmentsinfo'", null, null);
 
-                    MChat chats = new MChat(ctx, 0, null);
+                    MVACMChat chats = new MVACMChat(ctx, 0, null);
                     chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
@@ -1649,7 +1649,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
                 {
                     chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='va048_calldetails'", null, null);
 
-                    MChat chats = new MChat(ctx, 0, null);
+                    MVACMChat chats = new MVACMChat(ctx, 0, null);
                     chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
@@ -1664,7 +1664,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
                 if (chatID == null || chatID == DBNull.Value)
                 {
                     chatID = DB.ExecuteScalar("SELECT VAF_TableView_ID FROM VAF_TableView WHERE lower(TableName)='mailattachment1'", null, null);
-                    MChat chats = new MChat(ctx, 0, null);
+                    MVACMChat chats = new MVACMChat(ctx, 0, null);
                     chats.SetVAF_TableView_ID(Convert.ToInt32(chatID));
                     chats.SetRecord_ID(ID);
                     chats.SetDescription("");
@@ -1673,7 +1673,7 @@ ON au.VAF_UserContact_ID=ai.createdby JOIN VAF_TableView adt ON adt.VAF_TableVie
                 }
             }
 
-            MChatEntry entry = new MChatEntry(ctx, 0, null);
+            MVACMChatLine entry = new MVACMChatLine(ctx, 0, null);
             entry.SetCM_Chat_ID(Convert.ToInt32(chatID));
             entry.SetCharacterData(text);
             entry.SetVAF_UserContact_ID(ctx.GetVAF_UserContact_ID());

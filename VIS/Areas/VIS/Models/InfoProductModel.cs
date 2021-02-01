@@ -199,8 +199,8 @@ namespace VIS.Models
                 int noofRecords = isMobile ? 50 : 100;
                 where = where.Replace('●', '%');
                 string sqlWhere = sql + where;
-                sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
-                                MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                sqlWhere = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
+                                MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " ) t", null, null));
                 int pageSize = 50;
@@ -220,7 +220,7 @@ namespace VIS.Models
                         LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID = patr.M_Product_ID)
                         LEFT OUTER JOIN VAB_UOM_Conversion uc ON (p.M_Product_ID = uc.M_Product_ID)
                         , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, VAB_UOM_ID";
-                sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                sqlPaging = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, VAB_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
                         (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
                         @") pp ON pp.M_Product_ID = p.M_Product_ID AND pp.M_AttriButeSetInstance_ID = NVL(pr.M_AttriButeSetInstance_ID,0) AND pp.VAB_UOM_ID = NVL(pr.VAB_UOM_ID,0) 
@@ -288,8 +288,8 @@ namespace VIS.Models
 
                 sql += " ORDER BY VAICNT_ScanName";
 
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAICNT_InventoryCount",
-                                MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAICNT_InventoryCount",
+                                MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
                 //DataSet data = DB.ExecuteDataset(sql, null, null);
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " ) t", null, null));
@@ -1903,8 +1903,8 @@ namespace VIS.Models
 
             try
             {
-                Sql = MRole.GetDefault(ctx).AddAccessSQL(_Str.ToString(), "M_Storage",
-                                            MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                Sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_Str.ToString(), "M_Storage",
+                                            MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
                 _DsVariants = DB.ExecuteDataset(Sql, null, null);
                 _Str.Clear();
                 Sql = "";
@@ -1955,8 +1955,8 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetWarehouse(Ctx ctx)
         {
             List<Dictionary<string, object>> retWare = null;
-            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT M_Warehouse_ID, Value || ' - ' || Name AS ValueName FROM M_Warehouse WHERE IsActive='Y'",
-                    "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY Value";
+            string sql = MVAFRole.GetDefault(ctx).AddAccessSQL("SELECT M_Warehouse_ID, Value || ' - ' || Name AS ValueName FROM M_Warehouse WHERE IsActive='Y'",
+                    "M_Warehouse", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY Value";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -1975,8 +1975,8 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetUOM(Ctx ctx)
         {
             List<Dictionary<string, object>> reDIc = null;
-            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT VAB_UOM_ID, Name FROM VAB_UOM WHERE IsActive = 'Y'",
-                    "VAB_UOM", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " ORDER BY Name";
+            string sql = MVAFRole.GetDefault(ctx).AddAccessSQL("SELECT VAB_UOM_ID, Name FROM VAB_UOM WHERE IsActive = 'Y'",
+                    "VAB_UOM", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY Name";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -2007,7 +2007,7 @@ namespace VIS.Models
                 sql += " AND EXISTS (SELECT * FROM M_PriceList xp WHERE xp.M_PriceList_ID=" + PriceList + ")";
             }
             // Add Access & Order
-            var qry = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_PriceList_Version", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + " ORDER BY plv.Name";
+            var qry = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_PriceList_Version", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY plv.Name";
             DataSet ds = DB.ExecuteDataset(qry, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -2060,8 +2060,8 @@ namespace VIS.Models
         public List<Dictionary<string, object>> GetAttributeSet(Ctx ctx)
         {
             List<Dictionary<string, object>> retAttrSet = null;
-            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT M_AttributeSet_ID, Name FROM M_AttributeSet WHERE IsActive='Y'",
-                    "M_AttributeSet", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY Name";
+            string sql = MVAFRole.GetDefault(ctx).AddAccessSQL("SELECT M_AttributeSet_ID, Name FROM M_AttributeSet WHERE IsActive='Y'",
+                    "M_AttributeSet", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY Name";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

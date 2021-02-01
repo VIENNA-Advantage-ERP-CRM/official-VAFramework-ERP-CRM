@@ -331,8 +331,8 @@ namespace VAdvantage.Model
                 }
                 sql.Append(" ) ");
             }
-            String finalSql = MRole.GetDefault((Context)GetCtx(), false).AddAccessSQL(
-                sql.ToString(), "M_Locator", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            String finalSql = MVAFRole.GetDefault((Context)GetCtx(), false).AddAccessSQL(
+                sql.ToString(), "M_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             //if (_loader.ThreadState == ThreadState.Suspended)
             //{
             //    log.log(Level.SEVERE, "Interrupted");

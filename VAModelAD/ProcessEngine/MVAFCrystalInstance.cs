@@ -69,7 +69,7 @@ namespace VAdvantage.ProcessEngine
             int VAF_Role_ID = Utility.Env.GetContext().GetVAF_Role_ID();
             if (VAF_Role_ID != 0)
             {
-                MRole role = MRole.Get(GetCtx(), VAF_Role_ID);
+                MVAFRole role = MVAFRole.Get(GetCtx(), VAF_Role_ID);
                 //bool? access = role.GetProcessAccess(AD_CrytalProcess_ID);
                 //if (access == null)
                 //    throw new Exception("Cannot access Process " + AD_CrytalProcess_ID

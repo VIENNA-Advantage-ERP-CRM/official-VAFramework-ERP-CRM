@@ -1015,7 +1015,7 @@ namespace VAdvantage.Model
 
             VAdvantage.Model.MAcctSchema[] mass = VAdvantage.Model.MAcctSchema.GetClientAcctSchema(product.GetCtx(),
                 product.GetVAF_Client_ID(), product.Get_TrxName());
-            VAdvantage.Model.MOrg[] orgs = null;
+            VAdvantage.Model.MVAFOrg[] orgs = null;
 
             int M_ASI_ID = 0;		//	No Attribute
             for (int i = 0; i < mass.Length; i++)
@@ -1065,7 +1065,7 @@ namespace VAdvantage.Model
                 else if (VAdvantage.Model.MAcctSchema.COSTINGLEVEL_Organization.Equals(cl))
                 {
                     if (orgs == null)
-                        orgs = VAdvantage.Model.MOrg.GetOfClient(product);
+                        orgs = VAdvantage.Model.MVAFOrg.GetOfClient(product);
                     for (int o = 0; o < orgs.Length; o++)
                     {
                         MCost cost = MCost.Get(product, M_ASI_ID,
@@ -1107,7 +1107,7 @@ namespace VAdvantage.Model
                 ce = ces[j];
                 VAdvantage.Model.MAcctSchema[] mass = VAdvantage.Model.MAcctSchema.GetClientAcctSchemas(product.GetCtx(),
             product.GetVAF_Client_ID(), product.Get_TrxName());
-                VAdvantage.Model.MOrg[] orgs = null;
+                VAdvantage.Model.MVAFOrg[] orgs = null;
 
                 int M_ASI_ID = 0;		//	No Attribute
                 for (int i = 0; i < mass.Length; i++)
@@ -1158,7 +1158,7 @@ namespace VAdvantage.Model
                     else if (VAdvantage.Model.MAcctSchema.COSTINGLEVEL_Organization.Equals(cl))
                     {
                         if (orgs == null)
-                            orgs = VAdvantage.Model.MOrg.GetOfClient(product);
+                            orgs = VAdvantage.Model.MVAFOrg.GetOfClient(product);
                         for (int o = 0; o < orgs.Length; o++)
                         {
                             MCost cost = MCost.Get(product, M_ASI_ID,
@@ -2101,7 +2101,7 @@ namespace VAdvantage.Model
             }
 
             sql = "SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive='Y' AND costingmethod='" + costMethod + "'";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_CostElement", true, true);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_CostElement", true, true);
             int costElementID = Convert.ToInt32(DB.ExecuteScalar(sql));
 
             MCost cost = MCost.Get(mproduct, M_ASI_ID, acctSchema, VAF_Org_ID, costElementID);

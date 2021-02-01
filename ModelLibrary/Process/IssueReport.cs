@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("VAF_Issue_ID=" + _VAF_Issue_ID);
-            if (!MSystem.Get(GetCtx()).IsAutoErrorReport())
+            if (!MVAFSystem.Get(GetCtx()).IsAutoErrorReport())
             {
                 return "NOT reported - Enable Error Reporting in Window System";
             }

@@ -29,7 +29,7 @@ namespace VAdvantage.Model
     public class MMailText : X_VAR_MailTemplate
     {
         /**	Parse User			*/
-        private MUser _user = null;
+        private MVAFUserContact _user = null;
         /** Parse BPartner		*/
         private X_VAB_BusinessPartner _bpartner = null;
         /** Parse PO			*/
@@ -427,14 +427,14 @@ namespace VAdvantage.Model
         /// <param name="VAF_UserContact_ID">user</param>
         public void SetUser(int VAF_UserContact_ID)
         {
-            _user = MUser.Get(GetCtx(), VAF_UserContact_ID);
+            _user = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
         }
 
         /// <summary>
         /// Set User for parse
         /// </summary>
         /// <param name="user">user</param>
-        public void SetUser(MUser user)
+        public void SetUser(MVAFUserContact user)
         {
             _user = user;
         }

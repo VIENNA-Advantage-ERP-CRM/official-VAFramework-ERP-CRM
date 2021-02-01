@@ -85,26 +85,26 @@ namespace VAdvantage.Model
 		//	Create Trees
 		if (newRecord)
 		{
-			MTree tree = new MTree (GetCtx(), 
-				GetName()+MTree.TREETYPE_CMContainer, MTree.TREETYPE_CMContainer, Get_TrxName());
+			MVAFTreeInfo tree = new MVAFTreeInfo (GetCtx(), 
+				GetName()+MVAFTreeInfo.TREETYPE_CMContainer, MVAFTreeInfo.TREETYPE_CMContainer, Get_TrxName());
 			if (!tree.Save())
 				return false;
 			SetVAF_TreeInfoCMC_ID(tree.GetVAF_TreeInfo_ID());
 			//
-			tree = new MTree (GetCtx(), 
-				GetName()+MTree.TREETYPE_CMContainerStage, MTree.TREETYPE_CMContainerStage, Get_TrxName());
+			tree = new MVAFTreeInfo (GetCtx(), 
+				GetName()+MVAFTreeInfo.TREETYPE_CMContainerStage, MVAFTreeInfo.TREETYPE_CMContainerStage, Get_TrxName());
 			if (!tree.Save())
 				return false;
 			SetVAF_TreeInfoCMS_ID(tree.GetVAF_TreeInfo_ID());
 			//
-			tree = new MTree (GetCtx(), 
-				GetName()+MTree.TREETYPE_CMTemplate, MTree.TREETYPE_CMTemplate, Get_TrxName());
+			tree = new MVAFTreeInfo (GetCtx(), 
+				GetName()+MVAFTreeInfo.TREETYPE_CMTemplate, MVAFTreeInfo.TREETYPE_CMTemplate, Get_TrxName());
 			if (!tree.Save())
 				return false;
 			SetVAF_TreeInfoCMT_ID(tree.GetVAF_TreeInfo_ID());
 			//
-			tree = new MTree (GetCtx(), 
-				GetName()+MTree.TREETYPE_CMMedia, MTree.TREETYPE_CMMedia, Get_TrxName());
+			tree = new MVAFTreeInfo (GetCtx(), 
+				GetName()+MVAFTreeInfo.TREETYPE_CMMedia, MVAFTreeInfo.TREETYPE_CMMedia, Get_TrxName());
 			if (!tree.Save())
 				return false;
 			SetVAF_TreeInfoCMM_ID(tree.GetVAF_TreeInfo_ID());

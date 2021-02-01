@@ -153,7 +153,7 @@ namespace VAdvantage.Model
         /**	BPartner					*/
         private MBPartner _partner = null;
         /** User/Contact				*/
-        private MUser _user = null;
+        private MVAFUserContact _user = null;
         /** List of EMail Notices		*/
         private StringBuilder _emailTo = new StringBuilder();
 
@@ -593,7 +593,7 @@ namespace VAdvantage.Model
          */
         public String GetDueTypeText()
         {
-            return MRefList.GetListName(GetCtx(), DUETYPE_VAF_Control_Ref_ID, GetDueType());
+            return MVAFCtrlRefList.GetListName(GetCtx(), DUETYPE_VAF_Control_Ref_ID, GetDueType());
         }
 
         /**
@@ -602,7 +602,7 @@ namespace VAdvantage.Model
          */
         public String GetPriorityText()
         {
-            return MRefList.GetListName(GetCtx(), PRIORITY_VAF_Control_Ref_ID, GetPriority());
+            return MVAFCtrlRefList.GetListName(GetCtx(), PRIORITY_VAF_Control_Ref_ID, GetPriority());
         }
 
         /**
@@ -611,7 +611,7 @@ namespace VAdvantage.Model
          */
         public String GetPriorityUserText()
         {
-            return MRefList.GetListName(GetCtx(), PRIORITYUSER_VAF_Control_Ref_ID, GetPriorityUser());
+            return MVAFCtrlRefList.GetListName(GetCtx(), PRIORITYUSER_VAF_Control_Ref_ID, GetPriorityUser());
         }
 
         /**
@@ -620,7 +620,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPE_VAF_Control_Ref_ID, GetConfidentialType());
+            return MVAFCtrlRefList.GetListName(GetCtx(), CONFIDENTIALTYPE_VAF_Control_Ref_ID, GetConfidentialType());
         }
 
         /**
@@ -629,7 +629,7 @@ namespace VAdvantage.Model
          */
         public String GetConfidentialEntryText()
         {
-            return MRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
+            return MVAFCtrlRefList.GetListName(GetCtx(), CONFIDENTIALTYPEENTRY_VAF_Control_Ref_ID, GetConfidentialTypeEntry());
         }
 
         /**
@@ -645,11 +645,11 @@ namespace VAdvantage.Model
          * 	Get Sales Rep
          *	@return Sales Rep User
          */
-        public MUser GetSalesRep()
+        public MVAFUserContact GetSalesRep()
         {
             if (GetSalesRep_ID() == 0)
                 return null;
-            return MUser.Get(GetCtx(), GetSalesRep_ID());
+            return MVAFUserContact.Get(GetCtx(), GetSalesRep_ID());
         }
 
         /**
@@ -658,7 +658,7 @@ namespace VAdvantage.Model
          */
         public String GetSalesRepName()
         {
-            MUser sr = GetSalesRep();
+            MVAFUserContact sr = GetSalesRep();
             if (sr == null)
                 return "n/a";
             return sr.GetName();
@@ -670,7 +670,7 @@ namespace VAdvantage.Model
          */
         public String GetCreatedByName()
         {
-            MUser user = MUser.Get(GetCtx(), GetCreatedBy());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetCreatedBy());
             return user.GetName();
         }
 
@@ -678,14 +678,14 @@ namespace VAdvantage.Model
          * 	Get Contact (may be not defined)
          *	@return Sales Rep User
          */
-        public MUser GetUser()
+        public MVAFUserContact GetUser()
         {
             if (GetVAF_UserContact_ID() == 0)
                 return null;
             if (_user != null && _user.GetVAF_UserContact_ID() != GetVAF_UserContact_ID())
                 _user = null;
             if (_user == null)
-                _user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
+                _user = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
             return _user;
         }
 
@@ -708,7 +708,7 @@ namespace VAdvantage.Model
 
             if (GetVAB_BusinessPartner_ID() == 0)
             {
-                MUser user = new MUser(GetCtx(), VAF_UserContact_ID, null);
+                MVAFUserContact user = new MVAFUserContact(GetCtx(), VAF_UserContact_ID, null);
                 SetVAB_BusinessPartner_ID(user.GetVAB_BusinessPartner_ID());
             }
         }
@@ -1010,9 +1010,9 @@ namespace VAdvantage.Model
                 {
                     //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
                     Object[] args = new Object[] {GetDocumentNo(),
-                        MUser.GetNameOfUser(VAF_UserContact_ID),
-                        MUser.GetNameOfUser(oldSalesRep_ID),
-                        MUser.GetNameOfUser(GetSalesRep_ID())
+                        MVAFUserContact.GetNameOfUser(VAF_UserContact_ID),
+                        MVAFUserContact.GetNameOfUser(oldSalesRep_ID),
+                        MVAFUserContact.GetNameOfUser(GetSalesRep_ID())
                         };
                     String msg = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
                     AddToResult(msg);
@@ -1163,7 +1163,7 @@ namespace VAdvantage.Model
                 message = new StringBuilder();
                 //		UpdatedBy: Joe
                 int UpdatedBy = GetCtx().GetVAF_UserContact_ID();
-                MUser from = MUser.Get(GetCtx(), UpdatedBy);
+                MVAFUserContact from = MVAFUserContact.Get(GetCtx(), UpdatedBy);
                 if (from != null)
                     message.Append(Msg.Translate(GetCtx(), "UpdatedBy")).Append(": ")
                         .Append(from.GetName());
@@ -1260,7 +1260,7 @@ namespace VAdvantage.Model
         private List<int> validateUsers(DataSet _ds)
         {
             List<int> users = new List<int>();
-            MRole role = new MRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["VAF_Role_ID"]), null);
+            MVAFRole role = new MVAFRole(GetCtx(), Util.GetValueOfInt(_ds.Tables[0].Rows[0]["VAF_Role_ID"]), null);
             bool isAllUser = false;
             // if access all organization
             if (role.IsAccessAllOrgs())
@@ -1342,9 +1342,9 @@ namespace VAdvantage.Model
                     {
                         //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
                         Object[] args = new Object[] {GetDocumentNo(),
-                        MUser.GetNameOfUser(VAF_UserContact_ID),
-                        MUser.GetNameOfUser(oldSalesRep_ID),
-                        MUser.GetNameOfUser(GetSalesRep_ID())
+                        MVAFUserContact.GetNameOfUser(VAF_UserContact_ID),
+                        MVAFUserContact.GetNameOfUser(oldSalesRep_ID),
+                        MVAFUserContact.GetNameOfUser(GetSalesRep_ID())
                         };
                         String msg = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
                         AddToResult(msg);
@@ -1462,14 +1462,14 @@ namespace VAdvantage.Model
                 return "RequestActionEMailNoSMTP";
 
             //  Mail To
-            MUser to = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
+            MVAFUserContact to = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
             if (to == null
                 || to.GetEMail() == null
                 || to.GetEMail().Length == 0)
                 return "RequestActionEMailNoTo";
 
             //  Mail From real user
-            MUser from = MUser.Get(GetCtx(), GetCtx().GetVAF_UserContact_ID());
+            MVAFUserContact from = MVAFUserContact.Get(GetCtx(), GetCtx().GetVAF_UserContact_ID());
             if (from == null
                 || from.GetEMail() == null
                 || from.GetEMail().Length == 0)
@@ -1660,15 +1660,15 @@ namespace VAdvantage.Model
 
             //  RequestActionTransfer - Request {0} was transfered by {1} from {2} to {3}
             Object[] args = new Object[] {GetDocumentNo(),
-                    MUser.GetNameOfUser(VAF_UserContact_ID),
-                    MUser.GetNameOfUser(oldSalesRep_ID),
-                    MUser.GetNameOfUser(GetSalesRep_ID())
+                    MVAFUserContact.GetNameOfUser(VAF_UserContact_ID),
+                    MVAFUserContact.GetNameOfUser(oldSalesRep_ID),
+                    MVAFUserContact.GetNameOfUser(GetSalesRep_ID())
                     };
             String subject = Msg.GetMsg(GetCtx(), "RequestActionTransfer");
             String message = subject + "\n" + GetSummary();
             MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
-            MUser from = MUser.Get(GetCtx(), VAF_UserContact_ID);
-            MUser to = MUser.Get(GetCtx(), GetSalesRep_ID());
+            MVAFUserContact from = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
+            MVAFUserContact to = MVAFUserContact.Get(GetCtx(), GetSalesRep_ID());
             //
             client.SendEMail(from, to, subject, message, CreatePDF());
         }
@@ -1692,7 +1692,7 @@ namespace VAdvantage.Model
 
             //		UpdatedBy: Joe
             int UpdatedBy = GetCtx().GetVAF_UserContact_ID();
-            MUser from = MUser.Get(GetCtx(), UpdatedBy);
+            MVAFUserContact from = MVAFUserContact.Get(GetCtx(), UpdatedBy);
 
             FileInfo pdf = CreatePDF();
             log.Finer(message.ToString());
@@ -1781,8 +1781,8 @@ namespace VAdvantage.Model
                     userList.Add(ii);
 
                     // check the user roles for organization access.
-                    MUser user = new MUser(GetCtx(), VAF_UserContact_ID, null);
-                    MRole[] role = user.GetRoles(GetVAF_Org_ID());
+                    MVAFUserContact user = new MVAFUserContact(GetCtx(), VAF_UserContact_ID, null);
+                    MVAFRole[] role = user.GetRoles(GetVAF_Org_ID());
                     if (role.Length == 0)
                         continue;
 
@@ -1799,7 +1799,7 @@ namespace VAdvantage.Model
                 List<int> _users = SendRoleNotice();
                 for (int i = 0; i < _users.Count; i++)
                 {
-                    MUser user = new MUser(GetCtx(), _users[i], null);
+                    MVAFUserContact user = new MVAFUserContact(GetCtx(), _users[i], null);
                     int VAF_UserContact_ID = user.GetVAF_UserContact_ID();
                     String NotificationType = user.GetNotificationType(); //idr.GetString(1);
                     if (NotificationType == null)
@@ -1834,7 +1834,7 @@ namespace VAdvantage.Model
                 }
 
                 int VAF_Msg_Lable_ID = 834;
-                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetVAF_UserContact_ID(),
+                MVAFNotice note = new MVAFNotice(GetCtx(), VAF_Msg_Lable_ID, GetCtx().GetVAF_UserContact_ID(),
                     X_VAR_Request.Table_ID, GetVAR_Request_ID(),
                     subject, finalMsg.ToString(), Get_TrxName());
                 if (note.Save())
@@ -1870,9 +1870,9 @@ namespace VAdvantage.Model
          *	@param pdf optional attachment
          */
         private void SendNoticeNow(int VAF_UserContact_ID, String NotificationType,
-            MVAFClient client, MUser from, String subject, String message, FileInfo pdf)
+            MVAFClient client, MVAFUserContact from, String subject, String message, FileInfo pdf)
         {
-            MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
+            MVAFUserContact to = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
             if (NotificationType == null)
                 NotificationType = to.GetNotificationType();
             //	Send Mail
@@ -1926,7 +1926,7 @@ namespace VAdvantage.Model
                 || X_VAF_UserContact.NOTIFICATIONTYPE_EMailPlusNotice.Equals(NotificationType))
             {
                 int VAF_Msg_Lable_ID = 834;
-                MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, VAF_UserContact_ID,
+                MVAFNotice note = new MVAFNotice(GetCtx(), VAF_Msg_Lable_ID, VAF_UserContact_ID,
                     X_VAR_Request.Table_ID, GetVAR_Request_ID(),
                     subject, message.ToString(), Get_TrxName());
                 if (note.Save())

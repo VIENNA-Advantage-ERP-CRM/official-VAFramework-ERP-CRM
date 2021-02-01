@@ -149,8 +149,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             // JID_1226: Both Users must have same business partner or no Business partner
             if (columnName == VAF_USERCONTACT_ID)
             {
-                MUser fromUsr = new MUser(GetCtx(), from_ID, Get_TrxName());
-                MUser toUsr = new MUser(GetCtx(), to_ID, Get_TrxName());
+                MVAFUserContact fromUsr = new MVAFUserContact(GetCtx(), from_ID, Get_TrxName());
+                MVAFUserContact toUsr = new MVAFUserContact(GetCtx(), to_ID, Get_TrxName());
                 if(fromUsr.GetVAB_BusinessPartner_ID() != toUsr.GetVAB_BusinessPartner_ID())
                 {
                     return Msg.GetMsg(GetCtx(), "MergeUserError");

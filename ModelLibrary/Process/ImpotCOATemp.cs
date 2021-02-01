@@ -272,9 +272,9 @@ namespace VAdvantage.Process
                                         log.SaveError("NotSaved", "");
                                         return msg;
                                     }
-                                    VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
+                                    VAdvantage.Model.MVAFTreeInfo obj = new VAdvantage.Model.MVAFTreeInfo(GetCtx(), VAF_TreeInfo_id, null);
                                     VAB_Acct_Element_ID = VAB_Acct_Element_ID + 1;
-                                    VAdvantage.Model.MTreeNode mNode = new VAdvantage.Model.MTreeNode(obj, VAB_Acct_Element_ID);
+                                    VAdvantage.Model.MVAFTreeInfoChild mNode = new VAdvantage.Model.MVAFTreeInfoChild(obj, VAB_Acct_Element_ID);
                                     mNode.SetParent_ID(VAB_Acct_Element_ID_Parent);
                                     if (!mNode.Save())
                                     {

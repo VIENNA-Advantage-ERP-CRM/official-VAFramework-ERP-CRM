@@ -236,7 +236,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MUser to = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
+                MVAFUserContact to = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
                 MVAFClient client = MVAFClient.Get(GetCtx());
                 MMailText mtext = new MMailText(GetCtx(), GetRfQ().GetVAR_MailTemplate_ID(), Get_TrxName());
 

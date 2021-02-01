@@ -579,7 +579,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
          */
         public String GetUserName()
         {
-            return MUser.Get(GetCtx(), GetVAF_UserContact_ID()).GetName();
+            return MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID()).GetName();
         }
         #region DocAction Members
 

@@ -3098,7 +3098,7 @@ namespace VIS.Models
                 sql += " OR p.VAB_BusinessPartner_ID IN ( " + relatedBpids + " ) ";
 
             sql += " ORDER BY p.DateTrx,p.DocumentNo";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "p", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "p", true, false);
 
             List<VIS_PaymentData> payData = new List<VIS_PaymentData>();
 
@@ -3119,7 +3119,7 @@ namespace VIS.Models
                 if (!string.IsNullOrEmpty(relatedBpids))
                     sql1 += "   OR p.VAB_BusinessPartner_ID IN ( " + relatedBpids + " ) ";
 
-                sql1 = MRole.GetDefault(ctx).AddAccessSQL(sql1, "p", true, false);
+                sql1 = MVAFRole.GetDefault(ctx).AddAccessSQL(sql1, "p", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
             }
 
@@ -3447,7 +3447,7 @@ namespace VIS.Models
 
             sqlCash += " ORDER BY cn.created,cn.receiptno";
 
-            sqlCash = MRole.GetDefault(ctx).AddAccessSQL(sqlCash, "cn", true, false);
+            sqlCash = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlCash, "cn", true, false);
 
             List<VIS_CashData> payData = new List<VIS_CashData>();
 
@@ -3466,7 +3466,7 @@ namespace VIS.Models
                 if (!string.IsNullOrEmpty(relatedBpids))
                     sql += "   OR cn.VAB_BusinessPartner_ID IN ( " + relatedBpids + " ) ";
 
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "cn", true, false);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "cn", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
 
@@ -3649,7 +3649,7 @@ namespace VIS.Models
             //--------------------------------------
 
             string sqlnew = string.Empty;
-            sqlnew = MRole.GetDefault(ctx).AddAccessSQL(sqlInvoice.ToString(), "i", true, false);
+            sqlnew = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlInvoice.ToString(), "i", true, false);
             sqlInvoice.Clear();
             sqlInvoice.Append(sqlnew);
             sqlnew = null;
@@ -3672,7 +3672,7 @@ namespace VIS.Models
                     sqlInvoice.Append(" OR i.VAB_BusinessPartner_ID IN ( " + relatedBpids + " ) ");
 
                 sql += " AND ((invoiceOpen(VAB_Invoice_ID,VAB_sched_InvoicePayment_ID)) *i.MultiplierAP ) <> 0 ";
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "i", true, false);
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
             if (String.IsNullOrEmpty(conversionDate))
@@ -3758,7 +3758,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             List<VIS_DocbaseType> DocbaseType = new List<VIS_DocbaseType>();
             //string _sql = "SELECT VAB_DocTypes.DocBaseType, VAB_DocTypes.Name FROM VAB_DocTypes VAB_DocTypes INNER JOIN VAB_MasterDocType DB ON VAB_DocTypes.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APP','ARR') AND VAB_DocTypes.ISACTIVE='Y'";
             string _sql = "SELECT VAB_MasterDocType.DocBaseType, VAB_MasterDocType.Name FROM VAB_MasterDocType VAB_MasterDocType WHERE VAB_MasterDocType.DOCBASETYPE IN ('APP','ARR') AND VAB_MasterDocType.ISACTIVE='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_MasterDocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_MasterDocType", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -3782,7 +3782,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             List<VIS_DocbaseType> DocbaseType = new List<VIS_DocbaseType>();
             //string _sql = "SELECT DB.DocBaseType, DB.Name FROM VAB_DocTypes VAB_DocTypes INNER JOIN VAB_MasterDocType DB ON VAB_DocTypes.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('API','APR','APC','ARC') AND VAB_DocTypes.ISACTIVE='Y'";
             string _sql = "SELECT VAB_MasterDocType.DocBaseType, VAB_MasterDocType.Name FROM VAB_MasterDocType VAB_MasterDocType WHERE VAB_MasterDocType.DOCBASETYPE IN ('API','APR','APC','ARC','ARI') AND VAB_MasterDocType.ISACTIVE='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_MasterDocType", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_MasterDocType", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -3803,7 +3803,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             List<VIS_DocType> DocType = new List<VIS_DocType>();
             string _sql = "SELECT VAB_DocTypes.NAME, VAB_DocTypes.VAB_DocTypes_ID FROM VAB_DocTypes VAB_DocTypes INNER JOIN VAB_MasterDocType DB ON VAB_DocTypes.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APR','API','ARC','APC','ARI') AND VAB_DocTypes.ISACTIVE='Y'";
             //string _sql = "SELECT VAB_DocTypes.Name,VAB_DocTypes_ID FROM VAB_DocTypes INNER JOIN VAB_MasterDocType ON VAB_DocTypes.docbasetype = VAB_MasterDocType.docbasetype WHERE  VAB_MasterDocType_ID IN (SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAB_DocTypes')) AND VAB_DocTypes.isactive='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_DocTypes", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_DocTypes", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -3825,7 +3825,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
             List<VIS_DocType> DocType = new List<VIS_DocType>();
             string _sql = "SELECT VAB_DocTypes.NAME, VAB_DocTypes.VAB_DocTypes_ID FROM VAB_DocTypes VAB_DocTypes INNER JOIN VAB_MasterDocType DB ON VAB_DocTypes.DOCBASETYPE=DB.DOCBASETYPE WHERE DB.DOCBASETYPE IN ('APP','ARR') AND VAB_DocTypes.ISACTIVE='Y'";
             //string _sql = "SELECT VAB_DocTypes.Name,VAB_DocTypes_ID FROM VAB_DocTypes INNER JOIN VAB_MasterDocType ON VAB_DocTypes.docbasetype = VAB_MasterDocType.docbasetype WHERE  VAB_MasterDocType_ID IN (SELECT VAF_Control_Ref_ID FROM VAF_Column WHERE ColumnName ='DocBaseType' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAB_DocTypes')) AND VAB_DocTypes.isactive='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_DocTypes", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAB_DocTypes", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -3846,7 +3846,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         {
             List<VIS_PayType> payType = new List<VIS_PayType>();
             string _sql = "SELECT Value,Name FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=(SELECT VAF_Control_Ref_Value_ID FROM VAF_Column WHERE ColumnName ='VSS_PAYMENTTYPE' AND VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAB_CashJRNLLine')) AND IsActive='Y'";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_CtrlRef_List", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_CtrlRef_List", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             DataSet ds = DB.ExecuteDataset(_sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -3882,7 +3882,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         {
             List<NameValue> retValue = new List<NameValue>();
             string _sql = " SELECT VAF_Org.VAF_Org_ID, VAF_Org.Name FROM VAF_Org VAF_Org WHERE VAF_Org.VAF_Org_ID NOT IN (0) AND VAF_Org.IsSummary='N' AND VAF_Org.IsActive='Y' AND VAF_Org.IsCostCenter='N' AND VAF_Org.IsProfitCenter='N' ";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_Org", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_Org", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             _sql += " ORDER BY VAF_Org.Name ";
             DataSet _ds = DB.ExecuteDataset(_sql);
             if (_ds != null && _ds.Tables[0].Rows.Count > 0)
@@ -3904,7 +3904,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         {
             List<NameValue> retValue = new List<NameValue>();
             string _sql = " SELECT VAF_Org.VAF_Org_ID, VAF_Org.Name FROM VAF_Org VAF_Org WHERE VAF_Org.VAF_Org_ID NOT IN (0) AND VAF_Org.IsSummary='N' AND VAF_Org.IsActive='Y' AND VAF_Org.IsCostCenter='N' AND VAF_Org.IsProfitCenter='N' ";
-            _sql = MRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_Org", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            _sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql, "VAF_Org", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             _sql += " ORDER BY VAF_Org.Name ";
             DataSet _ds = DB.ExecuteDataset(_sql);
             if (_ds != null && _ds.Tables[0].Rows.Count > 0)
@@ -5760,7 +5760,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         private string[] CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction, Trx trx)
         {
             string[] result = new string[2];
-            MRole role = MRole.Get(ctx, ctx.GetVAF_Role_ID());
+            MVAFRole role = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
             {
                 if (Process_ID == 150)
@@ -5784,8 +5784,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     }
                 }
                 trx.Commit();
-                MProcess proc = new MProcess(ctx, Process_ID, null);
-                MPInstance pin = new MPInstance(proc, Record_ID);
+                MVAFJob proc = new MVAFJob(ctx, Process_ID, null);
+                MVAFJInstance pin = new MVAFJInstance(proc, Record_ID);
                 if (!pin.Save())
                 {
                     ValueNamePair vnp = VLogger.RetrieveError();

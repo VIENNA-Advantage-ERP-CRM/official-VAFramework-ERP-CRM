@@ -36,7 +36,7 @@ namespace VIS.Helpers
         /// --  
         /// </summary>
         /// <returns>MTree object</returns>
-        public MTree GetMenuTree()
+        public MVAFTreeInfo GetMenuTree()
         {
 
             int VAF_TreeInfo_ID = DB.GetSQLValue(null,
@@ -45,7 +45,7 @@ namespace VIS.Helpers
                           + " INNER JOIN VAF_Role r ON (ci.VAF_Client_ID=r.VAF_Client_ID) "
                           + "WHERE VAF_Role_ID=" + _ctx.GetVAF_Role_ID());
 
-            MRole.GetDefault(_ctx, true); // init MRole
+            MVAFRole.GetDefault(_ctx, true); // init MRole
 
 
             if (VAF_TreeInfo_ID <= 0)
@@ -68,9 +68,9 @@ namespace VIS.Helpers
         /// <param name="editable"></param>
         /// <returns></returns>
 
-        public MTree GetMenuTree(int VAF_TreeInfo_ID, bool editable)
+        public MVAFTreeInfo GetMenuTree(int VAF_TreeInfo_ID, bool editable)
         {
-            MTree vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null);
+            MVAFTreeInfo vTree = new MVAFTreeInfo(_ctx, VAF_TreeInfo_ID, editable, true, null);
             return vTree;
         }
 
@@ -81,17 +81,17 @@ namespace VIS.Helpers
         /// <param name="editable"></param>
         /// <returns></returns>
 
-        public MTree GetMenuTree(int VAF_TreeInfo_ID, bool editable, bool onDemandTree, int nodeID,int VAF_Tab_ID,int winNo)
+        public MVAFTreeInfo GetMenuTree(int VAF_TreeInfo_ID, bool editable, bool onDemandTree, int nodeID,int VAF_Tab_ID,int winNo)
         {
             _onDemandTree = onDemandTree;
-            MTree vTree = null;
+            MVAFTreeInfo vTree = null;
             if (onDemandTree)
             {
-                vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null, true, VAF_Tab_ID, winNo);
+                vTree = new MVAFTreeInfo(_ctx, VAF_TreeInfo_ID, editable, true, null, true, VAF_Tab_ID, winNo);
             }
             else
             {
-                vTree = new MTree(_ctx, VAF_TreeInfo_ID, editable, true, null, nodeID, VAF_Tab_ID);
+                vTree = new MVAFTreeInfo(_ctx, VAF_TreeInfo_ID, editable, true, null, nodeID, VAF_Tab_ID);
             }
             return vTree;
         }
@@ -336,7 +336,7 @@ namespace VIS.Helpers
 
         public int updateTree(Ctx ctx, string nodeID, int oldParentID, int newParentID, int VAF_TreeInfo_ID)
         {
-            MTree trr = new MTree(ctx, VAF_TreeInfo_ID, null);
+            MVAFTreeInfo trr = new MVAFTreeInfo(ctx, VAF_TreeInfo_ID, null);
             string tableName = trr.GetNodeTableName();
 
 

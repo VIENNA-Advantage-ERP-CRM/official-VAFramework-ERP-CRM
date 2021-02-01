@@ -591,7 +591,7 @@ namespace VIS.Models
                 sql += ")";
             }
 
-            var finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Locator", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            var finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             List<SqlParams> param = new List<SqlParams>();
             if (orgId != 0)
             {
@@ -714,8 +714,8 @@ namespace VIS.Models
                 sql = sql + " AND VAF_Tab_ID='" + VAF_Tab_ID + "' ";
             }
             sql = sql + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name";	//	Own First
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql,		//	Own First
-                   "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql,		//	Own First
+                   "VAF_Print_Rpt_Layout", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;
@@ -734,7 +734,7 @@ namespace VIS.Models
                 sql = sql + " AND VAF_Tab_ID=" + VAF_Tab_ID;
             }
             sql = sql + " ORDER BY Name";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_Print_Rpt_Layout", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             SqlParamsIn sqlP = new SqlParamsIn();
             sqlP.sql = sql;

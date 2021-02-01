@@ -21,7 +21,7 @@ namespace VIS.Models
         VTreeNode root = null;
         DataTable dt;
         VAdvantage.Classes.VTree.TreeType Vtreetype;
-        MTree objVTree = null;
+        MVAFTreeInfo objVTree = null;
         List<VTreeNode> barNodes = new List<VTreeNode>();
         List<VTreeNode> mnuNodes = new List<VTreeNode>();
         string bindornot = "true";
@@ -40,7 +40,7 @@ namespace VIS.Models
 
             //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, true);
 
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, true);
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, true);
             //            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "VAF_TreeInfo", true, false);
 
             DataSet ds = DB.ExecuteDataset(sql, null, null);
@@ -66,7 +66,7 @@ namespace VIS.Models
             List<AllMenuData> obj = new List<AllMenuData>();
             List<int> getNodeID = new List<int>();
 
-            MTree tree = new MTree(_ctx, VAF_TreeInfo_ID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, VAF_TreeInfo_ID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -105,14 +105,14 @@ namespace VIS.Models
                 }
 
                 DataSet ds = new DataSet();
-                qryPaging = MRole.GetDefault(_ctx).AddAccessSQL(qryPaging, TableName, true, false);
+                qryPaging = MVAFRole.GetDefault(_ctx).AddAccessSQL(qryPaging, TableName, true, false);
                 ds = DB.ExecuteDataset(qryPaging, null, null);
 
                 string qry = "";
                 DataSet qryds = new DataSet();
 
                 qry = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE IsActive='Y' AND VAF_TreeInfo_ID=" + VAF_TreeInfo_ID;
-                qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     qry += " AND node_id IN (";
@@ -234,7 +234,7 @@ namespace VIS.Models
                         AND  ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
                 DataSet dst = new DataSet();
-                executeqry = MRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
+                executeqry = MVAFRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
                  dst = DB.ExecuteDataset(executeqry, null, null);
 
 
@@ -292,7 +292,7 @@ namespace VIS.Models
                         AND  ((" + pageNo + @" * " + pageLength + @") + 1 )";
                 }
 
-                executeqry = MRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
+                executeqry = MVAFRole.GetDefault(_ctx).AddAccessSQL(executeqry, TableName, true, false);
                 DataSet dst = DB.ExecuteDataset(executeqry, null, null);
 
 
@@ -321,7 +321,7 @@ namespace VIS.Models
 
         public Tree BindTree(Ctx _ctx, string treeType, int VAF_TreeInfo_ID, string isAllNodes, bool isSummary)
         {
-            objVTree = new MTree(_ctx, VAF_TreeInfo_ID, true, false, null, isSummary);
+            objVTree = new MVAFTreeInfo(_ctx, VAF_TreeInfo_ID, true, false, null, isSummary);
             List<SetTree> setttreeobj = new List<SetTree>();
 
             SetTree trees = new SetTree();
@@ -476,7 +476,7 @@ namespace VIS.Models
         /// <returns></returns>
         public string SaveDataOnDrop(Ctx _ctx, int summaryid, int nodid, int treeID, string dragMenuNodeID, bool checkMorRdragable, string IsExistItem)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -496,7 +496,7 @@ namespace VIS.Models
 
             string getchild = "SELECT node_id FROM " + tree.GetNodeTableName() + " WHERE parent_id=" + summaryid + " AND VAF_TreeInfo_id=" + treeID;
 
-            getchild = MRole.GetDefault(_ctx).AddAccessSQL(getchild, tree.GetNodeTableName(), true, false);
+            getchild = MVAFRole.GetDefault(_ctx).AddAccessSQL(getchild, tree.GetNodeTableName(), true, false);
             DataSet dsgetparent = DB.ExecuteDataset(getchild, null, null);
 
 
@@ -540,7 +540,7 @@ namespace VIS.Models
                 {
                     if (checkMorRdragable)
                     {
-                        MTreeNodePR obj = MTreeNodePR.Get(tree, Convert.ToInt32(stringArray[i]));
+                        MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, Convert.ToInt32(stringArray[i]));
                         obj.SetParent_ID(summaryid);
                         obj.SetSeqNo(i);
                         if (!obj.Save())
@@ -553,7 +553,7 @@ namespace VIS.Models
                     {
                         if (existitem[i] == "new")
                         {
-                            MTreeNodePR obj = new MTreeNodePR(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildProd obj = new MVAFTreeInfoChildProd(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -563,7 +563,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            MTreeNodePR obj = MTreeNodePR.Get(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -577,7 +577,7 @@ namespace VIS.Models
                 {
                     if (checkMorRdragable)
                     {
-                        MTreeNodeMM obj = MTreeNodeMM.Get(tree, Convert.ToInt32(stringArray[i]));
+                        MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, Convert.ToInt32(stringArray[i]));
                         obj.SetParent_ID(summaryid);
                         obj.SetSeqNo(i);
                         if (!obj.Save())
@@ -590,7 +590,7 @@ namespace VIS.Models
                     {
                         if (existitem[i] == "new")
                         {
-                            MTreeNodeMM obj = new MTreeNodeMM(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildMenu obj = new MVAFTreeInfoChildMenu(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -601,7 +601,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            MTreeNodeMM obj = MTreeNodeMM.Get(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -616,7 +616,7 @@ namespace VIS.Models
                 {
                     if (checkMorRdragable)
                     {
-                        MTreeNodeBP obj = MTreeNodeBP.Get(tree, Convert.ToInt32(stringArray[i]));
+                        MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, Convert.ToInt32(stringArray[i]));
                         obj.SetParent_ID(summaryid);
                         obj.SetSeqNo(i);
                         if (!obj.Save())
@@ -629,7 +629,7 @@ namespace VIS.Models
                     {
                         if (existitem[i] == "new")
                         {
-                            MTreeNodeBP obj = new MTreeNodeBP(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildBPart obj = new MVAFTreeInfoChildBPart(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -640,7 +640,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            MTreeNodeBP obj = MTreeNodeBP.Get(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -655,7 +655,7 @@ namespace VIS.Models
                 {
                     if (checkMorRdragable)
                     {
-                        MTreeNode obj = MTreeNode.Get(tree, Convert.ToInt32(stringArray[i]));
+                        MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, Convert.ToInt32(stringArray[i]));
                         obj.SetParent_ID(summaryid);
                         obj.SetSeqNo(i);
                         if (!obj.Save())
@@ -669,7 +669,7 @@ namespace VIS.Models
 
                         if (existitem[i] == "new")
                         {
-                            MTreeNode obj = new MTreeNode(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChild obj = new MVAFTreeInfoChild(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -680,7 +680,7 @@ namespace VIS.Models
                         }
                         else
                         {
-                            MTreeNode obj = MTreeNode.Get(tree, Convert.ToInt32(stringArray[i]));
+                            MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, Convert.ToInt32(stringArray[i]));
                             obj.SetParent_ID(summaryid);
                             obj.SetSeqNo(i);
                             if (!obj.Save())
@@ -973,7 +973,7 @@ namespace VIS.Models
         {
 
             List<GetDataTreeNodeSelect> obj = new List<GetDataTreeNodeSelect>();
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1046,7 +1046,7 @@ namespace VIS.Models
 
 
                 qry = qryPaging;
-                qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
             }
             else
             {
@@ -1055,7 +1055,7 @@ namespace VIS.Models
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y'  AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
-                qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
             }
 
 
@@ -1084,16 +1084,16 @@ namespace VIS.Models
         public List<GetDataTreeNodeSelect> GetDataTreeNodeSelect(Ctx _ctx, int nodeID, int treeID, int pageNo, int pageLength, string searchChildNode, string getTreeNodeChkValue)
         {
             List<GetDataTreeNodeSelect> obj = new List<GetDataTreeNodeSelect>();
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
             string qry = "";
             string qryPaging = "";
 
-            string clientIDProp = MRole.GetDefault(_ctx).GetClientWhere(true);
+            string clientIDProp = MVAFRole.GetDefault(_ctx).GetClientWhere(true);
 
-            string orgwhere = MRole.GetDefault(_ctx).GetOrgWhere(true);
+            string orgwhere = MVAFRole.GetDefault(_ctx).GetOrgWhere(true);
             clientIDProp = clientIDProp + " AND " + orgwhere;
 
 
@@ -1115,7 +1115,7 @@ namespace VIS.Models
 
                         qry = qryPaging;
 
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                     else
                     {
@@ -1123,7 +1123,7 @@ namespace VIS.Models
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND Upper(mp.name) LIKE upper('%" + searchChildNode + "%') ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                 }
                 else
@@ -1141,7 +1141,7 @@ namespace VIS.Models
  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
                         qry = qryPaging;
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                     else
                     {
@@ -1149,7 +1149,7 @@ namespace VIS.Models
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE mp.Isactive='Y' AND mp.issummary='N' AND  " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY  COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
 
                 }
@@ -1173,7 +1173,7 @@ namespace VIS.Models
 
 
                         qry = qryPaging;
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                     else
                     {
@@ -1183,7 +1183,7 @@ namespace VIS.Models
 
 
 
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                 }
                 else
@@ -1203,7 +1203,7 @@ namespace VIS.Models
 
 
                         qry = qryPaging;
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                     else
                     {
@@ -1212,7 +1212,7 @@ namespace VIS.Models
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE  mp.Isactive='Y' AND mp.issummary='N' AND " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + "  ORDER BY COALESCE(" + tree.GetNodeTableName() + ".Parent_ID, -1),   seqno,Upper(mp.Name) ";
 
 
-                        qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                        qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                     }
                 }
             }
@@ -1248,7 +1248,7 @@ namespace VIS.Models
 
         public string GetNodePath(Ctx ctx, int node_ID, int TreeID)
         {
-            MTree tree = new MTree(ctx, TreeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, TreeID, null);
 
             object otput = "";
 
@@ -1287,7 +1287,7 @@ namespace VIS.Models
         /// <returns></returns>
         public string SaveTreeDragDrop(Ctx _ctx, int treeID, int NodeID, int ParentID)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1303,7 +1303,7 @@ namespace VIS.Models
 
             if (type == "PR")
             {
-                MTreeNodePR obj = MTreeNodePR.Get(tree, NodeID);
+                MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, NodeID);
                 obj.SetParent_ID(ParentID);
                 obj.SetSeqNo(0);
                 if (!obj.Save())
@@ -1314,7 +1314,7 @@ namespace VIS.Models
             }
             else if (type == "MM")
             {
-                MTreeNodeMM obj = MTreeNodeMM.Get(tree, NodeID);
+                MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, NodeID);
                 obj.SetParent_ID(ParentID);
                 obj.SetSeqNo(0);
                 if (!obj.Save())
@@ -1325,7 +1325,7 @@ namespace VIS.Models
             }
             else if (type == "BP")
             {
-                MTreeNodeBP obj = MTreeNodeBP.Get(tree, NodeID);
+                MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, NodeID);
                 obj.SetParent_ID(ParentID);
                 obj.SetSeqNo(0);
                 if (!obj.Save())
@@ -1336,7 +1336,7 @@ namespace VIS.Models
             }
             else
             {
-                MTreeNode obj = MTreeNode.Get(tree, NodeID);
+                MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, NodeID);
                 obj.SetParent_ID(ParentID);
                 obj.SetSeqNo(0);
                 if (!obj.Save())
@@ -1354,7 +1354,7 @@ namespace VIS.Models
         public String DeleteNodeFromTree(Ctx _ctx, int nodeid, int treeID, string unlinkchild, string menuArray)
         {
             menuArrays = menuArray;
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1398,7 +1398,7 @@ namespace VIS.Models
                 DataSet ds = DB.ExecuteDataset(getfirstParent, null, null);
                 if (type == "PR")
                 {
-                    MTreeNodePR obj = MTreeNodePR.Get(tree, nodeid);
+                    MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, nodeid);
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1407,7 +1407,7 @@ namespace VIS.Models
                 }
                 else if (type == "MM")
                 {
-                    MTreeNodeMM obj = MTreeNodeMM.Get(tree, nodeid);
+                    MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, nodeid);
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1417,7 +1417,7 @@ namespace VIS.Models
                 }
                 else if (type == "BP")
                 {
-                    MTreeNodeBP obj = MTreeNodeBP.Get(tree, nodeid);
+                    MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, nodeid);
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1426,7 +1426,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    MTreeNode obj = MTreeNode.Get(tree, nodeid);
+                    MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, nodeid);
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1481,7 +1481,7 @@ namespace VIS.Models
                 //                        }
                 //                        else if (type == "MM")
                 //                        {
-                //                            MTreeNodeMM obj = MTreeNodeMM.Get(tree, Convert.ToInt32(stringArray[i]));
+                //                            MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, Convert.ToInt32(stringArray[i]));
                 //                            if (!obj.Delete(true))
                 //                            {
                 //                                ValueNamePair pp = VLogger.RetrieveError();
@@ -1501,7 +1501,7 @@ namespace VIS.Models
                 //                        }
                 //                        else
                 //                        {
-                //                            MTreeNode obj = MTreeNode.Get(tree, Convert.ToInt32(stringArray[i]));
+                //                            MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, Convert.ToInt32(stringArray[i]));
                 //                            if (!obj.Delete(true))
                 //                            {
                 //                                ValueNamePair pp = VLogger.RetrieveError();
@@ -1515,7 +1515,7 @@ namespace VIS.Models
 
                 if (type == "PR")
                 {
-                    MTreeNodePR obj = MTreeNodePR.Get(tree, nodeid);
+                    MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, nodeid);
                     if (obj != null)
                     {
                         if (!obj.Delete(true))
@@ -1527,7 +1527,7 @@ namespace VIS.Models
                 }
                 else if (type == "MM")
                 {
-                    MTreeNodeMM obj = MTreeNodeMM.Get(tree, nodeid);
+                    MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, nodeid);
                     if (obj != null)
                     {
                         if (!obj.Delete(true))
@@ -1539,7 +1539,7 @@ namespace VIS.Models
                 }
                 else if (type == "BP")
                 {
-                    MTreeNodeBP obj = MTreeNodeBP.Get(tree, nodeid);
+                    MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, nodeid);
                     if (obj != null)
                     {
                         if (!obj.Delete(true))
@@ -1551,7 +1551,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    MTreeNode obj = MTreeNode.Get(tree, nodeid);
+                    MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, nodeid);
                     if (obj != null)
                     {
                         if (!obj.Delete(true))
@@ -1566,7 +1566,7 @@ namespace VIS.Models
             return _result;
         }
 
-        private void deleteChildNodes(MTree tree, string TableName, int treeID, int nodeID)        
+        private void deleteChildNodes(MVAFTreeInfo tree, string TableName, int treeID, int nodeID)        
         {
             // bindornot is false because menu bind with rol window or tenant window;
             if (bindornot == "false")
@@ -1581,7 +1581,7 @@ namespace VIS.Models
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
-                qrys = MRole.GetDefault(_ctx).AddAccessSQL(qrys, tree.GetNodeTableName(), true, false);
+                qrys = MVAFRole.GetDefault(_ctx).AddAccessSQL(qrys, tree.GetNodeTableName(), true, false);
                 DataSet ds = DB.ExecuteDataset(qrys, null, null);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -1614,7 +1614,7 @@ namespace VIS.Models
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
                              ON mp." + TableName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
-                qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+                qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
                 DataSet ds = DB.ExecuteDataset(qry, null, null);
 
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -1666,7 +1666,7 @@ namespace VIS.Models
 
         private string SelectAllChildNodes(Ctx _ctx, string TableName, int treeID, int nodeID)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string tbName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
 
@@ -1710,7 +1710,7 @@ namespace VIS.Models
                            INNER JOIN " + tree.GetNodeTableName() + " " + tree.GetNodeTableName() + @"                            
                              ON mp." + tbName + @"_ID=" + tree.GetNodeTableName() + ".node_id WHERE " + tree.GetNodeTableName() + ".VAF_TreeInfo_id=" + treeID + @" AND " + tree.GetNodeTableName() + ".parent_id=" + nodeID + " AND mp.issummary='Y'";
 
-            qry = MRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
+            qry = MVAFRole.GetDefault(_ctx).AddAccessSQL(qry, tree.GetNodeTableName(), true, false);
             DataSet ds = DB.ExecuteDataset(qry, null, null);
 
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -1741,7 +1741,7 @@ namespace VIS.Models
         public String DeleteNodeFromBottom(Ctx _ctx, string nodeid, int treeID, string menuArray)
         {
             menuArrays = menuArray;
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1795,7 +1795,7 @@ namespace VIS.Models
                 {
                     deleteChildNodes(tree, TableName, treeID, Convert.ToInt32(stringArray[i]));
 
-                    MTreeNodePR obj = MTreeNodePR.Get(tree, Convert.ToInt32(stringArray[i]));
+                    MVAFTreeInfoChildProd obj = MVAFTreeInfoChildProd.Get(tree, Convert.ToInt32(stringArray[i]));
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1805,7 +1805,7 @@ namespace VIS.Models
                 else if (type == "MM")
                 {
                     deleteChildNodes(tree, TableName, treeID, Convert.ToInt32(stringArray[i]));
-                    MTreeNodeMM obj = MTreeNodeMM.Get(tree, Convert.ToInt32(stringArray[i]));
+                    MVAFTreeInfoChildMenu obj = MVAFTreeInfoChildMenu.Get(tree, Convert.ToInt32(stringArray[i]));
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1817,7 +1817,7 @@ namespace VIS.Models
                 {
                    deleteChildNodes(tree, TableName, treeID, Convert.ToInt32(stringArray[i]));
 
-                    MTreeNodeBP obj = MTreeNodeBP.Get(tree, Convert.ToInt32(stringArray[i]));
+                    MVAFTreeInfoChildBPart obj = MVAFTreeInfoChildBPart.Get(tree, Convert.ToInt32(stringArray[i]));
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1829,7 +1829,7 @@ namespace VIS.Models
                 {
                     deleteChildNodes(tree, TableName, treeID, Convert.ToInt32(stringArray[i]));
 
-                    MTreeNode obj = MTreeNode.Get(tree, Convert.ToInt32(stringArray[i]));
+                    MVAFTreeInfoChild obj = MVAFTreeInfoChild.Get(tree, Convert.ToInt32(stringArray[i]));
                     if (!obj.Delete(true))
                     {
                         ValueNamePair pp = VLogger.RetrieveError();
@@ -1847,7 +1847,7 @@ namespace VIS.Models
 
         public String TreeTableName(Ctx _ctx, int treeID)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1857,7 +1857,7 @@ namespace VIS.Models
 
         public string UpdateItemSeqNo(Ctx _ctx, int treeID, string itemsid, int ParentID)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string type = tree.GetTreeType();
@@ -1905,7 +1905,7 @@ namespace VIS.Models
         ////rolCheck = MRole.GetDefault(_ctx).AddAccessSQL(rolCheck, "VAF_Role", true, false);
         public String RemoveLinkedItemFromTree(Ctx _ctx, int treeID, string menuId)
         {
-            MTree tree = new MTree(_ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, treeID, null);
             int VAF_TableView_ID = tree.GetVAF_TableView_ID();
             string TableName = MVAFTableView.GetTableName(_ctx, VAF_TableView_ID);
             string treeTblName = tree.GetNodeTableName();
@@ -1938,7 +1938,7 @@ namespace VIS.Models
 
             string getvalue = @"SELECT count(*) as count FROM " + treeTblName + @"
                                 WHERE VAF_TreeInfo_ID =" + treeID;
-            getvalue = MRole.GetDefault(_ctx).AddAccessSQL(getvalue, tree.GetNodeTableName(), true, false);
+            getvalue = MVAFRole.GetDefault(_ctx).AddAccessSQL(getvalue, tree.GetNodeTableName(), true, false);
             int counts = Convert.ToInt32(DB.ExecuteScalar(getvalue));
 
 
@@ -1948,7 +1948,7 @@ namespace VIS.Models
                 string delquery = @"DELETE FROM " + treeTblName + @"
                                 WHERE VAF_TreeInfo_ID =" + treeID + " AND node_id NOT IN (" + menuId + ")";
 
-                delquery = MRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
+                delquery = MVAFRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
 
                 DB.ExecuteQuery(delquery);
 
@@ -1970,7 +1970,7 @@ namespace VIS.Models
             {
                 string delquery = @"DELETE FROM " + treeTblName + @"
                                 WHERE VAF_TreeInfo_ID =" + treeID;
-                delquery = MRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
+                delquery = MVAFRole.GetDefault(_ctx).AddAccessSQL(delquery, tree.GetNodeTableName(), true, false);
 
                 DB.ExecuteQuery(delquery);
             }

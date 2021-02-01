@@ -73,7 +73,7 @@ namespace VAdvantage.WF
         public bool Process(PO document, int VAF_TableView_ID)
         {
             _noCalled++;
-            MWorkflow[] wfs = MWorkflow.GetDocValue(document.GetCtx(),
+            MVAFWorkflow[] wfs = MVAFWorkflow.GetDocValue(document.GetCtx(),
                 document.GetVAF_Client_ID(), VAF_TableView_ID);
             if (wfs == null || wfs.Length == 0)
                 return false;
@@ -81,7 +81,7 @@ namespace VAdvantage.WF
             bool started = false;
             for (int i = 0; i < wfs.Length; i++)
             {
-                MWorkflow wf = wfs[i];
+                MVAFWorkflow wf = wfs[i];
                 //	We have a Document Workflow
                 String logic = wf.GetDocValueLogic();
                 if (logic == null || logic.Length == 0)
@@ -142,7 +142,7 @@ namespace VAdvantage.WF
         /// <param name="wf">workflow</param>
         /// <param name="document">document</param>
         /// <returns>true if WF should be started</returns>
-        private bool TestStart(MWorkflow wf, PO document)
+        private bool TestStart(MVAFWorkflow wf, PO document)
         {
             bool retValue = false;
             String logic = wf.GetDocValueLogic();

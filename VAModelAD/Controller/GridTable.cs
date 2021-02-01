@@ -226,7 +226,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "Table already open - ignored: " + field.GetColumnName());
                 return;
             }
-            if (!MRole.GetDefault(_ctx, false).IsColumnAccess(_VAF_TableView_ID, field.GetVAF_Column_ID(), true))
+            if (!MVAFRole.GetDefault(_ctx, false).IsColumnAccess(_VAF_TableView_ID, field.GetVAF_Column_ID(), true))
             {
                 log.Fine("No Column Access " + field.GetColumnName());
                 return;
@@ -755,7 +755,7 @@ namespace VAdvantage.Model
             //	Audit
             if (_rowCount > 0)
             {
-                MSession session = MSession.Get(_ctx, true);
+                MVAFSession session = MVAFSession.Get(_ctx, true);
                 session.QueryLog(_ctx.GetVAF_Client_ID(), _ctx.GetVAF_Org_ID(), _VAF_TableView_ID,
                     _SQL_Count, _rowCount);
             }
@@ -1028,10 +1028,10 @@ namespace VAdvantage.Model
                 //	boolean ro = MRole.SQL_RO;
                 //	if (!_readOnly)
                 //		ro = MRole.SQL_RW;
-                _SQL = MRole.GetDefault(_ctx, false).AddAccessSQL(_SQL,
-                    _tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
-                _SQL_Count = MRole.GetDefault(_ctx, false).AddAccessSQL(_SQL_Count,
-                    _tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                _SQL = MVAFRole.GetDefault(_ctx, false).AddAccessSQL(_SQL,
+                    _tableName, MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
+                _SQL_Count = MVAFRole.GetDefault(_ctx, false).AddAccessSQL(_SQL_Count,
+                    _tableName, MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             }
 
             //	ORDER BY
@@ -1125,7 +1125,7 @@ namespace VAdvantage.Model
             int VAF_Client_ID = co[0];
             int VAF_Org_ID = co[1];
             bool createError = true;
-            if (!MRole.GetDefault(_ctx, false)
+            if (!MVAFRole.GetDefault(_ctx, false)
                  .CanUpdate(VAF_Client_ID, VAF_Org_ID, _VAF_TableView_ID, 0, createError))
             {
                 ShowInfoMessage("", "can-not Update records(access)");
@@ -1395,7 +1395,7 @@ namespace VAdvantage.Model
                                 if (!newDocNo && docNo != null && docNo.Length > 0)
                                     insertDoc = docNo;
                                 else //  get a number from DocType or Table
-                                    insertDoc = MSequence.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
+                                    insertDoc = MVAFRecordSeq.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// DataBase.getDocumentNo(m_ctx, m_WindowNo, 
                                 //m_tableName, false, null);	//	no trx
                                 /****************************************Check********************************************************/
                             }
@@ -1434,7 +1434,7 @@ namespace VAdvantage.Model
                         if (value == null || value.Length == 0)
                         {
                             /***************************************Check**************************************************/
-                            value = MSequence.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
+                            value = MVAFRecordSeq.GetDocumentNo(VAF_Client_ID, _tableName, null,_ctx);// null;// DataBase.getDocumentNo(_ctx, _windowNo, _tableName, false, null);
                             //  No Value
                             if (value == null || value.Length == 0)
                             {

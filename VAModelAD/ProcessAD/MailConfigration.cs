@@ -74,7 +74,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             if (processMode == "C")
             {
-                MUserMailConfigration mailConfig = new MUserMailConfigration(GetCtx(), p_VAF_UserMailConfigration_ID, Get_TrxName());
+                MVAFUserMailConfigration mailConfig = new MVAFUserMailConfigration(GetCtx(), p_VAF_UserMailConfigration_ID, Get_TrxName());
                 if (mailConfig.Get_ID() == 0)
                 {
                     
@@ -89,7 +89,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         }
         //	doIt
 
-        public string BindAndSaveIMAPConfigInfo(MUserMailConfigration mailConfig)
+        public string BindAndSaveIMAPConfigInfo(MVAFUserMailConfigration mailConfig)
         {
             try
             {

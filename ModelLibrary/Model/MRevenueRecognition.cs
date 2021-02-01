@@ -434,7 +434,7 @@ namespace VAdvantage.Model
             MAcctSchema acctSchema = null;
             if (VAF_Org_ID > 0)
             {
-                acctSchema = MOrg.Get(ctx, VAF_Org_ID).GetAcctSchema();
+                acctSchema = MVAFOrg.Get(ctx, VAF_Org_ID).GetAcctSchema();
             }
             if (acctSchema == null)
             {

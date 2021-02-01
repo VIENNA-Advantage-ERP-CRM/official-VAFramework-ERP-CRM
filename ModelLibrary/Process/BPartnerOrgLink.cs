@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		
 		//	Create Org
 		Boolean newOrg = _VAF_Org_ID == 0; 
-		MOrg org = new MOrg (GetCtx(), _VAF_Org_ID, Get_Trx());
+		MVAFOrg org = new MVAFOrg (GetCtx(), _VAF_Org_ID, Get_Trx());
 		if (newOrg)
 		{
 			org.SetValue (bp.GetValue());
@@ -126,7 +126,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		_VAF_Org_ID = org.GetVAF_Org_ID();
 		
 		//	Update Org Info
-		MOrgInfo oInfo = org.GetInfo();
+		MVAFOrgDetail oInfo = org.GetInfo();
 		oInfo.SetVAF_OrgCategory_ID (_VAF_OrgCategory_ID);
         if (newOrg)
         {
@@ -188,7 +188,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		if (_VAF_Role_ID != 0)	
 		{
 			Boolean found = false;
-			MRoleOrgAccess[] orgAccesses = MRoleOrgAccess.GetOfOrg (GetCtx(), _VAF_Org_ID);
+			MVAFRoleOrgRights[] orgAccesses = MVAFRoleOrgRights.GetOfOrg (GetCtx(), _VAF_Org_ID);
 			//	delete all accesses except the specific
 			for (int i = 0; i < orgAccesses.Length; i++)
 			{
@@ -204,13 +204,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			//	create access
 			if (!found)
 			{
-				MRoleOrgAccess orgAccess = new MRoleOrgAccess (org, _VAF_Role_ID);
+				MVAFRoleOrgRights orgAccess = new MVAFRoleOrgRights (org, _VAF_Role_ID);
 				orgAccess.Save();
 			}
 		}
 		
 		//	Reset Client Role
-		MRole.GetDefault(GetCtx(), true);
+		MVAFRole.GetDefault(GetCtx(), true);
 		
 		return "Business Partner - Organization Link created";
 	}	//	doIt

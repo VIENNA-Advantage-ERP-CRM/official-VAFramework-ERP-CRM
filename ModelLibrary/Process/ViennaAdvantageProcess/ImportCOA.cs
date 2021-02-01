@@ -101,12 +101,12 @@ namespace ViennaAdvantage.Process
 
             sql = "select VAF_TreeInfo_id from VAB_Element where VAB_Element_id = " + C_Elememt_ID + " and vaf_client_id = " + client;
             int VAF_TreeInfo_id = 0;
-            MTree tree = null;
+            MVAFTreeInfo tree = null;
 
             try
             {
                 VAF_TreeInfo_id = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                tree = new MTree(GetCtx(), VAF_TreeInfo_id, null);
+                tree = new MVAFTreeInfo(GetCtx(), VAF_TreeInfo_id, null);
             }
             catch
             {
@@ -414,12 +414,12 @@ namespace ViennaAdvantage.Process
 
                                     //return msg;
                                 }
-                                VAdvantage.Model.MTree obj = new VAdvantage.Model.MTree(GetCtx(), VAF_TreeInfo_id, null);
+                                VAdvantage.Model.MVAFTreeInfo obj = new VAdvantage.Model.MVAFTreeInfo(GetCtx(), VAF_TreeInfo_id, null);
                                 //VAB_Acct_Element_ID = VAB_Acct_Element_ID + 1;                                   
-                                VAdvantage.Model.MTreeNode mNode = VAdvantage.Model.MTreeNode.Get(obj, eleValue.Get_ID());
+                                VAdvantage.Model.MVAFTreeInfoChild mNode = VAdvantage.Model.MVAFTreeInfoChild.Get(obj, eleValue.Get_ID());
                                 if (mNode == null)
                                 {
-                                    mNode = new VAdvantage.Model.MTreeNode(tree, eleValue.Get_ID());
+                                    mNode = new VAdvantage.Model.MVAFTreeInfoChild(tree, eleValue.Get_ID());
                                 }
                                 mNode.SetParent_ID(VAB_Acct_Element_ID_Parent);
                                 // ((PO)mNode).Set_Value("Parent_ID", VAB_Acct_Element_ID_Parent);

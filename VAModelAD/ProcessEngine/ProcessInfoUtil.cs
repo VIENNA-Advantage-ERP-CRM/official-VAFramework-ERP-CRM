@@ -322,7 +322,7 @@ namespace VAdvantage.ProcessEngine
                 // Get Default Heirarchy
                 string sqla = @"SELECT VAPA_REPORTINGORDER_id FROM VAPA_FinancialReportingOrder WHERE ISACTIVE ='Y' 
                        ORDER BY ISDEFAULT DESC ,VAPA_REPORTINGORDER_id ASC";
-                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
+                sqla = MVAFRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
                 object ID = DB.ExecuteScalar(sqla);
                 int _VAPA_FinancialReportingOrder_ID = 0;
                 if (ID != null && ID != DBNull.Value)

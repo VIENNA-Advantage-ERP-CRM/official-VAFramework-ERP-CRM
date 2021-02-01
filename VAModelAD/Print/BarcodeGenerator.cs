@@ -8,7 +8,7 @@ namespace VAdvantage.Print
 {
     public class BarcodeGenerator
     {
-        public BarcodeGenerator(MPrintFormatItem item)
+        public BarcodeGenerator(MVAFPrintRptLItem item)
         {
             width = item.GetMaxWidth();
             height = item.GetMaxHeight();

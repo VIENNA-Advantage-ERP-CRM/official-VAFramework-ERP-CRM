@@ -301,10 +301,10 @@ namespace VIS.Controllers
 
         public JsonResult UpdateOrInsertPersonalLock(int VAF_UserContact_ID, int VAF_TableView_ID, int Record_ID, bool locked)
         {
-            MPrivateAccess access = MPrivateAccess.Get(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
+            MVAFPrivateRights access = MVAFPrivateRights.Get(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
+                access = new MVAFPrivateRights(Session["ctx"] as Ctx, VAF_UserContact_ID, VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locked);
             bool ret = access.Save();
@@ -967,7 +967,7 @@ namespace VIS.Controllers
             if (keyCol == "")
             {
                 sql = "SELECT " + pColumnName + "," + pColumnName + " as Name, count(" + pColumnName + ") FROM " + pTableName;
-                sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
+                sql = "SELECT * FROM (" + MVAFRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                 if (!string.IsNullOrEmpty(validationCode))
                     sql += " AND " + validationCode;
                 if (!string.IsNullOrEmpty(whereClause))
@@ -985,7 +985,7 @@ namespace VIS.Controllers
                     //sql = "SELECT " + keyCol + ", " + displayCol + " || '('|| count(" + keyCol + ") || ')' FROM " + tableName + " WHERE IsActive='Y'";
                     sql = "SELECT " + pColumnName + ", (Select Name from VAF_CtrlRef_List where Value= " + pColumnName + " AND VAF_Control_Ref_ID=" + VAF_Control_Refvalue_ID + ")  as name ,count(" + pColumnName + ")"
                         + " FROM " + pTableName;// + " WHERE " + pTableName + ".IsActive='Y'";
-                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
+                    sql = "SELECT * FROM (" + MVAFRole.GetDefault(ctx).AddAccessSQL(sql, pTableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
                         sql += " AND " + validationCode;
                     if (!string.IsNullOrEmpty(whereClause))
@@ -998,7 +998,7 @@ namespace VIS.Controllers
                     sql = "SELECT " + keyCol + ", " + displayCol + " , count(" + keyCol + ")  FROM " + pTableName + " " + pTableName + " JOIN " + tableName + " " + tableName
                         + " ON " + tableName + "." + tableName + "_ID =" + pTableName + "." + pColumnName
                         + " ";// WHERE " + pTableName + ".IsActive='Y'";
-                    sql = "SELECT * FROM (" + MRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
+                    sql = "SELECT * FROM (" + MVAFRole.GetDefault(ctx).AddAccessSQL(sql, tableName, true, false);
                     if (!string.IsNullOrEmpty(validationCode))
                         sql += " AND " + validationCode;
                     if (!string.IsNullOrEmpty(whereClause))

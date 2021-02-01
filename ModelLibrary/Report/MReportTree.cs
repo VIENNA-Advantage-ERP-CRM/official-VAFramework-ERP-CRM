@@ -94,7 +94,7 @@ namespace VAdvantage.Report
             if (MAcctSchemaElement.ELEMENTTYPE_Account.Equals(_ElementType)
                 || MAcctSchemaElement.ELEMENTTYPE_UserList1.Equals(_ElementType)
                 || MAcctSchemaElement.ELEMENTTYPE_UserList2.Equals(_ElementType))
-                _TreeType = MTree.TREETYPE_ElementValue;
+                _TreeType = MVAFTreeInfo.TREETYPE_ElementValue;
             _VAPA_FinancialReportingOrder_ID = VAPA_FinancialReportingOrder_ID;
             _ctx = ctx;
             //
@@ -107,7 +107,7 @@ namespace VAdvantage.Report
             }
             //
             Boolean clientTree = true;
-            _tree = new MTree(ctx, VAF_TreeInfo_ID, true, clientTree, null);
+            _tree = new MVAFTreeInfo(ctx, VAF_TreeInfo_ID, true, clientTree, null);
         }	//	MReportTree
 
         /** Optional Hierarchy		*/
@@ -119,7 +119,7 @@ namespace VAdvantage.Report
         /** Tree Type				*/
         private String _TreeType = null;
         /**	The Tree				*/
-        private MTree _tree = null;
+        private MVAFTreeInfo _tree = null;
         /**	Logger					*/
         private VLogger log = null;
 
@@ -210,7 +210,7 @@ namespace VAdvantage.Report
         /// Get Tree
         /// </summary>
         /// <returns>tree</returns>
-        public MTree GetTree()
+        public MVAFTreeInfo GetTree()
         {
             return _tree;
         }	//	getTreeType

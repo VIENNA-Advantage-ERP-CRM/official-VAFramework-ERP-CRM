@@ -121,7 +121,7 @@ namespace VIS.Helpers
                
                 // bool success = OpenForm(VAF_Page_ID, className, name);
                 //	Log
-                MSession session = MSession.Get(ctx, true);
+                MVAFSession session = MVAFSession.Get(ctx, true);
                 session.WindowLog(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(), 0, VAF_Page_ID);
             }
 

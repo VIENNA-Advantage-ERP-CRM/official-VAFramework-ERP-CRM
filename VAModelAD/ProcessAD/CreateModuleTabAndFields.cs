@@ -20,7 +20,7 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            MModuleWindow mWindow = new MModuleWindow(GetCtx(), GetRecord_ID(), null);
+            MVAFModuleWindow mWindow = new MVAFModuleWindow(GetCtx(), GetRecord_ID(), null);
             _windowNo = mWindow.GetVAF_Screen_ID();
 
             if (_windowNo == 0)
@@ -28,7 +28,7 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "VIS_WindowNotFound");
             }
 
-            MWindow window = new MWindow(GetCtx(), _windowNo, null);
+            MVAFScreen window = new MVAFScreen(GetCtx(), _windowNo, null);
             MVAFTab[] tabs = window.GetTabs(false, null);
             if (tabs == null || tabs.Length == 0)
             {
@@ -50,15 +50,15 @@ namespace VAdvantage.Process
 
             for (int i = 0; i < tabs.Length; i++)
             {
-                MModuleTab mTab = null;
+                MVAFModuleTab mTab = null;
                 if (existingTabs.ContainsKey(tabs[i].GetVAF_Tab_ID()))
                 {
-                    mTab = new MModuleTab(GetCtx(), existingTabs[tabs[i].GetVAF_Tab_ID()], null);
+                    mTab = new MVAFModuleTab(GetCtx(), existingTabs[tabs[i].GetVAF_Tab_ID()], null);
                     InsertORUpdateFields(tabs[i].GetVAF_Tab_ID(), mTab);
                 }
                 else
                 {
-                    mTab = new MModuleTab(GetCtx(), 0, null);
+                    mTab = new MVAFModuleTab(GetCtx(), 0, null);
 
                     mTab.SetVAF_Tab_ID(tabs[i].GetVAF_Tab_ID());
                     mTab.SetVAF_ModuleWindow_ID(GetRecord_ID());
@@ -72,7 +72,7 @@ namespace VAdvantage.Process
             return "Done";
         }
 
-        private string InsertORUpdateFields(int VAF_Tab_ID, MModuleTab mTab)
+        private string InsertORUpdateFields(int VAF_Tab_ID, MVAFModuleTab mTab)
         {
             MVAFTab tab = new MVAFTab(GetCtx(), VAF_Tab_ID, null);
             MVAFField[] fields = tab.GetFields(true, null);
@@ -100,14 +100,14 @@ namespace VAdvantage.Process
                     continue;
                 }
 
-                MModuleField mField = null;
+                MVAFModuleField mField = null;
                 if (existingFields.ContainsKey(fields[i].GetVAF_Field_ID()))
                 {
-                    mField = new MModuleField(GetCtx(), existingFields[fields[i].GetVAF_Field_ID()], null);
+                    mField = new MVAFModuleField(GetCtx(), existingFields[fields[i].GetVAF_Field_ID()], null);
                 }
                 else
                 {
-                    mField = new MModuleField(GetCtx(), 0, null);
+                    mField = new MVAFModuleField(GetCtx(), 0, null);
                     mField.SetVAF_Field_ID(fields[i].GetVAF_Field_ID());
                     mField.SetVAF_ModuleTab_ID(mTab.GetVAF_ModuleTab_ID());
                 }

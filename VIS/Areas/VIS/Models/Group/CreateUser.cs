@@ -46,7 +46,7 @@ namespace VIS.Models
         {
             string msg;
             string info= "";
-            MUser user = new MUser(ctx, 0, null);
+            MVAFUserContact user = new MVAFUserContact(ctx, 0, null);
             user.SetName(Name);
             user.SetIsLoginUser(true);
             user.SetEMail(Email);
@@ -73,8 +73,8 @@ namespace VIS.Models
                 {
                     for (int i = 0; i < OrgID.Count; i++)
                     {
-                        MOrg org = new MOrg(ctx, OrgID[i], null);
-                        MUserOrgAccess roles = new MUserOrgAccess(org, user.GetVAF_UserContact_ID());
+                        MVAFOrg org = new MVAFOrg(ctx, OrgID[i], null);
+                        MVAFUserContactOrgRights roles = new MVAFUserContactOrgRights(org, user.GetVAF_UserContact_ID());
                         roles.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         roles.SetVAF_Org_ID(OrgID[i]);
                         roles.SetIsReadOnly(false);
@@ -111,7 +111,7 @@ namespace VIS.Models
             List<OrgAccessinfo> orgaccess = new List<OrgAccessinfo>();
 
 
-            VAdvantage.Model.MRole.OrgAccess[] accesss = MRole.GetDefault(ctx).GetOrgAccess();
+            VAdvantage.Model.MVAFRole.OrgAccess[] accesss = MVAFRole.GetDefault(ctx).GetOrgAccess();
             StringBuilder orgs = new StringBuilder();
             if (accesss.Length > 0)
             {

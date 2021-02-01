@@ -110,9 +110,9 @@ namespace VIS.Models
 
 
             //Load Payment Terms
-            String SQL = MRole.GetDefault(ctx).AddAccessSQL(
+            String SQL = MVAFRole.GetDefault(ctx).AddAccessSQL(
                 "SELECT VAB_PaymentTerm_ID, Name FROM VAB_PaymentTerm WHERE IsActive='Y' ORDER BY Name",
-                "VAB_PaymentTerm", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_PaymentTerm", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             IDataReader idr = null;
             DataTable dt = null;
@@ -213,12 +213,12 @@ namespace VIS.Models
             pDetails.ccs = _mPayment.GetCreditCards();
 
             //Load Bank Accounts
-            SQL = MRole.GetDefault(ctx).AddAccessSQL(
+            SQL = MVAFRole.GetDefault(ctx).AddAccessSQL(
                 "SELECT VAB_Bank_Acct_ID, Name || ' ' || AccountNo, IsDefault "
                 + "FROM VAB_Bank_Acct ba"
                 + " INNER JOIN C_Bank b ON (ba.C_Bank_ID=b.C_Bank_ID) "
                 + "WHERE b.IsActive='Y'",
-                "ba", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                "ba", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             kp = null;
             IDataReader idr2 = null;
             try
@@ -279,9 +279,9 @@ namespace VIS.Models
 
 
             //Load Cash Books
-            SQL = MRole.GetDefault(ctx).AddAccessSQL(
+            SQL = MVAFRole.GetDefault(ctx).AddAccessSQL(
                 "SELECT VAB_CashBook_ID, Name, VAF_Org_ID FROM VAB_CashBook WHERE IsActive='Y'",
-                "VAB_CashBook", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_CashBook", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             kp = null;
             IDataReader idr3 = null;
             try

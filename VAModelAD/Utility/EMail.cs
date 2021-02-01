@@ -1548,13 +1548,13 @@ namespace VAdvantage.Utility
             bool IsSmtpAuthorization = false;
             _ctx = ctx;
             int mailConfigID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_UserMailConfigration_ID FROM VAF_UserMailConfigration WHERE IsActive='Y' AND VAF_UserContact_ID=" + ctx.GetVAF_UserContact_ID()));
-            MUserMailConfigration userConfig = new MUserMailConfigration(ctx, mailConfigID, null);
+            MVAFUserMailConfigration userConfig = new MVAFUserMailConfigration(ctx, mailConfigID, null);
             username = userConfig.GetSmtpUsername();
             password = userConfig.GetSmtpPassword();
 
 
             //By Sukhwinder on 3rd Jan, 2018, for getting FromName.
-            MUser user1 = new MUser(ctx, userConfig.GetVAF_UserContact_ID(), null);
+            MVAFUserContact user1 = new MVAFUserContact(ctx, userConfig.GetVAF_UserContact_ID(), null);
             uName = user1.GetName();
             //
 
@@ -1587,7 +1587,7 @@ namespace VAdvantage.Utility
                 IsSmtpAuthorization = client.IsSmtpAuthorization();
                 if (!sendFromClient)
                 {
-                    MUser user = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
+                    MVAFUserContact user = new MVAFUserContact(ctx, ctx.GetVAF_UserContact_ID(), null);
                     username = user.GetEMailUser();
                     password = user.GetEMailUserPW();
                     fromEMail = username;
@@ -1631,7 +1631,7 @@ namespace VAdvantage.Utility
                 int smtpport = client.GetSmtpPort();
                 if (!IsSendFromClient)
                 {
-                    MUser user = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
+                    MVAFUserContact user = new MVAFUserContact(ctx, ctx.GetVAF_UserContact_ID(), null);
                     username = user.GetEMailUser();
                     password = user.GetEMailUserPW();
                 }
@@ -1666,14 +1666,14 @@ namespace VAdvantage.Utility
             //IMAPConfig localConfig = new IMAPConfig();
 
 
-            MUserMailConfigration _userMailConfigration = null;
+            MVAFUserMailConfigration _userMailConfigration = null;
 
             IDataReader idr = null;
 
             string sql = "SELECT * FROM VAF_UserMailConfigration WHERE VAF_USERCONTACT_ID=" + VAF_UserContact_ID + " AND IsActive='Y'";
 
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserMailConfigration", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserMailConfigration", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
             idr = DB.ExecuteReader(sql, null, null);
 
@@ -1683,7 +1683,7 @@ namespace VAdvantage.Utility
 
             if (idr.Read())
             {
-                _userMailConfigration = new MUserMailConfigration(ctx, idr, null);
+                _userMailConfigration = new MVAFUserMailConfigration(ctx, idr, null);
             }
             if (idr != null)
                 idr.Close();
@@ -1717,7 +1717,7 @@ namespace VAdvantage.Utility
         {
             //IMAPConfig localConfig = new IMAPConfig(); //used for any saved on local pc 
             //IMAPConfig config = new IMAPConfig(); // user for user configuration
-            MUserMailConfigration _userMailConfigration = null;
+            MVAFUserMailConfigration _userMailConfigration = null;
 
             try
             {
@@ -1726,7 +1726,7 @@ namespace VAdvantage.Utility
                 IDataReader idr = DB.ExecuteReader(sql, null, null);
                 if (idr.Read())
                 {
-                    _userMailConfigration = new MUserMailConfigration(ctx, idr, null);
+                    _userMailConfigration = new MVAFUserMailConfigration(ctx, idr, null);
 
                 }
                 if (idr != null)

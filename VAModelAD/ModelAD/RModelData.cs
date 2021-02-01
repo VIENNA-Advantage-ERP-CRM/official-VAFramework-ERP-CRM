@@ -106,8 +106,8 @@ namespace VAdvantage.Model
             {
                 sql.Append(" WHERE ").Append(whereClause);
             }
-            String finalSQL = MRole.GetDefault(ctx, false).AddAccessSQL(
-                sql.ToString(), RModel.TABLE_ALIAS, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            String finalSQL = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
+                sql.ToString(), RModel.TABLE_ALIAS, MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             if (orderClause != null && orderClause.Length > 0)
             {
                 finalSQL += " ORDER BY " + orderClause;

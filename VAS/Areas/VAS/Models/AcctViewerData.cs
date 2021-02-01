@@ -152,7 +152,7 @@ namespace VIS.Models
 
             var sql = "SELECT VAF_Org_ID, Name FROM VAF_Org WHERE VAF_Client_ID=" + vaf_client_id;
             // check applied for checking if organization unit window is available on the target DB or not.
-            MOrg Org = new MOrg(ctx, ctx.GetVAF_Org_ID(), null);
+            MVAFOrg Org = new MVAFOrg(ctx, ctx.GetVAF_Org_ID(), null);
             if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
             {
                 sql += " AND IsActive='Y' AND IsCostCenter='N' AND IsProfitCenter='N' AND IsSummary='N' ORDER BY Value ";
@@ -311,7 +311,7 @@ namespace VIS.Models
         /// <returns></returns>
         public bool HasOrganizationUnit(Ctx ctx)
         {
-            MOrg Org = new MOrg(ctx, ctx.GetVAF_Org_ID(), null);
+            MVAFOrg Org = new MVAFOrg(ctx, ctx.GetVAF_Org_ID(), null);
             if (Org.Get_ColumnIndex("IsOrgUnit") > -1)
             {
                 return true;

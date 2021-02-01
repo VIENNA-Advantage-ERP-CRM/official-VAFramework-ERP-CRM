@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="role">role</param>
         /// <returns>statement</returns>
-        public String GetSQL(MRole role)
+        public String GetSQL(MVAFRole role)
         {
             if (_lines == null)
             {
@@ -146,9 +146,9 @@ namespace VAdvantage.Model
             //	Access
             if (role == null)
             {
-                role = MRole.GetDefault(GetCtx(), false);
+                role = MVAFRole.GetDefault(GetCtx(), false);
             }
-            String finalSQL = role.AddAccessSQL(sql.ToString(), GetTableName(), MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            String finalSQL = role.AddAccessSQL(sql.ToString(), GetTableName(), MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             log.Finer(finalSQL);
             return finalSQL;
         }

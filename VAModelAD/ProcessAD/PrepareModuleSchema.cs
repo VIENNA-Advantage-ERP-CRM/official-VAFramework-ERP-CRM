@@ -128,7 +128,7 @@ namespace VAdvantage.Process
 
             if (count == 0)
             {
-                MModuleDBSchema schema = new MModuleDBSchema(_ctx, 0, Get_TrxName());
+                MVAFModuleDBSchema schema = new MVAFModuleDBSchema(_ctx, 0, Get_TrxName());
                 schema.SetVAF_TableView_ID(VAF_TableView_ID);
                 schema.SetRecord_ID(Record_ID);
                 schema.SetName(RName);
@@ -144,7 +144,7 @@ namespace VAdvantage.Process
                         object Export_ID = DB.ExecuteScalar("SELECT Export_ID FROM " + TableName + " WHERE " + whereClause);
                         if (Export_ID == null || Export_ID.ToString() == "")
                         {
-                            int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), TableName, null);
+                            int expID = MVAFRecordSeq.GetNextExportID(GetCtx().GetVAF_Client_ID(), TableName, null);
                             if (expID == -1)
                             {
                                 throw new InvalidConstraintException("ExportID -1 for TableName: " + TableName);
@@ -1019,7 +1019,7 @@ namespace VAdvantage.Process
             {
                 InsertIntoDBSchema(X_VAF_Control_Ref.Table_ID, sVAF_Control_Ref_ID, X_VAF_Control_Ref.Table_Name, name, "VAF_Control_Ref_ID =" + sVAF_Control_Ref_ID);
 
-                MReference sReference = new MReference(_ctx, sVAF_Control_Ref_ID, null);
+                MVAFControlRef sReference = new MVAFControlRef(_ctx, sVAF_Control_Ref_ID, null);
 
                 if (sReference.GetValidationType() == X_VAF_Control_Ref.VALIDATIONTYPE_ListValidation)
                 {
@@ -1032,13 +1032,13 @@ namespace VAdvantage.Process
                 }
                 else if (sReference.GetValidationType() == X_VAF_Control_Ref.VALIDATIONTYPE_TableValidation)
                 {
-                    MRefTable sRefTable = null;
+                    MVAFCtrlRefTable sRefTable = null;
 
                     DataSet ds = DataBase.DB.ExecuteDataset("Select * From VAF_CtrlRef_Table Where VAF_Control_Ref_ID =" + sReference.GetVAF_Control_Ref_ID());
 
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        sRefTable = new MRefTable(_ctx, dr, Get_TrxName());
+                        sRefTable = new MVAFCtrlRefTable(_ctx, dr, Get_TrxName());
 
                         GetTable(sRefTable.GetVAF_TableView_ID());
                         GetColumn(sRefTable.GetColumn_Key_ID());
@@ -1057,7 +1057,7 @@ namespace VAdvantage.Process
             string name;
             if (HasModulePrefix("Name", "VAF_Job", "VAF_Job_ID=" + sVAF_Job_ID, out name))
             {
-                MProcess sProcess = new MProcess(_ctx, sVAF_Job_ID, null);
+                MVAFJob sProcess = new MVAFJob(_ctx, sVAF_Job_ID, null);
 
                 if (sProcess.GetVAF_ContextScope_ID() != 0)
                 {
@@ -1095,7 +1095,7 @@ namespace VAdvantage.Process
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MProcessPara sPara = new MProcessPara(_ctx, dr, Get_TrxName());
+                    MVAFJobPara sPara = new MVAFJobPara(_ctx, dr, Get_TrxName());
                     if (sPara.GetVAF_ColumnDic_ID() != 0)
                     {
                         GetElement(sPara.GetVAF_ColumnDic_ID());

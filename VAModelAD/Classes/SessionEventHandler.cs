@@ -14,7 +14,7 @@ namespace VAdvantage.Classes
             try
             {
                 //VAdvantage.Logging.VLogMgt.Shutdown(ctx);
-                MSession s = MSession.Get(ctx);
+                MVAFSession s = MVAFSession.Get(ctx);
                 if (s != null)
                 {
                     s.Logout();

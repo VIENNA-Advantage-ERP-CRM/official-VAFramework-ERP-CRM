@@ -48,7 +48,7 @@ namespace VIS.Models
             {
                 sql += " WHERE M_Warehouse_ID=" + warehouse_id;
             }
-            string finalSql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY 2";
+            string finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Warehouse", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY 2";
             DataSet ds = DB.ExecuteDataset(finalSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

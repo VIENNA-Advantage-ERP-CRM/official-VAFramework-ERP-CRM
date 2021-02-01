@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         ///Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        public MVAFTab(MWindow parent)
+        public MVAFTab(MVAFScreen parent)
             : this(parent.GetCtx(), 0, parent.Get_Trx())
         {
             ///this(parent.getCtx(), 0, parent.get_TrxName());
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="parent">parent</param>
         /// <param name="from">from copy from</param>
-        public MVAFTab(MWindow parent, MVAFTab from)
+        public MVAFTab(MVAFScreen parent, MVAFTab from)
             : this(parent.GetCtx(), 0, parent.Get_Trx())
         {
             CopyValues(from, this);
@@ -258,7 +258,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="tab"></param>
         /// <returns></returns>
-        public MVAFTableView GetParentTable(MWindow win, MVAFTab currentTab)
+        public MVAFTableView GetParentTable(MVAFScreen win, MVAFTab currentTab)
         {
             MVAFTab[] tabs = win.GetTabs(false, null);
             MVAFTab tab = tabs[currentTab.GetTabLevel()];

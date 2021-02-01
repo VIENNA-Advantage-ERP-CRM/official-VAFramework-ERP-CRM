@@ -104,7 +104,7 @@ namespace VIS.Controllers
                 
                 var VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_JOB_ID  FROM VAF_JOB WHERE NAME = 'Reset Your Password'", null, null)); // Get Reset Your Password process id 
                 // Prepare Process
-                MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0); // create object of MPInstance
+                MVAFJInstance instance = new MVAFJInstance(ctx, VAF_Job_ID, 0); // create object of MPInstance
                 if (!instance.Save())
                 {
                     msg = Msg.GetMsg(ctx, "ProcessNoInstance");
@@ -115,7 +115,7 @@ namespace VIS.Controllers
                 pi.SetVAF_UserContact_ID(VAF_UserContact_ID);
                 pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                 // Add Parameter - CurrentPassword
-                MPInstancePara para = new MPInstancePara(instance, 10);
+                MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
 
                 para.setParameter("CurrentPassword", currentPws);
                 if (!para.Save())
@@ -126,7 +126,7 @@ namespace VIS.Controllers
 
                 }
                 // Add Parameter - NewPassword
-                para = new MPInstancePara(instance, 20);
+                para = new MVAFJInstancePara(instance, 20);
                 para.setParameter("NewPassword", newPws);
                 if (!para.Save())
                 {
@@ -134,7 +134,7 @@ namespace VIS.Controllers
                    // msg = Msg.GetMsg(ctx, "ProcessNoInstance");
                     return Json(new { result = msg }, JsonRequestBehavior.AllowGet);
                 }
-                para = new MPInstancePara(instance, 30);
+                para = new MVAFJInstancePara(instance, 30);
                 para.setParameter("VAF_UserContact_ID", VAF_UserContact_ID);
                 if (!para.Save())
                 {

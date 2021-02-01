@@ -81,13 +81,13 @@ namespace VIS.Controllers
 
                 /* USER */
                 sb.Append(" VIS.MUser = {");
-                sb.Append("'isAdministrator':'" + MUser.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MUser.GetIsEmployee(ctx, ctx.GetVAF_UserContact_ID()) + "' }; ");
+                sb.Append("'isAdministrator':'" + MVAFUserContact.Get(ctx).IsAdministrator() + "', 'isUserEmployee':'" + MVAFUserContact.GetIsEmployee(ctx, ctx.GetVAF_UserContact_ID()) + "' }; ");
 
                 /* ROLE */
                 sb.Append(" VIS.MRole =  {");
-                sb.Append(" 'vo' : " + Newtonsoft.Json.JsonConvert.SerializeObject(VIS.Helpers.RoleHelper.GetRole(VAdvantage.Model.MRole.GetDefault(ctx, false))) + " , ");
+                sb.Append(" 'vo' : " + Newtonsoft.Json.JsonConvert.SerializeObject(VIS.Helpers.RoleHelper.GetRole(VAdvantage.Model.MVAFRole.GetDefault(ctx, false))) + " , ");
                 sb.Append(" 'SQL_RW' : true, 'SQL_RO' : false, 'SQL_FULLYQUALIFIED' : true, 'SQL_NOTQUALIFIED' : false,'SUPERUSER_USER_ID' : 100, 'SYSTEM_USER_ID' : 0 ");
-                sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
+                sb.Append(", 'PREFERENCETYPE_Client':'C', 'PREFERENCETYPE_None':'N', 'PREFERENCETYPE_Organization':'O', 'PREFERENCETYPE_User':'U','isAdministrator':" + (VAdvantage.Model.MVAFRole.GetDefault(ctx, false).IsAdministrator() ? "1" : "0").ToString() + "");
 
                 sb.Append(", columnSynonym : { 'VAF_UserContact_ID': 'SalesRep_ID','VAB_Acct_Element_ID':'Account_ID'}");
                 sb.Append("};");
@@ -152,12 +152,12 @@ namespace VIS.Controllers
         {
             LoginProcess process = new VAdvantage.Login.LoginProcess(_ctx);
 
-            if (VAdvantage.Model.MUser.IsSalesRep(_ctx.GetVAF_UserContact_ID()))
+            if (VAdvantage.Model.MVAFUserContact.IsSalesRep(_ctx.GetVAF_UserContact_ID()))
                 _ctx.SetContext("#SalesRep_ID", _ctx.GetVAF_UserContact_ID());
             if (_ctx.GetVAF_Role_ID() == 0)	//	User is a Sys Admin
                 _ctx.SetContext("#SysAdmin", "Y");
 
-            _ctx.SetContext("#IsAdmin", VAdvantage.Model.MRole.GetDefault(_ctx, false).IsAdministrator() ? "Y" : "N");
+            _ctx.SetContext("#IsAdmin", VAdvantage.Model.MVAFRole.GetDefault(_ctx, false).IsAdministrator() ? "Y" : "N");
 
             // m_ctx.SetContext("#User_Level", dr[0].ToString());  
             process.LoadPreferences(_ctx.GetContext("#Date"), "");

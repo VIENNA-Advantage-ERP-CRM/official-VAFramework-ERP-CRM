@@ -372,7 +372,7 @@ namespace VIS.Helpers
                 {
                     return false;
                 }
-                if (!MRole.GetDefault(_ctx).IsTableAccess(tableID, false))
+                if (!MVAFRole.GetDefault(_ctx).IsTableAccess(tableID, false))
                     return false;
             }
             return true;
@@ -401,7 +401,7 @@ namespace VIS.Helpers
                     {
                         return false;
                     }
-                    if (!MRole.GetDefault(_ctx).IsTableAccess(tableID, false))
+                    if (!MVAFRole.GetDefault(_ctx).IsTableAccess(tableID, false))
                         return false;
                 }
             }

@@ -156,7 +156,7 @@ namespace VAdvantage.Model
         public ListBoxVO GetPostingType()
         {
             int VAF_Control_Ref_ID = 125;
-            List<NamePair> options = new List<NamePair>(MRefList.GetList(VAF_Control_Ref_ID, true));
+            List<NamePair> options = new List<NamePair>(MVAFCtrlRefList.GetList(VAF_Control_Ref_ID, true));
             return new ListBoxVO(options, null);
         }
 

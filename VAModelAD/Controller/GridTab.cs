@@ -2733,7 +2733,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public bool IsLocked()
         {
-            if (!MRole.GetDefault((Context)_vo.GetCtx(), false).IsPersonalLock())
+            if (!MVAFRole.GetDefault((Context)_vo.GetCtx(), false).IsPersonalLock())
                 return false;
             if (_Lock == null)
                 LoadLocks();
@@ -2755,10 +2755,10 @@ namespace VAdvantage.Model
             int VAF_UserContact_ID = ctx.GetVAF_UserContact_ID();
             log.Finer("Lock=" + locks + ", VAF_UserContact_ID=" + VAF_UserContact_ID
               + ", VAF_TableView_ID=" + _vo.VAF_TableView_ID + ", Record_ID=" + Record_ID);
-            MPrivateAccess access = MPrivateAccess.Get(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
+            MVAFPrivateRights access = MVAFPrivateRights.Get(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             if (access == null)
             {
-                access = new MPrivateAccess(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
+                access = new MVAFPrivateRights(ctx, VAF_UserContact_ID, _vo.VAF_TableView_ID, Record_ID);
             }
             access.SetIsActive(locks);
             access.Save();

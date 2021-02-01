@@ -691,7 +691,7 @@ namespace VAdvantage.Utility
                 }
             }
 
-            MSession session = MSession.Get(Env.GetContext(), false);	//	finish
+            MVAFSession session = MVAFSession.Get(Env.GetContext(), false);	//	finish
             if (session != null)
                 session.Logout();
             VLogErrorBuffer.Get(true).ResetBuffer(false);

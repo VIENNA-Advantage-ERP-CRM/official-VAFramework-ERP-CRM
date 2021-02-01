@@ -381,7 +381,7 @@ namespace VIS.Controllers
 
                 // Apply Role check
                 if (sqlCol.Trim() != "")
-                    sqlCol = MRole.GetDefault(ctx).AddAccessSQL(sqlCol, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                    sqlCol = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlCol, TableName, MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
                 // if SQL is being generated for Version table
                 if (Util.GetValueOfBool(paramValue[1]))
@@ -486,7 +486,7 @@ namespace VIS.Controllers
                     + "WHERE VAM_ProductFeature_ID=" + yM_Attribute_ID
                     + " AND M_AttributeValue_ID=" + yM_AttributeValue_ID + ")";
             }
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             DataTable dt = null;
             IDataReader idr = null;
             int noProducts = 0;
@@ -602,7 +602,7 @@ namespace VIS.Controllers
                 + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
                 + " AND M_PriceList_Version.IsActive='Y' AND pl.IsActive='Y'";
             //	Add Access & Order
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_PriceList_Version", true, false)	// fully qualidfied - RO 
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_PriceList_Version", true, false)	// fully qualidfied - RO 
                 + " ORDER BY M_PriceList_Version.Name";
             System.Data.IDataReader idr = null;
             try
@@ -619,8 +619,8 @@ namespace VIS.Controllers
                 sql = "SELECT M_Warehouse_ID, Value || ' - ' || Name AS ValueName "
                     + "FROM M_Warehouse "
                     + "WHERE IsActive='Y'";
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql,
-                        "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO)
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql,
+                        "M_Warehouse", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO)
                     + " ORDER BY Value";
                 whList.Add(new KeyNamePair(0, ""));
                 idr = DB.ExecuteReader(sql, null, null);
@@ -2134,7 +2134,7 @@ namespace VIS.Controllers
 
             //	Prepare Process
             int VAF_Job_ID = 134;  // HARDCODED    VAB_InvoiceCreate
-            MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0);
+            MVAFJInstance instance = new MVAFJInstance(ctx, VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 lblStatusInfo = Msg.GetMsg(ctx, "ProcessNoInstance");
@@ -2147,7 +2147,7 @@ namespace VIS.Controllers
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
             //	Add Parameters
-            MPInstancePara para = new MPInstancePara(instance, 10);
+            MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
             //para.setParameter("Selection", "Y");
             para.setParameter("Selection", "N");
             if (!para.Save())
@@ -2158,7 +2158,7 @@ namespace VIS.Controllers
                 return msg.ToString();
             }
 
-            para = new MPInstancePara(instance, 20);
+            para = new MVAFJInstancePara(instance, 20);
             para.setParameter("DocAction", "CO");
             if (!para.Save())
             {
@@ -2168,7 +2168,7 @@ namespace VIS.Controllers
                 return msg.ToString();
             }
 
-            para = new MPInstancePara(instance, 30);
+            para = new MVAFJInstancePara(instance, 30);
             para.setParameter("VAB_Order_ID", whereClause);
             if (!para.Save())
             {
@@ -2209,7 +2209,7 @@ namespace VIS.Controllers
 
             //	Prepare Process
             int VAF_Job_ID = 199;	  // M_InOutCreate - Vframwork.Process.InOutGenerate
-            MPInstance instance = new MPInstance(ctx, VAF_Job_ID, 0);
+            MVAFJInstance instance = new MVAFJInstance(ctx, VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 lblStatusInfo = Msg.GetMsg(ctx, "ProcessNoInstance");
@@ -2220,7 +2220,7 @@ namespace VIS.Controllers
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
 
             //	Add Parameter - Selection=Y
-            MPInstancePara para = new MPInstancePara(instance, 10);
+            MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
             para.setParameter("Selection", "Y");
             if (!para.Save())
             {
@@ -2228,7 +2228,7 @@ namespace VIS.Controllers
                 lblStatusInfo = msg.ToString();
             }
             //	Add Parameter - M_Warehouse_ID=x
-            para = new MPInstancePara(instance, 20);
+            para = new MVAFJInstancePara(instance, 20);
             para.setParameter("M_Warehouse_ID", Util.GetValueOfInt(M_Warehouse_ID));
             if (!para.Save())
             {
@@ -2957,7 +2957,7 @@ namespace VIS.Controllers
         public string DownloadPdf(Ctx ctx, int archiveId)
         {
             MVAFArchive ar = new MVAFArchive(ctx, archiveId, null);//  m_archives[m_index];
-            MSession sess = MSession.Get(ctx);
+            MVAFSession sess = MVAFSession.Get(ctx);
 
             //Save Action Log
             VAdvantage.Common.Common.SaveActionLog(ctx, MActionLog.ACTION_Form, "Archive Viewer", ar.GetVAF_TableView_ID(), ar.GetRecord_ID(), 0, "", "", "Report Downloaded:->" + ar.GetName(), MActionLog.ACTIONTYPE_Download);

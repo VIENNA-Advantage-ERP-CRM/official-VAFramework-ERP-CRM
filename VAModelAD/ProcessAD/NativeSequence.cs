@@ -109,7 +109,7 @@ namespace VAdvantage.Process
         {
             if (!table.IsView())
             {
-                if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName))
+                if (!MVAFRecordSeq.CreateTableSequence(GetCtx(), table.GetTableName(), trxName))
                 {
                     //throw new Exception("Can not create Native Sequence for table " + table.GetTableName());
                     this.AddLog("Can not create Native Sequence for table : " + table.GetTableName());

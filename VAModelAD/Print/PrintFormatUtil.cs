@@ -44,7 +44,7 @@ namespace VAdvantage.Print
                 DataSet ds = DataBase.DB.ExecuteDataset(sql);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    total += AddMissingColumns(new MPrintFormat(_ctx, dr, null));
+                    total += AddMissingColumns(new MVAFPrintRptLayout(_ctx, dr, null));
                 }
             }
             catch (Exception e)
@@ -60,7 +60,7 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="pf"></param>
         /// <returns></returns>
-        public int AddMissingColumns(MPrintFormat pf)
+        public int AddMissingColumns(MVAFPrintRptLayout pf)
         {
            
             String sql = "SELECT c.VAF_Column_ID, c.ColumnName "
@@ -83,7 +83,7 @@ namespace VAdvantage.Print
                 {
                     int VAF_Column_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                     String ColumnName = dr.GetString(1);
-                    MPrintFormatItem pfi = MPrintFormatItem.CreateFromColumn(pf, VAF_Column_ID, 0);
+                    MVAFPrintRptLItem pfi = MVAFPrintRptLItem.CreateFromColumn(pf, VAF_Column_ID, 0);
                     if (pfi.Get_ID() != 0)
                     { //log
                     }

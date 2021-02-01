@@ -47,7 +47,7 @@ namespace VIS.Helpers
             //	Authentification
             bool authenticated = false;
             bool isLDAP = false;
-            MSystem system = MSystem.Get(new Ctx());
+            MVAFSystem system = MVAFSystem.Get(new Ctx());
             string output = "";
             if (system != null && system.IsLDAP())
             {
@@ -445,7 +445,7 @@ namespace VIS.Helpers
                     + ") "
                 + "ORDER BY o.Name";
             //
-            MRole role = null;
+            MVAFRole role = null;
             IDataReader dr = null;
 
             //list.Add(new KeyNamePair(-1, "Select"));
@@ -465,7 +465,7 @@ namespace VIS.Helpers
                         if (role == null)
                         {
                             ctx.SetVAF_Client_ID(VAF_Client_ID);
-                            role = MRole.Get(ctx, VAF_Role_ID, VAF_UserContact_ID, false);
+                            role = MVAFRole.Get(ctx, VAF_Role_ID, VAF_UserContact_ID, false);
                         }
                         GetOrgsAddSummary(list, VAF_Org_ID, Name, role, ctx);
                     }
@@ -504,7 +504,7 @@ namespace VIS.Helpers
         }
 
 
-        private static void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MRole role, Ctx ctx)
+        private static void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MVAFRole role, Ctx ctx)
         {
             if (role == null)
             {
@@ -516,7 +516,7 @@ namespace VIS.Helpers
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(ctx, role.GetVAF_TreeInfo_Org_ID(), null);
+            MVAFTreeInfo tree = MVAFTreeInfo.Get(ctx, role.GetVAF_TreeInfo_Org_ID(), null);
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
@@ -688,7 +688,7 @@ namespace VIS.Helpers
         {
             try
             {
-                int id = MSequence.GetNextID(Convert.ToInt32(model.Login2Model.Client), "VAF_LoginSetting", (Trx)null);
+                int id = MVAFRecordSeq.GetNextID(Convert.ToInt32(model.Login2Model.Client), "VAF_LoginSetting", (Trx)null);
                 if (id > 0)
                 {
                     string sql = "INSERT INTO VAF_LoginSetting " +

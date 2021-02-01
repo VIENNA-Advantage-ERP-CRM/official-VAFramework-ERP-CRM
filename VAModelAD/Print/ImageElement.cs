@@ -120,7 +120,7 @@ namespace VAdvantage.Print
 
         private void LoadAttachment(int VAF_Print_Rpt_LItem_ID)
         {
-            MVAFAttachment attachment = MVAFAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MPrintFormatItem.Table_ID, VAF_Print_Rpt_LItem_ID);
+            MVAFAttachment attachment = MVAFAttachment.Get(VAdvantage.Utility.Env.GetCtx(), MVAFPrintRptLItem.Table_ID, VAF_Print_Rpt_LItem_ID);
             if (attachment == null)
             {
                 log.Log(Level.WARNING, "No Attachment - VAF_Print_Rpt_LItem_ID=" + VAF_Print_Rpt_LItem_ID);
@@ -183,9 +183,9 @@ namespace VAdvantage.Print
             //	Position
             PointF location = GetAbsoluteLocation(pageStart);
             float x = location.X;
-            if (MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
+            if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
                 x += p_maxWidth - p_width;
-            else if (MPrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+            else if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                 x += (p_maxWidth - p_width) / 2;
             float y = location.Y;
 
@@ -223,9 +223,9 @@ namespace VAdvantage.Print
             //	Position
             PointF location = GetAbsoluteLocation(pageStart);
             float x = location.X;
-            if (MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
+            if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight.Equals(p_FieldAlignmentType))
                 x += p_maxWidth - p_width;
-            else if (MPrintFormatItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
+            else if (MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center.Equals(p_FieldAlignmentType))
                 x += (p_maxWidth - p_width) / 2;
             float y = location.Y;
 

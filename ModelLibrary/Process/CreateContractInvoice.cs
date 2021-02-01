@@ -141,7 +141,7 @@ namespace ViennaAdvantageServer.Process
             {
                 int res = 0;
                 sql.Clear();
-                sql.Append(MRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(VAB_DocTypes_ID) FROM VAB_DocTypes WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "VAB_DocTypes", true, true));
+                sql.Append(MVAFRole.GetDefault(GetCtx()).AddAccessSQL("SELECT MIN(VAB_DocTypes_ID) FROM VAB_DocTypes WHERE DOCBASETYPE='ARI' AND ISACTIVE ='Y'", "VAB_DocTypes", true, true));
                 int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                 // sql = "select noofdays from VAB_Frequency where VAB_Frequency_id = " + cont.GetVAB_Frequency_ID();

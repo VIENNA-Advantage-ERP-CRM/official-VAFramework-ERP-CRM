@@ -3110,7 +3110,7 @@ namespace VAdvantage.Model
             //	Check PriceLimit
             bool epl = "Y".Equals(GetCtx().GetContext(windowNo, "EnforcePriceLimit"));
             bool enforce = epl && GetCtx().IsSOTrx(windowNo);
-            if (enforce && MRole.GetDefault(GetCtx()).IsOverwritePriceLimit())
+            if (enforce && MVAFRole.GetDefault(GetCtx()).IsOverwritePriceLimit())
                 enforce = false;
             //	Check Price Limit?
             if (enforce && (Double)PriceLimit != 0.0 && priceActual.CompareTo(PriceLimit) < 0)
@@ -4301,7 +4301,7 @@ namespace VAdvantage.Model
 
                 if (!withinPolicy)
                 {
-                    if (!MRole.GetDefault(GetCtx()).IsOverrideReturnPolicy())
+                    if (!MVAFRole.GetDefault(GetCtx()).IsOverrideReturnPolicy())
                     {
                         log.SaveError("Error", Msg.GetMsg(GetCtx(), "ReturnPolicyExceeded"));
                         return false;
@@ -4768,7 +4768,7 @@ namespace VAdvantage.Model
         private int CreateDropShipWareHouse()
         {
             MWarehouse wh = new MWarehouse(GetCtx(), 0, Get_Trx());
-            MOrg org = new MOrg(GetCtx(), GetVAF_Org_ID(), Get_Trx());
+            MVAFOrg org = new MVAFOrg(GetCtx(), GetVAF_Org_ID(), Get_Trx());
             wh.SetVAF_Client_ID(GetVAF_Client_ID());
             wh.SetVAF_Org_ID(GetVAF_Org_ID());
             wh.SetName(org.GetName() + " Drop Ship WareHouse");

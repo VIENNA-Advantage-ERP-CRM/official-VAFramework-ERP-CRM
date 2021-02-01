@@ -68,7 +68,7 @@ namespace VAdvantage.Model
          */
         public String GetCreatedByName()
         {
-            MUser user = MUser.Get(GetCtx(), GetCreatedBy());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetCreatedBy());
             return user.GetName();
         }
 

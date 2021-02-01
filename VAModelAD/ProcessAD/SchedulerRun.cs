@@ -36,7 +36,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override string DoIt()
         {
             log.Info("VAF_JobRun_Plan_ID=" + p_VAF_JobRun_Plan_ID);
-            MScheduler scheduler = new MScheduler(GetCtx(), p_VAF_JobRun_Plan_ID, Get_TrxName());
+            MVAFJobRunPlan scheduler = new MVAFJobRunPlan(GetCtx(), p_VAF_JobRun_Plan_ID, Get_TrxName());
             return scheduler.Execute(Get_Trx());            
         }
     }

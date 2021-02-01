@@ -225,7 +225,7 @@ namespace VAdvantage.Process
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
+                int expID = MVAFRecordSeq.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
                 if (expID == -1)
                 {
                     throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
@@ -256,7 +256,7 @@ namespace VAdvantage.Process
 
                 //String exportid = module.GetPrefix() + PrimaryKey;    //export id to be picked from msequence table
 
-                int expID = MSequence.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
+                int expID = MVAFRecordSeq.GetNextExportID(GetCtx().GetVAF_Client_ID(), tableName, null);
                 if (expID == -1)
                 {
                     throw new InvalidConstraintException("ExportID -1 for TableName: " + tableName);
@@ -306,9 +306,9 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="refVID">Ref value ID</param>
         /// <param name="tableName">Name of the table</param>
-        MRefTable CheckReference(ExportDataRecords refRecord, String _tableName)
+        MVAFCtrlRefTable CheckReference(ExportDataRecords refRecord, String _tableName)
         {
-            MRefTable refTable = null;
+            MVAFCtrlRefTable refTable = null;
             int refVID = refRecord.Record_ID;
             string tableName = _tableName;
 
@@ -351,7 +351,7 @@ namespace VAdvantage.Process
                                 tempStore = "VAF_Control_Ref_ID";
                                 PrimaryID = int.Parse(tmpDS.Tables[0].Rows[a][tempStore].ToString());
 
-                                refTable = new MRefTable(GetCtx(), tmpDS.Tables[0].Rows[a], null);
+                                refTable = new MVAFCtrlRefTable(GetCtx(), tmpDS.Tables[0].Rows[a], null);
 
                                 if (tmpDS.Tables[0].Rows[a]["Export_ID"].Equals(DBNull.Value))
                                 {
@@ -478,7 +478,7 @@ namespace VAdvantage.Process
                                         else if (refID == DisplayType.List || refID == DisplayType.Table)
                                         {
                                             Object colValue = tmpDS.Tables[0].Rows[0][colName];
-                                            MRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MVAFTableView.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
+                                            MVAFCtrlRefTable refTable = CheckReference(new ExportDataRecords() { Record_ID = refVID, VAF_TableView_ID = MVAFTableView.Get_Table_ID("VAF_Control_Ref") }, "VAF_Control_Ref");
 
                                             if (refTable != null && colValue != null && colValue.ToString() != "")
                                             {

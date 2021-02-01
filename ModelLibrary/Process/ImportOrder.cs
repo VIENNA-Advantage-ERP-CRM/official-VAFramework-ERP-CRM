@@ -549,8 +549,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || imp.GetEMail() != null
                         || imp.GetPhone() != null)
                     {
-                        MUser[] users = bp.GetContacts(true);
-                        MUser user = null;
+                        MVAFUserContact[] users = bp.GetContacts(true);
+                        MVAFUserContact user = null;
                         for (int i = 0; user == null && i < users.Length; i++)
                         {
                             String name = users[i].GetName();
@@ -563,7 +563,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
                         if (user == null)
                         {
-                            user = new MUser(bp);
+                            user = new MVAFUserContact(bp);
                             if (imp.GetContactName() == null)
                                 user.SetName(imp.GetName());
                             else

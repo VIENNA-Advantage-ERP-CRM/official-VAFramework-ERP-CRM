@@ -1851,7 +1851,7 @@ namespace VAdvantage.Model
         */
         public String GetDocStatusName()
         {
-            return MRefList.GetListName(GetCtx(), 131, GetDocStatus());
+            return MVAFCtrlRefList.GetListName(GetCtx(), 131, GetDocStatus());
         }
 
         /// <summary>

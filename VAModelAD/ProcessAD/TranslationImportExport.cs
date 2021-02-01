@@ -114,10 +114,10 @@ namespace VAdvantage.Process
             
             #region [Module Parameter Check]
             // Added by Sukhwinder on 23 June,2017 for creating translations on the basis of Modules.
-            MModuleInfo module = null;
+            MVAFModuleInfo module = null;
             if (_VAF_ModuleInfo_ID != 0)
             {
-                module = new MModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
+                module = new MVAFModuleInfo(GetCtx(), _VAF_ModuleInfo_ID, null);
             }
             #endregion
 

@@ -40,13 +40,13 @@ namespace VAdvantage.Print
             if (_VAF_TableView_ID != null && int.Parse(_VAF_TableView_ID.ToString()) > 0)
             {
 
-                MPrintFormat pf = MPrintFormat.CreateFromTable(GetCtx(), int.Parse(_VAF_TableView_ID.ToString()), GetRecord_ID());
+                MVAFPrintRptLayout pf = MVAFPrintRptLayout.CreateFromTable(GetCtx(), int.Parse(_VAF_TableView_ID.ToString()), GetRecord_ID());
                 AddLog(Utility.Util.GetValueOfInt(_VAF_TableView_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
                 return pf.GetName() + " #" + pf.GetItemCount();
             }
             else if (_VAF_Print_Rpt_Layout_ID != null && _VAF_Print_Rpt_Layout_ID > 0)
             {
-                MPrintFormat pf = MPrintFormat.Copy(GetCtx(), Utility.Util.GetValueOfInt(_VAF_Print_Rpt_Layout_ID.ToString()), GetRecord_ID());
+                MVAFPrintRptLayout pf = MVAFPrintRptLayout.Copy(GetCtx(), Utility.Util.GetValueOfInt(_VAF_Print_Rpt_Layout_ID.ToString()), GetRecord_ID());
                 AddLog(Utility.Util.GetValueOfInt(_VAF_Print_Rpt_Layout_ID.ToString()), null, pf.GetItemCount(), pf.GetName());
                 return pf.GetName() + " #" + pf.GetItemCount();
             }

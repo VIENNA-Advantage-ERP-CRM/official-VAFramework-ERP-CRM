@@ -120,7 +120,7 @@ namespace VAdvantage.Model
                 "WHERE pfi.IsActive='Y' " +
                 "AND DCA.VAF_ROLE_ID='" + ctx.GetVAF_Role_ID() + "' AND DCA.ISACTIVE='Y' AND DCA.ISREADWRITE = 'Y' ORDER BY SeqNo asc";
 
-            MRole role = MRole.GetDefault(ctx, false);
+            MVAFRole role = MVAFRole.GetDefault(ctx, false);
             if (role.IsTableAccess(Table_ID, false))
             {
 

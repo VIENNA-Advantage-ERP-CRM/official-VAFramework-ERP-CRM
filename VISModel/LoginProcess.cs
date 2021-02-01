@@ -203,9 +203,9 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#Date", today.ToString());
 
             //	Load User/Role Info
-            MUser user = MUser.Get(m_ctx, GetVAF_UserContact_ID());
-            MUserPreference preference = user.GetPreference();
-            MRole role = MRole.GetDefault(m_ctx, true);
+            MVAFUserContact user = MVAFUserContact.Get(m_ctx, GetVAF_UserContact_ID());
+            MVAFUserPrefInfo preference = user.GetPreference();
+            MVAFRole role = MVAFRole.GetDefault(m_ctx, true);
 
             //	Optional Printer
             if (printerName == null)
@@ -350,7 +350,7 @@ namespace VAdvantage.Login
             //
             String sql = "SELECT " + ColumnName + " FROM " + TableName	//	most specific first
                 + " WHERE IsDefault='Y' AND IsActive='Y' ORDER BY VAF_Client_ID DESC, VAF_Org_ID DESC";
-            sql = MRole.GetDefault(m_ctx, false).AddAccessSQL(sql, TableName, MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(m_ctx, false).AddAccessSQL(sql, TableName, MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             IDataReader dr = null;
             try
             {
@@ -396,7 +396,7 @@ namespace VAdvantage.Login
             int VAF_Role_ID = m_ctx.GetVAF_Role_ID();
             int VAF_UserContact_ID = m_ctx.GetVAF_UserContact_ID();
             //
-            MSession session = MSession.Get(m_ctx, true);
+            MVAFSession session = MVAFSession.Get(m_ctx, true);
             if (VAF_Client_ID != session.GetVAF_Client_ID())
                 session.SetVAF_Client_ID(VAF_Client_ID);
             if (VAF_Org_ID != session.GetVAF_Org_ID())
@@ -495,7 +495,7 @@ namespace VAdvantage.Login
                 m_user = new KeyNamePair(VAF_UserContact_ID, app_user);
                 m_ctx.SetContext("##VAF_UserContact_Name", app_user);
 
-                if (MUser.IsSalesRep(VAF_UserContact_ID))
+                if (MVAFUserContact.IsSalesRep(VAF_UserContact_ID))
                     m_ctx.SetContext("#SalesRep_ID", VAF_UserContact_ID);
                 //
                 Ini.SetProperty(Ini.P_UID, app_user);
@@ -565,7 +565,7 @@ namespace VAdvantage.Login
                 {
                     int VAF_UserContact_ID = m_users[i];
                     m_ctx.SetVAF_UserContact_ID(VAF_UserContact_ID);
-                    if (MUser.IsSalesRep(VAF_UserContact_ID))
+                    if (MVAFUserContact.IsSalesRep(VAF_UserContact_ID))
                         m_ctx.SetContext("#SalesRep_ID", VAF_UserContact_ID);
                     m_user = new KeyNamePair(VAF_UserContact_ID, m_user.GetName());
                     break;
@@ -665,7 +665,7 @@ namespace VAdvantage.Login
                     + ") "
                 + "ORDER BY o.Name";
             //
-            MRole role = null;
+            MVAFRole role = null;
             IDataReader dr = null;
             try
             {
@@ -680,7 +680,7 @@ namespace VAdvantage.Login
                     if (summary)
                     {
                         if (role == null)
-                            role = MRole.Get(m_ctx, VAF_Role_ID, VAF_UserContact_ID, false);
+                            role = MVAFRole.Get(m_ctx, VAF_Role_ID, VAF_UserContact_ID, false);
                         GetOrgsAddSummary(list, VAF_Org_ID, Name, role);
                     }
                     else
@@ -726,7 +726,7 @@ namespace VAdvantage.Login
         /// <param name="Summary_Org_ID">summary org</param>
         /// <param name="Summary_Name">name</param>
         /// <param name="role"></param>
-        private void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MRole role)
+        private void GetOrgsAddSummary(List<KeyNamePair> list, int Summary_Org_ID, String Summary_Name, MVAFRole role)
         {
             if (role == null)
             {
@@ -738,7 +738,7 @@ namespace VAdvantage.Login
                 return;
             }
             //	Summary Org - Get Dependents
-            MTree tree = MTree.Get(m_ctx, role.GetVAF_TreeInfo_Org_ID(), null);
+            MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, role.GetVAF_TreeInfo_Org_ID(), null);
             String sql = "SELECT VAF_Client_ID, VAF_Org_ID, Name, IsSummary FROM VAF_Org "
                 + "WHERE IsActive='Y' AND VAF_Org_ID IN (SELECT Node_ID FROM "
                 + tree.GetNodeTableName()
@@ -885,10 +885,10 @@ namespace VAdvantage.Login
             m_ctx.SetContext("#Date", today.ToString());
 
             //	Load User/Role Infos
-            MUser user = MUser.Get(m_ctx, m_ctx.GetVAF_UserContact_ID());
+            MVAFUserContact user = MVAFUserContact.Get(m_ctx, m_ctx.GetVAF_UserContact_ID());
 
-            MUserPreference preference = user.GetPreference();
-            MRole role = MRole.GetDefault(m_ctx);
+            MVAFUserPrefInfo preference = user.GetPreference();
+            MVAFRole role = MVAFRole.GetDefault(m_ctx);
 
             //	Optional Printer
             if (printerName == null)

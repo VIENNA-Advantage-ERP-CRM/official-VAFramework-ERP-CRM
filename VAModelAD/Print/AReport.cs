@@ -33,7 +33,7 @@ namespace VAdvantage.Print
         /// <param name="query">query</param>
         public AReport(int VAF_TableView_ID, ToolStripDropDownButton sender, Query query)
         {
-            if (!MRole.GetDefault(Env.GetContext()).IsCanReport(VAF_TableView_ID))
+            if (!MVAFRole.GetDefault(Env.GetContext()).IsCanReport(VAF_TableView_ID))
             {
                 //ShowMessage.Error("AccessCannotReport", true, query.GetTableName());
                 return;
@@ -67,12 +67,12 @@ namespace VAdvantage.Print
 
             int VAF_Client_ID = Env.GetContext().GetVAF_Client_ID();
             //
-            String sql = MRole.GetDefault(Env.GetContext()).AddAccessSQL(
+            String sql = MVAFRole.GetDefault(Env.GetContext()).AddAccessSQL(
                 "SELECT VAF_Print_Rpt_Layout_ID, Name, VAF_Client_ID "
                     + "FROM VAF_Print_Rpt_Layout "
                     + "WHERE VAF_TableView_ID='" + VAF_TableView_ID + "' AND IsTableBased='Y' "
                     + "ORDER BY VAF_Client_ID DESC, IsDefault DESC, Name",		//	Own First
-                "VAF_Print_Rpt_Layout", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAF_Print_Rpt_Layout", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             KeyNamePair pp = null;
 
@@ -136,7 +136,7 @@ namespace VAdvantage.Print
         /// <param name="pp">KeyNamePair values</param>
         private void LaunchReport(KeyNamePair pp)
         {
-            MPrintFormat pf = MPrintFormat.Get(Env.GetContext(), pp.GetKey(), true);
+            MVAFPrintRptLayout pf = MVAFPrintRptLayout.Get(Env.GetContext(), pp.GetKey(), true);
             LaunchReport(pf);
         }	//	launchReport
 
@@ -145,7 +145,7 @@ namespace VAdvantage.Print
         /// Launch Report
         /// </summary>
         /// <param name="pf">PrintFormat Object</param>
-        private void LaunchReport(MPrintFormat pf)
+        private void LaunchReport(MVAFPrintRptLayout pf)
         {
             //Code to preload the format (not include as user can change setting at the last moment )
             int Record_ID = 0;
@@ -180,7 +180,7 @@ namespace VAdvantage.Print
         /// <param name="VAF_TableView_ID">table id</param>
         private void CreateNewFormat(int VAF_TableView_ID)
         {
-            MPrintFormat pf = MPrintFormat.CreateFromTable(Env.GetContext(), VAF_TableView_ID);
+            MVAFPrintRptLayout pf = MVAFPrintRptLayout.CreateFromTable(Env.GetContext(), VAF_TableView_ID);
             LaunchReport(pf);
         }	//	createNewFormat
 
@@ -192,7 +192,7 @@ namespace VAdvantage.Print
         /// <param name="To_Client_ID">client id</param>
         private void CopyFormat(int VAF_Print_Rpt_Layout_ID, int To_Client_ID)
         {
-            MPrintFormat pf = MPrintFormat.CopyToClient(Env.GetContext(), VAF_Print_Rpt_Layout_ID, To_Client_ID);
+            MVAFPrintRptLayout pf = MVAFPrintRptLayout.CopyToClient(Env.GetContext(), VAF_Print_Rpt_Layout_ID, To_Client_ID);
             LaunchReport(pf);
         }	//	copyFormatFromClient
 

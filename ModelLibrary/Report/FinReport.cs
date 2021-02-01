@@ -1153,24 +1153,24 @@ namespace VAdvantage.Report
     /// Get/Create PrintFormat
     /// </summary>
     /// <returns>print format</returns>
-    private MPrintFormat GetPrintFormat()
+    private MVAFPrintRptLayout GetPrintFormat()
     {
         int VAF_Print_Rpt_Layout_ID = _report.GetVAF_Print_Rpt_Layout_ID();
         log.Info("VAF_Print_Rpt_Layout_ID=" + VAF_Print_Rpt_Layout_ID);
-        MPrintFormat pf = null;
+        MVAFPrintRptLayout pf = null;
         bool createNew = VAF_Print_Rpt_Layout_ID == 0;
 
         //	Create New
         if (createNew)
         {
             int VAF_TableView_ID = 544;		//	VAT_Report
-            pf = MPrintFormat.CreateFromTable(GetCtx(), VAF_TableView_ID);
+            pf = MVAFPrintRptLayout.CreateFromTable(GetCtx(), VAF_TableView_ID);
             VAF_Print_Rpt_Layout_ID = pf.GetVAF_Print_Rpt_Layout_ID();
             _report.SetVAF_Print_Rpt_Layout_ID(VAF_Print_Rpt_Layout_ID);
             _report.Save();
         }
         else
-            pf = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
+            pf = MVAFPrintRptLayout.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
 
         //	Print Format Sync
         if (!_report.GetName().Equals(pf.GetName()))
@@ -1189,7 +1189,7 @@ namespace VAdvantage.Report
         int count = pf.GetItemCount();
         for (int i = 0; i < count; i++)
         {
-            MPrintFormatItem pfi = pf.GetItem(i);
+            MVAFPrintRptLItem pfi = pf.GetItem(i);
             String ColumnName = pfi.GetColumnName();
             //
             if (ColumnName == null)
@@ -1286,7 +1286,7 @@ namespace VAdvantage.Report
         pf.SetTranslation();
         //	First one is unsorted - just re-load
         if (createNew)
-            pf = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
+            pf = MVAFPrintRptLayout.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);	//	use Cache
         return pf;
     }	//	getPrintFormat
 

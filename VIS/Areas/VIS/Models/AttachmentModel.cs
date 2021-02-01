@@ -38,7 +38,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Models
             FileLocation locations = new FileLocation();
             int VAF_Control_Ref_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAF_Control_Ref_Value_ID from vaf_column WHERE VAF_TableView_ID =(SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName='VAF_ClientDetail') AND UPPER(ColumnName)='SAVEATTACHMENTON'", null, null));
 
-            locations.values = MRefList.GetList(VAF_Control_Ref_ID, false, ctx);
+            locations.values = MVAFCtrlRefList.GetList(VAF_Control_Ref_ID, false, ctx);
             locations.selectedvalue = Util.GetValueOfString(DB.ExecuteScalar("Select SAVEATTACHMENTON From VAF_ClientDetail WHERE vaf_client_ID=" + ctx.GetVAF_Client_ID(), null, null));
             return locations;
         }

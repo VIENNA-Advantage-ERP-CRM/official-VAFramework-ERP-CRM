@@ -312,7 +312,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     journal.SetVAB_AccountBook_ID(aas.GetVAB_AccountBook_ID());
                     journal.SetVAB_Currency_ID(aas.GetVAB_Currency_ID());
                     journal.SetVAB_CurrencyType_ID(_VAB_CurrencyTypeReval_ID);
-                    MOrg org = MOrg.Get(GetCtx(), gl.GetVAF_Org_ID());
+                    MVAFOrg org = MVAFOrg.Get(GetCtx(), gl.GetVAF_Org_ID());
                     journal.SetDescription(GetName() + " - " + org.GetName());
                     journal.SetVAGL_Group_ID(cat.GetVAGL_Group_ID());
                     if (!journal.Save())

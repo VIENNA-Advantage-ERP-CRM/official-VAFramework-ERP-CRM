@@ -120,7 +120,7 @@ namespace VIS.Models
             isCustomer = _partner.IsCustomer();
             isVendor = _partner.IsVendor();
             isEmployee = _partner.IsEmployee();
-            _readOnly = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
+            _readOnly = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                 Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                 MBPartner.Table_ID, 0, false);
             log.Info("R/O=" + _readOnly);
@@ -135,11 +135,11 @@ namespace VIS.Models
             /************************************/
             ro = _readOnly;
             if (!ro)
-                ro = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
+                ro = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MBPartnerLocation.Table_ID, 0, false);
             if (!ro)
-                ro = !MRole.GetDefault(Env.GetCtx()).CanUpdate(
+                ro = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
                     MLocation.Table_ID, 0, false);
 
@@ -286,7 +286,7 @@ namespace VIS.Models
             });
             DataSet ds = new DataSet();
             String sql = "select VAB_BPart_Category_id, Name  from VAB_BPart_Category WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Category", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Category", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -321,7 +321,7 @@ namespace VIS.Models
             });
             DataSet ds = new DataSet();
             String sql = "select VAB_BusinessPartner_id, Name  from VAB_BusinessPartner WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BusinessPartner", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BusinessPartner", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -352,7 +352,7 @@ namespace VIS.Models
             });
             DataSet ds = new DataSet();
             String sql = "select VAB_BPart_Location_id, Name  from VAB_BPart_Location WHERE IsActive='Y' and VAB_BusinessPartner_id=" + VAB_BusinessPartner_id;
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Location", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_BPart_Location", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -383,7 +383,7 @@ namespace VIS.Models
             });
             DataSet ds = new DataSet();
             String sql = "SELECT VAB_Greeting_ID, Name FROM VAB_Greeting WHERE IsActive='Y' ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Greeting", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Greeting", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             sql += "ORDER BY 2";
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -405,7 +405,7 @@ namespace VIS.Models
         private MBPartnerLocation _pLocation = null;
         private MBPartner _partner = null;
 
-        private MUser _user = null;
+        private MVAFUserContact _user = null;
         X_VAB_BPart_Relation _bprelation = null;
         private static VLogger log = VLogger.GetVLogger(typeof(BPartnerModel).FullName);
         /// <summary>
@@ -525,7 +525,7 @@ namespace VIS.Models
             if (searchKey == null || searchKey.Length == 0)
             {
                 //	get Table Documet No
-                searchKey = MSequence.GetDocumentNo(ctx.GetVAF_Client_ID(), "VAB_BusinessPartner", null, ctx);
+                searchKey = MVAFRecordSeq.GetDocumentNo(ctx.GetVAF_Client_ID(), "VAB_BusinessPartner", null, ctx);
                 //Dispatcher.BeginInvoke(() => { txtValue.Text = value; });
             }
             _partner.SetValue(searchKey);
@@ -608,11 +608,11 @@ namespace VIS.Models
             if (_user == null && (contact.Length > 0 || email.Length > 0))
                 if (VAB_BusinessPartner_ID > 0)
                 {
-                    _user = new MUser(ctx, GetUserID(_partner.Get_ID()), null);
+                    _user = new MVAFUserContact(ctx, GetUserID(_partner.Get_ID()), null);
                 }
                 else
                 {
-                    _user = new MUser(_partner);
+                    _user = new MVAFUserContact(_partner);
                 }
             if (_user != null)
             {

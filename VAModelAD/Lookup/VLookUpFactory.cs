@@ -228,15 +228,15 @@ namespace VAdvantage.Classes
             {
                 info.queryDirect = info.query
                     + (hasWhere ? " AND " : " WHERE ") + info.keyColumn + "=@key";
-                info.queryAll = VAdvantage.Model.MRole.GetDefault(ctx, false).AddAccessSQL(info.query,
-                   info.tableName, VAdvantage.Model.MRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MRole.SQL_RO);
+                info.queryAll = VAdvantage.Model.MVAFRole.GetDefault(ctx, false).AddAccessSQL(info.query,
+                   info.tableName, VAdvantage.Model.MVAFRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MVAFRole.SQL_RO);
                 // }
             }
             else
             {
                 info.queryDirect = info.query.Substring(0, posOrder);
-                info.queryAll = VAdvantage.Model.MRole.GetDefault(ctx, false).AddAccessSQL(info.queryDirect,
-                   info.tableName, VAdvantage.Model.MRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MRole.SQL_RO);
+                info.queryAll = VAdvantage.Model.MVAFRole.GetDefault(ctx, false).AddAccessSQL(info.queryDirect,
+                   info.tableName, VAdvantage.Model.MVAFRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MVAFRole.SQL_RO);
 
                 info.queryDirect += (hasWhere ? " AND " : " WHERE ") + info.keyColumn + "=@key";
             }
@@ -269,8 +269,8 @@ namespace VAdvantage.Classes
                     info.query = info.query
                     + (hasWhere ? " AND " : " WHERE ") + local_validationCode;
 
-                info.queryAll = VAdvantage.Model.MRole.GetDefault(ctx, false).AddAccessSQL(info.query,
-                   info.tableName, VAdvantage.Model.MRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MRole.SQL_RO);
+                info.queryAll = VAdvantage.Model.MVAFRole.GetDefault(ctx, false).AddAccessSQL(info.query,
+                   info.tableName, VAdvantage.Model.MVAFRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MVAFRole.SQL_RO);
                 // }
             }
 
@@ -286,8 +286,8 @@ namespace VAdvantage.Classes
 
             //	Add Security
             if (needToAddSecurity)
-                info.query = VAdvantage.Model.MRole.GetDefault(ctx, false).AddAccessSQL(info.query,
-                    info.tableName, VAdvantage.Model.MRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MRole.SQL_RO);
+                info.query = VAdvantage.Model.MVAFRole.GetDefault(ctx, false).AddAccessSQL(info.query,
+                    info.tableName, VAdvantage.Model.MVAFRole.SQL_FULLYQUALIFIED, VAdvantage.Model.MVAFRole.SQL_RO);
 
             return info;
         }

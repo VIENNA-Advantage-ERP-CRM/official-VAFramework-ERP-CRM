@@ -842,7 +842,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+                    MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
                     int M_Warehouse_ID = org.GetM_Warehouse_ID();
                     //
                     int VAB_TaxRate_ID = Tax.Get(GetCtx(), GetM_Product_ID(), GetVAB_Charge_ID(),
@@ -5718,7 +5718,7 @@ namespace VAdvantage.Model
                 //	Check PriceLimit
                 String epl = GetCtx().GetContext(WindowNo, "EnforcePriceLimit");
                 bool enforce = GetCtx().IsSOTrx(WindowNo) && epl != null && epl.Equals("Y");
-                if (enforce && MRole.GetDefault(GetCtx()).IsOverwritePriceLimit())
+                if (enforce && MVAFRole.GetDefault(GetCtx()).IsOverwritePriceLimit())
                     enforce = false;
                 //	Check Price Limit?
                 if (enforce && Decimal.ToDouble((Decimal)PriceLimit) != 0.0

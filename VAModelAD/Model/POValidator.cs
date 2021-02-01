@@ -34,7 +34,7 @@ namespace VAModelAD.Model
             PORecord.AddCascade(X_K_Index.Table_ID, X_K_Index.Table_Name);
 
             //Restricts
-            PORecord.AddRestricts(X_CM_Chat.Table_ID, X_CM_Chat.Table_Name);
+            PORecord.AddRestricts(X_VACM_Chat.Table_ID, X_VACM_Chat.Table_Name);
             PORecord.AddRestricts(X_VAR_Request.Table_ID, X_VAR_Request.Table_Name);
         }
 
@@ -50,11 +50,11 @@ namespace VAModelAD.Model
         private bool InsertTreeNode(PO po)
         {
             int VAF_TableView_ID = po.Get_Table_ID();
-            if (!MTree.HasTree(VAF_TableView_ID, po.GetCtx()))
+            if (!MVAFTreeInfo.HasTree(VAF_TableView_ID, po.GetCtx()))
                 return false;
             int id = po.Get_ID();
             int VAF_Client_ID = po.GetVAF_Client_ID();
-            String treeTableName = MTree.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
+            String treeTableName = MVAFTreeInfo.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
             int VAB_Element_ID = 0;
             if (VAF_TableView_ID == X_VAB_Acct_Element.Table_ID)
             {
@@ -90,7 +90,7 @@ namespace VAModelAD.Model
                 {
                     if (Org.IsOrgUnit())
                     {
-                        int DefaultTree_ID = MTree.GetDefaultVAF_TreeInfo_ID(po.GetVAF_Client_ID(), VAF_TableView_ID);
+                        int DefaultTree_ID = MVAFTreeInfo.GetDefaultVAF_TreeInfo_ID(po.GetVAF_Client_ID(), VAF_TableView_ID);
                         sb.Append(" AND t.VAF_TreeInfo_ID=").Append(DefaultTree_ID);
                     }
                 }
@@ -117,9 +117,9 @@ namespace VAModelAD.Model
             if (id == 0)
                 id = po.Get_IDOld();
             int VAF_TableView_ID = po.Get_Table_ID();
-            if (!MTree.HasTree(VAF_TableView_ID, po.GetCtx()))
+            if (!MVAFTreeInfo.HasTree(VAF_TableView_ID, po.GetCtx()))
                 return false;
-            String treeTableName = MTree.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
+            String treeTableName = MVAFTreeInfo.GetNodeTableName(VAF_TableView_ID, po.GetCtx());
             if (treeTableName == null)
                 return false;
             //
@@ -287,20 +287,20 @@ namespace VAModelAD.Model
             dynamic masDet = po.GetMasterDetails();
             string value = null;
             if (dt != -1)       //	get based on Doc Type (might return null)
-                value = MSequence.GetDocumentNo(dt, po.Get_Trx(), po.GetCtx(), false, po);
+                value = MVAFRecordSeq.GetDocumentNo(dt, po.Get_Trx(), po.GetCtx(), false, po);
             if (value == null)  //	not overwritten by DocType and not manually entered
             {
                 if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                    value = MSequence.GetDocumentNo(po.GetVAF_Client_ID(), masDet.TableName, po.Get_Trx(), po.GetCtx());
+                    value = MVAFRecordSeq.GetDocumentNo(po.GetVAF_Client_ID(), masDet.TableName, po.Get_Trx(), po.GetCtx());
                 else
-                    value = MSequence.GetDocumentNo(po.GetVAF_Client_ID(), po.GetTableName(), po.Get_Trx(), po.GetCtx());
+                    value = MVAFRecordSeq.GetDocumentNo(po.GetVAF_Client_ID(), po.GetTableName(), po.Get_Trx(), po.GetCtx());
             }
             return value;
         }
         
         public int GetNextID(int VAF_Client_ID, string TableName, Trx trx)
         {
-            return MSequence.GetNextID(VAF_Client_ID, TableName, trx);
+            return MVAFRecordSeq.GetNextID(VAF_Client_ID, TableName, trx);
         }
 
         public string GetDocumentNo(PO po)
@@ -308,11 +308,11 @@ namespace VAModelAD.Model
             dynamic masDet = po.GetMasterDetails();
             string value = null;
             if (masDet != null && masDet.TableName != null && masDet.TableName != "")
-                value = MSequence.GetDocumentNo(masDet.TableName, po.Get_Trx(), po.GetCtx(), po);
+                value = MVAFRecordSeq.GetDocumentNo(masDet.TableName, po.Get_Trx(), po.GetCtx(), po);
             else
             {
                 // Handled to get Search Key based on Organization same as Document No.
-                value = MSequence.GetDocumentNo(GetTable(po.Get_TableName()), po.Get_Trx(), po.GetCtx(), po);
+                value = MVAFRecordSeq.GetDocumentNo(GetTable(po.Get_TableName()), po.Get_Trx(), po.GetCtx(), po);
 
             }
             return value;

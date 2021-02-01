@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /** BPartner			*/
         private MBPartner _bp = null;
         /** User				*/
-        private MUser _user = null;
+        private MVAFUserContact _user = null;
         /** Request				*/
         private MRequest _request = null;
         /** Project				*/
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
             String email = GetEMail();
             if (email != null && email.Length > 0)
             {
-                _user = MUser.Get(GetCtx(), email, Get_TrxName());
+                _user = MVAFUserContact.Get(GetCtx(), email, Get_TrxName());
                 if (_user != null)
                 {
                     base.SetVAF_UserContact_ID(_user.GetVAF_UserContact_ID());
@@ -122,13 +122,13 @@ namespace VAdvantage.Model
          * 	Get User
          *	@return user
          */
-        public MUser GetUser()
+        public MVAFUserContact GetUser()
         {
             if (GetVAF_UserContact_ID() == 0)
                 _user = null;
             else if (_user == null
                 || _user.GetVAF_UserContact_ID() != GetVAF_UserContact_ID())
-                _user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
+                _user = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
             return _user;
         }
 
@@ -484,9 +484,9 @@ namespace VAdvantage.Model
             if (_user == null)
             {
                 if (_bp == null)
-                    _user = new MUser(GetCtx(), 0, Get_TrxName());
+                    _user = new MVAFUserContact(GetCtx(), 0, Get_TrxName());
                 else
-                    _user = new MUser(_bp);
+                    _user = new MVAFUserContact(_bp);
             }
             _user.SetName(GetContactName());
             //

@@ -545,7 +545,7 @@ namespace VAdvantage.Model
             }
 
             //	Set Contact
-            MUser[] contacts = bp.GetContacts(false);
+            MVAFUserContact[] contacts = bp.GetContacts(false);
             if (contacts != null && contacts.Length > 0)	//	get first User
                 SetVAF_UserContact_ID(contacts[0].GetVAF_UserContact_ID());
         }
@@ -1894,7 +1894,7 @@ namespace VAdvantage.Model
          */
         public String GetDocStatusName()
         {
-            return MRefList.GetListName(GetCtx(), 131, GetDocStatus());
+            return MVAFCtrlRefList.GetListName(GetCtx(), 131, GetDocStatus());
         }
 
         /**
@@ -2886,7 +2886,7 @@ namespace VAdvantage.Model
                                     int deliveryCount = j + 1;
                                     if (product.IsOneAssetPerUOM())
                                         deliveryCount = 0;
-                                    MAsset asset = new MAsset(this, line, deliveryCount);
+                                    MVAAsset asset = new MVAAsset(this, line, deliveryCount);
                                     // Change By Mohit Amortization process .3/11/2016 
                                     if (countVA038 > 0)
                                     {
@@ -2913,7 +2913,7 @@ namespace VAdvantage.Model
                                 #region[Added by Sukhwinder (mantis ID: 1762, point 1)]
                                 if (noAssets > 0 && Util.GetValueOfInt(product.GetVAA_AssetGroup_ID()) > 0)
                                 {
-                                    MAsset asset = new MAsset(this, line, noAssets);
+                                    MVAAsset asset = new MVAAsset(this, line, noAssets);
                                     if (!asset.Save(Get_TrxName()))
                                     {
                                         _processMsg = "Could not create Asset";
@@ -3047,7 +3047,7 @@ namespace VAdvantage.Model
                                     CapitalExpense_ = Util.GetValueOfString(line.Get_Value("VAFAM_CapitalExpense"));
                                     if (CapitalExpense_ == "C")
                                     {
-                                        MAsset asst = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_TrxName());
+                                        MVAAsset asst = new MVAAsset(GetCtx(), line.GetA_Asset_ID(), Get_TrxName());
                                         //Update Asset Gross Value in Case of Capital Expense
                                         if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                                         {
@@ -4101,7 +4101,7 @@ namespace VAdvantage.Model
                 //	User - Last Result/Contact
                 if (GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
+                    MVAFUserContact user = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
                     //user.SetLastContact(new DateTime(System.currentTimeMillis()));
                     user.SetLastContact(DateTime.Now);
                     user.SetLastResult(Msg.Translate(GetCtx(), "VAB_Invoice_ID") + ": " + GetDocumentNo());
@@ -4413,7 +4413,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -4765,7 +4765,7 @@ namespace VAdvantage.Model
                 {
                     log.Fine("Asset");
                     Info.Append("@VAA_Asset_ID@: ");
-                    MAssetGroup astgrp = new MAssetGroup(GetCtx(), Util.GetValueOfInt(ch.Get_Value("VAA_AssetGroup_ID")), Get_TrxName());
+                    MVAAAssetGroup astgrp = new MVAAAssetGroup(GetCtx(), Util.GetValueOfInt(ch.Get_Value("VAA_AssetGroup_ID")), Get_TrxName());
                     int Qty = 1;
                     decimal invQty = line.GetQtyInvoiced();
                     if (astgrp.IsOneAssetPerUOM())
@@ -4775,7 +4775,7 @@ namespace VAdvantage.Model
                     }
                     for (Int32 i = 0; i < Qty; i++)
                     {
-                        MAsset ast = new MAsset(GetCtx(), 0, Get_TrxName());
+                        MVAAsset ast = new MVAAsset(GetCtx(), 0, Get_TrxName());
                         ast.SetVAF_Client_ID(GetVAF_Client_ID());
                         ast.SetVAF_Org_ID(GetVAF_Org_ID());
                         ast.Set_Value("VAB_Charge_ID", line.GetVAB_Charge_ID());
@@ -4832,7 +4832,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+            MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
             int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(Get_TrxName()); //jz
             if (counterVAB_BusinessPartner_ID == 0)
                 return null;
@@ -4843,7 +4843,7 @@ namespace VAdvantage.Model
                 return null;
 
             MBPartner counterBP = new MBPartner(GetCtx(), counterVAB_BusinessPartner_ID, null);
-            MOrgInfo counterOrgInfo = MOrgInfo.Get(GetCtx(), counterVAF_Org_ID, null);
+            MVAFOrgDetail counterOrgInfo = MVAFOrgDetail.Get(GetCtx(), counterVAF_Org_ID, null);
             log.Info("Counter BP=" + counterBP.GetName());
 
             //	Document Type
@@ -5396,7 +5396,7 @@ namespace VAdvantage.Model
             CapitalExpense_ = Util.GetValueOfString(rLine.Get_Value("VAFAM_CapitalExpense"));
             if (CapitalExpense_ == "C")
             {
-                MAsset asst = new MAsset(GetCtx(), Util.GetValueOfInt(po.Get_Value("VAA_Asset_ID")), Get_TrxName());
+                MVAAsset asst = new MVAAsset(GetCtx(), Util.GetValueOfInt(po.Get_Value("VAA_Asset_ID")), Get_TrxName());
                 //Update Asset Gross Value in Case of Capital Expense
                 if (asst.Get_ColumnIndex("VAFAM_AssetGrossValue") > 0)
                 {

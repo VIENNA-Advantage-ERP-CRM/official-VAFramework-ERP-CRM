@@ -482,7 +482,7 @@ namespace VIS.Models
                 _sql.Append(chkSameQtyss);
             }
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(_sql.ToString(), "hdr", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO) + _groupBy;
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(_sql.ToString(), "hdr", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO) + _groupBy;
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -523,7 +523,7 @@ namespace VIS.Models
                 sql += "  AND M_Locator_ID = " + locator;
             }
             sql += " ORDER BY Value";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

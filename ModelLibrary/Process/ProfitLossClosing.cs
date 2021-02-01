@@ -63,7 +63,7 @@ namespace VAdvantage.Process
                 }
 
                 // Get currentNext for generating key
-                VAB_ProfitLossLines_ID = MSequence.GetNextID(GetVAF_Client_ID(), "VAB_ProfitLossLines", Get_Trx());
+                VAB_ProfitLossLines_ID = MVAFRecordSeq.GetNextID(GetVAF_Client_ID(), "VAB_ProfitLossLines", Get_Trx());
                 VAB_ProfitLossLines_ID -= 1;
 
                 // Delete All Record from line

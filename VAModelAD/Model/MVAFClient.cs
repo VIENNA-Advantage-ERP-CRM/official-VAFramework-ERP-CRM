@@ -118,7 +118,7 @@ namespace VAModelAD.Model
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public EMail CreateEMail(MUser from, MUser to, String subject, String message, bool isHTML)
+        public EMail CreateEMail(MVAFUserContact from, MVAFUserContact to, String subject, String message, bool isHTML)
         {
             if (to == null)
             {
@@ -170,7 +170,7 @@ namespace VAModelAD.Model
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public EMail CreateEMail(MUser from, String toEMail, String toName, String subject, String message, bool isHTML)
+        public EMail CreateEMail(MVAFUserContact from, String toEMail, String toName, String subject, String message, bool isHTML)
         {
             if (toEMail == null || toEMail.Length == 0)
             {
@@ -324,7 +324,7 @@ namespace VAModelAD.Model
         }
 
 
-        public bool SendEMail(MUser from, MUser to, String subject, String message, FileInfo attachment, bool isHTML)
+        public bool SendEMail(MVAFUserContact from, MVAFUserContact to, String subject, String message, FileInfo attachment, bool isHTML)
         {
             EMail email = CreateEMail(from, to, subject, message, isHTML);
             if (email == null)
@@ -447,7 +447,7 @@ namespace VAModelAD.Model
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public EMail CreateEMail(MUser from, MUser to, String subject, String message)
+        public EMail CreateEMail(MVAFUserContact from, MVAFUserContact to, String subject, String message)
         {
             if (to == null)
             {
@@ -499,7 +499,7 @@ namespace VAModelAD.Model
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public EMail CreateEMail(MUser from, String toEMail, String toName, String subject, String message)
+        public EMail CreateEMail(MVAFUserContact from, String toEMail, String toName, String subject, String message)
         {
             if (toEMail == null || toEMail.Length == 0)
             {
@@ -696,7 +696,7 @@ namespace VAModelAD.Model
         /// <returns></returns>
         public bool SendEMail(int VAF_UserContact_ID, String subject, String message, FileInfo attachment)
         {
-            MUser to = MUser.Get(GetCtx(), VAF_UserContact_ID);
+            MVAFUserContact to = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
             String toEMail = to.GetEMail();
             if (toEMail == null || toEMail.Length == 0)
             {
@@ -733,7 +733,7 @@ namespace VAModelAD.Model
         /// <param name="message"></param>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public bool SendEMail(MUser from, MUser to, String subject, String message, FileInfo attachment)
+        public bool SendEMail(MVAFUserContact from, MVAFUserContact to, String subject, String message, FileInfo attachment)
         {
             EMail email = CreateEMail(from, to, subject, message);
             if (email == null)
@@ -816,7 +816,7 @@ namespace VAModelAD.Model
         /// <param name="to">to user</param>
         /// <param name="email">email</param>
         /// <returns>true if sent</returns>
-        private bool SendEmailNow(MUser from, MUser to, EMail email)
+        private bool SendEmailNow(MVAFUserContact from, MVAFUserContact to, EMail email)
         {
             String msg = email.Send();
             //

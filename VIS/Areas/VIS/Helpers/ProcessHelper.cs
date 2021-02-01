@@ -184,10 +184,10 @@ namespace VIS.Helpers
                             //cache.Add(10101, msgID);
                         }
 
-                        MProcess pro = MProcess.Get(ctx, Convert.ToInt32(processInfo["Process_ID"]));
+                        MVAFJob pro = MVAFJob.Get(ctx, Convert.ToInt32(processInfo["Process_ID"]));
 
                         // Insert Notice
-                        MNote note = new MNote(ctx, msgID, ctx.GetVAF_UserContact_ID(), null);
+                        MVAFNotice note = new MVAFNotice(ctx, msgID, ctx.GetVAF_UserContact_ID(), null);
                         note.SetTextMsg(Msg.GetMsg(ctx, "ProcessCompleted") + ": " + pro.GetName());
 
                         note.SetDescription(pro.GetName());
@@ -219,8 +219,8 @@ namespace VIS.Helpers
             pi.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             if (pi.GetVAF_JInstance_ID() == 0)
             {
-                MPInstance instance = null;
-                instance = new MPInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
+                MVAFJInstance instance = null;
+                instance = new MVAFJInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
 
                 if (!instance.Save())
                 {
@@ -236,7 +236,7 @@ namespace VIS.Helpers
                 {
                     var pp = pList[i];
                     //	Create Parameter
-                    MPInstancePara para = new MPInstancePara(ctx, pi.GetVAF_JInstance_ID(), i);
+                    MVAFJInstancePara para = new MVAFJInstancePara(ctx, pi.GetVAF_JInstance_ID(), i);
                     para.SetParameterName(pp.Name);
 
                     if (DisplayType.IsDate(pp.DisplayType))
@@ -448,10 +448,10 @@ namespace VIS.Helpers
         internal static ProcessReportInfo Process(Ctx ctx, Dictionary<string, string> processInfo)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
-            MPInstance instance = null;
+            MVAFJInstance instance = null;
             try
             {
-                instance = new MPInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
+                instance = new MVAFJInstance(ctx, Util.GetValueOfInt(processInfo["Process_ID"]), Util.GetValueOfInt(processInfo["Record_ID"]));
             }
             catch (Exception e)
             {
@@ -499,7 +499,7 @@ namespace VIS.Helpers
         StringBuilder parentIDs = new StringBuilder();
         private void GetChildNodesID(Ctx ctx, int currentnode, int treeID)
         {
-            MTree tree = new MTree(ctx, treeID, null);
+            MVAFTreeInfo tree = new MVAFTreeInfo(ctx, treeID, null);
 
 
             if (parentIDs.Length == 0)
@@ -546,7 +546,7 @@ namespace VIS.Helpers
             //Saved Action Log
             VAdvantage.Common.Common.SaveActionLog(_ctx, Util.GetValueOfString(nProcessInfo["ActionOrigin"]), Util.GetValueOfString(nProcessInfo["OriginName"]),
                 Util.GetValueOfInt(nProcessInfo["VAF_TableView_ID"]), Util.GetValueOfInt(nProcessInfo["Record_ID"]), Util.GetValueOfInt(nProcessInfo["Process_ID"]),
-                MWindow.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(), fileType, "", "");
+                MVAFScreen.Get(_ctx, Util.GetValueOfInt(nProcessInfo["Process_ID"])).GetName(), fileType, "", "");
 
 
             // _ctx.SetContext("#TimeZoneName", "India Standard Time");
@@ -576,7 +576,7 @@ namespace VIS.Helpers
                 if (nodeID > 0)
                 {
                     GetChildNodesID(_ctx, Convert.ToInt32(nodeID), Convert.ToInt32(treeID));
-                    MTree tree = new MTree(_ctx, Convert.ToInt32(treeID), null);
+                    MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, Convert.ToInt32(treeID), null);
                     string nodeTableName = tree.GetNodeTableName();
                     _query.AddRestriction(" " + tableName + "." + tableName + "_ID  IN (SELECT NODE_ID FROM " + nodeTableName + "  WHERE Parent_ID IN (" + parentIDs.ToString() + ") OR NODE_ID IN (" + parentIDs + ")) ");
 
@@ -591,7 +591,7 @@ namespace VIS.Helpers
             {
                 if (nodeID > 0)
                 {
-                    MTree tree = new MTree(_ctx, Convert.ToInt32(treeID), null);
+                    MVAFTreeInfo tree = new MVAFTreeInfo(_ctx, Convert.ToInt32(treeID), null);
                     string tableName = MVAFTableView.GetTableName(_ctx, tree.GetVAF_TableView_ID());
 
                     _query = new Query(tableName);
@@ -639,14 +639,14 @@ namespace VIS.Helpers
             byte[] b = null;
             try
             {
-                MPrintFormat pf = null;
+                MVAFPrintRptLayout pf = null;
 
                 if (!isCreateNew)
                 {
                     bool isPFExist = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(*) FROM VAF_Print_Rpt_Layout WHERE VAF_Print_Rpt_Layout_ID=" + id)) > 0;
                     if (isPFExist)
                     {
-                        pf = MPrintFormat.Get(_ctx, id, true);
+                        pf = MVAFPrintRptLayout.Get(_ctx, id, true);
                     }
                     else
                     {
@@ -661,11 +661,11 @@ namespace VIS.Helpers
                     //   pf = MPrintFormat.CreateFromTable(_ctx, id);
                     if (Convert.ToInt32(vaf_tab_ID) > 0)
                     {
-                        pf = MPrintFormat.CreateFromTable(_ctx, id, vaf_tab_ID, true);
+                        pf = MVAFPrintRptLayout.CreateFromTable(_ctx, id, vaf_tab_ID, true);
                     }
                     else
                     {
-                        pf = MPrintFormat.CreateFromTable(_ctx, id, true);
+                        pf = MVAFPrintRptLayout.CreateFromTable(_ctx, id, true);
                     }
 
                 }
@@ -748,13 +748,13 @@ namespace VIS.Helpers
         public static ProcessReportInfo GeneratePrint(Ctx ctx, int VAF_Job_ID, string Name, int VAF_TableView_ID, int Record_ID, int WindowNo, string recIDs, string fileType, string actionOrigin, string originName)
         {
             ProcessReportInfo ret = new ProcessReportInfo();
-            MPInstance instance = null;
+            MVAFJInstance instance = null;
             //Saved Action Log
-            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, VAF_TableView_ID, Record_ID, VAF_Job_ID, MProcess.Get(ctx, VAF_Job_ID).GetName(), fileType, "", "");
+            VAdvantage.Common.Common.SaveActionLog(ctx, actionOrigin, originName, VAF_TableView_ID, Record_ID, VAF_Job_ID, MVAFJob.Get(ctx, VAF_Job_ID).GetName(), fileType, "", "");
 
             try
             {
-                instance = new MPInstance(ctx, VAF_Job_ID, Record_ID);
+                instance = new MVAFJInstance(ctx, VAF_Job_ID, Record_ID);
             }
             catch (Exception e)
             {
@@ -1099,7 +1099,7 @@ namespace VIS.Helpers
                 // Get Default Heirarchy
                 string sqla = @"SELECT VAPA_REPORTINGORDER_id FROM VAPA_FinancialReportingOrder WHERE ISACTIVE ='Y' 
                        ORDER BY ISDEFAULT DESC ,VAPA_REPORTINGORDER_id ASC";
-                sqla = MRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
+                sqla = MVAFRole.GetDefault(_ctx).AddAccessSQL(sqla, "VAPA_FinancialReportingOrder", true, true);
                 object ID = DB.ExecuteScalar(sqla);
                 int _VAPA_FinancialReportingOrder_ID = 0;
                 if (ID != null && ID != DBNull.Value)

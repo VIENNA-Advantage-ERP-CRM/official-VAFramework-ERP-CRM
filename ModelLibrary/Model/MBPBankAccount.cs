@@ -103,7 +103,7 @@ namespace VAdvantage.Model
          *	@param bpc BP Contact
          * 	@param location Location
          */
-        public MBPBankAccount(Ctx ctx, MBPartner bp, MUser bpc, MLocation location)
+        public MBPBankAccount(Ctx ctx, MBPartner bp, MVAFUserContact bpc, MLocation location)
             : this(ctx, 0, bp.Get_TrxName())
         {
 

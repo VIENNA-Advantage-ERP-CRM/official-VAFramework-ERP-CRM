@@ -512,7 +512,7 @@ namespace VAdvantage.Model
                 SetStatementDate(today);	// @#Date@
                 SetDateAcct(today);	// @#Date@
                 //String name = DisplayType.getDateFormat(DisplayType.Date).format(today) + " " + MOrg.Get(ctx, GetVAF_Org_ID()).GetValue();
-                String name = String.Format("{0:d}", today) + " " + MOrg.Get(ctx, GetVAF_Org_ID()).GetValue();
+                String name = String.Format("{0:d}", today) + " " + MVAFOrg.Get(ctx, GetVAF_Org_ID()).GetValue();
                 SetName(name);
                 SetIsApproved(false);
                 SetPosted(false);	// N
@@ -707,7 +707,7 @@ namespace VAdvantage.Model
                 string filePath = Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "TempDownload", fileName);
 
                 int processID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Job_Id FROM VAF_Job WHERE VALUE='CashJournalReport'", null, null));
-                MPInstance instance = new MPInstance(GetCtx(), processID, GetVAB_CashJRNL_ID());
+                MVAFJInstance instance = new MVAFJInstance(GetCtx(), processID, GetVAB_CashJRNL_ID());
                 instance.Save();
                 ProcessInfo pi = new ProcessInfo("", processID, Get_Table_ID(), GetVAB_CashJRNL_ID());
                 pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());

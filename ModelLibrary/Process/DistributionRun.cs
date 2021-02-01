@@ -405,7 +405,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 runVAF_Org_ID = GetCtx().GetVAF_Org_ID();
 
             }
-            MOrg runOrg = MOrg.Get(GetCtx(), runVAF_Org_ID);
+            MVAFOrg runOrg = MVAFOrg.Get(GetCtx(), runVAF_Org_ID);
             int runVAB_BusinessPartner_ID = runOrg.GetLinkedVAB_BusinessPartner_ID();
             bool counter = !_run.IsCreateSingleOrder()	//	no single Order 
                 && runVAB_BusinessPartner_ID > 0						//	Org linked to BP
@@ -500,7 +500,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             log.Fine("Counter - From_BPOrg=" + bp.GetVAF_OrgBP_ID_Int()
                                 + "-" + bp + ", To_BP=" + runBPartner);
                             order.SetVAF_Org_ID(bp.GetVAF_OrgBP_ID_Int());
-                            MOrgInfo oi = MOrgInfo.Get(GetCtx(), bp.GetVAF_OrgBP_ID_Int(), null);
+                            MVAFOrgDetail oi = MVAFOrgDetail.Get(GetCtx(), bp.GetVAF_OrgBP_ID_Int(), null);
                             if (oi.GetM_Warehouse_ID() > 0)
                             {
                                 order.SetM_Warehouse_ID(oi.GetM_Warehouse_ID());

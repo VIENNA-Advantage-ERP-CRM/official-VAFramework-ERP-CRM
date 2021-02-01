@@ -330,7 +330,7 @@ namespace VAdvantage.Model
 
             int VAF_Org_ID = GetVAF_Org_ID();
             log.Fine("Org=" + VAF_Org_ID);
-            MOrg org = MOrg.Get(GetCtx(), VAF_Org_ID);
+            MVAFOrg org = MVAFOrg.Get(GetCtx(), VAF_Org_ID);
             int M_Warehouse_ID = org.GetM_Warehouse_ID();
             log.Fine("Warehouse=" + M_Warehouse_ID);
 

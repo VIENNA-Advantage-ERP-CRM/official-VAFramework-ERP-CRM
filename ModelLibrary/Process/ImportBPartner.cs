@@ -402,10 +402,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         }
 
                     //	****	Create/Update Contact	****
-                    MUser user = null;
+                    MVAFUserContact user = null;
                     if (impBP.GetVAF_UserContact_ID() != 0)
                     {
-                        user = new MUser(GetCtx(), impBP.GetVAF_UserContact_ID(), Get_TrxName());
+                        user = new MVAFUserContact(GetCtx(), impBP.GetVAF_UserContact_ID(), Get_TrxName());
                         if (user.GetVAB_BusinessPartner_ID() == 0)
                             user.SetVAB_BusinessPartner_ID(bp.GetVAB_BusinessPartner_ID());
                         else if (user.GetVAB_BusinessPartner_ID() != bp.GetVAB_BusinessPartner_ID())
@@ -462,7 +462,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     else 	//	New Contact
                         if (impBP.GetContactName() != null || impBP.GetEMail() != null)
                         {
-                            user = new MUser(bp);
+                            user = new MVAFUserContact(bp);
                             if (impBP.GetVAB_Greeting_ID() != 0)
                                 user.SetVAB_Greeting_ID(impBP.GetVAB_Greeting_ID());
                             String name = impBP.GetContactName();

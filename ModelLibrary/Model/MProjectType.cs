@@ -110,7 +110,7 @@ namespace VAdvantage.Model
         /// <param name="role">role</param>
         /// <returns>query</returns>
         public Query GetQuery(MGoalRestriction[] restrictions,
-            String measureDisplay, DateTime? date, int VAB_Std_Stage_ID, MRole role)
+            String measureDisplay, DateTime? date, int VAB_Std_Stage_ID, MVAFRole role)
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
@@ -157,7 +157,7 @@ namespace VAdvantage.Model
         /// <param name="role">role</param>
         /// <returns>sql for Bar Chart</returns>
         public String GetSqlBarChart(MGoalRestriction[] restrictions, String measureDisplay,
-            String measureDataType, DateTime? startDate, MRole role)
+            String measureDataType, DateTime? startDate, MVAFRole role)
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
@@ -225,7 +225,7 @@ namespace VAdvantage.Model
         /// <param name="role">role</param>
         /// <returns>sql for performance indicator</returns>
         public String GetSqlPI(MGoalRestriction[] restrictions,
-            String measureScope, String measureDataType, DateTime? reportDate, MRole role)
+            String measureScope, String measureDataType, DateTime? reportDate, MVAFRole role)
         {
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";

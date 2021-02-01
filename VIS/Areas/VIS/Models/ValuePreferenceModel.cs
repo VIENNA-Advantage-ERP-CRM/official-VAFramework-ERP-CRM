@@ -36,7 +36,7 @@ namespace VIS.Controllers
             bool success = false;
             int VAF_ValuePreference_ID = Convert.ToInt32(preferenceId);
 
-            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
+            MVAFValuePreference pref = new MVAFValuePreference(ctx, VAF_ValuePreference_ID, null);
             // delete the preference
             success = pref.Delete(true);
 
@@ -67,7 +67,7 @@ namespace VIS.Controllers
             _chkUser = Convert.ToBoolean(chkUser);
             _chkWindow = Convert.ToBoolean(chkWindow);
 
-            MPreference pref = new MPreference(ctx, VAF_ValuePreference_ID, null);
+            MVAFValuePreference pref = new MVAFValuePreference(ctx, VAF_ValuePreference_ID, null);
             // if preference id=0
             if (VAF_ValuePreference_ID == 0)
             {

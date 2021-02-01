@@ -46,12 +46,12 @@ namespace VIS.Models
             int UserTableID = MVAFTableView.Get_Table_ID("VAF_UserContact");
             int UserWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='User'", null, null));
 
-            if (!(bool)MRole.GetDefault(ctx).GetWindowAccess(UserWindowID))
+            if (!(bool)MVAFRole.GetDefault(ctx).GetWindowAccess(UserWindowID))
             {
                 return uInfo;
             }
 
-            if (!MRole.GetDefault(ctx).IsTableAccess(UserTableID, false))
+            if (!MVAFRole.GetDefault(ctx).IsTableAccess(UserTableID, false))
             {
                 return uInfo;
             }
@@ -89,7 +89,7 @@ namespace VIS.Models
                 sql += " , upper(VAF_UserContact.Email) ASC";
             }
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserContact", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_UserContact", true, false);
 
             DataSet ds = DB.ExecuteDatasetPaging(sql, pageNo, pageSize);
 
@@ -99,7 +99,7 @@ namespace VIS.Models
                 {
                     UserInfo userInfo = new UserInfo();
 
-                    userInfo.HasAccess = MRole.GetDefault(ctx).IsRecordAccess(UserTableID, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]), true);
+                    userInfo.HasAccess = MVAFRole.GetDefault(ctx).IsRecordAccess(UserTableID, Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]), true);
                     userInfo.Username = Convert.ToString(ds.Tables[0].Rows[i]["Name"]);
                     userInfo.Email = Convert.ToString(ds.Tables[0].Rows[i]["Email"]);
                     userInfo.VAF_UserContactID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_UserContact_ID"]);
@@ -110,7 +110,7 @@ namespace VIS.Models
                     userInfo.UserWindowID = UserWindowID;
                     userInfo.IsActive = ds.Tables[0].Rows[i]["IsActive"].ToString() == "Y" ? true : false;
 
-                    userInfo.IsUpdate = MRole.GetDefault(ctx).CanUpdate(userInfo.VAF_ClientID, userInfo.VAF_OrgID, userInfo.UserTableID, userInfo.VAF_UserContactID, false);
+                    userInfo.IsUpdate = MVAFRole.GetDefault(ctx).CanUpdate(userInfo.VAF_ClientID, userInfo.VAF_OrgID, userInfo.UserTableID, userInfo.VAF_UserContactID, false);
 
                     if (ds.Tables[0].Rows[i]["VAF_Image_ID"] != DBNull.Value && ds.Tables[0].Rows[i]["VAF_Image_ID"] != null && Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Image_ID"]) > 0)
                     {
@@ -167,7 +167,7 @@ namespace VIS.Models
 
             int RoleWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='Role'", null, null));
 
-            if (!(bool)MRole.GetDefault(ctx).GetWindowAccess(RoleWindowID))
+            if (!(bool)MVAFRole.GetDefault(ctx).GetWindowAccess(RoleWindowID))
             {
                 return rInfo;
             }
@@ -178,7 +178,7 @@ namespace VIS.Models
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
-                IsUpdate = MRole.GetDefault(ctx).CanUpdate(Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Client_ID"]), Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), UserTableID, VAF_UserContact_ID, false);
+                IsUpdate = MVAFRole.GetDefault(ctx).CanUpdate(Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Client_ID"]), Convert.ToInt32(ds.Tables[0].Rows[0]["VAF_Org_ID"]), UserTableID, VAF_UserContact_ID, false);
             }
 
 
@@ -203,7 +203,7 @@ namespace VIS.Models
             }
 
             sql += " ORDER BY upper(VAF_Role.Name)";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_Role", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_Role", true, false);
             ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -319,7 +319,7 @@ namespace VIS.Models
         /// <param name="VAF_UserContact_ID"></param>
         private void CreateNewUserRole(int VAF_Role_ID, int VAF_UserContact_ID)
         {
-            MUserRoles role = new MUserRoles(ctx, 0, null);
+            MVAFUserContactRoles role = new MVAFUserContactRoles(ctx, 0, null);
             role.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
             role.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
             role.SetVAF_UserContact_ID(VAF_UserContact_ID);
@@ -338,7 +338,7 @@ namespace VIS.Models
             List<GroupInfo> gInfo = new List<GroupInfo>();
             int groupWindowID = Convert.ToInt32(DB.ExecuteScalar("SELECT VAF_Screen_ID from VAF_Screen WHERE Name='Group Rights'", null, null));
 
-            if (MRole.GetDefault(ctx).GetWindowAccess(groupWindowID) == null || !(bool)MRole.GetDefault(ctx).GetWindowAccess(groupWindowID))
+            if (MVAFRole.GetDefault(ctx).GetWindowAccess(groupWindowID) == null || !(bool)MVAFRole.GetDefault(ctx).GetWindowAccess(groupWindowID))
             {
                 return gInfo;
             }
@@ -351,7 +351,7 @@ namespace VIS.Models
             }
 
             sql += " ORDER BY upper(name) ";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
 
             DataSet ds = DB.ExecuteDataset(sql);        // get All Groups.
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -373,7 +373,7 @@ namespace VIS.Models
                 sql += " AND upper(VAF_GroupInfo.Name) like ('%" + name.ToUpper() + "%')";
             }
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
 
             DataSet dsURoles = DB.ExecuteDataset(sql);                  // Get All groups that are assigned to current Role...
             if (dsURoles != null && dsURoles.Tables[0].Rows.Count > 0)
@@ -560,8 +560,8 @@ namespace VIS.Models
                     }
                     else                // Else create new entry....
                     {
-                        MWindow wind = new MWindow(ctx, groupWindowIDs[i], null);
-                        MWindowAccess wAccess = new MWindowAccess(wind, VAF_Role_ID);
+                        MVAFScreen wind = new MVAFScreen(ctx, groupWindowIDs[i], null);
+                        MVAFScreenRights wAccess = new MVAFScreenRights(wind, VAF_Role_ID);
                         wAccess.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                         wAccess.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                         wAccess.SetVAF_Role_ID(VAF_Role_ID);
@@ -690,8 +690,8 @@ namespace VIS.Models
 
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
-                    MProcess wind = new MProcess(ctx, groupWindowIDs[i], null);
-                    MProcessAccess wAccess = new MProcessAccess(wind, VAF_Role_ID);
+                    MVAFJob wind = new MVAFJob(ctx, groupWindowIDs[i], null);
+                    MVAFJobRights wAccess = new MVAFJobRights(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
                         if (roleWindowIDsDictinary[groupWindowIDs[i]] != grantAccess)
@@ -765,7 +765,7 @@ namespace VIS.Models
 
                 for (int i = 0; i < groupWindowIDs.Count(); i++)
                 {
-                    MWorkflow wind = new MWorkflow(ctx, groupWindowIDs[i], null);
+                    MVAFWorkflow wind = new MVAFWorkflow(ctx, groupWindowIDs[i], null);
                     MWorkflowAccess wAccess = new MWorkflowAccess(wind, VAF_Role_ID);
                     if (roleWindowIDsDictinary.ContainsKey(groupWindowIDs[i]))
                     {
@@ -838,7 +838,7 @@ namespace VIS.Models
             GroupChildInfo gInfo = new GroupChildInfo();
 
             string sql = "SELECT Name, Description from VAF_GroupInfo WHERE VAF_GroupInfo_ID=" + groupID;
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_GroupInfo", true, false);
 
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds == null || ds.Tables[0].Rows.Count == 0)
@@ -977,7 +977,7 @@ namespace VIS.Models
                     return VAdvantage.Utility.Msg.GetMsg(ctx, "DefaultValueNotFound");
                 }
 
-                MRole role = new MRole(ctx, 0, null);
+                MVAFRole role = new MVAFRole(ctx, 0, null);
 
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)           // Setting Default Values 
                 {
@@ -1000,8 +1000,8 @@ namespace VIS.Models
                     {
                         for (int i = 0; i < OrgID.Count; i++)           // Assigning org access to role
                         {
-                            MOrg org = new MOrg(ctx, OrgID[i], null);
-                            MRoleOrgAccess roles = new MRoleOrgAccess(org, role.GetVAF_Role_ID());
+                            MVAFOrg org = new MVAFOrg(ctx, OrgID[i], null);
+                            MVAFRoleOrgRights roles = new MVAFRoleOrgRights(org, role.GetVAF_Role_ID());
                             roles.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                             roles.SetVAF_Org_ID(OrgID[i]);
                             roles.SetIsReadOnly(false);

@@ -451,7 +451,7 @@ namespace VAdvantage.Model
             MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
             if (pc.GetVAA_AssetGroup_ID() == 0)
                 return false;
-            MAssetGroup ag = MAssetGroup.Get(GetCtx(), pc.GetVAA_AssetGroup_ID());
+            MVAAAssetGroup ag = MVAAAssetGroup.Get(GetCtx(), pc.GetVAA_AssetGroup_ID());
             return ag.IsOneAssetPerUOM();
 
         }

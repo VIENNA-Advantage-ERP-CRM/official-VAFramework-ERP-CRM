@@ -27,7 +27,7 @@ namespace VAdvantage.Print
 
     public class ReportEngine_N:IReportEngine,IReportView
     {
-        public ReportEngine_N(Ctx ctx, MPrintFormat pf, Query query, PrintInfo info)
+        public ReportEngine_N(Ctx ctx, MVAFPrintRptLayout pf, Query query, PrintInfo info)
         {
             string tableName = "";
 
@@ -71,7 +71,7 @@ namespace VAdvantage.Print
         private Ctx m_ctx;
 
         /**	Print Format			*/
-        private MPrintFormat m_printFormat;
+        private MVAFPrintRptLayout m_printFormat;
         /** Print Info				*/
         private PrintInfo m_info;
         /**	Query					*/
@@ -88,7 +88,7 @@ namespace VAdvantage.Print
         //******************//
         private int _vaf_org_id = -1;
 
-        public void SetPrintFormat(MPrintFormat pf)
+        public void SetPrintFormat(MVAFPrintRptLayout pf)
         {
             m_printFormat = pf;
             if (m_layout != null)
@@ -189,7 +189,7 @@ namespace VAdvantage.Print
             return m_printFormat.GetName();
         }	//	getName
 
-        public MPrintFormat GetPrintFormat()
+        public MVAFPrintRptLayout GetPrintFormat()
         {
             return m_printFormat;
         }	//	getPrintFormat
@@ -789,7 +789,7 @@ namespace VAdvantage.Print
 
 
             //	Get Print Format
-            MPrintFormat format = null;
+            MVAFPrintRptLayout format = null;
             //Object so = pi.getSerializableObject();
             //if (so instanceof MPrintFormat)
             //	format = (MPrintFormat)so;
@@ -797,9 +797,9 @@ namespace VAdvantage.Print
             {
                 //	We have a PrintFormat with the correct Client
                 if (Client_ID == VAF_Client_ID)
-                    format = MPrintFormat.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
+                    format = MVAFPrintRptLayout.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
                 else
-                    format = MPrintFormat.CopyToClient(ctx, VAF_Print_Rpt_Layout_ID, VAF_Client_ID);
+                    format = MVAFPrintRptLayout.CopyToClient(ctx, VAF_Print_Rpt_Layout_ID, VAF_Client_ID);
             }
             if (format != null)
             {
@@ -814,7 +814,7 @@ namespace VAdvantage.Print
             }
             //	Create Format
             if (format == null && VAF_ReportView_ID != 0)
-                format = MPrintFormat.CreateFromReportView(ctx, VAF_ReportView_ID, pi.GetTitle());
+                format = MVAFPrintRptLayout.CreateFromReportView(ctx, VAF_ReportView_ID, pi.GetTitle());
             if (format == null)
                 return null;
             //
@@ -1225,7 +1225,7 @@ namespace VAdvantage.Print
             }
 
             //	Get Format & Data
-            MPrintFormat format = MPrintFormat.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
+            MVAFPrintRptLayout format = MVAFPrintRptLayout.Get(ctx, VAF_Print_Rpt_Layout_ID, false);
             format.SetLanguage(language);		//	BP Language if Multi-Lingual
             //	if (!Env.isBaseLanguage(language, DOC_TABLES[type]))
             format.SetTranslationLanguage(language);
@@ -1305,12 +1305,12 @@ namespace VAdvantage.Print
                 //changes made by Jagmohan Bhatt :- Date: 13-july-2010
                 for (int col = 0; col < m_printFormat.GetItemCount(); col++)
                 {
-                    MPrintFormatItem item = m_printFormat.GetItem(col);
+                    MVAFPrintRptLItem item = m_printFormat.GetItem(col);
                     if (item.IsTypePrintFormat())
                     {
                         //isAnyHasChild = true;
                         int VAF_Column_ID = item.GetVAF_Column_ID();
-                        m_printFormat = MPrintFormat.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), true);
+                        m_printFormat = MVAFPrintRptLayout.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), true);
                         Object obj = m_printData.GetNode(VAF_Column_ID, false);
 
                         PrintDataElement dataElement = (PrintDataElement)obj;
@@ -1335,7 +1335,7 @@ namespace VAdvantage.Print
                     bool first = true;	//	first column to print
                     for (int col = 0; col < m_printFormat.GetItemCount(); col++)
                     {
-                        MPrintFormatItem item = m_printFormat.GetItem(col);
+                        MVAFPrintRptLItem item = m_printFormat.GetItem(col);
                         if (item.IsPrinted())
                         {
                             if (first)
@@ -1441,8 +1441,8 @@ namespace VAdvantage.Print
         /// <returns>HTML Content</returns>
         public bool CreateHTML(StreamWriter writer, bool onlyTable, Language language)
         {
-            MPrintTableFormat tf = m_printFormat.GetTableFormat();
-            MPrintFont printFont = MPrintFont.Get(m_printFormat.GetVAF_Print_Rpt_Font_ID());
+            MVAFPrintRptTblLayout tf = m_printFormat.GetTableFormat();
+            MVAFPrintRptFont printFont = MVAFPrintRptFont.Get(m_printFormat.GetVAF_Print_Rpt_Font_ID());
             tf.SetStandard_Font(printFont.GetFont());
             StringBuilder sb = new StringBuilder(@"<html><head><title>Report : " + m_printData.GetTableName() + "</title></head><body>");
 
@@ -1455,10 +1455,10 @@ namespace VAdvantage.Print
                 int i = 0;
                 for (int col = 0; col < m_printFormat.GetItemCount(); col++)
                 {
-                    MPrintFormatItem item = m_printFormat.GetItem(col);
+                    MVAFPrintRptLItem item = m_printFormat.GetItem(col);
                     if (item.GetVAF_Print_Rpt_Font_ID() != 0)
                     {
-                        MPrintFont font = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
+                        MVAFPrintRptFont font = MVAFPrintRptFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                     }
                     if (item.IsPrinted())
                     {
@@ -1506,7 +1506,7 @@ namespace VAdvantage.Print
             return true;
         }
 
-        private string CreateHeaderRow(MPrintTableFormat tbf, MPrintFormatItem item, bool row)
+        private string CreateHeaderRow(MVAFPrintRptTblLayout tbf, MVAFPrintRptLItem item, bool row)
         {
             StringBuilder sb = new StringBuilder("");
             if (row)
@@ -1541,7 +1541,7 @@ namespace VAdvantage.Print
         }
 
 
-        private string CreateDataRow(MPrintTableFormat tbf, MPrintFormatItem item, bool row)
+        private string CreateDataRow(MVAFPrintRptTblLayout tbf, MVAFPrintRptLItem item, bool row)
         {
 
             StringBuilder sb = new StringBuilder("");

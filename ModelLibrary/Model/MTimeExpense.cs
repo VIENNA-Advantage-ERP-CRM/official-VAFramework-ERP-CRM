@@ -550,7 +550,7 @@ namespace VAdvantage.Model
             }
             if (GetVAB_BusinessPartner_ID() != 0)
             {
-                VAdvantage.Model.MUser[] users = VAdvantage.Model.MUser.GetOfBPartner(GetCtx(), GetVAB_BusinessPartner_ID());
+                VAdvantage.Model.MVAFUserContact[] users = VAdvantage.Model.MVAFUserContact.GetOfBPartner(GetCtx(), GetVAB_BusinessPartner_ID());
                 if (users.Length > 0)
                 {
                     _VAF_UserContact_ID = users[0].GetVAF_UserContact_ID();

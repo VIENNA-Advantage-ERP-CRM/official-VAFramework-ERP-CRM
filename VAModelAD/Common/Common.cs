@@ -81,13 +81,13 @@ namespace VAdvantage.Common
                     return null;
                 }
                 FileInfo temp = null;
-                MProcess process = MProcess.Get(ctx, reportID);
+                MVAFJob process = MVAFJob.Get(ctx, reportID);
 
                 ProcessInfo pi = new ProcessInfo(nodeName, reportID,
                               VAF_TableViewID, recordID);
                 pi.SetVAF_UserContact_ID(VAF_UserContactID);
                 pi.SetVAF_Client_ID(VAF_ClientID);
-                MPInstance pInstance = new MPInstance(process, recordID);
+                MVAFJInstance pInstance = new MVAFJInstance(process, recordID);
                 //FillParameter(pInstance, trx);
                 pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
 
@@ -340,10 +340,10 @@ namespace VAdvantage.Common
             rptFilePath = null;
 
             // Create PInstance
-            MPInstance instance = null;
+            MVAFJInstance instance = null;
             try
             {
-                instance = new MPInstance(ctx, VAF_Job_ID, Record_ID);
+                instance = new MVAFJInstance(ctx, VAF_Job_ID, Record_ID);
             }
             catch (Exception e)
             {
@@ -977,7 +977,7 @@ namespace VAdvantage.Common
                 descriptonForLog += ", Process Name:->" + ProcessName;
             }
 
-            MSession sess = MSession.Get(ctx);
+            MVAFSession sess = MVAFSession.Get(ctx);
             sess.ActionLog(ctx, sess.GetVAF_Session_ID(), ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
                ActionOrigin, reportTypeForLog, OriginName, descriptonForLog, VAF_TableView_ID, Record_ID);
         }

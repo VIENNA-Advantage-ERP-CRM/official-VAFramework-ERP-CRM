@@ -231,7 +231,7 @@ namespace VIS.Models
                     //	New Lot Button
                     if (_masi.GetMAttributeSet().GetM_LotCtl_ID() != 0)
                     {
-                        if (MRole.GetDefault(ctx).IsTableAccess(MLot.Table_ID, false) && MRole.GetDefault(ctx).IsTableAccess(MLotCtl.Table_ID, false))
+                        if (MVAFRole.GetDefault(ctx).IsTableAccess(MLot.Table_ID, false) && MVAFRole.GetDefault(ctx).IsTableAccess(MLotCtl.Table_ID, false))
                         {
                             if (!_masi.IsExcludeLot(VAF_Column_ID, IsSOTrx))//_windowNoParent
                             {
@@ -281,7 +281,7 @@ namespace VIS.Models
                 //	New SerNo Button
                 if (_masi.GetMAttributeSet().GetM_SerNoCtl_ID() != 0)
                 {
-                    if (MRole.GetDefault(ctx).IsTableAccess(MSerNoCtl.Table_ID, false))
+                    if (MVAFRole.GetDefault(ctx).IsTableAccess(MSerNoCtl.Table_ID, false))
                     {
                         if (!_masi.IsExcludeSerNo(VAF_Column_ID, IsSOTrx))//_windowNoParent
                         {

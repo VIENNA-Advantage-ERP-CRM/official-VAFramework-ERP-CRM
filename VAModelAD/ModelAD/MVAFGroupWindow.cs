@@ -84,7 +84,7 @@ namespace VAdvantage.Model
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    MWindowAccess access = new MWindowAccess(GetCtx(), 0, null);
+                    MVAFScreenRights access = new MVAFScreenRights(GetCtx(), 0, null);
                     access.SetVAF_Screen_ID(GetVAF_Screen_ID());
                     access.SetVAF_Role_ID(Convert.ToInt32(ds.Tables[0].Rows[i]["VAF_Role_ID"]));
                     access.SetIsReadWrite(true);

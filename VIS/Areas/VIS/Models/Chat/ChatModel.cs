@@ -21,11 +21,11 @@ namespace VIS.Models
         //Window No
         private int _windowNo;
         //Attachment
-        private MChat _chat;
+        private MVACMChat _chat;
         // private MChatEntry _entry; 
         //get login info from context class
        // Ctx ctx = Env.GetContext();
-        private MChatEntry[] _chatEntries = null;//chat entries
+        private MVACMChatLine[] _chatEntries = null;//chat entries
         //private SimpleDateFormat _createdDate = null;
         private DateTime _createdDate;//get date from database according to chat entry
         private DataSet _ds = null;//data set for VACM_ChatLine table
@@ -50,11 +50,11 @@ namespace VIS.Models
             if (Chat_ID == 0)
             {
                 //set chat from MChat class first time
-                _chat = new MChat(ct, VAF_TableView_ID, Record_ID, description, null);
+                _chat = new MVACMChat(ct, VAF_TableView_ID, Record_ID, description, null);
             }
             else
             {
-                _chat = new MChat(ct, Chat_ID, null);
+                _chat = new MVACMChat(ct, Chat_ID, null);
             }
             //ctx = ct;
 
@@ -90,14 +90,14 @@ namespace VIS.Models
             if (VACM_Chat_ID == 0)
             {
                 //set chat from MChat class first time
-                _chat = new MChat(ct, VAF_TableView_ID, Record_ID, description, trxName);
+                _chat = new MVACMChat(ct, VAF_TableView_ID, Record_ID, description, trxName);
             }
             else
             {
-                _chat = new MChat(ct, VACM_Chat_ID, trxName);
+                _chat = new MVACMChat(ct, VACM_Chat_ID, trxName);
             }
             subsribedChat = new ChatInfo();
-            subsribedChat = GetHistory(MChat.CONFIDENTIALTYPE_Internal, _chat, page, pageSize,ct);
+            subsribedChat = GetHistory(MVACMChat.CONFIDENTIALTYPE_Internal, _chat, page, pageSize,ct);
             //ctx = ct;
             //Call Load Chat function 
             // Deployment.Current.Dispatcher.BeginInvoke(() => ShowText(subsribedChat));
@@ -111,13 +111,13 @@ namespace VIS.Models
         /// </summary>
         /// <param name="reload">Bool Type(reload data)</param>
         /// <returns>array of lines</returns>
-        public MChatEntry[] GetEntries(Boolean reload, int chatID, int page, int pageSize,Ctx ctx)
+        public MVACMChatLine[] GetEntries(Boolean reload, int chatID, int page, int pageSize,Ctx ctx)
         {
             //chat entries
             if (_chatEntries != null && !reload)
                 return _chatEntries;//return chat
             //list for chatEntry records
-            List<MChatEntry> list = new List<MChatEntry>();
+            List<MVACMChatLine> list = new List<MVACMChatLine>();
             String sql = "SELECT * FROM VACM_ChatLine WHERE VACM_Chat_ID=" + chatID + " ORDER BY Created";
 
 
@@ -143,7 +143,7 @@ namespace VIS.Models
                     rs = _ds.Tables[0].Rows[i];
                     //list.Add(new MChatEntry(GetCtx, rs, Get_TrxName()));
                     //add chatentries into list from VACM_ChatLine table
-                    list.Add(new MChatEntry(ctx, rs, null));
+                    list.Add(new MVACMChatLine(ctx, rs, null));
                 }
                 //_ds = null;
 
@@ -153,7 +153,7 @@ namespace VIS.Models
                 //log.Log(Level.SEVERE, sql, e);
             }
             //count number of records
-            _chatEntries = new MChatEntry[list.Count];
+            _chatEntries = new MVACMChatLine[list.Count];
             //add list into array
             _chatEntries = list.ToArray();
             //list.ToArray(_chatEntries);1..........................
@@ -171,7 +171,7 @@ namespace VIS.Models
         /// </summary>
         /// <param name="ConfidentialType">confidential type</param>
         /// <returns>text from control</returns>
-        public ChatInfo GetHistory(String confidentialType, MChat _chat, int page, int pageSize,Ctx ctx)
+        public ChatInfo GetHistory(String confidentialType, MVACMChat _chat, int page, int pageSize,Ctx ctx)
         {
             ChatInfo cinfo = new ChatInfo();
             GetEntries(true, _chat.GetCM_Chat_ID(), page, pageSize,ctx);//array list status
@@ -186,7 +186,7 @@ namespace VIS.Models
             for (int i = 0; i < _chatEntries.Length; i++)
             {
                 //olean first = true;
-                MChatEntry entry = _chatEntries[i];
+                MVACMChatLine entry = _chatEntries[i];
                 //get the created date of a perticular chat from PO
                 _createdDate = entry.GetCreated();
                 _format = DateTime.SpecifyKind(new DateTime(_createdDate.Year, _createdDate.Month, _createdDate.Day, _createdDate.Hour, _createdDate.Minute, _createdDate.Second), DateTimeKind.Utc);
@@ -249,7 +249,7 @@ namespace VIS.Models
                 {
                     _chat.Save();
                 }
-                MChatEntry entry = new MChatEntry(_chat, data);
+                MVACMChatLine entry = new MVACMChatLine(_chat, data);
 
                 bool saved = entry.Save();
 

@@ -240,18 +240,18 @@ namespace VAdvantage.Model
             {
                 MGoal goal = goals[i];
                 //	Find Role
-                MRole role = null;
+                MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
+                    role = MVAFRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
-                    MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
+                    MVAFUserContact user = MVAFUserContact.Get(GetCtx(), goal.GetVAF_UserContact_ID());
+                    MVAFRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];
                 }
                 if (role == null)
-                    role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
+                    role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 MMeasureCalc mc = MMeasureCalc.Get(GetCtx(), GetVAPA_EvaluateCalc_ID());
                 if (mc == null || mc.Get_ID() == 0 || mc.Get_ID() != GetVAPA_EvaluateCalc_ID())
@@ -317,18 +317,18 @@ namespace VAdvantage.Model
             {
                 MGoal goal = goals[i];
                 //	Find Role
-                MRole role = null;
+                MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
+                    role = MVAFRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
-                    MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
+                    MVAFUserContact user = MVAFUserContact.Get(GetCtx(), goal.GetVAF_UserContact_ID());
+                    MVAFRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];
                 }
                 if (role == null)
-                    role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
+                    role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
                 MRequestType rt = MRequestType.Get(GetCtx(), GetVAR_Req_Type_ID());
@@ -380,18 +380,18 @@ namespace VAdvantage.Model
             {
                 MGoal goal = goals[i];
                 //	Find Role
-                MRole role = null;
+                MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
-                    role = MRole.Get(GetCtx(), goal.GetVAF_Role_ID());
+                    role = MVAFRole.Get(GetCtx(), goal.GetVAF_Role_ID());
                 else if (goal.GetVAF_UserContact_ID() != 0)
                 {
-                    MUser user = MUser.Get(GetCtx(), goal.GetVAF_UserContact_ID());
-                    MRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
+                    MVAFUserContact user = MVAFUserContact.Get(GetCtx(), goal.GetVAF_UserContact_ID());
+                    MVAFRole[] roles = user.GetRoles(goal.GetVAF_Org_ID());
                     if (roles.Length > 0)
                         role = roles[0];
                 }
                 if (role == null)
-                    role = MRole.GetDefault(GetCtx(), false);	//	could result in wrong data
+                    role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
                 MProjectType pt = MProjectType.Get(GetCtx(), GetVAB_ProjectType_ID());

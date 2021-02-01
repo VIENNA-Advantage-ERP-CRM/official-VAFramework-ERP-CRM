@@ -365,7 +365,7 @@ namespace VAdvantage.Model
             if (isApproved && !IsApproved())
             {
                 int VAF_UserContact_ID = GetCtx().GetVAF_UserContact_ID();
-                MUser user = MUser.Get(GetCtx(), VAF_UserContact_ID);
+                MVAFUserContact user = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
                 String info = user.GetName()
                     + ": "
                     + Msg.Translate(GetCtx(), "IsApproved")

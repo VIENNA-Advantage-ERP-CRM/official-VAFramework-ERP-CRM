@@ -55,7 +55,7 @@ namespace VIS.Controllers
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 int VAF_Org_ID = Util.GetValueOfInt(fields);
                 int warehouse_ID = 0;
-                MOrgInfo oInfo = new MOrgInfo(ctx, VAF_Org_ID, null);                
+                MVAFOrgDetail oInfo = new MVAFOrgDetail(ctx, VAF_Org_ID, null);                
                 if (oInfo != null)
                 {
                     warehouse_ID = Util.GetValueOfInt(oInfo.Get_Value("M_Warehouse_ID"));

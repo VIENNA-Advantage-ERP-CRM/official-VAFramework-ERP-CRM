@@ -2529,7 +2529,7 @@ namespace VAdvantage.Model
          */
         public String GetDocStatusName()
         {
-            return MRefList.GetListName(GetCtx(), 131, GetDocStatus());
+            return MVAFCtrlRefList.GetListName(GetCtx(), 131, GetDocStatus());
         }
 
         /**
@@ -3489,7 +3489,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -4521,7 +4521,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Org Must be linked to BPartner
-            MOrg org = MOrg.Get(GetCtx(), GetVAF_Org_ID());
+            MVAFOrg org = MVAFOrg.Get(GetCtx(), GetVAF_Org_ID());
             //jz int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(); 
             int counterVAB_BusinessPartner_ID = org.GetLinkedVAB_BusinessPartner_ID(Get_Trx());
             if (counterVAB_BusinessPartner_ID == 0)

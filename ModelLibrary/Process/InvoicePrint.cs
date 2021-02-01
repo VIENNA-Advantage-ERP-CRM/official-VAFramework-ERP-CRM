@@ -227,7 +227,7 @@ namespace VAdvantage.Process
 		sql.Append(" ORDER BY i.VAB_Invoice_ID, pf.VAF_Org_ID DESC");	//	more than 1 PF record
 		log.Finer(sql.ToString());
 
-		MPrintFormat format = null;
+		MVAFPrintRptLayout format = null;
 		int old_VAF_Print_Rpt_Layout_ID = -1;
 		int old_VAB_Invoice_ID = -1;
 		int VAB_BusinessPartner_ID = 0;
@@ -275,7 +275,7 @@ namespace VAdvantage.Process
                 //    int VAF_UserContact_ID = rs.getInt(6);
                 int VAF_UserContact_ID = Utility.Util.GetValueOfInt(idr[5]);
                 //    MUser to = new MUser (getCtx(), VAF_UserContact_ID, get_TrxName());
-                MUser to = new MUser(GetCtx(), VAF_UserContact_ID, Get_TrxName());
+                MVAFUserContact to = new MVAFUserContact(GetCtx(), VAF_UserContact_ID, Get_TrxName());
                 //    String DocumentNo = rs.getString(7);
                 String DocumentNo = Utility.Util.GetValueOfString(idr[6]);
                 //    VAB_BusinessPartner_ID = rs.getInt(8);
@@ -304,7 +304,7 @@ namespace VAdvantage.Process
                 //	Get Format & Data
                 if (VAF_Print_Rpt_Layout_ID != old_VAF_Print_Rpt_Layout_ID)
                 {
-                    format = MPrintFormat.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);
+                    format = MVAFPrintRptLayout.Get(GetCtx(), VAF_Print_Rpt_Layout_ID, false);
                     old_VAF_Print_Rpt_Layout_ID = VAF_Print_Rpt_Layout_ID;
                 }
 
@@ -364,7 +364,7 @@ namespace VAdvantage.Process
 
                     //
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, GetVAF_UserContact_ID(), email);
+                    MVAFUserMailLog um = new MVAFUserMailLog(mText, GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

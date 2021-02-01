@@ -175,7 +175,7 @@ OR
             if (whereClause.Length > 7)
             {
                 // Applied Role access on workflow Activities
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
 
                 sql += fromClause;
                 sql += whereClause;
@@ -191,7 +191,7 @@ OR
             {
                 sql += "  ORDER BY Priority DESC, Created DESC";
                 // Applied Role access on workflow Activities
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true);
             }
 
             //temp ORDER BY Created desc,a.Priority DESC
@@ -237,7 +237,7 @@ OR
                     itm.WfState = Util.GetValueOfString(dr["WfState"]);
                     itm.EndWaitTime = Util.GetValueOfDateTime(dr["EndWaitTime"]);
                     itm.Created = Util.GetValueOfString(dr["Created"]);
-                    MWFActivity act = new MWFActivity(ctx, itm.VAF_WFlow_Task_ID, null);
+                    MVAFWFlowTask act = new MVAFWFlowTask(ctx, itm.VAF_WFlow_Task_ID, null);
                     itm.NodeName = act.GetNodeName();
                     itm.Summary = act.GetSummary();
                     itm.Description = act.GetNodeDescription();
@@ -325,7 +325,7 @@ OR
                     if (whereClause.Length > 7)
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
+                        sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + @" )  MyTable ";
 
                         sql += fromClause;
                         sql += whereClause;
@@ -339,7 +339,7 @@ OR
                     else
                     {
                         // Applied Role access on workflow Activities
-                        sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
+                        sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "a", true, true) + "  ) MyTable";
                     }
 
                     info.count = Util.GetValueOfInt(DB.ExecuteScalar(sql));
@@ -589,10 +589,10 @@ OR
             ActivityInfo info = new ActivityInfo();
             try
             {
-                MWFNode node = new MWFNode(ctx, nodeID, null);
+                MVAFWFlowNode node = new MVAFWFlowNode(ctx, nodeID, null);
                 info.NodeAction = node.GetAction();
                 info.NodeName = node.GetName();
-                if (MWFNode.ACTION_UserChoice.Equals(node.GetAction()))
+                if (MVAFWFlowNode.ACTION_UserChoice.Equals(node.GetAction()))
                 {
                     MVAFColumn col = node.GetColumn();
                     info.ColID = col.GetVAF_Column_ID();
@@ -600,13 +600,13 @@ OR
                     info.ColReferenceValue = col.GetVAF_Control_Ref_Value_ID();
                     info.ColName = col.GetColumnName();
                 }
-                else if (MWFNode.ACTION_UserWindow.Equals(node.GetAction()))
+                else if (MVAFWFlowNode.ACTION_UserWindow.Equals(node.GetAction()))
                 {
                     info.VAF_Screen_ID = node.GetVAF_Screen_ID();
-                    MWFActivity activity = new MWFActivity(ctx, activityID, null);
+                    MVAFWFlowTask activity = new MVAFWFlowTask(ctx, activityID, null);
                     info.KeyCol = activity.GetPO().Get_TableName() + "_ID";
                 }
-                else if (MWFNode.ACTION_UserForm.Equals(node.GetAction()))
+                else if (MVAFWFlowNode.ACTION_UserForm.Equals(node.GetAction()))
                 {
                     info.VAF_Page_ID = node.GetVAF_Page_ID();
                 }
@@ -703,8 +703,8 @@ OR
                 activitiesID.Sort();
                 for (int i = 0; i < activitiesID.Count; i++)
                 {
-                    MWFActivity activity = new MWFActivity(ctx, Convert.ToInt32(activitiesID[i]), null);
-                    MWFNode node = activity.GetNode();
+                    MVAFWFlowTask activity = new MVAFWFlowTask(ctx, Convert.ToInt32(activitiesID[i]), null);
+                    MVAFWFlowNode node = activity.GetNode();
                     // Change done to set zoom window from Node
                     if (node.GetZoomWindow_ID() > 0)
                         activity.SetVAF_Screen_ID(node.GetZoomWindow_ID());
@@ -725,7 +725,7 @@ OR
                         }
                     }
                     //	User Choice - Answer
-                    else if (MWFNode.ACTION_UserChoice.Equals(node.GetAction()))
+                    else if (MVAFWFlowNode.ACTION_UserChoice.Equals(node.GetAction()))
                     {
                         if (column == null)
                             column = node.GetColumn();
@@ -780,14 +780,14 @@ OR
                                     VAF_WFlow_Incharge_ID = node.GetVAF_WFlow_Incharge_ID();
                                 else if (node.GetWorkflow().GetVAF_WFlow_Incharge_ID() > 0)
                                     VAF_WFlow_Incharge_ID = node.GetWorkflow().GetVAF_WFlow_Incharge_ID();
-                                MWFResponsible resp = new MWFResponsible(ctx, VAF_WFlow_Incharge_ID, null);
+                                MVAFWFlowIncharge resp = new MVAFWFlowIncharge(ctx, VAF_WFlow_Incharge_ID, null);
                                 int superVisiorID = 0;
                                 bool setRespOrg = false;
                                 int parentOrg_ID = -1;
                                 if (resp.IsOrganization())
                                 {
                                     parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM VAF_OrgDetail WHERE VAF_Org_ID = " + activity.GetResponsibleOrg_ID()));
-                                    superVisiorID = (new MOrgInfo(ctx, parentOrg_ID, null).GetSupervisor_ID());
+                                    superVisiorID = (new MVAFOrgDetail(ctx, parentOrg_ID, null).GetSupervisor_ID());
                                     if (superVisiorID > 0)
                                         setRespOrg = true;
                                 }
@@ -891,7 +891,7 @@ OR
             return "";
         }
 
-        private string SetUserChoice(int VAF_UserContact_ID, string value, int dt, string textMsg, MWFActivity _activity, MWFNode _node, int VAF_Screen_ID)
+        private string SetUserChoice(int VAF_UserContact_ID, string value, int dt, string textMsg, MVAFWFlowTask _activity, MVAFWFlowNode _node, int VAF_Screen_ID)
         {
             try
             {
@@ -1103,7 +1103,7 @@ OR
 
 
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_WFlow_Task", true, true);
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAF_WFlow_Task", true, true);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

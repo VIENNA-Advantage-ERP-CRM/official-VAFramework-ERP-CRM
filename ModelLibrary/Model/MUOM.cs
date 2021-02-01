@@ -156,10 +156,10 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         private static void LoadUOMs(Ctx ctx)
         {
-            String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
+            String sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
                 "SELECT * FROM VAB_UOM "
                 + "WHERE IsActive='Y'",
-                "VAB_UOM", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_UOM", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             try
             {
                 DataSet ds = ExecuteQuery.ExecuteDataset(sql, null);

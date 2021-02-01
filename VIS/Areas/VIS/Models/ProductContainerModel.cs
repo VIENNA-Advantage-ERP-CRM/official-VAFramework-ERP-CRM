@@ -99,7 +99,7 @@ namespace VIS.Models
             {
                 sql += " AND M_Warehouse_ID = " + Warehouse_ID;
             }
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Warehouse", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Warehouse", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
 
             sql += "order by Name asc";
             DataSet ds = DB.ExecuteDataset(sql);
@@ -127,7 +127,7 @@ namespace VIS.Models
             {
                 sql += " AND M_Warehouse_ID = " + Warehouse_ID;
             }
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Locator", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Locator", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
             sql += " order by value asc";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -161,7 +161,7 @@ namespace VIS.Models
                 sql += " AND M_ProductContainer_ID != " + container;
             }
             sql += " ORDER BY Value";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -218,7 +218,7 @@ namespace VIS.Models
                     sql += " AND " + validation;
                 }
                 sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR m_productcontainer_id";
-                sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO); // fully qualidfied - RO
+                sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
                 ds = DB.ExecuteDataset(sql);
             }
             else if (DatabaseType.IsPostgre)
@@ -838,7 +838,7 @@ namespace VIS.Models
             text = text.ToUpper();
             string sql = @"SELECT Value || '_' || Name as des, M_ProductContainer_ID FROM M_ProductContainer WHERE IsActive='Y'
             AND (Upper(VALUE) like '%" + text + "%' OR UPPER(Name) LIKE '%" + text + "%')";
-            sql = MRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
             sql += " AND " + validation;
 

@@ -356,7 +356,7 @@ namespace VIS.Controllers
             {
                 Ctx ctx = Session["ctx"] as Ctx;
                 //VAdvantage.Logging.VLogMgt.Shutdown(ctx);
-                MSession s = MSession.Get(ctx);
+                MVAFSession s = MVAFSession.Get(ctx);
                 s.Logout();
             }
             catch

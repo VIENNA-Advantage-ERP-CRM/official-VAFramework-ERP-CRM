@@ -71,7 +71,7 @@ namespace VAdvantage.Print
         /// <param name="format">format</param>
         /// <param name="query">query</param>
         /// <returns></returns>
-        public PrintData GetPrintData(Ctx ctx, MPrintFormat format, Query query)
+        public PrintData GetPrintData(Ctx ctx, MVAFPrintRptLayout format, Query query)
         {
             if (format == null)
                 throw new Exception("No print format");
@@ -165,7 +165,7 @@ namespace VAdvantage.Print
         /// <param name="reportName">name of the report</param>
         /// <param name="tableName">name of the table</param>
         /// <returns></returns>
-        private PrintData GetPrintDataInfo(Ctx ctx, MPrintFormat format, Query query,
+        private PrintData GetPrintDataInfo(Ctx ctx, MVAFPrintRptLayout format, Query query,
             String reportName, String tableName)
         {
             _startTime = CommonFunctions.CurrentTimeMillis();
@@ -512,7 +512,7 @@ namespace VAdvantage.Print
                         {
                             MVAFColumn col = new MVAFColumn(ctx, VAF_Column_ID, null);
                             string obscureType = col.GetObscureType();
-                            if (obscureType != null && obscureType.Length > 0 && !MRole.GetDefault(ctx).IsColumnAccess(col.GetVAF_TableView_ID(),VAF_Column_ID,false))
+                            if (obscureType != null && obscureType.Length > 0 && !MVAFRole.GetDefault(ctx).IsColumnAccess(col.GetVAF_TableView_ID(),VAF_Column_ID,false))
                             {
                                 sb.Append(DBFunctionCollections.GetObscureColumn(obscureType, tableName, ColumnName)).Append(",");
                             }
@@ -633,12 +633,12 @@ namespace VAdvantage.Print
                     finalSQL.Append(wherequery);
                 }
                 //	Access Restriction
-                MRole role = MRole.GetDefault(ctx, false);
+                MVAFRole role = MVAFRole.GetDefault(ctx, false);
                 if (role.GetVAF_Role_ID() == 0 && !Ini.IsClient())
                 { }
                 else
                     finalSQL = new StringBuilder(role.AddAccessSQL(finalSQL.ToString(),
-                        tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO));
+                        tableName, MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO));
             }
 
             if (sqlSelfTableRef.Length > 0)
@@ -845,7 +845,7 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="pd">print data</param>
         /// <param name="format">format</param>
-        private void LoadPrintData(Ctx ctx, PrintData pd, MPrintFormat format)
+        private void LoadPrintData(Ctx ctx, PrintData pd, MVAFPrintRptLayout format)
         {
             //	Translate Spool Output
             bool translateSpool = pd.GetTableName().Equals("VAT_Spool");

@@ -145,7 +145,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void LogAccess()
         {
-            MSession session = MSession.Get(_vo.GetCtx(), true);
+            MVAFSession session = MVAFSession.Get(_vo.GetCtx(), true);
             session.WindowLog(_vo.GetCtx().GetVAF_Client_ID(), _vo.GetCtx().GetVAF_Org_ID(),
                 GetVAF_Screen_ID(), 0);
         }	//

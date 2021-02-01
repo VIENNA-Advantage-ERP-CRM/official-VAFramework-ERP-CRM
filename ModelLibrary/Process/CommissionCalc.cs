@@ -199,7 +199,7 @@ namespace VAdvantage.Process
                 //	CommissionOrders/Invoices
                 if (lines[i].IsCommissionOrders())
                 {
-                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
+                    MVAFUserContact[] users = MVAFUserContact.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
                     if (users == null || users.Length == 0)
                         throw new Exception("Commission Business Partner has no Users/Contact");
                     if (users.Length == 1)
@@ -219,7 +219,7 @@ namespace VAdvantage.Process
                 //To calculate Commission Amount For the Particular Agent If Not Selected in Line Tab Of Commission
                 else
                 {
-                    MUser[] users = MUser.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
+                    MVAFUserContact[] users = MVAFUserContact.GetOfBPartner(GetCtx(), m_com.GetVAB_BusinessPartner_ID());
                     if (users == null || users.Length == 0)
                     {
                         throw new Exception("Commission Business Partner has no Users/Contact");

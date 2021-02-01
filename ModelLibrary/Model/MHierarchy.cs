@@ -79,35 +79,35 @@ namespace VAdvantage.Model
         /// <returns>id or 0</returns>
         public int GetVAF_TreeInfo_ID(String TreeType)
         {
-            if (MTree.TREETYPE_Activity.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_Activity.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Activity_ID();
             }
-            if (MTree.TREETYPE_BPartner.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_BPartner.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_BPartner_ID();
             }
-            if (MTree.TREETYPE_Campaign.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_Campaign.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Campaign_ID();
             }
-            if (MTree.TREETYPE_ElementValue.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_ElementValue.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Account_ID();
             }
-            if (MTree.TREETYPE_Organization.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_Organization.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Org_ID();
             }
-            if (MTree.TREETYPE_Product.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_Product.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Product_ID();
             }
-            if (MTree.TREETYPE_Project.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_Project.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_Project_ID();
             }
-            if (MTree.TREETYPE_SalesRegion.Equals(TreeType))
+            if (MVAFTreeInfo.TREETYPE_SalesRegion.Equals(TreeType))
             {
                 return GetVAF_TreeInfo_SalesRegion_ID();
             }

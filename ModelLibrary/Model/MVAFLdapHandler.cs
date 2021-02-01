@@ -548,7 +548,7 @@ namespace VAdvantage.Model
             String info = null;
 
             //	Query 2 - Validate Asset
-            MAsset asset = null;
+            MVAAsset asset = null;
             String sql = "SELECT * "
                 + "FROM VAA_Asset "
                 + "WHERE M_Product_ID=@param1"
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
                 {
-                    asset = new MAsset(GetCtx(), idr, null);
+                    asset = new MVAAsset(GetCtx(), idr, null);
                 }
                 idr.Close();
             }
@@ -620,7 +620,7 @@ namespace VAdvantage.Model
             //	Done OK
             MVAFLdapRights log = LogAccess(VAF_Client_ID, VAF_UserContact_ID, 0, asset.GetA_Asset_ID(), info, null,
                         remoteHost, remoteAddr);
-            MAssetDelivery ad = new MAssetDelivery(asset, null, log.ToString(), VAF_UserContact_ID);
+            MVAAAssetDelivery ad = new MVAAAssetDelivery(asset, null, log.ToString(), VAF_UserContact_ID);
             ad.SetRemote_Host(remoteHost);
             ad.SetRemote_Addr(remoteAddr);
             ad.Save();

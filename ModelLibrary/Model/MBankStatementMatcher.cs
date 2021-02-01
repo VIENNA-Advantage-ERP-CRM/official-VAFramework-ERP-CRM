@@ -45,9 +45,9 @@ namespace VAdvantage.Model
         public static MBankStatementMatcher[] GetMatchers(Ctx ctx, Trx trxName)
         {
             List<MBankStatementMatcher> list = new List<MBankStatementMatcher>();
-            String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
+            String sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
                 "SELECT * FROM VAB_BankingJRNLMatcher ORDER BY SeqNo",
-                "VAB_BankingJRNLMatcher", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_BankingJRNLMatcher", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             DataTable dt = null;
             IDataReader idr = null;

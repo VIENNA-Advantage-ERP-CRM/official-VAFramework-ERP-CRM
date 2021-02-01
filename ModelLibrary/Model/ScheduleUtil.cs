@@ -152,7 +152,7 @@ namespace VAdvantage.Model
 	//	log.fine( "- NonBusinessDay -");
 		//	"WHERE TRUNC(Date1) BETWEEN TRUNC(?) AND TRUNC(?)"   causes
 		//	ORA-00932: inconsistent datatypes: expected NUMBER got TIMESTAMP
-		sql = MRole.GetDefault(_ctx, false).AddAccessSQL (
+		sql = MVAFRole.GetDefault(_ctx, false).AddAccessSQL (
 			"SELECT Name, Date1 FROM VAB_NonBusinessDay "
 			+ "WHERE TRUNC(Date1,'DD') BETWEEN @1 AND @2",
 			"VAB_NonBusinessDay", false, false);	// not qualified - RO
@@ -572,13 +572,13 @@ namespace VAdvantage.Model
         private void GetBaseInfo(int VAS_Resource_ID)
         {
             //	Resource is Active and Available
-            String sql = MRole.GetDefault(_ctx, false).AddAccessSQL(
+            String sql = MVAFRole.GetDefault(_ctx, false).AddAccessSQL(
                 "SELECT r.IsActive,r.IsAvailable,NULL,"	//	r.IsSingleAssignment,"
                 + "r.VAS_Res_Type_ID,rt.VAB_UOM_ID "
                 + "FROM VAS_Resource r, VAS_Res_Type rt "
                 + "WHERE r.VAS_Resource_ID=" + VAS_Resource_ID + " "
                 + " AND r.VAS_Res_Type_ID=rt.VAS_Res_Type_ID",
-                "r", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                "r", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             //
             IDataReader dr = null;
            // System.Data.SqlClient.SqlParameter param = null;

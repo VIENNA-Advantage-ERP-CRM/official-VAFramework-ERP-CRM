@@ -139,7 +139,7 @@ namespace VAdvantage.Process
         private int CreateVerWindow(string DisplayName, string TabName)
         {
             // create new version window
-            MWindow verWnd = new MWindow(GetCtx(), 0, Get_TrxName());
+            MVAFScreen verWnd = new MVAFScreen(GetCtx(), 0, Get_TrxName());
             verWnd.SetVAF_Client_ID(0);
             verWnd.SetVAF_Org_ID(0);
             verWnd.SetName(DisplayName + "_" + TabName);
@@ -224,7 +224,7 @@ namespace VAdvantage.Process
             int VAF_TabPanel_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_TabPanel_ID FROM VAF_TabPanel WHERE Classname = '" + className + "' AND VAF_Tab_ID = " + tab.GetVAF_Tab_ID(), null, null));
             if (VAF_TabPanel_ID <= 0)
             {
-                MTabPanel tbPnl = new MTabPanel(GetCtx(), 0, Get_TrxName());
+                MVAFTabPanel tbPnl = new MVAFTabPanel(GetCtx(), 0, Get_TrxName());
                 tbPnl.SetVAF_Client_ID(tab.GetVAF_Client_ID());
                 tbPnl.SetVAF_Org_ID(tab.GetVAF_Org_ID());
                 tbPnl.SetVAF_Tab_ID(tab.GetVAF_Tab_ID());
@@ -443,7 +443,7 @@ namespace VAdvantage.Process
         public string CreateMasterVersionTable(int VAF_Column_ID, int VAF_TableView_ID)
         {
             int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_Job_ID FROM VAF_Job WHERE Value = 'MasterDataVersions'", null, Get_Trx()));
-            MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, 0);
+            MVAFJInstance instance = new MVAFJInstance(GetCtx(), VAF_Job_ID, 0);
             if (!instance.Save())
             {
                 log.Info(Msg.GetMsg(GetCtx(), "ProcessNoInstance"));
@@ -455,7 +455,7 @@ namespace VAdvantage.Process
             pi.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
 
             //	Add Parameters
-            MPInstancePara para = new MPInstancePara(instance, 10);
+            MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
             //para.setParameter("Selection", "Y");
             para.setParameter("VAF_TableView_ID", VAF_TableView_ID);
             if (!para.Save())
@@ -466,7 +466,7 @@ namespace VAdvantage.Process
                 return msg.ToString();
             }
 
-            para = new MPInstancePara(instance, 20);
+            para = new MVAFJInstancePara(instance, 20);
             para.setParameter("VAF_Column_ID", VAF_Column_ID);
             if (!para.Save())
             {

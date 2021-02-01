@@ -183,7 +183,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             mh.Save();
 
             AddLog(0, null, new Decimal(lines), "@M_Movement_ID@ " + mh.GetDocumentNo() + " ("
-                + MRefList.Get(GetCtx(), MMovement.DOCSTATUS_VAF_Control_Ref_ID,
+                + MVAFCtrlRefList.Get(GetCtx(), MMovement.DOCSTATUS_VAF_Control_Ref_ID,
                     mh.GetDocStatus(), Get_Trx()) + ")");
 
             EliminateReservation(target);

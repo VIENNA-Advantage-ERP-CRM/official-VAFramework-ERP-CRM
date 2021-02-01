@@ -55,7 +55,7 @@ namespace VIS.Models
                + ", IsSOTrx=" + isSOTrx + ", Processing=" + processing
                + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Record_ID=" + Record_ID);
             options = new String[_values.Count()];
-            String wfStatus = MWFActivity.GetActiveInfo(ctx, VAF_TableView_ID, Record_ID);
+            String wfStatus = MVAFWFlowTask.GetActiveInfo(ctx, VAF_TableView_ID, Record_ID);
             if (wfStatus != null)
             {
                 VLogger.Get().SaveError("WFActiveForRecord", wfStatus);

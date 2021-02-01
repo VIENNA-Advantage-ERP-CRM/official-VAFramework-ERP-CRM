@@ -52,7 +52,7 @@ namespace VIS.Models
             retDic["VAA_AssetGroup_ID"] = Util.GetValueOfString(pc.GetVAA_AssetGroup_ID());
             if (pc.GetVAA_AssetGroup_ID() > 0)
             {
-                MAssetGroup astGrp = new MAssetGroup(ctx, pc.GetVAA_AssetGroup_ID(), null);
+                MVAAAssetGroup astGrp = new MVAAAssetGroup(ctx, pc.GetVAA_AssetGroup_ID(), null);
                 if (astGrp.Get_ColumnIndex("VA038_AmortizationTemplate_ID") > 0)
                 {
                     retDic["VA038_AmortizationTemplate_ID"] = Util.GetValueOfString(astGrp.Get_Value("VA038_AmortizationTemplate_ID"));

@@ -11,7 +11,7 @@ namespace VIS.Helpers
     {
 
         //private OrgAccess[] _orgAccess = null;
-        public static Role GetRole(MRole role)
+        public static Role GetRole(MVAFRole role)
         {
             Role r = new Role();
             r.IsAccessAllOrgs = role.IsAccessAllOrgs();
@@ -66,7 +66,7 @@ namespace VIS.Helpers
         public List<ColumnAccess> columnAccess = null;
         public List<RecordAccess> recordAccess = null;
         public List<RecordAccess> recordDependentAccess = null;
-        public VAdvantage.Model.MRole.OrgAccess[] orgAccess = null;
+        public VAdvantage.Model.MVAFRole.OrgAccess[] orgAccess = null;
         public Dictionary<int, string> tableAccessLevel = null;
         public Dictionary<string, int> tableName = null;
 
@@ -154,11 +154,11 @@ namespace VIS.Helpers
         public bool IsCanExport;
         public bool IsReadOnly;
 
-        public static List<TableAccess> Get(MTableAccess[] tblAccess)
+        public static List<TableAccess> Get(MVAFTableViewRights[] tblAccess)
         {
             List<TableAccess> tl = new List<TableAccess>();
             TableAccess ta = null;
-            foreach (MTableAccess t in tblAccess)
+            foreach (MVAFTableViewRights t in tblAccess)
             {
                 ta = new TableAccess();
                 ta.IsExclude = t.IsExclude();
@@ -209,11 +209,11 @@ namespace VIS.Helpers
         public bool IsExclude;
         public string KeyColumnName;
 
-        public static List<RecordAccess> Get(MRecordAccess[] recAccess)
+        public static List<RecordAccess> Get(MVAFRecordRights[] recAccess)
         {
             List<RecordAccess> rl = new List<RecordAccess>();
             RecordAccess ra = null;
-            foreach (MRecordAccess r in recAccess)
+            foreach (MVAFRecordRights r in recAccess)
             {
                 ra = new RecordAccess();
                 ra.IsExclude = r.IsExclude();

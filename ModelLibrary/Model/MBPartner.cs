@@ -33,7 +33,7 @@ namespace VAdvantage.Model
     {
         #region private Variables
         // Users						
-        private MUser[] _contacts = null;
+        private MVAFUserContact[] _contacts = null;
         //Addressed						
         private MBPartnerLocation[] _locations = null;
         // BP Bank Accounts				
@@ -383,7 +383,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="reload">if true users will be requeried</param>
         /// <returns>contacts</returns>
-        public MUser[] GetContacts(bool reload)
+        public MVAFUserContact[] GetContacts(bool reload)
         {
             if (reload || _contacts == null || _contacts.Length == 0)
             {
@@ -392,7 +392,7 @@ namespace VAdvantage.Model
             else
                 return _contacts;
             //
-            List<MUser> list = new List<MUser>();
+            List<MVAFUserContact> list = new List<MVAFUserContact>();
             String sql = "SELECT * FROM VAF_UserContact WHERE VAB_BusinessPartner_ID=" + GetVAB_BusinessPartner_ID();
             DataSet ds = null;
             try
@@ -401,7 +401,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MUser(GetCtx(), dr, null));
+                    list.Add(new MVAFUserContact(GetCtx(), dr, null));
                 }
                 ds = null;
             }
@@ -410,7 +410,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            _contacts = new MUser[list.Count];
+            _contacts = new MVAFUserContact[list.Count];
             _contacts = list.ToArray();
             return _contacts;
         }
@@ -420,9 +420,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_UserContact_ID">optional user</param>
         /// <returns>contact or null</returns>
-        public MUser GetContact(int VAF_UserContact_ID)
+        public MVAFUserContact GetContact(int VAF_UserContact_ID)
         {
-            MUser[] users = GetContacts(false);
+            MVAFUserContact[] users = GetContacts(false);
             if (users.Length == 0)
                 return null;
             for (int i = 0; VAF_UserContact_ID != 0 && i < users.Length; i++)
@@ -646,7 +646,7 @@ namespace VAdvantage.Model
         {
             if (_primaryVAF_UserContact_ID == null)
             {
-                MUser[] users = GetContacts(false);
+                MVAFUserContact[] users = GetContacts(false);
                 //	for (int i = 0; i < users.Length; i++)
                 //	{
                 //	}

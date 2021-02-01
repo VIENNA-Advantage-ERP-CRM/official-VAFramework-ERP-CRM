@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         private string query = "";
         private Decimal? trxQty = 0;
         private bool isGetFromStorage = false;
-        MAsset ast = null;
+        MVAAsset ast = null;
         private bool isAsset = false;
 
         MAcctSchema acctSchema = null;
@@ -1040,7 +1040,7 @@ namespace VAdvantage.Model
                                 }
                                 if (line.GetA_Asset_ID() > 0)
                                 {
-                                    ast = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
+                                    ast = new MVAAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
                                     Tuple<String, String, String> aInfo = null;
                                     if (Env.HasModulePrefix("VAFAM_", out aInfo))
                                     {
@@ -1543,7 +1543,7 @@ namespace VAdvantage.Model
                         {
                             if (line.GetA_Asset_ID() > 0)
                             {
-                                ast = new MAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
+                                ast = new MVAAsset(GetCtx(), line.GetA_Asset_ID(), Get_Trx());
                                 Tuple<String, String, String> aInfo = null;
                                 if (Env.HasModulePrefix("VAFAM_", out aInfo))
                                 {
@@ -1883,7 +1883,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);
@@ -3355,7 +3355,7 @@ namespace VAdvantage.Model
                 MMovementLine mline = mlines[i];
                 if (mline.GetA_Asset_ID() > 0)
                 {
-                    ast = new MAsset(GetCtx(), mline.GetA_Asset_ID(), Get_Trx());
+                    ast = new MVAAsset(GetCtx(), mline.GetA_Asset_ID(), Get_Trx());
                     Tuple<String, String, String> aInfo = null;
                     if (Env.HasModulePrefix("VAFAM_", out aInfo))
                     {

@@ -311,8 +311,8 @@ namespace VAdvantage.Model
 
             if (WhereClause != null && WhereClause.Length != 0)
                 sql.Append(WhereClause);
-            MRole role = MRole.GetDefault(GetCtx(), false);
-            String stmt = role.AddAccessSQL(sql.ToString(), "M_Product", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+            MVAFRole role = MVAFRole.GetDefault(GetCtx(), false);
+            String stmt = role.AddAccessSQL(sql.ToString(), "M_Product", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             SqlParameter[] param = null;
             IDataReader idr = null;

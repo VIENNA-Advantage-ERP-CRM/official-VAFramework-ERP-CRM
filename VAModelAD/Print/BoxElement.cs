@@ -11,7 +11,7 @@ namespace VAdvantage.Print
 {
     public class BoxElement : PrintElement
     {
-        public BoxElement(MPrintFormatItem item, Color color)
+        public BoxElement(MVAFPrintRptLItem item, Color color)
             : base()
         {
             if (item != null && item.IsTypeBox())
@@ -23,7 +23,7 @@ namespace VAdvantage.Print
         }	//	BoxElement
 
         /** The Item					*/
-        private MPrintFormatItem m_item = null;
+        private MVAFPrintRptLItem m_item = null;
         private Color m_color = Color.Black;
 
         protected override bool CalculateSize()
@@ -51,7 +51,7 @@ namespace VAdvantage.Print
             int width = m_item.GetMaxWidth();
             int height = m_item.GetMaxHeight();
 
-            if (m_item.GetPrintFormatType().Equals(MPrintFormatItem.PRINTFORMATTYPE_Line))
+            if (m_item.GetPrintFormatType().Equals(MVAFPrintRptLItem.PRINTFORMATTYPE_Line))
                 g2D.DrawLine(pen, x, y, x + width, y + height);
             else
             {
@@ -60,11 +60,11 @@ namespace VAdvantage.Print
                     type = "";
                 if (m_item.IsFilledRectangle())
                 {
-                    if (type.Equals(MPrintFormatItem.SHAPETYPE_3DRectangle))
+                    if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_3DRectangle))
                         g2D.FillRectangle(g2Dpen, x, y, width, height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_Oval))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_Oval))
                         g2D.FillEllipse(g2Dpen, x, y, width, height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_RoundRectangle))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_RoundRectangle))
                     {
                         g2D.FillRectangle(g2Dpen, x, y, width, height); //, m_item.getArcDiameter(), m_item.getArcDiameter());
                     }
@@ -73,11 +73,11 @@ namespace VAdvantage.Print
                 }
                 else
                 {
-                    if (type.Equals(MPrintFormatItem.SHAPETYPE_3DRectangle))
+                    if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_3DRectangle))
                         g2D.DrawRectangle(pen, x, y, width, height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_Oval))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_Oval))
                         g2D.DrawEllipse(pen, x, y, width, height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_RoundRectangle))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_RoundRectangle))
                     {
                         g2D.DrawRectangle(pen, x, y, width, height); //, m_item.getArcDiameter(), m_item.getArcDiameter());
                     }
@@ -107,7 +107,7 @@ namespace VAdvantage.Print
             int width = m_item.GetMaxWidth();
             int height = m_item.GetMaxHeight();
 
-            if (m_item.GetPrintFormatType().Equals(MPrintFormatItem.PRINTFORMATTYPE_Line))
+            if (m_item.GetPrintFormatType().Equals(MVAFPrintRptLItem.PRINTFORMATTYPE_Line))
                 g2D.DrawLine(pen, (double)x, (double)y, (double)x + width, (double)y + height);
             else
             {
@@ -116,11 +116,11 @@ namespace VAdvantage.Print
                     type = "";
                 if (m_item.IsFilledRectangle())
                 {
-                    if (type.Equals(MPrintFormatItem.SHAPETYPE_3DRectangle))
+                    if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_3DRectangle))
                         g2D.DrawRectangle(g2Dpen, (double)x, (double)y, (double)width, (double)height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_Oval))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_Oval))
                         g2D.DrawRectangle(g2Dpen, (double)x, (double)y, (double)width, (double)height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_RoundRectangle))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_RoundRectangle))
                     {
                         g2D.DrawRectangle(g2Dpen, (double)x, (double)y, (double)width, (double)height); //, m_item.getArcDiameter(), m_item.getArcDiameter());
                     }
@@ -129,11 +129,11 @@ namespace VAdvantage.Print
                 }
                 else
                 {
-                    if (type.Equals(MPrintFormatItem.SHAPETYPE_3DRectangle))
+                    if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_3DRectangle))
                         g2D.DrawRectangle(pen, (double)x, (double)y, (double)width, (double)height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_Oval))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_Oval))
                         g2D.DrawEllipse(pen, (double)x, (double)y, (double)width, (double)height);
-                    else if (type.Equals(MPrintFormatItem.SHAPETYPE_RoundRectangle))
+                    else if (type.Equals(MVAFPrintRptLItem.SHAPETYPE_RoundRectangle))
                     {
                         g2D.DrawRectangle(pen, (double)x, (double)y, (double)width, (double)height); //, m_item.getArcDiameter(), m_item.getArcDiameter());
                     }

@@ -119,7 +119,7 @@ namespace VAdvantage.Process
             }
             //	Print Format on Dunning Level
             MDunningLevel level = new MDunningLevel(GetCtx(), run.GetVAB_DunningStep_ID(), Get_TrxName());
-            MPrintFormat format = MPrintFormat.Get(GetCtx(), level.GetDunning_PrintFormat_ID(), false);
+            MVAFPrintRptLayout format = MVAFPrintRptLayout.Get(GetCtx(), level.GetDunning_PrintFormat_ID(), false);
 
             MVAFClient client = MVAFClient.Get(GetCtx());
 
@@ -142,7 +142,7 @@ namespace VAdvantage.Process
                     continue;
                 }
                 //	To User
-                MUser to = new MUser(GetCtx(), entry.GetVAF_UserContact_ID(), Get_TrxName());
+                MVAFUserContact to = new MVAFUserContact(GetCtx(), entry.GetVAF_UserContact_ID(), Get_TrxName());
                 if (_EMailPDF)
                 {
                     if (to.Get_ID() == 0)
@@ -233,7 +233,7 @@ namespace VAdvantage.Process
                         }
                     }
                     String msg = email.Send();
-                    MUserMail um = new MUserMail(mText, entry.GetVAF_UserContact_ID(), email);
+                    MVAFUserMailLog um = new MVAFUserMailLog(mText, entry.GetVAF_UserContact_ID(), email);
                     um.Save();
                     if (msg.Equals(EMail.SENT_OK))
                     {

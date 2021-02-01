@@ -573,7 +573,7 @@ namespace VAdvantage.Process
                 {
                     //  log.Log(Level.SEVERE, "SendOnlyNoticeToSubscribeUser");
 
-                    MNote note = new MNote(ctx, 0, null);
+                    MVAFNotice note = new MVAFNotice(ctx, 0, null);
                     note.SetVAF_UserContact_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
                     //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());
@@ -609,7 +609,7 @@ namespace VAdvantage.Process
                     objEmail.SetMessageText(message);
                     objEmail.SetSubject(Msg.GetMsg(ctx, "AttachEmailNotification"));
                     objEmail.Send();
-                    MNote note = new MNote(ctx, 0, null);
+                    MVAFNotice note = new MVAFNotice(ctx, 0, null);
                     note.SetVAF_UserContact_ID(userID);
                     // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
                     //note.SetClientOrg(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID());

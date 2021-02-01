@@ -1,0 +1,602 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using VAdvantage.Classes;
+using VAdvantage.DataBase;
+using System.Data;
+using System.Net;
+using VAdvantage.Utility;
+using VAdvantage.Logging;
+
+namespace VAdvantage.Model
+{
+    public class MVAFSession : X_VAF_Session
+    {
+        //Sessions			
+        private static CCache<int, MVAFSession> s_sessions = new CCache<int, MVAFSession>("VAF_Session_ID", 30);   //	no
+                                                                                                            /**	Logger	*/
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MVAFSession).FullName);
+
+        //	get
+        /**	Sessions					*/
+        private static CCache<int, MVAFSession> cache = false
+            ? new CCache<int, MVAFSession>("VAF_Session_ID", 1, 0)		//	one client session 
+            : new CCache<int, MVAFSession>("VAF_Session_ID", 30, 0);    //	no time-out	
+
+        private static CCache<int, bool> roleChangeLog = new CCache<int, bool>("VAF_Session_RoleLog", 10, 0);
+
+        /* Do-not use CCache class :: cacahe list get clear at time cache reset process*/
+        //private static Dictionary<int, MSession> cache = new Dictionary<int, MSession>(10);
+
+        /// <summary>
+        /// Get existing or create local session
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="createNew">create if not found</param>
+        /// <returns>session</returns>
+        public static MVAFSession Get(Ctx ctx, Boolean createNew)
+        {
+            //int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
+            //MSession session = null;
+            //if (VAF_Session_ID > 0)
+            //    session = cache[VAF_Session_ID];
+
+            //if (session == null && createNew)
+            //{
+            //    session = new MSession(ctx, null);	//	local session
+            //    session.Save();
+            //    VAF_Session_ID = session.GetVAF_Session_ID();
+            //    ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+            //    cache.Add(VAF_Session_ID, session);
+            //}
+            //return session;
+            return Get(ctx, createNew, "");
+        }	//	get
+
+        /// <summary>
+        /// Get existing or create local session
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="createNew">create if not found</param>
+        /// <param name="requestAddr">Request address</param>
+        /// <returns>session</returns>
+        public static MVAFSession Get(Ctx ctx, Boolean createNew, String requestAddr)
+        {
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
+            MVAFSession session = null;
+            if (VAF_Session_ID > 0)
+                session = cache[VAF_Session_ID];
+
+            if (session == null && VAF_Session_ID > 0)
+            {
+                // check from DB
+                session = new MVAFSession(ctx, VAF_Session_ID, null);
+                if (session.Get_ID() != VAF_Session_ID)
+                    session = null;
+                else
+                    cache.Add(VAF_Session_ID, session);
+            }
+
+            if (session != null && session.IsProcessed())
+            {
+                s_log.Log(Level.WARNING, "Session Processed=" + session);
+
+                cache.Remove(VAF_Session_ID);
+                session = null;
+            }
+
+
+            if (session == null && createNew)
+            {
+                session = new MVAFSession(ctx, null);	//	local session
+                if (!string.IsNullOrEmpty(requestAddr))
+                {
+                    session.SetRequest_Addr(requestAddr);
+                }
+                session.Save();
+                VAF_Session_ID = session.GetVAF_Session_ID();
+                ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+                cache.Add(VAF_Session_ID, session);
+            }
+
+            if (session == null)
+            {
+                s_log.Fine("No Session");
+            }
+
+            return session;
+
+
+        }
+
+
+        /// <summary>
+        /// Get existing or create remote session
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="Remote_Addr">remote address</param>
+        /// <param name="Remote_Host">remote host</param>
+        /// <param name="WebSession">web session</param>
+        /// <returns>session</returns>
+        public static MVAFSession Get(Ctx ctx, String remoteAddr, String remoteHost, String WebSession)
+        {
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
+            MVAFSession session = null;
+            if (VAF_Session_ID > 0)
+                session = cache[VAF_Session_ID];
+            if (session == null)
+            {
+                session = new MVAFSession(ctx, remoteAddr, remoteHost, WebSession, null);	//	remote session
+                session.Save();
+                VAF_Session_ID = session.GetVAF_Session_ID();
+                ctx.SetContext("#VAF_Session_ID", VAF_Session_ID.ToString());
+                cache.Add(VAF_Session_ID, session);
+            }
+            return session;
+        }
+
+
+        public static MVAFSession Get(Ctx ctx, String SessionType, bool createNew, String Remote_Addr, String Remote_Host, String WebSession)
+        {
+            int VAF_Session_ID = ctx.GetContextAsInt("#VAF_Session_ID");
+            MVAFSession session = null;
+            if (VAF_Session_ID > 0)
+            {
+                session = s_sessions.Get(ctx, VAF_Session_ID);
+                if (session == null)
+                    session = new MVAFSession(ctx, VAF_Session_ID, null);
+                if (session.IsProcessed())
+                {
+                    s_log.Log(Level.WARNING, "Processed=" + session, new ArgumentException("Processed"));
+                    s_sessions.Remove(VAF_Session_ID);
+                    return null;
+                }
+            }
+            if (session == null)
+            {
+                if (createNew)
+                {
+                    session = new MVAFSession(ctx, SessionType, Remote_Addr, Remote_Host, null);
+                    session.Save();
+                    VAF_Session_ID = session.GetVAF_Session_ID();
+                    ctx.SetContext("#VAF_Session_ID", VAF_Session_ID);
+                    cache.Add(VAF_Session_ID, session);
+                    if (s_sessions.ContainsKey(VAF_Session_ID))
+                        s_sessions[VAF_Session_ID] = session;
+                    else
+                        s_sessions.Add(VAF_Session_ID, session);
+                }
+                else
+                    s_log.Warning("No Session!");
+            }
+            return session;
+        }   //	get
+
+
+
+        /// <summary>
+        /// 	 * 	Standard Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="VAF_Session_ID">id</param>
+        /// <param name="trxName">transaction</param>
+        public MVAFSession(Ctx ctx, int VAF_Session_ID, Trx trxName)
+            : base(ctx, VAF_Session_ID, trxName)
+        {
+
+            if (VAF_Session_ID == 0)
+            {
+                SetProcessed(false);
+                int VAF_Role_ID = ctx.GetVAF_Role_ID();
+                SetVAF_Role_ID(VAF_Role_ID);
+            }
+        }	//	MSess
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="rs">result set</param>
+        /// <param name="trxName">transaction</param>
+        public MVAFSession(Ctx ctx, DataRow rs, Trx trxName)
+            : base(ctx, rs, trxName)
+        {
+
+        }	//	MSession
+
+        /// <summary>
+        /// New (remote) Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="Remote_Addr">remote address</param>
+        /// <param name="Remote_Host">remote host</param>
+        /// <param name="WebSession">web session</param>
+        /// <param name="trxName">transaction</param>
+        public MVAFSession(Ctx ctx, String remoteAddr, String remoteHost, String webSession, Trx trxName)
+            : this(ctx, 0, trxName)
+        {
+
+            if (remoteAddr != null)
+                SetRemote_Addr(remoteAddr);
+            if (remoteHost != null)
+                SetRemote_Host(remoteHost);
+            if (webSession != null)
+                SetWebSession(webSession);
+        }
+
+
+        /// <summary>
+        /// New (local) Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="trxName">transaction</param>
+        public MVAFSession(Ctx ctx, Trx trxName)
+            : this(ctx, 0, trxName)
+        {
+
+            try
+            {
+                string hostName = "";
+
+                hostName = ctx.GetContext("HostName");
+                if (string.IsNullOrEmpty(hostName))
+                {
+                    hostName = System.Net.Dns.GetHostName();
+                }
+                SetRemote_Host(hostName);
+
+
+
+
+                string cmpIP = "";
+
+                cmpIP = ctx.GetContext("IPAddress");
+
+                if (string.IsNullOrEmpty(cmpIP))
+                {
+                    System.Net.IPAddress[] ipA = System.Net.Dns.GetHostAddresses(hostName);
+                    for (int i = 0; i < ipA.Length; i++)
+                    {
+                        cmpIP = ipA[i].ToString();
+                    }
+
+                }
+
+                SetRemote_Addr(cmpIP);
+
+                //InetAddress lh = InetAddress.getLocalHost();
+                SetVAF_Role_ID(ctx.GetVAF_Role_ID());
+
+
+
+
+            }
+            catch (ApplicationException ex)
+            {
+                log.Log(Level.SEVERE, "No Local Host", ex);
+            }
+        }	//	MSession
+
+        private Boolean _webStoreSession = false;
+
+        public Boolean IsWebStoreSession()
+        {
+            return _webStoreSession;
+
+        }
+
+        public void SetWebStoreSession(Boolean webStoreSession)
+        {
+            _webStoreSession = webStoreSession;
+        }	//	setWebStoreSession
+
+
+        public void Logout()
+        {
+            SetProcessed(true);
+            Save();
+            cache.Remove(GetVAF_Session_ID());
+            //(GetVAF_Session_ID());
+            log.Info(TimeUtil.FormatElapsed(GetCreated(), GetUpdated()));
+        }
+
+
+        private bool IsRoleChangeLog(Ctx ctx)
+        {
+            int VAF_Role_ID = ctx.GetVAF_Role_ID();
+            bool isChangeLog = false;
+            if (roleChangeLog.ContainsKey(VAF_Role_ID))
+                isChangeLog = roleChangeLog[VAF_Role_ID];
+            else
+            {
+                isChangeLog = Utility.Util.GetValueOfBool(
+                    DB.ExecuteScalar("SELECT IsChangeLog FROM VAF_Role WHERE VAF_Role_ID = " + VAF_Role_ID) == "Y");
+                roleChangeLog[VAF_Role_ID] = isChangeLog;
+            }
+            return isChangeLog;
+        }
+
+
+        /// <summary>
+        /// 	Create Change Log only if table is logged
+        /// </summary>
+        /// <param name="TrxName">transaction name</param>
+        /// <param name="VAF_AlterLog_ID">0 for new change log</param>
+        /// <param name="VAF_TableView_ID">table</param>
+        /// <param name="VAF_Column_ID">column</param>
+        /// <param name="keyInfo">key value(s)</param>
+        /// <param name="VAF_Client_ID">client</param>
+        /// <param name="VAF_Org_ID">org</param>
+        /// <param name="OldValue">old</param>
+        /// <param name="NewValue">new</param>
+        /// <param name="tableName"></param>
+        /// <param name="type"></param>
+        /// <returns>change log or null</returns>
+        public MVAFAlterLog ChangeLog(Trx trx, int VAF_AlterLog_ID,
+        int VAF_TableView_ID, int VAF_Column_ID, Object keyInfo,
+        int VAF_Client_ID, int VAF_Org_ID,
+        Object oldValue, Object newValue,
+        String tableName, String type)
+        {
+            //	Null handling
+            if (oldValue == null && newValue == null)
+                return null;
+            //	Equal Value
+            if (oldValue != null && newValue != null && oldValue.Equals(newValue))
+                return null;
+
+            //	No Log
+            if (MVAFAlterLog.IsNotLogged(VAF_TableView_ID, tableName, VAF_Column_ID, type))
+                return null;
+
+            //	Role Logging
+            // MRole role = MRole.GetDefault(GetCtx(), false);
+            //	Do we need to log
+            if (_webStoreSession						//	log if WebStore
+                || MVAFAlterLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
+                || (IsRoleChangeLog(GetCtx())))//	Role Logging
+            {; }
+            else
+            {
+                return null;
+            }
+            //
+            log.Finest("VAF_AlterLog_ID=" + VAF_AlterLog_ID
+                    + ", VAF_Session_ID=" + GetVAF_Session_ID()
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID
+                   + ": " + oldValue + " -> " + newValue);
+            //Boolean success = false;
+
+            try
+            {
+                String trxName = null;
+                if (trx != null)
+                    trxName = trx.GetTrxName();
+                MVAFAlterLog cl = new MVAFAlterLog(GetCtx(),
+                    VAF_AlterLog_ID, trxName, GetVAF_Session_ID(),
+                    VAF_TableView_ID, VAF_Column_ID, keyInfo, VAF_Client_ID, VAF_Org_ID,
+                    oldValue, newValue);
+                if (cl.Save())
+                    return cl;
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
+                    + ", VAF_Session_ID=" + GetVAF_Session_ID()
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID, e);
+                return null;
+            }
+            log.Log(Level.SEVERE, "VAF_AlterLog_ID=" + VAF_AlterLog_ID
+               + ", VAF_Session_ID=" + GetVAF_Session_ID()
+               + ", VAF_TableView_ID=" + VAF_TableView_ID + ", VAF_Column_ID=" + VAF_Column_ID);
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
+        /// <param name="whereClause"></param>
+        /// <param name="recordCount"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public MVAFDBQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, String parameter)
+        {
+            MVAFDBQueryLog qlog = null;
+            try
+            {
+                qlog = new MVAFDBQueryLog(GetCtx(), GetVAF_Session_ID(),
+                    VAF_Client_ID, VAF_Org_ID,
+                    VAF_TableView_ID, whereClause, recordCount, parameter);
+                qlog.Save();
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", Where=" + whereClause
+                   , e);
+            }
+            return qlog;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
+        /// <param name="whereClause"></param>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        public MVAFDBQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount)
+        {
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
+                whereClause, recordCount, (String)null);
+        }	//
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
+        /// <param name="whereClause"></param>
+        /// <param name="recordCount"></param>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public MVAFDBQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, Object parameter)
+        {
+            String para = null;
+            if (parameter != null)
+                para = parameter.ToString();
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
+                whereClause, recordCount, para);
+        }	//
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_TableView_ID"></param>
+        /// <param name="whereClause"></param>
+        /// <param name="recordCount"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public MVAFDBQueryLog QueryLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_TableView_ID, String whereClause, int recordCount, Object[] parameters)
+        {
+            String para = null;
+            if (parameters != null && parameters.Length > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    if (i > 0)
+                        sb.Append(", ");
+                    if (parameters[i] == null)
+                        sb.Append("NULL");
+                    else
+                        sb.Append(parameters[i].ToString());
+                }
+                para = sb.ToString();
+            }
+            return QueryLog(VAF_Client_ID, VAF_Org_ID, VAF_TableView_ID,
+                whereClause, recordCount, para);
+        }	//	queryLog
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="VAF_Client_ID"></param>
+        /// <param name="VAF_Org_ID"></param>
+        /// <param name="VAF_Screen_ID"></param>
+        /// <param name="VAF_Page_ID"></param>
+        /// <returns></returns>
+        public MVAFScreenLog WindowLog(int VAF_Client_ID, int VAF_Org_ID,
+        int VAF_Screen_ID, int VAF_Page_ID)
+        {
+            MVAFScreenLog wlog = null;
+            try
+            {
+                wlog = new MVAFScreenLog(GetCtx(), GetVAF_Session_ID(),
+                    VAF_Client_ID, VAF_Org_ID,
+                    VAF_Screen_ID, VAF_Page_ID);
+                wlog.Save();
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
+                    + ", VAF_Screen_ID=" + VAF_Screen_ID + ", VAF_Page_ID=" + VAF_Page_ID
+                    , e);
+            }
+            return wlog;
+        }
+
+
+        /// <summary>
+        /// Retrieve existing session
+        /// createNew create if not found
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <returns>session or null if session was ended or does not exist</returns>
+        /// <witer>Raghu</witer>
+        /// <date>08-March-2011</date>
+        public static MVAFSession Get(Ctx ctx)
+        {
+
+            return Get(ctx, false, "");
+
+
+        }
+
+        /// <summary>
+        /// Is the information logged?
+        /// </summary>
+        /// <param name="VAF_TableView_ID"> table id</param>
+        /// <param name="tableName">table name</param>
+        /// <param name="type">change type</param>
+        /// <returns> true if table is logged</returns>
+        public Boolean IsLogged(int VAF_TableView_ID, String tableName, String type)
+        {
+            //	No Log
+            if (MVAFAlterLog.IsNotLogged(VAF_TableView_ID, tableName, 0, type))
+                return false;
+            //	Role Logging
+            //MRole role = MRole.GetDefault(GetCtx(), false);
+            //	Do we need to log
+            if (IsWebStoreSession()						//	log if WebStore
+                || MVAFAlterLog.IsLogged(VAF_TableView_ID, type)		//	im/explicit log
+                || IsRoleChangeLog(GetCtx()))	//	Role Logging
+                return true;
+            //
+            return false;
+        }
+
+        /// <summary>
+        /// Log view/download action events
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="VAF_Session_ID">sessioni id</param>
+        /// <param name="VAF_Client_ID"client id></param>
+        /// <param name="VAF_Org_ID">org id</param>
+        /// <param name="action">menu action (window.proces etc)</param>
+        /// <param name="actionType"type of action></param>
+        /// <param name="actionOrigin">origin of action</param>
+        /// <param name="desc">additional info</param>
+        /// <param name="VAF_TableView_ID">table id</param>
+        /// <param name="Record_ID">record id</param>
+        /// <returns></returns>
+        public MActionLog ActionLog(Ctx ctx, int VAF_Session_ID,
+    int VAF_Client_ID, int VAF_Org_ID,
+    String actionOrigin, string actionType, String OriginName, string desc, int VAF_TableView_ID, int Record_ID = 0)
+        {
+
+
+            MActionLog alog = null;
+            try
+            {
+                alog = new MActionLog(GetCtx(), GetVAF_Session_ID(),
+                    VAF_Client_ID, VAF_Org_ID, actionOrigin, actionType, OriginName, desc, VAF_TableView_ID, Record_ID);
+
+                alog.Save();
+            }
+            catch (Exception e)
+            {
+                log.Log(Level.SEVERE, "VAF_Session_ID=" + GetVAF_Session_ID()
+                    + ", VAF_TableView_ID=" + VAF_TableView_ID + ", actionOrigin=" + OriginName
+                   , e);
+            }
+            return alog;
+        }
+
+
+
+    }
+}

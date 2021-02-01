@@ -846,7 +846,7 @@ namespace VAdvantage.Model
                 {
                     if (GetVAF_Org_ID() != 0)
                     {
-                        MOrg org = new MOrg(GetCtx(), GetVAF_Org_ID(), Get_TrxName());	//	in Trx!
+                        MVAFOrg org = new MVAFOrg(GetCtx(), GetVAF_Org_ID(), Get_TrxName());	//	in Trx!
                         combiStr = org.GetValue();
                         descrStr = org.GetName();
                     }
@@ -913,7 +913,7 @@ namespace VAdvantage.Model
                 {
                     if (GetVAF_OrgTrx_ID() != 0)
                     {
-                        MOrg org = new MOrg(GetCtx(), GetVAF_OrgTrx_ID(), Get_TrxName());	// in Trx!
+                        MVAFOrg org = new MVAFOrg(GetCtx(), GetVAF_OrgTrx_ID(), Get_TrxName());	// in Trx!
                         combiStr = org.GetValue();
                         descrStr = org.GetName();
                     }

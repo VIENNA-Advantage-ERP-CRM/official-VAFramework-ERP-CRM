@@ -88,7 +88,7 @@ namespace VAdvantage.Process
             StringBuilder sql = new StringBuilder("DELETE FROM VAT_StockData WHERE VAF_JInstance_ID=");
             sql.Append(GetVAF_JInstance_ID());
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            MPInstance instance = new MPInstance(GetCtx(), GetVAF_JInstance_ID(), null);
+            MVAFJInstance instance = new MVAFJInstance(GetCtx(), GetVAF_JInstance_ID(), null);
             DateTime Createddate = instance.GetCreated();
             Createddate = Createddate.AddHours(-1);
 

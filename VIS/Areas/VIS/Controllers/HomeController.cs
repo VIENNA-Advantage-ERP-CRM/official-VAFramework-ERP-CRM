@@ -130,7 +130,7 @@ namespace VIS.Controllers
                         ctx = Session["ctx"] as Ctx;
 
                         //Update Old Session
-                        MSession session = MSession.Get(ctx, false);
+                        MVAFSession session = MVAFSession.Get(ctx, false);
                         if (session != null)
                             session.Logout();
 
@@ -218,13 +218,13 @@ namespace VIS.Controllers
                     //string diableMenu = ctx.GetContext("#DisableMenu");
                     Helpers.MenuHelper mnuHelper = new Helpers.MenuHelper(ctx); // inilitilize menu class
 
-                    bool disableMenu = MRole.GetDefault(ctx).IsDisableMenu();
+                    bool disableMenu = MVAFRole.GetDefault(ctx).IsDisableMenu();
                     ctx.SetIsBasicDB(mnuHelper.GetIsBasicDB());
 
 
                     // If Home page not linked OR home page Linked BUT Menu is not disabled , then show home page.
                     // If Home is linked as well as menu is disabled then don't load Default Home Page Settings
-                    if (MRole.GetDefault(ctx).GetHomePage_ID() == 0 || (MRole.GetDefault(ctx).GetHomePage_ID() > 0 && !disableMenu))
+                    if (MVAFRole.GetDefault(ctx).GetHomePage_ID() == 0 || (MVAFRole.GetDefault(ctx).GetHomePage_ID() > 0 && !disableMenu))
                     {
                         HomeModels hm = new HomeModels();
                         objHomeHelp = new HomeHelper();
@@ -260,7 +260,7 @@ namespace VIS.Controllers
                     lock (_lock)    // Locked bundle Object and session Creation to handle concurrent requests.
                     {
                         //Cretae new Sessin
-                        MSession sessionNew = MSession.Get(ctx, true, GetVisitorIPAddress(true));
+                        MVAFSession sessionNew = MVAFSession.Get(ctx, true, GetVisitorIPAddress(true));
 
 
                         var lst = VAdvantage.ModuleBundles.GetStyleBundles(); //Get All Style Bundle
@@ -802,7 +802,7 @@ namespace VIS.Controllers
                 ctx = Session["ctx"] as Ctx;
 
             }
-            MUser objUser = new MUser(ctx, ctx.GetVAF_UserContact_ID(), null);
+            MVAFUserContact objUser = new MVAFUserContact(ctx, ctx.GetVAF_UserContact_ID(), null);
             objUser.SetComments(status);
             if (!objUser.Save())
             {

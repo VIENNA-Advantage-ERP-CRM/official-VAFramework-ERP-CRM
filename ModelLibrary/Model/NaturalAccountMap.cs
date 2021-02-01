@@ -241,7 +241,7 @@ namespace VAdvantage.Model
 
 
 
-        public String ParseFile(FileStream file, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID, MTree tree)
+        public String ParseFile(FileStream file, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID, MVAFTreeInfo tree)
         {
             //log.Config(file.Name);
             String line = null;
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         }   //  parse
 
 
-        public String ParseAndSaveLine(String line, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID,MTree tree)
+        public String ParseAndSaveLine(String line, int VAF_Client_ID, int VAF_Org_ID, int VAB_Element_ID,MVAFTreeInfo tree)
         {
             log.Config(line);
 
@@ -397,10 +397,10 @@ namespace VAdvantage.Model
                         return "Acct Element Values NOT inserted";
                         //m_info.Append(Msg.Translate(m_lang, "VAB_Acct_Element_ID")).Append(" # ").Append(m_nap.Count).Append("\n");
                     }
-                    VAdvantage.Model.MTreeNode mNode = VAdvantage.Model.MTreeNode.Get(tree, na.Get_ID());
+                    VAdvantage.Model.MVAFTreeInfoChild mNode = VAdvantage.Model.MVAFTreeInfoChild.Get(tree, na.Get_ID());
                     if (mNode == null)
                     {
-                        mNode = new VAdvantage.Model.MTreeNode(tree, na.Get_ID());
+                        mNode = new VAdvantage.Model.MVAFTreeInfoChild(tree, na.Get_ID());
                     }
                     ((VAdvantage.Model.PO)mNode).Set_Value("Parent_ID", refElementID);
                     if (!mNode.Save(m_trx))

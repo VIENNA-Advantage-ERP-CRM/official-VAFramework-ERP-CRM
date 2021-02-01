@@ -899,7 +899,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
          */
         public static string[] checkActionAccess(Ctx ctx, int clientId, int roleId, int docTypeId, String[] options,ref int maxIndex)
         {
-            return MRole.Get(ctx, roleId).checkActionAccess(clientId, docTypeId, options,ref maxIndex);
+            return MVAFRole.Get(ctx, roleId).checkActionAccess(clientId, docTypeId, options,ref maxIndex);
         }
 
     }

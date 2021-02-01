@@ -73,7 +73,7 @@ namespace VAdvantage.Model
         private NaturalAccountMap<String, MElementValue> m_nap = null;
         //
         private MVAFClient m_client;
-        private MOrg m_org;
+        private MVAFOrg m_org;
         private MAcctSchema m_as;
         //
         private int VAF_UserContact_ID;
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
             m_info.Append(Msg.Translate(m_lang, "VAF_Client_ID")).Append("=").Append(name).Append("\n");
 
             //	Setup Sequences
-            if (!MSequence.CheckClientSequences(m_ctx, VAF_Client_ID, m_trx))
+            if (!MVAFRecordSeq.CheckClientSequences(m_ctx, VAF_Client_ID, m_trx))
             {
                 String err = "Sequences NOT created";
                 log.Log(Level.SEVERE, err);
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
             name = orgName;
             if (name == null || name.Length == 0)
                 name = "newOrg";
-            m_org = new MOrg(m_client, name);
+            m_org = new MVAFOrg(m_client, name);
             m_org.SetIsLegalEntity(true);
             if (!m_org.Save())
             {
@@ -206,11 +206,11 @@ namespace VAdvantage.Model
              *  - User
              */
             name = m_clientName + " Admin";
-            MRole admin = new MRole(m_ctx, 0, m_trx);
+            MVAFRole admin = new MVAFRole(m_ctx, 0, m_trx);
             admin.SetClientOrg(m_client);
             admin.SetName(name);
-            admin.SetUserLevel(MRole.USERLEVEL_ClientPlusOrganization);
-            admin.SetPreferenceType(MRole.PREFERENCETYPE_Client);
+            admin.SetUserLevel(MVAFRole.USERLEVEL_ClientPlusOrganization);
+            admin.SetPreferenceType(MVAFRole.PREFERENCETYPE_Client);
             admin.SetIsShowAcct(true);
             admin.SetIsAdministrator(true);
             admin.SetIsManual(false);
@@ -228,11 +228,11 @@ namespace VAdvantage.Model
 
             tInfo.AdminRole = admin.GetName();
             //	OrgAccess x, 0
-            MRoleOrgAccess adminClientAccess = new MRoleOrgAccess(admin, 0);
+            MVAFRoleOrgRights adminClientAccess = new MVAFRoleOrgRights(admin, 0);
             if (!adminClientAccess.Save())
                 log.Log(Level.SEVERE, "Admin Role_OrgAccess 0 NOT created");
             //  OrgAccess x,y
-            MRoleOrgAccess adminOrgAccess = new MRoleOrgAccess(admin, m_org.GetVAF_Org_ID());
+            MVAFRoleOrgRights adminOrgAccess = new MVAFRoleOrgRights(admin, m_org.GetVAF_Org_ID());
             if (!adminOrgAccess.Save())
                 log.Log(Level.SEVERE, "Admin Role_OrgAccess NOT created");
 
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
 
             //
             name = m_clientName + " User";
-            MRole user = new MRole(m_ctx, 0, m_trx);
+            MVAFRole user = new MVAFRole(m_ctx, 0, m_trx);
             user.SetClientOrg(m_client);
             user.SetName(name);
             if (!user.Save())
@@ -259,7 +259,7 @@ namespace VAdvantage.Model
             }
             tInfo.UserRole = user.GetName();
             //  OrgAccess x,y
-            MRoleOrgAccess userOrgAccess = new MRoleOrgAccess(user, m_org.GetVAF_Org_ID());
+            MVAFRoleOrgRights userOrgAccess = new MVAFRoleOrgRights(user, m_org.GetVAF_Org_ID());
             if (!userOrgAccess.Save())
                 log.Log(Level.SEVERE, "User Role_OrgAccess NOT created");
 
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {
-                MRole role = null;
+                MVAFRole role = null;
                 DataSet dsComm = null;
                 X_VAF_Role_OrgRights orgAcess = null;
                 X_VAF_UserContact_Roles userRole = null;
@@ -461,7 +461,7 @@ namespace VAdvantage.Model
                 X_VAF_Task_Rights taskAcess = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    role = new MRole(m_ctx, 0, m_trx);
+                    role = new MVAFRole(m_ctx, 0, m_trx);
                     role.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                     role.SetVAF_Org_ID(0);
                     role.SetName(ds.Tables[0].Rows[i]["Name"].ToString());
@@ -2129,12 +2129,12 @@ namespace VAdvantage.Model
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null)
             {
-                MPrintFormat print = null;
-                MPrintFormatItem item = null;
+                MVAFPrintRptLayout print = null;
+                MVAFPrintRptLItem item = null;
                 DataSet dsItem = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    print = new MPrintFormat(m_ctx, 0, null);
+                    print = new MVAFPrintRptLayout(m_ctx, 0, null);
                     print.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                     print.SetVAF_Org_ID(0);
                     if (ds.Tables[0].Rows[i]["Name"] != null && ds.Tables[0].Rows[i]["Name"] != DBNull.Value)
@@ -2271,7 +2271,7 @@ namespace VAdvantage.Model
                         {
                             for (int j = 0; j < dsItem.Tables[0].Rows.Count; j++)
                             {
-                                item = new MPrintFormatItem(m_ctx, 0, null);
+                                item = new MVAFPrintRptLItem(m_ctx, 0, null);
                                 item.SetVAF_Client_ID(m_client.GetVAF_Client_ID());
                                 item.SetVAF_Org_ID(0);
                                 item.SetVAF_Print_Rpt_Layout_ID(print.Get_ID());
@@ -3312,10 +3312,10 @@ namespace VAdvantage.Model
         /// <returns>doc type or 0 for error</returns>
         private int CreateDocType(String Name, String PrintName, String DocBaseType, String DocSubTypeSO, int VAB_DocTypesShipment_ID, int VAB_DocTypesInvoice_ID, int StartNo, int VAGL_Group_ID, bool isReturnTrx, bool IsCreateCounter, string postingCode)
         {
-            MSequence sequence = null;
+            MVAFRecordSeq sequence = null;
             if (StartNo != 0)
             {
-                sequence = new MSequence(m_ctx, GetVAF_Client_ID(), Name, StartNo, m_trx);
+                sequence = new MVAFRecordSeq(m_ctx, GetVAF_Client_ID(), Name, StartNo, m_trx);
                 if (!sequence.Save())
                 {
                     log.Log(Level.SEVERE, "Sequence NOT created - " + Name);
@@ -4015,7 +4015,7 @@ namespace VAdvantage.Model
 
         private string SetupDefaultLogin(Trx trx, int VAF_Client_ID, int VAF_Role_ID, int VAF_Org_ID, int VAF_UserContact_ID, int M_Warehouse_ID)
         {
-            int VAF_LoginSetting_ID = MSequence.GetNextID(m_ctx.GetVAF_Client_ID(), "VAF_LoginSetting", trx);
+            int VAF_LoginSetting_ID = MVAFRecordSeq.GetNextID(m_ctx.GetVAF_Client_ID(), "VAF_LoginSetting", trx);
             StringBuilder sql = new StringBuilder("");
             sql.Append("INSERT INTO VAF_LoginSetting (VAF_CLIENT_ID,VAF_LOGINSETTING_ID,VAF_ORG_ID,VAF_ROLE_ID,VAF_USERCONTACT_ID,CREATED,CREATEDBY,EXPORT_ID,M_WAREHOUSE_ID,UPDATED,UPDATEDBY)");
             sql.Append(" VALUES (" + VAF_Client_ID + "," + VAF_LoginSetting_ID + "," + VAF_Org_ID + "," + VAF_Role_ID + "," + VAF_UserContact_ID + ",");

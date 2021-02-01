@@ -64,10 +64,10 @@ namespace VAdvantage.WF
         /// <returns>Message (variables are parsed)</returns>
         protected override String DoIt()
         {
-            MWFProcess process = new MWFProcess(GetCtx(), p_VAF_WFlow_Handler_ID, Get_Trx());
+            MVAFWFlowHandler process = new MVAFWFlowHandler(GetCtx(), p_VAF_WFlow_Handler_ID, Get_Trx());
             log.Info("doIt - " + process);
 
-            MUser user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
+            MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
             //	Abort
             if (p_IsAbort)
             {
@@ -93,8 +93,8 @@ namespace VAdvantage.WF
             //	Change User
             if (p_VAF_UserContact_ID != 0 && process.GetVAF_UserContact_ID() != p_VAF_UserContact_ID)
             {
-                MUser from = MUser.Get(GetCtx(), process.GetVAF_UserContact_ID());
-                MUser to = MUser.Get(GetCtx(), p_VAF_UserContact_ID);
+                MVAFUserContact from = MVAFUserContact.Get(GetCtx(), process.GetVAF_UserContact_ID());
+                MVAFUserContact to = MVAFUserContact.Get(GetCtx(), p_VAF_UserContact_ID);
                 msg = user.GetName() + ": " + from.GetName() + " -> " + to.GetName();
                 process.SetTextMsg(msg);
                 process.SetVAF_UserContact_ID(p_VAF_UserContact_ID);
@@ -102,8 +102,8 @@ namespace VAdvantage.WF
             //	Change Responsible
             if (p_VAF_WFlow_Incharge_ID != 0 && process.GetVAF_WFlow_Incharge_ID() != p_VAF_WFlow_Incharge_ID)
             {
-                MWFResponsible from = MWFResponsible.Get(GetCtx(), process.GetVAF_WFlow_Incharge_ID());
-                MWFResponsible to = MWFResponsible.Get(GetCtx(), p_VAF_WFlow_Incharge_ID);
+                MVAFWFlowIncharge from = MVAFWFlowIncharge.Get(GetCtx(), process.GetVAF_WFlow_Incharge_ID());
+                MVAFWFlowIncharge to = MVAFWFlowIncharge.Get(GetCtx(), p_VAF_WFlow_Incharge_ID);
                 String msg1 = user.GetName() + ": " + from.GetName() + " -> " + to.GetName();
                 process.SetTextMsg(msg1);
                 process.SetVAF_WFlow_Incharge_ID(p_VAF_WFlow_Incharge_ID);

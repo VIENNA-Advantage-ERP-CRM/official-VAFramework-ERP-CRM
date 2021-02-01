@@ -38,7 +38,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Client Info				
         private MVAFClient _client = null;
         //	From					
-        private MUser _from = null;
+        private MVAFUserContact _from = null;
         // Recipient List to prevent duplicate mails	
         //private ArrayList<Integer>	_list = new ArrayList<Integer>();
         private List<int> _list = new List<int>();
@@ -116,7 +116,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             if (_VAF_UserContact_ID > 0)
             {
-                _from = new MUser(GetCtx(), _VAF_UserContact_ID, Get_TrxName());
+                _from = new MVAFUserContact(GetCtx(), _VAF_UserContact_ID, Get_TrxName());
                 if (_from.GetVAF_UserContact_ID() == 0)
                 {
                     throw new Exception("No found @VAF_UserContact_ID@=" + _VAF_UserContact_ID);
@@ -282,7 +282,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             _list.Add(ii);
             //
-            MUser to = new MUser(GetCtx(), VAF_UserContact_ID, null);
+            MVAFUserContact to = new MVAFUserContact(GetCtx(), VAF_UserContact_ID, null);
             if (to.IsEMailBounced())			//	ignore bounces
             {
                 //return null;
@@ -321,7 +321,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 return false;
             }
             Boolean OK = EMail.SENT_OK.Equals(email.Send());
-            new MUserMail(_MailText, VAF_UserContact_ID, email).Save();
+            new MVAFUserMailLog(_MailText, VAF_UserContact_ID, email).Save();
             if (OK)
             {
                 log.Fine(to.GetEMail());

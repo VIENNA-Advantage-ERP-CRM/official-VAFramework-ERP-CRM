@@ -291,7 +291,7 @@ namespace VAdvantage.Classes
                         index++;
                         AD_Workbench_ID = (dr[index].ToString().Trim() == "") ? 0 : Utility.Util.GetValueOfInt(dr[index].ToString());
                         index++;
-                        MRole role = MRole.GetDefault(ctx);
+                        MVAFRole role = MVAFRole.GetDefault(ctx);
                         if (VTreeNode.ACTION_WINDOW.Equals(actionColor))
                         {
                             blnAccess = role.GetWindowAccess(VAF_Screen_ID);

@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         //Only Post Org Childs			
         private int?[] _onlyOrgs = null;
         //Only Post Org				
-        private MOrg _onlyOrg = null;
+        private MVAFOrg _onlyOrg = null;
 
         //GL Info				
         private MAcctSchemaGL _gl = null;
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
                 return false;
             }
             if (_onlyOrg == null)
-                _onlyOrg = MOrg.Get(GetCtx(), GetVAF_OrgOnly_ID());
+                _onlyOrg = MVAFOrg.Get(GetCtx(), GetVAF_OrgOnly_ID());
             //	Not Summary Only - i.e. skip it
             if (!_onlyOrg.IsSummary())
             {

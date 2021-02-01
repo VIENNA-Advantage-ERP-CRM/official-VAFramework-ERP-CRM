@@ -643,7 +643,7 @@ namespace VAdvantage.Acct
                 //  Insert Note
                 String VAF_Msg_LableValue = "PostingError-" + _status;
                 int VAF_UserContact_ID = _po.GetUpdatedBy();
-                MNote note = new MNote(GetCtx(), VAF_Msg_LableValue, VAF_UserContact_ID,
+                MVAFNotice note = new MVAFNotice(GetCtx(), VAF_Msg_LableValue, VAF_UserContact_ID,
                     GetVAF_Client_ID(), GetVAF_Org_ID(), null);
                 note.SetRecord(_po.Get_Table_ID(), _po.Get_ID());
                 //  Reference

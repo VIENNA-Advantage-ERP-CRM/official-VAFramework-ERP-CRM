@@ -70,7 +70,7 @@ namespace VAdvantage.Model
 
         public ViennaProcessorLog[] GetLogs()
         {
-            List<MAlertProcessorLog> list = new List<MAlertProcessorLog>();
+            List<MVAFAlertHandlerLog> list = new List<MVAFAlertHandlerLog>();
             String sql = "SELECT * "
                 + "FROM VAF_AlertHandlerLog "
                 + "WHERE VAF_AlertHandler_ID=@VAF_AlertHandler_ID "
@@ -81,14 +81,14 @@ namespace VAdvantage.Model
                 param[0] = new SqlParameter("@VAF_AlertHandler_ID", GetVAF_AlertHandler_ID());
                 DataSet ds = DB.ExecuteDataset(sql, param);
                 foreach(DataRow dr in ds.Tables[0].Rows)
-                    list.Add(new MAlertProcessorLog(GetCtx(), dr, null));
+                    list.Add(new MVAFAlertHandlerLog(GetCtx(), dr, null));
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            MAlertProcessorLog[] retValue = new MAlertProcessorLog[list.Count()];
+            MVAFAlertHandlerLog[] retValue = new MVAFAlertHandlerLog[list.Count()];
             retValue = list.ToArray();
             return retValue;
         }	//	getLogs

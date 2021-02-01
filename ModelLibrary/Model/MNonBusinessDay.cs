@@ -75,7 +75,7 @@ namespace VAdvantage.Model
             string sql = "SELECT VAB_Calender_ID FROM VAB_YEAR WHERE VAB_YEAR_ID=(SELECT VAB_YEAR_ID FROM VAB_YEARPERIOD  WHERE VAB_YEARPERIOD_ID=" + VAB_YearPeriod_ID + ")";
             int VAB_Calender_ID = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
 
-            sql = MRole.GetDefault(ctx, false).AddAccessSQL(
+            sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
                "SELECT count(*) FROM C_NONBUSINESSDAY WHERE ISACTIVE = 'Y' AND VAB_Calender_ID=" + VAB_Calender_ID
                + (VAF_Org_ID > 0 ? " AND VAF_Org_ID IN (0, " + VAF_Org_ID + ")" : "") + " AND DATE1=TO_DATE('" + dt.Value.ToShortDateString() + "', 'MM-DD-YY')",
                "VAB_NonBusinessDay", false, false);   // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.

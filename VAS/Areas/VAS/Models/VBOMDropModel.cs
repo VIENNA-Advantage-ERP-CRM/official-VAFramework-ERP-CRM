@@ -48,7 +48,7 @@ namespace VIS.Models
                     + "WHERE IsBOM='Y' AND IsVerified='Y' AND IsActive='Y' "
                     + "ORDER BY Name";
 
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", true, false);    
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", true, false);    
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -76,7 +76,7 @@ namespace VIS.Models
                    + "FROM VAB_Invoice "
                    + "WHERE Processed='N' AND DocStatus='DR' "
                    + "ORDER BY DocumentNo";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Invoice", true, false);    
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Invoice", true, false);    
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -105,7 +105,7 @@ namespace VIS.Models
                   + "WHERE IsActive='Y' AND IsSOTrx='N' AND IsReturnTrx='N' AND Processed='N' AND DocStatus='DR' "
                   + "ORDER BY DocumentNo";
             // Added Check By Pratap 30-12-15  -- IsActive='Y' AND IsSOTrx='N' AND IsReturnTrx='N'
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Order", true, false);     
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Order", true, false);     
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -135,7 +135,7 @@ namespace VIS.Models
                  + "WHERE Processed='N' AND IsSummary='N' AND IsActive='Y'"
                  + " AND ProjectCategory<>'S' "
                  + "ORDER BY Name";
-            sql = MRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Project", true, false);          
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAB_Project", true, false);          
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {

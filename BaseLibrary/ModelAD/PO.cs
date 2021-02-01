@@ -2091,9 +2091,9 @@ namespace VAdvantage.Model
             //MSession session = MSession.Get(GetCtx(), false);
             int VAF_AlterLog_ID = 0;
             // Change Log
-            MSession session = null;
-            if (!(this is MSession))
-                session = MSession.Get(p_ctx);
+            MVAFSession session = null;
+            if (!(this is MVAFSession))
+                session = MVAFSession.Get(p_ctx);
 
             bool logThis = session != null;
             if (logThis)
@@ -2480,9 +2480,9 @@ namespace VAdvantage.Model
             // MSession session = MSession.Get(GetCtx(), true);
 
             // Change Log
-            MSession session = null;
-            if (!(this is MSession))
-                session = MSession.Get(p_ctx);
+            MVAFSession session = null;
+            if (!(this is MVAFSession))
+                session = MVAFSession.Get(p_ctx);
             bool logThis = session != null;
             if (logThis)
                 logThis = session.IsLogged(p_info.getVAF_TableView_ID(),
@@ -3325,7 +3325,7 @@ namespace VAdvantage.Model
                 if (isLocalTrx)
                     localTrx.Commit();
                 //	Change Log
-                MSession session = MSession.Get(GetCtx(), false);
+                MVAFSession session = MVAFSession.Get(GetCtx(), false);
                 if (session == null)
                 {
                     log.Fine("No Session found");
@@ -4405,9 +4405,9 @@ namespace VAdvantage.Model
 
             LobReset();
             //	Change Log
-            MSession session = null;
-            if (!(this is MSession))	//	initial session
-                session = MSession.Get(p_ctx);
+            MVAFSession session = null;
+            if (!(this is MVAFSession))	//	initial session
+                session = MVAFSession.Get(p_ctx);
             int VAF_AlterLog_ID = 0;
             Boolean logThis = session != null;
             if (logThis)
@@ -4640,9 +4640,9 @@ namespace VAdvantage.Model
             LobReset();
 
             //	Change Log
-            MSession session = null;
-            if (!(this is MSession))
-                session = MSession.Get(p_ctx);
+            MVAFSession session = null;
+            if (!(this is MVAFSession))
+                session = MVAFSession.Get(p_ctx);
             int VAF_AlterLog_ID = 0;
             Boolean logThis = session != null;
             if (logThis)

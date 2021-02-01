@@ -32,7 +32,7 @@ namespace VIS.Controllers
         {
             int no = -1;
 
-            var uq = new VAdvantage.Model.MUserQuery(Session["ctx"] as VAdvantage.Utility.Ctx, id, null);
+            var uq = new VAdvantage.Model.MVAFUserSearch(Session["ctx"] as VAdvantage.Utility.Ctx, id, null);
             if (uq != null)
             {
                 // get name of the query
@@ -55,7 +55,7 @@ namespace VIS.Controllers
             if (id == 0)
             {
                 string sql = "SELECT Count(*) FROM VAF_UserSearch WHERE VAF_TableView_ID=" + tid + " AND VAF_Tab_ID=" + tabid + " AND Upper(Name)='" + name.ToUpper() + "'";
-                int count = Convert.ToInt32(DB.ExecuteScalar(MRole.GetDefault(Session["ctx"] as VAdvantage.Utility.Ctx).AddAccessSQL(sql, "VAF_UserSearch", true, false)));
+                int count = Convert.ToInt32(DB.ExecuteScalar(MVAFRole.GetDefault(Session["ctx"] as VAdvantage.Utility.Ctx).AddAccessSQL(sql, "VAF_UserSearch", true, false)));
                 if (count > 0)
                 {
                     return Json(-5);
@@ -64,7 +64,7 @@ namespace VIS.Controllers
             }
 
 
-            var uq = new VAdvantage.Model.MUserQuery(Session["ctx"] as VAdvantage.Utility.Ctx, id, null);
+            var uq = new VAdvantage.Model.MVAFUserSearch(Session["ctx"] as VAdvantage.Utility.Ctx, id, null);
             //set query name
             if (name != null && name.Length > 0)
                 uq.SetName(name);
@@ -93,7 +93,7 @@ namespace VIS.Controllers
                     {
                         QueryModel m = qLines[i];
                         // set values
-                        VAdvantage.Model.MUserQueryLine line = new VAdvantage.Model.MUserQueryLine(uq, (i + 1) * 10, m.KEYNAME ?? "",
+                        VAdvantage.Model.MVAFUserSearchLine line = new VAdvantage.Model.MVAFUserSearchLine(uq, (i + 1) * 10, m.KEYNAME ?? "",
                                 m.KEYVALUE ?? "", m.OPERATORNAME ?? "",
                                 m.VALUE1NAME ?? "", m.VALUE1VALUE ?? "",
                                 m.VALUE2NAME ?? "", m.VALUE2VALUE ?? "",

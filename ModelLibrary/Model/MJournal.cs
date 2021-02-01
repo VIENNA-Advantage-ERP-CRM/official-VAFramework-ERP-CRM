@@ -700,7 +700,7 @@ INNER JOIN VAB_AccountBook_Element ASE ON (CA.VAB_AccountBook_ID = ASE.VAB_Accou
 WHERE CA.ISACTIVE = 'Y' AND ASE.IsActive = 'Y' AND AO.IsActive = 'Y' AND AO.VAF_Org_ID IN(0," + GetVAF_Org_ID() + @")
 AND ASE.VAB_Element_ID = (SELECT VAB_Element_ID FROM VAB_AccountBook_Element WHERE ElementType = 'AC' AND IsActive = 'Y' AND VAB_AccountBook_ID = " + GetVAB_AccountBook_ID() + @" )
 AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
-            sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_AccountBook", true, true);
+            sql = MVAFRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_AccountBook", true, true);
 
             DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
             MAssignAcctSchema assignAcctSchema = null;
@@ -1052,7 +1052,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 }
 
                 // Get current next from Completed document sequence defined on Document type
-                String value = MSequence.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
+                String value = MVAFRecordSeq.GetDocumentNo(GetVAB_DocTypes_ID(), Get_TrxName(), GetCtx(), true, this);
                 if (value != null)
                 {
                     SetDocumentNo(value);

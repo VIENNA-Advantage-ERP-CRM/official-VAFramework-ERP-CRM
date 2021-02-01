@@ -30,7 +30,7 @@ namespace VIS.Areas.VIS.Models
                 return false;
             }
 
-            MRecordAccess recData = new MRecordAccess(ctx, VAF_Role_ID, VAF_TableView_ID, Record_ID, null);
+            MVAFRecordRights recData = new MVAFRecordRights(ctx, VAF_Role_ID, VAF_TableView_ID, Record_ID, null);
             recData.SetIsActive(isActive);
             recData.SetIsExclude(isExclude);
             recData.SetIsReadOnly(isReadOnly);
@@ -59,7 +59,7 @@ namespace VIS.Areas.VIS.Models
         public List<Dictionary<string, object>> GetRoles(Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT VAF_Role_ID, Name FROM VAF_Role ORDER BY 2", "VAF_Role", MRole.SQL_NOTQUALIFIED, MRole.SQL_RW);
+            string sql = MVAFRole.GetDefault(ctx).AddAccessSQL("SELECT VAF_Role_ID, Name FROM VAF_Role ORDER BY 2", "VAF_Role", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RW);
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

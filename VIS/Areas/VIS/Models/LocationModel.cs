@@ -283,7 +283,7 @@ namespace VIS.Models
                                     " AND Lower((NVL(CNTRL.Name,'')   ||' '  || NVL(VAB_Address.ADDRESS1,'')  ||' '  || NVL(VAB_Address.ADDRESS2,'')  ||' '  || NVL(VAB_Address.ADDRESS3,'')  ||' '  || NVL(VAB_Address.ADDRESS4,'')  ||' ' " +
                                     " || NVL(VAB_Address.CITY,'')  ||' '  || NVL(VAB_Address.REGIONNAME,'')  ||' '  || NVL(VAB_Address.POSTAL,'')  ||' '  || NVL(VAB_Address.POSTAL_ADD,''))) like Lower('%" + name_startsWith + "%')  AND rownum <500";
             }
-            sqlquery = MRole.GetDefault(ctx).AddAccessSQL(sqlquery, "VAB_Address", MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+            sqlquery = MVAFRole.GetDefault(ctx).AddAccessSQL(sqlquery, "VAB_Address", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
             //sqlquery = "SELECT * FROM (" + sqlquery + " ) fltr WHERE LOWER(fltr.address) LIKE LOWER('" + name_startsWith + "%') or LOWER(fltr.address) LIKE LOWER('%" + name_startsWith + "%') or LOWER(fltr.address) LIKE LOWER('%" + name_startsWith + "')";
 
 

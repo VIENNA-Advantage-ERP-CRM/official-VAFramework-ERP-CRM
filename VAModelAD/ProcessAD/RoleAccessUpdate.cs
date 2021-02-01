@@ -72,7 +72,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             if (_VAF_Role_ID != 0 && _VAF_Role_ID != -1)
             {
-                UpdateRole(new MRole(GetCtx(), _VAF_Role_ID, Get_TrxName()));
+                UpdateRole(new MVAFRole(GetCtx(), _VAF_Role_ID, Get_TrxName()));
 
             }
             else
@@ -106,7 +106,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //while (rs.next())
                     foreach (DataRow dr in dt.Rows)
                     {
-                        UpdateRole(new MRole(GetCtx(), dr, Get_TrxName()));
+                        UpdateRole(new MVAFRole(GetCtx(), dr, Get_TrxName()));
                     }
 
                 }
@@ -136,7 +136,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         ///	Update Role
         /// </summary>
         /// <param name="role">role</param>
-        private void UpdateRole(MRole role)
+        private void UpdateRole(MVAFRole role)
         {
             AddLog(0, null, null, role.GetName() + ": "
                 + role.UpdateAccessRecords());

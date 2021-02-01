@@ -594,13 +594,13 @@ namespace VAdvantage.Process
         private string CompleteOrReverse(Ctx ctx, int Record_ID, int Process_ID, string DocAction)
         {
             string result = "";
-            MRole role = MRole.Get(ctx, ctx.GetVAF_Role_ID());
+            MVAFRole role = MVAFRole.Get(ctx, ctx.GetVAF_Role_ID());
             if (Util.GetValueOfBool(role.GetProcessAccess(Process_ID)))
             {
                 DB.ExecuteQuery("UPDATE VAGL_JRNL SET DocAction = '" + DocAction + "' WHERE VAGL_JRNL_ID = " + Record_ID);
 
-                MProcess proc = new MProcess(ctx, Process_ID, null);
-                MPInstance pin = new MPInstance(proc, Record_ID);
+                MVAFJob proc = new MVAFJob(ctx, Process_ID, null);
+                MVAFJInstance pin = new MVAFJInstance(proc, Record_ID);
                 if (!pin.Save())
                 {
                     ValueNamePair vnp = VLogger.RetrieveError();
@@ -617,7 +617,7 @@ namespace VAdvantage.Process
                     return result;
                 }
 
-                MPInstancePara para = new MPInstancePara(pin, 20);
+                MVAFJInstancePara para = new MVAFJInstancePara(pin, 20);
                 para.setParameter("DocAction", DocAction);
                 if (!para.Save())
                 {

@@ -27,7 +27,7 @@ namespace VAdvantage.Print
     /// </summary>
     public class LayoutEngine : IPrintable
     {
-        public LayoutEngine(MPrintFormat format, PrintData data, Query query)
+        public LayoutEngine(MVAFPrintRptLayout format, PrintData data, Query query)
         {
             log.Info(format + " - " + data + " - " + query);
             SetPrintFormat(format, false);
@@ -35,7 +35,7 @@ namespace VAdvantage.Print
             Layout();
         }
 
-        public LayoutEngine(MPrintFormat format, PrintData data, Query query, int VAF_Org_ID)
+        public LayoutEngine(MVAFPrintRptLayout format, PrintData data, Query query, int VAF_Org_ID)
         {
             _vaf_org_id = VAF_Org_ID;
             log.Info(format + " - " + data + " - " + query);
@@ -51,7 +51,7 @@ namespace VAdvantage.Print
         /** Existing Layout				*/
         private bool m_hasLayout = false;
         /**	The Format					*/
-        private MPrintFormat m_format;
+        private MVAFPrintRptLayout m_format;
         /**	Print Context				*/
         private Ctx m_printCtx;
         /** The Data					*/
@@ -59,9 +59,9 @@ namespace VAdvantage.Print
         /** The Query (parameter		*/
         private Query m_query;
         /**	Default Color				*/
-        private MPrintColor m_printColor;
+        private MVAFPrintRptColour m_printColor;
         /**	Default Font				*/
-        private MPrintFont m_printFont;
+        private MVAFPrintRptFont m_printFont;
         /**	Printed Column Count		*/
         private int m_columnCount = -1;
 
@@ -142,7 +142,7 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="format">if layout exists, redo it</param>
         /// <param name="doLayout">print Format</param>
-        public void SetPrintFormat(MPrintFormat format, bool doLayout)
+        public void SetPrintFormat(MVAFPrintRptLayout format, bool doLayout)
         {
             m_format = format;
             //	Initial & Default Settings
@@ -151,7 +151,7 @@ namespace VAdvantage.Print
             //	Set Paper
             bool tempHasLayout = m_hasLayout;
             m_hasLayout = false;	//	do not start re-calculation
-            MPrintPaper mPaper = MPrintPaper.Get(format.GetVAF_Print_Rpt_Paper_ID());
+            MVAFPrintRptPaper mPaper = MVAFPrintRptPaper.Get(format.GetVAF_Print_Rpt_Paper_ID());
             if (m_format.IsStandardHeaderFooter())
                 SetPaper(mPaper.GetCPaper());
             else
@@ -159,8 +159,8 @@ namespace VAdvantage.Print
                     m_format.GetHeaderMargin(), m_format.GetFooterMargin());
             m_hasLayout = tempHasLayout;
             //
-            m_printColor = MPrintColor.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
-            m_printFont = MPrintFont.Get(format.GetVAF_Print_Rpt_Font_ID());
+            m_printColor = MVAFPrintRptColour.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
+            m_printFont = MVAFPrintRptFont.Get(format.GetVAF_Print_Rpt_Font_ID());
 
             //	Print Context
             m_printCtx.SetContext(Page.CONTEXVAT_REPORTNAME, m_format.GetName());
@@ -421,7 +421,7 @@ namespace VAdvantage.Print
 
                 for (int i = 0; i < m_format.GetItemCount(); i++)
                 {
-                    MPrintFormatItem item = m_format.GetItem(i);
+                    MVAFPrintRptLItem item = m_format.GetItem(i);
 
                     //	log.fine("layoutForm - Row=" + row + " - #" + i + " - " + item);
                     if (!item.IsPrinted())
@@ -471,19 +471,19 @@ namespace VAdvantage.Print
                     {
                         if (item.IsLineAlignLeading())
                         {
-                            alignment = MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft;
+                            alignment = MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft;
                             maxWidth = GetAreaBounds().Width;
                             lineAligned = true;
                         }
                         else if (item.IsLineAlignCenter())
                         {
-                            alignment = MPrintFormatItem.FIELDALIGNMENTTYPE_Center;
+                            alignment = MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center;
                             maxWidth = GetAreaBounds().Width;
                             lineAligned = true;
                         }
                         else if (item.IsLineAlignTrailing())
                         {
-                            alignment = MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight;
+                            alignment = MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight;
                             maxWidth = GetAreaBounds().Width;
                             lineAligned = true;
                         }
@@ -625,14 +625,14 @@ namespace VAdvantage.Print
             Color color = GetColor();	//	default
             if (VAF_Print_Rpt_Colour_ID != 0 && m_printColor.Get_ID() != VAF_Print_Rpt_Colour_ID)
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), VAF_Print_Rpt_Colour_ID);
+                MVAFPrintRptColour c = MVAFPrintRptColour.Get(GetCtx(), VAF_Print_Rpt_Colour_ID);
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
             Font font = m_printFont.GetFont();		//	default
             if (VAF_Print_Rpt_Font_ID != 0 && m_printFont.Get_ID() != VAF_Print_Rpt_Font_ID)
             {
-                MPrintFont f = MPrintFont.Get(VAF_Print_Rpt_Font_ID);
+                MVAFPrintRptFont f = MVAFPrintRptFont.Get(VAF_Print_Rpt_Font_ID);
                 if (f.GetFont() != null)
                     font = f.GetFont();
             }
@@ -646,7 +646,7 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="item">item</param>
         /// <returns>image element</returns>
-        private PrintElement CreateImageElement(MPrintFormatItem item)
+        private PrintElement CreateImageElement(MVAFPrintRptLItem item)
         {
             Object obj = m_data.GetNode(item.GetVAF_Column_ID());
             if (obj == null)
@@ -679,13 +679,13 @@ namespace VAdvantage.Print
         /// </summary>
         /// <param name="item">item</param>
         /// <returns>BoxElement</returns>
-        private PrintElement CreateBoxElement(MPrintFormatItem item)
+        private PrintElement CreateBoxElement(MVAFPrintRptLItem item)
         {
             Color color = GetColor();	//	default
             if (item.GetVAF_Print_Rpt_Colour_ID() != 0
                 && m_printColor.Get_ID() != item.GetVAF_Print_Rpt_Colour_ID())
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
+                MVAFPrintRptColour c = MVAFPrintRptColour.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
@@ -707,7 +707,7 @@ namespace VAdvantage.Print
         /// <param name="FieldAlignmentType"></param>
         /// <param name="isForm"></param>
         /// <returns></returns>
-        private PrintElement CreateFieldElement(MPrintFormatItem item, int maxWidth,
+        private PrintElement CreateFieldElement(MVAFPrintRptLItem item, int maxWidth,
             String FieldAlignmentType, bool isForm)
         {
             //	Get Data
@@ -769,7 +769,7 @@ namespace VAdvantage.Print
             { }								//	link color/underline handeled in PrintElement classes
             else if (item.GetVAF_Print_Rpt_Colour_ID() != 0 && m_printColor.Get_ID() != item.GetVAF_Print_Rpt_Colour_ID())
             {
-                MPrintColor c = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
+                MVAFPrintRptColour c = MVAFPrintRptColour.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                 if (c.GetColor() != null)
                     color = c.GetColor();
             }
@@ -777,7 +777,7 @@ namespace VAdvantage.Print
             Font font = m_printFont.GetFont();		//	default
             if (item.GetVAF_Print_Rpt_Font_ID() != 0 && m_printFont.Get_ID() != item.GetVAF_Print_Rpt_Font_ID())
             {
-                MPrintFont f = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
+                MVAFPrintRptFont f = MVAFPrintRptFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                 if (f.GetFont() != null)
                     font = f.GetFont();
             }
@@ -806,12 +806,12 @@ namespace VAdvantage.Print
         /// <param name="item">print format item</param>
         /// <param name="data">print data</param>
         /// <returns>Print Element</returns>
-        private PrintElement IncludeFormat(MPrintFormatItem item, PrintData data)
+        private PrintElement IncludeFormat(MVAFPrintRptLItem item, PrintData data)
         {
             NewLine();
             PrintElement element = null;
             //
-            MPrintFormat format = MPrintFormat.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), false);
+            MVAFPrintRptLayout format = MVAFPrintRptLayout.Get(GetCtx(), item.GetVAF_Print_Rpt_LayoutChild_ID(), false);
             format.SetLanguage(m_format.GetLanguage());
             if (m_format.IsTranslationView())
                 format.SetTranslationLanguage(m_format.GetLanguage());
@@ -1081,7 +1081,7 @@ namespace VAdvantage.Print
         }	//	getPageInfoMax
 
 
-        public MPrintFormat GetFormat()
+        public MVAFPrintRptLayout GetFormat()
         {
             return m_format;
         }	//	getFormat
@@ -1251,21 +1251,21 @@ namespace VAdvantage.Print
             //PrintElement element = new ImageElement(new Bitmap(""), "Vienna Small Log");	//	48x15
             //PrintElement element = new ImageElement(img, "Vienna Small Log");	//	48x15
             //element = new ImageElement(org.Vienna.Vienna.getImageLogo());	//	100x30
-            element.Layout(48, 15, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
+            element.Layout(48, 15, false, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft);
             element.SetLocation(m_header.Location);
             //m_headerFooter.AddElement(element);
 
-            MPrintTableFormat tf = m_format.GetTableFormat();
+            MVAFPrintRptTblLayout tf = m_format.GetTableFormat();
             Font font = tf.GetPageHeader_Font();
             Color color = tf.GetPageHeaderFG_Color();
 
             element = new StringElement("@*ReportName@", font, color, null, true);
-            element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_Center);
+            element.Layout(m_header.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);
 
             element = new StringElement("@Page@ @*Page@ @of@ @*PageCount@", font, color, null, true);
-            element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight);
+            element.Layout(m_header.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);
 
@@ -1291,19 +1291,19 @@ namespace VAdvantage.Print
             ////
 
             element = new StringElement(VIENNA_R, font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft);
             PointF ft = m_footer.Location;
             ft.Y += m_footer.Height - element.GetHeight() - 2;	//	2pt above min
             element.SetLocation(ft);
             // m_headerFooter.AddElement(element);
 
             element = new StringElement("@*Header@", font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_Center);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center);
             element.SetLocation(ft);
             //m_headerFooter.AddElement(element);
 
             element = new StringElement(DateTime.UtcNow.Date.ToString("d"), font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight);
             element.SetLocation(ft);
             m_headerFooter.AddElement(element);
 
@@ -1333,23 +1333,23 @@ namespace VAdvantage.Print
             // PrintElement element = new ImageElement(VAdvantage.DataBase.DB.GetImageLogoSmall(true), "Vienna Small Log");	//	48x15
             PrintElement element = new ImageElement(new Bitmap(""), "Vienna Small Log");	//	48x15
             //	element = new ImageElement(org.Vienna.Vienna.getImageLogo());	//	100x30
-            element.Layout(48, 15, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
+            element.Layout(48, 15, false, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft);
             element.SetLocation(m_header.Location);
 
             m_headerFooter.AddElement(element);
             //
-            MPrintTableFormat tf = m_format.GetTableFormat();
+            MVAFPrintRptTblLayout tf = m_format.GetTableFormat();
             Font font = tf.GetPageHeader_Font();
             Color color = tf.GetPageHeaderFG_Color();
             ////
             element = new StringElement("@*ReportName@", font, color, null, true);
-            element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_Center);
+            element.Layout(m_header.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);
             //
             //
             element = new StringElement("@Page@ @*Page@ @of@ @*PageCount@", font, color, null, true);
-            element.Layout(m_header.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight);
+            element.Layout(m_header.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight);
             element.SetLocation(m_header.Location);
             m_headerFooter.AddElement(element);
 
@@ -1361,19 +1361,19 @@ namespace VAdvantage.Print
             //element = new StringElement(Vienna.Vienna_R, font, color, null, true);
             /** If you have a valid Vienna support contract, you can use the following	*/
             element = new StringElement(VIENNA_R, font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft);
             PointF ft = m_footer.Location;
             ft.Y += m_footer.Height - element.GetHeight() - 2;	//	2pt above min
             element.SetLocation(ft);
             m_headerFooter.AddElement(element);
             //
             element = new StringElement("@*Header@", font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_Center);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Center);
             element.SetLocation(ft);
             m_headerFooter.AddElement(element);
             //
             element = new StringElement("@*CurrentDateTime@", font, color, null, true);
-            element.Layout(m_footer.Width, 0, true, MPrintFormatItem.FIELDALIGNMENTTYPE_TrailingRight);
+            element.Layout(m_footer.Width, 0, true, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_TrailingRight);
             element.SetLocation(ft);
             m_headerFooter.AddElement(element);
 
@@ -1397,20 +1397,20 @@ namespace VAdvantage.Print
         }
 
 
-        private PrintElement LayoutTable(MPrintFormat format, PrintData printData, int xOffset)
+        private PrintElement LayoutTable(MVAFPrintRptLayout format, PrintData printData, int xOffset)
         {
             log.Info(format.GetName() + " - " + printData.GetName());
-            MPrintTableFormat tf = format.GetTableFormat();
+            MVAFPrintRptTblLayout tf = format.GetTableFormat();
             //	Initial Values
             HashMap<Point, Font> rowColFont = new HashMap<Point, Font>();
-            MPrintFont printFont = MPrintFont.Get(format.GetVAF_Print_Rpt_Font_ID());
+            MVAFPrintRptFont printFont = MVAFPrintRptFont.Get(format.GetVAF_Print_Rpt_Font_ID());
             rowColFont.Put(new Point(TableElement.ALL, TableElement.ALL), printFont.GetFont());
             tf.SetStandard_Font(printFont.GetFont());
             rowColFont.Put(new Point(TableElement.HEADER_ROW, TableElement.ALL), tf.GetHeader_Font());
 
             //
             HashMap<Point, Color> rowColColor = new HashMap<Point, Color>();
-            MPrintColor printColor = MPrintColor.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
+            MVAFPrintRptColour printColor = MVAFPrintRptColour.Get(GetCtx(), format.GetVAF_Print_Rpt_Colour_ID());
             rowColColor.Put(new Point(TableElement.ALL, TableElement.ALL), printColor.GetColor());
             rowColColor.Put(new Point(TableElement.HEADER_ROW, TableElement.ALL), tf.GetHeaderFG_Color());
             //
@@ -1452,7 +1452,7 @@ namespace VAdvantage.Print
             int col = 0;
             for (int c = 0; c < format.GetItemCount(); c++)
             {
-                MPrintFormatItem item = format.GetItem(c);
+                MVAFPrintRptLItem item = format.GetItem(c);
                 if (item.IsPrinted())
                 {
                     if (item.IsNextLine() && item.GetBelowColumn() != 0)
@@ -1479,18 +1479,18 @@ namespace VAdvantage.Print
                     if (item.IsHeightOneLine())
                         columnMaxHeight[col] = -1;
                     columnJustification[col] = item.GetFieldAlignmentType();
-                    if (columnJustification[col] == null || columnJustification[col].Equals(MPrintFormatItem.FIELDALIGNMENTTYPE_Default))
-                        columnJustification[col] = MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft;	//	when generated sets correct alignment
+                    if (columnJustification[col] == null || columnJustification[col].Equals(MVAFPrintRptLItem.FIELDALIGNMENTTYPE_Default))
+                        columnJustification[col] = MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft;	//	when generated sets correct alignment
                     //	Column Fonts
                     if (item.GetVAF_Print_Rpt_Font_ID() != 0 && item.GetVAF_Print_Rpt_Font_ID() != format.GetVAF_Print_Rpt_Font_ID())
                     {
-                        MPrintFont font = MPrintFont.Get(item.GetVAF_Print_Rpt_Font_ID());
+                        MVAFPrintRptFont font = MVAFPrintRptFont.Get(item.GetVAF_Print_Rpt_Font_ID());
                         rowColFont.Put(new Point(TableElement.ALL, col), font.GetFont());
                     }
                     if (item.GetVAF_Print_Rpt_Colour_ID() != 0 && item.GetVAF_Print_Rpt_Colour_ID() != format.GetVAF_Print_Rpt_Colour_ID())
                     {
                         //QueryRestriction
-                        MPrintColor color = MPrintColor.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
+                        MVAFPrintRptColour color = MVAFPrintRptColour.Get(GetCtx(), item.GetVAF_Print_Rpt_Colour_ID());
                         rowColColor.Put(new Point(TableElement.ALL, col), color.GetColor());
                     }
                     //
@@ -1545,7 +1545,7 @@ namespace VAdvantage.Print
                 col = 0;
                 for (int c = 0; c < format.GetItemCount(); c++)
                 {
-                    MPrintFormatItem item = format.GetItem(c);
+                    MVAFPrintRptLItem item = format.GetItem(c);
                     Object dataElement = null;
                     if (item.IsPrinted() && item.GetVAF_Column_ID() > 0)	//	Text Columns
                     {
@@ -1680,7 +1680,7 @@ namespace VAdvantage.Print
                 pageNoStart, firstPage, nextPages, repeatedColumns, additionalLines,
                 rowColFont, rowColColor, rowColBackground,
                 tf, pageBreak);
-            table.Layout(0, 0, false, MPrintFormatItem.FIELDALIGNMENTTYPE_LeadingLeft);
+            table.Layout(0, 0, false, MVAFPrintRptLItem.FIELDALIGNMENTTYPE_LeadingLeft);
             if (m_tableElement == null)
                 m_tableElement = table;
             dynamicPageHtml = htmlTable.ToString().Split('●');

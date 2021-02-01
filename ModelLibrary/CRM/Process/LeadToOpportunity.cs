@@ -111,7 +111,7 @@ namespace VAdvantage.Process
             string sql = "select VAF_Job_id from VAF_Job where name = 'VAB_Lead BPartner'";
             int VAF_Job_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName())); // 1000025;
 
-            MPInstance instance = new MPInstance(GetCtx(), VAF_Job_ID, GetRecord_ID());
+            MVAFJInstance instance = new MVAFJInstance(GetCtx(), VAF_Job_ID, GetRecord_ID());
             if (!instance.Save())
             {
                 return;
@@ -121,10 +121,10 @@ namespace VAdvantage.Process
             pi.SetVAF_JInstance_ID(instance.GetVAF_JInstance_ID());
 
             // Add Parameter - Selection=Y
-            MPInstancePara para = new MPInstancePara(instance, 10);
+            MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
 
             // Add Parameter - M_Warehouse_ID=x
-            para = new MPInstancePara(instance, 20);
+            para = new MVAFJInstancePara(instance, 20);
             para.setParameter("_VAB_Lead_ID", lead_id);
             if (!para.Save())
             {
@@ -167,7 +167,7 @@ namespace VAdvantage.Process
             {
                 return "@VAB_BusinessPartner_ID@: " + bp.GetName();
             }
-            VAdvantage.Model.MUser user = lead.GetUser();
+            VAdvantage.Model.MVAFUserContact user = lead.GetUser();
             if (user != null)
             {
                 return "@VAF_UserContact_ID@: " + user.GetName();

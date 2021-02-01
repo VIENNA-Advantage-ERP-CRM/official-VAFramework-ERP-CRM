@@ -1,0 +1,1589 @@
+﻿/********************************************************
+ * Module Name    : Scheduler
+ * Purpose        : Schedule the Events
+ * Author         : Jagmohan Bhatt
+ * Date           : 03-Nov-2009
+ ******************************************************/
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SqlClient;
+using System.Data;
+using VAdvantage.Process;
+using VAdvantage.DataBase;
+using VAdvantage.Utility;
+using VAdvantage.Classes;
+using VAdvantage.Logging;
+using VAdvantage.Print;
+using VAdvantage.ProcessEngine;
+using System.IO;
+using VAModelAD.Model;
+
+namespace VAdvantage.Model
+{
+    public class MVAFJobRunPlan : X_VAF_JobRun_Plan, ViennaProcessor
+    {
+        /// <summary>
+        /// Get Active
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <returns>active processors</returns>
+        public static MVAFJobRunPlan[] GetActive(Ctx ctx)
+        {
+
+            //List<MScheduler> list = new List<MScheduler>();
+            //String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
+            //try
+            //{
+            //    DataSet ds = BaseLibrary.DataBase.DB.ExecuteDataset(sql);
+            //    foreach (DataRow dr in ds.Tables[0].Rows)
+            //    {
+            //        list.Add(new MScheduler(ctx, dr, null));
+            //    }
+            //    ds = null;
+            //}
+            //catch (Exception e)
+            //{
+
+            //    s_log.Log(Level.SEVERE, sql, e);
+            //}
+
+
+            //MScheduler[] retValue = new MScheduler[list.Count()];
+            //retValue = list.ToArray();
+            //return retValue;
+
+
+            // changed by lakhwinder
+            // the scheduler entries having ip address on the respective schedule.
+            // will not be run on the other system having different machine IP.
+
+            List<MVAFJobRunPlan> list = new List<MVAFJobRunPlan>();
+            String sql = "SELECT * FROM VAF_JobRun_Plan WHERE IsActive='Y'";
+            string scheduleIP = null;
+            try
+            {
+                //string machineIP = null;// System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+
+                string machineIP = System.Net.Dns.GetHostEntry(Environment.MachineName).AddressList[0].ToString();
+                //var host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+                //foreach (var ip in host.AddressList)
+                //{
+                //    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                //    {
+                //        machineIP= ip.ToString();
+                //        break;
+                //    }
+                //}
+
+                //int port=System.Web.HttpContext.Current.Request.Url.Port;
+                //string machineIPPort =machineIP+ ":" + port.ToString();
+                DataSet ds = DataBase.DB.ExecuteDataset(sql);
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    scheduleIP = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT RunOnlyOnIP FROM VAF_Plan WHERE 
+                                                        VAF_Plan_ID = (SELECT VAF_Plan_ID FROM VAF_JobRun_Plan WHERE VAF_JobRun_Plan_ID =" + dr["VAF_JobRun_Plan_ID"] + " )"));
+
+                    //if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP) || machineIPPort.Contains(scheduleIP))
+                    if (string.IsNullOrEmpty(scheduleIP) || machineIP.Contains(scheduleIP))
+                    {
+                        list.Add(new MVAFJobRunPlan(new Ctx(), dr, null));
+                    }
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+
+                s_log.Log(Level.SEVERE, sql, e);
+            }
+
+
+            MVAFJobRunPlan[] retValue = new MVAFJobRunPlan[list.Count()];
+            retValue = list.ToArray();
+            return retValue;
+        }	//	getActive
+
+
+        /**	Static Logger	*/
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MVAFJobRunPlan).FullName);
+
+        /// <summary>
+        /// Standard Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="VAF_JobRun_Plan_ID">scheduler id</param>
+        /// <param name="trxName">optional transaction name</param>
+        public MVAFJobRunPlan(Ctx ctx, int VAF_JobRun_Plan_ID, Trx trxName)
+            : base(ctx, VAF_JobRun_Plan_ID, trxName)
+        {
+
+            if (VAF_JobRun_Plan_ID == 0)
+            {
+                //	setVAF_Job_ID (0);
+                //	setName (null);
+                SetFrequencyType(FREQUENCYTYPE_Day);
+                SetFrequency(1);
+                //
+                SetKeepLogDays(7);
+                //	setSupervisor_ID (0);
+            }
+        }	//	MScheduler
+
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="rs">datarow</param>
+        /// <param name="trxName">optional transaction name</param>
+        public MVAFJobRunPlan(Ctx ctx, DataRow rs, Trx trxName)
+            : base(ctx, rs, trxName)
+        {
+        }	//	MScheduler
+
+        /** Process to be executed		*/
+        private MVAFJob m_process = null;
+        /**	Scheduler Parameter			*/
+        private MVAFJobRunPara[] m_parameter = null;
+        /** Scheduler Recipients		*/
+        private MVAFJobRunRecipient[] m_recipients = null;
+        /** The Supervisor				*/
+        private MVAFUserContact m_supervisor = null;
+
+        /// <summary>
+        /// Get Server ID
+        /// </summary>
+        /// <returns>ID</returns>
+        public String GetServerID()
+        {
+            return "Scheduler" + Get_ID();
+        }	//	getServerID
+
+        /// <summary>
+        /// Get Date Next Run
+        /// </summary>
+        /// <param name="requery">requery</param>
+        /// <returns>date next run</returns>
+        public DateTime? GetDateNextRun(bool requery)
+        {
+            if (requery)
+                Load(Get_TrxName());
+            return GetDateNextRun();
+        }	//	getDateNextRun
+
+
+        /// <summary>
+        /// Get Logs
+        /// </summary>
+        /// <returns>logs</returns>
+        public ViennaProcessorLog[] GetLogs()
+        {
+            List<MVAFJobRunLog> list = new List<MVAFJobRunLog>();
+            String sql = "SELECT * "
+                + "FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=@scheduleid "
+                + "ORDER BY Created DESC";
+
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    list.Add(new MVAFJobRunLog(GetCtx(), dr, Get_TrxName()));
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+
+                log.Log(Level.SEVERE, sql, e);
+            }
+
+
+            MVAFJobRunLog[] retValue = new MVAFJobRunLog[list.Count()];
+            retValue = list.ToArray();
+            return retValue;
+        }	//	getLogs
+
+
+        /// <summary>
+        /// Delete old Request Log
+        /// </summary>
+        /// <returns>number of records</returns>
+        public int DeleteLog()
+        {
+            if (GetKeepLogDays() < 1)
+                return 0;
+            String sql = "DELETE FROM VAF_JobRun_Log "
+                + "WHERE VAF_JobRun_Plan_ID=" + GetVAF_JobRun_Plan_ID()
+                + " AND (Created+" + GetKeepLogDays() + ") < SysDate";
+            int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
+            return no;
+        }	//	deleteLog
+
+        /// <summary>
+        /// Get Process
+        /// </summary>
+        /// <returns>process</returns>
+        public MVAFJob GetProcess()
+        {
+
+
+            if (m_process == null)
+                m_process = new MVAFJob(GetCtx(), GetVAF_Job_ID(), null);
+            return m_process;
+        }	//	getProcess
+
+
+        /// <summary>
+        /// Get Parameters
+        /// </summary>
+        /// <param name="reload">reload</param>
+        /// <returns>parameter</returns>
+        public MVAFJobRunPara[] GetParameters(bool reload)
+        {
+            if (!reload && m_parameter != null)
+                return m_parameter;
+            List<MVAFJobRunPara> list = new List<MVAFJobRunPara>();
+            String sql = "SELECT * FROM VAF_JobRun_Para WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
+            DataSet ds = null;
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
+                ds = new DataSet();
+                ds = DataBase.DB.ExecuteDataset(sql, param);
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    list.Add(new MVAFJobRunPara(GetCtx(), dr, null));
+                }
+                ds = null;
+            }
+            catch (Exception e)
+            {
+                if (ds != null)
+                {
+                    ds = null;
+                }
+                log.Log(Level.SEVERE, sql, e);
+            }
+
+            m_parameter = new MVAFJobRunPara[list.Count()];
+            m_parameter = list.ToArray();
+            return m_parameter;
+        }	//	getParameter
+
+        /// <summary>
+        /// Get Recipients
+        /// </summary>
+        /// <param name="reload">reload</param>
+        /// <returns>recipients</returns>
+        public MVAFJobRunRecipient[] GetRecipients(bool reload)
+        {
+            if (!reload && m_recipients != null)
+                return m_recipients;
+            List<MVAFJobRunRecipient> list = new List<MVAFJobRunRecipient>();
+            String sql = "SELECT * FROM VAF_JobRun_Recipient WHERE VAF_JobRun_Plan_ID=@scheduleid AND IsActive='Y'";
+            try
+            {
+                SqlParameter[] param = new SqlParameter[1];
+                param[0] = new SqlParameter("@scheduleid", GetVAF_JobRun_Plan_ID());
+                DataSet ds = DataBase.DB.ExecuteDataset(sql, param);
+
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    list.Add(new MVAFJobRunRecipient(GetCtx(), dr, null));
+                }
+                ds = null;
+
+            }
+            catch (Exception e)
+            {
+
+                log.Log(Level.SEVERE, sql, e);
+            }
+
+            m_recipients = new MVAFJobRunRecipient[list.Count()];
+            m_recipients = list.ToArray();
+            return m_recipients;
+        }	//	getRecipients
+
+        /// <summary>
+        /// Get Recipient VAF_UserContact_IDs
+        /// </summary>
+        /// <returns>array of user IDs</returns>
+        public int[] GetRecipientVAF_UserContact_IDs()
+        {
+            List<int> list = new List<int>();
+            MVAFJobRunRecipient[] recipients = GetRecipients(false);
+            for (int i = 0; i < recipients.Length; i++)
+            {
+                MVAFJobRunRecipient recipient = recipients[i];
+                if (!recipient.IsActive())
+                    continue;
+                if (recipient.GetVAF_UserContact_ID() != 0)
+                {
+                    int ii = recipient.GetVAF_UserContact_ID();
+                    if (!list.Contains(ii))
+                        list.Add(ii);
+                }
+                if (recipient.GetVAF_Role_ID() != 0)
+                {
+                    MVAFUserContactRoles[] urs = MVAFUserContactRoles.GetOfRole(GetCtx(), recipient.GetVAF_Role_ID());
+                    for (int j = 0; j < urs.Length; j++)
+                    {
+                        MVAFUserContactRoles ur = urs[j];
+                        if (!ur.IsActive())
+                            continue;
+                        int ii = ur.GetVAF_UserContact_ID();
+                        if (!list.Contains(ii))
+                            list.Add(ii);
+                    }
+                }
+            }
+            //	Add Updater
+            if (list.Count() == 0)
+            {
+                int ii = GetUpdatedBy();
+                list.Add(ii);
+            }
+            //
+            int[] recipientIDs = new int[list.Count()];
+            recipientIDs = list.ToArray();
+            return recipientIDs;
+        }	//	getRecipientVAF_UserContact_IDs
+
+
+        /// <summary>
+        /// String Representation
+        /// </summary>
+        /// <returns>info</returns>
+        public override String ToString()
+        {
+            StringBuilder sb = new StringBuilder("MScheduler[");
+            sb.Append(Get_ID()).Append("-").Append(GetName())
+                .Append("]");
+            return sb.ToString();
+        }	//	toString
+
+
+        /// <summary>
+        /// Run Scheduler
+        /// </summary>
+        /// <param name="trx">optional transaction</param>
+        /// <returns>Summary</returns>
+        public String Execute(Trx trx)
+        {
+            //if (GetVAF_Page_ID() != 0)
+            //{
+            //    return RunCrystalReport();
+            //}
+
+            if (m_process == null)
+                GetProcess();
+
+            if (m_process.IsReport())
+            {
+                //if (m_process.GetClassname() != null)
+                //{
+                //    RunProcess(trx);
+                //}
+
+                return RunReport(trx);
+                //return ""; // RunReport(trx); //not implemented yet
+            }
+            else
+            {
+                return RunProcess(trx);
+            }
+        }	//	execute
+
+        public void ExecuteFromThread(Trx trx)
+        {
+            this.Execute(trx);
+        }
+
+        private List<String> _emails = new List<string>();
+        bool isDocxFile = false;
+        /// <summary>
+        /// Run Report
+        /// </summary>
+        /// <param name="trx">optional transaction</param>
+        /// <returns></returns>
+        
+        private String RunReport(Trx trx)
+        {
+            log.Info(m_process.ToString());
+            if (!m_process.IsReport() || (m_process.GetVAF_Print_Rpt_Layout_ID() == 0
+                                             && m_process.GetVAF_ReportView_ID() == 0
+                //&& !m_process.GetIsCrystalReport()
+                                             && m_process.GetIsCrystalReport() == "N"
+                                              && m_process.GetVAF_ReportLayout_ID() == 0
+                                              && !m_process.Get_Value("IsCrystalReport").Equals("B")
+                                              && !m_process.Get_Value("IsCrystalReport").Equals("J")
+                                              && m_process.GetVAF_ReportMaster_ID() == 0))
+                return "Not a Report VAF_Job_ID=" + m_process.GetVAF_Job_ID()
+                    + " - " + m_process.GetName();
+            //	Process
+            int VAF_TableView_ID = 0;
+            int Record_ID = 0;
+            //
+            MVAFJInstance pInstance = new MVAFJInstance(m_process, Record_ID);
+            String error = FillParameter(pInstance);
+            if (!String.IsNullOrEmpty(error))
+            {
+                NotifySupervisor(false, error, null);
+                return error;
+            }
+            //
+            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
+            pi.SetVAF_Client_ID(GetVAF_Client_ID());
+            pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
+            pi.SetVAF_Org_ID(GetVAF_Org_ID());
+            if (!m_process.ProcessIt(pi, trx) && pi.GetClassName() != null)
+            {
+                string msg = "Process failed: (" + pi.GetClassName() + ") " + pi.GetSummary();
+                NotifySupervisor(false, msg, null);
+                return msg;
+            }
+
+            IReportEngine re = null;
+
+            //Dynamic Report    
+            if (m_process.GetVAF_ReportMaster_ID() > 0)
+            {
+                String fqClassName = "", asmName = "";
+                DataSet ds = DB.ExecuteDataset("SELECT ClassName,AssemblyName FROM VAF_ReportMaster WHERE IsActive='Y' AND VAF_ReportMaster_ID = " + m_process.GetVAF_ReportMaster_ID());
+                if (ds != null && ds.Tables[0].Rows.Count > 0)
+                {
+                    fqClassName = ds.Tables[0].Rows[0]["ClassName"].ToString();
+                    asmName = ds.Tables[0].Rows[0]["AssemblyName"].ToString();
+                    re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, asmName, fqClassName);
+                }
+                else
+                {
+                    log.Log(Level.WARNING, "Report Engine data not found Error -> InActive record");
+                    re = null;
+                }
+            }
+
+            else if (m_process.GetVAF_ReportLayout_ID() > 0)
+            {
+                string lang = p_ctx.GetContext("#VAF_Language");
+                lang = lang.Replace("_", "-");
+
+                if ((m_process.GetVAF_ReportLayout_ID() > 0) && (lang == "ar-IQ"))
+                {
+                    isDocxFile = true;
+                    //p_ctx.SetContext("ReportFromSchdular", true);
+                    pi.IsArabicReportFromOutside = true;
+                    
+                }
+                else
+                {
+                    pi.IsArabicReportFromOutside = false;
+                }
+                pi.SetPrintAllPages(true);
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VARCOMSvc", "ViennaAdvantage.Classes.ReportFromatWrapper");
+            }
+
+            else if (m_process.GetIsCrystalReport() == "Y")
+            {
+                re = new CrystalReport.CrystalReportEngine();
+                re.StartReport(p_ctx, pi, null);
+            }
+            else if (m_process.GetIsCrystalReport() == "B")
+            {
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.BIReportEngine");
+
+                //try
+                //{
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>BI Report");
+                //    X_VAF_Job BIProcess = new X_VAF_Job(p_ctx, pi.GetVAF_Job_ID(), null);
+                //    var Dll = Assembly.Load("VA039");
+                //    var BIReportEngine = Dll.GetType("VA039.Classes.BIReportEngine");
+
+                //    var ctor = BIReportEngine.GetConstructors()[0];
+                //    if (ctor.GetParameters().Length > 2)
+                //    {
+                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID(), pi });
+                //    }
+                //    else
+                //    {
+                //        re = (IReportEngine)ctor.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
+                //    }
+
+                //    //ConstructorInfo conInfo = BIReportEngine.GetConstructor(new[] { typeof(Ctx), typeof(int) });
+                //    //log.Log(Level.INFO, "MVAFWFlowTask=>BI Report Cunstructor Call");
+                //    //re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>BI Report Engine Reference");
+                //}
+                //catch (Exception e)
+                //{
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>BI Report Error" + e.Message);
+                //    re = null;
+                //}
+            }
+            else if (m_process.GetIsCrystalReport() == "J")
+            {
+                re = VAdvantage.Report.ReportEngine.GetReportEngine(p_ctx, pi, trx, "VA039", "VA039.Classes.JasperReportEngine");
+                //try
+                //{
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>Jasper Report");
+                //    X_VAF_Job BIProcess = new X_VAF_Job(p_ctx, pi.GetVAF_Job_ID(), null);
+                //    var Dll = Assembly.Load("VA039");
+                //    var JasperReportEngine = Dll.GetType("VA039.Classes.JasperReportEngine");
+                //    ConstructorInfo conInfo = JasperReportEngine.GetConstructor(new[] { typeof(Ctx), typeof(int) });
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>Jasper Report Cunstructor Call");
+                //    re = (IReportEngine)conInfo.Invoke(new object[] { p_ctx, pi.GetVAF_JInstance_ID() });
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>Jasper Report Engine Reference");
+                //}
+                //catch (Exception e)
+                //{
+                //    log.Log(Level.INFO, "MVAFWFlowTask=>Jasper Report Error" + e.Message);
+                //    re = null;
+                //}
+            }
+            else
+            {
+                re = ReportEngine_N.Get(GetCtx(), pi);
+            }
+
+            //Report
+            //re = ReportEngine_N.Get(GetCtx(), pi);
+            if (re == null)
+            {
+                string msg = "Cannot create Report VAF_Job_ID=" + m_process.GetVAF_Job_ID()
+                    + " - " + m_process.GetName();
+                NotifySupervisor(false, msg, null);
+                return msg;
+            }
+
+            //	Notice
+            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
+            int[] userIDs = GetRecipientVAF_UserContact_IDs();
+            byte[] report = null;
+            bool success = false;
+            if (re != null)
+            {
+                //int reportTable_ID = re.GetPrintFormat().GetVAF_TableView_ID();
+                if (re is IReportView)
+                {
+                    ((IReportView)re).GetView();
+                }
+
+                if (re != null)
+                {
+                    report = re.GetReportBytes();
+                }
+
+                _emails = new List<String>();
+                for (int i = 0; i < userIDs.Length; i++)
+                {
+                    MVAFNotice note = new MVAFNotice(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], trx);
+                    // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
+                    //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+                    note.SetClientOrg(GetVAF_Client_ID(), 0);
+                    note.SetTextMsg(GetName());
+                    note.SetDescription(GetDescription());
+                    note.SetRecord(VAF_TableView_ID, Record_ID);
+                    note.Save();
+
+                    if (report != null)
+                    {
+                        MVAFAttachment attachment = new MVAFAttachment(GetCtx(), MVAFNotice.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
+                        attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+
+                        if (isDocxFile)
+                        {
+                            attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".Docx", report);
+                        }
+                        else
+                        {
+                            attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".pdf", report);
+                        }
+                        attachment.SetTextMsg(GetName());
+                        attachment.Save();
+                    }
+                    MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
+
+                    success = SendEMail(client, userIDs[i], null, GetName(), GetDescription(), null, true, 0, 0, report);
+
+                }
+            }
+
+            NotifySupervisor(success, pi.GetSummary(), report);
+            //
+            return pi.GetSummary();
+        }	//	runReport
+
+        /// <summary>
+        /// Send actual EMail
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="VAF_UserContact_ID"></param>
+        /// <param name="email"></param>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
+        /// <param name="pdf"></param>
+        /// <param name="isHTML"></param>
+        private bool SendEMail(MVAFClient client, int VAF_UserContact_ID, String email, String subject,
+            String message, FileInfo pdf, bool isHTML, int VAF_TableView_ID, int record_ID, byte[] bArray = null)
+        {
+            if (VAF_UserContact_ID != 0)
+            {
+                MVAFUserContact user = MVAFUserContact.Get(GetCtx(), VAF_UserContact_ID);
+                email = user.GetEMail();
+
+                if (!user.IsActive() || email == null)
+                {
+                    return false;
+                }
+
+                // Check Added by Lokesh Chauhan 
+                if (!user.IsEmail())
+                {
+                    if (!(MVAFUserContact.NOTIFICATIONTYPE_EMail.Equals(user.GetNotificationType()) ||
+                   MVAFUserContact.NOTIFICATIONTYPE_EMailPlusFaxEMail.Equals(user.GetNotificationType())))
+                    {
+                        return false;
+                    }
+                }
+
+                if (email.IndexOf(";") == -1)
+                {
+                    email = email.Trim();
+
+
+                    if (!_emails.Contains(email))
+                    {
+                        if ((isDocxFile))
+                        {
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            {
+                                _emails.Add(email);
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
+                            {
+                                _emails.Add(email);
+                                return true;
+                            }
+                        }
+
+                    }
+                    return false;
+                }
+                //	Multiple EMail
+                StringTokenizer st = new StringTokenizer(email, ";");
+                while (st.HasMoreTokens())
+                {
+                    String email1 = st.NextToken().Trim();
+                    if (email1.Length == 0)
+                        continue;
+                    if (!_emails.Contains(email1))
+                    {
+                        if (isDocxFile)
+                        {
+                            //, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            {
+                                _emails.Add(email1);
+                            }
+                        }
+                        else
+                        {
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
+                            {
+                                _emails.Add(email1);
+                            }
+                        }
+                    }
+                }
+
+            }
+            else if (email != null && email.Length > 0)
+            {
+                //	Just one
+                if (email.IndexOf(";") == -1)
+                {
+                    email = email.Trim();
+                    if (!_emails.Contains(email))
+                    {
+                        if (isDocxFile)
+                        {
+                            //  //, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            {
+                                _emails.Add(email);
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (client.SendEMail(email, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
+                            {
+                                _emails.Add(email);
+                                return true;
+                            }
+                        }
+
+                    }
+                    return false;
+                }
+                //	Multiple EMail
+                StringTokenizer st = new StringTokenizer(email, ";");
+                while (st.HasMoreTokens())
+                {
+                    String email1 = st.NextToken().Trim();
+                    if (email1.Length == 0)
+                        continue;
+                    if (!_emails.Contains(email1))
+                    {
+                        if (isDocxFile)
+                        {
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray, DateTime.Now.Millisecond.ToString() + bArray.Length + ".docx"))
+                            {
+                                _emails.Add(email1);
+                            }
+                        }
+                        else
+                        {
+                            if (client.SendEMail(email1, null, subject, message, pdf, isHTML, VAF_TableView_ID, record_ID, bArray))
+                            {
+                                _emails.Add(email1);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            if (_emails != null)
+            {
+                if (_emails.Count > 0)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Run Process
+        /// </summary>
+        /// <param name="trx">optional transaction</param>
+        /// <returns>Summary</returns>
+        private String RunProcess(Trx trx)
+        {
+            log.Info(m_process.ToString());
+            //	Process (see also MVAFWFlowTask.performWork
+            int VAF_TableView_ID = 0;
+            int Record_ID = 0;
+            //
+            MVAFJInstance pInstance = new MVAFJInstance(m_process, Record_ID);
+            String error = FillParameter(pInstance);
+            if (!String.IsNullOrEmpty(error))
+            {
+                NotifySupervisor(false, error, null);
+                return error;
+            }
+            if (m_process.Get_ID() <= 0)
+                return "error";
+            //FillParameter(pInstance);
+            //
+
+            Ctx ctx = new Ctx();
+            ctx.SetVAF_Client_ID(GetVAF_Client_ID());
+            ctx.SetContext("VAF_Client_ID", GetVAF_Client_ID());
+            ctx.SetVAF_Org_ID(GetVAF_Org_ID());
+            ctx.SetContext("VAF_Org_ID", GetVAF_Org_ID());
+            ctx.SetVAF_UserContact_ID(GetUpdatedBy());
+            ctx.SetContext("VAF_UserContact_ID", GetUpdatedBy());
+            ctx.SetContext("#SalesRep_ID", GetUpdatedBy());
+
+
+
+            ProcessInfo pi = new ProcessInfo(m_process.GetName(), m_process.GetVAF_Job_ID(), VAF_TableView_ID, Record_ID);
+            pi.SetVAF_UserContact_ID(GetUpdatedBy());
+            pi.SetVAF_Client_ID(GetVAF_Client_ID());
+            pi.SetVAF_JInstance_ID(pInstance.GetVAF_JInstance_ID());
+
+            pi.SetLocalCtx(ctx.GetMap());
+
+            m_process.ProcessIt(pi, trx);
+            NotifySupervisor(!pi.IsError(), pi.GetSummary(), null);
+            return pi.GetSummary();
+        }	//	runProcess
+
+
+        /// <summary>
+        /// Fill the parameter
+        /// </summary>
+        /// <param name="pInstance">instance detail</param>
+        private string FillParameter(MVAFJInstance pInstance)
+        {
+            StringBuilder sb = null;
+            MVAFJobRunPara[] sParams = GetParameters(false);
+            MVAFJInstancePara[] iParams = pInstance.GetParameters();
+            for (int pi = 0; pi < iParams.Length; pi++)
+            {
+                MVAFJInstancePara iPara = iParams[pi];
+                for (int np = 0; np < sParams.Length; np++)
+                {
+                    MVAFJobRunPara sPara = sParams[np];
+                    if (iPara.GetParameterName().Equals(sPara.GetColumnName()))
+                    {
+                        String variable = sPara.GetParameterDefault();
+
+
+
+
+
+                        log.Fine(sPara.GetColumnName() + " = " + variable);
+                        //	Value - Constant/Variable
+                        Object value = variable;
+                        if (variable == null || (variable != null && variable.Length == 0))
+                            value = null;
+                        else if (variable.IndexOf("@") != -1)	//	we may have a variable
+                        {
+                            //	Strip
+                            int index = variable.IndexOf("@");
+                            String columnName = variable.Substring(index + 1);
+                            index = columnName.IndexOf("@");
+                            if (index != -1)
+                            {
+                                columnName = columnName.Substring(0, index);
+                                //	try Env
+                                String env = GetCtx().GetContext(columnName);
+                                if (env.Length == 0)
+                                {
+                                    if (columnName == "sysdate")
+                                    {
+                                        value = DateTime.Now;
+                                    }
+                                    else
+                                    {
+                                        log.Warning(sPara.GetColumnName()
+                                            + " - not in environment =" + columnName
+                                            + "(" + variable + ") - ignored");
+                                        break;
+                                    }
+                                }
+                                else
+                                    value = env;
+                            }
+                        }	//	@variable@
+
+                        //	No Value
+                        if (value == null)
+                        {
+                            log.Fine(sPara.GetColumnName() + " - empty");
+                            break;
+                        }
+
+                        object colValue = "";
+
+                        try
+                        {
+                            MVAFJobPara parass = new MVAFJobPara(GetCtx(), sPara.GetVAF_Job_Para_ID(), null);
+                            if (DisplayType.IsLookup(parass.GetVAF_Control_Ref_ID()))
+                            {
+                                if (sPara.GetColumnName().ToLower() == "vaf_org_id")
+                                {
+                                    DataSet ds = DB.ExecuteDataset(@"SELECT
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_Org' )
+                                                                  ) AS name FROM VAF_Org WHERE VAF_Org_ID=" + value);
+                                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        for (int a = 0; a < ds.Tables[0].Rows.Count; a++)
+                                        {
+                                            if (a > 0)
+                                            {
+                                                colValue += "||'-'||";
+                                            }
+                                            colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
+                                        }
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_Org WHERE VAF_Org_ID=" + value);
+                                    }
+
+                                }
+                                else if (sPara.GetColumnName().ToLower() == "vaf_client_id")
+                                {
+                                    DataSet ds = DB.ExecuteDataset(@"SELECT
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_Client' )
+                                                                  ) AS name FROM VAF_Client WHERE VAF_Client_ID=" + value);
+                                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        for (int a = 0; a < ds.Tables[0].Rows.Count; a++)
+                                        {
+                                            if (a > 0)
+                                            {
+                                                colValue += "||'-'||";
+                                            }
+                                            colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
+                                        }
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_Client WHERE VAF_Client_ID=" + value);
+                                    }
+                                }
+                                else if (sPara.GetColumnName().ToLower() == "VAF_UserContact_id")
+                                {
+                                    DataSet ds = DB.ExecuteDataset(@"SELECT
+                                                                  (SELECT columnname FROM VAF_Column WHERE isidentifier='Y'
+                                                                  AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE tableName='VAF_UserContact' )
+                                                                  ) AS name FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
+
+                                    if (ds != null && ds.Tables[0].Rows.Count > 0)
+                                    {
+                                        for (int a = 0; a < ds.Tables[0].Rows.Count; a++)
+                                        {
+                                            if (a > 0)
+                                            {
+                                                colValue += "||'-'||";
+                                            }
+                                            colValue += " " + ds.Tables[0].Rows[a]["name"].ToString();
+                                        }
+                                        colValue = DB.ExecuteScalar("SELECT " + colValue + " FROM VAF_UserContact WHERE VAF_UserContact_ID=" + value);
+                                    }
+
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+
+                        //	Convert to Type
+                        try
+                        {
+                            if (DisplayType.IsNumeric(sPara.GetDisplayType())
+                                || DisplayType.IsID(sPara.GetDisplayType()))
+                            {
+                                Decimal? bd = null;
+                                if (value is Decimal)
+                                    bd = (Decimal)value;
+                                else if (value is int)
+                                    bd = decimal.Parse(value.ToString());
+                                else
+                                    bd = decimal.Parse(value.ToString());
+                                iPara.SetP_Number((decimal)bd);
+                                if (!string.IsNullOrEmpty(colValue.ToString()))
+                                {
+                                    iPara.SetInfo(colValue.ToString());
+                                }
+                                else
+                                {
+                                    iPara.SetInfo(bd.ToString());
+                                }
+                                log.Fine(sPara.GetColumnName() + " = " + variable + " (=" + bd + "=)");
+                            }
+                            else if (DisplayType.IsDate(sPara.GetDisplayType()))
+                            {
+                                DateTime? ts = null;
+                                if (value is DateTime)
+                                    ts = (DateTime)value;
+                                else
+                                    ts = DateTime.Parse(value.ToString());
+                                //if (DisplayType.Date == sPara.GetDisplayType())
+                                //{
+                                    iPara.SetP_Date(ts);
+                                //}
+                                //else if (DisplayType.DateTime == sPara.GetDisplayType())
+                                //{
+                                //    iPara.SetP_Date_Time(ts);
+                                //}
+                                //else if (DisplayType.Time == sPara.GetDisplayType())
+                                //{
+                                //    iPara.SetP_Time(ts);
+
+                                //}
+
+                                iPara.SetInfo(value.ToString());
+                                log.Fine(sPara.GetColumnName() + " = " + variable + " (=" + ts + "=)");
+                            }
+                            else
+                            {
+                                iPara.SetP_String(value.ToString());
+                                iPara.SetInfo(value.ToString());
+                                log.Fine(sPara.GetColumnName()
+                                        + " = " + variable
+                                        + " (=" + value + "=) " + value.GetType().FullName);
+                            }
+
+
+                            if (!iPara.Save())
+                                log.Warning("Not Saved - " + sPara.GetColumnName());
+                        }
+                        catch (Exception e)
+                        {
+                            String msg = sPara.GetColumnName()
+                                + " = " + variable + " (" + value
+                                + ") " + value.GetType().FullName
+                                + " - " + e.Message;
+                            log.Warning(msg);
+                            if (sb == null)
+                                sb = new StringBuilder(msg);
+                            else
+                                sb.Append("; ").Append(msg);
+                        }
+                        break;
+                    }	//	parameter match
+                }	//	scheduler parameter loop
+            }	//	instance parameter loop
+
+            if (sb == null)
+                return null;
+            return sb.ToString();
+        }	//	fillParameter
+
+        public DateTime[] CheckProcessTime(int VAF_Plan_ID, MVAFJobRunPlan scheduler)
+        {
+            MVAFPlan schedule = new MVAFPlan(GetCtx(), VAF_Plan_ID, Get_TrxName());
+            DateTime? dtNextRun;
+            bool blNextDate = false;
+            try
+            {
+                dtNextRun = scheduler.GetUpdated();
+                if (schedule.GetScheduleHour() > 0)
+                {
+                    //blNextDate = true;
+                    dtNextRun = dtNextRun.Value.Subtract(new TimeSpan(dtNextRun.Value.Hour, 0, 0));
+                    dtNextRun = dtNextRun.Value.AddHours(schedule.GetScheduleHour());
+                }
+                if (schedule.GetScheduleMinute() > 0)
+                {
+                    //blNextDate = true;
+                    dtNextRun = dtNextRun.Value.Subtract(new TimeSpan(0, dtNextRun.Value.Minute, 0));
+                    dtNextRun = dtNextRun.Value.AddMinutes(schedule.GetScheduleMinute());
+                }
+            }
+            catch
+            {
+                dtNextRun = DateTime.Now;
+
+            }
+            if ((scheduler.GetDateNextRun() != null) && (!blNextDate))
+                dtNextRun = (DateTime)this.GetDateNextRun();
+
+            DateTime[] dtSchedule = schedule.GetNext((DateTime)dtNextRun, 1);
+            DateTime[] returnValue = new DateTime[2];
+            if (DateTime.Now.ToString("dd-MM-yyyy hh:mm") == dtNextRun.Value.ToString("dd-MM-yyyy hh:mm"))
+            {
+                returnValue[0] = DateTime.Parse(dtNextRun.ToString());
+                returnValue[1] = DateTime.Parse(dtSchedule[0].ToString());
+
+                //scheduler.SetDateLastRun(DateTime.Parse(dtNextRun.ToString()));
+                //dtSchedule = schedule.GetNext(DateTime.Parse(dtSchedule[0].ToString()), 1);
+                //scheduler.SetDateNextRun(DateTime.Parse(dtSchedule[0].ToString()));
+                //if (!scheduler.Save())
+                //return false;
+                return returnValue;
+            }
+            else
+                return returnValue;
+        }
+
+        /** Scheduler Result		*/
+        private static int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
+
+        private bool NotifySupervisor(bool success, String message, byte[] report)
+        {
+            if (m_supervisor == null)
+                m_supervisor = MVAFUserContact.Get(GetCtx(), GetSupervisor_ID());
+            //	Send Mail
+            // if (m_supervisor.IsNotificationEMail())
+            //{
+            MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
+            String subject = client.GetName() + ": " + GetName();
+
+            SendEMail(client, GetSupervisor_ID(), null, subject, message, null, false, 0, 0, report);
+            //if (client.SendEMail(GetSupervisor_ID(), subject, message, attachmentFile))
+            // return true;
+            // }
+            //	Create Notice
+            MVAFNotice note = new MVAFNotice(GetCtx(), VAF_Msg_Lable_ID, GetSupervisor_ID(), null);
+            // changes done by Bharat on 22 May 2018 to set Organization to * on Notification as discussed with Mukesh Sir.
+            //note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+            note.SetClientOrg(GetVAF_Client_ID(), 0);
+            note.SetTextMsg(GetName());
+            note.SetDescription(message);
+            note.SetRecord(Table_ID, Get_ID());		//	point to this
+            bool ok = note.Save();
+            //	Attachment
+            if (ok && (report != null))
+            {
+                MVAFAttachment attachment = new MVAFAttachment(GetCtx(), X_VAF_Notice.Table_ID, note.GetVAF_Notice_ID(), null);
+                attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+                // attachment.AddEntry(attachmentFile.FullName);
+                if (isDocxFile)
+                {
+                    attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".Docx", report);
+                }
+                else
+                {
+                    attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".pdf", report);
+                }
+                attachment.SetTextMsg(GetName());
+                attachment.Save();
+
+            }
+            return ok;
+        }	//	sendEMail
+
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="cParams"></param>
+        ///// <returns></returns>
+        //public string RunCrystalReport()
+        //{
+
+        //    string reportPath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Reports");
+        //    string reportImagePath = System.IO.Path.Combine(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath, "CReports\\Images");
+
+        //    System.Globalization.CultureInfo systemCulture = Thread.CurrentThread.CurrentCulture;
+
+        //    if (!string.IsNullOrEmpty(GetCtx().GetVAF_Language().Replace('_', '-')))
+        //    {
+        //        Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
+        //        Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(GetCtx().GetVAF_Language().Replace('_', '-'));
+        //    }
+
+        //    MForm form = new MForm(GetCtx(), GetVAF_Page_ID(), Get_TrxName());
+
+        //    //CrystalParameter para = new CrystalParameter(windowNo);
+        //    int VAF_CrystalInstance_ID = 0;
+        //    MCrystalInstance instance = null;
+        //    try
+        //    {
+        //        instance = new MCrystalInstance(Env.GetContext(), GetVAF_Page_ID(), 0);
+        //        if (!instance.Save())
+        //        {
+        //            return Msg.GetMsg(GetCtx(), "");
+        //        }
+        //        VAF_CrystalInstance_ID = instance.GetVAF_CrystalInstance_ID();
+        //    }
+        //    catch
+        //    {
+        //        return Msg.GetMsg(GetCtx(), "CrystalInstanceNotSaved");
+        //    }
+
+        //    if (!String.IsNullOrEmpty(form.GetProcedureName()))
+        //    {
+        //        //bool b = StartDBProcess(form.GetProcedureName(), cParams.ColNames, cParams.ColValues);
+        //        bool b = StartDBProcess(form.GetProcedureName(), null, null);
+        //        if (!b)
+        //        {
+        //            //serviceError = new CustomException(new Exception("CouldNotExecuteProcedure"));
+        //            Thread.CurrentThread.CurrentCulture = systemCulture;
+        //            Thread.CurrentThread.CurrentUICulture = systemCulture;
+
+        //            return Msg.GetMsg(GetCtx(), "ProcedureNotExecuted");
+        //        }
+        //    }
+
+        //    //serviceError = null;
+        //    ProcessInfoParameter[] parameters = ProcessInfoUtil.SetCrystalParameterFromDB(VAF_CrystalInstance_ID);
+        //    string _ReportImagePath = "";
+        //    string _ReportPath = "";
+
+        //    if (form.IsReport())
+        //    {
+        //        string path = reportPath;
+        //        _ReportImagePath = reportImagePath;
+        //        if (String.IsNullOrEmpty(path))
+        //        {
+
+        //        }
+
+        //        if (form.GetReportPath().IndexOf(":") < 0)
+        //            _ReportPath = path + "\\" + form.GetReportPath();
+        //        else
+        //            _ReportPath = form.GetReportPath();
+        //    }
+        //    else
+        //    {
+        //        return Msg.GetMsg(GetCtx(), "FormIsNotReport");
+        //    }
+
+        //    ReportDocument rptBurndown = new ReportDocument();
+        //    if (File.Exists(_ReportPath))   //Check if the crystal report file exists in a specified location.
+        //    {
+        //        try
+        //        {
+        //            rptBurndown.Load(_ReportPath);
+
+        //            //Set Connection Info
+        //            ConnectionInfo.Get().SetAttributes(connectionString);
+
+
+        //            //Application will pick database info from the property file.
+        //            CrystalDecisions.Shared.ConnectionInfo crDbConnection = new CrystalDecisions.Shared.ConnectionInfo();
+        //            crDbConnection.IntegratedSecurity = false;
+        //            crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+        //            crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+        //            crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+        //            //crDbConnection.Type = ConnectionInfoType.Unknown;
+        //            crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+        //            CrystalDecisions.CrystalReports.Engine.Database crDatabase = rptBurndown.Database;
+        //            CrystalDecisions.Shared.TableLogOnInfo oCrTableLoginInfo;
+        //            foreach (CrystalDecisions.CrystalReports.Engine.Table oCrTable in crDatabase.Tables)
+        //            {
+        //                crDbConnection.IntegratedSecurity = false;
+        //                crDbConnection.DatabaseName = ConnectionInfo.Get().Db_name;
+        //                crDbConnection.UserID = ConnectionInfo.Get().Db_uid;
+        //                crDbConnection.Password = ConnectionInfo.Get().Db_pwd;
+        //                //crDbConnection.Type = ConnectionInfoType.Unknown;
+        //                crDbConnection.ServerName = ConnectionInfo.Get().Db_host;
+
+        //                oCrTableLoginInfo = oCrTable.LogOnInfo;
+        //                oCrTableLoginInfo.ConnectionInfo = crDbConnection;
+        //                oCrTable.ApplyLogOnInfo(oCrTableLoginInfo);
+        //            }
+
+        //            //Create Parameter query
+        //            string sql = form.GetSqlQuery();
+        //            StringBuilder sb = new StringBuilder(" Where ");
+        //            if (parameters.Count() > 0)
+        //            {
+        //                int loopCount = 0;
+        //                for (int para = 0; para <= parameters.Count() - 1; para++)
+        //                {
+        //                    string sInfo = parameters[para].GetInfo();
+        //                    string sInfoTo = parameters[para].GetInfo_To();
+        //                    if ((String.IsNullOrEmpty(sInfo) && String.IsNullOrEmpty(sInfoTo)) || sInfo == "NULL")
+        //                    {
+        //                        continue;
+        //                    }
+
+        //                    if (loopCount > 0)
+        //                        sb.Append(" And ");
+        //                    string paramName = parameters[para].GetParameterName();
+        //                    object paramValue = parameters[para].GetParameter();
+        //                    object paramValueTo = parameters[para].GetParameter_To();
+
+        //                    if (paramValue is DateTime)
+        //                    {
+        //                        sb.Append(paramName).Append(" Between ").Append(GlobalVariable.TO_DATE((DateTime)paramValue, true));
+        //                        if (paramValueTo != null && paramValueTo.ToString() != String.Empty)
+        //                            sb.Append(" And ").Append(GlobalVariable.TO_DATE(((DateTime)paramValueTo).AddDays(1), true));
+        //                        else
+        //                            sb.Append(" And ").Append(GlobalVariable.TO_DATE(((DateTime)paramValue).AddDays(1), true));
+
+        //                    }
+        //                    else
+        //                    {
+        //                        sb.Append("Upper(").Append(paramName).Append(")").Append(" = Upper(")
+        //                            .Append(GlobalVariable.TO_STRING(paramValue.ToString()) + ")");
+        //                    }
+
+        //                    loopCount++;
+        //                }
+
+        //                if (sb.Length > 7)
+        //                    sql = sql + sb.ToString();
+        //            }
+
+        //            if (form.IsIncludeProcedure())
+        //            {
+        //                bool result = StartDBProcess(form.GetProcedureName(), parameters);
+        //            }
+
+        //            DataSet ds = DB.ExecuteDataset(sql);
+
+        //            if (ds == null)
+        //            {
+        //                ValueNamePair error = VLogger.RetrieveError();
+        //                return Msg.GetMsg(GetCtx(), "NoRecords");
+        //            }
+
+        //            bool imageError = false;
+        //            if (form.IsIncludeImage())
+        //            {
+        //                for (int i_img = 0; i_img <= ds.Tables[0].Rows.Count - 1; i_img++)
+        //                {
+        //                    String ImagePath = "";
+        //                    String ImageField = "";
+        //                    if (ds.Tables[0].Rows[i_img][form.GetImagePathField()] != null)
+        //                    {
+        //                        ImagePath = ds.Tables[0].Rows[i_img][form.GetImagePathField()].ToString();
+        //                        ImageField = form.GetImageField();
+
+        //                        if (ds.Tables[0].Columns.Contains(ImageField))
+        //                        {
+        //                            if (File.Exists(_ReportImagePath + "\\" + ImagePath))
+        //                            {
+        //                                byte[] b = StreamFile(_ReportImagePath + "\\" + ImagePath);
+        //                                ds.Tables[0].Rows[i_img][ImageField] = b;
+        //                            }
+        //                            else
+        //                            {
+        //                                imageError = true;
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            imageError = true;
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        imageError = true;
+        //                    }
+        //                }
+        //            }
+
+        //            if (imageError)
+        //            {
+        //                //   ShowMessage.Error("ErrorLoadingSomeImages", true);
+        //            }
+
+        //            System.IO.Stream oStream;
+        //            byte[] report = null;
+
+        //            rptBurndown.SetDataSource(ds.Tables[0]);                //By karan approveed by lokesh......
+        //            //rptBurndown.PrintOptions.ApplyPageMargins(new CrystalDecisions.Shared.PageMargins(100, 360, 100, 360));
+        //            oStream = rptBurndown.ExportToStream(CrystalDecisions.Shared.ExportFormatType.PortableDocFormat);
+        //            report = new byte[oStream.Length];
+        //            oStream.Read(report, 0, Convert.ToInt32(oStream.Length));
+
+        //            Thread.CurrentThread.CurrentCulture = systemCulture;
+        //            Thread.CurrentThread.CurrentUICulture = systemCulture;
+
+        //            int VAF_TableView_ID = 0;
+        //            int Record_ID = 0;
+
+        //            int VAF_Msg_Lable_ID = 884;		//	HARDCODED SchedulerResult
+        //            int[] userIDs = GetRecipientVAF_UserContact_IDs();
+
+        //            bool success = false;
+        //            if (report != null)
+        //            {
+        //                _emails = new List<String>();
+        //                for (int i = 0; i < userIDs.Length; i++)
+        //                {
+        //                    MNote note = new MNote(GetCtx(), VAF_Msg_Lable_ID, userIDs[i], Get_TrxName());
+        //                    note.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+        //                    note.SetTextMsg(GetName());
+        //                    note.SetDescription(GetDescription());
+        //                    note.SetRecord(VAF_TableView_ID, Record_ID);
+        //                    note.Save();
+
+        //                    MAttachment attachment = new MAttachment(GetCtx(), MNote.Table_ID, note.GetVAF_Notice_ID(), Get_TrxName());
+        //                    attachment.SetClientOrg(GetVAF_Client_ID(), GetVAF_Org_ID());
+        //                    attachment.AddEntry("Report_" + DateTime.Now.Ticks + ".pdf", report);
+        //                    attachment.SetTextMsg(GetName());
+        //                    attachment.Save();
+
+        //                    MClient client = MClient.Get(GetCtx(), GetVAF_Client_ID());
+
+        //                    success = SendEMail(client, userIDs[i], null, GetName(), GetDescription(), null, true, 0, 0, report);
+
+        //                }
+        //            }
+
+        //            NotifySupervisor(success, GetDescription(), report);
+
+        //            return Msg.GetMsg(GetCtx(), "ProcessCompleted");
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Thread.CurrentThread.CurrentCulture = systemCulture;
+        //            Thread.CurrentThread.CurrentUICulture = systemCulture;
+        //            return Msg.GetMsg(GetCtx(), ex.Message);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return Msg.GetMsg(GetCtx(), "ReportNotFound");
+        //    }
+        //}
+
+        ///// <summary>
+        ///// Start the DB Process
+        ///// </summary>
+        ///// <param name="procedureName">name of the process</param>
+        ///// <returns></returns>
+        //private bool StartDBProcess(String procedureName, ProcessInfoParameter[] list)
+        //{
+        //    if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
+        //    {
+        //        return false;
+        //    }
+
+        //    //  execute on this thread/connection
+        //    //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
+        //    try
+        //    {
+        //        //only oracle procedure are supported
+        //        OracleCommand comm = new OracleCommand();
+        //        OracleConnection conn = (OracleConnection)VAdvantage.DataBase.DB.GetConnection();
+        //        conn.Open();
+        //        comm.Connection = conn;
+        //        comm.CommandText = procedureName;
+        //        comm.CommandType = CommandType.StoredProcedure;
+        //        OracleCommandBuilder.DeriveParameters(comm);
+        //        OracleParameter[] param = new OracleParameter[comm.Parameters.Count];
+        //        int i = 0;
+        //        StringBuilder orclParams = new StringBuilder();
+        //        bool isDateTo = false;
+        //        foreach (OracleParameter orp in comm.Parameters)
+        //        {
+        //            if (isDateTo)
+        //            {
+        //                isDateTo = false;
+        //                continue;
+        //            }
+        //            Object paramvalue = list[i].GetParameter();
+        //            if (paramvalue != null)
+        //            {
+        //                if (orp.DbType == System.Data.DbType.DateTime)
+        //                {
+        //                    if (paramvalue.ToString().Length > 0)
+        //                    {
+        //                        paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+        //                    }
+        //                    param[i] = new OracleParameter(orp.ParameterName, paramvalue);
+        //                    if (list[i].GetParameter_To().ToString().Length > 0)
+        //                    {
+        //                        paramvalue = list[i].GetParameter_To();
+        //                        paramvalue = ((DateTime)paramvalue).ToString("dd-MMM-yyyy");
+        //                        param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+        //                        i++;
+        //                        isDateTo = true;
+        //                        continue;
+        //                    }
+        //                    else
+        //                    {
+        //                        if (comm.Parameters.Count > (i + 1))
+        //                        {
+        //                            if (comm.Parameters[i + 1].ParameterName.Equals(comm.Parameters[i].ParameterName + "_TO", StringComparison.OrdinalIgnoreCase))
+        //                            {
+        //                                param[i + 1] = new OracleParameter(comm.Parameters[i + 1].ParameterName, paramvalue);
+        //                                isDateTo = true;
+        //                                continue;
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                else if (orp.DbType == System.Data.DbType.VarNumeric)
+        //                {
+        //                    if (paramvalue.ToString().Length > 0)
+        //                    {
+        //                        //continue;
+        //                    }
+        //                    else
+        //                        paramvalue = 0;
+        //                }
+        //                else
+        //                {
+        //                    if (paramvalue.ToString().Length > 0)
+        //                    {
+        //                        paramvalue = GlobalVariable.TO_STRING(paramvalue.ToString());
+        //                    }
+        //                }
+
+        //            }
+        //            param[i] = new OracleParameter(orp.ParameterName, paramvalue);
+        //            //orclParams.Append(orp.ParameterName).Append(": ").Append(_curTab.GetValue(list[i]));
+        //            //if (i < comm.Parameters.Count - 1)
+        //            //    orclParams.Append(", ");
+        //            i++;
+        //        }
+
+        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
+        //        int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
+        //        //DataBase.DB.ExecuteQuery(sql, null);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        VLogger.Get().SaveError(e.Message, e);
+        //        //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+        //        return false;
+
+        //    }
+        //    //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+        //    return true;
+        //}
+
+        //private bool StartDBProcess(String procedureName, List<String> list, List<object> values)
+        //{
+        //    if (DatabaseType.IsPostgre)  //jz Only DB2 not support stored procedure now
+        //    {
+        //        return false;
+        //    }
+
+        //    //  execute on this thread/connection
+        //    //String sql = "{call " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")}";
+        //    try
+        //    {
+        //        //only oracle procedure are supported
+        //        OracleCommand comm = new OracleCommand();
+        //        OracleConnection conn = (OracleConnection)VAdvantage.DataBase.DB.GetConnection();
+        //        conn.Open();
+        //        comm.Connection = conn;
+        //        comm.CommandText = procedureName;
+        //        comm.CommandType = CommandType.StoredProcedure;
+        //        OracleCommandBuilder.DeriveParameters(comm);
+        //        OracleParameter[] param = new OracleParameter[list.Count];
+        //        int i = 0;
+        //        StringBuilder orclParams = new StringBuilder();
+        //        foreach (OracleParameter orp in comm.Parameters)
+        //        {
+        //            param[i] = new OracleParameter(orp.ParameterName, values[i]);
+        //            orclParams.Append(orp.ParameterName).Append(": ").Append(values[i]);
+        //            if (i < comm.Parameters.Count - 1)
+        //                orclParams.Append(", ");
+        //            i++;
+        //        }
+
+        //        //log.Fine("Executing " + procedureName + "(" + _pi.GetVAF_JInstance_ID() + ")");
+        //        int res = VAdvantage.SqlExec.Oracle.OracleHelper.ExecuteNonQuery(conn, CommandType.StoredProcedure, procedureName, param);
+        //        //DataBase.DB.ExecuteQuery(sql, null);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        VLogger.Get().SaveError(e.Message, e);
+        //        //log.Log(Level.SEVERE, "Error executing procedure " + procedureName, e);
+        //        return false;
+
+        //    }
+        //    //	log.fine(Log.l4_Data, "ProcessCtl.startProcess - done");
+        //    return true;
+        //}
+
+        //private byte[] StreamFile(string filename)
+        //{
+        //    FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+
+        //    // Create a byte array of file stream length
+        //    byte[] ImageData = new byte[fs.Length];
+
+        //    //Read block of bytes from stream into the byte array
+        //    fs.Read(ImageData, 0, System.Convert.ToInt32(fs.Length));
+
+        //    //Close the File Stream
+        //    fs.Close();
+        //    return ImageData; //return the byte data
+        //}
+    }
+}

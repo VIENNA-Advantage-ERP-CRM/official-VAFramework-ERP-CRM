@@ -280,8 +280,8 @@ namespace VIS.Models
             try
             {
                 sql = sql.Replace('●', '%');
-                sql = MRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
-                                MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
+                sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, tableName,
+                                MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
 
                 int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sql + " ) t", null, null));

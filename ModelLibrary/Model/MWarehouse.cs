@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// Organization Constructor
         /// </summary>
         /// <param name="org">org</param>
-        public MWarehouse(MOrg org)
+        public MWarehouse(MVAFOrg org)
             : this(org.GetCtx(), 0, org.Get_TrxName())
         {
             SetClientOrg(org);

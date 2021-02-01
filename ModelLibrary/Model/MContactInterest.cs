@@ -236,11 +236,11 @@ namespace VAdvantage.Model
                     String summary = "Subscribe: " + ia.GetName();
                     //
                     MSource source = MSource.Get(GetCtx(), ia.GetVAR_Source_ID());
-                    MUser user = null;
+                    MVAFUserContact user = null;
                     if (Get_TrxName() == null)
-                        user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
+                        user = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
                     else
-                        user = new MUser(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
+                        user = new MVAFUserContact(GetCtx(), GetVAF_UserContact_ID(), Get_TrxName());
                     //	Create Request
                     if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
                         || MSource.SOURCECREATETYPE_Request.Equals(source.GetSourceCreateType()))

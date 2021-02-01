@@ -92,7 +92,7 @@ namespace VAdvantage.Model
             List<MGoal> list = new List<MGoal>();
             String sql = "SELECT * FROM VAPA_Target WHERE IsActive='Y' "
                 + "ORDER BY SeqNo";
-            sql = MRole.GetDefault(ctx, false).AddAccessSQL(sql, "VAPA_Target",
+            sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(sql, "VAPA_Target",
                 false, true);	//	RW to restrict Access
             DataTable dt = null;
             IDataReader idr = null;
@@ -515,7 +515,7 @@ namespace VAdvantage.Model
                     return Msg.GetElement(GetCtx(), "VAB_Std_Stage_ID");
             }
             String value = GetMeasureDisplay();
-            String display = MRefList.GetListName(GetCtx(), MEASUREDISPLAY_VAF_Control_Ref_ID, value);
+            String display = MVAFCtrlRefList.GetListName(GetCtx(), MEASUREDISPLAY_VAF_Control_Ref_ID, value);
             return display == null ? value : display;
         }
 
@@ -562,8 +562,8 @@ namespace VAdvantage.Model
             if ((newRecord || Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("VAF_Role_ID"))
                 && GetVAF_UserContact_ID() != 0)
             {
-                MUser user = MUser.Get(GetCtx(), GetVAF_UserContact_ID());
-                MRole[] roles = user.GetRoles(GetVAF_Org_ID());
+                MVAFUserContact user = MVAFUserContact.Get(GetCtx(), GetVAF_UserContact_ID());
+                MVAFRole[] roles = user.GetRoles(GetVAF_Org_ID());
                 if (roles.Length == 0)		//	No Role
                     SetVAF_Role_ID(0);
                 else if (roles.Length == 1)	//	One

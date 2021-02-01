@@ -77,7 +77,7 @@ namespace VAdvantage.Model
                 String sql = "SELECT * FROM VAB_GenFeatureValue "
                     + "WHERE VAB_GenFeature_ID=" + GetVAB_GenFeature_ID()
                     + " ORDER BY Value";
-                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_GenFeatureValue", true, false);
+                sql = MVAFRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_GenFeatureValue", true, false);
 
                 DataSet ds = null;
                 try

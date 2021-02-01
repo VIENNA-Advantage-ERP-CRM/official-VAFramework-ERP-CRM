@@ -182,11 +182,11 @@ namespace VAdvantage.Model
         {
             _conversions = new CCache<Point, Decimal>("VAB_UOMConversion", 20);
             //
-            String sql = MRole.GetDefault(ctx, false).AddAccessSQL(
+            String sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
                 "SELECT VAB_UOM_ID, VAB_UOM_To_ID, MultiplyRate, DivideRate "
                 + "FROM VAB_UOM_Conversion "
                 + "WHERE IsActive='Y' AND M_Product_ID IS NULL",
-                "VAB_UOM_Conversion", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO);
+                "VAB_UOM_Conversion", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             DataTable dt = null;
             IDataReader idr = null;
