@@ -189,6 +189,14 @@ namespace VAdvantage.DataBase
             //TODO
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
+           
+            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE") == "Y")
+            {
+                
+                int m_sequence_id = VConnection.Get().GetDatabase().GetNextID(TableName + "_SEQ");
+                return m_sequence_id;
+            }
+
             int id = MSequence.GetNextID(AD_Client_ID, TableName, trxName);	//	tries 3 times
             //	if (id <= 0)
             //		throw new DBException("No NextID (" + id + ")");

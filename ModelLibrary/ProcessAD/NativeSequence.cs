@@ -53,7 +53,7 @@ namespace VAdvantage.Process
 
 
 
-            bool SYSTEM_NATIVE_SEQUENCE =  GetCtx().GetContext("SYSTEM_NATIVE_SEQUENCE")=="Y";
+            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE") == "Y";
             if (SYSTEM_NATIVE_SEQUENCE)
             {
                 throw new Exception("Native Sequence is Actived");
@@ -109,7 +109,7 @@ namespace VAdvantage.Process
         {
             if (!table.IsView())
             {
-                if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName))
+                if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName,true))
                 {
                     //throw new Exception("Can not create Native Sequence for table " + table.GetTableName());
                     this.AddLog("Can not create Native Sequence for table : " + table.GetTableName());

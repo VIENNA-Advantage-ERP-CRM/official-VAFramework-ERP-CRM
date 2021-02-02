@@ -1632,6 +1632,7 @@
     <Compile Include="ProcessAD\MasterVersionFields.cs" />
     <Compile Include="ProcessAD\MasterVersions.cs" />
     <Compile Include="ProcessAD\MasterVersionSchedules.cs" />
+    <Compile Include="ProcessAD\NativeSequence.cs" />
     <Compile Include="ProcessAD\PO_LOB.cs" />
     <Compile Include="ProcessAD\RoleAccessUpdate.cs" />
     <Compile Include="ProcessAD\SchedulerRun.cs" />

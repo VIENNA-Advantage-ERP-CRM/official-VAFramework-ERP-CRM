@@ -247,7 +247,7 @@ namespace VAdvantage.DataBase
             return ds;
         }
 
-        public static int GetNextID(String Name)
+        public int GetNextID(String Name)
         {
             int m_sequence_id = DB.GetSQLValue(null, "SELECT " + Name.ToUpper() + ".nextval FROM DUAL");
             return m_sequence_id;
