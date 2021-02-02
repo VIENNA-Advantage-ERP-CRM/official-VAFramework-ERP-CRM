@@ -1022,7 +1022,8 @@ namespace VIS.Models
             {
                 MOrderModel objOrder = new MOrderModel();
                 _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
-                
+
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));
@@ -1220,6 +1221,7 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             StringBuilder sbparams = new StringBuilder();
             sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
             sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
@@ -1480,6 +1482,7 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             int _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             StringBuilder sbparams = new StringBuilder();
             sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
             sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
@@ -1600,6 +1603,7 @@ namespace VIS.Models
                 MOrderModel objOrder = new MOrderModel();
                 _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
                 StringBuilder sbparams = new StringBuilder();
                 sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
                 sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
@@ -1693,7 +1697,8 @@ namespace VIS.Models
 
             MOrderModel objOrder = new MOrderModel();
             _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
-            
+
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             StringBuilder sbparams = new StringBuilder();
             sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
             sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));

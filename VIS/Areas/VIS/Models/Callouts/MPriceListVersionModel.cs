@@ -8,6 +8,9 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
+    /// <summary>
+    /// Transaction Type enum
+    /// </summary>
     public enum TransactionType
     { 
         Order = 1,
@@ -25,6 +28,7 @@ namespace VIS.Models
         private string _columnName = string.Empty;
         public int GetM_PriceList_Version_ID(Ctx ctx, string fields)
         {
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
             int M_PriceList_ID=0, transactionId = 0, productId=0, uomId=0, attrSetInstId=0, tranType=0;
 
             if (!string.IsNullOrEmpty(fields))
@@ -61,6 +65,13 @@ namespace VIS.Models
             //return Util.GetValueOfInt(DB.ExecuteScalar(sql));
         }
 
+        /// <summary>
+        /// Get Price List Version on ValidFrom Date
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="fields"></param>
+        /// <param name="transactionType"></param>
+        /// <returns></returns>
         public int GetM_PriceList_Version_ID(Ctx ctx, string fields, TransactionType transactionType)
         {
             SetTableAndColumnName(transactionType);
@@ -68,6 +79,10 @@ namespace VIS.Models
             return GetM_PriceList_Version_ID(ctx, fields);
         }
 
+        /// <summary>
+        /// Set Table And ColumnName
+        /// </summary>
+        /// <param name="transactionType"></param>
         private void SetTableAndColumnName(TransactionType transactionType)
         {
             if (transactionType == TransactionType.Invoice)
@@ -107,7 +122,17 @@ namespace VIS.Models
                 _columnName = "DateOrdered";
             }
         }
-        
+
+        /// <summary>
+        /// Get Price List Version on ValidFrom Date
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="priceListId"></param>
+        /// <param name="transactionId"></param>
+        /// <param name="productId"></param>
+        /// <param name="uomId"></param>
+        /// <param name="attrSetInstId"></param>
+        /// <returns></returns>
         public int GetM_PriceList_Version_ID(Ctx ctx, string priceListId, string transactionId, string productId, string uomId, string attrSetInstId)
         {
             if (Util.GetValueOfInt(transactionId) > 0)
@@ -160,25 +185,6 @@ namespace VIS.Models
                     }
                 }
                                 
-                return Util.GetValueOfInt(DB.ExecuteScalar(sql));
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public int GetM_PriceList_Version_ID_ForOrder(Ctx ctx, string fields, string OrderId)
-        {
-            string[] paramValue = fields.Split(',');
-            int M_PriceList_ID;
-            M_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
-
-            if (Util.GetValueOfInt(OrderId) > 0)
-            {
-                sql = "SELECT M_PriceList_Version_ID FROM M_PriceList_Version WHERE IsActive = 'Y' AND M_PriceList_ID = " + M_PriceList_ID + @" AND VALIDFROM <= (SELECT DATEORDERED FROM C_ORDER WHERE C_ORDER_ID=" + Util.GetValueOfInt(OrderId) + ") ORDER BY VALIDFROM DESC, M_PriceList_Version_ID DESC";
-
-
                 return Util.GetValueOfInt(DB.ExecuteScalar(sql));
             }
             else

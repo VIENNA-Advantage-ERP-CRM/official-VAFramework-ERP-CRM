@@ -13315,6 +13315,7 @@
 
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
 
+            //** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **//
                 var paramsPrice;                
                 paramsPrice = invoiceRecord["M_PriceList_ID"].toString().concat(",", mTab.getValue("C_Invoice_ID").toString(), ",",
                         M_Product_ID.toString(), ",", 
