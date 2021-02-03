@@ -1184,7 +1184,7 @@ namespace VIS.Models
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Invoice);
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Invoice);
 
 
                 MBPartnerModel objBPartner = new MBPartnerModel();

@@ -9,9 +9,9 @@ using VAdvantage.Utility;
 namespace VIS.Models
 {
     /// <summary>
-    /// Transaction Type enum
+    /// Screen Type enum
     /// </summary>
-    public enum TransactionType
+    public enum ScreenType
     { 
         Order = 1,
         Invoice = 2,
@@ -26,6 +26,13 @@ namespace VIS.Models
         private string _tableName = string.Empty;
         private string _keyColumnName = string.Empty;
         private string _columnName = string.Empty;
+
+        /// <summary>
+        /// Get Price List Version ID
+        /// </summary>
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters as comma seperated string</param>
+        /// <returns>Price List Version ID</returns>
         public int GetM_PriceList_Version_ID(Ctx ctx, string fields)
         {
             /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
@@ -46,7 +53,7 @@ namespace VIS.Models
                 if (paramValue.Length >= 6)
                 {
                     tranType = Util.GetValueOfInt(paramValue[5].ToString());
-                    SetTableAndColumnName((TransactionType)tranType);
+                    SetTableAndColumnName((ScreenType)tranType);
                 }
             }
 
@@ -68,13 +75,13 @@ namespace VIS.Models
         /// <summary>
         /// Get Price List Version on ValidFrom Date
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="fields"></param>
-        /// <param name="transactionType"></param>
-        /// <returns></returns>
-        public int GetM_PriceList_Version_ID(Ctx ctx, string fields, TransactionType transactionType)
+        /// <param name="ctx">Context</param>
+        /// <param name="fields">Parameters as comma seperated string</param>
+        /// <param name="screenType">Screen type</param>
+        /// <returns>Price List Version ID</returns>
+        public int GetM_PriceList_Version_ID(Ctx ctx, string fields, ScreenType screenType)
         {
-            SetTableAndColumnName(transactionType);
+            SetTableAndColumnName(screenType);
 
             return GetM_PriceList_Version_ID(ctx, fields);
         }
@@ -82,34 +89,34 @@ namespace VIS.Models
         /// <summary>
         /// Set Table And ColumnName
         /// </summary>
-        /// <param name="transactionType"></param>
-        private void SetTableAndColumnName(TransactionType transactionType)
+        /// <param name="screenType">Screen Type</param>
+        private void SetTableAndColumnName(ScreenType screenType)
         {
-            if (transactionType == TransactionType.Invoice)
+            if (screenType == ScreenType.Invoice)
             {
                 _tableName = "C_Invoice";
                 _keyColumnName = "C_Invoice_ID";
                 _columnName = "DateInvoiced";
             }
-            else if (transactionType == TransactionType.Order)
+            else if (screenType == ScreenType.Order)
             {
                 _tableName = "C_Order";
                 _keyColumnName = "C_Order_ID";
                 _columnName = "DateOrdered";
             }
-            else if (transactionType == TransactionType.Requisition)
+            else if (screenType == ScreenType.Requisition)
             {
                 _tableName = "M_Requisition";
                 _keyColumnName = "M_Requisition_ID";
                 _columnName = "DateDoc";
             }
-            else if (transactionType == TransactionType.TimeExpense)
+            else if (screenType == ScreenType.TimeExpense)
             {
                 _tableName = "S_TimeExpense";
                 _keyColumnName = "S_TimeExpense_ID";
                 _columnName = "DateReport";
             }
-            else if (transactionType == TransactionType.Contract)
+            else if (screenType == ScreenType.Contract)
             {
                 _tableName = "C_Contract";
                 _keyColumnName = "C_Contract_ID";
@@ -126,13 +133,13 @@ namespace VIS.Models
         /// <summary>
         /// Get Price List Version on ValidFrom Date
         /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="priceListId"></param>
-        /// <param name="transactionId"></param>
-        /// <param name="productId"></param>
-        /// <param name="uomId"></param>
-        /// <param name="attrSetInstId"></param>
-        /// <returns></returns>
+        /// <param name="ctx">Context</param>
+        /// <param name="priceListId">Price List Id</param>
+        /// <param name="transactionId">Transaction Id of screen</param>
+        /// <param name="productId">Product Id</param>
+        /// <param name="uomId">UOM Id</param>
+        /// <param name="attrSetInstId">Attribute Set Instance ID</param>
+        /// <returns>Price List Version Id</returns>
         public int GetM_PriceList_Version_ID(Ctx ctx, string priceListId, string transactionId, string productId, string uomId, string attrSetInstId)
         {
             if (Util.GetValueOfInt(transactionId) > 0)

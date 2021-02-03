@@ -1032,7 +1032,7 @@ namespace VIS.Models
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Order);
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1230,7 +1230,7 @@ namespace VIS.Models
             sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Order);
+            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             MBPartnerModel objBPartner = new MBPartnerModel();
             Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1491,7 +1491,7 @@ namespace VIS.Models
             sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            int _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Order);
+            int _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             string sql;
             decimal PriceEntered = 0;
@@ -1612,7 +1612,7 @@ namespace VIS.Models
                 sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Order);
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
@@ -1707,7 +1707,7 @@ namespace VIS.Models
             //sbparams.Append(",").Append(Util.GetValueOfInt("0"));
 
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), TransactionType.Order);
+            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             MUOMModel objUOM = new MUOMModel();
             _standardPrecision = objUOM.GetPrecision(ctx, _c_Uom_Id.ToString());
