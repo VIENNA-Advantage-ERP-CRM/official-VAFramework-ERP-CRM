@@ -24,13 +24,16 @@ namespace VAdvantage.Model
 		public MSysConfig(Ctx ctx, int AD_SysConfig_ID, Trx trxName) : base(ctx, AD_SysConfig_ID, trxName) { }/** if (AD_SysConfig_ID == 0){SetAD_SysConfig_ID (0);} */
 
 
-		public static String GetValue(String Name)
+		public static String GetValue(String Name,bool Reload)
+		{
+			String str = "";
+			if (!Reload)
 			{
-				String str = Util.GetValueOfString(cache.Get(Name));
-				if (str != null)
+				str = Util.GetValueOfString(cache.Get(Name));
+				if (!string.IsNullOrEmpty(str))
 					return str;
+			}
 				
-
 				//
 				String sql = "SELECT Value FROM AD_SysConfig"
 								+ " WHERE IsActive='Y' AND Name='"+ Name + "'"
@@ -40,7 +43,7 @@ namespace VAdvantage.Model
 				{
 					dr = DB.ExecuteReader(sql, null);
 					while (dr.Read())
-						str = dr.GetString(1);
+						str = dr.GetString(0);
 				}
 				catch (Exception e)
 				{
@@ -64,7 +67,6 @@ namespace VAdvantage.Model
 					cache[Name] =null;
 					return null;
 				}
-			
 		}
-}
+	}
 }

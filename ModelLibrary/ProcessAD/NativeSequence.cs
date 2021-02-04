@@ -53,16 +53,16 @@ namespace VAdvantage.Process
 
 
 
-            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE") == "Y";
+            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y";
             if (SYSTEM_NATIVE_SEQUENCE)
             {
                 throw new Exception("Native Sequence is Actived");
             }
 
-            if (!DatabaseType.IsOracle)
-            {
-                throw new Exception("Native Sequence Supported for Oracle only.");
-            }
+            //if (!DatabaseType.IsOracle)
+            //{
+            //    throw new Exception("Native Sequence Supported for Oracle only.");
+            //}
 
             SetSystemNativeSequence(true);
             bool ok = false;
@@ -71,12 +71,8 @@ namespace VAdvantage.Process
                 CreateSequence("AD_Sequence", null);
                 CreateSequence("AD_Issue", null);
                 CreateSequence("AD_ChangeLog", null);
-                //
-                String whereClause = "TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog')";
-                //List<MTable> tables = new Query(GetCtx(),X_AD_Table.Table_Name, whereClause, Get_TrxName().GetTrxName())
-                //    .SetOrderBy("TableName")
-                //    .list();
-                 sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') AND IsActive='Y'";
+                
+                sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') AND IsActive='Y'";
                 DataSet ds = DB.ExecuteDataset(sql);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -130,10 +126,12 @@ namespace VAdvantage.Process
             if (value)
             {
                 DB.ExecuteQuery("UPDATE AD_SysConfig SET Value='Y' WHERE Name='SYSTEM_NATIVE_SEQUENCE'");
+                MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE", true);
             }
             else
             {
                 DB.ExecuteQuery("UPDATE AD_SysConfig SET Value='N' WHERE Name='SYSTEM_NATIVE_SEQUENCE'");
+                MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE", false);
             }
             //new Object[] { value ? "Y" : "N" },
             //null // trxName

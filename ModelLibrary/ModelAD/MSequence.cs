@@ -490,7 +490,7 @@ namespace VAdvantage.Model
         public int GetNextID()
         {
             int retValue = GetCurrentNext();
-            if (p_ctx.GetContext("SYSTEM_NATIVE_SEQUENCE") != "Y" && IsTableID())
+            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false)!= "Y" && IsTableID())
             {
                 SetCurrentNext(retValue + GetIncrementNo());
             }
@@ -500,7 +500,7 @@ namespace VAdvantage.Model
 
         public int GetCurrentNext()
         {
-            if (p_ctx.GetContext("SYSTEM_NATIVE_SEQUENCE") != "Y" && IsTableID())
+            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) != "Y" && IsTableID())
             {
                 return DB.GetNextID(GetAD_Client_ID(), GetName(), Get_TrxName());
             }
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
 
         public void SetCurrentNext(int CurrentNext)
         {
-            if (p_ctx.GetContext("SYSTEM_NATIVE_SEQUENCE") != "Y" && IsTableID())
+            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) != "Y" && IsTableID())
             {
                 while (true)
                 {
@@ -1665,12 +1665,12 @@ namespace VAdvantage.Model
         /// <returns>true if created</returns>
         public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, Boolean tableID)
         {
-            bool SYSTEM_NATIVE_SEQUENCE = ctx.GetContext("SYSTEM_NATIVE_SEQUENCE") == "Y"; //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
+            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y"; //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
             if (tableID)
             {
                 if (SYSTEM_NATIVE_SEQUENCE)
                 {
-                    int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name=" + TableName + " AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
+                    int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
 
                     if (nextid == -1)
                     {
@@ -1678,7 +1678,7 @@ namespace VAdvantage.Model
                         nextid = INIT_NO;
                     }
 
-                    if (!VConnection.Get().GetDatabase().CreateSequence(TableName + "_SQ", 1, INIT_NO, int.MaxValue, nextid, trxName))
+                    if (!VConnection.Get().GetDatabase().CreateSequence(TableName , 1, INIT_NO, int.MaxValue, nextid, trxName))
                         return false;
 
                     return true;

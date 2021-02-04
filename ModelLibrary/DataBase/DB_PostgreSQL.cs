@@ -333,12 +333,24 @@ namespace VAdvantage.DataBase
 
         public int GetNextID(string Name)
         {
-            throw new NotImplementedException();
+            int m_sequence_id = DB.GetSQLValue(null, "SELECT nextval('" + Name.ToUpper() + ")");
+            return m_sequence_id;
         }
 
         public bool CreateSequence(string name, int increment, int minvalue, int maxvalue, int start, Trx trxName)
         {
-            throw new NotImplementedException();
+            int no = DB.ExecuteQuery("DROP SEQUENCE " + name.ToUpper() + "_SEQ", null, trxName);
+            no = DB.ExecuteQuery("CREATE SEQUENCE " + name.ToUpper() + "_SEQ"
+                                + " MINVALUE " + minvalue
+                                + " MAXVALUE " + maxvalue
+                                + " START WITH " + start
+                                + " INCREMENT BY " + increment + " CACHE 20", null, trxName)
+                                ;
+
+            if (no == -1)
+                return false;
+            else
+                return true;
         }
 
 

@@ -402,6 +402,7 @@
     <Compile Include="ModelAD\MGroupWindow.cs" />
     <Compile Include="ModelAD\MGroupWorkflow.cs" />
     <Compile Include="ModelAD\MModuleTable.cs" />
+    <Compile Include="ModelAD\MSysConfig.cs" />
     <Compile Include="ModelAD\MTabPanel.cs" />
     <Compile Include="ModelAD\X_AD_ActionLog.cs" />
     <Compile Include="ModelAD\X_AD_AlertRuleCondition.cs" />
@@ -431,6 +432,7 @@
     <Compile Include="ModelAD\X_AD_ReportItem.cs" />
     <Compile Include="ModelAD\X_AD_ReportTable.cs" />
     <Compile Include="ModelAD\X_AD_Role_Group.cs" />
+    <Compile Include="ModelAD\X_AD_SysConfig.cs" />
     <Compile Include="ModelAD\X_AD_TabPanel.cs" />
     <Compile Include="ModelAD\X_AD_Theme.cs" />
     <Compile Include="ModelAD\X_AD_UserHomePageSetting.cs" />

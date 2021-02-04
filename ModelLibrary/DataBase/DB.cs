@@ -190,7 +190,7 @@ namespace VAdvantage.DataBase
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
            
-            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE") == "Y")
+            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y")
             {
                 
                 int m_sequence_id = VConnection.Get().GetDatabase().GetNextID(TableName + "_SEQ");
