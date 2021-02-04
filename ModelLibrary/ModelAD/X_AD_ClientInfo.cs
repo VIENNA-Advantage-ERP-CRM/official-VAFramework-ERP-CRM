@@ -741,6 +741,41 @@ namespace VAdvantage.Model
         {
             return (String)Get_Value("AD_WebServiceURL");
         }
+
+        /** AD_IDPServerClient AD_Reference_ID=1000333 */
+        public static int AD_IDPSERVERCLIENT_AD_Reference_ID = 1000333;
+
+        /** Access Key = AK */
+        public static String AD_IDPSERVERCLIENT_AccessKey = "AK";
+
+        /** UserName Password = UP */
+        public static String AD_IDPSERVERCLIENT_UserNamePassword = "UP";
+
+        /** Is test a valid value.
+        @param test testvalue
+        @returns true if valid **/
+        public bool IsAD_IDPServerClientValid(String test) { return test == null || test.Equals("AK") || test.Equals("UP"); }
+
+        /** Set IDP Server Client.
+        @param AD_IDPServerClient Client Type which user want to validate at IDP Server. */
+        public void SetAD_IDPServerClient(String AD_IDPServerClient)
+        {
+            if (!IsAD_IDPServerClientValid(AD_IDPServerClient))
+                throw new ArgumentException("AD_IDPServerClient Invalid value - " + AD_IDPServerClient + " - Reference_ID=1000333 - AK - UP"); if (AD_IDPServerClient != null && AD_IDPServerClient.Length > 2) { log.Warning("Length > 2 - truncated"); AD_IDPServerClient = AD_IDPServerClient.Substring(0, 2); }
+            Set_Value("AD_IDPServerClient", AD_IDPServerClient);
+        }
+
+        /** Get IDP Server Client.
+        @return Client Type which user want to validate at IDP Server. */
+        public String GetAD_IDPServerClient() { return (String)Get_Value("AD_IDPServerClient"); }
+
+        /** Set IDP Server URL.
+        @param AD_IDPServerURL URL of the server where client has hosted IDP server */
+        public void SetAD_IDPServerURL(String AD_IDPServerURL) { if (AD_IDPServerURL != null && AD_IDPServerURL.Length > 150) { log.Warning("Length > 150 - truncated"); AD_IDPServerURL = AD_IDPServerURL.Substring(0, 150); } Set_Value("AD_IDPServerURL", AD_IDPServerURL); }
+
+        /** Get IDP Server URL.
+        @return URL of the server where client has hosted IDP server */
+        public String GetAD_IDPServerURL() { return (String)Get_Value("AD_IDPServerURL"); }
     }
 
 }
