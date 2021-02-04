@@ -234,12 +234,15 @@ namespace VAdvantage.Model
         /** Web Service = WS */
         public static String FILELOCATION_WebService = "WS";
 
+        /** IDP = ID */
+        public static String FILELOCATION_IDP = "ID";
+
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/
         public bool IsFileLocationValid(String test)
         {
-            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS");
+            return test.Equals("DB") || test.Equals("FT") || test.Equals("SR") || test.Equals("WS") || test.Equals("ID");
         }
         /** Set File Location.
         @param FileLocation File Location */
