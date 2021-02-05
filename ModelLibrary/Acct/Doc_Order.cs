@@ -30,7 +30,7 @@ using VAdvantage.Acct;
 
 namespace VAdvantage.Acct
 {
-    public class DoVAB_Order : Doc
+    public class Doc_Order : Doc
     {
 
         #region

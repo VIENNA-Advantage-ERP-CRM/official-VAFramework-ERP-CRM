@@ -25,14 +25,14 @@ namespace VAdvantage.Model
 {
     public class MVACMLayout : X_VACM_Layout
 {
-	/// <summary>
-	///Get MVACMLayout from Cache
-   	/// </summary>
-	/// <param name="ctx">context</param>
-	/// <param name="VACM_Layout_ID">id</param>
-	/// <param name="trxName">trx</param>
-	/// <returns>MWEbproject</returns>
-	public static MVACMLayout Get(Ctx ctx, int VACM_Layout_ID, Trx trxName)
+		/// <summary>
+		///Get MVACMLayout from Cache
+		/// </summary>VAVAVAG
+		/// <param name="ctx">context</param>
+		/// <param name="VACM_Layout_ID">id</param>
+		/// <param name="trxName">trx</param>
+		/// <returns>MWEbproject</returns>
+		public static MVACMLayout Get(Ctx ctx, int VACM_Layout_ID, Trx trxName)
 	{
 		MVACMLayout retValue = new MVACMLayout (ctx, VACM_Layout_ID, trxName);
 		if (retValue != null)
