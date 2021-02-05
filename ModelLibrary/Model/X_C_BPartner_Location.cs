@@ -381,10 +381,10 @@ SetName (null);	// .
         public void SetName(String Name)
         {
             if (Name == null) throw new ArgumentException("Name is mandatory.");
-            if (Name.Length > 60)
+            if (Name.Length > 500)
             {
-                log.Warning("Length > 60 - truncated");
-                Name = Name.Substring(0, 60);
+                log.Warning("Length > 500 - truncated");
+                Name = Name.Substring(0, 500);
             }
             Set_Value("Name", Name);
         }
