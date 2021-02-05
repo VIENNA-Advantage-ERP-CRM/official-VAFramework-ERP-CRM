@@ -719,6 +719,11 @@
                         cmbWarehoue.ctrl.val(M_Warehouse_ID);
                     }
                 }
+
+                // if no login or default warehouse found then set first warehouse by default.
+                if (M_Warehouse_ID == 0) {
+                    cmbWarehoue.ctrl.val(VIS.Utility.Util.getValueOfInt(data[0]["M_Warehouse_ID"]));
+                }
             }
             //while (dr.read()) {
             //    key = VIS.Utility.Util.getValueOfInt(dr.getString(0));
