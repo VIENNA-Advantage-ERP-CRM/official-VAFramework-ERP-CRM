@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     [Serializable]
-    public class MAccountLookup : Lookup
+    public class MVABAccountLookup : Lookup
     {
         //Account_ID			
         public int VAB_Acct_ValidParameter_ID;
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
        /// </summary>
        /// <param name="ctx"></param>
        /// <param name="WindowNo"></param>
-        public MAccountLookup(Ctx ctx, int windowNo)
+        public MVABAccountLookup(Ctx ctx, int windowNo)
             : base(ctx, windowNo, DisplayType.TableDir)
         {
 

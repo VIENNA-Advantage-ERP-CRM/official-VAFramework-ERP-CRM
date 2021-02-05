@@ -1370,7 +1370,7 @@ namespace VAdvantage.Model
                 //	Value/Name change
                 if (success && !newRecord
                     && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                    MAccount.UpdateValueDescription(GetCtx(), "VAB_BusinessPartner_ID=" +
+                    MVABAccount.UpdateValueDescription(GetCtx(), "VAB_BusinessPartner_ID=" +
                         GetVAB_BusinessPartner_ID(), Get_TrxName());
             }
             //Added by Neha Thakur--05 Jan 2018--Set "Report To" (from Header tab) as Supervisor in Login User tab--Asked by Ravikant

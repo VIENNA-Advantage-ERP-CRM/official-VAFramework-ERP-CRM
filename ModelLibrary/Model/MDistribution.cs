@@ -34,7 +34,7 @@ namespace VAdvantage.Model
   /// <param name="PostingType">only posting type</param>
   /// <param name="VAB_DocTypes_ID">only document type</param>
     /// <returns>array of distributions</returns>
-	public static MDistribution[] Get (MAccount acct,  
+	public static MDistribution[] Get (MVABAccount acct,  
 		String PostingType, int VAB_DocTypes_ID)
 	{
 		return Get (acct.GetCtx(), acct.GetVAB_AccountBook_ID(), 
@@ -402,7 +402,7 @@ namespace VAdvantage.Model
 	/// <param name="acct">account</param>
 	/// <param name="Amt">amount</param>
 	/// <param name="VAB_Currency_ID">currency</param>
-	public void Distribute (MAccount acct, Decimal Amt, int VAB_Currency_ID)
+	public void Distribute (MVABAccount acct, Decimal Amt, int VAB_Currency_ID)
 	{
 		log.Info("Amt=" + Amt + " - " + acct);
 		GetLines(false);

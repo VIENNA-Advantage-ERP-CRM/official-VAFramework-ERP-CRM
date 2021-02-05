@@ -327,7 +327,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetDescription(invoice.GetSummary());
                 //
                 MFactAcct fa = new MFactAcct(GetCtx(), gl.GetActual_Acct_Detail_ID(), null);
-                line.SetVAB_Acct_ValidParameter_ID(MAccount.Get(fa));
+                line.SetVAB_Acct_ValidParameter_ID(MVABAccount.Get(fa));
                 Decimal? dr = gl.GetAmtRevalDrDiff();
                 Decimal? cr = gl.GetAmtRevalCrDiff();
                 drTotal = Decimal.Add(drTotal.Value, dr.Value);
@@ -379,8 +379,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MJournalLine line = new MJournalLine(journal);
                 line.SetLine(lineNo + 1);
-                MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
-                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
+                MVABAccount bas = MVABAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
+                MVABAccount acct = MVABAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
                     bas.GetVAM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),
@@ -397,8 +397,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 MJournalLine line = new MJournalLine(journal);
                 line.SetLine(lineNo + 2);
-                MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
-                MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
+                MVABAccount bas = MVABAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
+                MVABAccount acct = MVABAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
                     bas.GetVAM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),

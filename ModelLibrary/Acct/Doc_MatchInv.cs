@@ -166,7 +166,7 @@ namespace VAdvantage.Acct
 
             //  InventoryClearing               CR
             //  From Invoice
-            MAccount expense = _pc.GetAccount(ProductCost.ACCTTYPE_P_InventoryClearing, as1);
+            MVABAccount expense = _pc.GetAccount(ProductCost.ACCTTYPE_P_InventoryClearing, as1);
             if (_pc.IsService())
             {
                 expense = _pc.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
@@ -266,7 +266,7 @@ namespace VAdvantage.Acct
             /** Commitment release										****/
             if (as1.IsAccrual() && as1.IsCreateCommitment())
             {
-                fact = DoVAB_Order.GetCommitmentRelease(as1, this,
+                fact = Doc_Order.GetCommitmentRelease(as1, this,
                    Utility.Util.GetValueOfDecimal(GetQty()), _invoiceLine.GetVAB_InvoiceLine_ID(), Env.ONE);
                 if (fact == null)
                 {

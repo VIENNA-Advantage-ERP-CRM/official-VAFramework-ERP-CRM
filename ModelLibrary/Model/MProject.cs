@@ -563,7 +563,7 @@ namespace VAdvantage.Model
             MProject prjph = null;
             if (success && !newRecord
                 && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                MAccount.UpdateValueDescription(GetCtx(), "VAB_Project_ID=" + GetVAB_Project_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAB_Project_ID=" + GetVAB_Project_ID(), Get_TrxName());
             if (GetVAB_Promotion_ID() != 0)
             {
                 MVABPromotion cam = new MVABPromotion(GetCtx(), GetVAB_Promotion_ID(), null);

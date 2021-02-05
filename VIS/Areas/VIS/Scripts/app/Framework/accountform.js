@@ -9,7 +9,7 @@
         var $self = this;
 
         var title = header;
-        var mAccount = account;
+        var MVABAccount = account;
         var VAB_AccountBook_ID = cAcctSchemaId;
         var windowNo = VIS.Env.getWindowNo();
         var _comb = null;
@@ -172,7 +172,7 @@
         };
 
         this.log = VIS.Logging.VLogger.getVLogger("AccountForm");
-        this.log.config("VAB_AccountBook_ID=" + VAB_AccountBook_ID + ", VAB_Acct_ValidParameter_ID=" + mAccount.VAB_Acct_ValidParameter_ID);
+        this.log.config("VAB_AccountBook_ID=" + VAB_AccountBook_ID + ", VAB_Acct_ValidParameter_ID=" + MVABAccount.VAB_Acct_ValidParameter_ID);
         //control on form
 
 
@@ -850,12 +850,12 @@
                     // end 17/03/2017, Requested By Mukesh sir
 
 
-                    if (mAccount.VAB_Acct_ValidParameter_ID == 0)
+                    if (MVABAccount.VAB_Acct_ValidParameter_ID == 0)
                         _mTab.setQuery(VIS.Query.prototype.getEqualQuery("1", "2"));
                     else {
                         var _query = new VIS.Query();
                         _query.addRestriction("VAB_AccountBook_ID", VIS.Query.prototype.EQUAL, VAB_AccountBook_ID);
-                        _query.addRestriction("VAB_Acct_ValidParameter_ID", VIS.Query.prototype.EQUAL, mAccount.VAB_Acct_ValidParameter_ID);
+                        _query.addRestriction("VAB_Acct_ValidParameter_ID", VIS.Query.prototype.EQUAL, MVABAccount.VAB_Acct_ValidParameter_ID);
                         _mTab.setQuery(_query);
                     }
 
@@ -1805,7 +1805,7 @@
             }
 
             title = null;
-            mAccount = null;
+            MVABAccount = null;
             VAB_AccountBook_ID = null;
             windowNo = null;
             _comb = null;

@@ -95,7 +95,7 @@ namespace VAdvantage.Acct
                     // no need to update converted amount here
                     //docLine.SetConvertedAmt(_VAB_AccountBook_ID, line.GetAmtAcctDr(), line.GetAmtAcctCr());
                     //  --  Account
-                    MAccount account = line.GetAccount();
+                    MVABAccount account = line.GetAccount();
                     docLine.SetAccount(account);
                     //  -- Quantity
                     docLine.SetQty(line.GetQty(), false);
@@ -155,7 +155,7 @@ namespace VAdvantage.Acct
                             // no need to update converted amount here
                             //docLine.SetConvertedAmt(_VAB_AccountBook_ID, amtAcctDr, amtAcctCr);
                             //  --  Account
-                            MAccount account = line.GetAccount();
+                            MVABAccount account = line.GetAccount();
 
 
                             docLine.SetAccount(account);

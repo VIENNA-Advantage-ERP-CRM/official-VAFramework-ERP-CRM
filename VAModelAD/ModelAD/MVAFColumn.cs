@@ -710,7 +710,7 @@ namespace VAdvantage.Model
                 return MVAFTableView.Get(GetCtx(), MVAFCtrlRefList.Table_ID);
             //	Account
             //if (displayType == DisplayType.Account)
-            //    return MVAFTableView.Get(GetCtx(), MAccount.Table_ID);	//	VAB_Acct_ValidParameter
+            //    return MVAFTableView.Get(GetCtx(), MVABAccount.Table_ID);	//	VAB_Acct_ValidParameter
 
             //	Table, TableDir, ...
             String FKTableName = GetFKColumnName();

@@ -446,60 +446,6 @@ public MVACMLayout (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
     /// Get's all the Ads from Template AD Cat (including all subtemplates)
 	/// </summary>
 	/// <returns>array of MAd</returns>
-	public MAd[] GetAds()
-	{
-		int[] AdCats = null;
-		String sql = "SELECT count(*) FROM VACM_Layout_Ad_Group WHERE VACM_Layout_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
-        IDataReader idr = null;
-		try
-		{
-			int numberAdCats = 0;
-			//pstmt = DataBase.prepareStatement (sql, get_TrxName ());
-            idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
-			if (idr.Read())
-			{
-                numberAdCats = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
-			}
-            idr.Close();
-			AdCats = new int[numberAdCats];
-			int i = 0;
-			sql = "SELECT CM_Ad_Cat_ID FROM VACM_Layout_Ad_Group WHERE VACM_Layout_ID IN (" + _adTemplates.ToString ().Substring (0,_adTemplates.Length -1) + ")";
-			//pstmt = DataBase.prepareStatement (sql, get_TrxName ());
-            idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
-			while (idr.Read())
-			{
-                AdCats[i] = Utility.Util.GetValueOfInt(idr[0]);// rs.getInt(1);
-				i++;
-			}
-            idr.Close();
-		}
-		catch (Exception ex)
-		{
-            if (idr != null)
-            {
-                idr.Close();
-            }
-			log.Log (Level.SEVERE, sql, ex);
-		}
-		
-		
-		if (AdCats != null && AdCats.Length > 0)
-		{
-			MAd[] returnAds = new MAd[AdCats.Length];
-			for (int i = 0; i < AdCats.Length; i++)
-			{
-				MAd thisAd = MAd.GetNext(GetCtx (), AdCats[i],
-					Get_TrxName ());
-				if (thisAd!=null) 
-					returnAds[i] = thisAd;
-			}
-			return returnAds;
-		}
-		else
-		{
-			return null;
-		}
-	}	//	getAds
 	
 } // MVACMLayout
 

@@ -96,12 +96,12 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Derive MAccount from record
+         * 	Derive MVABAccount from record
          *	@return Valid Account Combination
          */
-        public MAccount GetMAccount()
+        public MVABAccount GetMVABAccount()
         {
-            MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(),
+            MVABAccount acct = MVABAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(),
                 GetVAB_AccountBook_ID(), GetAccount_ID(), GetVAB_SubAcct_ID(),
                 GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
                 GetC_LocFrom_ID(), GetC_LocTo_ID(), GetVAB_SalesRegionState_ID(),

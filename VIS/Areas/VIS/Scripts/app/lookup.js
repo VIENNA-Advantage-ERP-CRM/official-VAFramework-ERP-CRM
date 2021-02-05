@@ -1503,22 +1503,22 @@
 
 
 
-    //4. MAccountLookup
-    function MAccountLookup(ctx, windowNo) {
+    //4. MVABAccountLookup
+    function MVABAccountLookup(ctx, windowNo) {
         Lookup.call(this, null, null, ctx, windowNo, VIS.DisplayType.TableDir);
-        this.log = VIS.Logging.VLogger.getVLogger("MAccountLookup");
+        this.log = VIS.Logging.VLogger.getVLogger("MVABAccountLookup");
         /** Account_ID			*/
         this.VAB_Acct_ValidParameter_ID = 0;
         this.combination;
         this.description;
     };
-    VIS.Utility.inheritPrototype(MAccountLookup, Lookup);//Inherit
+    VIS.Utility.inheritPrototype(MVABAccountLookup, Lookup);//Inherit
     /**
      *	Get Display for Value
      *  @param value value
      *  @return String
      */
-    MAccountLookup.prototype.getDisplay = function (value) {
+    MVABAccountLookup.prototype.getDisplay = function (value) {
         if (!this.containsKey(value))
             return "<" + value.toString() + ">";
         return this.toStringX();
@@ -1527,7 +1527,7 @@
      *	Return String representation
      *  @return Combination
      */
-    MAccountLookup.prototype.toStringX = function () {
+    MVABAccountLookup.prototype.toStringX = function () {
         if (this.VAB_Acct_ValidParameter_ID == 0)
             return "";
         return this.combination;
@@ -1537,7 +1537,7 @@
      *  @param key key
      *  @return true if exists
      */
-    MAccountLookup.prototype.containsKey = function (key) {
+    MVABAccountLookup.prototype.containsKey = function (key) {
         var intValue = 0;
         if (key != null)
             intValue = parseInt(key.toString());
@@ -1549,7 +1549,7 @@
      *  @param ID VAB_Acct_ValidParameter_ID
      *  @return true if found
      */
-    MAccountLookup.prototype.load = function (ID) {
+    MVABAccountLookup.prototype.load = function (ID) {
         if (ID == 0)						//	new
         {
             this.VAB_Acct_ValidParameter_ID = 0;
@@ -1588,7 +1588,7 @@
      *	Get underlying fully qualified Table.Column Name
      *  @return ""
      */
-    MAccountLookup.prototype.getColumnName = function () {
+    MVABAccountLookup.prototype.getColumnName = function () {
         return "";
     };
     /**
@@ -1600,7 +1600,7 @@
      * 	@param temporary force load for temporary display
      *  @return ArrayList with KeyNamePair
      */
-    MAccountLookup.prototype.getData = function (mandatory, onlyValidated, onlyActive, temporary) {
+    MVABAccountLookup.prototype.getData = function (mandatory, onlyValidated, onlyActive, temporary) {
         var list = [];
         if (!mandatory)
             list.push({ "Key": -1, "Name": "" });
@@ -2487,7 +2487,7 @@
     /* Namespace */
     VIS.MLookup = MLookup;
     VIS.MLocationLookup = MLocationLookup;
-    VIS.MAccountLookup = MAccountLookup;
+    VIS.MVABAccountLookup = MVABAccountLookup;
     VIS.MPAttributeLookup = MPAttributeLookup;
     VIS.MGAttributeLookup = MGAttributeLookup;
     VIS.MLocatorLookup = MLocatorLookup;

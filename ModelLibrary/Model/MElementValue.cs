@@ -221,11 +221,11 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "Account_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "Account_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
                 if ("Y".Equals(GetCtx().GetContext("$Element_U1")))
-                    MAccount.UpdateValueDescription(GetCtx(), "User1_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
+                    MVABAccount.UpdateValueDescription(GetCtx(), "User1_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
                 if ("Y".Equals(GetCtx().GetContext("$Element_U2")))
-                    MAccount.UpdateValueDescription(GetCtx(), "User2_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
+                    MVABAccount.UpdateValueDescription(GetCtx(), "User2_ID=" + GetVAB_Acct_Element_ID(), Get_TrxName());
             }
             return success;
         }

@@ -781,7 +781,7 @@ namespace VAdvantage.Model
 
                 //	Value/Name change in Account
                 if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                    MAccount.UpdateValueDescription(GetCtx(), "VAM_Product_ID=" + GetVAM_Product_ID(), Get_TrxName());
+                    MVABAccount.UpdateValueDescription(GetCtx(), "VAM_Product_ID=" + GetVAM_Product_ID(), Get_TrxName());
 
                 //	Name/Description Change in Asset	MAsset.setValueNameDescription
                 if (!newRecord && (Is_ValueChanged("Name") || Is_ValueChanged("Description")))

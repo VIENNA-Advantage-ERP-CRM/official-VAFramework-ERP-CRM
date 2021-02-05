@@ -2985,7 +2985,7 @@ namespace VAdvantage.Model
                 return 0;
             }
 
-            MAccount vc = MAccount.GetDefault(m_as, true);	//	optional null
+            MVABAccount vc = MVABAccount.GetDefault(m_as, true);	//	optional null
             vc.SetVAF_Org_ID(0);		//	will be overwritten
             vc.SetAccount_ID(VAB_Acct_Element_ID);
             if (!vc.Save())

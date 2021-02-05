@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAccount
+ * Class Name     : MVABAccount
  * Purpose        : Account Object Entity to maintain all segment values.
  * Class Used     : X_VAB_Acct_ValidParameter
  * Chronological    Development
@@ -23,10 +23,10 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MAccount : X_VAB_Acct_ValidParameter
+    public class MVABAccount : X_VAB_Acct_ValidParameter
     {
         /**	Logger						*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MAccount).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABAccount).FullName);
         /**	Account Segment				*/
         private MElementValue _accountEV = null;
 
@@ -53,12 +53,12 @@ namespace VAdvantage.Model
         /// <param name="UserElement1_ID"></param>
         /// <param name="UserElement2_ID"></param>
         /// <returns>account or null</returns>
-        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID,
+        public static MVABAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID,
             int Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID,
             int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID)
         {
-            MAccount existingAccount = null;
+            MVABAccount existingAccount = null;
             //
             StringBuilder info = new StringBuilder();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAB_Acct_ValidParameter "
@@ -198,7 +198,7 @@ namespace VAdvantage.Model
                 //if (dr.Read())
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    existingAccount = new MAccount(ctx, rs, null);
+                    existingAccount = new MVABAccount(ctx, rs, null);
                 }
             }
             catch (Exception e)
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
             if (existingAccount != null)
                 return existingAccount;
             //	New
-            MAccount newAccount = new MAccount(ctx, 0, null);
+            MVABAccount newAccount = new MVABAccount(ctx, 0, null);
             newAccount.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             newAccount.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
             newAccount.SetAccount_ID(Account_ID);
@@ -240,11 +240,11 @@ namespace VAdvantage.Model
 
 
         // Added by Bharat for New elements UserElements1 to UserElement9
-        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+        public static MVABAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID,
             int UserElement3_ID, int UserElement4_ID, int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID)
         {
-            MAccount existingAccount = null;
+            MVABAccount existingAccount = null;
             //
             StringBuilder info = new StringBuilder();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAB_Acct_ValidParameter "
@@ -443,7 +443,7 @@ namespace VAdvantage.Model
                 //if (dr.Read())
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    existingAccount = new MAccount(ctx, rs, null);
+                    existingAccount = new MVABAccount(ctx, rs, null);
                 }
             }
             catch (Exception e)
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
             if (existingAccount != null)
                 return existingAccount;
             //	New
-            MAccount newAccount = new MAccount(ctx, 0, null);
+            MVABAccount newAccount = new MVABAccount(ctx, 0, null);
             newAccount.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
             newAccount.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
             newAccount.SetAccount_ID(Account_ID);
@@ -498,9 +498,9 @@ namespace VAdvantage.Model
         /// <param name="VAB_AccountBook_ID"></param>
         /// <param name="alias"></param>
         /// <returns>account</returns>
-        public static MAccount Get(Ctx ctx, int VAB_AccountBook_ID, String alias)
+        public static MVABAccount Get(Ctx ctx, int VAB_AccountBook_ID, String alias)
         {
-            MAccount retValue = null;
+            MVABAccount retValue = null;
             String sql = "SELECT * FROM VAB_Acct_ValidParameter WHERE VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND Alias=" + alias;
             DataSet ds = new DataSet();
             try
@@ -509,7 +509,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    retValue = new MAccount(ctx, rs, null);
+                    retValue = new MVABAccount(ctx, rs, null);
                 }
             }
             catch (Exception e)
@@ -524,9 +524,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="fa">accounting fact</param>
         /// <returns>account</returns>
-        public static MAccount Get(X_Actual_Acct_Detail fa)
+        public static MVABAccount Get(X_Actual_Acct_Detail fa)
         {
-            MAccount acct = Get(fa.GetCtx(),
+            MVABAccount acct = Get(fa.GetCtx(),
                 fa.GetVAF_Client_ID(), fa.GetVAF_Org_ID(), fa.GetVAB_AccountBook_ID(),
                 fa.GetAccount_ID(), fa.GetVAB_SubAcct_ID(),
                 fa.GetVAM_Product_ID(), fa.GetVAB_BusinessPartner_ID(), fa.GetVAF_OrgTrx_ID(),
@@ -544,7 +544,7 @@ namespace VAdvantage.Model
         /// <param name="optionalNull">if true the optional values are null</param>
         /// <param name="trxName"></param>
         /// <returns>Account</returns>
-        public static MAccount GetDefault(Ctx ctx, int VAB_AccountBook_ID,
+        public static MVABAccount GetDefault(Ctx ctx, int VAB_AccountBook_ID,
             bool optionalNull, Trx trxName)
         {
             MVABAccountBook acctSchema = new MVABAccountBook(ctx, VAB_AccountBook_ID, trxName);
@@ -557,9 +557,9 @@ namespace VAdvantage.Model
         /// <param name="acctSchema">accounting schema</param>
         /// <param name="optionalNull">if true, the optional values are null</param>
         /// <returns>Account</returns>
-        public static MAccount GetDefault(MVABAccountBook acctSchema, bool optionalNull)
+        public static MVABAccount GetDefault(MVABAccountBook acctSchema, bool optionalNull)
         {
-            MAccount vc = new MAccount(acctSchema);
+            MVABAccount vc = new MVABAccount(acctSchema);
             //  Active Elements
             MVABAccountBookElement[] elements = acctSchema.GetAcctSchemaElements();
             for (int i = 0; i < elements.Length; i++)
@@ -613,10 +613,10 @@ namespace VAdvantage.Model
         /// <param name="ctx"> context</param>
         /// <param name="VAB_Acct_ValidParameter_ID">combination</param>
         /// <returns>Account</returns>
-        public static MAccount Get(Ctx ctx, int VAB_Acct_ValidParameter_ID)
+        public static MVABAccount Get(Ctx ctx, int VAB_Acct_ValidParameter_ID)
         {
             //	Maybe later cache
-            return new MAccount(ctx, VAB_Acct_ValidParameter_ID, null);
+            return new MVABAccount(ctx, VAB_Acct_ValidParameter_ID, null);
         }
 
         /// <summary>
@@ -641,7 +641,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = ds.Tables[0].Rows[i];
-                    MAccount account = new MAccount(ctx, rs, trxName);
+                    MVABAccount account = new MVABAccount(ctx, rs, trxName);
                     account.SetValueDescription();
                     if (account.Save())
                         count++;
@@ -663,7 +663,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_Acct_ValidParameter_ID"></param>
         /// <param name="trxName"></param>
-        public MAccount(Ctx ctx, int VAB_Acct_ValidParameter_ID, Trx trxName)
+        public MVABAccount(Ctx ctx, int VAB_Acct_ValidParameter_ID, Trx trxName)
             : base(ctx, VAB_Acct_ValidParameter_ID, trxName)
         {
 
@@ -681,7 +681,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName"></param>
-        public MAccount(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABAccount(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
@@ -691,7 +691,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="as1">as account schema</param>
-        public MAccount(MVABAccountBook as1)
+        public MVABAccount(MVABAccountBook as1)
             : this(as1.GetCtx(), 0, as1.Get_TrxName())
         {
             SetClientOrg(as1);
@@ -704,7 +704,7 @@ namespace VAdvantage.Model
         /// <returns>string</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MAccount=[");
+            StringBuilder sb = new StringBuilder("MVABAccount=[");
             sb.Append(GetVAB_Acct_ValidParameter_ID());
             if (GetCombination() != null)
                 sb.Append(",").Append(GetCombination());

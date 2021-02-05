@@ -32,9 +32,9 @@ namespace VAdvantage.Acct
 
         private VLogger log = null;
 
-        private MAccount _DiscountAccount;
+        private MVABAccount _DiscountAccount;
         private Decimal _DiscountAmt;
-        private MAccount _WriteOffAccount;
+        private MVABAccount _WriteOffAccount;
         private Decimal _WriteOffAmt;
 
         private List<MFactAcct> _facts = new List<MFactAcct>();
@@ -49,7 +49,7 @@ namespace VAdvantage.Acct
         /// <param name="DiscountAmt">discount amt</param>
         /// <param name="WriteOffAccount">write off acct</param>
         /// <param name="WriteOffAmt">write off amt</param>
-        public Doc_AllocationTax(MAccount DiscountAccount, Decimal DiscountAmt, MAccount WriteOffAccount, Decimal WriteOffAmt)
+        public Doc_AllocationTax(MVABAccount DiscountAccount, Decimal DiscountAmt, MVABAccount WriteOffAccount, Decimal WriteOffAmt)
         {
 
             log = VLogger.GetVLogger(this.GetType().FullName);//getClass());
@@ -119,7 +119,7 @@ namespace VAdvantage.Acct
                 log.Info(i + ": " + factAcct1);
 
                 //	Create Tax Account
-                MAccount taxAcct = factAcct1.GetMAccount();
+                MVABAccount taxAcct = factAcct1.GetMVABAccount();
                 if (taxAcct == null || taxAcct.Get_ID() == 0)
                 {
                     log.Severe("Tax Account not found/created");

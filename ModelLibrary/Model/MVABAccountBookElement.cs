@@ -495,7 +495,7 @@ namespace VAdvantage.Model
             }
             //	Resequence
             if (newRecord || Is_ValueChanged("SeqNo"))
-                MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //	Clear Cache
             s_cache.Clear();
             return success;
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
         /// <param name="id">new default</param>
         private void UpdateData(String element, int id)
         {
-            MAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
+            MVABAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
             //
             String sql = "UPDATE VAB_Acct_ValidParameter SET " + element + "=" + id
                 + " WHERE " + element + " IS NULL AND VAF_Client_ID=" + GetVAF_Client_ID();
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             //	Update Account Info
-            MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
+            MVABAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //
             s_cache.Clear();
             return success;

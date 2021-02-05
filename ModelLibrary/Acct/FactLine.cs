@@ -29,7 +29,7 @@ namespace VAdvantage.Acct
     public sealed class FactLine : X_Actual_Acct_Detail
     {
         //Account					
-        private MAccount _acct = null;
+        private MVABAccount _acct = null;
         // Accounting Schema		
         private MVABAccountBook _acctSchema = null;
         // Document Header			
@@ -103,7 +103,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="acctSchema">account schema</param>
         /// <param name="acct">account</param>
-        public void SetAccount(MVABAccountBook acctSchema, MAccount acct)
+        public void SetAccount(MVABAccountBook acctSchema, MVABAccount acct)
         {
             _acctSchema = acctSchema;
             SetVAB_AccountBook_ID(acctSchema.GetVAB_AccountBook_ID());
@@ -1131,7 +1131,7 @@ namespace VAdvantage.Acct
         /// Get Account
         /// </summary>
         /// <returns>account</returns>
-        public MAccount GetAccount()
+        public MVABAccount GetAccount()
         {
             return _acct;
         }
@@ -1457,7 +1457,7 @@ namespace VAdvantage.Acct
         {
             log.Fine("From Accout_ID=" + Account_ID);
             //  get VC for P_Revenue (from Product)
-            MAccount revenue = MAccount.Get(GetCtx(),
+            MVABAccount revenue = MVABAccount.Get(GetCtx(),
                 VAF_Client_ID, VAF_Org_ID, GetVAB_AccountBook_ID(), Account_ID, VAB_SubAcct_ID,
                 VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID,
                 VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,

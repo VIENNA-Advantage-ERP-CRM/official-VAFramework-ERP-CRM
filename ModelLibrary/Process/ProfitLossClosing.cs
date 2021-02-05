@@ -155,7 +155,7 @@ namespace VAdvantage.Process
                 // get Valid Combination against Income Summary Acct  from accounting schema
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT IncomeSummary_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=" + Util.GetValueOfInt(Profit.Get_Value("VAB_AccountBook_ID"))));
                 // get account id 
-                MAccount acct = MAccount.Get(GetCtx(), validComID);
+                MVABAccount acct = MVABAccount.Get(GetCtx(), validComID);
 
                 for (int i = 0; i < dsProfit.Tables[0].Rows.Count; i++)
                 {

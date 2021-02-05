@@ -118,17 +118,17 @@ namespace VIS.Models
             int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID, string Alias)
         {
             AccountingObjects obj = new AccountingObjects();
-            MAccount acct = null;
+            MVABAccount acct = null;
             string qry = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'UserElement3_ID' AND VAF_TableView_ID = 176";
             if (Util.GetValueOfInt(DBase.DB.ExecuteScalar(qry, null, null)) > 0)
             {
-                acct = MAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, AD_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
+                acct = MVABAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, AD_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
                    C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID,
                    UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID);
             }
             else
             {
-                acct = MAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, AD_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
+                acct = MVABAccount.Get(ctx, VAF_Client_ID, VAF_Org_ID, VAB_AccountBook_ID, AD_Account_ID, VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
                     C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID, VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
             }
 

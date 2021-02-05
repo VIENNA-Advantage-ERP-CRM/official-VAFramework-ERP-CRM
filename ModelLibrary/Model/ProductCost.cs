@@ -155,7 +155,7 @@ namespace VAdvantage.Model
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Requested Product Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
 
             //if (AcctType < 1 || AcctType > 10)
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            return MAccount.Get(as1.GetCtx(), validCombination_ID);
+            return MVABAccount.Get(as1.GetCtx(), validCombination_ID);
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace VAdvantage.Model
         /// <param name="AcctType"></param>
         /// <param name="as1">accounting schema</param>
         /// <returns> Requested Product Account</returns>
-        public MAccount GetAccountDefault(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccountDefault(int AcctType, MVABAccountBook as1)
         {
             // if (AcctType < 1 || AcctType > 10)
             //Updated By raghu 7,jun,2011
@@ -293,7 +293,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            return MAccount.Get(as1.GetCtx(), validCombination_ID);
+            return MVABAccount.Get(as1.GetCtx(), validCombination_ID);
         }
 
 

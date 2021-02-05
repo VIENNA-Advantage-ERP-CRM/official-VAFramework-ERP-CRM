@@ -692,7 +692,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Set/Get Account Combination
                     if (imp.GetVAB_Acct_ValidParameter_ID() == 0)
                     {
-                        MAccount acct = MAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
+                        MVABAccount acct = MVABAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
                             imp.GetVAB_AccountBook_ID(), imp.GetAccount_ID(), 0,
                             imp.GetVAM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
                             imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetVAB_SalesRegionState_ID(),

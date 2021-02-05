@@ -453,7 +453,7 @@ namespace VAdvantage.Acct
                                     prdAmt = amt + taxAmt;
                                 }
                                 grossAmt = Decimal.Subtract(grossAmt, prdAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
+                                fact.CreateLine(_lines[i], MVABAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
                                 //grossAmt = Decimal.Add(grossAmt, taxAmt);
                             }
                         }
@@ -467,7 +467,7 @@ namespace VAdvantage.Acct
                             if (disAmt != Env.ZERO)
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, disAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
+                                fact.CreateLine(_lines[i], MVABAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
                             }
                         }
 
@@ -487,12 +487,12 @@ namespace VAdvantage.Acct
                         //}
                         if (Env.Signum(grossAmt) != 0)
                         {
-                            fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
+                            fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivables_ID),
                                 GetVAB_Currency_ID(), grossAmt, null);
                         }
                         if (Env.Signum(serviceAmt) != 0)
                         {
-                            fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
+                            fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                                 GetVAB_Currency_ID(), serviceAmt, null);
                         }
                     }
@@ -538,7 +538,7 @@ namespace VAdvantage.Acct
                                     dAmt = discount;
                                 }
                             }
-                            fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), expRevenue), GetVAB_Currency_ID(), dAmt, amt);
+                            fact.CreateLine(_lines[i], MVABAccount.Get(GetCtx(), expRevenue), GetVAB_Currency_ID(), dAmt, amt);
                             if (!_lines[i].IsItem())
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, amt);
@@ -609,7 +609,7 @@ namespace VAdvantage.Acct
                                     prdAmt = amt + taxAmt;
                                 }
                                 grossAmt = Decimal.Subtract(grossAmt, prdAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
+                                fact.CreateLine(_lines[i], MVABAccount.Get(GetCtx(), freeProd), GetVAB_Currency_ID(), prdAmt, 0);
                                 //grossAmt = Decimal.Add(grossAmt, taxAmt);
                             }
                         }
@@ -624,7 +624,7 @@ namespace VAdvantage.Acct
                             if (disAmt != Env.ZERO)
                             {
                                 grossAmt = Decimal.Subtract(grossAmt, disAmt);
-                                fact.CreateLine(_lines[i], MAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
+                                fact.CreateLine(_lines[i], MVABAccount.Get(GetCtx(), disAccount), GetVAB_Currency_ID(), disAmt, 0);
                             }
                         }
 
@@ -644,12 +644,12 @@ namespace VAdvantage.Acct
                         //}
                         if (Env.Signum(grossAmt) != 0)
                         {
-                            fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
+                            fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivables_ID),
                                 GetVAB_Currency_ID(), grossAmt, null);
                         }
                         if (Env.Signum(serviceAmt) != 0)
                         {
-                            fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
+                            fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                                 GetVAB_Currency_ID(), serviceAmt, null);
                         }
                     }
@@ -711,13 +711,13 @@ namespace VAdvantage.Acct
                             if (idr[1].ToString().ToUpper() == "S" || idr[1].ToString().ToUpper() == "R" || idr[1].ToString().ToUpper() == "E" || idr[1].ToString().ToUpper() == "CH")
                             {
                                 serviceAmt = serviceAmt + lineAmt;
-                                //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
+                                //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                                 //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                             }
                             else
                             {
                                 itemAmt = itemAmt + lineAmt;
-                                //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
+                                //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivables_ID),
                                 //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                             }
                         }
@@ -781,12 +781,12 @@ namespace VAdvantage.Acct
                     }
                     if (Env.Signum(grossAmt) != 0)
                     {
-                        fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
+                        fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivables_ID),
                             GetVAB_Currency_ID(), grossAmt, null);
                     }
                     if (Env.Signum(serviceAmt) != 0)
                     {
-                        fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
+                        fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                             GetVAB_Currency_ID(), serviceAmt, null);
                     }
                 }
@@ -849,13 +849,13 @@ namespace VAdvantage.Acct
                         if (idr[1].ToString().ToUpper() == "S" || idr[1].ToString().ToUpper() == "R" || idr[1].ToString().ToUpper() == "E" || idr[1].ToString().ToUpper() == "CH")
                         {
                             serviceAmt = serviceAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivables_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
@@ -917,12 +917,12 @@ namespace VAdvantage.Acct
                 }
                 if (Env.Signum(grossAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), receivables_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivables_ID),
                         GetVAB_Currency_ID(), null, grossAmt);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), receivablesServices_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                         GetVAB_Currency_ID(), null, serviceAmt);
                 }
             }
@@ -975,13 +975,13 @@ namespace VAdvantage.Acct
                         if (idr[1].ToString().ToUpper() == "S" || idr[1].ToString().ToUpper() == "R" || idr[1].ToString().ToUpper() == "E" || idr[1].ToString().ToUpper() == "CH")
                         {
                             serviceAmt = serviceAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivables_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
@@ -1011,7 +1011,7 @@ namespace VAdvantage.Acct
                     }
                     if (!landedCost)
                     {
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         if (line.IsItem())
                         {
                             expense = line.GetAccount(ProductCost.ACCTTYPE_P_InventoryClearing, as1);
@@ -1084,12 +1084,12 @@ namespace VAdvantage.Acct
                 }
                 if (Env.Signum(grossAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), payables_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), payables_ID),
                         GetVAB_Currency_ID(), null, grossAmt);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), payablesServices_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), payablesServices_ID),
                         GetVAB_Currency_ID(), null, serviceAmt);
                 }
                 //
@@ -1143,13 +1143,13 @@ namespace VAdvantage.Acct
                         if (idr[1].ToString().ToUpper() == "S" || idr[1].ToString().ToUpper() == "R" || idr[1].ToString().ToUpper() == "E" || idr[1].ToString().ToUpper() == "CH")
                         {
                             serviceAmt = serviceAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivablesServices_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivablesServices_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                         else
                         {
                             itemAmt = itemAmt + lineAmt;
-                            //fl = fact.CreateLine(line, MAccount.Get(GetCtx(), receivables_ID),
+                            //fl = fact.CreateLine(line, MVABAccount.Get(GetCtx(), receivables_ID),
                             //     GetVAB_Currency_ID(), ConvertedValue, null);// - line.GetAmtSource(), null);
                         }
                     }
@@ -1179,7 +1179,7 @@ namespace VAdvantage.Acct
                     }
                     if (!landedCost)
                     {
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         if (line.IsItem())
                         {
                             expense = line.GetAccount(ProductCost.ACCTTYPE_P_InventoryClearing, as1);
@@ -1250,12 +1250,12 @@ namespace VAdvantage.Acct
                 }
                 if (Env.Signum(grossAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), payables_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), payables_ID),
                         GetVAB_Currency_ID(), grossAmt, null);
                 }
                 if (Env.Signum(serviceAmt) != 0)
                 {
-                    fact.CreateLine(null, MAccount.Get(GetCtx(), payablesServices_ID),
+                    fact.CreateLine(null, MVABAccount.Get(GetCtx(), payablesServices_ID),
                         GetVAB_Currency_ID(), serviceAmt, null);
                 }
             }
@@ -1314,7 +1314,7 @@ namespace VAdvantage.Acct
                 }
                 if (!landedCost)
                 {
-                    MAccount acct = line.GetAccount(
+                    MVABAccount acct = line.GetAccount(
                         payables ? ProductCost.ACCTTYPE_P_Expense : ProductCost.ACCTTYPE_P_Revenue, as1);
                     if (payables)
                     {

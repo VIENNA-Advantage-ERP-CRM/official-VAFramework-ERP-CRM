@@ -195,7 +195,7 @@ namespace VAdvantage.Acct
                     }
 
                     //  BankInTransit   DR      CR              (Payment)
-                    MAccount acct = null;
+                    MVABAccount acct = null;
 
                     string tenderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT tendertype FROM VAB_Payment WHERE VAB_Payment_ID=" + VAB_Payment_ID + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                     // Tender Type RIBA
@@ -204,13 +204,13 @@ namespace VAdvantage.Acct
                         int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
 
                         if (acct == null)
                         {
                             validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RIBA_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type MAV
@@ -219,13 +219,13 @@ namespace VAdvantage.Acct
                         int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
 
                         if (acct == null)
                         {
                             validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_MAV_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     // Tender Type RID
@@ -234,13 +234,13 @@ namespace VAdvantage.Acct
                         int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM VAB_Bank_Acct_Acct WHERE VAB_Bank_Acct_ID=" + GetVAB_Bank_Acct_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (validComID > 0)
                         {
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
 
                         if (acct == null)
                         {
                             validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT ED000_RID_Acct FROM VAB_AccountBook_Default WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                            acct = MAccount.Get(Env.GetCtx(), validComID);
+                            acct = MVABAccount.Get(Env.GetCtx(), validComID);
                         }
                     }
                     else

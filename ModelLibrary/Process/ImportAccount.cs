@@ -591,7 +591,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         if (_createNewCombination)
                         {
-                            MAccount acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+                            MVABAccount acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
                             acct.SetAccount_ID(VAB_Acct_Element_ID);
                             if (acct.Save())
                             {

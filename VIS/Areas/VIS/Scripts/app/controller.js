@@ -5323,7 +5323,7 @@
                 //this.vo.DefaultValue = m_lookup.getDefault();
             }
             else if (gField._vo.displayType == VIS.DisplayType.Account) {
-                m_lookup = new VIS.MAccountLookup(VIS.context, gField._vo.windowNo);
+                m_lookup = new VIS.MVABAccountLookup(VIS.context, gField._vo.windowNo);
             }
             else if (gField._vo.displayType == VIS.DisplayType.PAttribute) {
                 m_lookup = new VIS.MPAttributeLookup(VIS.context, gField._vo.windowNo);

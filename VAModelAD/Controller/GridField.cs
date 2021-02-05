@@ -122,7 +122,7 @@ namespace VAdvantage.Model
             //}
             //else if (_vo.displayType == DisplayType.Account)    //  not cached
             //{
-            //    MAccountLookup ma = new MAccountLookup(_vo.GetCtx(), _vo.windowNo);
+            //    MVABAccountLookup ma = new MVABAccountLookup(_vo.GetCtx(), _vo.windowNo);
             //    _lookup = ma;
             //}
             //else if (_vo.displayType == DisplayType.PAttribute)    //  not cached

@@ -62,7 +62,7 @@ namespace VAdvantage.DataBase
                     {
                         object obj = entry.NativeObject;
                         DirectorySearcher search = new DirectorySearcher(entry);
-                        search.Filter = "(SAMAccountName=" + userName + ")";
+                        search.Filter = "(SAMVABAccountName=" + userName + ")";
                         result = search.FindOne();
                         log.Info("LDAP Admin user Credentials and user verified");
                     }
@@ -95,7 +95,7 @@ namespace VAdvantage.DataBase
                         entry = new DirectoryEntry(ldapURL, userName, password, AuthenticationTypes.Secure | AuthenticationTypes.Signing | AuthenticationTypes.Sealing);
                         DirectorySearcher search1 = new DirectorySearcher(entry);
 
-                        search1.Filter = "(SAMAccountName=" + userName + ")";
+                        search1.Filter = "(SAMVABAccountName=" + userName + ")";
                         result = search1.FindOne();
 
                         if (null == result)

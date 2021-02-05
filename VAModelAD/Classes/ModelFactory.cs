@@ -50,7 +50,7 @@ namespace VAModelAD.Classes
         "VAR_Category", "VAdvantage.Model.MRequestCategory",
         "VAGL_Group", "VAdvantage.Model.MGLCategory",
         "K_Category", "VAdvantage.Model.MKCategory",
-        "VAB_Acct_ValidParameter", "VAdvantage.Model.MAccount",
+        "VAB_Acct_ValidParameter", "VAdvantage.Model.MVABAccount",
         "VAB_Std_Stage", "VAdvantage.Model.MProjectTypePhase",
         "VAB_Std_Task", "VAdvantage.Model.MProjectTypeTask",
         "K_Source", "VAdvantage.Model.X_K_Source",

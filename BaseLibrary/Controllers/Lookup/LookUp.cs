@@ -1,7 +1,7 @@
 ﻿/********************************************************
 // Module Name    : Show field 
 // Purpose        : Base Class for MLookup, MLocator.
-                    as well as for MLocation, MAccount (only single value)
+                    as well as for MLocation, MVABAccount (only single value)
                     Maintains selectable data as NamePairs in ArrayList
                     The objects itself may be shared by the lookup implementation (ususally HashMap)
 // Class Used     : GlobalVariable.cs, CommonFunctions.cs,Ctx.cs
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
 
     /// <summary>
     ///  Base Class for MLookup, MLocator.
-    ///  as well as for MLocation, MAccount (only single value)
+    ///  as well as for MLocation, MVABAccount (only single value)
     ///  Maintains selectable data as NamePairs in ArrayList
     ///  The objects itself may be shared by the lookup implementation (ususally HashMap)
     /// </summary>

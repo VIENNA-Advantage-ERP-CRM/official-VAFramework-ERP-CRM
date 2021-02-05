@@ -133,8 +133,8 @@ namespace VAdvantage.Process
                 KeyNamePair pp = list[i];
                 int sourceVAB_Acct_ValidParameter_ID = pp.GetKey();
                 String columnName = pp.GetName();
-                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
-                MAccount targetAccount = CreateAccount(targetAS, sourceAccount);
+                MVABAccount sourceAccount = MVABAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
+                MVABAccount targetAccount = CreateAccount(targetAS, sourceAccount);
                 target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetVAB_Acct_ValidParameter_ID()));
             }
             if (!target.Save())
@@ -161,8 +161,8 @@ namespace VAdvantage.Process
                 KeyNamePair pp = list[i];
                 int sourceVAB_Acct_ValidParameter_ID = pp.GetKey();
                 String columnName = pp.GetName();
-                MAccount sourceAccount = MAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
-                MAccount targetAccount = CreateAccount(targetAS, sourceAccount);
+                MVABAccount sourceAccount = MVABAccount.Get(GetCtx(), sourceVAB_Acct_ValidParameter_ID);
+                MVABAccount targetAccount = CreateAccount(targetAS, sourceAccount);
                 target.SetValue(columnName, Utility.Util.GetValueOfInt(targetAccount.GetVAB_Acct_ValidParameter_ID()));
                 
             }
@@ -178,7 +178,7 @@ namespace VAdvantage.Process
         /// <param name="targetAS">target AS</param>
         /// <param name="sourceAcct">source account</param>
         /// <returns>target account</returns>
-        private MAccount CreateAccount(MVABAccountBook targetAS, MAccount sourceAcct)
+        private MVABAccount CreateAccount(MVABAccountBook targetAS, MVABAccount sourceAcct)
         {
             int VAF_Client_ID = targetAS.GetVAF_Client_ID();
             int VAB_AccountBook_ID = targetAS.GetVAB_AccountBook_ID();
@@ -274,7 +274,7 @@ namespace VAdvantage.Process
                 //	No UserElement
             }
             //
-            return MAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
+            return MVABAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
                 VAB_AccountBook_ID, Account_ID, VAB_SubAcct_ID,
                 VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
                 C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,

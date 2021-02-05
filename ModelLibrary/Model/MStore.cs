@@ -28,7 +28,7 @@ namespace VAdvantage.Model
     public class MStore : X_W_Store
     {
         //	Logger						
-        // private static VLogger _log = VLogger.GetVLogger(typeof(MAccount).FullName);
+        // private static VLogger _log = VLogger.GetVLogger(typeof(MVABAccount).FullName);
         private static VLogger _log = VLogger.GetVLogger(typeof(MStore).FullName);
         /// <summary>
         /// Get WStore from Cache
@@ -299,7 +299,7 @@ namespace VAdvantage.Model
         /**	Logger	*/
         //private static CLogger	s_log	= CLogger.getCLogger (MStore.class);
         /**	Logger						*/
-        // private static VLogger _log = VLogger.GetVLogger(typeof(MAccount).FullName);
+        // private static VLogger _log = VLogger.GetVLogger(typeof(MVABAccount).FullName);
 
         /// <summary>
         /// Standard Constructor

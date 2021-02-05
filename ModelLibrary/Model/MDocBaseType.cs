@@ -381,7 +381,7 @@ namespace VAdvantage.Model
             if (dbt.Equals(DOCBASETYPE_SALESORDER) || dbt.Equals(DOCBASETYPE_PURCHASEORDER))
             {
                 
-                return "VAdvantage.Acct.DoVAB_Order";
+                return "VAdvantage.Acct.Doc_Order";
             }
             if (dbt.Equals(DOCBASETYPE_MATERIALRECEIPT) || dbt.Equals(DOCBASETYPE_MATERIALDELIVERY))
             {

@@ -40,7 +40,7 @@ namespace VAdvantage.Model
          *  @param amount amount for expense(+)/revenue(-)
          *  @return Charge Account or null
          */
-        public static MAccount GetAccount(int VAB_Charge_ID, MVABAccountBook aSchema, Decimal amount)
+        public static MVABAccount GetAccount(int VAB_Charge_ID, MVABAccountBook aSchema, Decimal amount)
         {
             if (VAB_Charge_ID == 0 || aSchema == null)
                 return null;
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
             }
 
             //	Return Account
-            MAccount acct = MAccount.Get(aSchema.GetCtx(), Account_ID);
+            MVABAccount acct = MVABAccount.Get(aSchema.GetCtx(), Account_ID);
             return acct;
 
 

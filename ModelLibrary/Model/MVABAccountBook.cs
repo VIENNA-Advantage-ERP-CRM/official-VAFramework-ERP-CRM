@@ -42,13 +42,13 @@ namespace VAdvantage.Model
 
         //GL Info				
         private MVABAccountBookGL _gl = null;
-        private MAccount _SuspenseError_Acct = null;
-        private MAccount _DueTo_Acct = null;
-        private MAccount _DueFrom_Acct = null;
-        private MAccount _CurrencyBalancing_Acct = null;
+        private MVABAccount _SuspenseError_Acct = null;
+        private MVABAccount _DueTo_Acct = null;
+        private MVABAccount _DueFrom_Acct = null;
+        private MVABAccount _CurrencyBalancing_Acct = null;
 
-        private MAccount _realizedGain_Acct = null;
-        private MAccount _realizedLoss_Acct = null;
+        private MVABAccount _realizedGain_Acct = null;
+        private MVABAccount _realizedLoss_Acct = null;
 
 
 
@@ -488,7 +488,7 @@ namespace VAdvantage.Model
         /// Get Suspense Error Account
         /// </summary>
         /// <returns>suspense error account</returns>
-        public MAccount GetSuspenseBalancing_Acct()
+        public MVABAccount GetSuspenseBalancing_Acct()
         {
             if (_SuspenseError_Acct != null)
             {
@@ -499,7 +499,7 @@ namespace VAdvantage.Model
                 GetAcctSchemaGL();
             }
             int VAB_Acct_ValidParameter_ID = _gl.GetSuspenseBalancing_Acct();
-            _SuspenseError_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+            _SuspenseError_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _SuspenseError_Acct;
         }
 
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="segment">ignored</param>
         /// <returns>Account</returns>
-        public MAccount GetDueTo_Acct(String segment)
+        public MVABAccount GetDueTo_Acct(String segment)
         {
             if (_DueTo_Acct != null)
             {
@@ -519,7 +519,7 @@ namespace VAdvantage.Model
                 GetAcctSchemaGL();
             }
             int VAB_Acct_ValidParameter_ID = _gl.GetIntercompanyDueTo_Acct();
-            _DueTo_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+            _DueTo_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _DueTo_Acct;
 
         }
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
       /// </summary>
       /// <param name="segment"></param>
       /// <returns></returns>
-        public MAccount GetDueFrom_Acct(String segment)
+        public MVABAccount GetDueFrom_Acct(String segment)
         {
             if (_DueFrom_Acct != null)
             {
@@ -540,7 +540,7 @@ namespace VAdvantage.Model
                 GetAcctSchemaGL();
             }
             int VAB_Acct_ValidParameter_ID = _gl.GetIntercompanyDueFrom_Acct();
-            _DueFrom_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+            _DueFrom_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _DueFrom_Acct;
         }
 
@@ -549,7 +549,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="segment">ignored</param>
         /// <returns>Account</returns>
-        public MAccount GetFRPT_RealizedGain_Acct()
+        public MVABAccount GetFRPT_RealizedGain_Acct()
         {
             if (_realizedGain_Acct != null)
             {
@@ -562,7 +562,7 @@ namespace VAdvantage.Model
 
             int VAB_Acct_ValidParameter_ID = _gl.GetFRPT_RealizedGain_Acct();
             if (VAB_Acct_ValidParameter_ID > 0)
-                _realizedGain_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+                _realizedGain_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _realizedGain_Acct;
         }
 
@@ -571,7 +571,7 @@ namespace VAdvantage.Model
        /// </summary>
        /// <param name="segment"></param>
        /// <returns></returns>
-        public MAccount GetFRPT_RealizedLoss_Acct()
+        public MVABAccount GetFRPT_RealizedLoss_Acct()
         {
             if (_realizedLoss_Acct != null)
             {
@@ -583,7 +583,7 @@ namespace VAdvantage.Model
             }
             int VAB_Acct_ValidParameter_ID = _gl.GetFRPT_RealizedLoss_Acct();
             if (VAB_Acct_ValidParameter_ID > 0)
-                _realizedLoss_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+                _realizedLoss_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _realizedLoss_Acct;
         }
 
@@ -606,7 +606,7 @@ namespace VAdvantage.Model
         /// Get Currency Balancing Account
         /// </summary>
         /// <returns>currency balancing account</returns>
-        public MAccount GetCurrencyBalancing_Acct()
+        public MVABAccount GetCurrencyBalancing_Acct()
         {
             if (_CurrencyBalancing_Acct != null)
             {
@@ -617,7 +617,7 @@ namespace VAdvantage.Model
                 GetAcctSchemaGL();
             }
             int VAB_Acct_ValidParameter_ID = _gl.GetCurrencyBalancing_Acct();
-            _CurrencyBalancing_Acct = MAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
+            _CurrencyBalancing_Acct = MVABAccount.Get(GetCtx(), VAB_Acct_ValidParameter_ID);
             return _CurrencyBalancing_Acct;
         }
 

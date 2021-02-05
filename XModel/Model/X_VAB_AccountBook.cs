@@ -467,7 +467,7 @@ namespace VAdvantage.Model
         /** US GAAP = US */
         public static String GAAP_USGAAP = "US";
         /** Custom Accounting Rules = XX */
-        public static String GAAP_CustomAccountingRules = "XX";
+        public static String GAAP_CustoMVABAccountingRules = "XX";
         /** Is test a valid value.
         @param test testvalue
         @returns true if valid **/

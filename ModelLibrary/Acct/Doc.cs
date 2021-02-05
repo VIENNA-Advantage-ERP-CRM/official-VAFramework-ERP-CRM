@@ -2022,7 +2022,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1);
             if (VAB_Acct_ValidParameter_ID == 0)
@@ -2030,7 +2030,7 @@ namespace VAdvantage.Acct
                 return null;
             }
             //	Return Account
-            MAccount acct = MAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
+            MVABAccount acct = MVABAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
             return acct;
         }
 
@@ -2041,7 +2041,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1, int BPartner_ID)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1, int BPartner_ID)
         {
             int VAB_Acct_ValidParameter_ID = GetValidCombination_ID(AcctType, as1, BPartner_ID);
             if (VAB_Acct_ValidParameter_ID == 0)
@@ -2049,7 +2049,7 @@ namespace VAdvantage.Acct
                 return null;
             }
             //	Return Account
-            MAccount acct = MAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
+            MVABAccount acct = MVABAccount.Get(as1.GetCtx(), VAB_Acct_ValidParameter_ID);
             return acct;
         }
 

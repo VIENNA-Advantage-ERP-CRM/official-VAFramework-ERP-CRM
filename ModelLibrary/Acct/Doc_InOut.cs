@@ -368,7 +368,7 @@ namespace VAdvantage.Acct
                         return null;
                     }
                     //  Inventory/Asset			DR
-                    MAccount assets = line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1);
+                    MVABAccount assets = line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1);
                     if (product.IsService())
                         assets = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
 

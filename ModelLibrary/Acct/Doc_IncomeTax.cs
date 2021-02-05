@@ -128,14 +128,14 @@ namespace ModelLibrary.Acct
                     }
 
                     //	Account
-                    MAccount expense = MAccount.Get(GetCtx(), line.GetVAB_IncomeTax_Acct());
+                    MVABAccount expense = MVABAccount.Get(GetCtx(), line.GetVAB_IncomeTax_Acct());
                     fact.CreateLine(dline, expense, GetVAB_Currency_ID(), amount);
                 }
 
                 if (total != Env.ZERO)
                 {
                     int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT T_Due_Acct FROM VAB_Tax_Acct WHERE VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                    MAccount acct = MAccount.Get(GetCtx(), validComID);
+                    MVABAccount acct = MVABAccount.Get(GetCtx(), validComID);
                     fact.CreateLine(null, acct,GetVAB_Currency_ID(), Decimal.Negate(total));
                 }
 

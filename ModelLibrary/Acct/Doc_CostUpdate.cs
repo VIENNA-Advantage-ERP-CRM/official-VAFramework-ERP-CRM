@@ -175,7 +175,7 @@ namespace VAdvantage.Acct
                         {
                             continue;
                         }
-                        MAccount db_acct, cr_acct;
+                        MVABAccount db_acct, cr_acct;
 
                         /* Decide the Credit and Debit Accounts */
                         if (Env.Signum(amt) == 1)

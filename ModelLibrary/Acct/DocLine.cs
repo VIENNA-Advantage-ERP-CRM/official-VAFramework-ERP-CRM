@@ -64,7 +64,7 @@ namespace VAdvantage.Acct
         // Production indicator	
         private bool _productionBOM = false;
         // Account used only for GL Journal    
-        private MAccount _account = null;
+        private MVABAccount _account = null;
 
         // Accounting Date				
         private DateTime? _DateAcct = null;
@@ -458,7 +458,7 @@ namespace VAdvantage.Acct
         /// Set GL Journal Account
         /// </summary>
         /// <param name="acct">account</param>
-        public void SetAccount(MAccount acct)
+        public void SetAccount(MVABAccount acct)
         {
             _account = acct;
         }
@@ -467,7 +467,7 @@ namespace VAdvantage.Acct
         /// Get GL Journal Account
         /// </summary>
         /// <returns>account</returns>
-        public MAccount GetAccount()
+        public MVABAccount GetAccount()
         {
             return _account;
         }
@@ -478,7 +478,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Requested Product Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             //	Charge Account
             if (GetVAM_Product_ID() == 0 && GetVAB_Charge_ID() != 0)
@@ -488,7 +488,7 @@ namespace VAdvantage.Acct
                 {
                     amt = new Decimal(+1);				//	Expense (+)
                 }
-                MAccount acct = GetChargeAccount(as1, amt);
+                MVABAccount acct = GetChargeAccount(as1, amt);
                 if (acct != null)
                 {
                     return acct;
@@ -522,7 +522,7 @@ namespace VAdvantage.Acct
         /// <param name="as1">account schema</param>
         /// <param name="amount">amount for expense(+)/revenue(-)</param>
         /// <returns>Charge Account or null</returns>
-        public MAccount GetChargeAccount(MVABAccountBook as1, Decimal? amount)
+        public MVABAccount GetChargeAccount(MVABAccountBook as1, Decimal? amount)
         {
             int VAB_Charge_ID = GetVAB_Charge_ID();
             if (VAB_Charge_ID == 0)

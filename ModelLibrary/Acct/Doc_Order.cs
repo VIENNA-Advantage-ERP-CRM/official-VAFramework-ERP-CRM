@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : DoVAB_Order
+ * Class Name     : Doc_Order
  * Purpose        : Post Order Documents.
                     <pre>
                     Table:              VAB_Order (259)
@@ -48,12 +48,12 @@ namespace VAdvantage.Acct
         /// <param name="ass">accounting schemata</param>
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
-        public DoVAB_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
+        public Doc_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MOrder), idr, null, trxName)
         {
 
         }
-        public DoVAB_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
+        public Doc_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MOrder), dr, null, trxName)
         {
 
@@ -363,11 +363,11 @@ namespace VAdvantage.Acct
                         total = Decimal.Add(total, cost);
 
                         //	Account
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         fact.CreateLine(line, expense, GetVAB_Currency_ID(), cost, null);
                     }
                     //	Offset
-                    MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
+                    MVABAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
                     if (offset == null)
                     {
                         _error = "@NotFound@ @CommitmentOffset_Acct@";
@@ -395,11 +395,11 @@ namespace VAdvantage.Acct
                         total = Decimal.Add(total, cost);
 
                         //	Account
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         fact.CreateLine(line, expense, GetVAB_Currency_ID(), null, cost);
                     }
                     //	Offset
-                    MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
+                    MVABAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
                     if (offset == null)
                     {
                         _error = "@NotFound@ @CommitmentOffset_Acct@";
@@ -572,7 +572,7 @@ namespace VAdvantage.Acct
             Decimal Qty, int VAB_InvoiceLine_ID, Decimal multiplier)
         {
             Fact fact = new Fact(doc, as1, Fact.POST_Commitment);
-            DocLine[] commitments = DoVAB_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
+            DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
             Decimal total = Env.ZERO;
             int VAB_Currency_ID = -1;
             for (int i = 0; i < commitments.Length; i++)
@@ -592,11 +592,11 @@ namespace VAdvantage.Acct
                 total = Decimal.Add(total, cost);
 
                 //	Account
-                MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                 fact.CreateLine(line, expense, VAB_Currency_ID, null, cost);
             }
             //	Offset
-            MAccount offset = doc.GetAccount(ACCTTYPE_CommitmentOffset, as1);
+            MVABAccount offset = doc.GetAccount(ACCTTYPE_CommitmentOffset, as1);
             if (offset == null)
             {
                 doc._error = "@NotFound@ @CommitmentOffset_Acct@";

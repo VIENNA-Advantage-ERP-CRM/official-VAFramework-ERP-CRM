@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         /**	Currency Precision		*/
         private int m_precision = 2;
         /**	Account Combination		*/
-        private MAccount m_account = null;
+        private MVABAccount m_account = null;
         /** Account Element			*/
         private MElementValue m_accountElement = null;
 
@@ -395,7 +395,7 @@ namespace VAdvantage.Model
         ///	Set VAB_Acct_ValidParameter_ID
         /// </summary>
         /// <param name="acct">account</param>
-        public void SetVAB_Acct_ValidParameter_ID(MAccount acct)
+        public void SetVAB_Acct_ValidParameter_ID(MVABAccount acct)
         {
             if (acct == null)
             {
@@ -410,10 +410,10 @@ namespace VAdvantage.Model
         /// Get Account (Valid Combination)
         /// </summary>
         /// <returns> combination or null</returns>
-        public MAccount GetAccount()
+        public MVABAccount GetAccount()
         {
             if (m_account == null && GetVAB_Acct_ValidParameter_ID() != 0)
-                m_account = new MAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
+                m_account = new MVABAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
             return m_account;
         }	//	getValidCombination
 
@@ -425,7 +425,7 @@ namespace VAdvantage.Model
         {
             if (m_accountElement == null)
             {
-                MAccount vc = GetAccount();
+                MVABAccount vc = GetAccount();
                 if (vc != null && vc.GetAccount_ID() != 0)
                 {
                     m_accountElement = new MElementValue(GetCtx(), vc.GetAccount_ID(), Get_TrxName());
@@ -647,7 +647,7 @@ namespace VAdvantage.Model
                         User2_ID = Util.GetValueOfInt(Get_Value("User2_ID"));
                 }
 
-                MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
+                MVABAccount acct = MVABAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
                         VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
                         VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
@@ -675,7 +675,7 @@ namespace VAdvantage.Model
         {
             if (GetVAB_Acct_ValidParameter_ID() > 0)
             {
-                MAccount combi = new MAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
+                MVABAccount combi = new MVABAccount(GetCtx(), GetVAB_Acct_ValidParameter_ID(), Get_TrxName());
                 if (Get_ColumnIndex("Account_ID") > 0)
                     Set_Value("Account_ID", combi.GetAccount_ID() > 0 ? combi.GetAccount_ID() : 0);
                 if (Get_ColumnIndex("VAB_SubAcct_ID") > 0)

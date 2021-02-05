@@ -332,14 +332,14 @@ namespace VIS.Controllers
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public JsonResult GetCurrencyFromAccountingSchema(string fields)
+        public JsonResult GetCurrencyFroMVABAccountingSchema(string fields)
         {
             if (Session["Ctx"] != null)
             {
                 string retJSON = "";
                 Ctx ctx = Session["ctx"] as Ctx;
                 CommonModel objCommonModel = new CommonModel();
-                retJSON = JsonConvert.SerializeObject(objCommonModel.GetCurrencyFromAccountingSchema(ctx, fields));
+                retJSON = JsonConvert.SerializeObject(objCommonModel.GetCurrencyFroMVABAccountingSchema(ctx, fields));
                 return Json(retJSON, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
@@ -3186,7 +3186,7 @@ namespace VIS.Controllers
         /// <param name="ctx"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public Dictionary<string, object> GetCurrencyFromAccountingSchema(Ctx ctx, string fields)
+        public Dictionary<string, object> GetCurrencyFroMVABAccountingSchema(Ctx ctx, string fields)
         {
             Dictionary<string, object> retDic = null;
             try

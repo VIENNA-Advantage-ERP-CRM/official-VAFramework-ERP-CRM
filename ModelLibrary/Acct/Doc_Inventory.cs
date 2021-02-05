@@ -161,7 +161,7 @@ namespace VAdvantage.Acct
 
                 //  InventoryDiff   DR      CR
                 //	or Charge
-                MAccount invDiff = line.GetChargeAccount(as1, Decimal.Negate(costs));
+                MVABAccount invDiff = line.GetChargeAccount(as1, Decimal.Negate(costs));
                 if (invDiff == null)
                 {
                     invDiff = GetAccount(Doc.ACCTTYPE_InvDifferences, as1);

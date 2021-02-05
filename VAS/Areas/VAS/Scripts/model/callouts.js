@@ -22000,7 +22000,7 @@
             //var adClientID = ctx.getVAF_Client_ID();
             //var yearID = mTab.getValue("VAB_Year_ID");
 
-            var dr = VIS.dataContext.getJSONRecord("Common/GetCurrencyFromAccountingSchema", paramString);
+            var dr = VIS.dataContext.getJSONRecord("Common/GetCurrencyFroMVABAccountingSchema", paramString);
             if (dr != null) {
                 var VAB_Currency_ID = Util.getValueOfInt(dr["CurrencyID"]);
 

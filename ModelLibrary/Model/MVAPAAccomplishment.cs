@@ -19,10 +19,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAchievement : X_VAPA_Accomplishment
+    public class MVAPAAccomplishment : X_VAPA_Accomplishment
     {
         /**	Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MAchievement).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAPAAccomplishment).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAPA_Accomplishment_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAchievement(Ctx ctx, int VAPA_Accomplishment_ID, Trx trxName)
+        public MVAPAAccomplishment(Ctx ctx, int VAPA_Accomplishment_ID, Trx trxName)
             : base(ctx, VAPA_Accomplishment_ID, trxName)
         {
         }
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MAchievement(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAPAAccomplishment(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="measure">Measure</param>
         /// <returns>array of Achievements</returns>
-        public static MAchievement[] Get(MMeasure measure)
+        public static MVAPAAccomplishment[] Get(MMeasure measure)
         {
             return GetOfMeasure(measure.GetCtx(), measure.GetVAPA_Evaluate_ID());
         }
@@ -62,9 +62,9 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAPA_Evaluate_ID">measure id</param>
         /// <returns>array of Achievements</returns>
-        public static MAchievement[] GetOfMeasure(Ctx ctx, int VAPA_Evaluate_ID)
+        public static MVAPAAccomplishment[] GetOfMeasure(Ctx ctx, int VAPA_Evaluate_ID)
         {
-            List<MAchievement> list = new List<MAchievement>();
+            List<MVAPAAccomplishment> list = new List<MVAPAAccomplishment>();
             String sql = "SELECT * FROM VAPA_Accomplishment "
                 + "WHERE VAPA_Evaluate_ID=" + VAPA_Evaluate_ID + " AND IsAchieved='Y' ORDER BY SeqNo, DateDoc";
             try
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MAchievement(ctx, dr, null));
+                        list.Add(new MVAPAAccomplishment(ctx, dr, null));
                     }
                 }
             }
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
             }
 
             //
-            MAchievement[] retValue = new MAchievement[list.Count];
+            MVAPAAccomplishment[] retValue = new MVAPAAccomplishment[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MAchievement[");
+            StringBuilder sb = new StringBuilder("MVAPAAccomplishment[");
             sb.Append(Get_ID()).Append("-").Append(GetName()).Append("]");
             return sb.ToString();
         }

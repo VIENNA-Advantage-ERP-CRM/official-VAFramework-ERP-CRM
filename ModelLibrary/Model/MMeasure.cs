@@ -209,11 +209,11 @@ namespace VAdvantage.Model
                     trunc = TimeUtil.TRUNC_WEEK;
                 DateTime compare = TimeUtil.Trunc(today, trunc);
                 //
-                MAchievement[] achievements = MAchievement.GetOfMeasure(GetCtx(), GetVAPA_Evaluate_ID());
+                MVAPAAccomplishment[] achievements = MVAPAAccomplishment.GetOfMeasure(GetCtx(), GetVAPA_Evaluate_ID());
                 Decimal ManualActual = Env.ZERO;
                 for (int j = 0; j < achievements.Length; j++)
                 {
-                    MAchievement achievement = achievements[j];
+                    MVAPAAccomplishment achievement = achievements[j];
                     if (achievement.IsAchieved() && achievement.GetDateDoc() != null)
                     {
                         DateTime ach = TimeUtil.Trunc(achievement.GetDateDoc(), trunc);
