@@ -96,9 +96,9 @@ namespace VAdvantage.Process
             invoice.SetBPartner(bp);
 
             // JID_0101: When we generate the AP invoice from Commission run window, its giving price list error.
-            if (invoice.GetM_PriceList_ID() == 0)
+            if (invoice.GetVAM_PriceList_ID() == 0)
             {
-                string sql = "SELECT M_PriceList_ID FROM M_PriceList WHERE IsActive = 'Y' AND VAF_Client_ID = " + com.GetVAF_Client_ID() + " AND VAF_Org_ID = " + com.GetVAF_Org_ID()
+                string sql = "SELECT VAM_PriceList_ID FROM VAM_PriceList WHERE IsActive = 'Y' AND VAF_Client_ID = " + com.GetVAF_Client_ID() + " AND VAF_Org_ID = " + com.GetVAF_Org_ID()
                             + " AND IsDefault='Y' AND IsSOPriceList='N'";
                 int pricelist = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (pricelist == 0)
@@ -114,7 +114,7 @@ namespace VAdvantage.Process
                 }
                 if (pricelist > 0)
                 {
-                    invoice.SetM_PriceList_ID(pricelist);
+                    invoice.SetVAM_PriceList_ID(pricelist);
                 }
             }
             //	invoice.setDocumentNo (comRun.getDocumentNo());		//	may cause unique constraint

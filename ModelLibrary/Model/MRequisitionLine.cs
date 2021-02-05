@@ -27,30 +27,30 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRequisitionLine : X_M_RequisitionLine
+    public class MRequisitionLine : X_VAM_RequisitionLine
     {
         // Parent					
         private MRequisition _parent = null;
         //	PriceList				
-        private int _M_PriceList_ID = 0;
+        private int _VAM_PriceList_ID = 0;
         // Temp BPartner			
         private int _VAB_BusinessPartner_ID = 0;
 
         /**
          * 	Standard Constructor
          *	@param Ctx context
-         *	@param M_RequisitionLine_ID id
+         *	@param VAM_RequisitionLine_ID id
          *	@param trxName transaction
          */
-        public MRequisitionLine(Ctx ctx, int M_RequisitionLine_ID, Trx trxName)
-            : base(ctx, M_RequisitionLine_ID, trxName)
+        public MRequisitionLine(Ctx ctx, int VAM_RequisitionLine_ID, Trx trxName)
+            : base(ctx, VAM_RequisitionLine_ID, trxName)
         {
             try
             {
-                if (M_RequisitionLine_ID == 0)
+                if (VAM_RequisitionLine_ID == 0)
                 {
-                    //	setM_Requisition_ID (0);
-                    SetLine(0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM M_RequisitionLine WHERE M_Requisition_ID=@M_Requisition_ID@
+                    //	setVAM_Requisition_ID (0);
+                    SetLine(0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAM_RequisitionLine WHERE VAM_Requisition_ID=@VAM_Requisition_ID@
                     SetLineNetAmt(Env.ZERO);
                     SetPriceActual(Env.ZERO);
                     SetQty(Env.ONE);	// 1
@@ -96,8 +96,8 @@ namespace VAdvantage.Model
             try
             {
                 SetClientOrg(req);
-                SetM_Requisition_ID(req.GetM_Requisition_ID());
-                _M_PriceList_ID = req.GetM_PriceList_ID();
+                SetVAM_Requisition_ID(req.GetVAM_Requisition_ID());
+                _VAM_PriceList_ID = req.GetVAM_PriceList_ID();
                 _parent = req;
             }
             catch
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
             {
                 if (_parent == null)
                 {
-                    _parent = new MRequisition(GetCtx(), GetM_Requisition_ID(), Get_TrxName());
+                    _parent = new MRequisition(GetCtx(), GetVAM_Requisition_ID(), Get_TrxName());
                 }
             }
             catch
@@ -150,19 +150,19 @@ namespace VAdvantage.Model
             {
                 if (GetVAB_Charge_ID() != 0)
                 {
-                    MCharge charge = MCharge.Get(GetCtx(), GetVAB_Charge_ID());
+                    MVABCharge charge = MVABCharge.Get(GetCtx(), GetVAB_Charge_ID());
                     SetPriceActual(charge.GetChargeAmt());
                 }
-                if (GetM_Product_ID() == 0)
+                if (GetVAM_Product_ID() == 0)
                     return;
-                if (_M_PriceList_ID == 0)
-                    _M_PriceList_ID = GetParent().GetM_PriceList_ID();
-                if (_M_PriceList_ID == 0)
+                if (_VAM_PriceList_ID == 0)
+                    _VAM_PriceList_ID = GetParent().GetVAM_PriceList_ID();
+                if (_VAM_PriceList_ID == 0)
                 {
                     log.Log(Level.SEVERE, "PriceList unknown!");
                     return;
                 }
-                SetPrice(_M_PriceList_ID);
+                SetPrice(_VAM_PriceList_ID);
             }
             catch (Exception e)
             {
@@ -172,20 +172,20 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Price for Product and PriceList
-         * 	@param M_PriceList_ID price list
+         * 	@param VAM_PriceList_ID price list
          */
-        public void SetPrice(int M_PriceList_ID)
+        public void SetPrice(int VAM_PriceList_ID)
         {
             try
             {
-                if (GetM_Product_ID() == 0)
+                if (GetVAM_Product_ID() == 0)
                     return;
                 //
-                log.Fine("M_PriceList_ID=" + M_PriceList_ID);
+                log.Fine("VAM_PriceList_ID=" + VAM_PriceList_ID);
                 bool isSOTrx = false;
                 MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    GetM_Product_ID(), GetVAB_BusinessPartner_ID(), GetQty(), isSOTrx);
-                pp.SetM_PriceList_ID(M_PriceList_ID);
+                    GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetQty(), isSOTrx);
+                pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
 
                 // 
                 // JID_0495_1: Set unit price on Requisition Line based on selected Pricelist on header
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
             }
             catch
             {
-               // MessageBox.Show("MRequisitionLine--SetPrice(int M_PriceList_ID)");
+               // MessageBox.Show("MRequisitionLine--SetPrice(int VAM_PriceList_ID)");
             }
         }
 
@@ -222,47 +222,47 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Product - Callout
-         *	@param oldM_Product_ID old value
-         *	@param newM_Product_ID new value
+         *	@param oldVAM_Product_ID old value
+         *	@param newVAM_Product_ID new value
          *	@param windowNo window
          *	@throws Exception
          */
         //@UICallout
-        public void SetM_Product_ID(String oldM_Product_ID, String newM_Product_ID, int windowNo)
+        public void SetVAM_Product_ID(String oldVAM_Product_ID, String newVAM_Product_ID, int windowNo)
         {
             try
             {
-                if (newM_Product_ID == null || newM_Product_ID.Length == 0)
+                if (newVAM_Product_ID == null || newVAM_Product_ID.Length == 0)
                     return;
-                int M_Product_ID = int.Parse(newM_Product_ID);
-                base.SetM_Product_ID(M_Product_ID);
-                if (M_Product_ID == 0)
+                int VAM_Product_ID = int.Parse(newVAM_Product_ID);
+                base.SetVAM_Product_ID(VAM_Product_ID);
+                if (VAM_Product_ID == 0)
                 {
-                    SetM_AttributeSetInstance_ID(0);
+                    SetVAM_PFeature_SetInstance_ID(0);
                     return;
                 }
                 //	Set Attribute
-                int M_AttributeSetInstance_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "M_AttributeSetInstance_ID");
-                if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "M_Product_ID") == M_Product_ID
-                    && M_AttributeSetInstance_ID != 0)
+                int VAM_PFeature_SetInstance_ID = GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAM_PFeature_SetInstance_ID");
+                if (GetCtx().GetContextAsInt(Env.WINDOW_INFO, Env.TAB_INFO, "VAM_Product_ID") == VAM_Product_ID
+                    && VAM_PFeature_SetInstance_ID != 0)
                 {
-                    SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+                    SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
                 }
                 else
                 {
-                    SetM_AttributeSetInstance_ID(0);
+                    SetVAM_PFeature_SetInstance_ID(0);
                 }
 
                 int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
                 Decimal Qty = GetQty();
                 bool isSOTrx = false;
                 MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
+                    VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
                 //
-                int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");
-                pp.SetM_PriceList_ID(M_PriceList_ID);
-                int M_PriceList_Version_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_Version_ID");
-                pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                int VAM_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceList_ID");
+                pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
+                int VAM_PriceListVersion_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceListVersion_ID");
+                pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
                 //DateTime orderDate = new DateTime(GetCtx().GetContextAsTime(windowNo, "DateRequired"));
                 DateTime orderDate = Convert.ToDateTime(GetCtx().GetContextAsTime(windowNo, "DateRequired"));
                 pp.SetPriceDate(orderDate);
@@ -335,16 +335,16 @@ namespace VAdvantage.Model
                 if (columnName.Equals("Qty")
                     && "Y".Equals(GetCtx().GetContext(windowNo, "DiscountSchema")))
                 {
-                    int M_Product_ID = GetM_Product_ID();
+                    int VAM_Product_ID = GetVAM_Product_ID();
                     int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
                     bool isSOTrx = false;
                     MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                        M_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
+                        VAM_Product_ID, VAB_BusinessPartner_ID, qty, isSOTrx);
                     //
-                    int M_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_ID");
-                    pp.SetM_PriceList_ID(M_PriceList_ID);
-                    int M_PriceList_Version_ID = GetCtx().GetContextAsInt(windowNo, "M_PriceList_Version_ID");
-                    pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                    int VAM_PriceList_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceList_ID");
+                    pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
+                    int VAM_PriceListVersion_ID = GetCtx().GetContextAsInt(windowNo, "VAM_PriceListVersion_ID");
+                    pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
                     //DateTime orderDate = new DateTime(getContext().getContextAsTime(windowNo, "DateInvoiced"));
                     DateTime orderDate = Convert.ToDateTime(GetCtx().GetContextAsTime(windowNo, "DateInvoiced"));
                     pp.SetPriceDate(orderDate);
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
             try
             {
                 // Check Product_ID or charge_ID before save
-                if (GetM_Product_ID() == 0 && GetVAB_Charge_ID() == 0)
+                if (GetVAM_Product_ID() == 0 && GetVAB_Charge_ID() == 0)
                 {
                     log.SaveError("VIS_NOProductOrCharge", "");
                     return false;
@@ -394,21 +394,21 @@ namespace VAdvantage.Model
                     return false;
                 }
 
-                MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
+                MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
                 if (GetLine() == 0)
                 {
-                    String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM M_RequisitionLine WHERE M_Requisition_ID=@param1";
-                    int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetM_Requisition_ID());
+                    String sql = "SELECT COALESCE(MAX(Line),0)+10 FROM VAM_RequisitionLine WHERE VAM_Requisition_ID=@param1";
+                    int ii = DataBase.DB.GetSQLValue(Get_TrxName(), sql, GetVAM_Requisition_ID());
                     SetLine(ii);
                 }
 
                 // change to set Converted Quantity in Movement quantity if there is differnce in UOM of Base Product and UOM Selected on line
-                if (GetM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("VAB_UOM_ID")))
+                if (GetVAM_Product_ID() > 0 && Get_ColumnIndex("QtyEntered") > 0 && (newRecord || Is_ValueChanged("QtyEntered") || Is_ValueChanged("VAB_UOM_ID")))
                 {
                     Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
                     if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                     {
-                        SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
+                        SetQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                     }
                 }
 
@@ -423,13 +423,13 @@ namespace VAdvantage.Model
                 }
 
                 //	Product & ASI - Charge
-                if (GetM_Product_ID() != 0 && GetVAB_Charge_ID() != 0)
+                if (GetVAM_Product_ID() != 0 && GetVAB_Charge_ID() != 0)
                 {
                     SetVAB_Charge_ID(0);
                 }
-                if (GetM_AttributeSetInstance_ID() != 0 && GetVAB_Charge_ID() != 0)
+                if (GetVAM_PFeature_SetInstance_ID() != 0 && GetVAB_Charge_ID() != 0)
                 {
-                    SetM_AttributeSetInstance_ID(0);
+                    SetVAM_PFeature_SetInstance_ID(0);
                 }
                 //
                 if (GetPriceActual().CompareTo(Env.ZERO) == 0)
@@ -482,11 +482,11 @@ namespace VAdvantage.Model
         private bool UpdateHeader()
         {
             log.Fine("");
-            String sql = "UPDATE M_Requisition r"
+            String sql = "UPDATE VAM_Requisition r"
                 + " SET TotalLines="
-                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM M_RequisitionLine rl "
-                    + "WHERE r.M_Requisition_ID=rl.M_Requisition_ID) "
-                + "WHERE M_Requisition_ID=" + GetM_Requisition_ID();
+                    + "(SELECT COALESCE(SUM(LineNetAmt),0) FROM VAM_RequisitionLine rl "
+                    + "WHERE r.VAM_Requisition_ID=rl.VAM_Requisition_ID) "
+                + "WHERE VAM_Requisition_ID=" + GetVAM_Requisition_ID();
             int no = Convert.ToInt32(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
             if (no != 1)
             {

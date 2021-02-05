@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAttributeUse
  * Purpose        : Attribute Use Model 
- * Class Used     : X_M_AttributeUse
+ * Class Used     : X_VAM_PFeature_Use
  * Chronological    Development
  * Raghunandan     22-Oct-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeUse : X_M_AttributeUse
+    public class MAttributeUse : X_VAM_PFeature_Use
     {
         /// <summary>
         /// Persistency Constructor
@@ -63,14 +63,14 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             //	also used for afterDelete
-            String sql = "UPDATE M_AttributeSet mas"
+            String sql = "UPDATE VAM_PFeature_Set mas"
                 + " SET IsInstanceAttribute='Y' "
-                + "WHERE M_AttributeSet_ID=" + GetM_AttributeSet_ID()
+                + "WHERE VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID()
                 + " AND IsInstanceAttribute='N'"
                 + " AND (IsSerNo='Y' OR IsLot='Y' OR IsGuaranteeDate='Y'"
-                    + " OR EXISTS (SELECT * FROM M_AttributeUse mau"
+                    + " OR EXISTS (SELECT * FROM VAM_PFeature_Use mau"
                         + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
-                        + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
+                        + "WHERE mau.VAM_PFeature_Set_ID=mas.VAM_PFeature_Set_ID"
                         + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                         + " AND ma.IsInstanceAttribute='Y')"
                         + ")";
@@ -80,14 +80,14 @@ namespace VAdvantage.Model
                 log.Fine("afterSave - Set Instance Attribute");
             }
             //
-            sql = "UPDATE M_AttributeSet mas"
+            sql = "UPDATE VAM_PFeature_Set mas"
                 + " SET IsInstanceAttribute='N' "
-                + "WHERE M_AttributeSet_ID=" + GetM_AttributeSet_ID()
+                + "WHERE VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID()
                 + " AND IsInstanceAttribute='Y'"
                 + "	AND IsSerNo='N' AND IsLot='N' AND IsGuaranteeDate='N'"
-                + " AND NOT EXISTS (SELECT * FROM M_AttributeUse mau"
+                + " AND NOT EXISTS (SELECT * FROM VAM_PFeature_Use mau"
                     + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
-                    + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
+                    + "WHERE mau.VAM_PFeature_Set_ID=mas.VAM_PFeature_Set_ID"
                     + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                     + " AND ma.IsInstanceAttribute='Y')";
             no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));

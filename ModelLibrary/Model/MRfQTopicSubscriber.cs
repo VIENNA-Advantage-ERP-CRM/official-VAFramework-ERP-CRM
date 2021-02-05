@@ -106,9 +106,9 @@ namespace VAdvantage.Model
         /// <summary>
         /// Is the product included?
         /// </summary>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <returns>true if no restrictions or included in "positive" only list</returns>
-        public bool IsIncluded(int M_Product_ID)
+        public bool IsIncluded(int VAM_Product_ID)
         {
             //	No restrictions
             if (GetRestrictions(false).Length == 0)
@@ -124,12 +124,12 @@ namespace VAdvantage.Model
                     continue;
                 }
                 //	Product
-                if (restriction.GetM_Product_ID() == M_Product_ID)
+                if (restriction.GetVAM_Product_ID() == VAM_Product_ID)
                 {
                     return true;
                 }
                 //	Product Category
-                if (MProductCategory.IsCategory(restriction.GetM_Product_Category_ID(), M_Product_ID))
+                if (MProductCategory.IsCategory(restriction.GetVAM_ProductCategory_ID(), VAM_Product_ID))
                 {
                     return true;
                 }

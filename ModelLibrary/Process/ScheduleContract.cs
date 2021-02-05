@@ -63,9 +63,9 @@ namespace ViennaAdvantageServer.Process
                 //     CSchedule.SetEndDate(end);
                 //     CSchedule.SetNoOfDays((end - start).Days+1);
                 // }
-                CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+                CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
                 // Added by Vivek on 21/11/2017 asigned by Pradeep
-                CSchedule.SetM_AttributeSetInstance_ID(contract.GetM_AttributeSetInstance_ID());
+                CSchedule.SetVAM_PFeature_SetInstance_ID(contract.GetVAM_PFeature_SetInstance_ID());
                 CSchedule.SetTotalAmt(contract.GetLineNetAmt()); 
                 CSchedule.SetGrandTotal(contract.GetGrandTotal());
                 CSchedule.SetTaxAmt(contract.GetTaxAmt());
@@ -135,7 +135,7 @@ namespace ViennaAdvantageServer.Process
         //        //     CSchedule.SetEndDate(end);
         //        // CSchedule.SetNoOfDays((end - start).Days+1);
         //        // }
-        //        CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+        //        CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
         //        CSchedule.SetTotalAmt(contract.GetLineNetAmt());
         //        CSchedule.SetGrandTotal(contract.GetGrandTotal());
         //        CSchedule.SetTaxAmt(contract.GetTaxAmt());

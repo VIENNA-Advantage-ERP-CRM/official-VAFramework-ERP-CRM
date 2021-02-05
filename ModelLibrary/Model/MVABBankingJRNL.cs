@@ -819,7 +819,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_Currency_id</returns>
         public int GetVAB_Currency_ID()
         {
-            /*/	MPriceList pl = MPriceList.get(getCtx(), getM_PriceList_ID());
+            /*/	MPriceList pl = MPriceList.get(getCtx(), getVAM_PriceList_ID());
             //	return pl.getVAB_Currency_ID();*/
             return 0;
         }

@@ -11,34 +11,34 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_InOutLineConfirm
+/** Generated Model for VAM_Inv_InOutLineConfirm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_InOutLineConfirm : PO
+    public class X_VAM_Inv_InOutLineConfirm : PO
     {
-        public X_M_InOutLineConfirm(Context ctx, int M_InOutLineConfirm_ID, Trx trxName)
-            : base(ctx, M_InOutLineConfirm_ID, trxName)
+        public X_VAM_Inv_InOutLineConfirm(Context ctx, int VAM_Inv_InOutLineConfirm_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineConfirm_ID, trxName)
         {
-            /** if (M_InOutLineConfirm_ID == 0)
+            /** if (VAM_Inv_InOutLineConfirm_ID == 0)
             {
             SetConfirmedQty (0.0);
-            SetM_InOutConfirm_ID (0);
-            SetM_InOutLineConfirm_ID (0);
-            SetM_InOutLine_ID (0);
+            SetVAM_Inv_InOutConfirm_ID (0);
+            SetVAM_Inv_InOutLineConfirm_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
             SetProcessed (false);	// N
             SetTargetQty (0.0);
             }
              */
         }
-        public X_M_InOutLineConfirm(Ctx ctx, int M_InOutLineConfirm_ID, Trx trxName)
-            : base(ctx, M_InOutLineConfirm_ID, trxName)
+        public X_VAM_Inv_InOutLineConfirm(Ctx ctx, int VAM_Inv_InOutLineConfirm_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineConfirm_ID, trxName)
         {
-            /** if (M_InOutLineConfirm_ID == 0)
+            /** if (VAM_Inv_InOutLineConfirm_ID == 0)
             {
             SetConfirmedQty (0.0);
-            SetM_InOutConfirm_ID (0);
-            SetM_InOutLineConfirm_ID (0);
-            SetM_InOutLine_ID (0);
+            SetVAM_Inv_InOutConfirm_ID (0);
+            SetVAM_Inv_InOutLineConfirm_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
             SetProcessed (false);	// N
             SetTargetQty (0.0);
             }
@@ -49,7 +49,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineConfirm(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOutLineConfirm(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineConfirm(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOutLineConfirm(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ using System.Data;
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineConfirm(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Inv_InOutLineConfirm(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_InOutLineConfirm()
+        static X_VAM_Inv_InOutLineConfirm()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ using System.Data;
         public static int Table_ID;
         // =728;
 
-        /** TableName=M_InOutLineConfirm */
-        public static String Table_Name = "M_InOutLineConfirm";
+        /** TableName=VAM_Inv_InOutLineConfirm */
+        public static String Table_Name = "VAM_Inv_InOutLineConfirm";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -122,7 +122,7 @@ using System.Data;
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_InOutLineConfirm[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Inv_InOutLineConfirm[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice Line.
@@ -205,47 +205,47 @@ using System.Data;
             return Convert.ToDecimal(bd);
         }
         /** Set Ship/Receipt Confirmation.
-        @param M_InOutConfirm_ID Material Shipment or Receipt Confirmation */
-        public void SetM_InOutConfirm_ID(int M_InOutConfirm_ID)
+        @param VAM_Inv_InOutConfirm_ID Material Shipment or Receipt Confirmation */
+        public void SetVAM_Inv_InOutConfirm_ID(int VAM_Inv_InOutConfirm_ID)
         {
-            if (M_InOutConfirm_ID < 1) throw new ArgumentException("M_InOutConfirm_ID is mandatory.");
-            Set_ValueNoCheck("M_InOutConfirm_ID", M_InOutConfirm_ID);
+            if (VAM_Inv_InOutConfirm_ID < 1) throw new ArgumentException("VAM_Inv_InOutConfirm_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOutConfirm_ID", VAM_Inv_InOutConfirm_ID);
         }
         /** Get Ship/Receipt Confirmation.
         @return Material Shipment or Receipt Confirmation */
-        public int GetM_InOutConfirm_ID()
+        public int GetVAM_Inv_InOutConfirm_ID()
         {
-            Object ii = Get_Value("M_InOutConfirm_ID");
+            Object ii = Get_Value("VAM_Inv_InOutConfirm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Ship/Receipt Confirmation Line.
-        @param M_InOutLineConfirm_ID Material Shipment or Receipt Confirmation Line */
-        public void SetM_InOutLineConfirm_ID(int M_InOutLineConfirm_ID)
+        @param VAM_Inv_InOutLineConfirm_ID Material Shipment or Receipt Confirmation Line */
+        public void SetVAM_Inv_InOutLineConfirm_ID(int VAM_Inv_InOutLineConfirm_ID)
         {
-            if (M_InOutLineConfirm_ID < 1) throw new ArgumentException("M_InOutLineConfirm_ID is mandatory.");
-            Set_ValueNoCheck("M_InOutLineConfirm_ID", M_InOutLineConfirm_ID);
+            if (VAM_Inv_InOutLineConfirm_ID < 1) throw new ArgumentException("VAM_Inv_InOutLineConfirm_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOutLineConfirm_ID", VAM_Inv_InOutLineConfirm_ID);
         }
         /** Get Ship/Receipt Confirmation Line.
         @return Material Shipment or Receipt Confirmation Line */
-        public int GetM_InOutLineConfirm_ID()
+        public int GetVAM_Inv_InOutLineConfirm_ID()
         {
-            Object ii = Get_Value("M_InOutLineConfirm_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLineConfirm_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID < 1) throw new ArgumentException("M_InOutLine_ID is mandatory.");
-            Set_ValueNoCheck("M_InOutLine_ID", M_InOutLine_ID);
+            if (VAM_Inv_InOutLine_ID < 1) throw new ArgumentException("VAM_Inv_InOutLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -253,21 +253,21 @@ using System.Data;
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetM_InOutLine_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAM_Inv_InOutLine_ID().ToString());
         }
         /** Set Phys Inventory Line.
-        @param M_InventoryLine_ID Unique line in an Inventory document */
-        public void SetM_InventoryLine_ID(int M_InventoryLine_ID)
+        @param VAM_InventoryLine_ID Unique line in an Inventory document */
+        public void SetVAM_InventoryLine_ID(int VAM_InventoryLine_ID)
         {
-            if (M_InventoryLine_ID <= 0) Set_Value("M_InventoryLine_ID", null);
+            if (VAM_InventoryLine_ID <= 0) Set_Value("VAM_InventoryLine_ID", null);
             else
-                Set_Value("M_InventoryLine_ID", M_InventoryLine_ID);
+                Set_Value("VAM_InventoryLine_ID", VAM_InventoryLine_ID);
         }
         /** Get Phys Inventory Line.
         @return Unique line in an Inventory document */
-        public int GetM_InventoryLine_ID()
+        public int GetVAM_InventoryLine_ID()
         {
-            Object ii = Get_Value("M_InventoryLine_ID");
+            Object ii = Get_Value("VAM_InventoryLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -320,18 +320,18 @@ using System.Data;
         }
 
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID <= 0) Set_Value("M_Locator_ID", null);
+            if (VAM_Locator_ID <= 0) Set_Value("VAM_Locator_ID", null);
             else
-                Set_Value("M_Locator_ID", M_Locator_ID);
+                Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

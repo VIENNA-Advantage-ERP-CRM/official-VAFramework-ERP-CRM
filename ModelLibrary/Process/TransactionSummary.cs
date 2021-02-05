@@ -18,9 +18,9 @@ namespace VAdvantage.Process
         private DataSet dsTransaction = null;
         private int productId = 0;
         private string orgId = "";
-        private int _M_Product_ID = 0;
-        private int _M_Locator_ID = 0;
-        private int _M_AttributeSetInstance_ID = 0;
+        private int _VAM_Product_ID = 0;
+        private int _VAM_Locator_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
         private int _vaf_org_ID = 0;
         private decimal _currentQty = 0;
         private decimal OpeningStock = 0, ClosingStock = 0;
@@ -39,7 +39,7 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
                     productId = Util.GetValueOfInt(para[i].GetParameter());
                 }
@@ -53,31 +53,31 @@ namespace VAdvantage.Process
 
         protected override string DoIt()
         {
-            Qry = "TRUNCATE TABLE M_TransactionSummary";
+            Qry = "TRUNCATE TABLE VAM_Inv_TrxSummary";
             int no = DB.ExecuteQuery(Qry);
-            sql.Append(@" SELECT TR.M_PRODUCT_ID ,
-                      TR.M_LOCATOR_ID ,
-                      TR.M_ATTRIBUTESETINSTANCE_ID ,
-                      TR.M_TRANSACTION_ID ,
+            sql.Append(@" SELECT TR.VAM_Product_ID ,
+                      TR.VAM_Locator_ID ,
+                      TR.VAM_PFeature_SetInstance_ID ,
+                      TR.VAM_Inv_Trx_ID ,
                       TR.CURRENTQTY ,
                       TR.MOVEMENTQTY ,
                       TR.MOVEMENTTYPE ,
                       TR.MOVEMENTDATE ,
                       TR.VAF_ORG_ID
-                    FROM M_TRANSACTION TR
-                    INNER JOIN M_PRODUCT PR
-                    ON PR.M_PRODUCT_ID  =TR.M_PRODUCT_ID
+                    FROM VAM_Inv_Trx TR
+                    INNER JOIN VAM_Product PR
+                    ON PR.VAM_Product_ID  =TR.VAM_Product_ID
                     WHERE TR.ISACTIVE   = 'Y'
                     AND PR.ISACTIVE     ='Y'");
             if (productId > 0)
             {
-                sql.Append(@" AND PR.M_PRODUCT_ID  IN ( " + productId + " )");
+                sql.Append(@" AND PR.VAM_Product_ID  IN ( " + productId + " )");
             }
-            sql.Append(@" ORDER BY TR.M_PRODUCT_ID ,
-                      TR.M_LOCATOR_ID ,
-                      TR.M_ATTRIBUTESETINSTANCE_ID ,
+            sql.Append(@" ORDER BY TR.VAM_Product_ID ,
+                      TR.VAM_Locator_ID ,
+                      TR.VAM_PFeature_SetInstance_ID ,
                       TR.MOVEMENTDATE ,
-                      TR.M_TRANSACTION_ID ASC ");
+                      TR.VAM_Inv_Trx_ID ASC ");
             dsTransaction = new DataSet();
             try
             {
@@ -96,43 +96,43 @@ namespace VAdvantage.Process
                                 {
                                     log.Info(" =====> " + i + " Transactions Updated till " + DateTime.Now.ToString() + "<===== ");
                                 }
-                                _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                 _moveType = Util.GetValueOfString(dsTransaction.Tables[0].Rows[i]["MovementType"]);
                                 _moveDate = Util.GetValueOfDateTime(dsTransaction.Tables[0].Rows[i]["MovementDate"]);
                                 _moveQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"]);
                                 _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
                                 sql.Clear();
                                 
-                                sql.Append(@"Select M_TransactionSummary_ID From M_TransactionSummary Where M_Product_ID=" + _M_Product_ID + @" AND M_AttributeSetInstance_ID=" + _M_AttributeSetInstance_ID + @"
-                                        AND M_Locator_ID=" + _M_Locator_ID + @" AND MovementDate=" + GlobalVariable.TO_DATE(_moveDate, true));
-                                int M_TransactionSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
-                                if (M_TransactionSummary_ID > 0)
+                                sql.Append(@"Select VAM_Inv_TrxSummary_ID From VAM_Inv_TrxSummary Where VAM_Product_ID=" + _VAM_Product_ID + @" AND VAM_PFeature_SetInstance_ID=" + _VAM_PFeature_SetInstance_ID + @"
+                                        AND VAM_Locator_ID=" + _VAM_Locator_ID + @" AND MovementDate=" + GlobalVariable.TO_DATE(_moveDate, true));
+                                int VAM_Inv_TrxSummary_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString()));
+                                if (VAM_Inv_TrxSummary_ID > 0)
                                 {
-                                    Trs = new MTransactionSummary(GetCtx(), M_TransactionSummary_ID, Get_TrxName());
+                                    Trs = new MTransactionSummary(GetCtx(), VAM_Inv_TrxSummary_ID, Get_TrxName());
                                     Trs.SetClosingStock(_currentQty);
                                 }
                                 else
                                 {
-                                    Qry = "SELECT Count(*) FROM M_TransactionSummary WHERE IsActive = 'Y' AND  M_Product_ID = " + _M_Product_ID +
-                                     " AND M_Locator_ID = " + _M_Locator_ID + " AND M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID +
+                                    Qry = "SELECT Count(*) FROM VAM_Inv_TrxSummary WHERE IsActive = 'Y' AND  VAM_Product_ID = " + _VAM_Product_ID +
+                                     " AND VAM_Locator_ID = " + _VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID +
                                      " AND movementdate < " + GlobalVariable.TO_DATE(_moveDate, true);
                                     int existOld = Util.GetValueOfInt(DB.ExecuteScalar(Qry));
                                     if (existOld > 0)
                                     {
-                                        Qry = "SELECT ClosingStock FROM M_TransactionSummary WHERE IsActive = 'Y' AND  M_Product_ID = " + _M_Product_ID +
-                                                        " AND M_Locator_ID = " + _M_Locator_ID + " AND M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID +
+                                        Qry = "SELECT ClosingStock FROM VAM_Inv_TrxSummary WHERE IsActive = 'Y' AND  VAM_Product_ID = " + _VAM_Product_ID +
+                                                        " AND VAM_Locator_ID = " + _VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID +
                                                         " AND movementdate < " + GlobalVariable.TO_DATE(_moveDate, true) + " ORDER BY MovementDate DESC";
                                     }
                                     else
                                     {
-                                        Qry = "SELECT NVL(GetStockofWarehouse(" + _M_Product_ID + "," + _M_Locator_ID + ",0," + _M_AttributeSetInstance_ID + ","
+                                        Qry = "SELECT NVL(GetStockofWarehouse(" + _VAM_Product_ID + "," + _VAM_Locator_ID + ",0," + _VAM_PFeature_SetInstance_ID + ","
                                         + GlobalVariable.TO_DATE(Convert.ToDateTime(_moveDate).AddDays(-1), true) + "," + GetVAF_Client_ID() + "," + GetVAF_Org_ID() + "),0) AS Stock FROM DUAL";
                                     }
                                     OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry));
-                                    MLocator loc = new MLocator(GetCtx(), _M_Locator_ID, Get_TrxName());
-                                    Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), _M_Locator_ID, _M_Product_ID, _M_AttributeSetInstance_ID,
+                                    MLocator loc = new MLocator(GetCtx(), _VAM_Locator_ID, Get_TrxName());
+                                    Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), _VAM_Locator_ID, _VAM_Product_ID, _VAM_PFeature_SetInstance_ID,
                                             OpeningStock, _currentQty, _moveDate, Get_TrxName());
                                 }
                                 if (_moveType == MTransaction.MOVEMENTTYPE_CustomerReturns)

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Model for Cost Element.
- * Class Used     : X_M_CostElementLine
+ * Class Used     : X_VAM_ProductCostElementLine
  * Chronological    Development
  * Amit Bansal      07-April-2016
 **********************************************************/
@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCostElementLine : X_M_CostElementLine
+    public class MCostElementLine : X_VAM_ProductCostElementLine
     {
         private static VLogger _log = VLogger.GetVLogger(typeof(MCostElementLine).FullName);
         private MCostElement costElement = null;
@@ -27,8 +27,8 @@ namespace VAdvantage.Model
         private StringBuilder sql = new StringBuilder();
         private int countRecord = 0;
 
-        public MCostElementLine(Ctx ctx, int M_CostElementLine_ID, Trx trxName)
-            : base(ctx, M_CostElementLine_ID, trxName)
+        public MCostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
+            : base(ctx, VAM_ProductCostElementLine_ID, trxName)
         {
 
         }
@@ -52,8 +52,8 @@ namespace VAdvantage.Model
                         return true;
                     }
                     sql.Clear();
-                    sql.Append(@"SELECT COUNT(*) FROM M_CostElementLine WHERE M_Ref_CostElement =  " + GetM_Ref_CostElement()
-                                 + " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND M_CostElement_ID = " + GetM_CostElement_ID() + " AND M_CostElementLine_ID != " + GetM_CostElementLine_ID());
+                    sql.Append(@"SELECT COUNT(*) FROM VAM_ProductCostElementLine WHERE M_Ref_CostElement =  " + GetM_Ref_CostElement()
+                                 + " AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() + " AND VAM_ProductCostElementLine_ID != " + GetVAM_ProductCostElementLine_ID());
                     countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (countRecord > 0)
                     {
@@ -68,10 +68,10 @@ namespace VAdvantage.Model
                         return true;
                     }
                     sql.Clear();
-                    sql.Append(@"SELECT COUNT(*) FROM M_CostElementLine WHERE VAF_Client_ID = " + GetVAF_Client_ID()
-                                  + " AND M_CostElement_ID = " + GetM_CostElement_ID()
-                                  + " AND CAST(M_Ref_CostElement AS INTEGER) IN (SELECT M_CostElement_ID FROM M_CostElement WHERE IsActive = 'Y' AND "
-                                  + " CostingMethod IN ('A' , 'F' , 'I' , 'L' , 'S' , 'i' , 'p')) AND M_CostElementLine_ID != " + GetM_CostElementLine_ID());
+                    sql.Append(@"SELECT COUNT(*) FROM VAM_ProductCostElementLine WHERE VAF_Client_ID = " + GetVAF_Client_ID()
+                                  + " AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID()
+                                  + " AND CAST(M_Ref_CostElement AS INTEGER) IN (SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE IsActive = 'Y' AND "
+                                  + " CostingMethod IN ('A' , 'F' , 'I' , 'L' , 'S' , 'i' , 'p')) AND VAM_ProductCostElementLine_ID != " + GetVAM_ProductCostElementLine_ID());
                     countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                     if (countRecord > 0)
                     {

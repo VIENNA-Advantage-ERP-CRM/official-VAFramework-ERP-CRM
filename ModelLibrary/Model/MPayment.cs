@@ -3701,11 +3701,11 @@ namespace VAdvantage.Model
 
         //public int GetCostAllocationID()
         //{
-        //    return Convert.ToInt32(DB.ExecuteScalar("select nvl(cl.m_CostAllocation_ID,0) as CostAllocationID from VAB_Payment cp inner join VAB_DocAllocationLine cl on cp.VAB_Payment_ID=cl.VAB_Payment_ID where cp.VAB_Payment_ID='" + GetVAB_Payment_ID() + "'"));
+        //    return Convert.ToInt32(DB.ExecuteScalar("select nvl(cl.VAM_ProductCostAllocation_ID,0) as CostAllocationID from VAB_Payment cp inner join VAB_DocAllocationLine cl on cp.VAB_Payment_ID=cl.VAB_Payment_ID where cp.VAB_Payment_ID='" + GetVAB_Payment_ID() + "'"));
         //}
         //public string GetCostAlloactionDocStatus()
         //{
-        //    return Convert.ToString(DB.ExecuteScalar("select DocStatus from M_CostAllocation where M_CostAllocation_ID=" + GetCostAllocationID()));
+        //    return Convert.ToString(DB.ExecuteScalar("select DocStatus from VAM_ProductCostAllocation where VAM_ProductCostAllocation_ID=" + GetCostAllocationID()));
         //}
         //public bool GenerateCostAllocation(string DocumentNo, int VAF_Client_ID, Trx trx, int VAF_Org_ID, out String Msg)
         //{
@@ -3715,7 +3715,7 @@ namespace VAdvantage.Model
         //    string sql = "SELECT DocumentType,PaymentNo,InvoiceNo,BaseCurrency,TotalAllocationAmount,DocStatus,InvoiceLineID,AllocationType,ProductID,partialType,AllocationLineID FROM " +
         //    " (SELECT cs.VAB_DocTypes_id AS DocumentType,pay.paymentID AS PaymentNo,pay.Payamt,pay.Amount,ci.grandTotal AS InvoiceAmount,pay.invoiceID AS InvoiceNo, " +
         //    " pay.DocumentNo,pay.PaymentDoc,pay.partialType,ci.VAB_DocTypes_ID  AS InvoiceDoc,AC.VAB_CURRENCY_ID AS BaseCurrency,ci.VAB_Currency_id,pc.iso_code,icr.multiplyrate AS InvoiceCurrencyRate," +
-        //    "  pcr.multiplyrate AS PayCurrencyRate,cl.lineTotalAmt AS LineAmount,CS.DOCSTATUS,cl.VAB_InvoiceLine_id AS InvoiceLineID,CS.ALLOCATIONTYPE,al.VAB_DocAllocationLine_ID as AllocationLineID,mp.m_product_id as ProductID," +
+        //    "  pcr.multiplyrate AS PayCurrencyRate,cl.lineTotalAmt AS LineAmount,CS.DOCSTATUS,cl.VAB_InvoiceLine_id AS InvoiceLineID,CS.ALLOCATIONTYPE,al.VAB_DocAllocationLine_ID as AllocationLineID,mp.VAM_Product_id as ProductID," +
         //    "   CASE WHEN pay.partialType='CD' THEN CASE WHEN ((icr.multiplyrate=pcr.multiplyrate)or(ci.VAB_Currency_ID=AC.VAB_CURRENCY_ID)) THEN 0 ELSE (round(((cl.lineTotalAmt/ci.grandTotal*100)/100*pay.Amount)*(pcr.multiplyrate),12)) END " +
         //    "  ELSE case when (ci.VAB_Currency_ID=AC.VAB_CURRENCY_ID) then (round(((cl.lineTotalAmt/ci.grandTotal*100)/100*pay.Amount),12)) else (round(((cl.lineTotalAmt/ci.grandTotal*100)/100*pay.Amount)*(pcr.multiplyrate),12)) END END AS TotalAllocationAmount " +
         //    "   FROM " +
@@ -3728,7 +3728,7 @@ namespace VAdvantage.Model
         //      "   FROM VAB_PAYMENT) Payment) pay " +
         //      "  INNER JOIN VAB_Invoice ci " +
         //       " ON pay.invoiceID=ci.VAB_Invoice_ID " +
-        //       "  INNER JOIN M_CostAllocationSetting cs " +
+        //       "  INNER JOIN VAM_ProductCostAllocationSetting cs " +
         //        " ON pay.paymentDoc  =cs.VAB_DocTypes_ID " +
         //         " AND ci.VAB_DocTypes_ID=cs.InvRef_DocType_ID and cs.isactive='Y'" +
         //         "  inner join VAF_ClientDetail adc on adc.VAF_CLIENT_ID=" + VAF_Client_ID + "" +
@@ -3738,10 +3738,10 @@ namespace VAdvantage.Model
         //              " ON PC.VAB_CURRENCY_ID=AC.VAB_CURRENCY_ID " +
         //               " INNER JOIN VAB_DocAllocationLine al " +
         //               " ON pay.paymentID=al.VAB_Payment_ID " +
-        //                " INNER JOIN (SELECT SUM(lineTotalAmt) AS lineTotalAmt,VAB_Invoice_id,m_product_ID,VAB_InvoiceLine_id FROM VAB_InvoiceLine GROUP BY VAB_Invoice_id, m_product_ID,VAB_InvoiceLine_id) cl " +
+        //                " INNER JOIN (SELECT SUM(lineTotalAmt) AS lineTotalAmt,VAB_Invoice_id,VAM_Product_ID,VAB_InvoiceLine_id FROM VAB_InvoiceLine GROUP BY VAB_Invoice_id, VAM_Product_ID,VAB_InvoiceLine_id) cl " +
         //                " ON cl.VAB_Invoice_id=ci.VAB_Invoice_id " +
-        //                " INNER JOIN m_product mp " +
-        //                "  ON cl.m_product_id=mp.m_product_id " +
+        //                " INNER JOIN VAM_Product mp " +
+        //                "  ON cl.VAM_Product_id=mp.VAM_Product_id " +
         //                 "  LEFT JOIN VAB_EXCHANGERATE ICR " +
         //                 "  ON icr.VAB_CURRENCY_ID    =ci.VAB_CURRENCY_ID AND ICR.VAB_CURRENCY_To_ID=AC.VAB_CURRENCY_ID AND (ci.dateinvoiced>= ICR.VALIDFROM AND ci.dateinvoiced<= ICR.VALIDTO) AND ICR.isactive='Y' and ICR.vaf_client_ID=" + VAF_Client_ID + "  and icr.VAB_CurrencyType_id=ci.VAB_CurrencyType_id " +
         //                 "  LEFT JOIN VAB_EXCHANGERATE PCR " +
@@ -3818,9 +3818,9 @@ namespace VAdvantage.Model
         //                            {
         //                                CostAllocationAmount += Convert.ToDecimal(DrCostAllocationLine[j]["TotalAllocationAmount"]);
         //                                MCostAllocationLine ObjMCostAllocationLine = new MCostAllocationLine(GetCtx(), 0, trx);
-        //                                ObjMCostAllocationLine.SetM_CostAllocation_ID(ObjMCostAllocation.Get_ID());
+        //                                ObjMCostAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMCostAllocation.Get_ID());
         //                                ObjMCostAllocationLine.SetVAB_InvoiceLine_ID(Convert.ToInt32(DrCostAllocationLine[j]["InvoiceLineID"]));
-        //                                ObjMCostAllocationLine.SetM_Product_ID(Convert.ToInt32(DrCostAllocationLine[j]["ProductID"]));
+        //                                ObjMCostAllocationLine.SetVAM_Product_ID(Convert.ToInt32(DrCostAllocationLine[j]["ProductID"]));
         //                                ObjMCostAllocationLine.SetAmount(Convert.ToDecimal(DrCostAllocationLine[j]["TotalAllocationAmount"]));
         //                                ObjMCostAllocationLine.SetAllocationType(Convert.ToString(DrCostAllocationLine[j]["partialType"]));
         //                                ObjMCostAllocationLine.SetVAF_Org_ID(VAF_Org_ID);
@@ -3847,7 +3847,7 @@ namespace VAdvantage.Model
 
         //                            //  update CostAllocationID on Allocation Line against generated Allocation Line.........
         //                            MAllocationLine objMAllocationLine = new MAllocationLine(GetCtx(), Convert.ToInt32(DrCostAllocationLine[0]["AllocationLineID"]), trx);
-        //                            objMAllocationLine.SetM_CostAllocation_ID(ObjMCostAllocation.Get_ID());
+        //                            objMAllocationLine.SetVAM_ProductCostAllocation_ID(ObjMCostAllocation.Get_ID());
         //                            if (!objMAllocationLine.Save(trx))
         //                            {
         //                                CheckExecution = false;

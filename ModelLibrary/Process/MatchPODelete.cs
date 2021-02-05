@@ -28,14 +28,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class MatchPODelete : ProcessEngine.SvrProcess
     {
         //ID				
-        private int _M_MatchPO_ID = 0;
+        private int _VAM_MatchPO_ID = 0;
 
         /// <summary>
         /// Prepare
         /// </summary>
         protected override void Prepare()
         {
-            _M_MatchPO_ID = GetRecord_ID();
+            _VAM_MatchPO_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -44,11 +44,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("M_MatchPO_ID=" + _M_MatchPO_ID);
-            MMatchPO po = new MMatchPO(GetCtx(), _M_MatchPO_ID, Get_TrxName());
+            log.Info("VAM_MatchPO_ID=" + _VAM_MatchPO_ID);
+            MMatchPO po = new MMatchPO(GetCtx(), _VAM_MatchPO_ID, Get_TrxName());
             if (po.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ @M_MatchPO_ID@ " + _M_MatchPO_ID);
+                throw new Exception("@NotFound@ @VAM_MatchPO_ID@ " + _VAM_MatchPO_ID);
             }
             if (po.Delete(true))
             {

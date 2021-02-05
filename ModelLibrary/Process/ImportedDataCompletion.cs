@@ -40,7 +40,7 @@ namespace VAdvantage.Process
             try
             {
                 sql.Clear();
-                sql.Append("SELECT * FROM M_InOut WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY movementdate");
+                sql.Append("SELECT * FROM VAM_Inv_InOut WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY movementdate");
                 dsInOut = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                 #region complete Order Record
@@ -134,7 +134,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["M_InOut_ID"]), Get_Trx());
+                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -144,7 +144,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetVAM_Inv_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -154,7 +154,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Material Receipt not completed for this Record ID = " + inout.GetM_InOut_ID());
+                                _log.Info("Material Receipt not completed for this Record ID = " + inout.GetVAM_Inv_InOut_ID());
                             }
                         }
                         catch { }
@@ -164,7 +164,7 @@ namespace VAdvantage.Process
 
                 #region complete Movement Record
                 sql.Clear();
-                sql.Append("SELECT * FROM M_Movement WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY movementdate");
+                sql.Append("SELECT * FROM VAM_InventoryTransfer WHERE IsActive = 'Y' AND DocStatus IN ('DR') ORDER BY movementdate");
                 dsRecord = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
 
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "movementdate");
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            movement = new MMovement(GetCtx(), Util.GetValueOfInt(dataRow[i]["M_Movement_ID"]), Get_Trx());
+                            movement = new MMovement(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_InventoryTransfer_ID"]), Get_Trx());
                             movement.CompleteIt();
                             if (movement.GetDocAction() == "CL")
                             {
@@ -185,7 +185,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving VAB_Invoice Record ID = " + movement.GetM_Movement_ID() +
+                                    _log.Info("Error found for saving VAB_Invoice Record ID = " + movement.GetVAM_InventoryTransfer_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -195,7 +195,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Movement not completed for this Record ID = " + movement.GetM_Movement_ID());
+                                _log.Info("Movement not completed for this Record ID = " + movement.GetVAM_InventoryTransfer_ID());
                             }
                         }
                         catch { }
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["M_InOut_ID"]), Get_Trx());
+                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetVAM_Inv_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -231,7 +231,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Shipment not completed for this Record ID = " + inout.GetM_InOut_ID());
+                                _log.Info("Shipment not completed for this Record ID = " + inout.GetVAM_Inv_InOut_ID());
                             }
                         }
                         catch { }
@@ -247,7 +247,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["M_InOut_ID"]), Get_Trx());
+                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -257,7 +257,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetVAM_Inv_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -267,7 +267,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Customer return not completed for this Record ID = " + inout.GetM_InOut_ID());
+                                _log.Info("Customer return not completed for this Record ID = " + inout.GetVAM_Inv_InOut_ID());
                             }
                         }
                         catch { }
@@ -283,7 +283,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["M_InOut_ID"]), Get_Trx());
+                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -293,7 +293,7 @@ namespace VAdvantage.Process
                                 {
                                     Rollback();
                                     ValueNamePair pp = VLogger.RetrieveError();
-                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetM_InOut_ID() +
+                                    _log.Info("Error found for saving VAB_Order Record ID = " + inout.GetVAM_Inv_InOut_ID() +
                                                " Error Name is " + pp.GetName() + " And Error Type is " + pp.GetType());
                                 }
                                 else
@@ -303,7 +303,7 @@ namespace VAdvantage.Process
                             }
                             else
                             {
-                                _log.Info("Return to Vendor not completed for this Record ID = " + inout.GetM_InOut_ID());
+                                _log.Info("Return to Vendor not completed for this Record ID = " + inout.GetVAM_Inv_InOut_ID());
                             }
                         }
                         catch { }

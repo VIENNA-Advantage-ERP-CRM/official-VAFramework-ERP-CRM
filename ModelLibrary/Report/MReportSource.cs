@@ -91,7 +91,7 @@ namespace VAdvantage.Report
             }
             else if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et))
             {
-                ID = GetM_Product_ID();
+                ID = GetVAM_Product_ID();
             }
             else if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et))
             {

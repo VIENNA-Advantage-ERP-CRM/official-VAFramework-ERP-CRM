@@ -11,15 +11,15 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_AttributeSet
+    /** Generated Model for VAM_PFeature_Set
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_AttributeSet : PO
+    public class X_VAM_PFeature_Set : PO
     {
-        public X_M_AttributeSet(Context ctx, int M_AttributeSet_ID, Trx trxName)
-            : base(ctx, M_AttributeSet_ID, trxName)
+        public X_VAM_PFeature_Set(Context ctx, int VAM_PFeature_Set_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Set_ID, trxName)
         {
-            /** if (M_AttributeSet_ID == 0)
+            /** if (VAM_PFeature_Set_ID == 0)
             {
             SetIsGuaranteeDate (false);
             SetIsGuaranteeDateMandatory (false);
@@ -28,16 +28,16 @@ namespace VAdvantage.Model
             SetIsLotMandatory (false);
             SetIsSerNo (false);
             SetIsSerNoMandatory (false);
-            SetM_AttributeSet_ID (0);
+            SetVAM_PFeature_Set_ID (0);
             SetMandatoryType (null);
             SetName (null);
             }
              */
         }
-        public X_M_AttributeSet(Ctx ctx, int M_AttributeSet_ID, Trx trxName)
-            : base(ctx, M_AttributeSet_ID, trxName)
+        public X_VAM_PFeature_Set(Ctx ctx, int VAM_PFeature_Set_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Set_ID, trxName)
         {
-            /** if (M_AttributeSet_ID == 0)
+            /** if (VAM_PFeature_Set_ID == 0)
             {
             SetIsGuaranteeDate (false);
             SetIsGuaranteeDateMandatory (false);
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             SetIsLotMandatory (false);
             SetIsSerNo (false);
             SetIsSerNoMandatory (false);
-            SetM_AttributeSet_ID (0);
+            SetVAM_PFeature_Set_ID (0);
             SetMandatoryType (null);
             SetName (null);
             }
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeSet(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_PFeature_Set(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeSet(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_PFeature_Set(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -75,14 +75,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeSet(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_PFeature_Set(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_AttributeSet()
+        static X_VAM_PFeature_Set()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -95,8 +95,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =560;
 
-        /** TableName=M_AttributeSet */
-        public static String Table_Name = "M_AttributeSet";
+        /** TableName=VAM_PFeature_Set */
+        public static String Table_Name = "VAM_PFeature_Set";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_AttributeSet[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_PFeature_Set[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Description.
@@ -325,49 +325,49 @@ namespace VAdvantage.Model
             return (String)Get_Value("LotCharSOverwrite");
         }
         /** Set Attribute Set.
-        @param M_AttributeSet_ID Product Attribute Set */
-        public void SetM_AttributeSet_ID(int M_AttributeSet_ID)
+        @param VAM_PFeature_Set_ID Product Attribute Set */
+        public void SetVAM_PFeature_Set_ID(int VAM_PFeature_Set_ID)
         {
-            if (M_AttributeSet_ID < 0) throw new ArgumentException("M_AttributeSet_ID is mandatory.");
-            Set_ValueNoCheck("M_AttributeSet_ID", M_AttributeSet_ID);
+            if (VAM_PFeature_Set_ID < 0) throw new ArgumentException("VAM_PFeature_Set_ID is mandatory.");
+            Set_ValueNoCheck("VAM_PFeature_Set_ID", VAM_PFeature_Set_ID);
         }
         /** Get Attribute Set.
         @return Product Attribute Set */
-        public int GetM_AttributeSet_ID()
+        public int GetVAM_PFeature_Set_ID()
         {
-            Object ii = Get_Value("M_AttributeSet_ID");
+            Object ii = Get_Value("VAM_PFeature_Set_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Lot Control.
-        @param M_LotCtl_ID Product Lot Control */
-        public void SetM_LotCtl_ID(int M_LotCtl_ID)
+        @param VAM_LotControl_ID Product Lot Control */
+        public void SetVAM_LotControl_ID(int VAM_LotControl_ID)
         {
-            if (M_LotCtl_ID <= 0) Set_Value("M_LotCtl_ID", null);
+            if (VAM_LotControl_ID <= 0) Set_Value("VAM_LotControl_ID", null);
             else
-                Set_Value("M_LotCtl_ID", M_LotCtl_ID);
+                Set_Value("VAM_LotControl_ID", VAM_LotControl_ID);
         }
         /** Get Lot Control.
         @return Product Lot Control */
-        public int GetM_LotCtl_ID()
+        public int GetVAM_LotControl_ID()
         {
-            Object ii = Get_Value("M_LotCtl_ID");
+            Object ii = Get_Value("VAM_LotControl_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Serial No Control.
-        @param M_SerNoCtl_ID Product Serial Number Control */
-        public void SetM_SerNoCtl_ID(int M_SerNoCtl_ID)
+        @param VAM_CtlSerialNo_ID Product Serial Number Control */
+        public void SetVAM_CtlSerialNo_ID(int VAM_CtlSerialNo_ID)
         {
-            if (M_SerNoCtl_ID <= 0) Set_Value("M_SerNoCtl_ID", null);
+            if (VAM_CtlSerialNo_ID <= 0) Set_Value("VAM_CtlSerialNo_ID", null);
             else
-                Set_Value("M_SerNoCtl_ID", M_SerNoCtl_ID);
+                Set_Value("VAM_CtlSerialNo_ID", VAM_CtlSerialNo_ID);
         }
         /** Get Serial No Control.
         @return Product Serial Number Control */
-        public int GetM_SerNoCtl_ID()
+        public int GetVAM_CtlSerialNo_ID()
         {
-            Object ii = Get_Value("M_SerNoCtl_ID");
+            Object ii = Get_Value("VAM_CtlSerialNo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

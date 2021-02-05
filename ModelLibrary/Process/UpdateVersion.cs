@@ -162,7 +162,7 @@ namespace ViennaAdvantageServer.Process
         {
             if (VAB_YearPeriod_ID != 0)
             {
-                sql = "select Distinct(M_Product_ID) from VAB_Forecastline fl inner join VAB_Forecast f on (fl.VAB_Forecast_id = f.VAB_Forecast_id) where f.VAB_YearPeriod_id = " + VAB_YearPeriod_ID + " and f.vaf_client_id = " + GetCtx().GetVAF_Client_ID() + " and f.isactive = 'Y' and f.processed = 'Y'";
+                sql = "select Distinct(VAM_Product_ID) from VAB_Forecastline fl inner join VAB_Forecast f on (fl.VAB_Forecast_id = f.VAB_Forecast_id) where f.VAB_YearPeriod_id = " + VAB_YearPeriod_ID + " and f.vaf_client_id = " + GetCtx().GetVAF_Client_ID() + " and f.isactive = 'Y' and f.processed = 'Y'";
                 IDataReader idr = null;
                 try
                 {
@@ -174,21 +174,21 @@ namespace ViennaAdvantageServer.Process
                         Decimal? totalPriceTeam = 0;
                         Decimal? totalQtyOpp = 0;
                         Decimal? totalPriceOpp = 0;
-                        sql = "select SUM(nvl(qtyentered,0)) from VAB_Forecastline where isactive = 'Y' and m_product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
+                        sql = "select SUM(nvl(qtyentered,0)) from VAB_Forecastline where isactive = 'Y' and VAM_Product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
                         totalQtyTeam = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                        // sql = "select SUM(nvl(qtyentered,0) * nvl(pricestd,0)) from VAB_Forecastline where m_product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
-                        sql = "select SUM(nvl(pricestd,0)) from VAB_Forecastline where isactive = 'Y' and m_product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
+                        // sql = "select SUM(nvl(qtyentered,0) * nvl(pricestd,0)) from VAB_Forecastline where VAM_Product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
+                        sql = "select SUM(nvl(pricestd,0)) from VAB_Forecastline where isactive = 'Y' and VAM_Product_id = " + Util.GetValueOfInt(idr[0]) + " and processed = 'Y'";
                         totalPriceTeam = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
 
                         if (mFor.IsIncludeOpp())
                         {
                             sql = "select sum(nvl(pl.plannedqty,0))  FROM VAB_ProjectLine pl inner join VAB_Project p on (p.VAB_Project_ID = pl.VAB_Project_ID) "
                                 + " WHERE pl.planneddate BETWEEN (SELECT startdate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") "
-                                + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.m_product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
+                                + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.VAM_Product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
                             totalQtyOpp = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                             sql = " SELECT SUM(NVL(pl.plannedqty,0) * NVL(pl.plannedprice,0)) FROM VAB_ProjectLine pl inner join VAB_Project p on (p.VAB_Project_ID = pl.VAB_Project_ID) "
                                 + " WHERE pl.planneddate BETWEEN (SELECT startdate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") "
-                                + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.m_product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
+                                + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.VAM_Product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
                             totalPriceOpp = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                         }
 
@@ -232,13 +232,13 @@ namespace ViennaAdvantageServer.Process
 
         private void OnlyOpportunityProducts()
         {
-            //sql = " SELECT distinct(pl.m_product_id) FROM VAB_ProjectLine pl INNER JOIN VAB_Project p ON p.VAB_Project_ID = pl.VAB_Project_ID WHERE p.VAB_Order_id IS NULL"
-            //    + " AND p.ref_order_id IS NULL AND pl.m_product_id NOT IN (SELECT DISTINCT(M_Product_ID) FROM VAB_Forecastline fl "
+            //sql = " SELECT distinct(pl.VAM_Product_id) FROM VAB_ProjectLine pl INNER JOIN VAB_Project p ON p.VAB_Project_ID = pl.VAB_Project_ID WHERE p.VAB_Order_id IS NULL"
+            //    + " AND p.ref_order_id IS NULL AND pl.VAM_Product_id NOT IN (SELECT DISTINCT(VAM_Product_ID) FROM VAB_Forecastline fl "
             //    + " INNER JOIN VAB_Forecast f ON (fl.VAB_Forecast_id = f.VAB_Forecast_id) WHERE f.VAB_YearPeriod_id = " + VAB_YearPeriod_ID
             //    + " AND f.vaf_client_id = " + GetCtx().GetVAF_Client_ID() + " AND fl.isactive = 'Y')";
 
-            sql = " SELECT distinct(pl.m_product_id) FROM VAB_ProjectLine pl INNER JOIN VAB_Project p ON p.VAB_Project_ID = pl.VAB_Project_ID WHERE p.VAB_Order_id IS NULL"
-               + " AND p.ref_order_id IS NULL AND pl.m_product_id NOT IN (select m_product_id from VAB_MasterForecastline where isactive = 'Y' and VAB_MasterForecast_id = " + mFor.GetVAB_MasterForecast_ID() + ")";
+            sql = " SELECT distinct(pl.VAM_Product_id) FROM VAB_ProjectLine pl INNER JOIN VAB_Project p ON p.VAB_Project_ID = pl.VAB_Project_ID WHERE p.VAB_Order_id IS NULL"
+               + " AND p.ref_order_id IS NULL AND pl.VAM_Product_id NOT IN (select VAM_Product_id from VAB_MasterForecastline where isactive = 'Y' and VAB_MasterForecast_id = " + mFor.GetVAB_MasterForecast_ID() + ")";
 
             IDataReader idr = null;
             try
@@ -250,11 +250,11 @@ namespace ViennaAdvantageServer.Process
                     Decimal? totalPriceOpp = 0;
                     sql = "select sum(nvl(pl.plannedqty,0))  FROM VAB_ProjectLine pl inner join VAB_Project p on (p.VAB_Project_ID = pl.VAB_Project_ID) "
                            + " WHERE pl.planneddate BETWEEN (SELECT startdate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") "
-                           + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.m_product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
+                           + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.VAM_Product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
                     totalQtyOpp = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                     sql = " SELECT SUM(NVL(pl.plannedqty,0) * NVL(pl.plannedprice,0)) FROM VAB_ProjectLine pl inner join VAB_Project p on (p.VAB_Project_ID = pl.VAB_Project_ID) "
                         + " WHERE pl.planneddate BETWEEN (SELECT startdate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") "
-                        + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.m_product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
+                        + " AND (SELECT enddate FROM VAB_YearPeriod WHERE VAB_YearPeriod_id = " + VAB_YearPeriod_ID + ") AND pl.VAM_Product_id =  " + Util.GetValueOfInt(idr[0]) + " and p.VAB_Order_id is null and p.ref_order_id is null and pl.isactive = 'Y'";
                     totalPriceOpp = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
 
                     if (totalQtyOpp.Value > 0)
@@ -281,13 +281,13 @@ namespace ViennaAdvantageServer.Process
             }
         }
 
-        private void GenerateMasterForecast(int M_Product_ID, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
+        private void GenerateMasterForecast(int VAM_Product_ID, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
-            sql = "select VAB_UOM_id from m_product where m_product_id = " + M_Product_ID;
+            sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + VAM_Product_ID;
             X_VAB_MasterForecastLine mfLine = new X_VAB_MasterForecastLine(GetCtx(), 0, null);
             mfLine.SetVAF_Client_ID(mf.GetVAF_Client_ID());
             mfLine.SetVAF_Org_ID(mf.GetVAF_Org_ID());
-            mfLine.SetM_Product_ID(M_Product_ID);
+            mfLine.SetVAM_Product_ID(VAM_Product_ID);
             mfLine.SetVAB_MasterForecast_ID(mFor.GetVAB_MasterForecast_ID());
             mfLine.SetForcastQty(totalQtyTeam);
             mfLine.SetOppQty(totalQtyOpp);

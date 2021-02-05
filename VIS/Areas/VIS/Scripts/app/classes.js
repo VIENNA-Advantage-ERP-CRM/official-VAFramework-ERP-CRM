@@ -1315,12 +1315,12 @@
             var PO_zoomWindow_ID = 0;
 
             // Hard code for zooming to Production Resource Window		
-            if (targetTableName.equals("M_Product")) {
+            if (targetTableName.equals("VAM_Product")) {
                 //var ProductType = null;
                 //var ResourceGroup = null;
                 //if(targetWhereClause!=null && !targetWhereClause.equals(""))
                 //{
-                //    var sql1 = " SELECT ProductType, ResourceGroup FROM M_Product "
+                //    var sql1 = " SELECT ProductType, ResourceGroup FROM VAM_Product "
                 //                +" WHERE " + targetWhereClause;
 
                 //    var rs = null;
@@ -1343,9 +1343,9 @@
                 //    }
 
                 //if(ProductType != null && ResourceGroup != null &&
-                //        ProductType.equals(X_M_Product.PRODUCTTYPE_Resource)&& 
-                //        (ResourceGroup.equals(X_M_Product.RESOURCEGROUP_Person) ||
-                //                ResourceGroup.equals(X_M_Product.RESOURCEGROUP_Equipment)))
+                //        ProductType.equals(X_VAM_Product.PRODUCTTYPE_Resource)&& 
+                //        (ResourceGroup.equals(X_VAM_Product.RESOURCEGROUP_Person) ||
+                //                ResourceGroup.equals(X_VAM_Product.RESOURCEGROUP_Equipment)))
                 //{
                 //    var windowID = 0;
                 //    var sql11 = " SELECT VAF_Screen_ID FROM VAF_Screen WHERE NAME LIKE 'Production Resource'";

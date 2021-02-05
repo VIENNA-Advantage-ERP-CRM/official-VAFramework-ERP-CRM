@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MovementLineConfirm_ID">id</param>
+        /// <param name="VAM_InvTrf_LineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
         public MVAFRightsLog(Context ctx, int M_VAF_RightsLog_ID, Trx trxName)
             : base(ctx, M_VAF_RightsLog_ID, trxName)

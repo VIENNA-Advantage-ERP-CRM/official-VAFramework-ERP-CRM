@@ -412,16 +412,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Product
             sql = new StringBuilder("UPDATE I_GLJournal i "
-                + "SET M_Product_ID=(SELECT MAX(p.M_Product_ID) FROM M_Product p"
+                + "SET VAM_Product_ID=(SELECT MAX(p.VAM_Product_ID) FROM VAM_Product p"
                 + " WHERE (p.Value=i.ProductValue OR p.UPC=i.UPC OR p.SKU=i.SKU)"
                 + " AND p.IsSummary='N' AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE M_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
+                + "WHERE VAM_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
                 + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_GLJournal i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Product, '"
-                + "WHERE M_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
+                + "WHERE VAM_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
                 + " AND (VAB_Acct_ValidParameter_ID IS NULL OR VAB_Acct_ValidParameter_ID=0) AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -694,7 +694,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         MAccount acct = MAccount.Get(GetCtx(), imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID(),
                             imp.GetVAB_AccountBook_ID(), imp.GetAccount_ID(), 0,
-                            imp.GetM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
+                            imp.GetVAM_Product_ID(), imp.GetVAB_BusinessPartner_ID(), imp.GetVAF_OrgTrx_ID(),
                             imp.GetC_LocFrom_ID(), imp.GetC_LocTo_ID(), imp.GetVAB_SalesRegionState_ID(),
                             imp.GetVAB_Project_ID(), imp.GetVAB_Promotion_ID(), imp.GetVAB_BillingCode_ID(),
                             imp.GetUser1_ID(), imp.GetUser2_ID(), 0, 0);

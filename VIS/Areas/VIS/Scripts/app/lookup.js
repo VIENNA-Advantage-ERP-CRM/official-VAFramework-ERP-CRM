@@ -1227,13 +1227,13 @@
         var onlyIsSOTrx = this.getIsOnlyOutgoing();
 
         // Commented This 
-        //var sql = "SELECT M_Locator_ID,Value FROM M_Locator WHERE IsActive='Y'";
+        //var sql = "SELECT VAM_Locator_ID,Value FROM VAM_Locator WHERE IsActive='Y'";
 
 
         // Change By Lokesh Chauhan 6 Aug 2015
         // Display Identifiers in Locator Reference instead of Value
         //var colName = "Value";
-        var colName = "Value, LocatorCombination, M_Warehouse_ID, (SELECT Name FROM M_Warehouse WHERE M_Warehouse_ID = M_Locator.M_Warehouse_ID) AS Warehouse";
+        var colName = "Value, LocatorCombination, VAM_Warehouse_ID, (SELECT Name FROM VAM_Warehouse WHERE VAM_Warehouse_ID = VAM_Locator.VAM_Warehouse_ID) AS Warehouse";
         try {
             // Commented by Bharat on 24 Jan 2019
             // JID_1024: "Show locator name in dropdown with Warehouse Name_LocatorSearchkey(locatorName)
@@ -1266,23 +1266,23 @@
         }
         // Change By Lokesh Chauhan 6 Aug 2015
 
-        //var sql = "SELECT * FROM M_Locator WHERE IsActive='Y'"; not using mclass to get override value
-        //sql = "SELECT M_Locator_ID," + colName + " FROM M_Locator WHERE IsActive='Y'";
+        //var sql = "SELECT * FROM VAM_Locator WHERE IsActive='Y'"; not using mclass to get override value
+        //sql = "SELECT VAM_Locator_ID," + colName + " FROM VAM_Locator WHERE IsActive='Y'";
         //if (warehouseId != 0) {
-        //    sql += " AND M_Warehouse_ID=@w";
+        //    sql += " AND VAM_Warehouse_ID=@w";
         //}
         //if (productId != 0) {
-        //    sql += " AND (IsDefault='Y' OR EXISTS (SELECT * FROM M_Storage s WHERE s.M_Locator_ID=M_Locator.M_Locator_ID AND s.M_Product_ID=@p)";
+        //    sql += " AND (IsDefault='Y' OR EXISTS (SELECT * FROM VAM_Storage s WHERE s.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND s.VAM_Product_ID=@p)";
         //    if (onlyIsSOTrx == null || !onlyIsSOTrx.value) {
         //        //	Default Product
-        //        sql += "OR EXISTS (SELECT * FROM M_Product p WHERE p.M_Locator_ID=M_Locator.M_Locator_ID AND p.M_Product_ID=@p)OR EXISTS (SELECT * FROM M_ProductLocator pl " +
-        //            " WHERE pl.M_Locator_ID=M_Locator.M_Locator_ID AND pl.M_Product_ID=@p) OR 0 = (SELECT COUNT(*) FROM M_ProductLocator pl " +
-        //            " INNER JOIN M_Locator l2 ON (pl.M_Locator_ID=l2.M_Locator_ID) WHERE pl.M_Product_ID=@p AND l2.M_Warehouse_ID=M_Locator.M_Warehouse_ID )";
+        //        sql += "OR EXISTS (SELECT * FROM VAM_Product p WHERE p.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND p.VAM_Product_ID=@p)OR EXISTS (SELECT * FROM VAM_ProductLocator pl " +
+        //            " WHERE pl.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND pl.VAM_Product_ID=@p) OR 0 = (SELECT COUNT(*) FROM VAM_ProductLocator pl " +
+        //            " INNER JOIN VAM_Locator l2 ON (pl.VAM_Locator_ID=l2.VAM_Locator_ID) WHERE pl.VAM_Product_ID=@p AND l2.VAM_Warehouse_ID=VAM_Locator.VAM_Warehouse_ID )";
         //    }
         //    sql += ")";
         //}
 
-        //var finalSql = VIS.MRole.addAccessSQL(sql, "M_Locator", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
+        //var finalSql = VIS.MRole.addAccessSQL(sql, "VAM_Locator", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO);
 
         //	Reset
         this.lookup = null;
@@ -1463,7 +1463,7 @@
         return this.lookup.length;
     };
     MLocatorLookup.prototype.getColumnName = function () {
-        return "M_Locator.M_Locator_ID";
+        return "VAM_Locator.VAM_Locator_ID";
     };
 
     /**
@@ -1484,7 +1484,7 @@
     * more tables if they have multiple windows.
     */
 
-        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID("M_Locator",
+        var VAF_Screen_ID = VIS.ZoomTarget.getZoomVAF_Screen_ID("VAM_Locator",
             this.windowNo, query.getWhereClause(), VIS.context.isSOTrx(this.windowNo));
         return VAF_Screen_ID;
     }; // getZoomWindow
@@ -1670,32 +1670,32 @@
     MPAttributeLookup.prototype.get = function (value) {
         if (value == null)
             return null;
-        var M_AttributeSetInstance_ID = 0;
+        var VAM_PFeature_SetInstance_ID = 0;
         if (value instanceof Number)
-            M_AttributeSetInstance_ID = value;
+            VAM_PFeature_SetInstance_ID = value;
         else {
             try {
-                M_AttributeSetInstance_ID = parseInt(value.toString());
+                VAM_PFeature_SetInstance_ID = parseInt(value.toString());
             }
             catch (e) {
                 this.log.log(Level.SEVERE, "Value=" + value, e);
             }
         }
 
-        if (M_AttributeSetInstance_ID == 0)
+        if (VAM_PFeature_SetInstance_ID == 0)
             return this.NO_INSTANCE;
 
         var description = null;
         try {
 
             var param = [];
-            param[0] = new VIS.DB.SqlParam("@M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+            param[0] = new VIS.DB.SqlParam("@VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
             var dr = executeReader("VIS_95", param);
             if (dr.read()) {
                 description = dr.getString(0);			//	Description
                 if (description == null || description.length == 0) {
                     if (VIS.Logging.VLogMgt.getIsLevelFine())
-                        description = "{" + M_AttributeSetInstance_ID + "}";
+                        description = "{" + VAM_PFeature_SetInstance_ID + "}";
                     else
                         description = "";
                 }
@@ -1708,11 +1708,11 @@
         }
         if (description == null)
             return null;
-        return { "Key": M_AttributeSetInstance_ID, "Name": description };
+        return { "Key": VAM_PFeature_SetInstance_ID, "Name": description };
     };	//	get
 
     MPAttributeLookup.prototype.getColumnName = function () {
-        return "M_AttributeSetInstance_ID";
+        return "VAM_PFeature_SetInstance_ID";
     };	//	getColumnName
 
     MPAttributeLookup.prototype.dispose = function () {
@@ -1810,7 +1810,7 @@
         if (!mandatory)
             list.push({ "Key": -1, "Name": "" });
         //var sql = "SELECT ASI.VAB_GenFeatureSetInstance_ID, ASI.Description " +
-        //    " from VAB_GenFeatureSetInstance ASI, M_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_GenFeatureSet_ID");
+        //    " from VAB_GenFeatureSetInstance ASI, VAM_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_GenFeatureSet_ID");
         //if (onlyActive)
         //    sql += " AND IsActive='Y'";
         //sql.append(" ORDER BY 2");
@@ -2400,37 +2400,37 @@
     MProductContainerLookup.prototype.get = function (value) {
         if (value == null)
             return null;
-        var M_ProductContainer_ID = 0;
+        var VAM_ProductContainer_ID = 0;
         if (value instanceof Number)
-            M_ProductContainer_ID = value;
+            VAM_ProductContainer_ID = value;
         else {
             try {
-                M_ProductContainer_ID = parseInt(value.toString());
+                VAM_ProductContainer_ID = parseInt(value.toString());
             }
             catch (e) {
                 this.log.log(Level.SEVERE, "Value=" + value, e);
             }
         }
 
-        if (M_ProductContainer_ID in this.lookup) {
-            return this.lookup[M_ProductContainer_ID];
+        if (VAM_ProductContainer_ID in this.lookup) {
+            return this.lookup[VAM_ProductContainer_ID];
         }
 
 
-        if (M_ProductContainer_ID == 0)
+        if (VAM_ProductContainer_ID == 0)
             return this.NO_INSTANCE;
 
         var description = null;
         //try {
         //    var param = [];
-        //    param[0] = new VIS.DB.SqlParam("@M_ProductContainer_ID", M_ProductContainer_ID);
+        //    param[0] = new VIS.DB.SqlParam("@VAM_ProductContainer_ID", VAM_ProductContainer_ID);
 
         //    var dr = executeReader("VIS_99", param);
         //    if (dr.read()) {
         //        description = dr.getString(0);			//	Description
         //        if (description == null || description.length == 0) {
         //            if (VIS.Logging.VLogMgt.getIsLevelFine())
-        //                description = "{" + M_ProductContainer_ID + "}";
+        //                description = "{" + VAM_ProductContainer_ID + "}";
         //            else
         //                description = "";
         //        }
@@ -2445,12 +2445,12 @@
 
         $.ajax({
             url: baseUrl + "ProductContainer/GetProductContainerInfo",
-            data: { ID: M_ProductContainer_ID },
+            data: { ID: VAM_ProductContainer_ID },
             async: false,
             success: function (result) {
                 if (!result) {
                     if (VIS.Logging.VLogMgt.getIsLevelFine())
-                        description = "{" + M_ProductContainer_ID + "}";
+                        description = "{" + VAM_ProductContainer_ID + "}";
                     else
                         description = "";
                 }
@@ -2463,13 +2463,13 @@
             }
         });
 
-        this.lookup[M_ProductContainer_ID] = description;
+        this.lookup[VAM_ProductContainer_ID] = description;
         if (description == null)
             return null;
-        return { "Key": M_ProductContainer_ID, "Name": description };
+        return { "Key": VAM_ProductContainer_ID, "Name": description };
     };	//	get
     MProductContainerLookup.prototype.getColumnName = function () {
-        return "M_ProductContainer_ID";
+        return "VAM_ProductContainer_ID";
     };
 
 

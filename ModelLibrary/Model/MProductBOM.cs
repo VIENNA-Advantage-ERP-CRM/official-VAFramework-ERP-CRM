@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProductBOM : X_M_Product_BOM
+    public class MProductBOM : X_VAM_Product_BOM
     {
 
         //	Included Product		
@@ -40,19 +40,19 @@ namespace VAdvantage.Model
          */
         public static MProductBOM[] GetBOMLines(MProduct product)
         {
-            return GetBOMLines(product.GetCtx(), product.GetM_Product_ID(), product.Get_TrxName());
+            return GetBOMLines(product.GetCtx(), product.GetVAM_Product_ID(), product.Get_TrxName());
         }
 
         /**
          * 	Get BOM Lines for Product
          * 	@param ctx context
-         *	@param M_Product_ID product
+         *	@param VAM_Product_ID product
          *	@param trxName transaction
          *	@return array of BOMs
          */
-        public static MProductBOM[] GetBOMLines(Ctx ctx, int M_Product_ID, Trx trxName)
+        public static MProductBOM[] GetBOMLines(Ctx ctx, int VAM_Product_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM M_Product_BOM WHERE IsActive = 'Y' AND M_Product_ID=" + M_Product_ID + " ORDER BY Line";
+            String sql = "SELECT * FROM VAM_Product_BOM WHERE IsActive = 'Y' AND VAM_Product_ID=" + VAM_Product_ID + " ORDER BY Line";
             List<MProductBOM> list = new List<MProductBOM>();
             DataTable dt = null;
             IDataReader idr = null;
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
                 }
                 dt = null;
             }
-            //	s_log.fine("getBOMLines - #" + list.size() + " - M_Product_ID=" + M_Product_ID);
+            //	s_log.fine("getBOMLines - #" + list.size() + " - VAM_Product_ID=" + VAM_Product_ID);
             MProductBOM[] retValue = new MProductBOM[list.Count];
             retValue = list.ToArray();
             return retValue;
@@ -95,17 +95,17 @@ namespace VAdvantage.Model
         /****
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_Product_BOM_ID id
+         *	@param VAM_Product_BOM_ID id
          *	@param trxName transaction
          */
-        public MProductBOM(Ctx ctx, int M_Product_BOM_ID, Trx trxName)
-            : base(ctx, M_Product_BOM_ID, trxName)
+        public MProductBOM(Ctx ctx, int VAM_Product_BOM_ID, Trx trxName)
+            : base(ctx, VAM_Product_BOM_ID, trxName)
         {
-            if (M_Product_BOM_ID == 0)
+            if (VAM_Product_BOM_ID == 0)
             {
-                //	setM_Product_ID (0);	//	parent
-                //	setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_Product_BOM WHERE M_Product_ID=@M_Product_ID@
-                //	setM_ProductBOM_ID(0);
+                //	setVAM_Product_ID (0);	//	parent
+                //	setLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_Product_BOM WHERE VAM_Product_ID=@VAM_Product_ID@
+                //	setVAM_ProductBOM_ID(0);
                 SetBOMQty(Env.ZERO);	// 1
             }
         }
@@ -128,18 +128,18 @@ namespace VAdvantage.Model
          */
         public MProduct GetProduct()
         {
-            if (_product == null && GetM_ProductBOM_ID() != 0)
-                _product = MProduct.Get(GetCtx(), GetM_ProductBOM_ID());
+            if (_product == null && GetVAM_ProductBOM_ID() != 0)
+                _product = MProduct.Get(GetCtx(), GetVAM_ProductBOM_ID());
             return _product;
         }
 
         /**
          * 	Set included Product
-         *	@param M_ProductBOM_ID product ID
+         *	@param VAM_ProductBOM_ID product ID
          */
-        public new void SetM_ProductBOM_ID(int M_ProductBOM_ID)
+        public new void SetVAM_ProductBOM_ID(int VAM_ProductBOM_ID)
         {
-            base.SetM_ProductBOM_ID(M_ProductBOM_ID);
+            base.SetVAM_ProductBOM_ID(VAM_ProductBOM_ID);
             _product = null;
         }
 
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
             sb.Append(Get_ID()).Append(",Line=").Append(GetLine())
                 .Append(",Type=").Append(GetBOMType()).Append(",Qty=").Append(GetBOMQty());
             if (_product == null)
-                sb.Append(",M_Product_ID=").Append(GetM_ProductBOM_ID());
+                sb.Append(",VAM_Product_ID=").Append(GetVAM_ProductBOM_ID());
             else
                 sb.Append(",").Append(_product);
             sb.Append("]");
@@ -170,10 +170,10 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             //	Product Line was changed
-            if (newRecord || Is_ValueChanged("M_ProductBOM_ID"))
+            if (newRecord || Is_ValueChanged("VAM_ProductBOM_ID"))
             {
                 //	Invalidate BOM
-                MProduct product = new MProduct(GetCtx(), GetM_Product_ID(), Get_TrxName());
+                MProduct product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_TrxName());
                 if (Get_TrxName() != null)
                     product.Load(Get_TrxName());
                 if (product.IsVerified())

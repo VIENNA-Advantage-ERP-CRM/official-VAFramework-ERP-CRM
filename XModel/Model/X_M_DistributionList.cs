@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DistributionList
+/** Generated Model for VAM_DistributionList
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DistributionList : PO
+public class X_VAM_DistributionList : PO
 {
-public X_M_DistributionList (Context ctx, int M_DistributionList_ID, Trx trxName) : base (ctx, M_DistributionList_ID, trxName)
+public X_VAM_DistributionList (Context ctx, int VAM_DistributionList_ID, Trx trxName) : base (ctx, VAM_DistributionList_ID, trxName)
 {
-/** if (M_DistributionList_ID == 0)
+/** if (VAM_DistributionList_ID == 0)
 {
-SetM_DistributionList_ID (0);
+SetVAM_DistributionList_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_DistributionList (Ctx ctx, int M_DistributionList_ID, Trx trxName) : base (ctx, M_DistributionList_ID, trxName)
+public X_VAM_DistributionList (Ctx ctx, int VAM_DistributionList_ID, Trx trxName) : base (ctx, VAM_DistributionList_ID, trxName)
 {
-/** if (M_DistributionList_ID == 0)
+/** if (VAM_DistributionList_ID == 0)
 {
-SetM_DistributionList_ID (0);
+SetVAM_DistributionList_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_DistributionList (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_DistributionList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_DistributionList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DistributionList()
+static X_VAM_DistributionList()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389062435L;
 public static int Table_ID;
  // =666;
 
-/** TableName=M_DistributionList */
-public static String Table_Name="M_DistributionList";
+/** TableName=VAM_DistributionList */
+public static String Table_Name="VAM_DistributionList";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DistributionList[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_DistributionList[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -147,17 +147,17 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Distribution List.
-@param M_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
-public void SetM_DistributionList_ID (int M_DistributionList_ID)
+@param VAM_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
+public void SetVAM_DistributionList_ID (int VAM_DistributionList_ID)
 {
-if (M_DistributionList_ID < 1) throw new ArgumentException ("M_DistributionList_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionList_ID", M_DistributionList_ID);
+if (VAM_DistributionList_ID < 1) throw new ArgumentException ("VAM_DistributionList_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionList_ID", VAM_DistributionList_ID);
 }
 /** Get Distribution List.
 @return Distribution Lists allow to distribute products to a selected list of partners */
-public int GetM_DistributionList_ID() 
+public int GetVAM_DistributionList_ID() 
 {
-Object ii = Get_Value("M_DistributionList_ID");
+Object ii = Get_Value("VAM_DistributionList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

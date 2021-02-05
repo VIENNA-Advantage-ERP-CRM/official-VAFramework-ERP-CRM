@@ -593,13 +593,13 @@ namespace VAdvantage.Model
         /** Update combination and optionally **/
         private bool GetOrCreateCombination(Boolean newRecord)
         {
-            int Account_ID = 0, VAB_SubAcct_ID = 0, M_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
+            int Account_ID = 0, VAB_SubAcct_ID = 0, VAM_Product_ID = 0, VAB_BusinessPartner_ID = 0, VAF_Org_ID = 0, VAF_OrgTrx_ID = 0,
                 C_LocFrom_ID = 0, C_LocTo_ID = 0, VAB_SalesRegionState_ID = 0, VAB_Project_ID = 0, VAB_Promotion_ID = 0,
                 VAB_BillingCode_ID = 0, User1_ID = 0, User2_ID = 0;
 
             if (GetVAB_Acct_ValidParameter_ID() == 0
                     || (!newRecord && (Is_ValueChanged("Account_ID")
-                            || Is_ValueChanged("M_Product_ID")
+                            || Is_ValueChanged("VAM_Product_ID")
                             || Is_ValueChanged("VAB_BusinessPartner_ID")
                             || Is_ValueChanged("VAF_Org_ID")
                             || Is_ValueChanged("VAB_Project_ID")
@@ -633,8 +633,8 @@ namespace VAdvantage.Model
                         C_LocFrom_ID = Util.GetValueOfInt(Get_Value("C_LocFrom_ID"));
                     if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("C_LocTo_ID") > 0)
                         C_LocTo_ID = Util.GetValueOfInt(Get_Value("C_LocTo_ID"));
-                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("M_Product_ID") > 0)
-                        M_Product_ID = Util.GetValueOfInt(Get_Value("M_Product_ID"));
+                    if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(et) && Get_ColumnIndex("VAM_Product_ID") > 0)
+                        VAM_Product_ID = Util.GetValueOfInt(Get_Value("VAM_Product_ID"));
                     if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Project_ID") > 0)
                         VAB_Project_ID = Util.GetValueOfInt(Get_Value("VAB_Project_ID"));
                     if (MVABAccountBookElement.ELEMENTTYPE_Project.Equals(et) && Get_ColumnIndex("VAB_Promotion_ID") > 0)
@@ -648,7 +648,7 @@ namespace VAdvantage.Model
                 }
 
                 MAccount acct = MAccount.Get(GetCtx(), GetVAF_Client_ID(), VAF_Org_ID, gl.GetVAB_AccountBook_ID(), Account_ID,
-                        VAB_SubAcct_ID, M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
+                        VAB_SubAcct_ID, VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
                         VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID, User1_ID, User2_ID, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
                 if (acct != null)
@@ -681,10 +681,10 @@ namespace VAdvantage.Model
                 if (Get_ColumnIndex("VAB_SubAcct_ID") > 0)
                     Set_Value("VAB_SubAcct_ID", combi.GetVAB_SubAcct_ID() > 0 ? combi.GetVAB_SubAcct_ID() : 0);
                 // setting null in business partner and product search control because if set 0 then it shows <0> in controls.-Mohit-11 May 2020
-                if (Get_ColumnIndex("M_Product_ID") > 0)
+                if (Get_ColumnIndex("VAM_Product_ID") > 0)
                 {
-                    if (combi.GetM_Product_ID() > 0)
-                        Set_Value("M_Product_ID", combi.GetM_Product_ID());
+                    if (combi.GetVAM_Product_ID() > 0)
+                        Set_Value("VAM_Product_ID", combi.GetVAM_Product_ID());
                 }
                 if (Get_ColumnIndex("VAB_BusinessPartner_ID") > 0)
                 {
@@ -786,7 +786,7 @@ namespace VAdvantage.Model
                 toLine.SetVAB_Address_ID(fromLines[i].GetVAB_Address_ID());
                 toLine.SetVAB_Project_ID(fromLines[i].GetVAB_Project_ID());
                 toLine.SetVAB_SalesRegionState_ID(fromLines[i].GetVAB_SalesRegionState_ID());
-                toLine.SetM_Product_ID(fromLines[i].GetM_Product_ID());
+                toLine.SetVAM_Product_ID(fromLines[i].GetVAM_Product_ID());
                 toLine.SetOrg_ID(fromLines[i].GetOrg_ID());
                 toLine.SetSeqNo(fromLines[i].GetSeqNo());
                 toLine.SetLineType(fromLines[i].GetLineType());

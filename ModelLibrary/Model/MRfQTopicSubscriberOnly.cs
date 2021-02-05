@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         {
             // JID_0474: "RFQ Topic window third tab (Restriction) system allow to save blank entry
             //	No Product OR Product Category
-            if (GetM_Product_Category_ID() == 0 && GetM_Product_ID() == 0)
+            if (GetVAM_ProductCategory_ID() == 0 && GetVAM_Product_ID() == 0)
             {
                 log.SaveError("NoProduct/Category", "");
                 return false;

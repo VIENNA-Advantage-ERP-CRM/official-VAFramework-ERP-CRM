@@ -76,7 +76,7 @@ namespace VAdvantage.Process
                 //throw new Exception("Could not create Order");
 
             //	Create an order on Phase Level
-            if (fromPhase.GetM_Product_ID() != 0)
+            if (fromPhase.GetVAM_Product_ID() != 0)
             {
                 MOrderLine ol = new MOrderLine(order);
                 ol.SetLine(fromPhase.GetSeqNo());
@@ -85,7 +85,7 @@ namespace VAdvantage.Process
                     sb.Append(" - ").Append(fromPhase.GetDescription());
                 ol.SetDescription(sb.ToString());
                 //
-                ol.SetM_Product_ID(fromPhase.GetM_Product_ID(), true);
+                ol.SetVAM_Product_ID(fromPhase.GetVAM_Product_ID(), true);
                 ol.SetQty(fromPhase.GetQty());
                 ol.SetPrice();
                 if (fromPhase.GetPriceActual() != null && fromPhase.GetPriceActual().CompareTo(Env.ZERO) != 0)
@@ -108,7 +108,7 @@ namespace VAdvantage.Process
                     sb.Append(" - ").Append(element.GetDescription());
                 ol.SetDescription(sb.ToString());
                 //
-                ol.SetM_Product_ID(element.GetM_Product_ID(), true);
+                ol.SetVAM_Product_ID(element.GetVAM_Product_ID(), true);
                 ol.SetQty(element.GetQty());
                 ol.SetPrice();
                 ol.SetTax();

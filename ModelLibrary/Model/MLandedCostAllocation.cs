@@ -85,7 +85,7 @@ namespace VAdvantage.Model
 
             if (VAB_LCostDistribution_ID == 0)
             {
-                //	setM_CostElement_ID(0);
+                //	setVAM_ProductCostElement_ID(0);
                 SetAmt(Env.ZERO);
                 SetQty(Env.ZERO);
                 SetBase(Env.ZERO);
@@ -108,15 +108,15 @@ namespace VAdvantage.Model
         /**
          * 	Parent Constructor
          *	@param parent parent
-         *	@param M_CostElement_ID cost element
+         *	@param VAM_ProductCostElement_ID cost element
          */
-        public MLandedCostAllocation(MInvoiceLine parent, int M_CostElement_ID)
+        public MLandedCostAllocation(MInvoiceLine parent, int VAM_ProductCostElement_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
             SetClientOrg(parent);
             SetVAB_InvoiceLine_ID(parent.GetVAB_InvoiceLine_ID());
-            SetM_CostElement_ID(M_CostElement_ID);
+            SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
         }	//	MLandedCostAllocation
 
         /**

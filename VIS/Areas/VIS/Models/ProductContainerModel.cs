@@ -39,14 +39,14 @@ namespace VIS.Models
         public List<PContainer> ProductContainer(string Name, int WarehouseId, int LocatorId)
         {
             List<PContainer> listOverHead = new List<PContainer>();
-            string sqlQry = @"SELECT M_ProductContainer_ID,
+            string sqlQry = @"SELECT VAM_ProductContainer_ID,
                                      Name, 
                                      Ref_M_Container_ID ,
-                                     (SELECT NAME FROM M_ProductContainer ipc WHERE ipc.M_ProductContainer_ID=opc.Ref_M_Container_ID) AS ParentPath ,
+                                     (SELECT NAME FROM VAM_ProductContainer ipc WHERE ipc.VAM_ProductContainer_ID=opc.Ref_M_Container_ID) AS ParentPath ,
                                      Width, 
                                      Height 
-                              FROM M_ProductContainer opc WHERE IsActive='Y' AND M_Warehouse_ID=" + WarehouseId +
-                              @" AND M_Locator_ID=" + LocatorId;
+                              FROM VAM_ProductContainer opc WHERE IsActive='Y' AND VAM_Warehouse_ID=" + WarehouseId +
+                              @" AND VAM_Locator_ID=" + LocatorId;
             if (!String.IsNullOrEmpty(Name))
             {
                 sqlQry += "  AND UPPER(Name) LIKE UPPER('%" + Name + "%')";
@@ -61,7 +61,7 @@ namespace VIS.Models
                     objContainer.ParentPath = Util.GetValueOfString(ds.Tables[0].Rows[i]["ParentPath"]);
                     objContainer.Width = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Width"]);
                     objContainer.Height = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["Height"]);
-                    objContainer.M_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
+                    objContainer.VAM_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"]);
                     objContainer.Ref_M_Container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["Ref_M_Container_ID"]);
                     listOverHead.Add(objContainer);
                 }
@@ -78,7 +78,7 @@ namespace VIS.Models
         /// <returns></returns>
         public bool UpdateProductContainer(string TableName, int RecordId, int ContainerId)
         {
-            int no = DB.ExecuteQuery("UPDATE " + TableName.Substring(0, TableName.Length - 3) + " SET M_ProductContainer_ID = " + ContainerId + " WHERE " + TableName + " = " + RecordId, null, null);
+            int no = DB.ExecuteQuery("UPDATE " + TableName.Substring(0, TableName.Length - 3) + " SET VAM_ProductContainer_ID = " + ContainerId + " WHERE " + TableName + " = " + RecordId, null, null);
             if (no > 0)
                 return true;
             else
@@ -94,12 +94,12 @@ namespace VIS.Models
         public List<MoveKeyVal> GetWarehouse(int Warehouse_ID)
         {
             List<MoveKeyVal> keyVal = new List<MoveKeyVal>();
-            string sql = "SELECT M_Warehouse_ID,Name FROM M_Warehouse WHERE IsActive = 'Y'";
+            string sql = "SELECT VAM_Warehouse_ID,Name FROM VAM_Warehouse WHERE IsActive = 'Y'";
             if (Warehouse_ID > 0)
             {
-                sql += " AND M_Warehouse_ID = " + Warehouse_ID;
+                sql += " AND VAM_Warehouse_ID = " + Warehouse_ID;
             }
-            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Warehouse", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_Warehouse", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
 
             sql += "order by Name asc";
             DataSet ds = DB.ExecuteDataset(sql);
@@ -107,7 +107,7 @@ namespace VIS.Models
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    keyVal.Add(new MoveKeyVal() { ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_Warehouse_ID"]), Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]) });
+                    keyVal.Add(new MoveKeyVal() { ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_Warehouse_ID"]), Name = Convert.ToString(ds.Tables[0].Rows[i]["Name"]) });
                 }
                 ds.Dispose();
             }
@@ -122,19 +122,19 @@ namespace VIS.Models
         public List<MoveKeyVal> GetLocator(int Warehouse_ID)
         {
             List<MoveKeyVal> keyVal = new List<MoveKeyVal>();
-            string sql = "SELECT M_Locator_ID,Value FROM M_Locator WHERE IsActive = 'Y'";
+            string sql = "SELECT VAM_Locator_ID,Value FROM VAM_Locator WHERE IsActive = 'Y'";
             if (Warehouse_ID > 0)
             {
-                sql += " AND M_Warehouse_ID = " + Warehouse_ID;
+                sql += " AND VAM_Warehouse_ID = " + Warehouse_ID;
             }
-            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_Locator", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_Locator", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
             sql += " order by value asc";
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    keyVal.Add(new MoveKeyVal() { ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_Locator_ID"]), Name = Convert.ToString(ds.Tables[0].Rows[i]["Value"]) });
+                    keyVal.Add(new MoveKeyVal() { ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_Locator_ID"]), Name = Convert.ToString(ds.Tables[0].Rows[i]["Value"]) });
                 }
                 ds.Dispose();
             }
@@ -151,17 +151,17 @@ namespace VIS.Models
         public List<MoveKeyVal> GetContainer(int warehouse, int locator, int container)
         {
             List<MoveKeyVal> keyVal = new List<MoveKeyVal>();
-            string sql = "SELECT M_ProductContainer_ID,Name || '_' || Value AS Value FROM M_ProductContainer WHERE IsActive = 'Y' AND M_Warehouse_ID = " + warehouse;
+            string sql = "SELECT VAM_ProductContainer_ID,Name || '_' || Value AS Value FROM VAM_ProductContainer WHERE IsActive = 'Y' AND VAM_Warehouse_ID = " + warehouse;
             if (locator > 0)
             {
-                sql += "  AND M_Locator_ID = " + locator;
+                sql += "  AND VAM_Locator_ID = " + locator;
             }
             if (container > 0)
             {
-                sql += " AND M_ProductContainer_ID != " + container;
+                sql += " AND VAM_ProductContainer_ID != " + container;
             }
             sql += " ORDER BY Value";
-            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -169,7 +169,7 @@ namespace VIS.Models
                 {
                     keyVal.Add(new MoveKeyVal()
                     {
-                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]),
+                        ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"]),
                         Name = Convert.ToString(ds.Tables[0].Rows[i]["Value"])
                     });
                 }
@@ -190,8 +190,8 @@ namespace VIS.Models
         {
             if (warehouse == 0 && locator > 0)
             {
-                MLocator m_locator = MLocator.Get(_ctx, locator);
-                warehouse = m_locator.GetM_Warehouse_ID();
+                MLocator VAM_Locator = MLocator.Get(_ctx, locator);
+                warehouse = VAM_Locator.GetVAM_Warehouse_ID();
             }
             List<TreeContainer> keyVal = new List<TreeContainer>();
             string sql = "";
@@ -199,26 +199,26 @@ namespace VIS.Models
             if (DatabaseType.IsOracle)
             {
                 sql = @"SELECT value ,   '.'   || LPAD (' ', LEVEL * 1)   || Name AS Name,
-                            LEVEL ,   name   || '_'   || value AS ContainerName , m_productcontainer_id
-                         FROM m_productcontainer WHERE IsActive = 'Y'";
+                            LEVEL ,   name   || '_'   || value AS ContainerName , VAM_ProductContainer_id
+                         FROM VAM_ProductContainer WHERE IsActive = 'Y'";
                 if (warehouse > 0)
                 {
-                    sql += " AND m_warehouse_id = " + warehouse;
+                    sql += " AND VAM_Warehouse_id = " + warehouse;
                 }
                 if (locator > 0)
                 {
-                    sql += "  AND M_Locator_ID = " + locator;
+                    sql += "  AND VAM_Locator_ID = " + locator;
                 }
                 if (container > 0)
                 {
-                    sql += " AND M_ProductContainer_ID != " + container;
+                    sql += " AND VAM_ProductContainer_ID != " + container;
                 }
                 if (!String.IsNullOrEmpty(validation))
                 {
                     sql += " AND " + validation;
                 }
-                sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR m_productcontainer_id";
-                sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
+                sql += "  START WITH NVL(ref_m_container_id,0) =0  CONNECT BY NVL(ref_m_container_id,0) = PRIOR VAM_ProductContainer_id";
+                sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO); // fully qualidfied - RO
                 ds = DB.ExecuteDataset(sql);
             }
             else if (DatabaseType.IsPostgre)
@@ -236,7 +236,7 @@ namespace VIS.Models
                         Name = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]),
                         Level = Util.GetValueOfInt(ds.Tables[0].Rows[i]["LEVEL"]),
                         ContainerName = Util.GetValueOfString(ds.Tables[0].Rows[i]["ContainerName"]),
-                        M_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"])
+                        VAM_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"])
                     });
                 }
                 ds.Dispose();
@@ -257,18 +257,18 @@ namespace VIS.Models
         {
             DataSet finalContainer = null;
             // Get List of parent Container
-            String sql = "SELECT M_ProductContainer_ID FROM M_ProductContainer WHERE Ref_M_Container_ID IS NULL AND IsActive = 'Y' ";
+            String sql = "SELECT VAM_ProductContainer_ID FROM VAM_ProductContainer WHERE Ref_M_Container_ID IS NULL AND IsActive = 'Y' ";
             if (warehouse > 0)
             {
-                sql += "  AND m_warehouse_id = " + warehouse;
+                sql += "  AND VAM_Warehouse_id = " + warehouse;
             }
             if (locator > 0)
             {
-                sql += "  AND M_Locator_ID = " + locator;
+                sql += "  AND VAM_Locator_ID = " + locator;
             }
             if (container > 0)
             {
-                sql += " AND M_ProductContainer_ID != " + container;
+                sql += " AND VAM_ProductContainer_ID != " + container;
             }
             if (!String.IsNullOrEmpty(validation))
             {
@@ -281,15 +281,15 @@ namespace VIS.Models
                 DataSet childContainer = null;
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-                    int parentId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]);
-                    sql = @"select (select tt.value from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as value,
-                                   (select tt.name from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as Name , 
+                    int parentId = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"]);
+                    sql = @"select (select tt.value from VAM_ProductContainer tt where tt.VAM_ProductContainer_ID = t.VAM_ProductContainer_ID) as value,
+                                   (select tt.name from VAM_ProductContainer tt where tt.VAM_ProductContainer_ID = t.VAM_ProductContainer_ID) as Name , 
                                    t.LEVEL + 1 AS LEVEL, 
-                                   (select tt.name   || '_'   || tt.value from m_productcontainer tt where tt.M_ProductContainer_ID = t.M_ProductContainer_ID) as ContainerName
-                                  , t.M_ProductContainer_ID
-                            FROM connectby('M_ProductContainer', 'M_ProductContainer_ID', 'Ref_M_Container_ID', " + parentId + @"::text,0)
-                            AS t(M_ProductContainer_ID int , Ref_M_Container_ID int, level int)  
-                             JOIN M_ProductContainer pt on pt.M_ProductContainer_ID =" + parentId;
+                                   (select tt.name   || '_'   || tt.value from VAM_ProductContainer tt where tt.VAM_ProductContainer_ID = t.VAM_ProductContainer_ID) as ContainerName
+                                  , t.VAM_ProductContainer_ID
+                            FROM connectby('VAM_ProductContainer', 'VAM_ProductContainer_ID', 'Ref_M_Container_ID', " + parentId + @"::text,0)
+                            AS t(VAM_ProductContainer_ID int , Ref_M_Container_ID int, level int)  
+                             JOIN VAM_ProductContainer pt on pt.VAM_ProductContainer_ID =" + parentId;
                     childContainer = DB.ExecuteDataset(sql, null, null);
                     if (childContainer != null && childContainer.Tables.Count > 0 && childContainer.Tables[0].Rows.Count > 0)
                     {
@@ -334,18 +334,18 @@ namespace VIS.Models
             List<MoveContainer> moveContainer = new List<MoveContainer>();
 
             string sql = @"SELECT * FROM (
-                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                             First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty, 
-                            (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
-                            FROM M_Transaction t
-                            INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
+                            SELECT DISTINCT p.VAM_Product_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID,
+                             First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS ContainerCurrentQty, 
+                            (SELECT DESCRIPTION FROM VAM_PFeature_SetInstance WHERE NVL(VAM_PFeature_SetInstance_ID, 0) = t.VAM_PFeature_SetInstance_ID) AS ASI
+                            FROM VAM_Inv_Trx t
+                            INNER JOIN VAM_Product p ON p.VAM_Product_ID = t.VAM_Product_ID
                             INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
-                            WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
+                            WHERE t.IsActive = 'Y' AND NVL(t.VAM_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                               AND t.M_Locator_ID  = " + locator + @"
+                               AND t.VAM_Locator_ID  = " + locator + @"
                                AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
                           //AND t.VAF_Org_ID  = " + VAF_Org_ID +
-                          //@" GROUP BY p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          //@" GROUP BY p.VAM_Product_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
 
 
@@ -353,18 +353,18 @@ namespace VIS.Models
             if (page == 1)
             {
                 string sql1 = @"SELECT COUNT(*) FROM (
-                            SELECT DISTINCT p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty,  
-                            (SELECT DESCRIPTION FROM M_ATTRIBUTESETINSTANCE WHERE NVL(M_ATTRIBUTESETINSTANCE_ID, 0) = t.M_ATTRIBUTESETINSTANCE_ID) AS ASI
-                            FROM M_Transaction t
-                            INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
+                            SELECT DISTINCT p.VAM_Product_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID,
+                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS ContainerCurrentQty,  
+                            (SELECT DESCRIPTION FROM VAM_PFeature_SetInstance WHERE NVL(VAM_PFeature_SetInstance_ID, 0) = t.VAM_PFeature_SetInstance_ID) AS ASI
+                            FROM VAM_Inv_Trx t
+                            INNER JOIN VAM_Product p ON p.VAM_Product_ID = t.VAM_Product_ID
                             INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
-                            WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) = " + container +
+                            WHERE t.IsActive = 'Y' AND NVL(t.VAM_ProductContainer_ID, 0) = " + container +
                             @" AND t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                               AND t.M_Locator_ID  = " + locator + @"
+                               AND t.VAM_Locator_ID  = " + locator + @"
                                AND t.VAF_Client_ID  = " + _ctx.GetVAF_Client_ID() +
                           //AND t.VAF_Org_ID  = " + VAF_Org_ID +
-                          // @" GROUP BY p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID 
+                          // @" GROUP BY p.VAM_Product_ID, p.NAME, p.VAB_UOM_ID, u.Name, t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID 
                           @" )t WHERE ContainerCurrentQty <> 0 ";
                 countRecord = Util.GetValueOfInt(DB.ExecuteScalar(sql1, null, null));
             }
@@ -376,9 +376,9 @@ namespace VIS.Models
                 {
                     moveContainer.Add(new MoveContainer()
                     {
-                        M_Product_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_PRODUCT_ID"]),
-                        M_AttributeSetInstance_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_ATTRIBUTESETINSTANCE_ID"]),
-                        M_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_ProductContainer_ID"]),
+                        VAM_Product_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_Product_ID"]),
+                        VAM_PFeature_SetInstance_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]),
+                        VAM_ProductContainer_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_ProductContainer_ID"]),
                         VAB_UOM_ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAB_UOM_ID"]),
                         ProductName = Util.GetValueOfString(ds.Tables[0].Rows[i]["NAME"]),
                         ContainerQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"]),
@@ -411,14 +411,14 @@ namespace VIS.Models
                 //to delete all the movement lines where MoveFullContainer is False
                 if (isMoveFullContainer)
                 {
-                    DB.ExecuteQuery("DELETE FROM M_MovementLine WHERE M_Movement_ID = " + Util.GetValueOfInt(mData[0]["M_Movement_ID"]) + " AND MoveFullContainer= 'N' ", null, null);
+                    DB.ExecuteQuery("DELETE FROM VAM_InvTrf_Line WHERE VAM_InventoryTransfer_ID = " + Util.GetValueOfInt(mData[0]["VAM_InventoryTransfer_ID"]) + " AND MoveFullContainer= 'N' ", null, null);
                 }
 
                 // Lines not inserted, as movement line already has a full move container line.
                 if (!isMoveFullContainer)
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(MoveFullContainer) FROM M_MovementLine WHERE MoveFullContainer= 'Y' AND M_Movement_ID = "
-                                                              + Util.GetValueOfInt(mData[0]["M_Movement_ID"]), null, trx)) > 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(MoveFullContainer) FROM VAM_InvTrf_Line WHERE MoveFullContainer= 'Y' AND VAM_InventoryTransfer_ID = "
+                                                              + Util.GetValueOfInt(mData[0]["VAM_InventoryTransfer_ID"]), null, trx)) > 0)
                     {
                         trx.Close();
                         return Msg.GetMsg(_ctx, "VIS_LinehaveFullContainer");
@@ -426,8 +426,8 @@ namespace VIS.Models
                 }
 
                 // Get Line No
-                int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(MAX(Line),0) AS DefaultValue FROM M_MovementLine WHERE M_Movement_ID="
-                    + Util.GetValueOfInt(mData[0]["M_Movement_ID"]), null, trx));
+                int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(MAX(Line),0) AS DefaultValue FROM VAM_InvTrf_Line WHERE VAM_InventoryTransfer_ID="
+                    + Util.GetValueOfInt(mData[0]["VAM_InventoryTransfer_ID"]), null, trx));
 
 
                 isMoveFullContainerQty = Util.GetValueOfBool(mData[0]["IsfullContainerQtyWise"]);
@@ -437,7 +437,7 @@ namespace VIS.Models
                 else if (isMoveFullContainer || isMoveFullContainerQty)
                 {
                     error.Clear();
-                    error.Append(SaveMoveLinewithFullContainer(Util.GetValueOfInt(mData[0]["M_Movement_ID"]),
+                    error.Append(SaveMoveLinewithFullContainer(Util.GetValueOfInt(mData[0]["VAM_InventoryTransfer_ID"]),
                                                    Util.GetValueOfInt(mData[0]["FromLocator"]),
                                                    Util.GetValueOfInt(mData[0]["FromContainer"]),
                                                    Util.GetValueOfInt(mData[0]["ToLocator"]),
@@ -455,16 +455,16 @@ namespace VIS.Models
                 for (int i = 0; i < mData.Count; i++)
                 {
                     #region Quantity Only
-                    MMovement move = new MMovement(_ctx, Util.GetValueOfInt(mData[i]["M_Movement_ID"]), null);
+                    MMovement move = new MMovement(_ctx, Util.GetValueOfInt(mData[i]["VAM_InventoryTransfer_ID"]), null);
 
-                    moveId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(M_MovementLine_ID, 0) AS M_Movement_ID FROM M_MovementLine WHERE 
-                             M_Movement_ID = " + Util.GetValueOfInt(mData[i]["M_Movement_ID"]) +
-                             @" AND M_Product_ID = " + Util.GetValueOfInt(mData[i]["M_Product_ID"]) +
-                             @" AND NVL(M_AttributeSetInstance_ID, 0) = " + Util.GetValueOfInt(mData[i]["M_AttributeSetInstance_ID"]) +
-                             @" AND M_Locator_ID = " + Util.GetValueOfInt(mData[i]["FromLocator"]) +
-                             @" AND NVL(M_ProductContainer_ID, 0) = " + Util.GetValueOfInt(mData[i]["FromContainer"]) +
-                             @" AND M_LocatorTo_ID = " + Util.GetValueOfInt(mData[i]["ToLocator"]) +
-                             @" AND NVL(Ref_M_ProductContainerTo_ID, 0) = " + Util.GetValueOfInt(mData[i]["ToContainer"]) +
+                    moveId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(VAM_InvTrf_Line_ID, 0) AS VAM_InventoryTransfer_ID FROM VAM_InvTrf_Line WHERE 
+                             VAM_InventoryTransfer_ID = " + Util.GetValueOfInt(mData[i]["VAM_InventoryTransfer_ID"]) +
+                             @" AND VAM_Product_ID = " + Util.GetValueOfInt(mData[i]["VAM_Product_ID"]) +
+                             @" AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + Util.GetValueOfInt(mData[i]["VAM_PFeature_SetInstance_ID"]) +
+                             @" AND VAM_Locator_ID = " + Util.GetValueOfInt(mData[i]["FromLocator"]) +
+                             @" AND NVL(VAM_ProductContainer_ID, 0) = " + Util.GetValueOfInt(mData[i]["FromContainer"]) +
+                             @" AND VAM_LocatorTo_ID = " + Util.GetValueOfInt(mData[i]["ToLocator"]) +
+                             @" AND NVL(Ref_VAM_ProductContainerTo_ID, 0) = " + Util.GetValueOfInt(mData[i]["ToContainer"]) +
                              @" AND VAF_Org_ID = " + move.GetVAF_Org_ID()));
 
                     if (moveId > 0)
@@ -481,15 +481,15 @@ namespace VIS.Models
                         lineNo += 10;
                         moveline.SetVAF_Client_ID(move.GetVAF_Client_ID());
                         moveline.SetVAF_Org_ID(move.GetVAF_Org_ID());
-                        moveline.SetM_Movement_ID(move.GetM_Movement_ID());
+                        moveline.SetVAM_InventoryTransfer_ID(move.GetVAM_InventoryTransfer_ID());
                         moveline.SetLine(lineNo);
-                        moveline.SetM_Product_ID(Util.GetValueOfInt(mData[i]["M_Product_ID"]));
-                        moveline.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(mData[i]["M_AttributeSetInstance_ID"]));
+                        moveline.SetVAM_Product_ID(Util.GetValueOfInt(mData[i]["VAM_Product_ID"]));
+                        moveline.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(mData[i]["VAM_PFeature_SetInstance_ID"]));
                         moveline.SetVAB_UOM_ID(Util.GetValueOfInt(mData[i]["VAB_UOM_ID"]));
-                        moveline.SetM_Locator_ID(Util.GetValueOfInt(mData[i]["FromLocator"]));
-                        moveline.SetM_LocatorTo_ID(Util.GetValueOfInt(mData[i]["ToLocator"]));
-                        moveline.SetM_ProductContainer_ID(Util.GetValueOfInt(mData[i]["FromContainer"]));
-                        moveline.SetRef_M_ProductContainerTo_ID(Util.GetValueOfInt(mData[i]["ToContainer"]));
+                        moveline.SetVAM_Locator_ID(Util.GetValueOfInt(mData[i]["FromLocator"]));
+                        moveline.SetVAM_LocatorTo_ID(Util.GetValueOfInt(mData[i]["ToLocator"]));
+                        moveline.SetVAM_ProductContainer_ID(Util.GetValueOfInt(mData[i]["FromContainer"]));
+                        moveline.SetRef_VAM_ProductContainerTo_ID(Util.GetValueOfInt(mData[i]["ToContainer"]));
                         moveline.SetQtyEntered(Util.GetValueOfDecimal(mData[i]["MoveQty"]));
                         moveline.SetMovementQty(Util.GetValueOfDecimal(mData[i]["MoveQty"]));
                         moveline.SetMoveFullContainer(Util.GetValueOfBool(mData[i]["IsFullMoveContainer"]));
@@ -506,7 +506,7 @@ namespace VIS.Models
                     if (!moveline.Save(trx))
                     {
                         #region Save error catch and rollback
-                        product = MProduct.Get(_ctx, Util.GetValueOfInt(mData[i]["M_Product_ID"]));
+                        product = MProduct.Get(_ctx, Util.GetValueOfInt(mData[i]["VAM_Product_ID"]));
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -559,24 +559,24 @@ namespace VIS.Models
             // Get Path upto selected container
             if (ispostgerSql)
             {
-                sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
-                        SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
-                        FROM    M_ProductContainer
+                sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
+                        SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
+                        FROM    VAM_ProductContainer
                         WHERE   Ref_M_Container_ID is null
                         UNION ALL
-                        SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
-                        FROM    M_ProductContainer p
-                                INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
+                        SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
+                        FROM    VAM_ProductContainer p
+                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID
                     )
                     SELECT   ARRAY_TO_STRING(name_path, '->')
-                    FROM    pops  where m_productcontainer_id = " + fromContainerId;
+                    FROM    pops  where VAM_ProductContainer_id = " + fromContainerId;
             }
             else
             {
-                sql = @"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
-                            FROM m_productcontainer 
-                           WHERE m_productcontainer_id = " + fromContainerId + @"
-                            START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
+                sql = @"SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
+                            FROM VAM_ProductContainer 
+                           WHERE VAM_ProductContainer_id = " + fromContainerId + @"
+                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
                            ORDER BY tree ";
             }
             pathContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
@@ -586,24 +586,24 @@ namespace VIS.Models
             {
                 if (ispostgerSql)
                 {
-                    sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
-                                SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
-                                FROM    M_ProductContainer
+                    sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
+                                SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
+                                FROM    VAM_ProductContainer
                                 WHERE   Ref_M_Container_ID is null
                                 UNION ALL
-                                SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
-                                FROM    M_ProductContainer p
-                                        INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID )
-                            SELECT  M_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
+                                SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
+                                FROM    VAM_ProductContainer p
+                                        INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID )
+                            SELECT  VAM_ProductContainer_id, level,  ARRAY_TO_STRING(name_path, '->')
                             FROM    pops  where ARRAY_TO_STRING(name_path, '->') like '" + pathContainer + "%'";
                 }
                 else
                 {
-                    sql = @"SELECT tree, m_productcontainer_id FROM
-                            (SELECT sys_connect_by_path(m_productcontainer_id,'->') tree , m_productcontainer_id
-                             FROM m_productcontainer
+                    sql = @"SELECT tree, VAM_ProductContainer_id FROM
+                            (SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree , VAM_ProductContainer_id
+                             FROM VAM_ProductContainer
                              START WITH ref_m_container_id IS NULL
-                             CONNECT BY prior m_productcontainer_id = ref_m_container_id
+                             CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
                              ORDER BY tree  
                              )
                            WHERE tree LIKE ('" + pathContainer + "%') ";
@@ -614,9 +614,9 @@ namespace VIS.Models
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         if (String.IsNullOrEmpty(childContainerId))
-                            childContainerId = Util.GetValueOfString(ds.Tables[0].Rows[i]["m_productcontainer_id"]);
+                            childContainerId = Util.GetValueOfString(ds.Tables[0].Rows[i]["VAM_ProductContainer_id"]);
                         else
-                            childContainerId += "," + Util.GetValueOfString(ds.Tables[0].Rows[i]["m_productcontainer_id"]);
+                            childContainerId += "," + Util.GetValueOfString(ds.Tables[0].Rows[i]["VAM_ProductContainer_id"]);
                     }
                 }
                 ds.Dispose();
@@ -647,14 +647,14 @@ namespace VIS.Models
 
             // Get All records of Parent Container and child container
             sql = @"SELECT * FROM (
-                            SELECT Distinct p.M_PRODUCT_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.M_ATTRIBUTESETINSTANCE_ID, t.M_ProductContainer_ID,
-                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty
-                            FROM M_Transaction t
-                            INNER JOIN M_Product p ON p.M_Product_ID = t.M_Product_ID
+                            SELECT Distinct p.VAM_Product_ID, p.NAME, p.VAB_UOM_ID, u.Name AS UomName,  t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID,
+                            First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS ContainerCurrentQty
+                            FROM VAM_Inv_Trx t
+                            INNER JOIN VAM_Product p ON p.VAM_Product_ID = t.VAM_Product_ID
                             INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
-                            WHERE t.IsActive = 'Y' AND NVL(t.M_ProductContainer_ID, 0) IN ( " + childContainerId +
+                            WHERE t.IsActive = 'Y' AND NVL(t.VAM_ProductContainer_ID, 0) IN ( " + childContainerId +
                            @" ) AND t.MovementDate <=" + GlobalVariable.TO_DATE(movement.GetMovementDate(), true) + @" 
-                               AND t.M_Locator_ID  = " + fromLocatorId + @"
+                               AND t.VAM_Locator_ID  = " + fromLocatorId + @"
                                AND t.VAF_Client_ID  = " + movement.GetVAF_Client_ID() + @"
                           ) t WHERE ContainerCurrentQty <> 0 ";
             DataSet dsRecords = DB.ExecuteDataset(sql, null, trx);
@@ -665,14 +665,14 @@ namespace VIS.Models
                 MProduct product = null;
                 for (int i = 0; i < dsRecords.Tables[0].Rows.Count; i++)
                 {
-                    movementlineId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(M_MovementLine_ID, 0) AS M_Movement_ID FROM M_MovementLine WHERE 
-                             M_Movement_ID = " + Util.GetValueOfInt(movementId) +
-                            @" AND M_Product_ID = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_Product_ID"]) +
-                            @" AND NVL(M_AttributeSetInstance_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) +
-                            @" AND M_Locator_ID = " + Util.GetValueOfInt(fromLocatorId) +
-                            @" AND NVL(M_ProductContainer_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_ProductContainer_ID"]) +
-                            @" AND M_LocatorTo_ID = " + Util.GetValueOfInt(toLocatorId) +
-                            @" AND NVL(Ref_M_ProductContainerTo_ID, 0) = " + toContainerId +
+                    movementlineId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(VAM_InvTrf_Line_ID, 0) AS VAM_InventoryTransfer_ID FROM VAM_InvTrf_Line WHERE 
+                             VAM_InventoryTransfer_ID = " + Util.GetValueOfInt(movementId) +
+                            @" AND VAM_Product_ID = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]) +
+                            @" AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) +
+                            @" AND VAM_Locator_ID = " + Util.GetValueOfInt(fromLocatorId) +
+                            @" AND NVL(VAM_ProductContainer_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_ProductContainer_ID"]) +
+                            @" AND VAM_LocatorTo_ID = " + Util.GetValueOfInt(toLocatorId) +
+                            @" AND NVL(Ref_VAM_ProductContainerTo_ID, 0) = " + toContainerId +
                             @" AND VAF_Org_ID = " + movement.GetVAF_Org_ID()));
 
                     if (movementlineId > 0)
@@ -689,15 +689,15 @@ namespace VIS.Models
                         lineNo += 10;
                         moveline.SetVAF_Client_ID(movement.GetVAF_Client_ID());
                         moveline.SetVAF_Org_ID(movement.GetVAF_Org_ID());
-                        moveline.SetM_Movement_ID(movement.GetM_Movement_ID());
+                        moveline.SetVAM_InventoryTransfer_ID(movement.GetVAM_InventoryTransfer_ID());
                         moveline.SetLine(lineNo);
-                        moveline.SetM_Product_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_Product_ID"]));
-                        moveline.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                        moveline.SetVAM_Product_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]));
+                        moveline.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]));
                         moveline.SetVAB_UOM_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAB_UOM_ID"]));
-                        moveline.SetM_Locator_ID(fromLocatorId);
-                        moveline.SetM_LocatorTo_ID(toLocatorId);
-                        moveline.SetM_ProductContainer_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_ProductContainer_ID"]));
-                        moveline.SetRef_M_ProductContainerTo_ID(toContainerId);
+                        moveline.SetVAM_Locator_ID(fromLocatorId);
+                        moveline.SetVAM_LocatorTo_ID(toLocatorId);
+                        moveline.SetVAM_ProductContainer_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_ProductContainer_ID"]));
+                        moveline.SetRef_VAM_ProductContainerTo_ID(toContainerId);
                         moveline.SetQtyEntered(Util.GetValueOfDecimal(dsRecords.Tables[0].Rows[i]["ContainerCurrentQty"]));
                         moveline.SetMovementQty(Util.GetValueOfDecimal(dsRecords.Tables[0].Rows[i]["ContainerCurrentQty"]));
                         moveline.SetMoveFullContainer(isMoveFullContainerQty ? false : true);
@@ -705,7 +705,7 @@ namespace VIS.Models
                         // and set true value on those line which container are moving, not on its child container
                         if (!isMoveFullContainerQty)
                         {
-                            moveline.SetIsParentMove(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_ProductContainer_ID"]) == fromContainerId ? true : false);
+                            moveline.SetIsParentMove(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_ProductContainer_ID"]) == fromContainerId ? true : false);
                             moveline.SetTargetContainer_ID(fromContainerId);
                         }
                         #endregion
@@ -721,7 +721,7 @@ namespace VIS.Models
                     if (!moveline.Save(trx))
                     {
                         #region Save error catch and rollback
-                        product = MProduct.Get(_ctx, Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["M_Product_ID"]));
+                        product = MProduct.Get(_ctx, Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]));
                         ValueNamePair pp = VLogger.RetrieveError();
                         if (pp != null)
                         {
@@ -771,29 +771,29 @@ namespace VIS.Models
             string pathUptoToContainer = "";
             if (DatabaseType.IsPostgre)
             {
-                String sql = @"WITH RECURSIVE pops (M_ProductContainer_id, level, name_path) AS (
-                        SELECT  M_ProductContainer_id, 0,  ARRAY[M_ProductContainer_id]
-                        FROM    M_ProductContainer
+                String sql = @"WITH RECURSIVE pops (VAM_ProductContainer_id, level, name_path) AS (
+                        SELECT  VAM_ProductContainer_id, 0,  ARRAY[VAM_ProductContainer_id]
+                        FROM    VAM_ProductContainer
                         WHERE   Ref_M_Container_ID is null
                         UNION ALL
-                        SELECT  p.M_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.M_ProductContainer_id)
-                        FROM    M_ProductContainer p
-                                INNER JOIN pops t0 ON t0.M_ProductContainer_id = p.Ref_M_Container_ID
+                        SELECT  p.VAM_ProductContainer_id, t0.level + 1, ARRAY_APPEND(t0.name_path, p.VAM_ProductContainer_id)
+                        FROM    VAM_ProductContainer p
+                                INNER JOIN pops t0 ON t0.VAM_ProductContainer_id = p.Ref_M_Container_ID
                     )
                         SELECT    ARRAY_TO_STRING(name_path, '->')
-                        FROM    pops  where m_productcontainer_id = " + toContainerId;
+                        FROM    pops  where VAM_ProductContainer_id = " + toContainerId;
                 pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(sql, null, trx));
             }
             else
             {
-                pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(m_productcontainer_id,'->') tree
-                            FROM m_productcontainer 
-                           WHERE m_productcontainer_id = " + toContainerId + @"
-                            START WITH ref_m_container_id IS NULL CONNECT BY prior m_productcontainer_id = ref_m_container_id
+                pathUptoToContainer = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT sys_connect_by_path(VAM_ProductContainer_id,'->') tree
+                            FROM VAM_ProductContainer 
+                           WHERE VAM_ProductContainer_id = " + toContainerId + @"
+                            START WITH ref_m_container_id IS NULL CONNECT BY prior VAM_ProductContainer_id = ref_m_container_id
                            ORDER BY tree ", null, trx));
             }
-            DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT DISTINCT targetcontainer_id FROM M_MovementLine 
-                                        WHERE MoveFullContainer='Y' AND IsActive = 'Y' AND M_Movement_ID = " + movementId, null, trx);
+            DataSet dsTragetContainer = DB.ExecuteDataset(@"SELECT DISTINCT targetcontainer_id FROM VAM_InvTrf_Line 
+                                        WHERE MoveFullContainer='Y' AND IsActive = 'Y' AND VAM_InventoryTransfer_ID = " + movementId, null, trx);
             if (dsTragetContainer != null && dsTragetContainer.Tables.Count > 0 && dsTragetContainer.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < dsTragetContainer.Tables[0].Rows.Count; i++)
@@ -822,7 +822,7 @@ namespace VIS.Models
 
         public string GetProductContainerInfo(int ID)
         {
-            string sql = " SELECT  Value || '_' || Name as des from M_ProductContainer WHERE M_ProductContainer_ID=" + ID;
+            string sql = " SELECT  Value || '_' || Name as des from VAM_ProductContainer WHERE VAM_ProductContainer_ID=" + ID;
             object des = DB.ExecuteScalar(sql);
             if (des != null && des != DBNull.Value)
             {
@@ -836,9 +836,9 @@ namespace VIS.Models
         public string GetProductContainer(string text, string validation)
         {
             text = text.ToUpper();
-            string sql = @"SELECT Value || '_' || Name as des, M_ProductContainer_ID FROM M_ProductContainer WHERE IsActive='Y'
+            string sql = @"SELECT Value || '_' || Name as des, VAM_ProductContainer_ID FROM VAM_ProductContainer WHERE IsActive='Y'
             AND (Upper(VALUE) like '%" + text + "%' OR UPPER(Name) LIKE '%" + text + "%')";
-            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "M_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
+            sql = MVAFRole.GetDefault(_ctx).AddAccessSQL(sql, "VAM_ProductContainer", MVAFRole.SQL_FULLYQUALIFIED, MVAFRole.SQL_RO);
 
             sql += " AND " + validation;
 
@@ -848,8 +848,8 @@ namespace VIS.Models
             {
                 return null;
             }
-            return Convert.ToString(ds.Tables[0].Rows[0]["M_ProductContainer_ID"]);
-            // return new KeyNamePair(Convert.ToString(ds.Tables[0].Rows[0]["M_ProductContainer_ID"]), Convert.ToString(ds.Tables[0].Rows[0]["desc"]));
+            return Convert.ToString(ds.Tables[0].Rows[0]["VAM_ProductContainer_ID"]);
+            // return new KeyNamePair(Convert.ToString(ds.Tables[0].Rows[0]["VAM_ProductContainer_ID"]), Convert.ToString(ds.Tables[0].Rows[0]["desc"]));
         }
 
         /// <summary>
@@ -866,48 +866,48 @@ namespace VIS.Models
         /// <writer>Amit Bansal</writer>
         public string SaveProductContainer(int warehouseId, int locatorId, string value, string name, Decimal height, Decimal width, int parentContainerId)
         {
-            MLocator m_locator = null;
-            MWarehouse m_warehouse = null;
+            MLocator VAM_Locator = null;
+            MWarehouse VAM_Warehouse = null;
 
             // when warehouse ID is ZERO, then extract it from Locator
             if (warehouseId == 0 && locatorId > 0)
             {
-                m_locator = MLocator.Get(_ctx, locatorId);
-                warehouseId = m_locator.GetM_Warehouse_ID();
+                VAM_Locator = MLocator.Get(_ctx, locatorId);
+                warehouseId = VAM_Locator.GetVAM_Warehouse_ID();
             }
             // when locator ID is ZERO, then extract it either from Parent Conatiner or from Warehouse
             else if (warehouseId > 0 && locatorId == 0)
             {
                 if (parentContainerId == 0)
                 {
-                    m_warehouse = MWarehouse.Get(_ctx, warehouseId);
-                    locatorId = m_warehouse.GetDefaultM_Locator_ID();
+                    VAM_Warehouse = MWarehouse.Get(_ctx, warehouseId);
+                    locatorId = VAM_Warehouse.GetDefaultVAM_Locator_ID();
                 }
                 else
                 {
-                    locatorId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Locator_ID FROM M_ProductContainer WHERE M_ProductContainer_ID = " + parentContainerId, null, null));
+                    locatorId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_Locator_ID FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID = " + parentContainerId, null, null));
                 }
             }
 
             // need to check warehouse and locator shoyld be active during ceation of Product Container
-            m_warehouse = MWarehouse.Get(_ctx, warehouseId);
-            m_locator = MLocator.Get(_ctx, locatorId);
-            if (!m_warehouse.IsActive())
+            VAM_Warehouse = MWarehouse.Get(_ctx, warehouseId);
+            VAM_Locator = MLocator.Get(_ctx, locatorId);
+            if (!VAM_Warehouse.IsActive())
             {
                 return Msg.GetMsg(_ctx, "VIS_WarehouseNotActive");
             }
-            else if (!m_locator.IsActive())
+            else if (!VAM_Locator.IsActive())
             {
                 return Msg.GetMsg(_ctx, "VIS_LocatorNotActive");
             }
 
             // Create Product Container in Locator Organization
             MProductContainer container = new MProductContainer(_ctx, 0, null);
-            container.SetVAF_Org_ID(m_locator.GetVAF_Org_ID());
+            container.SetVAF_Org_ID(VAM_Locator.GetVAF_Org_ID());
             container.SetValue(value);
             container.SetName(name);
-            container.SetM_Warehouse_ID(warehouseId);
-            container.SetM_Locator_ID(locatorId);
+            container.SetVAM_Warehouse_ID(warehouseId);
+            container.SetVAM_Locator_ID(locatorId);
             container.SetHeight(height);
             container.SetWidth(width);
             container.SetRef_M_Container_ID(parentContainerId);
@@ -926,9 +926,9 @@ namespace VIS.Models
 
     public class MoveContainer
     {
-        public int M_Product_ID { get; set; }
-        public int M_AttributeSetInstance_ID { get; set; }
-        public int M_ProductContainer_ID { get; set; }
+        public int VAM_Product_ID { get; set; }
+        public int VAM_PFeature_SetInstance_ID { get; set; }
+        public int VAM_ProductContainer_ID { get; set; }
         public int VAB_UOM_ID { get; set; }
         public String ProductName { get; set; }
         public Decimal ContainerQty { get; set; }
@@ -939,7 +939,7 @@ namespace VIS.Models
 
     public class PContainer
     {
-        public int M_ProductContainer_ID { get; set; }
+        public int VAM_ProductContainer_ID { get; set; }
         public int Ref_M_Container_ID { get; set; }
         public string ContainerName { get; set; }
         public string ParentPath { get; set; }
@@ -955,6 +955,6 @@ namespace VIS.Models
         public String Name { get; set; }
         public int Level { get; set; }
         public String ContainerName { get; set; }
-        public int M_ProductContainer_ID { get; set; }
+        public int VAM_ProductContainer_ID { get; set; }
     }
 }

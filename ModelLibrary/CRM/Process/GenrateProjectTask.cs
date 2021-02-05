@@ -88,8 +88,8 @@ namespace VAdvantage.Process
                     ProjectPhase.SetVAB_Project_ID(Project.GetVAB_Project_ID());
                     //ProjectPhase.SetName(Phase1.GetName());
                     ProjectPhase.SetName(CampPhase.GetName());
-                    // ProjectPhase.SetM_Product_ID(Phase1.GetM_Product_ID());
-                    //ProjectPhase.SetM_Product_ID(CampPhase.GetM_Product_ID());
+                    // ProjectPhase.SetVAM_Product_ID(Phase1.GetVAM_Product_ID());
+                    //ProjectPhase.SetVAM_Product_ID(CampPhase.GetVAM_Product_ID());
                     // ProjectPhase.SetQty(Phase1.GetStandardQty());
                     //ProjectPhase.SetQty(CampPhase.GetStandardQty());
                     //ProjectPhase.SetVAB_Std_Stage_ID(Phase1.GetVAB_Std_Stage_ID());
@@ -118,8 +118,8 @@ namespace VAdvantage.Process
                             ProjectTask.SetVAB_ProjectStage_ID(ProjectPhase.GetVAB_ProjectStage_ID());
                             //ProjectTask.SetName(task1.GetName());
                             ProjectTask.SetName(CampaignTask.GetName());
-                            // ProjectTask.SetM_Product_ID(task1.GetM_Product_ID());
-                            //ProjectTask.SetM_Product_ID(CampaignTask.GetM_Product_ID());
+                            // ProjectTask.SetVAM_Product_ID(task1.GetVAM_Product_ID());
+                            //ProjectTask.SetVAM_Product_ID(CampaignTask.GetVAM_Product_ID());
                             // ProjectTask.SetQty(task1.GetStandardQty());
                             //ProjectTask.SetQty(CampaignTask.GetStandardQty());
                             //ProjectTask.SetVAB_Std_Task_ID(task1.GetVAB_Std_Task_ID());

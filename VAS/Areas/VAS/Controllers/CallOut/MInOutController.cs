@@ -46,20 +46,20 @@ namespace VIS.Controllers
 
                 string[] vals = null;
 
-                int M_Product_ID = 0;
+                int VAM_Product_ID = 0;
                 int windowNo = 0;
                 string attrCode = "";
 
                 if (fields != null)
                 {
                     vals = fields.Split(',');
-                    M_Product_ID = Util.GetValueOfInt(vals[1]);
+                    VAM_Product_ID = Util.GetValueOfInt(vals[1]);
                     windowNo = Util.GetValueOfInt(vals[2]);
                     attrCode = Util.GetValueOfString(vals[0]);
                 }
                 AttributeInstance aIns = null;
                 string lotNo = "";
-                int M_AttributeSetInstance_ID = 0;
+                int VAM_PFeature_SetInstance_ID = 0;
 
                 try
                 {
@@ -93,16 +93,16 @@ namespace VIS.Controllers
                         expDate = "";
                     }
 
-                    aIns = pMod.SaveAttributeMR(0, lotNo, "", expDate, attrCode, false, 0, M_Product_ID, 0, null, ctx);
-                    M_AttributeSetInstance_ID = aIns.M_AttributeSetInstance_ID;
+                    aIns = pMod.SaveAttributeMR(0, lotNo, "", expDate, attrCode, false, 0, VAM_Product_ID, 0, null, ctx);
+                    VAM_PFeature_SetInstance_ID = aIns.VAM_PFeature_SetInstance_ID;
                 }
                 catch (Exception ex)
                 {
-                    M_AttributeSetInstance_ID = 0;
+                    VAM_PFeature_SetInstance_ID = 0;
                     aIns = null;
                 }
 
-                retJSON = Util.GetValueOfString(M_AttributeSetInstance_ID);
+                retJSON = Util.GetValueOfString(VAM_PFeature_SetInstance_ID);
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
@@ -172,7 +172,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                retJSON = JsonConvert.SerializeObject(MWarehouse.Get(ctx, Util.GetValueOfInt(fields)).GetDefaultM_Locator_ID());
+                retJSON = JsonConvert.SerializeObject(MWarehouse.Get(ctx, Util.GetValueOfInt(fields)).GetDefaultVAM_Locator_ID());
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

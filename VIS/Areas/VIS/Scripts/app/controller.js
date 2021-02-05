@@ -1462,7 +1462,7 @@
         else if (colName.equals("Orig_Order_ID"))
             refColName = "VAB_Order_ID";
         else if (colName.equals("Orig_InOut_ID"))
-            refColName = "M_InOut_ID";
+            refColName = "VAM_Inv_InOut_ID";
         if (refColName != null) {
 
             if (this.getField(refColName) != null) {
@@ -2156,11 +2156,11 @@
                 //var valueAsInt = 0;
                 //if (changedField.getValue() != null && changedField.getValue() instanceof Number)
                 //    valueAsInt = changedField.getValue();
-                //if( columnName.equals( "M_Warehouse_ID" ) )
+                //if( columnName.equals( "VAM_Warehouse_ID" ) )
                 //{
                 //    locLookup.setOnly_Warehouse_ID( valueAsInt );
                 //}
-                //if( columnName.equals( "M_Product_ID" ) )
+                //if( columnName.equals( "VAM_Product_ID" ) )
                 //{
                 //    locLookup.setOnly_Product_ID( valueAsInt );
                 //}
@@ -5517,7 +5517,7 @@
             || _vo.ColumnName.startsWith("Created") || _vo.ColumnName.startsWith("Updated")
             // || _vo.ColumnName.equals("Value")
             //|| _vo.ColumnName.equals("DocumentNo")
-            || _vo.ColumnName.equals("M_AttributeSetInstance_ID"))	//	0 is valid
+            || _vo.ColumnName.equals("VAM_PFeature_SetInstance_ID"))	//	0 is valid
             return false;
 
         //  Mandatory if displayed
@@ -5750,12 +5750,12 @@
         var list = [];
         //	Implicit Dependencies
         var colName = this.getColumnName();
-        if (colName.equals("M_AttributeSetInstance_ID"))
-            list.push("M_Product_ID");
+        if (colName.equals("VAM_PFeature_SetInstance_ID"))
+            list.push("VAM_Product_ID");
 
-        else if (colName.equals("M_Locator_ID") || colName.equals("M_LocatorTo_ID")) {
-            list.push("M_Product_ID");
-            list.push("M_Warehouse_ID");
+        else if (colName.equals("VAM_Locator_ID") || colName.equals("VAM_LocatorTo_ID")) {
+            list.push("VAM_Product_ID");
+            list.push("VAM_Warehouse_ID");
         }
         //  Display dependent
         VIS.Evaluator.parseDepends(list, this.vo.DisplayLogic);

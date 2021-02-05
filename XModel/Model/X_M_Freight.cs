@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Freight
+/** Generated Model for VAM_Freight
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Freight : PO
+public class X_VAM_Freight : PO
 {
-public X_M_Freight (Context ctx, int M_Freight_ID, Trx trxName) : base (ctx, M_Freight_ID, trxName)
+public X_VAM_Freight (Context ctx, int VAM_Freight_ID, Trx trxName) : base (ctx, VAM_Freight_ID, trxName)
 {
-/** if (M_Freight_ID == 0)
+/** if (VAM_Freight_ID == 0)
 {
 SetVAB_Currency_ID (0);
 SetFreightAmt (0.0);
-SetM_FreightCategory_ID (0);
-SetM_Freight_ID (0);
-SetM_Shipper_ID (0);
+SetVAM_FreightCategory_ID (0);
+SetVAM_Freight_ID (0);
+SetVAM_ShippingMethod_ID (0);
 SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_M_Freight (Ctx ctx, int M_Freight_ID, Trx trxName) : base (ctx, M_Freight_ID, trxName)
+public X_VAM_Freight (Ctx ctx, int VAM_Freight_ID, Trx trxName) : base (ctx, VAM_Freight_ID, trxName)
 {
-/** if (M_Freight_ID == 0)
+/** if (VAM_Freight_ID == 0)
 {
 SetVAB_Currency_ID (0);
 SetFreightAmt (0.0);
-SetM_FreightCategory_ID (0);
-SetM_Freight_ID (0);
-SetM_Shipper_ID (0);
+SetVAM_FreightCategory_ID (0);
+SetVAM_Freight_ID (0);
+SetVAM_ShippingMethod_ID (0);
 SetValidFrom (DateTime.Now);
 }
  */
@@ -47,7 +47,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Freight (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Freight (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_Freight (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Freight (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Freight (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_Freight (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Freight (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Freight (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Freight()
+static X_VAM_Freight()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389062576L;
 public static int Table_ID;
  // =596;
 
-/** TableName=M_Freight */
-public static String Table_Name="M_Freight";
+/** TableName=VAM_Freight */
+public static String Table_Name="VAM_Freight";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Freight[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Freight[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Country.
@@ -183,47 +183,47 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Freight Category.
-@param M_FreightCategory_ID Category of the Freight */
-public void SetM_FreightCategory_ID (int M_FreightCategory_ID)
+@param VAM_FreightCategory_ID Category of the Freight */
+public void SetVAM_FreightCategory_ID (int VAM_FreightCategory_ID)
 {
-if (M_FreightCategory_ID < 1) throw new ArgumentException ("M_FreightCategory_ID is mandatory.");
-Set_Value ("M_FreightCategory_ID", M_FreightCategory_ID);
+if (VAM_FreightCategory_ID < 1) throw new ArgumentException ("VAM_FreightCategory_ID is mandatory.");
+Set_Value ("VAM_FreightCategory_ID", VAM_FreightCategory_ID);
 }
 /** Get Freight Category.
 @return Category of the Freight */
-public int GetM_FreightCategory_ID() 
+public int GetVAM_FreightCategory_ID() 
 {
-Object ii = Get_Value("M_FreightCategory_ID");
+Object ii = Get_Value("VAM_FreightCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Freight.
-@param M_Freight_ID Freight Rate */
-public void SetM_Freight_ID (int M_Freight_ID)
+@param VAM_Freight_ID Freight Rate */
+public void SetVAM_Freight_ID (int VAM_Freight_ID)
 {
-if (M_Freight_ID < 1) throw new ArgumentException ("M_Freight_ID is mandatory.");
-Set_ValueNoCheck ("M_Freight_ID", M_Freight_ID);
+if (VAM_Freight_ID < 1) throw new ArgumentException ("VAM_Freight_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Freight_ID", VAM_Freight_ID);
 }
 /** Get Freight.
 @return Freight Rate */
-public int GetM_Freight_ID() 
+public int GetVAM_Freight_ID() 
 {
-Object ii = Get_Value("M_Freight_ID");
+Object ii = Get_Value("VAM_Freight_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Freight Carrier.
-@param M_Shipper_ID Method or manner of product delivery */
-public void SetM_Shipper_ID (int M_Shipper_ID)
+@param VAM_ShippingMethod_ID Method or manner of product delivery */
+public void SetVAM_ShippingMethod_ID (int VAM_ShippingMethod_ID)
 {
-if (M_Shipper_ID < 1) throw new ArgumentException ("M_Shipper_ID is mandatory.");
-Set_ValueNoCheck ("M_Shipper_ID", M_Shipper_ID);
+if (VAM_ShippingMethod_ID < 1) throw new ArgumentException ("VAM_ShippingMethod_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
 }
 /** Get Freight Carrier.
 @return Method or manner of product delivery */
-public int GetM_Shipper_ID() 
+public int GetVAM_ShippingMethod_ID() 
 {
-Object ii = Get_Value("M_Shipper_ID");
+Object ii = Get_Value("VAM_ShippingMethod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -231,7 +231,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Shipper_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_ShippingMethod_ID().ToString());
 }
 
 /** To_Country_ID VAF_Control_Ref_ID=156 */

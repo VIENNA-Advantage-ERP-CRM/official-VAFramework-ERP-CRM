@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (qty.IsActive() && qty.IsOfferQty())
                     {
                         MOrderLine ol = new MOrderLine(order);
-                        ol.SetM_Product_ID(line.GetM_Product_ID(),
+                        ol.SetVAM_Product_ID(line.GetVAM_Product_ID(),
                             qty.GetVAB_UOM_ID());
                         ol.SetDescription(line.GetDescription());
                         ol.SetQty(qty.GetQty());

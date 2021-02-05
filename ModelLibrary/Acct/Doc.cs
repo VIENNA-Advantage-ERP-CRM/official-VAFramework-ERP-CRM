@@ -1426,9 +1426,9 @@ namespace VAdvantage.Acct
             //Inventory Accounts         
             else if (AcctType == ACCTTYPE_InvDifferences)
             {
-                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND VAB_AccountBook_ID=?";
-                para_1 = GetM_Warehouse_ID();
+                sql = "SELECT W_Differences_Acct FROM VAM_Warehouse_Acct WHERE VAM_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM VAM_Warehouse_Acct WHERE VAM_Warehouse_ID=? AND VAB_AccountBook_ID=?";
+                para_1 = GetVAM_Warehouse_ID();
             }
             else if (AcctType == ACCTTYPE_NotInvoicedReceipts)
             {
@@ -1549,8 +1549,8 @@ namespace VAdvantage.Acct
                     + " INNER JOIN VAB_AccountBook_Default b ON (wcc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
                     + " AND wcc.VAB_AccountBook_ID=@param2 "
-                    + " AND wcc.M_CostElement_ID = @param3 "
-                    + " AND wcc.M_CostType_ID = @param4 ";
+                    + " AND wcc.VAM_ProductCostElement_ID = @param3 "
+                    + " AND wcc.VAM_ProductCostType_ID = @param4 ";
                 para_1 = _workcenter_id;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1587,7 +1587,7 @@ namespace VAdvantage.Acct
                         param[0] = new SqlParameter("@param1", para_1);
                         param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
-                        param[3] = new SqlParameter("@param4", as1.GetM_CostType_ID());
+                        param[3] = new SqlParameter("@param4", as1.GetVAM_ProductCostType_ID());
                     }
                     else
                     {
@@ -1774,9 +1774,9 @@ namespace VAdvantage.Acct
             //Inventory Accounts         
             else if (AcctType == ACCTTYPE_InvDifferences)
             {
-                sql = "SELECT W_Differences_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
-                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM M_Warehouse_Acct WHERE M_Warehouse_ID=? AND VAB_AccountBook_ID=?";
-                para_1 = GetM_Warehouse_ID();
+                sql = "SELECT W_Differences_Acct FROM VAM_Warehouse_Acct WHERE VAM_Warehouse_ID=@param1 AND VAB_AccountBook_ID=@param2";
+                //  "SELECT W_Inventory_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct FROM VAM_Warehouse_Acct WHERE VAM_Warehouse_ID=? AND VAB_AccountBook_ID=?";
+                para_1 = GetVAM_Warehouse_ID();
             }
             else if (AcctType == ACCTTYPE_NotInvoicedReceipts)
             {
@@ -1897,8 +1897,8 @@ namespace VAdvantage.Acct
                     + " INNER JOIN VAB_AccountBook_Default b ON (wcc.VAB_AccountBook_ID = b.VAB_AccountBook_ID)"
                     + " WHERE wcc.VAMFG_M_WorkCenter_ID = @param1 "
                     + " AND wcc.VAB_AccountBook_ID=@param2 "
-                    + " AND wcc.M_CostElement_ID = @param3 "
-                    + " AND wcc.M_CostType_ID = @param4 ";
+                    + " AND wcc.VAM_ProductCostElement_ID = @param3 "
+                    + " AND wcc.VAM_ProductCostType_ID = @param4 ";
                 para_1 = _workcenter_id;
             }
             /**************Manfacturing*******************///Jun,06,2011/
@@ -1935,7 +1935,7 @@ namespace VAdvantage.Acct
                         param[0] = new SqlParameter("@param1", para_1);
                         param[1] = new SqlParameter("@param2", as1.GetVAB_AccountBook_ID());
                         param[2] = new SqlParameter("@param3", _costelement_id);
-                        param[3] = new SqlParameter("@param4", as1.GetM_CostType_ID());
+                        param[3] = new SqlParameter("@param4", as1.GetVAM_ProductCostType_ID());
                     }
                     else
                     {
@@ -2552,12 +2552,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get M_Warehouse_ID
+        /// Get VAM_Warehouse_ID
         /// </summary>
         /// <returns>Warehouse</returns>
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            int index = _po.Get_ColumnIndex("M_Warehouse_ID");
+            int index = _po.Get_ColumnIndex("VAM_Warehouse_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -2729,12 +2729,12 @@ namespace VAdvantage.Acct
         }
 
         /// <summary>
-        /// Get M_Product_ID
+        /// Get VAM_Product_ID
         /// </summary>
         /// <returns>Product</returns>
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            int index = _po.Get_ColumnIndex("M_Product_ID");
+            int index = _po.Get_ColumnIndex("VAM_Product_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);

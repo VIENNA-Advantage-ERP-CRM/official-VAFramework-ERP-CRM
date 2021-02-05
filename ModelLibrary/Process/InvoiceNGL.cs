@@ -382,7 +382,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
+                    bas.GetVAM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),
                     bas.GetVAB_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());
@@ -400,7 +400,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MAccount bas = MAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
                 MAccount acct = MAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
                     asDefaultAccts.GetVAB_AccountBook_ID(), bas.GetAccount_ID(), bas.GetVAB_SubAcct_ID(),
-                    bas.GetM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
+                    bas.GetVAM_Product_ID(), bas.GetVAB_BusinessPartner_ID(), bas.GetVAF_OrgTrx_ID(),
                     bas.GetC_LocFrom_ID(), bas.GetC_LocTo_ID(), bas.GetVAB_SalesRegionState_ID(),
                     bas.GetVAB_Project_ID(), bas.GetVAB_Promotion_ID(), bas.GetVAB_BillingCode_ID(),
                     bas.GetUser1_ID(), bas.GetUser2_ID(), bas.GetUserElement1_ID(), bas.GetUserElement2_ID());

@@ -193,7 +193,7 @@ namespace VAdvantage.Process
                 inv.SetVAB_PaymentTerm_ID(cont.GetVAB_PaymentTerm_ID());
                 inv.SetVAB_Promotion_ID(cont.GetVAB_Promotion_ID());
                 inv.SetIsSOTrx(true);
-                inv.SetM_PriceList_ID(cont.GetM_PriceList_ID());
+                inv.SetVAM_PriceList_ID(cont.GetVAM_PriceList_ID());
                 inv.SetSalesRep_ID(cont.GetSalesRep_ID());
                 inv.SetVAB_Contract_ID(cont.GetVAB_Contract_ID());
                 if (!inv.Save())
@@ -209,7 +209,7 @@ namespace VAdvantage.Process
                     invLine.SetVAB_Promotion_ID(inv.GetVAB_Promotion_ID());
                     invLine.SetVAB_Invoice_ID(inv.GetVAB_Invoice_ID());
                     invLine.SetVAB_UOM_ID(cont.GetVAB_UOM_ID());
-                    invLine.SetM_Product_ID(cont.GetM_Product_ID());
+                    invLine.SetVAM_Product_ID(cont.GetVAM_Product_ID());
                     if (Util.GetValueOfInt(cont.GetVAB_OrderLine_ID()) != 0)
                     {
                         invLine.SetVAB_OrderLine_ID(cont.GetVAB_OrderLine_ID());

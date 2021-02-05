@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_StorageDetail
+/** Generated Model for VAM_StorageDetail
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_StorageDetail : PO
+public class X_VAM_StorageDetail : PO
 {
-public X_M_StorageDetail (Context ctx, int M_StorageDetail_ID, Trx trxName) : base (ctx, M_StorageDetail_ID, trxName)
+public X_VAM_StorageDetail (Context ctx, int VAM_StorageDetail_ID, Trx trxName) : base (ctx, VAM_StorageDetail_ID, trxName)
 {
-/** if (M_StorageDetail_ID == 0)
+/** if (VAM_StorageDetail_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_Locator_ID (0);
-SetM_Product_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Locator_ID (0);
+SetVAM_Product_ID (0);
 SetQty (0.0);
 SetQtyType (null);
 }
  */
 }
-public X_M_StorageDetail (Ctx ctx, int M_StorageDetail_ID, Trx trxName) : base (ctx, M_StorageDetail_ID, trxName)
+public X_VAM_StorageDetail (Ctx ctx, int VAM_StorageDetail_ID, Trx trxName) : base (ctx, VAM_StorageDetail_ID, trxName)
 {
-/** if (M_StorageDetail_ID == 0)
+/** if (VAM_StorageDetail_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_Locator_ID (0);
-SetM_Product_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Locator_ID (0);
+SetVAM_Product_ID (0);
 SetQty (0.0);
 SetQtyType (null);
 }
@@ -45,7 +45,7 @@ SetQtyType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_StorageDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_StorageDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_M_StorageDetail (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_StorageDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_StorageDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_M_StorageDetail (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_M_StorageDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_StorageDetail (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_StorageDetail()
+static X_VAM_StorageDetail()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1298962905116L;
 public static int Table_ID;
  // =2160;
 
-/** TableName=M_StorageDetail */
-public static String Table_Name="M_StorageDetail";
+/** TableName=VAM_StorageDetail */
+public static String Table_Name="VAM_StorageDetail";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_StorageDetail[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_StorageDetail[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Date last inventory count.
@@ -131,47 +131,47 @@ public DateTime? GetDateLastInventory()
 return (DateTime?)Get_Value("DateLastInventory");
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-public void SetM_Locator_ID (int M_Locator_ID)
+@param VAM_Locator_ID Warehouse Locator */
+public void SetVAM_Locator_ID (int VAM_Locator_ID)
 {
-if (M_Locator_ID < 1) throw new ArgumentException ("M_Locator_ID is mandatory.");
-Set_ValueNoCheck ("M_Locator_ID", M_Locator_ID);
+if (VAM_Locator_ID < 1) throw new ArgumentException ("VAM_Locator_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Locator_ID", VAM_Locator_ID);
 }
 /** Get Locator.
 @return Warehouse Locator */
-public int GetM_Locator_ID() 
+public int GetVAM_Locator_ID() 
 {
-Object ii = Get_Value("M_Locator_ID");
+Object ii = Get_Value("VAM_Locator_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

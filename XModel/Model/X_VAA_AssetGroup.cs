@@ -328,16 +328,16 @@ namespace VAdvantage.Model
             return (String)Get_Value("SupportLevel");
         }
         /** Set Serial No Control.
-        @param M_SerNoCtl_ID Product Serial Number Control */
-        public void SetM_SerNoCtl_ID(int M_SerNoCtl_ID)
+        @param VAM_CtlSerialNo_ID Product Serial Number Control */
+        public void SetVAM_CtlSerialNo_ID(int VAM_CtlSerialNo_ID)
         {
-            if (M_SerNoCtl_ID <= 0) Set_Value("M_SerNoCtl_ID", null);
+            if (VAM_CtlSerialNo_ID <= 0) Set_Value("VAM_CtlSerialNo_ID", null);
             else
-                Set_Value("M_SerNoCtl_ID", M_SerNoCtl_ID);
+                Set_Value("VAM_CtlSerialNo_ID", VAM_CtlSerialNo_ID);
         }/** Get Serial No Control.
         @return Product Serial Number Control */
-        public int GetM_SerNoCtl_ID()
-        { Object ii = Get_Value("M_SerNoCtl_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_CtlSerialNo_ID()
+        { Object ii = Get_Value("VAM_CtlSerialNo_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

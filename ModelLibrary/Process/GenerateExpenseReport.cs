@@ -90,16 +90,16 @@ namespace ViennaAdvantage.Process
             tExp.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             tExp.SetDateReport(Util.GetValueOfDateTime(System.DateTime.Now));
 
-            sql = "select M_Pricelist_ID from m_Pricelist where isdefault ='Y' and issopricelist = 'Y' and isactive= 'Y' and vaf_org_id = " + GetCtx().GetVAF_Org_ID();
-            int M_Pricelist_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-            if (M_Pricelist_ID == 0)
+            sql = "select VAM_PriceList_ID from VAM_PriceList where isdefault ='Y' and issopricelist = 'Y' and isactive= 'Y' and vaf_org_id = " + GetCtx().GetVAF_Org_ID();
+            int VAM_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
+            if (VAM_PriceList_ID == 0)
             {
                 log.SaveError("PriceListNotFound", "PriceListNotFound");
                 return 1;
             }
 
-            tExp.SetM_PriceList_ID(M_Pricelist_ID);
-            tExp.SetM_Warehouse_ID(1000030);
+            tExp.SetVAM_PriceList_ID(VAM_PriceList_ID);
+            tExp.SetVAM_Warehouse_ID(1000030);
             tExp.SetVAB_BusinessPartner_ID(1001904);
             if (!tExp.Save(Get_TrxName()))
             {
@@ -121,7 +121,7 @@ namespace ViennaAdvantage.Process
             tLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             tLine.SetVAS_ExpenseReport_ID(S_TimeExpence_ID);
             tLine.SetDateExpense(rTime.GetDate1());
-            tLine.SetM_Product_ID(rTime.GetM_Product_ID());
+            tLine.SetVAM_Product_ID(rTime.GetVAM_Product_ID());
             tLine.SetVAB_OrderLine_ID(rTime.GetVAB_OrderLine_ID());
             tLine.SetVAB_UOM_ID(rTime.GetVAB_UOM_ID());
             tLine.SetIsTimeReport(true);

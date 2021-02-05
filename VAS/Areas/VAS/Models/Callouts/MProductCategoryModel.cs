@@ -18,10 +18,10 @@ namespace VIS.Models
         public Dictionary<string, string> GetProductCategory(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_Category_ID;
+            int VAM_ProductCategory_ID;
 
-            M_Product_Category_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MProductCategory pc = new MProductCategory(ctx, M_Product_Category_ID, null);
+            VAM_ProductCategory_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MProductCategory pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
             //   mTab.setValue("IsPurchasedToOrder", pc.IsPurchasedToOrder());
             bool IsPurchasedToOrder = false;//= pc.IsPurchasedToOrder();  //Temporay Commented BY sarab 
             Dictionary<string, string> retDic = new Dictionary<string, string>();
@@ -33,17 +33,17 @@ namespace VIS.Models
         public Dictionary<string, string> GetCategoryData(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_Category_ID = 0;
-            M_Product_Category_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MProductCategory pc = new MProductCategory(ctx, M_Product_Category_ID, null);
+            int VAM_ProductCategory_ID = 0;
+            VAM_ProductCategory_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MProductCategory pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
             Dictionary<string, string> retDic = new Dictionary<string, string>();
             if (pc.Get_ColumnIndex("ProductType") > 0)
             {
                 retDic["ProductType"] = pc.GetProductType();
             }
-            if (pc.Get_ColumnIndex("M_AttributeSet_ID") > 0)
+            if (pc.Get_ColumnIndex("VAM_PFeature_Set_ID") > 0)
             {
-                retDic["M_AttributeSet_ID"] = Util.GetValueOfString(pc.GetM_AttributeSet_ID());
+                retDic["VAM_PFeature_Set_ID"] = Util.GetValueOfString(pc.GetVAM_PFeature_Set_ID());
             }
             if (pc.Get_ColumnIndex("VAB_TaxCategory_ID") > 0)
             {

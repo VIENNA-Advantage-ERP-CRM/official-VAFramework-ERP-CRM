@@ -28,7 +28,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class InvoiceCreateInOut : ProcessEngine.SvrProcess
     {
         //	Warehouse			
-        private int _M_Warehouse_ID = 0;
+        private int _VAM_Warehouse_ID = 0;
         // Document Type		
         private int _VAB_DocTypes_ID = 0;
         // Invoice			
@@ -46,9 +46,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Warehouse_ID"))
+                else if (name.Equals("VAM_Warehouse_ID"))
                 {
-                    _M_Warehouse_ID = para[i].GetParameterAsInt();
+                    _VAM_Warehouse_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_DocTypes_ID"))
                 {
@@ -70,15 +70,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.info("VAB_Invoice_ID=" + _VAB_Invoice_ID 
-            //    + ", M_Warehouse_ID=" + _M_Warehouse_ID
+            //    + ", VAM_Warehouse_ID=" + _VAM_Warehouse_ID
             //    + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
             if (_VAB_Invoice_ID == 0)
             {
                 throw new ArgumentException("@NotFound@ @VAB_Invoice_ID@");
             }
-            if (_M_Warehouse_ID == 0)
+            if (_VAM_Warehouse_ID == 0)
             {
-                throw new ArgumentException("@NotFound@ @M_Warehouse_ID@");
+                throw new ArgumentException("@NotFound@ @VAM_Warehouse_ID@");
             }
             //
             MInvoice invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, Get_Trx());
@@ -103,7 +103,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             MOrder ord = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
             if (ord.GetVAB_BusinessPartner_ID() > 0)
             {
-                ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);
+                ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
                 // Change by Mohit Asked by Amardeep sir 02/03/2016
                 ship.SetPOReference(invoice.GetPOReference());
                 // End
@@ -119,7 +119,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //throw new ArgumentException("@InvoiceNotLinkedWithPO@");
             }
             /*
-             MInOut ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);
+             MInOut ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
                if (!ship.Save())
                {
                    throw new ArgumentException("@SaveError@ Receipt");
@@ -147,14 +147,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 if (invoiceLine.GetVAB_OrderLine_ID() != 0)
                 {
                     decimal? res = 0;
-                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from VAB_OrderLine ol Inner join M_InOutLine il on il.VAB_Orderline_ID= ol.VAB_Orderline_Id "
+                     movementqty = Util.GetValueOfDecimal(DB.ExecuteScalar(@" select (QtyOrdered-sum(MovementQty))   from VAB_OrderLine ol Inner join VAM_Inv_InOutLine il on il.VAB_Orderline_ID= ol.VAB_Orderline_Id "
                              + " WHERE il.VAB_OrderLine_ID =" + invoiceLine.GetVAB_OrderLine_ID() + "group by QtyOrdered", null, Get_Trx()));
                     // in case of partial receipt
                     if ( invoiceLine.GetQtyInvoiced() > movementqty && movementqty!=0)
                     {
                         if (product.GetVAB_UOM_ID() != invoiceLine.GetVAB_UOM_ID())
                         {
-                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetM_Product_ID(), invoiceLine.GetVAB_UOM_ID(), movementqty);
+                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetVAM_Product_ID(), invoiceLine.GetVAB_UOM_ID(), movementqty);
                         }
                         sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
                             invoice.IsSOTrx() ? (movementqty) : Env.ZERO);
@@ -191,12 +191,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else
                     {
-                        return GetRetrievedError(sLine, "@SaveError@ @M_InOutLine_ID@");
+                        return GetRetrievedError(sLine, "@SaveError@ @VAM_Inv_InOutLine_ID@");
                     }
-                    //throw new ArgumentException("@SaveError@ @M_InOutLine_ID@");  
+                    //throw new ArgumentException("@SaveError@ @VAM_Inv_InOutLine_ID@");  
                 }
                 //
-                invoiceLine.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+                invoiceLine.SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
                 if (!invoiceLine.Save())
                 {
                     return GetRetrievedError(invoiceLine, "@SaveError@ @VAB_InvoiceLine_ID@");

@@ -168,7 +168,7 @@ namespace VAdvantage.Process
                     + "','" + MDocBaseType.DOCBASETYPE_ARCREDITMEMO
                     + "','" + MDocBaseType.DOCBASETYPE_ARPROFORMAINVOICE + "')";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_InOut"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Inv_InOut"))
             {
                 docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_MATERIALDELIVERY
                     + "','" + MDocBaseType.DOCBASETYPE_MATERIALRECEIPT + "')";
@@ -209,27 +209,27 @@ namespace VAdvantage.Process
             // {
             //		docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLDocument + "'";
             //  }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_Movement"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_InventoryTransfer"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT + "'";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_Requisition"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Requisition"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION + "'";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_Inventory"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Inventory"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY + "'";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_Production"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Production"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION + "'";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_MatchInv"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_MatchInvoice"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHINVOICE + "'";
             }
-            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("M_MatchPO"))
+            else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_MatchPO"))
             {
                 docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHPO + "'";
             }

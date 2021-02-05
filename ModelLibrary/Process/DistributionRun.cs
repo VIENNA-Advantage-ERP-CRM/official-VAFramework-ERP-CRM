@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     {
         #region Private variables
         //	The Run to execute		
-        private int _M_DistributionRun_ID = 0;
+        private int _VAM_DistributionRun_ID = 0;
         //	Date Promised		
         private DateTime? _DatePromised = null;
         //Dicument Type			
@@ -84,7 +84,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            _M_DistributionRun_ID = GetRecord_ID();
+            _VAM_DistributionRun_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -93,19 +93,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (text with variables)</returns>
         protected override String DoIt()
         {
-            log.Info("M_DistributionRun_ID=" + _M_DistributionRun_ID
+            log.Info("VAM_DistributionRun_ID=" + _VAM_DistributionRun_ID
                 + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID
                 + ", DatePromised=" + _DatePromised
                 + ", Test=" + _IsTest);
             //	Distribution Run
-            if (_M_DistributionRun_ID == 0)
+            if (_VAM_DistributionRun_ID == 0)
             {
                 throw new ArgumentException("No Distribution Run ID");
             }
-            _run = new MDistributionRun(GetCtx(), _M_DistributionRun_ID, Get_TrxName());
+            _run = new MDistributionRun(GetCtx(), _VAM_DistributionRun_ID, Get_TrxName());
             if (_run.Get_ID() == 0)
             {
-                throw new Exception("Distribution Run not found -  M_DistributionRun_ID=" + _M_DistributionRun_ID);
+                throw new Exception("Distribution Run not found -  VAM_DistributionRun_ID=" + _VAM_DistributionRun_ID);
             }
             _runLines = _run.GetLines(true);
             if (_runLines == null || _runLines.Length == 0)
@@ -138,7 +138,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Order By Distribution Run Line
-            _details = MDistributionRunDetail.Get(GetCtx(), _M_DistributionRun_ID, false, Get_TrxName());
+            _details = MDistributionRunDetail.Get(GetCtx(), _VAM_DistributionRun_ID, false, Get_TrxName());
             //	First Run -- Add & Round
             AddAllocations();
 
@@ -155,7 +155,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Order By Business Partner
-            _details = MDistributionRunDetail.Get(GetCtx(), _M_DistributionRun_ID, true, Get_TrxName());
+            _details = MDistributionRunDetail.Get(GetCtx(), _VAM_DistributionRun_ID, true, Get_TrxName());
             //	Create Orders
             CreateOrders();
 
@@ -170,35 +170,35 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private int InsertDetails()
         {
             //	Handle NULL
-            String sql = "UPDATE M_DistributionRunLine SET MinQty = 0 WHERE MinQty IS NULL";
+            String sql = "UPDATE VAM_DistributionRunLine SET MinQty = 0 WHERE MinQty IS NULL";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            sql = "UPDATE M_DistributionListLine SET MinQty = 0 WHERE MinQty IS NULL";
+            sql = "UPDATE VAM_DistributionListLine SET MinQty = 0 WHERE MinQty IS NULL";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             //	Total Ratio
-            sql ="UPDATE M_DistributionList l "
-                + "SET RatioTotal = (SELECT SUM(Ratio) FROM M_DistributionListLine ll "
-                + " WHERE l.M_DistributionList_ID=ll.M_DistributionList_ID) "
-            + "WHERE EXISTS (SELECT * FROM M_DistributionRunLine rl"
-                + " WHERE l.M_DistributionList_ID=rl.M_DistributionList_ID"
-                + " AND rl.M_DistributionRun_ID=" + _M_DistributionRun_ID + ")";
+            sql ="UPDATE VAM_DistributionList l "
+                + "SET RatioTotal = (SELECT SUM(Ratio) FROM VAM_DistributionListLine ll "
+                + " WHERE l.VAM_DistributionList_ID=ll.VAM_DistributionList_ID) "
+            + "WHERE EXISTS (SELECT * FROM VAM_DistributionRunLine rl"
+                + " WHERE l.VAM_DistributionList_ID=rl.VAM_DistributionList_ID"
+                + " AND rl.VAM_DistributionRun_ID=" + _VAM_DistributionRun_ID + ")";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
 
             //	Delete Old
-            sql = "DELETE FROM VAT_CirculationDetail WHERE M_DistributionRun_ID="
-                + _M_DistributionRun_ID;
+            sql = "DELETE FROM VAT_CirculationDetail WHERE VAM_DistributionRun_ID="
+                + _VAM_DistributionRun_ID;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Fine("insertDetails - deleted #" + no);
             //	Insert New
             sql = "INSERT INTO VAT_CirculationDetail "
-                + "(M_DistributionRun_ID, M_DistributionRunLine_ID, M_DistributionList_ID, M_DistributionListLine_ID,"
+                + "(VAM_DistributionRun_ID, VAM_DistributionRunLine_ID, VAM_DistributionList_ID, VAM_DistributionListLine_ID,"
                 + "VAF_Client_ID,VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-                + "VAB_BusinessPartner_ID, VAB_BPart_Location_ID, M_Product_ID,"
+                + "VAB_BusinessPartner_ID, VAB_BPart_Location_ID, VAM_Product_ID,"
                 + "Ratio, MinQty, Qty) "
                 //
-                + "SELECT rl.M_DistributionRun_ID, rl.M_DistributionRunLine_ID,"
-                + "ll.M_DistributionList_ID, ll.M_DistributionListLine_ID, "
+                + "SELECT rl.VAM_DistributionRun_ID, rl.VAM_DistributionRunLine_ID,"
+                + "ll.VAM_DistributionList_ID, ll.VAM_DistributionListLine_ID, "
                 + "rl.VAF_Client_ID,rl.VAF_Org_ID, rl.IsActive, rl.Created,rl.CreatedBy, rl.Updated,rl.UpdatedBy,"
-                + "ll.VAB_BusinessPartner_ID, ll.VAB_BPart_Location_ID, rl.M_Product_ID, "
+                + "ll.VAB_BusinessPartner_ID, ll.VAB_BPart_Location_ID, rl.VAM_Product_ID, "
                 + "ll.Ratio, "
                 + "CASE WHEN rl.MinQty > ll.MinQty THEN rl.MinQty ELSE ll.MinQty END, ";
 
@@ -215,10 +215,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //}
 
-            sql += "FROM M_DistributionRunLine rl"
-                + " INNER JOIN M_DistributionList l ON (rl.M_DistributionList_ID=l.M_DistributionList_ID)"
-                + " INNER JOIN M_DistributionListLine ll ON (rl.M_DistributionList_ID=ll.M_DistributionList_ID) "
-                + "WHERE rl.M_DistributionRun_ID=" + _M_DistributionRun_ID
+            sql += "FROM VAM_DistributionRunLine rl"
+                + " INNER JOIN VAM_DistributionList l ON (rl.VAM_DistributionList_ID=l.VAM_DistributionList_ID)"
+                + " INNER JOIN VAM_DistributionListLine ll ON (rl.VAM_DistributionList_ID=ll.VAM_DistributionList_ID) "
+                + "WHERE rl.VAM_DistributionRun_ID=" + _VAM_DistributionRun_ID
                 + " AND l.RatioTotal<>0 AND rl.IsActive='Y' AND ll.IsActive='Y'";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
 
@@ -245,7 +245,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 for (int j = 0; j < _runLines.Length; j++)
                 {
                     MDistributionRunLine runLine = _runLines[j];
-                    if (runLine.GetM_DistributionRunLine_ID() == detail.GetM_DistributionRunLine_ID())
+                    if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         //	Round
                         detail.Round(runLine.GetUOMPrecision());
@@ -331,7 +331,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 for (int i = 0; i < _details.Length; i++)
                 {
                     MDistributionRunDetail detail = _details[i];
-                    if (runLine.GetM_DistributionRunLine_ID() == detail.GetM_DistributionRunLine_ID())
+                    if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         log.Fine("Biggest - DetailAllocation=" + detail.GetActualAllocation()
                             + ", MaxAllocation=" + runLine.GetMaxAllocation()
@@ -355,7 +355,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 for (int i = 0; i < _details.Length; i++)
                 {
                     MDistributionRunDetail detail = _details[i];
-                    if (runLine.GetM_DistributionRunLine_ID() == detail.GetM_DistributionRunLine_ID())
+                    if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         if (detail.IsCanAdjust())
                         {
@@ -373,7 +373,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 for (int i = 0; i < _details.Length; i++)
                 {
                     MDistributionRunDetail detail = _details[i];
-                    if (runLine.GetM_DistributionRunLine_ID() == detail.GetM_DistributionRunLine_ID())
+                    if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         if (detail.IsCanAdjust())
                         {
@@ -501,9 +501,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 + "-" + bp + ", To_BP=" + runBPartner);
                             order.SetVAF_Org_ID(bp.GetVAF_OrgBP_ID_Int());
                             MVAFOrgDetail oi = MVAFOrgDetail.Get(GetCtx(), bp.GetVAF_OrgBP_ID_Int(), null);
-                            if (oi.GetM_Warehouse_ID() > 0)
+                            if (oi.GetVAM_Warehouse_ID() > 0)
                             {
-                                order.SetM_Warehouse_ID(oi.GetM_Warehouse_ID());
+                                order.SetVAM_Warehouse_ID(oi.GetVAM_Warehouse_ID());
                             }
                             order.SetBPartner(runBPartner);
                         }
@@ -529,8 +529,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 //	Line
-                if (product == null || product.GetM_Product_ID() != detail.GetM_Product_ID())
-                    product = MProduct.Get(GetCtx(), detail.GetM_Product_ID());
+                if (product == null || product.GetVAM_Product_ID() != detail.GetVAM_Product_ID())
+                    product = MProduct.Get(GetCtx(), detail.GetVAM_Product_ID());
                 if (_IsTest)
                 {
                     AddLog(0, null, detail.GetActualAllocation(),

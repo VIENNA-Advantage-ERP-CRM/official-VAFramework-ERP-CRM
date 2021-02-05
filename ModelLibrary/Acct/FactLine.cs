@@ -536,11 +536,11 @@ namespace VAdvantage.Acct
             {
                 if (_docLine != null)
                 {
-                    SetM_Product_ID(_docLine.GetM_Product_ID());
+                    SetVAM_Product_ID(_docLine.GetVAM_Product_ID());
                 }
-                if (GetM_Product_ID() == 0)
+                if (GetVAM_Product_ID() == 0)
                 {
-                    SetM_Product_ID(_doc.GetM_Product_ID());
+                    SetVAM_Product_ID(_doc.GetVAM_Product_ID());
                 }
             }
             //	UOM
@@ -726,7 +726,7 @@ namespace VAdvantage.Acct
             {
                 string sql = @"SELECT ase.vaf_client_id ,   ase.ElementType ,   ase.VAB_BillingCode_id ,   ase.VAB_BusinessPartner_id ,
                                      ase.VAB_Promotion_id ,   ase.VAB_Address_id ,   ase.VAB_Project_ID ,   ase.VAB_SalesRegionState_id ,
-                                     ase.m_product_id ,   ase.org_id ,   c.columnname
+                                     ase.VAM_Product_id ,   ase.org_id ,   c.columnname
                              FROM VAB_AccountBook_Element ase LEFT JOIN vaf_column c ON ase.vaf_column_id   = c.vaf_column_id 
                              WHERE ase.VAB_AccountBook_ID = " + VAB_AccountBook_ID + " AND ase.IsActive = 'Y'";
                 DataSet dsAcctSchemaElement = DB.ExecuteDataset(sql, null, null);
@@ -761,7 +761,7 @@ namespace VAdvantage.Acct
                         }
                         else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "PR")
                         {
-                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "M_Product_ID";
+                            acctSchemaElementRecord[Util.GetValueOfString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"])] = "VAM_Product_ID";
                         }
                         else if (System.Convert.ToString(dsAcctSchemaElement.Tables[0].Rows[ase]["ElementType"]) == "SR")
                         {
@@ -819,10 +819,10 @@ namespace VAdvantage.Acct
         /// Set Warehouse Locator.
         /// - will overwrite Organization -
         /// </summary>
-        /// <param name="M_Locator_ID">locator</param>
-        public new void SetM_Locator_ID(int M_Locator_ID)
+        /// <param name="VAM_Locator_ID">locator</param>
+        public new void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            base.SetM_Locator_ID(M_Locator_ID);
+            base.SetVAM_Locator_ID(VAM_Locator_ID);
             SetVAF_Org_ID(0);	//	reset
         }
 
@@ -847,17 +847,17 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Set Location from Locator
         /// </summary>
-        /// <param name="M_Locator_ID"></param>
+        /// <param name="VAM_Locator_ID"></param>
         /// <param name="isFrom"></param>
-        public void SetLocationFromLocator(int M_Locator_ID, bool isFrom)
+        public void SetLocationFromLocator(int VAM_Locator_ID, bool isFrom)
         {
-            if (M_Locator_ID == 0)
+            if (VAM_Locator_ID == 0)
             {
                 return;
             }
             int VAB_Address_ID = 0;
-            String sql = "SELECT w.VAB_Address_ID FROM M_Warehouse w, M_Locator l "
-                + "WHERE w.M_Warehouse_ID=l.M_Warehouse_ID AND l.M_Locator_ID=" + M_Locator_ID;
+            String sql = "SELECT w.VAB_Address_ID FROM VAM_Warehouse w, VAM_Locator l "
+                + "WHERE w.VAM_Warehouse_ID=l.VAM_Warehouse_ID AND l.VAM_Locator_ID=" + VAM_Locator_ID;
             IDataReader idr = null;
             try
             {
@@ -1168,9 +1168,9 @@ namespace VAdvantage.Acct
                 return base.GetVAF_Org_ID();
             }
             //	Prio 1 - get from locator - if exist
-            if (GetM_Locator_ID() != 0)
+            if (GetVAM_Locator_ID() != 0)
             {
-                String sql = "SELECT VAF_Org_ID FROM M_Locator WHERE M_Locator_ID=" + GetM_Locator_ID() + " AND VAF_Client_ID=" + GetVAF_Client_ID();
+                String sql = "SELECT VAF_Org_ID FROM VAM_Locator WHERE VAM_Locator_ID=" + GetVAM_Locator_ID() + " AND VAF_Client_ID=" + GetVAF_Client_ID();
                 IDataReader idr = null;
                 try
                 {
@@ -1178,11 +1178,11 @@ namespace VAdvantage.Acct
                     if (idr.Read())
                     {
                         SetVAF_Org_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
-                        log.Finer("VAF_Org_ID=" + base.GetVAF_Org_ID() + " (1 from M_Locator_ID=" + GetM_Locator_ID() + ")");
+                        log.Finer("VAF_Org_ID=" + base.GetVAF_Org_ID() + " (1 from VAM_Locator_ID=" + GetVAM_Locator_ID() + ")");
                     }
                     else
                     {
-                        log.Log(Level.SEVERE, "VAF_Org_ID - Did not find M_Locator_ID=" + GetM_Locator_ID());
+                        log.Log(Level.SEVERE, "VAF_Org_ID - Did not find VAM_Locator_ID=" + GetVAM_Locator_ID());
                     }
                     idr.Close();
                 }
@@ -1195,7 +1195,7 @@ namespace VAdvantage.Acct
                     }
                     log.Log(Level.SEVERE, sql, e);
                 }
-            }   //  M_Locator_ID != 0
+            }   //  VAM_Locator_ID != 0
 
             //	Prio 2 - get from doc line - if exists (document context overwrites)
             if (_docLine != null && base.GetVAF_Org_ID() == 0)
@@ -1316,9 +1316,9 @@ namespace VAdvantage.Acct
                 GetVAF_Org_ID();
                 GetVAB_SalesRegionState_ID();
                 //  Set Default Account Info
-                if (GetM_Product_ID() == 0)
+                if (GetVAM_Product_ID() == 0)
                 {
-                    SetM_Product_ID(_acct.GetM_Product_ID());
+                    SetVAM_Product_ID(_acct.GetVAM_Product_ID());
                 }
                 if (GetC_LocFrom_ID() == 0)
                 {
@@ -1405,7 +1405,7 @@ namespace VAdvantage.Acct
                             _docLine.GetC_RevenueRecognition_ID(), _docLine.Get_ID(),
                             GetVAF_Client_ID(), GetVAF_Org_ID(), VAF_UserContact_ID,
                             GetAccount_ID(), GetVAB_SubAcct_ID(),
-                            GetM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
+                            GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
                             GetC_LocFrom_ID(), GetC_LocTo_ID(),
                             GetVAB_SalesRegionState_ID(), GetVAB_Project_ID(),
                             GetVAB_Promotion_ID(), GetVAB_BillingCode_ID(),
@@ -1432,7 +1432,7 @@ namespace VAdvantage.Acct
         /// <param name="VAF_UserContact_ID">user</param>
         /// <param name="Account_ID">of Revenue Account</param>
         /// <param name="VAB_SubAcct_ID"> sub account</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_BusinessPartner_ID">bpartner</param>
         /// <param name="VAF_OrgTrx_ID"> trx org</param>
         /// <param name="C_LocFrom_ID">loc from</param>
@@ -1450,7 +1450,7 @@ namespace VAdvantage.Acct
             int C_RevenueRecognition_ID, int VAB_InvoiceLine_ID,
             int VAF_Client_ID, int VAF_Org_ID, int VAF_UserContact_ID,
             int Account_ID, int VAB_SubAcct_ID,
-            int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+            int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int C_SRegion_ID, int VAB_Project_ID,
             int VAB_Promotion_ID, int VAB_BillingCode_ID,
             int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID)
@@ -1459,7 +1459,7 @@ namespace VAdvantage.Acct
             //  get VC for P_Revenue (from Product)
             MAccount revenue = MAccount.Get(GetCtx(),
                 VAF_Client_ID, VAF_Org_ID, GetVAB_AccountBook_ID(), Account_ID, VAB_SubAcct_ID,
-                M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID,
+                VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID, C_LocFrom_ID, C_LocTo_ID, C_SRegion_ID,
                 VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);
             if (revenue != null && revenue.Get_ID() == 0)
@@ -1581,8 +1581,8 @@ namespace VAdvantage.Acct
                     SetVAB_SalesRegionState_ID(fact.GetVAB_SalesRegionState_ID());
                     SetC_LocFrom_ID(fact.GetC_LocFrom_ID());
                     SetC_LocTo_ID(fact.GetC_LocTo_ID());
-                    SetM_Product_ID(fact.GetM_Product_ID());
-                    SetM_Locator_ID(fact.GetM_Locator_ID());
+                    SetVAM_Product_ID(fact.GetVAM_Product_ID());
+                    SetVAM_Locator_ID(fact.GetVAM_Locator_ID());
                     SetUser1_ID(fact.GetUser1_ID());
                     SetUser2_ID(fact.GetUser2_ID());
                     SetVAB_UOM_ID(fact.GetVAB_UOM_ID());

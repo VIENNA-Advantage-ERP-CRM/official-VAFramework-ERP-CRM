@@ -90,18 +90,18 @@ namespace VAdvantage.Model
         /// Get Default Org Warehouse
         /// </summary>
         /// <returns>warehouse</returns>
-        public new int GetM_Warehouse_ID()
+        public new int GetVAM_Warehouse_ID()
         {
-            int M_Warehouse_ID = base.GetM_Warehouse_ID();
-            if (M_Warehouse_ID != 0)
-                return M_Warehouse_ID;
+            int VAM_Warehouse_ID = base.GetVAM_Warehouse_ID();
+            if (VAM_Warehouse_ID != 0)
+                return VAM_Warehouse_ID;
             //
             MWarehouse[] whss = MWarehouse.GetForOrg(GetCtx(), GetVAF_Org_ID());
             if (whss.Length > 0)
             {
-                M_Warehouse_ID = whss[0].GetM_Warehouse_ID();
-                SetM_Warehouse_ID(M_Warehouse_ID);
-                return M_Warehouse_ID;
+                VAM_Warehouse_ID = whss[0].GetVAM_Warehouse_ID();
+                SetVAM_Warehouse_ID(VAM_Warehouse_ID);
+                return VAM_Warehouse_ID;
             }
             log.Warning("No Warehouse for VAF_Org_ID=" + GetVAF_Org_ID());
             return 0;

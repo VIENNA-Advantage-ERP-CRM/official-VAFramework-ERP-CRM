@@ -24,22 +24,22 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProductLocator : X_M_ProductLocator
+    public class MProductLocator : X_VAM_ProductLocator
     {
         /**
          * 	Get array of active Locators for Product and warehouse ordered by priority
          *	@param product product
-         *	@param M_Warehouse_ID wh
+         *	@param VAM_Warehouse_ID wh
          *	@return product locators
          */
-        public static MLocator[] GetLocators(MProduct product, int M_Warehouse_ID)
+        public static MLocator[] GetLocators(MProduct product, int VAM_Warehouse_ID)
         {
             List<MLocator> list = new List<MLocator>();
-            String sql = "SELECT * FROM M_Locator l "
+            String sql = "SELECT * FROM VAM_Locator l "
                 + "WHERE l.IsActive='Y'"
-                + " AND (M_Locator_ID IN (SELECT M_Locator_ID FROM M_Product WHERE M_Product_ID=" + product.GetM_Product_ID() + ")"
-                + " OR M_Locator_ID IN (SELECT M_Locator_ID FROM M_ProductLocator WHERE M_Product_ID=" + product.GetM_Product_ID() + " AND IsActive='Y'))"
-                + " AND M_Warehouse_ID=" + M_Warehouse_ID
+                + " AND (VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_Product WHERE VAM_Product_ID=" + product.GetVAM_Product_ID() + ")"
+                + " OR VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_ProductLocator WHERE VAM_Product_ID=" + product.GetVAM_Product_ID() + " AND IsActive='Y'))"
+                + " AND VAM_Warehouse_ID=" + VAM_Warehouse_ID
                 + "ORDER BY PriorityNo DESC";
             DataTable dt = null;
             IDataReader idr = null;
@@ -75,22 +75,22 @@ namespace VAdvantage.Model
         }
 
         /**
-         * 	Get First M_Locator_ID for product and Warehouse ordered by priority of Locator
+         * 	Get First VAM_Locator_ID for product and Warehouse ordered by priority of Locator
          *	@param product product
-         *	@param M_Warehouse_ID wh
+         *	@param VAM_Warehouse_ID wh
          *	@return locator or 0 if none
          */
-        public static int GetFirstM_Locator_ID(MProduct product, int M_Warehouse_ID)
+        public static int GetFirstVAM_Locator_ID(MProduct product, int VAM_Warehouse_ID)
         {
-            if (product == null || M_Warehouse_ID == 0)
+            if (product == null || VAM_Warehouse_ID == 0)
                 return 0;
             //
-            int M_Locator_ID = 0;
-            String sql = "SELECT M_Locator_ID FROM M_Locator l "
+            int VAM_Locator_ID = 0;
+            String sql = "SELECT VAM_Locator_ID FROM VAM_Locator l "
                 + "WHERE l.IsActive='Y'"
-                + " AND (M_Locator_ID IN (SELECT M_Locator_ID FROM M_Product WHERE M_Product_ID=" + product.GetM_Product_ID() + ")"
-                + " OR M_Locator_ID IN (SELECT M_Locator_ID FROM M_ProductLocator WHERE M_Product_ID=" + product.GetM_Product_ID() + " AND IsActive='Y'))"
-                + " AND M_Warehouse_ID= " + M_Warehouse_ID
+                + " AND (VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_Product WHERE VAM_Product_ID=" + product.GetVAM_Product_ID() + ")"
+                + " OR VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_ProductLocator WHERE VAM_Product_ID=" + product.GetVAM_Product_ID() + " AND IsActive='Y'))"
+                + " AND VAM_Warehouse_ID= " + VAM_Warehouse_ID
                 + "ORDER BY PriorityNo DESC";
             DataTable dt = null;
             IDataReader idr = null;
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    M_Locator_ID = Convert.ToInt32(dr[0]);// rs.getInt(1);
+                    VAM_Locator_ID = Convert.ToInt32(dr[0]);// rs.getInt(1);
                 }
             }
             catch (Exception e)
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
                 }
                 dt = null;
             }
-            return M_Locator_ID;
+            return VAM_Locator_ID;
         }
 
 
@@ -130,11 +130,11 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_ProductLocator_ID id
+         *	@param VAM_ProductLocator_ID id
          *	@param trxName trx
          */
-        public MProductLocator(Ctx ctx, int M_ProductLocator_ID, Trx trxName)
-            : base(ctx, M_ProductLocator_ID, trxName)
+        public MProductLocator(Ctx ctx, int VAM_ProductLocator_ID, Trx trxName)
+            : base(ctx, VAM_ProductLocator_ID, trxName)
         {
 
         }
@@ -152,16 +152,16 @@ namespace VAdvantage.Model
         }
 
         // added mohit 20-8-2015 VAWMS
-        public static MProductLocator GetOfProductLocator(Ctx ctx, int M_Product_ID, int M_Locator_ID)
+        public static MProductLocator GetOfProductLocator(Ctx ctx, int VAM_Product_ID, int VAM_Locator_ID)
         {
-            if (M_Product_ID == 0 || M_Locator_ID == 0)
+            if (VAM_Product_ID == 0 || VAM_Locator_ID == 0)
                 return null;
 
-            int M_ProductLocator_ID = 0;
-            String sql = "SELECT M_ProductLocator_ID FROM M_ProductLocator l "
+            int VAM_ProductLocator_ID = 0;
+            String sql = "SELECT VAM_ProductLocator_ID FROM VAM_ProductLocator l "
                 + "WHERE l.IsActive='Y'"
-                + " AND M_Locator_ID=" + M_Locator_ID
-                + " AND M_Product_ID=" + M_Product_ID;
+                + " AND VAM_Locator_ID=" + VAM_Locator_ID
+                + " AND VAM_Product_ID=" + VAM_Product_ID;
 
             IDataReader idr = null;
             try
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
                 idr = DB.ExecuteReader(sql, null);
                 if (idr.Read())
                 {
-                    M_ProductLocator_ID = Util.GetValueOfInt(idr[0]);
+                    VAM_ProductLocator_ID = Util.GetValueOfInt(idr[0]);
                 }
             }
             catch (Exception e)
@@ -184,11 +184,11 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            if (M_ProductLocator_ID == 0)
+            if (VAM_ProductLocator_ID == 0)
             {
                 return null;
             }
-            return new MProductLocator(ctx, M_ProductLocator_ID, null);
+            return new MProductLocator(ctx, VAM_ProductLocator_ID, null);
         }
         //end
 

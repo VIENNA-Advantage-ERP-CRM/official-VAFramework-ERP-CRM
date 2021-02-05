@@ -723,66 +723,66 @@ namespace VAdvantage.Model
             return (String)Get_Value("LineDescription");
         }
         /** Set Price List.
-        @param M_PriceList_ID Unique identifier of a Price List */
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        @param VAM_PriceList_ID Unique identifier of a Price List */
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            if (M_PriceList_ID <= 0) Set_Value("M_PriceList_ID", null);
+            if (VAM_PriceList_ID <= 0) Set_Value("VAM_PriceList_ID", null);
             else
-                Set_Value("M_PriceList_ID", M_PriceList_ID);
+                Set_Value("VAM_PriceList_ID", VAM_PriceList_ID);
         }
         /** Get Price List.
         @return Unique identifier of a Price List */
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            Object ii = Get_Value("M_PriceList_ID");
+            Object ii = Get_Value("VAM_PriceList_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Freight Carrier.
-        @param M_Shipper_ID Method or manner of product delivery */
-        public void SetM_Shipper_ID(int M_Shipper_ID)
+        @param VAM_ShippingMethod_ID Method or manner of product delivery */
+        public void SetVAM_ShippingMethod_ID(int VAM_ShippingMethod_ID)
         {
-            if (M_Shipper_ID <= 0) Set_Value("M_Shipper_ID", null);
+            if (VAM_ShippingMethod_ID <= 0) Set_Value("VAM_ShippingMethod_ID", null);
             else
-                Set_Value("M_Shipper_ID", M_Shipper_ID);
+                Set_Value("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
         }
         /** Get Freight Carrier.
         @return Method or manner of product delivery */
-        public int GetM_Shipper_ID()
+        public int GetVAM_ShippingMethod_ID()
         {
-            Object ii = Get_Value("M_Shipper_ID");
+            Object ii = Get_Value("VAM_ShippingMethod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            if (VAM_Warehouse_ID <= 0) Set_Value("VAM_Warehouse_ID", null);
             else
-                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+                Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

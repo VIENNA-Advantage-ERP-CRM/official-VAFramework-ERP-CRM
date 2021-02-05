@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MPackage
  * Purpose        : Package Model
- * Class Used     : X_M_Package
+ * Class Used     : X_VAM_Packaging
  * Chronological    Development
  * Raghunandan     21-Oct-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPackage : X_M_Package
+    public class MPackage : X_VAM_Packaging
     {
         /// <summary>
         /// Create one Package for Shipment 
@@ -82,12 +82,12 @@ namespace VAdvantage.Model
         /// MPackage
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Package_ID">id</param>
+        /// <param name="VAM_Packaging_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPackage(Ctx ctx, int M_Package_ID, Trx trxName)
-            : base(ctx, M_Package_ID, trxName)
+        public MPackage(Ctx ctx, int VAM_Packaging_ID, Trx trxName)
+            : base(ctx, VAM_Packaging_ID, trxName)
         {
-            if (M_Package_ID == 0)
+            if (VAM_Packaging_ID == 0)
             {
                 //SetShipDate(new DateTime(System.currentTimeMillis()));
                 SetShipDate(new DateTime(CommonFunctions.CurrentTimeMillis()));
@@ -115,8 +115,8 @@ namespace VAdvantage.Model
             : this(shipment.GetCtx(), 0, shipment.Get_TrxName())
         {
             SetClientOrg(shipment);
-            SetM_InOut_ID(shipment.GetM_InOut_ID());
-            SetM_Shipper_ID(shipper.GetM_Shipper_ID());
+            SetVAM_Inv_InOut_ID(shipment.GetVAM_Inv_InOut_ID());
+            SetVAM_ShippingMethod_ID(shipper.GetVAM_ShippingMethod_ID());
         }
     }
 }

@@ -147,18 +147,18 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set BOM.
-@param M_BOM_ID Bill of Material */
-public void SetM_BOM_ID (int M_BOM_ID)
+@param VAM_BOM_ID Bill of Material */
+public void SetVAM_BOM_ID (int VAM_BOM_ID)
 {
-if (M_BOM_ID <= 0) Set_Value ("M_BOM_ID", null);
+if (VAM_BOM_ID <= 0) Set_Value ("VAM_BOM_ID", null);
 else
-Set_Value ("M_BOM_ID", M_BOM_ID);
+Set_Value ("VAM_BOM_ID", VAM_BOM_ID);
 }
 /** Get BOM.
 @return Bill of Material */
-public int GetM_BOM_ID() 
+public int GetVAM_BOM_ID() 
 {
-Object ii = Get_Value("M_BOM_ID");
+Object ii = Get_Value("VAM_BOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

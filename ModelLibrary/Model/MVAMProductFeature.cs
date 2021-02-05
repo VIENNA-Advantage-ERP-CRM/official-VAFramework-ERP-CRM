@@ -117,7 +117,7 @@ namespace VAdvantage.Model
                 if (!IsMandatory())
                     list.Add(val);
                 //
-                String sql = "SELECT * FROM M_AttributeValue "
+                String sql = "SELECT * FROM VAM_PFeature_Value "
                     + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID()
                     + "ORDER BY Value";
                 DataSet ds = null;
@@ -146,14 +146,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">attribute set instance</param>
         /// <returns>Attribute Instance or null</returns>
-        public MAttributeInstance GetMAttributeInstance(int M_AttributeSetInstance_ID)
+        public MAttributeInstance GetMAttributeInstance(int VAM_PFeature_SetInstance_ID)
         {
             MAttributeInstance retValue = null;
             String sql = "SELECT * "
-                + "FROM M_AttributeInstance "
-                + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                + "FROM VAM_PFeatue_Instance "
+                + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             DataSet ds = null;
             try
             {
@@ -177,23 +177,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">value</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">value</param>
         /// <param name="value">id</param>
-        public void SetMAttributeInstance(int M_AttributeSetInstance_ID, MAttributeValue value)
+        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, MAttributeValue value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(M_AttributeSetInstance_ID);
+            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 if (value != null)
                 {
                     instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
-                      M_AttributeSetInstance_ID, value.GetM_AttributeValue_ID(),
+                      VAM_PFeature_SetInstance_ID, value.GetVAM_PFeature_Value_ID(),
                     value.GetName(), Get_TrxName()); 					//	Cached !!
                 }
                 else
                 {
                     instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
-                        M_AttributeSetInstance_ID, 0, null, Get_TrxName());
+                        VAM_PFeature_SetInstance_ID, 0, null, Get_TrxName());
                 }
                 // Create new Attribute Instances in * Organization
                 instance.SetVAF_Org_ID(0);
@@ -202,12 +202,12 @@ namespace VAdvantage.Model
             {
                 if (value != null)
                 {
-                    instance.SetM_AttributeValue_ID(value.GetM_AttributeValue_ID());
+                    instance.SetVAM_PFeature_Value_ID(value.GetVAM_PFeature_Value_ID());
                     instance.SetValue(value.GetName()); 	//	Cached !!
                 }
                 else
                 {
-                    instance.SetM_AttributeValue_ID(0);
+                    instance.SetVAM_PFeature_Value_ID(0);
                     instance.SetValue(null);
                 }
             }
@@ -217,15 +217,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">id</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">id</param>
         /// <param name="value">string value</param>
-        public void SetMAttributeInstance(int M_AttributeSetInstance_ID, String value)
+        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, String value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(M_AttributeSetInstance_ID);
+            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
-                    M_AttributeSetInstance_ID, value, Get_TrxName());
+                    VAM_PFeature_SetInstance_ID, value, Get_TrxName());
             }
             else
             {
@@ -237,15 +237,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">number value</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">number value</param>
         /// <param name="value">id</param>
-        public void SetMAttributeInstance(int M_AttributeSetInstance_ID, Decimal? value)
+        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, Decimal? value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(M_AttributeSetInstance_ID);
+            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
-                    M_AttributeSetInstance_ID, value, Get_TrxName());
+                    VAM_PFeature_SetInstance_ID, value, Get_TrxName());
             }
             else
             {
@@ -280,11 +280,11 @@ namespace VAdvantage.Model
             //	Changed to Instance Attribute
             if (!newRecord && Is_ValueChanged("IsInstanceAttribute") && IsInstanceAttribute())
             {
-                String sql = "UPDATE M_AttributeSet mas "
+                String sql = "UPDATE VAM_PFeature_Set mas "
                     + "SET IsInstanceAttribute='Y' "
                     + "WHERE IsInstanceAttribute='N'"
-                    + " AND EXISTS (SELECT * FROM M_AttributeUse mau "
-                        + "WHERE mas.M_AttributeSet_ID=mau.M_AttributeSet_ID"
+                    + " AND EXISTS (SELECT * FROM VAM_PFeature_Use mau "
+                        + "WHERE mas.VAM_PFeature_Set_ID=mau.VAM_PFeature_Set_ID"
                         + " AND mau.VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + ")";
                 int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
                 log.Fine("AttributeSet Instance set #" + no);

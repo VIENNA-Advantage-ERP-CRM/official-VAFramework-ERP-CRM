@@ -11,32 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Cost
+/** Generated Model for VAM_ProductCost
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Cost : PO
+public class X_VAM_ProductCost : PO
 {
-public X_M_Cost (Context ctx, int M_Cost_ID, Trx trxName) : base (ctx, M_Cost_ID, trxName)
+public X_VAM_ProductCost (Context ctx, int VAM_ProductCost_ID, Trx trxName) : base (ctx, VAM_ProductCost_ID, trxName)
 {
-/** if (M_Cost_ID == 0)
-{
-SetA_Asset_ID (0);	// 0
-SetBasisType (null);	// I
-SetVAB_AccountBook_ID (0);
-SetCurrentCostPrice (0.0);
-SetCurrentQty (0.0);
-SetIsThisLevel (null);	// Y
-SetLastCostPrice (0.0);	// 0
-SetM_AttributeSetInstance_ID (0);
-SetM_CostElement_ID (0);
-SetM_CostType_ID (0);
-SetM_Product_ID (0);
-}
- */
-}
-public X_M_Cost (Ctx ctx, int M_Cost_ID, Trx trxName) : base (ctx, M_Cost_ID, trxName)
-{
-/** if (M_Cost_ID == 0)
+/** if (VAM_ProductCost_ID == 0)
 {
 SetA_Asset_ID (0);	// 0
 SetBasisType (null);	// I
@@ -45,10 +27,28 @@ SetCurrentCostPrice (0.0);
 SetCurrentQty (0.0);
 SetIsThisLevel (null);	// Y
 SetLastCostPrice (0.0);	// 0
-SetM_AttributeSetInstance_ID (0);
-SetM_CostElement_ID (0);
-SetM_CostType_ID (0);
-SetM_Product_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_ProductCostElement_ID (0);
+SetVAM_ProductCostType_ID (0);
+SetVAM_Product_ID (0);
+}
+ */
+}
+public X_VAM_ProductCost (Ctx ctx, int VAM_ProductCost_ID, Trx trxName) : base (ctx, VAM_ProductCost_ID, trxName)
+{
+/** if (VAM_ProductCost_ID == 0)
+{
+SetA_Asset_ID (0);	// 0
+SetBasisType (null);	// I
+SetVAB_AccountBook_ID (0);
+SetCurrentCostPrice (0.0);
+SetCurrentQty (0.0);
+SetIsThisLevel (null);	// Y
+SetLastCostPrice (0.0);	// 0
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_ProductCostElement_ID (0);
+SetVAM_ProductCostType_ID (0);
+SetVAM_Product_ID (0);
 }
  */
 }
@@ -57,7 +57,7 @@ SetM_Product_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Cost (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCost (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,7 +65,7 @@ public X_M_Cost (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Cost (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCost (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -73,13 +73,13 @@ public X_M_Cost (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Cost (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ProductCost (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Cost()
+static X_VAM_ProductCost()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -92,8 +92,8 @@ public static long updatedMS = 1412838398807L;
 public static int Table_ID;
  // =771;
 
-/** TableName=M_Cost */
-public static String Table_Name="M_Cost";
+/** TableName=VAM_ProductCost */
+public static String Table_Name="VAM_ProductCost";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -127,7 +127,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Cost[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ProductCost[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Asset.
@@ -457,62 +457,62 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cost Element.
-@param M_CostElement_ID Product Cost Element */
-public void SetM_CostElement_ID (int M_CostElement_ID)
+@param VAM_ProductCostElement_ID Product Cost Element */
+public void SetVAM_ProductCostElement_ID (int VAM_ProductCostElement_ID)
 {
-if (M_CostElement_ID < 1) throw new ArgumentException ("M_CostElement_ID is mandatory.");
-Set_ValueNoCheck ("M_CostElement_ID", M_CostElement_ID);
+if (VAM_ProductCostElement_ID < 1) throw new ArgumentException ("VAM_ProductCostElement_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
 }
 /** Get Cost Element.
 @return Product Cost Element */
-public int GetM_CostElement_ID() 
+public int GetVAM_ProductCostElement_ID() 
 {
-Object ii = Get_Value("M_CostElement_ID");
+Object ii = Get_Value("VAM_ProductCostElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cost Type.
-@param M_CostType_ID Type of Cost (e.g. Current, Plan, Future) */
-public void SetM_CostType_ID (int M_CostType_ID)
+@param VAM_ProductCostType_ID Type of Cost (e.g. Current, Plan, Future) */
+public void SetVAM_ProductCostType_ID (int VAM_ProductCostType_ID)
 {
-if (M_CostType_ID < 1) throw new ArgumentException ("M_CostType_ID is mandatory.");
-Set_ValueNoCheck ("M_CostType_ID", M_CostType_ID);
+if (VAM_ProductCostType_ID < 1) throw new ArgumentException ("VAM_ProductCostType_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostType_ID", VAM_ProductCostType_ID);
 }
 /** Get Cost Type.
 @return Type of Cost (e.g. Current, Plan, Future) */
-public int GetM_CostType_ID() 
+public int GetVAM_ProductCostType_ID() 
 {
-Object ii = Get_Value("M_CostType_ID");
+Object ii = Get_Value("VAM_ProductCostType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -551,10 +551,10 @@ return false;
 
 
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID(int M_Warehouse_ID) { if (M_Warehouse_ID < 0) throw new ArgumentException("M_Warehouse_ID is mandatory."); Set_ValueNoCheck("M_Warehouse_ID", M_Warehouse_ID); }/** Get Warehouse.
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID) { if (VAM_Warehouse_ID < 0) throw new ArgumentException("VAM_Warehouse_ID is mandatory."); Set_ValueNoCheck("VAM_Warehouse_ID", VAM_Warehouse_ID); }/** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+public int GetVAM_Warehouse_ID() { Object ii = Get_Value("VAM_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 }
 
 }

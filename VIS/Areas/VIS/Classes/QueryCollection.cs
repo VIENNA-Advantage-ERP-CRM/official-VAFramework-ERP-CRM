@@ -20,146 +20,146 @@ namespace VIS.Classes
 
             queryList.VIS_2 = "SELECT PayAmt FROM VAB_Payment_V WHERE VAB_Payment_ID=@VAB_Payment_ID";
 
-            queryList.VIS_3 = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID =@param1 "
-                                         + " AND M_PriceList_Version_ID =@param2 "
-                                         + " AND  M_AttributeSetInstance_ID =@param3 "
+            queryList.VIS_3 = "SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID =@param1 "
+                                         + " AND VAM_PriceListVersion_ID =@param2 "
+                                         + " AND  VAM_PFeature_SetInstance_ID =@param3 "
                                          + "  AND VAB_UOM_ID=@param 4";
 
-            queryList.VIS_4 = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                       + " AND M_PriceList_Version_ID = @param2 "
-                                       + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_4 = "SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                       + " AND VAM_PriceListVersion_ID = @param2 "
+                                       + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                        + "  AND VAB_UOM_ID= @param3";
 
-            queryList.VIS_5 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                        + " AND M_PriceList_Version_ID = @param2 "
-                                        + " AND  M_AttributeSetInstance_ID = @param3 "
+            queryList.VIS_5 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                        + " AND VAM_PriceListVersion_ID = @param2 "
+                                        + " AND  VAM_PFeature_SetInstance_ID = @param3 "
                                         + "  AND VAB_UOM_ID= @param4 ";
 
-            queryList.VIS_6 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID =@param1 "
-                                      + " AND M_PriceList_Version_ID =@param2 "
-                                      + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_6 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID =@param1 "
+                                      + " AND VAM_PriceListVersion_ID =@param2 "
+                                      + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                       + "  AND VAB_UOM_ID= @param3 ";
 
-            queryList.VIS_7 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID =@param1 "
-                                  + " AND M_PriceList_Version_ID = @param2 "
-                                  + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_7 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID =@param1 "
+                                  + " AND VAM_PriceListVersion_ID = @param2 "
+                                  + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                   + "  AND VAB_UOM_ID= @param3 ";
 
-            queryList.VIS_8 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                        + " AND M_PriceList_Version_ID = @param2 "
-                                        + " AND  M_AttributeSetInstance_ID = @param3 "
+            queryList.VIS_8 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                        + " AND VAM_PriceListVersion_ID = @param2 "
+                                        + " AND  VAM_PFeature_SetInstance_ID = @param3 "
                                         + "  AND VAB_UOM_ID= @param4 ";
 
-            queryList.VIS_9 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID =  @param1 "
-                                      + " AND M_PriceList_Version_ID = @param2 "
-                                      + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_9 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID =  @param1 "
+                                      + " AND VAM_PriceListVersion_ID = @param2 "
+                                      + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                       + "  AND VAB_UOM_ID= @param3 ";
             queryList.VIS_10 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' "
-                                      + " AND con.M_Product_ID = @param1  AND con.VAB_UOM_ID = @param2  AND con.VAB_UOM_To_ID = @param3 ";
+                                      + " AND con.VAM_Product_ID = @param1  AND con.VAB_UOM_ID = @param2  AND con.VAB_UOM_To_ID = @param3 ";
 
             queryList.VIS_11 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
                                   " AND con.VAB_UOM_ID = @param1  AND con.VAB_UOM_To_ID = @param2 ";
 
-            queryList.VIS_12 = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                             + " AND M_PriceList_Version_ID = @param2 "
-                                             + " AND  M_AttributeSetInstance_ID = @param3 "
+            queryList.VIS_12 = "SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                             + " AND VAM_PriceListVersion_ID = @param2 "
+                                             + " AND  VAM_PFeature_SetInstance_ID = @param3 "
                                              + "  AND VAB_UOM_ID= @param4 ";
 
-            queryList.VIS_13 = "SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                           + " AND M_PriceList_Version_ID =  @param2 "
-                                           + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_13 = "SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                           + " AND VAM_PriceListVersion_ID =  @param2 "
+                                           + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                            + "  AND VAB_UOM_ID= @param3 ";
 
-            queryList.VIS_14 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                            + " AND M_PriceList_Version_ID =  @param2 "
-                                            + " AND  M_AttributeSetInstance_ID = @param3 "
+            queryList.VIS_14 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                            + " AND VAM_PriceListVersion_ID =  @param2 "
+                                            + " AND  VAM_PFeature_SetInstance_ID = @param3 "
                                             + "  AND VAB_UOM_ID= @param4 ";
 
-            queryList.VIS_15 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                          + " AND M_PriceList_Version_ID = @param2 "
-                                          + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_15 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                          + " AND VAM_PriceListVersion_ID = @param2 "
+                                          + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                           + "  AND VAB_UOM_ID= @param3 ";
-            queryList.VIS_16 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                      + " AND M_PriceList_Version_ID = @param2 "
-                                      + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_16 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                      + " AND VAM_PriceListVersion_ID = @param2 "
+                                      + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                       + "  AND VAB_UOM_ID= @param3 ";
-            queryList.VIS_17 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                            + " AND M_PriceList_Version_ID =  @param2 "
-                                            + " AND  M_AttributeSetInstance_ID = @param3 "
+            queryList.VIS_17 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                            + " AND VAM_PriceListVersion_ID =  @param2 "
+                                            + " AND  VAM_PFeature_SetInstance_ID = @param3 "
                                             + "  AND VAB_UOM_ID= @param4 ";
-            queryList.VIS_18 = "SELECT PriceStd , PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                          + " AND M_PriceList_Version_ID = @param2 "
-                                          + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_18 = "SELECT PriceStd , PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                          + " AND VAM_PriceListVersion_ID = @param2 "
+                                          + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                           + "  AND VAB_UOM_ID= @param3 ";
             queryList.VIS_19 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' "
-                                          + " AND con.M_Product_ID = @param1  AND con.VAB_UOM_ID =  @param2 AND con.VAB_UOM_To_ID = @param3 ";
+                                          + " AND con.VAM_Product_ID = @param1  AND con.VAB_UOM_ID =  @param2 AND con.VAB_UOM_To_ID = @param3 ";
 
             queryList.VIS_20 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
                                       " AND con.VAB_UOM_ID = @param1 AND con.VAB_UOM_To_ID = @param2 ";
 
-            queryList.VIS_21 = "SELECT EnforcePriceLimit FROM M_PriceList WHERE IsActive = 'Y' AND M_PriceList_ID = @param1 ";
+            queryList.VIS_21 = "SELECT EnforcePriceLimit FROM VAM_PriceList WHERE IsActive = 'Y' AND VAM_PriceList_ID = @param1 ";
 
             queryList.VIS_22 = "SELECT OverwritePriceLimit FROM VAF_Role WHERE IsActive = 'Y' AND VAF_Role_ID = @param1 ";
 
-            queryList.VIS_23 = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                        + " AND M_PriceList_Version_ID = @param2 "
-                                        + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+            queryList.VIS_23 = "SELECT PriceList , PriceStd , PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                        + " AND VAM_PriceListVersion_ID = @param2 "
+                                        + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                         + "  AND VAB_UOM_ID= @param3 ";
 
-            queryList.VIS_24 = "SELECT PriceList FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                       + " AND M_PriceList_Version_ID = @param2 "
-                                       + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) AND VAB_UOM_ID= @param3 ";
+            queryList.VIS_24 = "SELECT PriceList FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                       + " AND VAM_PriceListVersion_ID = @param2 "
+                                       + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) AND VAB_UOM_ID= @param3 ";
 
-            queryList.VIS_25 = "SELECT PriceStd FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = @param1 "
-                                     + " AND M_PriceList_Version_ID = @param2 "
-                                     + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) AND VAB_UOM_ID= @param3 ";
+            queryList.VIS_25 = "SELECT PriceStd FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = @param1 "
+                                     + " AND VAM_PriceListVersion_ID = @param2 "
+                                     + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) AND VAB_UOM_ID= @param3 ";
             queryList.VIS_26 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' "
-                                     + " AND con.M_Product_ID = @param1 "
+                                     + " AND con.VAM_Product_ID = @param1 "
                            + " AND con.VAB_UOM_ID = @param2  AND con.VAB_UOM_To_ID = @param3 ";
 
             queryList.VIS_27 = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y'" +
                                       " AND con.VAB_UOM_ID = @param1  AND con.VAB_UOM_To_ID = @param2 ";
 
-            queryList.VIS_28 = "SELECT VAB_UOM_ID FROM M_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = @param1 "
-                                     + " AND M_Product_ID = @param2 ";
+            queryList.VIS_28 = "SELECT VAB_UOM_ID FROM VAM_Product_PO WHERE IsActive = 'Y' AND  VAB_BusinessPartner_ID = @param1 "
+                                     + " AND VAM_Product_ID = @param2 ";
 
-            queryList.VIS_29 = "SELECT VAB_UOM_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = @param1 ";
+            queryList.VIS_29 = "SELECT VAB_UOM_ID FROM VAM_Product WHERE IsActive = 'Y' AND VAM_Product_ID = @param1 ";
 
             queryList.VIS_30 = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=@param1 ";
 
             queryList.VIS_31 = "select rate from VAB_TaxRate WHERE VAB_TaxRate_id= @param1 ";
 
             queryList.VIS_32 = "SELECT VAB_OrderLine_ID FROM VAB_OrderLine WHERE VAB_Order_ID = (SELECT VAB_Order_ID FROM VAB_Order "
-                             + "WHERE DocumentNo = (SELECT DocumentNo FROM M_Requisition WHERE M_Requisition.M_Requisition_id = @Param1) "
-                             + "AND VAF_Client_ID = @Param2) AND M_Product_ID = @Param3";
+                             + "WHERE DocumentNo = (SELECT DocumentNo FROM VAM_Requisition WHERE VAM_Requisition.VAM_Requisition_id = @Param1) "
+                             + "AND VAF_Client_ID = @Param2) AND VAM_Product_ID = @Param3";
 
-            queryList.VIS_33 = "SELECT VAB_Currency_ID FROM M_PriceList where M_PriceList_ID = @Param";
+            queryList.VIS_33 = "SELECT VAB_Currency_ID FROM VAM_PriceList where VAM_PriceList_ID = @Param";
 
             queryList.VIS_34 = "SELECT COALESCE(MAX(VAB_BatchInvoiceLine_ID),0) FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID = @Param";
 
-            queryList.VIS_35 = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty FROM VAS_Res_Assignment ra"
-                             + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) WHERE ra.VAS_Res_Assignment_ID = @Param";
-            queryList.VIS_36 = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
-                             + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
-                             + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
+            queryList.VIS_35 = "SELECT p.VAM_Product_ID, ra.Name, ra.Description, ra.Qty FROM VAS_Res_Assignment ra"
+                             + " INNER JOIN VAM_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) WHERE ra.VAS_Res_Assignment_ID = @Param";
+            queryList.VIS_36 = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
+                             + "bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                             + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                              + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
-                             + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList_Version pv "
-                             + "WHERE p.M_Product_ID=pp.M_Product_ID"
-                             + " AND pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID"
-                             + " AND pv.M_PriceList_ID=pl.M_PriceList_ID"
-                             + " AND pv.IsActive='Y' AND p.M_Product_ID=@param1"
-                             + " AND pl.M_PriceList_ID=@param2 ORDER BY pv.ValidFrom DESC";
+                             + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceListVersion pv "
+                             + "WHERE p.VAM_Product_ID=pp.VAM_Product_ID"
+                             + " AND pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID"
+                             + " AND pv.VAM_PriceList_ID=pl.VAM_PriceList_ID"
+                             + " AND pv.IsActive='Y' AND p.VAM_Product_ID=@param1"
+                             + " AND pl.VAM_PriceList_ID=@param2 ORDER BY pv.ValidFrom DESC";
 
-            queryList.VIS_37 = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"
-                             + "bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"
-                             + "bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"
+            queryList.VIS_37 = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"
+                             + "bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"
+                             + "bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"
                              + "p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID "
-                             + "FROM M_Product p, M_ProductPrice pp, M_PriceList pl, M_PriceList bpl, M_PriceList_Version pv "
-                             + "WHERE p.M_Product_ID=pp.M_Product_ID"
-                             + " AND pp.M_PriceList_Version_ID = pv.M_PriceList_Version_ID"
-                             + " AND pv.M_PriceList_ID = bpl.M_PriceList_ID"
-                             + " AND pv.IsActive = 'Y' AND bpl.M_PriceList_ID = pl.BasePriceList_ID"	//	Base
-                             + " AND p.M_Product_ID = @param1 AND pl.M_PriceList_ID = @param2"	//	2
+                             + "FROM VAM_Product p, VAM_ProductPrice pp, VAM_PriceList pl, VAM_PriceList bpl, VAM_PriceListVersion pv "
+                             + "WHERE p.VAM_Product_ID=pp.VAM_Product_ID"
+                             + " AND pp.VAM_PriceListVersion_ID = pv.VAM_PriceListVersion_ID"
+                             + " AND pv.VAM_PriceList_ID = bpl.VAM_PriceList_ID"
+                             + " AND pv.IsActive = 'Y' AND bpl.VAM_PriceList_ID = pl.BasePriceList_ID"	//	Base
+                             + " AND p.VAM_Product_ID = @param1 AND pl.VAM_PriceList_ID = @param2"	//	2
                              + " ORDER BY pv.ValidFrom DESC";
 
             queryList.VIS_38 = "SELECT VAB_YearPeriod_ID FROM VAB_YearPeriod WHERE VAB_Year_ID IN "
@@ -171,15 +171,15 @@ namespace VIS.Classes
 
             queryList.VIS_40 = "SELECT ProfitBeforeTax,VAB_Year_ID,VAB_ProfitAndLoss_ID FROM VAB_ProfitLoss WHERE VAB_ProfitLoss_ID=@Param";
 
-            queryList.VIS_41 = "Select M_PriceList_Version_ID from M_ProductPrice where M_Product_id=@param1"
-                             + " and M_PriceList_Version_ID in (select m_pricelist_version_id from m_pricelist_version"
-                             + " where m_pricelist_id = @param2 and isactive='Y')";
+            queryList.VIS_41 = "Select VAM_PriceListVersion_ID from VAM_ProductPrice where VAM_Product_id=@param1"
+                             + " and VAM_PriceListVersion_ID in (select VAM_PriceListVersion_id from VAM_PriceListVersion"
+                             + " where VAM_PriceList_id = @param2 and isactive='Y')";
 
-            queryList.VIS_42 = "Select PriceStd from M_ProductPrice where M_PriceList_Version_ID=@param1 and M_Product_id=@param2";
+            queryList.VIS_42 = "Select PriceStd from VAM_ProductPrice where VAM_PriceListVersion_ID=@param1 and VAM_Product_id=@param2";
 
-            queryList.VIS_43 = "SELECT loc.M_Warehouse_ID FROM M_Product p INNER JOIN M_Locator loc ON p.M_Locator_ID= loc.M_Locator_ID WHERE p.M_Product_ID=@Param";
+            queryList.VIS_43 = "SELECT loc.VAM_Warehouse_ID FROM VAM_Product p INNER JOIN VAM_Locator loc ON p.VAM_Locator_ID= loc.VAM_Locator_ID WHERE p.VAM_Product_ID=@Param";
 
-            queryList.VIS_44 = "SELECT Count(*) FROM M_Manufacturer WHERE IsActive = 'Y' AND UPC = '@Param'";
+            queryList.VIS_44 = "SELECT Count(*) FROM VAM_Manufacturer WHERE IsActive = 'Y' AND UPC = '@Param'";
 
             queryList.VIS_45 = "UPDATE VARC_ViewColumn SET IsGroupBy='N' WHERE VARC_View_ID=@Param1 AND VARC_ViewColumn_ID NOT IN(@Param2)";
 
@@ -187,18 +187,18 @@ namespace VIS.Classes
 
             queryList.VIS_47 = "SELECT ColumnName FROM VAF_Column WHERE VAF_Column_ID=@Param";
 
-            queryList.VIS_48 = "SELECT DISTINCT M_Product_Category_ID FROM M_Product WHERE IsActive='Y' AND M_Product_ID=@Param";
+            queryList.VIS_48 = "SELECT DISTINCT VAM_ProductCategory_ID FROM VAM_Product WHERE IsActive='Y' AND VAM_Product_ID=@Param";
 
-            queryList.VIS_49 = "SELECT  DiscountType FROM M_DiscountSchema WHERE M_DiscountSchema_ID=@Param1 AND IsActive='Y' AND VAF_Client_ID=@Param2";
+            queryList.VIS_49 = "SELECT  DiscountType FROM VAM_DiscountCalculation WHERE VAM_DiscountCalculation_ID=@Param1 AND IsActive='Y' AND VAF_Client_ID=@Param2";
 
-            queryList.VIS_50 = "SELECT M_Product_Category_ID, M_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM M_DiscountSchemaBreak WHERE "
-                             + "M_DiscountSchema_ID = @Param1 AND M_Product_ID = @Param2 AND IsActive='Y' AND VAF_Client_ID= @Param3 Order BY BreakValue DESC";
+            queryList.VIS_50 = "SELECT VAM_ProductCategory_ID, VAM_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM VAM_BreakDiscount WHERE "
+                             + "VAM_DiscountCalculation_ID = @Param1 AND VAM_Product_ID = @Param2 AND IsActive='Y' AND VAF_Client_ID= @Param3 Order BY BreakValue DESC";
 
-            queryList.VIS_51 = "SELECT M_Product_Category_ID, M_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM M_DiscountSchemaBreak WHERE "
-                             + " M_DiscountSchema_ID = @Param1 AND M_Product_Category_ID = @Param2 AND IsActive='Y' AND VAF_Client_ID = @Param3 Order BY BreakValue DESC";
+            queryList.VIS_51 = "SELECT VAM_ProductCategory_ID, VAM_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM VAM_BreakDiscount WHERE "
+                             + " VAM_DiscountCalculation_ID = @Param1 AND VAM_ProductCategory_ID = @Param2 AND IsActive='Y' AND VAF_Client_ID = @Param3 Order BY BreakValue DESC";
 
-            queryList.VIS_52 = "SELECT M_Product_Category_ID, M_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM M_DiscountSchemaBreak WHERE "
-                             + " M_DiscountSchema_ID = @Param1 AND M_Product_Category_ID IS NULL AND M_Product_ID IS NULL AND IsActive='Y' AND VAF_Client_ID = @Param2 Order BY BreakValue DESC";
+            queryList.VIS_52 = "SELECT VAM_ProductCategory_ID, VAM_Product_ID, BreakValue, IsBPartnerFlatDiscount, BreakDiscount FROM VAM_BreakDiscount WHERE "
+                             + " VAM_DiscountCalculation_ID = @Param1 AND VAM_ProductCategory_ID IS NULL AND VAM_Product_ID IS NULL AND IsActive='Y' AND VAF_Client_ID = @Param2 Order BY BreakValue DESC";
 
             queryList.VIS_53 = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID = @Param1 AND IsActive ='Y' AND VAF_Client_ID = @Param2";
 
@@ -210,7 +210,7 @@ namespace VIS.Classes
 
             queryList.VIS_57 = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = @Param1 AND IsActive ='Y' and VATAX_TaxType_ID =@Param2";
 
-            queryList.VIS_58 = "SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID=@Param";
+            queryList.VIS_58 = "SELECT IsTaxIncluded FROM VAM_PriceList WHERE VAM_PriceList_ID=@Param";
 
             queryList.VIS_59 = "select FO_RES_ACCOMODATION_ID,DATE_FROM,TILL_DATE from FO_RES_ACCOMODATION where FO_OBJECT_DATA_ID=@FO_OBJ_DATA_ID";
 
@@ -224,14 +224,14 @@ namespace VIS.Classes
 
             queryList.VIS_64 = "SELECT ProfileType FROM VAS_Resource WHERE VAF_UserContact_ID=@Param";
 
-            queryList.VIS_65 = "SELECT M_Product_ID, MovementQty, M_AttributeSetInstance_ID FROM M_InOutLine WHERE M_InOutLine_ID=@Param";
+            queryList.VIS_65 = "SELECT VAM_Product_ID, MovementQty, VAM_PFeature_SetInstance_ID FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOutLine_ID=@Param";
 
-            queryList.VIS_66 = "SELECT SUM(ConfirmedQty + ScrappedQty) FROM M_PackageLine WHERE M_Package_ID=@Param1 AND M_InOutLine_ID=@Param2";
+            queryList.VIS_66 = "SELECT SUM(ConfirmedQty + ScrappedQty) FROM VAM_PackagingLine WHERE VAM_Packaging_ID=@Param1 AND VAM_Inv_InOutLine_ID=@Param2";
 
             queryList.VIS_67 = "SELECT EndingBalance FROM VAB_CashJRNL WHERE VAB_CashBook_ID=@Param1 AND VAF_Client_ID=@Param2 AND VAF_Org_ID=@Param3 AND " +
                             "VAB_CashJRNL_ID IN (SELECT Max(VAB_CashJRNL_ID) FROM VAB_CashJRNL WHERE VAB_CashBook_ID=@Param4 AND VAF_Client_ID=@Param5 AND VAF_Org_ID=@Param6) AND Processed='Y'";
 
-            queryList.VIS_68 = "SELET Count(*) FROM M_Transaction WHERE M_Product_ID = @Param";
+            queryList.VIS_68 = "SELET Count(*) FROM VAM_Inv_Trx WHERE VAM_Product_ID = @Param";
 
             queryList.VIS_69 = "SELET uom.FO_HOTEL_UOM_ID,s.DESCRIPTION FROM FO_HOTEL_UOM uom INNER JOIN FO_SERVICE s ON(uom.FO_HOTEL_UOM_ID = s.FO_HOTEL_UOM_ID) "
                              + "WHERE s.FO_SERVICE_ID=@FO_SERVICE_ID ";
@@ -239,9 +239,9 @@ namespace VIS.Classes
             queryList.VIS_70 = "SELET PRICE,CHILDGROUP1,CHILDGROUP2,UOM1,UOM2 FROM FO_SERVICE_PRICE_PRICELINE WHERE CREATED=(SELECT max(CREATED) FROM FO_SERVICE_PRICE_PRICELINE "
                              + "WHERE FO_SERVICE_ID=@FO_SERVICE_ID)";
 
-            queryList.VIS_71 = "SELECT SUM(t.CurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty FROM m_transaction t" +
-                            " INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= @Param1 AND l.VAF_Org_ID = @Param2" +
-                            " AND t.M_Locator_ID = @Param3 AND t.M_Product_ID = @Param4 AND NVL(t.M_AttributeSetInstance_ID,0) = @Param5";
+            queryList.VIS_71 = "SELECT SUM(t.CurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.VAM_Inv_Trx_ID) AS CurrentQty FROM VAM_Inv_Trx t" +
+                            " INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= @Param1 AND l.VAF_Org_ID = @Param2" +
+                            " AND t.VAM_Locator_ID = @Param3 AND t.VAM_Product_ID = @Param4 AND NVL(t.VAM_PFeature_SetInstance_ID,0) = @Param5";
 
 
             queryList.VIS_72 = "SELECT COUNT(*) FROM VAF_TableView WHERE TableName='VAR_Request'";
@@ -325,13 +325,13 @@ namespace VIS.Classes
                             + " INNER JOIN VAF_Column kc ON (rt.Column_Key_ID=kc.VAF_Column_ID)"
                             + "WHERE rt.VAF_Control_Ref_ID=@VAF_Control_Ref_ID";
 
-            queryList.VIS_92 = "SELECT Value FROM M_Locator WHERE IsActive='Y' and M_Locator_ID=@keyValue";
+            queryList.VIS_92 = "SELECT Value FROM VAM_Locator WHERE IsActive='Y' and VAM_Locator_ID=@keyValue";
 
             queryList.VIS_93 = "SELECT ColumnName FROM VAF_Column WHERE VAF_TableView_ID = 207 AND IsIdentifier  = 'Y' AND SeqNo  IS NOT NULL ORDER BY SeqNo";
 
             queryList.VIS_94 = "SELECT VAB_Acct_ValidParameter_ID, Combination, Description FROM VAB_Acct_ValidParameter WHERE VAB_Acct_ValidParameter_ID=@ID";
 
-            queryList.VIS_95 = "SELECT Description FROM M_AttributeSetInstance WHERE M_AttributeSetInstance_ID=@M_AttributeSetInstance_ID";
+            queryList.VIS_95 = "SELECT Description FROM VAM_PFeature_SetInstance WHERE VAM_PFeature_SetInstance_ID=@VAM_PFeature_SetInstance_ID";
 
             queryList.VIS_96 = "SELECT Description FROM VAB_GenFeatureSetInstance WHERE VAB_GenFeatureSetInstance_ID=@C_GenttributeSetInstance_ID";
 
@@ -477,7 +477,7 @@ namespace VIS.Classes
             queryList.VIS_131 = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'";
 
 
-            queryList.VIS_132 = "SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID =@M_Product_ID";
+            queryList.VIS_132 = "SELECT VAM_PFeature_Set_ID FROM VAM_Product WHERE VAM_Product_ID =@VAM_Product_ID";
 
             queryList.VIS_133 = "SELECT "	//	Entered UOM
                 //+ "l.QtyInvoiced-SUM(NVL(mi.Qty,0)),round(l.QtyEntered/l.QtyInvoiced,6),"
@@ -486,12 +486,12 @@ namespace VIS.Classes
             + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
-            + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
+            + " l.VAM_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
             + " l.VAB_OrderLine_ID "                					//  9
             + " FROM VAB_UOM uom  INNER JOIN VAB_InvoiceLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID) "
-            + " INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
+            + " INNER JOIN VAM_Product p ON (l.VAM_Product_ID=p.VAM_Product_ID) LEFT OUTER JOIN VAM_MatchInvoice mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
               + " WHERE l.VAB_Invoice_ID=@VAB_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered, l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                    + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID ORDER BY l.Line";
+                    + " l.VAM_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID ORDER BY l.Line";
 
             queryList.VIS_134 = "SELECT "	//	Entered UOM
                 //+ "l.QtyInvoiced-SUM(NVL(mi.Qty,0)),round(l.QtyEntered/l.QtyInvoiced,6),"
@@ -500,11 +500,11 @@ namespace VIS.Classes
             + "round((l.QtyInvoiced-SUM(COALESCE(mi.Qty,0))) * "					//	1               
             + "(CASE WHEN l.QtyInvoiced=0 THEN 0 ELSE l.QtyEntered/l.QtyInvoiced END ),2) as QTYENTER,"	//	2
             + " l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"			//  3..4
-            + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
-            + " l.VAB_OrderLine_ID FROM VAB_UOM_TL uom INNER JOIN VAB_InvoiceLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID AND uom.VAF_Language=@VAF_Language) INNER JOIN M_Product p ON (l.M_Product_ID=p.M_Product_ID) "
-           + " LEFT OUTER JOIN M_MatchInv mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) WHERE l.VAB_Invoice_ID=@VAB_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered,"
+            + " l.VAM_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,"      //  5..8
+            + " l.VAB_OrderLine_ID FROM VAB_UOM_TL uom INNER JOIN VAB_InvoiceLine l ON (l.VAB_UOM_ID=uom.VAB_UOM_ID AND uom.VAF_Language=@VAF_Language) INNER JOIN VAM_Product p ON (l.VAM_Product_ID=p.VAM_Product_ID) "
+           + " LEFT OUTER JOIN VAM_MatchInvoice mi ON (l.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) WHERE l.VAB_Invoice_ID=@VAB_Invoice_ID GROUP BY l.QtyInvoiced,l.QtyEntered,"
             + " l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name),"
-                + " l.M_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID  ORDER BY l.Line";
+                + " l.VAM_Product_ID,p.Name, l.VAB_InvoiceLine_ID,l.Line,l.VAB_OrderLine_ID  ORDER BY l.Line";
 
 
             queryList.VIS_135 = "SELECT PaymentRule FROM VAB_PaymentOptionCheck WHERE VAB_PaymentOption_ID = @pSelectID";
@@ -517,13 +517,13 @@ namespace VIS.Classes
 
             queryList.VIS_139 = "select vaf_tableview_id from vaf_tableview where tablename = 'VAB_Payment'";
 
-            queryList.VIS_140 = "SELECT M_InOut_ID FROM M_InOutLine WHERE M_InOutLine_ID=@lineID";
+            queryList.VIS_140 = "SELECT VAM_Inv_InOut_ID FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOutLine_ID=@lineID";
 
-            queryList.VIS_141 = "SELECT M_Inventory_ID FROM M_InventoryLine WHERE M_InventoryLine_ID=@lineID";
+            queryList.VIS_141 = "SELECT VAM_Inventory_ID FROM VAM_InventoryLine WHERE VAM_InventoryLine_ID=@lineID";
 
-            queryList.VIS_142 = "SELECT M_Movement_ID FROM M_MovementLine WHERE M_MovementLine_ID=@lineID";
+            queryList.VIS_142 = "SELECT VAM_InventoryTransfer_ID FROM VAM_InvTrf_Line WHERE VAM_InvTrf_Line_ID=@lineID";
 
-            queryList.VIS_143 = "SELECT M_Production_ID FROM M_ProductionLine WHERE M_ProductionLine_ID=@lineID";
+            queryList.VIS_143 = "SELECT VAM_Production_ID FROM VAM_ProductionLine WHERE VAM_ProductionLine_ID=@lineID";
 
 
             queryList.VIS_144 = "SELECT Log_ID, P_ID, P_Date, P_Number, P_Msg "

@@ -23,13 +23,13 @@ namespace VIS.Models
             if (fields != null)
             {
                 string[] paramValue = fields.ToString().Split(',');
-                int M_PriceList_ID;
+                int VAM_PriceList_ID;
 
                 //Assign parameter value
-                M_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //End Assign parameter value
 
-                MPriceList prcLst = new MPriceList(ctx, M_PriceList_ID, null);
+                MPriceList prcLst = new MPriceList(ctx, VAM_PriceList_ID, null);
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
                 // Reset Orig Shipment
                 MVABCurrency crncy = new MVABCurrency(ctx, prcLst.GetVAB_Currency_ID(), null);
@@ -52,15 +52,15 @@ namespace VIS.Models
         /// <returns>List of Data</returns>
         public Dictionary<String, Object> GetPriceListData(Ctx ctx, string fields)
         {            
-                int M_PriceList_ID;                
-                M_PriceList_ID = Util.GetValueOfInt(fields);
+                int VAM_PriceList_ID;                
+                VAM_PriceList_ID = Util.GetValueOfInt(fields);
                 Dictionary<String, Object> retDic = null;
                 string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
-                + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                + "plv.VAM_PriceListVersion_ID,plv.ValidFrom "
+                + "FROM VAM_PriceList pl,VAB_Currency c,VAM_PriceListVersion plv "
                 + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
-                + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
-                + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
+                + " AND pl.VAM_PriceList_ID=plv.VAM_PriceList_ID"
+                + " AND pl.VAM_PriceList_ID=" + VAM_PriceList_ID						//	1
                 + "ORDER BY plv.ValidFrom DESC";
                 DataSet ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -70,7 +70,7 @@ namespace VIS.Models
                     retDic["EnforcePriceLimit"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["EnforcePriceLimit"]);
                     retDic["StdPrecision"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["StdPrecision"]);
                     retDic["VAB_Currency_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_Currency_ID"]);
-                    retDic["M_PriceList_Version_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_Version_ID"]);                    
+                    retDic["VAM_PriceListVersion_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_PriceListVersion_ID"]);                    
                     retDic["ValidFrom"] = Util.GetValueOfDateTime(ds.Tables[0].Rows[0]["ValidFrom"]);
                 }
                 return retDic;

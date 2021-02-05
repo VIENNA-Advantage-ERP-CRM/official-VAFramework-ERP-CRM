@@ -1332,7 +1332,7 @@ namespace VAdvantage.Model
             }
             else if (colName.Equals("Orig_InOut_ID"))
             {
-                refColName = "M_InOut_ID";
+                refColName = "VAM_Inv_InOut_ID";
             }
 
             if (refColName != null)
@@ -2458,11 +2458,11 @@ namespace VAdvantage.Model
                     {
                         valueAsInt = (int)changedField.GetValue();
                     }
-                    if (columnName.Equals("M_Warehouse_ID"))
+                    if (columnName.Equals("VAM_Warehouse_ID"))
                     {
                         locLookup.SetOnly_Warehouse_ID(valueAsInt);
                     }
-                    if (columnName.Equals("M_Product_ID"))
+                    if (columnName.Equals("VAM_Product_ID"))
                     {
                         locLookup.SetOnly_Product_ID(valueAsInt);
                     }

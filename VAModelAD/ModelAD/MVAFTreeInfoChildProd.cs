@@ -130,7 +130,7 @@ namespace VAdvantage.Model
 	{
 		StringBuilder sb = new StringBuilder("MTreeNodePR[");
 		sb.Append("VAF_TreeInfo_ID=").Append(GetVAF_TreeInfo_ID())
-			.Append(",M_Product_ID=").Append(GetNode_ID())
+			.Append(",VAM_Product_ID=").Append(GetNode_ID())
 			.Append(",Parent_ID=").Append(GetParent_ID())
 			.Append("]");
 		return sb.ToString();

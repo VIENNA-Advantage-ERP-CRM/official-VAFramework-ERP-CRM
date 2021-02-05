@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProductCosting : X_M_Product_Costing
+    public class MProductCosting : X_VAM_ProductCosting
     {
 
         /**	Static Logger	*/
@@ -33,13 +33,13 @@ namespace VAdvantage.Model
         /**
          * 	Get Costing Of Product
          *	@param ctx context
-         *	@param M_Product_ID product
+         *	@param VAM_Product_ID product
          *	@param trxName trx
          *	@return array of costs
          */
-        public static MProductCosting[] GetOfProduct(Ctx ctx, int M_Product_ID, Trx trxName)
+        public static MProductCosting[] GetOfProduct(Ctx ctx, int VAM_Product_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM M_Product_Costing WHERE M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT * FROM VAM_ProductCosting WHERE VAM_Product_ID=" + VAM_Product_ID;
             List<MProductCosting> list = new List<MProductCosting>();
             DataTable dt = null;
             IDataReader idr = null;
@@ -78,16 +78,16 @@ namespace VAdvantage.Model
         /**
          * 	Get Costing
          *	@param ctx context
-         *	@param M_Product_ID product
+         *	@param VAM_Product_ID product
          *	@param VAB_AccountBook_ID as
          *	@param trxName trx
          *	@return array of costs
          */
-        public static MProductCosting Get(Ctx ctx, int M_Product_ID,
+        public static MProductCosting Get(Ctx ctx, int VAM_Product_ID,
             int VAB_AccountBook_ID, Trx trxName)
         {
             MProductCosting retValue = null;
-            String sql = "SELECT * FROM M_Product_Costing WHERE M_Product_ID=" + M_Product_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
+            String sql = "SELECT * FROM VAM_ProductCosting WHERE VAM_Product_ID=" + VAM_Product_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -138,7 +138,7 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Multi-Key");
             else
             {
-                //	setM_Product_ID (0);
+                //	setVAM_Product_ID (0);
                 //	setVAB_AccountBook_ID (0);
                 //
                 SetCostAverage(Env.ZERO);
@@ -168,7 +168,7 @@ namespace VAdvantage.Model
         {
             
             SetClientOrg(product);
-            SetM_Product_ID(product.GetM_Product_ID());
+            SetVAM_Product_ID(product.GetVAM_Product_ID());
             SetVAB_AccountBook_ID(VAB_AccountBook_ID);
         }
 

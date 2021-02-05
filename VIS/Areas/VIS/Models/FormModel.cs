@@ -48,7 +48,7 @@ namespace VIS.Models
             }
             else if (VAF_TableView_ID == 208)
             {//MProduct.Table_ID){
-                m_where += " OR M_Product_ID=" + Record_ID;
+                m_where += " OR VAM_Product_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 203)
             {//MProject.Table_ID){
@@ -521,10 +521,10 @@ namespace VIS.Models
         public string GetAccessSql(string _columnName, string text)
         {
             string sql = "";
-            if (_columnName.Equals("M_Product_ID"))
+            if (_columnName.Equals("VAM_Product_ID"))
             {
-                sql += "SELECT DISTINCT p.M_Product_ID FROM M_Product p LEFT OUTER JOIN M_Manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID)" +
-                    " LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID) WHERE (UPPER(p.Value) LIKE " + DB.TO_STRING(text) +
+                sql += "SELECT DISTINCT p.VAM_Product_ID FROM VAM_Product p LEFT OUTER JOIN VAM_Manufacturer mr ON (p.VAM_Product_ID=mr.VAM_Product_ID)" +
+                    " LEFT OUTER JOIN VAM_ProductFeatures patr ON (p.VAM_Product_ID=patr.VAM_Product_ID) WHERE (UPPER(p.Value) LIKE " + DB.TO_STRING(text) +
                     " OR UPPER(p.Name) LIKE " + DB.TO_STRING(text) + " OR UPPER(mr.UPC) LIKE " + DB.TO_STRING(text) +
                     " OR UPPER(patr.UPC) LIKE " + DB.TO_STRING(text) + " OR UPPER(p.UPC) LIKE " + DB.TO_STRING(text) + ")";
             }
@@ -543,9 +543,9 @@ namespace VIS.Models
                 sql += "SELECT VAB_Invoice_ID FROM VAB_Invoice WHERE UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
             }
-            else if (_columnName.Equals("M_InOut_ID"))
+            else if (_columnName.Equals("VAM_Inv_InOut_ID"))
             {
-                sql += "SELECT M_InOut_ID FROM M_InOut WHERE UPPER(DocumentNo) LIKE ";
+                sql += "SELECT VAM_Inv_InOut_ID FROM VAM_Inv_InOut WHERE UPPER(DocumentNo) LIKE ";
                 sql += DB.TO_STRING(text);
             }
             else if (_columnName.Equals("VAB_Payment_ID"))
@@ -568,7 +568,7 @@ namespace VIS.Models
 
         public List<JTable> GetWareProWiseLocator(Ctx ctx, string colName, int orgId, int warehouseId, int productId, bool onlyIsSOTrx)
         {
-            string sql = "SELECT M_Locator_ID," + colName + " FROM M_Locator WHERE IsActive='Y'";
+            string sql = "SELECT VAM_Locator_ID," + colName + " FROM VAM_Locator WHERE IsActive='Y'";
             //JID_0932 In validation of locator need to consider organization  
             if (orgId != 0)
             {
@@ -576,22 +576,22 @@ namespace VIS.Models
             }
             if (warehouseId != 0)
             {
-                sql += " AND M_Warehouse_ID=@w";
+                sql += " AND VAM_Warehouse_ID=@w";
             }
             if (productId != 0)
             {
-                sql += " AND (IsDefault='Y' OR EXISTS (SELECT * FROM M_Storage s WHERE s.M_Locator_ID=M_Locator.M_Locator_ID AND s.M_Product_ID=@p)";
+                sql += " AND (IsDefault='Y' OR EXISTS (SELECT * FROM VAM_Storage s WHERE s.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND s.VAM_Product_ID=@p)";
                 if (onlyIsSOTrx)
                 {
                     //	Default Product
-                    sql += "OR EXISTS (SELECT * FROM M_Product p WHERE p.M_Locator_ID=M_Locator.M_Locator_ID AND p.M_Product_ID=@p)OR EXISTS (SELECT * FROM M_ProductLocator pl " +
-                        " WHERE pl.M_Locator_ID=M_Locator.M_Locator_ID AND pl.M_Product_ID=@p) OR 0 = (SELECT COUNT(*) FROM M_ProductLocator pl " +
-                        " INNER JOIN M_Locator l2 ON (pl.M_Locator_ID=l2.M_Locator_ID) WHERE pl.M_Product_ID=@p AND l2.M_Warehouse_ID=M_Locator.M_Warehouse_ID )";
+                    sql += "OR EXISTS (SELECT * FROM VAM_Product p WHERE p.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND p.VAM_Product_ID=@p)OR EXISTS (SELECT * FROM VAM_ProductLocator pl " +
+                        " WHERE pl.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND pl.VAM_Product_ID=@p) OR 0 = (SELECT COUNT(*) FROM VAM_ProductLocator pl " +
+                        " INNER JOIN VAM_Locator l2 ON (pl.VAM_Locator_ID=l2.VAM_Locator_ID) WHERE pl.VAM_Product_ID=@p AND l2.VAM_Warehouse_ID=VAM_Locator.VAM_Warehouse_ID )";
                 }
                 sql += ")";
             }
 
-            var finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
+            var finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAM_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             List<SqlParams> param = new List<SqlParams>();
             if (orgId != 0)
             {
@@ -632,7 +632,7 @@ namespace VIS.Models
         public List<JTable> GenAttributeSetInstance(int VAB_GenFeatureSet_ID, bool onlyActive)
         {
             var sql = "SELECT ASI.VAB_GenFeatureSetInstance_ID, ASI.Description " +
-         " from VAB_GenFeatureSetInstance ASI, M_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VAB_GenFeatureSet_ID;
+         " from VAB_GenFeatureSetInstance ASI, VAM_Product P WHERE ASI.VAB_GenFeatureSet_ID  = " + VAB_GenFeatureSet_ID;
             if (onlyActive)
                 sql += " AND IsActive='Y'";
             sql += " ORDER BY 2";
@@ -916,7 +916,7 @@ namespace VIS.Models
                 }
                 else if (type.Equals(MVABAccountBookElement.ELEMENTTYPE_Product))
                 {
-                    sql = sql.Append("M_Product_ID");
+                    sql = sql.Append("VAM_Product_ID");
                     if (string.IsNullOrEmpty(value))
                         sql = sql.Append(" IS NULL AND ");
                     else

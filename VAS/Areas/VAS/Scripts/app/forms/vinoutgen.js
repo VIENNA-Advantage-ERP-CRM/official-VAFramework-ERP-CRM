@@ -9,7 +9,7 @@
         this.arrListColumns = [];
         this.dGrid = null;
         var whereClause = null;
-        var M_Warehouse_ID = null;
+        var VAM_Warehouse_ID = null;
         var VAB_BusinessPartner_ID = null;
 
         var toggle = false;
@@ -223,7 +223,7 @@
         }
 
         function jbInit() {
-            $self.lblWarehouse.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "M_Warehouse_ID"));
+            $self.lblWarehouse.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Warehouse_ID"));
             $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"));
             $self.tabSelect.getControl().text(VIS.Msg.getMsg("Select", false, false));
             $self.tabGenrate.getControl().text(VIS.Msg.getMsg("Generate", false, false));
@@ -237,8 +237,8 @@
             //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2223, VIS.DisplayType.TableDir);
 
             // JID_0782: InActive warehouse should not be available to select at Generate Shipment Manual form
-            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2223, VIS.DisplayType.TableDir, "M_Warehouse_ID", 0, false, "M_Warehouse.IsActive='Y'");
-            $self.cmbWarehouse = new VIS.Controls.VComboBox("M_Warehouse_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
+            var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2223, VIS.DisplayType.TableDir, "VAM_Warehouse_ID", 0, false, "VAM_Warehouse.IsActive='Y'");
+            $self.cmbWarehouse = new VIS.Controls.VComboBox("VAM_Warehouse_ID", true, false, true, lookup, 150, VIS.DisplayType.TableDir, 0);
 
             // Handled issue when there is no default Document type, no data was coming in Info.
             var value = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2762, VIS.DisplayType.Search, "VAB_BusinessPartner_ID", 0, false, "VAB_BusinessPartner.IsActive ='Y' And VAB_BusinessPartner.Issummary ='N'");
@@ -303,9 +303,9 @@
             var cBPartnerID = "";
             var cOrderIDSearch = "";
 
-            if (M_Warehouse_ID != null) {
-                if (M_Warehouse_ID.toString() != "-1") {
-                    mWarehouseID = " AND ic.M_Warehouse_ID=" + M_Warehouse_ID;
+            if (VAM_Warehouse_ID != null) {
+                if (VAM_Warehouse_ID.toString() != "-1") {
+                    mWarehouseID = " AND ic.VAM_Warehouse_ID=" + VAM_Warehouse_ID;
                 }
             }
             if (VAB_BusinessPartner_ID != null) {
@@ -383,15 +383,15 @@
         //    //  Create SQL
         //    var sql = (
         //        "SELECT VAB_Order_ID, o.Name as ord, dt.Name as docType, DocumentNo, bp.Name as bpName, DateOrdered, TotalLines "
-        //        + "FROM M_InOut_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
+        //        + "FROM VAM_Inv_InOut_Candidate_v ic, VAF_Org o, VAB_BusinessPartner bp, VAB_DocTypes dt "
         //        + "WHERE ic.VAF_Org_ID=o.VAF_Org_ID"
         //        + " AND ic.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID"
         //        + " AND ic.VAB_DocTypes_ID=dt.VAB_DocTypes_ID"
         //        + " AND ic.VAF_Client_ID=" + VAF_Client_ID);
 
-        //    if (M_Warehouse_ID != null) {
-        //        if (M_Warehouse_ID.toString() != "-1") {
-        //            sql = sql.concat(" AND ic.M_Warehouse_ID=").concat(M_Warehouse_ID);
+        //    if (VAM_Warehouse_ID != null) {
+        //        if (VAM_Warehouse_ID.toString() != "-1") {
+        //            sql = sql.concat(" AND ic.VAM_Warehouse_ID=").concat(VAM_Warehouse_ID);
         //        }
         //    }
         //    if (VAB_BusinessPartner_ID != null) {
@@ -491,7 +491,7 @@
                 dataType: "json",
                 data: {
                     whereClause: whereClause,
-                    M_Warehouse_ID: M_Warehouse_ID
+                    VAM_Warehouse_ID: VAM_Warehouse_ID
                 },
                 success: function (data) {
                     if (data.DocumentText != null) {
@@ -620,7 +620,7 @@
             if (this.btnRefresh != null)
                 this.btnRefresh.on(VIS.Events.onTouchStartOrClick, function () {
                     $self.okBtn.removeAttr('disabled');
-                    M_Warehouse_ID = $self.cmbWarehouse.getControl().find('option:selected').val();
+                    VAM_Warehouse_ID = $self.cmbWarehouse.getControl().find('option:selected').val();
                     VAB_BusinessPartner_ID = $self.vSearchBPartner.getValue();
                     executeQuery();
                 });
@@ -736,7 +736,7 @@
             if (this.cmbWarehouse != null)
                 this.cmbWarehouse.getControl().change(function () {
                     $self.okBtn.removeAttr('disabled');
-                    M_Warehouse_ID = $self.cmbWarehouse.getControl().find('option:selected').val();
+                    VAM_Warehouse_ID = $self.cmbWarehouse.getControl().find('option:selected').val();
                     executeQuery();
                 });
 
@@ -787,7 +787,7 @@
             this.arrListColumns = null;
             this.dGrid = null;
             whereClause = null;
-            M_Warehouse_ID = null;
+            VAM_Warehouse_ID = null;
             VAB_BusinessPartner_ID = null;
 
             toggle = null;

@@ -879,7 +879,7 @@
                         VAF_Role_ID: VAF_Role_ID,
                         VAF_Client_ID: VAF_Client_ID,
                         VAF_Org_ID: VAF_Org_ID,
-                        M_Warehouse_ID: AD_WH_ID
+                        VAM_Warehouse_ID: AD_WH_ID
                     },
                     success: function (data) {
                         returnValue = data.result;
@@ -1574,7 +1574,7 @@
                     defaultLogin.VAF_Role_ID = di.VAF_Role_ID;
                     defaultLogin.VAF_Client_ID = di.VAF_Client_ID;
                     defaultLogin.VAF_Org_ID = di.VAF_Org_ID;
-                    defaultLogin.M_Warehouse_ID = di.M_Warehouse_ID;
+                    defaultLogin.VAM_Warehouse_ID = di.VAM_Warehouse_ID;
                     loadRoles();
                 }
             });
@@ -1700,7 +1700,7 @@
                 return;
 
             }
-            var sql = "SELECT Name,M_Warehouse_ID  FROM M_Warehouse "
+            var sql = "SELECT Name,VAM_Warehouse_ID  FROM VAM_Warehouse "
                 + "WHERE VAF_Org_ID=" + VAF_Org_ID + " AND IsActive='Y' "
                 + "ORDER BY Name";
 
@@ -1717,7 +1717,7 @@
                         cmbWHContent += "<option value=" + dic[itm].RecKey + ">" + dic[itm].Name + "</option>";
                     }
                     $cmdWareHouse.append(cmbWHContent);
-                    $cmdWareHouse.val(defaultLogin.M_Warehouse_ID);
+                    $cmdWareHouse.val(defaultLogin.VAM_Warehouse_ID);
                     cmbWHContent = null;
                     dic = null;
                     sql = null;

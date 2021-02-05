@@ -1243,7 +1243,7 @@ namespace VAdvantage.Utility
         /// <returns></returns>
         public int GetAD_Warehouse_ID()
         {
-            return GetContextAsInt("#M_Warehouse_ID");
+            return GetContextAsInt("#VAM_Warehouse_ID");
         }
 
         /// <summary>

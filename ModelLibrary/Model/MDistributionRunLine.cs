@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionRunLine
  * Purpose        :Distribution Run List Line Model
- * Class Used     : X_M_DistributionRunLine
+ * Class Used     : X_VAM_DistributionRunLine
  * Chronological    Development
  * Raghunandan     03-Nov-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionRunLine : X_M_DistributionRunLine
+    public class MDistributionRunLine : X_VAM_DistributionRunLine
     {
         #region private variable
         //Product						
@@ -47,10 +47,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DistributionRunLine_ID">id</param>
+        /// <param name="VAM_DistributionRunLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDistributionRunLine(Ctx ctx, int M_DistributionRunLine_ID, Trx trxName)
-            : base(ctx, M_DistributionRunLine_ID, trxName)
+        public MDistributionRunLine(Ctx ctx, int VAM_DistributionRunLine_ID, Trx trxName)
+            : base(ctx, VAM_DistributionRunLine_ID, trxName)
         {
 
         }
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
         {
             if (_product == null)
             {
-                _product = MProduct.Get(GetCtx(), GetM_Product_ID());
+                _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
             }
             return _product;
         }

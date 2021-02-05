@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_CostElement
+/** Generated Model for VAM_ProductCostElement
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_CostElement : PO
+public class X_VAM_ProductCostElement : PO
 {
-public X_M_CostElement (Context ctx, int M_CostElement_ID, Trx trxName) : base (ctx, M_CostElement_ID, trxName)
+public X_VAM_ProductCostElement (Context ctx, int VAM_ProductCostElement_ID, Trx trxName) : base (ctx, VAM_ProductCostElement_ID, trxName)
 {
-/** if (M_CostElement_ID == 0)
+/** if (VAM_ProductCostElement_ID == 0)
 {
 SetCostElementType (null);
 SetIsCalculated (false);
-SetM_CostElement_ID (0);
+SetVAM_ProductCostElement_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_CostElement (Ctx ctx, int M_CostElement_ID, Trx trxName) : base (ctx, M_CostElement_ID, trxName)
+public X_VAM_ProductCostElement (Ctx ctx, int VAM_ProductCostElement_ID, Trx trxName) : base (ctx, VAM_ProductCostElement_ID, trxName)
 {
-/** if (M_CostElement_ID == 0)
+/** if (VAM_ProductCostElement_ID == 0)
 {
 SetCostElementType (null);
 SetIsCalculated (false);
-SetM_CostElement_ID (0);
+SetVAM_ProductCostElement_ID (0);
 SetName (null);
 }
  */
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCostElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_M_CostElement (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCostElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_M_CostElement (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ProductCostElement (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_CostElement()
+static X_VAM_ProductCostElement()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389062169L;
 public static int Table_ID;
  // =770;
 
-/** TableName=M_CostElement */
-public static String Table_Name="M_CostElement";
+/** TableName=VAM_ProductCostElement */
+public static String Table_Name="VAM_ProductCostElement";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_CostElement[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ProductCostElement[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -265,17 +265,17 @@ if (oo != null)
 return false;
 }
 /** Set Cost Element.
-@param M_CostElement_ID Product Cost Element */
-public void SetM_CostElement_ID (int M_CostElement_ID)
+@param VAM_ProductCostElement_ID Product Cost Element */
+public void SetVAM_ProductCostElement_ID (int VAM_ProductCostElement_ID)
 {
-if (M_CostElement_ID < 1) throw new ArgumentException ("M_CostElement_ID is mandatory.");
-Set_ValueNoCheck ("M_CostElement_ID", M_CostElement_ID);
+if (VAM_ProductCostElement_ID < 1) throw new ArgumentException ("VAM_ProductCostElement_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
 }
 /** Get Cost Element.
 @return Product Cost Element */
-public int GetM_CostElement_ID() 
+public int GetVAM_ProductCostElement_ID() 
 {
-Object ii = Get_Value("M_CostElement_ID");
+Object ii = Get_Value("VAM_ProductCostElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

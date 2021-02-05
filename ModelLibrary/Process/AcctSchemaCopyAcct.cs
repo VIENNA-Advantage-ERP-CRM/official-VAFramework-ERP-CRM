@@ -186,7 +186,7 @@ namespace VAdvantage.Process
             int VAF_Org_ID = 0;
             int Account_ID = 0;
             int VAB_SubAcct_ID = 0;
-            int M_Product_ID = 0;
+            int VAM_Product_ID = 0;
             int VAB_BusinessPartner_ID = 0;
             int VAF_OrgTrx_ID = 0;
             int C_LocFrom_ID = 0;
@@ -225,7 +225,7 @@ namespace VAdvantage.Process
                 }
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Product))
                 {
-                    M_Product_ID = sourceAcct.GetM_Product_ID();
+                    VAM_Product_ID = sourceAcct.GetVAM_Product_ID();
                 }
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Activity))
                 {
@@ -276,7 +276,7 @@ namespace VAdvantage.Process
             //
             return MAccount.Get(GetCtx(), VAF_Client_ID, VAF_Org_ID,
                 VAB_AccountBook_ID, Account_ID, VAB_SubAcct_ID,
-                M_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
+                VAM_Product_ID, VAB_BusinessPartner_ID, VAF_OrgTrx_ID,
                 C_LocFrom_ID, C_LocTo_ID, VAB_SalesRegionState_ID,
                 VAB_Project_ID, VAB_Promotion_ID, VAB_BillingCode_ID,
                 User1_ID, User2_ID, UserElement1_ID, UserElement2_ID);

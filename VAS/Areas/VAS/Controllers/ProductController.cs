@@ -25,11 +25,11 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID;
+                int VAM_Product_ID;
 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MProduct product = MProduct.Get(ctx, M_Product_ID);
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                MProduct product = MProduct.Get(ctx, VAM_Product_ID);
 
 
                 Dictionary<String, String> retPDic = new Dictionary<string, string>();
@@ -55,23 +55,23 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID;
+                int VAM_Product_ID;
 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //Price = Util.GetValueOfInt(paramValue[2].ToString());
 
 
                 //End Assign parameter value
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-                //var M_Warehouse_ID = ctx.getContextAsInt(WindowNo, "M_Warehouse_ID");
-                //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
+                //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
+                //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
 
-                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
+                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
-                int retValue = MProduct.Get(ctx, M_Product_ID).GetUOMPrecision();
+                int retValue = MProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
 
                 List<int> retlst = new List<int>();
 

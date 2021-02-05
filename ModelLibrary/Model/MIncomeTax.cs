@@ -137,7 +137,7 @@ namespace VAdvantage.Model
             //        {
             //            for (int i = 0; i < lines.Length; i++)
             //            {
-            //                if (lines[i].GetM_Warehouse_ID() != GetM_Warehouse_ID())
+            //                if (lines[i].GetVAM_Warehouse_ID() != GetVAM_Warehouse_ID())
             //                {
             //                    log.Warning("different Warehouse " + lines[i]);
             //                    _processMsg = "@CannotChangeDocType@";
@@ -171,10 +171,10 @@ namespace VAdvantage.Model
             //String mandatoryType = "='Y'";	//	IN ('Y','S')
             //String sql = "SELECT COUNT(*) "
             //    + "FROM VAB_OrderLine ol"
-            //    + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
-            //    + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
+            //    + " INNER JOIN VAM_Product p ON (ol.VAM_Product_ID=p.VAM_Product_ID)"
+            //    + " INNER JOIN VAM_PFeature_Set pas ON (p.VAM_PFeature_Set_ID=pas.VAM_PFeature_Set_ID) "
             //    + "WHERE pas.MandatoryType" + mandatoryType
-            //    + " AND ol.M_AttributeSetInstance_ID IS NULL"
+            //    + " AND ol.VAM_PFeature_SetInstance_ID IS NULL"
             //    + " AND ol.VAB_Order_ID=" + GetVAB_Order_ID();
             //int no = DataBase.DB.GetSQLValue(Get_TrxName(), sql);
             //if (no != 0)
@@ -185,7 +185,7 @@ namespace VAdvantage.Model
 
             ////	Lines
             //if (ExplodeBOM())
-            //    lines = GetLines(true, "M_Product_ID");
+            //    lines = GetLines(true, "VAM_Product_ID");
             //if (!ReserveStock(dt, lines))
             //{
             //    _processMsg = "Cannot reserve Stock";
@@ -323,7 +323,7 @@ namespace VAdvantage.Model
                 //    {
                 //        //	Binding
                 //        if (MDocType.DOCSUBTYPESO_Quotation.Equals(DocSubTypeSO))
-                //            ReserveStock(dt, GetLines(true, "M_Product_ID"));
+                //            ReserveStock(dt, GetLines(true, "VAM_Product_ID"));
                 //        SetProcessed(true);
                 //        SetDocAction(DOCACTION_Close);
                 //        return DocActionVariables.STATUS_COMPLETED;
@@ -372,7 +372,7 @@ namespace VAdvantage.Model
                 //    shipment = CreateShipment(dt, realTimePOS ? null : GetDateOrdered());
                 //    if (shipment == null)
                 //        return DocActionVariables.STATUS_INVALID;
-                //    Info.Append("@M_InOut_ID@: ").Append(shipment.GetDocumentNo());
+                //    Info.Append("@VAM_Inv_InOut_ID@: ").Append(shipment.GetDocumentNo());
                 //    String msg = shipment.GetProcessMsg();
                 //    if (msg != null && msg.Length > 0)
                 //        Info.Append(" (").Append(msg).Append(")");
@@ -429,7 +429,7 @@ namespace VAdvantage.Model
 
         public bool VoidIt()
         {
-            //MOrderLine[] lines = GetLines(true, "M_Product_ID");
+            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //log.Info(ToString());
             //for (int i = 0; i < lines.Length; i++)
             //{
@@ -474,7 +474,7 @@ namespace VAdvantage.Model
             log.Info(ToString());
 
             //	Close Not delivered Qty - SO/PO
-            //MOrderLine[] lines = GetLines(true, "M_Product_ID");
+            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //for (int i = 0; i < lines.Length; i++)
             //{
             //    MOrderLine line = lines[i];
@@ -637,7 +637,7 @@ namespace VAdvantage.Model
                 StringBuilder Info = new StringBuilder();
 
                 //	Reverse All *Shipments*
-                Info.Append("@M_InOut_ID@:");
+                Info.Append("@VAM_Inv_InOut_ID@:");
                 //MInOut[] shipments = GetShipments(false);	//	get all (line based)
                 //for (int i = 0; i < shipments.Length; i++)
                 //{

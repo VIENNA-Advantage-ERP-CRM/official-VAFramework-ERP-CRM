@@ -243,7 +243,7 @@ namespace VAdvantage.Process
                     _order = null;
                     return;
                 }
-                _order.SetM_Warehouse_ID(te.GetM_Warehouse_ID());
+                _order.SetVAM_Warehouse_ID(te.GetVAM_Warehouse_ID());
                 //Bhupendra: Add payment term 
                 // to check for if payment term is null
                 if (bp.GetVAB_PaymentTerm_ID() == 0)
@@ -319,12 +319,12 @@ namespace VAdvantage.Process
                     _order.SetVAB_Project_ID(tel.GetVAB_Project_ID());
                     //	Optionally Overwrite BP Price list from Project
                     MProject project = new MProject(GetCtx(), tel.GetVAB_Project_ID(), Get_TrxName());
-                    if (project.GetM_PriceList_ID() != 0)
+                    if (project.GetVAM_PriceList_ID() != 0)
                     {
                         //check weather the PriceList is active or not
-                        if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM M_PriceList WHERE M_PriceList_ID=" + project.GetM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
+                        if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAM_PriceList WHERE VAM_PriceList_ID=" + project.GetVAM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
                         {
-                            _order.SetM_PriceList_ID(project.GetM_PriceList_ID());
+                            _order.SetVAM_PriceList_ID(project.GetVAM_PriceList_ID());
                         }
                         else
                         {
@@ -335,11 +335,11 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    if (bp.GetM_PriceList_ID() != 0)
+                    if (bp.GetVAM_PriceList_ID() != 0)
                     {
-                        if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM M_PriceList WHERE M_PriceList_ID=" + bp.GetM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
+                        if (Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM VAM_PriceList WHERE VAM_PriceList_ID=" + bp.GetVAM_PriceList_ID(), null, Get_Trx())).Equals("Y"))
                         {
-                            _order.SetM_PriceList_ID(bp.GetM_PriceList_ID());
+                            _order.SetVAM_PriceList_ID(bp.GetVAM_PriceList_ID());
                         }
                         else
                         {
@@ -409,9 +409,9 @@ namespace VAdvantage.Process
             //	OrderLine
             MOrderLine ol = new MOrderLine(_order);
             //
-            if (tel.GetM_Product_ID() != 0)
+            if (tel.GetVAM_Product_ID() != 0)
             {
-                ol.SetM_Product_ID(tel.GetM_Product_ID(),
+                ol.SetVAM_Product_ID(tel.GetVAM_Product_ID(),
                     tel.GetVAB_UOM_ID());
             }
             if (tel.GetVAS_Res_Assignment_ID() != 0)

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_M_Product_Category_Acct
+ * Class Used     : X_VAM_ProductCategory_Acct
  * Chronological Development
  * Veena Pandey     17-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MProductCategoryAcct : X_M_Product_Category_Acct
+    public class MProductCategoryAcct : X_VAM_ProductCategory_Acct
     {
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MProductCategoryAcct).FullName);
@@ -51,16 +51,16 @@ namespace VAdvantage.Model
         /// Get Category Acct
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_Category_ID">category</param>
+        /// <param name="VAM_ProductCategory_ID">category</param>
         /// <param name="VAB_AccountBook_ID">acct schema</param>
         /// <param name="trxName">transaction</param>
         /// <returns>category acct</returns>
-        public static MProductCategoryAcct Get(Ctx ctx, int M_Product_Category_ID, 
+        public static MProductCategoryAcct Get(Ctx ctx, int VAM_ProductCategory_ID, 
             int VAB_AccountBook_ID, Trx trxName)
         {
             MProductCategoryAcct retValue = null;
-            String sql = "SELECT * FROM  M_Product_Category_Acct "
-                + "WHERE M_Product_Category_ID=" + M_Product_Category_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
+            String sql = "SELECT * FROM  VAM_ProductCategory_Acct "
+                + "WHERE VAM_ProductCategory_ID=" + VAM_ProductCategory_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MProductCategoryAcct[");
             sb.Append(Get_ID())
-                .Append(",M_Product_Category_ID=").Append(GetM_Product_Category_ID())
+                .Append(",VAM_ProductCategory_ID=").Append(GetVAM_ProductCategory_ID())
                 .Append(",VAB_AccountBook_ID=").Append(GetVAB_AccountBook_ID())
                 .Append(",CostingLevel=").Append(GetCostingLevel())
                 .Append(",CostingMethod=").Append(GetCostingMethod())

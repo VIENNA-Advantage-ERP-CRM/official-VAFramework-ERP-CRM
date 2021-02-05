@@ -60,7 +60,7 @@ namespace VAdvantage.Process
                 //     CSchedule.SetEndDate(end);
                 //     CSchedule.SetNoOfDays((end - start).Days+1);
                 // }
-                CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+                CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
                 CSchedule.SetTotalAmt(contract.GetLineNetAmt());
                 CSchedule.SetGrandTotal(contract.GetGrandTotal());
                 CSchedule.SetTaxAmt(contract.GetTaxAmt());
@@ -115,7 +115,7 @@ namespace VAdvantage.Process
         //        //     CSchedule.SetEndDate(end);
         //        // CSchedule.SetNoOfDays((end - start).Days+1);
         //        // }
-        //        CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+        //        CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
         //        CSchedule.SetTotalAmt(contract.GetLineNetAmt());
         //        CSchedule.SetGrandTotal(contract.GetGrandTotal());
         //        CSchedule.SetTaxAmt(contract.GetTaxAmt());

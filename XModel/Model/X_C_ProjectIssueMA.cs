@@ -21,7 +21,7 @@ public X_VAB_ProjectSupplyMA (Context ctx, int VAB_ProjectSupplyMA_ID, Trx trxNa
 /** if (VAB_ProjectSupplyMA_ID == 0)
 {
 SetVAB_ProjectSupply_ID (0);
-SetM_AttributeSetInstance_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
 SetMovementQty (0.0);
 }
  */
@@ -31,7 +31,7 @@ public X_VAB_ProjectSupplyMA (Ctx ctx, int VAB_ProjectSupplyMA_ID, Trx trxName) 
 /** if (VAB_ProjectSupplyMA_ID == 0)
 {
 SetVAB_ProjectSupply_ID (0);
-SetM_AttributeSetInstance_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
 SetMovementQty (0.0);
 }
  */
@@ -136,17 +136,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_ProjectSupply_ID().ToString());
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

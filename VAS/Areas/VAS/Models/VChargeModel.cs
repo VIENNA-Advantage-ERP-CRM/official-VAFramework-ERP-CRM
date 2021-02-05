@@ -58,7 +58,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         public int CreateCharge(Ctx ctx, int m_VAB_AccountBook_ID, int m_VAB_TaxCategory_ID, String name, int primaryVAB_Acct_Element_ID, Boolean expense)
         {
-            MCharge charge = new MCharge(ctx, 0, null);
+            MVABCharge charge = new MVABCharge(ctx, 0, null);
             charge.SetName(name);
             charge.SetVAB_TaxCategory_ID(m_VAB_TaxCategory_ID);
             if (!charge.Save())
@@ -122,7 +122,7 @@ namespace VIS.Controllers
                     charge.GetVAF_Client_ID(), charge.GetVAF_Org_ID(),
                     ac.GetVAB_AccountBook_ID(),
                     VAB_Acct_Element_ID, defaultAcct.GetVAB_SubAcct_ID(),
-                    defaultAcct.GetM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
+                    defaultAcct.GetVAM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
                     defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetVAB_SalesRegionState_ID(),
                     defaultAcct.GetVAB_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),

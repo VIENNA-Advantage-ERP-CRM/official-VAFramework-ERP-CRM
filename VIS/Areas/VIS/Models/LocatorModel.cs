@@ -36,19 +36,19 @@ namespace VIS.Models
         public int LocatorSave(Ctx ctx, string warehouseId, string tValue, string tX, string tY, string tZ)
         {
             var loc = MLocator.Get(ctx, Convert.ToInt32(warehouseId), tValue, tX, tY, tZ);
-            return loc.GetM_Locator_ID();
+            return loc.GetVAM_Locator_ID();
         }
 
         // Added by Bharat on 09 June 2017
         public List<Dictionary<string, object>> GetWarehouse(int warehouse_id, Ctx ctx)
         {
             List<Dictionary<string, object>> retDic = null;
-            string sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse";
+            string sql = "SELECT VAM_Warehouse_ID, Name FROM VAM_Warehouse";
             if (warehouse_id != 0)
             {
-                sql += " WHERE M_Warehouse_ID=" + warehouse_id;
+                sql += " WHERE VAM_Warehouse_ID=" + warehouse_id;
             }
-            string finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Warehouse", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY 2";
+            string finalSql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAM_Warehouse", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO) + " ORDER BY 2";
             DataSet ds = DB.ExecuteDataset(finalSql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -56,7 +56,7 @@ namespace VIS.Models
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     Dictionary<string, object> obj = new Dictionary<string, object>();
-                    obj["M_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Warehouse_ID"]);
+                    obj["VAM_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Warehouse_ID"]);
                     obj["Name"] = Util.GetValueOfString(ds.Tables[0].Rows[i]["Name"]);
                     retDic.Add(obj);
                 }
@@ -68,8 +68,8 @@ namespace VIS.Models
         public Dictionary<string, object> GetWarehouseData(int locator_id, Ctx ctx)
         {
             Dictionary<string, object> obj = null;
-            string sql = "SELECT w.Name, l.x, l.y, l.z, l.Value, w.M_Warehouse_ID, w.Value AS wValue, w.Separator FROM M_Warehouse w" +
-                  " INNER JOIN M_Locator l on w.M_Warehouse_ID = l.M_Warehouse_ID and l.M_Locator_ID=" + locator_id;
+            string sql = "SELECT w.Name, l.x, l.y, l.z, l.Value, w.VAM_Warehouse_ID, w.Value AS wValue, w.Separator FROM VAM_Warehouse w" +
+                  " INNER JOIN VAM_Locator l on w.VAM_Warehouse_ID = l.VAM_Warehouse_ID and l.VAM_Locator_ID=" + locator_id;
             
             DataSet ds = DB.ExecuteDataset(sql);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
@@ -80,7 +80,7 @@ namespace VIS.Models
                     obj["y"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["y"]);
                     obj["z"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["z"]);
                     obj["Value"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Value"]);
-                    obj["M_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Warehouse_ID"]);
+                    obj["VAM_Warehouse_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_Warehouse_ID"]);
                     obj["wValue"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["wValue"]);
                     obj["Separator"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["Separator"]);                    
             }

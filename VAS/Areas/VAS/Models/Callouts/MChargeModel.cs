@@ -7,7 +7,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MChargeModel
+    public class MVABChargeModel
     {
         /// <summary>
         ///Get charge Amount

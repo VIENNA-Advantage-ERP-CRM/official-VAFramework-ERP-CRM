@@ -45,8 +45,8 @@ namespace VAdvantage.Model
                 SetDateReport(DateTime.Now);
                 //	setDocumentNo (null);
                 SetIsApproved(false);
-                //	setM_PriceList_ID (0);
-                //	setM_Warehouse_ID (0);
+                //	setVAM_PriceList_ID (0);
+                //	setVAM_Warehouse_ID (0);
                 //super.setProcessed(false);
                 base.SetProcessed(false);
                 SetProcessing(false);
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         }	//	MTimeExpense
 
         /** Default Locator				*/
-        private int _M_Locator_ID = 0;
+        private int _VAM_Locator_ID = 0;
         /**	Lines						*/
         private MTimeExpenseLine[] _lines = null;
         /** Cached User					*/
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             //applied check on changing the pricelist if time epense lines are present.
             if (!newRecord)
             {
-                if (Is_ValueChanged("M_PriceList_ID"))
+                if (Is_ValueChanged("VAM_PriceList_ID"))
                 {
                     MTimeExpenseLine[] lines = GetLines();
                     if (lines.Length > 0)
@@ -190,27 +190,27 @@ namespace VAdvantage.Model
         ///  Get Default Locator (from Warehouse)
         /// </summary>
         /// <returns>locator</returns>
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            if (_M_Locator_ID != 0)
+            if (_VAM_Locator_ID != 0)
             {
-                return _M_Locator_ID;
+                return _VAM_Locator_ID;
             }
             //
-            String sql = "SELECT M_Locator_ID FROM M_Locator "
-                + "WHERE M_Warehouse_ID=@param AND IsActive='Y' ORDER BY IsDefault DESC, Created";
+            String sql = "SELECT VAM_Locator_ID FROM VAM_Locator "
+                + "WHERE VAM_Warehouse_ID=@param AND IsActive='Y' ORDER BY IsDefault DESC, Created";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;
             try
             {
                 //pstmt = DataBase.prepareStatement(sql, null);
-                //pstmt.setInt(1, getM_Warehouse_ID());
-                param[0] = new SqlParameter("@param", GetM_Warehouse_ID());
+                //pstmt.setInt(1, getVAM_Warehouse_ID());
+                param[0] = new SqlParameter("@param", GetVAM_Warehouse_ID());
                 //ResultSet rs = pstmt.executeQuery();
                 idr = DB.ExecuteReader(sql, param, null);
                 if (idr.Read())
                 {
-                    _M_Locator_ID = Util.GetValueOfInt(idr[0]);// rs.getInt(1);
+                    _VAM_Locator_ID = Util.GetValueOfInt(idr[0]);// rs.getInt(1);
                 }
                 idr.Close();
             }
@@ -220,11 +220,11 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-                log.Log(Level.SEVERE, "getM_Locator_ID", ex);
+                log.Log(Level.SEVERE, "getVAM_Locator_ID", ex);
             }
             //
-            return _M_Locator_ID;
-        }	//	getM_Locator_ID
+            return _VAM_Locator_ID;
+        }	//	getVAM_Locator_ID
 
         /// <summary>
         /// Set Processed.Propergate to Lines/Taxes
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_Currency_ID</returns>
         public int GetVAB_Currency_ID()
         {
-            MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), Get_TrxName());
+            MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), Get_TrxName());
             return pl.GetVAB_Currency_ID();
         }	//	getVAB_Currency_ID
 

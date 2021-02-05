@@ -49,12 +49,12 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                     retDic["Bill_User_ID"]= order.GetBill_User_ID().ToString();
 
                 //if (ctx.IsSOTrx(WindowNo))
-                  //  retDic["M_ReturnPolicy_ID"]= bpartner.getM_ReturnPolicy_ID();
+                  //  retDic["VAM_ReturnRule_ID"]= bpartner.getVAM_ReturnRule_ID();
                 //else
-                 //   retDic["M_ReturnPolicy_ID"]= bpartner.getPO_ReturnPolicy_ID();
+                 //   retDic["VAM_ReturnRule_ID"]= bpartner.getPO_ReturnPolicy_ID();
 
                 //retDic["DateOrdered", order.GetDateOrdered());
-                retDic["M_PriceList_ID"]= order.GetM_PriceList_ID().ToString();
+                retDic["VAM_PriceList_ID"]= order.GetVAM_PriceList_ID().ToString();
                 retDic["PaymentRule"]= order.GetPaymentRule();
                 retDic["VAB_PaymentTerm_ID"]= order.GetVAB_PaymentTerm_ID().ToString();
                 //mTab.setValue ("DeliveryRule", X_VAB_Order.DELIVERYRULE_Manual);

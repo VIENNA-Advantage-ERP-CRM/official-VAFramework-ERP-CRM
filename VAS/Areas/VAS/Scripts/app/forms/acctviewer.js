@@ -453,7 +453,7 @@
         else if (elementType.equals(this.ELEMENTTYPE_BPartner))
             return "VAB_BusinessPartner_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Product))
-            return "M_Product_ID";
+            return "VAM_Product_ID";
         else if (elementType.equals(this.ELEMENTTYPE_Activity))
             return "VAB_BillingCode_ID";
         else if (elementType.equals(this.ELEMENTTYPE_LocationFrom))
@@ -686,7 +686,7 @@
         var SELECT_DOCUMENT = "SelectDocument";
         var ACCT_DATE = "AcctDateFrom";//DateAcct
 
-        var PROD = "M_Product_ID";
+        var PROD = "VAM_Product_ID";
         var BPARTNER = "VAB_BusinessPartner_ID";
         var PROJECT = "VAB_Project_ID";
         var CAMPAIGN = "VAB_Promotion_ID";
@@ -1962,7 +1962,7 @@
 
             var tableName = lookupColumn.substring(0, lookupColumn.length - 3);
             var info;
-            if (keyColumn == "M_Product_ID") {
+            if (keyColumn == "VAM_Product_ID") {
                 info = new VIS.InfoWindow(101, "", _data.windowNo, "", false);
             }
             else if (keyColumn == "VAB_BusinessPartner_ID") {

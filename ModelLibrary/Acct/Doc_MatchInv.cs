@@ -3,7 +3,7 @@
  * Class Name     : Doc_MatchInv
  * Purpose        : Post MatchInv Documents.
  *                  <pre>
- *                  Table:              M_MatchInv (472)
+ *                  Table:              VAM_MatchInvoice (472)
  *                  Document Types:     MXI
  *                  </pre>
  *                  *                  Update Costing Records
@@ -75,11 +75,11 @@ namespace VAdvantage.Acct
             int VAB_BusinessPartner_ID = _invoiceLine.GetParent().GetVAB_BusinessPartner_ID();
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             //
-            int M_InOutLine_ID = matchInv.GetM_InOutLine_ID();
-            _receiptLine = new MInOutLine(GetCtx(), M_InOutLine_ID, null);
+            int VAM_Inv_InOutLine_ID = matchInv.GetVAM_Inv_InOutLine_ID();
+            _receiptLine = new MInOutLine(GetCtx(), VAM_Inv_InOutLine_ID, null);
             //
             _pc = new ProductCost(GetCtx(),
-                GetM_Product_ID(), matchInv.GetM_AttributeSetInstance_ID(), null);
+                GetVAM_Product_ID(), matchInv.GetVAM_PFeature_SetInstance_ID(), null);
             _pc.SetQty(GetQty());
 
             return null;
@@ -113,11 +113,11 @@ namespace VAdvantage.Acct
         {
             List<Fact> facts = new List<Fact>();
             //  Nothing to do
-            if (GetM_Product_ID() == 0								//	no Product
+            if (GetVAM_Product_ID() == 0								//	no Product
                 || Env.Signum(GetQty().Value) == 0
                 || Env.Signum(_receiptLine.GetMovementQty()) == 0)	//	Qty = 0
             {
-                log.Fine("No Product/Qty - M_Product_ID=" + GetM_Product_ID()
+                log.Fine("No Product/Qty - VAM_Product_ID=" + GetVAM_Product_ID()
                     + ",Qty=" + GetQty() + ",InOutQty=" + _receiptLine.GetMovementQty());
                 return facts;
             }
@@ -148,14 +148,14 @@ namespace VAdvantage.Acct
                 return null;
             }
             dr.SetQty(GetQty());
-            //	dr.setM_Locator_ID(_receiptLine.getM_Locator_ID());
+            //	dr.setVAM_Locator_ID(_receiptLine.getVAM_Locator_ID());
             //	MInOut receipt = _receiptLine.getParent();
             //	dr.setLocationFromBPartner(receipt.getVAB_BPart_Location_ID(), true);	//  from Loc
-            //	dr.setLocationFromLocator(_receiptLine.getM_Locator_ID(), false);		//  to Loc
+            //	dr.setLocationFromLocator(_receiptLine.getVAM_Locator_ID(), false);		//  to Loc
             Decimal temp = dr.GetAcctBalance();
             //	Set AmtAcctCr/Dr from Receipt (sets also Project)
             if (!dr.UpdateReverseLine(MInOut.Table_ID, 		//	Amt updated
-                _receiptLine.GetM_InOut_ID(), _receiptLine.GetM_InOutLine_ID(),
+                _receiptLine.GetVAM_Inv_InOut_ID(), _receiptLine.GetVAM_Inv_InOutLine_ID(),
                 multiplier))
             {
                 _error = "Mat.Receipt not posted yet";
@@ -188,7 +188,7 @@ namespace VAdvantage.Acct
                     as1.GetVAB_Currency_ID(), null, LineNetAmt);		//	updated below
                 if (cr == null)
                 {
-                    log.Fine("Line Net Amt=0 - M_Product_ID=" + GetM_Product_ID()
+                    log.Fine("Line Net Amt=0 - VAM_Product_ID=" + GetVAM_Product_ID()
                         + ",Qty=" + GetQty() + ",InOutQty=" + _receiptLine.GetMovementQty());
                     facts.Add(fact);
                     return facts;
@@ -251,7 +251,7 @@ namespace VAdvantage.Acct
             {
                 //	Cost Detail Record - data from Expense/IncClearing (CR) record
                 MCostDetail.CreateInvoice(as1, GetVAF_Org_ID(),
-                    GetM_Product_ID(), matchInv.GetM_AttributeSetInstance_ID(),
+                    GetVAM_Product_ID(), matchInv.GetVAM_PFeature_SetInstance_ID(),
                     _invoiceLine.GetVAB_InvoiceLine_ID(), 0,		//	No cost element
                     Decimal.Negate(cr.GetAcctBalance()), isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),		//	correcting
                     GetDescription(), GetTrx(), GetRectifyingProcess());
@@ -288,55 +288,55 @@ namespace VAdvantage.Acct
         /// @deprecated old costing
         private bool UpdateProductInfo(int VAB_AccountBook_ID, bool standardCosting)
         {
-            log.Fine("M_MatchInv_ID=" + Get_ID());
+            log.Fine("VAM_MatchInvoice_ID=" + Get_ID());
 
             //  update Product Costing Qty/Amt
             //  requires existence of currency conversion !!
             StringBuilder sql = new StringBuilder(
-                "UPDATE M_Product_Costing pc "
+                "UPDATE VAM_ProductCosting pc "
                 + "SET (CostStandardCumQty,CostStandardCumAmt, CostAverageCumQty,CostAverageCumAmt) = "
                 + "(SELECT pc.CostStandardCumQty + m.Qty, " //jz ", "
                 + "pc.CostStandardCumAmt + currencyConvert(il.PriceActual,i.VAB_Currency_ID,a.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty, "
                 + "pc.CostAverageCumQty + m.Qty, "
                 + "pc.CostAverageCumAmt + currencyConvert(il.PriceActual,i.VAB_Currency_ID,a.VAB_Currency_ID,i.DateInvoiced,i.VAB_CurrencyType_ID,i.VAF_Client_ID,i.VAF_Org_ID)*m.Qty "
-                + "FROM M_MatchInv m"
+                + "FROM VAM_MatchInvoice m"
                 + " INNER JOIN VAB_InvoiceLine il ON (m.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID)"
                 + " INNER JOIN VAB_Invoice i ON (il.VAB_Invoice_ID=i.VAB_Invoice_ID),"
                 + " VAB_AccountBook a "
                 + "WHERE pc.VAB_AccountBook_ID=a.VAB_AccountBook_ID"
-                + " AND pc.M_Product_ID=m.M_Product_ID"
-                + " AND m.M_MatchInv_ID=").Append(Get_ID()).Append(")"
+                + " AND pc.VAM_Product_ID=m.VAM_Product_ID"
+                + " AND m.VAM_MatchInvoice_ID=").Append(Get_ID()).Append(")"
                 //
                 + "WHERE pc.VAB_AccountBook_ID=").Append(VAB_AccountBook_ID).Append(
-                  " AND EXISTS (SELECT * FROM M_MatchInv m "
-                    + "WHERE pc.M_Product_ID=m.M_Product_ID"
-                    + " AND m.M_MatchInv_ID=").Append(Get_ID()).Append(")");
+                  " AND EXISTS (SELECT * FROM VAM_MatchInvoice m "
+                    + "WHERE pc.VAM_Product_ID=m.VAM_Product_ID"
+                    + " AND m.VAM_MatchInvoice_ID=").Append(Get_ID()).Append(")");
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
-            log.Fine("M_Product_Costing - Qty/Amt Updated #=" + no);
+            log.Fine("VAM_ProductCosting - Qty/Amt Updated #=" + no);
 
             //  Update Average Cost
             sql = new StringBuilder(
-                "UPDATE M_Product_Costing "
+                "UPDATE VAM_ProductCosting "
                 + "SET CostAverage = CostAverageCumAmt/DECODE(CostAverageCumQty, 0,1, CostAverageCumQty) "
                 + "WHERE VAB_AccountBook_ID=").Append(VAB_AccountBook_ID)
-                .Append(" AND M_Product_ID=").Append(GetM_Product_ID());
+                .Append(" AND VAM_Product_ID=").Append(GetVAM_Product_ID());
 
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
-            log.Fine("M_Product_Costing - AvgCost Updated #=" + no);
+            log.Fine("VAM_ProductCosting - AvgCost Updated #=" + no);
 
 
             //  Update Current Cost
             if (!standardCosting)
             {
                 sql = new StringBuilder(
-                    "UPDATE M_Product_Costing "
+                    "UPDATE VAM_ProductCosting "
                     + "SET CurrentCostPrice = CostAverage "
                     + "WHERE VAB_AccountBook_ID=").Append(VAB_AccountBook_ID)
-                    .Append(" AND M_Product_ID=").Append(GetM_Product_ID());
+                    .Append(" AND VAM_Product_ID=").Append(GetVAM_Product_ID());
 
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
-                log.Fine("M_Product_Costing - CurrentCost Updated=" + no);
+                log.Fine("VAM_ProductCosting - CurrentCost Updated=" + no);
             }
             return true;
         }

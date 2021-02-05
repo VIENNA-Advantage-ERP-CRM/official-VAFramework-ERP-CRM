@@ -1038,15 +1038,15 @@ namespace VAdvantage.Model
             CheckChange(ra, "VAA_Asset_ID");
             CheckChange(ra, "VAB_Order_ID");
             CheckChange(ra, "VAB_Invoice_ID");
-            CheckChange(ra, "M_Product_ID");
+            CheckChange(ra, "VAM_Product_ID");
             CheckChange(ra, "VAB_Payment_ID");
-            CheckChange(ra, "M_InOut_ID");
+            CheckChange(ra, "VAM_Inv_InOut_ID");
             //	checkChange(ra, "VAB_Promotion_ID");
             //	checkChange(ra, "RequestAmt");
             CheckChange(ra, "IsInvoiced");
             CheckChange(ra, "VAB_BillingCode_ID");
             CheckChange(ra, "DateNextAction");
-            CheckChange(ra, "M_ProductSpent_ID");
+            CheckChange(ra, "VAM_ProductSpent_ID");
             CheckChange(ra, "QtySpent");
             CheckChange(ra, "QtyInvoiced");
             CheckChange(ra, "StartDate");
@@ -1370,15 +1370,15 @@ namespace VAdvantage.Model
                 CheckChange(ra, "VAA_Asset_ID");
                 CheckChange(ra, "VAB_Order_ID");
                 CheckChange(ra, "VAB_Invoice_ID");
-                CheckChange(ra, "M_Product_ID");
+                CheckChange(ra, "VAM_Product_ID");
                 CheckChange(ra, "VAB_Payment_ID");
-                CheckChange(ra, "M_InOut_ID");
+                CheckChange(ra, "VAM_Inv_InOut_ID");
                 //	checkChange(ra, "VAB_Promotion_ID");
                 //	checkChange(ra, "RequestAmt");
                 CheckChange(ra, "IsInvoiced");
                 CheckChange(ra, "VAB_BillingCode_ID");
                 CheckChange(ra, "DateNextAction");
-                CheckChange(ra, "M_ProductSpent_ID");
+                CheckChange(ra, "VAM_ProductSpent_ID");
                 CheckChange(ra, "QtySpent");
                 CheckChange(ra, "QtyInvoiced");
                 CheckChange(ra, "StartDate");
@@ -1612,14 +1612,14 @@ namespace VAdvantage.Model
                 {
                     MGroup oldG = MGroup.Get(GetCtx(), oldID);
                     MGroup newG = MGroup.Get(GetCtx(), GetR_Group_ID());
-                    if (oldG.GetM_BOM_ID() != newG.GetM_BOM_ID()
+                    if (oldG.GetVAM_BOM_ID() != newG.GetVAM_BOM_ID()
                         || oldG.GetM_ChangeNotice_ID() != newG.GetM_ChangeNotice_ID())
                     {
                         MChangeRequest ecr = new MChangeRequest(GetCtx(), GetM_ChangeRequest_ID(), Get_TrxName());
                         if (!ecr.IsProcessed()
                             || ecr.GetM_FixChangeNotice_ID() == 0)
                         {
-                            ecr.SetM_BOM_ID(newG.GetM_BOM_ID());
+                            ecr.SetVAM_BOM_ID(newG.GetVAM_BOM_ID());
                             ecr.SetM_ChangeNotice_ID(newG.GetM_ChangeNotice_ID());
                             ecr.Save();
                         }

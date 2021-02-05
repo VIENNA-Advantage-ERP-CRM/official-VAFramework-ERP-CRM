@@ -51,8 +51,8 @@ namespace VAdvantage.Model
             SetIsSelfService (false);
             SetIsTaxIncluded (false);
             SetIsTransferred (false);
-            SetM_PriceList_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_PriceList_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetPaymentRule (null);	// B
             SetPosted (false);	// N
             SetPriorityRule (null);	// 5
@@ -98,8 +98,8 @@ namespace VAdvantage.Model
             SetIsSelfService (false);
             SetIsTaxIncluded (false);
             SetIsTransferred (false);
-            SetM_PriceList_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_PriceList_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetPaymentRule (null);	// B
             SetPosted (false);	// N
             SetPriorityRule (null);	// 5
@@ -1166,80 +1166,80 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Price List.
-        @param M_PriceList_ID Unique identifier of a Price List */
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        @param VAM_PriceList_ID Unique identifier of a Price List */
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            if (M_PriceList_ID < 1) throw new ArgumentException("M_PriceList_ID is mandatory.");
-            Set_Value("M_PriceList_ID", M_PriceList_ID);
+            if (VAM_PriceList_ID < 1) throw new ArgumentException("VAM_PriceList_ID is mandatory.");
+            Set_Value("VAM_PriceList_ID", VAM_PriceList_ID);
         }
         /** Get Price List.
         @return Unique identifier of a Price List */
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            Object ii = Get_Value("M_PriceList_ID");
+            Object ii = Get_Value("VAM_PriceList_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set RMA Category.
-        @param M_RMACategory_ID Return Material Authorization Category */
-        public void SetM_RMACategory_ID(int M_RMACategory_ID)
+        @param VAM_RMACategory_ID Return Material Authorization Category */
+        public void SetVAM_RMACategory_ID(int VAM_RMACategory_ID)
         {
-            if (M_RMACategory_ID <= 0) Set_Value("M_RMACategory_ID", null);
+            if (VAM_RMACategory_ID <= 0) Set_Value("VAM_RMACategory_ID", null);
             else
-                Set_Value("M_RMACategory_ID", M_RMACategory_ID);
+                Set_Value("VAM_RMACategory_ID", VAM_RMACategory_ID);
         }
         /** Get RMA Category.
         @return Return Material Authorization Category */
-        public int GetM_RMACategory_ID()
+        public int GetVAM_RMACategory_ID()
         {
-            Object ii = Get_Value("M_RMACategory_ID");
+            Object ii = Get_Value("VAM_RMACategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Return Policy.
-        @param M_ReturnPolicy_ID The Return Policy dictates the timeframe within which goods can be returned. */
-        public void SetM_ReturnPolicy_ID(int M_ReturnPolicy_ID)
+        @param VAM_ReturnRule_ID The Return Policy dictates the timeframe within which goods can be returned. */
+        public void SetVAM_ReturnRule_ID(int VAM_ReturnRule_ID)
         {
-            if (M_ReturnPolicy_ID <= 0) Set_Value("M_ReturnPolicy_ID", null);
+            if (VAM_ReturnRule_ID <= 0) Set_Value("VAM_ReturnRule_ID", null);
             else
-                Set_Value("M_ReturnPolicy_ID", M_ReturnPolicy_ID);
+                Set_Value("VAM_ReturnRule_ID", VAM_ReturnRule_ID);
         }
         /** Get Return Policy.
         @return The Return Policy dictates the timeframe within which goods can be returned. */
-        public int GetM_ReturnPolicy_ID()
+        public int GetVAM_ReturnRule_ID()
         {
-            Object ii = Get_Value("M_ReturnPolicy_ID");
+            Object ii = Get_Value("VAM_ReturnRule_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Freight Carrier.
-        @param M_Shipper_ID Method or manner of product delivery */
-        public void SetM_Shipper_ID(int M_Shipper_ID)
+        @param VAM_ShippingMethod_ID Method or manner of product delivery */
+        public void SetVAM_ShippingMethod_ID(int VAM_ShippingMethod_ID)
         {
-            if (M_Shipper_ID <= 0) Set_Value("M_Shipper_ID", null);
+            if (VAM_ShippingMethod_ID <= 0) Set_Value("VAM_ShippingMethod_ID", null);
             else
-                Set_Value("M_Shipper_ID", M_Shipper_ID);
+                Set_Value("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
         }
         /** Get Freight Carrier.
         @return Method or manner of product delivery */
-        public int GetM_Shipper_ID()
+        public int GetVAM_ShippingMethod_ID()
         {
-            Object ii = Get_Value("M_Shipper_ID");
+            Object ii = Get_Value("VAM_ShippingMethod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

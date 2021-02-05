@@ -205,7 +205,7 @@ namespace ModelLibrary.Acct
                             }
 
                             //	Account
-                            MAccount expense = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetVAB_SubAcct_ID(), line.GetM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
+                            MAccount expense = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetVAB_SubAcct_ID(), line.GetVAM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
                                 line.GetC_LocFrom_ID(), line.GetC_LocTo_ID(), line.GetVAB_SalesRegionState_ID(), line.GetVAB_Project_ID(), line.GetVAB_Promotion_ID(), line.GetVAB_BillingCode_ID(), line.GetUser1_ID(), line.GetUser2_ID(), line.GetUserElement1_ID(), line.GetUserElement2_ID(),
                                 line.GetUserElement3_ID(), line.GetUserElement4_ID(), line.GetUserElement5_ID(), line.GetUserElement6_ID(), line.GetUserElement7_ID(), line.GetUserElement8_ID(), line.GetUserElement9_ID());
 

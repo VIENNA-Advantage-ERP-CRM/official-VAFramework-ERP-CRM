@@ -155,16 +155,16 @@ namespace VAdvantage.Model
 	private static VLogger _log = VLogger.GetVLogger (typeof(MCStage).FullName);//.class);
 	
 	/** Template */
-	private MTemplate _template = null;
+	private MVACMLayout _template = null;
 
 	/// <summary>
     /// Get Template from Cache, or load it
 	/// </summary>
 	/// <returns>template</returns>
-	public MTemplate GetTemplate() 
+	public MVACMLayout GetTemplate() 
 	{
 		if (GetVACM_Layout_ID()>0 && _template==null)
-			_template = MTemplate.Get(GetCtx(), GetVACM_Layout_ID(), null);
+			_template = MVACMLayout.Get(GetCtx(), GetVACM_Layout_ID(), null);
 		return _template;
 	} // getTemplate
 	
@@ -344,7 +344,7 @@ namespace VAdvantage.Model
 	/// <returns>true if updated</returns>
 	public bool CheckElements () 
     {
-		MTemplate thisTemplate = new MTemplate(GetCtx(), this.GetVACM_Layout_ID(), Get_TrxName());
+		MVACMLayout thisTemplate = new MVACMLayout(GetCtx(), this.GetVACM_Layout_ID(), Get_TrxName());
 		StringBuilder thisElementList = new StringBuilder(thisTemplate.GetElements());
 		while (thisElementList.ToString().IndexOf("\n")>=0) 
         {

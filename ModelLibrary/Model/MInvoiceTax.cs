@@ -69,7 +69,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM VAM_PriceList WHERE VAM_PriceList_ID = (SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
                     + line.GetVAB_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
                 }
 
                 // Get IsTaxincluded from selected PriceList on header
-                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM M_PriceList WHERE M_PriceList_ID = (SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
+                bool isTaxIncluded = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsTaxIncluded FROM VAM_PriceList WHERE VAM_PriceList_ID = (SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " 
                     + line.GetVAB_Invoice_ID() + ")", null, trxName)) == "Y";
 
                 if (retValue != null)

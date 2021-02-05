@@ -11,33 +11,33 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAVAGL_BudgetActivation
+/** Generated Model for VAGL_BudgetActivation
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAVAGL_BudgetActivation : PO
+public class X_VAGL_BudgetActivation : PO
 {
-public X_VAVAGL_BudgetActivation (Context ctx, int VAVAGL_BudgetActivation_ID, Trx trxName) : base (ctx, VAVAGL_BudgetActivation_ID, trxName)
+public X_VAGL_BudgetActivation (Context ctx, int VAGL_BudgetActivation_ID, Trx trxName) : base (ctx, VAGL_BudgetActivation_ID, trxName)
 {
-/** if (VAVAGL_BudgetActivation_ID == 0)
+/** if (VAGL_BudgetActivation_ID == 0)
 {
 SetBudgetControlScope (null);
 SetVAB_AccountBook_ID (0);
 SetCommitmentType (null);	// C
-SetVAVAGL_BudgetActivation_ID (0);
+SetVAGL_BudgetActivation_ID (0);
 SetVAGL_Budget_ID (0);
 SetIsBeforeApproval (false);
 SetName (null);
 }
  */
 }
-public X_VAVAGL_BudgetActivation (Ctx ctx, int VAVAGL_BudgetActivation_ID, Trx trxName) : base (ctx, VAVAGL_BudgetActivation_ID, trxName)
+public X_VAGL_BudgetActivation (Ctx ctx, int VAGL_BudgetActivation_ID, Trx trxName) : base (ctx, VAGL_BudgetActivation_ID, trxName)
 {
-/** if (VAVAGL_BudgetActivation_ID == 0)
+/** if (VAGL_BudgetActivation_ID == 0)
 {
 SetBudgetControlScope (null);
 SetVAB_AccountBook_ID (0);
 SetCommitmentType (null);	// C
-SetVAVAGL_BudgetActivation_ID (0);
+SetVAGL_BudgetActivation_ID (0);
 SetVAGL_Budget_ID (0);
 SetIsBeforeApproval (false);
 SetName (null);
@@ -49,7 +49,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_BudgetActivation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_BudgetActivation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_VAVAGL_BudgetActivation (Context ctx, DataRow rs, Trx trxName) : base(c
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_BudgetActivation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_BudgetActivation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_VAVAGL_BudgetActivation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_BudgetActivation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_BudgetActivation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAVAGL_BudgetActivation()
+static X_VAGL_BudgetActivation()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389059489L;
 public static int Table_ID;
  // =822;
 
-/** TableName=VAVAGL_BudgetActivation */
-public static String Table_Name="VAVAGL_BudgetActivation";
+/** TableName=VAGL_BudgetActivation */
+public static String Table_Name="VAGL_BudgetActivation";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAVAGL_BudgetActivation[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_BudgetActivation[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -227,17 +227,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Budget Control.
-@param VAVAGL_BudgetActivation_ID Budget Control */
-public void SetVAVAGL_BudgetActivation_ID (int VAVAGL_BudgetActivation_ID)
+@param VAGL_BudgetActivation_ID Budget Control */
+public void SetVAGL_BudgetActivation_ID (int VAGL_BudgetActivation_ID)
 {
-if (VAVAGL_BudgetActivation_ID < 1) throw new ArgumentException ("VAVAGL_BudgetActivation_ID is mandatory.");
-Set_ValueNoCheck ("VAVAGL_BudgetActivation_ID", VAVAGL_BudgetActivation_ID);
+if (VAGL_BudgetActivation_ID < 1) throw new ArgumentException ("VAGL_BudgetActivation_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_BudgetActivation_ID", VAGL_BudgetActivation_ID);
 }
 /** Get Budget Control.
 @return Budget Control */
-public int GetVAVAGL_BudgetActivation_ID() 
+public int GetVAGL_BudgetActivation_ID() 
 {
-Object ii = Get_Value("VAVAGL_BudgetActivation_ID");
+Object ii = Get_Value("VAGL_BudgetActivation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

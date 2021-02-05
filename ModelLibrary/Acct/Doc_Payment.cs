@@ -297,7 +297,7 @@ namespace VAdvantage.Acct
                         MAccount acct = null;
                         if (GetVAB_Charge_ID() != 0)
                         {
-                            acct = MCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
+                            acct = MVABCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
                         }
                         else if (_Prepayment)
                         {
@@ -329,7 +329,7 @@ namespace VAdvantage.Acct
                     MAccount acct = null;
                     if (GetVAB_Charge_ID() != 0)
                     {
-                        acct = MCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
+                        acct = MVABCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
                     }
                     else if (_Prepayment)
                     {
@@ -409,9 +409,9 @@ namespace VAdvantage.Acct
                         decimal amount = 0, WithholdingAmt = 0, sscAmt = 0, payAmt = 0;
                         payAmt = GetAmount();
 
-                        string sql = @"SELECT cl.m_product_id, cl.linenetamt,prd.ed010_sscode_id,holddet.ed010_appliedpercentage,holddet.ed010_actualpercentage,withAcct.Withholding_Acct
+                        string sql = @"SELECT cl.VAM_Product_id, cl.linenetamt,prd.ed010_sscode_id,holddet.ed010_appliedpercentage,holddet.ed010_actualpercentage,withAcct.Withholding_Acct
                         FROM VAB_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
-                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN VAB_Withholding hold ON hold.VAB_Withholding_Id = prd.VAB_Withholding_id
+                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN VAM_Product prd ON prd.VAM_Product_ID = cl.VAM_Product_ID LEFT JOIN VAB_Withholding hold ON hold.VAB_Withholding_Id = prd.VAB_Withholding_id
                         LEFT JOIN ed010_withholdingdetails holddet ON holddet.VAB_Withholding_Id = hold.VAB_Withholding_Id left join VAB_Withholding_Acct withAcct on hold.VAB_Withholding_Id=withAcct.VAB_Withholding_Id
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
                             @"BETWEEN holddet.ED010_FromDate AND holddet.ED010_ToDate and pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.VAB_Payment_id = " + Get_ID();
@@ -453,9 +453,9 @@ namespace VAdvantage.Acct
                         }
                         ds.Dispose();
 
-                        sql = @"SELECT cl.m_product_id,cb.VAB_BusinessPartner_id,cl.linenetamt,prd.ed010_sscode_id,sdet.ed010_percentagetype,sdet.ed010_maxamt,sdet.ed010_minamt,sdet.ed010_socialsecurityprcnt,sdet.ed010_orgpercentage,
+                        sql = @"SELECT cl.VAM_Product_id,cb.VAB_BusinessPartner_id,cl.linenetamt,prd.ed010_sscode_id,sdet.ed010_percentagetype,sdet.ed010_maxamt,sdet.ed010_minamt,sdet.ed010_socialsecurityprcnt,sdet.ed010_orgpercentage,
                         sdet.ed010_vendorpercentage,sscAcct.ED000_SecCodeAcct FROM VAB_Payment pay INNER JOIN VAB_Invoice inv ON pay.VAB_Invoice_id = inv.VAB_Invoice_id inner join VAB_InvoiceLine cl  on pay.VAB_Invoice_id=cl.VAB_Invoice_id inner join VAB_BusinessPartner cb 
-                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN m_product prd ON prd.m_product_ID = cl.m_product_ID LEFT JOIN ed010_sscode scode ON scode.ed010_sscode_ID = prd.ed010_sscode_id
+                        on pay.VAB_BusinessPartner_id=cb.VAB_BusinessPartner_id INNER JOIN VAM_Product prd ON prd.VAM_Product_ID = cl.VAM_Product_ID LEFT JOIN ed010_sscode scode ON scode.ed010_sscode_ID = prd.ed010_sscode_id
                         LEFT JOIN ed010_sscodedetails sdet ON sdet.ed010_sscode_ID = scode.ed010_sscode_ID left join ED010_SSCode_Acct sscAcct on scode.ED010_SSCode_ID=sscAcct.ED010_SSCode_ID
                         where cb.ED010_IsWithholding='Y' and cb.ED010_IsSSCode='Y' and pay.ED010_WithholdingAmt > 0 AND " + GlobalVariable.TO_DATE(DateTime.Now.ToLocalTime(), true) +
                             @"BETWEEN sdet.ED010_FromDate AND sdet.ED010_ToDate AND pay.VAF_Org_ID = " + GetCtx().GetVAF_Org_ID() + " and pay.VAB_Payment_id = " + Get_ID();
@@ -521,7 +521,7 @@ namespace VAdvantage.Acct
                     MAccount acct = null;
                     if (GetVAB_Charge_ID() != 0)
                     {
-                        acct = MCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
+                        acct = MVABCharge.GetAccount(GetVAB_Charge_ID(), as1, GetAmount());
                     }
                     else if (_Prepayment)
                     {

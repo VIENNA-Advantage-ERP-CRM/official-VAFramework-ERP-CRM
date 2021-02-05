@@ -246,34 +246,34 @@ public String GetLot()
 return (String)Get_Value("Lot");
 }
 /** Set Shipment/Receipt Line.
-@param M_InOutLine_ID Line on Shipment or Receipt document */
-public void SetM_InOutLine_ID (int M_InOutLine_ID)
+@param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+public void SetVAM_Inv_InOutLine_ID (int VAM_Inv_InOutLine_ID)
 {
-if (M_InOutLine_ID <= 0) Set_ValueNoCheck ("M_InOutLine_ID", null);
+if (VAM_Inv_InOutLine_ID <= 0) Set_ValueNoCheck ("VAM_Inv_InOutLine_ID", null);
 else
-Set_ValueNoCheck ("M_InOutLine_ID", M_InOutLine_ID);
+Set_ValueNoCheck ("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
 }
 /** Get Shipment/Receipt Line.
 @return Line on Shipment or Receipt document */
-public int GetM_InOutLine_ID() 
+public int GetVAM_Inv_InOutLine_ID() 
 {
-Object ii = Get_Value("M_InOutLine_ID");
+Object ii = Get_Value("VAM_Inv_InOutLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Download.
-@param M_ProductDownload_ID Product downloads */
-public void SetM_ProductDownload_ID (int M_ProductDownload_ID)
+@param VAM_ProductDownload_ID Product downloads */
+public void SetVAM_ProductDownload_ID (int VAM_ProductDownload_ID)
 {
-if (M_ProductDownload_ID <= 0) Set_Value ("M_ProductDownload_ID", null);
+if (VAM_ProductDownload_ID <= 0) Set_Value ("VAM_ProductDownload_ID", null);
 else
-Set_Value ("M_ProductDownload_ID", M_ProductDownload_ID);
+Set_Value ("VAM_ProductDownload_ID", VAM_ProductDownload_ID);
 }
 /** Get Product Download.
 @return Product downloads */
-public int GetM_ProductDownload_ID() 
+public int GetVAM_ProductDownload_ID() 
 {
-Object ii = Get_Value("M_ProductDownload_ID");
+Object ii = Get_Value("VAM_ProductDownload_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

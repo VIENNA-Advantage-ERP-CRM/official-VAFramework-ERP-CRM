@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAttributeInstance
  * Purpose        : attribute instance stting using x-classes
- * Class Used     : X_M_AttributeInstance
+ * Class Used     : X_VAM_PFeatue_Instance
  * Chronological    Development
  * Raghunandan     04-Jun-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeInstance : X_M_AttributeInstance
+    public class MAttributeInstance : X_VAM_PFeatue_Instance
     {
         /// <summary>
         /// Persistency Constructor
@@ -57,15 +57,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAM_ProductFeature_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="Value">string value</param>
         /// <param name="trxName">transaction</param>
         public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
-            int M_AttributeSetInstance_ID, String Value, Trx trxName)
+            int VAM_PFeature_SetInstance_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
             SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetValue(Value);
         }
 
@@ -74,15 +74,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAM_ProductFeature_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="BDValue"> number value</param>
         /// <param name="trxName">transaction</param>
         public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
-            int M_AttributeSetInstance_ID, Decimal? BDValue, Trx trxName)
+            int VAM_PFeature_SetInstance_ID, Decimal? BDValue, Trx trxName)
             : base(ctx, 0, trxName)
         {
             SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetValueNumber(BDValue);
         }
 
@@ -91,17 +91,17 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAM_ProductFeature_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
-        /// <param name="M_AttributeValue_ID">selection</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
+        /// <param name="VAM_PFeature_Value_ID">selection</param>
         /// <param name="Value">String representation for fast display</param>
         /// <param name="trxName">transaction</param>
         public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
-            int M_AttributeSetInstance_ID, int M_AttributeValue_ID, String Value, Trx trxName)
+            int VAM_PFeature_SetInstance_ID, int VAM_PFeature_Value_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
             SetVAM_ProductFeature_ID(VAM_ProductFeature_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
-            SetM_AttributeValue_ID(M_AttributeValue_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
+            SetVAM_PFeature_Value_ID(VAM_PFeature_Value_ID);
             SetValue(Value);
         }
 

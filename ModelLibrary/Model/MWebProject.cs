@@ -98,7 +98,7 @@ namespace VAdvantage.Model
 			SetVAF_TreeInfoCMS_ID(tree.GetVAF_TreeInfo_ID());
 			//
 			tree = new MVAFTreeInfo (GetCtx(), 
-				GetName()+MVAFTreeInfo.TREETYPE_CMTemplate, MVAFTreeInfo.TREETYPE_CMTemplate, Get_TrxName());
+				GetName()+MVAFTreeInfo.TREETYPE_CMVACMLayout, MVAFTreeInfo.TREETYPE_CMVACMLayout, Get_TrxName());
 			if (!tree.Save())
 				return false;
 			SetVAF_TreeInfoCMT_ID(tree.GetVAF_TreeInfo_ID());

@@ -200,7 +200,7 @@ namespace VIS.Models
             }
 
 
-            // //string unlinkdata = "select * from M_Product where IsActive='Y' AND M_Pr_ID NOT IN (select NOde_ID FROM VAF_TreeInfoChildProd where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ")";
+            // //string unlinkdata = "select * from VAM_Product where IsActive='Y' AND M_Pr_ID NOT IN (select NOde_ID FROM VAF_TreeInfoChildProd where VAF_TreeInfo_ID=" + VAF_TreeInfo_ID + ")";
             if (demandsMenu == "Unlinked")
             {
                 string tbname = tree.GetNodeTableName();

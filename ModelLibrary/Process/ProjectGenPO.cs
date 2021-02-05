@@ -96,7 +96,7 @@ namespace VAdvantage.Process
 	 */
         private void CreatePO(MProject project, MProjectLine projectLine)
         {
-            if (projectLine.GetM_Product_ID() == 0)
+            if (projectLine.GetVAM_Product_ID() == 0)
             {
                 AddLog(projectLine.GetLine(), null, null, "Line has no Product");
                 return;
@@ -108,7 +108,7 @@ namespace VAdvantage.Process
             }
 
             //	PO Record
-            MProductPO[] pos = MProductPO.GetOfProduct(GetCtx(), projectLine.GetM_Product_ID(), Get_TrxName());
+            MProductPO[] pos = MProductPO.GetOfProduct(GetCtx(), projectLine.GetVAM_Product_ID(), Get_TrxName());
             if (pos == null || pos.Length == 0)
             {
                 AddLog(projectLine.GetLine(), null, null, "Product has no PO record");
@@ -152,7 +152,7 @@ namespace VAdvantage.Process
 
             //	Create Line
             MOrderLine orderLine = new MOrderLine(order);
-            orderLine.SetM_Product_ID(projectLine.GetM_Product_ID(), true);
+            orderLine.SetVAM_Product_ID(projectLine.GetVAM_Product_ID(), true);
             orderLine.SetQty(projectLine.GetPlannedQty());
             orderLine.SetDescription(projectLine.GetDescription());
 

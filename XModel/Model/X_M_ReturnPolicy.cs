@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_ReturnPolicy
+/** Generated Model for VAM_ReturnRule
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ReturnPolicy : PO
+public class X_VAM_ReturnRule : PO
 {
-public X_M_ReturnPolicy (Context ctx, int M_ReturnPolicy_ID, Trx trxName) : base (ctx, M_ReturnPolicy_ID, trxName)
+public X_VAM_ReturnRule (Context ctx, int VAM_ReturnRule_ID, Trx trxName) : base (ctx, VAM_ReturnRule_ID, trxName)
 {
-/** if (M_ReturnPolicy_ID == 0)
+/** if (VAM_ReturnRule_ID == 0)
 {
 SetIsDefault (false);
-SetM_ReturnPolicy_ID (0);
+SetVAM_ReturnRule_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_ReturnPolicy (Ctx ctx, int M_ReturnPolicy_ID, Trx trxName) : base (ctx, M_ReturnPolicy_ID, trxName)
+public X_VAM_ReturnRule (Ctx ctx, int VAM_ReturnRule_ID, Trx trxName) : base (ctx, VAM_ReturnRule_ID, trxName)
 {
-/** if (M_ReturnPolicy_ID == 0)
+/** if (VAM_ReturnRule_ID == 0)
 {
 SetIsDefault (false);
-SetM_ReturnPolicy_ID (0);
+SetVAM_ReturnRule_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicy (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ReturnRule (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_ReturnPolicy (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicy (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ReturnRule (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_ReturnPolicy (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicy (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ReturnRule (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ReturnPolicy()
+static X_VAM_ReturnRule()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389064457L;
 public static int Table_ID;
  // =985;
 
-/** TableName=M_ReturnPolicy */
-public static String Table_Name="M_ReturnPolicy";
+/** TableName=VAM_ReturnRule */
+public static String Table_Name="VAM_ReturnRule";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_ReturnPolicy[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ReturnRule[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -150,17 +150,17 @@ if (oo != null)
 return false;
 }
 /** Set Return Policy.
-@param M_ReturnPolicy_ID The Return Policy dictates the timeframe within which goods can be returned. */
-public void SetM_ReturnPolicy_ID (int M_ReturnPolicy_ID)
+@param VAM_ReturnRule_ID The Return Policy dictates the timeframe within which goods can be returned. */
+public void SetVAM_ReturnRule_ID (int VAM_ReturnRule_ID)
 {
-if (M_ReturnPolicy_ID < 1) throw new ArgumentException ("M_ReturnPolicy_ID is mandatory.");
-Set_ValueNoCheck ("M_ReturnPolicy_ID", M_ReturnPolicy_ID);
+if (VAM_ReturnRule_ID < 1) throw new ArgumentException ("VAM_ReturnRule_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ReturnRule_ID", VAM_ReturnRule_ID);
 }
 /** Get Return Policy.
 @return The Return Policy dictates the timeframe within which goods can be returned. */
-public int GetM_ReturnPolicy_ID() 
+public int GetVAM_ReturnRule_ID() 
 {
-Object ii = Get_Value("M_ReturnPolicy_ID");
+Object ii = Get_Value("VAM_ReturnRule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

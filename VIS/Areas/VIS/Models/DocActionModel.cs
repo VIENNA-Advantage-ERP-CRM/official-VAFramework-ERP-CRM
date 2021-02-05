@@ -272,7 +272,7 @@ namespace VIS.Models
             //    /********************
             //*  Warehouse Task  New Add by raghu 11 april,2011
             //*/
-            //    else if (VAF_TableView_ID == X_M_WarehouseTask.Table_ID
+            //    else if (VAF_TableView_ID == X_VAM_WarehouseTask.Table_ID
             //        || VAF_TableView_ID == X_M_TaskList.Table_ID)
             //    {
             //        //	Draft                       ..  DR/IP/IN

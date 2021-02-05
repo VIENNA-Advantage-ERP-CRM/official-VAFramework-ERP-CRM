@@ -387,15 +387,15 @@ namespace VAdvantage.Model
             }
 
             // Reset Amount Dimension if charge Amount is different
-            if (Util.GetValueOfInt(Get_Value("AmtDimChargeAmount")) > 0)
+            if (Util.GetValueOfInt(Get_Value("AmtDiMVABChargeAmount")) > 0)
             {
-                string qry = "SELECT Amount FROM VAB_DimAmt WHERE VAB_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDimChargeAmount"));
+                string qry = "SELECT Amount FROM VAB_DimAmt WHERE VAB_DimAmt_ID=" + Util.GetValueOfInt(Get_Value("AmtDiMVABChargeAmount"));
                 decimal amtdimAmt = Util.GetValueOfDecimal(DB.ExecuteScalar(qry, null, Get_TrxName()));
 
                 if (amtdimAmt != GetChargeAmt())
                 {
                     resetAmtDim = true;
-                    Set_Value("AmtDimChargeAmount", null);
+                    Set_Value("AmtDiMVABChargeAmount", null);
                 }
             }
             return true;

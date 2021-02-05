@@ -11,30 +11,30 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_AttributeUse
+    /** Generated Model for VAM_PFeature_Use
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_AttributeUse : PO
+    public class X_VAM_PFeature_Use : PO
     {
-        public X_M_AttributeUse(Context ctx, int M_AttributeUse_ID, Trx trxName)
-            : base(ctx, M_AttributeUse_ID, trxName)
+        public X_VAM_PFeature_Use(Context ctx, int VAM_PFeature_Use_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Use_ID, trxName)
         {
-            /** if (M_AttributeUse_ID == 0)
+            /** if (VAM_PFeature_Use_ID == 0)
             {
-            SetM_AttributeSet_ID (0);
+            SetVAM_PFeature_Set_ID (0);
             SetVAM_ProductFeature_ID (0);
-            SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_AttributeUse WHERE M_AttributeSet_ID=@M_AttributeSet_ID@
+            SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PFeature_Use WHERE VAM_PFeature_Set_ID=@VAM_PFeature_Set_ID@
             }
              */
         }
-        public X_M_AttributeUse(Ctx ctx, int M_AttributeUse_ID, Trx trxName)
-            : base(ctx, M_AttributeUse_ID, trxName)
+        public X_VAM_PFeature_Use(Ctx ctx, int VAM_PFeature_Use_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Use_ID, trxName)
         {
-            /** if (M_AttributeUse_ID == 0)
+            /** if (VAM_PFeature_Use_ID == 0)
             {
-            SetM_AttributeSet_ID (0);
+            SetVAM_PFeature_Set_ID (0);
             SetVAM_ProductFeature_ID (0);
-            SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_AttributeUse WHERE M_AttributeSet_ID=@M_AttributeSet_ID@
+            SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PFeature_Use WHERE VAM_PFeature_Set_ID=@VAM_PFeature_Set_ID@
             }
              */
         }
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeUse(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_PFeature_Use(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeUse(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_PFeature_Use(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_AttributeUse(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_PFeature_Use(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_AttributeUse()
+        static X_VAM_PFeature_Use()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,8 +81,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =563;
 
-        /** TableName=M_AttributeUse */
-        public static String Table_Name = "M_AttributeUse";
+        /** TableName=VAM_PFeature_Use */
+        public static String Table_Name = "VAM_PFeature_Use";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -116,21 +116,21 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_AttributeUse[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_PFeature_Use[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Attribute Set.
-        @param M_AttributeSet_ID Product Attribute Set */
-        public void SetM_AttributeSet_ID(int M_AttributeSet_ID)
+        @param VAM_PFeature_Set_ID Product Attribute Set */
+        public void SetVAM_PFeature_Set_ID(int VAM_PFeature_Set_ID)
         {
-            if (M_AttributeSet_ID < 0) throw new ArgumentException("M_AttributeSet_ID is mandatory.");
-            Set_ValueNoCheck("M_AttributeSet_ID", M_AttributeSet_ID);
+            if (VAM_PFeature_Set_ID < 0) throw new ArgumentException("VAM_PFeature_Set_ID is mandatory.");
+            Set_ValueNoCheck("VAM_PFeature_Set_ID", VAM_PFeature_Set_ID);
         }
         /** Get Attribute Set.
         @return Product Attribute Set */
-        public int GetM_AttributeSet_ID()
+        public int GetVAM_PFeature_Set_ID()
         {
-            Object ii = Get_Value("M_AttributeSet_ID");
+            Object ii = Get_Value("VAM_PFeature_Set_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

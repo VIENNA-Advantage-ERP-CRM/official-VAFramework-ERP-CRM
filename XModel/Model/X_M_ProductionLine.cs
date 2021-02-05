@@ -11,36 +11,36 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_ProductionLine
+    /** Generated Model for VAM_ProductionLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_ProductionLine : PO
+    public class X_VAM_ProductionLine : PO
     {
-        public X_M_ProductionLine(Context ctx, int M_ProductionLine_ID, Trx trxName)
-            : base(ctx, M_ProductionLine_ID, trxName)
+        public X_VAM_ProductionLine(Context ctx, int VAM_ProductionLine_ID, Trx trxName)
+            : base(ctx, VAM_ProductionLine_ID, trxName)
         {
-            /** if (M_ProductionLine_ID == 0)
+            /** if (VAM_ProductionLine_ID == 0)
             {
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_ProductionLine WHERE M_ProductionPlan_ID=@M_ProductionPlan_ID@
-            SetM_Locator_ID (0);	// @M_Locator_ID@
-            SetM_Product_ID (0);
-            SetM_ProductionLine_ID (0);
-            SetM_ProductionPlan_ID (0);
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_ProductionLine WHERE VAM_ProductionPlan_ID=@VAM_ProductionPlan_ID@
+            SetVAM_Locator_ID (0);	// @VAM_Locator_ID@
+            SetVAM_Product_ID (0);
+            SetVAM_ProductionLine_ID (0);
+            SetVAM_ProductionPlan_ID (0);
             SetMovementQty (0.0);
             SetProcessed (false);	// N
             }
              */
         }
-        public X_M_ProductionLine(Ctx ctx, int M_ProductionLine_ID, Trx trxName)
-            : base(ctx, M_ProductionLine_ID, trxName)
+        public X_VAM_ProductionLine(Ctx ctx, int VAM_ProductionLine_ID, Trx trxName)
+            : base(ctx, VAM_ProductionLine_ID, trxName)
         {
-            /** if (M_ProductionLine_ID == 0)
+            /** if (VAM_ProductionLine_ID == 0)
             {
-            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_ProductionLine WHERE M_ProductionPlan_ID=@M_ProductionPlan_ID@
-            SetM_Locator_ID (0);	// @M_Locator_ID@
-            SetM_Product_ID (0);
-            SetM_ProductionLine_ID (0);
-            SetM_ProductionPlan_ID (0);
+            SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_ProductionLine WHERE VAM_ProductionPlan_ID=@VAM_ProductionPlan_ID@
+            SetVAM_Locator_ID (0);	// @VAM_Locator_ID@
+            SetVAM_Product_ID (0);
+            SetVAM_ProductionLine_ID (0);
+            SetVAM_ProductionPlan_ID (0);
             SetMovementQty (0.0);
             SetProcessed (false);	// N
             }
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductionLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductionLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductionLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductionLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductionLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_ProductionLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_ProductionLine()
+        static X_VAM_ProductionLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =326;
 
-        /** TableName=M_ProductionLine */
-        public static String Table_Name = "M_ProductionLine";
+        /** TableName=VAM_ProductionLine */
+        public static String Table_Name = "VAM_ProductionLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_ProductionLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_ProductionLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Description.
@@ -165,78 +165,78 @@ namespace VAdvantage.Model
             return new KeyNamePair(Get_ID(), GetLine().ToString());
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory.");
-            Set_Value("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory.");
+            Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_Value("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Production Line.
-        @param M_ProductionLine_ID Document Line representing a production */
-        public void SetM_ProductionLine_ID(int M_ProductionLine_ID)
+        @param VAM_ProductionLine_ID Document Line representing a production */
+        public void SetVAM_ProductionLine_ID(int VAM_ProductionLine_ID)
         {
-            if (M_ProductionLine_ID < 1) throw new ArgumentException("M_ProductionLine_ID is mandatory.");
-            Set_ValueNoCheck("M_ProductionLine_ID", M_ProductionLine_ID);
+            if (VAM_ProductionLine_ID < 1) throw new ArgumentException("VAM_ProductionLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_ProductionLine_ID", VAM_ProductionLine_ID);
         }
         /** Get Production Line.
         @return Document Line representing a production */
-        public int GetM_ProductionLine_ID()
+        public int GetVAM_ProductionLine_ID()
         {
-            Object ii = Get_Value("M_ProductionLine_ID");
+            Object ii = Get_Value("VAM_ProductionLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Production Plan.
-        @param M_ProductionPlan_ID Plan for how a product is produced */
-        public void SetM_ProductionPlan_ID(int M_ProductionPlan_ID)
+        @param VAM_ProductionPlan_ID Plan for how a product is produced */
+        public void SetVAM_ProductionPlan_ID(int VAM_ProductionPlan_ID)
         {
-            if (M_ProductionPlan_ID < 1) throw new ArgumentException("M_ProductionPlan_ID is mandatory.");
-            Set_ValueNoCheck("M_ProductionPlan_ID", M_ProductionPlan_ID);
+            if (VAM_ProductionPlan_ID < 1) throw new ArgumentException("VAM_ProductionPlan_ID is mandatory.");
+            Set_ValueNoCheck("VAM_ProductionPlan_ID", VAM_ProductionPlan_ID);
         }
         /** Get Production Plan.
         @return Plan for how a product is produced */
-        public int GetM_ProductionPlan_ID()
+        public int GetVAM_ProductionPlan_ID()
         {
-            Object ii = Get_Value("M_ProductionPlan_ID");
+            Object ii = Get_Value("VAM_ProductionPlan_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -281,24 +281,24 @@ namespace VAdvantage.Model
         public Decimal GetPlannedQty() { Object bd = Get_Value("PlannedQty"); if (bd == null) return Env.ZERO; return Convert.ToDecimal(bd); }
 
         /** Set Production.
-        @param M_Production_ID Plan for producing a product */
-        public void SetM_Production_ID(int M_Production_ID)
+        @param VAM_Production_ID Plan for producing a product */
+        public void SetVAM_Production_ID(int VAM_Production_ID)
         {
-            if (M_Production_ID <= 0) Set_Value("M_Production_ID", null); else Set_Value("M_Production_ID", M_Production_ID);
+            if (VAM_Production_ID <= 0) Set_Value("VAM_Production_ID", null); else Set_Value("VAM_Production_ID", VAM_Production_ID);
         }/** Get Production.
 @return Plan for producing a product */
-        public int GetM_Production_ID() { Object ii = Get_Value("M_Production_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_Production_ID() { Object ii = Get_Value("VAM_Production_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            if (VAM_Warehouse_ID <= 0) Set_Value("VAM_Warehouse_ID", null);
             else
-                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+                Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }/** Get Warehouse.
 @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID() { Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_Warehouse_ID() { Object ii = Get_Value("VAM_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
 
         /** Set UOM.
@@ -324,15 +324,15 @@ namespace VAdvantage.Model
         /** Get Reversal Document.@return Reversal Document */
         public int GetReversalDoc_ID() { Object ii = Get_Value("ReversalDoc_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
-        /** Set Product Container.@param M_ProductContainer_ID Pallet No. / Container Name */
-        public void SetM_ProductContainer_ID(int M_ProductContainer_ID)
+        /** Set Product Container.@param VAM_ProductContainer_ID Pallet No. / Container Name */
+        public void SetVAM_ProductContainer_ID(int VAM_ProductContainer_ID)
         {
-            if (M_ProductContainer_ID <= 0) Set_Value("M_ProductContainer_ID", null);
+            if (VAM_ProductContainer_ID <= 0) Set_Value("VAM_ProductContainer_ID", null);
             else
-                Set_Value("M_ProductContainer_ID", M_ProductContainer_ID);
+                Set_Value("VAM_ProductContainer_ID", VAM_ProductContainer_ID);
         }
         /** Get Product Container.@return Pallet No. / Container Name */
-        public int GetM_ProductContainer_ID() { Object ii = Get_Value("M_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_ProductContainer_ID() { Object ii = Get_Value("VAM_ProductContainer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 
 }

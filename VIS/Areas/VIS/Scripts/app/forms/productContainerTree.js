@@ -198,10 +198,10 @@
                 else if (validation != null) {
                     var token;
                     validation = validation.toUpperCase();
-                    if (validation.contains("M_LOCATOR_ID")) {
-                        token = validation.substr(validation.indexOf("M_LOCATOR_ID=") + 13, validation.length);
-                    } else if (validation.contains("M_LOCATORTO_ID")) {
-                        token = validation.substr(validation.indexOf("M_LOCATORTO_ID=") + 15, validation.length);
+                    if (validation.contains("VAM_Locator_ID")) {
+                        token = validation.substr(validation.indexOf("VAM_Locator_ID=") + 13, validation.length);
+                    } else if (validation.contains("VAM_LocatorTO_ID")) {
+                        token = validation.substr(validation.indexOf("VAM_LocatorTO_ID=") + 15, validation.length);
                     }
                     if (token != undefined) {
                         if (token.contains("AND")) {
@@ -244,10 +244,10 @@
         function getLocatorFromValidation(validation) {
             var token;
             validation = validation.toUpperCase();
-            if (validation.contains("M_LOCATOR_ID")) {
-                token = validation.substr(validation.indexOf("M_LOCATOR_ID=") + 13, validation.length);
-            } else if (validation.contains("M_LOCATORTO_ID")) {
-                token = validation.substr(validation.indexOf("M_LOCATORTO_ID=") + 15, validation.length);
+            if (validation.contains("VAM_Locator_ID")) {
+                token = validation.substr(validation.indexOf("VAM_Locator_ID=") + 13, validation.length);
+            } else if (validation.contains("VAM_LocatorTO_ID")) {
+                token = validation.substr(validation.indexOf("VAM_LocatorTO_ID=") + 15, validation.length);
             }
             if (token != undefined) {
                 if (token.contains("AND")) {
@@ -412,11 +412,11 @@
         // Creating (ul - li) tag for Tree
         function Ascendent(record, level) {
             if (level == 1)
-                $ContainerParent += '<li data-value=' + record.M_ProductContainer_ID + ' class="First">';
+                $ContainerParent += '<li data-value=' + record.VAM_ProductContainer_ID + ' class="First">';
             else
-                $ContainerParent += '<li data-value=' + record.M_ProductContainer_ID + '>';
+                $ContainerParent += '<li data-value=' + record.VAM_ProductContainer_ID + '>';
 
-            $ContainerParent += '<label class="tree-toggler nav-header" for=' + record.M_ProductContainer_ID + '>' + record.ContainerName + ''
+            $ContainerParent += '<label class="tree-toggler nav-header" for=' + record.VAM_ProductContainer_ID + '>' + record.ContainerName + ''
               + '<span class="vis-treewindow-span"><span class="vis-css-treewindow-arrow-up"></span></span></label>';
         };
 

@@ -80,23 +80,23 @@ namespace VAdvantage.Model
         {
             if (value == null)
                 return null;
-            int M_AttributeSetInstance_ID = 0;
+            int VAM_PFeature_SetInstance_ID = 0;
             if (value is int)
             {
-                M_AttributeSetInstance_ID = (int)value;
+                VAM_PFeature_SetInstance_ID = (int)value;
             }
             else
             {
                 try
                 {
-                    M_AttributeSetInstance_ID = int.Parse(value.ToString());
+                    VAM_PFeature_SetInstance_ID = int.Parse(value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.Log(Level.SEVERE, "Value=" + value, e);
                 }
             }
-            if (M_AttributeSetInstance_ID == 0)
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
                 return NO_INSTANCE;
             }
@@ -111,8 +111,8 @@ namespace VAdvantage.Model
             try
             {
                 dr = DataBase.DB.ExecuteReader("SELECT Description "
-                    + "FROM M_AttributeSetInstance "
-                    + "WHERE M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID);
+                    + "FROM VAM_PFeature_SetInstance "
+                    + "WHERE VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID);
 
                 if (dr.Read())
                 {
@@ -121,7 +121,7 @@ namespace VAdvantage.Model
                     {
                         if (VLogMgt.IsLevelFinest())
                         {
-                            description = "{" + M_AttributeSetInstance_ID.ToString() + "}";
+                            description = "{" + VAM_PFeature_SetInstance_ID.ToString() + "}";
                         }
                         else
                         {
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            return new KeyNamePair(M_AttributeSetInstance_ID, description);
+            return new KeyNamePair(VAM_PFeature_SetInstance_ID, description);
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder(
-                    "SELECT ASI.M_AttributeSetInstance_ID, ASI.Description from M_AttributeSetInstance ASI, M_Product P WHERE ASI.M_AttributeSet_ID = P.M_AttributeSet_ID AND P.M_Product_ID = " + GetCtx().GetContextAsInt(_WindowNo, "M_Product_ID"));
+                    "SELECT ASI.VAM_PFeature_SetInstance_ID, ASI.Description from VAM_PFeature_SetInstance ASI, VAM_Product P WHERE ASI.VAM_PFeature_Set_ID = P.VAM_PFeature_Set_ID AND P.VAM_Product_ID = " + GetCtx().GetContextAsInt(_WindowNo, "VAM_Product_ID"));
             if (onlyActive)
                 sql.Append(" AND ASI.IsActive='Y'");
             sql.Append(" ORDER BY 2");
@@ -214,7 +214,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override String GetColumnName()
         {
-            return "M_AttributeSetInstance_ID";
+            return "VAM_PFeature_SetInstance_ID";
         }
     }
 }

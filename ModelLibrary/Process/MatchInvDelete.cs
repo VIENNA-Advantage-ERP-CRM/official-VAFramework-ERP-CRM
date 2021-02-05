@@ -29,14 +29,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class MatchInvDelete : ProcessEngine.SvrProcess
     {
         //ID					
-        private int _M_MatchInv_ID = 0;
+        private int _VAM_MatchInvoice_ID = 0;
 
         /// <summary>
         /// Prepare
         /// </summary>
         protected override void Prepare()
         {
-            _M_MatchInv_ID = GetRecord_ID();
+            _VAM_MatchInvoice_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("M_MatchInv_ID=" + _M_MatchInv_ID);
-            MMatchInv inv = new MMatchInv(GetCtx(), _M_MatchInv_ID, Get_TrxName());
+            log.Info("VAM_MatchInvoice_ID=" + _VAM_MatchInvoice_ID);
+            MMatchInv inv = new MMatchInv(GetCtx(), _VAM_MatchInvoice_ID, Get_TrxName());
             if (inv.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ @M_MatchInv_ID@ " + _M_MatchInv_ID);
+                throw new Exception("@NotFound@ @VAM_MatchInvoice_ID@ " + _VAM_MatchInvoice_ID);
             }
             if (inv.Delete(true))
             {

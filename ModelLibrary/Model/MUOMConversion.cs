@@ -185,7 +185,7 @@ namespace VAdvantage.Model
             String sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(
                 "SELECT VAB_UOM_ID, VAB_UOM_To_ID, MultiplyRate, DivideRate "
                 + "FROM VAB_UOM_Conversion "
-                + "WHERE IsActive='Y' AND M_Product_ID IS NULL",
+                + "WHERE IsActive='Y' AND VAM_Product_ID IS NULL",
                 "VAB_UOM_Conversion", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             DataTable dt = null;
@@ -466,7 +466,7 @@ namespace VAdvantage.Model
                 + "FROM	VAB_UOM_Conversion c"
                 + " INNER JOIN VAB_UOM uomTo ON (c.VAB_UOM_To_ID=uomTo.VAB_UOM_ID) "
                 + "WHERE c.IsActive='Y' AND c.VAB_UOM_ID=" + VAB_UOM_From_ID + " AND c.VAB_UOM_To_ID=" + VAB_UOM_To_ID		//	#1/2
-                + " AND c.M_Product_ID IS NULL"
+                + " AND c.VAM_Product_ID IS NULL"
                 + " ORDER BY c.VAF_Client_ID DESC, c.VAF_Org_ID DESC";
             DataTable dt = null;
             IDataReader idr = null;
@@ -526,18 +526,18 @@ namespace VAdvantage.Model
         /// Convert Qty/Amt from entered UOM TO product UoM and round.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_UOM_To_ID">entered UOM</param>
         /// <param name="qtyPrice">entered quantity or price</param>
         /// <returns>Product: Qty/Amt in product UoM (precision rounded)</returns>
-        public static Decimal? ConvertProductTo(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
+        public static Decimal? ConvertProductTo(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
         {
-            if (qtyPrice == null || qtyPrice == 0 || M_Product_ID == 0 || VAB_UOM_To_ID == 0)
+            if (qtyPrice == null || qtyPrice == 0 || VAM_Product_ID == 0 || VAB_UOM_To_ID == 0)
             {
                 return qtyPrice;
             }
 
-            Decimal? retValue = (Decimal?)(GetProductRateTo(ctx, M_Product_ID, VAB_UOM_To_ID));
+            Decimal? retValue = (Decimal?)(GetProductRateTo(ctx, VAM_Product_ID, VAB_UOM_To_ID));
             if (retValue != null)
             {
                 if (Env.ONE.CompareTo(retValue) == 0)
@@ -558,16 +558,16 @@ namespace VAdvantage.Model
         /// Get Multiplier Rate from entered UOM TO product UoM
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_UOM_To_ID">entered UOM</param>
         /// <returns>multiplier or null</returns>
-        public static Decimal? GetProductRateTo(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID)
+        public static Decimal? GetProductRateTo(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID)
         {
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
                 return null;
             }
-            MUOMConversion[] rates = GetProductConversions(ctx, M_Product_ID);
+            MUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
             if (rates.Length == 0)
             {
                 _log.Fine("None found");
@@ -590,24 +590,24 @@ namespace VAdvantage.Model
         /// Convert Qty/Amt FROM product UOM to entered UOM and round.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_UOM_To_ID">quantity or price</param>
         /// <param name="qtyPrice">quantity or price</param>
         /// <returns>Entered: Qty in entered UoM (precision rounded)</returns>
-        //public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice,bool _ProductToConversion=false)
-        public static Decimal? ConvertProductFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
+        //public static Decimal? ConvertProductFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice,bool _ProductToConversion=false)
+        public static Decimal? ConvertProductFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID, Decimal? qtyPrice)
         {
             //	No conversion
             // Arpit to Pass a Parametrized Constructor so that we can have the reverse conversion rate for the defined product
             // bool ProductToConversion = _ProductToConversion;
             //  Arpit
-            if (qtyPrice == null || qtyPrice.Equals(Env.ZERO) || VAB_UOM_To_ID == 0 || M_Product_ID == 0)
+            if (qtyPrice == null || qtyPrice.Equals(Env.ZERO) || VAB_UOM_To_ID == 0 || VAM_Product_ID == 0)
             {
                 _log.Fine("No Conversion - QtyPrice=" + qtyPrice);
                 return qtyPrice;
             }
-            //Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, VAB_UOM_To_ID, ProductToConversion);
-            Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, M_Product_ID, VAB_UOM_To_ID);
+            //Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, VAM_Product_ID, VAB_UOM_To_ID, ProductToConversion);
+            Decimal? retValue = (Decimal?)GetProductRateFrom(ctx, VAM_Product_ID, VAB_UOM_To_ID);
             if (retValue != null)
             {
                 if (Env.ONE.CompareTo(retValue.Value) == 0)
@@ -622,7 +622,7 @@ namespace VAdvantage.Model
                 //return retValue.multiply(qtyPrice);
                 return Decimal.Multiply(retValue.Value, (Decimal)qtyPrice);
             }
-            _log.Fine("No Rate M_Product_ID=" + M_Product_ID);
+            _log.Fine("No Rate VAM_Product_ID=" + VAM_Product_ID);
             return null;
         }
 
@@ -630,13 +630,13 @@ namespace VAdvantage.Model
         /// Get Divide Rate FROM product UOM to entered UOM and round.
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
         /// <param name="VAB_UOM_To_ID"></param>
         /// <returns>divisor or null</returns>
-        //public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID,bool _ProductToConversion=false)
-        public static Decimal? GetProductRateFrom(Ctx ctx, int M_Product_ID, int VAB_UOM_To_ID)
+        //public static Decimal? GetProductRateFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID,bool _ProductToConversion=false)
+        public static Decimal? GetProductRateFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID)
         {
-            MUOMConversion[] rates = GetProductConversions(ctx, M_Product_ID);
+            MUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
             if (rates.Length == 0)
             {
                 _log.Fine("getProductRateFrom - none found");
@@ -666,15 +666,15 @@ namespace VAdvantage.Model
         /// Get Product Conversions (cached)
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
         /// <returns>array of conversions</returns>
-        public static MUOMConversion[] GetProductConversions(Ctx ctx, int M_Product_ID)
+        public static MUOMConversion[] GetProductConversions(Ctx ctx, int VAM_Product_ID)
         {
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
                 return new MUOMConversion[0];
             }
-            int key = M_Product_ID;
+            int key = VAM_Product_ID;
             MUOMConversion[] result = (MUOMConversion[])_conversionProduct[key];
             if (result != null)
             {
@@ -685,9 +685,9 @@ namespace VAdvantage.Model
 
             //
             String sql = "SELECT * FROM VAB_UOM_Conversion c "
-                + "WHERE c.M_Product_ID=" + M_Product_ID
-                + " AND EXISTS (SELECT * FROM M_Product p "
-                    + "WHERE c.M_Product_ID=p.M_Product_ID AND c.VAB_UOM_ID=p.VAB_UOM_ID)"
+                + "WHERE c.VAM_Product_ID=" + VAM_Product_ID
+                + " AND EXISTS (SELECT * FROM VAM_Product p "
+                    + "WHERE c.VAM_Product_ID=p.VAM_Product_ID AND c.VAB_UOM_ID=p.VAB_UOM_ID)"
                 + " AND c.IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
@@ -708,8 +708,8 @@ namespace VAdvantage.Model
                 if (list.Count == 0)
                 {
                     sql = "SELECT * FROM VAB_UOM_Conversion c "
-                + "WHERE EXISTS (SELECT * FROM M_Product p "
-                    + "WHERE c.VAB_UOM_ID=p.VAB_UOM_ID AND p.M_Product_ID=" + M_Product_ID + ")"
+                + "WHERE EXISTS (SELECT * FROM VAM_Product p "
+                    + "WHERE c.VAB_UOM_ID=p.VAB_UOM_ID AND p.VAM_Product_ID=" + VAM_Product_ID + ")"
                 + " AND c.IsActive='Y'";
 
                     idr1 = DB.ExecuteReader(sql, null, null);
@@ -755,7 +755,7 @@ namespace VAdvantage.Model
             //	Add default conversion
             if (list.Count == 0)
             {
-                MUOMConversion defRate = new MUOMConversion(MProduct.Get(ctx, M_Product_ID));
+                MUOMConversion defRate = new MUOMConversion(MProduct.Get(ctx, VAM_Product_ID));
                 list.Add(defRate);
             }
 
@@ -763,7 +763,7 @@ namespace VAdvantage.Model
             result = new MUOMConversion[list.Count];
             result = list.ToArray();
             _conversionProduct.Add(key, result);
-            _log.Fine("GetProductConversions - M_Product_ID=" + M_Product_ID + " #" + result.Length);
+            _log.Fine("GetProductConversions - VAM_Product_ID=" + VAM_Product_ID + " #" + result.Length);
             return result;
         }
 
@@ -800,7 +800,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(parent);
             SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
-            SetM_Product_ID(0);
+            SetVAM_Product_ID(0);
             SetVAB_UOM_To_ID(parent.GetVAB_UOM_ID());
             SetMultiplyRate(Env.ONE);
             SetDivideRate(Env.ONE);
@@ -815,7 +815,7 @@ namespace VAdvantage.Model
         {
             SetClientOrg(parent);
             SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
-            SetM_Product_ID(parent.GetM_Product_ID());
+            SetVAM_Product_ID(parent.GetVAM_Product_ID());
             SetVAB_UOM_To_ID(parent.GetVAB_UOM_ID());
             SetMultiplyRate(Env.ONE);
             SetDivideRate(Env.ONE);
@@ -842,9 +842,9 @@ namespace VAdvantage.Model
                 return false;
             }
             //	Enforce Product UOM
-            if (GetM_Product_ID() != 0 && (newRecord || Is_ValueChanged("M_Product_ID")))
+            if (GetVAM_Product_ID() != 0 && (newRecord || Is_ValueChanged("VAM_Product_ID")))
             {
-                MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
+                MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
                 if (product.GetVAB_UOM_ID() != GetVAB_UOM_ID())
                 {
                     MUOM uom = MUOM.Get(GetCtx(), product.GetVAB_UOM_ID());
@@ -854,7 +854,7 @@ namespace VAdvantage.Model
             }
 
             //	The Product UoM needs to be the smallest UoM - Multiplier  must be > 0
-            if (GetM_Product_ID() != 0 && GetDivideRate().CompareTo(Env.ONE) < 0)
+            if (GetVAM_Product_ID() != 0 && GetDivideRate().CompareTo(Env.ONE) < 0)
             {
                 // JID_0239: Currenly system show message when multiple rate is less than one like below "Product UOM Coversion rate error"
                 log.SaveError("", Msg.GetMsg(GetCtx(), "ProductUOMConversionRateError"));
@@ -865,7 +865,7 @@ namespace VAdvantage.Model
             {
                 //string sql = "SELECT UPCUNIQUE('c','" + GetUPC() + "') as productID FROM Dual";
                 //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+                //if (manu_ID != 0 && manu_ID != GetVAM_Product_ID())
 
                 int manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
@@ -886,7 +886,7 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MUOMConversion[");
             sb.Append(Get_ID()).Append("-VAB_UOM_ID=").Append(GetVAB_UOM_ID())
                 .Append(",VAB_UOM_To_ID=").Append(GetVAB_UOM_To_ID())
-                .Append(",M_Product_ID=").Append(GetM_Product_ID())
+                .Append(",VAM_Product_ID=").Append(GetVAM_Product_ID())
                 .Append("-Multiply=").Append(GetMultiplyRate())
                 .Append("/Divide=").Append(GetDivideRate())
                 .Append("]");

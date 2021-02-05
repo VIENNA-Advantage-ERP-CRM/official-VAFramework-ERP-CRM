@@ -43,9 +43,9 @@ namespace VIS.Controllers
 
 
 
-                retDic["M_ReturnPolicy_ID"] = bpartner.GetM_ReturnPolicy_ID().ToString();
+                retDic["VAM_ReturnRule_ID"] = bpartner.GetVAM_ReturnRule_ID().ToString();
 
-                retDic["M_ReturnPolicy_ID"] = bpartner.GetPO_ReturnPolicy_ID().ToString();
+                retDic["VAM_ReturnRule_ID"] = bpartner.GetPO_ReturnPolicy_ID().ToString();
 
                 //retDic["DateOrdered", order.GetDateOrdered());
 

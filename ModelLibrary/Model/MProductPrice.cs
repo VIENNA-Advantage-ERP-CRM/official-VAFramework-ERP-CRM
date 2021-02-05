@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProductPrice : X_M_ProductPrice
+    public class MProductPrice : X_VAM_ProductPrice
     {
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MProductPrice).FullName);
@@ -34,15 +34,15 @@ namespace VAdvantage.Model
         /// Get Product Price
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_Version_ID">id</param>
-        /// <param name="M_Product_ID">id</param>
+        /// <param name="VAM_PriceListVersion_ID">id</param>
+        /// <param name="VAM_Product_ID">id</param>
         /// <param name="trxName">transction</param>
         /// <returns>product price or null</returns>
-        public static MProductPrice Get(Ctx ctx, int M_PriceList_Version_ID, int M_Product_ID, Trx trxName)
+        public static MProductPrice Get(Ctx ctx, int VAM_PriceListVersion_ID, int VAM_Product_ID, Trx trxName)
         {
 
             MProductPrice retValue = null;
-            String sql = "SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + M_PriceList_Version_ID + " AND M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT * FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID=" + VAM_PriceListVersion_ID + " AND VAM_Product_ID=" + VAM_Product_ID;
             DataSet ds = new DataSet();
             try
             {
@@ -67,17 +67,17 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="VAB_UOM_ID"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_PriceList_Version_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PriceListVersion_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public static MProductPrice Get(Ctx ctx, int VAB_UOM_ID, int M_Product_ID, int M_PriceList_Version_ID,
-             int M_AttributeSetInstance_ID, Trx trxName)
+        public static MProductPrice Get(Ctx ctx, int VAB_UOM_ID, int VAM_Product_ID, int VAM_PriceListVersion_ID,
+             int VAM_PFeature_SetInstance_ID, Trx trxName)
         {
             MProductPrice retValue = null;
-            String sql = " SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + M_PriceList_Version_ID + " AND VAB_UOM_ID = " + VAB_UOM_ID
-                + " AND M_AttributeSetInstance_ID =" + M_AttributeSetInstance_ID + " AND M_Product_ID=" + M_Product_ID;
+            String sql = " SELECT * FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID=" + VAM_PriceListVersion_ID + " AND VAB_UOM_ID = " + VAB_UOM_ID
+                + " AND VAM_PFeature_SetInstance_ID =" + VAM_PFeature_SetInstance_ID + " AND VAM_Product_ID=" + VAM_Product_ID;
             DataSet ds = new DataSet();
             try
             {
@@ -101,17 +101,17 @@ namespace VAdvantage.Model
         /// Get Product Price (Only in case when Vienna Advance Pricing Module is available)
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_PriceList_Version_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PriceListVersion_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public static MProductPrice Get(Ctx ctx, int M_Product_ID, int M_PriceList_Version_ID,
-             int M_AttributeSetInstance_ID, Trx trxName)
+        public static MProductPrice Get(Ctx ctx, int VAM_Product_ID, int VAM_PriceListVersion_ID,
+             int VAM_PFeature_SetInstance_ID, Trx trxName)
         {
             MProductPrice retValue = null;
-            String sql = " SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + M_PriceList_Version_ID
-                + " AND M_AttributeSetInstance_ID =" + M_AttributeSetInstance_ID + " AND M_Product_ID=" + M_Product_ID;
+            String sql = " SELECT * FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID=" + VAM_PriceListVersion_ID
+                + " AND VAM_PFeature_SetInstance_ID =" + VAM_PFeature_SetInstance_ID + " AND VAM_Product_ID=" + VAM_Product_ID;
             DataSet ds = new DataSet();
             try
             {
@@ -163,29 +163,29 @@ namespace VAdvantage.Model
         /// New Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_Version_ID">Price List Version</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_PriceListVersion_ID">Price List Version</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="trxName">transaction</param>
-        public MProductPrice(Ctx ctx, int M_PriceList_Version_ID, int M_Product_ID, Trx trxName)
+        public MProductPrice(Ctx ctx, int VAM_PriceListVersion_ID, int VAM_Product_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
-            SetM_PriceList_Version_ID(M_PriceList_Version_ID);	//	FK
-            SetM_Product_ID(M_Product_ID);						//	FK
+            SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);	//	FK
+            SetVAM_Product_ID(VAM_Product_ID);						//	FK
         }
 
         /// <summary>
         /// New Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_Version_ID">Price List Version</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_PriceListVersion_ID">Price List Version</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="PriceList">list price</param>
         /// <param name="PriceStd">standard price</param>
         /// <param name="PriceLimit">limit price</param>
         /// <param name="trxName">transaction</param>
-        public MProductPrice(Ctx ctx, int M_PriceList_Version_ID, int M_Product_ID,
+        public MProductPrice(Ctx ctx, int VAM_PriceListVersion_ID, int VAM_Product_ID,
             Decimal PriceList, Decimal PriceStd, Decimal PriceLimit, Trx trxName)
-            : this(ctx, M_PriceList_Version_ID, M_Product_ID, trxName)
+            : this(ctx, VAM_PriceListVersion_ID, VAM_Product_ID, trxName)
         {
             SetPrices(PriceList, PriceStd, PriceLimit);
         }
@@ -194,17 +194,17 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="plv">list version</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="PriceList">list price</param>
         /// <param name="PriceStd">standard price</param>
         /// <param name="PriceLimit">limit price</param>
-        public MProductPrice(MPriceListVersion plv, int M_Product_ID,
+        public MProductPrice(MPriceListVersion plv, int VAM_Product_ID,
             Decimal PriceList, Decimal PriceStd, Decimal PriceLimit)
             : this(plv.GetCtx(), 0, plv.Get_TrxName())
         {
             SetClientOrg(plv);
-            SetM_PriceList_Version_ID(plv.GetM_PriceList_Version_ID());
-            SetM_Product_ID(M_Product_ID);
+            SetVAM_PriceListVersion_ID(plv.GetVAM_PriceListVersion_ID());
+            SetVAM_Product_ID(VAM_Product_ID);
             SetPrices(PriceList, PriceStd, PriceLimit);
         }
 
@@ -228,8 +228,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MProductPrice[");
-            sb.Append(GetM_PriceList_Version_ID())
-                .Append(",M_Product_ID=").Append(GetM_Product_ID())
+            sb.Append(GetVAM_PriceListVersion_ID())
+                .Append(",VAM_Product_ID=").Append(GetVAM_Product_ID())
                 .Append(",PriceList=").Append(GetPriceList())
                 .Append("]");
             return sb.ToString();

@@ -31,9 +31,9 @@ namespace VAdvantage.Model
     {
         #region Private Variables
         // The ID					
-        private int _M_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
         // ASI						
-        private int _M_AttributeSetInstance_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
         // The Product				
         private MProduct _product = null;
         // Transaction				
@@ -83,17 +83,17 @@ namespace VAdvantage.Model
         /// Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="trxName"></param>
-        public ProductCost(Ctx ctx, int M_Product_ID, int M_AttributeSetInstance_ID, Trx trxName)
+        public ProductCost(Ctx ctx, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, Trx trxName)
         {
-            _M_Product_ID = M_Product_ID;
-            if (_M_Product_ID != 0)
+            _VAM_Product_ID = VAM_Product_ID;
+            if (_VAM_Product_ID != 0)
             {
-                _product = MProduct.Get(ctx, M_Product_ID);
+                _product = MProduct.Get(ctx, VAM_Product_ID);
             }
-            _M_AttributeSetInstance_ID = M_AttributeSetInstance_ID;
+            _VAM_PFeature_SetInstance_ID = VAM_PFeature_SetInstance_ID;
             _trx = trxName;
         }
 
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
             }
 
             //  No Product - get Default from Product Category
-            if (_M_Product_ID == 0)
+            if (_VAM_Product_ID == 0)
             {
                 return GetAccountDefault(AcctType, as1);
             }
@@ -175,8 +175,8 @@ namespace VAdvantage.Model
             //    + "P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct, "	//	5..6
             //    + "P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct,"			//	7..8
             //    + "P_CostAdjustment_Acct, P_InventoryClearing_Acct "			//	9..10
-            //    + "FROM M_Product_Acct "
-            //    + "WHERE M_Product_ID=" + _M_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
+            //    + "FROM VAM_Product_Acct "
+            //    + "WHERE VAM_Product_ID=" + _VAM_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             //Updated By raghu 7,jun,2011
             /*******************Manfacturing**************************/
             String sql = "SELECT COALESCE(a.P_Revenue_Acct, b.P_Revenue_Acct), " //1
@@ -192,8 +192,8 @@ namespace VAdvantage.Model
             + " COALESCE(a.P_Resource_Absorption_Acct, b.P_Resource_Absorption_Acct), "      //11
             + " COALESCE(a.P_MaterialOverhd_Acct, b.P_MaterialOverhd_Acct) "	             //12
             + " FROM VAB_AccountBook_Default b "
-            + " LEFT OUTER JOIN M_Product_Acct a  ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
-            + " AND a.M_Product_ID=" + _M_Product_ID
+            + " LEFT OUTER JOIN VAM_Product_Acct a  ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
+            + " AND a.VAM_Product_ID=" + _VAM_Product_ID
             + " AND a.IsActive = 'Y') "
             + " WHERE b.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID();
             /*******************Manfacturing**************************/
@@ -243,8 +243,8 @@ namespace VAdvantage.Model
             //    + "P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct, "
             //    + "P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct, "
             //    + "P_CostAdjustment_Acct, P_InventoryClearing_Acct "
-            //    + "FROM M_Product_Category pc, M_Product_Category_Acct pca "
-            //    + "WHERE pc.M_Product_Category_ID=pca.M_Product_Category_ID"
+            //    + "FROM VAM_ProductCategory pc, VAM_ProductCategory_Acct pca "
+            //    + "WHERE pc.VAM_ProductCategory_ID=pca.VAM_ProductCategory_ID"
             //    + " AND pca.VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID()
             //    + "ORDER BY pc.IsDefault DESC, pc.Created";
             //Updated By raghu 7,jun,2011
@@ -262,10 +262,10 @@ namespace VAdvantage.Model
             + " COALESCE(a.P_Resource_Absorption_Acct, b.P_Resource_Absorption_Acct), "      //11
             + " COALESCE(a.P_MaterialOverhd_Acct, b.P_MaterialOverhd_Acct) "	             //12
             + " FROM VAB_AccountBook_Default b "
-            + " LEFT OUTER JOIN M_Product_Category_Acct a ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
+            + " LEFT OUTER JOIN VAM_ProductCategory_Acct a ON (a.VAB_AccountBook_ID = b.VAB_AccountBook_ID "
             + " AND a.IsActive = 'Y' ),"
-            + " M_Product_Category pc "
-            + " WHERE pc.M_Product_Category_ID=a.M_Product_Category_ID"
+            + " VAM_ProductCategory pc "
+            + " WHERE pc.VAM_ProductCategory_ID=a.VAM_ProductCategory_ID"
             + " AND b.VAB_AccountBook_ID =" + as1.GetVAB_AccountBook_ID()
             + " ORDER BY pc.IsDefault DESC, pc.Created";
             /*****************Manfacturing*********************/
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
                 return null;
             }
             //
-            Decimal? cost = MCost.GetCurrentCost(_product, _M_AttributeSetInstance_ID,
+            Decimal? cost = MCost.GetCurrentCost(_product, _VAM_PFeature_SetInstance_ID,
                 as1, VAF_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), VAB_OrderLine_ID, zeroCostsOK, _trx);
             if (cost == null || cost == 0)
             {
@@ -359,7 +359,7 @@ namespace VAdvantage.Model
             {
                 sql.Append("COSTSTANDARD");
             }
-            sql.Append(" FROM M_Product_Costing WHERE M_Product_ID=" + _M_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID());
+            sql.Append(" FROM VAM_ProductCosting WHERE VAM_Product_ID=" + _VAM_Product_ID + " AND VAB_AccountBook_ID=" + as1.GetVAB_AccountBook_ID());
             IDataReader idr = null;
             try
             {
@@ -407,15 +407,15 @@ namespace VAdvantage.Model
             //  Create Zero Record
             if (create)
             {
-                StringBuilder sql = new StringBuilder("INSERT INTO M_Product_Costing "
-                    + "(M_Product_ID,VAB_AccountBook_ID,"
+                StringBuilder sql = new StringBuilder("INSERT INTO VAM_ProductCosting "
+                    + "(VAM_Product_ID,VAB_AccountBook_ID,"
                     + " VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + " CurrentCostPrice,CostStandard,FutureCostPrice,"
                     + " CostStandardPOQty,CostStandardPOAmt,CostStandardCumQty,CostStandardCumAmt,"
                     + " CostAverage,CostAverageCumQty,CostAverageCumAmt,"
                     + " PriceLastPO,PriceLastInv, TotalInvQty,TotalInvAmt) "
                     + "VALUES (");
-                sql.Append(_M_Product_ID).Append(",").Append(as1.GetVAB_AccountBook_ID()).Append(",")
+                sql.Append(_VAM_Product_ID).Append(",").Append(as1.GetVAB_AccountBook_ID()).Append(",")
                     .Append(as1.GetVAF_Client_ID()).Append(",").Append(as1.GetVAF_Org_ID()).Append(",")
                     .Append("'Y',SysDate,0,SysDate,0, 0,0,0,  0,0,0,0,  0,0,0,  0,0,  0,0)");
                 int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, _trx);
@@ -447,9 +447,9 @@ namespace VAdvantage.Model
             }
 
             //  update current costs
-            StringBuilder sql1 = new StringBuilder("UPDATE M_Product_Costing ");
+            StringBuilder sql1 = new StringBuilder("UPDATE VAM_ProductCosting ");
             sql1.Append("SET CurrentCostPrice=").Append(costs)
-                .Append(" WHERE M_Product_ID=").Append(_M_Product_ID)
+                .Append(" WHERE VAM_Product_ID=").Append(_VAM_Product_ID)
                 .Append(" AND VAB_AccountBook_ID=").Append(as1.GetVAB_AccountBook_ID());
             int no1 = DataBase.DB.ExecuteQuery(sql1.ToString(), null, _trx);
             if (no1 == 1)
@@ -469,10 +469,10 @@ namespace VAdvantage.Model
         {
             StringBuilder sql = new StringBuilder(
                 "SELECT pl.VAB_Currency_ID, pp.PriceList, pp.PriceStd, pp.PriceLimit "
-                + "FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp "
-                + "WHERE pl.M_PriceList_ID = plv.M_PriceList_ID"
-                + " AND plv.M_PriceList_Version_ID = pp.M_PriceList_Version_ID"
-                + " AND pp.M_Product_ID=" + _M_Product_ID);
+                + "FROM VAM_PriceList pl, VAM_PriceListVersion plv, VAM_ProductPrice pp "
+                + "WHERE pl.VAM_PriceList_ID = plv.VAM_PriceList_ID"
+                + " AND plv.VAM_PriceListVersion_ID = pp.VAM_PriceListVersion_ID"
+                + " AND pp.VAM_Product_ID=" + _VAM_Product_ID);
             if (onlyPOPriceList)
             {
                 sql.Append(" AND pl.IsSOPriceList='N'");
@@ -531,7 +531,7 @@ namespace VAdvantage.Model
         private Decimal? GetPOCost(MVABAccountBook as1)
         {
             String sql = "SELECT VAB_Currency_ID, PriceList,PricePO,PriceLastPO "
-                + "FROM M_Product_PO WHERE M_Product_ID=" + _M_Product_ID
+                + "FROM VAM_Product_PO WHERE VAM_Product_ID=" + _VAM_Product_ID
                 + "ORDER BY IsCurrentVendor DESC";
 
             int VAB_Currency_ID = 0;
@@ -590,8 +590,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("ProductCost[");
-            sb.Append("M_Product_ID=").Append(_M_Product_ID)
-                .Append(",M_AttributeSetInstance_ID").Append(_M_AttributeSetInstance_ID)
+            sb.Append("VAM_Product_ID=").Append(_VAM_Product_ID)
+                .Append(",VAM_PFeature_SetInstance_ID").Append(_VAM_PFeature_SetInstance_ID)
                 .Append(",Qty=").Append(_qty)
                 .Append("]");
             return sb.ToString();

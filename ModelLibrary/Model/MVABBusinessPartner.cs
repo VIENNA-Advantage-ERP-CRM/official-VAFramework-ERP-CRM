@@ -966,16 +966,16 @@ namespace VAdvantage.Model
             if (_group.GetVAB_Dunning_ID() != 0)
                 SetVAB_Dunning_ID(_group.GetVAB_Dunning_ID());
             // if pricelist already selected from UI then skip..
-            if (base.GetM_PriceList_ID() > 0) { }
+            if (base.GetVAM_PriceList_ID() > 0) { }
             else
             {
-                if (_group.GetM_PriceList_ID() != 0)
-                    SetM_PriceList_ID(_group.GetM_PriceList_ID());
+                if (_group.GetVAM_PriceList_ID() != 0)
+                    SetVAM_PriceList_ID(_group.GetVAM_PriceList_ID());
             }
             if (_group.GetPO_PriceList_ID() != 0)
                 SetPO_PriceList_ID(_group.GetPO_PriceList_ID());
-            if (_group.GetM_DiscountSchema_ID() != 0)
-                SetM_DiscountSchema_ID(_group.GetM_DiscountSchema_ID());
+            if (_group.GetVAM_DiscountCalculation_ID() != 0)
+                SetVAM_DiscountCalculation_ID(_group.GetVAM_DiscountCalculation_ID());
             if (_group.GetPO_DiscountSchema_ID() != 0)
                 SetPO_DiscountSchema_ID(_group.GetPO_DiscountSchema_ID());
         }
@@ -984,11 +984,11 @@ namespace VAdvantage.Model
         /// Get PriceList
         /// </summary>
         /// <returns>price list</returns>
-        public new int GetM_PriceList_ID()
+        public new int GetVAM_PriceList_ID()
         {
-            int ii = base.GetM_PriceList_ID();
+            int ii = base.GetVAM_PriceList_ID();
             if (ii == 0)
-                ii = GetBPGroup().GetM_PriceList_ID();
+                ii = GetBPGroup().GetVAM_PriceList_ID();
             return ii;
         }
 
@@ -1008,11 +1008,11 @@ namespace VAdvantage.Model
         /// Get DiscountSchema
         /// </summary>
         /// <returns>Discount Schema</returns>
-        public new int GetM_DiscountSchema_ID()
+        public new int GetVAM_DiscountCalculation_ID()
         {
-            int ii = base.GetM_DiscountSchema_ID();
+            int ii = base.GetVAM_DiscountCalculation_ID();
             if (ii == 0)
-                ii = GetBPGroup().GetM_DiscountSchema_ID();
+                ii = GetBPGroup().GetVAM_DiscountCalculation_ID();
             return ii;
         }
 
@@ -1032,11 +1032,11 @@ namespace VAdvantage.Model
         /// Get ReturnPolicy
         /// </summary>
         /// <returns>Return Policy</returns>
-        public new int GetM_ReturnPolicy_ID()
+        public new int GetVAM_ReturnRule_ID()
         {
-            int ii = base.GetM_ReturnPolicy_ID();
+            int ii = base.GetVAM_ReturnRule_ID();
             if (ii == 0)
-                ii = GetBPGroup().GetM_ReturnPolicy_ID();
+                ii = GetBPGroup().GetVAM_ReturnRule_ID();
             if (ii == 0)
                 ii = MReturnPolicy.GetDefault(GetCtx());
             return ii;

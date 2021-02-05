@@ -244,7 +244,7 @@
             var orderShipmentvalue = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 2161, VIS.DisplayType.Search, "VAB_Order_ID", 0, false, "DocStatus='CO'");
             $self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("VAB_Order_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue, 0);
             //var orderShipmentvalue = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3521, VIS.DisplayType.Search);
-            //$self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("M_InOut_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue);
+            //$self.vSearchOrderShipment = new VIS.Controls.VTextBoxButton("VAM_Inv_InOut_ID", true, false, true, VIS.DisplayType.Search, orderShipmentvalue);
 
             //vSearchOrderShipment
         }

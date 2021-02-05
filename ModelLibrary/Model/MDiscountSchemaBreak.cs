@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDiscountSchema
  * Purpose        : Discount Calculation purposes
- * Class Used     : X_M_DiscountSchemaBreak
+ * Class Used     : X_VAM_BreakDiscount
  * Chronological    Development
  * Raghunandan     10-Jun-2009
   ******************************************************/
@@ -24,16 +24,16 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MDiscountSchemaBreak : X_M_DiscountSchemaBreak
+    public class MDiscountSchemaBreak : X_VAM_BreakDiscount
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_DiscountSchemaBreak_ID"></param>
+        /// <param name="VAM_BreakDiscount_ID"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchemaBreak(Ctx ctx, int M_DiscountSchemaBreak_ID, Trx trxName)
-            : base(ctx, M_DiscountSchemaBreak_ID, trxName)
+        public MDiscountSchemaBreak(Ctx ctx, int VAM_BreakDiscount_ID, Trx trxName)
+            : base(ctx, VAM_BreakDiscount_ID, trxName)
         {
 
         }
@@ -58,9 +58,9 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             // JID_0487: System should not allow to save same product category or product with same break value.
-            string sql = "SELECT COUNT(M_DiscountSchemaBreak_ID) FROM M_DiscountSchemaBreak WHERE M_DiscountSchema_ID = " + GetM_DiscountSchema_ID()
-                + " AND NVL(M_Product_ID, 0) = " + GetM_Product_ID() + " AND NVL(M_Product_Category_ID, 0) = " + GetM_Product_Category_ID() + " AND BreakValue = " + GetBreakValue() 
-                + " AND IsActive='Y'  AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND M_DiscountSchemaBreak_ID != " + Get_ID();
+            string sql = "SELECT COUNT(VAM_BreakDiscount_ID) FROM VAM_BreakDiscount WHERE VAM_DiscountCalculation_ID = " + GetVAM_DiscountCalculation_ID()
+                + " AND NVL(VAM_Product_ID, 0) = " + GetVAM_Product_ID() + " AND NVL(VAM_ProductCategory_ID, 0) = " + GetVAM_ProductCategory_ID() + " AND BreakValue = " + GetBreakValue() 
+                + " AND IsActive='Y'  AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAM_BreakDiscount_ID != " + Get_ID();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
             if (count > 0)
             {
@@ -74,10 +74,10 @@ namespace VAdvantage.Model
         /// Criteria apply
         /// </summary>
         /// <param name="Value">amt or qty</param>
-        /// <param name="M_Product_ID">product</param>
-        /// <param name="M_Product_Category_ID">category</param>
+        /// <param name="VAM_Product_ID">product</param>
+        /// <param name="VAM_ProductCategory_ID">category</param>
         /// <returns>true if criteria met</returns>
-        public bool Applies(Decimal Value, int M_Product_ID, int M_Product_Category_ID)
+        public bool Applies(Decimal Value, int VAM_Product_ID, int VAM_ProductCategory_ID)
         {
             if (!IsActive())
                 return false;
@@ -87,20 +87,20 @@ namespace VAdvantage.Model
                 return false;
 
             //	No Product / Category 
-            if (GetM_Product_ID() == 0
-                && GetM_Product_Category_ID() == 0)
+            if (GetVAM_Product_ID() == 0
+                && GetVAM_ProductCategory_ID() == 0)
                 return true;
 
             //	Product
-            if (GetM_Product_ID() == M_Product_ID)
+            if (GetVAM_Product_ID() == VAM_Product_ID)
                 return true;
 
             //	Category
-            if (M_Product_Category_ID != 0)
-                return GetM_Product_Category_ID() == M_Product_Category_ID;
+            if (VAM_ProductCategory_ID != 0)
+                return GetVAM_ProductCategory_ID() == VAM_ProductCategory_ID;
 
             //	Look up Category of Product
-            return MProductCategory.IsCategory(GetM_Product_Category_ID(), M_Product_ID);
+            return MProductCategory.IsCategory(GetVAM_ProductCategory_ID(), VAM_Product_ID);
         }
 
         /// <summary>
@@ -111,10 +111,10 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MDiscountSchemaBreak[");
             sb.Append(Get_ID()).Append("-Seq=").Append(GetSeqNo());
-            if (GetM_Product_Category_ID() != 0)
-                sb.Append(",M_Product_Category_ID=").Append(GetM_Product_Category_ID());
-            if (GetM_Product_ID() != 0)
-                sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
+            if (GetVAM_ProductCategory_ID() != 0)
+                sb.Append(",VAM_ProductCategory_ID=").Append(GetVAM_ProductCategory_ID());
+            if (GetVAM_Product_ID() != 0)
+                sb.Append(",VAM_Product_ID=").Append(GetVAM_Product_ID());
             sb.Append(",Break=").Append(GetBreakValue());
             if (IsBPartnerFlatDiscount())
                 sb.Append(",FlatDiscount");

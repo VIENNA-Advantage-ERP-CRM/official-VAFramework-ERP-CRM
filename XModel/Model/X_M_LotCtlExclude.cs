@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_LotCtlExclude
+/** Generated Model for VAM_LotControlExclude
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_LotCtlExclude : PO
+public class X_VAM_LotControlExclude : PO
 {
-public X_M_LotCtlExclude (Context ctx, int M_LotCtlExclude_ID, Trx trxName) : base (ctx, M_LotCtlExclude_ID, trxName)
+public X_VAM_LotControlExclude (Context ctx, int VAM_LotControlExclude_ID, Trx trxName) : base (ctx, VAM_LotControlExclude_ID, trxName)
 {
-/** if (M_LotCtlExclude_ID == 0)
-{
-SetVAF_TableView_ID (0);
-SetIsSOTrx (false);
-SetM_LotCtlExclude_ID (0);
-SetM_LotCtl_ID (0);
-}
- */
-}
-public X_M_LotCtlExclude (Ctx ctx, int M_LotCtlExclude_ID, Trx trxName) : base (ctx, M_LotCtlExclude_ID, trxName)
-{
-/** if (M_LotCtlExclude_ID == 0)
+/** if (VAM_LotControlExclude_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetIsSOTrx (false);
-SetM_LotCtlExclude_ID (0);
-SetM_LotCtl_ID (0);
+SetVAM_LotControlExclude_ID (0);
+SetVAM_LotControl_ID (0);
+}
+ */
+}
+public X_VAM_LotControlExclude (Ctx ctx, int VAM_LotControlExclude_ID, Trx trxName) : base (ctx, VAM_LotControlExclude_ID, trxName)
+{
+/** if (VAM_LotControlExclude_ID == 0)
+{
+SetVAF_TableView_ID (0);
+SetIsSOTrx (false);
+SetVAM_LotControlExclude_ID (0);
+SetVAM_LotControl_ID (0);
 }
  */
 }
@@ -43,7 +43,7 @@ SetM_LotCtl_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_LotCtlExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_LotControlExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_M_LotCtlExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_LotCtlExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_LotControlExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_M_LotCtlExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_M_LotCtlExclude (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_LotControlExclude (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_LotCtlExclude()
+static X_VAM_LotControlExclude()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389063172L;
 public static int Table_ID;
  // =810;
 
-/** TableName=M_LotCtlExclude */
-public static String Table_Name="M_LotCtlExclude";
+/** TableName=VAM_LotControlExclude */
+public static String Table_Name="VAM_LotControlExclude";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_LotCtlExclude[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_LotControlExclude[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -150,32 +150,32 @@ if (oo != null)
 return false;
 }
 /** Set Exclude Lot.
-@param M_LotCtlExclude_ID Exclude the ability to create Lots in Attribute Sets */
-public void SetM_LotCtlExclude_ID (int M_LotCtlExclude_ID)
+@param VAM_LotControlExclude_ID Exclude the ability to create Lots in Attribute Sets */
+public void SetVAM_LotControlExclude_ID (int VAM_LotControlExclude_ID)
 {
-if (M_LotCtlExclude_ID < 1) throw new ArgumentException ("M_LotCtlExclude_ID is mandatory.");
-Set_ValueNoCheck ("M_LotCtlExclude_ID", M_LotCtlExclude_ID);
+if (VAM_LotControlExclude_ID < 1) throw new ArgumentException ("VAM_LotControlExclude_ID is mandatory.");
+Set_ValueNoCheck ("VAM_LotControlExclude_ID", VAM_LotControlExclude_ID);
 }
 /** Get Exclude Lot.
 @return Exclude the ability to create Lots in Attribute Sets */
-public int GetM_LotCtlExclude_ID() 
+public int GetVAM_LotControlExclude_ID() 
 {
-Object ii = Get_Value("M_LotCtlExclude_ID");
+Object ii = Get_Value("VAM_LotControlExclude_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lot Control.
-@param M_LotCtl_ID Product Lot Control */
-public void SetM_LotCtl_ID (int M_LotCtl_ID)
+@param VAM_LotControl_ID Product Lot Control */
+public void SetVAM_LotControl_ID (int VAM_LotControl_ID)
 {
-if (M_LotCtl_ID < 1) throw new ArgumentException ("M_LotCtl_ID is mandatory.");
-Set_ValueNoCheck ("M_LotCtl_ID", M_LotCtl_ID);
+if (VAM_LotControl_ID < 1) throw new ArgumentException ("VAM_LotControl_ID is mandatory.");
+Set_ValueNoCheck ("VAM_LotControl_ID", VAM_LotControl_ID);
 }
 /** Get Lot Control.
 @return Product Lot Control */
-public int GetM_LotCtl_ID() 
+public int GetVAM_LotControl_ID() 
 {
-Object ii = Get_Value("M_LotCtl_ID");
+Object ii = Get_Value("VAM_LotControl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

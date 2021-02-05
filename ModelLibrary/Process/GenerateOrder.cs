@@ -135,7 +135,7 @@ namespace ViennaAdvantageServer.Process
                 String sql = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes WHERE DocBaseType = 'SOO' AND DocSubTypeSO = 'SO' AND IsReturnTrx = 'N' AND IsActive = 'Y' AND VAF_Client_ID = "
                             + GetVAF_Client_ID() + " AND VAF_Org_ID IN (0, " + GetVAF_Org_ID() + ") ORDER BY  VAF_Org_ID DESC";
                 int Doctype_id = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                order.SetM_PriceList_ID(fromProject.GetM_PriceList_ID());
+                order.SetVAM_PriceList_ID(fromProject.GetVAM_PriceList_ID());
 
                 order.SetVAB_Project_ID(GetRecord_ID());
                 if (fromProject.GetSalesRep_ID() > 0)
@@ -213,7 +213,7 @@ namespace ViennaAdvantageServer.Process
                     ol = new MOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
-                    ol.SetM_Product_ID(lines[i].GetM_Product_ID(), true);
+                    ol.SetVAM_Product_ID(lines[i].GetVAM_Product_ID(), true);
                     ol.SetQtyEntered(lines[i].GetPlannedQty());
                     ol.SetQtyOrdered(lines[i].GetPlannedQty());
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());

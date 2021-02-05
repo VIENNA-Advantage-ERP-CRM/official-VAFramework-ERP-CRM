@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInOutLineMA
  * Purpose        : Deletion of records from inout table
- * Class Used     : X_M_InOutLineMA
+ * Class Used     : X_VAM_Inv_InOutLineMP
  * Chronological    Development
  * Raghunandan     08-Jun-2009  
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInOutLineMA : X_M_InOutLineMA
+    public class MInOutLineMA : X_VAM_Inv_InOutLineMP
     {
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MInOutLineMA).FullName);
@@ -32,14 +32,14 @@ namespace VAdvantage.Model
         /**
         * 	Get Material Allocations for Line
         *	@param ctx context
-        *	@param M_InOutLine_ID line
+        *	@param VAM_Inv_InOutLine_ID line
         *	@param trxName trx
         *	@return allocations
         */
-        public static MInOutLineMA[] Get(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static MInOutLineMA[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
             List<MInOutLineMA> list = new List<MInOutLineMA>();
-            String sql = "SELECT * FROM M_InOutLineMA WHERE M_InOutLine_ID=" + M_InOutLine_ID;
+            String sql = "SELECT * FROM VAM_Inv_InOutLineMP WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID;
             DataSet ds = null;
             try
             {
@@ -61,41 +61,41 @@ namespace VAdvantage.Model
         }
 
         /*	Delete all Material Allocation for InOut
-        *	@param M_InOut_ID shipment
+        *	@param VAM_Inv_InOut_ID shipment
         *	@param trxName transaction
         *	@return number of rows deleted or -1 for error
         */
-        public static int DeleteInOutMA(int M_InOut_ID, Trx trxName)
+        public static int DeleteInOutMA(int VAM_Inv_InOut_ID, Trx trxName)
         {
-            String sql = "DELETE FROM M_InOutLineMA ma WHERE EXISTS "
-                + "(SELECT * FROM M_InOutLine l WHERE l.M_InOutLine_ID=ma.M_InOutLine_ID"
-                + " AND M_InOut_ID=" + M_InOut_ID + ")";
+            String sql = "DELETE FROM VAM_Inv_InOutLineMP ma WHERE EXISTS "
+                + "(SELECT * FROM VAM_Inv_InOutLine l WHERE l.VAM_Inv_InOutLine_ID=ma.VAM_Inv_InOutLine_ID"
+                + " AND VAM_Inv_InOut_ID=" + VAM_Inv_InOut_ID + ")";
             //return DataBase.executeUpdate(sql, trxName);
             return DataBase.DB.ExecuteQuery(sql, null, trxName);
         }
 
         /*	Delete all Material Allocation for InOutLine
-        *	@param M_InOutLine_ID Shipment Line
+        *	@param VAM_Inv_InOutLine_ID Shipment Line
         *	@param trxName transaction
         *	@return number of rows deleted or -1 for error
         */
-        public static int DeleteInOutLineMA(int M_InOutLine_ID, Trx trxName)
+        public static int DeleteInOutLineMA(int VAM_Inv_InOutLine_ID, Trx trxName)
         {
-            String sql = "DELETE FROM M_InOutLineMA ma WHERE EXISTS "
-                + "(SELECT * FROM M_InOutLine l WHERE l.M_InOutLine_ID=ma.M_InOutLine_ID"
-                + " AND M_InOutLine_ID=" + M_InOutLine_ID + ")";
+            String sql = "DELETE FROM VAM_Inv_InOutLineMP ma WHERE EXISTS "
+                + "(SELECT * FROM VAM_Inv_InOutLine l WHERE l.VAM_Inv_InOutLine_ID=ma.VAM_Inv_InOutLine_ID"
+                + " AND VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID + ")";
             return DataBase.DB.ExecuteQuery(sql, null, trxName);
         }
 
         /*	Standard Constructor
          *	@param ctx context
-         *	@param M_InOutLineMA_ID ignored
+         *	@param VAM_Inv_InOutLineMP_ID ignored
          *	@param trxName trx
          */
-        public MInOutLineMA(Ctx ctx, int M_InOutLineMA_ID, Trx trxName)
-            : base(ctx, M_InOutLineMA_ID, trxName)
+        public MInOutLineMA(Ctx ctx, int VAM_Inv_InOutLineMP_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineMP_ID, trxName)
         {
-            if (M_InOutLineMA_ID != 0)
+            if (VAM_Inv_InOutLineMP_ID != 0)
             {
                 throw new ArgumentException("Multi-Key");
             }
@@ -116,16 +116,16 @@ namespace VAdvantage.Model
         /**
         * 	Parent Constructor
         *	@param parent parent
-        *	@param M_AttributeSetInstance_ID asi
+        *	@param VAM_PFeature_SetInstance_ID asi
         *	@param MovementQty qty
         */
-        public MInOutLineMA(MInOutLine parent, int M_AttributeSetInstance_ID, Decimal MovementQty)
+        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal MovementQty)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_InOutLine_ID(parent.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(parent.GetVAM_Inv_InOutLine_ID());
             //
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(MovementQty);
         }
 
@@ -133,16 +133,16 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="movementQty"></param>
         /// <param name="MMPloicyDate"></param>
-        public MInOutLineMA(MInOutLine parent, int M_AttributeSetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_InOutLine_ID(parent.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(parent.GetVAM_Inv_InOutLine_ID());
             //
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(movementQty);
             if (MMPloicyDate == null)
             {
@@ -155,20 +155,20 @@ namespace VAdvantage.Model
         /// Is Used to Get or Create  Instance of MInoutLineMA (Attribute)
         /// </summary>
         /// <param name="line"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="MovementQty"></param>
         /// <param name="DateMaterialPolicy"></param>
         /// <returns></returns>
-        public static MInOutLineMA GetOrCreate(MInOutLine line, int M_AttributeSetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        public static MInOutLineMA GetOrCreate(MInOutLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
         {
             MInOutLineMA retValue = null;
-            String sql = "SELECT * FROM M_InoutLineMA " +
-                         @" WHERE  M_InOutLine_ID = " + line.GetM_InOutLine_ID() +
+            String sql = "SELECT * FROM VAM_Inv_InOutLineMP " +
+                         @" WHERE  VAM_Inv_InOutLine_ID = " + line.GetVAM_Inv_InOutLine_ID() +
                          @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
-            if (M_AttributeSetInstance_ID == 0)
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+            if (VAM_PFeature_SetInstance_ID == 0)
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             else
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MInOutLineMA(line, M_AttributeSetInstance_ID, MovementQty, DateMaterialPolicy);
+                retValue = new MInOutLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
             else
                 retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
             return retValue;
@@ -208,14 +208,14 @@ namespace VAdvantage.Model
         /**
 	 * 	Get Material Allocations from shipment which is not returned
 	 *	@param ctx context
-	 *	@param M_InOutLine_ID line
+	 *	@param VAM_Inv_InOutLine_ID line
 	 *	@param trxName trx
 	 *	@return allocations
 	 */
-        public static MInOutLineMA[] getNonReturned(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static MInOutLineMA[] getNonReturned(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
             List<MInOutLineMA> list = new List<MInOutLineMA>();
-            String sql = "SELECT * FROM M_InOutLineMA WHERE M_InOutLine_ID=" + M_InOutLine_ID + " ORDER BY MMPolicyDate ASC";
+            String sql = "SELECT * FROM VAM_Inv_InOutLineMP WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID + " ORDER BY MMPolicyDate ASC";
             DataSet ds = null;
             try
             {
@@ -239,17 +239,17 @@ namespace VAdvantage.Model
          // Mohit 20-8-2015 VAWMS
            /***  Parent Constructor
            * @param parent parent
-           * @param M_AttributeSetInstance_ID asi
+           * @param VAM_PFeature_SetInstance_ID asi
            * @param MovementQty qty
            *  @param QtyAllocated qty*/
-        public MInOutLineMA(MInOutLine parent, int M_AttributeSetInstance_ID,
+        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID,
                                 Decimal MovementQty, Decimal QtyAllocated)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_InOutLine_ID(parent.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(parent.GetVAM_Inv_InOutLine_ID());
             //
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(MovementQty);
             SetQtyAllocated(QtyAllocated);
         } // MInOutLineMA
@@ -262,8 +262,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MInOutLineMA[");
-            sb.Append("M_InOutLine_ID=").Append(GetM_InOutLine_ID())
-                .Append(",M_AttributeSetInstance_ID=").Append(GetM_AttributeSetInstance_ID())
+            sb.Append("VAM_Inv_InOutLine_ID=").Append(GetVAM_Inv_InOutLine_ID())
+                .Append(",VAM_PFeature_SetInstance_ID=").Append(GetVAM_PFeature_SetInstance_ID())
                 .Append(", Qty=").Append(GetMovementQty())
                 .Append("]");
             return sb.ToString();

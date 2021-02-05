@@ -95,8 +95,8 @@ namespace VAdvantage.Model
                 if (rr.IsTimeBased())
                 {
                     /**	Get InvoiveQty
-                    SELECT	QtyInvoiced, M_Product_ID 
-                      INTO	v_Qty, v_M_Product_ID
+                    SELECT	QtyInvoiced, VAM_Product_ID 
+                      INTO	v_Qty, v_VAM_Product_ID
                     FROM	VAB_InvoiceLine 
                     WHERE 	VAB_InvoiceLine_ID=:new.VAB_InvoiceLine_ID;
                     --	Insert
@@ -104,12 +104,12 @@ namespace VAdvantage.Model
                     INSERT INTO VAB_SLevelCriteria
                         (VAB_SLevelCriteria_ID, C_RevenueRecognition_Plan_ID,
                         VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,
-                        M_Product_ID, Description, ServiceLevelInvoiced, ServiceLevelProvided,
+                        VAM_Product_ID, Description, ServiceLevelInvoiced, ServiceLevelProvided,
                         Processing,Processed)
                     VALUES
                         (v_NextNo, :new.C_RevenueRecognition_Plan_ID,
                         :new.VAF_Client_ID,:new.VAF_Org_ID,'Y',SysDate,:new.CreatedBy,SysDate,:new.UpdatedBy,
-                        v_M_Product_ID, NULL, v_Qty, 0,
+                        v_VAM_Product_ID, NULL, v_Qty, 0,
                         'N', 'N');
                     **/
                 }
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
             SetVAB_InvoiceLine_ID(invoiceLine.GetVAB_InvoiceLine_ID());
             SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
-            bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
+            bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetVAM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
             if (invoice.GetVAB_Currency_ID() != ToCurrency)
             {

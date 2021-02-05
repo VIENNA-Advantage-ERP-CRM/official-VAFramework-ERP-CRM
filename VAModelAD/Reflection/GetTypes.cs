@@ -33,7 +33,7 @@ namespace VAModelAD.Reflection
                 {
                     ele = X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner;
                 }
-                else if (columnName.Equals("M_Product_ID", StringComparison.OrdinalIgnoreCase))
+                else if (columnName.Equals("VAM_Product_ID", StringComparison.OrdinalIgnoreCase))
                 {
                     ele = X_VAB_AccountBook_Element.ELEMENTTYPE_Product;
                 }

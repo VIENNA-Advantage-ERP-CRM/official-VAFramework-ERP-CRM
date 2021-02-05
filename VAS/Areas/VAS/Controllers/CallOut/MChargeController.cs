@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MChargeController:Controller
+    public class MVABChargeController:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MChargeModel objChargeModel = new MChargeModel();
+                MVABChargeModel objChargeModel = new MVABChargeModel();
                 retJSON = JsonConvert.SerializeObject(objChargeModel.GetCharge(ctx,fields));
             }
            

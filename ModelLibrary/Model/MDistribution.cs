@@ -40,7 +40,7 @@ namespace VAdvantage.Model
 		return Get (acct.GetCtx(), acct.GetVAB_AccountBook_ID(), 
 			PostingType, VAB_DocTypes_ID,
 			acct.GetVAF_Org_ID(), acct.GetAccount_ID(),
-			acct.GetM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetVAB_Project_ID(),
+			acct.GetVAM_Product_ID(), acct.GetVAB_BusinessPartner_ID(), acct.GetVAB_Project_ID(),
 			acct.GetVAB_Promotion_ID(), acct.GetVAB_BillingCode_ID(), acct.GetVAF_OrgTrx_ID(),
 			acct.GetVAB_SalesRegionState_ID(), acct.GetC_LocTo_ID(), acct.GetC_LocFrom_ID(),
 			acct.GetUser1_ID(), acct.GetUser2_ID());
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_DocTypes_ID">document type</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="Account_ID">account</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_BusinessPartner_ID">partner</param>
         /// <param name="VAB_Project_ID">project</param>
         /// <param name="VAB_Promotion_ID">campaign</param>
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
 	public static MDistribution[] Get (Ctx ctx, int VAB_AccountBook_ID, 
 		String PostingType, int VAB_DocTypes_ID,
 		int VAF_Org_ID, int Account_ID,
-		int M_Product_ID, int VAB_BusinessPartner_ID, int VAB_Project_ID,
+		int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAB_Project_ID,
 		int VAB_Promotion_ID, int VAB_BillingCode_ID, int VAF_OrgTrx_ID,
 		int VAB_SalesRegionState_ID, int C_LocTo_ID, int C_LocFrom_ID,
 		int User1_ID, int User2_ID)
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
             {
 				continue;
             }
-			if (!distribution.IsAnyProduct() && distribution.GetM_Product_ID() != M_Product_ID)
+			if (!distribution.IsAnyProduct() && distribution.GetVAM_Product_ID() != VAM_Product_ID)
             {
 				continue;
             }
@@ -514,9 +514,9 @@ namespace VAdvantage.Model
         {
 			SetVAF_OrgTrx_ID(0);
         }
-		if (IsAnyProduct() && GetM_Product_ID() != 0)
+		if (IsAnyProduct() && GetVAM_Product_ID() != 0)
         {
-			SetM_Product_ID(0);
+			SetVAM_Product_ID(0);
         }
 		if (IsAnyProject() && GetVAB_Project_ID() != 0)
         {

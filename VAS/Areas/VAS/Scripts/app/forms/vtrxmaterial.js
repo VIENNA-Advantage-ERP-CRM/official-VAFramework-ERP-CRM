@@ -96,8 +96,8 @@
             var $divLocatorInputwrap = $("<div class='input-group vis-input-wrap'>");
             var $divLocatorCtrlwrap = $("<div class='vis-control-wrap'>");
             var $divLocatorBtnwrap = $("<div class='input-group-append'>");
-            var lookupLocator = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Locator_ID", 0, false, "");
-            $locator = new VIS.Controls.VTextBoxButton("M_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
+            var lookupLocator = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "VAM_Locator_ID", 0, false, "");
+            $locator = new VIS.Controls.VTextBoxButton("VAM_Locator_ID", false, false, true, VIS.DisplayType.Search, lookupLocator);
             $divLocatorInputwrap.append($divLocatorCtrlwrap);
             $divLocatorCtrlwrap.append($locator.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
             $divLocatorInputwrap.append($divLocatorBtnwrap);
@@ -121,8 +121,8 @@
             var $divProductInputwrap = $("<div class='input-group vis-input-wrap'>");
             var $divProductCtrlwrap = $("<div class='vis-control-wrap'>");
             var $divProductBtnwrap = $("<div class='input-group-append'>");
-            var lookupProduct = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "M_Product_ID", 0, false, "");
-            $product = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
+            var lookupProduct = VIS.MLookupFactory.get(VIS.context, 0, 0, VIS.DisplayType.Search, "VAM_Product_ID", 0, false, "");
+            $product = new VIS.Controls.VTextBoxButton("VAM_Product_ID", false, false, true, VIS.DisplayType.Search, lookupProduct);
             $divProductInputwrap.append($divProductCtrlwrap);
             $divProductCtrlwrap.append($product.getControl().attr('data-placeholder', '').attr('placeholder', ' ').attr('data-hasbtn', ' '));
             $divProductInputwrap.append($divProductBtnwrap);
@@ -169,7 +169,7 @@
 
             var $divLocator = $("<div class='vis-paymentselect-field'>");
             $divLocator.append($divLocatorInputwrap);            
-            $divLocatorCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + " </label>"));
+            $divLocatorCtrlwrap.append($("<label>" + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Locator_ID") + " </label>"));
             $divInfoinn.append($divLocator);
 
             var $divProduct = $("<div class='vis-paymentselect-field'>");
@@ -346,12 +346,12 @@
             //  Locator
             value = $locator.getValue();
             if (value != null && value.toString().length > 0) {
-                localquery.addRestriction("M_Locator_ID", VIS.Query.prototype.EQUAL, value);
+                localquery.addRestriction("VAM_Locator_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  Product
             value = $product.getValue();;
             if (value != null && value.toString().length > 0) {
-                localquery.addRestriction("M_Product_ID", VIS.Query.prototype.EQUAL, value);
+                localquery.addRestriction("VAM_Product_ID", VIS.Query.prototype.EQUAL, value);
             }
             //  MovementType
             value = $cmbMoventType.getValue();
@@ -390,7 +390,7 @@
             var SQL = null;
             var params = [];
             //
-            var lineID = VIS.context.getContextAsInt($self.windowNo, "M_InOutLine_ID");
+            var lineID = VIS.context.getContextAsInt($self.windowNo, "VAM_Inv_InOutLine_ID");
             if (lineID != 0) {
 
                 if (VIS.context.getContext($self.windowNo, "MovementType").equals("C-")) {
@@ -406,35 +406,35 @@
                     VAF_Screen_ID = 411;     //  Vendor Return
                 }
 
-                ColumnName = "M_InOut_ID";
+                ColumnName = "VAM_Inv_InOut_ID";
                 SQL = "VIS_140";
                 params[0] = new VIS.DB.SqlParam("@lineID", lineID);
             }
             else {
-                lineID = VIS.context.getContextAsInt($self.windowNo, "M_InventoryLine_ID");
+                lineID = VIS.context.getContextAsInt($self.windowNo, "VAM_InventoryLine_ID");
                 if (lineID != 0) {
-                    //  log.Fine("M_InventoryLine_ID=" + lineID);
+                    //  log.Fine("VAM_InventoryLine_ID=" + lineID);
                     VAF_Screen_ID = 168;
-                    ColumnName = "M_Inventory_ID";
+                    ColumnName = "VAM_Inventory_ID";
                     SQL = "VIS_141";
                     params[0] = new VIS.DB.SqlParam("@lineID", lineID);
-                    ///SQL = "SELECT M_Inventory_ID FROM M_InventoryLine WHERE M_InventoryLine_ID=" + lineID;
+                    ///SQL = "SELECT VAM_Inventory_ID FROM VAM_InventoryLine WHERE VAM_InventoryLine_ID=" + lineID;
                 }
                 else {
-                    lineID = VIS.context.getContextAsInt($self.windowNo, "M_MovementLine_ID");
+                    lineID = VIS.context.getContextAsInt($self.windowNo, "VAM_InvTrf_Line_ID");
                     if (lineID != 0) {
-                        // log.Fine("M_MovementLine_ID=" + lineID);
+                        // log.Fine("VAM_InvTrf_Line_ID=" + lineID);
                         VAF_Screen_ID = 170;
-                        ColumnName = "M_Movement_ID";
+                        ColumnName = "VAM_InventoryTransfer_ID";
                         SQL = "VIS_142";
                         params[0] = new VIS.DB.SqlParam("@lineID", lineID);
                     }
                     else {
-                        lineID = VIS.context.getContextAsInt($self.windowNo, "M_ProductionLine_ID");
+                        lineID = VIS.context.getContextAsInt($self.windowNo, "VAM_ProductionLine_ID");
                         if (lineID != 0) {
-                            // log.Fine("M_ProductionLine_ID=" + lineID);
+                            // log.Fine("VAM_ProductionLine_ID=" + lineID);
                             VAF_Screen_ID = 191;
-                            ColumnName = "M_Production_ID";
+                            ColumnName = "VAM_Production_ID";
                             SQL = "VIS_143";
                             params[0] = new VIS.DB.SqlParam("@lineID", lineID);
                         }

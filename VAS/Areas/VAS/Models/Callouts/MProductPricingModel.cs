@@ -22,24 +22,24 @@ namespace VIS.Models
         public ProductDataOut GetProductPricing(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID, VAB_BusinessPartner_ID, M_PriceList_ID, M_PriceList_Version_ID, M_AttributeSetInstance_ID = 0, countED011 = 0, VAB_UOM_ID = 0;
+            int VAM_Product_ID, VAB_BusinessPartner_ID, VAM_PriceList_ID, VAM_PriceListVersion_ID, VAM_PFeature_SetInstance_ID = 0, countED011 = 0, VAB_UOM_ID = 0;
             decimal Qty;
             bool isSOTrx;
 
             //Assign parameter value
-            M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
             VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[1].ToString());
             Qty = Util.GetValueOfDecimal(paramValue[2].ToString());
             isSOTrx = Convert.ToBoolean(paramValue[3]);
-            M_PriceList_ID = Util.GetValueOfInt(paramValue[4].ToString());
-            M_PriceList_Version_ID = Util.GetValueOfInt(paramValue[5].ToString());
+            VAM_PriceList_ID = Util.GetValueOfInt(paramValue[4].ToString());
+            VAM_PriceListVersion_ID = Util.GetValueOfInt(paramValue[5].ToString());
             DateTime? orderDate = Util.GetValueOfDateTime(paramValue[6]);
             DateTime? orderDate1 = Util.GetValueOfDateTime(paramValue[7]);
 
             //if (paramValue.Length > 8)    
             if (paramValue.Length == 9 || paramValue.Length == 11)
             {
-                M_AttributeSetInstance_ID = Util.GetValueOfInt(paramValue[8].ToString());
+                VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(paramValue[8].ToString());
             }
 
             if (paramValue.Length > 9)
@@ -59,18 +59,18 @@ namespace VIS.Models
             //End Assign parameter value
 
             MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
-                        M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
+                        VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
-            //var M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
-            pp.SetM_PriceList_ID(M_PriceList_ID);
+            //var VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
+            pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
             /** PLV is only accurate if PL selected in header */
-            //var M_PriceList_Version_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
-            pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+            //var VAM_PriceListVersion_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceListVersion_ID");
+            pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
 
             //if (paramValue.Length > 8)
             if (paramValue.Length == 9 || paramValue.Length == 11)
             {
-                pp.SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+                pp.SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             }
             //var orderDate = System.Convert.ToDateTime(mTab.getValue("DateOrdered"));
             pp.SetPriceDate(orderDate);
@@ -82,7 +82,7 @@ namespace VIS.Models
             }
 
             //Get product stock
-            MProduct product = MProduct.Get(ctx, M_Product_ID);
+            MProduct product = MProduct.Get(ctx, VAM_Product_ID);
 
 
             ProductDataOut objInfo = new ProductDataOut

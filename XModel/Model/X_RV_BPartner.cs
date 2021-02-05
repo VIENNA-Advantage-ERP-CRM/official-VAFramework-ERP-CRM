@@ -1145,34 +1145,34 @@ namespace VAdvantage.Model
             return (String)Get_Value("LastResult");
         }
         /** Set Discount Schema.
-        @param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
-        public void SetM_DiscountSchema_ID(int M_DiscountSchema_ID)
+        @param VAM_DiscountCalculation_ID Schema to calculate price lists or the trade discount percentage */
+        public void SetVAM_DiscountCalculation_ID(int VAM_DiscountCalculation_ID)
         {
-            if (M_DiscountSchema_ID <= 0) Set_ValueNoCheck("M_DiscountSchema_ID", null);
+            if (VAM_DiscountCalculation_ID <= 0) Set_ValueNoCheck("VAM_DiscountCalculation_ID", null);
             else
-                Set_ValueNoCheck("M_DiscountSchema_ID", M_DiscountSchema_ID);
+                Set_ValueNoCheck("VAM_DiscountCalculation_ID", VAM_DiscountCalculation_ID);
         }
         /** Get Discount Schema.
         @return Schema to calculate price lists or the trade discount percentage */
-        public int GetM_DiscountSchema_ID()
+        public int GetVAM_DiscountCalculation_ID()
         {
-            Object ii = Get_Value("M_DiscountSchema_ID");
+            Object ii = Get_Value("VAM_DiscountCalculation_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Price List.
-        @param M_PriceList_ID Unique identifier of a Price List */
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        @param VAM_PriceList_ID Unique identifier of a Price List */
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            if (M_PriceList_ID <= 0) Set_ValueNoCheck("M_PriceList_ID", null);
+            if (VAM_PriceList_ID <= 0) Set_ValueNoCheck("VAM_PriceList_ID", null);
             else
-                Set_ValueNoCheck("M_PriceList_ID", M_PriceList_ID);
+                Set_ValueNoCheck("VAM_PriceList_ID", VAM_PriceList_ID);
         }
         /** Get Price List.
         @return Unique identifier of a Price List */
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            Object ii = Get_Value("M_PriceList_ID");
+            Object ii = Get_Value("VAM_PriceList_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

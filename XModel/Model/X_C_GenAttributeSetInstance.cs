@@ -206,18 +206,18 @@ public String GetLot()
 return (String)Get_Value("Lot");
 }
 /** Set Lot.
-@param M_Lot_ID Product Lot Definition */
-public void SetM_Lot_ID (int M_Lot_ID)
+@param VAM_Lot_ID Product Lot Definition */
+public void SetVAM_Lot_ID (int VAM_Lot_ID)
 {
-if (M_Lot_ID <= 0) Set_Value ("M_Lot_ID", null);
+if (VAM_Lot_ID <= 0) Set_Value ("VAM_Lot_ID", null);
 else
-Set_Value ("M_Lot_ID", M_Lot_ID);
+Set_Value ("VAM_Lot_ID", VAM_Lot_ID);
 }
 /** Get Lot.
 @return Product Lot Definition */
-public int GetM_Lot_ID() 
+public int GetVAM_Lot_ID() 
 {
-Object ii = Get_Value("M_Lot_ID");
+Object ii = Get_Value("VAM_Lot_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

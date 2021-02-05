@@ -23,7 +23,7 @@
             {
             SetVAB_DocTypes_ID (0);
             SetM_TaskList_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Warehouse_ID (0);
             }
              */
         }
@@ -34,7 +34,7 @@
             {
             SetVAB_DocTypes_ID (0);
             SetM_TaskList_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Warehouse_ID (0);
             }
              */
         }
@@ -286,17 +286,17 @@
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

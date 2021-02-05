@@ -11,28 +11,28 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAVAGL_FundAllow
+/** Generated Model for VAGL_FundAllow
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAVAGL_FundAllow : PO
+public class X_VAGL_FundAllow : PO
 {
-public X_VAVAGL_FundAllow (Context ctx, int VAVAGL_FundAllow_ID, Trx trxName) : base (ctx, VAVAGL_FundAllow_ID, trxName)
+public X_VAGL_FundAllow (Context ctx, int VAGL_FundAllow_ID, Trx trxName) : base (ctx, VAGL_FundAllow_ID, trxName)
 {
-/** if (VAVAGL_FundAllow_ID == 0)
+/** if (VAGL_FundAllow_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetVAVAGL_FundAllow_ID (0);
+SetVAGL_FundAllow_ID (0);
 SetVAGL_Fund_ID (0);
 SetName (null);
 }
  */
 }
-public X_VAVAGL_FundAllow (Ctx ctx, int VAVAGL_FundAllow_ID, Trx trxName) : base (ctx, VAVAGL_FundAllow_ID, trxName)
+public X_VAGL_FundAllow (Ctx ctx, int VAGL_FundAllow_ID, Trx trxName) : base (ctx, VAGL_FundAllow_ID, trxName)
 {
-/** if (VAVAGL_FundAllow_ID == 0)
+/** if (VAGL_FundAllow_ID == 0)
 {
 SetVAB_Acct_Element_ID (0);
-SetVAVAGL_FundAllow_ID (0);
+SetVAGL_FundAllow_ID (0);
 SetVAGL_Fund_ID (0);
 SetName (null);
 }
@@ -43,7 +43,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_FundAllow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_FundAllow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_VAVAGL_FundAllow (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_FundAllow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAGL_FundAllow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_VAVAGL_FundAllow (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAGL_FundAllow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAGL_FundAllow (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAVAGL_FundAllow()
+static X_VAGL_FundAllow()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389059755L;
 public static int Table_ID;
  // =824;
 
-/** TableName=VAVAGL_FundAllow */
-public static String Table_Name="VAVAGL_FundAllow";
+/** TableName=VAGL_FundAllow */
+public static String Table_Name="VAGL_FundAllow";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAVAGL_FundAllow[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAGL_FundAllow[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Account Element.
@@ -149,17 +149,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Fund Restriction.
-@param VAVAGL_FundAllow_ID Restriction of Funds */
-public void SetVAVAGL_FundAllow_ID (int VAVAGL_FundAllow_ID)
+@param VAGL_FundAllow_ID Restriction of Funds */
+public void SetVAGL_FundAllow_ID (int VAGL_FundAllow_ID)
 {
-if (VAVAGL_FundAllow_ID < 1) throw new ArgumentException ("VAVAGL_FundAllow_ID is mandatory.");
-Set_ValueNoCheck ("VAVAGL_FundAllow_ID", VAVAGL_FundAllow_ID);
+if (VAGL_FundAllow_ID < 1) throw new ArgumentException ("VAGL_FundAllow_ID is mandatory.");
+Set_ValueNoCheck ("VAGL_FundAllow_ID", VAGL_FundAllow_ID);
 }
 /** Get Fund Restriction.
 @return Restriction of Funds */
-public int GetVAVAGL_FundAllow_ID() 
+public int GetVAGL_FundAllow_ID() 
 {
-Object ii = Get_Value("VAVAGL_FundAllow_ID");
+Object ii = Get_Value("VAGL_FundAllow_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

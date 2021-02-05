@@ -22,7 +22,7 @@ public X_VAB_TaxComputationAcct (Context ctx, int VAB_TaxComputationAcct_ID, Trx
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_TaxComputationAcct_ID (0);
-SetVAVAB_TaxRateComputation_ID (0);
+SetVAB_TaxRateComputation_ID (0);
 SetActual_Acct_Detail_ID (0);
 }
  */
@@ -33,7 +33,7 @@ public X_VAB_TaxComputationAcct (Ctx ctx, int VAB_TaxComputationAcct_ID, Trx trx
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_TaxComputationAcct_ID (0);
-SetVAVAB_TaxRateComputation_ID (0);
+SetVAB_TaxRateComputation_ID (0);
 SetActual_Acct_Detail_ID (0);
 }
  */
@@ -248,17 +248,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Tax Declaration.
-@param VAVAB_TaxRateComputation_ID Define the declaration to the tax authorities */
-public void SetVAVAB_TaxRateComputation_ID (int VAVAB_TaxRateComputation_ID)
+@param VAB_TaxRateComputation_ID Define the declaration to the tax authorities */
+public void SetVAB_TaxRateComputation_ID (int VAB_TaxRateComputation_ID)
 {
-if (VAVAB_TaxRateComputation_ID < 1) throw new ArgumentException ("VAVAB_TaxRateComputation_ID is mandatory.");
-Set_ValueNoCheck ("VAVAB_TaxRateComputation_ID", VAVAB_TaxRateComputation_ID);
+if (VAB_TaxRateComputation_ID < 1) throw new ArgumentException ("VAB_TaxRateComputation_ID is mandatory.");
+Set_ValueNoCheck ("VAB_TaxRateComputation_ID", VAB_TaxRateComputation_ID);
 }
 /** Get Tax Declaration.
 @return Define the declaration to the tax authorities */
-public int GetVAVAB_TaxRateComputation_ID() 
+public int GetVAB_TaxRateComputation_ID() 
 {
-Object ii = Get_Value("VAVAB_TaxRateComputation_ID");
+Object ii = Get_Value("VAB_TaxRateComputation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

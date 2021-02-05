@@ -16,7 +16,7 @@
         var f_Description = new VIS.Controls.VLabel();
         //  Editors for Query
         var f_Alias = null, f_Combination = null, f_VAF_Org_ID = null, f_Account_ID = null, f_SubAcct_ID = null,
-            f_M_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
+            f_VAM_Product_ID = null, f_VAB_BusinessPartner_ID = null, f_VAB_Promotion_ID = null, f_C_LocFrom_ID = null, f_C_LocTo_ID = null,
             f_VAB_Project_ID = null, f_VAB_SalesRegionState_ID = null, f_VAF_OrgTrx_ID = null, f_VAB_BillingCode_ID = null,
             f_User1_ID = null, f_User2_ID = null, f_UserElement1_ID = null, f_UserElement2_ID = null, f_UserElement3_ID = null,
             f_UserElement4_ID = null, f_UserElement5_ID = null, f_UserElement6_ID = null, f_UserElement7_ID = null, f_UserElement8_ID = null, f_UserElement9_ID = null;
@@ -459,10 +459,10 @@
                             addLine(field, f_SubAcct_ID, isMandatory, lblNames, eLEMENTTYPE_SubAccount);
                         }
                         else if (type.equals(eLEMENTTYPE_Product)) {
-                            var field = _mTab.getField("M_Product_ID");
-                            f_M_Product_ID = VIS.VControlFactory.getControl(_mTab, field, false);
-                            f_M_Product_ID.getBtn();
-                            addLine(field, f_M_Product_ID, isMandatory, lblNames, eLEMENTTYPE_Product);
+                            var field = _mTab.getField("VAM_Product_ID");
+                            f_VAM_Product_ID = VIS.VControlFactory.getControl(_mTab, field, false);
+                            f_VAM_Product_ID.getBtn();
+                            addLine(field, f_VAM_Product_ID, isMandatory, lblNames, eLEMENTTYPE_Product);
                         }
                         else if (type.equals(eLEMENTTYPE_BPartner)) {
                             var field = _mTab.getField("VAB_BusinessPartner_ID");
@@ -1002,8 +1002,8 @@
                     localquery.addRestriction("VAB_SubAcct_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_SubAcct_ID.getValue()));
 
                 //	Product
-                if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
-                    localquery.addRestriction("M_Product_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_M_Product_ID.getValue()));
+                if (f_VAM_Product_ID != null && !isNull(f_VAM_Product_ID.getValue()))
+                    localquery.addRestriction("VAM_Product_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAM_Product_ID.getValue()));
                 //	BPartner
                 if (f_VAB_BusinessPartner_ID != null && !isNull(f_VAB_BusinessPartner_ID.getValue()))
                     localquery.addRestriction("VAB_BusinessPartner_ID", localquery.EQUAL, VIS.Utility.Util.getValueOfInt(f_VAB_BusinessPartner_ID.getValue()));
@@ -1085,8 +1085,8 @@
                     f_SubAcct_ID.setValue(null);
 
                 //	Product
-                if (f_M_Product_ID != null)
-                    f_M_Product_ID.setValue(null);
+                if (f_VAM_Product_ID != null)
+                    f_VAM_Product_ID.setValue(null);
                 //	BPartner
                 if (f_VAB_BusinessPartner_ID != null)
                     f_VAB_BusinessPartner_ID.setValue(null);
@@ -1195,8 +1195,8 @@
                 //            sql = sql.concat("=").concat(value).concat(" AND ");
                 //    }
                 //    else if (type.equals(eLEMENTTYPE_Product)) {
-                //        value = f_M_Product_ID.getValue();
-                //        sql = sql.concat("M_Product_ID");
+                //        value = f_VAM_Product_ID.getValue();
+                //        sql = sql.concat("VAM_Product_ID");
                 //        if (isNull(value))
                 //            sql = sql.concat(" IS NULL AND ");
                 //        else
@@ -1475,9 +1475,9 @@
                 var VAB_SubAcct_ID = 0;
                 if (f_SubAcct_ID != null && (f_SubAcct_ID.getValue() != null))
                     VAB_SubAcct_ID = f_SubAcct_ID.getValue();
-                var M_Product_ID = 0;
-                if (f_M_Product_ID != null && !isNull(f_M_Product_ID.getValue()))
-                    M_Product_ID = f_M_Product_ID.getValue();
+                var VAM_Product_ID = 0;
+                if (f_VAM_Product_ID != null && !isNull(f_VAM_Product_ID.getValue()))
+                    VAM_Product_ID = f_VAM_Product_ID.getValue();
                 var VAB_BusinessPartner_ID = 0;
                 if (f_VAB_BusinessPartner_ID != null && !isNull(f_VAB_BusinessPartner_ID.getValue()))
                     VAB_BusinessPartner_ID = f_VAB_BusinessPartner_ID.getValue();
@@ -1579,7 +1579,7 @@
                         VAB_AccountBook_ID: VAB_AccountBook_ID,
                         AD_Account_ID: AD_Account_ID,
                         VAB_SubAcct_ID: VAB_SubAcct_ID,
-                        M_Product_ID: M_Product_ID,
+                        VAM_Product_ID: VAM_Product_ID,
                         VAB_BusinessPartner_ID: VAB_BusinessPartner_ID,
                         VAF_OrgTrx_ID: VAF_OrgTrx_ID,
                         C_LocFrom_ID: C_LocFrom_ID,
@@ -1633,9 +1633,9 @@
                             f_Account_ID.setValue(dr.getInt("Account_ID"));
                         if (f_SubAcct_ID != null)
                             f_SubAcct_ID.setValue(dr.getInt("VAB_SubAcct_ID"));
-                        if (f_M_Product_ID != null) {
-                            if (dr.getInt("M_Product_ID") != 0) {
-                                f_M_Product_ID.setValue(dr.getInt("M_Product_ID"));
+                        if (f_VAM_Product_ID != null) {
+                            if (dr.getInt("VAM_Product_ID") != 0) {
+                                f_VAM_Product_ID.setValue(dr.getInt("VAM_Product_ID"));
                             }
                         }
                         if (f_VAB_BusinessPartner_ID != null) {
@@ -1813,7 +1813,7 @@
             f_Alias = null;
             f_Combination = null;
             f_VAF_Org_ID = null; f_Account_ID = null; f_SubAcct_ID = null;
-            f_M_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
+            f_VAM_Product_ID = null; f_VAB_BusinessPartner_ID = null; f_VAB_Promotion_ID = null; f_C_LocFrom_ID = null; f_C_LocTo_ID = null;
             f_VAB_Project_ID = null; f_VAB_SalesRegionState_ID = null; f_VAF_OrgTrx_ID = null; f_VAB_BillingCode_ID = null;
             f_User1_ID = null; f_User2_ID = null;
             this.log = null;

@@ -36,7 +36,7 @@ namespace VAdvantage.Model
             SetIsExplicitCostAdjustment (false);	// N
             SetIsPostServices (false);	// N
             SetIsTradeDiscountPosted (false);
-            SetM_CostType_ID (0);
+            SetVAM_ProductCostType_ID (0);
             SetName (null);
             SetSeparator (null);	// -
             SetTaxCorrectionType (null);	// N
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
             SetIsExplicitCostAdjustment (false);	// N
             SetIsPostServices (false);	// N
             SetIsTradeDiscountPosted (false);
-            SetM_CostType_ID (0);
+            SetVAM_ProductCostType_ID (0);
             SetName (null);
             SetSeparator (null);	// -
             SetTaxCorrectionType (null);	// N
@@ -379,14 +379,14 @@ namespace VAdvantage.Model
             return (String)Get_Value("CostingMethod");
         }
 
-        /** Set Cost Element. @param M_CostElement_ID Product Cost Element */
-        public void SetM_CostElement_ID(int M_CostElement_ID)
+        /** Set Cost Element. @param VAM_ProductCostElement_ID Product Cost Element */
+        public void SetVAM_ProductCostElement_ID(int VAM_ProductCostElement_ID)
         {
-            if (M_CostElement_ID <= 0) Set_Value("M_CostElement_ID", null);
+            if (VAM_ProductCostElement_ID <= 0) Set_Value("VAM_ProductCostElement_ID", null);
             else
-                Set_Value("M_CostElement_ID", M_CostElement_ID);
+                Set_Value("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
         }/** Get Cost Element. @return Product Cost Element */
-        public int GetM_CostElement_ID() { Object ii = Get_Value("M_CostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_ProductCostElement_ID() { Object ii = Get_Value("VAM_ProductCostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Description.
         @param Description Optional short description of the record */
@@ -640,17 +640,17 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Cost Type.
-        @param M_CostType_ID Type of Cost (e.g. Current, Plan, Future) */
-        public void SetM_CostType_ID(int M_CostType_ID)
+        @param VAM_ProductCostType_ID Type of Cost (e.g. Current, Plan, Future) */
+        public void SetVAM_ProductCostType_ID(int VAM_ProductCostType_ID)
         {
-            if (M_CostType_ID < 1) throw new ArgumentException("M_CostType_ID is mandatory.");
-            Set_Value("M_CostType_ID", M_CostType_ID);
+            if (VAM_ProductCostType_ID < 1) throw new ArgumentException("VAM_ProductCostType_ID is mandatory.");
+            Set_Value("VAM_ProductCostType_ID", VAM_ProductCostType_ID);
         }
         /** Get Cost Type.
         @return Type of Cost (e.g. Current, Plan, Future) */
-        public int GetM_CostType_ID()
+        public int GetVAM_ProductCostType_ID()
         {
-            Object ii = Get_Value("M_CostType_ID");
+            Object ii = Get_Value("VAM_ProductCostType_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MPackageLine
  * Purpose        : Package Line Model
- * Class Used     : X_M_PackageLine
+ * Class Used     : X_VAM_PackagingLine
  * Chronological    Development
  * Raghunandan     21-Oct-2009
   ******************************************************/
@@ -24,21 +24,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPackageLine : X_M_PackageLine
+    public class MPackageLine : X_VAM_PackagingLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PackageLine_ID">id</param>
+        /// <param name="VAM_PackagingLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPackageLine(Ctx ctx, int M_PackageLine_ID, Trx trxName)
-            : base(ctx, M_PackageLine_ID, trxName)
+        public MPackageLine(Ctx ctx, int VAM_PackagingLine_ID, Trx trxName)
+            : base(ctx, VAM_PackagingLine_ID, trxName)
         {
-            if (M_PackageLine_ID == 0)
+            if (VAM_PackagingLine_ID == 0)
             {
-                //	setM_Package_ID (0);
-                //	setM_InOutLine_ID (0);
+                //	setVAM_Packaging_ID (0);
+                //	setVAM_Inv_InOutLine_ID (0);
                 SetQty(Env.ZERO);
             }
         }
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_Package_ID(parent.GetM_Package_ID());
+            SetVAM_Packaging_ID(parent.GetVAM_Packaging_ID());
         }
 
         /// <summary>
@@ -72,14 +72,14 @@ namespace VAdvantage.Model
         /// <param name="line">line</param>
         public void SetInOutLine(MInOutLine line, DateTime? moveDate, String DocumentNo, Int32 Client_ID, Int32 Org_ID)
         {
-            SetM_InOutLine_ID(line.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
             SetQty(line.GetMovementQty());
             //Edited :Arpit Rai ,13 Sept,2017 
             //to Set Client,Org,Confirm Date,Confirm Date, Scrapped Qty, Difference Qty & Reference No
             SetVAF_Client_ID(Client_ID);
             SetVAF_Org_ID(Org_ID);
-            SetM_Product_ID(line.GetM_Product_ID());
-            SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
+            SetVAM_Product_ID(line.GetVAM_Product_ID());
+            SetVAM_PFeature_SetInstance_ID(line.GetVAM_PFeature_SetInstance_ID());
             if (Util.GetValueOfInt(DB.ExecuteQuery("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'")) > 0
                )
             {
@@ -101,11 +101,11 @@ namespace VAdvantage.Model
             int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));
             if (_CountDTD001 > 0)
             {
-                SetM_MovementLine_ID(line.GetM_MovementLine_ID());
+                SetVAM_InvTrf_Line_ID(line.GetVAM_InvTrf_Line_ID());
                 SetDTD001_TotalQty(line.GetMovementQty());
-                SetM_Product_ID(line.GetM_Product_ID());
-                SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
-                decimal totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_MovementLine_ID=" + line.GetM_MovementLine_ID()));
+                SetVAM_Product_ID(line.GetVAM_Product_ID());
+                SetVAM_PFeature_SetInstance_ID(line.GetVAM_PFeature_SetInstance_ID());
+                decimal totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_InvTrf_Line_ID=" + line.GetVAM_InvTrf_Line_ID()));
                 SetQty(line.GetMovementQty() - totalPackQty);
                 _count = Util.GetValueOfDecimal(line.GetMovementQty()) - totalPackQty;
                 SetDTD001_AlreadyPackQty(totalPackQty);
@@ -120,11 +120,11 @@ namespace VAdvantage.Model
             int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
             if (_CountDTD001 > 0)
             {
-                SetM_InOutLine_ID(line.GetM_InOutLine_ID());
+                SetVAM_Inv_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
                 SetDTD001_TotalQty(line.GetMovementQty());
-                SetM_Product_ID(line.GetM_Product_ID());
-                SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
-                decimal totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_InOutLine_ID=" + GetM_InOutLine_ID()));
+                SetVAM_Product_ID(line.GetVAM_Product_ID());
+                SetVAM_PFeature_SetInstance_ID(line.GetVAM_PFeature_SetInstance_ID());
+                decimal totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID()));
                 SetQty(line.GetMovementQty() - totalPackQty);
                 _count = Util.GetValueOfDecimal(line.GetMovementQty()) - totalPackQty;
                 SetDTD001_AlreadyPackQty(totalPackQty);
@@ -136,15 +136,15 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             #region IsConfirm
-            GetM_Package_ID();
-            GetM_MovementLine_ID();
-            GetM_InOutLine_ID();
+            GetVAM_Packaging_ID();
+            GetVAM_InvTrf_Line_ID();
+            GetVAM_Inv_InOutLine_ID();
             string sql = null;
             string DocS = null;
 
-            if (Util.GetValueOfInt(GetM_MovementLine_ID()) != 0)
+            if (Util.GetValueOfInt(GetVAM_InvTrf_Line_ID()) != 0)
             {
-                sql = "Select mv.docstatus FROM m_movementline ml   INNER JOIN m_movement mv   ON (ml.m_movement_id=mv.m_movement_id) where ml.m_movementline_id=" + GetM_MovementLine_ID();
+                sql = "Select mv.docstatus FROM VAM_InvTrf_Line ml   INNER JOIN VAM_InventoryTransfer mv   ON (ml.VAM_InventoryTransfer_id=mv.VAM_InventoryTransfer_id) where ml.VAM_InvTrf_Line_id=" + GetVAM_InvTrf_Line_ID();
                 DocS = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
                 if (DocS == "CO")
                 {
@@ -154,9 +154,9 @@ namespace VAdvantage.Model
                     SetDTD001_IsConfirm(true);
                 }
             }
-            if (Util.GetValueOfInt(GetM_InOutLine_ID()) != 0)
+            if (Util.GetValueOfInt(GetVAM_Inv_InOutLine_ID()) != 0)
             {
-                sql = "SELECT o.docstatus    FROM  M_InOutLine ol    INNER JOIN M_InOut o     ON (ol.M_InOut_ID=o.M_InOut_ID) where ol.M_InOutLine_ID=" + GetM_InOutLine_ID();
+                sql = "SELECT o.docstatus    FROM  VAM_Inv_InOutLine ol    INNER JOIN VAM_Inv_InOut o     ON (ol.VAM_Inv_InOut_ID=o.VAM_Inv_InOut_ID) where ol.VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID();
                 DocS = Util.GetValueOfString(DB.ExecuteScalar(sql));
                 if (DocS == "CO")
                 {
@@ -178,29 +178,29 @@ namespace VAdvantage.Model
                     log.SaveError("Message", Msg.GetMsg(GetCtx(), "DTD001_ConfirmQtyNotGreater"));
                     return false;
                 }
-                if (GetM_InOutLine_ID() > 0 && newRecord)
+                if (GetVAM_Inv_InOutLine_ID() > 0 && newRecord)
                 {
-                    //totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_InOutLine_ID=" + GetM_InOutLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
-                    //totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM M_PackageLine WHERE M_InOutLine_ID=" + GetM_InOutLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
-                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM M_PackageLine WHERE  M_Package_ID=" + GetM_Package_ID() + " AND M_InOutLine_ID=" + GetM_InOutLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
+                    //totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
+                    //totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM VAM_PackagingLine WHERE VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
+                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM VAM_PackagingLine WHERE  VAM_Packaging_ID=" + GetVAM_Packaging_ID() + " AND VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
                 }
-                else if (GetM_MovementLine_ID() > 0 && newRecord)
+                else if (GetVAM_InvTrf_Line_ID() > 0 && newRecord)
                 {
-                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
-                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM M_PackageLine WHERE M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
+                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
+                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM VAM_PackagingLine WHERE VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
                 }
-                else if (GetM_InOutLine_ID() > 0 && !(newRecord))
+                else if (GetVAM_Inv_InOutLine_ID() > 0 && !(newRecord))
                 {
-                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_InOutLine_ID=" + GetM_InOutLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_PackageLine_ID<>" + GetM_PackageLine_ID()));
-                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM M_PackageLine WHERE M_InOutLine_ID=" + GetM_InOutLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_PackageLine_ID<>" + GetM_PackageLine_ID()));
+                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PackagingLine_ID<>" + GetVAM_PackagingLine_ID()));
+                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM VAM_PackagingLine WHERE VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PackagingLine_ID<>" + GetVAM_PackagingLine_ID()));
                 }
-                else if (GetM_MovementLine_ID() > 0 && !(newRecord))
+                else if (GetVAM_InvTrf_Line_ID() > 0 && !(newRecord))
                 {
 
-                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM M_PackageLine WHERE M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_PackageLine_ID<>" + GetM_PackageLine_ID()));
-                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM M_PackageLine WHERE M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_PackageLine_ID<>" + GetM_PackageLine_ID()));
+                    // totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Qty) FROM VAM_PackagingLine WHERE VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PackagingLine_ID<>" + GetVAM_PackagingLine_ID()));
+                    totalPackQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(ConfirmedQty) FROM VAM_PackagingLine WHERE VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PackagingLine_ID<>" + GetVAM_PackagingLine_ID()));
                 }
-                else if (!(GetM_MovementLine_ID() > 0) && !(GetM_InOutLine_ID() > 0))
+                else if (!(GetVAM_InvTrf_Line_ID() > 0) && !(GetVAM_Inv_InOutLine_ID() > 0))
                 {
                     difference = GetQty();
                     difference = Decimal.Subtract(difference, GetConfirmedQty());
@@ -208,7 +208,7 @@ namespace VAdvantage.Model
                     SetDifferenceQty(difference);
                     return true;
                 }
-                else if (!(GetM_MovementLine_ID() > 0) && !(GetM_InOutLine_ID() > 0) && !newRecord)
+                else if (!(GetVAM_InvTrf_Line_ID() > 0) && !(GetVAM_Inv_InOutLine_ID() > 0) && !newRecord)
                 {
                     totalPackQty = 0;
                 }
@@ -223,8 +223,8 @@ namespace VAdvantage.Model
                 //    return false;
                 //}
                 //////
-                //_sql = "SELECT COUNT(*) FROM   M_MovementLine WHERE IsActive='Y' AND  M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID();
-                //int MvAttribute = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM   M_MovementLine WHERE IsActive='Y' AND  M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID() + " AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID()));
+                //_sql = "SELECT COUNT(*) FROM   VAM_InvTrf_Line WHERE IsActive='Y' AND  VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID();
+                //int MvAttribute = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM   VAM_InvTrf_Line WHERE IsActive='Y' AND  VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID()));
                 //if (MvAttribute > 0)
                 //{
 
@@ -238,11 +238,11 @@ namespace VAdvantage.Model
                 difference = Decimal.Subtract(difference, GetScrappedQty());
                 SetDifferenceQty(difference);
 
-                int _pckgAttrbt = GetM_AttributeSetInstance_ID();
+                int _pckgAttrbt = GetVAM_PFeature_SetInstance_ID();
 
-                if (GetM_MovementLine_ID() > 0)
+                if (GetVAM_InvTrf_Line_ID() > 0)
                 {
-                    int MvAttribute = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_AttributeSetInstance_ID  FROM   M_MovementLine WHERE IsActive='Y' AND  M_MovementLine_ID=" + GetM_MovementLine_ID() + " AND M_Product_ID=" + GetM_Product_ID()));
+                    int MvAttribute = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_PFeature_SetInstance_ID  FROM   VAM_InvTrf_Line WHERE IsActive='Y' AND  VAM_InvTrf_Line_ID=" + GetVAM_InvTrf_Line_ID() + " AND VAM_Product_ID=" + GetVAM_Product_ID()));
 
                     if (MvAttribute == _pckgAttrbt)
                     {

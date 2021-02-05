@@ -14,7 +14,7 @@ using VAdvantage.VOS;
 
 namespace VAdvantage.Model
 {
-    public class MCostUpdate : X_M_CostUpdate
+    public class MCostUpdate : X_VAM_ProductCostUpdate
     {
         #region Private Variables
         //Logger for class MCostUpdate 
@@ -27,8 +27,8 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MCostUpdate(Ctx ctx, int M_CostUpdate_ID, Trx trx)
-            : base(ctx, M_CostUpdate_ID, trx)
+        public MCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
+            : base(ctx, VAM_ProductCostUpdate_ID, trx)
         {
 
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         public MCostUpdateLine[] GetLines()
         {
             List<MCostUpdateLine> list = new List<MCostUpdateLine>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM M_CostUpdateline WHERE M_CostUpdate_ID=" + this.GetM_CostUpdate_ID());
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAM_ProductCostUpdateLine WHERE VAM_ProductCostUpdate_ID=" + this.GetVAM_ProductCostUpdate_ID());
             IDataReader idr = null;
             try
             {

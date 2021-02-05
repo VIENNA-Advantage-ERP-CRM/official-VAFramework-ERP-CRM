@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MAttributeValue
  * Purpose        : Set the attribute vlue from Table
- * Class Used     : X_M_AttributeValue
+ * Class Used     : X_VAM_PFeature_Value
  * Chronological    Development
  * Raghunandan     04-Jun-2009
   ******************************************************/
@@ -26,21 +26,21 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeValue : X_M_AttributeValue
+    public class MAttributeValue : X_VAM_PFeature_Value
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_AttributeValue_ID">id</param>
+        /// <param name="VAM_PFeature_Value_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeValue(Ctx ctx, int M_AttributeValue_ID, Trx trxName)
-            : base(ctx, M_AttributeValue_ID, trxName)
+        public MAttributeValue(Ctx ctx, int VAM_PFeature_Value_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Value_ID, trxName)
         {
-            /** if (M_AttributeValue_ID == 0)
+            /** if (VAM_PFeature_Value_ID == 0)
             {
-            setM_AttributeValue_ID (0);
-            setM_Attribute_ID (0);
+            setVAM_PFeature_Value_ID (0);
+            setVAM_ProductFeature_ID (0);
             setName (null);
             setValue (null);
             }

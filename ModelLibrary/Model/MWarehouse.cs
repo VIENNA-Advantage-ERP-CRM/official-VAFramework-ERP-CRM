@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_M_Warehouse
+ * Class Used     : X_VAM_Warehouse
  * Chronological Development
  * Veena Pandey     
  ******************************************************/
@@ -18,14 +18,14 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MWarehouse : X_M_Warehouse
+    public class MWarehouse : X_VAM_Warehouse
     {
         //	Cache
         private static CCache<int, MWarehouse> cache = new CCache<int, MWarehouse>("MWarehouse", 5);
         //	Warehouse Locators
         private MLocator[] locators = null;
         //	Default Locator
-        private int M_Locator_ID = -1;
+        private int VAM_Locator_ID = -1;
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MWarehouse).FullName);
 
@@ -33,12 +33,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Warehouse_ID">id</param>
+        /// <param name="VAM_Warehouse_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWarehouse(Ctx ctx, int M_Warehouse_ID, Trx trxName)
-            : base(ctx, M_Warehouse_ID, trxName)
+        public MWarehouse(Ctx ctx, int VAM_Warehouse_ID, Trx trxName)
+            : base(ctx, VAM_Warehouse_ID, trxName)
         {
-            if (M_Warehouse_ID == 0)
+            if (VAM_Warehouse_ID == 0)
             {
                 //SetValue(null);
                 //SetName(null);
@@ -76,11 +76,11 @@ namespace VAdvantage.Model
         /// Get from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Warehouse_ID">id</param>
+        /// <param name="VAM_Warehouse_ID">id</param>
         /// <returns>warehouse</returns>
-        public static MWarehouse Get(Ctx ctx, int M_Warehouse_ID)
+        public static MWarehouse Get(Ctx ctx, int VAM_Warehouse_ID)
         {
-            int key = M_Warehouse_ID;
+            int key = VAM_Warehouse_ID;
             MWarehouse retValue = null;
             if (cache.ContainsKey(key))
             {
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
             if (retValue != null)
                 return retValue;
             //
-            retValue = new MWarehouse(ctx, M_Warehouse_ID, null);
+            retValue = new MWarehouse(ctx, VAM_Warehouse_ID, null);
             cache.Add(key, retValue);
             return retValue;
         }
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         public static MWarehouse[] GetForOrg(Ctx ctx, int VAF_Org_ID)
         {
             List<MWarehouse> list = new List<MWarehouse>();
-            String sql = "SELECT * FROM M_Warehouse WHERE VAF_Org_ID=" + VAF_Org_ID + " ORDER BY Created";
+            String sql = "SELECT * FROM VAM_Warehouse WHERE VAF_Org_ID=" + VAF_Org_ID + " ORDER BY Created";
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -159,14 +159,14 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get Default M_Locator_ID
+        /// Get Default VAM_Locator_ID
         /// </summary>
         /// <returns>id</returns>
-        public int GetDefaultM_Locator_ID()
+        public int GetDefaultVAM_Locator_ID()
         {
-            if (M_Locator_ID <= 0)
-                M_Locator_ID = GetDefaultLocator().GetM_Locator_ID();
-            return M_Locator_ID;
+            if (VAM_Locator_ID <= 0)
+                VAM_Locator_ID = GetDefaultLocator().GetVAM_Locator_ID();
+            return VAM_Locator_ID;
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
             if (!reload && locators != null)
                 return locators;
             //
-            String sql = "SELECT * FROM M_Locator WHERE M_Warehouse_ID=" + GetM_Warehouse_ID() + " ORDER BY X,Y,Z";
+            String sql = "SELECT * FROM VAM_Locator WHERE VAM_Warehouse_ID=" + GetVAM_Warehouse_ID() + " ORDER BY X,Y,Z";
             List<MLocator> list = new List<MLocator>();
             try
             {
@@ -212,7 +212,7 @@ namespace VAdvantage.Model
         /// <returns>true</returns>
         protected override bool BeforeDelete()
         {
-            return Delete_Accounting("M_Warehouse_Acct");
+            return Delete_Accounting("VAM_Warehouse_Acct");
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoWarehouse)
                                     {
                                         _sql.Clear();
-                                        _sql.Append("Select COUNT(*) From M_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.M_Warehouse_ID=ca.M_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.M_Warehouse_ID = " + GetM_Warehouse_ID());
+                                        _sql.Append("Select COUNT(*) From VAM_Warehouse Bp Left Join Frpt_warehouse_Acct ca On Bp.VAM_Warehouse_ID=ca.VAM_Warehouse_ID And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"] + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID + " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) + " AND Bp.VAM_Warehouse_ID = " + GetVAM_Warehouse_ID());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null);
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
                                         {
                                             wrhus = MVAFTableView.GetPO(GetCtx(), "FRPT_Warehouse_Acct", 0, null);
                                             wrhus.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                            wrhus.Set_ValueNoCheck("M_Warehouse_ID", Util.GetValueOfInt(GetM_Warehouse_ID()));
+                                            wrhus.Set_ValueNoCheck("VAM_Warehouse_ID", Util.GetValueOfInt(GetVAM_Warehouse_ID()));
                                             wrhus.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             wrhus.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                             wrhus.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
@@ -305,7 +305,7 @@ namespace VAdvantage.Model
             {
                 if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
                 {
-                    bool sucs = Insert_Accounting("M_Warehouse_Acct", "VAB_AccountBook_Default", null);
+                    bool sucs = Insert_Accounting("VAM_Warehouse_Acct", "VAB_AccountBook_Default", null);
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
                     if (!sucs)
@@ -328,15 +328,15 @@ namespace VAdvantage.Model
             with negative onhand. */
             if (Is_ValueChanged("IsDisallowNegativeInv") && IsDisallowNegativeInv())
             {
-                //String sql = "SELECT M_Product_ID FROM M_StorageDetail s " +
-                //             "WHERE s.QtyType = 'H' AND s.M_Locator_ID IN (SELECT M_Locator_ID FROM M_Locator l " +
-                //                            "WHERE M_Warehouse_ID=" + GetM_Warehouse_ID() + " )" +
-                //             " GROUP BY M_Product_ID, M_Locator_ID " +
+                //String sql = "SELECT VAM_Product_ID FROM VAM_StorageDetail s " +
+                //             "WHERE s.QtyType = 'H' AND s.VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_Locator l " +
+                //                            "WHERE VAM_Warehouse_ID=" + GetVAM_Warehouse_ID() + " )" +
+                //             " GROUP BY VAM_Product_ID, VAM_Locator_ID " +
                 //             " HAVING SUM(s.Qty) < 0 ";
-                String sql = "SELECT M_Product_ID FROM M_Storage s " +
-                            "WHERE s.M_Locator_ID IN (SELECT M_Locator_ID FROM M_Locator l " +
-                                           "WHERE M_Warehouse_ID=" + GetM_Warehouse_ID() + " )" +
-                            " GROUP BY M_Product_ID, M_Locator_ID " +
+                String sql = "SELECT VAM_Product_ID FROM VAM_Storage s " +
+                            "WHERE s.VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_Locator l " +
+                                           "WHERE VAM_Warehouse_ID=" + GetVAM_Warehouse_ID() + " )" +
+                            " GROUP BY VAM_Product_ID, VAM_Locator_ID " +
                             " HAVING SUM(s.Qty) < 0 ";
 
                 IDataReader idr = null;
@@ -372,10 +372,10 @@ namespace VAdvantage.Model
             // Added by Vivek on 21/09/2017 suggested by Ravikant
             // Check if Drop ship warehouse already exist for the same organization
             // Check Column exist in DB -- Vivek on 17/10/2017 by Mukesh sir
-            MVAFTableView tab = MVAFTableView.Get(GetCtx(), "M_Warehouse");
+            MVAFTableView tab = MVAFTableView.Get(GetCtx(), "VAM_Warehouse");
             if (tab.Get_ColumnIndex("IsDropShip") > 0)
             {
-                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From M_WareHouse Where VAF_Org_ID=" + GetVAF_Org_ID() + " AND IsDropShip='Y' AND IsActive='Y'")) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VAM_Warehouse Where VAF_Org_ID=" + GetVAF_Org_ID() + " AND IsDropShip='Y' AND IsActive='Y'")) > 0)
                 {
                     log.SaveError("Error", Msg.Translate(GetCtx(), "DropShipWarehouse"));
                     return false;
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
 
             // JID_1888 Checks for the duplicate search key
 
-            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Warehouse WHERE Value= '" + GetValue() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
+            int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM VAM_Warehouse WHERE Value= '" + GetValue() + "' AND VAM_Warehouse_ID !=" + GetVAM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
             if (count > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
             }
             //JID_1888 checks for the duplicate name
 
-            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM M_Warehouse WHERE Name= '" + GetName() + "' AND M_Warehouse_ID !=" + GetM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
+            int countName = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Name) FROM VAM_Warehouse WHERE Name= '" + GetName() + "' AND VAM_Warehouse_ID !=" + GetVAM_Warehouse_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()));
             if (countName > 0)
             {
                 log.SaveError("", Msg.GetMsg(GetCtx(), "RequiredUniqueName"));
@@ -434,14 +434,14 @@ namespace VAdvantage.Model
         /// <summary>
         /// Check if locator is in warehouse 
         /// </summary>
-        /// <param name="p_M_Warehouse_ID"></param>
-        /// <param name="p_M_Locator_ID"></param>
+        /// <param name="p_VAM_Warehouse_ID"></param>
+        /// <param name="p_VAM_Locator_ID"></param>
         /// <returns>true if locator is in the warehouse</returns>
-        public static Boolean IsLocatorInWarehouse(int p_M_Warehouse_ID, int p_M_Locator_ID)
+        public static Boolean IsLocatorInWarehouse(int p_VAM_Warehouse_ID, int p_VAM_Locator_ID)
         {
-            int M_Warehouse_ID = DB.GetSQLValue(null,
-                    "SELECT M_Warehouse_ID FROM M_Locator WHERE M_Locator_ID=@param1", p_M_Locator_ID);
-            if (p_M_Warehouse_ID == M_Warehouse_ID)
+            int VAM_Warehouse_ID = DB.GetSQLValue(null,
+                    "SELECT VAM_Warehouse_ID FROM VAM_Locator WHERE VAM_Locator_ID=@param1", p_VAM_Locator_ID);
+            if (p_VAM_Warehouse_ID == VAM_Warehouse_ID)
             {
                 return true;
             }

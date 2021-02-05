@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * ModuleName     : 
  * Purpose        : 
- * Class Used     : X_M_ProductStockSummary
+ * Class Used     : X_VAM_Prod_StockSummary
  * Chronological    Development
  * Bharat     28-Oct-2016
   ******************************************************/
@@ -19,17 +19,17 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-    class MProductStockSummary : X_M_ProductStockSummary
+    class MProductStockSummary : X_VAM_Prod_StockSummary
     {
 
          /**
   * 	Standard Constructor
   *	@param ctx context
-  *	@param M_TransactionSummary_ID id
+  *	@param VAM_Inv_TrxSummary_ID id
   *	@param trxName transaction
   */
-        public MProductStockSummary(Ctx ctx, int M_ProductStockSummary_ID, Trx trxName)
-            : base(ctx, M_ProductStockSummary_ID, trxName)
+        public MProductStockSummary(Ctx ctx, int VAM_Prod_StockSummary_ID, Trx trxName)
+            : base(ctx, VAM_Prod_StockSummary_ID, trxName)
         {
             
         }
@@ -49,21 +49,21 @@ namespace VAdvantage.Model
         * 	Detail Constructor
         *	@param ctx context
         *	@param VAF_Org_ID org
-        * 	@param M_Locator_ID locator
-        * 	@param M_Product_ID product
-        * 	@param M_AttributeSetInstance_ID attribute
+        * 	@param VAM_Locator_ID locator
+        * 	@param VAM_Product_ID product
+        * 	@param VAM_PFeature_SetInstance_ID attribute
         * 	@param Opening Stock
          * 	@param Opening Stock
         * 	@param MovementDate optional date
         *	@param trxName transaction
         */
-        public MProductStockSummary(Ctx ctx, int VAF_Org_ID, int M_Product_ID, Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementFromDate, Trx trxName)
+        public MProductStockSummary(Ctx ctx, int VAF_Org_ID, int VAM_Product_ID, Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementFromDate, Trx trxName)
             : base(ctx, 0, trxName)
         {
             SetVAF_Org_ID(VAF_Org_ID);
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
                 throw new ArgumentException("No Product");
-            SetM_Product_ID(M_Product_ID);
+            SetVAM_Product_ID(VAM_Product_ID);
             SetQtyOpenStockOrg(OpeningStock);
             SetQtyCloseStockOrg(ClosingStock);
             if (MovementFromDate == null)

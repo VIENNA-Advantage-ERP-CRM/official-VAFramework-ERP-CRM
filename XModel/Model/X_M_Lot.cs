@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Lot
+/** Generated Model for VAM_Lot
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Lot : PO
+public class X_VAM_Lot : PO
 {
-public X_M_Lot (Context ctx, int M_Lot_ID, Trx trxName) : base (ctx, M_Lot_ID, trxName)
+public X_VAM_Lot (Context ctx, int VAM_Lot_ID, Trx trxName) : base (ctx, VAM_Lot_ID, trxName)
 {
-/** if (M_Lot_ID == 0)
+/** if (VAM_Lot_ID == 0)
 {
-SetM_Lot_ID (0);
-SetM_Product_ID (0);
+SetVAM_Lot_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_Lot (Ctx ctx, int M_Lot_ID, Trx trxName) : base (ctx, M_Lot_ID, trxName)
+public X_VAM_Lot (Ctx ctx, int VAM_Lot_ID, Trx trxName) : base (ctx, VAM_Lot_ID, trxName)
 {
-/** if (M_Lot_ID == 0)
+/** if (VAM_Lot_ID == 0)
 {
-SetM_Lot_ID (0);
-SetM_Product_ID (0);
+SetVAM_Lot_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Lot (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Lot (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_Lot (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Lot (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Lot (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_Lot (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Lot (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Lot (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Lot()
+static X_VAM_Lot()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389063093L;
 public static int Table_ID;
  // =557;
 
-/** TableName=M_Lot */
-public static String Table_Name="M_Lot";
+/** TableName=VAM_Lot */
+public static String Table_Name="VAM_Lot";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Lot[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Lot[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Date From.
@@ -173,48 +173,48 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Lot Control.
-@param M_LotCtl_ID Product Lot Control */
-public void SetM_LotCtl_ID (int M_LotCtl_ID)
+@param VAM_LotControl_ID Product Lot Control */
+public void SetVAM_LotControl_ID (int VAM_LotControl_ID)
 {
-if (M_LotCtl_ID <= 0) Set_ValueNoCheck ("M_LotCtl_ID", null);
+if (VAM_LotControl_ID <= 0) Set_ValueNoCheck ("VAM_LotControl_ID", null);
 else
-Set_ValueNoCheck ("M_LotCtl_ID", M_LotCtl_ID);
+Set_ValueNoCheck ("VAM_LotControl_ID", VAM_LotControl_ID);
 }
 /** Get Lot Control.
 @return Product Lot Control */
-public int GetM_LotCtl_ID() 
+public int GetVAM_LotControl_ID() 
 {
-Object ii = Get_Value("M_LotCtl_ID");
+Object ii = Get_Value("VAM_LotControl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lot.
-@param M_Lot_ID Product Lot Definition */
-public void SetM_Lot_ID (int M_Lot_ID)
+@param VAM_Lot_ID Product Lot Definition */
+public void SetVAM_Lot_ID (int VAM_Lot_ID)
 {
-if (M_Lot_ID < 1) throw new ArgumentException ("M_Lot_ID is mandatory.");
-Set_ValueNoCheck ("M_Lot_ID", M_Lot_ID);
+if (VAM_Lot_ID < 1) throw new ArgumentException ("VAM_Lot_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Lot_ID", VAM_Lot_ID);
 }
 /** Get Lot.
 @return Product Lot Definition */
-public int GetM_Lot_ID() 
+public int GetVAM_Lot_ID() 
 {
-Object ii = Get_Value("M_Lot_ID");
+Object ii = Get_Value("VAM_Lot_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -222,7 +222,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_Product_ID().ToString());
 }
 /** Set Name.
 @param Name Alphanumeric identifier of the entity */

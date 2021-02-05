@@ -19,15 +19,15 @@ namespace VIS.Models
         {
                        
             string[] paramValue = fields.Split(',');
-            int M_Warehouse_ID;
+            int VAM_Warehouse_ID;
 
             //Assign parameter value
-            M_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            VAM_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //Assign parameter value
 
-            MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+            MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["M_Locator_ID"] = wh.GetDefaultM_Locator_ID().ToString();
+            result["VAM_Locator_ID"] = wh.GetDefaultVAM_Locator_ID().ToString();
             return result;
                 
         }

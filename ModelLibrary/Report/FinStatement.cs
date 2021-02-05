@@ -41,7 +41,7 @@ namespace VAdvantage.Report
         /**	BPartner Parameter				*/
         private int _VAB_BusinessPartner_ID = 0;
         /**	Product Parameter				*/
-        private int _M_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
         /**	Project Parameter				*/
         private int _VAB_Project_ID = 0;
         /**	Activity Parameter				*/
@@ -112,9 +112,9 @@ namespace VAdvantage.Report
                 {
                     _VAB_BusinessPartner_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    _M_Product_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAM_Product_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("VAB_Project_ID"))
                 {
@@ -163,10 +163,10 @@ namespace VAdvantage.Report
                     _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_BPartner, _VAB_BusinessPartner_ID));
             }
             //	Optional Product
-            if (_M_Product_ID != 0 && _M_Product_ID != -1)
+            if (_VAM_Product_ID != 0 && _VAM_Product_ID != -1)
             {
                 _parameterWhere.Append(" AND ").Append(MReportTree.GetWhereClause(GetCtx(),
-                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Product, _M_Product_ID));
+                    _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Product, _VAM_Product_ID));
             }
             //	Optional Project
             if (_VAB_Project_ID != 0 && _VAB_Project_ID != -1)

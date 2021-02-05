@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_AttributeInstance
+/** Generated Model for VAM_PFeatue_Instance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_AttributeInstance : PO
+public class X_VAM_PFeatue_Instance : PO
 {
-public X_M_AttributeInstance (Context ctx, int M_AttributeInstance_ID, Trx trxName) : base (ctx, M_AttributeInstance_ID, trxName)
+public X_VAM_PFeatue_Instance (Context ctx, int VAM_PFeatue_Instance_ID, Trx trxName) : base (ctx, VAM_PFeatue_Instance_ID, trxName)
 {
-/** if (M_AttributeInstance_ID == 0)
+/** if (VAM_PFeatue_Instance_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_Attribute_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_ProductFeature_ID (0);
 }
  */
 }
-public X_M_AttributeInstance (Ctx ctx, int M_AttributeInstance_ID, Trx trxName) : base (ctx, M_AttributeInstance_ID, trxName)
+public X_VAM_PFeatue_Instance (Ctx ctx, int VAM_PFeatue_Instance_ID, Trx trxName) : base (ctx, VAM_PFeatue_Instance_ID, trxName)
 {
-/** if (M_AttributeInstance_ID == 0)
+/** if (VAM_PFeatue_Instance_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_Attribute_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_ProductFeature_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetM_Attribute_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeatue_Instance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_AttributeInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeatue_Instance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_AttributeInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PFeatue_Instance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_AttributeInstance()
+static X_VAM_PFeatue_Instance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389061479L;
 public static int Table_ID;
  // =561;
 
-/** TableName=M_AttributeInstance */
-public static String Table_Name="M_AttributeInstance";
+/** TableName=VAM_PFeatue_Instance */
+public static String Table_Name="VAM_PFeatue_Instance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,37 +109,37 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_AttributeInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PFeatue_Instance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Attribute Value.
-@param M_AttributeValue_ID Product Attribute Value */
-public void SetM_AttributeValue_ID (int M_AttributeValue_ID)
+@param VAM_PFeature_Value_ID Product Attribute Value */
+public void SetVAM_PFeature_Value_ID (int VAM_PFeature_Value_ID)
 {
-if (M_AttributeValue_ID <= 0) Set_Value ("M_AttributeValue_ID", null);
+if (VAM_PFeature_Value_ID <= 0) Set_Value ("VAM_PFeature_Value_ID", null);
 else
-Set_Value ("M_AttributeValue_ID", M_AttributeValue_ID);
+Set_Value ("VAM_PFeature_Value_ID", VAM_PFeature_Value_ID);
 }
 /** Get Attribute Value.
 @return Product Attribute Value */
-public int GetM_AttributeValue_ID() 
+public int GetVAM_PFeature_Value_ID() 
 {
-Object ii = Get_Value("M_AttributeValue_ID");
+Object ii = Get_Value("VAM_PFeature_Value_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -147,7 +147,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_AttributeValue_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_PFeature_Value_ID().ToString());
 }
         /** Set Attribute.
 @param VAM_ProductFeature_ID Product Attribute */

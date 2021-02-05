@@ -79,7 +79,7 @@ namespace VAdvantage.Print
                 return StartDocumentPrint(ctx, ReportEngine_N.ORDER, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == 116)		//	VAB_Invoice
                 return StartDocumentPrint(ctx, ReportEngine_N.INVOICE, pi.GetRecord_ID(), IsDirectPrint);
-            else if (pi.GetVAF_Job_ID() == 117)		//	M_InOut
+            else if (pi.GetVAF_Job_ID() == 117)		//	VAM_Inv_InOut
                 return StartDocumentPrint(ctx, ReportEngine_N.SHIPMENT, pi.GetRecord_ID(), IsDirectPrint);
             else if (pi.GetVAF_Job_ID() == 217)		//	VAB_Project
                 return StartDocumentPrint(ctx, ReportEngine_N.PROJECT, pi.GetRecord_ID(), IsDirectPrint);

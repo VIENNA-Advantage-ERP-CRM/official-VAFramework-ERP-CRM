@@ -238,7 +238,7 @@ namespace VAdvantage.Model
         /// <param name="usr">user name</param>
         /// <param name="o"> organization = Client Name</param>
         /// <param name="ou">ou optional organization unit = Interest Group Value 
-        //or Aa<M_Product_ID>aA = Active Asset of Product of user</param>
+        //or Aa<VAM_Product_ID>aA = Active Asset of Product of user</param>
         /// <param name="remoteHost">remote host name</param>
         /// <param name="remoteAddr">remote host ip address</param>
         /// <returns>MLdapUser with updated information</returns>
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
             }
             //	Optional Interest Area or Asset
             int VAR_InterestArea_ID = 0;
-            int M_Product_ID = 0;	//	Product of Asset
+            int VAM_Product_ID = 0;	//	Product of Asset
             if (ou != null && ou.Length > 0)
             {
                 if (ou.StartsWith("Aa") && ou.EndsWith("aA"))
@@ -292,7 +292,7 @@ namespace VAdvantage.Model
                     try
                     {
                         String s = ou.Substring(2, ou.Length - 2);
-                        M_Product_ID = Utility.Util.GetValueOfInt(s);
+                        VAM_Product_ID = Utility.Util.GetValueOfInt(s);
                     }
                     catch 
                     {
@@ -300,7 +300,7 @@ namespace VAdvantage.Model
                 }
                 else
                     VAR_InterestArea_ID = FindInterestArea(VAF_Client_ID, ou);
-                if (VAR_InterestArea_ID == 0 && M_Product_ID == 0)
+                if (VAR_InterestArea_ID == 0 && VAM_Product_ID == 0)
                 {
                     error = "@NotFound@ OU=" + ou;
                     ldapUser.SetErrorString(error);
@@ -418,16 +418,16 @@ namespace VAdvantage.Model
             ldapUser.SetUserId(usr);
             ldapUser.SetPassword(Password);
             //	Done
-            if (VAR_InterestArea_ID == 0 && M_Product_ID == 0)
+            if (VAR_InterestArea_ID == 0 && VAM_Product_ID == 0)
             {
                 LogAccess(VAF_Client_ID, VAF_UserContact_ID, 0, 0, info, null,
                             remoteHost, remoteAddr);
                 return ldapUser;
             }
 
-            if (M_Product_ID != 0)
+            if (VAM_Product_ID != 0)
                 return AuthenticateAsset(ldapUser,
-                        VAF_UserContact_ID, usr, M_Product_ID,
+                        VAF_UserContact_ID, usr, VAM_Product_ID,
                         VAF_Client_ID, remoteHost, remoteAddr);
 
             return AuthenticateSubscription(ldapUser,
@@ -535,13 +535,13 @@ namespace VAdvantage.Model
         /// <param name="ldapUser">user</param>
         /// <param name="VAF_UserContact_ID">id</param>
         /// <param name="usr">user authentification (email, ...)</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="remoteHost">remote info</param>
         /// <param name="remoteAddr">remote info</param>
         /// <returns>user with error message set if error</returns>
         private MLdapUser AuthenticateAsset(MLdapUser ldapUser,
-                int VAF_UserContact_ID, String usr, int M_Product_ID,
+                int VAF_UserContact_ID, String usr, int VAM_Product_ID,
                 int VAF_Client_ID, String remoteHost, String remoteAddr)
         {
             String error = null;
@@ -551,7 +551,7 @@ namespace VAdvantage.Model
             MVAAsset asset = null;
             String sql = "SELECT * "
                 + "FROM VAA_Asset "
-                + "WHERE M_Product_ID=@param1"
+                + "WHERE VAM_Product_ID=@param1"
                 + " AND VAF_UserContact_ID=@param2";		//	only specific user
             //	Will have problems with multiple assets
             SqlParameter[] param = new SqlParameter[2];
@@ -559,8 +559,8 @@ namespace VAdvantage.Model
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, null);
-                //pstmt.setInt (1, M_Product_ID);
-                param[0] = new SqlParameter("@param1", M_Product_ID);
+                //pstmt.setInt (1, VAM_Product_ID);
+                param[0] = new SqlParameter("@param1", VAM_Product_ID);
                 //pstmt.setInt (2, VAF_UserContact_ID);
                 param[1] = new SqlParameter("@param2", VAF_UserContact_ID);
                 idr = CoreLibrary.DataBase.DB.ExecuteReader(sql, param, null);
@@ -591,7 +591,7 @@ namespace VAdvantage.Model
             if (asset == null)
             {
                 error = "@UserNoAsset@ User=" + usr;
-                info = "No Asset - " + usr + " - " + M_Product_ID;
+                info = "No Asset - " + usr + " - " + VAM_Product_ID;
             }
             else if (!asset.IsActive())
             {

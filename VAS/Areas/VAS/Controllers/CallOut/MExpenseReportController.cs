@@ -25,7 +25,7 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MTimeExpense timeExpense = new MTimeExpense(ctx, Util.GetValueOfInt(fields), null);
-                MPriceList priceList = new MPriceList(ctx, timeExpense.GetM_PriceList_ID(), null);
+                MPriceList priceList = new MPriceList(ctx, timeExpense.GetVAM_PriceList_ID(), null);
                 retJSON = JsonConvert.SerializeObject(priceList.GetVAB_Currency_ID());
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

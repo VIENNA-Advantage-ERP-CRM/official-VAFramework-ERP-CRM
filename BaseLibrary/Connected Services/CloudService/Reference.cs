@@ -351,7 +351,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/AssignServerIPToCustomerTenant", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey);
+        string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int VAM_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetIpAssignRequest", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -693,7 +693,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerServerAndFTPInfo", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey);
+        BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int VAM_Product_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerServerInfoM1", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -727,11 +727,11 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/UnSubscribeProduct", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string UnSubscribeProduct(int VAF_UserContact_ID, int M_Product_ID, string accessKey);
+        string UnSubscribeProduct(int VAF_UserContact_ID, int VAM_Product_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetFTPInfo", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        BaseLibrary.CloudService.FTPInfo GetFTPInfo(int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey);
+        BaseLibrary.CloudService.FTPInfo GetFTPInfo(int CS_ZoneMasterServer_ID, int VAM_Product_ID, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetAllCountries", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -747,7 +747,7 @@ namespace BaseLibrary.CloudService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetRelatedProduct", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GetRelatedProduct(int M_Product_ID, int VAF_UserContact_ID, string SubscriptionType, string accessKey);
+        string GetRelatedProduct(int VAM_Product_ID, int VAF_UserContact_ID, string SubscriptionType, string accessKey);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetCustomerAccountDetail", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -2355,7 +2355,7 @@ namespace BaseLibrary.CloudService {
         
         private int[] zoneMasterServerField;
         
-        private int[] m_Product_IDField;
+        private int[] VAM_Product_IDField;
         
         private int[] a_Asset_IDField;
         
@@ -2381,13 +2381,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=1)]
-        public int[] M_Product_ID {
+        public int[] VAM_Product_ID {
             get {
-                return this.m_Product_IDField;
+                return this.VAM_Product_IDField;
             }
             set {
-                this.m_Product_IDField = value;
-                this.RaisePropertyChanged("M_Product_ID");
+                this.VAM_Product_IDField = value;
+                this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
         
@@ -2883,7 +2883,7 @@ namespace BaseLibrary.CloudService {
         
         private string cS_ZoneMasterServer_IDField;
         
-        private string m_Product_IDField;
+        private string VAM_Product_IDField;
         
         private string cS_ZoneClientServer_IDField;
         
@@ -3011,13 +3011,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=10)]
-        public string M_Product_ID {
+        public string VAM_Product_ID {
             get {
-                return this.m_Product_IDField;
+                return this.VAM_Product_IDField;
             }
             set {
-                this.m_Product_IDField = value;
-                this.RaisePropertyChanged("M_Product_ID");
+                this.VAM_Product_IDField = value;
+                this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
         
@@ -3143,7 +3143,7 @@ namespace BaseLibrary.CloudService {
         
         private string[] cS_ZoneMasterServer_IDField;
         
-        private string[] m_Product_IDField;
+        private string[] VAM_Product_IDField;
         
         private string[] cS_ZoneClientServer_IDField;
         
@@ -3271,13 +3271,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=10)]
-        public string[] M_Product_ID {
+        public string[] VAM_Product_ID {
             get {
-                return this.m_Product_IDField;
+                return this.VAM_Product_IDField;
             }
             set {
-                this.m_Product_IDField = value;
-                this.RaisePropertyChanged("M_Product_ID");
+                this.VAM_Product_IDField = value;
+                this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
         
@@ -3403,7 +3403,7 @@ namespace BaseLibrary.CloudService {
         
         private string[] zoneMasterIDField;
         
-        private string[] m_Product_IDField;
+        private string[] VAM_Product_IDField;
         
         private string[] a_Asset_IDField;
         
@@ -3447,13 +3447,13 @@ namespace BaseLibrary.CloudService {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlArrayAttribute(Order=3)]
-        public string[] M_Product_ID {
+        public string[] VAM_Product_ID {
             get {
-                return this.m_Product_IDField;
+                return this.VAM_Product_IDField;
             }
             set {
-                this.m_Product_IDField = value;
-                this.RaisePropertyChanged("M_Product_ID");
+                this.VAM_Product_IDField = value;
+                this.RaisePropertyChanged("VAM_Product_ID");
             }
         }
         
@@ -6062,7 +6062,7 @@ namespace BaseLibrary.CloudService {
     public partial class GetAmountRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=0)]
-        public int m_product_id;
+        public int VAM_Product_id;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
         public int user;
@@ -6073,8 +6073,8 @@ namespace BaseLibrary.CloudService {
         public GetAmountRequest() {
         }
         
-        public GetAmountRequest(int m_product_id, int user, string accessKey) {
-            this.m_product_id = m_product_id;
+        public GetAmountRequest(int VAM_Product_id, int user, string accessKey) {
+            this.VAM_Product_id = VAM_Product_id;
             this.user = user;
             this.accessKey = accessKey;
         }
@@ -6108,7 +6108,7 @@ namespace BaseLibrary.CloudService {
         public int VAF_UserContact_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
-        public int M_Product_ID;
+        public int VAM_Product_ID;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=2)]
         public string fileName;
@@ -6126,9 +6126,9 @@ namespace BaseLibrary.CloudService {
         public SubscribeProductRequest() {
         }
         
-        public SubscribeProductRequest(int VAF_UserContact_ID, int M_Product_ID, string fileName, System.Nullable<int> backupAfter, string ipaddress, string accessKey) {
+        public SubscribeProductRequest(int VAF_UserContact_ID, int VAM_Product_ID, string fileName, System.Nullable<int> backupAfter, string ipaddress, string accessKey) {
             this.VAF_UserContact_ID = VAF_UserContact_ID;
-            this.M_Product_ID = M_Product_ID;
+            this.VAM_Product_ID = VAM_Product_ID;
             this.fileName = fileName;
             this.backupAfter = backupAfter;
             this.ipaddress = ipaddress;
@@ -6634,8 +6634,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAllAppDeleteRequest(zoneCode, accessKey);
         }
         
-        public string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int M_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey) {
-            return base.Channel.AssignServerIPToCustomerTenant(CS_CustomerTenentInfo_ID, value, CS_ZoneMasterServer_ID, M_Product_ID, VAA_Asset_ID, VAF_UserContact_ID, accessKey);
+        public string AssignServerIPToCustomerTenant(int CS_CustomerTenentInfo_ID, string value, int CS_ZoneMasterServer_ID, int VAM_Product_ID, int VAA_Asset_ID, int VAF_UserContact_ID, string accessKey) {
+            return base.Channel.AssignServerIPToCustomerTenant(CS_CustomerTenentInfo_ID, value, CS_ZoneMasterServer_ID, VAM_Product_ID, VAA_Asset_ID, VAF_UserContact_ID, accessKey);
         }
         
         public BaseLibrary.CloudService.GetUnassignedIp GetIpAssignRequest(string zoneCode, string accessKey) {
@@ -7185,8 +7185,8 @@ namespace BaseLibrary.CloudService {
             return retVal.VRegisterInfoResult;
         }
         
-        public BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey) {
-            return base.Channel.GetCustomerServerAndFTPInfo(VAA_Asset_ID, CS_ZoneMasterServer_ID, M_Product_ID, accessKey);
+        public BaseLibrary.CloudService.ServerAndFtpInfo GetCustomerServerAndFTPInfo(int VAA_Asset_ID, int CS_ZoneMasterServer_ID, int VAM_Product_ID, string accessKey) {
+            return base.Channel.GetCustomerServerAndFTPInfo(VAA_Asset_ID, CS_ZoneMasterServer_ID, VAM_Product_ID, accessKey);
         }
         
         public BaseLibrary.CloudService.ServerInfo GetCustomerServerInfoM1(int VAA_Asset_ID, string accessKey) {
@@ -7214,9 +7214,9 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetAmount(request);
         }
         
-        public System.Nullable<decimal> GetAmount(int m_product_id, int user, string accessKey) {
+        public System.Nullable<decimal> GetAmount(int VAM_Product_id, int user, string accessKey) {
             BaseLibrary.CloudService.GetAmountRequest inValue = new BaseLibrary.CloudService.GetAmountRequest();
-            inValue.m_product_id = m_product_id;
+            inValue.VAM_Product_id = VAM_Product_id;
             inValue.user = user;
             inValue.accessKey = accessKey;
             BaseLibrary.CloudService.GetAmountResponse retVal = ((BaseLibrary.CloudService.ServiceSoap)(this)).GetAmount(inValue);
@@ -7228,10 +7228,10 @@ namespace BaseLibrary.CloudService {
             return base.Channel.SubscribeProduct(request);
         }
         
-        public string SubscribeProduct(int VAF_UserContact_ID, int M_Product_ID, string fileName, System.Nullable<int> backupAfter, string ipaddress, string accessKey) {
+        public string SubscribeProduct(int VAF_UserContact_ID, int VAM_Product_ID, string fileName, System.Nullable<int> backupAfter, string ipaddress, string accessKey) {
             BaseLibrary.CloudService.SubscribeProductRequest inValue = new BaseLibrary.CloudService.SubscribeProductRequest();
             inValue.VAF_UserContact_ID = VAF_UserContact_ID;
-            inValue.M_Product_ID = M_Product_ID;
+            inValue.VAM_Product_ID = VAM_Product_ID;
             inValue.fileName = fileName;
             inValue.backupAfter = backupAfter;
             inValue.ipaddress = ipaddress;
@@ -7240,12 +7240,12 @@ namespace BaseLibrary.CloudService {
             return retVal.SubscribeProductResult;
         }
         
-        public string UnSubscribeProduct(int VAF_UserContact_ID, int M_Product_ID, string accessKey) {
-            return base.Channel.UnSubscribeProduct(VAF_UserContact_ID, M_Product_ID, accessKey);
+        public string UnSubscribeProduct(int VAF_UserContact_ID, int VAM_Product_ID, string accessKey) {
+            return base.Channel.UnSubscribeProduct(VAF_UserContact_ID, VAM_Product_ID, accessKey);
         }
         
-        public BaseLibrary.CloudService.FTPInfo GetFTPInfo(int CS_ZoneMasterServer_ID, int M_Product_ID, string accessKey) {
-            return base.Channel.GetFTPInfo(CS_ZoneMasterServer_ID, M_Product_ID, accessKey);
+        public BaseLibrary.CloudService.FTPInfo GetFTPInfo(int CS_ZoneMasterServer_ID, int VAM_Product_ID, string accessKey) {
+            return base.Channel.GetFTPInfo(CS_ZoneMasterServer_ID, VAM_Product_ID, accessKey);
         }
         
         public string GetAllCountries(string accessKey) {
@@ -7260,8 +7260,8 @@ namespace BaseLibrary.CloudService {
             return base.Channel.GetNewTenant(zoneCode, accessKey);
         }
         
-        public string GetRelatedProduct(int M_Product_ID, int VAF_UserContact_ID, string SubscriptionType, string accessKey) {
-            return base.Channel.GetRelatedProduct(M_Product_ID, VAF_UserContact_ID, SubscriptionType, accessKey);
+        public string GetRelatedProduct(int VAM_Product_ID, int VAF_UserContact_ID, string SubscriptionType, string accessKey) {
+            return base.Channel.GetRelatedProduct(VAM_Product_ID, VAF_UserContact_ID, SubscriptionType, accessKey);
         }
         
         public string GetCustomerAccountDetail(int VAF_UserContact_ID, string accessKey) {

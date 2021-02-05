@@ -74,8 +74,8 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 retDic["MovementQty"] = Orig_InOutLine.GetMovementQty().ToString();
                 retDic["VAB_Project_ID"]= Orig_InOutLine.GetVAB_Project_ID().ToString();
                 retDic["VAB_Promotion_ID"]= Orig_InOutLine.GetVAB_Promotion_ID().ToString();
-                retDic["M_Product_ID"]= Orig_InOutLine.GetM_Product_ID().ToString();
-                retDic["M_AttributeSetInstance_ID"]= Orig_InOutLine.GetM_AttributeSetInstance_ID().ToString();
+                retDic["VAM_Product_ID"]= Orig_InOutLine.GetVAM_Product_ID().ToString();
+                retDic["VAM_PFeature_SetInstance_ID"]= Orig_InOutLine.GetVAM_PFeature_SetInstance_ID().ToString();
                 retDic["VAB_UOM_ID"]= Orig_InOutLine.GetVAB_UOM_ID().ToString();
                 //retlst.Add(retValue);
 

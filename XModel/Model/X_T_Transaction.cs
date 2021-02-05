@@ -21,10 +21,10 @@ public X_VAT_Transaction (Context ctx, int VAT_Transaction_ID, Trx trxName) : ba
 /** if (VAT_Transaction_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Locator_ID (0);
-SetM_Product_ID (0);
-SetM_Transaction_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Locator_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Inv_Trx_ID (0);
 SetMovementDate (DateTime.Now);
 SetMovementQty (0.0);
 SetMovementType (null);
@@ -36,10 +36,10 @@ public X_VAT_Transaction (Ctx ctx, int VAT_Transaction_ID, Trx trxName) : base (
 /** if (VAT_Transaction_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Locator_ID (0);
-SetM_Product_ID (0);
-SetM_Transaction_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Locator_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Inv_Trx_ID (0);
 SetMovementDate (DateTime.Now);
 SetMovementQty (0.0);
 SetMovementType (null);
@@ -172,190 +172,190 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_Value ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_Value ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Shipment/Receipt Line.
-@param M_InOutLine_ID Line on Shipment or Receipt document */
-public void SetM_InOutLine_ID (int M_InOutLine_ID)
+@param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+public void SetVAM_Inv_InOutLine_ID (int VAM_Inv_InOutLine_ID)
 {
-if (M_InOutLine_ID <= 0) Set_Value ("M_InOutLine_ID", null);
+if (VAM_Inv_InOutLine_ID <= 0) Set_Value ("VAM_Inv_InOutLine_ID", null);
 else
-Set_Value ("M_InOutLine_ID", M_InOutLine_ID);
+Set_Value ("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
 }
 /** Get Shipment/Receipt Line.
 @return Line on Shipment or Receipt document */
-public int GetM_InOutLine_ID() 
+public int GetVAM_Inv_InOutLine_ID() 
 {
-Object ii = Get_Value("M_InOutLine_ID");
+Object ii = Get_Value("VAM_Inv_InOutLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Shipment/Receipt.
-@param M_InOut_ID Material Shipment Document */
-public void SetM_InOut_ID (int M_InOut_ID)
+@param VAM_Inv_InOut_ID Material Shipment Document */
+public void SetVAM_Inv_InOut_ID (int VAM_Inv_InOut_ID)
 {
-if (M_InOut_ID <= 0) Set_Value ("M_InOut_ID", null);
+if (VAM_Inv_InOut_ID <= 0) Set_Value ("VAM_Inv_InOut_ID", null);
 else
-Set_Value ("M_InOut_ID", M_InOut_ID);
+Set_Value ("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
 }
 /** Get Shipment/Receipt.
 @return Material Shipment Document */
-public int GetM_InOut_ID() 
+public int GetVAM_Inv_InOut_ID() 
 {
-Object ii = Get_Value("M_InOut_ID");
+Object ii = Get_Value("VAM_Inv_InOut_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Phys Inventory Line.
-@param M_InventoryLine_ID Unique line in an Inventory document */
-public void SetM_InventoryLine_ID (int M_InventoryLine_ID)
+@param VAM_InventoryLine_ID Unique line in an Inventory document */
+public void SetVAM_InventoryLine_ID (int VAM_InventoryLine_ID)
 {
-if (M_InventoryLine_ID <= 0) Set_Value ("M_InventoryLine_ID", null);
+if (VAM_InventoryLine_ID <= 0) Set_Value ("VAM_InventoryLine_ID", null);
 else
-Set_Value ("M_InventoryLine_ID", M_InventoryLine_ID);
+Set_Value ("VAM_InventoryLine_ID", VAM_InventoryLine_ID);
 }
 /** Get Phys Inventory Line.
 @return Unique line in an Inventory document */
-public int GetM_InventoryLine_ID() 
+public int GetVAM_InventoryLine_ID() 
 {
-Object ii = Get_Value("M_InventoryLine_ID");
+Object ii = Get_Value("VAM_InventoryLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Phys.Inventory.
-@param M_Inventory_ID Parameters for a Physical Inventory */
-public void SetM_Inventory_ID (int M_Inventory_ID)
+@param VAM_Inventory_ID Parameters for a Physical Inventory */
+public void SetVAM_Inventory_ID (int VAM_Inventory_ID)
 {
-if (M_Inventory_ID <= 0) Set_Value ("M_Inventory_ID", null);
+if (VAM_Inventory_ID <= 0) Set_Value ("VAM_Inventory_ID", null);
 else
-Set_Value ("M_Inventory_ID", M_Inventory_ID);
+Set_Value ("VAM_Inventory_ID", VAM_Inventory_ID);
 }
 /** Get Phys.Inventory.
 @return Parameters for a Physical Inventory */
-public int GetM_Inventory_ID() 
+public int GetVAM_Inventory_ID() 
 {
-Object ii = Get_Value("M_Inventory_ID");
+Object ii = Get_Value("VAM_Inventory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-public void SetM_Locator_ID (int M_Locator_ID)
+@param VAM_Locator_ID Warehouse Locator */
+public void SetVAM_Locator_ID (int VAM_Locator_ID)
 {
-if (M_Locator_ID < 1) throw new ArgumentException ("M_Locator_ID is mandatory.");
-Set_Value ("M_Locator_ID", M_Locator_ID);
+if (VAM_Locator_ID < 1) throw new ArgumentException ("VAM_Locator_ID is mandatory.");
+Set_Value ("VAM_Locator_ID", VAM_Locator_ID);
 }
 /** Get Locator.
 @return Warehouse Locator */
-public int GetM_Locator_ID() 
+public int GetVAM_Locator_ID() 
 {
-Object ii = Get_Value("M_Locator_ID");
+Object ii = Get_Value("VAM_Locator_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Move Line.
-@param M_MovementLine_ID Inventory Move document Line */
-public void SetM_MovementLine_ID (int M_MovementLine_ID)
+@param VAM_InvTrf_Line_ID Inventory Move document Line */
+public void SetVAM_InvTrf_Line_ID (int VAM_InvTrf_Line_ID)
 {
-if (M_MovementLine_ID <= 0) Set_Value ("M_MovementLine_ID", null);
+if (VAM_InvTrf_Line_ID <= 0) Set_Value ("VAM_InvTrf_Line_ID", null);
 else
-Set_Value ("M_MovementLine_ID", M_MovementLine_ID);
+Set_Value ("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
 }
 /** Get Move Line.
 @return Inventory Move document Line */
-public int GetM_MovementLine_ID() 
+public int GetVAM_InvTrf_Line_ID() 
 {
-Object ii = Get_Value("M_MovementLine_ID");
+Object ii = Get_Value("VAM_InvTrf_Line_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Inventory Move.
-@param M_Movement_ID Movement of Inventory */
-public void SetM_Movement_ID (int M_Movement_ID)
+@param VAM_InventoryTransfer_ID Movement of Inventory */
+public void SetVAM_InventoryTransfer_ID (int VAM_InventoryTransfer_ID)
 {
-if (M_Movement_ID <= 0) Set_Value ("M_Movement_ID", null);
+if (VAM_InventoryTransfer_ID <= 0) Set_Value ("VAM_InventoryTransfer_ID", null);
 else
-Set_Value ("M_Movement_ID", M_Movement_ID);
+Set_Value ("VAM_InventoryTransfer_ID", VAM_InventoryTransfer_ID);
 }
 /** Get Inventory Move.
 @return Movement of Inventory */
-public int GetM_Movement_ID() 
+public int GetVAM_InventoryTransfer_ID() 
 {
-Object ii = Get_Value("M_Movement_ID");
+Object ii = Get_Value("VAM_InventoryTransfer_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_Value ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Production Line.
-@param M_ProductionLine_ID Document Line representing a production */
-public void SetM_ProductionLine_ID (int M_ProductionLine_ID)
+@param VAM_ProductionLine_ID Document Line representing a production */
+public void SetVAM_ProductionLine_ID (int VAM_ProductionLine_ID)
 {
-if (M_ProductionLine_ID <= 0) Set_Value ("M_ProductionLine_ID", null);
+if (VAM_ProductionLine_ID <= 0) Set_Value ("VAM_ProductionLine_ID", null);
 else
-Set_Value ("M_ProductionLine_ID", M_ProductionLine_ID);
+Set_Value ("VAM_ProductionLine_ID", VAM_ProductionLine_ID);
 }
 /** Get Production Line.
 @return Document Line representing a production */
-public int GetM_ProductionLine_ID() 
+public int GetVAM_ProductionLine_ID() 
 {
-Object ii = Get_Value("M_ProductionLine_ID");
+Object ii = Get_Value("VAM_ProductionLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Production.
-@param M_Production_ID Plan for producing a product */
-public void SetM_Production_ID (int M_Production_ID)
+@param VAM_Production_ID Plan for producing a product */
+public void SetVAM_Production_ID (int VAM_Production_ID)
 {
-if (M_Production_ID <= 0) Set_Value ("M_Production_ID", null);
+if (VAM_Production_ID <= 0) Set_Value ("VAM_Production_ID", null);
 else
-Set_Value ("M_Production_ID", M_Production_ID);
+Set_Value ("VAM_Production_ID", VAM_Production_ID);
 }
 /** Get Production.
 @return Plan for producing a product */
-public int GetM_Production_ID() 
+public int GetVAM_Production_ID() 
 {
-Object ii = Get_Value("M_Production_ID");
+Object ii = Get_Value("VAM_Production_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Inventory Transaction.
-@param M_Transaction_ID Inventory Transaction */
-public void SetM_Transaction_ID (int M_Transaction_ID)
+@param VAM_Inv_Trx_ID Inventory Transaction */
+public void SetVAM_Inv_Trx_ID (int VAM_Inv_Trx_ID)
 {
-if (M_Transaction_ID < 1) throw new ArgumentException ("M_Transaction_ID is mandatory.");
-Set_Value ("M_Transaction_ID", M_Transaction_ID);
+if (VAM_Inv_Trx_ID < 1) throw new ArgumentException ("VAM_Inv_Trx_ID is mandatory.");
+Set_Value ("VAM_Inv_Trx_ID", VAM_Inv_Trx_ID);
 }
 /** Get Inventory Transaction.
 @return Inventory Transaction */
-public int GetM_Transaction_ID() 
+public int GetVAM_Inv_Trx_ID() 
 {
-Object ii = Get_Value("M_Transaction_ID");
+Object ii = Get_Value("VAM_Inv_Trx_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

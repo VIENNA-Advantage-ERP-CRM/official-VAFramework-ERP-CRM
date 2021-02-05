@@ -31,13 +31,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Org_ID">org of document</param>
         /// <param name="isSOTrx">sales order</param>
-        /// <param name="M_PriceList_ID">price list selected</param>
+        /// <param name="VAM_PriceList_ID">price list selected</param>
         /// <param name="VAB_BusinessPartner_ID">business partner</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="Qty">quantity</param>
         /// <param name="PriceDate">date for pricing</param>
         /// <returns>null if Vienna should price it or pricing info</returns>
-        UserPricingVO Price(int VAF_Org_ID, bool isSOTrx, int M_PriceList_ID, int VAB_BusinessPartner_ID,
-            int M_Product_ID, Decimal Qty, DateTime? PriceDate);
+        UserPricingVO Price(int VAF_Org_ID, bool isSOTrx, int VAM_PriceList_ID, int VAB_BusinessPartner_ID,
+            int VAM_Product_ID, Decimal Qty, DateTime? PriceDate);
     }
 }

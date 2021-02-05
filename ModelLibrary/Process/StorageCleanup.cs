@@ -60,7 +60,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Info("");
             //	Clean up empty Storage
-            String sql = "DELETE FROM M_Storage "
+            String sql = "DELETE FROM VAM_Storage "
                 + "WHERE QtyOnHand = 0 AND QtyReserved = 0 AND QtyOrdered = 0"
                 //jz + " AND Created < SysDate-3";
                 + " AND Created < addDays(SysDate,-3)";
@@ -69,25 +69,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //
             sql = "SELECT * "
-                + "FROM M_Storage s "
+                + "FROM VAM_Storage s "
                 + "WHERE VAF_Client_ID =" + GetCtx().GetVAF_Client_ID()
                 + " AND QtyOnHand < 0"
                 //	Instance Attribute
-                + " AND EXISTS (SELECT * FROM M_Product p"
-                    + " INNER JOIN M_AttributeSet mas ON (p.M_AttributeSet_ID=mas.M_AttributeSet_ID) "
-                    + "WHERE s.M_Product_ID=p.M_Product_ID AND mas.IsInstanceAttribute='Y')"
+                + " AND EXISTS (SELECT * FROM VAM_Product p"
+                    + " INNER JOIN VAM_PFeature_Set mas ON (p.VAM_PFeature_Set_ID=mas.VAM_PFeature_Set_ID) "
+                    + "WHERE s.VAM_Product_ID=p.VAM_Product_ID AND mas.IsInstanceAttribute='Y')"
                 //	Stock in same location
-                //	+ " AND EXISTS (SELECT * FROM M_Storage sl "
+                //	+ " AND EXISTS (SELECT * FROM VAM_Storage sl "
                 //		+ "WHERE sl.QtyOnHand > 0"
-                //		+ " AND s.M_Product_ID=sl.M_Product_ID"
-                //		+ " AND s.M_Locator_ID=sl.M_Locator_ID)"
+                //		+ " AND s.VAM_Product_ID=sl.VAM_Product_ID"
+                //		+ " AND s.VAM_Locator_ID=sl.VAM_Locator_ID)"
                 //	Stock in same Warehouse
-                + " AND EXISTS (SELECT * FROM M_Storage sw"
-                    + " INNER JOIN M_Locator swl ON (sw.M_Locator_ID=swl.M_Locator_ID), M_Locator sl "
+                + " AND EXISTS (SELECT * FROM VAM_Storage sw"
+                    + " INNER JOIN VAM_Locator swl ON (sw.VAM_Locator_ID=swl.VAM_Locator_ID), VAM_Locator sl "
                     + "WHERE sw.QtyOnHand > 0"
-                    + " AND s.M_Product_ID=sw.M_Product_ID"
-                    + " AND s.M_Locator_ID=sl.M_Locator_ID"
-                    + " AND sl.M_Warehouse_ID=swl.M_Warehouse_ID)";
+                    + " AND s.VAM_Product_ID=sw.VAM_Product_ID"
+                    + " AND s.VAM_Locator_ID=sl.VAM_Locator_ID"
+                    + " AND sl.VAM_Warehouse_ID=swl.VAM_Warehouse_ID)";
             DataTable dt = null;
             IDataReader idr = null;
             int lines = 0;
@@ -142,19 +142,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             int lines = 0;
-            MStorage[] sources = GetSources(target.GetM_Product_ID(), target.GetM_Locator_ID());
+            MStorage[] sources = GetSources(target.GetVAM_Product_ID(), target.GetVAM_Locator_ID());
             for (int i = 0; i < sources.Length; i++)
             {
                 MStorage source = sources[i];
 
                 //	Movement Line
                 MMovementLine ml = new MMovementLine(mh);
-                ml.SetM_Product_ID(target.GetM_Product_ID());
-                ml.SetM_LocatorTo_ID(target.GetM_Locator_ID());
-                ml.SetM_AttributeSetInstanceTo_ID(target.GetM_AttributeSetInstance_ID());
+                ml.SetVAM_Product_ID(target.GetVAM_Product_ID());
+                ml.SetVAM_LocatorTo_ID(target.GetVAM_Locator_ID());
+                ml.SetVAM_PFeature_SetInstanceTo_ID(target.GetVAM_PFeature_SetInstance_ID());
                 //	From
-                ml.SetM_Locator_ID(source.GetM_Locator_ID());
-                ml.SetM_AttributeSetInstance_ID(source.GetM_AttributeSetInstance_ID());
+                ml.SetVAM_Locator_ID(source.GetVAM_Locator_ID());
+                ml.SetVAM_PFeature_SetInstance_ID(source.GetVAM_PFeature_SetInstance_ID());
 
                 Decimal qtyMove = qty;
                 if (qtyMove.CompareTo(source.GetQtyOnHand()) > 0)
@@ -182,7 +182,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             mh.ProcessIt(DocActionVariables.ACTION_COMPLETE);
             mh.Save();
 
-            AddLog(0, null, new Decimal(lines), "@M_Movement_ID@ " + mh.GetDocumentNo() + " ("
+            AddLog(0, null, new Decimal(lines), "@VAM_InventoryTransfer_ID@ " + mh.GetDocumentNo() + " ("
                 + MVAFCtrlRefList.Get(GetCtx(), MMovement.DOCSTATUS_VAF_Control_Ref_ID,
                     mh.GetDocStatus(), Get_Trx()) + ")");
 
@@ -199,17 +199,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Negative Ordered / Reserved Qty
             if (Env.Signum(target.GetQtyReserved()) != 0 || Env.Signum(target.GetQtyOrdered()) != 0)
             {
-                int M_Locator_ID = target.GetM_Locator_ID();
-                MStorage storage0 = MStorage.Get(GetCtx(), M_Locator_ID,
-                    target.GetM_Product_ID(), 0, Get_Trx());
+                int VAM_Locator_ID = target.GetVAM_Locator_ID();
+                MStorage storage0 = MStorage.Get(GetCtx(), VAM_Locator_ID,
+                    target.GetVAM_Product_ID(), 0, Get_Trx());
                 if (storage0 == null)
                 {
-                    MLocator defaultLoc = MLocator.GetDefault(GetCtx(), M_Locator_ID);
-                    if (M_Locator_ID != defaultLoc.GetM_Locator_ID())
+                    MLocator defaultLoc = MLocator.GetDefault(GetCtx(), VAM_Locator_ID);
+                    if (VAM_Locator_ID != defaultLoc.GetVAM_Locator_ID())
                     {
-                        M_Locator_ID = defaultLoc.GetM_Locator_ID();
-                        storage0 = MStorage.Get(GetCtx(), M_Locator_ID,
-                            target.GetM_Product_ID(), 0, Get_Trx());
+                        VAM_Locator_ID = defaultLoc.GetVAM_Locator_ID();
+                        storage0 = MStorage.Get(GetCtx(), VAM_Locator_ID,
+                            target.GetVAM_Product_ID(), 0, Get_Trx());
                     }
                 }
                 if (storage0 != null)
@@ -227,14 +227,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Eliminate Reservation
                     if (Env.Signum(reserved) != 0 || Env.Signum(ordered) != 0)
                     {
-                        if (MStorage.Add(GetCtx(), target.GetM_Warehouse_ID(), target.GetM_Locator_ID(),
-                            target.GetM_Product_ID(),
-                            target.GetM_AttributeSetInstance_ID(), target.GetM_AttributeSetInstance_ID(),
+                        if (MStorage.Add(GetCtx(), target.GetVAM_Warehouse_ID(), target.GetVAM_Locator_ID(),
+                            target.GetVAM_Product_ID(),
+                            target.GetVAM_PFeature_SetInstance_ID(), target.GetVAM_PFeature_SetInstance_ID(),
                             Env.ZERO, Decimal.Negate(reserved), Decimal.Negate(ordered), Get_Trx()))
                         {
-                            if (MStorage.Add(GetCtx(), storage0.GetM_Warehouse_ID(), storage0.GetM_Locator_ID(),
-                                storage0.GetM_Product_ID(),
-                                storage0.GetM_AttributeSetInstance_ID(), storage0.GetM_AttributeSetInstance_ID(),
+                            if (MStorage.Add(GetCtx(), storage0.GetVAM_Warehouse_ID(), storage0.GetVAM_Locator_ID(),
+                                storage0.GetVAM_Product_ID(),
+                                storage0.GetVAM_PFeature_SetInstance_ID(), storage0.GetVAM_PFeature_SetInstance_ID(),
                                 Env.ZERO, reserved, ordered, Get_Trx()))
                             {
                                 log.Info("Reserved=" + reserved + ",Ordered=" + ordered);
@@ -256,27 +256,27 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <summary>
         /// Get Storage Sources
         /// </summary>
-        /// <param name="M_Product_ID">product</param>
-        /// <param name="M_Locator_ID">locator</param>
+        /// <param name="VAM_Product_ID">product</param>
+        /// <param name="VAM_Locator_ID">locator</param>
         /// <returns>sources</returns>
-        private MStorage[] GetSources(int M_Product_ID, int M_Locator_ID)
+        private MStorage[] GetSources(int VAM_Product_ID, int VAM_Locator_ID)
         {
             List<MStorage> list = new List<MStorage>();
             String sql = "SELECT * "
-                + "FROM M_Storage s "
+                + "FROM VAM_Storage s "
                 + "WHERE QtyOnHand > 0"
-                + " AND M_Product_ID=" + M_Product_ID
+                + " AND VAM_Product_ID=" + VAM_Product_ID
                 //	Empty ASI
-                + " AND (M_AttributeSetInstance_ID=0"
-                + " OR EXISTS (SELECT * FROM M_AttributeSetInstance asi "
-                    + "WHERE s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID"
+                + " AND (VAM_PFeature_SetInstance_ID=0"
+                + " OR EXISTS (SELECT * FROM VAM_PFeature_SetInstance asi "
+                    + "WHERE s.VAM_PFeature_SetInstance_ID=asi.VAM_PFeature_SetInstance_ID"
                     + " AND asi.Description IS NULL) )"
                 //	Stock in same Warehouse
-                + " AND EXISTS (SELECT * FROM M_Locator sl, M_Locator x "
-                    + "WHERE s.M_Locator_ID=sl.M_Locator_ID"
-                    + " AND x.M_Locator_ID=" + M_Locator_ID
-                    + " AND sl.M_Warehouse_ID=x.M_Warehouse_ID) "
-                + "ORDER BY M_AttributeSetInstance_ID";
+                + " AND EXISTS (SELECT * FROM VAM_Locator sl, VAM_Locator x "
+                    + "WHERE s.VAM_Locator_ID=sl.VAM_Locator_ID"
+                    + " AND x.VAM_Locator_ID=" + VAM_Locator_ID
+                    + " AND sl.VAM_Warehouse_ID=x.VAM_Warehouse_ID) "
+                + "ORDER BY VAM_PFeature_SetInstance_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try

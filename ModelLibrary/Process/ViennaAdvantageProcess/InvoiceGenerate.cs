@@ -141,7 +141,7 @@ namespace ViennaAdvantage.Process
             //{
             //    sql = "SELECT * FROM VAB_Order "
             //        + "WHERE IsSelected='Y' AND DocStatus='CO' AND IsSOTrx='Y' AND VAF_Client_ID = " + GetVAF_Client_ID() + " AND VAF_Org_ID = " + GetVAF_Org_ID()
-            //        + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
+            //        + "ORDER BY VAM_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
             //}
             //else
             //{
@@ -163,12 +163,12 @@ namespace ViennaAdvantage.Process
             // JID_1237 : While creating invoice need to consolidate order on the basis of Org, Payment Term, BP Location (Bill to Location) and Pricelist.
             sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol "
                     + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID AND ol.QtyOrdered<>ol.QtyInvoiced AND ol.IsContract ='N') "
-                + "ORDER BY VAF_Org_ID, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, M_PriceList_ID, VAB_CurrencyType_ID, VAB_Order_ID, M_Warehouse_ID, PriorityRule";
+                + "ORDER BY VAF_Org_ID, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAM_PriceList_ID, VAB_CurrencyType_ID, VAB_Order_ID, VAM_Warehouse_ID, PriorityRule";
 
             //sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol INNER JOIN VAB_Order ord "
             //      + "  ON (ord.VAB_Order_id = ol.VAB_Order_id) WHERE ord.VAB_Order_ID  =ol.VAB_Order_ID "
             //     + "  AND ol.QtyOrdered <> ol.QtyInvoiced AND ol.Iscontract ='N') "
-            //  + "ORDER BY M_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
+            //  + "ORDER BY VAM_Warehouse_ID, PriorityRule, VAB_BusinessPartner_ID, VAB_PaymentTerm_ID, VAB_Order_ID";
             //}
             //	sql += " FOR UPDATE";
 
@@ -276,7 +276,7 @@ namespace ViennaAdvantage.Process
                     || (_invoice != null
                     && (_invoice.GetVAB_BPart_Location_ID() != order.GetBill_Location_ID()
                         || _invoice.GetVAB_PaymentTerm_ID() != order.GetVAB_PaymentTerm_ID()
-                        || _invoice.GetM_PriceList_ID() != order.GetM_PriceList_ID()
+                        || _invoice.GetVAM_PriceList_ID() != order.GetVAM_PriceList_ID()
                         || _invoice.GetVAF_Org_ID() != order.GetVAF_Org_ID()
                         || ((_invoice.GetVAB_CurrencyType_ID() != 0 ? _invoice.GetVAB_CurrencyType_ID() : defaultConversionType)
                              != (order.GetVAB_CurrencyType_ID() != 0 ? order.GetVAB_CurrencyType_ID() : defaultConversionType))
@@ -325,9 +325,9 @@ namespace ViennaAdvantage.Process
                             continue;
                         }
                         if (shipment == null
-                            || shipment.GetM_InOut_ID() != shipLine.GetM_InOut_ID())
+                            || shipment.GetVAM_Inv_InOut_ID() != shipLine.GetVAM_Inv_InOut_ID())
                         {
-                            shipment = new MInOut(GetCtx(), shipLine.GetM_InOut_ID(), Get_TrxName());
+                            shipment = new MInOut(GetCtx(), shipLine.GetVAM_Inv_InOut_ID(), Get_TrxName());
                         }
                         if (!shipment.IsComplete()		//	ignore incomplete or reversals 
                             || shipment.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
@@ -335,7 +335,7 @@ namespace ViennaAdvantage.Process
                             continue;
                         }
                         //JID_1139 Avoided the duplicate charge records
-                        if (shipLine.GetM_Product_ID() > 0 || isAllownonItem)
+                        if (shipLine.GetVAM_Product_ID() > 0 || isAllownonItem)
                         {
                             CreateLine(order, shipment, shipLine);
                         }
@@ -378,7 +378,7 @@ namespace ViennaAdvantage.Process
                     {
                         MOrderLine oLine = oLines[i];
                         Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
-                        if (toInvoice.CompareTo(Env.ZERO) == 0 && oLine.GetM_Product_ID() != 0)
+                        if (toInvoice.CompareTo(Env.ZERO) == 0 && oLine.GetVAM_Product_ID() != 0)
                         {
                             continue;
                         }
@@ -609,7 +609,7 @@ namespace ViennaAdvantage.Process
             #region Comment Create Shipment Comment Line
             //	Create Shipment Comment Line
             //if (_ship == null
-            //    || _ship.GetM_InOut_ID() != ship.GetM_InOut_ID())
+            //    || _ship.GetVAM_Inv_InOut_ID() != ship.GetVAM_Inv_InOut_ID())
             //{
             //    MDocType dt = MDocType.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
             //    if (_bp == null || _bp.GetVAB_BusinessPartner_ID() != ship.GetVAB_BusinessPartner_ID())
@@ -669,7 +669,7 @@ namespace ViennaAdvantage.Process
             line1.SetQtyEntered(sLine.GetQtyEntered());
             line1.SetQtyInvoiced(sLine.GetMovementQty());
             line1.SetLine(_line + sLine.GetLine());
-            line1.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+            line1.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
             if (sLine.GetA_Asset_ID() > 0)
             {
                 line1.SetA_Asset_ID(sLine.GetA_Asset_ID());
@@ -684,7 +684,7 @@ namespace ViennaAdvantage.Process
                         pCurrency_ID = as1.GetVAB_Currency_ID();
                     }
                     decimal LineNetAmt = Decimal.Multiply(line1.GetPriceActual(), line1.GetQtyEntered());
-                    decimal AssetCost = GetAssetCost(sLine.GetA_Asset_ID(), sLine.GetM_Product_ID(), PAcctSchema_ID);
+                    decimal AssetCost = GetAssetCost(sLine.GetA_Asset_ID(), sLine.GetVAM_Product_ID(), PAcctSchema_ID);
                     AssetCost = Decimal.Multiply(AssetCost, line1.GetQtyEntered());
                     if (LineNetAmt > 0)
                     {
@@ -722,19 +722,19 @@ namespace ViennaAdvantage.Process
             StringBuilder _Sql = new StringBuilder();
 
             _Sql.Append(@"SELECT cost.CurrentCostPrice,
-                          cost.FutureCostPrice,cost.M_COSTELEMENT_ID ,
-                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.m_product_id
-                        FROM M_Cost cost
+                          cost.FutureCostPrice,cost.VAM_ProductCostElement_ID ,
+                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.VAM_Product_id
+                        FROM VAM_ProductCost cost
                         INNER JOIN VAA_Asset ass
                         ON(Ass.VAA_Asset_ID =cost.VAA_Asset_ID)
-                        INNER JOIN m_product pro
-                        ON(ass.m_product_id =pro.m_product_id AND pro.M_product_id=cost.m_Product_id)
-                        INNER JOIN m_costelement costele
-                        ON(costele.M_costelement_id =cost.m_costelement_id)
-                        LEFT JOIN M_Product_Category acc
-                        ON acc.M_Product_Category_ID=pro.M_Product_Category_ID
+                        INNER JOIN VAM_Product pro
+                        ON(ass.VAM_Product_id =pro.VAM_Product_id AND pro.VAM_Product_id=cost.VAM_Product_id)
+                        INNER JOIN VAM_ProductCostElement costele
+                        ON(costele.VAM_ProductCostElement_id =cost.VAM_ProductCostElement_id)
+                        LEFT JOIN VAM_ProductCategory acc
+                        ON acc.VAM_ProductCategory_ID=pro.VAM_ProductCategory_ID
                         WHERE ass.VAA_Asset_ID =" + Asset_ID + @" 
-                        AND ass.M_Product_ID=" + Product_ID + @"
+                        AND ass.VAM_Product_ID=" + Product_ID + @"
                         AND costele.costelementtype='M'
                         AND cost.IsAssetCost = 'Y' 
                         AND costele.CostingMethod=acc.CostingMethod");
@@ -748,19 +748,19 @@ namespace ViennaAdvantage.Process
                 //Else Check costElement in Accounting Schema
                 _Sql.Clear();
                 _Sql.Append(@"SELECT cost.CurrentCostPrice,
-                          cost.FutureCostPrice,cost.M_COSTELEMENT_ID ,
-                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.m_product_id
-                        FROM M_Cost cost
+                          cost.FutureCostPrice,cost.VAM_ProductCostElement_ID ,
+                        cost.VAB_AccountBook_id,cost.VAA_Asset_ID  , cost.VAM_Product_id
+                        FROM VAM_ProductCost cost
                         INNER JOIN VAA_Asset ass
                         ON(Ass.VAA_Asset_ID =cost.VAA_Asset_ID)
-                        INNER JOIN m_product pro
-                        ON(ass.m_product_id =pro.m_product_id AND pro.M_product_id=cost.m_Product_id)
-                        INNER JOIN m_costelement costele
-                        ON(costele.M_costelement_id =cost.m_costelement_id)
+                        INNER JOIN VAM_Product pro
+                        ON(ass.VAM_Product_id =pro.VAM_Product_id AND pro.VAM_Product_id=cost.VAM_Product_id)
+                        INNER JOIN VAM_ProductCostElement costele
+                        ON(costele.VAM_ProductCostElement_id =cost.VAM_ProductCostElement_id)
                         INNER JOIN VAF_ClientDetail ci ON ci.VAF_Client_ID = ass.VAF_Client_ID
                         left join VAB_AccountBook accSch on accsch.VAB_AccountBook_ID=ci.VAB_AccountBook1_ID
                         WHERE ass.VAA_Asset_ID =" + Asset_ID + @" 
-                        AND ass.M_Product_ID=" + Product_ID + @"
+                        AND ass.VAM_Product_ID=" + Product_ID + @"
                         AND costele.costelementtype='M'
                         AND cost.IsAssetCost = 'Y' 
                         AND costele.CostingMethod=accsch.CostingMethod");

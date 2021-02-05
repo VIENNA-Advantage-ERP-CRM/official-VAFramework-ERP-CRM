@@ -159,11 +159,11 @@ public void SetVAGL_Budget_ID (int VAGL_Budget_ID){if (VAGL_Budget_ID <= 0) Set_
 Set_Value ("VAGL_Budget_ID", VAGL_Budget_ID);}/** Get Budget.
 @return General Ledger Budget */
 public int GetVAGL_Budget_ID() {Object ii = Get_Value("VAGL_Budget_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID){if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);else
-Set_Value ("M_Product_ID", M_Product_ID);}/** Get Product.
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID){if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);else
+Set_Value ("VAM_Product_ID", VAM_Product_ID);}/** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() {Object ii = Get_Value("M_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
+public int GetVAM_Product_ID() {Object ii = Get_Value("VAM_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}
 /** PostingType VAF_Control_Ref_ID=125 */
 public static int POSTINGTYPE_VAF_Control_Ref_ID=125;/** Actual = A */
 public static String POSTINGTYPE_Actual = "A";/** Budget = B */

@@ -11,41 +11,41 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_Inventory
+    /** Generated Model for VAM_Inventory
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Inventory : PO
+    public class X_VAM_Inventory : PO
     {
-        public X_M_Inventory(Context ctx, int M_Inventory_ID, Trx trxName)
-            : base(ctx, M_Inventory_ID, trxName)
+        public X_VAM_Inventory(Context ctx, int VAM_Inventory_ID, Trx trxName)
+            : base(ctx, VAM_Inventory_ID, trxName)
         {
-            /** if (M_Inventory_ID == 0)
+            /** if (VAM_Inventory_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
             SetIsApproved (false);
-            SetM_Inventory_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Inventory_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetPosted (false);
             SetProcessed (false);	// N
             }
              */
         }
-        public X_M_Inventory(Ctx ctx, int M_Inventory_ID, Trx trxName)
-            : base(ctx, M_Inventory_ID, trxName)
+        public X_VAM_Inventory(Ctx ctx, int VAM_Inventory_ID, Trx trxName)
+            : base(ctx, VAM_Inventory_ID, trxName)
         {
-            /** if (M_Inventory_ID == 0)
+            /** if (VAM_Inventory_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetDocAction (null);	// CO
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
             SetIsApproved (false);
-            SetM_Inventory_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Inventory_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetPosted (false);
             SetProcessed (false);	// N
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Inventory(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inventory(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Inventory(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inventory(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -75,14 +75,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Inventory(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Inventory(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_Inventory()
+        static X_VAM_Inventory()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -95,8 +95,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =321;
 
-        /** TableName=M_Inventory */
-        public static String Table_Name = "M_Inventory";
+        /** TableName=VAM_Inventory */
+        public static String Table_Name = "VAM_Inventory";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_Inventory[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Inventory[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -436,48 +436,48 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Phys.Inventory.
-        @param M_Inventory_ID Parameters for a Physical Inventory */
-        public void SetM_Inventory_ID(int M_Inventory_ID)
+        @param VAM_Inventory_ID Parameters for a Physical Inventory */
+        public void SetVAM_Inventory_ID(int VAM_Inventory_ID)
         {
-            if (M_Inventory_ID < 1) throw new ArgumentException("M_Inventory_ID is mandatory.");
-            Set_ValueNoCheck("M_Inventory_ID", M_Inventory_ID);
+            if (VAM_Inventory_ID < 1) throw new ArgumentException("VAM_Inventory_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inventory_ID", VAM_Inventory_ID);
         }
         /** Get Phys.Inventory.
         @return Parameters for a Physical Inventory */
-        public int GetM_Inventory_ID()
+        public int GetVAM_Inventory_ID()
         {
-            Object ii = Get_Value("M_Inventory_ID");
+            Object ii = Get_Value("VAM_Inventory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Perpetual Inventory.
-        @param M_PerpetualInv_ID Rules for generating physical inventory */
-        public void SetM_PerpetualInv_ID(int M_PerpetualInv_ID)
+        @param VAM_PerpetualInventory_ID Rules for generating physical inventory */
+        public void SetVAM_PerpetualInventory_ID(int VAM_PerpetualInventory_ID)
         {
-            if (M_PerpetualInv_ID <= 0) Set_ValueNoCheck("M_PerpetualInv_ID", null);
+            if (VAM_PerpetualInventory_ID <= 0) Set_ValueNoCheck("VAM_PerpetualInventory_ID", null);
             else
-                Set_ValueNoCheck("M_PerpetualInv_ID", M_PerpetualInv_ID);
+                Set_ValueNoCheck("VAM_PerpetualInventory_ID", VAM_PerpetualInventory_ID);
         }
         /** Get Perpetual Inventory.
         @return Rules for generating physical inventory */
-        public int GetM_PerpetualInv_ID()
+        public int GetVAM_PerpetualInventory_ID()
         {
-            Object ii = Get_Value("M_PerpetualInv_ID");
+            Object ii = Get_Value("VAM_PerpetualInventory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

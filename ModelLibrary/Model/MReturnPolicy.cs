@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MProductPrice
  * Purpose        : 
- * Class Used     : X_M_ReturnPolicy
+ * Class Used     : X_VAM_ReturnRule
  * Chronological    Development
  * Raghunandan     09-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MReturnPolicy : X_M_ReturnPolicy
+    public class MReturnPolicy : X_VAM_ReturnRule
     {
 
         private static VLogger s_log = VLogger.GetVLogger(typeof(MReturnPolicy).FullName);
@@ -34,10 +34,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_ReturnPolicy_ID">id</param>
+        /// <param name="VAM_ReturnRule_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReturnPolicy(Ctx ctx, int M_ReturnPolicy_ID, Trx trxName)
-            : base(ctx, M_ReturnPolicy_ID, trxName)
+        public MReturnPolicy(Ctx ctx, int VAM_ReturnRule_ID, Trx trxName)
+            : base(ctx, VAM_ReturnRule_ID, trxName)
         {
         }
 
@@ -53,17 +53,17 @@ namespace VAdvantage.Model
 
         }
 
-        public bool CheckReturnPolicy(DateTime? shipDate, DateTime? returnDate, int M_Product_ID)
+        public bool CheckReturnPolicy(DateTime? shipDate, DateTime? returnDate, int VAM_Product_ID)
         {
-            int M_ReturnPolicyLine_ID = GetProductLine(M_Product_ID);
-            if (M_ReturnPolicyLine_ID == 0)
+            int VAM_ReturnRuleLine_ID = GetProductLine(VAM_Product_ID);
+            if (VAM_ReturnRuleLine_ID == 0)
             {
-                MProduct product = new MProduct(GetCtx(), M_Product_ID, Get_TrxName());
-                GetProductCategoryLine(product.GetM_Product_Category_ID());
+                MProduct product = new MProduct(GetCtx(), VAM_Product_ID, Get_TrxName());
+                GetProductCategoryLine(product.GetVAM_ProductCategory_ID());
             }
             int days = 0;//new code
             long timeFrame;
-            if (M_ReturnPolicyLine_ID == 0)
+            if (VAM_ReturnRuleLine_ID == 0)
             {
                 //Get dateTime(in days).
                 //The datetime dictates the number of days after shipment that the
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                MReturnPolicyLine rpolicyLine = new MReturnPolicyLine(GetCtx(), M_ReturnPolicyLine_ID, Get_TrxName());
+                MReturnPolicyLine rpolicyLine = new MReturnPolicyLine(GetCtx(), VAM_ReturnRuleLine_ID, Get_TrxName());
                 days = rpolicyLine.GetTimeFrame();//new code
                 timeFrame = rpolicyLine.GetTimeFrame() * 24 * 60 * 60; // Timeframe in milliseconds
             }
@@ -136,15 +136,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Lines of Return Policy for a product
         /// </summary>
-        /// <param name="M_Product_ID">where clause or null (starting with AND)</param>
+        /// <param name="VAM_Product_ID">where clause or null (starting with AND)</param>
         /// <returns>lines</returns>
-        int GetProductLine(int M_Product_ID)
+        int GetProductLine(int VAM_Product_ID)
         {
-            StringBuilder sql = new StringBuilder("SELECT M_ReturnPolicyLine_ID FROM M_ReturnPolicyLine WHERE M_ReturnPolicy_ID =" + GetM_ReturnPolicy_ID());
-            int M_ReturnPolicyLine_ID = 0;
+            StringBuilder sql = new StringBuilder("SELECT VAM_ReturnRuleLine_ID FROM VAM_ReturnRuleLine WHERE VAM_ReturnRule_ID =" + GetVAM_ReturnRule_ID());
+            int VAM_ReturnRuleLine_ID = 0;
 
-            if (M_Product_ID != 0)
-                sql.Append("AND M_Product_ID =" + M_Product_ID);
+            if (VAM_Product_ID != 0)
+                sql.Append("AND VAM_Product_ID =" + VAM_Product_ID);
 
             DataSet ds = null;
             try
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    M_ReturnPolicyLine_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    VAM_ReturnRuleLine_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                 }
                 ds = null;
             }
@@ -165,21 +165,21 @@ namespace VAdvantage.Model
             {
                 ds = null;
             }
-            return M_ReturnPolicyLine_ID;
+            return VAM_ReturnRuleLine_ID;
         }
 
         /// <summary>
         /// Get Lines of Return Policy for a product
         /// </summary>
-        /// <param name="M_Product_Category_ID"></param>
+        /// <param name="VAM_ProductCategory_ID"></param>
         /// <returns>lines</returns>
-        int GetProductCategoryLine(int M_Product_Category_ID)
+        int GetProductCategoryLine(int VAM_ProductCategory_ID)
         {
-            StringBuilder sql = new StringBuilder("SELECT M_ReturnPolicyLine_ID FROM M_ReturnPolicyLine WHERE M_ReturnPolicy_ID =" + GetM_ReturnPolicy_ID());
-            int M_ReturnPolicyLine_ID = 0;
+            StringBuilder sql = new StringBuilder("SELECT VAM_ReturnRuleLine_ID FROM VAM_ReturnRuleLine WHERE VAM_ReturnRule_ID =" + GetVAM_ReturnRule_ID());
+            int VAM_ReturnRuleLine_ID = 0;
 
-            if (M_Product_Category_ID != 0)
-                sql.Append("AND M_Product_ID IS NULL AND M_Product_Category_ID = " + M_Product_Category_ID);
+            if (VAM_ProductCategory_ID != 0)
+                sql.Append("AND VAM_Product_ID IS NULL AND VAM_ProductCategory_ID = " + VAM_ProductCategory_ID);
 
             try
             {
@@ -187,14 +187,14 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    M_ReturnPolicyLine_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
+                    VAM_ReturnRuleLine_ID = Utility.Util.GetValueOfInt(dr[0].ToString());
                 }
             }
             catch (Exception e)
             {
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
-            return M_ReturnPolicyLine_ID;
+            return VAM_ReturnRuleLine_ID;
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         bool PolicyHasLines()
         {
-            StringBuilder sql = new StringBuilder("SELECT count(*) FROM M_ReturnPolicyLine WHERE M_ReturnPolicy_ID =" + GetM_ReturnPolicy_ID() + "");
+            StringBuilder sql = new StringBuilder("SELECT count(*) FROM VAM_ReturnRuleLine WHERE VAM_ReturnRule_ID =" + GetVAM_ReturnRule_ID() + "");
             int lineCount = 0;
             IDataReader idr = null;
             try
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             int rPolicy_ID = 0;
 
-            String sql = "SELECT M_ReturnPolicy_ID FROM M_ReturnPolicy"
+            String sql = "SELECT VAM_ReturnRule_ID FROM VAM_ReturnRule"
                 + " WHERE IsDefault='Y' AND IsActive='Y' AND VAF_Client_ID=" + VAF_Client_ID;
             IDataReader idr = null;
             try

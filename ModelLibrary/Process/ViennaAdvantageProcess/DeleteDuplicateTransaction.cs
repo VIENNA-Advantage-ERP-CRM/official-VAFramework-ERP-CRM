@@ -32,8 +32,8 @@ namespace ViennaAdvantageServer.Process
         }
         protected override string DoIt()
         {
-            sql = @"SELECT   VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id , m_transaction_id
-                    FROM m_transaction WHERE m_movementline_id IS NOT NULL ORDER BY m_product_id";
+            sql = @"SELECT   VAF_Org_ID ,   VAM_Product_ID ,  VAM_Locator_ID ,  VAM_PFeature_SetInstance_ID ,  VAM_InvTrf_Line_id , VAM_Inv_Trx_id
+                    FROM VAM_Inv_Trx WHERE VAM_InvTrf_Line_id IS NOT NULL ORDER BY VAM_Product_id";
             dsAllTransactionRecord = new DataSet();
             try
             {
@@ -47,10 +47,10 @@ namespace ViennaAdvantageServer.Process
                 }
             }
 
-            sql = @"SELECT COUNT(*) ,   VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
-                    FROM m_transaction WHERE m_movementline_id IS NOT NULL
-                    GROUP BY VAF_Org_ID ,   M_Product_ID ,  M_Locator_ID ,  M_AttributeSetInstance_ID ,  m_movementline_id
-                    HAVING COUNT(*) > 1 ORDER BY m_product_id";
+            sql = @"SELECT COUNT(*) ,   VAF_Org_ID ,   VAM_Product_ID ,  VAM_Locator_ID ,  VAM_PFeature_SetInstance_ID ,  VAM_InvTrf_Line_id
+                    FROM VAM_Inv_Trx WHERE VAM_InvTrf_Line_id IS NOT NULL
+                    GROUP BY VAF_Org_ID ,   VAM_Product_ID ,  VAM_Locator_ID ,  VAM_PFeature_SetInstance_ID ,  VAM_InvTrf_Line_id
+                    HAVING COUNT(*) > 1 ORDER BY VAM_Product_id";
             dsTransaction = new DataSet();
             try
             {
@@ -65,15 +65,15 @@ namespace ViennaAdvantageServer.Process
                             for (i = 0; i < dsTransaction.Tables[0].Rows.Count; i++)
                             {
                                 DataRow[] dr = dsAllTransactionRecord.Tables[0].Select("VAF_Org_ID= " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAF_Org_ID"]) +
-                                                                                       " AND M_Product_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) +
-                                                                                       " AND M_Locator_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) +
-                                                                                       " AND M_AttributeSetInstance_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) +
-                                                                                       " AND m_movementline_id=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["m_movementline_id"]), "m_transaction_id ASC");
+                                                                                       " AND VAM_Product_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) +
+                                                                                       " AND VAM_Locator_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) +
+                                                                                       " AND VAM_PFeature_SetInstance_ID=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) +
+                                                                                       " AND VAM_InvTrf_Line_id=" + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InvTrf_Line_id"]), "VAM_Inv_Trx_id ASC");
                                 if (dr.GetLength(0) > 0)
                                 {
                                     for (j = 0; j < dr.GetLength(0) - 1; j++)
                                     {
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dr[0]["m_transaction_id"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dr[0]["VAM_Inv_Trx_id"]), Get_Trx());
                                         transaction.Delete(true, Get_Trx());
                                         Commit();
                                     }

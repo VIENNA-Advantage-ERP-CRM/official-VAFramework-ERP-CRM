@@ -173,9 +173,9 @@ namespace VAdvantage.Model
         /// Get Default Org Warehouse
         /// </summary>
         /// <returns>warehouse</returns>
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            return GetInfo().GetM_Warehouse_ID();
+            return GetInfo().GetVAM_Warehouse_ID();
         }
 
         /// <summary>

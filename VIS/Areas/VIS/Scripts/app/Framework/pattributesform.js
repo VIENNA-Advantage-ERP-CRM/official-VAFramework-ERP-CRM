@@ -1,7 +1,7 @@
 ﻿; (function (VIS, $) {
 
     // PAttributesForm form declraion for constructor class
-    function PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, VAB_BusinessPartner_ID, proWindow, VAF_Column_ID, pwindowNo) {
+    function PAttributesForm(VAM_PFeature_SetInstance_ID, VAM_Product_ID, VAM_Locator_ID, VAB_BusinessPartner_ID, proWindow, VAF_Column_ID, pwindowNo) {
         this.onClose = null;
         var $self = this;
         var $root = $("<div style='position:relative'>");
@@ -15,7 +15,7 @@
         var cBPartnerId = null;
         var adColumnId = null;
         var windowNoParent = null;
-        var M_Lot_ID = null;
+        var VAM_Lot_ID = null;
         var attrCode = "";
 
         /**	Enter Product Attributes		*/
@@ -33,16 +33,16 @@
         var IsSOTrx = false;
         var IsInternalUse = false;
         this.log = VIS.Logging.VLogger.getVLogger("PAttributesForm");
-        this.log.config("M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", M_Product_ID=" + M_Product_ID + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
+        this.log.config("VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + ", VAM_Product_ID=" + VAM_Product_ID + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
 
         //constructor load
-        mAttributeSetInstanceId = M_AttributeSetInstance_ID;
-        mProductId = M_Product_ID;
+        mAttributeSetInstanceId = VAM_PFeature_SetInstance_ID;
+        mProductId = VAM_Product_ID;
         cBPartnerId = VAB_BusinessPartner_ID;
         productWindow = proWindow;
         adColumnId = VAF_Column_ID;
         windowNoParent = pwindowNo;
-        mLocatorId = M_Locator_ID;
+        mLocatorId = VAM_Locator_ID;
         if (windowNoParent != -1) {
             //winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID"));
             //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry, null, null));
@@ -226,7 +226,7 @@
             else if (chkNewEdit.prop("checked")) {
                 var text = txtLotString.val();
                 flag = false;
-                //var sql = "select count(*) from vaf_column where columnname = 'UniqueLot' and vaf_tableview_id = (select vaf_tableview_id from vaf_tableview where tablename = 'M_AttributeSet')";
+                //var sql = "select count(*) from vaf_column where columnname = 'UniqueLot' and vaf_tableview_id = (select vaf_tableview_id from vaf_tableview where tablename = 'VAM_PFeature_Set')";
                 //var count = VIS.DB.executeScalar(sql);
                 var count = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/CheckUniqueLot", null, null);
                 if (count > 0) {
@@ -302,7 +302,7 @@
                     strAttrCode: txtAttrCode.val(),
                     productWindow: productWindow,
                     mAttributeSetInstanceId: mAttributeSetInstanceId,
-                    mProductId: M_Product_ID,
+                    mProductId: VAM_Product_ID,
                     windowNo: windowNo,
                     description: txtDescription.val(),
                     isEdited: chkEdit.prop("checked"),
@@ -319,7 +319,7 @@
                         else {
                             VIS.Env.getCtx().setContext(windowNoParent, "AttrCode", returnValue.attrCode);
                             if ($self.onClose)
-                                $self.onClose(returnValue.M_AttributeSetInstance_ID, returnValue.M_AttributeSetInstanceName, mLocatorId);
+                                $self.onClose(returnValue.VAM_PFeature_SetInstance_ID, returnValue.VAM_PFeature_SetInstanceName, mLocatorId);
                             setBusy(false);
                             $root.dialog('close');
                         }
@@ -335,20 +335,20 @@
         function cmdSelect() {
             debugger;
             $self.log.config("");
-            var M_Warehouse_ID = 0;
+            var VAM_Warehouse_ID = 0;
             if (windowNoParent != -1) {
                 if (window.DTD001 && window_ID == 170) {
-                    M_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "DTD001_MWarehouseSource_ID");
+                    VAM_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "DTD001_MWarehouseSource_ID");
                 }
                 else if (window_ID == 143 || windowName == "Blanket Sales Order" || window_ID == 169 || window_ID == 168 || window_ID == 341) {
-                    M_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "M_Warehouse_ID");
+                    VAM_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "VAM_Warehouse_ID");
                 }
             }
             var title = "";
 
             //	Get Text
-            //var sql = "SELECT p.Name, w.Name FROM M_Product p, M_Warehouse w "
-            //    + "WHERE p.M_Product_ID=" + mProductId + " AND w.M_Warehouse_ID=" + M_Warehouse_ID;
+            //var sql = "SELECT p.Name, w.Name FROM VAM_Product p, VAM_Warehouse w "
+            //    + "WHERE p.VAM_Product_ID=" + mProductId + " AND w.VAM_Warehouse_ID=" + VAM_Warehouse_ID;
 
             //var dr = null;
             try {
@@ -358,7 +358,7 @@
                 //}
                 //dr.close();
                 //dr = null;
-                title = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetTitle", { "Warehouse_ID": M_Warehouse_ID, "Product_ID": mProductId }, null);
+                title = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "PAttributes/GetTitle", { "Warehouse_ID": VAM_Warehouse_ID, "Product_ID": mProductId }, null);
             }
             catch (e) {
                 //if (dr != null) {
@@ -371,15 +371,15 @@
             var AttributeSetInstance_ID = -1;
             //open new form
             // Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
-            var obj = new VIS.PAttributeInstance(title, M_Warehouse_ID, mLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
+            var obj = new VIS.PAttributeInstance(title, VAM_Warehouse_ID, mLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
             obj.showDialog();
 
             //JID_1140: On OK of select existing record  pop up system should not close the control Of ASI should only close the Select existing record control.
-            obj.onClose = function (attributeSetInstanceID, name, M_Locator_ID, AttrCode) {
+            obj.onClose = function (attributeSetInstanceID, name, VAM_Locator_ID, AttrCode) {
                 if (attributeSetInstanceID != -1) {
                     mAttributeSetInstanceId = attributeSetInstanceID;
                     mAttributeSetInstanceName = name;
-                    mLocatorId = M_Locator_ID;
+                    mLocatorId = VAM_Locator_ID;
                     attrCode = AttrCode;
                     changed = true;
                     setBusy(true);
@@ -572,14 +572,14 @@
                     check = true;
                 }
 
-                //sql = "SELECT COUNT(*) FROM M_Storage s INNER JOIN M_Locator l ON (l.M_Locator_ID = s.M_Locator_ID) "
-                //       + " inner join M_warehouse w ON (w.M_warehouse_ID = l.M_Warehouse_ID) WHERE VAF_Client_ID = " + VIS.context.getVAF_Client_ID();
+                //sql = "SELECT COUNT(*) FROM VAM_Storage s INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID = s.VAM_Locator_ID) "
+                //       + " inner join VAM_Warehouse w ON (w.VAM_Warehouse_ID = l.VAM_Warehouse_ID) WHERE VAF_Client_ID = " + VIS.context.getVAF_Client_ID();
 
                 //var sqlWhere = "";
                 //var VAF_Org_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "VAF_Org_ID");
 
-                //var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM M_AttributeSet aSet INNER JOIN M_Product mp on mp.M_AttributeSet_ID = aset.M_AttributeSet_ID"
-                //    + " WHERE mp.M_Product_ID = " + mProductId;
+                //var sqlChk = "SELECT IsOrganization, IsProduct, IsWarehouse FROM VAM_PFeature_Set aSet INNER JOIN VAM_Product mp on mp.VAM_PFeature_Set_ID = aset.VAM_PFeature_Set_ID"
+                //    + " WHERE mp.VAM_Product_ID = " + mProductId;
 
                 //dr = VIS.DB.executeReader(sqlChk, null);
                 //if (dr.read()) {
@@ -587,31 +587,31 @@
                 //        sqlWhere = sqlWhere.concat(" OR s.VAF_Org_ID = " + VAF_Org_ID);
                 //    }
                 //    if (dr.getString(1).toUpper() == "Y") {
-                //        sqlWhere = sqlWhere.concat(" OR s.M_Product_ID = " + mProductId);
+                //        sqlWhere = sqlWhere.concat(" OR s.VAM_Product_ID = " + mProductId);
                 //    }
                 //    if (dr.getString(2).toUpper() == "Y") {
-                //        var M_Warehouse_ID = 0;
+                //        var VAM_Warehouse_ID = 0;
                 //        var sqlMovement = "SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + VIS.Env.getCtx().getContext(windowNoParent, "BaseTable_ID");
                 //        var innerdr = VIS.DB.executeReader(sqlMovement, null);
                 //        if (innerdr.read()) {
-                //            if (innerdr.getString(0).toUpper() == "M_MOVEMENT") {
-                //                var sqlWarehouse = "SELECT wh.M_Warehouse_ID FROM M_Warehouse wh INNER JOIN M_Locator l ON (wh.M_Warehouse_ID = l.M_Warehouse_ID) "
-                //        + " WHERE l.M_Locator_ID = " + VIS.Env.getCtx().getContext(windowNoParent, "M_LocatorTo_ID");
-                //                M_Warehouse_ID = VIS.DB.executeScalar(sqlWarehouse, null);
+                //            if (innerdr.getString(0).toUpper() == "VAM_InventoryTransfer") {
+                //                var sqlWarehouse = "SELECT wh.VAM_Warehouse_ID FROM VAM_Warehouse wh INNER JOIN VAM_Locator l ON (wh.VAM_Warehouse_ID = l.VAM_Warehouse_ID) "
+                //        + " WHERE l.VAM_Locator_ID = " + VIS.Env.getCtx().getContext(windowNoParent, "VAM_LocatorTo_ID");
+                //                VAM_Warehouse_ID = VIS.DB.executeScalar(sqlWarehouse, null);
                 //            }
                 //            innerdr.close();
                 //            innerdr = null;
                 //        }
                 //        else {
-                //            M_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "M_Warehouse_ID");
+                //            VAM_Warehouse_ID = VIS.Env.getCtx().getContextAsInt(windowNoParent, "VAM_Warehouse_ID");
                 //        }
 
-                //        sqlWhere = sqlWhere.concat(" OR w.M_Warehouse_ID = " + M_Warehouse_ID);
+                //        sqlWhere = sqlWhere.concat(" OR w.VAM_Warehouse_ID = " + VAM_Warehouse_ID);
                 //    }
                 //    if (sqlWhere.length > 0) {
                 //        sqlWhere = sqlWhere.Remove(0, 3);
                 //        sql = sql + " AND (" + sqlWhere.toString();
-                //        sql = sql + ") AND s.M_AttributeSetInstance_ID IN (SELECT M_AttributeSetInstance_ID FROM M_AttributeSetInstance WHERE Lot = '" + lotString + "')";
+                //        sql = sql + ") AND s.VAM_PFeature_SetInstance_ID IN (SELECT VAM_PFeature_SetInstance_ID FROM VAM_PFeature_SetInstance WHERE Lot = '" + lotString + "')";
                 //    }
                 //}
                 //dr.close();
@@ -685,7 +685,7 @@
                         txtLotString.val(name);
                         txtLotString.attr("readOnly", true);
                         txtLotString.addClass("vis-gc-vpanel-table-readOnly");
-                        M_Lot_ID = pp;
+                        VAM_Lot_ID = pp;
                     }
                     else {
                         txtLotString.attr("readOnly", false);
@@ -793,7 +793,7 @@
         this.showDialog = function () {
             $root.dialog({
                 modal: true,
-                title: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"),
+                title: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_PFeature_SetInstance_ID"),
                 width: 490,
                 close: function () {
                     $self.dispose();
@@ -802,7 +802,7 @@
                     $root = null;
                 }
             });
-            if (controlList && M_AttributeSetInstance_ID == 0) {
+            if (controlList && VAM_PFeature_SetInstance_ID == 0) {
                 for (var i = 0; i < controlList.length; i++) {
                     if (controlList[i].toString().contains("cmb")) {
                         $root.find("#" + controlList[i]).prop('selectedIndex', -1);
@@ -818,8 +818,8 @@
             if (cancelbtn)
                 cancelbtn.off("click");
             VIS.Env.clearWinContext(VIS.Env.getCtx(), windowNo);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "M_AttributeSetInstance_ID", mAttributeSetInstanceId);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "M_Locator_ID", mLocatorId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", mAttributeSetInstanceId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_Locator_ID", mLocatorId);
 
             mLocatorId = null;
             mAttributeSetInstanceName = null;

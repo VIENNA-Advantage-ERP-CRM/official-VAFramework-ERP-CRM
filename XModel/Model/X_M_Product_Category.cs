@@ -11,37 +11,37 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_Product_Category
+    /** Generated Model for VAM_ProductCategory
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Product_Category : PO
+    public class X_VAM_ProductCategory : PO
     {
-        public X_M_Product_Category(Context ctx, int M_Product_Category_ID, Trx trxName)
-            : base(ctx, M_Product_Category_ID, trxName)
+        public X_VAM_ProductCategory(Context ctx, int VAM_ProductCategory_ID, Trx trxName)
+            : base(ctx, VAM_ProductCategory_ID, trxName)
         {
-            /** if (M_Product_Category_ID == 0)
+            /** if (VAM_ProductCategory_ID == 0)
             {
             SetIsDefault (false);
             SetIsPurchasedToOrder (false);	// N
             SetIsSelfService (true);	// Y
             SetMMPolicy (null);	// F
-            SetM_Product_Category_ID (0);
+            SetVAM_ProductCategory_ID (0);
             SetName (null);
             SetPlannedMargin (0.0);
             SetValue (null);
             }
              */
         }
-        public X_M_Product_Category(Ctx ctx, int M_Product_Category_ID, Trx trxName)
-            : base(ctx, M_Product_Category_ID, trxName)
+        public X_VAM_ProductCategory(Ctx ctx, int VAM_ProductCategory_ID, Trx trxName)
+            : base(ctx, VAM_ProductCategory_ID, trxName)
         {
-            /** if (M_Product_Category_ID == 0)
+            /** if (VAM_ProductCategory_ID == 0)
             {
             SetIsDefault (false);
             SetIsPurchasedToOrder (false);	// N
             SetIsSelfService (true);	// Y
             SetMMPolicy (null);	// F
-            SetM_Product_Category_ID (0);
+            SetVAM_ProductCategory_ID (0);
             SetName (null);
             SetPlannedMargin (0.0);
             SetValue (null);
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Product_Category(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductCategory(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Product_Category(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductCategory(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -71,14 +71,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Product_Category(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_ProductCategory(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_Product_Category()
+        static X_VAM_ProductCategory()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -91,8 +91,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =209;
 
-        /** TableName=M_Product_Category */
-        public static String Table_Name = "M_Product_Category";
+        /** TableName=VAM_ProductCategory */
+        public static String Table_Name = "VAM_ProductCategory";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_Product_Category[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_ProductCategory[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Image.
@@ -351,43 +351,43 @@ namespace VAdvantage.Model
             return (String)Get_Value("MMPolicy");
         }
         /** Set Attribute Set.
-        @param M_AttributeSet_ID Product Attribute Set */
-        public void SetM_AttributeSet_ID(int M_AttributeSet_ID)
+        @param VAM_PFeature_Set_ID Product Attribute Set */
+        public void SetVAM_PFeature_Set_ID(int VAM_PFeature_Set_ID)
         {
-            if (M_AttributeSet_ID <= 0) Set_Value("M_AttributeSet_ID", null);
+            if (VAM_PFeature_Set_ID <= 0) Set_Value("VAM_PFeature_Set_ID", null);
             else
-                Set_Value("M_AttributeSet_ID", M_AttributeSet_ID);
+                Set_Value("VAM_PFeature_Set_ID", VAM_PFeature_Set_ID);
         }
         /** Get Attribute Set.
         @return Product Attribute Set */
-        public int GetM_AttributeSet_ID()
+        public int GetVAM_PFeature_Set_ID()
         {
-            Object ii = Get_Value("M_AttributeSet_ID");
+            Object ii = Get_Value("VAM_PFeature_Set_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** Set Cost Element. @param M_CostElement_ID Product Cost Element */
-        public void SetM_CostElement_ID(int M_CostElement_ID)
+        /** Set Cost Element. @param VAM_ProductCostElement_ID Product Cost Element */
+        public void SetVAM_ProductCostElement_ID(int VAM_ProductCostElement_ID)
         {
-            if (M_CostElement_ID <= 0) Set_Value("M_CostElement_ID", null);
+            if (VAM_ProductCostElement_ID <= 0) Set_Value("VAM_ProductCostElement_ID", null);
             else
-                Set_Value("M_CostElement_ID", M_CostElement_ID);
+                Set_Value("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
         }/** Get Cost Element. @return Product Cost Element */
-        public int GetM_CostElement_ID() { Object ii = Get_Value("M_CostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_ProductCostElement_ID() { Object ii = Get_Value("VAM_ProductCostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
 
         /** Set Product Category.
-        @param M_Product_Category_ID Category of a Product */
-        public void SetM_Product_Category_ID(int M_Product_Category_ID)
+        @param VAM_ProductCategory_ID Category of a Product */
+        public void SetVAM_ProductCategory_ID(int VAM_ProductCategory_ID)
         {
-            if (M_Product_Category_ID < 1) throw new ArgumentException("M_Product_Category_ID is mandatory.");
-            Set_ValueNoCheck("M_Product_Category_ID", M_Product_Category_ID);
+            if (VAM_ProductCategory_ID < 1) throw new ArgumentException("VAM_ProductCategory_ID is mandatory.");
+            Set_ValueNoCheck("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
         }
         /** Get Product Category.
         @return Category of a Product */
-        public int GetM_Product_Category_ID()
+        public int GetVAM_ProductCategory_ID()
         {
-            Object ii = Get_Value("M_Product_Category_ID");
+            Object ii = Get_Value("VAM_ProductCategory_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

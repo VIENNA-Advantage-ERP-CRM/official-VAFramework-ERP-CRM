@@ -31,9 +31,9 @@ namespace VAdvantage.Model
         /// Selection Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
-        /// <param name="M_AttributeValue_ID">selection</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
+        /// <param name="VAM_PFeature_Value_ID">selection</param>
         /// <param name="Value">String representation for fast display</param>
         /// <param name="trxName">transaction</param>
         public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,
@@ -49,8 +49,8 @@ namespace VAdvantage.Model
         /// Number Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="BDValue"> number value</param>
         /// <param name="trxName">transaction</param>
         public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,
@@ -66,8 +66,8 @@ namespace VAdvantage.Model
         /// String Value Constructior
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Attribute_ID">attribute</param>
-        /// <param name="M_AttributeSetInstance_ID">instance</param>
+        /// <param name="VAM_ProductFeature_ID">attribute</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="Value">string value</param>
         /// <param name="trxName">transaction</param>
         public MGenAttributeInstance(Ctx ctx, int VAB_GenFeature_ID,

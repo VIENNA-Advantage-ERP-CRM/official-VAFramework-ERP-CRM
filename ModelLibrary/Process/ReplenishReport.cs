@@ -29,7 +29,7 @@ namespace VAdvantage.Process
     public class ReplenishReport : ProcessEngine.SvrProcess
     {
         /** Warehouse				*/
-        private int _M_Warehouse_ID = 0;
+        private int _VAM_Warehouse_ID = 0;
         /**	Optional BPartner		*/
         private int _VAB_BusinessPartner_ID = 0;
         /** Create (POO)Purchse Order or (POR)Requisition or (MMM)Movements */
@@ -53,9 +53,9 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Warehouse_ID"))
+                else if (name.Equals("VAM_Warehouse_ID"))
                 {
-                    _M_Warehouse_ID = para[i].GetParameterAsInt();
+                    _VAM_Warehouse_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_BusinessPartner_ID"))
                 {
@@ -82,7 +82,7 @@ namespace VAdvantage.Process
         /// <returns>Message </returns>
         protected override String DoIt()
         {
-            log.Info("M_Warehouse_ID=" + _M_Warehouse_ID
+            log.Info("VAM_Warehouse_ID=" + _VAM_Warehouse_ID
                 + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
                 + " - ReplenishmentCreate=" + _ReplenishmentCreate
                 + ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
@@ -93,14 +93,14 @@ namespace VAdvantage.Process
             }
             
 
-            MWarehouse wh = MWarehouse.Get(GetCtx(), _M_Warehouse_ID);
+            MWarehouse wh = MWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
             if (wh.Get_ID() == 0)
             {
-                throw new Exception("@FillMandatory@ @M_Warehouse_ID@");
+                throw new Exception("@FillMandatory@ @VAM_Warehouse_ID@");
             }
-            if (wh.GetM_WarehouseSource_ID() > 0)
+            if (wh.GetVAM_WarehouseSource_ID() > 0)
             {
-                _M_WareSource = "M_WarehouseSource_ID = " + Util.GetValueOfString(wh.GetM_WarehouseSource_ID());
+                _M_WareSource = "VAM_WarehouseSource_ID = " + Util.GetValueOfString(wh.GetVAM_WarehouseSource_ID());
             }
             else
             {
@@ -145,7 +145,7 @@ namespace VAdvantage.Process
         private void PrepareTable()
         {
             //	Level_Max must be >= Level_Max
-            String sql = "UPDATE M_Replenish"
+            String sql = "UPDATE VAM_Inv_Replenish"
                 + " SET Level_Max = Level_Min "
                 + "WHERE Level_Max < Level_Min";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -155,7 +155,7 @@ namespace VAdvantage.Process
             }
 
             //	Minimum Order should be 1
-            sql = "UPDATE M_Product_PO"
+            sql = "UPDATE VAM_Product_PO"
                 + " SET Order_Min = 1 "
                 + "WHERE Order_Min IS NULL OR Order_Min < 1";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -165,7 +165,7 @@ namespace VAdvantage.Process
             }
 
             //	Pack should be 1
-            sql = "UPDATE M_Product_PO"
+            sql = "UPDATE VAM_Product_PO"
                 + " SET Order_Pack = 1 "
                 + "WHERE Order_Pack IS NULL OR Order_Pack < 1";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -175,13 +175,13 @@ namespace VAdvantage.Process
             }
 
             //	Set Current Vendor where only one vendor
-            sql = "UPDATE M_Product_PO p"
+            sql = "UPDATE VAM_Product_PO p"
                 + " SET IsCurrentVendor='Y' "
                 + "WHERE IsCurrentVendor<>'Y'"
-                //jz groupby problem + " AND EXISTS (SELECT * FROM M_Product_PO pp "
-                + " AND EXISTS (SELECT 1 FROM M_Product_PO pp "
-                    + "WHERE p.M_Product_ID=pp.M_Product_ID "
-                    + "GROUP BY pp.M_Product_ID "
+                //jz groupby problem + " AND EXISTS (SELECT * FROM VAM_Product_PO pp "
+                + " AND EXISTS (SELECT 1 FROM VAM_Product_PO pp "
+                    + "WHERE p.VAM_Product_ID=pp.VAM_Product_ID "
+                    + "GROUP BY pp.VAM_Product_ID "
                     + "HAVING COUNT(*) = 1)";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
@@ -190,13 +190,13 @@ namespace VAdvantage.Process
             }
 
             //	More then one current vendor
-            sql = "UPDATE M_Product_PO p"
+            sql = "UPDATE VAM_Product_PO p"
                 + " SET IsCurrentVendor='N' "
                 + "WHERE IsCurrentVendor = 'Y'"
-                //jz + " AND EXISTS (SELECT * FROM M_Product_PO pp "
-                + " AND EXISTS (SELECT 1 FROM M_Product_PO pp "
-                    + "WHERE p.M_Product_ID=pp.M_Product_ID AND pp.IsCurrentVendor='Y' "
-                    + "GROUP BY pp.M_Product_ID "
+                //jz + " AND EXISTS (SELECT * FROM VAM_Product_PO pp "
+                + " AND EXISTS (SELECT 1 FROM VAM_Product_PO pp "
+                    + "WHERE p.VAM_Product_ID=pp.VAM_Product_ID AND pp.IsCurrentVendor='Y' "
+                    + "GROUP BY pp.VAM_Product_ID "
                     + "HAVING COUNT(*) > 1)";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
@@ -220,11 +220,11 @@ namespace VAdvantage.Process
         private void FillTable(MWarehouse wh)
         {
             String sql = "INSERT INTO VAT_Restock "
-                + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
+                + "(VAF_JInstance_ID, VAM_Warehouse_ID, VAM_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                 + " ReplenishType, Level_Min, Level_Max, QtyOnHand,QtyReserved,QtyOrdered,"
                 + " VAB_BusinessPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                 + "SELECT " + GetVAF_JInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
+                    + ", r.VAM_Warehouse_ID, r.VAM_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                 + " r.ReplenishType, r.Level_Min, r.Level_Max, 0,0,0,"
                 + " po.VAB_BusinessPartner_ID, po.Order_Min, po.Order_Pack, 0, ";
             if (_ReplenishmentCreate == null)
@@ -235,12 +235,12 @@ namespace VAdvantage.Process
             {
                 sql += "'" + _ReplenishmentCreate + "'";
             }
-            sql += " FROM M_Replenish r"
-                + " INNER JOIN M_Product_PO po ON (r.M_Product_ID=po.M_Product_ID) "
+            sql += " FROM VAM_Inv_Replenish r"
+                + " INNER JOIN VAM_Product_PO po ON (r.VAM_Product_ID=po.VAM_Product_ID) "
                 + "WHERE po.IsCurrentVendor='Y'"	//	Only Current Vendor
                 + " AND r.ReplenishType<>'0'"
                 + " AND po.IsActive='Y' AND r.IsActive='Y'"
-                + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID;
+                + " AND r.VAM_Warehouse_ID=" + _VAM_Warehouse_ID;
             if (_VAB_BusinessPartner_ID != 0 && _VAB_BusinessPartner_ID != -1)
             {
                 sql += " AND po.VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID;
@@ -252,11 +252,11 @@ namespace VAdvantage.Process
             if (_VAB_BusinessPartner_ID == 0 || _VAB_BusinessPartner_ID == -1)
             {
                 sql = "INSERT INTO VAT_Restock "
-                    + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, VAF_Client_ID, VAF_Org_ID,"
+                    + "(VAF_JInstance_ID, VAM_Warehouse_ID, VAM_Product_ID, VAF_Client_ID, VAF_Org_ID,"
                     + " ReplenishType, Level_Min, Level_Max,"
                     + " VAB_BusinessPartner_ID, Order_Min, Order_Pack, QtyToOrder, ReplenishmentCreate) "
                     + "SELECT " + GetVAF_JInstance_ID()
-                    + ", r.M_Warehouse_ID, r.M_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
+                    + ", r.VAM_Warehouse_ID, r.VAM_Product_ID, r.VAF_Client_ID, r.VAF_Org_ID,"
                     + " r.ReplenishType, r.Level_Min, r.Level_Max,"
                     //jz + " null, 1, 1, 0, ";
                     + VAdvantage.DataBase.DB.NULL("I", Types.VARCHAR)
@@ -269,11 +269,11 @@ namespace VAdvantage.Process
                 {
                     sql += "'" + _ReplenishmentCreate + "'";
                 }
-                sql += " FROM M_Replenish r "
+                sql += " FROM VAM_Inv_Replenish r "
                     + "WHERE r.ReplenishType<>'0' AND r.IsActive='Y'"
-                    + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID
+                    + " AND r.VAM_Warehouse_ID=" + _VAM_Warehouse_ID
                     + " AND NOT EXISTS (SELECT * FROM VAT_Restock t "
-                        + "WHERE r.M_Product_ID=t.M_Product_ID"
+                        + "WHERE r.VAM_Product_ID=t.VAM_Product_ID"
                         + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID() + ")";
 
                 no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
@@ -281,12 +281,12 @@ namespace VAdvantage.Process
             }
 
             sql = "UPDATE VAT_Restock t SET "
-                + "QtyOnHand = (SELECT COALESCE(SUM(QtyOnHand),0) FROM M_Storage s, M_Locator l WHERE t.M_Product_ID=s.M_Product_ID"
-                    + " AND l.M_Locator_ID=s.M_Locator_ID AND l.M_Warehouse_ID=t.M_Warehouse_ID),"
-                + "QtyReserved = (SELECT COALESCE(SUM(QtyReserved),0) FROM M_Storage s, M_Locator l WHERE t.M_Product_ID=s.M_Product_ID"
-                    + " AND l.M_Locator_ID=s.M_Locator_ID AND l.M_Warehouse_ID=t.M_Warehouse_ID),"
-                + "QtyOrdered = (SELECT COALESCE(SUM(QtyOrdered),0) FROM M_Storage s, M_Locator l WHERE t.M_Product_ID=s.M_Product_ID"
-                    + " AND l.M_Locator_ID=s.M_Locator_ID AND l.M_Warehouse_ID=t.M_Warehouse_ID)";
+                + "QtyOnHand = (SELECT COALESCE(SUM(QtyOnHand),0) FROM VAM_Storage s, VAM_Locator l WHERE t.VAM_Product_ID=s.VAM_Product_ID"
+                    + " AND l.VAM_Locator_ID=s.VAM_Locator_ID AND l.VAM_Warehouse_ID=t.VAM_Warehouse_ID),"
+                + "QtyReserved = (SELECT COALESCE(SUM(QtyReserved),0) FROM VAM_Storage s, VAM_Locator l WHERE t.VAM_Product_ID=s.VAM_Product_ID"
+                    + " AND l.VAM_Locator_ID=s.VAM_Locator_ID AND l.VAM_Warehouse_ID=t.VAM_Warehouse_ID),"
+                + "QtyOrdered = (SELECT COALESCE(SUM(QtyOrdered),0) FROM VAM_Storage s, VAM_Locator l WHERE t.VAM_Product_ID=s.VAM_Product_ID"
+                    + " AND l.VAM_Locator_ID=s.VAM_Locator_ID AND l.VAM_Warehouse_ID=t.VAM_Warehouse_ID)";
             if (_VAB_DocTypes_ID != 0 && _VAB_DocTypes_ID != -1)
             {
                 sql += ", VAB_DocTypes_ID=" + _VAB_DocTypes_ID;
@@ -300,10 +300,10 @@ namespace VAdvantage.Process
 
             //	Delete inactive products and replenishments
             sql = "DELETE FROM VAT_Restock r "
-                + "WHERE (EXISTS (SELECT * FROM M_Product p "
-                    + "WHERE p.M_Product_ID=r.M_Product_ID AND p.IsActive='N')"
-                + " OR EXISTS (SELECT * FROM M_Replenish rr "
-                    + " WHERE rr.M_Product_ID=r.M_Product_ID AND rr.M_Warehouse_ID=r.M_Warehouse_ID AND rr.IsActive='N'))"
+                + "WHERE (EXISTS (SELECT * FROM VAM_Product p "
+                    + "WHERE p.VAM_Product_ID=r.VAM_Product_ID AND p.IsActive='N')"
+                + " OR EXISTS (SELECT * FROM VAM_Inv_Replenish rr "
+                    + " WHERE rr.VAM_Product_ID=r.VAM_Product_ID AND rr.VAM_Warehouse_ID=r.VAM_Warehouse_ID AND rr.IsActive='N'))"
                 + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
@@ -320,7 +320,7 @@ namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
 
             //	Set Minimum / Maximum Maintain Level
-            //	X_M_Replenish.REPLENISHTYPE_ReorderBelowMinimumLevel
+            //	X_VAM_Inv_Replenish.REPLENISHTYPE_ReorderBelowMinimumLevel
             sql = "UPDATE VAT_Restock"
                 + " SET QtyToOrder = Level_Min - QtyOnHand + QtyReserved - QtyOrdered "
                 + "WHERE ReplenishType='1'"
@@ -331,7 +331,7 @@ namespace VAdvantage.Process
                 log.Fine("Update Type-1=" + no);
             }
             //
-            //	X_M_Replenish.REPLENISHTYPE_MaintainMaximumLevel
+            //	X_VAM_Inv_Replenish.REPLENISHTYPE_MaintainMaximumLevel
 
             sql = "UPDATE VAT_Restock"
                 + " SET QtyToOrder = Level_Max - QtyOnHand + QtyReserved - QtyOrdered "
@@ -376,10 +376,10 @@ namespace VAdvantage.Process
             }
 
             //	Source from other warehouse
-            if (wh.GetM_WarehouseSource_ID() != 0)
+            if (wh.GetVAM_WarehouseSource_ID() != 0)
             {
                 sql = "UPDATE VAT_Restock"
-                    + " SET M_WarehouseSource_ID=" + wh.GetM_WarehouseSource_ID()
+                    + " SET VAM_WarehouseSource_ID=" + wh.GetVAM_WarehouseSource_ID()
                     + " WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID();
                 no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 if (no != 0)
@@ -389,14 +389,14 @@ namespace VAdvantage.Process
             }
             //	Replenishment on Product level overwrites 
             sql = "UPDATE VAT_Restock "
-                + "SET M_WarehouseSource_ID=(SELECT M_WarehouseSource_ID FROM M_Replenish r "
-                    + "WHERE r.M_Product_ID=VAT_Restock.M_Product_ID"
-                    + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID + ")"
+                + "SET VAM_WarehouseSource_ID=(SELECT VAM_WarehouseSource_ID FROM VAM_Inv_Replenish r "
+                    + "WHERE r.VAM_Product_ID=VAT_Restock.VAM_Product_ID"
+                    + " AND r.VAM_Warehouse_ID=" + _VAM_Warehouse_ID + ")"
                 + "WHERE VAF_JInstance_ID=" + GetVAF_JInstance_ID()
-                + " AND EXISTS (SELECT * FROM M_Replenish r "
-                    + "WHERE r.M_Product_ID=VAT_Restock.M_Product_ID"
-                    + " AND r.M_Warehouse_ID=" + _M_Warehouse_ID
-                    + " AND r.M_WarehouseSource_ID > 0)";
+                + " AND EXISTS (SELECT * FROM VAM_Inv_Replenish r "
+                    + "WHERE r.VAM_Product_ID=VAT_Restock.VAM_Product_ID"
+                    + " AND r.VAM_Warehouse_ID=" + _VAM_Warehouse_ID
+                    + " AND r.VAM_WarehouseSource_ID > 0)";
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
@@ -405,8 +405,8 @@ namespace VAdvantage.Process
 
             //	Check Source Warehouse
             sql = "UPDATE VAT_Restock"
-                + " SET M_WarehouseSource_ID = NULL "
-                + "WHERE M_Warehouse_ID=M_WarehouseSource_ID"
+                + " SET VAM_WarehouseSource_ID = NULL "
+                + "WHERE VAM_Warehouse_ID=VAM_WarehouseSource_ID"
                 + " AND VAF_JInstance_ID=" + GetVAF_JInstance_ID();
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
@@ -473,14 +473,14 @@ namespace VAdvantage.Process
             for (int i = 0; i < replenishs.Length; i++)
             {
                 X_VAT_Restock replenish = replenishs[i];
-                if (wh == null || wh.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
+                if (wh == null || wh.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    wh = MWarehouse.Get(GetCtx(), replenish.GetM_Warehouse_ID());
+                    wh = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 //
                 if (order == null
                     || order.GetVAB_BusinessPartner_ID() != replenish.GetVAB_BusinessPartner_ID()
-                    || order.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
+                    || order.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
                     order = new MOrder(GetCtx(), 0, Get_TrxName());
                     order.SetIsSOTrx(false);
@@ -491,7 +491,7 @@ namespace VAdvantage.Process
                     order.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment"));
                     //	Set Org/WH
                     order.SetVAF_Org_ID(wh.GetVAF_Org_ID());
-                    order.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
+                    order.SetVAM_Warehouse_ID(wh.GetVAM_Warehouse_ID());
                    
                     if (!order.Save())
                     {
@@ -502,7 +502,7 @@ namespace VAdvantage.Process
                     info += " - " + order.GetDocumentNo();
                 }
                 MOrderLine line = new MOrderLine(order);
-                line.SetM_Product_ID(replenish.GetM_Product_ID());
+                line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                 line.SetQty(replenish.GetQtyToOrder());
                 line.SetPrice();
                 line.Save();
@@ -525,13 +525,13 @@ namespace VAdvantage.Process
             for (int i = 0; i < replenishs.Length; i++)
             {
                 X_VAT_Restock replenish = replenishs[i];
-                if (wh == null || wh.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
+                if (wh == null || wh.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    wh = MWarehouse.Get(GetCtx(), replenish.GetM_Warehouse_ID());
+                    wh = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 //
                 if (requisition == null
-                    || requisition.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
+                    || requisition.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
                     requisition = new MRequisition(GetCtx(), 0, Get_TrxName());
                     requisition.SetVAF_UserContact_ID(GetVAF_UserContact_ID());
@@ -541,10 +541,10 @@ namespace VAdvantage.Process
                     int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
                     if (_CountDTD001 > 0)
                     {
-                        requisition.SetDTD001_MWarehouseSource_ID(wh.GetM_WarehouseSource_ID());
+                        requisition.SetDTD001_MWarehouseSource_ID(wh.GetVAM_WarehouseSource_ID());
                     }
                     requisition.SetVAF_Org_ID(wh.GetVAF_Org_ID());
-                    requisition.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
+                    requisition.SetVAM_Warehouse_ID(wh.GetVAM_Warehouse_ID());
                     
                     if (!requisition.Save())
                     {
@@ -557,7 +557,7 @@ namespace VAdvantage.Process
                 }
                 //
                 MRequisitionLine line = new MRequisitionLine(requisition);
-                line.SetM_Product_ID(replenish.GetM_Product_ID());
+                line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                 line.SetVAB_BusinessPartner_ID(replenish.GetVAB_BusinessPartner_ID());
                 line.SetQty(replenish.GetQtyToOrder());
                 line.SetPrice();
@@ -578,8 +578,8 @@ namespace VAdvantage.Process
             //
             MVAFClient client = null;
             MMovement move = null;
-            int M_Warehouse_ID = 0;
-            int M_WarehouseSource_ID = 0;
+            int VAM_Warehouse_ID = 0;
+            int VAM_WarehouseSource_ID = 0;
             MWarehouse whSource = null;
             MWarehouse whTarget = null;
 
@@ -590,19 +590,19 @@ namespace VAdvantage.Process
             }
             else
             {
-                param = "M_WarehouseSource_ID IS NOT NULL";
+                param = "VAM_WarehouseSource_ID IS NOT NULL";
             }
             X_VAT_Restock[] replenishs = GetReplenish(param); ;
             for (int i = 0; i < replenishs.Length; i++)
             {
                 X_VAT_Restock replenish = replenishs[i];
-                if (whSource == null || whSource.GetM_WarehouseSource_ID() != replenish.GetM_WarehouseSource_ID())
+                if (whSource == null || whSource.GetVAM_WarehouseSource_ID() != replenish.GetVAM_WarehouseSource_ID())
                 {
-                    whSource = MWarehouse.Get(GetCtx(), replenish.GetM_WarehouseSource_ID());
+                    whSource = MWarehouse.Get(GetCtx(), replenish.GetVAM_WarehouseSource_ID());
                 }
-                if (whTarget == null || whTarget.GetM_Warehouse_ID() != replenish.GetM_Warehouse_ID())
+                if (whTarget == null || whTarget.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    whTarget = MWarehouse.Get(GetCtx(), replenish.GetM_Warehouse_ID());
+                    whTarget = MWarehouse.Get(GetCtx(), replenish.GetVAM_Warehouse_ID());
                 }
                 if (client == null || client.GetVAF_Client_ID() != whSource.GetVAF_Client_ID())
                 {
@@ -610,11 +610,11 @@ namespace VAdvantage.Process
                 }
                 //
                 if (move == null
-                    || M_WarehouseSource_ID != replenish.GetM_WarehouseSource_ID()
-                    || M_Warehouse_ID != replenish.GetM_Warehouse_ID())
+                    || VAM_WarehouseSource_ID != replenish.GetVAM_WarehouseSource_ID()
+                    || VAM_Warehouse_ID != replenish.GetVAM_Warehouse_ID())
                 {
-                    M_WarehouseSource_ID = replenish.GetM_WarehouseSource_ID();
-                    M_Warehouse_ID = replenish.GetM_Warehouse_ID();
+                    VAM_WarehouseSource_ID = replenish.GetVAM_WarehouseSource_ID();
+                    VAM_Warehouse_ID = replenish.GetVAM_Warehouse_ID();
 
                     move = new MMovement(GetCtx(), 0, Get_TrxName());
                     move.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
@@ -630,12 +630,12 @@ namespace VAdvantage.Process
                     noMoves++;
                     info += " - " + move.GetDocumentNo();
                 }
-                MProduct product = MProduct.Get(GetCtx(), replenish.GetM_Product_ID());
+                MProduct product = MProduct.Get(GetCtx(), replenish.GetVAM_Product_ID());
                 //	To
-                int M_LocatorTo_ID = GetLocator_ID(product, whTarget);
+                int VAM_LocatorTo_ID = GetLocator_ID(product, whTarget);
 
                 //	From: Look-up Storage
-                MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+                MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
                 String MMPolicy = pc.GetMMPolicy();
                 if (MMPolicy == null || MMPolicy.Length == 0)
                 {
@@ -643,7 +643,7 @@ namespace VAdvantage.Process
                 }
                 //
                 MStorage[] storages = MStorage.GetWarehouse(GetCtx(),
-                    whSource.GetM_Warehouse_ID(), replenish.GetM_Product_ID(), 0, 0,
+                    whSource.GetVAM_Warehouse_ID(), replenish.GetVAM_Product_ID(), 0, 0,
                     true, null,
                     MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                 if (storages == null || storages.Length == 0)
@@ -669,16 +669,16 @@ namespace VAdvantage.Process
                     }
                     //
                     MMovementLine line = new MMovementLine(move);
-                    line.SetM_Product_ID(replenish.GetM_Product_ID());
+                    line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                     line.SetMovementQty(moveQty);
                     if (replenish.GetQtyToOrder().CompareTo(moveQty) != 0)
                     {
                         line.SetDescription("Total: " + replenish.GetQtyToOrder());
                     }
-                    line.SetM_Locator_ID(storage.GetM_Locator_ID());		//	from
-                    line.SetM_AttributeSetInstance_ID(storage.GetM_AttributeSetInstance_ID());
-                    line.SetM_LocatorTo_ID(M_LocatorTo_ID);					//	to
-                    line.SetM_AttributeSetInstanceTo_ID(storage.GetM_AttributeSetInstance_ID());
+                    line.SetVAM_Locator_ID(storage.GetVAM_Locator_ID());		//	from
+                    line.SetVAM_PFeature_SetInstance_ID(storage.GetVAM_PFeature_SetInstance_ID());
+                    line.SetVAM_LocatorTo_ID(VAM_LocatorTo_ID);					//	to
+                    line.SetVAM_PFeature_SetInstanceTo_ID(storage.GetVAM_PFeature_SetInstance_ID());
                     line.Save();
                     //
                     //target = target.subtract(moveQty);
@@ -715,22 +715,22 @@ namespace VAdvantage.Process
         /// <returns>locator with highest priority</returns>
         private int GetLocator_ID(MProduct product, MWarehouse wh)
         {
-            int M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, wh.GetM_Warehouse_ID());
+            int VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, wh.GetVAM_Warehouse_ID());
             /**	
-            MLocator[] locators = MProductLocator.getLocators (product, wh.getM_Warehouse_ID());
+            MLocator[] locators = MProductLocator.getLocators (product, wh.getVAM_Warehouse_ID());
             for (int i = 0; i < locators.length; i++)
             {
                 MLocator locator = locators[i];
                 //	Storage/capacity restrictions come here
-                return locator.getM_Locator_ID();
+                return locator.getVAM_Locator_ID();
             }
             //	default
             **/
-            if (M_Locator_ID == 0)
+            if (VAM_Locator_ID == 0)
             {
-                M_Locator_ID = wh.GetDefaultM_Locator_ID();
+                VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
             }
-            return M_Locator_ID;
+            return VAM_Locator_ID;
         }	//	getLocator_ID
 
 
@@ -747,7 +747,7 @@ namespace VAdvantage.Process
             {
                 sql += " AND " + where;
             }
-            sql += " ORDER BY M_Warehouse_ID, M_WarehouseSource_ID, VAB_BusinessPartner_ID";
+            sql += " ORDER BY VAM_Warehouse_ID, VAM_WarehouseSource_ID, VAB_BusinessPartner_ID";
             List<X_VAT_Restock> list = new List<X_VAT_Restock>();
             SqlParameter[] param = new SqlParameter[1];
             IDataReader idr = null;

@@ -30,14 +30,14 @@ namespace VAdvantage.Model
         #region Private variables
         private int _VAF_Client_ID;
         private int _VAF_Org_ID;
-        private int _M_Product_ID;
+        private int _VAM_Product_ID;
         private int _VAB_BusinessPartner_ID;
         private Decimal _qty = Env.ONE;
         private Boolean _isSOTrx = true;
         //
-        private int _M_PriceList_ID = 0;
-        private int _M_PriceList_Version_ID = 0;
-        private int _M_AttributeSetInstance_ID = 0;
+        private int _VAM_PriceList_ID = 0;
+        private int _VAM_PriceListVersion_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
         private DateTime? _PriceDate;
         /** Precision -1 = no rounding		*/
         private int _precision = -1;
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         private int _VAB_Currency_ID = 0;
         private Boolean _enforcePriceLimit = false;
         private int _VAB_UOM_ID = 0;
-        private int _M_Product_Category_ID;
+        private int _VAM_ProductCategory_ID;
         private Boolean _discountSchema = false;
         private Boolean _isTaxIncluded = false;
 
@@ -71,12 +71,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Client_ID">product</param>
         /// <param name="VAF_Org_ID">partner</param>
-        /// <param name="M_Product_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
         /// <param name="VAB_BusinessPartner_ID"></param>
         /// <param name="Qty">quantity</param>
         /// <param name="isSOTrx">SO or PO</param>
         public MProductPricing(int VAF_Client_ID, int VAF_Org_ID,
-            int M_Product_ID, int VAB_BusinessPartner_ID,
+            int VAM_Product_ID, int VAB_BusinessPartner_ID,
             Decimal? qty, bool isSOTrx)
         {
             if (log == null)
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
             }
             _VAF_Client_ID = VAF_Client_ID;
             _VAF_Org_ID = VAF_Org_ID;
-            _M_Product_ID = M_Product_ID;
+            _VAM_Product_ID = VAM_Product_ID;
             _VAB_BusinessPartner_ID = VAB_BusinessPartner_ID;
             if (qty != null && Env.ZERO.CompareTo(qty) != 0)
                 _qty = (Decimal)qty;
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         /// <returns> true if calculated</returns>
         public bool CalculatePrice()
         {
-            if (_M_Product_ID == 0 || (_found != null && !(Boolean)_found))	//	previously not found
+            if (_VAM_Product_ID == 0 || (_found != null && !(Boolean)_found))	//	previously not found
                 return false;
             //	Customer Pricing Engine
             if (!_calculated)
@@ -163,8 +163,8 @@ namespace VAdvantage.Model
             {
                 try
                 {
-                    vo = _api.Price(_VAF_Org_ID, _isSOTrx, _M_PriceList_ID,
-                        _VAB_BusinessPartner_ID, _M_Product_ID, _qty, _PriceDate);
+                    vo = _api.Price(_VAF_Org_ID, _isSOTrx, _VAM_PriceList_ID,
+                        _VAB_BusinessPartner_ID, _VAM_Product_ID, _qty, _PriceDate);
                 }
                 catch (Exception ex)
                 {
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
         private bool CalculatePLV()
         {
             String sql = "";
-            if (_M_Product_ID == 0 || _M_PriceList_Version_ID == 0)
+            if (_VAM_Product_ID == 0 || _VAM_PriceListVersion_ID == 0)
                 return false;
             // Check For Advance Pricing Module
             Tuple<String, String, String> mInfo = null;
@@ -207,56 +207,56 @@ namespace VAdvantage.Model
                 {
                     //vikas  mantis Issue ( 0000517)
                     string _sql = null;
-                    _sql = "SELECT VAB_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
+                    _sql = "SELECT VAB_UOM_ID FROM VAM_Product WHERE  VAM_Product_ID=" + _VAM_Product_ID;
                     _VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
                     //end
-                    sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                       + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
-                       + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
-                       + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                    sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
+                       + " bomPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                       + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
+                       + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                        + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                       + "FROM M_Product p"
-                       + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                       + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                       + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                       + "FROM VAM_Product p"
+                       + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                       + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                       + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                        + "WHERE pv.IsActive='Y'"
-                       + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                       + " AND pv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID	//	#2
-                       + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID  //	#3
+                       + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                       + " AND pv.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID	//	#2
+                       + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID  //	#3
                        + " AND pp.VAB_UOM_ID = " + _VAB_UOM_ID  //    #4
                        + " AND pp.IsActive='Y'";
                 }
                 else
                 {
-                    sql = "SELECT bomPriceStdAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceStd,"	//	1
-                        + " bomPriceListAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceList,"		//	2
-                        + " bomPriceLimitAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceLimit,"	//	3
-                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                    sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
+                        + " bomPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
+                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                        + "FROM M_Product p"
-                        + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                        + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                        + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                        + "FROM VAM_Product p"
+                        + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                        + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                        + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                         + "WHERE pv.IsActive='Y'"
-                        + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                        + " AND pv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID	//	#2
-                        + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID;   //	#3
+                        + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                        + " AND pv.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID	//	#2
+                        + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID;   //	#3
                 }
             }
             else
             {
-                sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"	//	1
-                    + " bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"		//	2
-                    + " bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"	//	3
-                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
+                    + " bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"	//	3
+                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                     + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                    + "FROM M_Product p"
-                    + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                    + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                    + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                    + "FROM VAM_Product p"
+                    + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                    + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                    + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                     + "WHERE pv.IsActive='Y'"
-                    + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                    + " AND pv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID;	//	#2
+                    + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                    + " AND pv.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID;	//	#2
             }
             _calculated = false;
             try
@@ -278,11 +278,11 @@ namespace VAdvantage.Model
                     //
                     _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[3].ToString());//.getInt(4);
                     _VAB_Currency_ID = Utility.Util.GetValueOfInt(dr[5].ToString());//.getInt(6);
-                    _M_Product_Category_ID = Utility.Util.GetValueOfInt(dr[6].ToString());//.getInt(7);
+                    _VAM_ProductCategory_ID = Utility.Util.GetValueOfInt(dr[6].ToString());//.getInt(7);
                     _enforcePriceLimit = "Y".Equals(dr[7].ToString());//.getString(8));
                     _isTaxIncluded = "Y".Equals(dr[8].ToString());//.getString(9));
                     //
-                    log.Fine("M_PriceList_Version_ID=" + _M_PriceList_Version_ID + " - " + _PriceStd);
+                    log.Fine("VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID + " - " + _PriceStd);
                     _calculated = true;
                 }
             }
@@ -301,27 +301,27 @@ namespace VAdvantage.Model
         private bool CalculatePL()
         {
             String sql = "";
-            if (_M_Product_ID == 0)
+            if (_VAM_Product_ID == 0)
                 return false;
 
             //	Get Price List
             /**
-            if (_M_PriceList_ID == 0)
+            if (_VAM_PriceList_ID == 0)
             {
-                String sql = "SELECT M_PriceList_ID, IsTaxIncluded "
-                    + "FROM M_PriceList pl"
-                    + " INNER JOIN M_Product p ON (pl.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID=? "
+                String sql = "SELECT VAM_PriceList_ID, IsTaxIncluded "
+                    + "FROM VAM_PriceList pl"
+                    + " INNER JOIN VAM_Product p ON (pl.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE VAM_Product_ID=? "
                     + "ORDER BY IsDefault DESC";
                 PreparedStatement pstmt = null;
                 try
                 {
                     pstmt = DataBase.prepareStatement(sql);
-                    pstmt.setInt(1, _M_Product_ID);
+                    pstmt.setInt(1, _VAM_Product_ID);
                     ResultSet dr = pstmt.executeQuery();
                     if (dr.next())
                     {
-                        _M_PriceList_ID = dr.getInt(1);
+                        _VAM_PriceList_ID = dr.getInt(1);
                         _isTaxIncluded = "Y".equals(dr.getString(2));
                     }
                     dr.close();
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
                 }
             }
             /** **/
-            if (_M_PriceList_ID == 0)
+            if (_VAM_PriceList_ID == 0)
             {
                 log.Log(Level.SEVERE, "No PriceList");
                 //Trace.printStack();//*******************************************
@@ -360,52 +360,52 @@ namespace VAdvantage.Model
                 Tuple<String, String, String> mInfo1 = null;
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
-                    sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                       + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
-                       + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
-                       + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,pl.EnforcePriceLimit "	// 4..8
-                       + "FROM M_Product p"
-                       + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                       + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                       + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                    sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
+                       + " bomPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                       + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
+                       + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
+                       + "FROM VAM_Product p"
+                       + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                       + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                       + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                        + " WHERE pv.IsActive='Y'"
-                       + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                       + " AND pv.M_PriceList_ID=" + _M_PriceList_ID			//	#2
-                       + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID   //	#3
+                       + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                       + " AND pv.VAM_PriceList_ID=" + _VAM_PriceList_ID			//	#2
+                       + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID   //	#3
                        + " AND pp.VAB_UOM_ID = " + _VAB_UOM_ID  //    #4
                        + " AND pp.IsActive='Y'"
                        + " ORDER BY pv.ValidFrom DESC";
                 }
                 else
                 {
-                    sql = "SELECT bomPriceStdAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceStd,"	//	1
-                        + " bomPriceListAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceList,"		//	2
-                        + " bomPriceLimitAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceLimit,"	//	3
-                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,pl.EnforcePriceLimit "	// 4..8
-                        + "FROM M_Product p"
-                        + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                        + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                        + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                    sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
+                        + " bomPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
+                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
+                        + "FROM VAM_Product p"
+                        + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                        + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                        + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                         + " WHERE pv.IsActive='Y'"
-                        + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                        + " AND pv.M_PriceList_ID=" + _M_PriceList_ID			//	#2
-                        + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID   //	#3
+                        + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                        + " AND pv.VAM_PriceList_ID=" + _VAM_PriceList_ID			//	#2
+                        + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID   //	#3
                         + " ORDER BY pv.ValidFrom DESC";
                 }
             }
             else
             {
-                sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"	//	1
-                    + " bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"		//	2
-                    + " bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"  	//	3
-                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,pl.EnforcePriceLimit "	// 4..8
-                    + "FROM M_Product p"
-                    + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                    + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                    + " INNER JOIN M_PriceList pl ON (pv.M_PriceList_ID=pl.M_PriceList_ID) "
+                sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
+                    + " bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"  	//	3
+                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,pl.EnforcePriceLimit "	// 4..8
+                    + "FROM VAM_Product p"
+                    + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                    + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                    + " INNER JOIN VAM_PriceList pl ON (pv.VAM_PriceList_ID=pl.VAM_PriceList_ID) "
                     + "WHERE pv.IsActive='Y'"
-                    + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                    + " AND pv.M_PriceList_ID=" + _M_PriceList_ID			//	#2
+                    + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                    + " AND pv.VAM_PriceList_ID=" + _VAM_PriceList_ID			//	#2
                     + " ORDER BY pv.ValidFrom DESC";
             }
             _calculated = false;
@@ -439,10 +439,10 @@ namespace VAdvantage.Model
                         //
                         _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[3].ToString());
                         _VAB_Currency_ID = Utility.Util.GetValueOfInt(dr[5].ToString());
-                        _M_Product_Category_ID = Utility.Util.GetValueOfInt(dr[6].ToString());
+                        _VAM_ProductCategory_ID = Utility.Util.GetValueOfInt(dr[6].ToString());
                         _enforcePriceLimit = "Y".Equals(dr[7].ToString());
                         //
-                        log.Fine("M_PriceList_ID=" + _M_PriceList_ID + "(" + plDate + ")" + " - " + _PriceStd);
+                        log.Fine("VAM_PriceList_ID=" + _VAM_PriceList_ID + "(" + plDate + ")" + " - " + _PriceStd);
                         _calculated = true;
                         break;
                     }
@@ -472,7 +472,7 @@ namespace VAdvantage.Model
         private bool CalculateBPL()
         {
             String sql = "";
-            if (_M_Product_ID == 0 || _M_PriceList_ID == 0)
+            if (_VAM_Product_ID == 0 || _VAM_PriceList_ID == 0)
                 return false;
             // Check For Advance Pricing Module
             Tuple<String, String, String> mInfo = null;
@@ -481,59 +481,59 @@ namespace VAdvantage.Model
                 Tuple<String, String, String> mInfo1 = null;
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
-                    sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
-                        + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
-                        + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
-                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                    sql = "SELECT bomPriceStdUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceStd,"	//	1
+                        + " bomPriceListUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceList,"		//	2
+                        + " bomPriceLimitUOM(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID , pp.VAB_UOM_ID) AS PriceLimit,"	//	3
+                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                        + "FROM M_Product p"
-                        + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                        + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                        + " INNER JOIN M_PriceList bpl ON (pv.M_PriceList_ID=bpl.M_PriceList_ID)"
-                        + " INNER JOIN M_PriceList pl ON (bpl.M_PriceList_ID=pl.BasePriceList_ID) "
+                        + "FROM VAM_Product p"
+                        + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                        + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                        + " INNER JOIN VAM_PriceList bpl ON (pv.VAM_PriceList_ID=bpl.VAM_PriceList_ID)"
+                        + " INNER JOIN VAM_PriceList pl ON (bpl.VAM_PriceList_ID=pl.BasePriceList_ID) "
                         + "WHERE pv.IsActive='Y'"
-                        + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                        + " AND pl.M_PriceList_ID= " + _M_PriceList_ID			//	#2
-                        + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID   //	#3
+                        + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                        + " AND pl.VAM_PriceList_ID= " + _VAM_PriceList_ID			//	#2
+                        + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID   //	#3
                         + " AND pp.VAB_UOM_ID = " + _VAB_UOM_ID  //    #4
                         + " AND pp.IsActive='Y'"
                         + "ORDER BY pv.ValidFrom DESC";
                 }
                 else
                 {
-                    sql = "SELECT bomPriceStdAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceStd,"	//	1
-                        + " bomPriceListAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceList,"		//	2
-                        + " bomPriceLimitAttr(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID) AS PriceLimit,"	//	3
-                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                    sql = "SELECT bomPriceStdAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceStd,"	//	1
+                        + " bomPriceListAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceList,"		//	2
+                        + " bomPriceLimitAttr(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID,pp.VAM_PFeature_SetInstance_ID) AS PriceLimit,"	//	3
+                        + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                         + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                        + "FROM M_Product p"
-                        + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                        + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                        + " INNER JOIN M_PriceList bpl ON (pv.M_PriceList_ID=bpl.M_PriceList_ID)"
-                        + " INNER JOIN M_PriceList pl ON (bpl.M_PriceList_ID=pl.BasePriceList_ID) "
+                        + "FROM VAM_Product p"
+                        + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                        + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                        + " INNER JOIN VAM_PriceList bpl ON (pv.VAM_PriceList_ID=bpl.VAM_PriceList_ID)"
+                        + " INNER JOIN VAM_PriceList pl ON (bpl.VAM_PriceList_ID=pl.BasePriceList_ID) "
                         + "WHERE pv.IsActive='Y'"
-                        + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                        + " AND pl.M_PriceList_ID= " + _M_PriceList_ID			//	#2
-                        + " AND pp.M_AttributeSetInstance_ID = " + _M_AttributeSetInstance_ID   //	#3
+                        + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                        + " AND pl.VAM_PriceList_ID= " + _VAM_PriceList_ID			//	#2
+                        + " AND pp.VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_ID   //	#3
                         + "ORDER BY pv.ValidFrom DESC";
                 }
             }
             else
             {
 
-                sql = "SELECT bomPriceStd(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceStd,"	//	1
-                    + " bomPriceList(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceList,"		//	2
-                    + " bomPriceLimit(p.M_Product_ID,pv.M_PriceList_Version_ID) AS PriceLimit,"	//	3
-                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.M_Product_Category_ID,"	//	4..7
+                sql = "SELECT bomPriceStd(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceStd,"	//	1
+                    + " bomPriceList(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceList,"		//	2
+                    + " bomPriceLimit(p.VAM_Product_ID,pv.VAM_PriceListVersion_ID) AS PriceLimit,"	//	3
+                    + " p.VAB_UOM_ID,pv.ValidFrom,pl.VAB_Currency_ID,p.VAM_ProductCategory_ID,"	//	4..7
                     + " pl.EnforcePriceLimit, pl.IsTaxIncluded "	// 8..9
-                    + "FROM M_Product p"
-                    + " INNER JOIN M_ProductPrice pp ON (p.M_Product_ID=pp.M_Product_ID)"
-                    + " INNER JOIN  M_PriceList_Version pv ON (pp.M_PriceList_Version_ID=pv.M_PriceList_Version_ID)"
-                    + " INNER JOIN M_PriceList bpl ON (pv.M_PriceList_ID=bpl.M_PriceList_ID)"
-                    + " INNER JOIN M_PriceList pl ON (bpl.M_PriceList_ID=pl.BasePriceList_ID) "
+                    + "FROM VAM_Product p"
+                    + " INNER JOIN VAM_ProductPrice pp ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                    + " INNER JOIN  VAM_PriceListVersion pv ON (pp.VAM_PriceListVersion_ID=pv.VAM_PriceListVersion_ID)"
+                    + " INNER JOIN VAM_PriceList bpl ON (pv.VAM_PriceList_ID=bpl.VAM_PriceList_ID)"
+                    + " INNER JOIN VAM_PriceList pl ON (bpl.VAM_PriceList_ID=pl.BasePriceList_ID) "
                     + "WHERE pv.IsActive='Y'"
-                    + " AND p.M_Product_ID=" + _M_Product_ID				//	#1
-                    + " AND pl.M_PriceList_ID= " + _M_PriceList_ID			//	#2
+                    + " AND p.VAM_Product_ID=" + _VAM_Product_ID				//	#1
+                    + " AND pl.VAM_PriceList_ID= " + _VAM_PriceList_ID			//	#2
                     + "ORDER BY pv.ValidFrom DESC";
             }
             _calculated = false;
@@ -566,11 +566,11 @@ namespace VAdvantage.Model
                         //
                         _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[3].ToString());
                         _VAB_Currency_ID = Utility.Util.GetValueOfInt(dr[5].ToString());
-                        _M_Product_Category_ID = Utility.Util.GetValueOfInt(dr[6].ToString());
+                        _VAM_ProductCategory_ID = Utility.Util.GetValueOfInt(dr[6].ToString());
                         _enforcePriceLimit = "Y".Equals(dr[7].ToString());
                         _isTaxIncluded = "Y".Equals(dr[8].ToString());
                         //
-                        log.Fine("M_PriceList_ID=" + _M_PriceList_ID + "(" + plDate + ")" + " - " + _PriceStd);
+                        log.Fine("VAM_PriceList_ID=" + _VAM_PriceList_ID + "(" + plDate + ")" + " - " + _PriceStd);
                         _calculated = true;
                         break;
                     }
@@ -598,10 +598,10 @@ namespace VAdvantage.Model
         /// </summary>
         private void SetBaseInfo()
         {
-            if (_M_Product_ID == 0)
+            if (_VAM_Product_ID == 0)
                 return;
             //
-            String sql = "SELECT VAB_UOM_ID, M_Product_Category_ID FROM M_Product WHERE M_Product_ID=" + _M_Product_ID;
+            String sql = "SELECT VAB_UOM_ID, VAM_ProductCategory_ID FROM VAM_Product WHERE VAM_Product_ID=" + _VAM_Product_ID;
             IDataReader dr = null;
             try
             {
@@ -609,7 +609,7 @@ namespace VAdvantage.Model
                 if (dr.Read())
                 {
                     _VAB_UOM_ID = Utility.Util.GetValueOfInt(dr[0]);//.getInt(1);
-                    _M_Product_Category_ID = Utility.Util.GetValueOfInt(dr[1]);//.getInt(2);
+                    _VAM_ProductCategory_ID = Utility.Util.GetValueOfInt(dr[1]);//.getInt(2);
                 }
                 dr.Close();
             }
@@ -641,12 +641,12 @@ namespace VAdvantage.Model
             try
             {
                 _discountSchema = false;
-                if (_VAB_BusinessPartner_ID == 0 || _M_Product_ID == 0)
+                if (_VAB_BusinessPartner_ID == 0 || _VAM_Product_ID == 0)
                     return;
 
-                int M_DiscountSchema_ID = 0;
+                int VAM_DiscountCalculation_ID = 0;
                 Decimal? FlatDiscount = null;
-                String sql = "SELECT COALESCE(p.M_DiscountSchema_ID,g.M_DiscountSchema_ID),"
+                String sql = "SELECT COALESCE(p.VAM_DiscountCalculation_ID,g.VAM_DiscountCalculation_ID),"
                     + " COALESCE(p.PO_DiscountSchema_ID,g.PO_DiscountSchema_ID), p.FlatDiscount "
                     + "FROM VAB_BusinessPartner p"
                     + " INNER JOIN VAB_BPart_Category g ON (p.VAB_BPart_Category_ID=g.VAB_BPart_Category_ID) "
@@ -662,7 +662,7 @@ namespace VAdvantage.Model
                     //if (dr.Read())
                     foreach (DataRow dr in dt.Rows)
                     {
-                        M_DiscountSchema_ID = Utility.Util.GetValueOfInt(dr[_isSOTrx ? 0 : 1]);
+                        VAM_DiscountCalculation_ID = Utility.Util.GetValueOfInt(dr[_isSOTrx ? 0 : 1]);
                         if (dr[2] == DBNull.Value)
                         {
                             FlatDiscount = Env.ZERO;
@@ -695,15 +695,15 @@ namespace VAdvantage.Model
                     }
                 }
                 //	No Discount Schema
-                if (M_DiscountSchema_ID == 0)
+                if (VAM_DiscountCalculation_ID == 0)
                     return;
 
-                MDiscountSchema sd = MDiscountSchema.Get(Env.GetContext(), M_DiscountSchema_ID);	//	not correct
+                MDiscountSchema sd = MDiscountSchema.Get(Env.GetContext(), VAM_DiscountCalculation_ID);	//	not correct
                 if (sd.Get_ID() == 0)
                     return;
                 //
                 _discountSchema = true;
-                _PriceStd = sd.CalculatePrice(_qty, _PriceStd, _M_Product_ID, _M_Product_Category_ID, (decimal)FlatDiscount);
+                _PriceStd = sd.CalculatePrice(_qty, _PriceStd, _VAM_Product_ID, _VAM_ProductCategory_ID, (decimal)FlatDiscount);
             }
             catch (Exception ex)
             {
@@ -749,27 +749,27 @@ namespace VAdvantage.Model
         /// Get Product ID
         /// </summary>
         /// <returns>id</returns>
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            return _M_Product_ID;
+            return _VAM_Product_ID;
         }
 
         /// <summary>
         /// Get PriceList ID
         /// </summary>
         /// <returns>pl</returns>
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            return _M_PriceList_ID;
+            return _VAM_PriceList_ID;
         }
 
         /// <summary>
         /// Set PriceList
         /// </summary>
-        /// <param name="M_PriceList_ID">pl</param>
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        /// <param name="VAM_PriceList_ID">pl</param>
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            _M_PriceList_ID = M_PriceList_ID;
+            _VAM_PriceList_ID = VAM_PriceList_ID;
             _calculated = false;
         }
 
@@ -777,18 +777,18 @@ namespace VAdvantage.Model
         /// Get Attribute Set Instance
         /// </summary>
         /// <returns>plv</returns>
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            return _M_AttributeSetInstance_ID;
+            return _VAM_PFeature_SetInstance_ID;
         }
 
         /// <summary>
         /// Set Attribute Set Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">plv</param>
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        /// <param name="VAM_PFeature_SetInstance_ID">plv</param>
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            _M_AttributeSetInstance_ID = M_AttributeSetInstance_ID;
+            _VAM_PFeature_SetInstance_ID = VAM_PFeature_SetInstance_ID;
             _calculated = false;
         }
 
@@ -796,18 +796,18 @@ namespace VAdvantage.Model
         /// Get PriceList Version
         /// </summary>
         /// <returns>plv</returns>
-        public int GetM_PriceList_Version_ID()
+        public int GetVAM_PriceListVersion_ID()
         {
-            return _M_PriceList_Version_ID;
+            return _VAM_PriceListVersion_ID;
         }
 
         /// <summary>
         /// Set PriceList Version
         /// </summary>
-        /// <param name="M_PriceList_Version_ID">plv</param>
-        public void SetM_PriceList_Version_ID(int M_PriceList_Version_ID)
+        /// <param name="VAM_PriceListVersion_ID">plv</param>
+        public void SetVAM_PriceListVersion_ID(int VAM_PriceListVersion_ID)
         {
-            _M_PriceList_Version_ID = M_PriceList_Version_ID;
+            _VAM_PriceListVersion_ID = VAM_PriceListVersion_ID;
             _calculated = false;
         }
 
@@ -848,8 +848,8 @@ namespace VAdvantage.Model
         /// </summary>
         private void SetPrecision()
         {
-            if (_M_PriceList_ID != 0)
-                _precision = MPriceList.GetPricePrecision(Env.GetContext(), GetM_PriceList_ID());
+            if (_VAM_PriceList_ID != 0)
+                _precision = MPriceList.GetPricePrecision(Env.GetContext(), GetVAM_PriceList_ID());
         }
 
         /// <summary>

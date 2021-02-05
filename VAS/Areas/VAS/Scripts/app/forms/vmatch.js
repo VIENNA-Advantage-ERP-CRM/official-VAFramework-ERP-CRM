@@ -103,7 +103,7 @@
         //Match Options  
         var _matchOptions = [];
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAB_Invoice_ID", false));
-        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "M_InOut_ID", false));
+        _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAM_Inv_InOut_ID", false));
         _matchOptions.push(VIS.Msg.getElement3(VIS.Env.getVAF_Language(VIS.Env.getCtx()), "VAB_Order_ID", false));
 
         // Match Mode 
@@ -476,7 +476,7 @@
             $self.lblMatchTo.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "MatchTo"));
             $self.lblMatchMode.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "MatchMode"));
             $self.lblBPartner.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"));
-            $self.lblProduct.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"));
+            $self.lblProduct.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"));
             $self.lblDateFrom.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "DateFrom"));
             $self.lblDateTo.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "DateTo"));
             $self.lblMatched.getControl().text(VIS.Msg.translate(VIS.Env.getCtx(), "ToBeMatched"));
@@ -511,7 +511,7 @@
 
             //Product
             value = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 3840, VIS.DisplayType.Search);
-            $self.onlyProduct = new VIS.Controls.VTextBoxButton("M_Product_ID", true, false, true, VIS.DisplayType.Search, value);
+            $self.onlyProduct = new VIS.Controls.VTextBoxButton("VAM_Product_ID", true, false, true, VIS.DisplayType.Search, value);
 
 
             //var lookup = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), $self.windowNo, 2163, VIS.DisplayType.TableDir);
@@ -577,7 +577,7 @@
             //  Product
             if ($self.onlyProduct.getValue() != null) {
                 var Product = $self.onlyProduct.getValue();
-                onlyProduct_s = " AND lin.M_Product_ID=" + Product;
+                onlyProduct_s = " AND lin.VAM_Product_ID=" + Product;
             }
             //  BPartner
             if ($self.onlyVendor.getValue() != null) {
@@ -648,7 +648,7 @@
                 tableInit(display, matchToType);	//	sets _sql
                 //  ** Add Where Clause **              
                 var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
-                var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
+                var Product = { 'key': $self.vdgvInvoice.get(row).VAM_Product_ID_K, 'value': $self.vdgvInvoice.get(row).VAM_Product_ID };
 
 
 
@@ -656,7 +656,7 @@
                     chkSameBPartners = " AND hdr.VAB_BusinessPartner_ID=" + BPartner.key;
                 }
                 if ($self.chkSameProduct.prop("checked")) {
-                    chkSameProducts = " AND lin.M_Product_ID=" + Product.key;
+                    chkSameProducts = " AND lin.VAM_Product_ID=" + Product.key;
                 }
 
                 //  calculate qty
@@ -725,14 +725,14 @@
         //        //  ** Add Where Clause **
         //        //var BPartner = ($self.vdgvInvoice.get(row)).I_BPartner;
         //        var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
-        //        var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
+        //        var Product = { 'key': $self.vdgvInvoice.get(row).VAM_Product_ID_K, 'value': $self.vdgvInvoice.get(row).VAM_Product_ID };
 
         //        //log.Fine("BPartner=" + BPartner + " - Product=" + Product);
         //        if ($self.chkSameBPartner.prop("checked")) {
         //            _sql = _sql.concat(" AND hdr.VAB_BusinessPartner_ID=").concat(BPartner.key);
         //        }
         //        if ($self.chkSameProduct.prop("checked")) {
-        //            _sql = _sql.concat(" AND lin.M_Product_ID=").concat(Product.key);
+        //            _sql = _sql.concat(" AND lin.VAM_Product_ID=").concat(Product.key);
         //        }
 
         //        //  calculate qty
@@ -779,7 +779,7 @@
 
             var BPartner = { 'key': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID_K, 'value': $self.vdgvInvoice.get(row).VAB_BusinessPartner_ID };
             var lineMatched = { 'key': $self.vdgvInvoice.get(row).Line_K, 'value': $self.vdgvInvoice.get(row).Line };
-            var Product = { 'key': $self.vdgvInvoice.get(row).M_Product_ID_K, 'value': $self.vdgvInvoice.get(row).M_Product_ID };
+            var Product = { 'key': $self.vdgvInvoice.get(row).VAM_Product_ID_K, 'value': $self.vdgvInvoice.get(row).VAM_Product_ID };
 
 
             var toMatchQty = _xMatched;
@@ -818,7 +818,7 @@
                 var id = ($self.vdgvReceipt.get(splitValue[row]))._ID;
                 if (id != null) {
                     //  need to be the same product
-                    var ProductCompare = { 'key': $self.vdgvReceipt.get(splitValue[row]).M_Product_ID_K, 'value': $self.vdgvReceipt.get(splitValue[row]).M_Product_ID };
+                    var ProductCompare = { 'key': $self.vdgvReceipt.get(splitValue[row]).VAM_Product_ID_K, 'value': $self.vdgvReceipt.get(splitValue[row]).VAM_Product_ID };
                     if (Product.key != ProductCompare.key) {
                         continue;
                     }
@@ -851,21 +851,21 @@
                     //}                    
 
                     ////  Get Shipment_ID
-                    //var M_InOutLine_ID = 0;
+                    //var VAM_Inv_InOutLine_ID = 0;
                     //var Line_ID = 0;
                     //if ($self.cmbMatchFrom.getControl()[0].selectedIndex == MATCH_SHIPMENT) {
-                    //    M_InOutLine_ID = lineMatched.key;      //  upper table
+                    //    VAM_Inv_InOutLine_ID = lineMatched.key;      //  upper table
                     //    Line_ID = lineMatchedTo.key;
                     //}
                     //else {
-                    //    M_InOutLine_ID = lineMatchedTo.key;    //  lower table
+                    //    VAM_Inv_InOutLine_ID = lineMatchedTo.key;    //  lower table
                     //    Line_ID = lineMatched.key;
                     //}
 
                     multiSelect.push($self.vdgvReceipt.get(splitValue[row]));
 
                     // Added by Bharat on 20 July 2017 to restrict multiclick issue         
-                    //return createMatchRecord(invoice, M_InOutLine_ID, Line_ID, qty, lineMatched.key, selectedItems);
+                    //return createMatchRecord(invoice, VAM_Inv_InOutLine_ID, Line_ID, qty, lineMatched.key, selectedItems);
                 }
                 else {
                     continue;
@@ -964,19 +964,19 @@
         //        _dateColumn = "hdr.DateInvoiced";
         //        _qtyColumn = "lin.QtyInvoiced";
         //        _sql = _sql.concat("SELECT hdr.VAB_Invoice_ID,hdr.DocumentNo, hdr.DateInvoiced, bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.VAB_InvoiceLine_ID, p.Name as Product,lin.M_Product_ID,"
+        //            + " lin.Line,lin.VAB_InvoiceLine_ID, p.Name as Product,lin.VAM_Product_ID,"
         //            + " lin.QtyInvoiced,SUM(NVL(mi.Qty,0)) as match "
         //            + "FROM VAB_Invoice hdr"
         //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
         //            + " INNER JOIN VAB_InvoiceLine lin ON (hdr.VAB_Invoice_ID=lin.VAB_Invoice_ID)"
-        //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
+        //            + " INNER JOIN VAM_Product p ON (lin.VAM_Product_ID=p.VAM_Product_ID)"
         //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID and dt.DocBaseType in ('API','APC') AND dt.IsReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
-        //            .concat(" FULL JOIN M_MatchInv mi ON (lin.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
+        //            .concat(" FULL JOIN VAM_MatchInvoice mi ON (lin.VAB_InvoiceLine_ID=mi.VAB_InvoiceLine_ID) "
         //            + "WHERE hdr.DocStatus IN ('CO','CL')");
 
         //        _groupBy = " GROUP BY hdr.VAB_Invoice_ID,hdr.DocumentNo,hdr.DateInvoiced,bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.VAB_InvoiceLine_ID,p.Name,lin.M_Product_ID,lin.QtyInvoiced "
+        //            + " lin.Line,lin.VAB_InvoiceLine_ID,p.Name,lin.VAM_Product_ID,lin.QtyInvoiced "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyInvoiced")
         //            + "<>SUM(NVL(mi.Qty,0))";
@@ -985,22 +985,22 @@
         //        _dateColumn = "hdr.DateOrdered";
         //        _qtyColumn = "lin.QtyOrdered";
         //        _sql = _sql.concat("SELECT hdr.VAB_Order_ID,hdr.DocumentNo, hdr.DateOrdered, bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.VAB_OrderLine_ID, p.Name as Product,lin.M_Product_ID,"
+        //            + " lin.Line,lin.VAB_OrderLine_ID, p.Name as Product,lin.VAM_Product_ID,"
         //            + " lin.QtyOrdered,SUM(COALESCE(mo.Qty,0)) as match "
         //            + "FROM VAB_Order hdr"
         //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
         //            + " INNER JOIN VAB_OrderLine lin ON (hdr.VAB_Order_ID=lin.VAB_Order_ID)"
-        //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
+        //            + " INNER JOIN VAM_Product p ON (lin.VAM_Product_ID=p.VAM_Product_ID)"
         //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID=dt.VAB_DocTypes_ID AND dt.DocBaseType='POO'AND dt.isReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
-        //            .concat(" FULL JOIN M_MatchPO mo ON (lin.VAB_OrderLine_ID=mo.VAB_OrderLine_ID) "
+        //            .concat(" FULL JOIN VAM_MatchPO mo ON (lin.VAB_OrderLine_ID=mo.VAB_OrderLine_ID) "
         //            + "WHERE mo.")
-        //            .concat(matchToType == MATCH_SHIPMENT ? "M_InOutLine_ID" : "VAB_InvoiceLine_ID")
+        //            .concat(matchToType == MATCH_SHIPMENT ? "VAM_Inv_InOutLine_ID" : "VAB_InvoiceLine_ID")
         //            .concat(matched ? " IS NOT NULL" : " IS NULL"
         //            + " AND hdr.DocStatus IN ('CO','CL')");
 
         //        _groupBy = " GROUP BY hdr.VAB_Order_ID,hdr.DocumentNo,hdr.DateOrdered,bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.VAB_OrderLine_ID,p.Name,lin.M_Product_ID,lin.QtyOrdered "
+        //            + " lin.Line,lin.VAB_OrderLine_ID,p.Name,lin.VAM_Product_ID,lin.QtyOrdered "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.QtyOrdered")
         //            + "<>SUM(COALESCE(mo.Qty,0))";
@@ -1009,21 +1009,21 @@
         //    {
         //        _dateColumn = "hdr.MovementDate";
         //        _qtyColumn = "lin.MovementQty";
-        //        _sql = _sql.concat("SELECT hdr.M_InOut_ID,hdr.DocumentNo, hdr.MovementDate, bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.M_InOutLine_ID, p.Name as Product,lin.M_Product_ID,"
+        //        _sql = _sql.concat("SELECT hdr.VAM_Inv_InOut_ID,hdr.DocumentNo, hdr.MovementDate, bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAM_Inv_InOutLine_ID, p.Name as Product,lin.VAM_Product_ID,"
         //            + " lin.MovementQty,SUM(NVL(m.Qty,0)) as match"
-        //            + " FROM M_InOut hdr"
+        //            + " FROM VAM_Inv_InOut hdr"
         //            + " INNER JOIN VAB_BusinessPartner bp ON (hdr.VAB_BusinessPartner_ID=bp.VAB_BusinessPartner_ID)"
-        //            + " INNER JOIN M_InOutLine lin ON (hdr.M_InOut_ID=lin.M_InOut_ID)"
-        //            + " INNER JOIN M_Product p ON (lin.M_Product_ID=p.M_Product_ID)"
+        //            + " INNER JOIN VAM_Inv_InOutLine lin ON (hdr.VAM_Inv_InOut_ID=lin.VAM_Inv_InOut_ID)"
+        //            + " INNER JOIN VAM_Product p ON (lin.VAM_Product_ID=p.VAM_Product_ID)"
         //            + " INNER JOIN VAB_DocTypes dt ON (hdr.VAB_DocTypes_ID = dt.VAB_DocTypes_ID AND dt.DocBaseType='MMR' AND dt.isReturnTrx = ")
         //            .concat($self.chkIsReturnTrx.prop('checked') ? "'Y')" : "'N')")
         //            .concat(" FULL JOIN ")
-        //            .concat(matchToType == MATCH_ORDER ? "M_MatchPO" : "M_MatchInv")
-        //            .concat(" m ON (lin.M_InOutLine_ID=m.M_InOutLine_ID) "
+        //            .concat(matchToType == MATCH_ORDER ? "VAM_MatchPO" : "VAM_MatchInvoice")
+        //            .concat(" m ON (lin.VAM_Inv_InOutLine_ID=m.VAM_Inv_InOutLine_ID) "
         //            + "WHERE hdr.DocStatus IN ('CO','CL')");
-        //        _groupBy = " GROUP BY hdr.M_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.VAB_BusinessPartner_ID,"
-        //            + " lin.Line,lin.M_InOutLine_ID,p.Name,lin.M_Product_ID,lin.MovementQty "
+        //        _groupBy = " GROUP BY hdr.VAM_Inv_InOut_ID,hdr.DocumentNo,hdr.MovementDate,bp.Name,hdr.VAB_BusinessPartner_ID,"
+        //            + " lin.Line,lin.VAM_Inv_InOutLine_ID,p.Name,lin.VAM_Product_ID,lin.MovementQty "
         //            + "HAVING "
         //            + (matched ? "0" : "lin.MovementQty")
         //            + "<>SUM(NVL(m.Qty,0))";
@@ -1080,8 +1080,8 @@
                             line['VAB_BusinessPartner_ID_K'] = res[i].CBPartnerID;
                             line['Line'] = res[i].Line;
                             line['Line_K'] = res[i].Line_K;
-                            line['M_Product_ID'] = res[i].MProductIDK;
-                            line['M_Product_ID_K'] = res[i].MProductID;
+                            line['VAM_Product_ID'] = res[i].MProductIDK;
+                            line['VAM_Product_ID_K'] = res[i].MProductID;
                             line['Qty'] = res[i].Qty;
                             line['Matched'] = res[i].Matched;
                             line['recid'] = count;
@@ -1206,8 +1206,8 @@
                 $self.arrListColumns.push({ field: "VAB_BusinessPartner_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_BusinessPartner_ID"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "Line", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: false });
                 $self.arrListColumns.push({ field: "Line_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Line"), sortable: true, size: '11%', hidden: true });
-                $self.arrListColumns.push({ field: "M_Product_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"), sortable: true, size: '11%', hidden: false });
-                $self.arrListColumns.push({ field: "M_Product_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"), sortable: true, size: '11%', hidden: true });
+                $self.arrListColumns.push({ field: "VAM_Product_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"), sortable: true, size: '11%', hidden: false });
+                $self.arrListColumns.push({ field: "VAM_Product_ID_K", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"), sortable: true, size: '11%', hidden: true });
                 $self.arrListColumns.push({ field: "Qty", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Qty"), sortable: true, size: '11%', hidden: false,
                     render: function (record, index, col_index) {
                         var val = VIS.Utility.Util.getValueOfDecimal(record["Qty"]);
@@ -1367,7 +1367,7 @@
             var Product = null;
             if ($self.vdgvInvoice.getSelection().length > 0) {
                 matchedRow = Number($self.vdgvInvoice.getSelection().toString());
-                Product = { 'key': $self.vdgvInvoice.get(matchedRow).M_Product_ID_K, 'value': $self.vdgvInvoice.get(matchedRow).M_Product_ID };
+                Product = { 'key': $self.vdgvInvoice.get(matchedRow).VAM_Product_ID_K, 'value': $self.vdgvInvoice.get(matchedRow).VAM_Product_ID };
             }
 
             //  Matched To
@@ -1387,7 +1387,7 @@
                     for (var row = 0; row < splitValue.length; row++) {
                         var id = ($self.vdgvReceipt.get(splitValue[0]))._ID;
                         if (id != null) {
-                            var ProductCompare = { 'key': $self.vdgvReceipt.get(splitValue[row]).M_Product_ID_K, 'value': $self.vdgvReceipt.get(splitValue[row]).M_Product_ID };
+                            var ProductCompare = { 'key': $self.vdgvReceipt.get(splitValue[row]).VAM_Product_ID_K, 'value': $self.vdgvReceipt.get(splitValue[row]).VAM_Product_ID };
                             if (Product.key != ProductCompare.key) {
                                 setTimeout(function () { $self.vdgvReceipt.unselect(Number(recid)) }, 10);
                                 return;

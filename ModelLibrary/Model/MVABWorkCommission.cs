@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /// <returns>array of lines</returns>
         public MVABWorkCommissionLine[] GetLines()
         {
-            String sql = "SELECT * FROM VAB_WorkCommissionLine WHERE VAB_WorkCommission_ID=@comid AND IsActive='Y' ORDER BY M_Product_ID, M_Product_Category_ID,VAB_BusinessPartner_ID,VAB_BPart_Category_ID,VAF_Org_ID,VAB_SalesRegionState_ID";
+            String sql = "SELECT * FROM VAB_WorkCommissionLine WHERE VAB_WorkCommission_ID=@comid AND IsActive='Y' ORDER BY VAM_Product_ID, VAM_ProductCategory_ID,VAB_BusinessPartner_ID,VAB_BPart_Category_ID,VAF_Org_ID,VAB_SalesRegionState_ID";
             List<MVABWorkCommissionLine> list = new List<MVABWorkCommissionLine>();
             try
             {

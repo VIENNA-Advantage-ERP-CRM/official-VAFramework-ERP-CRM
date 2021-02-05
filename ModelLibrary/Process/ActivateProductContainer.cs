@@ -2,8 +2,8 @@
     * Project Name   : VAdvantage
     * Class Name     : ActivateProductContainer
     * Purpose        : Is used to enable "Product Container" into the system
-                       this process update the "ContainerCurentQty" on "M_Transaction" with "CurrentQty"
-                       also update the M_ContainerStorage with QtyOnHand
+                       this process update the "ContainerCurentQty" on "VAM_Inv_Trx" with "CurrentQty"
+                       also update the VAM_ContainerStorage with QtyOnHand
     * Class Used     : ProcessEngine.SvrProcess
     * Chronological    Development
     * Amit Bansal     21-Jan-2019
@@ -49,31 +49,31 @@ namespace VAdvantage.Process
                 }
 
                 // update container qty with current qty on all records on transaction
-                int no = DB.ExecuteQuery(@"UPDATE M_TRANSACTION SET ContainerCurrentQty = CurrentQty", null, Get_Trx());
+                int no = DB.ExecuteQuery(@"UPDATE VAM_Inv_Trx SET ContainerCurrentQty = CurrentQty", null, Get_Trx());
                 if (no > 0)
                 {
                     // delete all record from container storage
-                    no = DB.ExecuteQuery(@"DELETE FROM  M_ContainerStorage", null, Get_Trx());
+                    no = DB.ExecuteQuery(@"DELETE FROM  VAM_ContainerStorage", null, Get_Trx());
 
                     // get all data from storage having OnHandQty != 0, and create recod on container storage with locator, product and qty details
                     sql.Clear();
-                    sql.Append(@"SELECT M_Transaction.vaf_client_ID , M_Transaction.VAF_Org_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
-                                  NVL(M_Transaction.M_AttributeSetInstance_ID , 0) AS M_AttributeSetInstance_ID , M_Transaction.M_Transaction_ID ,
-                                  M_Transaction.MovementDate , NVL(M_Transaction.MovementQty , 0) AS MovementQty , M_Transaction.CurrentQty , M_Transaction.MovementType ,
-                                  CASE WHEN M_Transaction.M_InventoryLine_ID > 0
-                                    AND (SELECT IsInternalUse FROM M_InventoryLine
-                                      WHERE M_InventoryLine.M_InventoryLine_ID = M_Transaction.M_InventoryLine_ID ) = 'N'
+                    sql.Append(@"SELECT VAM_Inv_Trx.vaf_client_ID , VAM_Inv_Trx.VAF_Org_ID , VAM_Inv_Trx.VAM_Locator_ID , VAM_Inv_Trx.VAM_Product_ID ,
+                                  NVL(VAM_Inv_Trx.VAM_PFeature_SetInstance_ID , 0) AS VAM_PFeature_SetInstance_ID , VAM_Inv_Trx.VAM_Inv_Trx_ID ,
+                                  VAM_Inv_Trx.MovementDate , NVL(VAM_Inv_Trx.MovementQty , 0) AS MovementQty , VAM_Inv_Trx.CurrentQty , VAM_Inv_Trx.MovementType ,
+                                  CASE WHEN VAM_Inv_Trx.VAM_InventoryLine_ID > 0
+                                    AND (SELECT IsInternalUse FROM VAM_InventoryLine
+                                      WHERE VAM_InventoryLine.VAM_InventoryLine_ID = VAM_Inv_Trx.VAM_InventoryLine_ID ) = 'N'
                                     THEN 'Y' ELSE 'N' END AS PhysicalInventory,
-                                    (SELECT MMPolicy FROM M_Product_Category WHERE M_Product_Category.M_Product_Category_ID = M_Product.M_Product_Category_ID) AS MMPolicy
-                                FROM M_Transaction 
-                                INNER JOIN M_Product ON M_Product.M_Product_ID = M_Transaction.M_Product_ID  
-                                ORDER BY M_Transaction.VAF_Client_ID , M_Transaction.M_Locator_ID , M_Transaction.M_Product_ID ,
-                                M_Transaction.M_AttributeSetInstance_ID , M_Transaction.MovementDate , M_Transaction.M_Transaction_ID ASC");
+                                    (SELECT MMPolicy FROM VAM_ProductCategory WHERE VAM_ProductCategory.VAM_ProductCategory_ID = VAM_Product.VAM_ProductCategory_ID) AS MMPolicy
+                                FROM VAM_Inv_Trx 
+                                INNER JOIN VAM_Product ON VAM_Product.VAM_Product_ID = VAM_Inv_Trx.VAM_Product_ID  
+                                ORDER BY VAM_Inv_Trx.VAF_Client_ID , VAM_Inv_Trx.VAM_Locator_ID , VAM_Inv_Trx.VAM_Product_ID ,
+                                VAM_Inv_Trx.VAM_PFeature_SetInstance_ID , VAM_Inv_Trx.MovementDate , VAM_Inv_Trx.VAM_Inv_Trx_ID ASC");
                     DataSet dsStorage = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
                     if (dsStorage != null && dsStorage.Tables.Count > 0 && dsStorage.Tables[0].Rows.Count > 0)
                     {
-                        X_M_ContainerStorage containerStorage = null;
-                        int M_ContainerStorage_ID = 0;
+                        X_VAM_ContainerStorage containerStorage = null;
+                        int VAM_ContainerStorage_ID = 0;
                         for (int i = 0; i < dsStorage.Tables[0].Rows.Count; i++)
                         {
                             // get dataRow from dataset
@@ -82,11 +82,11 @@ namespace VAdvantage.Process
                             if (Convert.ToInt32(dr["MovementQty"]) > 0)
                             {
                                 // Quantity IN
-                                M_ContainerStorage_ID = GetContainerStorage(Convert.ToInt32(dr["M_Locator_ID"]), Convert.ToInt32(dr["M_Product_ID"]),
-                                                    Convert.ToInt32(dr["M_AttributeSetInstance_ID"]), Convert.ToDateTime(dr["MovementDate"]),
+                                VAM_ContainerStorage_ID = GetContainerStorage(Convert.ToInt32(dr["VAM_Locator_ID"]), Convert.ToInt32(dr["VAM_Product_ID"]),
+                                                    Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]), Convert.ToDateTime(dr["MovementDate"]),
                                                     Convert.ToString(dr["PhysicalInventory"]));
 
-                                containerStorage = new X_M_ContainerStorage(GetCtx(), M_ContainerStorage_ID, Get_Trx()); // object of container storage                                                                                          
+                                containerStorage = new X_VAM_ContainerStorage(GetCtx(), VAM_ContainerStorage_ID, Get_Trx()); // object of container storage                                                                                          
                                 // Set or Update Values 
                                 containerStorage = InsertContainerStorage(containerStorage, dr);
                                 if (!containerStorage.Save(Get_Trx()))
@@ -125,21 +125,21 @@ namespace VAdvantage.Process
         /// <summary>
         /// This function is used to get record id refernce if created on specified reference
         /// </summary>
-        /// <param name="M_Locator_ID">Locator ID</param>
-        /// <param name="M_Product_ID">Product ID</param>
-        /// <param name="M_AttributeSetInstance_ID">AttributeSetInstance ID</param>
+        /// <param name="VAM_Locator_ID">Locator ID</param>
+        /// <param name="VAM_Product_ID">Product ID</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">AttributeSetInstance ID</param>
         /// <param name="MovementDate">Movement Date / Policy Date</param>
         /// <param name="IsPhysicalInventory">Is physical Inventory record</param>
         /// <returns>record Id, if found else 0</returns>
-        private int GetContainerStorage(int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID, DateTime? MovementDate, String IsPhysicalInventory)
+        private int GetContainerStorage(int VAM_Locator_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, DateTime? MovementDate, String IsPhysicalInventory)
         {
-            int M_ContainerStorage_ID = 0;
-            String sql = "SELECT M_ContainerStorage_ID FROM M_ContainerStorage WHERE M_Locator_ID = " + M_Locator_ID +
-                            @" AND M_Product_ID = " + M_Product_ID + @" AND NVL(M_AttributeSetInstance_ID , 0) = " + M_AttributeSetInstance_ID +
+            int VAM_ContainerStorage_ID = 0;
+            String sql = "SELECT VAM_ContainerStorage_ID FROM VAM_ContainerStorage WHERE VAM_Locator_ID = " + VAM_Locator_ID +
+                            @" AND VAM_Product_ID = " + VAM_Product_ID + @" AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + VAM_PFeature_SetInstance_ID +
                             @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(MovementDate, true);
             //@" AND IsPhysicalInventory = '" + IsPhysicalInventory + "'";
-            M_ContainerStorage_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
-            return M_ContainerStorage_ID;
+            VAM_ContainerStorage_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_Trx()));
+            return VAM_ContainerStorage_ID;
         }
 
         /// <summary>
@@ -154,19 +154,19 @@ namespace VAdvantage.Process
             //    return false;
             //}
 
-            int no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InOut_ID) FROM M_InOut WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
+            int no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAM_Inv_InOut_ID) FROM VAM_Inv_InOut WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
             if (no > 0)
             {
                 return false;
             }
 
-            no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Inventory_ID) FROM M_Inventory WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
+            no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAM_Inventory_ID) FROM VAM_Inventory WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
             if (no > 0)
             {
                 return false;
             }
 
-            no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_Movement_ID) FROM M_Movement WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
+            no = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAM_InventoryTransfer_ID) FROM VAM_InventoryTransfer WHERE IsActive = 'Y' AND DocStatus NOT IN ('CL' , 'RE' , 'VO')", null, Get_Trx()));
             if (no > 0)
             {
                 return false;
@@ -182,13 +182,13 @@ namespace VAdvantage.Process
         /// <param name="dr">data row</param>
         /// <param name="isPhysicalInventory">is record created for physical inventory</param>
         /// <returns>object of container storage</returns>
-        private X_M_ContainerStorage InsertContainerStorage(X_M_ContainerStorage containerStorage, DataRow dr, bool isPhysicalInventory)
+        private X_VAM_ContainerStorage InsertContainerStorage(X_VAM_ContainerStorage containerStorage, DataRow dr, bool isPhysicalInventory)
         {
             containerStorage.SetVAF_Client_ID(Convert.ToInt32(dr["VAF_Client_ID"]));
             containerStorage.SetVAF_Org_ID(Convert.ToInt32(dr["VAF_Org_ID"]));
-            containerStorage.SetM_Locator_ID(Convert.ToInt32(dr["M_Locator_ID"]));
-            containerStorage.SetM_Product_ID(Convert.ToInt32(dr["M_Product_ID"]));
-            containerStorage.SetM_AttributeSetInstance_ID(Convert.ToInt32(dr["M_AttributeSetInstance_ID"]));
+            containerStorage.SetVAM_Locator_ID(Convert.ToInt32(dr["VAM_Locator_ID"]));
+            containerStorage.SetVAM_Product_ID(Convert.ToInt32(dr["VAM_Product_ID"]));
+            containerStorage.SetVAM_PFeature_SetInstance_ID(Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]));
 
             // when storage dont have DateLastInventory -- means not any physical inventory
             if (dr["DateLastInventory"] == DBNull.Value)
@@ -233,15 +233,15 @@ namespace VAdvantage.Process
         /// <param name="containerStorage">Container Storage Object</param>
         /// <param name="dr">data row</param>
         /// <returns>container Storage object</returns>
-        private X_M_ContainerStorage InsertContainerStorage(X_M_ContainerStorage containerStorage, DataRow dr)
+        private X_VAM_ContainerStorage InsertContainerStorage(X_VAM_ContainerStorage containerStorage, DataRow dr)
         {
             if (containerStorage.Get_ID() <= 0)
             {
                 containerStorage.SetVAF_Client_ID(Convert.ToInt32(dr["VAF_Client_ID"]));
-                containerStorage.SetVAF_Org_ID(MLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["M_Locator_ID"])).GetVAF_Org_ID());
-                containerStorage.SetM_Locator_ID(Convert.ToInt32(dr["M_Locator_ID"]));
-                containerStorage.SetM_Product_ID(Convert.ToInt32(dr["M_Product_ID"]));
-                containerStorage.SetM_AttributeSetInstance_ID(Convert.ToInt32(dr["M_AttributeSetInstance_ID"]));
+                containerStorage.SetVAF_Org_ID(MLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["VAM_Locator_ID"])).GetVAF_Org_ID());
+                containerStorage.SetVAM_Locator_ID(Convert.ToInt32(dr["VAM_Locator_ID"]));
+                containerStorage.SetVAM_Product_ID(Convert.ToInt32(dr["VAM_Product_ID"]));
+                containerStorage.SetVAM_PFeature_SetInstance_ID(Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]));
                 containerStorage.SetMMPolicyDate(Convert.ToDateTime(dr["MovementDate"]));
                 containerStorage.SetIsPhysicalInventory(Convert.ToString(dr["PhysicalInventory"]).Equals("Y") ? true : false);
                 containerStorage.SetQty(Convert.ToDecimal(dr["MovementQty"]));
@@ -262,17 +262,17 @@ namespace VAdvantage.Process
         {
             Decimal Qty = Math.Abs(Convert.ToDecimal(dr["MovementQty"]));
             int no;
-            String sql = @"SELECT M_ContainerStorage_ID , Qty , IsPhysicalInventory FROM M_ContainerStorage WHERE Qty > 0 
-                               AND M_Locator_ID = " + Convert.ToInt32(dr["M_Locator_ID"]) +
-                            @" AND M_Product_ID = " + Convert.ToInt32(dr["M_Product_ID"]) +
-                            @" AND NVL(M_AttributeSetInstance_ID , 0) = " + Convert.ToInt32(dr["M_AttributeSetInstance_ID"]);
+            String sql = @"SELECT VAM_ContainerStorage_ID , Qty , IsPhysicalInventory FROM VAM_ContainerStorage WHERE Qty > 0 
+                               AND VAM_Locator_ID = " + Convert.ToInt32(dr["VAM_Locator_ID"]) +
+                            @" AND VAM_Product_ID = " + Convert.ToInt32(dr["VAM_Product_ID"]) +
+                            @" AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]);
             if (Convert.ToString(dr["MMPolicy"]).Equals(MProductCategory.MMPOLICY_LiFo))
             {
-                sql += " ORDER BY MMPolicyDate  DESC , M_ContainerStorage_ID DESC";
+                sql += " ORDER BY MMPolicyDate  DESC , VAM_ContainerStorage_ID DESC";
             }
             else
             {
-                sql += " ORDER BY MMPolicyDate , M_ContainerStorage_ID ASC";
+                sql += " ORDER BY MMPolicyDate , VAM_ContainerStorage_ID ASC";
             }
             DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -289,14 +289,14 @@ namespace VAdvantage.Process
                         if (Util.GetValueOfString(ds.Tables[0].Rows[i]["IsPhysicalInventory"]).Equals("Y"))
                         {
                             // update record - bcz it is physical inventory record
-                            no = DB.ExecuteQuery("Update M_ContainerStorage SET QTY = 0 , IsPhysicalInventory = 'Y' WHERE M_ContainerStorage_ID = "
-                                                + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["M_ContainerStorage_ID"]), null, Get_Trx());
+                            no = DB.ExecuteQuery("Update VAM_ContainerStorage SET QTY = 0 , IsPhysicalInventory = 'Y' WHERE VAM_ContainerStorage_ID = "
+                                                + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["VAM_ContainerStorage_ID"]), null, Get_Trx());
                         }
                         else
                         {
                             // delete record
-                            no = DB.ExecuteQuery("DELETE FROM  M_ContainerStorage WHERE M_ContainerStorage_ID = "
-                                               + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["M_ContainerStorage_ID"]), null, Get_Trx());
+                            no = DB.ExecuteQuery("DELETE FROM  VAM_ContainerStorage WHERE VAM_ContainerStorage_ID = "
+                                               + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["VAM_ContainerStorage_ID"]), null, Get_Trx());
                         }
 
                         // set remaining qty which is to be reduce 
@@ -305,8 +305,8 @@ namespace VAdvantage.Process
                     else
                     {
                         // subtract qty from the current traverse record
-                        no = DB.ExecuteQuery("Update M_ContainerStorage SET QTY = Qty - " + Qty + @" WHERE M_ContainerStorage_ID = "
-                                                + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["M_ContainerStorage_ID"]), null, Get_Trx());
+                        no = DB.ExecuteQuery("Update VAM_ContainerStorage SET QTY = Qty - " + Qty + @" WHERE VAM_ContainerStorage_ID = "
+                                                + Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["VAM_ContainerStorage_ID"]), null, Get_Trx());
                         Qty = 0;
                         break;
                     }
@@ -316,7 +316,7 @@ namespace VAdvantage.Process
             // after consumption, if any qty left than need to create record there with -ve remaining qty
             if (Qty != 0)
             {
-                X_M_ContainerStorage containerStorage = new X_M_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage  
+                X_VAM_ContainerStorage containerStorage = new X_VAM_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage  
                 containerStorage = InsertContainerStorage(containerStorage, dr);
                 containerStorage.SetQty(Decimal.Negate(Qty));
                 if (!containerStorage.Save(Get_Trx()))
@@ -339,30 +339,30 @@ namespace VAdvantage.Process
         //                    return Msg.GetMsg(GetCtx(), "VIS_NotClosedocument");
         //                }
         //                // update container qty with current qty on all records on transaction
-        //                int no = DB.ExecuteQuery(@"UPDATE M_TRANSACTION SET ContainerCurrentQty = CurrentQty", null, Get_Trx());
+        //                int no = DB.ExecuteQuery(@"UPDATE VAM_Inv_Trx SET ContainerCurrentQty = CurrentQty", null, Get_Trx());
         //                if (no > 0)
         //                {
         //                    // delete all record from container storage
-        //                    no = DB.ExecuteQuery(@"DELETE FROM  M_ContainerStorage", null, Get_Trx());
+        //                    no = DB.ExecuteQuery(@"DELETE FROM  VAM_ContainerStorage", null, Get_Trx());
 
         //                    // get all data from storage having OnHandQty != 0, and create recod on container storage with locator, product and qty details
         //                    sql.Clear();
         //                    sql.Append(@"WITH conSTORAGE AS
-        //  (SELECT il.M_Locator_ID, il.m_product_id, il.M_AttributeSetInstance_ID, i.MovementDate, SUM(il.QtyCount - il.QtyBook) AS qty
-        //  FROM m_inventory i INNER JOIN m_inventoryline il ON i.m_inventory_id = il.m_inventory_id WHERE i.isinternaluse = 'N' 
-        //  GROUP BY il.M_Locator_ID, il.m_product_id, il.M_AttributeSetInstance_ID, i.MovementDate  )
-        //SELECT VAF_Client_ID, VAF_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID,  NVL(M_Storage.M_AttributeSetInstance_ID , 0) AS M_AttributeSetInstance_ID,
+        //  (SELECT il.VAM_Locator_ID, il.VAM_Product_id, il.VAM_PFeature_SetInstance_ID, i.MovementDate, SUM(il.QtyCount - il.QtyBook) AS qty
+        //  FROM VAM_Inventory i INNER JOIN VAM_InventoryLine il ON i.VAM_Inventory_id = il.VAM_Inventory_id WHERE i.isinternaluse = 'N' 
+        //  GROUP BY il.VAM_Locator_ID, il.VAM_Product_id, il.VAM_PFeature_SetInstance_ID, i.MovementDate  )
+        //SELECT VAF_Client_ID, VAF_Org_ID, VAM_Storage.VAM_Locator_ID, VAM_Storage.VAM_Product_ID,  NVL(VAM_Storage.VAM_PFeature_SetInstance_ID , 0) AS VAM_PFeature_SetInstance_ID,
         //  SUM(QtyOnHand) AS QtyOnHand, DateLastInventory, NVL(qty, 0) AS qty
-        //FROM M_Storage LEFT JOIN conSTORAGE ON ( conSTORAGE.m_locator_id = M_Storage.m_locator_id
-        //AND conSTORAGE.m_product_id  = M_Storage.m_product_id AND NVL(conSTORAGE.M_AttributeSetInstance_ID , 0) = NVL(M_Storage.M_AttributeSetInstance_ID , 0)
-        //AND conSTORAGE.MovementDate = M_Storage.DateLastInventory)
-        //GROUP BY VAF_Client_ID, VAF_Org_ID, M_Storage.M_Locator_ID, M_Storage.M_Product_ID, M_Storage.M_AttributeSetInstance_ID, DateLastInventory, qty
+        //FROM VAM_Storage LEFT JOIN conSTORAGE ON ( conSTORAGE.VAM_Locator_id = VAM_Storage.VAM_Locator_id
+        //AND conSTORAGE.VAM_Product_id  = VAM_Storage.VAM_Product_id AND NVL(conSTORAGE.VAM_PFeature_SetInstance_ID , 0) = NVL(VAM_Storage.VAM_PFeature_SetInstance_ID , 0)
+        //AND conSTORAGE.MovementDate = VAM_Storage.DateLastInventory)
+        //GROUP BY VAF_Client_ID, VAF_Org_ID, VAM_Storage.VAM_Locator_ID, VAM_Storage.VAM_Product_ID, VAM_Storage.VAM_PFeature_SetInstance_ID, DateLastInventory, qty
         //HAVING SUM(QtyOnHand) != 0");
         //                    _log.Info(sql.ToString());
         //                    DataSet dsStorage = DB.ExecuteDataset(sql.ToString(), null, Get_Trx());
         //                    if (dsStorage != null && dsStorage.Tables.Count > 0 && dsStorage.Tables[0].Rows.Count > 0)
         //                    {
-        //                        X_M_ContainerStorage containerStorage = null;
+        //                        X_VAM_ContainerStorage containerStorage = null;
         //                        bool isPhysicalInventory = false;
         //                        for (int i = 0; i < dsStorage.Tables[0].Rows.Count; i++)
         //                        {
@@ -374,7 +374,7 @@ namespace VAdvantage.Process
         //                            {
         //                                isPhysicalInventory = false; // is record save for Physical inventory
 
-        //                                containerStorage = new X_M_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
+        //                                containerStorage = new X_VAM_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
 
         //                                // Set Values 
         //                                containerStorage = InsertContainerStorage(containerStorage, dr, isPhysicalInventory);
@@ -396,7 +396,7 @@ namespace VAdvantage.Process
         //                                    isPhysicalInventory = false;
 
         //                                newRecord:
-        //                                    containerStorage = new X_M_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
+        //                                    containerStorage = new X_VAM_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
 
         //                                    // Set Values 
         //                                    containerStorage = InsertContainerStorage(containerStorage, dr, isPhysicalInventory);
@@ -418,7 +418,7 @@ namespace VAdvantage.Process
         //                                }
         //                                else
         //                                {
-        //                                    containerStorage = new X_M_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
+        //                                    containerStorage = new X_VAM_ContainerStorage(GetCtx(), 0, Get_Trx()); // object of container storage
 
         //                                    // Set Values 
         //                                    containerStorage = InsertContainerStorage(containerStorage, dr, true);

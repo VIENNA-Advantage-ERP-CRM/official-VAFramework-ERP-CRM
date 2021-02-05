@@ -11,34 +11,34 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DiscountSchemaBreak
+/** Generated Model for VAM_BreakDiscount
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DiscountSchemaBreak : PO
+public class X_VAM_BreakDiscount : PO
 {
-public X_M_DiscountSchemaBreak (Context ctx, int M_DiscountSchemaBreak_ID, Trx trxName) : base (ctx, M_DiscountSchemaBreak_ID, trxName)
+public X_VAM_BreakDiscount (Context ctx, int VAM_BreakDiscount_ID, Trx trxName) : base (ctx, VAM_BreakDiscount_ID, trxName)
 {
-/** if (M_DiscountSchemaBreak_ID == 0)
-{
-SetBreakDiscount (0.0);
-SetBreakValue (0.0);
-SetIsBPartnerFlatDiscount (false);	// N
-SetM_DiscountSchemaBreak_ID (0);
-SetM_DiscountSchema_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_DiscountSchemaBreak WHERE M_DiscountSchema_ID=@M_DiscountSchema_ID@
-}
- */
-}
-public X_M_DiscountSchemaBreak (Ctx ctx, int M_DiscountSchemaBreak_ID, Trx trxName) : base (ctx, M_DiscountSchemaBreak_ID, trxName)
-{
-/** if (M_DiscountSchemaBreak_ID == 0)
+/** if (VAM_BreakDiscount_ID == 0)
 {
 SetBreakDiscount (0.0);
 SetBreakValue (0.0);
 SetIsBPartnerFlatDiscount (false);	// N
-SetM_DiscountSchemaBreak_ID (0);
-SetM_DiscountSchema_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_DiscountSchemaBreak WHERE M_DiscountSchema_ID=@M_DiscountSchema_ID@
+SetVAM_BreakDiscount_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_BreakDiscount WHERE VAM_DiscountCalculation_ID=@VAM_DiscountCalculation_ID@
+}
+ */
+}
+public X_VAM_BreakDiscount (Ctx ctx, int VAM_BreakDiscount_ID, Trx trxName) : base (ctx, VAM_BreakDiscount_ID, trxName)
+{
+/** if (VAM_BreakDiscount_ID == 0)
+{
+SetBreakDiscount (0.0);
+SetBreakValue (0.0);
+SetIsBPartnerFlatDiscount (false);	// N
+SetVAM_BreakDiscount_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_BreakDiscount WHERE VAM_DiscountCalculation_ID=@VAM_DiscountCalculation_ID@
 }
  */
 }
@@ -47,7 +47,7 @@ SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_Discoun
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaBreak (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_BreakDiscount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_DiscountSchemaBreak (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaBreak (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_BreakDiscount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_DiscountSchemaBreak (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaBreak (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_BreakDiscount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DiscountSchemaBreak()
+static X_VAM_BreakDiscount()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389062325L;
 public static int Table_ID;
  // =476;
 
-/** TableName=M_DiscountSchemaBreak */
-public static String Table_Name="M_DiscountSchemaBreak";
+/** TableName=VAM_BreakDiscount */
+public static String Table_Name="VAM_BreakDiscount";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DiscountSchemaBreak[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_BreakDiscount[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Break Discount %.
@@ -169,64 +169,64 @@ if (oo != null)
 return false;
 }
 /** Set Discount Schema Break.
-@param M_DiscountSchemaBreak_ID Trade Discount Break */
-public void SetM_DiscountSchemaBreak_ID (int M_DiscountSchemaBreak_ID)
+@param VAM_BreakDiscount_ID Trade Discount Break */
+public void SetVAM_BreakDiscount_ID (int VAM_BreakDiscount_ID)
 {
-if (M_DiscountSchemaBreak_ID < 1) throw new ArgumentException ("M_DiscountSchemaBreak_ID is mandatory.");
-Set_ValueNoCheck ("M_DiscountSchemaBreak_ID", M_DiscountSchemaBreak_ID);
+if (VAM_BreakDiscount_ID < 1) throw new ArgumentException ("VAM_BreakDiscount_ID is mandatory.");
+Set_ValueNoCheck ("VAM_BreakDiscount_ID", VAM_BreakDiscount_ID);
 }
 /** Get Discount Schema Break.
 @return Trade Discount Break */
-public int GetM_DiscountSchemaBreak_ID() 
+public int GetVAM_BreakDiscount_ID() 
 {
-Object ii = Get_Value("M_DiscountSchemaBreak_ID");
+Object ii = Get_Value("VAM_BreakDiscount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Discount Schema.
-@param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
-public void SetM_DiscountSchema_ID (int M_DiscountSchema_ID)
+@param VAM_DiscountCalculation_ID Schema to calculate price lists or the trade discount percentage */
+public void SetVAM_DiscountCalculation_ID (int VAM_DiscountCalculation_ID)
 {
-if (M_DiscountSchema_ID < 1) throw new ArgumentException ("M_DiscountSchema_ID is mandatory.");
-Set_ValueNoCheck ("M_DiscountSchema_ID", M_DiscountSchema_ID);
+if (VAM_DiscountCalculation_ID < 1) throw new ArgumentException ("VAM_DiscountCalculation_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DiscountCalculation_ID", VAM_DiscountCalculation_ID);
 }
 /** Get Discount Schema.
 @return Schema to calculate price lists or the trade discount percentage */
-public int GetM_DiscountSchema_ID() 
+public int GetVAM_DiscountCalculation_ID() 
 {
-Object ii = Get_Value("M_DiscountSchema_ID");
+Object ii = Get_Value("VAM_DiscountCalculation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID <= 0) Set_Value ("M_Product_Category_ID", null);
+if (VAM_ProductCategory_ID <= 0) Set_Value ("VAM_ProductCategory_ID", null);
 else
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);
 else
-Set_Value ("M_Product_ID", M_Product_ID);
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

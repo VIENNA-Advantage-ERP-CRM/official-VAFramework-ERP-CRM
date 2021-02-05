@@ -301,18 +301,18 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -406,17 +406,17 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }/** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

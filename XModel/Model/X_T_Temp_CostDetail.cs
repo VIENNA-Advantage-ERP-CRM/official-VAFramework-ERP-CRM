@@ -179,114 +179,114 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cost Detail.
-        @param M_CostDetail_ID Cost Detail Information */
-        public void SetM_CostDetail_ID(int M_CostDetail_ID)
+        @param VAM_ProductCostDetail_ID Cost Detail Information */
+        public void SetVAM_ProductCostDetail_ID(int VAM_ProductCostDetail_ID)
         {
-            if (M_CostDetail_ID <= 0) Set_Value("M_CostDetail_ID", null);
+            if (VAM_ProductCostDetail_ID <= 0) Set_Value("VAM_ProductCostDetail_ID", null);
             else
-                Set_Value("M_CostDetail_ID", M_CostDetail_ID);
+                Set_Value("VAM_ProductCostDetail_ID", VAM_ProductCostDetail_ID);
         }
         /** Get Cost Detail.
         @return Cost Detail Information */
-        public int GetM_CostDetail_ID()
+        public int GetVAM_ProductCostDetail_ID()
         {
-            Object ii = Get_Value("M_CostDetail_ID");
+            Object ii = Get_Value("VAM_ProductCostDetail_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cost Queue.
-        @param M_CostQueue_ID FiFo/LiFo Cost Queue */
-        public void SetM_CostQueue_ID(int M_CostQueue_ID)
+        @param VAM_ProductCostQueue_ID FiFo/LiFo Cost Queue */
+        public void SetVAM_ProductCostQueue_ID(int VAM_ProductCostQueue_ID)
         {
-            if (M_CostQueue_ID <= 0) Set_Value("M_CostQueue_ID", null);
+            if (VAM_ProductCostQueue_ID <= 0) Set_Value("VAM_ProductCostQueue_ID", null);
             else
-                Set_Value("M_CostQueue_ID", M_CostQueue_ID);
+                Set_Value("VAM_ProductCostQueue_ID", VAM_ProductCostQueue_ID);
         }
         /** Get Cost Queue.
         @return FiFo/LiFo Cost Queue */
-        public int GetM_CostQueue_ID()
+        public int GetVAM_ProductCostQueue_ID()
         {
-            Object ii = Get_Value("M_CostQueue_ID");
+            Object ii = Get_Value("VAM_ProductCostQueue_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID <= 0) Set_Value("M_InOutLine_ID", null);
+            if (VAM_Inv_InOutLine_ID <= 0) Set_Value("VAM_Inv_InOutLine_ID", null);
             else
-                Set_Value("M_InOutLine_ID", M_InOutLine_ID);
+                Set_Value("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Phys Inventory Line.
-        @param M_InventoryLine_ID Unique line in an Inventory document */
-        public void SetM_InventoryLine_ID(int M_InventoryLine_ID)
+        @param VAM_InventoryLine_ID Unique line in an Inventory document */
+        public void SetVAM_InventoryLine_ID(int VAM_InventoryLine_ID)
         {
-            if (M_InventoryLine_ID <= 0) Set_Value("M_InventoryLine_ID", null);
+            if (VAM_InventoryLine_ID <= 0) Set_Value("VAM_InventoryLine_ID", null);
             else
-                Set_Value("M_InventoryLine_ID", M_InventoryLine_ID);
+                Set_Value("VAM_InventoryLine_ID", VAM_InventoryLine_ID);
         }
         /** Get Phys Inventory Line.
         @return Unique line in an Inventory document */
-        public int GetM_InventoryLine_ID()
+        public int GetVAM_InventoryLine_ID()
         {
-            Object ii = Get_Value("M_InventoryLine_ID");
+            Object ii = Get_Value("VAM_InventoryLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Move Line.
-        @param M_MovementLine_ID Inventory Move document Line */
-        public void SetM_MovementLine_ID(int M_MovementLine_ID)
+        @param VAM_InvTrf_Line_ID Inventory Move document Line */
+        public void SetVAM_InvTrf_Line_ID(int VAM_InvTrf_Line_ID)
         {
-            if (M_MovementLine_ID <= 0) Set_Value("M_MovementLine_ID", null);
+            if (VAM_InvTrf_Line_ID <= 0) Set_Value("VAM_InvTrf_Line_ID", null);
             else
-                Set_Value("M_MovementLine_ID", M_MovementLine_ID);
+                Set_Value("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
         }
         /** Get Move Line.
         @return Inventory Move document Line */
-        public int GetM_MovementLine_ID()
+        public int GetVAM_InvTrf_Line_ID()
         {
-            Object ii = Get_Value("M_MovementLine_ID");
+            Object ii = Get_Value("VAM_InvTrf_Line_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -346,18 +346,18 @@ namespace VAdvantage.Model
         public Boolean IsRecordFromForm() { Object oo = Get_Value("isRecordFromForm"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
         /** Set Warehouse.
-       @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+       @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID <= 0) Set_Value("M_Warehouse_ID", null);
+            if (VAM_Warehouse_ID <= 0) Set_Value("VAM_Warehouse_ID", null);
             else
-                Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+                Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
+            Object ii = Get_Value("VAM_Warehouse_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
     }
 

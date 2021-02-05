@@ -130,12 +130,12 @@ namespace VIS.Controllers
 
         // Variant Changes Done By Mohit 08/07/20161
         [HttpPost]
-        public JsonResult GetVariants(int M_Product_ID, int M_Warehouse_ID, int ParentRec_ID, int M_AttributeSetInstance_ID, string AttributeCode)
+        public JsonResult GetVariants(int VAM_Product_ID, int VAM_Warehouse_ID, int ParentRec_ID, int VAM_PFeature_SetInstance_ID, string AttributeCode)
         {
 
             VIS.Models.InfoProductModel model = new VIS.Models.InfoProductModel();
             //model.GetSchema(VAF_QuickSearchWindow_ID);
-            return Json(JsonConvert.SerializeObject(model.GetVariants(M_Product_ID, M_Warehouse_ID, ParentRec_ID, M_AttributeSetInstance_ID, AttributeCode, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
+            return Json(JsonConvert.SerializeObject(model.GetVariants(VAM_Product_ID, VAM_Warehouse_ID, ParentRec_ID, VAM_PFeature_SetInstance_ID, AttributeCode, Session["ctx"] as Ctx)), JsonRequestBehavior.AllowGet);
         }
 
         // Added by Bharat on 31 May 2017

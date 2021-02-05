@@ -64,13 +64,13 @@ namespace VIS.Controllers
         /// <param name="pref"></param>
         /// <returns></returns>
         public JsonResult SaveUserSettings(int VAF_UserContact_ID, string currentPws, string newPws, bool chkEmail, bool chkNotice,
-            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int VAF_Role_ID,int VAF_Client_ID,int VAF_Org_ID, int M_Warehouse_ID)
+            bool chkSMS, bool chkFax, string emailUserName, string emailPws,int VAF_Role_ID,int VAF_Client_ID,int VAF_Org_ID, int VAM_Warehouse_ID)
         {
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
                 UserPreferenceModel obj = new UserPreferenceModel();
-                var val = obj.SaveUserSettings(ctx, VAF_UserContact_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,VAF_Role_ID,VAF_Client_ID,VAF_Org_ID, M_Warehouse_ID);
+                var val = obj.SaveUserSettings(ctx, VAF_UserContact_ID, currentPws, newPws, chkEmail, chkNotice, chkSMS, chkFax, emailUserName, emailPws,VAF_Role_ID,VAF_Client_ID,VAF_Org_ID, VAM_Warehouse_ID);
                 return Json(new { result = val }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);

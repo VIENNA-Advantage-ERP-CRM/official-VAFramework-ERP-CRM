@@ -85,7 +85,7 @@ namespace VAdvantage.DBPort
             s_pg.Add("\\bFROM\\s+DUAL\\b", "");
 
             //  Statements
-            s_pg.Add("\\bELSIF\\b", "ELSE IF");
+           // s_pg.Add("\\bELSIF\\b", "ELSE IF");
             // begin vpj-cd e-evolution 03/11/2005 PostgreSQL
             s_pg.Add("\\bREC \\b", "AS REC ");
             // end vpj-cd e-evolution 03/11/2005 PostgreSQL

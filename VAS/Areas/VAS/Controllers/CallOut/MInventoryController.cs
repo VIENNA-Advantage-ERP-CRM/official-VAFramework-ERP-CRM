@@ -28,19 +28,19 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_InventoryLine_ID;
+                int VAM_InventoryLine_ID;
 
                 //Assign parameter value
-                M_InventoryLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MInventoryLine iLine = new MInventoryLine(ctx, M_InventoryLine_ID, null);
-                int M_Product_ID = iLine.GetM_Product_ID();
-                int M_Locator_ID = iLine.GetM_Locator_ID();
+                VAM_InventoryLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                MInventoryLine iLine = new MInventoryLine(ctx, VAM_InventoryLine_ID, null);
+                int VAM_Product_ID = iLine.GetVAM_Product_ID();
+                int VAM_Locator_ID = iLine.GetVAM_Locator_ID();
 
 
                 List<int> retlst = new List<int>();
 
-                retlst.Add(M_Product_ID);
-                retlst.Add(M_Locator_ID);
+                retlst.Add(VAM_Product_ID);
+                retlst.Add(VAM_Locator_ID);
 
                 retJSON = JsonConvert.SerializeObject(retlst);
             }           

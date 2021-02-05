@@ -3,7 +3,7 @@
  * Class Name     : Doc_Production
  * Purpose        : Post Invoice Documents.
  *                  <pre>
- *                  Table:              M_Production (325)
+ *                  Table:              VAM_Production (325)
  *                  Document Types:     MMP
  *                  </pre>
  *                  * Class Used     : Doc
@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Production(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(X_M_Production), idr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
+            : base(ass, typeof(X_VAM_Production), idr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
         }
         public Doc_Production(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(X_M_Production), dr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
+            : base(ass, typeof(X_VAM_Production), dr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            X_M_Production prod = (X_M_Production)GetPO();
+            X_VAM_Production prod = (X_VAM_Production)GetPO();
             SetDateDoc(prod.GetMovementDate());
             SetDateAcct(prod.GetMovementDate());
             //	Contained Objects
@@ -70,19 +70,19 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="prod">production</param>
         /// <returns> DoaLine Array</returns>
-        private DocLine[] LoadLines(X_M_Production prod)
+        private DocLine[] LoadLines(X_VAM_Production prod)
         {
             List<DocLine> list = new List<DocLine>();
             //	Production
             //	-- ProductionPlan
             //	-- -- ProductionLine	- the real level
-            String sqlPP = "SELECT * FROM M_ProductionPlan pp "
-                + "WHERE pp.M_Production_ID=@param1 "
+            String sqlPP = "SELECT * FROM VAM_ProductionPlan pp "
+                + "WHERE pp.VAM_Production_ID=@param1 "
                 + "ORDER BY pp.Line";
             IDataReader idrPP = null;
 
-            String sqlPL = "SELECT * FROM M_ProductionLine pl "
-                + "WHERE pl.M_ProductionPlan_ID=@param2 "
+            String sqlPL = "SELECT * FROM VAM_ProductionLine pl "
+                + "WHERE pl.VAM_ProductionPlan_ID=@param2 "
                 + "ORDER BY pl.Line";
             IDataReader idrPL = null;
 
@@ -95,19 +95,19 @@ namespace VAdvantage.Acct
                 //ResultSet rsPP = idrPP.executeQuery();
                 while (idrPP.Read())
                 {
-                    int M_Product_ID = Utility.Util.GetValueOfInt(idrPP["M_Product_ID"]);
-                    int M_ProductionPlan_ID = Utility.Util.GetValueOfInt(idrPP["M_ProductionPlan_ID"]);
+                    int VAM_Product_ID = Utility.Util.GetValueOfInt(idrPP["VAM_Product_ID"]);
+                    int VAM_ProductionPlan_ID = Utility.Util.GetValueOfInt(idrPP["VAM_ProductionPlan_ID"]);
                     //
                     try
                     {
                         param = new SqlParameter[1];
-                        param[0] = new SqlParameter("@param2", M_ProductionPlan_ID);
+                        param[0] = new SqlParameter("@param2", VAM_ProductionPlan_ID);
                         idrPL = DataBase.DB.ExecuteReader(sqlPL, param, GetTrx());
-                        //idrPL.setInt(1, M_ProductionPlan_ID);
+                        //idrPL.setInt(1, VAM_ProductionPlan_ID);
                         //ResultSet rsPL = idrPL.executeQuery();
                         while (idrPL.Read())
                         {
-                            X_M_ProductionLine line = new X_M_ProductionLine(GetCtx(), idrPL, GetTrx());
+                            X_VAM_ProductionLine line = new X_VAM_ProductionLine(GetCtx(), idrPL, GetTrx());
                             if (Env.Signum(line.GetMovementQty()) == 0)
                             {
                                 log.Info("LineQty=0 - " + line);
@@ -116,7 +116,7 @@ namespace VAdvantage.Acct
                             DocLine docLine = new DocLine(line, this);
                             docLine.SetQty(line.GetMovementQty(), false);
                             //	Identify finished BOM Product
-                            docLine.SetProductionBOM(line.GetM_Product_ID() == M_Product_ID);
+                            docLine.SetProductionBOM(line.GetVAM_Product_ID() == VAM_Product_ID);
                             //
                             log.Fine(docLine.ToString());
                             list.Add(docLine);
@@ -190,7 +190,7 @@ namespace VAdvantage.Acct
                     for (int ii = 0; ii < _lines.Length; ii++)
                     {
                         DocLine line0 = _lines[ii];
-                        if (line0.GetM_ProductionPlan_ID() != line.GetM_ProductionPlan_ID())
+                        if (line0.GetVAM_ProductionPlan_ID() != line.GetVAM_ProductionPlan_ID())
                         {
                             continue;
                         }
@@ -215,7 +215,7 @@ namespace VAdvantage.Acct
                     _error = "No Costs for Line " + line.GetLine() + " - " + line;
                     return null;
                 }
-                fl.SetM_Locator_ID(line.GetM_Locator_ID());
+                fl.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                 fl.SetQty(line.GetQty());
 
                 //	Cost Detail
@@ -232,7 +232,7 @@ namespace VAdvantage.Acct
                 if (!IsPosted())
                 {
                     MCostDetail.CreateProduction(as1, line.GetVAF_Org_ID(),
-                        line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                        line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                         line.Get_ID(), 0,
                        Utility.Util.GetValueOfInt(costs), line.GetQty().Value,
                         description, GetTrx(), GetRectifyingProcess());

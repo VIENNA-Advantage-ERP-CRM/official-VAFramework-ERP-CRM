@@ -15,7 +15,7 @@ namespace VAdvantage.Process
     public class OpportunityGeneration : SvrProcess
     {
         private int _VAB_Promotion_ID = 0;
-        private int _M_PriceList_Version_ID = 0;
+        private int _VAM_PriceListVersion_ID = 0;
         private int _Probability = 0;
 
         protected override void Prepare()
@@ -33,9 +33,9 @@ namespace VAdvantage.Process
                     _VAB_Promotion_ID = Util.GetValueOfInt(para[i].GetParameter());
                     
                 }
-                else if (name.Equals("M_PriceList_Version_ID"))
+                else if (name.Equals("VAM_PriceListVersion_ID"))
                 {
-                    _M_PriceList_Version_ID = Util.GetValueOfInt(para[i].GetParameter());
+                    _VAM_PriceListVersion_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
                 else if (name.Equals("Probability"))
                 {
@@ -80,12 +80,12 @@ namespace VAdvantage.Process
                 {
                     VAB_BusinessPartnerSR_id = Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"]);
                 }
-                sql = "select mp.m_pricelist_id,cc.VAB_Currency_id from m_pricelist_version mpv join m_pricelist mp on(mp.m_pricelist_id=mpv.m_pricelist_id) join VAB_Currency cc on(cc.VAB_Currency_id= mp.VAB_Currency_id) where mpv.m_pricelist_version_id=" + _M_PriceList_Version_ID + " and mp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
+                sql = "select mp.VAM_PriceList_id,cc.VAB_Currency_id from VAM_PriceListVersion mpv join VAM_PriceList mp on(mp.VAM_PriceList_id=mpv.VAM_PriceList_id) join VAB_Currency cc on(cc.VAB_Currency_id= mp.VAB_Currency_id) where mpv.VAM_PriceListVersion_id=" + _VAM_PriceListVersion_ID + " and mp.vaf_client_id=" + GetCtx().GetVAF_Client_ID();
                 IDataReader idr1 = null;
                 idr1 = DB.ExecuteReader(sql);
                 if (idr1.Read())
                 {
-                    Pricelist = Util.GetValueOfInt(idr1["M_PriceList_ID"]);
+                    Pricelist = Util.GetValueOfInt(idr1["VAM_PriceList_ID"]);
                     Currency = Util.GetValueOfInt(idr1["VAB_Currency_ID"]);
                 }
                 idr1.Close();
@@ -104,9 +104,9 @@ namespace VAdvantage.Process
                 opp.SetVAB_BPart_Location_ID(Location);
                 opp.SetVAB_Promotion_ID(_VAB_Promotion_ID);
                 opp.SetProbability(_Probability);
-                opp.SetM_PriceList_Version_ID(_M_PriceList_Version_ID);
+                opp.SetVAM_PriceListVersion_ID(_VAM_PriceListVersion_ID);
                 opp.SetVAB_Currency_ID(Currency);
-                opp.SetM_PriceList_ID(Pricelist);
+                opp.SetVAM_PriceList_ID(Pricelist);
                 opp.Save();
             }
             idr.Close();

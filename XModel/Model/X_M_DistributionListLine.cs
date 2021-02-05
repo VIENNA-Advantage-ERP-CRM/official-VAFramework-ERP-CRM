@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DistributionListLine
+/** Generated Model for VAM_DistributionListLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DistributionListLine : PO
+public class X_VAM_DistributionListLine : PO
 {
-public X_M_DistributionListLine (Context ctx, int M_DistributionListLine_ID, Trx trxName) : base (ctx, M_DistributionListLine_ID, trxName)
+public X_VAM_DistributionListLine (Context ctx, int VAM_DistributionListLine_ID, Trx trxName) : base (ctx, VAM_DistributionListLine_ID, trxName)
 {
-/** if (M_DistributionListLine_ID == 0)
+/** if (VAM_DistributionListLine_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_BPart_Location_ID (0);
-SetM_DistributionListLine_ID (0);
-SetM_DistributionList_ID (0);
+SetVAM_DistributionListLine_ID (0);
+SetVAM_DistributionList_ID (0);
 SetMinQty (0.0);
 }
  */
 }
-public X_M_DistributionListLine (Ctx ctx, int M_DistributionListLine_ID, Trx trxName) : base (ctx, M_DistributionListLine_ID, trxName)
+public X_VAM_DistributionListLine (Ctx ctx, int VAM_DistributionListLine_ID, Trx trxName) : base (ctx, VAM_DistributionListLine_ID, trxName)
 {
-/** if (M_DistributionListLine_ID == 0)
+/** if (VAM_DistributionListLine_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetVAB_BPart_Location_ID (0);
-SetM_DistributionListLine_ID (0);
-SetM_DistributionList_ID (0);
+SetVAM_DistributionListLine_ID (0);
+SetVAM_DistributionList_ID (0);
 SetMinQty (0.0);
 }
  */
@@ -45,7 +45,7 @@ SetMinQty (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionListLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionListLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_M_DistributionListLine (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionListLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionListLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_M_DistributionListLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionListLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_DistributionListLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DistributionListLine()
+static X_VAM_DistributionListLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389062467L;
 public static int Table_ID;
  // =665;
 
-/** TableName=M_DistributionListLine */
-public static String Table_Name="M_DistributionListLine";
+/** TableName=VAM_DistributionListLine */
+public static String Table_Name="VAM_DistributionListLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DistributionListLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_DistributionListLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -166,32 +166,32 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Distribution List Line.
-@param M_DistributionListLine_ID Distribution List Line with Business Partner and Quantity/Percentage */
-public void SetM_DistributionListLine_ID (int M_DistributionListLine_ID)
+@param VAM_DistributionListLine_ID Distribution List Line with Business Partner and Quantity/Percentage */
+public void SetVAM_DistributionListLine_ID (int VAM_DistributionListLine_ID)
 {
-if (M_DistributionListLine_ID < 1) throw new ArgumentException ("M_DistributionListLine_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionListLine_ID", M_DistributionListLine_ID);
+if (VAM_DistributionListLine_ID < 1) throw new ArgumentException ("VAM_DistributionListLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionListLine_ID", VAM_DistributionListLine_ID);
 }
 /** Get Distribution List Line.
 @return Distribution List Line with Business Partner and Quantity/Percentage */
-public int GetM_DistributionListLine_ID() 
+public int GetVAM_DistributionListLine_ID() 
 {
-Object ii = Get_Value("M_DistributionListLine_ID");
+Object ii = Get_Value("VAM_DistributionListLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Distribution List.
-@param M_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
-public void SetM_DistributionList_ID (int M_DistributionList_ID)
+@param VAM_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
+public void SetVAM_DistributionList_ID (int VAM_DistributionList_ID)
 {
-if (M_DistributionList_ID < 1) throw new ArgumentException ("M_DistributionList_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionList_ID", M_DistributionList_ID);
+if (VAM_DistributionList_ID < 1) throw new ArgumentException ("VAM_DistributionList_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionList_ID", VAM_DistributionList_ID);
 }
 /** Get Distribution List.
 @return Distribution Lists allow to distribute products to a selected list of partners */
-public int GetM_DistributionList_ID() 
+public int GetVAM_DistributionList_ID() 
 {
-Object ii = Get_Value("M_DistributionList_ID");
+Object ii = Get_Value("VAM_DistributionList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -199,7 +199,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_DistributionList_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_DistributionList_ID().ToString());
 }
 /** Set Minimum Quantity.
 @param MinQty Minimum quantity for the business partner */

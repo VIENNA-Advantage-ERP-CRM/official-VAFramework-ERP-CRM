@@ -165,21 +165,21 @@ public DateTime? GetEndTime()
 return (DateTime?)Get_Value("EndTime");
 }
 
-/** M_ProductSpent_ID VAF_Control_Ref_ID=162 */
-public static int M_PRODUCTSPENT_ID_VAF_Control_Ref_ID=162;
+/** VAM_ProductSpent_ID VAF_Control_Ref_ID=162 */
+public static int VAM_ProductSPENT_ID_VAF_Control_Ref_ID=162;
 /** Set Product Used.
-@param M_ProductSpent_ID Product/Resource/Service used in Request */
-public void SetM_ProductSpent_ID (int M_ProductSpent_ID)
+@param VAM_ProductSpent_ID Product/Resource/Service used in Request */
+public void SetVAM_ProductSpent_ID (int VAM_ProductSpent_ID)
 {
-if (M_ProductSpent_ID <= 0) Set_Value ("M_ProductSpent_ID", null);
+if (VAM_ProductSpent_ID <= 0) Set_Value ("VAM_ProductSpent_ID", null);
 else
-Set_Value ("M_ProductSpent_ID", M_ProductSpent_ID);
+Set_Value ("VAM_ProductSpent_ID", VAM_ProductSpent_ID);
 }
 /** Get Product Used.
 @return Product/Resource/Service used in Request */
-public int GetM_ProductSpent_ID() 
+public int GetVAM_ProductSpent_ID() 
 {
-Object ii = Get_Value("M_ProductSpent_ID");
+Object ii = Get_Value("VAM_ProductSpent_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

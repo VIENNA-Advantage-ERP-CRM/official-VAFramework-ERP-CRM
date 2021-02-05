@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     :  MTemplate
- * Purpose        :  MTemplate Model
+ * Class Name     :  MVACMLayout
+ * Purpose        :  MVACMLayout Model
  * Class Used     : X_VACM_Layout
  * Chronological    Development
  * Deepak           05-Feb-2010
@@ -26,18 +26,18 @@ namespace VAdvantage.Model
     public class MVACMLayout : X_VACM_Layout
 {
 	/// <summary>
-	///Get MTemplate from Cache
+	///Get MVACMLayout from Cache
    	/// </summary>
 	/// <param name="ctx">context</param>
 	/// <param name="VACM_Layout_ID">id</param>
 	/// <param name="trxName">trx</param>
 	/// <returns>MWEbproject</returns>
-	public static MTemplate Get(Ctx ctx, int VACM_Layout_ID, Trx trxName)
+	public static MVACMLayout Get(Ctx ctx, int VACM_Layout_ID, Trx trxName)
 	{
-		MTemplate retValue = new MTemplate (ctx, VACM_Layout_ID, trxName);
+		MVACMLayout retValue = new MVACMLayout (ctx, VACM_Layout_ID, trxName);
 		if (retValue != null)
 			return retValue;
-		retValue = new MTemplate (ctx, VACM_Layout_ID, null);
+		retValue = new MVACMLayout (ctx, VACM_Layout_ID, null);
 		return retValue;
 	}	// get
 
@@ -47,10 +47,10 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="VACM_Layout_ID">id</param>
 	/// <param name="trxName">trx</param>
-	public MTemplate (Ctx ctx, int VACM_Layout_ID, Trx trxName):base(ctx, VACM_Layout_ID, trxName)
+	public MVACMLayout (Ctx ctx, int VACM_Layout_ID, Trx trxName):base(ctx, VACM_Layout_ID, trxName)
 	{
 		
-	} // MTemplate
+	} // MVACMLayout
 
 	/// <summary>
 	///  Load Constructor
@@ -58,11 +58,11 @@ namespace VAdvantage.Model
 	/// <param name="ctx">context</param>
 	/// <param name="rs">datarow</param>
 	/// <param name="trxName">trx</param>
-	public MTemplate (Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
+	public MVACMLayout (Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
 	{
 		
 	} 
-public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
+public MVACMLayout (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	{
 		
 	} 
@@ -74,7 +74,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	private StringBuilder _preBuildTemplate;
 	
 	/** Logger								*/
-	private static VLogger		_log = VLogger.GetVLogger (typeof(MTemplate).FullName);//.class);
+	private static VLogger		_log = VLogger.GetVLogger (typeof(MVACMLayout).FullName);//.class);
 
 	/// <summary>
     ///  	get Template by Name
@@ -84,10 +84,10 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	/// <param name="projectID">id</param>
 	/// <param name="trxName">trx</param>
 	/// <returns>Template</returns>
-	public static MTemplate GetByName (Ctx ctx, String name, int projectID, Trx trxName)
+	public static MVACMLayout GetByName (Ctx ctx, String name, int projectID, Trx trxName)
 	{
 		String sql = "SELECT * FROM VACM_Layout WHERE Value LIKE @param1 AND CM_WebProject_ID=@param2";
-		MTemplate thisElement = null;
+		MVACMLayout thisElement = null;
         SqlParameter[] param = new SqlParameter[2];
         IDataReader idr = null;
 		try
@@ -101,7 +101,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
             idr = DataBase.DB.ExecuteReader(sql, param, trxName);
             if (idr.Read())
             {
-                thisElement = new MTemplate(ctx, idr, trxName);
+                thisElement = new MVACMLayout(ctx, idr, trxName);
             }
             idr.Close();
 		}
@@ -265,7 +265,7 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 			// Build all the subtemplates and add them to the main template
 			for (int i=0;i<subTemplateNames.Count ;i++) 
 			{
-				MTemplate subTemplate = GetByName(GetCtx(), subTemplateNames[i], GetCM_WebProject_ID(), Get_TrxName());
+				MVACMLayout subTemplate = GetByName(GetCtx(), subTemplateNames[i], GetCM_WebProject_ID(), Get_TrxName());
 				if (subTemplate != null)
 				{
 					if (subTemplate.ContainsSubtemplates (true, subTemplateNames)) 
@@ -501,6 +501,6 @@ public MTemplate (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 		}
 	}	//	getAds
 	
-} // MTemplate
+} // MVACMLayout
 
 }

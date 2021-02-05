@@ -1,15 +1,15 @@
 ﻿; (function (VIS, $) {
     //SerNo Parameter Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607 
-    function PAttributeInstance(title, M_Warehouse_ID, M_Locator_ID, M_Product_ID, VAB_BusinessPartner_ID, SerNo, lotNo, garunteeDate, isSOTrx) {
+    function PAttributeInstance(title, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID, VAB_BusinessPartner_ID, SerNo, lotNo, garunteeDate, isSOTrx) {
 
         var $self = this;
         this.onClose = null;
         var $root = $("<div>");
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
-        var mWarehouseID = M_Warehouse_ID;
-        var mLocatorID = M_Locator_ID;
-        var mProductID = M_Product_ID;
+        var mWarehouseID = VAM_Warehouse_ID;
+        var mLocatorID = VAM_Locator_ID;
+        var mProductID = VAM_Product_ID;
         var mCBPartnerID = VAB_BusinessPartner_ID;
         var mtitle = title;
         var issotrx = isSOTrx;
@@ -22,13 +22,13 @@
         var msql = "";
         var msqlNonZero = "";
         //	From Clause						
-        var msqlFrom = "M_ProductAttributes patr LEFT JOIN M_Storage s ON (patr.M_AttributeSetInstance_ID = s.M_AttributeSetInstance_ID AND patr.M_Product_ID = s.M_Product_ID)"
-            + " LEFT JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID)"
-            + " LEFT JOIN M_Warehouse w ON (l.M_Warehouse_ID=w.M_Warehouse_ID)"
-            + " INNER JOIN M_Product p ON (patr.M_Product_ID=p.M_Product_ID)"
-            + " INNER JOIN M_AttributeSetInstance asi ON (patr.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID)";
+        var msqlFrom = "VAM_ProductFeatures patr LEFT JOIN VAM_Storage s ON (patr.VAM_PFeature_SetInstance_ID = s.VAM_PFeature_SetInstance_ID AND patr.VAM_Product_ID = s.VAM_Product_ID)"
+            + " LEFT JOIN VAM_Locator l ON (s.VAM_Locator_ID=l.VAM_Locator_ID)"
+            + " LEFT JOIN VAM_Warehouse w ON (l.VAM_Warehouse_ID=w.VAM_Warehouse_ID)"
+            + " INNER JOIN VAM_Product p ON (patr.VAM_Product_ID=p.VAM_Product_ID)"
+            + " INNER JOIN VAM_PFeature_SetInstance asi ON (patr.VAM_PFeature_SetInstance_ID=asi.VAM_PFeature_SetInstance_ID)";
 
-        var msqlWhere = " patr.M_Product_ID=@M_Product_ID AND patr.M_AttributeSetInstance_ID != 0";
+        var msqlWhere = " patr.VAM_Product_ID=@VAM_Product_ID AND patr.VAM_PFeature_SetInstance_ID != 0";
         msqlNonZero = " AND s.QtyOnHand>0";            // (s.QtyOnHand<>0 OR s.QtyReserved<>0 OR s.QtyOrdered<>0)";
         var msqlMinLife = "";
 
@@ -66,7 +66,7 @@
                 //var sql = "SELECT bp.ShelfLifeMinPct, bpp.ShelfLifeMinPct, bpp.ShelfLifeMinDays "
                 //    + "FROM VAB_BusinessPartner bp "
                 //    + " LEFT OUTER JOIN VAB_BPart_Product bpp"
-                //    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.M_Product_ID=" + mProductID + ") "
+                //    + " ON (bp.VAB_BusinessPartner_ID=bpp.VAB_BusinessPartner_ID AND bpp.VAM_Product_ID=" + mProductID + ") "
                 //    + "WHERE bp.VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
 
                 var dr = null;
@@ -127,7 +127,7 @@
         }
 
         function prepareTable(from, where, multiSelection, tableName) {
-            var sql = "SELECT DISTINCT patr.M_AttributeSetInstance_ID, asi.Description, asi.Lot, asi.SerNo, asi.GuaranteeDate, asi.Value AS AttrCode, l.Value, NVL(s.M_Locator_ID,0) AS M_Locator_ID," +
+            var sql = "SELECT DISTINCT patr.VAM_PFeature_SetInstance_ID, asi.Description, asi.Lot, asi.SerNo, asi.GuaranteeDate, asi.Value AS AttrCode, l.Value, NVL(s.VAM_Locator_ID,0) AS VAM_Locator_ID," +
                 " NVL(s.QtyOnHand,0) AS QtyOnHand, NVL(s.QtyReserved,0) AS QtyReserved, NVL(s.QtyOrdered,0) AS QtyOrdered," +
                 " (daysBetween(TRUNC(asi.GuaranteeDate,'DD'), TRUNC(SysDate,'DD'))-p.GuaranteeDaysMin) as ShelfLifeDays," +
                 " daysBetween(TRUNC(asi.GuaranteeDate,'DD'), TRUNC(SysDate,'DD')) as GoodForDays, CASE WHEN p.GuaranteeDays > 0 THEN " +
@@ -137,10 +137,10 @@
             sql = sql.concat(" WHERE ").concat(where);
 
             //if (mLocatorID != 0) {
-            //    sql = sql.concat(" AND s.M_Locator_ID = " + mLocatorID);
+            //    sql = sql.concat(" AND s.VAM_Locator_ID = " + mLocatorID);
             //}
             if (mWarehouseID != 0) {
-                sql = sql.concat(" AND NVL(l.M_Warehouse_ID,0) IN (0," + mWarehouseID + ")");
+                sql = sql.concat(" AND NVL(l.VAM_Warehouse_ID,0) IN (0," + mWarehouseID + ")");
             }
 
             if (from.length == 0) {
@@ -177,7 +177,7 @@
                     var count = 1;
                     for (var i in dr) {
                         var line = {};
-                        line['M_AttributeSetInstance_ID'] = dr[i]["M_AttributeSetInstance_ID"];
+                        line['VAM_PFeature_SetInstance_ID'] = dr[i]["VAM_PFeature_SetInstance_ID"];
                         line['Description'] = dr[i]["Description"];
                         line['Lot'] = dr[i]["Lot"];
                         line['SerNo'] = dr[i]["SerNo"];
@@ -189,7 +189,7 @@
                         line['GoodForDays'] = dr[i]["GoodForDays"];
                         line['ShelfLifeDays'] = dr[i]["ShelfLifeDays"];
                         line['ShelfLifeRemainingPct'] = dr[i]["ShelfLifeRemainingPct"];
-                        line['M_Locator_ID'] = dr[i]["M_Locator_ID"];
+                        line['VAM_Locator_ID'] = dr[i]["VAM_Locator_ID"];
                         line['AttrCode'] = dr[i]["AttrCode"];
                         line['recid'] = count;
                         count++;
@@ -198,12 +198,12 @@
                 }
 
                 //var param = [];
-                //param[0] = new VIS.DB.SqlParam("@M_Product_ID", mProductID);
+                //param[0] = new VIS.DB.SqlParam("@VAM_Product_ID", mProductID);
                 //var dr = VIS.DB.executeReader(sql, param);
                 //var count = 1;
                 //while (dr.read()) {
                 //    var line = {};
-                //    line['M_AttributeSetInstance_ID'] = dr.getInt("M_AttributeSetInstance_ID");
+                //    line['VAM_PFeature_SetInstance_ID'] = dr.getInt("VAM_PFeature_SetInstance_ID");
                 //    line['Description'] = dr.getString("Description");
                 //    line['Lot'] = dr.getString("Lot");
                 //    line['SerNo'] = dr.getString("SerNo");
@@ -215,7 +215,7 @@
                 //    line['GoodForDays'] = dr.getString("GoodForDays");
                 //    line['ShelfLifeDays'] = dr.getString("ShelfLifeDays");
                 //    line['ShelfLifeRemainingPct'] = dr.getString("ShelfLifeRemainingPct");
-                //    line['M_Locator_ID'] = dr.getString("M_Locator_ID");
+                //    line['VAM_Locator_ID'] = dr.getString("VAM_Locator_ID");
                 //    line['recid'] = count;
                 //    count++;
                 //    data.push(line);
@@ -242,7 +242,7 @@
                 $self.arrListColumns.push({ field: "Lot", caption: VIS.Msg.translate(VIS.Env.getCtx(), "Lot"), sortable: true, size: '10%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "SerNo", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "SerNo"), sortable: true, size: '10%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "GuaranteeDate", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "GuaranteeDate"), sortable: true, size: '10%', min: 100, hidden: false, render: 'date', options: { format: 'yyyy-mm-dd' } });
-                $self.arrListColumns.push({ field: "Value", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "M_Locator_ID"), sortable: true, size: '10%', min: 100, hidden: false });
+                $self.arrListColumns.push({ field: "Value", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_Locator_ID"), sortable: true, size: '10%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "QtyReserved", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "QtyReserved"), sortable: true, size: '15%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "QtyOrdered", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "QtyOrdered"), sortable: true, size: '15%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "QtyOnHand", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "QtyOnHand"), sortable: true, size: '15%', min: 100, hidden: false });
@@ -250,8 +250,8 @@
                 $self.arrListColumns.push({ field: "ShelfLifeDays", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "ShelfLifeDays"), sortable: true, size: '15%', min: 100, hidden: false });
                 $self.arrListColumns.push({ field: "ShelfLifeRemainingPct", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "ShelfLifeRemainingPct"), sortable: true, size: '20%', min: 100, hidden: false });
 
-                $self.arrListColumns.push({ field: "M_Locator_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "M_Locator_ID"), sortable: true, size: '16%', min: 150, hidden: true });
-                $self.arrListColumns.push({ field: "M_AttributeSetInstance_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "ID"), sortable: true, size: '16%', min: 150, hidden: true });
+                $self.arrListColumns.push({ field: "VAM_Locator_ID", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_Locator_ID"), sortable: true, size: '16%', min: 150, hidden: true });
+                $self.arrListColumns.push({ field: "VAM_PFeature_SetInstance_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "ID"), sortable: true, size: '16%', min: 150, hidden: true });
                 $self.arrListColumns.push({ field: "AttrCode", caption: VIS.Msg.getElement(VIS.Env.getCtx(), "AttrCode"), sortable: true, size: '16%', min: 150, hidden: true });
 
             }
@@ -289,7 +289,7 @@
                 else if (lotNo)
                     $self.dGrid.search('all', lotNo);
             }
-            //$self.dGrid.hideColumn('M_Locator_ID');
+            //$self.dGrid.hideColumn('VAM_Locator_ID');
             $busyDiv.css("display", 'none');
         }
 
@@ -303,11 +303,11 @@
                 mLocatorID = 0;
                 enabled = recid != -1;
                 if (enabled && recid > 0) {
-                    var id = $self.dGrid.get(recid).M_AttributeSetInstance_ID;
+                    var id = $self.dGrid.get(recid).VAM_PFeature_SetInstance_ID;
                     if (id > 0) {
                         mAttributeSetInstanceID = id;
                         mAttributeSetInstanceName = $self.dGrid.get(recid).Description;
-                        mLocatorID = $self.dGrid.get(recid).M_Locator_ID;
+                        mLocatorID = $self.dGrid.get(recid).VAM_Locator_ID;
                         attrCode = $self.dGrid.get(recid).AttrCode;
                     }
                 }
@@ -318,7 +318,7 @@
                 btnOk.removeAttr("disabled");
             }
 
-            $self.log.fine("M_AttributeSetInstance_ID=" + mAttributeSetInstanceID + " - " + mAttributeSetInstanceName + "; M_Locator_ID=" + mLocatorID);
+            $self.log.fine("VAM_PFeature_SetInstance_ID=" + mAttributeSetInstanceID + " - " + mAttributeSetInstanceName + "; VAM_Locator_ID=" + mLocatorID);
         }
 
         function events() {

@@ -27,14 +27,14 @@ using System.Reflection;
 
 namespace VAdvantage.Model
 {
-    public class MProduct : X_M_Product
+    public class MProduct : X_VAM_Product
     {
         //	UOM Precision			
         private int? _precision = null;
         // Additional Downloads				
         private MProductDownload[] _downloads = null;
         //	Cache						
-        private static CCache<int, MProduct> s_cache = new CCache<int, MProduct>("M_Product", 40, 5);	//	5 minutes
+        private static CCache<int, MProduct> s_cache = new CCache<int, MProduct>("VAM_Product", 40, 5);	//	5 minutes
         //	Static Logger	*
         private static VLogger _log = VLogger.GetVLogger(typeof(MProduct).FullName);
 
@@ -42,15 +42,15 @@ namespace VAdvantage.Model
         /// Get MProduct from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">id</param>
+        /// <param name="VAM_Product_ID">id</param>
         /// <returns>MProduct</returns>
-        public static MProduct Get(Ctx ctx, int M_Product_ID)
+        public static MProduct Get(Ctx ctx, int VAM_Product_ID)
         {
-            int key = M_Product_ID;
+            int key = VAM_Product_ID;
             MProduct retValue = (MProduct)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MProduct(ctx, M_Product_ID, null);
+            retValue = new MProduct(ctx, VAM_Product_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         public static MProduct[] Get(Ctx ctx, String whereClause, Trx trxName)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
-            String sql = "SELECT * FROM M_Product";
+            String sql = "SELECT * FROM VAM_Product";
             if (whereClause != null && whereClause.Length > 0)
                 sql += " WHERE VAF_Client_ID=" + VAF_Client_ID + " AND " + whereClause;
             List<MProduct> list = new List<MProduct>();
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 return null;
             }
             MProduct retValue = null;
-            String sql = "SELECT * FROM M_Product "
+            String sql = "SELECT * FROM VAM_Product "
                 + "WHERE LicenseInfo LIKE '%" + entityType + "%' AND TrialPhaseDays > 0 AND IsActive='Y'";
             //String entityTypeLike = "%" + entityType + "%";
             //pstmt.setString(1, entityTypeLike);
@@ -156,28 +156,28 @@ namespace VAdvantage.Model
 
         /*	Is Product Stocked
         * 	@param ctx context
-        *	@param M_Product_ID id
+        *	@param VAM_Product_ID id
         *	@return true if found and stocked - false otherwise
         */
-        public static bool IsProductStocked(Ctx ctx, int M_Product_ID)
+        public static bool IsProductStocked(Ctx ctx, int VAM_Product_ID)
         {
-            MProduct product = Get(ctx, M_Product_ID);
+            MProduct product = Get(ctx, VAM_Product_ID);
             return product.IsStocked();
         }
 
         /* 	Standard Constructor
          *	@param ctx context
-         *	@param M_Product_ID id
+         *	@param VAM_Product_ID id
          *	@param trxName transaction
          */
-        public MProduct(Ctx ctx, int M_Product_ID, Trx trxName)
-            : base(ctx, M_Product_ID, trxName)
+        public MProduct(Ctx ctx, int VAM_Product_ID, Trx trxName)
+            : base(ctx, VAM_Product_ID, trxName)
         {
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
                 //	setValue (null);
                 //	setName (null);
-                //	setM_Product_Category_ID (0);
+                //	setVAM_ProductCategory_ID (0);
                 //	setVAB_TaxCategory_ID (0);
                 //	setVAB_UOM_ID (0);
                 //
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
             : this(et.GetCtx(), 0, et.Get_TrxName())
         {
 
-            SetProductType(X_M_Product.PRODUCTTYPE_ExpenseType);
+            SetProductType(X_VAM_Product.PRODUCTTYPE_ExpenseType);
             SetExpenseType(et);
         }
 
@@ -232,7 +232,7 @@ namespace VAdvantage.Model
             : this(resource.GetCtx(), 0, resource.Get_TrxName())
         {
 
-            SetProductType(X_M_Product.PRODUCTTYPE_Resource);
+            SetProductType(X_VAM_Product.PRODUCTTYPE_Resource);
             SetResource(resource);
             SetResource(resourceType);
         }
@@ -292,9 +292,9 @@ namespace VAdvantage.Model
                 SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
                 changed = true;
             }
-            if (parent.GetM_Product_Category_ID() != GetM_Product_Category_ID())
+            if (parent.GetVAM_ProductCategory_ID() != GetVAM_ProductCategory_ID())
             {
-                SetM_Product_Category_ID(parent.GetM_Product_Category_ID());
+                SetVAM_ProductCategory_ID(parent.GetVAM_ProductCategory_ID());
                 changed = true;
             }
             if (parent.GetVAB_TaxCategory_ID() != GetVAB_TaxCategory_ID())
@@ -369,9 +369,9 @@ namespace VAdvantage.Model
                 SetVAB_UOM_ID(parent.GetVAB_UOM_ID());
                 changed = true;
             }
-            if (parent.GetM_Product_Category_ID() != GetM_Product_Category_ID())
+            if (parent.GetVAM_ProductCategory_ID() != GetVAM_ProductCategory_ID())
             {
-                SetM_Product_Category_ID(parent.GetM_Product_Category_ID());
+                SetVAM_ProductCategory_ID(parent.GetVAM_ProductCategory_ID());
                 changed = true;
             }
             if (parent.GetVAB_TaxCategory_ID() != GetVAB_TaxCategory_ID())
@@ -405,7 +405,7 @@ namespace VAdvantage.Model
         */
         public int GetVAA_AssetGroup_ID()
         {
-            MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
+            MProductCategory pc = MProductCategory.Get(GetCtx(), GetVAM_ProductCategory_ID());
             return pc.GetVAA_AssetGroup_ID();
         }
 
@@ -416,7 +416,7 @@ namespace VAdvantage.Model
         */
         public bool IsCreateAsset()
         {
-            MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
+            MProductCategory pc = MProductCategory.Get(GetCtx(), GetVAM_ProductCategory_ID());
             return pc.GetVAA_AssetGroup_ID() != 0;
         }
 
@@ -425,8 +425,8 @@ namespace VAdvantage.Model
         */
         public MAttributeSet GetAttributeSet()
         {
-            if (GetM_AttributeSet_ID() != 0)
-                return MAttributeSet.Get(GetCtx(), GetM_AttributeSet_ID());
+            if (GetVAM_PFeature_Set_ID() != 0)
+                return MAttributeSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
             return null;
         }
 
@@ -436,9 +436,9 @@ namespace VAdvantage.Model
          */
         public bool IsInstanceAttribute()
         {
-            if (GetM_AttributeSet_ID() == 0)
+            if (GetVAM_PFeature_Set_ID() == 0)
                 return false;
-            MAttributeSet mas = MAttributeSet.Get(GetCtx(), GetM_AttributeSet_ID());
+            MAttributeSet mas = MAttributeSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
             return mas.IsInstanceAttribute();
         }
 
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
         */
         public bool IsOneAssetPerUOM()
         {
-            MProductCategory pc = MProductCategory.Get(GetCtx(), GetM_Product_Category_ID());
+            MProductCategory pc = MProductCategory.Get(GetCtx(), GetVAM_ProductCategory_ID());
             if (pc.GetVAA_AssetGroup_ID() == 0)
                 return false;
             MVAAAssetGroup ag = MVAAAssetGroup.Get(GetCtx(), pc.GetVAA_AssetGroup_ID());
@@ -505,8 +505,8 @@ namespace VAdvantage.Model
                 return _downloads;
             //
             List<MProductDownload> list = new List<MProductDownload>();
-            String sql = "SELECT * FROM M_ProductDownload "
-                + "WHERE M_Product_ID=" + GetM_Product_ID() + " AND IsActive='Y' ORDER BY Name";
+            String sql = "SELECT * FROM VAM_ProductDownload "
+                + "WHERE VAM_Product_ID=" + GetVAM_Product_ID() + " AND IsActive='Y' ORDER BY Name";
             //
             DataTable dt = null;
             IDataReader idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
@@ -624,15 +624,15 @@ namespace VAdvantage.Model
                 _precision = null;
             if (Util.GetValueOfInt(Env.GetCtx().GetContext("#VAF_UserContact_ID")) != 100)
             {
-                if (Is_ValueChanged("VAB_UOM_ID") || Is_ValueChanged("M_AttributeSet_ID"))
+                if (Is_ValueChanged("VAB_UOM_ID") || Is_ValueChanged("VAM_PFeature_Set_ID"))
                 {
-                    string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + @"  UNION
-                SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " UNION SELECT COUNT(*) AS cc FROM VAB_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() +
-                    " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + ") t";
+                    string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM VAM_InvTrf_Line WHERE VAM_Product_ID = " + GetVAM_Product_ID() + @"  UNION
+                SELECT COUNT(*) AS cc FROM VAM_InventoryLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " UNION SELECT COUNT(*) AS cc FROM VAB_OrderLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() +
+                    " UNION  SELECT COUNT(*) AS cc FROM VAM_Inv_InOutLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + ") t";
                     int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                     if (no == 0 || IsBOM())
                     {
-                        uqry = "SELECT count(*) FROM M_ProductionPlan WHERE M_Product_ID = " + GetM_Product_ID();
+                        uqry = "SELECT count(*) FROM VAM_ProductionPlan WHERE VAM_Product_ID = " + GetVAM_Product_ID();
                         no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                     }
                     if (no > 0)
@@ -661,7 +661,7 @@ namespace VAdvantage.Model
                 {
                     //string sql = "SELECT UPCUNIQUE('p','" + GetUPC() + "') as productID FROM Dual";
                     //int manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-                    //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+                    //if (manu_ID != 0 && manu_ID != GetVAM_Product_ID())
 
                     int manu_ID = UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                     if (manu_ID > 0)
@@ -679,16 +679,16 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAF_Client_ID">Client ID</param>
         /// <param name="upc">UPC of Product</param>
-        /// <returns>M_Product_ID, if records found</returns>
+        /// <returns>VAM_Product_ID, if records found</returns>
         public static int UpcUniqueClientWise(int VAF_Client_ID, string upc)
         {
-            int M_Product_ID = 0;
-            string sql = @"SELECT p.M_Product_ID FROM M_Product p LEFT JOIN M_Manufacturer m ON m.M_Product_ID = p.M_Product_ID 
-                            LEFT JOIN M_ProductAttributes a ON a.M_Product_ID = p.M_Product_ID LEFT JOIN VAB_UOM_Conversion c ON c.M_Product_ID = p.M_Product_ID 
-                            LEFT JOIN VAB_UOM_ProductBarcode b ON b.M_Product_ID = p.M_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
+            int VAM_Product_ID = 0;
+            string sql = @"SELECT p.VAM_Product_ID FROM VAM_Product p LEFT JOIN VAM_Manufacturer m ON m.VAM_Product_ID = p.VAM_Product_ID 
+                            LEFT JOIN VAM_ProductFeatures a ON a.VAM_Product_ID = p.VAM_Product_ID LEFT JOIN VAB_UOM_Conversion c ON c.VAM_Product_ID = p.VAM_Product_ID 
+                            LEFT JOIN VAB_UOVAM_ProductBarcode b ON b.VAM_Product_ID = p.VAM_Product_ID WHERE p.VAF_Client_ID = " + VAF_Client_ID
                             + " AND ( p.UPC = '" + upc + "' OR m.UPC = '" + upc + "' OR a.UPC = '" + upc + "' OR c.UPC = '" + upc + "' OR b.UPC = '" + upc + "')";
-            M_Product_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            return M_Product_ID;
+            VAM_Product_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            return VAM_Product_ID;
         }
 
         /**
@@ -711,21 +711,21 @@ namespace VAdvantage.Model
             {
                 PO obj = null;
                 //MFRPTProductAcct obj = null;
-                int _MProduct_ID = GetM_Product_ID();
-                int _PCategory_ID = GetM_Product_Category_ID();
+                int _MProduct_ID = GetVAM_Product_ID();
+                int _PCategory_ID = GetVAM_ProductCategory_ID();
                 string sql = "SELECT L.VALUE FROM VAF_CTRLREF_LIST L inner join VAF_Control_Ref r on R.VAF_CONTROL_REF_ID=L.VAF_CONTROL_REF_ID where   r.name='FRPT_RelatedTo' and l.name='Product'";
                 //"select VALUE from VAF_CtrlRef_List where name='Product'";
                 string _RelatedToProduct = Convert.ToString(DB.ExecuteScalar(sql));
                 //string _RelatedToProduct = X_FRPT_AcctDefault.FRPT_RELATEDTO_Product.ToString();
 
                 _sql.Clear();
-                _sql.Append("Select Count(*) From FRPT_Product_Acct  where M_Product_ID=" + _MProduct_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
+                _sql.Append("Select Count(*) From FRPT_Product_Acct  where VAM_Product_ID=" + _MProduct_ID + " AND IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID());
                 int value = Util.GetValueOfInt(DB.ExecuteScalar(_sql.ToString()));
                 if (value < 1)
                 {
                     _sql.Clear();
-                    _sql.Append("Select  PCA.VAB_AccountBook_id, PCA.VAB_Acct_ValidParameter_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.m_product_category_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
-                    //_sql.Append("Select VAB_AccountBook_ID, VAB_Acct_ValidParameter_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where m_product_category_id =" + _PCategory_ID);
+                    _sql.Append("Select  PCA.VAB_AccountBook_id, PCA.VAB_Acct_ValidParameter_id, PCA.frpt_acctdefault_id From FRPT_product_category_acct PCA inner join frpt_acctdefault ACC ON acc.frpt_acctdefault_id= PCA.frpt_acctdefault_id where PCA.VAM_ProductCategory_id=" + _PCategory_ID + " and acc.frpt_relatedto='" + _RelatedToProduct + "' AND PCA.IsActive = 'Y' AND PCA.VAF_Client_ID = " + GetVAF_Client_ID());
+                    //_sql.Append("Select VAB_AccountBook_ID, VAB_Acct_ValidParameter_ID, FRPT_AcctDefault_ID from FRPT_product_category_acct where VAM_ProductCategory_id =" + _PCategory_ID);
 
                     DataSet ds = DB.ExecuteDataset(_sql.ToString());
                     if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -735,7 +735,7 @@ namespace VAdvantage.Model
                             //obj = new MFRPTProductAcct(GetCtx(), 0, null);
                             obj = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                             obj.Set_ValueNoCheck("VAF_Org_ID", 0);
-                            obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
+                            obj.Set_ValueNoCheck("VAM_Product_ID", _MProduct_ID);
                             obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_AccountBook_ID"]));
                             obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_ID"]));
                             obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
@@ -760,7 +760,7 @@ namespace VAdvantage.Model
                 //                {
                 //                    obj = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Acct", 0, null);
                 //                    obj.Set_ValueNoCheck("VAF_Org_ID", 0);
-                //                    obj.Set_ValueNoCheck("M_Product_ID", _MProduct_ID);
+                //                    obj.Set_ValueNoCheck("VAM_Product_ID", _MProduct_ID);
                 //                    obj.Set_ValueNoCheck("VAB_AccountBook_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_AccountBook_ID"]));
                 //                    obj.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["VAB_Acct_ValidParameter_ID"]));
                 //                    obj.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(_dsAcct.Tables[0].Rows[j]["FRPT_AcctDefault_ID"]));
@@ -781,14 +781,14 @@ namespace VAdvantage.Model
 
                 //	Value/Name change in Account
                 if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                    MAccount.UpdateValueDescription(GetCtx(), "M_Product_ID=" + GetM_Product_ID(), Get_TrxName());
+                    MAccount.UpdateValueDescription(GetCtx(), "VAM_Product_ID=" + GetVAM_Product_ID(), Get_TrxName());
 
                 //	Name/Description Change in Asset	MAsset.setValueNameDescription
                 if (!newRecord && (Is_ValueChanged("Name") || Is_ValueChanged("Description")))
                 {
-                    String sql = " UPDATE VAA_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM M_Product p, VAB_BusinessPartner bp  WHERE p.M_Product_ID=a.M_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)," +
-      "Description=(SELECT  p.Description FROM M_Product p, VAB_BusinessPartner bp WHERE p.M_Product_ID=a.M_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)" +
-      "WHERE IsActive='Y'  AND M_Product_ID=" + GetM_Product_ID();
+                    String sql = " UPDATE VAA_Asset a SET Name=(SELECT SUBSTR(bp.Name || ' - ' || p.Name,1,60) FROM VAM_Product p, VAB_BusinessPartner bp  WHERE p.VAM_Product_ID=a.VAM_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)," +
+      "Description=(SELECT  p.Description FROM VAM_Product p, VAB_BusinessPartner bp WHERE p.VAM_Product_ID=a.VAM_Product_ID AND bp.VAB_BusinessPartner_ID=a.VAB_BusinessPartner_ID)" +
+      "WHERE IsActive='Y'  AND VAM_Product_ID=" + GetVAM_Product_ID();
 
                     int no = 0;
                     try
@@ -803,8 +803,8 @@ namespace VAdvantage.Model
                 {
                     if (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y")
                     {
-                        bool sucs = Insert_Accounting("M_Product_Acct", "M_Product_Category_Acct",
-                              "p.M_Product_Category_ID=" + GetM_Product_Category_ID());
+                        bool sucs = Insert_Accounting("VAM_Product_Acct", "VAM_ProductCategory_Acct",
+                              "p.VAM_ProductCategory_ID=" + GetVAM_ProductCategory_ID());
 
                         //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                         // Before this, data was being saved but giving message "record not saved".
@@ -825,7 +825,7 @@ namespace VAdvantage.Model
                 }
                 //	New Costing
                 // by Amit 22-12-2015
-                //if (newRecord || Is_ValueChanged("M_Product_Category_ID"))
+                //if (newRecord || Is_ValueChanged("VAM_ProductCategory_ID"))
                 //{
                 //    MCost.Create(this);
                 //}
@@ -833,7 +833,7 @@ namespace VAdvantage.Model
 
             //22-12-2015
             //by Amit for creating records ffor product foe all Costing Element whose costing elemnt type is 'Material'
-            //if (newRecord || Is_ValueChanged("M_Product_Category_ID"))
+            //if (newRecord || Is_ValueChanged("VAM_ProductCategory_ID"))
             //{
             //    MCost.CreateRecords(this);
             //}
@@ -842,10 +842,10 @@ namespace VAdvantage.Model
             object ModuleId = DB.ExecuteScalar("select VAF_ModuleInfo_id from VAF_ModuleInfo where prefix='VA019_' and isactive='Y'");
             if (ModuleId != null && ModuleId != DBNull.Value)
             {
-                object objNDBNo = DB.ExecuteScalar("select va019_ndbno from M_Product where m_product_ID=" + GetM_Product_ID() + "");
+                object objNDBNo = DB.ExecuteScalar("select va019_ndbno from VAM_Product where VAM_Product_ID=" + GetVAM_Product_ID() + "");
                 if (objNDBNo != null && objNDBNo != DBNull.Value)
                 {
-                    CallNutritionApi(Convert.ToString(objNDBNo), GetM_Product_ID());
+                    CallNutritionApi(Convert.ToString(objNDBNo), GetVAM_Product_ID());
                 }
             }
             return success;
@@ -888,13 +888,13 @@ namespace VAdvantage.Model
             MProductCosting[] costings = MProductCosting.GetOfProduct(GetCtx(), Get_ID(), Get_TrxName());
             for (int i = 0; i < costings.Length; i++)
                 costings[i].Delete(true, Get_TrxName());
-            string sql = "DELETE FROM M_Cost WHERE M_Product_ID = " + Get_ID();
+            string sql = "DELETE FROM VAM_ProductCost WHERE VAM_Product_ID = " + Get_ID();
             int no = DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no < 0)
             {
                 return false;
             }
-            return Delete_Accounting("M_Product_Acct");
+            return Delete_Accounting("VAM_Product_Acct");
         }
         #region Class To Get Nutrition Json Response
         public class rootObject
@@ -949,7 +949,7 @@ namespace VAdvantage.Model
                     foreach (nutrients nutrient in dataObject.report.food.nutrients)
                     {
                         int TblPrimaryKey = 0;
-                        object objNT = DB.ExecuteScalar("select va019_nutrition_id from va019_nutrition where m_product_id=" + ProductID + " and va019_nutrition_key=" + nutrient.nutrient_id + "");
+                        object objNT = DB.ExecuteScalar("select va019_nutrition_id from va019_nutrition where VAM_Product_id=" + ProductID + " and va019_nutrition_key=" + nutrient.nutrient_id + "");
                         if (objNT != null && objNT != DBNull.Value)
                         {
                             TblPrimaryKey = Convert.ToInt32(objNT);

@@ -33,10 +33,10 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
             //Is used to drop all movement line when movement is of Full Movement container
-            int no = DB.ExecuteQuery("DELETE FROM M_MovementLine WHERE M_Movement_ID = " + GetRecord_ID(), null, Get_Trx());
+            int no = DB.ExecuteQuery("DELETE FROM VAM_InvTrf_Line WHERE VAM_InventoryTransfer_ID = " + GetRecord_ID(), null, Get_Trx());
             _log.Info(no + " records delete from movement line, movement id =  " + GetRecord_ID());
             if (no >= 0)
-                DB.ExecuteQuery("Update M_Movement SET DocStatus = 'DR' WHERE M_Movement_ID = " + GetRecord_ID(), null, Get_Trx());
+                DB.ExecuteQuery("Update VAM_InventoryTransfer SET DocStatus = 'DR' WHERE VAM_InventoryTransfer_ID = " + GetRecord_ID(), null, Get_Trx());
             if (no <= 0)
                 return Msg.GetMsg(GetCtx(), "VIS_NoRecordsFound"); // No document line found.
             return Msg.GetMsg(GetCtx(), "VIS_RecordsDeleted") + no; // All records on line deleted successfully - 

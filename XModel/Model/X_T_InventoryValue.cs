@@ -21,9 +21,9 @@ public X_VAT_StockData (Context ctx, int VAT_StockData_ID, Trx trxName) : base (
 /** if (VAT_StockData_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Warehouse_ID (0);
 }
  */
 }
@@ -32,9 +32,9 @@ public X_VAT_StockData (Ctx ctx, int VAT_StockData_ID, Trx trxName) : base (ctx,
 /** if (VAT_StockData_ID == 0)
 {
 SetVAF_JInstance_ID (0);
-SetM_AttributeSetInstance_ID (0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Warehouse_ID (0);
 }
  */
 }
@@ -216,79 +216,79 @@ public DateTime? GetDateValue()
 return (DateTime?)Get_Value("DateValue");
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_Value ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_Value ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cost Element.
-@param M_CostElement_ID Product Cost Element */
-public void SetM_CostElement_ID (int M_CostElement_ID)
+@param VAM_ProductCostElement_ID Product Cost Element */
+public void SetVAM_ProductCostElement_ID (int VAM_ProductCostElement_ID)
 {
-if (M_CostElement_ID <= 0) Set_Value ("M_CostElement_ID", null);
+if (VAM_ProductCostElement_ID <= 0) Set_Value ("VAM_ProductCostElement_ID", null);
 else
-Set_Value ("M_CostElement_ID", M_CostElement_ID);
+Set_Value ("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
 }
 /** Get Cost Element.
 @return Product Cost Element */
-public int GetM_CostElement_ID() 
+public int GetVAM_ProductCostElement_ID() 
 {
-Object ii = Get_Value("M_CostElement_ID");
+Object ii = Get_Value("VAM_ProductCostElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Price List Version.
-@param M_PriceList_Version_ID Identifies a unique instance of a Price List */
-public void SetM_PriceList_Version_ID (int M_PriceList_Version_ID)
+@param VAM_PriceListVersion_ID Identifies a unique instance of a Price List */
+public void SetVAM_PriceListVersion_ID (int VAM_PriceListVersion_ID)
 {
-if (M_PriceList_Version_ID <= 0) Set_Value ("M_PriceList_Version_ID", null);
+if (VAM_PriceListVersion_ID <= 0) Set_Value ("VAM_PriceListVersion_ID", null);
 else
-Set_Value ("M_PriceList_Version_ID", M_PriceList_Version_ID);
+Set_Value ("VAM_PriceListVersion_ID", VAM_PriceListVersion_ID);
 }
 /** Get Price List Version.
 @return Identifies a unique instance of a Price List */
-public int GetM_PriceList_Version_ID() 
+public int GetVAM_PriceListVersion_ID() 
 {
-Object ii = Get_Value("M_PriceList_Version_ID");
+Object ii = Get_Value("VAM_PriceListVersion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_Value ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");
-Set_Value ("M_Warehouse_ID", M_Warehouse_ID);
+if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");
+Set_Value ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

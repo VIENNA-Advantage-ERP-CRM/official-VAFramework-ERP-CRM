@@ -77,8 +77,8 @@ namespace VAdvantage.Model
             SetName(task.GetName());
             SetDescription(task.GetDescription());
             SetHelp(task.GetHelp());
-            if (task.GetM_Product_ID() != 0)
-                SetM_Product_ID(task.GetM_Product_ID());
+            if (task.GetVAM_Product_ID() != 0)
+                SetVAM_Product_ID(task.GetVAM_Product_ID());
             SetQty(task.GetStandardQty());
         }
 

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionRunDetail
  * Purpose        : Distribution Run Detail
- * Class Used     : X_M_DistributionListLine
+ * Class Used     : X_VAM_DistributionListLine
  * Chronological    Development
  * Raghunandan     04-Nov-2009
   ******************************************************/
@@ -37,22 +37,22 @@ namespace VAdvantage.Model
         /// Get Distribution Dun details
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DistributionRun_ID">id</param>
+        /// <param name="VAM_DistributionRun_ID">id</param>
         /// <param name="orderBP">if true ordered by Business Partner otherwise Run Line</param>
         /// <param name="trxName">transaction</param>
         /// <returns>array of details</returns>
-        public static MDistributionRunDetail[] Get(Ctx ctx, int M_DistributionRun_ID,
+        public static MDistributionRunDetail[] Get(Ctx ctx, int VAM_DistributionRun_ID,
                 bool orderBP, Trx trxName)
         {
             List<MDistributionRunDetail> list = new List<MDistributionRunDetail>();
-            String sql = "SELECT * FROM VAT_CirculationDetail WHERE M_DistributionRun_ID=" + M_DistributionRun_ID;
+            String sql = "SELECT * FROM VAT_CirculationDetail WHERE VAM_DistributionRun_ID=" + VAM_DistributionRun_ID;
             if (orderBP)
             {
                 sql += " ORDER BY VAB_BusinessPartner_ID, VAB_BPart_Location_ID";
             }
             else
             {
-                sql += " ORDER BY M_DistributionRunLine_ID";
+                sql += " ORDER BY VAM_DistributionRunLine_ID";
             }
             DataTable dt = null;
             IDataReader idr = null;
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MDistributionRunDetail[")
                 .Append(Get_ID())
-                .Append(";M_DistributionListLine_ID=").Append(GetM_DistributionListLine_ID())
+                .Append(";VAM_DistributionListLine_ID=").Append(GetVAM_DistributionListLine_ID())
                 .Append(";Qty=").Append(GetQty())
                 .Append(";Ratio=").Append(GetRatio())
                 .Append(";MinQty=").Append(GetMinQty())

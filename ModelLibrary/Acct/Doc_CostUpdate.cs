@@ -42,8 +42,8 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             costupdate = (MCostUpdate)GetPO();
-            if (costupdate.GetM_Product_Category_ID() != 0)
-                mpc = MProductCategory.Get(GetCtx(), costupdate.GetM_Product_Category_ID());
+            if (costupdate.GetVAM_ProductCategory_ID() != 0)
+                mpc = MProductCategory.Get(GetCtx(), costupdate.GetVAM_ProductCategory_ID());
 
             _lines = LoadLines(costupdate);
             m_ce = MCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
@@ -83,7 +83,7 @@ namespace VAdvantage.Acct
             // Get the costing method and the costing level of the product Category for the current accounting schema.
             if (mpc != null)
             {
-                pca = MProductCategoryAcct.Get(GetCtx(), mpc.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), null);
+                pca = MProductCategoryAcct.Get(GetCtx(), mpc.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), null);
                 if (pca.GetCostingMethod() != null)
                     costingMethod = pca.GetCostingMethod();
                 else
@@ -110,8 +110,8 @@ namespace VAdvantage.Acct
 
                 if (mpc == null)
                 {
-                    pca = MProductCategoryAcct.Get(GetCtx(), MProduct.Get(GetCtx(), line.GetM_Product_ID()).
-                                                   GetM_Product_Category_ID(),
+                    pca = MProductCategoryAcct.Get(GetCtx(), MProduct.Get(GetCtx(), line.GetVAM_Product_ID()).
+                                                   GetVAM_ProductCategory_ID(),
                                                    as1.GetVAB_AccountBook_ID(), null);
                     if (pca.GetCostingMethod() != null)
                         costingMethod = pca.GetCostingMethod();
@@ -132,19 +132,19 @@ namespace VAdvantage.Acct
                 Decimal oldCost = Env.ZERO;
                 Decimal Qty = Env.ZERO;
                 String sql = " SELECT Sum(CurrentCostPrice), Sum(LastCostPrice), Sum(CurrentQty)"
-                           + " FROM M_Cost WHERE M_Product_ID = " + line.GetM_Product_ID()
+                           + " FROM VAM_ProductCost WHERE VAM_Product_ID = " + line.GetVAM_Product_ID()
                            + " AND VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID()
-                           + " AND M_CostElement_ID = " + m_ce.GetM_CostElement_ID()
-                           + " AND M_CostType_ID = " + as1.GetM_CostType_ID()
+                           + " AND VAM_ProductCostElement_ID = " + m_ce.GetVAM_ProductCostElement_ID()
+                           + " AND VAM_ProductCostType_ID = " + as1.GetVAM_ProductCostType_ID()
                            + " AND VAF_Client_ID = " + GetVAF_Client_ID();
                 if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_Client))
                 {
                     sql += " AND VAF_Org_ID = 0"
-                        + " AND M_AttributeSetInstance_ID  = 0";
+                        + " AND VAM_PFeature_SetInstance_ID  = 0";
                 }
                 else if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_Organization))
                 {
-                    sql += " AND M_AttributeSetInstance_ID  = 0";
+                    sql += " AND VAM_PFeature_SetInstance_ID  = 0";
                 }
                 else if (costingLevel.Equals(X_VAB_AccountBook.COSTINGLEVEL_BatchLot))
                 {

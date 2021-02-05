@@ -20,7 +20,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// BOM Alternative Model
     /// </summary>
-    public class MBOMAlternative : X_M_BOMAlternative
+    public class MBOMAlternative : X_VAM_BOMSubsitutue
     {
         #region Private Variables
         //Logger for class MBOMAlternative 
@@ -32,10 +32,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_BOMAlternative_ID"></param>
+        /// <param name="VAM_BOMSubsitutue_ID"></param>
         /// <param name="trx"></param>
-        public MBOMAlternative(Ctx ctx, int M_BOMAlternative_ID, Trx trx)
-            : base(ctx, M_BOMAlternative_ID, trx)
+        public MBOMAlternative(Ctx ctx, int VAM_BOMSubsitutue_ID, Trx trx)
+            : base(ctx, VAM_BOMSubsitutue_ID, trx)
         {
 
         }

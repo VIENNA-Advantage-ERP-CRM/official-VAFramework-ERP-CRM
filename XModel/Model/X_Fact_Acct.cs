@@ -620,34 +620,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-public void SetM_Locator_ID (int M_Locator_ID)
+@param VAM_Locator_ID Warehouse Locator */
+public void SetVAM_Locator_ID (int VAM_Locator_ID)
 {
-if (M_Locator_ID <= 0) Set_ValueNoCheck ("M_Locator_ID", null);
+if (VAM_Locator_ID <= 0) Set_ValueNoCheck ("VAM_Locator_ID", null);
 else
-Set_ValueNoCheck ("M_Locator_ID", M_Locator_ID);
+Set_ValueNoCheck ("VAM_Locator_ID", VAM_Locator_ID);
 }
 /** Get Locator.
 @return Warehouse Locator */
-public int GetM_Locator_ID() 
+public int GetVAM_Locator_ID() 
 {
-Object ii = Get_Value("M_Locator_ID");
+Object ii = Get_Value("VAM_Locator_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_ValueNoCheck ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_ValueNoCheck ("VAM_Product_ID", null);
 else
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

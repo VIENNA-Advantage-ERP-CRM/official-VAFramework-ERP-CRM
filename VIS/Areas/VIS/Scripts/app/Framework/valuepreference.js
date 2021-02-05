@@ -361,7 +361,7 @@
         //	Handle NULL
         if (this.aValue == null) {
             if (VIS.DisplayType.IsLookup(this.displayType)) {
-                this.aValue = "-1";	//	 -1 may cause problems (BPartner - M_DiscountSchema
+                this.aValue = "-1";	//	 -1 may cause problems (BPartner - VAM_DiscountCalculation
             }
             else if (VIS.DisplayType.IsDate(this.displayType)) {
                 this.aValue = " ";

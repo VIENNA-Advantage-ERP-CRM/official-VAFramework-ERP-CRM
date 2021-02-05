@@ -22,7 +22,7 @@ public X_S_Training (Context ctx, int S_Training_ID, Trx trxName) : base (ctx, S
 {
 SetVAB_TaxCategory_ID (0);
 SetVAB_UOM_ID (0);
-SetM_Product_Category_ID (0);
+SetVAM_ProductCategory_ID (0);
 SetName (null);
 SetS_Training_ID (0);
 }
@@ -34,7 +34,7 @@ public X_S_Training (Ctx ctx, int S_Training_ID, Trx trxName) : base (ctx, S_Tra
 {
 SetVAB_TaxCategory_ID (0);
 SetVAB_UOM_ID (0);
-SetM_Product_Category_ID (0);
+SetVAM_ProductCategory_ID (0);
 SetName (null);
 SetS_Training_ID (0);
 }
@@ -234,17 +234,17 @@ public String GetImageURL()
 return (String)Get_Value("ImageURL");
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID < 1) throw new ArgumentException ("M_Product_Category_ID is mandatory.");
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+if (VAM_ProductCategory_ID < 1) throw new ArgumentException ("VAM_ProductCategory_ID is mandatory.");
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

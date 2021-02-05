@@ -11,32 +11,32 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_Locator
+    /** Generated Model for VAM_Locator
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Locator : PO
+    public class X_VAM_Locator : PO
     {
-        public X_M_Locator(Context ctx, int M_Locator_ID, Trx trxName)
-            : base(ctx, M_Locator_ID, trxName)
+        public X_VAM_Locator(Context ctx, int VAM_Locator_ID, Trx trxName)
+            : base(ctx, VAM_Locator_ID, trxName)
         {
-            /** if (M_Locator_ID == 0)
+            /** if (VAM_Locator_ID == 0)
             {
             SetIsDefault (false);
-            SetM_Locator_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetPriorityNo (0);	// 50
             SetValue (null);
             }
              */
         }
-        public X_M_Locator(Ctx ctx, int M_Locator_ID, Trx trxName)
-            : base(ctx, M_Locator_ID, trxName)
+        public X_VAM_Locator(Ctx ctx, int VAM_Locator_ID, Trx trxName)
+            : base(ctx, VAM_Locator_ID, trxName)
         {
-            /** if (M_Locator_ID == 0)
+            /** if (VAM_Locator_ID == 0)
             {
             SetIsDefault (false);
-            SetM_Locator_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetPriorityNo (0);	// 50
             SetValue (null);
             }
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Locator(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Locator(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Locator(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Locator(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Locator(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Locator(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_Locator()
+        static X_VAM_Locator()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =207;
 
-        /** TableName=M_Locator */
-        public static String Table_Name = "M_Locator";
+        /** TableName=VAM_Locator */
+        public static String Table_Name = "VAM_Locator";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(7);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_Locator[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Locator[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Default.
@@ -142,32 +142,32 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory.");
-            Set_ValueNoCheck("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_ValueNoCheck("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -175,7 +175,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetM_Warehouse_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAM_Warehouse_ID().ToString());
         }
         /** Set Relative Priority.
         @param PriorityNo Where inventory should be picked from first */

@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Substitute
+/** Generated Model for VAM_Alternate
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Substitute : PO
+public class X_VAM_Alternate : PO
 {
-public X_M_Substitute (Context ctx, int M_Substitute_ID, Trx trxName) : base (ctx, M_Substitute_ID, trxName)
+public X_VAM_Alternate (Context ctx, int VAM_Alternate_ID, Trx trxName) : base (ctx, VAM_Alternate_ID, trxName)
 {
-/** if (M_Substitute_ID == 0)
+/** if (VAM_Alternate_ID == 0)
 {
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 SetSubstitute_ID (0);
 }
  */
 }
-public X_M_Substitute (Ctx ctx, int M_Substitute_ID, Trx trxName) : base (ctx, M_Substitute_ID, trxName)
+public X_VAM_Alternate (Ctx ctx, int VAM_Alternate_ID, Trx trxName) : base (ctx, VAM_Alternate_ID, trxName)
 {
-/** if (M_Substitute_ID == 0)
+/** if (VAM_Alternate_ID == 0)
 {
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 SetSubstitute_ID (0);
 }
@@ -41,7 +41,7 @@ SetSubstitute_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Substitute (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Alternate (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_Substitute (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Substitute (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Alternate (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_Substitute (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Substitute (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Alternate (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Substitute()
+static X_VAM_Alternate()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389064598L;
 public static int Table_ID;
  // =213;
 
-/** TableName=M_Substitute */
-public static String Table_Name="M_Substitute";
+/** TableName=VAM_Alternate */
+public static String Table_Name="VAM_Alternate";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Substitute[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Alternate[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -132,17 +132,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -150,7 +150,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_Product_ID().ToString());
 }
 /** Set Name.
 @param Name Alphanumeric identifier of the entity */

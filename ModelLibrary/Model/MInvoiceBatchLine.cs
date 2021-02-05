@@ -189,7 +189,7 @@ namespace VAdvantage.Model
                 return;
 
             String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
-                + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
+                + " COALESCE(p.VAM_PriceList_ID,g.VAM_PriceList_ID) AS VAM_PriceList_ID, p.PaymentRule,p.POReference,"
                 + " p.SO_Description,p.IsDiscountPrinted,"
                 + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
                 + " l.VAB_BPart_Location_ID,c.VAF_UserContact_ID,"
@@ -295,7 +295,7 @@ namespace VAdvantage.Model
             int VAB_Charge_ID = int.Parse(newVAB_Charge_ID);
             base.SetVAB_Charge_ID(VAB_Charge_ID);
 
-            MCharge charge = MCharge.Get(GetCtx(), VAB_Charge_ID);
+            MVABCharge charge = MVABCharge.Get(GetCtx(), VAB_Charge_ID);
             SetPriceEntered(charge.GetChargeAmt());
             SetTax(windowNo, "VAB_Charge_ID");
         }	//	setVAB_Charge_ID
@@ -331,13 +331,13 @@ namespace VAdvantage.Model
             int VAF_Org_ID = GetVAF_Org_ID();
             log.Fine("Org=" + VAF_Org_ID);
             MVAFOrg org = MVAFOrg.Get(GetCtx(), VAF_Org_ID);
-            int M_Warehouse_ID = org.GetM_Warehouse_ID();
-            log.Fine("Warehouse=" + M_Warehouse_ID);
+            int VAM_Warehouse_ID = org.GetVAM_Warehouse_ID();
+            log.Fine("Warehouse=" + VAM_Warehouse_ID);
 
             Boolean isSOTrx = GetCtx().IsSOTrx(windowNo);
             //
             int VAB_TaxRate_ID = Tax.Get(GetCtx(), 0, VAB_Charge_ID, billDate, shipDate,
-                VAF_Org_ID, M_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
+                VAF_Org_ID, VAM_Warehouse_ID, VAB_BPart_Location_ID, VAB_BPart_Location_ID,
                 isSOTrx);
             log.Info("Tax ID=" + VAB_TaxRate_ID + " - SOTrx=" + isSOTrx);
 

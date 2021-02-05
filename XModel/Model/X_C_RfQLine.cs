@@ -85,21 +85,21 @@ public String GetHelp() {return (String)Get_Value("Help");}/** Set Line No.
 public void SetLine (int Line){Set_Value ("Line", Line);}/** Get Line No.
 @return Unique line for this document */
 public int GetLine() {Object ii = Get_Value("Line");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID){if (M_AttributeSetInstance_ID <= 0) Set_Value ("M_AttributeSetInstance_ID", null);else
-Set_Value ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);}/** Get Attribute Set Instance.
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID){if (VAM_PFeature_SetInstance_ID <= 0) Set_Value ("VAM_PFeature_SetInstance_ID", null);else
+Set_Value ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);}/** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() {Object ii = Get_Value("M_AttributeSetInstance_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID){if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);else
-Set_Value ("M_Product_ID", M_Product_ID);}/** Get Product.
+public int GetVAM_PFeature_SetInstance_ID() {Object ii = Get_Value("VAM_PFeature_SetInstance_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Product.
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID){if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);else
+Set_Value ("VAM_Product_ID", VAM_Product_ID);}/** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() {Object ii = Get_Value("M_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Requisition Line.
-@param M_RequisitionLine_ID Material Requisition Line */
-public void SetM_RequisitionLine_ID (int M_RequisitionLine_ID){if (M_RequisitionLine_ID <= 0) Set_Value ("M_RequisitionLine_ID", null);else
-Set_Value ("M_RequisitionLine_ID", M_RequisitionLine_ID);}/** Get Requisition Line.
+public int GetVAM_Product_ID() {Object ii = Get_Value("VAM_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Requisition Line.
+@param VAM_RequisitionLine_ID Material Requisition Line */
+public void SetVAM_RequisitionLine_ID (int VAM_RequisitionLine_ID){if (VAM_RequisitionLine_ID <= 0) Set_Value ("VAM_RequisitionLine_ID", null);else
+Set_Value ("VAM_RequisitionLine_ID", VAM_RequisitionLine_ID);}/** Get Requisition Line.
 @return Material Requisition Line */
-public int GetM_RequisitionLine_ID() {Object ii = Get_Value("M_RequisitionLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Processed.
+public int GetVAM_RequisitionLine_ID() {Object ii = Get_Value("VAM_RequisitionLine_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Processed.
 @param Processed The document has been processed */
 public void SetProcessed (Boolean Processed){Set_Value ("Processed", Processed);}/** Get Processed.
 @return The document has been processed */

@@ -45,7 +45,7 @@ namespace VAdvantage.Model
             SetIsSelfService (false);
             SetIsTaxIncluded (false);
             SetIsTransferred (false);
-            SetM_PriceList_ID (0);
+            SetVAM_PriceList_ID (0);
             SetPaymentRule (null);	// P
             SetPosted (false);	// N
             SetProcessed (false);	// N
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
             SetIsSelfService (false);
             SetIsTaxIncluded (false);
             SetIsTransferred (false);
-            SetM_PriceList_ID (0);
+            SetVAM_PriceList_ID (0);
             SetPaymentRule (null);	// P
             SetPosted (false);	// N
             SetProcessed (false);	// N
@@ -973,17 +973,17 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Price List.
-        @param M_PriceList_ID Unique identifier of a Price List */
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        @param VAM_PriceList_ID Unique identifier of a Price List */
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            if (M_PriceList_ID < 1) throw new ArgumentException("M_PriceList_ID is mandatory.");
-            Set_Value("M_PriceList_ID", M_PriceList_ID);
+            if (VAM_PriceList_ID < 1) throw new ArgumentException("VAM_PriceList_ID is mandatory.");
+            Set_Value("VAM_PriceList_ID", VAM_PriceList_ID);
         }
         /** Get Price List.
         @return Unique identifier of a Price List */
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            Object ii = Get_Value("M_PriceList_ID");
+            Object ii = Get_Value("VAM_PriceList_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

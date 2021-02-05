@@ -474,7 +474,7 @@ namespace VAdvantage.Acct
                 int receivables_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable, as1);
                 int receivablesServices_ID = GetValidCombination_ID(Doc.ACCTTYPE_C_Receivable_Services, as1);
                 string sql = " SELECT SUM(cl.linenetamt),  prod.producttype, tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
-                             " INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() +
+                             " INNER JOIN VAM_Product prod      ON prod.VAM_Product_id=cl.VAM_Product_id   WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() +
                              " GROUP BY prod.producttype,tx.rate UNION SELECT SUM(cl.linenetamt),  'CH',tx.rate  FROM VAB_InvoiceLine cl INNER JOIN VAB_TaxRate tx ON (cl.VAB_TaxRate_ID=tx.VAB_TaxRate_ID) " +
                              " INNER JOIN VAB_Charge prod ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + line.GetVAB_Invoice_ID() + " GROUP BY tx.rate";
                 string newsql = " SELECT SUM(al.amount) FROM VAB_DocAllocationLine al INNER JOIN VAB_DocAllocation alh" +
@@ -1548,7 +1548,7 @@ namespace VAdvantage.Acct
 
 //                //#region ViewAllocation21-March-2011-Raghu
 //                ////logic for View Allocation-21march2011by raghu
-//                //string sql = "select m_product_id from VAB_InvoiceLine WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() + " and Rownum=" + (i + 1);
+//                //string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() + " and Rownum=" + (i + 1);
 //                ////logic for View Allocation-21march2011by raghu
 //                //int id = DB.GetSQLValue(null, sql);
 //                //MProduct product = MProduct.Get(Env.GetCtx(), id);
@@ -1734,14 +1734,14 @@ namespace VAdvantage.Acct
 //                    if (as1.IsAccrual())
 //                    {
 //                        //MInvoiceLine invLine = new MInvoiceLine(invoice);
-//                        // string sql = "select m_product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
+//                        // string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
 
 //                        //string sql = "select sum(cl.linenetamt),prod.producttype  from VAB_InvoiceLine cl inner join" +
-//                        //        " M_product prod on prod.m_product_id=cl.m_product_id WHERE VAB_Invoice_id=" + invoice.GetVAB_Invoice_ID() +
+//                        //        " VAM_Product prod on prod.VAM_Product_id=cl.VAM_Product_id WHERE VAB_Invoice_id=" + invoice.GetVAB_Invoice_ID() +
 //                        //        " GROUP BY prod.producttype";
 
 //                        string sql = " SELECT SUM(cl.linenetamt),  prod.producttype   FROM VAB_InvoiceLine cl" +
-//" INNER JOIN M_product prod      ON prod.m_product_id=cl.m_product_id   WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() +
+//" INNER JOIN VAM_Product prod      ON prod.VAM_Product_id=cl.VAM_Product_id   WHERE VAB_Invoice_id=" + line.GetVAB_Invoice_ID() +
 //" GROUP BY prod.producttype UNION SELECT SUM(cl.linenetamt),  'CH'   FROM VAB_InvoiceLine cl INNER JOIN VAB_Charge prod" +
 //"     ON prod.VAB_Charge_id=cl.VAB_Charge_id  WHERE VAB_Invoice_id     =" + line.GetVAB_Invoice_ID();
 
@@ -2342,10 +2342,10 @@ namespace VAdvantage.Acct
 //        //            if (as1.IsAccrual())
 //        //            {
 //        //                //MInvoiceLine invLine = new MInvoiceLine(invoice);
-//        //                // string sql = "select m_product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
+//        //                // string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
 
 //        //                string sql = "select sum(cl.linenetamt),prod.producttype  from VAB_InvoiceLine cl inner join" +
-//        //                        " M_product prod on prod.m_product_id=cl.m_product_id WHERE VAB_Invoice_id=" + invoice.GetVAB_Invoice_ID() +
+//        //                        " VAM_Product prod on prod.VAM_Product_id=cl.VAM_Product_id WHERE VAB_Invoice_id=" + invoice.GetVAB_Invoice_ID() +
 //        //                        " GROUP BY prod.producttype";
 
 //        //                IDataReader idr = DB.ExecuteReader(sql);

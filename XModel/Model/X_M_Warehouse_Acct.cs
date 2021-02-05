@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Warehouse_Acct
+/** Generated Model for VAM_Warehouse_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Warehouse_Acct : PO
+public class X_VAM_Warehouse_Acct : PO
 {
-public X_M_Warehouse_Acct (Context ctx, int M_Warehouse_Acct_ID, Trx trxName) : base (ctx, M_Warehouse_Acct_ID, trxName)
+public X_VAM_Warehouse_Acct (Context ctx, int VAM_Warehouse_Acct_ID, Trx trxName) : base (ctx, VAM_Warehouse_Acct_ID, trxName)
 {
-/** if (M_Warehouse_Acct_ID == 0)
+/** if (VAM_Warehouse_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_Warehouse_ID (0);
 SetW_Differences_Acct (0);
 SetW_InvActualAdjust_Acct (0);
 SetW_Inventory_Acct (0);
@@ -29,12 +29,12 @@ SetW_Revaluation_Acct (0);
 }
  */
 }
-public X_M_Warehouse_Acct (Ctx ctx, int M_Warehouse_Acct_ID, Trx trxName) : base (ctx, M_Warehouse_Acct_ID, trxName)
+public X_VAM_Warehouse_Acct (Ctx ctx, int VAM_Warehouse_Acct_ID, Trx trxName) : base (ctx, VAM_Warehouse_Acct_ID, trxName)
 {
-/** if (M_Warehouse_Acct_ID == 0)
+/** if (VAM_Warehouse_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_Warehouse_ID (0);
 SetW_Differences_Acct (0);
 SetW_InvActualAdjust_Acct (0);
 SetW_Inventory_Acct (0);
@@ -47,7 +47,7 @@ SetW_Revaluation_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Warehouse_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Warehouse_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_Warehouse_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Warehouse_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Warehouse_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_Warehouse_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Warehouse_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Warehouse_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Warehouse_Acct()
+static X_VAM_Warehouse_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389064723L;
 public static int Table_ID;
  // =191;
 
-/** TableName=M_Warehouse_Acct */
-public static String Table_Name="M_Warehouse_Acct";
+/** TableName=VAM_Warehouse_Acct */
+public static String Table_Name="VAM_Warehouse_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Warehouse_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Warehouse_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -142,17 +142,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");
-Set_ValueNoCheck ("M_Warehouse_ID", M_Warehouse_ID);
+if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -1,38 +1,38 @@
 namespace ViennaAdvantage.Model{
 /** Generated Model - DO NOT CHANGE */
-using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for M_ProductContainer
+using System;using System.Text;using VAdvantage.DataBase;using VAdvantage.Common;using VAdvantage.Classes;using VAdvantage.Process;using VAdvantage.Model;using VAdvantage.Utility;using System.Data;/** Generated Model for VAM_ProductContainer
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ProductContainer : PO{public X_M_ProductContainer (Context ctx, int M_ProductContainer_ID, Trx trxName) : base (ctx, M_ProductContainer_ID, trxName){/** if (M_ProductContainer_ID == 0){SetM_Locator_ID (0);// -1
-SetM_ProductContainer_ID (0);SetM_Warehouse_ID (0);// -1
+public class X_VAM_ProductContainer : PO{public X_VAM_ProductContainer (Context ctx, int VAM_ProductContainer_ID, Trx trxName) : base (ctx, VAM_ProductContainer_ID, trxName){/** if (VAM_ProductContainer_ID == 0){SetVAM_Locator_ID (0);// -1
+SetVAM_ProductContainer_ID (0);SetVAM_Warehouse_ID (0);// -1
 SetName (null);} */
-}public X_M_ProductContainer (Ctx ctx, int M_ProductContainer_ID, Trx trxName) : base (ctx, M_ProductContainer_ID, trxName){/** if (M_ProductContainer_ID == 0){SetM_Locator_ID (0);// -1
-SetM_ProductContainer_ID (0);SetM_Warehouse_ID (0);// -1
+}public X_VAM_ProductContainer (Ctx ctx, int VAM_ProductContainer_ID, Trx trxName) : base (ctx, VAM_ProductContainer_ID, trxName){/** if (VAM_ProductContainer_ID == 0){SetVAM_Locator_ID (0);// -1
+SetVAM_ProductContainer_ID (0);SetVAM_Warehouse_ID (0);// -1
 SetName (null);} */
 }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductContainer (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAM_ProductContainer (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductContainer (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
+public X_VAM_ProductContainer (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName){}/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductContainer (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
+public X_VAM_ProductContainer (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName){}/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ProductContainer(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
+static X_VAM_ProductContainer(){ Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID,Table_Name);}/** Serial Version No */
 static long serialVersionUID = 27817490194683L;/** Last Updated Timestamp 8/27/2018 3:44:38 PM */
 public static long updatedMS = 1535364877894L;/** VAF_TableView_ID=1000524 */
 public static int Table_ID; // =1000524;
-/** TableName=M_ProductContainer */
-public static String Table_Name="M_ProductContainer";
+/** TableName=VAM_ProductContainer */
+public static String Table_Name="VAM_ProductContainer";
 protected static KeyNamePair model;protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -47,7 +47,7 @@ protected override POInfo InitPO (Context ctx){POInfo poi = POInfo.GetPOInfo (ct
 protected override POInfo InitPO (Ctx ctx){POInfo poi = POInfo.GetPOInfo (ctx, Table_ID);return poi;}/** Info
 @return info
 */
-public override String ToString(){StringBuilder sb = new StringBuilder ("X_M_ProductContainer[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Description.
+public override String ToString(){StringBuilder sb = new StringBuilder ("X_VAM_ProductContainer[").Append(Get_ID()).Append("]");return sb.ToString();}/** Set Description.
 @param Description Optional short description of the record */
 public void SetDescription (String Description){if (Description != null && Description.Length > 255){log.Warning("Length > 255 - truncated");Description = Description.Substring(0,255);}Set_Value ("Description", Description);}/** Get Description.
 @return Optional short description of the record */
@@ -64,18 +64,18 @@ public Decimal GetHeight() {Object bd =Get_Value("Height");if (bd == null) retur
 public void SetIsDefault (Boolean IsDefault){Set_Value ("IsDefault", IsDefault);}/** Get Default.
 @return Default value */
 public Boolean IsDefault() {Object oo = Get_Value("IsDefault");if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo);}return false;}/** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-public void SetM_Locator_ID (int M_Locator_ID){if (M_Locator_ID < 1) throw new ArgumentException ("M_Locator_ID is mandatory.");Set_Value ("M_Locator_ID", M_Locator_ID);}/** Get Locator.
+@param VAM_Locator_ID Warehouse Locator */
+public void SetVAM_Locator_ID (int VAM_Locator_ID){if (VAM_Locator_ID < 1) throw new ArgumentException ("VAM_Locator_ID is mandatory.");Set_Value ("VAM_Locator_ID", VAM_Locator_ID);}/** Get Locator.
 @return Warehouse Locator */
-public int GetM_Locator_ID() {Object ii = Get_Value("M_Locator_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Product Container.
-@param M_ProductContainer_ID Product Container */
-public void SetM_ProductContainer_ID (int M_ProductContainer_ID){if (M_ProductContainer_ID < 1) throw new ArgumentException ("M_ProductContainer_ID is mandatory.");Set_ValueNoCheck ("M_ProductContainer_ID", M_ProductContainer_ID);}/** Get Product Container.
+public int GetVAM_Locator_ID() {Object ii = Get_Value("VAM_Locator_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Product Container.
+@param VAM_ProductContainer_ID Product Container */
+public void SetVAM_ProductContainer_ID (int VAM_ProductContainer_ID){if (VAM_ProductContainer_ID < 1) throw new ArgumentException ("VAM_ProductContainer_ID is mandatory.");Set_ValueNoCheck ("VAM_ProductContainer_ID", VAM_ProductContainer_ID);}/** Get Product Container.
 @return Product Container */
-public int GetM_ProductContainer_ID() {Object ii = Get_Value("M_ProductContainer_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID){if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");Set_Value ("M_Warehouse_ID", M_Warehouse_ID);}/** Get Warehouse.
+public int GetVAM_ProductContainer_ID() {Object ii = Get_Value("VAM_ProductContainer_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Warehouse.
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID){if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");Set_Value ("VAM_Warehouse_ID", VAM_Warehouse_ID);}/** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() {Object ii = Get_Value("M_Warehouse_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Name.
+public int GetVAM_Warehouse_ID() {Object ii = Get_Value("VAM_Warehouse_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Name.
 @param Name Alphanumeric identifier of the entity */
 public void SetName (String Name){if (Name == null) throw new ArgumentException ("Name is mandatory.");if (Name.Length > 100){log.Warning("Length > 100 - truncated");Name = Name.Substring(0,100);}Set_Value ("Name", Name);}/** Get Name.
 @return Alphanumeric identifier of the entity */

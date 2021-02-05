@@ -61,24 +61,24 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             MProjectLine projectLine = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
             log.Info("doIt - " + projectLine);
-            if (projectLine.GetM_Product_ID() == 0)
+            if (projectLine.GetVAM_Product_ID() == 0)
             {
                 throw new ArgumentException("No Product");
             }
             //
             MProject project = new MProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
-            if (project.GetM_PriceList_ID() == 0)
+            if (project.GetVAM_PriceList_ID() == 0)
             {
                 throw new ArgumentException("No PriceList");
             }
             //
             Boolean isSOTrx = true;
             MProductPricing pp = new MProductPricing(projectLine.GetVAF_Client_ID(), projectLine.GetVAF_Org_ID(),
-                projectLine.GetM_Product_ID(), project.GetVAB_BusinessPartner_ID(),
+                projectLine.GetVAM_Product_ID(), project.GetVAB_BusinessPartner_ID(),
                 projectLine.GetPlannedQty(), isSOTrx);
-            pp.SetM_PriceList_ID(project.GetM_PriceList_ID());
+            pp.SetVAM_PriceList_ID(project.GetVAM_PriceList_ID());
             //vikas  mantis Issue ( 0000517)
-            pp.SetM_PriceList_Version_ID(project.GetM_PriceList_Version_ID());
+            pp.SetVAM_PriceListVersion_ID(project.GetVAM_PriceListVersion_ID());
             //End
             pp.SetPriceDate(project.GetDateContract());
             //

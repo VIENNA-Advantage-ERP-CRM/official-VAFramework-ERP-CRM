@@ -39,7 +39,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_AccountBook_ID"> account schema id</param>
         /// <param name="Account_ID">account id</param>
         /// <param name="VAB_SubAcct_ID">sub-Account id</param>
-        /// <param name="M_Product_ID">product id</param>
+        /// <param name="VAM_Product_ID">product id</param>
         /// <param name="VAB_BusinessPartner_ID">Bussness partner id</param>
         /// <param name="VAF_OrgTrx_ID"> ordTax id</param>
         /// <param name="C_LocFrom_ID">C_LocFrom_ID</param>
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="UserElement2_ID"></param>
         /// <returns>account or null</returns>
         public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID,
-            int Account_ID, int VAB_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+            int Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID,
             int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID)
         {
@@ -76,13 +76,13 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND VAB_SubAcct_ID=" + VAB_SubAcct_ID);
             }
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
-                sql.Append(" AND M_Product_ID IS NULL");
+                sql.Append(" AND VAM_Product_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND M_Product_ID=" + M_Product_ID);
+                sql.Append(" AND VAM_Product_ID=" + VAM_Product_ID);
             }
             if (VAB_BusinessPartner_ID == 0)
             {
@@ -215,7 +215,7 @@ namespace VAdvantage.Model
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
             newAccount.SetVAB_SubAcct_ID(VAB_SubAcct_ID);
-            newAccount.SetM_Product_ID(M_Product_ID);
+            newAccount.SetVAM_Product_ID(VAM_Product_ID);
             newAccount.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
@@ -240,7 +240,7 @@ namespace VAdvantage.Model
 
 
         // Added by Bharat for New elements UserElements1 to UserElement9
-        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int VAB_SubAcct_ID, int M_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
+        public static MAccount Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAB_AccountBook_ID, int Account_ID, int VAB_SubAcct_ID, int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
             int C_LocFrom_ID, int C_LocTo_ID, int VAB_SalesRegionState_ID, int VAB_Project_ID, int VAB_Promotion_ID, int VAB_BillingCode_ID, int User1_ID, int User2_ID, int UserElement1_ID, int UserElement2_ID,
             int UserElement3_ID, int UserElement4_ID, int UserElement5_ID, int UserElement6_ID, int UserElement7_ID, int UserElement8_ID, int UserElement9_ID)
         {
@@ -262,13 +262,13 @@ namespace VAdvantage.Model
             {
                 sql.Append(" AND VAB_SubAcct_ID=" + VAB_SubAcct_ID);
             }
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
-                sql.Append(" AND M_Product_ID IS NULL");
+                sql.Append(" AND VAM_Product_ID IS NULL");
             }
             else
             {
-                sql.Append(" AND M_Product_ID=" + M_Product_ID);
+                sql.Append(" AND VAM_Product_ID=" + VAM_Product_ID);
             }
             if (VAB_BusinessPartner_ID == 0)
             {
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
             newAccount.SetAccount_ID(Account_ID);
             //	--  Optional Accounting fields
             newAccount.SetVAB_SubAcct_ID(VAB_SubAcct_ID);
-            newAccount.SetM_Product_ID(M_Product_ID);
+            newAccount.SetVAM_Product_ID(VAM_Product_ID);
             newAccount.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             newAccount.SetVAF_OrgTrx_ID(VAF_OrgTrx_ID);
             newAccount.SetC_LocFrom_ID(C_LocFrom_ID);
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
             MAccount acct = Get(fa.GetCtx(),
                 fa.GetVAF_Client_ID(), fa.GetVAF_Org_ID(), fa.GetVAB_AccountBook_ID(),
                 fa.GetAccount_ID(), fa.GetVAB_SubAcct_ID(),
-                fa.GetM_Product_ID(), fa.GetVAB_BusinessPartner_ID(), fa.GetVAF_OrgTrx_ID(),
+                fa.GetVAM_Product_ID(), fa.GetVAB_BusinessPartner_ID(), fa.GetVAF_OrgTrx_ID(),
                 fa.GetC_LocFrom_ID(), fa.GetC_LocTo_ID(), fa.GetVAB_SalesRegionState_ID(),
                 fa.GetVAB_Project_ID(), fa.GetVAB_Promotion_ID(), fa.GetVAB_BillingCode_ID(),
                 fa.GetUser1_ID(), fa.GetUser2_ID(), fa.GetUserElement1_ID(), fa.GetUserElement2_ID());
@@ -578,7 +578,7 @@ namespace VAdvantage.Model
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_BPartner) && setValue)
                     vc.SetVAB_BusinessPartner_ID(defaultValue);
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Product) && setValue)
-                    vc.SetM_Product_ID(defaultValue);
+                    vc.SetVAM_Product_ID(defaultValue);
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_Activity) && setValue)
                     vc.SetVAB_BillingCode_ID(defaultValue);
                 else if (elementType.Equals(MVABAccountBookElement.ELEMENTTYPE_LocationFrom) && setValue)
@@ -717,8 +717,8 @@ namespace VAdvantage.Model
                     .Append(" ");
                 if (GetVAB_SubAcct_ID() != 0)
                     sb.Append(",VAB_SubAcct_ID=").Append(GetVAB_SubAcct_ID());
-                if (GetM_Product_ID() != 0)
-                    sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
+                if (GetVAM_Product_ID() != 0)
+                    sb.Append(",VAM_Product_ID=").Append(GetVAM_Product_ID());
                 if (GetVAB_BusinessPartner_ID() != 0)
                     sb.Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID());
                 if (GetVAF_OrgTrx_ID() != 0)
@@ -883,9 +883,9 @@ namespace VAdvantage.Model
                 }
                 else if (MVABAccountBookElement.ELEMENTTYPE_Product.Equals(element.GetElementType()))
                 {
-                    if (GetM_Product_ID() != 0)
+                    if (GetVAM_Product_ID() != 0)
                     {
-                        X_M_Product product = new X_M_Product(GetCtx(), GetM_Product_ID(), Get_TrxName());
+                        X_VAM_Product product = new X_VAM_Product(GetCtx(), GetVAM_Product_ID(), Get_TrxName());
                         combiStr = product.GetValue();
                         descrStr = product.GetName();
                     }

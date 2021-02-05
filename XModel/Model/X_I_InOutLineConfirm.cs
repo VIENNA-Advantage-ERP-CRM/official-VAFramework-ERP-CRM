@@ -251,18 +251,18 @@ public String GetI_IsImported()
 return (String)Get_Value("I_IsImported");
 }
 /** Set Ship/Receipt Confirmation Line.
-@param M_InOutLineConfirm_ID Material Shipment or Receipt Confirmation Line */
-public void SetM_InOutLineConfirm_ID (int M_InOutLineConfirm_ID)
+@param VAM_Inv_InOutLineConfirm_ID Material Shipment or Receipt Confirmation Line */
+public void SetVAM_Inv_InOutLineConfirm_ID (int VAM_Inv_InOutLineConfirm_ID)
 {
-if (M_InOutLineConfirm_ID <= 0) Set_Value ("M_InOutLineConfirm_ID", null);
+if (VAM_Inv_InOutLineConfirm_ID <= 0) Set_Value ("VAM_Inv_InOutLineConfirm_ID", null);
 else
-Set_Value ("M_InOutLineConfirm_ID", M_InOutLineConfirm_ID);
+Set_Value ("VAM_Inv_InOutLineConfirm_ID", VAM_Inv_InOutLineConfirm_ID);
 }
 /** Get Ship/Receipt Confirmation Line.
 @return Material Shipment or Receipt Confirmation Line */
-public int GetM_InOutLineConfirm_ID() 
+public int GetVAM_Inv_InOutLineConfirm_ID() 
 {
-Object ii = Get_Value("M_InOutLineConfirm_ID");
+Object ii = Get_Value("VAM_Inv_InOutLineConfirm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

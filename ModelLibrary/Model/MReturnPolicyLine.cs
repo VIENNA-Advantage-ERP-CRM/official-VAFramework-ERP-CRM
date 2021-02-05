@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : 
- * Class Used     : X_M_ReturnPolicyLine
+ * Class Used     : X_VAM_ReturnRuleLine
  * Chronological Development
  * Veena Pandey     19-June-2009
  ******************************************************/
@@ -17,16 +17,16 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MReturnPolicyLine : X_M_ReturnPolicyLine
+    public class MReturnPolicyLine : X_VAM_ReturnRuleLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_ReturnPolicyLine_ID">id</param>
+        /// <param name="VAM_ReturnRuleLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MReturnPolicyLine(Ctx ctx, int M_ReturnPolicyLine_ID, Trx trxName)
-            : base(ctx, M_ReturnPolicyLine_ID, trxName)
+        public MReturnPolicyLine(Ctx ctx, int VAM_ReturnRuleLine_ID, Trx trxName)
+            : base(ctx, VAM_ReturnRuleLine_ID, trxName)
         {
         }
 

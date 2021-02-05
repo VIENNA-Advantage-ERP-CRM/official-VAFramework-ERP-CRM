@@ -188,15 +188,15 @@ SetSalesRep_ID (0);} */
         public void SetIsSelfService(Boolean IsSelfService) { Set_Value("IsSelfService", IsSelfService); }/** Get Self-Service.
 @return This is a Self-Service entry or this entry can be changed via Self-Service */
         public Boolean IsSelfService() { Object oo = Get_Value("IsSelfService"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Requisition.
-@param M_Requisition_ID Material Requisition */
-        public void SetM_Requisition_ID(int M_Requisition_ID)
+@param VAM_Requisition_ID Material Requisition */
+        public void SetVAM_Requisition_ID(int VAM_Requisition_ID)
         {
-            if (M_Requisition_ID <= 0) Set_Value("M_Requisition_ID", null);
+            if (VAM_Requisition_ID <= 0) Set_Value("VAM_Requisition_ID", null);
             else
-                Set_Value("M_Requisition_ID", M_Requisition_ID);
+                Set_Value("VAM_Requisition_ID", VAM_Requisition_ID);
         }/** Get Requisition.
 @return Material Requisition */
-        public int GetM_Requisition_ID() { Object ii = Get_Value("M_Requisition_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Margin %.
+        public int GetVAM_Requisition_ID() { Object ii = Get_Value("VAM_Requisition_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Margin %.
 @param Margin Margin for a product as a percentage */
         public void SetMargin(Decimal? Margin) { Set_Value("Margin", (Decimal?)Margin); }/** Get Margin %.
 @return Margin for a product as a percentage */

@@ -24,17 +24,17 @@ namespace VIS.Models
             MVABBusinessPartner bpartner = new MVABBusinessPartner(ctx, VAB_BusinessPartner_ID, null);
             Dictionary<String, String> retDic = new Dictionary<string, string>();
 
-            retDic["M_ReturnPolicy_ID"] = bpartner.GetM_ReturnPolicy_ID().ToString();
+            retDic["VAM_ReturnRule_ID"] = bpartner.GetVAM_ReturnRule_ID().ToString();
             retDic["PO_ReturnPolicy_ID"] = bpartner.GetPO_ReturnPolicy_ID().ToString();
 
             // Added By Amit 
-            if (bpartner.GetM_DiscountSchema_ID() != 0)
+            if (bpartner.GetVAM_DiscountCalculation_ID() != 0)
             {
-                retDic["M_DiscountSchema_ID"] = bpartner.GetM_DiscountSchema_ID().ToString();
+                retDic["VAM_DiscountCalculation_ID"] = bpartner.GetVAM_DiscountCalculation_ID().ToString();
             }
             else
             {
-                retDic["M_DiscountSchema_ID"] = "0";
+                retDic["VAM_DiscountCalculation_ID"] = "0";
             }
             if (bpartner.GetVAB_BPart_Category_ID() > 0)
             {
@@ -87,24 +87,24 @@ namespace VIS.Models
             MVABBPartCategory bpartner = new MVABBPartCategory(ctx, C_BPGroup_ID, null);
             Dictionary<String, String> retDic = new Dictionary<string, string>();
 
-            retDic["M_ReturnPolicy_ID"] = bpartner.GetM_ReturnPolicy_ID().ToString();
+            retDic["VAM_ReturnRule_ID"] = bpartner.GetVAM_ReturnRule_ID().ToString();
             retDic["PO_ReturnPolicy_ID"] = bpartner.GetPO_ReturnPolicy_ID().ToString();
 
-            if (bpartner.GetM_DiscountSchema_ID() != 0)
+            if (bpartner.GetVAM_DiscountCalculation_ID() != 0)
             {
-                retDic["M_DiscountSchema_ID"] = bpartner.GetM_DiscountSchema_ID().ToString();
+                retDic["VAM_DiscountCalculation_ID"] = bpartner.GetVAM_DiscountCalculation_ID().ToString();
             }
             else
             {
-                retDic["M_DiscountSchema_ID"] = "0";
+                retDic["VAM_DiscountCalculation_ID"] = "0";
             }
-            if (bpartner.GetM_PriceList_ID() > 0)
+            if (bpartner.GetVAM_PriceList_ID() > 0)
             {
-                retDic["M_PriceList_ID"] = bpartner.GetM_PriceList_ID().ToString();
+                retDic["VAM_PriceList_ID"] = bpartner.GetVAM_PriceList_ID().ToString();
             }
             else
             {
-                retDic["M_PriceList_ID"] = "0";
+                retDic["VAM_PriceList_ID"] = "0";
             }
             if (bpartner.GetPO_PriceList_ID() > 0)
             {
@@ -151,7 +151,7 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.VAF_Language, p.VAB_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.VAB_PaymentTerm_ID, COALESCE(p.VAM_PriceList_ID, g.VAM_PriceList_ID) AS VAM_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.IsDiscountPrinted, ";
             if (countVA009)
             {
@@ -170,7 +170,7 @@ namespace VIS.Models
             {
                 retDic = new Dictionary<string, object>();
                 retDic["VAB_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_PaymentTerm_ID"]);
-                retDic["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
+                retDic["VAM_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_PriceList_ID"]);
                 retDic["PaymentRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRule"]);
                 retDic["POReference"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]);
                 retDic["SO_Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SO_Description"]);
@@ -220,7 +220,7 @@ namespace VIS.Models
             bool countVA009 = Util.GetValueOfBool(paramValue[0]);
             int VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[1]);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT p.VAF_Language, p.VAB_PaymentTerm_ID, COALESCE(p.M_PriceList_ID, g.M_PriceList_ID) AS M_PriceList_ID,"
+            string sql = "SELECT p.VAF_Language, p.VAB_PaymentTerm_ID, COALESCE(p.VAM_PriceList_ID, g.VAM_PriceList_ID) AS VAM_PriceList_ID,"
                 + "p.PaymentRule, p.POReference, p.SO_Description, p.SalesRep_ID, ";
             if (countVA009)
             {
@@ -243,7 +243,7 @@ namespace VIS.Models
             {
                 retDic = new Dictionary<string, object>();
                 retDic["VAB_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_PaymentTerm_ID"]);
-                retDic["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
+                retDic["VAM_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_PriceList_ID"]);
                 retDic["PaymentRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRule"]);
                 retDic["POReference"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]);
                 retDic["SO_Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SO_Description"]);
@@ -283,7 +283,7 @@ namespace VIS.Models
             int bill_BPartner_ID = Util.GetValueOfInt(fields);
             Dictionary<string, object> retDic = null;
             string sql = sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
-                + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
+                + "p.VAM_PriceList_ID,p.PaymentRule,p.POReference,"
                 + "p.SO_Description,p.IsDiscountPrinted,"
                 + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
                 + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -299,7 +299,7 @@ namespace VIS.Models
             {
                 retDic = new Dictionary<string, object>();
                 retDic["VAB_PaymentTerm_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAB_PaymentTerm_ID"]);
-                retDic["M_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_PriceList_ID"]);
+                retDic["VAM_PriceList_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_PriceList_ID"]);
                 retDic["PaymentRule"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["PaymentRule"]);
                 retDic["POReference"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["POReference"]);
                 retDic["SO_Description"] = Util.GetValueOfString(ds.Tables[0].Rows[0]["SO_Description"]);

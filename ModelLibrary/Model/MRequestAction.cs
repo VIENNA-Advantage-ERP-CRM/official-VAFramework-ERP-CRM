@@ -103,8 +103,8 @@ namespace VAdvantage.Model
             GetChangeHTML(sb, "IsEscalated");
             GetChangeHTML(sb, "IsInvoiced");
             GetChangeHTML(sb, "IsSelfService");
-            GetChangeHTML(sb, "M_InOut_ID");
-            GetChangeHTML(sb, "M_Product_ID");
+            GetChangeHTML(sb, "VAM_Inv_InOut_ID");
+            GetChangeHTML(sb, "VAM_Product_ID");
             GetChangeHTML(sb, "M_RMA_ID");
             GetChangeHTML(sb, "VAA_Asset_ID");
 

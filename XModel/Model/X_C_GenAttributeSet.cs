@@ -352,34 +352,34 @@ public String GetLotCharSOverwrite()
 return (String)Get_Value("LotCharSOverwrite");
 }
 /** Set Lot Control.
-@param M_LotCtl_ID Product Lot Control */
-public void SetM_LotCtl_ID (int M_LotCtl_ID)
+@param VAM_LotControl_ID Product Lot Control */
+public void SetVAM_LotControl_ID (int VAM_LotControl_ID)
 {
-if (M_LotCtl_ID <= 0) Set_Value ("M_LotCtl_ID", null);
+if (VAM_LotControl_ID <= 0) Set_Value ("VAM_LotControl_ID", null);
 else
-Set_Value ("M_LotCtl_ID", M_LotCtl_ID);
+Set_Value ("VAM_LotControl_ID", VAM_LotControl_ID);
 }
 /** Get Lot Control.
 @return Product Lot Control */
-public int GetM_LotCtl_ID() 
+public int GetVAM_LotControl_ID() 
 {
-Object ii = Get_Value("M_LotCtl_ID");
+Object ii = Get_Value("VAM_LotControl_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Serial No Control.
-@param M_SerNoCtl_ID Product Serial Number Control */
-public void SetM_SerNoCtl_ID (int M_SerNoCtl_ID)
+@param VAM_CtlSerialNo_ID Product Serial Number Control */
+public void SetVAM_CtlSerialNo_ID (int VAM_CtlSerialNo_ID)
 {
-if (M_SerNoCtl_ID <= 0) Set_Value ("M_SerNoCtl_ID", null);
+if (VAM_CtlSerialNo_ID <= 0) Set_Value ("VAM_CtlSerialNo_ID", null);
 else
-Set_Value ("M_SerNoCtl_ID", M_SerNoCtl_ID);
+Set_Value ("VAM_CtlSerialNo_ID", VAM_CtlSerialNo_ID);
 }
 /** Get Serial No Control.
 @return Product Serial Number Control */
-public int GetM_SerNoCtl_ID() 
+public int GetVAM_CtlSerialNo_ID() 
 {
-Object ii = Get_Value("M_SerNoCtl_ID");
+Object ii = Get_Value("VAM_CtlSerialNo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

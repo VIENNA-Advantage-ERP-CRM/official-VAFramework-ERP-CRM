@@ -45,28 +45,28 @@ namespace VAdvantage.Process
             string Result = "";
 
             Sql.Append(@"SELECT 
-                        ReqLine.M_requisition_ID,
-                        ReqLine.M_requisitionLine_ID,
-                        reqline.M_Product_ID,
-                        reqline.M_AttributeSetInstance_ID,
+                        ReqLine.VAM_Requisition_ID,
+                        ReqLine.VAM_RequisitionLine_ID,
+                        reqline.VAM_Product_ID,
+                        reqline.VAM_PFeature_SetInstance_ID,
                         reqline.Description,
                         reqline.VAB_UOM_ID,
                         (reqline.Qty - reqline.DTD001_DeliveredQty) as Qty ,
                         req.DateRequired
-                        FROM M_RequisitionLine ReqLine
-                        INNER JOIN M_requisition req
-                        ON (reqline.M_requisition_ID  =req.M_requisition_ID)
+                        FROM VAM_RequisitionLine ReqLine
+                        INNER JOIN VAM_Requisition req
+                        ON (reqline.VAM_Requisition_ID  =req.VAM_Requisition_ID)
                         WHERE ReqLine.IsActive        ='Y' AND req.IsActive        ='Y'
                         AND ReqLine.vaf_org_ID         =" + Requisition_Org_ID + " AND req.DocStatus='CO' AND reqline.Qty!=reqline.DTD001_DeliveredQty  ");
             // Requisition selection check
             if (!string.IsNullOrEmpty(Req))
             {
-                Sql.Append(" AND ReqLine.M_requisition_ID IN (" + Req + ") ");
+                Sql.Append(" AND ReqLine.VAM_Requisition_ID IN (" + Req + ") ");
             }
             // Warehouse selection check
             if (Warehouse_ID > 0)
             {
-                Sql.Append(" AND Req.M_Warehouse_ID        =" + Warehouse_ID + " ");
+                Sql.Append(" AND Req.VAM_Warehouse_ID        =" + Warehouse_ID + " ");
             }
             // Document Date Check
             if (DocDateFrom != null && DocDateTo != null)
@@ -96,7 +96,7 @@ namespace VAdvantage.Process
             }
             if (!isConsolidate)
             {
-                Sql.Append(" ORDER BY ReqLine.M_requisition_ID ");
+                Sql.Append(" ORDER BY ReqLine.VAM_Requisition_ID ");
             }
             else
             {
@@ -153,7 +153,7 @@ namespace VAdvantage.Process
                 {
                     Requisition_Org_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Warehouse_ID"))
+                else if (name.Equals("VAM_Warehouse_ID"))
                 {
                     Warehouse_ID = para[i].GetParameterAsInt();
                 }
@@ -161,7 +161,7 @@ namespace VAdvantage.Process
                 {
                     VAB_Currency_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Requisition_ID"))
+                else if (name.Equals("VAM_Requisition_ID"))
                 {
                     Req = para[i].GetParameter().ToString();
                 }
@@ -214,16 +214,16 @@ namespace VAdvantage.Process
                 // If document is not consolidated
                 if (!isConsolidate)
                 {
-                    if (rfq == null || Requisition_ID != Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_Requisition_ID"]))
+                    if (rfq == null || Requisition_ID != Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_Requisition_ID"]))
                     {
                         LineNo = 0;
-                        Requisition_ID = Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_Requisition_ID"]);
+                        Requisition_ID = Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_Requisition_ID"]);
                         rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
                         rfq.SetVAB_RFQ_Subject_ID(RfQTopic_ID);
-                        rfq.SetM_Requisition_ID(Requisition_ID);
+                        rfq.SetVAM_Requisition_ID(Requisition_ID);
                         rfq.SetDateWorkStart(System.DateTime.Now);
                         rfq.SetDateResponse(DateResponse);      // Added by Bharat on 15 Jan 2019 as asked by Puneet
                         if (Util.GetValueOfDateTime(_ds.Tables[0].Rows[i]["DateRequired"]) >= System.DateTime.Now)
@@ -325,11 +325,11 @@ namespace VAdvantage.Process
                 // Create RfQ line
                 MRfQLine RfqLine = new MRfQLine(rfq);
                 RfqLine.SetLine(LineNo);
-                RfqLine.SetM_RequisitionLine_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_RequisitionLine_ID"]));
-                RfqLine.SetM_Product_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_Product_ID"]));
-                if (Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) > 0)
+                RfqLine.SetVAM_RequisitionLine_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_RequisitionLine_ID"]));
+                RfqLine.SetVAM_Product_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_Product_ID"]));
+                if (Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) > 0)
                 {
-                    RfqLine.SetM_AttributeSetInstance_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                    RfqLine.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]));
                 }
                 RfqLine.SetDescription(Util.GetValueOfString(_ds.Tables[0].Rows[i]["Description"]));
                 if (RfqLine.Save())

@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_MovementLineConfirm
+/** Generated Model for VAM_InvTrf_LineConfirm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_MovementLineConfirm : PO
+public class X_VAM_InvTrf_LineConfirm : PO
 {
-public X_M_MovementLineConfirm (Context ctx, int M_MovementLineConfirm_ID, Trx trxName) : base (ctx, M_MovementLineConfirm_ID, trxName)
+public X_VAM_InvTrf_LineConfirm (Context ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName) : base (ctx, VAM_InvTrf_LineConfirm_ID, trxName)
 {
-/** if (M_MovementLineConfirm_ID == 0)
+/** if (VAM_InvTrf_LineConfirm_ID == 0)
 {
 SetConfirmedQty (0.0);
 SetDifferenceQty (0.0);
-SetM_MovementConfirm_ID (0);
-SetM_MovementLineConfirm_ID (0);
-SetM_MovementLine_ID (0);
+SetVAM_InvTrf_Confirm_ID (0);
+SetVAM_InvTrf_LineConfirm_ID (0);
+SetVAM_InvTrf_Line_ID (0);
 SetProcessed (false);	// N
 SetScrappedQty (0.0);
 SetTargetQty (0.0);
 }
  */
 }
-public X_M_MovementLineConfirm (Ctx ctx, int M_MovementLineConfirm_ID, Trx trxName) : base (ctx, M_MovementLineConfirm_ID, trxName)
+public X_VAM_InvTrf_LineConfirm (Ctx ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName) : base (ctx, VAM_InvTrf_LineConfirm_ID, trxName)
 {
-/** if (M_MovementLineConfirm_ID == 0)
+/** if (VAM_InvTrf_LineConfirm_ID == 0)
 {
 SetConfirmedQty (0.0);
 SetDifferenceQty (0.0);
-SetM_MovementConfirm_ID (0);
-SetM_MovementLineConfirm_ID (0);
-SetM_MovementLine_ID (0);
+SetVAM_InvTrf_Confirm_ID (0);
+SetVAM_InvTrf_LineConfirm_ID (0);
+SetVAM_InvTrf_Line_ID (0);
 SetProcessed (false);	// N
 SetScrappedQty (0.0);
 SetTargetQty (0.0);
@@ -51,7 +51,7 @@ SetTargetQty (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_LineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_M_MovementLineConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_LineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_M_MovementLineConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_InvTrf_LineConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_MovementLineConfirm()
+static X_VAM_InvTrf_LineConfirm()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389063376L;
 public static int Table_ID;
  // =737;
 
-/** TableName=M_MovementLineConfirm */
-public static String Table_Name="M_MovementLineConfirm";
+/** TableName=VAM_InvTrf_LineConfirm */
+public static String Table_Name="VAM_InvTrf_LineConfirm";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_MovementLineConfirm[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_InvTrf_LineConfirm[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Confirmed Quantity.
@@ -172,33 +172,33 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Phys Inventory Line.
-@param M_InventoryLine_ID Unique line in an Inventory document */
-public void SetM_InventoryLine_ID (int M_InventoryLine_ID)
+@param VAM_InventoryLine_ID Unique line in an Inventory document */
+public void SetVAM_InventoryLine_ID (int VAM_InventoryLine_ID)
 {
-if (M_InventoryLine_ID <= 0) Set_Value ("M_InventoryLine_ID", null);
+if (VAM_InventoryLine_ID <= 0) Set_Value ("VAM_InventoryLine_ID", null);
 else
-Set_Value ("M_InventoryLine_ID", M_InventoryLine_ID);
+Set_Value ("VAM_InventoryLine_ID", VAM_InventoryLine_ID);
 }
 /** Get Phys Inventory Line.
 @return Unique line in an Inventory document */
-public int GetM_InventoryLine_ID() 
+public int GetVAM_InventoryLine_ID() 
 {
-Object ii = Get_Value("M_InventoryLine_ID");
+Object ii = Get_Value("VAM_InventoryLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Move Confirm.
-@param M_MovementConfirm_ID Inventory Move Confirmation */
-public void SetM_MovementConfirm_ID (int M_MovementConfirm_ID)
+@param VAM_InvTrf_Confirm_ID Inventory Move Confirmation */
+public void SetVAM_InvTrf_Confirm_ID (int VAM_InvTrf_Confirm_ID)
 {
-if (M_MovementConfirm_ID < 1) throw new ArgumentException ("M_MovementConfirm_ID is mandatory.");
-Set_ValueNoCheck ("M_MovementConfirm_ID", M_MovementConfirm_ID);
+if (VAM_InvTrf_Confirm_ID < 1) throw new ArgumentException ("VAM_InvTrf_Confirm_ID is mandatory.");
+Set_ValueNoCheck ("VAM_InvTrf_Confirm_ID", VAM_InvTrf_Confirm_ID);
 }
 /** Get Move Confirm.
 @return Inventory Move Confirmation */
-public int GetM_MovementConfirm_ID() 
+public int GetVAM_InvTrf_Confirm_ID() 
 {
-Object ii = Get_Value("M_MovementConfirm_ID");
+Object ii = Get_Value("VAM_InvTrf_Confirm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -206,35 +206,35 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_MovementConfirm_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_InvTrf_Confirm_ID().ToString());
 }
 /** Set Move Line Confirm.
-@param M_MovementLineConfirm_ID Inventory Move Line Confirmation */
-public void SetM_MovementLineConfirm_ID (int M_MovementLineConfirm_ID)
+@param VAM_InvTrf_LineConfirm_ID Inventory Move Line Confirmation */
+public void SetVAM_InvTrf_LineConfirm_ID (int VAM_InvTrf_LineConfirm_ID)
 {
-if (M_MovementLineConfirm_ID < 1) throw new ArgumentException ("M_MovementLineConfirm_ID is mandatory.");
-Set_ValueNoCheck ("M_MovementLineConfirm_ID", M_MovementLineConfirm_ID);
+if (VAM_InvTrf_LineConfirm_ID < 1) throw new ArgumentException ("VAM_InvTrf_LineConfirm_ID is mandatory.");
+Set_ValueNoCheck ("VAM_InvTrf_LineConfirm_ID", VAM_InvTrf_LineConfirm_ID);
 }
 /** Get Move Line Confirm.
 @return Inventory Move Line Confirmation */
-public int GetM_MovementLineConfirm_ID() 
+public int GetVAM_InvTrf_LineConfirm_ID() 
 {
-Object ii = Get_Value("M_MovementLineConfirm_ID");
+Object ii = Get_Value("VAM_InvTrf_LineConfirm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Move Line.
-@param M_MovementLine_ID Inventory Move document Line */
-public void SetM_MovementLine_ID (int M_MovementLine_ID)
+@param VAM_InvTrf_Line_ID Inventory Move document Line */
+public void SetVAM_InvTrf_Line_ID (int VAM_InvTrf_Line_ID)
 {
-if (M_MovementLine_ID < 1) throw new ArgumentException ("M_MovementLine_ID is mandatory.");
-Set_Value ("M_MovementLine_ID", M_MovementLine_ID);
+if (VAM_InvTrf_Line_ID < 1) throw new ArgumentException ("VAM_InvTrf_Line_ID is mandatory.");
+Set_Value ("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
 }
 /** Get Move Line.
 @return Inventory Move document Line */
-public int GetM_MovementLine_ID() 
+public int GetVAM_InvTrf_Line_ID() 
 {
-Object ii = Get_Value("M_MovementLine_ID");
+Object ii = Get_Value("VAM_InvTrf_Line_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

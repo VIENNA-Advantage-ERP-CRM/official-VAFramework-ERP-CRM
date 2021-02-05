@@ -27,7 +27,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class CostCreate : ProcessEngine.SvrProcess
     {
         //Product				
-        private int _M_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -43,9 +43,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    _M_Product_ID = para[i].GetParameterAsInt();
+                    _VAM_Product_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -60,15 +60,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (text with variables)</returns>
         protected override String DoIt()
         {
-            log.Info("M_Product_ID=" + _M_Product_ID);
-            if (_M_Product_ID == 0)
+            log.Info("VAM_Product_ID=" + _VAM_Product_ID);
+            if (_VAM_Product_ID == 0)
             {
-                throw new Exception("@NotFound@: @M_Product_ID@ = " + _M_Product_ID);
+                throw new Exception("@NotFound@: @VAM_Product_ID@ = " + _VAM_Product_ID);
             }
-            MProduct product = MProduct.Get(GetCtx(), _M_Product_ID);
-            if (product.Get_ID() != _M_Product_ID)
+            MProduct product = MProduct.Get(GetCtx(), _VAM_Product_ID);
+            if (product.Get_ID() != _VAM_Product_ID)
             {
-                throw new Exception("@NotFound@: @M_Product_ID@ = " + _M_Product_ID);
+                throw new Exception("@NotFound@: @VAM_Product_ID@ = " + _VAM_Product_ID);
             }
             //
             if (MCostDetail.ProcessProduct(product, Get_Trx()))

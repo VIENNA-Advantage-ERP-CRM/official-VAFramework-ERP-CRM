@@ -334,7 +334,7 @@ namespace VAdvantage.Model
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
             String bpColumn = "VAB_BusinessPartner_ID";
-            String pColumn = "M_Product_ID";
+            String pColumn = "VAM_Product_ID";
             //	PlannedAmt -> PlannedQty -> Count
             StringBuilder sb = new StringBuilder("SELECT COUNT(*) "
                 + "FROM VAR_Request WHERE VAR_Req_Type_ID=" + GetVAR_Req_Type_ID()
@@ -385,7 +385,7 @@ namespace VAdvantage.Model
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
             String bpColumn = "VAB_BusinessPartner_ID";
-            String pColumn = "M_Product_ID";
+            String pColumn = "VAM_Product_ID";
             //
             StringBuilder sb = new StringBuilder("SELECT COUNT(*), ");
             String groupBy = null;
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
             String dateColumn = "Created";
             String orgColumn = "VAF_Org_ID";
             String bpColumn = "VAB_BusinessPartner_ID";
-            String pColumn = "M_Product_ID";
+            String pColumn = "VAM_Product_ID";
             //
             Query query = new Query("VAR_Request");
             query.AddRestriction("VAR_Req_Type_ID", "=", GetVAR_Req_Type_ID());

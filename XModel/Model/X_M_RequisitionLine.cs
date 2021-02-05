@@ -11,34 +11,34 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_RequisitionLine
+    /** Generated Model for VAM_RequisitionLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_RequisitionLine : PO
+    public class X_VAM_RequisitionLine : PO
     {
-        public X_M_RequisitionLine(Context ctx, int M_RequisitionLine_ID, Trx trxName)
-            : base(ctx, M_RequisitionLine_ID, trxName)
+        public X_VAM_RequisitionLine(Context ctx, int VAM_RequisitionLine_ID, Trx trxName)
+            : base(ctx, VAM_RequisitionLine_ID, trxName)
         {
-            /** if (M_RequisitionLine_ID == 0)
+            /** if (VAM_RequisitionLine_ID == 0)
             {
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM M_RequisitionLine WHERE M_Requisition_ID=@M_Requisition_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAM_RequisitionLine WHERE VAM_Requisition_ID=@VAM_Requisition_ID@
             SetLineNetAmt (0.0);
-            SetM_RequisitionLine_ID (0);
-            SetM_Requisition_ID (0);
+            SetVAM_RequisitionLine_ID (0);
+            SetVAM_Requisition_ID (0);
             SetPriceActual (0.0);
             SetQty (0.0);	// 1
             }
              */
         }
-        public X_M_RequisitionLine(Ctx ctx, int M_RequisitionLine_ID, Trx trxName)
-            : base(ctx, M_RequisitionLine_ID, trxName)
+        public X_VAM_RequisitionLine(Ctx ctx, int VAM_RequisitionLine_ID, Trx trxName)
+            : base(ctx, VAM_RequisitionLine_ID, trxName)
         {
-            /** if (M_RequisitionLine_ID == 0)
+            /** if (VAM_RequisitionLine_ID == 0)
             {
-            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM M_RequisitionLine WHERE M_Requisition_ID=@M_Requisition_ID@
+            SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAM_RequisitionLine WHERE VAM_Requisition_ID=@VAM_Requisition_ID@
             SetLineNetAmt (0.0);
-            SetM_RequisitionLine_ID (0);
-            SetM_Requisition_ID (0);
+            SetVAM_RequisitionLine_ID (0);
+            SetVAM_Requisition_ID (0);
             SetPriceActual (0.0);
             SetQty (0.0);	// 1
             }
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_RequisitionLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_RequisitionLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_RequisitionLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_RequisitionLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -67,14 +67,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_RequisitionLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_RequisitionLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_RequisitionLine()
+        static X_VAM_RequisitionLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -87,8 +87,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =703;
 
-        /** TableName=M_RequisitionLine */
-        public static String Table_Name = "M_RequisitionLine";
+        /** TableName=VAM_RequisitionLine */
+        public static String Table_Name = "VAM_RequisitionLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_RequisitionLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_RequisitionLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Charge.
@@ -238,64 +238,64 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Requisition Line.
-        @param M_RequisitionLine_ID Material Requisition Line */
-        public void SetM_RequisitionLine_ID(int M_RequisitionLine_ID)
+        @param VAM_RequisitionLine_ID Material Requisition Line */
+        public void SetVAM_RequisitionLine_ID(int VAM_RequisitionLine_ID)
         {
-            if (M_RequisitionLine_ID < 1) throw new ArgumentException("M_RequisitionLine_ID is mandatory.");
-            Set_ValueNoCheck("M_RequisitionLine_ID", M_RequisitionLine_ID);
+            if (VAM_RequisitionLine_ID < 1) throw new ArgumentException("VAM_RequisitionLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_RequisitionLine_ID", VAM_RequisitionLine_ID);
         }
         /** Get Requisition Line.
         @return Material Requisition Line */
-        public int GetM_RequisitionLine_ID()
+        public int GetVAM_RequisitionLine_ID()
         {
-            Object ii = Get_Value("M_RequisitionLine_ID");
+            Object ii = Get_Value("VAM_RequisitionLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Requisition.
-        @param M_Requisition_ID Material Requisition */
-        public void SetM_Requisition_ID(int M_Requisition_ID)
+        @param VAM_Requisition_ID Material Requisition */
+        public void SetVAM_Requisition_ID(int VAM_Requisition_ID)
         {
-            if (M_Requisition_ID < 1) throw new ArgumentException("M_Requisition_ID is mandatory.");
-            Set_ValueNoCheck("M_Requisition_ID", M_Requisition_ID);
+            if (VAM_Requisition_ID < 1) throw new ArgumentException("VAM_Requisition_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Requisition_ID", VAM_Requisition_ID);
         }
         /** Get Requisition.
         @return Material Requisition */
-        public int GetM_Requisition_ID()
+        public int GetVAM_Requisition_ID()
         {
-            Object ii = Get_Value("M_Requisition_ID");
+            Object ii = Get_Value("VAM_Requisition_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

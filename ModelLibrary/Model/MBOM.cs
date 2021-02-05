@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : VFramwork (Model class)
  * Purpose        : BOM Model
- * Class Used     : X_M_BOM
+ * Class Used     : X_VAM_BOM
  * Chronological Development
  * Raghunandan    24-June-2009
  ******************************************************/
@@ -19,10 +19,10 @@ using VAdvantage.Process;
 using VAdvantage.Utility;
 namespace VAdvantage.Model
 {
-    public class MBOM : X_M_BOM
+    public class MBOM : X_VAM_BOM
     {
         //	Cache						
-        private static CCache<int, MBOM> _cache = new CCache<int, MBOM>("M_BOM", 20);
+        private static CCache<int, MBOM> _cache = new CCache<int, MBOM>("VAM_BOM", 20);
         //	Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MBOM).FullName);
 
@@ -30,16 +30,16 @@ namespace VAdvantage.Model
         /**
         * 	Get BOM from Cache
         *	@param ctx context
-        *	@param M_BOM_ID id
+        *	@param VAM_BOM_ID id
         *	@return MBOM
         */
-        public static MBOM Get(Ctx ctx, int M_BOM_ID)
+        public static MBOM Get(Ctx ctx, int VAM_BOM_ID)
         {
-            int key = M_BOM_ID;
+            int key = VAM_BOM_ID;
             MBOM retValue = (MBOM)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MBOM(ctx, M_BOM_ID, null);
+            retValue = new MBOM(ctx, VAM_BOM_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -48,16 +48,16 @@ namespace VAdvantage.Model
         /**
          * 	Get BOMs Of Product
          *	@param ctx context
-         *	@param M_Product_ID product
+         *	@param VAM_Product_ID product
          *	@param trxName trx
          *	@param whereClause optional WHERE clause w/o AND
          *	@return array of BOMs
          */
-        public static MBOM[] GetOfProduct(Ctx ctx, int M_Product_ID,
+        public static MBOM[] GetOfProduct(Ctx ctx, int VAM_Product_ID,
             Trx trxName, String whereClause)
         {
             List<MBOM> list = new List<MBOM>();
-            String sql = "SELECT * FROM M_BOM WHERE IsActive = 'Y' AND M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT * FROM VAM_BOM WHERE IsActive = 'Y' AND VAM_Product_ID=" + VAM_Product_ID;
             if (whereClause != null && whereClause.Length > 0)
                 sql += " AND " + whereClause;
             //PreparedStatement pstmt = null;
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
             try
             {
                 //pstmt = DataBase.prepareStatement (sql, trxName);
-                //pstmt.SetInt (1, M_Product_ID);
+                //pstmt.SetInt (1, VAM_Product_ID);
                 //ResultSet rs = pstmt.executeQuery ();
                 idr = DataBase.DB.ExecuteReader(sql, null, trxName);
                 dt = new DataTable();
@@ -112,16 +112,16 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_BOM_ID id
+         *	@param VAM_BOM_ID id
          *	@param trxName trx
          */
-        public MBOM(Ctx ctx, int M_BOM_ID, Trx trxName) :
-            base(ctx, M_BOM_ID, trxName)
+        public MBOM(Ctx ctx, int VAM_BOM_ID, Trx trxName) :
+            base(ctx, VAM_BOM_ID, trxName)
         {
 
-            if (M_BOM_ID == 0)
+            if (VAM_BOM_ID == 0)
             {
-                //	SetM_Product_ID (0);
+                //	SetVAM_Product_ID (0);
                 //	SetName (null);
                 SetBOMType(BOMTYPE_CurrentActive);	// A
                 SetBOMUse(BOMUSE_Master);	// A
@@ -154,10 +154,10 @@ namespace VAdvantage.Model
                 //	Only one Current Active
                 if (GetBOMType().Equals(BOMTYPE_CurrentActive))
                 {
-                    MBOM[] boms = GetOfProduct(GetCtx(), GetM_Product_ID(), Get_Trx(),
-                        "BOMType='A' AND BOMUse='" + GetBOMUse() + "' AND IsActive='Y' AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID());
+                    MBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
+                        "BOMType='A' AND BOMUse='" + GetBOMUse() + "' AND IsActive='Y' AND VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID());
                     if (boms.Length == 0	//	only one = this 
-                        || (boms.Length == 1 && boms[0].GetM_BOM_ID() == GetM_BOM_ID()))
+                        || (boms.Length == 1 && boms[0].GetVAM_BOM_ID() == GetVAM_BOM_ID()))
                     { ;}
                     else
                     {
@@ -170,10 +170,10 @@ namespace VAdvantage.Model
                 //	Only one MTO
                 else if (GetBOMType().Equals(BOMTYPE_Make_To_Order))
                 {
-                    MBOM[] boms = GetOfProduct(GetCtx(), GetM_Product_ID(), Get_Trx(),
+                    MBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
                         "IsActive='Y'");
                     if (boms.Length == 0	//	only one = this 
-                        || (boms.Length == 1 && boms[0].GetM_BOM_ID() == GetM_BOM_ID()))
+                        || (boms.Length == 1 && boms[0].GetVAM_BOM_ID() == GetVAM_BOM_ID()))
                     { ;}
                     else
                     {
@@ -191,9 +191,9 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             //set verified on Product as False when we change BOMType AND BOMUse
-            if (newRecord || Is_ValueChanged("BOMType") || Is_ValueChanged("BOMUse") || Is_ValueChanged("IsActive") || Is_ValueChanged("M_AttributeSetInstance_ID"))
+            if (newRecord || Is_ValueChanged("BOMType") || Is_ValueChanged("BOMUse") || Is_ValueChanged("IsActive") || Is_ValueChanged("VAM_PFeature_SetInstance_ID"))
             {
-                MProduct product = new MProduct(GetCtx(), GetM_Product_ID(), Get_Trx());
+                MProduct product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
                 product.SetIsVerified(false);
                 if (!product.Save())
                 {
@@ -206,7 +206,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             // when we delete BOM, then set IsVerified False on Product
-            MProduct product = new MProduct(GetCtx(), GetM_Product_ID(), Get_Trx());
+            MProduct product = new MProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx());
             product.SetIsVerified(false);
             if (!product.Save())
             {

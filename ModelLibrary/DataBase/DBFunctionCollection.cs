@@ -32,21 +32,21 @@ namespace VAdvantage.DataBase
                 {
                     decimal currentQty = 0;
                     int container_ID = 0;
-                    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
-                    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
-                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
-                    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
+                    int VAM_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
+                    int VAM_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
+                    int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
+                    int VAM_PFeature_Set_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
                     if (isContainerApplicable)
                     {
-                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
+                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAM_ProductContainer_ID"]);
                     }
                     currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
                     lineNo = lineNo + 10;
                     MInventoryLine line = new MInventoryLine(ctx, 0, trx);
-                    int line_ID = DB.GetNextID(ctx, "M_InventoryLine", trx);
-                    string qry = "select m_warehouse_id from m_locator where m_locator_id=" + M_Locator_ID;
-                    int M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
-                    MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+                    int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
+                    string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
+                    int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
+                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
                     if (wh.IsDisallowNegativeInv() == true)
                     {
                         if (currentQty < 0)
@@ -54,7 +54,7 @@ namespace VAdvantage.DataBase
                             continue;
                         }
                     }
-                    MProduct product = MProduct.Get(ctx, M_Product_ID);
+                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();
@@ -62,8 +62,8 @@ namespace VAdvantage.DataBase
                             currentQty = Decimal.Round(currentQty, precision, MidpointRounding.AwayFromZero);
                     }
                     sql.Clear();
-                    sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
-                                M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
+                    sql.Append(@"INSERT INTO VAM_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, VAM_Inventory_ID, VAM_InventoryLine_ID,  
+                                VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
                     if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
@@ -74,14 +74,14 @@ namespace VAdvantage.DataBase
                     {
                         sql.Append(",IsFromProcess");
                     }
-                    if (line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
+                    if (line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
                     {
-                        sql.Append(",M_ProductContainer_ID ");
+                        sql.Append(",VAM_ProductContainer_ID ");
                     }
 
                     sql.Append(" ) VALUES ( " + _inventory.GetVAF_Client_ID() + "," + _inventory.GetVAF_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
-                        GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
-                        M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
+                        GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + VAM_Locator_ID + "," + VAM_Product_ID + "," +
+                        VAM_PFeature_SetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
                     if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
@@ -92,7 +92,7 @@ namespace VAdvantage.DataBase
                     {
                         sql.Append(",'Y'");
                     }
-                    if (line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
+                    if (line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
                     {
                         sql.Append("," + container_ID);
                     }
@@ -107,21 +107,21 @@ namespace VAdvantage.DataBase
                 {
                     decimal currentQty = 0;
                     int container_ID = 0;
-                    int M_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
-                    int M_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
-                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
-                    int M_AttributeSet_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
+                    int VAM_Product_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
+                    int VAM_Locator_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][1]);
+                    int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][2]);
+                    int VAM_PFeature_Set_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][5]);
                     if (isContainerApplicable)
                     {
-                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["M_ProductContainer_ID"]);
+                        container_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAM_ProductContainer_ID"]);
                     }
                     currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
                     lineNo = lineNo + 10;
                     MInventoryLine line = new MInventoryLine(ctx, 0, trx);
-                    int line_ID = DB.GetNextID(ctx, "M_InventoryLine", trx);
-                    string qry = "select m_warehouse_id from m_locator where m_locator_id=" + M_Locator_ID;
-                    int M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
-                    MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+                    int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
+                    string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
+                    int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
+                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
                     if (wh.IsDisallowNegativeInv() == true)
                     {
                         if (currentQty < 0)
@@ -129,7 +129,7 @@ namespace VAdvantage.DataBase
                             continue;
                         }
                     }
-                    MProduct product = MProduct.Get(ctx, M_Product_ID);
+                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
                     if (product != null)
                     {
                         int precision = product.GetUOMPrecision();
@@ -137,8 +137,8 @@ namespace VAdvantage.DataBase
                             currentQty = Decimal.Round(currentQty, precision, MidpointRounding.AwayFromZero);
                     }
                     sql.Clear();
-                    sql.Append(@"INSERT INTO M_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, M_Inventory_ID, M_InventoryLine_ID,  
-                                M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
+                    sql.Append(@"INSERT INTO VAM_InventoryLine (VAF_Client_ID, VAF_Org_ID,IsActive, Created, CreatedBy, Updated, UpdatedBy, Line, VAM_Inventory_ID, VAM_InventoryLine_ID,  
+                                VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, QtyBook, QtyCount, OpeningStock, AsOnDateCount, DifferenceQty, AdjustmentType");
 
                     if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
@@ -149,14 +149,14 @@ namespace VAdvantage.DataBase
                     {
                         sql.Append(",IsFromProcess");
                     }
-                    if (line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
+                    if (line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
                     {
-                        sql.Append(",M_ProductContainer_ID ");
+                        sql.Append(",VAM_ProductContainer_ID ");
                     }
 
                     sql.Append(" ) VALUES ( " + _inventory.GetVAF_Client_ID() + "," + _inventory.GetVAF_Org_ID() + ",'Y'," + GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," +
-                        GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + M_Locator_ID + "," + M_Product_ID + "," +
-                        M_AttributeSetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
+                        GlobalVariable.TO_DATE(DateTime.Now, true) + "," + 0 + "," + lineNo + "," + _inventory.Get_ID() + "," + line_ID + "," + VAM_Locator_ID + "," + VAM_Product_ID + "," +
+                        VAM_PFeature_SetInstance_ID + "," + currentQty + "," + currentQty + "," + currentQty + "," + currentQty + "," + 0 + ",'A'");
 
                     if (line.Get_ColumnIndex("VAB_UOM_ID") > 0)
                     {
@@ -167,7 +167,7 @@ namespace VAdvantage.DataBase
                     {
                         sql.Append(",'Y'");
                     }
-                    if (line.Get_ColumnIndex("M_ProductContainer_ID") > 0)
+                    if (line.Get_ColumnIndex("VAM_ProductContainer_ID") > 0)
                     {
                         sql.Append("," + container_ID);
                     }
@@ -181,7 +181,7 @@ namespace VAdvantage.DataBase
         /// To Update Data on Physical Inventory Line from Update Inventory Quantity Process in case of Skip Bussiness Logic
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="M_InventoryLine_ID">Inventory Line</param>
+        /// <param name="VAM_InventoryLine_ID">Inventory Line</param>
         /// <param name="ds">DataSet</param>
         /// <param name="trx">Transaction</param>
         /// <returns>Return query as string based on connected Database</returns>
@@ -219,8 +219,8 @@ namespace VAdvantage.DataBase
                     Decimal QtyCount = Util.GetValueOfDecimal(Decimal.Subtract(currentQty, DiffQty));
 
                     sql.Clear();
-                    sql.Append(@"UPDATE M_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsonDateCount +
-                        ",DifferenceQty = " + DiffQty + " WHERE M_InventoryLine_ID = " + line_ID);
+                    sql.Append(@"UPDATE VAM_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsonDateCount +
+                        ",DifferenceQty = " + DiffQty + " WHERE VAM_InventoryLine_ID = " + line_ID);
                     updateSql.Append(" BEGIN execute immediate('" + sql.Replace("'", "''") + "'); exception when others then null; END;");
                 }
                 updateSql.Append(" END;");
@@ -254,8 +254,8 @@ namespace VAdvantage.DataBase
                     Decimal QtyCount = Util.GetValueOfDecimal(Decimal.Subtract(currentQty, DiffQty));
 
                     sql.Clear();
-                    sql.Append(@"UPDATE M_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsonDateCount +
-                        ",DifferenceQty = " + DiffQty + " WHERE M_InventoryLine_ID = " + line_ID);
+                    sql.Append(@"UPDATE VAM_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsonDateCount +
+                        ",DifferenceQty = " + DiffQty + " WHERE VAM_InventoryLine_ID = " + line_ID);
                     updateSql.Append(" SELECT ExecuteImmediate('" + sql.Replace("'", "''") + "') FROM DUAL;");
                 }
             }
@@ -268,11 +268,11 @@ namespace VAdvantage.DataBase
             if (DB.IsOracle())
             {
                 sql.Append("SELECT SUBSTR(SYS_CONNECT_BY_PATH(value, ', '), 2) CSV FROM(SELECT value, ROW_NUMBER() OVER(ORDER BY value) rn, COUNT(*) over() CNT FROM "
-                                 + " (SELECT DISTINCT value FROM m_locator WHERE M_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + "))) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
+                                 + " (SELECT DISTINCT value FROM VAM_Locator WHERE VAM_Locator_ID IN(" + locators.ToString().Trim().Trim(',') + "))) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
             }
             else if (DB.IsPostgreSQL())
             {
-                sql.Append("SELECT DISTINCT string_agg(Value, ', ') AS resultColumn FROM M_Locator WHERE M_Locator_ID IN (" + locators.ToString().Trim().Trim(',') + ")");
+                sql.Append("SELECT DISTINCT string_agg(Value, ', ') AS resultColumn FROM VAM_Locator WHERE VAM_Locator_ID IN (" + locators.ToString().Trim().Trim(',') + ")");
             }
             return sql.ToString();
         }
@@ -283,16 +283,16 @@ namespace VAdvantage.DataBase
             if (DB.IsOracle())
             {
                 sql.Append("SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2) CSV FROM(SELECT Name, ROW_NUMBER() OVER(ORDER BY Name) rn, COUNT(*) over() CNT FROM "
-                                + " M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
+                                + " VAM_Product WHERE VAM_Product_ID IN (" + products.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
             }
             else if (DB.IsPostgreSQL())
             {
-                sql.Append("SELECT DISTINCT string_agg(Name, ', ') AS resultColumn FROM M_Product WHERE M_Product_ID IN (" + products.ToString().Trim().Trim(',') + ")");
+                sql.Append("SELECT DISTINCT string_agg(Name, ', ') AS resultColumn FROM VAM_Product WHERE VAM_Product_ID IN (" + products.ToString().Trim().Trim(',') + ")");
             }
             return sql.ToString();
         }
 
-        public static string MInOutContainerNotMatched(int M_InOut_ID)
+        public static string MInOutContainerNotMatched(int VAM_Inv_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -300,22 +300,22 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '), ',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER() OVER(ORDER BY NotMatched) RN, COUNT(*) OVER() CNT  FROM
                         (SELECT DISTINCT
-                        CASE  WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
-                              WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + M_InOut_ID + @" AND ROWNUM <= 100)  WHERE notmatched IS NOT NULL)
+                        CASE  WHEN p.VAM_Warehouse_id <> i.VAM_Warehouse_id  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_id <> il.VAM_Locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_Inv_InOut i INNER JOIN VAM_Inv_InOutLine il ON i.VAM_Inv_InOut_id = il.VAM_Inv_InOut_id
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_Inv_InOut_id = " + VAM_Inv_InOut_ID + @" AND ROWNUM <= 100)  WHERE notmatched IS NOT NULL)
                         WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
             else if (DB.IsPostgreSQL())
             {
-                sql.Append(@"SELECT string_agg(NotMatched, ', ') FROM (SELECT DISTINCT CASE WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
-                        WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line END AS NotMatched 
-                        FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.m_inout_id = " + M_InOut_ID + @" AND ROWNUM <= 100) t WHERE notmatched IS NOT NULL");
+                sql.Append(@"SELECT string_agg(NotMatched, ', ') FROM (SELECT DISTINCT CASE WHEN p.VAM_Warehouse_id <> i.VAM_Warehouse_id  THEN pr.Name || '_' || il.line
+                        WHEN p.VAM_Locator_id <> il.VAM_Locator_id THEN pr.Name || '_' || il.line END AS NotMatched 
+                        FROM VAM_Inv_InOut i INNER JOIN VAM_Inv_InOutLine il ON i.VAM_Inv_InOut_id = il.VAM_Inv_InOut_id
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_Inv_InOut_id = " + VAM_Inv_InOut_ID + @" AND ROWNUM <= 100) t WHERE notmatched IS NOT NULL");
             }
             return sql.ToString();
         }
@@ -361,35 +361,35 @@ namespace VAdvantage.DataBase
         }
 
 
-        public static string MInOutContainerNotAvailable(int M_InOut_ID)
+        public static string MInOutContainerNotAvailable(int VAM_Inv_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
             {
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( name, ' , '),',') name FROM
                           (SELECT Name , ROW_NUMBER () OVER (ORDER BY Name) RN, COUNT (*) OVER () CNT FROM
-                          (SELECT (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
-                          CASE WHEN IL.M_PRODUCTCONTAINER_ID > 0 
-                          AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
-                          THEN 1 WHEN IL.M_PRODUCTCONTAINER_ID > 0
-                          AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
+                          (SELECT (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =IL.VAM_ProductContainer_ID ) AS Name ,
+                          CASE WHEN IL.VAM_ProductContainer_ID > 0 
+                          AND (SELECT DATELASTINVENTORY  FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)<=I.MOVEMENTDATE
+                          THEN 1 WHEN IL.VAM_ProductContainer_ID > 0
+                          AND (SELECT DATELASTINVENTORY FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)>I.MOVEMENTDATE
                           THEN 0 ELSE 1 END AS COUNT
-                          FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
-                          WHERE I.M_InOut_ID =" + M_InOut_ID + @" AND ROWNUM <= 100)
+                          FROM VAM_Inv_InOut I INNER JOIN VAM_Inv_InOutLine IL ON I.VAM_Inv_InOut_ID = IL.VAM_Inv_InOut_ID
+                          WHERE I.VAM_Inv_InOut_ID =" + VAM_Inv_InOut_ID + @" AND ROWNUM <= 100)
                           WHERE COUNT = 0 )
                           WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(Name, ', ') AS Name FROM                           
-                          (SELECT DISTINCT (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
-                          CASE WHEN IL.M_PRODUCTCONTAINER_ID > 0 
-                          AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
-                          THEN 1 WHEN IL.M_PRODUCTCONTAINER_ID > 0
-                          AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
+                          (SELECT DISTINCT (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =IL.VAM_ProductContainer_ID ) AS Name ,
+                          CASE WHEN IL.VAM_ProductContainer_ID > 0 
+                          AND (SELECT DATELASTINVENTORY  FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)<=I.MOVEMENTDATE
+                          THEN 1 WHEN IL.VAM_ProductContainer_ID > 0
+                          AND (SELECT DATELASTINVENTORY FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)>I.MOVEMENTDATE
                           THEN 0 ELSE 1 END AS COUNT
-                          FROM M_InOut I INNER JOIN M_InOutLINE IL ON I.M_InOut_ID = IL.M_InOut_ID
-                          WHERE I.M_InOut_ID =" + M_InOut_ID + @") t WHERE COUNT = 0 AND ROWNUM <= 100");
+                          FROM VAM_Inv_InOut I INNER JOIN VAM_Inv_InOutLine IL ON I.VAM_Inv_InOut_ID = IL.VAM_Inv_InOut_ID
+                          WHERE I.VAM_Inv_InOut_ID =" + VAM_Inv_InOut_ID + @") t WHERE COUNT = 0 AND ROWNUM <= 100");
             }
             return sql.ToString();
         }
@@ -402,18 +402,18 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT SUBSTR(Sys_Connect_By_Path (Name, ','),2) AS Product FROM
                             (SELECT Name, Row_Number () Over (Order By Name ) Rn, COUNT (*) OVER () cnt 
                             FROM ((SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp 
-                            INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id 
+                            INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE ( NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.M_Inoutlineconfirm_Id IN (" + mInOutLinesConfirm + @"))))
+                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + mInOutLinesConfirm + @"))))
                             WHERE rn = cnt START WITH rn = 1 CONNECT BY Rn = Prior Rn + 1");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(Name, ', ') AS Product FROM 
                             (SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp 
-                            INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id 
+                            INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE NVL(Shp.Va010_Actualvalue,0) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.M_Inoutlineconfirm_Id IN (" + mInOutLinesConfirm + "))s t");
+                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + mInOutLinesConfirm + "))s t");
             }
             return sql.ToString();
         }
@@ -424,16 +424,16 @@ namespace VAdvantage.DataBase
             if (DB.IsOracle())
             {
                 sql.Append("SELECT SUBSTR(SYS_CONNECT_BY_PATH(Name, ', '), 2) CSV FROM(SELECT ord.DocumentNo || '_' || ol.Line AS Name, ROW_NUMBER() OVER(ORDER BY ord.DocumentNo, ol.Line) rn, COUNT(*) over() CNT FROM "
-                         + " M_RequisitionLine ol INNER JOIN M_Requisition ord ON ol.M_Requisition_ID = ord.M_Requisition_ID WHERE M_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
+                         + " VAM_RequisitionLine ol INNER JOIN VAM_Requisition ord ON ol.VAM_Requisition_ID = ord.VAM_Requisition_ID WHERE VAM_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ") ) WHERE rn = cnt START WITH RN = 1 CONNECT BY rn = PRIOR rn + 1");
             }
             else if (DB.IsPostgreSQL())
             {
-                sql.Append("SELECT DISTINCT string_agg(ord.DocumentNo || '_' || ol.Line, ', ') AS Name FROM M_RequisitionLine ol INNER JOIN M_Requisition ord ON ol.M_Requisition_ID = ord.M_Requisition_ID WHERE M_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ")");
+                sql.Append("SELECT DISTINCT string_agg(ord.DocumentNo || '_' || ol.Line, ', ') AS Name FROM VAM_RequisitionLine ol INNER JOIN VAM_Requisition ord ON ol.VAM_Requisition_ID = ord.VAM_Requisition_ID WHERE VAM_RequisitionLine_ID IN (" + delReq.ToString().Trim().Trim(',') + ")");
             }
             return sql.ToString();
         }
 
-        public static string MInventoryContainerNotMatched(int M_Inventory_ID)
+        public static string MInventoryContainerNotMatched(int VAM_Inventory_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -441,60 +441,60 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
                         (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
-                              WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Inventory i INNER JOIN M_Inventoryline il ON i.M_Inventory_ID = il.M_Inventory_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Inventory_ID = " + M_Inventory_ID + @" AND ROWNUM <= 100) WHERE NotMatched IS NOT NULL ) 
+                        CASE  WHEN p.VAM_Warehouse_id <> i.VAM_Warehouse_id  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_id <> il.VAM_Locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_Inventory i INNER JOIN VAM_InventoryLine il ON i.VAM_Inventory_ID = il.VAM_Inventory_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_Inventory_ID = " + VAM_Inventory_ID + @" AND ROWNUM <= 100) WHERE NotMatched IS NOT NULL ) 
                         WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(NotMatched, ', ') FROM (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.m_warehouse_id  THEN pr.Name || '_' || il.line
-                              WHEN p.m_locator_id <> il.m_locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Inventory i INNER JOIN M_Inventoryline il ON i.M_Inventory_ID = il.M_Inventory_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Inventory_ID = " + M_Inventory_ID + @" ) t WHERE NotMatched IS NOT NULL AND ROWNUM <= 100");
+                        CASE  WHEN p.VAM_Warehouse_id <> i.VAM_Warehouse_id  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_id <> il.VAM_Locator_id THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_Inventory i INNER JOIN VAM_InventoryLine il ON i.VAM_Inventory_ID = il.VAM_Inventory_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_Inventory_ID = " + VAM_Inventory_ID + @" ) t WHERE NotMatched IS NOT NULL AND ROWNUM <= 100");
             }
             return sql.ToString();
         }
 
-        public static string MInventoryContainerNotAvailable(int M_Inventory_ID)
+        public static string MInventoryContainerNotAvailable(int VAM_Inventory_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
             {
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( name, ' , '),',') name FROM
                             (SELECT Name , ROW_NUMBER () OVER (ORDER BY name ) RN, COUNT (*) OVER () CNT FROM
-                            (SELECT (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
-                            CASE WHEN IL.M_PRODUCTCONTAINER_ID>0 
-                            AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
-                            THEN 1 WHEN IL.M_PRODUCTCONTAINER_ID>0
-                            AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
+                            (SELECT (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =IL.VAM_ProductContainer_ID ) AS Name ,
+                            CASE WHEN IL.VAM_ProductContainer_ID>0 
+                            AND (SELECT DATELASTINVENTORY  FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)<=I.MOVEMENTDATE
+                            THEN 1 WHEN IL.VAM_ProductContainer_ID>0
+                            AND (SELECT DATELASTINVENTORY FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)>I.MOVEMENTDATE
                             THEN 0 ELSE 1 END AS COUNT
-                            FROM M_INVENTORY I INNER JOIN M_INVENTORYLINE IL ON I.M_INVENTORY_ID = IL.M_INVENTORY_ID
-                            WHERE I.M_INVENTORY_ID =" + M_Inventory_ID + @" AND ROWNUM <= 100 )
+                            FROM VAM_Inventory I INNER JOIN VAM_InventoryLine IL ON I.VAM_Inventory_ID = IL.VAM_Inventory_ID
+                            WHERE I.VAM_Inventory_ID =" + VAM_Inventory_ID + @" AND ROWNUM <= 100 )
                             WHERE COUNT = 0) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(Name, ', ') AS Name FROM 
-                            (SELECT DISTINCT (SELECT NAME FROM M_ProductContainer WHERE M_ProductContainer_ID =IL.M_PRODUCTCONTAINER_ID ) AS Name ,
-                            CASE WHEN IL.M_PRODUCTCONTAINER_ID>0 
-                            AND (SELECT DATELASTINVENTORY  FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)<=I.MOVEMENTDATE
-                            THEN 1 WHEN IL.M_PRODUCTCONTAINER_ID>0
-                            AND (SELECT DATELASTINVENTORY FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=IL.M_PRODUCTCONTAINER_ID)>I.MOVEMENTDATE
+                            (SELECT DISTINCT (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =IL.VAM_ProductContainer_ID ) AS Name ,
+                            CASE WHEN IL.VAM_ProductContainer_ID>0 
+                            AND (SELECT DATELASTINVENTORY  FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)<=I.MOVEMENTDATE
+                            THEN 1 WHEN IL.VAM_ProductContainer_ID>0
+                            AND (SELECT DATELASTINVENTORY FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=IL.VAM_ProductContainer_ID)>I.MOVEMENTDATE
                             THEN 0 ELSE 1 END AS COUNT
-                            FROM M_INVENTORY I INNER JOIN M_INVENTORYLINE IL ON I.M_INVENTORY_ID = IL.M_INVENTORY_ID
-                            WHERE I.M_INVENTORY_ID =" + M_Inventory_ID + @" ) t WHERE COUNT = 0 AND ROWNUM <= 100");
+                            FROM VAM_Inventory I INNER JOIN VAM_InventoryLine IL ON I.VAM_Inventory_ID = IL.VAM_Inventory_ID
+                            WHERE I.VAM_Inventory_ID =" + VAM_Inventory_ID + @" ) t WHERE COUNT = 0 AND ROWNUM <= 100");
             }
             return sql.ToString();
         }
 
-        public static string MovementContainerNotMatched(int M_Movement_ID)
+        public static string MovementContainerNotMatched(int VAM_InventoryTransfer_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -502,28 +502,28 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
                         (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + M_Movement_ID + @" AND ROWNUM <= 100 )  WHERE notmatched IS NOT NULL ) 
+                        CASE  WHEN p.VAM_Warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_ID <> il.VAM_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_InventoryTransfer i INNER JOIN VAM_InvTrf_Line il ON i.VAM_InventoryTransfer_ID = il.VAM_InventoryTransfer_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" AND ROWNUM <= 100 )  WHERE notmatched IS NOT NULL ) 
                         WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(NotMatched, ', ') FROM  (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + M_Movement_ID + @" ) t WHERE NotMatched IS NOT NULL AND ROWNUM <= 100 ");
+                        CASE  WHEN p.VAM_Warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_ID <> il.VAM_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_InventoryTransfer i INNER JOIN VAM_InvTrf_Line il ON i.VAM_InventoryTransfer_ID = il.VAM_InventoryTransfer_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" ) t WHERE NotMatched IS NOT NULL AND ROWNUM <= 100 ");
             }
             return sql.ToString();
         }
 
-        public static string MovementContainerToNotMatched(int M_Movement_ID)
+        public static string MovementContainerToNotMatched(int VAM_InventoryTransfer_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -531,29 +531,29 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( NotMatched, ' , '),',') NotMatched FROM
                       (SELECT NotMatched, ROW_NUMBER () OVER (ORDER BY NotMatched ) RN, COUNT (*) OVER () CNT  FROM
                         (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.M_ProductContainer_ID
-                        WHERE il.M_ProductContainer_ID > 0 AND i.M_Movement_ID = " + M_Movement_ID + @" AND ROWNUM <= 100 )  WHERE notmatched IS NOT NULL ) 
+                        CASE  WHEN p.VAM_Warehouse_id <> i.DTD001_MWarehouseSource_ID  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_ID <> il.VAM_Locator_ID THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_InventoryTransfer i INNER JOIN VAM_InvTrf_Line il ON i.VAM_InventoryTransfer_ID = il.VAM_InventoryTransfer_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.VAM_ProductContainer_ID
+                        WHERE il.VAM_ProductContainer_ID > 0 AND i.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" AND ROWNUM <= 100 )  WHERE notmatched IS NOT NULL ) 
                         WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(NotMatched, ', ') FROM (SELECT DISTINCT 
-                        CASE  WHEN p.m_warehouse_id <> l.M_Warehouse_ID  THEN pr.Name || '_' || il.line
-                              WHEN p.M_Locator_ID <> il.M_LocatorTo_ID THEN pr.Name || '_' || il.line  END AS NotMatched
-                        FROM M_Movement i INNER JOIN M_Movementline il ON i.M_Movement_ID = il.M_Movement_ID
-                        INNER JOIN M_Locator l ON l.M_Locator_ID = il.M_LocatorTo_ID
-                        INNER JOIN m_product pr ON pr.m_product_id = il.m_product_id
-                        INNER JOIN M_ProductContainer p ON p.M_ProductContainer_ID  = il.Ref_M_ProductContainerTo_ID
-                        WHERE il.Ref_M_ProductContainerTo_ID > 0 AND i.M_Movement_ID = " + M_Movement_ID + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ");
+                        CASE  WHEN p.VAM_Warehouse_id <> l.VAM_Warehouse_ID  THEN pr.Name || '_' || il.line
+                              WHEN p.VAM_Locator_ID <> il.VAM_LocatorTo_ID THEN pr.Name || '_' || il.line  END AS NotMatched
+                        FROM VAM_InventoryTransfer i INNER JOIN VAM_InvTrf_Line il ON i.VAM_InventoryTransfer_ID = il.VAM_InventoryTransfer_ID
+                        INNER JOIN VAM_Locator l ON l.VAM_Locator_ID = il.VAM_LocatorTo_ID
+                        INNER JOIN VAM_Product pr ON pr.VAM_Product_id = il.VAM_Product_id
+                        INNER JOIN VAM_ProductContainer p ON p.VAM_ProductContainer_ID  = il.Ref_VAM_ProductContainerTo_ID
+                        WHERE il.Ref_VAM_ProductContainerTo_ID > 0 AND i.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" ) t WHERE notmatched IS NOT NULL AND ROWNUM <= 100 ");
             }
             return sql.ToString();
         }
 
-        public static string MovementContainerNotAvailable(int M_Movement_ID)
+        public static string MovementContainerNotAvailable(int VAM_InventoryTransfer_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -578,41 +578,41 @@ namespace VAdvantage.DataBase
                                FROM
                                  (SELECT
                                    (SELECT NAME
-                                   FROM M_PRODUCTCONTAINER
-                                   WHERE M_PRODUCTCONTAINER_ID =ML.M_PRODUCTCONTAINER_ID
+                                   FROM VAM_ProductContainer
+                                   WHERE VAM_ProductContainer_ID =ML.VAM_ProductContainer_ID
                                    ) AS NAME ,
                                    (SELECT NAME
-                                   FROM M_PRODUCTCONTAINER
-                                   WHERE M_PRODUCTCONTAINER_ID =ML.REF_M_PRODUCTCONTAINERTO_ID
+                                   FROM VAM_ProductContainer
+                                   WHERE VAM_ProductContainer_ID =ML.REF_VAM_ProductContainerTO_ID
                                    ) AS NAMETO ,
                                    CASE
-                                     WHEN ML.M_PRODUCTCONTAINER_ID>0
+                                     WHEN ML.VAM_ProductContainer_ID>0
                                      THEN
                                        CASE
                                          WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY'))
-                                           FROM M_PRODUCTCONTAINER
-                                           WHERE M_PRODUCTCONTAINER_ID=ML.M_PRODUCTCONTAINER_ID ) <=M.MOVEMENTDATE
+                                           FROM VAM_ProductContainer
+                                           WHERE VAM_ProductContainer_ID=ML.VAM_ProductContainer_ID ) <=M.MOVEMENTDATE
                                          THEN 1
                                          ELSE 0
                                        END
                                      ELSE 1
                                    END AS PCFROM ,
                                    CASE
-                                     WHEN ML.REF_M_PRODUCTCONTAINERTO_ID>0
+                                     WHEN ML.REF_VAM_ProductContainerTO_ID>0
                                      THEN
                                        CASE
                                          WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY'))
-                                           FROM M_PRODUCTCONTAINER
-                                           WHERE M_PRODUCTCONTAINER_ID=ML.REF_M_PRODUCTCONTAINERTO_ID ) <=M.MOVEMENTDATE
+                                           FROM VAM_ProductContainer
+                                           WHERE VAM_ProductContainer_ID=ML.REF_VAM_ProductContainerTO_ID ) <=M.MOVEMENTDATE
                                          THEN 1
                                          ELSE 0
                                        END
                                      ELSE 1
                                    END AS PCTO
-                                 FROM M_MOVEMENT M
-                                 INNER JOIN M_MOVEMENTLINE ML
-                                 ON M.M_MOVEMENT_ID    =ML.M_MOVEMENT_ID
-                                 WHERE M.M_MOVEMENT_ID =" + M_Movement_ID
+                                 FROM VAM_InventoryTransfer M
+                                 INNER JOIN VAM_InvTrf_Line ML
+                                 ON M.VAM_InventoryTransfer_ID    =ML.VAM_InventoryTransfer_ID
+                                 WHERE M.VAM_InventoryTransfer_ID =" + VAM_InventoryTransfer_ID
                                      + @" AND ROWNUM <= 100
                                  )
                                WHERE (PCFROM = 0 OR PCTO =0)
@@ -622,19 +622,19 @@ namespace VAdvantage.DataBase
             {
                 sql.Append(@"SELECT string_agg(CASE WHEN PCFROM = 0 AND PCTO = 0 THEN TRIM(NAME) || ' ' ||TRIM(NAMETO) 
                             WHEN PCFROM=0 THEN TRIM(NAME) WHEN PCTO=0 THEN TRIM(NAMETO) ELSE NULL END, ', ') AS PCNAME 
-                            FROM (SELECT (SELECT NAME FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID =ML.M_PRODUCTCONTAINER_ID ) AS NAME , 
-                            (SELECT NAME FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID =ML.REF_M_PRODUCTCONTAINERTO_ID ) AS NAMETO , 
-                            CASE WHEN ML.M_PRODUCTCONTAINER_ID>0 THEN CASE WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY')) 
-                            FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=ML.M_PRODUCTCONTAINER_ID ) <=M.MOVEMENTDATE THEN 1 ELSE 0 END ELSE 1 END AS PCFROM, 
-                            CASE WHEN ML.REF_M_PRODUCTCONTAINERTO_ID>0 THEN CASE WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY')) 
-                            FROM M_PRODUCTCONTAINER WHERE M_PRODUCTCONTAINER_ID=ML.REF_M_PRODUCTCONTAINERTO_ID ) <= M.MOVEMENTDATE THEN 1 ELSE 0 END ELSE 1 END AS PCTO 
-                            FROM M_MOVEMENT M INNER JOIN M_MOVEMENTLINE ML ON M.M_MOVEMENT_ID = ML.M_MOVEMENT_ID WHERE M.M_MOVEMENT_ID = " + M_Movement_ID + @" ) t 
+                            FROM (SELECT (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =ML.VAM_ProductContainer_ID ) AS NAME , 
+                            (SELECT NAME FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID =ML.REF_VAM_ProductContainerTO_ID ) AS NAMETO , 
+                            CASE WHEN ML.VAM_ProductContainer_ID>0 THEN CASE WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY')) 
+                            FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=ML.VAM_ProductContainer_ID ) <=M.MOVEMENTDATE THEN 1 ELSE 0 END ELSE 1 END AS PCFROM, 
+                            CASE WHEN ML.REF_VAM_ProductContainerTO_ID>0 THEN CASE WHEN (SELECT COALESCE(DATELASTINVENTORY,TO_DATE('01/01/1900','DD/MM/YYYY')) 
+                            FROM VAM_ProductContainer WHERE VAM_ProductContainer_ID=ML.REF_VAM_ProductContainerTO_ID ) <= M.MOVEMENTDATE THEN 1 ELSE 0 END ELSE 1 END AS PCTO 
+                            FROM VAM_InventoryTransfer M INNER JOIN VAM_InvTrf_Line ML ON M.VAM_InventoryTransfer_ID = ML.VAM_InventoryTransfer_ID WHERE M.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" ) t 
                             WHERE (PCFROM = 0 OR PCTO = 0) AND ROWNUM <= 100");
             }
             return sql.ToString();
         }
 
-        public static string CheckContainerQty(int M_Movement_ID)
+        public static string CheckContainerQty(int VAM_InventoryTransfer_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -643,22 +643,22 @@ namespace VAdvantage.DataBase
                                                (SELECT PName, ROW_NUMBER () OVER (ORDER BY PName ) RN, COUNT (*) OVER () CNT FROM 
                                                (
                                                 SELECT p.Name || '_' || asi.description || '_' || ml.line  AS PName 
-                                                FROM m_movementline ml INNER JOIN m_movement m ON m.m_movement_id = ml.m_movement_id
-                                                INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                                                LEFT JOIN m_attributesetinstance asi ON NVL(asi.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                 WHERE ml.MoveFullContainer ='Y' AND m.M_Movement_ID =" + M_Movement_ID + @"
+                                                FROM VAM_InvTrf_Line ml INNER JOIN VAM_InventoryTransfer m ON m.VAM_InventoryTransfer_id = ml.VAM_InventoryTransfer_id
+                                                INNER JOIN VAM_Product p ON p.VAM_Product_id = ml.VAM_Product_id
+                                                LEFT JOIN VAM_PFeature_SetInstance asi ON NVL(asi.VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                                                 WHERE ml.MoveFullContainer ='Y' AND m.VAM_InventoryTransfer_ID =" + VAM_InventoryTransfer_ID + @"
                                                     AND abs(ml.movementqty) <>
-                                                     NVL((SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.M_Transaction_ID) AS CurrentQty
-                                                     FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                                      WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
-                                                            VAF_Client_ID = m.VAF_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
-                                                            AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                            AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
+                                                     NVL((SELECT SUM(t.ContainerCurrentQty) keep (dense_rank last ORDER BY t.MovementDate, t.VAM_Inv_Trx_ID) AS CurrentQty
+                                                     FROM VAM_Inv_Trx t INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID
+                                                      WHERE t.MovementDate <= (Select MAX(movementdate) from VAM_Inv_Trx where 
+                                                            VAF_Client_ID = m.VAF_Client_ID  AND VAM_Locator_ID = ml.VAM_LocatorTo_ID
+                                                            AND VAM_Product_ID = ml.VAM_Product_ID AND NVL(VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                                                            AND NVL(VAM_ProductContainer_ID, 0) = NVL(ml.VAM_ProductContainer_ID, 0) )
                                                        AND t.VAF_Client_ID                     = m.VAF_Client_ID
-                                                       AND t.M_Locator_ID                     = ml.M_LocatorTo_ID
-                                                       AND t.M_Product_ID                     = ml.M_Product_ID
-                                                       AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                                                       AND NVL(t.M_ProductContainer_ID, 0)    = NVL(ml.M_ProductContainer_ID, 0)  ), 0) 
+                                                       AND t.VAM_Locator_ID                     = ml.VAM_LocatorTo_ID
+                                                       AND t.VAM_Product_ID                     = ml.VAM_Product_ID
+                                                       AND NVL(t.VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                                                       AND NVL(t.VAM_ProductContainer_ID, 0)    = NVL(ml.VAM_ProductContainer_ID, 0)  ), 0) 
                                                        AND ROWNUM <= 100 )
                                                ) WHERE RN = CNT START WITH RN = 1 CONNECT BY RN = PRIOR RN + 1 ");
             }
@@ -667,29 +667,29 @@ namespace VAdvantage.DataBase
             {
                 sql.Append(@"SELECT string_agg(PName, ', ') FROM 
                         (SELECT p.Name || '_' || asi.description || '_' || ml.line  AS PName 
-                        FROM m_movementline ml INNER JOIN m_movement m ON m.m_movement_id = ml.m_movement_id
-                        INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                        LEFT JOIN m_attributesetinstance asi ON NVL(asi.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                        WHERE ml.MoveFullContainer ='Y' AND m.M_Movement_ID =" + M_Movement_ID + @"
+                        FROM VAM_InvTrf_Line ml INNER JOIN VAM_InventoryTransfer m ON m.VAM_InventoryTransfer_id = ml.VAM_InventoryTransfer_id
+                        INNER JOIN VAM_Product p ON p.VAM_Product_id = ml.VAM_Product_id
+                        LEFT JOIN VAM_PFeature_SetInstance asi ON NVL(asi.VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                        WHERE ml.MoveFullContainer ='Y' AND m.VAM_InventoryTransfer_ID =" + VAM_InventoryTransfer_ID + @"
                         AND abs(ml.movementqty) <>
-                        NVL((SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, 
-                        t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty
-                        FROM m_transaction t INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                        WHERE t.MovementDate <= (Select MAX(movementdate) from m_transaction where 
-                        VAF_Client_ID = m.VAF_Client_ID  AND M_Locator_ID = ml.M_LocatorTo_ID
-                        AND M_Product_ID = ml.M_Product_ID AND NVL(M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                        AND NVL(M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0) )
+                        NVL((SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, 
+                        t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty
+                        FROM VAM_Inv_Trx t INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID
+                        WHERE t.MovementDate <= (Select MAX(movementdate) from VAM_Inv_Trx where 
+                        VAF_Client_ID = m.VAF_Client_ID  AND VAM_Locator_ID = ml.VAM_LocatorTo_ID
+                        AND VAM_Product_ID = ml.VAM_Product_ID AND NVL(VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                        AND NVL(VAM_ProductContainer_ID, 0) = NVL(ml.VAM_ProductContainer_ID, 0) )
                         AND t.VAF_Client_ID                     = m.VAF_Client_ID
-                        AND t.M_Locator_ID                     = ml.M_LocatorTo_ID
-                        AND t.M_Product_ID                     = ml.M_Product_ID
-                        AND NVL(t.M_AttributeSetInstance_ID,0) = NVL(ml.M_AttributeSetInstance_ID,0)
-                        AND NVL(t.M_ProductContainer_ID, 0)    = NVL(ml.M_ProductContainer_ID, 0)), 0)
+                        AND t.VAM_Locator_ID                     = ml.VAM_LocatorTo_ID
+                        AND t.VAM_Product_ID                     = ml.VAM_Product_ID
+                        AND NVL(t.VAM_PFeature_SetInstance_ID,0) = NVL(ml.VAM_PFeature_SetInstance_ID,0)
+                        AND NVL(t.VAM_ProductContainer_ID, 0)    = NVL(ml.VAM_ProductContainer_ID, 0)), 0)
                         ) final_ WHERE PName is not null AND ROWNUM <= 100 ");
             }
             return sql.ToString();
         }
 
-        public static string CheckMoveContainer(int M_Movement_ID)
+        public static string CheckMoveContainer(int VAM_InventoryTransfer_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -697,23 +697,23 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT LTRIM(SYS_CONNECT_BY_PATH( PName, ' , '),',') PName FROM
                              (SELECT PName, ROW_NUMBER() OVER(ORDER BY PName) RN, COUNT(*) OVER() CNT FROM(
                                SELECT ttt.PName, tt.CurrentQty, ttt.CurrentQty
-                                  FROM(SELECT '' AS PName, m_movementline_id, (ContainerCurrentQty)CurrentQty FROM(SELECT ml.m_movementline_id,
-                                  t.ContainerCurrentQty, t.MovementDate, t.M_Transaction_ID,
-                                  row_number() OVER(PARTITION BY ml.m_movementline_id ORDER BY t.M_Transaction_ID DESC, t.MovementDate DESC) RN_
-                                FROM m_transaction T INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                INNER JOIN M_movementLine ml ON(t.VAF_Client_ID = ml.VAF_Client_ID
-                                AND t.M_Locator_ID = ml.M_Locator_ID
-                                AND t.M_Product_ID = ml.M_Product_ID
-                                AND NVL(t.M_AttributeSetInstance_ID, 0) = NVL(ml.M_AttributeSetInstance_ID, 0)
-                                AND NVL(t.M_ProductContainer_ID, 0) = NVL(ml.M_ProductContainer_ID, 0))
-                                WHERE ml.M_Movement_ID = " + M_Movement_ID + @") WHERE RN_ = 1) tt
+                                  FROM(SELECT '' AS PName, VAM_InvTrf_Line_id, (ContainerCurrentQty)CurrentQty FROM(SELECT ml.VAM_InvTrf_Line_id,
+                                  t.ContainerCurrentQty, t.MovementDate, t.VAM_Inv_Trx_ID,
+                                  row_number() OVER(PARTITION BY ml.VAM_InvTrf_Line_id ORDER BY t.VAM_Inv_Trx_ID DESC, t.MovementDate DESC) RN_
+                                FROM VAM_Inv_Trx T INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID
+                                INNER JOIN VAM_InvTrf_Line ml ON(t.VAF_Client_ID = ml.VAF_Client_ID
+                                AND t.VAM_Locator_ID = ml.VAM_Locator_ID
+                                AND t.VAM_Product_ID = ml.VAM_Product_ID
+                                AND NVL(t.VAM_PFeature_SetInstance_ID, 0) = NVL(ml.VAM_PFeature_SetInstance_ID, 0)
+                                AND NVL(t.VAM_ProductContainer_ID, 0) = NVL(ml.VAM_ProductContainer_ID, 0))
+                                WHERE ml.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @") WHERE RN_ = 1) tt
                              INNER JOIN
-                              (SELECT p.Name || '_' || asi.description || '_' || ml.line AS PName, ml.m_movementline_id, ml.movementqty AS CurrentQty
-                               FROM m_movementline ml INNER JOIN m_movement m  ON m.m_movement_id = ml.m_movement_id
-                               INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                               LEFT JOIN m_attributesetinstance asi ON NVL(asi.M_AttributeSetInstance_ID, 0) = NVL(ml.M_AttributeSetInstance_ID, 0)
+                              (SELECT p.Name || '_' || asi.description || '_' || ml.line AS PName, ml.VAM_InvTrf_Line_id, ml.movementqty AS CurrentQty
+                               FROM VAM_InvTrf_Line ml INNER JOIN VAM_InventoryTransfer m  ON m.VAM_InventoryTransfer_id = ml.VAM_InventoryTransfer_id
+                               INNER JOIN VAM_Product p ON p.VAM_Product_id = ml.VAM_Product_id
+                               LEFT JOIN VAM_PFeature_SetInstance asi ON NVL(asi.VAM_PFeature_SetInstance_ID, 0) = NVL(ml.VAM_PFeature_SetInstance_ID, 0)
                                WHERE ml.MoveFullContainer = 'Y'
-                               AND m.M_Movement_ID = " + M_Movement_ID + @") ttt ON tt.m_movementline_id = ttt.m_movementline_id
+                               AND m.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @") ttt ON tt.VAM_InvTrf_Line_id = ttt.VAM_InvTrf_Line_id
                                WHERE tt.CurrentQty <> ttt.CurrentQty AND ROWNUM <= 100))
                            WHERE RN = CNT START WITH RN = 1   CONNECT BY RN = PRIOR RN + 1 ");
             }
@@ -722,23 +722,23 @@ namespace VAdvantage.DataBase
             {
                 sql.Append(@"SELECT string_agg(PName, ', ') FROM
                                 (SELECT ttt.PName , tt.CurrentQty, ttt.CurrentQty 
-                                FROM (SELECT '' AS PName, m_movementline_id, (ContainerCurrentQty) CurrentQty FROM (SELECT ml.m_movementline_id,
-                                t.ContainerCurrentQty, t.MovementDate,  t.M_Transaction_ID,
-                                row_number() OVER (PARTITION BY ml.m_movementline_id ORDER BY t.M_Transaction_ID DESC, t.MovementDate DESC) RN_
-                                FROM m_transaction T INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID
-                                INNER JOIN M_movementLine ml ON ( t.VAF_Client_ID = ml.VAF_Client_ID
-                                AND t.M_Locator_ID = ml.M_Locator_ID
-                                AND t.M_Product_ID = ml.M_Product_ID
-                                AND NVL (t.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
-                                AND NVL (t.M_ProductContainer_ID, 0) = NVL (ml.M_ProductContainer_ID, 0))
-                                WHERE ml.M_Movement_ID = " + M_Movement_ID + @" ) tt_ WHERE RN_ = 1 ) tt
+                                FROM (SELECT '' AS PName, VAM_InvTrf_Line_id, (ContainerCurrentQty) CurrentQty FROM (SELECT ml.VAM_InvTrf_Line_id,
+                                t.ContainerCurrentQty, t.MovementDate,  t.VAM_Inv_Trx_ID,
+                                row_number() OVER (PARTITION BY ml.VAM_InvTrf_Line_id ORDER BY t.VAM_Inv_Trx_ID DESC, t.MovementDate DESC) RN_
+                                FROM VAM_Inv_Trx T INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID
+                                INNER JOIN VAM_InvTrf_Line ml ON ( t.VAF_Client_ID = ml.VAF_Client_ID
+                                AND t.VAM_Locator_ID = ml.VAM_Locator_ID
+                                AND t.VAM_Product_ID = ml.VAM_Product_ID
+                                AND NVL (t.VAM_PFeature_SetInstance_ID, 0) = NVL (ml.VAM_PFeature_SetInstance_ID, 0)
+                                AND NVL (t.VAM_ProductContainer_ID, 0) = NVL (ml.VAM_ProductContainer_ID, 0))
+                                WHERE ml.VAM_InventoryTransfer_ID = " + VAM_InventoryTransfer_ID + @" ) tt_ WHERE RN_ = 1 ) tt
                                 INNER JOIN 
-                                (SELECT p.Name || '_' || asi.description || '_'  || ml.line AS PName, ml.m_movementline_id ,  ml.movementqty AS CurrentQty
-                                FROM m_movementline ml INNER JOIN m_movement m  ON m.m_movement_id = ml.m_movement_id
-                                INNER JOIN m_product p ON p.m_product_id = ml.m_product_id
-                                LEFT JOIN m_attributesetinstance asi ON NVL (asi.M_AttributeSetInstance_ID, 0) = NVL (ml.M_AttributeSetInstance_ID, 0)
+                                (SELECT p.Name || '_' || asi.description || '_'  || ml.line AS PName, ml.VAM_InvTrf_Line_id ,  ml.movementqty AS CurrentQty
+                                FROM VAM_InvTrf_Line ml INNER JOIN VAM_InventoryTransfer m  ON m.VAM_InventoryTransfer_id = ml.VAM_InventoryTransfer_id
+                                INNER JOIN VAM_Product p ON p.VAM_Product_id = ml.VAM_Product_id
+                                LEFT JOIN VAM_PFeature_SetInstance asi ON NVL (asi.VAM_PFeature_SetInstance_ID, 0) = NVL (ml.VAM_PFeature_SetInstance_ID, 0)
                                 WHERE ml.MoveFullContainer = 'Y'
-                                AND m.M_Movement_ID   = " + M_Movement_ID + @" ) ttt ON tt.m_movementline_id = ttt.m_movementline_id
+                                AND m.VAM_InventoryTransfer_ID   = " + VAM_InventoryTransfer_ID + @" ) ttt ON tt.VAM_InvTrf_Line_id = ttt.VAM_InvTrf_Line_id
                                 WHERE tt.CurrentQty <> ttt.CurrentQty) final_ WHERE PName IS NOT NULL AND ROWNUM <= 100");
             }
             return sql.ToString();
@@ -752,18 +752,18 @@ namespace VAdvantage.DataBase
                 sql.Append(@"SELECT SUBSTR(Sys_Connect_By_Path (Name, ','),2) AS Product FROM
                             (SELECT Name, Row_Number () Over (Order By Name ) Rn, COUNT (*) OVER () cnt 
                             FROM ((SELECT DISTINCT Prod.Name AS Name FROM VA010_MoveConfParameters Shp 
-                            INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id 
+                            INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE ( NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.M_MovementLineConfirm_ID IN (" + mMovementLinesConfirm + @"))))
+                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + mMovementLinesConfirm + @"))))
                             WHERE rn = cnt START WITH rn = 1 CONNECT BY Rn = Prior Rn + 1");
             }
             else if (DB.IsPostgreSQL())
             {
                 sql.Append(@"SELECT string_agg(Name, ', ') AS Product FROM 
                             (SELECT DISTINCT Prod.Name AS Name FROM VA010_MoveConfParameters Shp 
-                            INNER JOIN M_Product Prod ON prod.m_product_id = shp.m_product_id 
+                            INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE NVL(Shp.Va010_Actualvalue,0) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.M_MovementLineConfirm_ID IN (" + mMovementLinesConfirm + "))s t");
+                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + mMovementLinesConfirm + "))s t");
             }
             return sql.ToString();
         }

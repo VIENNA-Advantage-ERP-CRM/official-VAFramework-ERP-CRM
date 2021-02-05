@@ -28,9 +28,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     {
         //Organization Parameter		
         private int _VAF_Org_ID = -1;
-        private int _M_Warehouse_ID = -1;
-        private int _M_Product_Category_ID = -1;
-        private int _M_Product_ID = -1;
+        private int _VAM_Warehouse_ID = -1;
+        private int _VAM_ProductCategory_ID = -1;
+        private int _VAM_Product_ID = -1;
         private int _VAB_BPart_Category_ID = -1;
         private int _VAB_BusinessPartner_ID = -1;
 
@@ -51,18 +51,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("M_Warehouse_ID"))
+                else if (name.Equals("VAM_Warehouse_ID"))
                 {
-                    _M_Warehouse_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAM_Warehouse_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
 
-                else if (name.Equals("M_Product_Category_ID"))
+                else if (name.Equals("VAM_ProductCategory_ID"))
                 {
-                    _M_Product_Category_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAM_ProductCategory_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    _M_Product_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAM_Product_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
 
                 else if (name.Equals("VAB_BPart_Category_ID"))
@@ -95,12 +95,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             GeneralOwnership();
 
-            if (_M_Warehouse_ID > 0)
+            if (_VAM_Warehouse_ID > 0)
             {
                 return WarehouseOwnership();
             }
 
-            if (_M_Product_ID > 0 || _M_Product_Category_ID > 0)
+            if (_VAM_Product_ID > 0 || _VAM_ProductCategory_ID > 0)
             {
                 return ProductOwnership();
             }
@@ -119,7 +119,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>""</returns>
         private String WarehouseOwnership()
         {
-            log.Info("warehouseOwnership - M_Warehouse_ID=" + _M_Warehouse_ID);
+            log.Info("warehouseOwnership - VAM_Warehouse_ID=" + _VAM_Warehouse_ID);
             if (_VAF_Org_ID == 0)
             {
                 throw new Exception("Warehouse - Org cannot be * (0)");
@@ -127,19 +127,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Warehouse
             StringBuilder sql = new StringBuilder();
-            sql.Append("UPDATE M_Warehouse "
+            sql.Append("UPDATE VAM_Warehouse "
                 + "SET VAF_Org_ID=").Append(_VAF_Org_ID)
-                .Append(" WHERE M_Warehouse_ID=").Append(_M_Warehouse_ID)
+                .Append(" WHERE VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
                 .Append(" AND VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND VAF_Org_ID<>").Append(_VAF_Org_ID);
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Warehouse_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Warehouse_ID"));
 
             //	Set Accounts
             sql = new StringBuilder();
-            sql.Append("UPDATE M_Warehouse_Acct "
+            sql.Append("UPDATE VAM_Warehouse_Acct "
                 + "SET VAF_Org_ID=").Append(_VAF_Org_ID)
-                .Append(" WHERE M_Warehouse_ID=").Append(_M_Warehouse_ID)
+                .Append(" WHERE VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
                 .Append(" AND VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND VAF_Org_ID<>").Append(_VAF_Org_ID);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -147,25 +147,25 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Locators
             sql = new StringBuilder();
-            sql.Append("UPDATE M_Locator "
+            sql.Append("UPDATE VAM_Locator "
                 + "SET VAF_Org_ID=").Append(_VAF_Org_ID)
-                .Append(" WHERE M_Warehouse_ID=").Append(_M_Warehouse_ID)
+                .Append(" WHERE VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
                 .Append(" AND VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND VAF_Org_ID<>").Append(_VAF_Org_ID);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Locator_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Locator_ID"));
 
             //	Set Storage
             sql = new StringBuilder();
-            sql.Append("UPDATE M_Storage s "
+            sql.Append("UPDATE VAM_Storage s "
                 + "SET VAF_Org_ID=").Append(_VAF_Org_ID)
                 .Append(" WHERE EXISTS "
-                    + "(SELECT * FROM M_Locator l WHERE l.M_Locator_ID=s.M_Locator_ID"
-                    + " AND l.M_Warehouse_ID=").Append(_M_Warehouse_ID)
+                    + "(SELECT * FROM VAM_Locator l WHERE l.VAM_Locator_ID=s.VAM_Locator_ID"
+                    + " AND l.VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
                 .Append(") AND VAF_Client_ID=").Append(GetVAF_Client_ID())
                 .Append(" AND VAF_Org_ID<>").Append(_VAF_Org_ID);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Storage"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Storage"));
             return "";
         }
 
@@ -175,58 +175,58 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>""</returns>
         private String ProductOwnership()
         {
-            log.Info("productOwnership - M_Product_Category_ID=" + _M_Product_Category_ID
-                + ", M_Product_ID=" + _M_Product_ID);
+            log.Info("productOwnership - VAM_ProductCategory_ID=" + _VAM_ProductCategory_ID
+                + ", VAM_Product_ID=" + _VAM_Product_ID);
 
             String set = " SET VAF_Org_ID=" + _VAF_Org_ID;
-            if (_M_Product_Category_ID > 0)
+            if (_VAM_ProductCategory_ID > 0)
             {
-                set += " WHERE EXISTS (SELECT * FROM M_Product p"
-                    + " WHERE p.M_Product_ID=x.M_Product_ID AND p.M_Product_Category_ID="
-                        + _M_Product_Category_ID + ")";
+                set += " WHERE EXISTS (SELECT * FROM VAM_Product p"
+                    + " WHERE p.VAM_Product_ID=x.VAM_Product_ID AND p.VAM_ProductCategory_ID="
+                        + _VAM_ProductCategory_ID + ")";
             }
             else
             {
-                set += " WHERE M_Product_ID=" + _M_Product_ID;
+                set += " WHERE VAM_Product_ID=" + _VAM_Product_ID;
             }
             set += " AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAF_Org_ID<>" + _VAF_Org_ID;
             log.Fine("productOwnership - " + set);
 
             //	Product
-            String sql = "UPDATE M_Product x " + set;
+            String sql = "UPDATE VAM_Product x " + set;
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Product_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Product_ID"));
 
             //	Acct
-            sql = "UPDATE M_Product_Acct x " + set;
+            sql = "UPDATE VAM_Product_Acct x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAB_AccountBook_ID"));
 
             //	BOM
-            sql = "UPDATE M_Product_BOM x " + set;
+            sql = "UPDATE VAM_Product_BOM x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Product_BOM_ID"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Product_BOM_ID"));
 
             //	PO
-            sql = "UPDATE M_Product_PO x " + set;
+            sql = "UPDATE VAM_Product_PO x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Product_PO"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Product_PO"));
 
             //	Trl
-            sql = "UPDATE M_Product_Trl x " + set;
+            sql = "UPDATE VAM_Product_TL x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAF_Language"));
 
-            //Added by Pratap 30-12-15 M_Replenish,M_Substitute,VAB_BPart_Product - Mantis Issue ID - 0000441
-            //	M_Replenish 
-            sql = "UPDATE M_Replenish x " + set;
+            //Added by Pratap 30-12-15 VAM_Inv_Replenish,VAM_Alternate,VAB_BPart_Product - Mantis Issue ID - 0000441
+            //	VAM_Inv_Replenish 
+            sql = "UPDATE VAM_Inv_Replenish x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Replenish"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Inv_Replenish"));
 
-            //	M_Substitute
-            sql = "UPDATE M_Substitute x " + set;
+            //	VAM_Alternate
+            sql = "UPDATE VAM_Alternate x " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
-            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "M_Substitute"));
+            AddLog(0, null, new Decimal(no), Msg.Translate(GetCtx(), "VAM_Alternate"));
 
             //	VAB_BPart_Product
             sql = "UPDATE VAB_BPart_Product x " + set;
@@ -334,19 +334,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Costing
-            sql = "UPDATE M_Product_Costing " + set;
+            sql = "UPDATE VAM_ProductCosting " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - M_Product_Costing=" + no);
+                log.Fine("generalOwnership - VAM_ProductCosting=" + no);
             }
 
             //	Replenish
-            sql = "UPDATE M_Replenish " + set;
+            sql = "UPDATE VAM_Inv_Replenish " + set;
             no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             if (no != 0)
             {
-                log.Fine("generalOwnership - M_Replenish=" + no);
+                log.Fine("generalOwnership - VAM_Inv_Replenish=" + no);
             }
 
         }

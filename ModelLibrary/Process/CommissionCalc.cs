@@ -113,7 +113,7 @@ namespace VAdvantage.Process
                             + " INNER JOIN VAB_DocAllocationLine al ON (p.VAB_Payment_ID=al.VAB_Payment_ID)"
                             + " INNER JOIN VAB_Invoice h ON (al.VAB_Invoice_ID = h.VAB_Invoice_ID)"
                             + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID) "
-                            + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
+                            + " LEFT OUTER JOIN VAM_Product prd ON (l.VAM_Product_ID = prd.VAM_Product_ID) "
                             + "WHERE p.DocStatus IN ('CL','CO','RE')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND p.VAF_Client_ID = @clientid"
@@ -145,7 +145,7 @@ namespace VAdvantage.Process
                             + " COALESCE(prd.Value,l.Description),h.DateOrdered "
                             + "FROM VAB_Order h"
                             + " INNER JOIN VAB_OrderLine l ON (h.VAB_Order_ID = l.VAB_Order_ID)"
-                            + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
+                            + " LEFT OUTER JOIN VAM_Product prd ON (l.VAM_Product_ID = prd.VAM_Product_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND h.VAF_Client_ID = @clientid"
@@ -175,7 +175,7 @@ namespace VAdvantage.Process
                             + " COALESCE(prd.Value,l.Description),h.DateInvoiced "
                             + "FROM VAB_Invoice h"
                             + " INNER JOIN VAB_InvoiceLine l ON (h.VAB_Invoice_ID = l.VAB_Invoice_ID)"
-                            + " LEFT OUTER JOIN M_Product prd ON (l.M_Product_ID = prd.M_Product_ID) "
+                            + " LEFT OUTER JOIN VAM_Product prd ON (l.VAM_Product_ID = prd.VAM_Product_ID) "
                             + "WHERE h.DocStatus IN ('CL','CO')"
                             + " AND h.IsSOTrx='Y'"
                             + " AND l.IsCommissionCalculated = 'N' "
@@ -254,12 +254,12 @@ namespace VAdvantage.Process
                     sql.Append(" AND h.VAB_BPart_Location_ID IN "
                         + "(SELECT VAB_BPart_Location_ID FROM VAB_BPart_Location WHERE VAB_SalesRegionState_ID=").Append(lines[i].GetVAB_SalesRegionState_ID()).Append(")");
                 //	Product
-                if (lines[i].GetM_Product_ID() != 0)
-                    sql.Append(" AND l.M_Product_ID=").Append(lines[i].GetM_Product_ID());
+                if (lines[i].GetVAM_Product_ID() != 0)
+                    sql.Append(" AND l.VAM_Product_ID=").Append(lines[i].GetVAM_Product_ID());
                 //	Product Category
-                if (lines[i].GetM_Product_Category_ID() != 0)
-                    sql.Append(" AND l.M_Product_ID IN "
-                        + "(SELECT M_Product_ID FROM M_Product WHERE M_Product_Category_ID=").Append(lines[i].GetM_Product_Category_ID()).Append(")");
+                if (lines[i].GetVAM_ProductCategory_ID() != 0)
+                    sql.Append(" AND l.VAM_Product_ID IN "
+                        + "(SELECT VAM_Product_ID FROM VAM_Product WHERE VAM_ProductCategory_ID=").Append(lines[i].GetVAM_ProductCategory_ID()).Append(")");
                 //	Grouping according to Calculation Basis
                 if (!m_com.IsListDetails() && m_com.GetDocBasisType().Equals("O"))
                 {

@@ -22,7 +22,7 @@ public X_C_POSKey (Context ctx, int C_POSKey_ID, Trx trxName) : base (ctx, C_POS
 {
 SetC_POSKeyLayout_ID (0);
 SetC_POSKey_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 SetQty (0.0);
 SetSeqNo (0);
@@ -35,7 +35,7 @@ public X_C_POSKey (Ctx ctx, int C_POSKey_ID, Trx trxName) : base (ctx, C_POSKey_
 {
 SetC_POSKeyLayout_ID (0);
 SetC_POSKey_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 SetQty (0.0);
 SetSeqNo (0);
@@ -184,17 +184,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_Value ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

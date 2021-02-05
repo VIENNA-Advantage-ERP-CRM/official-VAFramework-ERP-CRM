@@ -326,8 +326,8 @@ namespace VAdvantage.Model
                 SetIsMenuShipments(true);	// Y
 
                 //	setVAB_PaymentTerm_ID (0);
-                //	setM_PriceList_ID (0);
-                //	setM_Warehouse_ID (0);
+                //	setVAM_PriceList_ID (0);
+                //	setVAM_Warehouse_ID (0);
                 //	setName (null);
                 //	setSalesRep_ID (0);
                 //	setURL (null);
@@ -399,9 +399,9 @@ namespace VAdvantage.Model
                 SetWebContext("/" + GetWebContext());
             }
             //	Org to Warehouse
-            if (newRecord || Is_ValueChanged("M_Warehouse_ID") || GetVAF_Org_ID() == 0)
+            if (newRecord || Is_ValueChanged("VAM_Warehouse_ID") || GetVAF_Org_ID() == 0)
             {
-                MWarehouse wh = new MWarehouse(GetCtx(), GetM_Warehouse_ID(), Get_TrxName());
+                MWarehouse wh = new MWarehouse(GetCtx(), GetVAM_Warehouse_ID(), Get_TrxName());
                 SetVAF_Org_ID(wh.GetVAF_Org_ID());
             }
 

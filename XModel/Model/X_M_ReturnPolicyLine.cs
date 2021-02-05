@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_ReturnPolicyLine
+/** Generated Model for VAM_ReturnRuleLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ReturnPolicyLine : PO
+public class X_VAM_ReturnRuleLine : PO
 {
-public X_M_ReturnPolicyLine (Context ctx, int M_ReturnPolicyLine_ID, Trx trxName) : base (ctx, M_ReturnPolicyLine_ID, trxName)
+public X_VAM_ReturnRuleLine (Context ctx, int VAM_ReturnRuleLine_ID, Trx trxName) : base (ctx, VAM_ReturnRuleLine_ID, trxName)
 {
-/** if (M_ReturnPolicyLine_ID == 0)
+/** if (VAM_ReturnRuleLine_ID == 0)
 {
-SetM_ReturnPolicyLine_ID (0);
-SetM_ReturnPolicy_ID (0);
+SetVAM_ReturnRuleLine_ID (0);
+SetVAM_ReturnRule_ID (0);
 }
  */
 }
-public X_M_ReturnPolicyLine (Ctx ctx, int M_ReturnPolicyLine_ID, Trx trxName) : base (ctx, M_ReturnPolicyLine_ID, trxName)
+public X_VAM_ReturnRuleLine (Ctx ctx, int VAM_ReturnRuleLine_ID, Trx trxName) : base (ctx, VAM_ReturnRuleLine_ID, trxName)
 {
-/** if (M_ReturnPolicyLine_ID == 0)
+/** if (VAM_ReturnRuleLine_ID == 0)
 {
-SetM_ReturnPolicyLine_ID (0);
-SetM_ReturnPolicy_ID (0);
+SetVAM_ReturnRuleLine_ID (0);
+SetVAM_ReturnRule_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetM_ReturnPolicy_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicyLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ReturnRuleLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_ReturnPolicyLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicyLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ReturnRuleLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_ReturnPolicyLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ReturnPolicyLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ReturnRuleLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ReturnPolicyLine()
+static X_VAM_ReturnRuleLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389064488L;
 public static int Table_ID;
  // =986;
 
-/** TableName=M_ReturnPolicyLine */
-public static String Table_Name="M_ReturnPolicyLine";
+/** TableName=VAM_ReturnRuleLine */
+public static String Table_Name="VAM_ReturnRuleLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_ReturnPolicyLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ReturnRuleLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -130,64 +130,64 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID <= 0) Set_Value ("M_Product_Category_ID", null);
+if (VAM_ProductCategory_ID <= 0) Set_Value ("VAM_ProductCategory_ID", null);
 else
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);
 else
-Set_Value ("M_Product_ID", M_Product_ID);
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Return Policy Line.
-@param M_ReturnPolicyLine_ID Exceptions to the return policy timeframe for specific products or product categories can be specified at the line level. */
-public void SetM_ReturnPolicyLine_ID (int M_ReturnPolicyLine_ID)
+@param VAM_ReturnRuleLine_ID Exceptions to the return policy timeframe for specific products or product categories can be specified at the line level. */
+public void SetVAM_ReturnRuleLine_ID (int VAM_ReturnRuleLine_ID)
 {
-if (M_ReturnPolicyLine_ID < 1) throw new ArgumentException ("M_ReturnPolicyLine_ID is mandatory.");
-Set_ValueNoCheck ("M_ReturnPolicyLine_ID", M_ReturnPolicyLine_ID);
+if (VAM_ReturnRuleLine_ID < 1) throw new ArgumentException ("VAM_ReturnRuleLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ReturnRuleLine_ID", VAM_ReturnRuleLine_ID);
 }
 /** Get Return Policy Line.
 @return Exceptions to the return policy timeframe for specific products or product categories can be specified at the line level. */
-public int GetM_ReturnPolicyLine_ID() 
+public int GetVAM_ReturnRuleLine_ID() 
 {
-Object ii = Get_Value("M_ReturnPolicyLine_ID");
+Object ii = Get_Value("VAM_ReturnRuleLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Return Policy.
-@param M_ReturnPolicy_ID The Return Policy dictates the timeframe within which goods can be returned. */
-public void SetM_ReturnPolicy_ID (int M_ReturnPolicy_ID)
+@param VAM_ReturnRule_ID The Return Policy dictates the timeframe within which goods can be returned. */
+public void SetVAM_ReturnRule_ID (int VAM_ReturnRule_ID)
 {
-if (M_ReturnPolicy_ID < 1) throw new ArgumentException ("M_ReturnPolicy_ID is mandatory.");
-Set_ValueNoCheck ("M_ReturnPolicy_ID", M_ReturnPolicy_ID);
+if (VAM_ReturnRule_ID < 1) throw new ArgumentException ("VAM_ReturnRule_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ReturnRule_ID", VAM_ReturnRule_ID);
 }
 /** Get Return Policy.
 @return The Return Policy dictates the timeframe within which goods can be returned. */
-public int GetM_ReturnPolicy_ID() 
+public int GetVAM_ReturnRule_ID() 
 {
-Object ii = Get_Value("M_ReturnPolicy_ID");
+Object ii = Get_Value("VAM_ReturnRule_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

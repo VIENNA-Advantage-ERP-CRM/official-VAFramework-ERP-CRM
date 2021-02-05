@@ -103,11 +103,11 @@ namespace VAdvantage.Process
                // String sql = "select VAB_DocTypes_id from VAB_DocTypes where docbasetype= 'SOO' and  = 'Sales Quotation'";
                 String sql = "select VAB_DocTypes_id from VAB_DocTypes where docbasetype = 'SOO' and docsubtypeso = 'ON' and isreturntrx = 'N' and vaf_client_id = " + GetCtx().GetVAF_Client_ID();
                 int Doctype_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                int MPriceList_id = Util.GetValueOfInt(fromProject.GetM_PriceList_ID());
-                order.SetM_PriceList_ID(MPriceList_id);
-                ////String sqlmpricelist = "select m_pricelist_id from m_pricelist where name='Export'";
+                int MPriceList_id = Util.GetValueOfInt(fromProject.GetVAM_PriceList_ID());
+                order.SetVAM_PriceList_ID(MPriceList_id);
+                ////String sqlmpricelist = "select VAM_PriceList_id from VAM_PriceList where name='Export'";
                 ////int MPriceList_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlmpricelist));
-                //if (MPriceList_id == order.GetM_PriceList_ID())
+                //if (MPriceList_id == order.GetVAM_PriceList_ID())
                 //{
                 //    String sqlconversiontype = "select VAB_CurrencyType_id from VAB_CurrencyType where value = 'C'";
                 //    int VAB_CurrencyType_id = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlconversiontype));
@@ -179,7 +179,7 @@ namespace VAdvantage.Process
                     VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
-                    ol.SetM_Product_ID(lines[i].GetM_Product_ID(), true);
+                    ol.SetVAM_Product_ID(lines[i].GetVAM_Product_ID(), true);
                     ol.SetQtyEntered(lines[i].GetPlannedQty());
                     ol.SetQtyOrdered(lines[i].GetPlannedQty());
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());

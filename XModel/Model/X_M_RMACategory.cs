@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_RMACategory
+/** Generated Model for VAM_RMACategory
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_RMACategory : PO
+public class X_VAM_RMACategory : PO
 {
-public X_M_RMACategory (Context ctx, int M_RMACategory_ID, Trx trxName) : base (ctx, M_RMACategory_ID, trxName)
+public X_VAM_RMACategory (Context ctx, int VAM_RMACategory_ID, Trx trxName) : base (ctx, VAM_RMACategory_ID, trxName)
 {
-/** if (M_RMACategory_ID == 0)
+/** if (VAM_RMACategory_ID == 0)
 {
-SetM_RMACategory_ID (0);
+SetVAM_RMACategory_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_RMACategory (Ctx ctx, int M_RMACategory_ID, Trx trxName) : base (ctx, M_RMACategory_ID, trxName)
+public X_VAM_RMACategory (Ctx ctx, int VAM_RMACategory_ID, Trx trxName) : base (ctx, VAM_RMACategory_ID, trxName)
 {
-/** if (M_RMACategory_ID == 0)
+/** if (VAM_RMACategory_ID == 0)
 {
-SetM_RMACategory_ID (0);
+SetVAM_RMACategory_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_RMACategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_RMACategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_RMACategory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_RMACategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_RMACategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_RMACategory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_M_RMACategory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_RMACategory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_RMACategory()
+static X_VAM_RMACategory()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389064269L;
 public static int Table_ID;
  // =987;
 
-/** TableName=M_RMACategory */
-public static String Table_Name="M_RMACategory";
+/** TableName=VAM_RMACategory */
+public static String Table_Name="VAM_RMACategory";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_RMACategory[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_RMACategory[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -147,17 +147,17 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set RMA Category.
-@param M_RMACategory_ID Return Material Authorization Category */
-public void SetM_RMACategory_ID (int M_RMACategory_ID)
+@param VAM_RMACategory_ID Return Material Authorization Category */
+public void SetVAM_RMACategory_ID (int VAM_RMACategory_ID)
 {
-if (M_RMACategory_ID < 1) throw new ArgumentException ("M_RMACategory_ID is mandatory.");
-Set_ValueNoCheck ("M_RMACategory_ID", M_RMACategory_ID);
+if (VAM_RMACategory_ID < 1) throw new ArgumentException ("VAM_RMACategory_ID is mandatory.");
+Set_ValueNoCheck ("VAM_RMACategory_ID", VAM_RMACategory_ID);
 }
 /** Get RMA Category.
 @return Return Material Authorization Category */
-public int GetM_RMACategory_ID() 
+public int GetVAM_RMACategory_ID() 
 {
-Object ii = Get_Value("M_RMACategory_ID");
+Object ii = Get_Value("VAM_RMACategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -25,15 +25,15 @@ namespace VAdvantage.Process
         private StringBuilder sql = new StringBuilder();
         private static VLogger _log = VLogger.GetVLogger(typeof(ProductionReverse).FullName);
 
-        private int M_Production_ID = 0;
+        private int VAM_Production_ID = 0;
         private DataSet dsProductionPlan = null;
         private DataSet dsProductionLine = null;
         private DataRow[] drProductionLine = null;
 
-        private X_M_ProductionPlan fromProdPlan = null;
-        private X_M_ProductionPlan toProdPlan = null;
-        private X_M_ProductionLine fromProdline = null;
-        private X_M_ProductionLine toProdline = null;
+        private X_VAM_ProductionPlan fromProdPlan = null;
+        private X_VAM_ProductionPlan toProdPlan = null;
+        private X_VAM_ProductionLine fromProdline = null;
+        private X_VAM_ProductionLine toProdline = null;
 
         private String result = string.Empty;
 
@@ -41,7 +41,7 @@ namespace VAdvantage.Process
         protected override void Prepare()
         {
             // record id - to be reversed
-            M_Production_ID = GetRecord_ID();
+            VAM_Production_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -50,10 +50,10 @@ namespace VAdvantage.Process
         /// <returns>message successfuly created or not</returns>
         protected override string DoIt()
         {
-            if (M_Production_ID > 0)
+            if (VAM_Production_ID > 0)
             {
                 //Copy Production Header
-                X_M_Production production = new X_M_Production(GetCtx(), M_Production_ID, Get_Trx());
+                X_VAM_Production production = new X_VAM_Production(GetCtx(), VAM_Production_ID, Get_Trx());
 
                 //check production is Reversed or not, if Reversed then not to do anything
                 if (production.IsReversed())
@@ -62,19 +62,19 @@ namespace VAdvantage.Process
                 }
 
                 //Get data from Production Plan
-                dsProductionPlan = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , M_LOCATOR_ID , 
-                                       M_PRODUCT_ID , M_PRODUCTIONPLAN_ID ,  M_PRODUCTION_ID  ,  PROCESSED  , PRODUCTIONQTY  M_WAREHOUSE_ID FROM M_ProductionPlan 
-                                       WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
+                dsProductionPlan = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , VAM_Locator_ID , 
+                                       VAM_Product_ID , VAM_ProductionPlan_ID ,  VAM_Production_ID  ,  PROCESSED  , PRODUCTIONQTY  VAM_Warehouse_ID FROM VAM_ProductionPlan 
+                                       WHERE IsActive = 'Y' AND VAM_Production_ID = " + VAM_Production_ID, null, Get_Trx());
 
                 //get data from production Line
-                dsProductionLine = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , M_ATTRIBUTESETINSTANCE_ID , M_LOCATOR_ID , 
-                                       M_PRODUCT_ID ,  M_PRODUCTIONLINE_ID, M_PRODUCTIONPLAN_ID , M_PRODUCTION_ID  , PROCESSED  , MOVEMENTQTY , 
-                                       VAB_UOM_ID , PLANNEDQTY , M_WAREHOUSE_ID FROM M_ProductionLine 
-                                       WHERE IsActive = 'Y' AND M_PRODUCTION_ID = " + M_Production_ID, null, Get_Trx());
+                dsProductionLine = DB.ExecuteDataset(@"SELECT VAF_CLIENT_ID , VAF_ORG_ID , DESCRIPTION , LINE , VAM_PFeature_SetInstance_ID , VAM_Locator_ID , 
+                                       VAM_Product_ID ,  VAM_ProductionLine_ID, VAM_ProductionPlan_ID , VAM_Production_ID  , PROCESSED  , MOVEMENTQTY , 
+                                       VAB_UOM_ID , PLANNEDQTY , VAM_Warehouse_ID FROM VAM_ProductionLine 
+                                       WHERE IsActive = 'Y' AND VAM_Production_ID = " + VAM_Production_ID, null, Get_Trx());
 
 
                 // Create New record of Production Header with Reverse Entry
-                X_M_Production productionTo = new X_M_Production(production.GetCtx(), 0, production.Get_Trx());
+                X_VAM_Production productionTo = new X_VAM_Production(production.GetCtx(), 0, production.Get_Trx());
                 try
                 {
                     productionTo.Set_TrxName(production.Get_Trx());
@@ -101,16 +101,16 @@ namespace VAdvantage.Process
                             for (int i = 0; i < dsProductionPlan.Tables[0].Rows.Count; i++)
                             {
                                 //Original Line
-                                fromProdPlan = new X_M_ProductionPlan(GetCtx(), Util.GetValueOfInt(dsProductionPlan.Tables[0].Rows[i]["M_PRODUCTIONPLAN_ID"]), Get_Trx());
+                                fromProdPlan = new X_VAM_ProductionPlan(GetCtx(), Util.GetValueOfInt(dsProductionPlan.Tables[0].Rows[i]["VAM_ProductionPlan_ID"]), Get_Trx());
 
                                 // Create New record of Production Plan with Reverse Entry
-                                toProdPlan = new X_M_ProductionPlan(production.GetCtx(), 0, production.Get_Trx());
+                                toProdPlan = new X_VAM_ProductionPlan(production.GetCtx(), 0, production.Get_Trx());
                                 try
                                 {
                                     toProdPlan.Set_TrxName(production.Get_Trx());
                                     PO.CopyValues(fromProdPlan, toProdPlan, fromProdPlan.GetVAF_Client_ID(), fromProdPlan.GetVAF_Org_ID());
                                     toProdPlan.SetProductionQty(Decimal.Negate(toProdPlan.GetProductionQty()));
-                                    toProdPlan.SetM_Production_ID(productionTo.GetM_Production_ID());
+                                    toProdPlan.SetVAM_Production_ID(productionTo.GetVAM_Production_ID());
                                     toProdPlan.SetProcessed(false);
                                     if (!toProdPlan.Save(production.Get_Trx()))
                                     {
@@ -125,28 +125,28 @@ namespace VAdvantage.Process
                                         if (dsProductionLine != null && dsProductionLine.Tables.Count > 0 && dsProductionLine.Tables[0].Rows.Count > 0)
                                         {
                                             //check record exist on production line against production plan
-                                            drProductionLine = dsProductionLine.Tables[0].Select("M_ProductionPlan_ID  = " + fromProdPlan.GetM_ProductionPlan_ID());
+                                            drProductionLine = dsProductionLine.Tables[0].Select("VAM_ProductionPlan_ID  = " + fromProdPlan.GetVAM_ProductionPlan_ID());
                                             if (drProductionLine.Length > 0)
                                             {
                                                 for (int j = 0; j < drProductionLine.Length; j++)
                                                 {
                                                     //Original Line
-                                                    fromProdline = new X_M_ProductionLine(GetCtx(), Util.GetValueOfInt(drProductionLine[j]["M_PRODUCTIONLINE_ID"]), Get_Trx());
+                                                    fromProdline = new X_VAM_ProductionLine(GetCtx(), Util.GetValueOfInt(drProductionLine[j]["VAM_ProductionLine_ID"]), Get_Trx());
 
                                                     // Create New record of Production line with Reverse Entry
-                                                    toProdline = new X_M_ProductionLine(production.GetCtx(), 0, production.Get_Trx());
+                                                    toProdline = new X_VAM_ProductionLine(production.GetCtx(), 0, production.Get_Trx());
                                                     try
                                                     {
                                                         toProdline.Set_TrxName(production.Get_Trx());
                                                         PO.CopyValues(fromProdline, toProdline, fromProdPlan.GetVAF_Client_ID(), fromProdPlan.GetVAF_Org_ID());
                                                         toProdline.SetMovementQty(Decimal.Negate(toProdline.GetMovementQty()));
                                                         toProdline.SetPlannedQty(Decimal.Negate(toProdline.GetPlannedQty()));
-                                                        toProdline.SetM_Production_ID(productionTo.GetM_Production_ID());
-                                                        toProdline.SetM_ProductionPlan_ID(toProdPlan.GetM_ProductionPlan_ID());
-                                                        toProdline.SetM_ProductContainer_ID(fromProdline.GetM_ProductContainer_ID()); // bcz not a copy record
-                                                        toProdline.SetReversalDoc_ID(fromProdline.GetM_ProductionLine_ID()); //maintain refernce of Orignal record on reversed record
+                                                        toProdline.SetVAM_Production_ID(productionTo.GetVAM_Production_ID());
+                                                        toProdline.SetVAM_ProductionPlan_ID(toProdPlan.GetVAM_ProductionPlan_ID());
+                                                        toProdline.SetVAM_ProductContainer_ID(fromProdline.GetVAM_ProductContainer_ID()); // bcz not a copy record
+                                                        toProdline.SetReversalDoc_ID(fromProdline.GetVAM_ProductionLine_ID()); //maintain refernce of Orignal record on reversed record
                                                         toProdline.SetProcessed(false);
-                                                        if (!CheckQtyAvailablity(GetCtx(), toProdline.GetM_Warehouse_ID(), toProdline.GetM_Locator_ID(), toProdline.GetM_ProductContainer_ID(), toProdline.GetM_Product_ID(), toProdline.GetM_AttributeSetInstance_ID(), toProdline.GetMovementQty(), Get_Trx()))
+                                                        if (!CheckQtyAvailablity(GetCtx(), toProdline.GetVAM_Warehouse_ID(), toProdline.GetVAM_Locator_ID(), toProdline.GetVAM_ProductContainer_ID(), toProdline.GetVAM_Product_ID(), toProdline.GetVAM_PFeature_SetInstance_ID(), toProdline.GetMovementQty(), Get_Trx()))
                                                         {
                                                             production.Get_Trx().Rollback();
                                                             ValueNamePair pp = VLogger.RetrieveError();
@@ -166,14 +166,14 @@ namespace VAdvantage.Process
                                                         {
                                                             // Create New record of Production line Policy (Material Policy) with Reverse Entry
                                                             sql.Clear();
-                                                            sql.Append(@"INSERT INTO M_ProductionLineMA 
+                                                            sql.Append(@"INSERT INTO VAM_ProductionLineMP 
                                                                   (  VAF_CLIENT_ID, VAF_ORG_ID , CREATED , CREATEDBY , ISACTIVE , UPDATED , UPDATEDBY ,
-                                                                    M_PRODUCTIONLINE_ID , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID, MOVEMENTQTY )
+                                                                    VAM_ProductionLine_ID , VAM_PFeature_SetInstance_ID , MMPOLICYDATE , VAM_ProductContainer_ID, MOVEMENTQTY )
                                                                   (SELECT VAF_CLIENT_ID, VAF_ORG_ID , sysdate , CREATEDBY , ISACTIVE , sysdate , UPDATEDBY ,
-                                                                      " + toProdline.GetM_ProductionLine_ID() + @" , M_ATTRIBUTESETINSTANCE_ID , MMPOLICYDATE , M_PRODUCTCONTAINER_ID,  -1 * MOVEMENTQTY
-                                                                    FROM M_ProductionLineMA  WHERE M_ProductionLine_ID = " + fromProdline.GetM_ProductionLine_ID() + @" ) ");
+                                                                      " + toProdline.GetVAM_ProductionLine_ID() + @" , VAM_PFeature_SetInstance_ID , MMPOLICYDATE , VAM_ProductContainer_ID,  -1 * MOVEMENTQTY
+                                                                    FROM VAM_ProductionLineMP  WHERE VAM_ProductionLine_ID = " + fromProdline.GetVAM_ProductionLine_ID() + @" ) ");
                                                             int no = DB.ExecuteQuery(sql.ToString(), null, Get_Trx());
-                                                            _log.Info("No of records saved on Meterial Policy against Production line ID : " + toProdline.GetM_ProductionLine_ID() + " are : " + no);
+                                                            _log.Info("No of records saved on Meterial Policy against Production line ID : " + toProdline.GetVAM_ProductionLine_ID() + " are : " + no);
 
                                                         }
                                                     }
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
                     // To check weather future date records are available in Transaction window
                     // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
                     string _processMsg = MTransaction.CheckFutureDateRecord(productionTo.GetMovementDate(),
-                                           productionTo.Get_TableName(), productionTo.GetM_Production_ID(), production.Get_Trx());
+                                           productionTo.Get_TableName(), productionTo.GetVAM_Production_ID(), production.Get_Trx());
                     if (!string.IsNullOrEmpty(_processMsg))
                     {
                         production.Get_Trx().Rollback();
@@ -232,7 +232,7 @@ namespace VAdvantage.Process
 
                     //Set reversed as true, Reverse Refernce on Orignal Document
                     production.SetIsReversed(true);
-                    production.SetM_Ref_Production(productionTo.GetM_Production_ID());
+                    production.SetM_Ref_Production(productionTo.GetVAM_Production_ID());
                     if (!production.Save(production.Get_Trx()))
                     {
                         production.Get_Trx().Rollback();
@@ -258,25 +258,25 @@ namespace VAdvantage.Process
         /// Check Qty Availablity in warehouse when Disallow Negative Inventory = true
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Warehouse_ID">warehouse refernce - for checking disallow negative inventory or not</param>
-        /// <param name="M_Locator_ID">locator ref - in which locator we have to check stock</param>
-        /// <param name="M_Product_ID">product ref -- to which product, need to check stock</param>
-        /// <param name="M_AttributeSetInstance_ID">AttributeSetInstance -- to which ASI, need to check stock</param>
+        /// <param name="VAM_Warehouse_ID">warehouse refernce - for checking disallow negative inventory or not</param>
+        /// <param name="VAM_Locator_ID">locator ref - in which locator we have to check stock</param>
+        /// <param name="VAM_Product_ID">product ref -- to which product, need to check stock</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">AttributeSetInstance -- to which ASI, need to check stock</param>
         /// <param name="MovementQty">qty to be impacted</param>
         /// <param name="trxName">system transaction</param>
         /// <returns>TRUE/False</returns>
-        private bool CheckQtyAvailablity(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID, int M_ProductContainer_ID, int M_Product_ID, int M_AttributeSetInstance_ID, Decimal? MovementQty, Trx trxName)
+        private bool CheckQtyAvailablity(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID, int VAM_ProductContainer_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, Decimal? MovementQty, Trx trxName)
         {
-            MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+            MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
             MProduct product = null;
-            if (wh.IsDisallowNegativeInv() && M_Product_ID > 0)
+            if (wh.IsDisallowNegativeInv() && VAM_Product_ID > 0)
             {
-                product = MProduct.Get(ctx, M_Product_ID);
-                string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM M_Storage where m_locator_id=" + M_Locator_ID + @" and m_product_id=" + M_Product_ID;
-                qry += " AND NVL(M_AttributeSetInstance_ID, 0) =" + M_AttributeSetInstance_ID;
-                if (M_ProductContainer_ID > 0)
+                product = MProduct.Get(ctx, VAM_Product_ID);
+                string qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + VAM_Locator_ID + @" and VAM_Product_id=" + VAM_Product_ID;
+                qry += " AND NVL(VAM_PFeature_SetInstance_ID, 0) =" + VAM_PFeature_SetInstance_ID;
+                if (VAM_ProductContainer_ID > 0)
                 {
-                    qry += " AND M_ProductContainer_ID = " + M_ProductContainer_ID;
+                    qry += " AND VAM_ProductContainer_ID = " + VAM_ProductContainer_ID;
                 }
                 Decimal? OnHandQty = Convert.ToDecimal(DB.ExecuteScalar(qry, null, trxName));
                 if (OnHandQty + MovementQty < 0)

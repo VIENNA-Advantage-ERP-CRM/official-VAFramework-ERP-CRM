@@ -208,18 +208,18 @@ if (oo != null)
 return false;
 }
 /** Set Attribute Search.
-@param M_AttributeSearch_ID Common Search Attribute */
-public void SetM_AttributeSearch_ID (int M_AttributeSearch_ID)
+@param VAM_PFeature_Search_ID Common Search Attribute */
+public void SetVAM_PFeature_Search_ID (int VAM_PFeature_Search_ID)
 {
-if (M_AttributeSearch_ID <= 0) Set_Value ("M_AttributeSearch_ID", null);
+if (VAM_PFeature_Search_ID <= 0) Set_Value ("VAM_PFeature_Search_ID", null);
 else
-Set_Value ("M_AttributeSearch_ID", M_AttributeSearch_ID);
+Set_Value ("VAM_PFeature_Search_ID", VAM_PFeature_Search_ID);
 }
 /** Get Attribute Search.
 @return Common Search Attribute */
-public int GetM_AttributeSearch_ID() 
+public int GetVAM_PFeature_Search_ID() 
 {
-Object ii = Get_Value("M_AttributeSearch_ID");
+Object ii = Get_Value("VAM_PFeature_Search_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

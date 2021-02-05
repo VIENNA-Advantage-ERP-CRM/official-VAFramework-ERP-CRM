@@ -224,7 +224,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     else if (columnName.Equals("VAB_Address_ID", StringComparison.OrdinalIgnoreCase))
                         column.SetVAF_Control_Ref_ID(DisplayType.Location);
                     // Product Attribute
-                    else if (columnName.Equals("M_AttributeSetInstance_ID"))
+                    else if (columnName.Equals("VAM_PFeature_SetInstance_ID"))
                         column.SetVAF_Control_Ref_ID(DisplayType.PAttribute);
                     // SalesRep_ID (=User)
                     else if (columnName.Equals("SalesRep_ID", StringComparison.OrdinalIgnoreCase))

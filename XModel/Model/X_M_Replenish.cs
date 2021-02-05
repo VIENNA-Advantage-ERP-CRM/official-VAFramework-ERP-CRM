@@ -11,31 +11,31 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Replenish
+/** Generated Model for VAM_Inv_Replenish
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Replenish : PO
+public class X_VAM_Inv_Replenish : PO
 {
-public X_M_Replenish (Context ctx, int M_Replenish_ID, Trx trxName) : base (ctx, M_Replenish_ID, trxName)
+public X_VAM_Inv_Replenish (Context ctx, int VAM_Inv_Replenish_ID, Trx trxName) : base (ctx, VAM_Inv_Replenish_ID, trxName)
 {
-/** if (M_Replenish_ID == 0)
+/** if (VAM_Inv_Replenish_ID == 0)
 {
 SetLevel_Max (0.0);
 SetLevel_Min (0.0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Warehouse_ID (0);
 SetReplenishType (null);
 }
  */
 }
-public X_M_Replenish (Ctx ctx, int M_Replenish_ID, Trx trxName) : base (ctx, M_Replenish_ID, trxName)
+public X_VAM_Inv_Replenish (Ctx ctx, int VAM_Inv_Replenish_ID, Trx trxName) : base (ctx, VAM_Inv_Replenish_ID, trxName)
 {
-/** if (M_Replenish_ID == 0)
+/** if (VAM_Inv_Replenish_ID == 0)
 {
 SetLevel_Max (0.0);
 SetLevel_Min (0.0);
-SetM_Product_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_Product_ID (0);
+SetVAM_Warehouse_ID (0);
 SetReplenishType (null);
 }
  */
@@ -45,7 +45,7 @@ SetReplenishType (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Replenish (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Inv_Replenish (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_M_Replenish (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Replenish (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Inv_Replenish (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_M_Replenish (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Replenish (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Inv_Replenish (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Replenish()
+static X_VAM_Inv_Replenish()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389064300L;
 public static int Table_ID;
  // =249;
 
-/** TableName=M_Replenish */
-public static String Table_Name="M_Replenish";
+/** TableName=VAM_Inv_Replenish */
+public static String Table_Name="VAM_Inv_Replenish";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Replenish[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Inv_Replenish[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Maximum Level.
@@ -149,17 +149,17 @@ if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -167,39 +167,39 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_Product_ID().ToString());
 }
 
-/** M_WarehouseSource_ID VAF_Control_Ref_ID=197 */
-public static int M_WAREHOUSESOURCE_ID_VAF_Control_Ref_ID=197;
+/** VAM_WarehouseSource_ID VAF_Control_Ref_ID=197 */
+public static int VAM_WarehouseSOURCE_ID_VAF_Control_Ref_ID=197;
 /** Set Source Warehouse.
-@param M_WarehouseSource_ID Optional Warehouse to replenish from */
-public void SetM_WarehouseSource_ID (int M_WarehouseSource_ID)
+@param VAM_WarehouseSource_ID Optional Warehouse to replenish from */
+public void SetVAM_WarehouseSource_ID (int VAM_WarehouseSource_ID)
 {
-if (M_WarehouseSource_ID <= 0) Set_Value ("M_WarehouseSource_ID", null);
+if (VAM_WarehouseSource_ID <= 0) Set_Value ("VAM_WarehouseSource_ID", null);
 else
-Set_Value ("M_WarehouseSource_ID", M_WarehouseSource_ID);
+Set_Value ("VAM_WarehouseSource_ID", VAM_WarehouseSource_ID);
 }
 /** Get Source Warehouse.
 @return Optional Warehouse to replenish from */
-public int GetM_WarehouseSource_ID() 
+public int GetVAM_WarehouseSource_ID() 
 {
-Object ii = Get_Value("M_WarehouseSource_ID");
+Object ii = Get_Value("VAM_WarehouseSource_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");
-Set_ValueNoCheck ("M_Warehouse_ID", M_Warehouse_ID);
+if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

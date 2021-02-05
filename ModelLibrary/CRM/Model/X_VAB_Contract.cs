@@ -33,7 +33,7 @@ namespace VAdvantage.Model
             SetEndDate (DateTime.Now);
             SetGrandTotal (0.0);
             SetLineNetAmt (0.0);
-            SetM_PriceList_ID (0);
+            SetVAM_PriceList_ID (0);
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
             SetPriceList (0.0);
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
             SetEndDate (DateTime.Now);
             SetGrandTotal (0.0);
             SetLineNetAmt (0.0);
-            SetM_PriceList_ID (0);
+            SetVAM_PriceList_ID (0);
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
             SetPriceList (0.0);
@@ -737,33 +737,33 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Price List.
-        @param M_PriceList_ID Unique identifier of a Price List */
-        public void SetM_PriceList_ID(int M_PriceList_ID)
+        @param VAM_PriceList_ID Unique identifier of a Price List */
+        public void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            if (M_PriceList_ID < 1) throw new ArgumentException("M_PriceList_ID is mandatory.");
-            Set_Value("M_PriceList_ID", M_PriceList_ID);
+            if (VAM_PriceList_ID < 1) throw new ArgumentException("VAM_PriceList_ID is mandatory.");
+            Set_Value("VAM_PriceList_ID", VAM_PriceList_ID);
         }
         /** Get Price List.
         @return Unique identifier of a Price List */
-        public int GetM_PriceList_ID()
+        public int GetVAM_PriceList_ID()
         {
-            Object ii = Get_Value("M_PriceList_ID");
+            Object ii = Get_Value("VAM_PriceList_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1092,17 +1092,17 @@ namespace VAdvantage.Model
             return (DateTime?)Get_Value("BillStartDate");
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }/** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);

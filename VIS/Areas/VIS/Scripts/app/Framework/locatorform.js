@@ -174,12 +174,12 @@
 
             //end
             //load warehouse combo
-            //var sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse";
+            //var sql = "SELECT VAM_Warehouse_ID, Name FROM VAM_Warehouse";
             //if (onlyWarehouseId != 0) {
-            //    sql += " WHERE M_Warehouse_ID=" + onlyWarehouseId;
+            //    sql += " WHERE VAM_Warehouse_ID=" + onlyWarehouseId;
             //}
 
-            //var finalSql = VIS.MRole.addAccessSQL(sql, "M_Warehouse", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO) + " ORDER BY 2";
+            //var finalSql = VIS.MRole.addAccessSQL(sql, "VAM_Warehouse", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO) + " ORDER BY 2";
             //var ds = VIS.DB.executeDataSet(finalSql);
 
             var ds = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "Locator/GetWarehouse", { "Warehouse_ID": onlyWarehouseId }, null);
@@ -189,7 +189,7 @@
             //}
             if (ds != null) {
                 for (var i in ds) {
-                    cmbWarehouse.append(" <option value=" + ds[i]["M_Warehouse_ID"] + ">" + ds[i]["Name"] + "</option>");
+                    cmbWarehouse.append(" <option value=" + ds[i]["VAM_Warehouse_ID"] + ">" + ds[i]["Name"] + "</option>");
                 }
             }
             cmbWarehouse.prop('selectedIndex', 0);
@@ -413,8 +413,8 @@
             //locatorId = cmbLocator.find('option:selected').val();
             var separator = "";
             var warehouseValue = "";
-            //var sql = "SELECT  w.name,l.x,l.y,l.z,l.value, w.M_Warehouse_ID,w.Value wValue,w.separator from m_warehouse w" +
-            //      " inner join M_Locator l on w.m_warehouse_id=l.M_Warehouse_ID and l.m_locator_id=" + locatorId;
+            //var sql = "SELECT  w.name,l.x,l.y,l.z,l.value, w.VAM_Warehouse_ID,w.Value wValue,w.separator from VAM_Warehouse w" +
+            //      " inner join VAM_Locator l on w.VAM_Warehouse_id=l.VAM_Warehouse_ID and l.VAM_Locator_id=" + locatorId;
 
             //var dsw = VIS.DB.executeDataSet(sql);
             //if (dsw.tables[0].rows.length > 0) {
@@ -423,7 +423,7 @@
             //    txtY.val(dsw.tables[0].getRow(0).getCell("y"));
             //    txtZ.val(dsw.tables[0].getRow(0).getCell("z"));
             //    txtValue.val(dsw.tables[0].getRow(0).getCell("value"));
-            //    warehouseId = dsw.tables[0].getRow(0).getCell("M_Warehouse_ID");
+            //    warehouseId = dsw.tables[0].getRow(0).getCell("VAM_Warehouse_ID");
             //    warehouseValue = dsw.tables[0].getRow(0).getCell("wValue");
             //    separator = dsw.tables[0].getRow(0).getCell("separator");
             //}
@@ -436,7 +436,7 @@
                 txtY.val(dsw["y"]);
                 txtZ.val(dsw["z"]);
                 txtValue.val(dsw["Value"]);
-                warehouseId = dsw["M_Warehouse_ID"];
+                warehouseId = dsw["VAM_Warehouse_ID"];
                 warehouseValue = dsw["wValue"];
                 separator = dsw["Separator"];
                 //Set text into autocomplete control in specific format.
@@ -456,7 +456,7 @@
             //	Set Warehouse
             if (ds != null) {
                 for (var i in ds) {
-                    if (warehouseId == ds[i]["M_Warehouse_ID"]) {
+                    if (warehouseId == ds[i]["VAM_Warehouse_ID"]) {
                         cmbWarehouse.prop('selectedIndex', i);
                         break;
                     }

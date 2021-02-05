@@ -118,7 +118,7 @@ namespace VAdvantage.Model
                 IsOverwriteAcct() && GetAccount_ID() != 0 ? GetAccount_ID() : _account.GetAccount_ID(),
                     _account.GetVAB_SubAcct_ID(),
                 //	
-                IsOverwriteProduct() ? GetM_Product_ID() : _account.GetM_Product_ID(),
+                IsOverwriteProduct() ? GetVAM_Product_ID() : _account.GetVAM_Product_ID(),
                 IsOverwriteBPartner() ? GetVAB_BusinessPartner_ID() : _account.GetVAB_BusinessPartner_ID(),
                 IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
                 IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
@@ -214,9 +214,9 @@ namespace VAdvantage.Model
             {
                 SetVAF_OrgTrx_ID(0);
             }
-            if (!IsOverwriteProduct() && GetM_Product_ID() != 0)
+            if (!IsOverwriteProduct() && GetVAM_Product_ID() != 0)
             {
-                SetM_Product_ID(0);
+                SetVAM_Product_ID(0);
             }
             if (!IsOverwriteProject() && GetVAB_Project_ID() != 0)
             {

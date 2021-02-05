@@ -22,9 +22,9 @@ public X_B_TopicType (Context ctx, int B_TopicType_ID, Trx trxName) : base (ctx,
 {
 SetAuctionType (null);
 SetB_TopicType_ID (0);
-SetM_PriceList_ID (0);
-SetM_ProductMember_ID (0);
-SetM_Product_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_ProductMember_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
@@ -35,9 +35,9 @@ public X_B_TopicType (Ctx ctx, int B_TopicType_ID, Trx trxName) : base (ctx, B_T
 {
 SetAuctionType (null);
 SetB_TopicType_ID (0);
-SetM_PriceList_ID (0);
-SetM_ProductMember_ID (0);
-SetM_Product_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_ProductMember_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
@@ -188,50 +188,50 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Price List.
-@param M_PriceList_ID Unique identifier of a Price List */
-public void SetM_PriceList_ID (int M_PriceList_ID)
+@param VAM_PriceList_ID Unique identifier of a Price List */
+public void SetVAM_PriceList_ID (int VAM_PriceList_ID)
 {
-if (M_PriceList_ID < 1) throw new ArgumentException ("M_PriceList_ID is mandatory.");
-Set_Value ("M_PriceList_ID", M_PriceList_ID);
+if (VAM_PriceList_ID < 1) throw new ArgumentException ("VAM_PriceList_ID is mandatory.");
+Set_Value ("VAM_PriceList_ID", VAM_PriceList_ID);
 }
 /** Get Price List.
 @return Unique identifier of a Price List */
-public int GetM_PriceList_ID() 
+public int GetVAM_PriceList_ID() 
 {
-Object ii = Get_Value("M_PriceList_ID");
+Object ii = Get_Value("VAM_PriceList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductMember_ID VAF_Control_Ref_ID=162 */
-public static int M_PRODUCTMEMBER_ID_VAF_Control_Ref_ID=162;
+/** VAM_ProductMember_ID VAF_Control_Ref_ID=162 */
+public static int VAM_ProductMEMBER_ID_VAF_Control_Ref_ID=162;
 /** Set Membership.
-@param M_ProductMember_ID Product used to deternine the price of the membership for the topic type */
-public void SetM_ProductMember_ID (int M_ProductMember_ID)
+@param VAM_ProductMember_ID Product used to deternine the price of the membership for the topic type */
+public void SetVAM_ProductMember_ID (int VAM_ProductMember_ID)
 {
-if (M_ProductMember_ID < 1) throw new ArgumentException ("M_ProductMember_ID is mandatory.");
-Set_Value ("M_ProductMember_ID", M_ProductMember_ID);
+if (VAM_ProductMember_ID < 1) throw new ArgumentException ("VAM_ProductMember_ID is mandatory.");
+Set_Value ("VAM_ProductMember_ID", VAM_ProductMember_ID);
 }
 /** Get Membership.
 @return Product used to deternine the price of the membership for the topic type */
-public int GetM_ProductMember_ID() 
+public int GetVAM_ProductMember_ID() 
 {
-Object ii = Get_Value("M_ProductMember_ID");
+Object ii = Get_Value("VAM_ProductMember_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_Value ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

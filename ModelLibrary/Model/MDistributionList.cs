@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionList
  * Purpose        : Material Distribution List
- * Class Used     : X_M_DistributionList
+ * Class Used     : X_VAM_DistributionList
  * Chronological    Development
  * Raghunandan     03-Nov-2009
   ******************************************************/
@@ -26,16 +26,16 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionList : X_M_DistributionList
+    public class MDistributionList : X_VAM_DistributionList
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DistributionList_ID">id</param>
+        /// <param name="VAM_DistributionList_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDistributionList(Ctx ctx, int M_DistributionList_ID, Trx trxName)
-            : base(ctx, M_DistributionList_ID, trxName)
+        public MDistributionList(Ctx ctx, int VAM_DistributionList_ID, Trx trxName)
+            : base(ctx, VAM_DistributionList_ID, trxName)
         {
 
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             List<MDistributionListLine> list = new List<MDistributionListLine>();
             Decimal ratioTotal = Env.ZERO;
             //
-            String sql = "SELECT * FROM M_DistributionListLine WHERE M_DistributionList_ID=" + GetM_DistributionList_ID();
+            String sql = "SELECT * FROM VAM_DistributionListLine WHERE VAM_DistributionList_ID=" + GetVAM_DistributionList_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try

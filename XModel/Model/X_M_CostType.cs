@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_CostType
+/** Generated Model for VAM_ProductCostType
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_CostType : PO
+public class X_VAM_ProductCostType : PO
 {
-public X_M_CostType (Context ctx, int M_CostType_ID, Trx trxName) : base (ctx, M_CostType_ID, trxName)
+public X_VAM_ProductCostType (Context ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
 {
-/** if (M_CostType_ID == 0)
+/** if (VAM_ProductCostType_ID == 0)
 {
-SetM_CostType_ID (0);
+SetVAM_ProductCostType_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_CostType (Ctx ctx, int M_CostType_ID, Trx trxName) : base (ctx, M_CostType_ID, trxName)
+public X_VAM_ProductCostType (Ctx ctx, int VAM_ProductCostType_ID, Trx trxName) : base (ctx, VAM_ProductCostType_ID, trxName)
 {
-/** if (M_CostType_ID == 0)
+/** if (VAM_ProductCostType_ID == 0)
 {
-SetM_CostType_ID (0);
+SetVAM_ProductCostType_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_CostType (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductCostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_CostType (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ProductCostType (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_CostType()
+static X_VAM_ProductCostType()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389062216L;
 public static int Table_ID;
  // =586;
 
-/** TableName=M_CostType */
-public static String Table_Name="M_CostType";
+/** TableName=VAM_ProductCostType */
+public static String Table_Name="VAM_ProductCostType";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_CostType[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ProductCostType[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -147,17 +147,17 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Cost Type.
-@param M_CostType_ID Type of Cost (e.g. Current, Plan, Future) */
-public void SetM_CostType_ID (int M_CostType_ID)
+@param VAM_ProductCostType_ID Type of Cost (e.g. Current, Plan, Future) */
+public void SetVAM_ProductCostType_ID (int VAM_ProductCostType_ID)
 {
-if (M_CostType_ID < 1) throw new ArgumentException ("M_CostType_ID is mandatory.");
-Set_ValueNoCheck ("M_CostType_ID", M_CostType_ID);
+if (VAM_ProductCostType_ID < 1) throw new ArgumentException ("VAM_ProductCostType_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostType_ID", VAM_ProductCostType_ID);
 }
 /** Get Cost Type.
 @return Type of Cost (e.g. Current, Plan, Future) */
-public int GetM_CostType_ID() 
+public int GetVAM_ProductCostType_ID() 
 {
-Object ii = Get_Value("M_CostType_ID");
+Object ii = Get_Value("VAM_ProductCostType_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

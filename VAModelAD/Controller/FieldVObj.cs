@@ -445,7 +445,7 @@ namespace VAdvantage.Controller
                     || ColumnName.StartsWith("Created") || ColumnName.StartsWith("Updated")
                     || ColumnName.Equals("Value")
                     || ColumnName.Equals("DocumentNo")
-                    || ColumnName.Equals("M_AttributeSetInstance_ID"))	//	0 is valid
+                    || ColumnName.Equals("VAM_PFeature_SetInstance_ID"))	//	0 is valid
                 return false;
 
             //	Mandatory Logic

@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MProject : X_VAB_Project
     {
         /**	Cached PL			*/
-        private int _M_PriceList_ID = 0;
+        private int _VAM_PriceList_ID = 0;
 
         /**
      * 	Create new Project by copying
@@ -165,26 +165,26 @@ namespace VAdvantage.Model
          * 	Get Price List from Price List Version
          *	@return price list or 0
          */
-        public new int GetM_PriceList_ID()
+        public new int GetVAM_PriceList_ID()
         {
-            if (GetM_PriceList_Version_ID() == 0)
+            if (GetVAM_PriceListVersion_ID() == 0)
                 return 0;
-            if (_M_PriceList_ID > 0)
-                return _M_PriceList_ID;
+            if (_VAM_PriceList_ID > 0)
+                return _VAM_PriceList_ID;
             //
-            String sql = "SELECT M_PriceList_ID FROM M_PriceList_Version WHERE M_PriceList_Version_ID=" + GetM_PriceList_Version_ID();
-            _M_PriceList_ID = DataBase.DB.GetSQLValue(null, sql);
-            return _M_PriceList_ID;
+            String sql = "SELECT VAM_PriceList_ID FROM VAM_PriceListVersion WHERE VAM_PriceListVersion_ID=" + GetVAM_PriceListVersion_ID();
+            _VAM_PriceList_ID = DataBase.DB.GetSQLValue(null, sql);
+            return _VAM_PriceList_ID;
         }
 
         /**
          * 	Set PL Version
-         *	@param M_PriceList_Version_ID id
+         *	@param VAM_PriceListVersion_ID id
          */
-        public new void SetM_PriceList_Version_ID(int M_PriceList_Version_ID)
+        public new void SetVAM_PriceListVersion_ID(int VAM_PriceListVersion_ID)
         {
-            base.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
-            _M_PriceList_ID = 0;	//	reset
+            base.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
+            _VAM_PriceList_ID = 0;	//	reset
         }
 
 
@@ -477,9 +477,9 @@ namespace VAdvantage.Model
                 SetVAF_UserContact_ID(0);
 
             //	Set Currency
-            if (Is_ValueChanged("M_PriceList_Version_ID") && GetM_PriceList_Version_ID() != 0)
+            if (Is_ValueChanged("VAM_PriceListVersion_ID") && GetVAM_PriceListVersion_ID() != 0)
             {
-                MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), null);
+                MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), null);
                 if (pl != null && pl.Get_ID() != 0)
                     SetVAB_Currency_ID(pl.GetVAB_Currency_ID());
             }

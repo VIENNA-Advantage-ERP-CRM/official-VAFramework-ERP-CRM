@@ -3,7 +3,7 @@
  * Class Name     : Doc_Requisition
  * Purpose        : Post Order Documents.
  *                  <pre>
- *                  Table:              M_Requisition
+ *                  Table:              VAM_Requisition
  *                  Document Types:     POR (Requisition)
  *                  </pre>
  *                  * Class Used     : Doc
