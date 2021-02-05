@@ -1170,11 +1170,11 @@ namespace VAdvantage.Model
                     return false;
                 }
             }
-
-            //** If schedule line are present system should not allow to save header with week day ** Dt: 02/04/2021 ** Modified By: Kumar ** //
-            if (Util.GetValueOfInt(GetWeekOffset()) > 0 && count > 0)
+            
+            //** If schedule lines are present, system should not allow to save header with week day ** Dt: 02/04/2021 ** Modified By: Kumar ** //
+            if (Util.GetValueOfInt(GetNetDay()) > 0 && count > 0)
             {
-                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_ScheduleExist"));
+                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_ScheduleExistForWeekDay"));
                 return false;
             }
 
