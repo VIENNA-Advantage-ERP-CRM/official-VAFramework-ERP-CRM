@@ -1174,7 +1174,7 @@ namespace VAdvantage.Model
             //** If schedule lines are present, system should not allow to save header with week day ** Dt: 02/04/2021 ** Modified By: Kumar ** //
             if (Util.GetValueOfInt(GetNetDay()) > 0 && count > 0)
             {
-                log.SaveError("Error", Msg.GetMsg(GetCtx(), "VIS_ScheduleExistForWeekDay"));
+                log.SaveError("VIS_ScheduleExistForWeekDay", string.Empty);
                 return false;
             }
 
