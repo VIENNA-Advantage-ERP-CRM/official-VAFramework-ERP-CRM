@@ -68,9 +68,9 @@ namespace VAdvantage.Process
             bool ok = false;
             try
             {
-                CreateSequence("AD_Sequence", null);
-                CreateSequence("AD_Issue", null);
-                CreateSequence("AD_ChangeLog", null);
+                CreateSequence("AD_Sequence", Get_TrxName());
+                CreateSequence("AD_Issue", Get_TrxName());
+                CreateSequence("AD_ChangeLog", Get_TrxName());
                 
                 sql = "SELECT AD_Table_ID FROM AD_Table WHERE TableName NOT IN ('AD_Sequence', 'AD_Issue', 'AD_ChangeLog') AND IsActive='Y'";
                 DataSet ds = DB.ExecuteDataset(sql);
