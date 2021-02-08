@@ -100,13 +100,13 @@ namespace ViennaAdvantage.Process
                 _DateDoc = Util.GetValueOfDateTime(DateTime.Now);
             }
             //
-            VAdvantage.Model.MOrder from = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+            VAdvantage.Model.MVABOrder from = new VAdvantage.Model.MVABOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
             if (from.GetDocStatus() != "DR" && from.GetDocStatus() != "IP" && from.GetDocStatus() != "CO")
             {
                 throw new Exception("Order Closed");
             }
             //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
-            VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetVAB_DocTypes_ID(), false, true, null,
+            VAdvantage.Model.MVABOrder newOrder = VAdvantage.Model.MVABOrder.CopyFrom(from, _DateDoc, dt.GetVAB_DocTypes_ID(), false, true, null,
                 dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);		//	copy ASI 
             newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             int VAB_BusinessPartner_ID = newOrder.GetVAB_BusinessPartner_ID();
@@ -178,17 +178,17 @@ namespace ViennaAdvantage.Process
             //
             if (_IsCloseDocument)
             {
-                VAdvantage.Model.MOrder original = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+                VAdvantage.Model.MVABOrder original = new VAdvantage.Model.MVABOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
                 //Edited by Arpit Rai on 8th of Nov,2017
                 if (original.GetDocStatus() != "CO") //to check if document is already completed
                 {
-                    original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Complete);
-                    original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Complete);
+                    original.SetDocAction(VAdvantage.Model.MVABOrder.DOCACTION_Complete);
+                    original.ProcessIt(VAdvantage.Model.MVABOrder.DOCACTION_Complete);
                     original.Save();
                 }
                 //Arpit
-                original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Close);
-                original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
+                original.SetDocAction(VAdvantage.Model.MVABOrder.DOCACTION_Close);
+                original.ProcessIt(VAdvantage.Model.MVABOrder.DOCACTION_Close);
                 original.Save();
             }
             //

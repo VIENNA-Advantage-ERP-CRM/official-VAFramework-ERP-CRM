@@ -220,7 +220,7 @@ namespace VAdvantage.Model
      *	@param M_Locator_ID locator
      * 	@param Qty used only to find suitable locator
      */
-        public void SetOrderLine(MOrderLine oLine, int M_Locator_ID, Decimal Qty)
+        public void SetOrderLine(MVABOrderLine oLine, int M_Locator_ID, Decimal Qty)
         {
             SetVAB_OrderLine_ID(oLine.GetVAB_OrderLine_ID());
             SetLine(oLine.GetLine());
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
             int VAB_OrderLine_ID = int.Parse(newVAB_OrderLine_ID);
             if (VAB_OrderLine_ID == 0)
                 return;
-            MOrderLine ol = new MOrderLine(GetCtx(), VAB_OrderLine_ID, null);
+            MVABOrderLine ol = new MVABOrderLine(GetCtx(), VAB_OrderLine_ID, null);
             if (ol.Get_ID() != 0)
             {
                 SetVAB_OrderLine_ID(VAB_OrderLine_ID);
@@ -789,7 +789,7 @@ namespace VAdvantage.Model
             if (M_Product_ID != 0 && IsReturnTrx)
             {
                 int oLine_ID = GetVAB_OrderLine_ID();
-                MOrderLine oLine = new MOrderLine(GetCtx(), oLine_ID, null);
+                MVABOrderLine oLine = new MVABOrderLine(GetCtx(), oLine_ID, null);
                 if (oLine.Get_ID() != 0)
                 {
                     int orig_IOLine_ID = oLine.GetOrig_InOutLine_ID();

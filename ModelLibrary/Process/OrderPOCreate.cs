@@ -172,14 +172,14 @@ namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    counter += CreatePOFromSO(new MOrder(GetCtx(), dr, Get_TrxName()));
+                    counter += CreatePOFromSO(new MVABOrder(GetCtx(), dr, Get_TrxName()));
                 }
                 // display price with document no
                 if (listConsolidatePO.Count > 0)
                 {
                     for (int i = 0; i < listConsolidatePO.Count; i++)
                     {
-                        MOrder purchaseOrder = new MOrder(GetCtx(), listConsolidatePO[i].VAB_Order_ID, Get_Trx());
+                        MVABOrder purchaseOrder = new MVABOrder(GetCtx(), listConsolidatePO[i].VAB_Order_ID, Get_Trx());
                         AddLog(0, null, purchaseOrder.GetGrandTotal(), purchaseOrder.GetDocumentNo());
                     }
                 }
@@ -213,14 +213,14 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="so">sales order</param>
         /// <returns>number of POs created</returns>
-        private int CreatePOFromSO(MOrder so)
+        private int CreatePOFromSO(MVABOrder so)
         {
             StringBuilder sql = new StringBuilder();
             StringBuilder sqlErrorMessage = new StringBuilder();
             sqlErrorMessage.Clear();
             string _Dropship = "";
             log.Info(so.ToString());
-            MOrderLine[] soLines = so.GetLines(true, null);
+            MVABOrderLine[] soLines = so.GetLines(true, null);
             if (soLines == null || soLines.Length == 0)
             {
                 log.Warning("No Lines - " + so);
@@ -270,7 +270,7 @@ namespace VAdvantage.Process
 
             IDataReader idr = null;
             DataTable dt = null;
-            MOrder po = null;
+            MVABOrder po = null;
             ConsolidatePO consolidatePO = null;
             //ConsolidatePOLine consolidatePOLine = null;
             try
@@ -301,7 +301,7 @@ namespace VAdvantage.Process
                             poRecord = listConsolidatePO.Find(x => (x.VAB_BusinessPartner_ID == VAB_BusinessPartner_ID) && (x.IsDropShip == Utility.Util.GetValueOfString(dr[2])));
                             if (poRecord != null)
                             {
-                                po = new MOrder(GetCtx(), poRecord.VAB_Order_ID, Get_Trx());
+                                po = new MVABOrder(GetCtx(), poRecord.VAB_Order_ID, Get_Trx());
                                 _Dropship = po.IsDropShip() ? "Y" : "N";
                             }
                         }
@@ -352,7 +352,7 @@ namespace VAdvantage.Process
                             }
                             if (soLines[i].GetM_Product_ID() == M_Product_ID && _Drop == _Dropship)
                             {
-                                MOrderLine poLine = new MOrderLine(po);
+                                MVABOrderLine poLine = new MVABOrderLine(po);
                                 poLine.SetRef_OrderLine_ID(soLines[i].GetVAB_OrderLine_ID());
                                 poLine.SetM_Product_ID(soLines[i].GetM_Product_ID());
                                 poLine.SetM_AttributeSetInstance_ID(soLines[i].GetM_AttributeSetInstance_ID());
@@ -417,9 +417,9 @@ namespace VAdvantage.Process
         /// <param name="VAB_BusinessPartner_ID">vendor</param>
         /// <param name="so">sales order</param>
         /// <returns>MOrder</returns>
-        public MOrder CreatePOForVendor(int VAB_BusinessPartner_ID, MOrder so, string _shipDrop)
+        public MVABOrder CreatePOForVendor(int VAB_BusinessPartner_ID, MVABOrder so, string _shipDrop)
         {
-            MOrder po = new MOrder(GetCtx(), 0, Get_TrxName());
+            MVABOrder po = new MVABOrder(GetCtx(), 0, Get_TrxName());
             po.SetClientOrg(so.GetVAF_Client_ID(), so.GetVAF_Org_ID());
             po.SetRef_Order_ID(so.GetVAB_Order_ID());
             po.SetIsSOTrx(false);

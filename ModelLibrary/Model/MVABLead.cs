@@ -24,7 +24,7 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MLead : X_VAB_Lead
+    public class MVABLead : X_VAB_Lead
     {
         #region private variables
         /** BPartner			*/
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
         *	@param VAB_Lead_ID id
         *	@param trxName trx
         */
-        public MLead(Ctx ctx, int VAB_Lead_ID, Trx trxName) :
+        public MVABLead(Ctx ctx, int VAB_Lead_ID, Trx trxName) :
             base(ctx, VAB_Lead_ID, trxName)
         {
             if (VAB_Lead_ID == 0)
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
          *	@param dr result Set
          *	@param trxName trx
          */
-        public MLead(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABLead(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
          *	@param map map
          *	@param trxName trx
          */
-        public MLead(Ctx ctx, Dictionary<String, String> map, Trx trxName)
+        public MVABLead(Ctx ctx, Dictionary<String, String> map, Trx trxName)
             : this(ctx, 0, trxName)
         {
 
@@ -540,7 +540,7 @@ namespace VAdvantage.Model
             }
 
             //	Address
-            MLocation location = new MLocation(GetCtx(), GetVAB_Country_ID(),
+            MVABAddress location = new MVABAddress(GetCtx(), GetVAB_Country_ID(),
                 GetVAB_RegionState_ID(), GetCity(), Get_TrxName());
             location.SetAddress1(GetAddress1());
             location.SetAddress2(GetAddress2());

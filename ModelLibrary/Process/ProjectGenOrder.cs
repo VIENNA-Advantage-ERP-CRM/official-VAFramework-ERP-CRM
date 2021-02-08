@@ -109,7 +109,7 @@ namespace VAdvantage.Process
                 }
             }
             //Credit Limit
-            MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
+            MVABOrder order = new MVABOrder(fromProject, true, MVABOrder.DocSubTypeSO_OnCredit);
             if (!order.Save())
             {
                 return GetRetrievedError(order, "Could not create Order");
@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                 MProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine ol = new MOrderLine(order);
+                    MVABOrderLine ol = new MVABOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
                     //

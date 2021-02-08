@@ -183,7 +183,7 @@ namespace VAdvantage.Process
         private void GenerateMasterForecast(int M_Product_ID, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
             sql = "select VAB_UOM_id from m_product where m_product_id = " + M_Product_ID;
-            MMasterForecastLine mfLine = new MMasterForecastLine(GetCtx(), 0, null);
+            MVABMasterForecastLine mfLine = new MVABMasterForecastLine(GetCtx(), 0, null);
             mfLine.SetVAF_Client_ID(mf.GetVAF_Client_ID());
             mfLine.SetVAF_Org_ID(mf.GetVAF_Org_ID());
             mfLine.SetM_Product_ID(M_Product_ID);

@@ -31,8 +31,8 @@ namespace VAdvantage.Process
         private DataSet ds = null;
         MInvoice invoice = null;
         MInvoiceLine invoiceLine = null;
-        MOrder order = null;
-        MOrderLine orderLine = null;
+        MVABOrder order = null;
+        MVABOrderLine orderLine = null;
         MInOutLine inoutLine = null;
 
         protected override void Prepare()
@@ -97,8 +97,8 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            orderLine = new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
-                            order = new MOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
+                            orderLine = new MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
+                            order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                             inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_inoutline_id"]), Get_Trx());
                             if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
                             {

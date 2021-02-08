@@ -44,7 +44,7 @@ namespace VIS.Models
             MInvoice inv = new MInvoice(ctx, Invoice_ID, null);
             if (inv.GetVAB_Order_ID() > 0)
             {
-                MOrder order = new MOrder(ctx, inv.GetVAB_Order_ID(), null);
+                MVABOrder order = new MVABOrder(ctx, inv.GetVAB_Order_ID(), null);
                 try
                 {
                     lc.paymethod = order.GetVA009_PaymentMethod_ID();

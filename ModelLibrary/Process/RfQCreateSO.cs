@@ -89,7 +89,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), rfq.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
-            MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
+            MVABOrder order = new MVABOrder(GetCtx(), 0, Get_TrxName());
             order.SetIsSOTrx(true);
             if (_VAB_DocTypes_ID != 0)
             {
@@ -136,7 +136,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     MRfQLineQty qty = qtys[j];
                     if (qty.IsActive() && qty.IsOfferQty())
                     {
-                        MOrderLine ol = new MOrderLine(order);
+                        MVABOrderLine ol = new MVABOrderLine(order);
                         ol.SetM_Product_ID(line.GetM_Product_ID(),
                             qty.GetVAB_UOM_ID());
                         ol.SetDescription(line.GetDescription());

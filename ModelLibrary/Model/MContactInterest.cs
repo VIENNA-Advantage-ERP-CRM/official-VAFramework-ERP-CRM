@@ -257,7 +257,7 @@ namespace VAdvantage.Model
                     if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
                         || MSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
                     {
-                        MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
+                        MVABLead lead = new MVABLead(GetCtx(), 0, Get_TrxName());
                         lead.SetClientOrg(this);
                         lead.SetDescription(summary);
                         lead.SetVAF_UserContact_ID(GetVAF_UserContact_ID());

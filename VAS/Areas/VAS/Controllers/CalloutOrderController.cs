@@ -106,7 +106,7 @@ namespace VIS.Controllers
                 //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
                 Decimal? available = MStorage.GetQtyAvailable(M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, null);
                 
-                Decimal notReserved = MOrderLine.GetNotReserved(ctx,
+                Decimal notReserved = MVABOrderLine.GetNotReserved(ctx,
                                 M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,
                                 VAB_OrderLine_ID);
                 

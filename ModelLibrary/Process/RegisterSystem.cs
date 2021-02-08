@@ -72,10 +72,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Registration
 		M_Registration reg = new M_Registration (GetCtx(), AD_Registration_ID, Get_TrxName());
 		//	Location
-		MLocation loc = null;
+		MVABAddress loc = null;
 		if (reg.GetVAB_Address_ID() > 0)
 		{
-			loc = new MLocation (GetCtx(), reg.GetVAB_Address_ID(), Get_TrxName());
+			loc = new MVABAddress (GetCtx(), reg.GetVAB_Address_ID(), Get_TrxName());
 			if (loc.GetCity() == null || loc.GetCity().Length < 2)
             {
 				throw new Exception("No City in Address");

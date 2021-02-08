@@ -133,7 +133,7 @@ namespace VIS.Models
             /********************
              *  Order
              */
-            if (VAF_TableView_ID == MOrder.Table_ID)
+            if (VAF_TableView_ID == MVABOrder.Table_ID)
             {
                 //	Draft                       ..  DR/IP/IN
                 if (docStatus.Equals(DocumentEngine.STATUS_DRAFTED)

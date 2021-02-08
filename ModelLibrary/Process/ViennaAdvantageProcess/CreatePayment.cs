@@ -49,7 +49,7 @@ namespace ViennaAdvantage.Process
                     return "Failed";
                 }
                 //int VAB_Order_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Order_ID From VAB_Order WHERE DocumentNo=" + salesOrderNo));
-                MOrder order = new MOrder(GetCtx(), VAB_Order_ID, Get_TrxName());
+                MVABOrder order = new MVABOrder(GetCtx(), VAB_Order_ID, Get_TrxName());
                 int VAB_DocTypes_ID = order.GetVAB_DocTypesTarget_ID();
                 string baseType = DB.ExecuteScalar("SELECT DocSubTypeSO From VAB_DocTypes WHERE isactive='Y' AND VAB_DocTypes_ID=" + VAB_DocTypes_ID).ToString();
 

@@ -103,7 +103,7 @@ namespace VAdvantage.Model
          *	@param bpc BP Contact
          * 	@param location Location
          */
-        public MVABBPartBankAcct(Ctx ctx, MVABBusinessPartner bp, MVAFUserContact bpc, MLocation location)
+        public MVABBPartBankAcct(Ctx ctx, MVABBusinessPartner bp, MVAFUserContact bpc, MVABAddress location)
             : this(ctx, 0, bp.Get_TrxName())
         {
 

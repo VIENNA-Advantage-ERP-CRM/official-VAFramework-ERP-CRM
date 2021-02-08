@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         // Searched for verification class	
         private bool _verifySearched = false;
         // Bank Location		
-        private MLocation _loc = null;
+        private MVABAddress _loc = null;
         //	Cache
         private static CCache<int, MVABBank> _cache = new CCache<int, MVABBank>("VAB_Bank", 3);
         //	Logger
@@ -156,7 +156,7 @@ namespace VAdvantage.Model
         public int GetVAB_Country_ID()
         {
             if (_loc == null)
-                _loc = MLocation.Get(GetCtx(), GetVAB_Address_ID(), null);
+                _loc = MVABAddress.Get(GetCtx(), GetVAB_Address_ID(), null);
             if (_loc == null)
                 return 0;
             return _loc.GetVAB_Country_ID();

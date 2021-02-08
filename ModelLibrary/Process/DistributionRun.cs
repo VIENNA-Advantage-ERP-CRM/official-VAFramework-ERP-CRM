@@ -426,7 +426,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ",VAB_BusinessPartner_ID=" + runVAB_BusinessPartner_ID + "," + runBPartner);
             //
             MVABBusinessPartner bp = null;
-            MOrder singleOrder = null;
+            MVABOrder singleOrder = null;
             MProduct product = null;
             //	Consolidated Order
             if (_run.IsCreateSingleOrder())
@@ -439,7 +439,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //
                 if (!_IsTest)
                 {
-                    singleOrder = new MOrder(GetCtx(), 0, Get_TrxName());
+                    singleOrder = new MVABOrder(GetCtx(), 0, Get_TrxName());
                     singleOrder.SetVAB_DocTypesTarget_ID(_docType.GetVAB_DocTypes_ID());
                     singleOrder.SetVAB_DocTypes_ID(_docType.GetVAB_DocTypes_ID());
                     singleOrder.SetIsReturnTrx(_docType.IsReturnTrx());
@@ -462,7 +462,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             int lastVAB_BusinessPartner_ID = 0;
             int lastVAB_BPart_Location_ID = 0;
-            MOrder order = null;
+            MVABOrder order = null;
             //	For all lines
             for (int i = 0; i < _details.Length; i++)
             {
@@ -489,7 +489,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     bp = new MVABBusinessPartner(GetCtx(), detail.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     if (!_IsTest)
                     {
-                        order = new MOrder(GetCtx(), 0, Get_TrxName());
+                        order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                         order.SetVAB_DocTypesTarget_ID(_docType.GetVAB_DocTypes_ID());
                         order.SetIsReturnTrx(_docType.IsReturnTrx());
                         order.SetVAB_DocTypes_ID(_docType.GetVAB_DocTypes_ID());
@@ -539,7 +539,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 //	Create Order Line
-                MOrderLine line = new MOrderLine(order);
+                MVABOrderLine line = new MVABOrderLine(order);
                 if (counter && bp.GetVAF_OrgBP_ID_Int() > 0)
                 {
                     ;	//	don't overwrite counter doc

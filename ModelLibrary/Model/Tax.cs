@@ -467,8 +467,8 @@ namespace VAdvantage.Model
             }
 
             MTax[] taxes = MTax.GetAll(ctx);
-            MLocation lFrom = new MLocation(ctx, billFromVAB_Address_ID, null);
-            MLocation lTo = new MLocation(ctx, billToVAB_Address_ID, null);
+            MVABAddress lFrom = new MVABAddress(ctx, billFromVAB_Address_ID, null);
+            MVABAddress lTo = new MVABAddress(ctx, billToVAB_Address_ID, null);
             log.Finer("From=" + lFrom);
             log.Finer("To=" + lTo);
 

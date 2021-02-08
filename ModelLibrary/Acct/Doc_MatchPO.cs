@@ -33,7 +33,7 @@ namespace VAdvantage.Acct
     public class Doc_MatchPO : Doc
     {
         private int _VAB_OrderLine_ID = 0;
-        private MOrderLine _oLine = null;
+        private MVABOrderLine _oLine = null;
         //
         private int _M_InOutLine_ID = 0;
         private ProductCost _pc;
@@ -72,7 +72,7 @@ namespace VAdvantage.Acct
             SetQty(matchPO.GetQty());
             //
             _VAB_OrderLine_ID = matchPO.GetVAB_OrderLine_ID();
-            _oLine = new MOrderLine(GetCtx(), _VAB_OrderLine_ID, GetTrxName());
+            _oLine = new MVABOrderLine(GetCtx(), _VAB_OrderLine_ID, GetTrxName());
             //
             _M_InOutLine_ID = matchPO.GetM_InOutLine_ID();
             //	m_VAB_InvoiceLine_ID = matchPO.getVAB_InvoiceLine_ID();
@@ -131,7 +131,7 @@ namespace VAdvantage.Acct
             //	Different currency
             if (_oLine.GetVAB_Currency_ID() != as1.GetVAB_Currency_ID())
             {
-                MOrder order = _oLine.GetParent();
+                MVABOrder order = _oLine.GetParent();
                 Decimal rate = MVABExchangeRate.GetRate(
                     order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                     order.GetDateAcct(), order.GetVAB_CurrencyType_ID(),
@@ -148,7 +148,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            MOrder order1 = _oLine.GetParent();
+            MVABOrder order1 = _oLine.GetParent();
             bool isReturnTrx = order1.IsReturnTrx();
             log.Fine("Temp");
 

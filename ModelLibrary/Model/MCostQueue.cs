@@ -400,8 +400,8 @@ namespace VAdvantage.Model
             string costingMethodMatchPO = null;
             MCostElement costElement = null;
             MProduct productLca = null;
-            MOrderLine orderline = null;
-            MOrder order = null;
+            MVABOrderLine orderline = null;
+            MVABOrder order = null;
             MInvoice invoice = null;
             MMovement movement = null;
             MInventory inventory = null;
@@ -584,8 +584,8 @@ namespace VAdvantage.Model
                             M_Warehouse_Id = inout.GetM_Warehouse_ID();
                             if (inoutline.GetVAB_OrderLine_ID() > 0)
                             {
-                                orderline = new MOrderLine(ctx, inoutline.GetVAB_OrderLine_ID(), trxName);
-                                order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
+                                orderline = new MVABOrderLine(ctx, inoutline.GetVAB_OrderLine_ID(), trxName);
+                                order = new MVABOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                                 if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
                                     // convert amount on account date of M_Inout (discussed with Ashish, Suya, Mukesh sir)
@@ -822,10 +822,10 @@ namespace VAdvantage.Model
 
                             inout = new MInOut(ctx, inoutline.GetM_InOut_ID(), trxName);
                             orderLineId = Util.GetValueOfInt(Price); // here price parametr contain Orderline id from controller
-                            orderline = new MOrderLine(ctx, orderLineId, trxName);
+                            orderline = new MVABOrderLine(ctx, orderLineId, trxName);
 
                             #region get price from purchase order
-                            order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
+                            order = new MVABOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                             Decimal ProductOrderLineCost = orderline.GetProductLineCost(orderline);
                             if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
@@ -3213,8 +3213,8 @@ namespace VAdvantage.Model
             dynamic pca = null;
             MCostElement costElement = null;
             MProduct productLca = null;
-            MOrderLine orderline = null;
-            MOrder order = null;
+            MVABOrderLine orderline = null;
+            MVABOrder order = null;
             MInvoice invoice = null;
             MMovement movement = null;
             MInventory inventory = null;
@@ -3301,8 +3301,8 @@ namespace VAdvantage.Model
                             inout = new MInOut(ctx, inoutline.GetM_InOut_ID(), trxName);
                             if (inoutline.GetVAB_OrderLine_ID() > 0)
                             {
-                                orderline = new MOrderLine(ctx, inoutline.GetVAB_OrderLine_ID(), trxName);
-                                order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
+                                orderline = new MVABOrderLine(ctx, inoutline.GetVAB_OrderLine_ID(), trxName);
+                                order = new MVABOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                                 if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                                 {
                                     Price = MVABExchangeRate.Convert(ctx, Price, order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),
@@ -3421,9 +3421,9 @@ namespace VAdvantage.Model
 
                             inout = new MInOut(ctx, inoutline.GetM_InOut_ID(), trxName);
                             orderLineId = Util.GetValueOfInt(Price); // here price parametr contain Orderline id from controller
-                            orderline = new MOrderLine(ctx, orderLineId, trxName);
+                            orderline = new MVABOrderLine(ctx, orderLineId, trxName);
 
-                            order = new MOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
+                            order = new MVABOrder(ctx, orderline.GetVAB_Order_ID(), trxName);
                             if (order.GetVAB_Currency_ID() != acctSchema.GetVAB_Currency_ID())
                             {
                                 Price = MVABExchangeRate.Convert(ctx, Decimal.Divide(orderline.GetLineNetAmt(), orderline.GetQtyOrdered()), order.GetVAB_Currency_ID(), acctSchema.GetVAB_Currency_ID(),

@@ -100,7 +100,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //*****************************Vikas  1 Dec 2015  *********************************
             //Case Msg Not Showing Proper
             MInOut ship = null;
-            MOrder ord = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
+            MVABOrder ord = new MVABOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
             if (ord.GetVAB_BusinessPartner_ID() > 0)
             {
                 ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _M_Warehouse_ID);

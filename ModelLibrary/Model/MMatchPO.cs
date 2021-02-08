@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /** InOut Changed			*/
         private bool _isInOutLineChange = false;
         /** Order Line				*/
-        private MOrderLine _oLine = null;
+        private MVABOrderLine _oLine = null;
         /** Invoice Line			*/
         private MInvoiceLine _iLine = null;
         /**	Static Logger	*/
@@ -452,7 +452,7 @@ namespace VAdvantage.Model
             //	(Reserved in VMatch and MInOut.completeIt)
             if (success && GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine orderLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
+                MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
                 Boolean IsReturnTrx = orderLine.GetParent().IsReturnTrx();
                 if (GetM_InOutLine_ID() != 0)
                 {
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
                     if (IsReturnTrx)
                     {
                         orderLine.SetQtyReturned(Decimal.Subtract(orderLine.GetQtyReturned(), GetQty()));
-                        MOrderLine origOrderLine = new MOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
+                        MVABOrderLine origOrderLine = new MVABOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
                         origOrderLine.SetQtyReturned(Decimal.Subtract(origOrderLine.GetQtyReturned(), GetQty()));
                         origOrderLine.Save();
                     }
@@ -484,7 +484,7 @@ namespace VAdvantage.Model
             //	(Reserved in VMatch and MInOut.completeIt)
             if (success && GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine orderLine = GetOrderLine();
+                MVABOrderLine orderLine = GetOrderLine();
                 bool isReturnTrx = orderLine.GetParent().IsReturnTrx();
                 //
                 if (_isInOutLineChange)
@@ -496,7 +496,7 @@ namespace VAdvantage.Model
                         if (isReturnTrx)
                         {
                             orderLine.SetQtyReturned(Decimal.Add(orderLine.GetQtyReturned(), GetQty()));
-                            MOrderLine origOrderLine = new MOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
+                            MVABOrderLine origOrderLine = new MVABOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
                             origOrderLine.SetQtyReturned(Decimal.Add(origOrderLine.GetQtyReturned(), GetQty()));
                             origOrderLine.Save();
                         }
@@ -507,7 +507,7 @@ namespace VAdvantage.Model
                         if (isReturnTrx)
                         {
                             orderLine.SetQtyReturned(Decimal.Subtract(orderLine.GetQtyReturned(), GetQty()));
-                            MOrderLine origOrderLine = new MOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
+                            MVABOrderLine origOrderLine = new MVABOrderLine(GetCtx(), orderLine.GetOrig_OrderLine_ID(), Get_Trx());
                             origOrderLine.SetQtyReturned(Decimal.Add(origOrderLine.GetQtyReturned(), GetQty()));
                             origOrderLine.Save();
                         }
@@ -553,8 +553,8 @@ namespace VAdvantage.Model
             //JID_0162: System should allow to delete the Matched PO of PO and MR with complete status only.
             if (GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine line = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_TrxName());
-                MOrder ord = new MOrder(GetCtx(), line.GetVAB_Order_ID(), Get_TrxName());
+                MVABOrderLine line = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_TrxName());
+                MVABOrder ord = new MVABOrder(GetCtx(), line.GetVAB_Order_ID(), Get_TrxName());
                 if (ord.GetDocStatus() != DocumentEngine.ACTION_COMPLETE)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted"));
@@ -761,11 +761,11 @@ namespace VAdvantage.Model
         /// Get Order Line
         /// </summary>
         /// <returns>order line or null</returns>
-        public MOrderLine GetOrderLine()
+        public MVABOrderLine GetOrderLine()
         {
             if ((_oLine == null && GetVAB_OrderLine_ID() != 0)
                 || GetVAB_OrderLine_ID() != _oLine.GetVAB_OrderLine_ID())
-                _oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
+                _oLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
             return _oLine;
         }
 
@@ -800,7 +800,7 @@ namespace VAdvantage.Model
         /// Set VAB_OrderLine_ID
         /// </summary>
         /// <param name="line">line</param>
-        public void SetVAB_OrderLine_ID(MOrderLine line)
+        public void SetVAB_OrderLine_ID(MVABOrderLine line)
         {
             _oLine = line;
             if (line == null)

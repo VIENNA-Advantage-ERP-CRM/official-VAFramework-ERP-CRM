@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             throw new Exception("@VAB_Lead_ID@ ID=0");
         }
-		MLead lead = new MLead (GetCtx(), _VAB_Lead_ID, Get_TrxName());
+		MVABLead lead = new MVABLead (GetCtx(), _VAB_Lead_ID, Get_TrxName());
         if (lead.Get_ID() != _VAB_Lead_ID)
         {
             throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);

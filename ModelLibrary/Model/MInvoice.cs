@@ -210,7 +210,7 @@ namespace VAdvantage.Model
                 //	Try to find Order link
                 if (from.GetVAB_Order_ID() != 0)
                 {
-                    MOrder peer = new MOrder(from.GetCtx(), from.GetVAB_Order_ID(), from.Get_TrxName());
+                    MVABOrder peer = new MVABOrder(from.GetCtx(), from.GetVAB_Order_ID(), from.Get_TrxName());
                     if (peer.GetRef_Order_ID() != 0)
                         to.SetVAB_Order_ID(peer.GetRef_Order_ID());
                 }
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
         /// <param name="order">order</param>
         /// <param name="VAB_DocTypesTarget_ID">target document type</param>
         /// <param name="invoiceDate">date or null</param>
-        public MInvoice(MOrder order, int VAB_DocTypesTarget_ID, DateTime? invoiceDate)
+        public MInvoice(MVABOrder order, int VAB_DocTypesTarget_ID, DateTime? invoiceDate)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
             try
@@ -554,7 +554,7 @@ namespace VAdvantage.Model
         /// 	Set Order References
         /// </summary>
         /// <param name="order"> order</param>
-        public void SetOrder(MOrder order)
+        public void SetOrder(MVABOrder order)
         {
             if (order == null)
                 return;
@@ -605,7 +605,7 @@ namespace VAdvantage.Model
 
             SetIsSOTrx(ship.IsSOTrx());
             //vikas 9/16/14 Set cb partner 
-            MOrder ord = new MOrder(GetCtx(), ship.GetVAB_Order_ID(), Get_Trx());
+            MVABOrder ord = new MVABOrder(GetCtx(), ship.GetVAB_Order_ID(), Get_Trx());
             MVABBusinessPartner bp = null;
             if (Util.GetValueOfInt(ship.GetVAB_Order_ID()) > 0)
             {
@@ -650,7 +650,7 @@ namespace VAdvantage.Model
             if (ship.GetVAB_Order_ID() != 0)
             {
                 SetVAB_Order_ID(ship.GetVAB_Order_ID());
-                MOrder order = new MOrder(GetCtx(), ship.GetVAB_Order_ID(), Get_TrxName());
+                MVABOrder order = new MVABOrder(GetCtx(), ship.GetVAB_Order_ID(), Get_TrxName());
                 SetIsDiscountPrinted(order.IsDiscountPrinted());
                 SetDateOrdered(order.GetDateOrdered());
                 SetM_PriceList_ID(order.GetM_PriceList_ID());
@@ -965,7 +965,7 @@ namespace VAdvantage.Model
                     line.SetVAB_OrderLine_ID(0);
                     if (fromLine.GetVAB_OrderLine_ID() != 0)
                     {
-                        MOrderLine peer = new MOrderLine(GetCtx(), fromLine.GetVAB_OrderLine_ID(), Get_TrxName());
+                        MVABOrderLine peer = new MVABOrderLine(GetCtx(), fromLine.GetVAB_OrderLine_ID(), Get_TrxName());
                         if (peer.GetRef_OrderLine_ID() != 0)
                             line.SetVAB_OrderLine_ID(peer.GetRef_OrderLine_ID());
                     }
@@ -2078,7 +2078,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2577,7 +2577,7 @@ namespace VAdvantage.Model
 
                         if (Env.IsModuleInstalled("VAPOS_"))
                         {
-                            MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+                            MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                             int VAPOS_Terminal_ID = order.GetVAPOS_POSTerminal_ID();
                             if (VAPOS_Terminal_ID > 0)
                             {
@@ -2678,13 +2678,13 @@ namespace VAdvantage.Model
                     MInvoiceLine line = lines[i];
                     MMatchInv inv = null;
                     //	Update Order Line
-                    MOrderLine ol = null;
+                    MVABOrderLine ol = null;
                     if (line.GetVAB_OrderLine_ID() != 0)
                     {
                         if (IsSOTrx()
                             || line.GetM_Product_ID() == 0)
                         {
-                            ol = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
+                            ol = new MVABOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
                             // if (line.GetQtyInvoiced() != null)
                             {
                                 // special check to Update orderline's Qty Invoiced
@@ -2731,11 +2731,11 @@ namespace VAdvantage.Model
                         {
                             if (ol == null || ol.Get_ID() == 0)
                             {
-                                ol = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
+                                ol = new MVABOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
                             }
                             if (ol.GetVAB_OrderLine_Blanket_ID() > 0)
                             {
-                                MOrderLine lineBlanket1 = new MOrderLine(GetCtx(), ol.GetVAB_OrderLine_Blanket_ID(), null);
+                                MVABOrderLine lineBlanket1 = new MVABOrderLine(GetCtx(), ol.GetVAB_OrderLine_Blanket_ID(), null);
                                 if (lineBlanket1.Get_ID() > 0)
                                 {
                                     if (IsSOTrx())
@@ -3158,12 +3158,12 @@ namespace VAdvantage.Model
                                         isCostAdjustableOnLost = product1.IsCostAdjustmentOnLost();
                                     }
 
-                                    MOrder order1 = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
-                                    MOrderLine ol1 = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_Trx());
+                                    MVABOrder order1 = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
+                                    MVABOrderLine ol1 = new MVABOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_Trx());
                                     if (order1.GetVAB_Order_ID() == 0)
                                     {
                                         //MOrderLine ol1 = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_Trx());
-                                        order1 = new MOrder(GetCtx(), ol1.GetVAB_Order_ID(), Get_Trx());
+                                        order1 = new MVABOrder(GetCtx(), ol1.GetVAB_Order_ID(), Get_Trx());
                                     }
                                     if (order1.IsSOTrx() && !order1.IsReturnTrx()) // SO
                                     {
@@ -4531,7 +4531,7 @@ namespace VAdvantage.Model
         /// <param name="Info">info message </param>
         /// <param name="order">order model</param>
         /// <returns></returns>
-        private bool UpdateCashBaseAndMulticurrency(StringBuilder Info, MOrder order)
+        private bool UpdateCashBaseAndMulticurrency(StringBuilder Info, MVABOrder order)
         {
             // get def Cash book id
             int VAB_CashBook_ID = GetVAB_CashBook_ID(order, order.GetVAB_Currency_ID());// Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_CashBook_ID FROM VAPOS_POSTerminal WHERE VAPOS_POSTerminal_ID = " + order.GetVAPOS_POSTerminal_ID(), null, null));
@@ -4582,7 +4582,7 @@ namespace VAdvantage.Model
         /// <param name="CurrencyAmounts"></param>
         /// <param name="CashBooks"></param>
         /// <returns>retrun list of currency cash book id and amount</returns>
-        public bool GetCashbookAndAmountList(MOrder order, StringBuilder Info, out Dictionary<int, Decimal?> CurrencyAmounts, out Dictionary<int, int> CashBooks)
+        public bool GetCashbookAndAmountList(MVABOrder order, StringBuilder Info, out Dictionary<int, Decimal?> CurrencyAmounts, out Dictionary<int, int> CashBooks)
         {
             int VAB_CashBook_ID = GetVAB_CashBook_ID(order, order.GetVAB_Currency_ID());// Util.GetValueO
             string _currencies = order.GetVA205_Currencies();
@@ -4734,7 +4734,7 @@ namespace VAdvantage.Model
         /// <param name="order"></param>
         /// <param name="IsGenerateVchRtn"></param>
         /// <returns></returns>
-        private bool IsGenerateVoucherReturn(MOrder order)
+        private bool IsGenerateVoucherReturn(MVABOrder order)
         {
             if (Env.IsModuleInstalled("VA018_"))
             {
@@ -5039,7 +5039,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return false;
@@ -5823,7 +5823,7 @@ namespace VAdvantage.Model
             SetDateInvoiced(dateInvoiced);
         }
 
-        public bool InsertReturnAmounts(MOrder order, int BaseCurrency, Dictionary<int, Decimal?> CurrAmounts, Dictionary<int, int> Cashbooks)
+        public bool InsertReturnAmounts(MVABOrder order, int BaseCurrency, Dictionary<int, Decimal?> CurrAmounts, Dictionary<int, int> Cashbooks)
         {
             StringBuilder _sb = new StringBuilder("");
             int VAB_CashBook_ID = 0;
@@ -5886,7 +5886,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        private int GetVAB_CashBook_ID(MOrder order, int VAB_Currency_ID)
+        private int GetVAB_CashBook_ID(MVABOrder order, int VAB_Currency_ID)
         {
             int VAB_CashBook_ID = 0;
             StringBuilder _sb = new StringBuilder();
@@ -5948,7 +5948,7 @@ namespace VAdvantage.Model
         /// <param name="amtVal"></param>
         /// <param name="VAB_Currency_ID"></param>
         /// <returns></returns>
-        public string CreateUpdateCash(MOrder order, int VAB_CashBook_ID, Decimal amtVal, int VAB_Currency_ID)
+        public string CreateUpdateCash(MVABOrder order, int VAB_CashBook_ID, Decimal amtVal, int VAB_Currency_ID)
         {
             //voucher return
             //int _CountVA018 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA018_'  AND ISActive='Y'  "));

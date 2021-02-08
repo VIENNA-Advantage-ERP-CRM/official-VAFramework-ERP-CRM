@@ -338,7 +338,7 @@ namespace VAdvantage.Model
                 {
 
                     /* code to check Order-invoce is creted form POS or Not */
-                    MOrder order = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
+                    MVABOrder order = new MVABOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
 
                     if (order.GetVAPOS_POSTerminal_ID() > 0)
                     {
@@ -543,7 +543,7 @@ namespace VAdvantage.Model
         /// <param name="order">Order record</param>
         /// <param name="invoice">Invoice</param>
         /// <returns> trur if schedules created and validated</returns>
-        private bool CreatePOSInvoiceSchedules(MOrder order, MInvoice invoice)
+        private bool CreatePOSInvoiceSchedules(MVABOrder order, MInvoice invoice)
         {
             var runForBaseCurrency = true;
             Dictionary<string, int> baseTypeIds = new Dictionary<string, int>();
@@ -814,7 +814,7 @@ namespace VAdvantage.Model
             schedule.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             schedule.SetVAB_DocTypes_ID(invoice.GetVAB_DocTypes_ID());
 
-            MOrder order = new MOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
+            MVABOrder order = new MVABOrder(GetCtx(), invoice.GetVAB_Order_ID(), Get_Trx());
 
             schedule.SetVA009_PaymentMethod_ID(VA009_PaymentMethod_ID);
 
@@ -1148,7 +1148,7 @@ namespace VAdvantage.Model
         /// <returns>DateTime, Next Business Day</returns>
         public DateTime? GetNextBusinessDate(DateTime? DueDate, int VAF_Org_ID)
         {
-            return MNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, VAF_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1), VAF_Org_ID) : DueDate;
+            return MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), DueDate, VAF_Org_ID) ? GetNextBusinessDate(TimeUtil.AddDays(DueDate, 1), VAF_Org_ID) : DueDate;
         }
 
         /// <summary>

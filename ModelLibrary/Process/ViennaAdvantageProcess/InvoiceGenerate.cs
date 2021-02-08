@@ -206,7 +206,7 @@ namespace ViennaAdvantage.Process
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             foreach (DataRow dr in dt.Rows)
             {
-                MOrder order = new MOrder(GetCtx(), dr, Get_TrxName());
+                MVABOrder order = new MVABOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
                 MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
@@ -284,17 +284,17 @@ namespace ViennaAdvantage.Process
                 {
                     CompleteInvoice();
                 }
-                bool completeOrder = MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule());
+                bool completeOrder = MVABOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule());
 
                 //	Schedule After Delivery
                 bool doInvoice = false;
-                if (MOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
+                if (MVABOrder.INVOICERULE_CustomerScheduleAfterDelivery.Equals(order.GetInvoiceRule()))
                 {
                     _bp = new MVABBusinessPartner(GetCtx(), order.GetBill_BPartner_ID(), null);
                     if (_bp.GetVAB_sched_Invoice_ID() == 0)
                     {
                         log.Warning("BPartner has no Schedule - set to After Delivery");
-                        order.SetInvoiceRule(MOrder.INVOICERULE_AfterDelivery);
+                        order.SetInvoiceRule(MVABOrder.INVOICERULE_AfterDelivery);
                         order.Save();
                     }
                     else
@@ -312,11 +312,11 @@ namespace ViennaAdvantage.Process
                 }	//	Schedule
 
                 //	After Delivery
-                if (doInvoice || MOrder.INVOICERULE_AfterDelivery.Equals(order.GetInvoiceRule()))
+                if (doInvoice || MVABOrder.INVOICERULE_AfterDelivery.Equals(order.GetInvoiceRule()))
                 {
                     MInOut shipment = null;
                     MInOutLine[] shipmentLines = order.GetShipmentLines();
-                    MOrderLine[] oLines = order.GetLines(true, null);
+                    MVABOrderLine[] oLines = order.GetLines(true, null);
                     for (int i = 0; i < shipmentLines.Length; i++)
                     {
                         MInOutLine shipLine = shipmentLines[i];
@@ -346,7 +346,7 @@ namespace ViennaAdvantage.Process
                     {
                         for (int i = 0; i < oLines.Length; i++)
                         {
-                            MOrderLine oLine = oLines[i];
+                            MVABOrderLine oLine = oLines[i];
                             if (oLine.GetVAB_Charge_ID() > 0)
                             {
                                 Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
@@ -373,10 +373,10 @@ namespace ViennaAdvantage.Process
                 //	After Order Delivered, Immediate
                 else
                 {
-                    MOrderLine[] oLines = order.GetLines(true, null);
+                    MVABOrderLine[] oLines = order.GetLines(true, null);
                     for (int i = 0; i < oLines.Length; i++)
                     {
-                        MOrderLine oLine = oLines[i];
+                        MVABOrderLine oLine = oLines[i];
                         Decimal toInvoice = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced());
                         if (toInvoice.CompareTo(Env.ZERO) == 0 && oLine.GetM_Product_ID() != 0)
                         {
@@ -416,7 +416,7 @@ namespace ViennaAdvantage.Process
                             break;
                         }
                         //	Immediate
-                        else if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
+                        else if (MVABOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
                         {
                             log.Fine("Immediate - ToInvoice=" + toInvoice + " - " + oLine);
                             Decimal qtyEntered = toInvoice;
@@ -441,12 +441,12 @@ namespace ViennaAdvantage.Process
                                 + " - ToInvoice=" + toInvoice + " - " + oLine);
                         }
                     }	//	for all order lines
-                    if (MOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
+                    if (MVABOrder.INVOICERULE_Immediate.Equals(order.GetInvoiceRule()))
                         _line += 1000;
                 }
 
                 //	Complete Order successful
-                if (completeOrder && MOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule()))
+                if (completeOrder && MVABOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule()))
                 {
                     MInOut[] shipments = order.GetShipments(true);
                     for (int i = 0; i < shipments.Length; i++)
@@ -487,7 +487,7 @@ namespace ViennaAdvantage.Process
         /// <param name="orderLine">line</param>
         /// <param name="qtyInvoiced">qty</param>
         /// <param name="qtyEntered">qty</param>
-        private void CreateLine(MOrder order, MOrderLine orderLine,
+        private void CreateLine(MVABOrder order, MVABOrderLine orderLine,
             Decimal qtyInvoiced, Decimal qtyEntered)
         {
             if (_invoice == null)
@@ -560,7 +560,7 @@ namespace ViennaAdvantage.Process
         /// <param name="order">order</param>
         /// <param name="ship">shipment header</param>
         /// <param name="sLine">shipment line</param>
-        private void CreateLine(MOrder order, MInOut ship, MInOutLine sLine)
+        private void CreateLine(MVABOrder order, MInOut ship, MInOutLine sLine)
         {
             if (_invoice == null)
             {

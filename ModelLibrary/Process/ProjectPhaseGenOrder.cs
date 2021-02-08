@@ -69,7 +69,7 @@ namespace VAdvantage.Process
                 throw new ArgumentException("VAB_ProjectStage_ID == 0");
             MProjectPhase fromPhase = new MProjectPhase(GetCtx(), m_VAB_ProjectStage_ID, Get_TrxName());
             MProject fromProject = ProjectGenOrder.GetProject(GetCtx(), fromPhase.GetVAB_Project_ID(), Get_TrxName());
-            MOrder order = new MOrder(fromProject, true, MOrder.DocSubTypeSO_OnCredit);
+            MVABOrder order = new MVABOrder(fromProject, true, MVABOrder.DocSubTypeSO_OnCredit);
             order.SetDescription(order.GetDescription() + " - " + fromPhase.GetName());
             if (!order.Save())
                 return GetRetrievedError(order, "Could not create Order");
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
             //	Create an order on Phase Level
             if (fromPhase.GetM_Product_ID() != 0)
             {
-                MOrderLine ol = new MOrderLine(order);
+                MVABOrderLine ol = new MVABOrderLine(order);
                 ol.SetLine(fromPhase.GetSeqNo());
                 StringBuilder sb = new StringBuilder(fromPhase.GetName());
                 if (fromPhase.GetDescription() != null && fromPhase.GetDescription().Length > 0)
@@ -101,7 +101,7 @@ namespace VAdvantage.Process
             MProjectTask[] tasks = fromPhase.GetTasks();
             foreach (MProjectTask element in tasks)
             {
-                MOrderLine ol = new MOrderLine(order);
+                MVABOrderLine ol = new MVABOrderLine(order);
                 ol.SetLine(element.GetSeqNo());
                 StringBuilder sb = new StringBuilder(element.GetName());
                 if (element.GetDescription() != null && element.GetDescription().Length > 0)

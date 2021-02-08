@@ -962,7 +962,7 @@ namespace VAdvantage.Model
             if (GetVAB_OrderLine_ID() != 0 && windowName == "Material Receipt")
             {
                 #region Material Receipt with Purchase Order
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
+                MVABOrderLine oLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
@@ -5196,7 +5196,7 @@ namespace VAdvantage.Model
             //	*** Purchase Order Detail Record ***
             if (GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
+                MVABOrderLine oLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
@@ -5581,7 +5581,7 @@ namespace VAdvantage.Model
             //	*** Purchase Order Detail Record ***
             if (GetVAB_OrderLine_ID() != 0)
             {
-                MOrderLine oLine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
+                MVABOrderLine oLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), null);
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 

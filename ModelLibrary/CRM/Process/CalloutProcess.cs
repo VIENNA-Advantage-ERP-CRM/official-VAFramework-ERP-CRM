@@ -27,10 +27,10 @@ namespace VAdvantage.Process
         {
             int VAB_Order_id = 0;
             int pid = 0;
-            VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), VAB_Order_id, null);
+            VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), VAB_Order_id, null);
 
 
-            VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), 0, null);
+            VAdvantage.Model.MVABOrderLine ol = new VAdvantage.Model.MVABOrderLine(GetCtx(), 0, null);
             ol.SetVAB_Order_ID(VAB_Order_id);
             ol.SetM_Product_ID(pid);
             ol.SetVAF_Client_ID(ord.GetVAF_Client_ID());

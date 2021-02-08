@@ -182,7 +182,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Create Lead
             if (imp.IsCreateLead())
             {
-                MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
+                MVABLead lead = new MVABLead(GetCtx(), 0, Get_TrxName());
                 lead.SetName(imp.GetContactName());
                 lead.SetDescription(imp.GetContactDescription());
                 lead.SetVAF_UserContact_ID(user.GetVAF_UserContact_ID());

@@ -143,9 +143,9 @@ namespace VIS.Models
         /// <param name="ctx"></param>
         /// <param name="pref"></param>
         /// <returns></returns>
-        public MLocation LocationSave(Ctx ctx, Dictionary<string, object> pref)
+        public MVABAddress LocationSave(Ctx ctx, Dictionary<string, object> pref)
         {
-            MLocation _location = null;
+            MVABAddress _location = null;
 
             var VAB_Address_Id = Convert.ToInt32(pref["clocationId"]);
 
@@ -156,7 +156,7 @@ namespace VIS.Models
                 VAB_Address_Id = 0;
             }
 
-            _location = new MLocation(ctx, VAB_Address_Id, null);
+            _location = new MVABAddress(ctx, VAB_Address_Id, null);
             _location.SetAddress1(Convert.ToString(pref["addvalue1"]));
             _location.SetAddress2(Convert.ToString(pref["addvalue2"]));
             _location.SetAddress3(Convert.ToString(pref["addvalue3"]));
@@ -343,7 +343,7 @@ namespace VIS.Models
                 {
                     if (count > MAX_ROWS)
                         break;
-                    MLocation loc = MLocation.Get(ctx, Convert.ToInt32(dr["VAB_Address_ID"]), null);
+                    MVABAddress loc = MVABAddress.Get(ctx, Convert.ToInt32(dr["VAB_Address_ID"]), null);
                     locs[loc.Get_ID()] = new KeyNamePair(loc.Get_ID(), loc.ToString());
 
                     lstLatLng[loc.Get_ID()] = new LatLng() { Latitude = loc.GetLatitude(), Longitude = loc.GetLongitude() };

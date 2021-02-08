@@ -337,8 +337,8 @@ namespace VAdvantage.Acct
                     {
                         if (as1.IsNotPostPOVariance() && line.GetVAB_OrderLine_ID() > 0)
                         {
-                            MOrderLine oLine = new MOrderLine(product.GetCtx(), line.GetVAB_OrderLine_ID(), null);
-                            MOrder order = new MOrder(product.GetCtx(), oLine.GetVAB_Order_ID(), null);
+                            MVABOrderLine oLine = new MVABOrderLine(product.GetCtx(), line.GetVAB_OrderLine_ID(), null);
+                            MVABOrder order = new MVABOrder(product.GetCtx(), oLine.GetVAB_Order_ID(), null);
                             Decimal convertedCost = MVABExchangeRate.Convert(product.GetCtx(),
                                 oLine.GetPriceEntered(), order.GetVAB_Currency_ID(), as1.GetVAB_Currency_ID(),
                                 line.GetDateAcct(), order.GetVAB_CurrencyType_ID(),

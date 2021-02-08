@@ -26,15 +26,15 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MOrderlineHistory : X_VAB_OrderlineHistory
+    public class MVABOrderlineHistory : X_VAB_OrderlineHistory
     {
-        public MOrderlineHistory(Ctx ctx, int VAB_OrderlineHistory_ID, Trx trxName)
+        public MVABOrderlineHistory(Ctx ctx, int VAB_OrderlineHistory_ID, Trx trxName)
             : base(ctx, VAB_OrderlineHistory_ID, trxName)
         {
 
         }
 
-        public MOrderlineHistory(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABOrderlineHistory(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

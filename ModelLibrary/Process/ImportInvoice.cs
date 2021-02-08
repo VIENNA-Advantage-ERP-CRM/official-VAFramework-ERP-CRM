@@ -480,7 +480,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //	Same Location Info
                         else if (imp.GetVAB_Address_ID() == 0)
                         {
-                            MLocation loc = bpl.GetLocation(false);
+                            MVABAddress loc = bpl.GetLocation(false);
                             if (loc.Equals(imp.GetVAB_Country_ID(), imp.GetVAB_RegionState_ID(),
                                     imp.GetPostal(), "", imp.GetCity(),
                                     imp.GetAddress1(), imp.GetAddress2()))
@@ -490,7 +490,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (bpl == null)
                     {
                         //	New Location
-                        MLocation loc = new MLocation(GetCtx(), 0, Get_TrxName());
+                        MVABAddress loc = new MVABAddress(GetCtx(), 0, Get_TrxName());
                         loc.SetAddress1(imp.GetAddress1());
                         loc.SetAddress2(imp.GetAddress2());
                         loc.SetCity(imp.GetCity());

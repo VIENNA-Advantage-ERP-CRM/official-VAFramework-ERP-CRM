@@ -26,7 +26,7 @@ namespace VIS.Models
 
             //Assign parameter value
             VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder order = new MVABOrder(ctx, VAB_Order_ID, null);
             // End Assign parameter value
 
             Dictionary<String, object> retDic = new Dictionary<string, object>();
@@ -104,7 +104,7 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             int VAB_Order_ID;
             VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder order = new MVABOrder(ctx, VAB_Order_ID, null);
             return order.GetM_PriceList_ID();
         }
 
@@ -113,7 +113,7 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
             int VAB_Order_ID;
             VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder order = new MVABOrder(ctx, VAB_Order_ID, null);
             return order.GetVAB_Currency_ID();
         }
         //End
@@ -157,7 +157,7 @@ namespace VIS.Models
             {
                 if (referenceID > 0)
                 {
-                    MOrder ord = new MOrder(ctx, referenceID, null);
+                    MVABOrder ord = new MVABOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
             }
@@ -165,12 +165,12 @@ namespace VIS.Models
             {
                 if (isSOTrx && referenceID > 0)
                 {
-                    MOrder ord = new MOrder(ctx, referenceID, null);
+                    MVABOrder ord = new MVABOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Order_ID")
                 {
-                    MOrder ord = new MOrder(ctx, referenceID, null);
+                    MVABOrder ord = new MVABOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "M_InOut_ID")
@@ -183,12 +183,12 @@ namespace VIS.Models
             {
                 if (isSOTrx && referenceID > 0)
                 {
-                    MOrder ord = new MOrder(ctx, referenceID, null);
+                    MVABOrder ord = new MVABOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Order_ID")
                 {
-                    MOrder ord = new MOrder(ctx, referenceID, null);
+                    MVABOrder ord = new MVABOrder(ctx, referenceID, null);
                     incoTerm_ID = ord.GetVAB_IncoTerm_ID();
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Invoice_ID")

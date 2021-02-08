@@ -927,7 +927,7 @@ namespace VAdvantage.Model
                 {
                     if (GetC_LocFrom_ID() != 0)
                     {
-                        MLocation loc = new MLocation(GetCtx(), GetC_LocFrom_ID(), Get_TrxName());	//	in Trx!
+                        MVABAddress loc = new MVABAddress(GetCtx(), GetC_LocFrom_ID(), Get_TrxName());	//	in Trx!
                         combiStr = loc.GetPostal();
                         descrStr = loc.GetCity();
                     }
@@ -941,7 +941,7 @@ namespace VAdvantage.Model
                 {
                     if (GetC_LocTo_ID() != 0)
                     {
-                        MLocation loc = new MLocation(GetCtx(), GetC_LocFrom_ID(), Get_TrxName());	//	in Trx!
+                        MVABAddress loc = new MVABAddress(GetCtx(), GetC_LocFrom_ID(), Get_TrxName());	//	in Trx!
                         combiStr = loc.GetPostal();
                         descrStr = loc.GetCity();
                     }

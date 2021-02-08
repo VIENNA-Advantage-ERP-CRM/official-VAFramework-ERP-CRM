@@ -140,8 +140,8 @@ namespace VAdvantage.Process
                 _DateDoc = Util.GetValueOfDateTime(DateTime.Now);
             }
             //
-            VAdvantage.Model.MOrder from = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
-            MOrder newOrder = MOrder.CopyFrom(from, _DateDoc,
+            VAdvantage.Model.MVABOrder from = new VAdvantage.Model.MVABOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+            MVABOrder newOrder = MVABOrder.CopyFrom(from, _DateDoc,
                 dt.GetVAB_DocTypes_ID(), false, true, null, true);//Pass optional parameter as True that we are going to create Order from Create Sales Order Process on Sales Quotation window---Neha
             newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             //Update New Order Refrence From Sales Qutation in Sales order
@@ -188,17 +188,17 @@ namespace VAdvantage.Process
             //
             if (_IsCloseDocument)
             {
-                VAdvantage.Model.MOrder original = new VAdvantage.Model.MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+                VAdvantage.Model.MVABOrder original = new VAdvantage.Model.MVABOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
                 //Edited by Arpit Rai on 8th of Nov,2017
                 if (original.GetDocStatus() != "CO") //to check if document is already completed
                 {
-                    original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Complete);
-                    original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Complete);
+                    original.ProcessIt(VAdvantage.Model.MVABOrder.DOCACTION_Complete);
+                    original.SetDocAction(VAdvantage.Model.MVABOrder.DOCACTION_Complete);
                     original.Save();
                 }
                 //Arpit
-                original.SetDocAction(VAdvantage.Model.MOrder.DOCACTION_Close);
-                original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
+                original.SetDocAction(VAdvantage.Model.MVABOrder.DOCACTION_Close);
+                original.ProcessIt(VAdvantage.Model.MVABOrder.DOCACTION_Close);
                 original.Save();
             }
             //

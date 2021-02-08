@@ -110,7 +110,7 @@ namespace ModelLibrary.Classes
             DateTime? eDate = null;
             if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_PURCHASEORDER.Equals(docBaseType))
             {
-                VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), _Record_ID, _trx);
+                VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), _Record_ID, _trx);
                 if (controlBasis.Equals("A"))
                 {
                     sql.Clear();
@@ -179,7 +179,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
                         // Amount = 0;
 
-                        VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]), _trx);
+                        VAdvantage.Model.MVABOrderLine ol = new VAdvantage.Model.MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]), _trx);
                         M_Product_ID = ol.GetM_Product_ID();
                         int Account_ID = 0;
                         if (M_Product_ID > 0)
@@ -379,7 +379,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             }
         }
 
-        private Decimal? CompareBudget(Decimal? lineAmt, VAdvantage.Model.MOrder order)
+        private Decimal? CompareBudget(Decimal? lineAmt, VAdvantage.Model.MVABOrder order)
         {
             Decimal? amt = 0;
             sql.Clear();
@@ -448,7 +448,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         }
 
         //
-        private int GetBudgetAmount(int AccID, DateTime? startDate, DateTime? endDate, VAdvantage.Model.MOrder ord)
+        private int GetBudgetAmount(int AccID, DateTime? startDate, DateTime? endDate, VAdvantage.Model.MVABOrder ord)
         {
             int B_ID = 0;
             int budget_ID = 0;
@@ -992,7 +992,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
             return budget_ID;
         }
 
-        private void GetWhereClause(VAdvantage.Model.MOrder ord)
+        private void GetWhereClause(VAdvantage.Model.MVABOrder ord)
         {
             //  StringBuilder where = new StringBuilder();
             //if (ord.GetVAB_BusinessPartner_ID() != 0)
@@ -1356,7 +1356,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
         public List<BudgetControl> ReduceAmountFromBudget(DataRow drDataRecord, DataRow drBUdgetControl,
                         DataRow[] drBudgetComtrolDimension, Decimal AlreadyAllocatedAmount, List<BudgetControl> _listBudgetControl)
         {
-            VLogger _log = VLogger.GetVLogger(typeof(MOrder).FullName);
+            VLogger _log = VLogger.GetVLogger(typeof(MVABOrder).FullName);
             BudgetControl _budgetControl = null;
             List<String> selectedDimension = new List<string>();
             String _budgetMessage = String.Empty;

@@ -100,7 +100,7 @@ namespace VAdvantage.Process
                 //
                 MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), response.GetVAB_BusinessPartner_ID(), Get_TrxName());
                 log.Config("Winner=" + bp);
-                MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
+                MVABOrder order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                 order.SetIsSOTrx(false);
                 if (_VAB_DocTypes_ID != 0)
                 {
@@ -157,7 +157,7 @@ namespace VAdvantage.Process
                         //	Create PO Lline for all Purchase Line Qtys
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
-                            MOrderLine ol = new MOrderLine(order);
+                            MVABOrderLine ol = new MVABOrderLine(order);
                             ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
                                 qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());
@@ -187,7 +187,7 @@ namespace VAdvantage.Process
             {
                 MRfQResponse response = responses[i];
                 MVABBusinessPartner bp = null;
-                MOrder order = null;
+                MVABOrder order = null;
                 //	For all Response Lines
                 MRfQResponseLine[] lines = response.GetLines(false);
                 for (int j = 0; j < lines.Length; j++)
@@ -205,7 +205,7 @@ namespace VAdvantage.Process
                     //	New Order
                     if (order == null)
                     {
-                        order = new MOrder(GetCtx(), 0, Get_TrxName());
+                        order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                         order.SetIsSOTrx(false);
                         // Adde by mohit to set selected document type on purchase order.- 11 january 2019
                         if (_VAB_DocTypes_ID != 0)
@@ -250,7 +250,7 @@ namespace VAdvantage.Process
                         MRfQResponseLineQty qty = qtys[k];
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
-                            MOrderLine ol = new MOrderLine(order);
+                            MVABOrderLine ol = new MVABOrderLine(order);
                             ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
                                 qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());

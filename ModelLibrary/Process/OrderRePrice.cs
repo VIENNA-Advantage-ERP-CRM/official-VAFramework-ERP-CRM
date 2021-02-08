@@ -76,15 +76,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String retValue = "";
             if (_VAB_Order_ID != 0)
             {
-                MOrder order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
+                MVABOrder order = new MVABOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
                 Decimal oldPrice = order.GetGrandTotal();
-                MOrderLine[] lines = order.GetLines();
+                MVABOrderLine[] lines = order.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     lines[i].SetPrice(order.GetM_PriceList_ID());
                     lines[i].Save();
                 }
-                order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
+                order = new MVABOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
                 Decimal newPrice = order.GetGrandTotal();
                 retValue = order.GetDocumentNo() + ":  " + oldPrice + " -> " + newPrice;
             }

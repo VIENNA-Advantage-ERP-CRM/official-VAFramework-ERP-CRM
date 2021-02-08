@@ -326,7 +326,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -3221,7 +3221,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetMovementDate(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return false;

@@ -279,7 +279,7 @@ namespace VIS.Models
         private bool Cmd_SaveOrder(Ctx ctx,int VAB_Order_ID)
         {
             log.Config("VAB_Order_ID=" + VAB_Order_ID);
-            MOrder order = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder order = new MVABOrder(ctx, VAB_Order_ID, null);
             if (order.Get_ID() == 0)
             {
                 log.Log(Level.SEVERE, "Not found - VAB_Order_ID=" + VAB_Order_ID);
@@ -299,7 +299,7 @@ namespace VIS.Models
                     {
                         int M_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
-                        MOrderLine ol = new MOrderLine(order);
+                        MVABOrderLine ol = new MVABOrderLine(order);
                         ol.SetM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         ol.SetQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         ol.SetPrice();

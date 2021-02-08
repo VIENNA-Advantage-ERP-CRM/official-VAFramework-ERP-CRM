@@ -712,7 +712,7 @@ namespace VIS.Models
                             obj.DimensionTypeVal = Convert.ToString(ds.Tables[0].Rows[i]["elementtype"]);
                             if (obj.DimensionTypeVal == "LF" || obj.DimensionTypeVal == "LT")
                             {
-                                MLocation objMLocation = new MLocation(ctx, obj.DimensionNameVal, null);
+                                MVABAddress objMLocation = new MVABAddress(ctx, obj.DimensionNameVal, null);
                                 obj.DimensionName = objMLocation.ToString();
                             }
                             obj.ElementID = Convert.ToInt32(ds.Tables[0].Rows[i]["ElementID"]);

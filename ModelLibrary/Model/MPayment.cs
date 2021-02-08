@@ -504,7 +504,7 @@ namespace VAdvantage.Model
         /// <returns>true, on Save</returns>
         protected override bool BeforeSave(bool newRecord)
         {
-            MOrder order = null;
+            MVABOrder order = null;
             MInvoice invoice = null;
             MDocType dt1 = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
 
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
                     }
                     else if (GetVAB_Order_ID() > 0)
                     {
-                        order = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
+                        order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
                         if (order.IsSOTrx() != dt1.IsSOTrx())
                         {
                             return false;
@@ -2656,7 +2656,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2675,7 +2675,7 @@ namespace VAdvantage.Model
             //	Waiting Payment - Need to create Invoice & Shipment
             if (GetVAB_Order_ID() != 0 && GetVAB_Invoice_ID() == 0)
             {	//	see WebOrder.process
-                MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+                MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                 if (DOCSTATUS_WaitingPayment.Equals(order.GetDocStatus()))
                 {
                     order.SetVAB_Payment_ID(GetVAB_Payment_ID());
@@ -3298,7 +3298,7 @@ namespace VAdvantage.Model
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
                         Decimal orderPaidAmt = GetPayAmt() + GetDiscountAmt() + GetWriteOffAmt() +
                             (Get_ColumnIndex("WithholdingAmt") >= 0 ? (GetWithholdingAmt() + GetBackupWithholdingAmount()) : 0);
-                        MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+                        MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         MVAFClientDetail client = MVAFClientDetail.Get(GetCtx(), GetVAF_Client_ID());
                         MVABAccountBook asch = MVABAccountBook.Get(GetCtx(), client.GetVAB_AccountBook1_ID());
 
@@ -3894,7 +3894,7 @@ namespace VAdvantage.Model
                 decimal price = 0;
                 PO po = null;
                 MInvoice invoice = null;
-                MOrder order = null;
+                MVABOrder order = null;
                 int currencyTo = 0;
                 decimal differenceAmount = 0;
                 bool isRealized = false;
@@ -4038,7 +4038,7 @@ namespace VAdvantage.Model
                     else if (VAB_Order_ID != 0)
                     {
                         #region update Amount on LC Detail
-                        order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+                        order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         //                        sql = @"SELECT aline.Amount, aline.DiscountAmt , aline.WriteOffAmt , aline.OverUnderAmt , aloc.VAB_Currency_ID , 
                         //                               (aline.Amount - (aline.DiscountAmt + aline.WriteOffAmt) + aline.OverUnderAmt) AS paidinvamount FROM VAB_DocAllocation aloc 
                         //                               INNER JOIN VAB_DocAllocationLine aline ON aloc.VAB_DocAllocation_ID = aline.VAB_DocAllocation_ID WHERE aline.IsActive = 'Y' 

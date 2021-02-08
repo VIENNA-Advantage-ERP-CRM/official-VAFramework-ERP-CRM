@@ -587,7 +587,7 @@ namespace ViennaAdvantage.Process
                                 line.SetQty(1);
                                 line.SetQtyEntered(1);
                                 line.SetQtyInvoiced(1);
-                                line.SetOrderLine(new MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ORDERLINE_ID"]), Get_Trx()));
+                                line.SetOrderLine(new MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_ORDERLINE_ID"]), Get_Trx()));
                                 line.SetVAB_Charge_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_CHARGE_ID"]));
                                 line.SetVAB_UOM_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_UOM_ID"]));
                                 line.SetVAB_TaxRate_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_TAXRATE_ID"]));

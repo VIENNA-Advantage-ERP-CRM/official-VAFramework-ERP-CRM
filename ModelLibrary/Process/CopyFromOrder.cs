@@ -70,8 +70,8 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("Source VAB_Order_ID == 0");
             }
-            MOrder from = new MOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
-            MOrder to = new MOrder(GetCtx(), To_VAB_Order_ID, Get_Trx());
+            MVABOrder from = new MVABOrder(GetCtx(), _VAB_Order_ID, Get_Trx());
+            MVABOrder to = new MVABOrder(GetCtx(), To_VAB_Order_ID, Get_Trx());
 
             //JID_0706: Need to bring the Attribute set instance value from old order to new order.
             int no = to.CopyLinesFrom(from, false, true);		//	no Attributes

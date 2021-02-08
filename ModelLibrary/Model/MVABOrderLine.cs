@@ -30,13 +30,13 @@ namespace VAdvantage.Model
     /// <summary>
     /// Order Line model.
     /// </summary>
-    public class MOrderLine : X_VAB_OrderLine
+    public class MVABOrderLine : X_VAB_OrderLine
     {
         #region Private variables
         private int _M_PriceList_ID = 0;
         private bool _IsSOTrx = true;
         private bool _IsReturnTrx = true;
-        private static VLogger _log = VLogger.GetVLogger(typeof(MOrderLine).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABOrderLine).FullName);
         //	Product Pricing
         private MProductPricing _productPrice = null;
         //Cached Currency Precision	
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
         //	Product					
         private MProduct _product = null;
         //Parent					
-        private MOrder _parent = null;
+        private MVABOrder _parent = null;
 
         private int I_Order_ID = 0;
 
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_OrderLine_ID">order line to load</param>
         /// <param name="trxName">transction</param>
-        public MOrderLine(Ctx ctx, int VAB_OrderLine_ID, Trx trxName)
+        public MVABOrderLine(Ctx ctx, int VAB_OrderLine_ID, Trx trxName)
             : base(ctx, VAB_OrderLine_ID, trxName)
         {
             if (VAB_OrderLine_ID == 0)
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
         /// ol.save();
         /// </summary>
         /// <param name="order">parent order</param>
-        public MOrderLine(MOrder order)
+        public MVABOrderLine(MVABOrder order)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
             if (order.Get_ID() == 0)
@@ -175,7 +175,7 @@ namespace VAdvantage.Model
             SetOrder(order);
         }
 
-        public MOrderLine(MOrder order, int p_I_Order_ID)
+        public MVABOrderLine(MVABOrder order, int p_I_Order_ID)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
             if (order.GetVAB_Order_ID() != 0)
@@ -191,15 +191,15 @@ namespace VAdvantage.Model
             return I_Order_ID;
         }
 
-        public MOrderLine GetRef_OrderLine()
+        public MVABOrderLine GetRef_OrderLine()
         {
             String sql = "SELECT VAB_OrderLine_ID FROM VAB_OrderLine WHERE Ref_OrderLine_ID=@param1";
-            MOrderLine line = null;
+            MVABOrderLine line = null;
 
             int ii = DB.GetSQLValue(Get_TrxName(), sql, GetVAB_OrderLine_ID());
             if (ii > 0)
             {
-                line = new MOrderLine(GetCtx(), ii, Get_TrxName());
+                line = new MVABOrderLine(GetCtx(), ii, Get_TrxName());
             }
             return line;
         }
@@ -210,13 +210,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">set record</param>
         /// <param name="trxName">transaction</param>
-        public MOrderLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABOrderLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
         }
 
-        public MOrderLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public MVABOrderLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -226,7 +226,7 @@ namespace VAdvantage.Model
         /// Does not set Parent !!
         /// </summary>
         /// <param name="order">order</param>
-        public void SetOrder(MOrder order)
+        public void SetOrder(MVABOrder order)
         {
             SetClientOrg(order);
             SetVAB_BusinessPartner_ID(order.GetVAB_BusinessPartner_ID());
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
         /// Set Header Info
         /// </summary>
         /// <param name="order">order</param>
-        public void SetHeaderInfo(MOrder order)
+        public void SetHeaderInfo(MVABOrder order)
         {
             _parent = order;
             _precision = order.GetPrecision();
@@ -255,10 +255,10 @@ namespace VAdvantage.Model
         /// Get Parent
         /// </summary>
         /// <returns>parent</returns>
-        public MOrder GetParent()
+        public MVABOrder GetParent()
         {
             if (_parent == null)
-                _parent = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
+                _parent = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -351,7 +351,7 @@ namespace VAdvantage.Model
             // if (_IsSOTrx)
             // {           
             DataSet dsLoc = null;
-            MOrder inv = new MOrder(Env.GetCtx(), Util.GetValueOfInt(Get_Value("VAB_Order_ID")), Get_TrxName());
+            MVABOrder inv = new MVABOrder(Env.GetCtx(), Util.GetValueOfInt(Get_Value("VAB_Order_ID")), Get_TrxName());
             //11-nov-2014 Amit
             string taxRule = string.Empty;
             int _CountED002 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('ED002_' , 'VATAX_' )"));
@@ -944,7 +944,7 @@ namespace VAdvantage.Model
         /// </summary>
         public void SetLineNetAmt()
         {
-            MOrder Ord = new MOrder(Env.GetCtx(), GetVAB_Order_ID(), null);
+            MVABOrder Ord = new MVABOrder(Env.GetCtx(), GetVAB_Order_ID(), null);
             if (Util.GetValueOfInt(Ord.GetVAPOS_POSTerminal_ID()) > 0)
             {
                 Decimal bd = Decimal.Multiply(GetPriceActual(), GetQtyEntered());
@@ -961,7 +961,7 @@ namespace VAdvantage.Model
                 if (Env.IsModuleInstalled("ED007_"))
                 {
                     #region Set Discount Values
-                    MOrder order = new MOrder(GetCtx(), Util.GetValueOfInt(GetVAB_Order_ID()), null);
+                    MVABOrder order = new MVABOrder(GetCtx(), Util.GetValueOfInt(GetVAB_Order_ID()), null);
                     MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetM_Product_ID()), null);
                     MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), order.GetVAB_BusinessPartner_ID(), null);
                     MDiscountSchema discountSchema = new MDiscountSchema(GetCtx(), bPartner.GetM_DiscountSchema_ID(), null);
@@ -2632,7 +2632,7 @@ namespace VAdvantage.Model
                     else
                     {
                         int VAB_OrderLine_ID = GetVAB_OrderLine_ID();
-                        Decimal notReserved = MOrderLine.GetNotReserved(GetCtx(),
+                        Decimal notReserved = MVABOrderLine.GetNotReserved(GetCtx(),
                             M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             VAB_OrderLine_ID);
                         if (notReserved == null)
@@ -2669,7 +2669,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="orderline">order Line reference</param>
         /// <returns>LineNetAmount of Product</returns>
-        public Decimal GetProductLineCost(MOrderLine orderline)
+        public Decimal GetProductLineCost(MVABOrderLine orderline)
         {
             if (orderline == null || orderline.Get_ID() <= 0)
             {
@@ -3347,7 +3347,7 @@ namespace VAdvantage.Model
                     else
                     {
                         int VAB_OrderLine_ID = GetVAB_OrderLine_ID();
-                        Decimal notReserved = MOrderLine.GetNotReserved(GetCtx(),
+                        Decimal notReserved = MVABOrderLine.GetNotReserved(GetCtx(),
                             M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,
                             VAB_OrderLine_ID);
                         if (notReserved == null)
@@ -3694,7 +3694,7 @@ namespace VAdvantage.Model
         /// 	SOTrx should be set.
         /// </summary>
         /// <param name="origOrderLine"> MInOutLine</param>
-        public void SetOrigOrderLine(MOrderLine origOrderLine)
+        public void SetOrigOrderLine(MVABOrderLine origOrderLine)
         {
             if (origOrderLine == null || origOrderLine.Get_ID() == 0)
                 return;
@@ -3732,7 +3732,7 @@ namespace VAdvantage.Model
             //p_changeVO.setContext(GetCtx(), windowNo, "DiscountSchema", false);
 
             //		Get Details
-            MOrderLine oLine = new MOrderLine(GetCtx(), Orig_OrderLine_ID, null);
+            MVABOrderLine oLine = new MVABOrderLine(GetCtx(), Orig_OrderLine_ID, null);
             if (oLine.Get_ID() != 0)
                 SetOrigOrderLine(oLine);
         }
@@ -3825,7 +3825,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            MOrder Ord = new MOrder(Env.GetCtx(), GetVAB_Order_ID(), Get_Trx());
+            MVABOrder Ord = new MVABOrder(Env.GetCtx(), GetVAB_Order_ID(), Get_Trx());
             MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetVAB_DocTypesTarget_ID());
 
             // JID_1850 if product is there when qty delivered / invoicedcant be less than qtyordered
@@ -3913,7 +3913,7 @@ namespace VAdvantage.Model
                 }
                 else if (Ord.IsReturnTrx() && GetOrig_OrderLine_ID() > 0)
                 {
-                    MOrderLine origOrderLine = new MOrderLine(GetCtx(), GetOrig_OrderLine_ID(), Get_Trx());
+                    MVABOrderLine origOrderLine = new MVABOrderLine(GetCtx(), GetOrig_OrderLine_ID(), Get_Trx());
                     currentcostprice = origOrderLine.GetCurrentCostPrice();
                 }
                 SetCurrentCostPrice(currentcostprice);
@@ -4278,7 +4278,7 @@ namespace VAdvantage.Model
 
             // Validate Return Policy for RMA
             //MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
-            MOrder order = Ord;
+            MVABOrder order = Ord;
             bool isReturnTrx = order.IsReturnTrx();
             if (isReturnTrx)
             {
@@ -4476,7 +4476,7 @@ namespace VAdvantage.Model
             }
 
             // when document is other that Drafted stage, then we cannot delete documnet line
-            MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+            MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
             if (order.GetDocStatus() != "DR")
             {
                 log.SaveError("DeleteError", Msg.GetMsg(GetCtx(), "VIS_CantBeDeleted"));
@@ -4530,7 +4530,7 @@ namespace VAdvantage.Model
                 if (!newRecord && Is_ValueChanged("VAB_TaxRate_ID"))
                 {
                     //	Recalculate Tax for old Tax
-                    MOrderTax tax = MOrderTax.Get(this, GetPrecision(), true, Get_TrxName());	//	old Tax
+                    MVABOrderTax tax = MVABOrderTax.Get(this, GetPrecision(), true, Get_TrxName());	//	old Tax
                     if (tax != null)
                     {
                         if (!tax.CalculateTaxFromLines())
@@ -4542,7 +4542,7 @@ namespace VAdvantage.Model
                     // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                     if (Get_ColumnIndex("SurchargeAmt") > 0)
                     {
-                        tax = MOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
+                        tax = MVABOrderTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
                         {
                             if (!tax.CalculateSurchargeFromLines())
@@ -4556,7 +4556,7 @@ namespace VAdvantage.Model
                     return false;
 
                 // Warning message needs to display in case Entered Price is less than Cost of the Product on Sales Order
-                MOrder Ord = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
+                MVABOrder Ord = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                 if (Ord.IsSOTrx() && !Ord.IsReturnTrx() && GetM_Product_ID() > 0)
                 {
                     MProduct prd = new MProduct(GetCtx(), GetM_Product_ID(), Get_Trx());
@@ -4570,12 +4570,12 @@ namespace VAdvantage.Model
             // nnayak : Changes for bug 1535824 - Order: Fully Invoiced
             if (!newRecord && Is_ValueChanged("QtyInvoiced"))
             {
-                MOrder order = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
-                MOrderLine[] oLines = order.GetLines(true, null);
+                MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
+                MVABOrderLine[] oLines = order.GetLines(true, null);
                 bool isInvoiced = true;
                 for (int i = 0; i < oLines.Length; i++)
                 {
-                    MOrderLine line = oLines[i];
+                    MVABOrderLine line = oLines[i];
                     if (line.GetQtyInvoiced().CompareTo(line.GetQtyOrdered()) < 0)
                     {
                         isInvoiced = false;
@@ -4626,7 +4626,7 @@ namespace VAdvantage.Model
         private bool UpdateHeaderTax()
         {
             //	Recalculate Tax for this Tax
-            MOrderTax tax = MOrderTax.Get(this, GetPrecision(), false, Get_TrxName());	//	current Tax
+            MVABOrderTax tax = MVABOrderTax.Get(this, GetPrecision(), false, Get_TrxName());	//	current Tax
             if (!tax.CalculateTaxFromLines())
                 return false;
             if (!tax.Save(Get_TrxName()))
@@ -4646,7 +4646,7 @@ namespace VAdvantage.Model
             // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
             else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
             {
-                tax = MOrderTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
+                tax = MVABOrderTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
                 if (!tax.CalculateSurchargeFromLines())
                     return false;
                 if (!tax.Save(Get_TrxName()))
@@ -4692,12 +4692,12 @@ namespace VAdvantage.Model
         /// <param name="tax">Tax</param>
         /// <param name="trxName">Trx Object</param>
         /// <returns>true, if Tax calculated</returns>
-        private bool CalculateChildTax(MOrder order, MOrderTax oTax, MTax tax, Trx trxName)
+        private bool CalculateChildTax(MVABOrder order, MVABOrderTax oTax, MTax tax, Trx trxName)
         {
             MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
             for (int j = 0; j < cTaxes.Length; j++)
             {
-                MOrderTax newITax = null;
+                MVABOrderTax newITax = null;
                 MTax cTax = cTaxes[j];
                 Decimal taxAmt = cTax.CalculateTax(oTax.GetTaxBaseAmt(), false, GetPrecision());
 
@@ -4711,7 +4711,7 @@ namespace VAdvantage.Model
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            newITax = new MOrderTax(GetCtx(), dr, trxName);
+                            newITax = new MVABOrderTax(GetCtx(), dr, trxName);
                         }
                     }
                 }
@@ -4728,7 +4728,7 @@ namespace VAdvantage.Model
                 // Create New
                 if (newITax == null)
                 {
-                    newITax = new MOrderTax(GetCtx(), 0, Get_TrxName());
+                    newITax = new MVABOrderTax(GetCtx(), 0, Get_TrxName());
                     newITax.SetClientOrg(this);
                     newITax.SetVAB_Order_ID(GetVAB_Order_ID());
                     newITax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());

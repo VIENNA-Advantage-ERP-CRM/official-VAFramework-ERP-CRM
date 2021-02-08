@@ -32,7 +32,7 @@ namespace VAdvantage.Model
 
         private string sql = "";
         private int manu_ID = 0;
-        private static VLogger _log = VLogger.GetVLogger(typeof(MOrderLine).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABOrderLine).FullName);
         #endregion
 
         /// <summary>

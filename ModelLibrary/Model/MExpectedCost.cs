@@ -124,9 +124,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAB_Order_ID">order id</param>
         /// <returns>order lines</returns>
-        public MOrderLine[] GetLinesItemProduct(int VAB_Order_ID)
+        public MVABOrderLine[] GetLinesItemProduct(int VAB_Order_ID)
         {
-            List<MOrderLine> list = new List<MOrderLine>();
+            List<MVABOrderLine> list = new List<MVABOrderLine>();
             StringBuilder sql = new StringBuilder(@"SELECT * FROM VAB_OrderLine ol
                                                         INNER JOIN m_product p ON p.m_product_id = ol.m_product_id
                                                         WHERE ol.VAB_Order_ID =" + VAB_Order_ID + @" AND ol.isactive = 'Y' 
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+                    MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
                     list.Add(ol);
                 }
             }
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MOrderLine[] lines = new MOrderLine[list.Count]; ;
+            MVABOrderLine[] lines = new MVABOrderLine[list.Count]; ;
             lines = list.ToArray();
             return lines;
         }
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             }
 
             // get order lines having only product
-            MOrderLine[] orderLines = GetLinesItemProduct(GetVAB_Order_ID());
+            MVABOrderLine[] orderLines = GetLinesItemProduct(GetVAB_Order_ID());
 
             // create expected cost distribution lines
             if (orderLines != null && orderLines.Length > 0)
@@ -254,7 +254,7 @@ namespace VAdvantage.Model
                 //	Create Allocations
                 for (int i = 0; i < _expectedDistributionlines.Length; i++)
                 {
-                    MOrderLine orderLine = new MOrderLine(GetCtx(), _expectedDistributionlines[i].GetVAB_OrderLine_ID(), Get_Trx());
+                    MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), _expectedDistributionlines[i].GetVAB_OrderLine_ID(), Get_Trx());
                     Decimal baseValue = orderLine.GetBase(GetLandedCostDistribution());
                     _expectedDistributionlines[i].SetBase(baseValue);
                     _expectedDistributionlines[i].SetQty(orderLine.GetQtyOrdered());
