@@ -81,5 +81,15 @@ namespace VAdvantage.Model
                 return null;
             }
         }
+
+        /// <summary>
+        /// Return Native sequence is enabled or not.
+        /// </summary>
+        /// <param name="reload">If true, Fetches value form DB, otherwise from cache</param>
+        /// <returns></returns>
+        public static bool IsNativeSequence(bool reload)
+        {
+            return MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, reload) != "Y";
+        }
     }
 }

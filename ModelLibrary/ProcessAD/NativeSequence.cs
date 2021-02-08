@@ -53,8 +53,8 @@ namespace VAdvantage.Process
 
 
             // If already activated, then return.
-            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false) == "Y";
-            if (SYSTEM_NATIVE_SEQUENCE)
+            
+            if (MSysConfig.IsNativeSequence(false))
             {
                 throw new Exception("Native Sequence is Actived");
             }
@@ -127,12 +127,12 @@ namespace VAdvantage.Process
             if (value)
             {
                 DB.ExecuteQuery("UPDATE AD_SysConfig SET Value='Y' WHERE Name='SYSTEM_NATIVE_SEQUENCE'");
-                MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, true);
+                MSysConfig.IsNativeSequence(true);
             }
             else
             {
                 DB.ExecuteQuery("UPDATE AD_SysConfig SET Value='N' WHERE Name='SYSTEM_NATIVE_SEQUENCE'");
-                MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
+                MSysConfig.IsNativeSequence(true);
             }
         }
     }
