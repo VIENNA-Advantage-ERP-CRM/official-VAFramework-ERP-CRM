@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttributeInstance
+ * Class Name     : MVAMPFeatueInstance
  * Purpose        : attribute instance stting using x-classes
  * Class Used     : X_VAM_PFeatue_Instance
  * Chronological    Development
@@ -26,7 +26,7 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeInstance : X_VAM_PFeatue_Instance
+    public class MVAMPFeatueInstance : X_VAM_PFeatue_Instance
     {
         /// <summary>
         /// Persistency Constructor
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="ignored">ignored</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int ignored, Trx trxName)
+        public MVAMPFeatueInstance(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
             if (ignored != 0)
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMPFeatueInstance(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="Value">string value</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
+        public MVAMPFeatueInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int VAM_PFeature_SetInstance_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="BDValue"> number value</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
+        public MVAMPFeatueInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int VAM_PFeature_SetInstance_ID, Decimal? BDValue, Trx trxName)
             : base(ctx, 0, trxName)
         {
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_Value_ID">selection</param>
         /// <param name="Value">String representation for fast display</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeInstance(Ctx ctx, int VAM_ProductFeature_ID,
+        public MVAMPFeatueInstance(Ctx ctx, int VAM_ProductFeature_ID,
             int VAM_PFeature_SetInstance_ID, int VAM_PFeature_Value_ID, String Value, Trx trxName)
             : base(ctx, 0, trxName)
         {

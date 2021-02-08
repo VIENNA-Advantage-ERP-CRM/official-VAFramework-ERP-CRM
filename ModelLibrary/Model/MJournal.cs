@@ -703,13 +703,13 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             sql = MVAFRole.GetDefault(GetCtx()).AddAccessSQL(sql, "VAB_AccountBook", true, true);
 
             DataSet ds = DB.ExecuteDataset(sql, null, Get_Trx());
-            MAssignAcctSchema assignAcctSchema = null;
+            MVAGLAssignAcctSchema assignAcctSchema = null;
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     // create new record 
-                    assignAcctSchema = new MAssignAcctSchema(GetCtx(), 0, Get_Trx());
+                    assignAcctSchema = new MVAGLAssignAcctSchema(GetCtx(), 0, Get_Trx());
                     assignAcctSchema.SetVAF_Client_ID(GetVAF_Client_ID());
                     assignAcctSchema.SetVAF_Org_ID(GetVAF_Org_ID());
                     assignAcctSchema.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
@@ -1211,10 +1211,10 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             {
                 return "";
             }
-            MAssignAcctSchema[] fromLines = GetAssignAcctSchemaLines();
+            MVAGLAssignAcctSchema[] fromLines = GetAssignAcctSchemaLines();
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MAssignAcctSchema toAssignAcctSchemaLine = new MAssignAcctSchema(GetCtx(), 0, trxName);
+                MVAGLAssignAcctSchema toAssignAcctSchemaLine = new MVAGLAssignAcctSchema(GetCtx(), 0, trxName);
                 PO.CopyValues(fromLines[i], toAssignAcctSchemaLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toAssignAcctSchemaLine.SetVAGL_JRNL_ID(newJournal_Id);
                 if (!toAssignAcctSchemaLine.Save())
@@ -1234,9 +1234,9 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// Get lines of Assign Accounting Schema against GL journal
         /// </summary>
         /// <returns>array of assign accounting schema</returns>
-        public MAssignAcctSchema[] GetAssignAcctSchemaLines()
+        public MVAGLAssignAcctSchema[] GetAssignAcctSchemaLines()
         {
-            List<MAssignAcctSchema> list = new List<MAssignAcctSchema>();
+            List<MVAGLAssignAcctSchema> list = new List<MVAGLAssignAcctSchema>();
             String sql = "SELECT * FROM VAGL_AssignAcctSchema WHERE VAGL_JRNL_ID=@Param1";
             SqlParameter[] Param = new SqlParameter[1];
             IDataReader idr = null;
@@ -1251,7 +1251,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MAssignAcctSchema(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAGLAssignAcctSchema(GetCtx(), dr, Get_TrxName()));
                 }
                 dt = null;
             }
@@ -1268,7 +1268,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 log.Log(Level.SEVERE, "getLines", ex);
             }
             //
-            MAssignAcctSchema[] retValue = new MAssignAcctSchema[list.Count];
+            MVAGLAssignAcctSchema[] retValue = new MVAGLAssignAcctSchema[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

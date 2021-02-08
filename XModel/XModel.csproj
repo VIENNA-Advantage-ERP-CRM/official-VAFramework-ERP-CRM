@@ -504,7 +504,7 @@
     <Compile Include="Model\X_Fact_Acct.cs" />
     <Compile Include="Model\X_Fact_Acct_Balance.cs" />
     <Compile Include="Model\X_Fact_Accumulation.cs" />
-    <Compile Include="Model\X_GL_AssignAcctSchema.cs" />
+    <Compile Include="Model\X_VAGL_AssignAcctSchema.cs" />
     <Compile Include="Model\X_GL_Budget.cs" />
     <Compile Include="Model\X_GL_BudgetControl.cs" />
     <Compile Include="Model\X_GL_Category.cs" />
@@ -562,7 +562,7 @@
     <Compile Include="Model\X_K_Topic.cs" />
     <Compile Include="Model\X_K_Type.cs" />
     <Compile Include="Model\X_VAM_ProductFeature.cs" />
-    <Compile Include="Model\X_M_AttributeInstance.cs" />
+    <Compile Include="Model\X_VAM_AttributeInstance.cs" />
     <Compile Include="Model\X_M_AttributeSearch.cs" />
     <Compile Include="Model\X_M_AttributeSet.cs" />
     <Compile Include="Model\X_M_AttributeSetExclude.cs" />
@@ -751,7 +751,7 @@
     <Compile Include="Model\X_Test.cs" />
     <Compile Include="Model\X_testtable.cs" />
     <Compile Include="Model\X_TIRE_Storage.cs" />
-    <Compile Include="Model\X_T_Aging.cs" />
+    <Compile Include="Model\X_VAT_Aging.cs" />
     <Compile Include="Model\X_T_DistributionRunDetail.cs" />
     <Compile Include="Model\X_T_ImpFormat.cs" />
     <Compile Include="Model\X_T_InventoryValue.cs" />

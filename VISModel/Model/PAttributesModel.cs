@@ -40,7 +40,7 @@ namespace VIS.Models
     {
         private VLogger log = VLogger.GetVLogger(typeof(PAttributesModel).FullName);
 
-        //Dictionary<MAttribute, KeyValuePair<MAttributeInstance, MAttributeValue[]>> attributesList = new Dictionary<MAttribute, KeyValuePair<MAttributeInstance, MAttributeValue[]>>(4);
+        //Dictionary<MAttribute, KeyValuePair<MVAMPFeatueInstance, MAttributeValue[]>> attributesList = new Dictionary<MAttribute, KeyValuePair<MVAMPFeatueInstance, MAttributeValue[]>>(4);
 
         public AttributesObjects LoadInit(int _VAM_PFeature_SetInstance_ID, int _VAM_Product_ID, bool _productWindow, int windowNo, Ctx ctx, int VAF_Column_ID, int window_ID, bool IsSOTrx, string IsInternalUse)
         {
@@ -686,7 +686,7 @@ namespace VIS.Models
             }
             //obj.tableStucture += "</td>";
 
-            MAttributeInstance instance = attribute.GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
+            MVAMPFeatueInstance instance = attribute.GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
 
             if (MVAMProductFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
             {
@@ -1056,7 +1056,7 @@ namespace VIS.Models
                             mandatory += " - " + attributes[i].GetName();
                         }
                         lst[attributes[i]] = value;
-                        //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                        //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                     }
                     else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
@@ -1068,7 +1068,7 @@ namespace VIS.Models
                             mandatory += " - " + attributes[i].GetName();
                         }
                         lst[attributes[i]] = value;
-                        //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                        //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                     }
                     else
                     {
@@ -1080,7 +1080,7 @@ namespace VIS.Models
                             mandatory += " - " + attributes[i].GetName();
                         }
                         lst[attributes[i]] = value;
-                        //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                        //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                     }
                     _changed = true;
                 }
@@ -1265,7 +1265,7 @@ namespace VIS.Models
                             {
                                 continue;
                             }
-                            attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                            attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                         }
                         else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                         {
@@ -1273,7 +1273,7 @@ namespace VIS.Models
                             {
                                 continue;
                             }
-                            attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, Convert.ToDecimal(lst[attributes[i]]));
+                            attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, Convert.ToDecimal(lst[attributes[i]]));
                         }
                         else
                         {
@@ -1281,7 +1281,7 @@ namespace VIS.Models
                             {
                                 continue;
                             }
-                            attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
+                            attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
                         }
                     }
 
@@ -1581,7 +1581,7 @@ namespace VIS.Models
                         mandatory += " - " + attributes[i].GetName();
                     }
                     lst[attributes[i]] = value;
-                    //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                    //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                 }
                 else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                 {
@@ -1593,7 +1593,7 @@ namespace VIS.Models
                         mandatory += " - " + attributes[i].GetName();
                     }
                     lst[attributes[i]] = value.ToString("0.##########");
-                    //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                    //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                 }
                 else
                 {
@@ -1605,7 +1605,7 @@ namespace VIS.Models
                         mandatory += " - " + attributes[i].GetName();
                     }
                     lst[attributes[i]] = value;
-                    //attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                    //attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                 }
                 _changed = true;
             }
@@ -1788,12 +1788,12 @@ namespace VIS.Models
                     {
                         MAttributeValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MAttributeValue : null;
 
-                        //Commented because that part is already handled in SetMAttributeInstance Function if Value is null then it'll set id to 0 and value to null
+                        //Commented because that part is already handled in SetMVAMPFeatueInstance Function if Value is null then it'll set id to 0 and value to null
                         //if (value == null)
                         //{
                         //    continue;
                         //}
-                        attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, value);
+                        attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, value);
                     }
                     else if (MVAMProductFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
@@ -1801,7 +1801,7 @@ namespace VIS.Models
                         {
                             continue;
                         }
-                        attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, Convert.ToDecimal(lst[attributes[i]]));
+                        attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, Convert.ToDecimal(lst[attributes[i]]));
                     }
                     else
                     {
@@ -1809,7 +1809,7 @@ namespace VIS.Models
                         {
                             continue;
                         }
-                        attributes[i].SetMAttributeInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
+                        attributes[i].SetMVAMPFeatueInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
                     }
                 }
                 if (hasValue)

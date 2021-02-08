@@ -14,48 +14,9 @@ using System.Data;
 /** Generated Model for VAT_Aging
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_T_Aging : PO
+public class X_VAT_Aging : PO
 {
-public X_T_Aging (Context ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
-{
-/** if (VAT_Aging_ID == 0)
-{
-SetVAF_JInstance_ID (0);
-SetVAB_BPart_Category_ID (0);
-SetVAB_BusinessPartner_ID (0);
-SetVAB_Currency_ID (0);
-SetVAB_sched_InvoicePayment_ID (0);
-SetVAB_Invoice_ID (0);
-SetDue0 (0.0);
-SetDue0_30 (0.0);
-SetDue0_7 (0.0);
-SetDue1_7 (0.0);
-SetDue31_60 (0.0);
-SetDue31_Plus (0.0);
-SetDue61_90 (0.0);
-SetDue61_Plus (0.0);
-SetDue8_30 (0.0);
-SetDue91_Plus (0.0);
-SetDueAmt (0.0);
-SetDueDate (DateTime.Now);
-SetInvoicedAmt (0.0);
-SetIsListInvoices (false);
-SetIsSOTrx (false);
-SetOpenAmt (0.0);
-SetPastDue1_30 (0.0);
-SetPastDue1_7 (0.0);
-SetPastDue31_60 (0.0);
-SetPastDue31_Plus (0.0);
-SetPastDue61_90 (0.0);
-SetPastDue61_Plus (0.0);
-SetPastDue8_30 (0.0);
-SetPastDue91_Plus (0.0);
-SetPastDueAmt (0.0);
-SetStatementDate (DateTime.Now);
-}
- */
-}
-public X_T_Aging (Ctx ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
+public X_VAT_Aging (Context ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
 {
 /** if (VAT_Aging_ID == 0)
 {
@@ -94,12 +55,51 @@ SetStatementDate (DateTime.Now);
 }
  */
 }
+public X_VAT_Aging (Ctx ctx, int VAT_Aging_ID, Trx trxName) : base (ctx, VAT_Aging_ID, trxName)
+{
+/** if (VAT_Aging_ID == 0)
+{
+SetVAF_JInstance_ID (0);
+SetVAB_BPart_Category_ID (0);
+SetVAB_BusinessPartner_ID (0);
+SetVAB_Currency_ID (0);
+SetVAB_sched_InvoicePayment_ID (0);
+SetVAB_Invoice_ID (0);
+SetDue0 (0.0);
+SetDue0_30 (0.0);
+SetDue0_7 (0.0);
+SetDue1_7 (0.0);
+SetDue31_60 (0.0);
+SetDue31_Plus (0.0);
+SetDue61_90 (0.0);
+SetDue61_Plus (0.0);
+SetDue8_30 (0.0);
+SetDue91_Plus (0.0);
+SetDueAmt (0.0);
+SetDueDate (DateTime.Now);
+SetInvoicedAmt (0.0);
+SetIsListInvoices (false);
+SetIsSOTrx (false);
+SetOpenAmt (0.0);
+SetPastDue1_30 (0.0);
+SetPastDue1_7 (0.0);
+SetPastDue31_60 (0.0);
+SetPastDue31_Plus (0.0);
+SetPastDue61_90 (0.0);
+SetPastDue61_Plus (0.0);
+SetPastDue8_30 (0.0);
+SetPastDue91_Plus (0.0);
+SetPastDueAmt (0.0);
+SetStatementDate (DateTime.Now);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Aging (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Aging (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -107,7 +107,7 @@ public X_T_Aging (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Aging (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAT_Aging (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -115,13 +115,13 @@ public X_T_Aging (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_T_Aging (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAT_Aging (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_T_Aging()
+static X_VAT_Aging()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -169,7 +169,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_T_Aging[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAT_Aging[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Process Instance.

@@ -203,7 +203,7 @@
     <Compile Include="Model\MVABAccountBookGL.cs" />
     <Compile Include="Model\MVAPAAccomplishment.cs" />
     <Compile Include="Model\MVABBillingCode.cs" />
-    <Compile Include="Model\MAging.cs" />
+    <Compile Include="Model\MVATAging.cs" />
     <Compile Include="Model\MVAFAlert.cs" />
     <Compile Include="Model\MVAFAlertHandler.cs" />
     <Compile Include="Model\MVAFAlertHandlerLog.cs" />
@@ -214,7 +214,7 @@
     <Compile Include="Model\MVAAsset.cs" />
     <Compile Include="Model\MVAAAssetDelivery.cs" />
     <Compile Include="Model\MVAAAssetGroup.cs" />
-    <Compile Include="Model\MAssignAcctSchema.cs" />
+    <Compile Include="Model\MVAGLAssignAcctSchema.cs" />
     <Compile Include="Model\MAssignmentSlot.cs" />
     <Compile Include="Model\MRevenueRecognitionRun.cs" />
     <Compile Include="Model\MVAMProductFeature.cs" />

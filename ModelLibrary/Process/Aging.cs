@@ -147,7 +147,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             // IDataReader idr = null;
             //
-            MAging aging = null;
+            MVATAging aging = null;
             int counter = 0;
             int rows = 0;
             int VAF_JInstance_ID = GetVAF_JInstance_ID();
@@ -204,7 +204,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                                 break;
                             }
                         }
-                        aging = new MAging(GetCtx(), VAF_JInstance_ID, _StatementDate,
+                        aging = new MVATAging(GetCtx(), VAF_JInstance_ID, _StatementDate,
                             VAB_BusinessPartner_ID, VAB_Currency_ID,
                             VAB_Invoice_ID, VAB_sched_InvoicePayment_ID,
                             VAB_BPart_Category_ID, DueDate, IsSOTrx, Get_Trx());

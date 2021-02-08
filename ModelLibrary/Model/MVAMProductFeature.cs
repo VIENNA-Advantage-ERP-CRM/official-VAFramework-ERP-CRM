@@ -148,9 +148,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PFeature_SetInstance_ID">attribute set instance</param>
         /// <returns>Attribute Instance or null</returns>
-        public MAttributeInstance GetMAttributeInstance(int VAM_PFeature_SetInstance_ID)
+        public MVAMPFeatueInstance GetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID)
         {
-            MAttributeInstance retValue = null;
+            MVAMPFeatueInstance retValue = null;
             String sql = "SELECT * "
                 + "FROM VAM_PFeatue_Instance "
                 + "WHERE VAM_ProductFeature_ID=" + GetVAM_ProductFeature_ID() + " AND VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    retValue = new MAttributeInstance(GetCtx(), dr, Get_TrxName());
+                    retValue = new MVAMPFeatueInstance(GetCtx(), dr, Get_TrxName());
                 }
                 ds = null;
             }
@@ -179,20 +179,20 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PFeature_SetInstance_ID">value</param>
         /// <param name="value">id</param>
-        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, MAttributeValue value)
+        public void SetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID, MAttributeValue value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
+            MVAMPFeatueInstance instance = GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 if (value != null)
                 {
-                    instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
+                    instance = new MVAMPFeatueInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                       VAM_PFeature_SetInstance_ID, value.GetVAM_PFeature_Value_ID(),
                     value.GetName(), Get_TrxName()); 					//	Cached !!
                 }
                 else
                 {
-                    instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
+                    instance = new MVAMPFeatueInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                         VAM_PFeature_SetInstance_ID, 0, null, Get_TrxName());
                 }
                 // Create new Attribute Instances in * Organization
@@ -219,12 +219,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PFeature_SetInstance_ID">id</param>
         /// <param name="value">string value</param>
-        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, String value)
+        public void SetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID, String value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
+            MVAMPFeatueInstance instance = GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
-                instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
+                instance = new MVAMPFeatueInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                     VAM_PFeature_SetInstance_ID, value, Get_TrxName());
             }
             else
@@ -239,12 +239,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PFeature_SetInstance_ID">number value</param>
         /// <param name="value">id</param>
-        public void SetMAttributeInstance(int VAM_PFeature_SetInstance_ID, Decimal? value)
+        public void SetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID, Decimal? value)
         {
-            MAttributeInstance instance = GetMAttributeInstance(VAM_PFeature_SetInstance_ID);
+            MVAMPFeatueInstance instance = GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
-                instance = new MAttributeInstance(GetCtx(), GetVAM_ProductFeature_ID(),
+                instance = new MVAMPFeatueInstance(GetCtx(), GetVAM_ProductFeature_ID(),
                     VAM_PFeature_SetInstance_ID, value, Get_TrxName());
             }
             else

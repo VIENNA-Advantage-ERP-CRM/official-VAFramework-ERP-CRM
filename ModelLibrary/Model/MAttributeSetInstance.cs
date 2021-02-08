@@ -169,7 +169,7 @@ namespace VAdvantage.Model
             MVAMProductFeature[] attributes = _mas.GetMAttributes(true);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetVAM_PFeature_SetInstance_ID());
+                MVAMPFeatueInstance mai = attributes[i].GetMVAMPFeatueInstance(GetVAM_PFeature_SetInstance_ID());
                 if (mai != null && mai.GetValue() != null)
                 {
                     if (sb.Length > 0)
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
             attributes = _mas.GetMAttributes(false);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetVAM_PFeature_SetInstance_ID());
+                MVAMPFeatueInstance mai = attributes[i].GetMVAMPFeatueInstance(GetVAM_PFeature_SetInstance_ID());
                 if (mai != null && mai.GetValue() != null)
                 {
                     if (sb.Length > 0)

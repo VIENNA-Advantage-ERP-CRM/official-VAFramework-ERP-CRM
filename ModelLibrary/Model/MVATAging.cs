@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAging
+ * Class Name     : MVATAging
  * Purpose        : Aging Model
- * Class Used     : X_T_Aging
+ * Class Used     : X_VAT_Aging
  * Chronological    Development
  * Deepak           14-Jan-2010
   ******************************************************/
@@ -23,7 +23,7 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAging : X_T_Aging
+    public class MVATAging : X_VAT_Aging
     {
         /// <summary>
         /// Standard Constructor
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAT_Aging_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAging(Ctx ctx, int VAT_Aging_ID, Trx trxName)
+        public MVATAging(Ctx ctx, int VAT_Aging_ID, Trx trxName)
             : base(ctx, VAT_Aging_ID, trxName)
         {
             //base(ctx, VAT_Aging_ID, trxName);
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
         /// <param name="DueDate">due date</param>
         /// <param name="IsSOTrx">so trx</param>
         /// <param name="trxName">transaction</param>
-        public MAging(Ctx ctx, int VAF_JInstance_ID, DateTime? StatementDate,
+        public MVATAging(Ctx ctx, int VAF_JInstance_ID, DateTime? StatementDate,
             int VAB_BusinessPartner_ID, int VAB_Currency_ID,
             int VAB_Invoice_ID, int VAB_sched_InvoicePayment_ID,
             int VAB_BPart_Category_ID, DateTime? DueDate, Boolean IsSOTrx, Trx trxName)
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
             SetIsListInvoices(VAB_Invoice_ID != 0);
             //
             SetDueDate(DueDate);		//	only sensible if List invoices
-        }	//	MAging
+        }	//	MVATAging
 
 
         /// <summary>
@@ -120,11 +120,11 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MAging(Ctx ctx, DataRow dr, Trx trxName)
+        public MVATAging(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             //base(ctx, rs, trxName);
-        }	//	MAging
+        }	//	MVATAging
 
         /** Number of items 		*/
         private int _noItems = 0;
@@ -288,7 +288,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MAging[");
+            StringBuilder sb = new StringBuilder("MVATAging[");
             sb.Append("VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
                 .Append(",VAB_BusinessPartner_ID=").Append(GetVAB_BusinessPartner_ID())
                 .Append(",VAB_Currency_ID=").Append(GetVAB_Currency_ID())
@@ -297,5 +297,5 @@ namespace VAdvantage.Model
             return sb.ToString();
         } //	toString
 
-    }	//	MAging
+    }	//	MVATAging
 }

@@ -451,7 +451,7 @@ namespace VIS.Models
                         {
                             if (attributes[i].IsMandatory() && value == null)
                                 mandatory += " - " + attributes[i].GetName();
-                            // attributes[i].SetMAttributeInstance(_VAM_PFeature_SetInstance_ID, value);
+                            // attributes[i].SetMVAMPFeatueInstance(_VAM_PFeature_SetInstance_ID, value);
                             lst[attributes[i]] = value;
                             description.Append(value + "_");
 
@@ -495,7 +495,7 @@ namespace VIS.Models
                             if (attributes[i].IsMandatory())
                                 mandatory += " - " + attributes[i].GetName();
 
-                            //attributes[i].SetMAttributeInstance(_VAM_PFeature_SetInstance_ID, value);
+                            //attributes[i].SetMVAMPFeatueInstance(_VAM_PFeature_SetInstance_ID, value);
                             lst[attributes[i]] = value;
 
                             if (i == 0)
