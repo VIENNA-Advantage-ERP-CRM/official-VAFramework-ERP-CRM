@@ -204,7 +204,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public static bool InsertForeignCostAveragePO(Ctx ctx, MOrder order, MOrderLine orderLine, MInOutLine inoutLine, Trx trx)
+        public static bool InsertForeignCostAveragePO(Ctx ctx, MVABOrder order, MVABOrderLine orderLine, MInOutLine inoutLine, Trx trx)
         {
             int acctSchema_ID = 0;
             int VAM_ProductCostElement_ID = 0;
@@ -401,7 +401,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public static bool InsertForeignCostMatchOrder(Ctx ctx, MOrderLine orderLine, decimal matchQty, int ASI, Trx trx)
+        public static bool InsertForeignCostMatchOrder(Ctx ctx, MVABOrderLine orderLine, decimal matchQty, int ASI, Trx trx)
         {
             int acctSchema_ID = 0;
             int VAM_ProductCostElement_ID = 0;
@@ -412,10 +412,10 @@ namespace VAdvantage.Model
             MCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
-            MOrder order = null;
+            MVABOrder order = null;
             try
             {
-                order = new MOrder(ctx, orderLine.GetVAB_Order_ID(), trx);
+                order = new MVABOrder(ctx, orderLine.GetVAB_Order_ID(), trx);
 
                 if (!order.IsSOTrx() && !order.IsReturnTrx())
                 {

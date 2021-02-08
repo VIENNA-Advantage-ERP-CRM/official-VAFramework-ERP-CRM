@@ -46,7 +46,7 @@ namespace ViennaAdvantage.Process
         private bool _consolidateDocument = true;
         //	The current Shipment	
         private MInOut _shipment = null;
-        private MOrder order = null;
+        private MVABOrder order = null;
         // Numner of Shipments		
         private int _created = 0;
         //	Line Number				
@@ -239,7 +239,7 @@ namespace ViennaAdvantage.Process
 
             foreach (DataRow dr in dt.Rows)		//	Order
             {
-                order = new MOrder(GetCtx(), dr, Get_TrxName());
+                order = new MVABOrder(GetCtx(), dr, Get_TrxName());
 
                 // Credit Limit check 
                 MVABBusinessPartner bp = MVABBusinessPartner.Get(GetCtx(), order.GetVAB_BusinessPartner_ID());
@@ -314,7 +314,7 @@ namespace ViennaAdvantage.Process
                 log.Fine("check: " + order + " - DeliveryRule=" + order.GetDeliveryRule());
                 //
                 DateTime? minGuaranteeDate = _movementDate;
-                bool completeOrder = MOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule());
+                bool completeOrder = MVABOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule());
                 //	OrderLine WHERE
                 StringBuilder where = new StringBuilder(" AND VAM_Warehouse_ID=" + _VAM_Warehouse_ID);
                 if (_datePromised != null)
@@ -325,7 +325,7 @@ namespace ViennaAdvantage.Process
                     //    + "' OR DatePromised IS NULL)";
                 }
                 //	Exclude Auto Delivery if not Force
-                if (!MOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
+                if (!MVABOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
                 {
                     where.Append(" AND (VAB_OrderLine.VAM_Product_ID IS NULL"
                         + " OR EXISTS (SELECT * FROM VAM_Product p "
@@ -348,11 +348,11 @@ namespace ViennaAdvantage.Process
                     + order.GetVAB_Order_ID() + " AND p.ProductType = 'I')");
                 }
 
-                //	Deadlock Prevention - Order by VAM_Product_ID
-                MOrderLine[] lines = order.GetLines(where.ToString(), "ORDER BY VAB_BPart_Location_ID, VAM_Product_ID");
+                //	Deadlock Prevention - Order by M_Product_ID
+                MVABOrderLine[] lines = order.GetLines(where.ToString(), "ORDER BY VAB_BPart_Location_ID, VAM_Product_ID");
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine line = lines[i];
+                    MVABOrderLine line = lines[i];
                     // if order line is not drop ship type
                     if (!line.IsDropShip())
                     {
@@ -410,7 +410,7 @@ namespace ViennaAdvantage.Process
                             && (Env.Signum(line.GetQtyOrdered()) == 0 	//	comments
                                 || Env.Signum(toDeliver) != 0))		//	lines w/o product
                         {
-                            if (!MOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule()))	//	printed later
+                            if (!MVABOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule()))	//	printed later
                             {
                                 CreateLine(order, line, toDeliver, null, false, false);
                             }
@@ -464,7 +464,7 @@ namespace ViennaAdvantage.Process
                             break;
                         }
                         //	Complete Line
-                        else if (fullLine && MOrder.DELIVERYRULE_CompleteLine.Equals(order.GetDeliveryRule()))
+                        else if (fullLine && MVABOrder.DELIVERYRULE_CompleteLine.Equals(order.GetDeliveryRule()))
                         {
                             log.Fine("CompleteLine - OnHand=" + onHand
                                 + " (Unconfirmed=" + unconfirmedShippedQty
@@ -473,7 +473,7 @@ namespace ViennaAdvantage.Process
                             CreateLine(order, line, toDeliver, storages, false, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Availability
-                        else if (MOrder.DELIVERYRULE_Availability.Equals(order.GetDeliveryRule())
+                        else if (MVABOrder.DELIVERYRULE_Availability.Equals(order.GetDeliveryRule())
                             && (Env.Signum(onHand) > 0
                                 || Env.Signum(toDeliver) < 0))
                         {
@@ -488,7 +488,7 @@ namespace ViennaAdvantage.Process
                             CreateLine(order, line, deliver, storages, false, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Force
-                        else if (MOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
+                        else if (MVABOrder.DELIVERYRULE_Force.Equals(order.GetDeliveryRule()))
                         {
                             Decimal deliver = toDeliver;
                             log.Fine("Force - OnHand=" + onHand
@@ -499,7 +499,7 @@ namespace ViennaAdvantage.Process
                             CreateLine(order, line, deliver, storages, true, MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy));
                         }
                         //	Manual
-                        else if (MOrder.DELIVERYRULE_Manual.Equals(order.GetDeliveryRule()))
+                        else if (MVABOrder.DELIVERYRULE_Manual.Equals(order.GetDeliveryRule()))
                             log.Fine("Manual - OnHand=" + onHand
                                 + " (Unconfirmed=" + unconfirmedShippedQty
                                 + ") - " + line);
@@ -511,11 +511,11 @@ namespace ViennaAdvantage.Process
                 }//	for all order lines
 
                 //	Complete Order successful
-                if (completeOrder && MOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule()))
+                if (completeOrder && MVABOrder.DELIVERYRULE_CompleteOrder.Equals(order.GetDeliveryRule()))
                 {
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        MOrderLine line = lines[i];
+                        MVABOrderLine line = lines[i];
                         // if order line is not drop ship type
                         if (!line.IsDropShip())
                         {
@@ -572,7 +572,7 @@ namespace ViennaAdvantage.Process
         /// <param name="qty">Quantity</param>
         /// <param name="storages">storage info</param>
         /// <param name="force">force delivery</param>
-        private void CreateLine(MOrder order, MOrderLine orderLine, Decimal qty,
+        private void CreateLine(MVABOrder order, MVABOrderLine orderLine, Decimal qty,
             dynamic[] storages, bool force, bool FiFo)
         {
             //	Complete last Shipment - can have multiple shipments
@@ -989,7 +989,7 @@ namespace ViennaAdvantage.Process
                 //
                 if ((_msg != null && _msg.Length > 0) || !String.IsNullOrEmpty(_shipment.GetProcessMsg()))
                 {
-                    MOrder OrderDoc = new MOrder(GetCtx(), _shipment.GetVAB_Order_ID(), _shipment.Get_TrxName());
+                    MVABOrder OrderDoc = new MVABOrder(GetCtx(), _shipment.GetVAB_Order_ID(), _shipment.Get_TrxName());
                     AddLog(_shipment.GetVAM_Inv_InOut_ID(), _shipment.GetMovementDate(), null,
                         (_msg + "  " +
                         (_shipment.GetProcessMsg() != "" ? (_shipment.GetProcessMsg() + " " + (!_consolidateDocument ? OrderDoc.GetDocumentNo() : " ")) : _shipment.GetDocumentNo())));

@@ -50,7 +50,7 @@ namespace ViennaAdvantageServer.Process
             string msg = "";
             ValueNamePair vp = null;
             MVABBusinessPartner bp = null;
-            MOrderLine ol = null;
+            MVABOrderLine ol = null;
 
             log.Info("VAB_Project_ID=" + _VAB_Project_ID);
             if (_VAB_Project_ID == 0)
@@ -81,7 +81,7 @@ namespace ViennaAdvantageServer.Process
                 return Msg.GetMsg(GetCtx(), "SelectBPLocation");
             }
 
-           MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
+           MVABOrder order = new MVABOrder(GetCtx(), 0, Get_TrxName());
             order.SetVAF_Client_ID(fromProject.GetVAF_Client_ID());
             order.SetVAF_Org_ID(fromProject.GetVAF_Org_ID());
             VAB_BusinessPartner_id = fromProject.GetVAB_BusinessPartner_ID();
@@ -204,7 +204,7 @@ namespace ViennaAdvantageServer.Process
                 MProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    ol = new MOrderLine(order);
+                    ol = new MVABOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
                     ol.SetVAM_Product_ID(lines[i].GetVAM_Product_ID(), true);

@@ -67,10 +67,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("VAB_Order_ID == 0");
             }
             //
-            MOrder order = new MOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
-            if (MOrder.DOCSTATUS_Closed.Equals(order.GetDocStatus()))
+            MVABOrder order = new MVABOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
+            if (MVABOrder.DOCSTATUS_Closed.Equals(order.GetDocStatus()))
             {
-                order.SetDocStatus(MOrder.DOCSTATUS_Completed);
+                order.SetDocStatus(MVABOrder.DOCSTATUS_Completed);
                 return order.Save() ? "@OK@" : "@Error@";
             }
             else

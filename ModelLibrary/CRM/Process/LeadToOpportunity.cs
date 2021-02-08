@@ -149,7 +149,7 @@ namespace VAdvantage.Process
             {
                 throw new Exception("@VAB_Lead_ID@ ID=0");
             }
-            VAdvantage.Model.MLead lead = new VAdvantage.Model.MLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
+            VAdvantage.Model.MVABLead lead = new VAdvantage.Model.MVABLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
             if (lead.Get_ID() != _VAB_Lead_ID)
             {
                 throw new Exception("@NotFound@: @VAB_Lead_ID@ ID=" + _VAB_Lead_ID);

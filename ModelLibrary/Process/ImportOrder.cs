@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
         /**	Document Action					*/
-        private String _docAction = MOrder.DOCACTION_Prepare;
+        private String _docAction = MVABOrder.DOCACTION_Prepare;
 
 
         /** Effective						*/
@@ -514,7 +514,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         //	Same Location Info
                         else if (imp.GetVAB_Address_ID() == 0)
                         {
-                            MLocation loc = bpl.GetLocation(false);
+                            MVABAddress loc = bpl.GetLocation(false);
                             if (loc.Equals(imp.GetVAB_Country_ID(), imp.GetVAB_RegionState_ID(),
                                     imp.GetPostal(), "", imp.GetCity(),
                                     imp.GetAddress1(), imp.GetAddress2()))
@@ -524,7 +524,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (bpl == null)
                     {
                         //	New Location
-                        MLocation loc = new MLocation(GetCtx(), 0, Get_TrxName());
+                        MVABAddress loc = new MVABAddress(GetCtx(), 0, Get_TrxName());
                         loc.SetAddress1(imp.GetAddress1());
                         loc.SetAddress2(imp.GetAddress2());
                         loc.SetCity(imp.GetCity());
@@ -616,7 +616,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int oldVAB_BPart_Location_ID = 0;
                 String oldDocumentNo = "";
                 //
-                MOrder order = null;
+                MVABOrder order = null;
                 int lineNo = 0;
                 while (idr.Read())
                 {
@@ -646,7 +646,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (oldDocumentNo == null)
                             oldDocumentNo = "";
                         //
-                        order = new MOrder(GetCtx(), 0, Get_TrxName());
+                        order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                         order.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         order.SetVAB_DocTypesTarget_ID(imp.GetVAB_DocTypes_ID());
                         order.SetIsSOTrx(imp.IsSOTrx());
@@ -706,7 +706,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     imp.SetVAB_Order_ID(order.GetVAB_Order_ID());
                     //	New OrderLine
-                    MOrderLine line = new MOrderLine(order);
+                    MVABOrderLine line = new MVABOrderLine(order);
                     line.SetLine(lineNo);
                     lineNo += 10;
 

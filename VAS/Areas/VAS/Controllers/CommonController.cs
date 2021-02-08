@@ -962,10 +962,10 @@ namespace VIS.Controllers
             // chck pallet Functionality applicable or not
             bool isContainerApplicable = MTransaction.ProductContainerApplicable(ctx);
 
-            MOrder _order = null;
+            MVABOrder _order = null;
             if (VAB_Order_ID > 0)
             {
-                _order = new MOrder(ctx, VAB_Order_ID, null);
+                _order = new MVABOrder(ctx, VAB_Order_ID, null);
             }
 
             MInvoice _invoice = null;
@@ -1219,12 +1219,12 @@ namespace VIS.Controllers
                 //iol.SetVAM_Product_ID(VAM_Product_ID, VAB_UOM_ID, VAM_PFeature_SetInstance_ID);	//	Line UOM
                 //iol.SetQty(QtyEntered);							//	Movement/Entered
                 //
-                MOrderLine ol = null;
+                MVABOrderLine ol = null;
                 if (VAB_OrderLine_ID != 0)
                 {
                     po.Set_ValueNoCheck("VAB_OrderLine_ID", VAB_OrderLine_ID);
                     //iol.SetVAB_OrderLine_ID(VAB_OrderLine_ID);
-                    ol = new MOrderLine(ctx, VAB_OrderLine_ID, null);
+                    ol = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
                     if (ol.GetQtyEntered().CompareTo(ol.GetQtyOrdered()) != 0)
                     {
                         po.Set_Value("MovementQty", Decimal.Round(Decimal.Divide(Decimal.Multiply(QtyEntered, ol.GetQtyOrdered()), ol.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
@@ -1502,10 +1502,10 @@ namespace VIS.Controllers
 
         public bool SaveInvoiceData(Ctx ctx, List<Dictionary<string, string>> model, string selectedItems, int VAB_Order_ID, int VAB_Invoice_ID, int VAM_Inv_InOut_ID)
         {
-            MOrder _order = null;
+            MVABOrder _order = null;
             if (VAB_Order_ID > 0)
             {
-                _order = new MOrder(ctx, VAB_Order_ID, null);
+                _order = new MVABOrder(ctx, VAB_Order_ID, null);
             }
 
             MInvoice _invoice = null;
@@ -1604,9 +1604,9 @@ namespace VIS.Controllers
                 invoiceLine.SetVAM_Product_ID(VAM_Product_ID, VAB_UOM_ID);	//	Line UOM
                 invoiceLine.SetQty(QtyEntered);							//	Invoiced/Entered
                 //  Info
-                MOrderLine orderLine = null;
+                MVABOrderLine orderLine = null;
                 if (VAB_OrderLine_ID != 0)
-                    orderLine = new MOrderLine(ctx, VAB_OrderLine_ID, null);
+                    orderLine = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
                 MInOutLine inoutLine = null;
                 if (VAM_Inv_InOutLine_ID != 0)
                 {
@@ -1614,7 +1614,7 @@ namespace VIS.Controllers
                     if (orderLine == null && inoutLine.GetVAB_OrderLine_ID() != 0)
                     {
                         VAB_OrderLine_ID = inoutLine.GetVAB_OrderLine_ID();
-                        orderLine = new MOrderLine(ctx, VAB_OrderLine_ID, null);
+                        orderLine = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
                     }
                 }
                 else
@@ -1931,9 +1931,9 @@ namespace VIS.Controllers
                 {
                     if (VAB_Order_ID == 0 && VAB_OrderLine_ID > 0)
                     {
-                        MOrderLine ordLine = new MOrderLine(ctx, VAB_OrderLine_ID, null);
+                        MVABOrderLine ordLine = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
                         VAB_Order_ID = ordLine.GetVAB_Order_ID();
-                        _order = new MOrder(ctx, VAB_Order_ID, null);
+                        _order = new MVABOrder(ctx, VAB_Order_ID, null);
                         _invoice.SetVAB_Order_ID(VAB_Order_ID);
                         _invoice.SetDateOrdered(_order.GetDateOrdered());
 
@@ -2503,7 +2503,7 @@ namespace VIS.Controllers
                         else
                         {
                             //	Update Order Line
-                            MOrderLine oLine = new MOrderLine(ctx, Line_ID, trx);
+                            MVABOrderLine oLine = new MVABOrderLine(ctx, Line_ID, trx);
                             if (oLine.Get_ID() != 0)	//	other in MInOut.completeIt
                             {
                                 //oLine.SetQtyReserved(oLine.GetQtyReserved().subtract(qty));

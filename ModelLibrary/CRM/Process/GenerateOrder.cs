@@ -55,7 +55,7 @@ namespace VAdvantage.Process
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
             VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
-            VAdvantage.Model.MOrder order = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.MVABOrder order = new VAdvantage.Model.MVABOrder(GetCtx(), 0, Get_TrxName());
             VAB_BusinessPartner_id = fromProject.GetVAB_BusinessPartner_ID();
             VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
             VAB_BusinessPartnerSR_ID = fromProject.GetVAB_BusinessPartnerSR_ID();
@@ -183,7 +183,7 @@ namespace VAdvantage.Process
                 VAdvantage.Model.MProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(order);
+                    VAdvantage.Model.MVABOrderLine ol = new VAdvantage.Model.MVABOrderLine(order);
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
                     ol.SetVAM_Product_ID(lines[i].GetVAM_Product_ID(), true);

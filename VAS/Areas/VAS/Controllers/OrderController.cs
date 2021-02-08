@@ -29,7 +29,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 //Assign parameter value
                 VAB_Order_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MOrder order = new MOrder(ctx, VAB_Order_ID, null);
+                MVABOrder order = new MVABOrder(ctx, VAB_Order_ID, null);
 
 
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
@@ -93,7 +93,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
                 id = Util.GetValueOfInt(paramValue[0].ToString());
 
 
-                MOrderLine orderline = new MOrderLine(ctx, id, null);
+                MVABOrderLine orderline = new MVABOrderLine(ctx, id, null);
                 //retDic["Orig_InOutLine_ID", null);
                 retDic["VAB_TaxRate_ID"]= orderline.GetVAB_TaxRate_ID().ToString();
                 retDic["PriceList"]= orderline.GetPriceList().ToString();

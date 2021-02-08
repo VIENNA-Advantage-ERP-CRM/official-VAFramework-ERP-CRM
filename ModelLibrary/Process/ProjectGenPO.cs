@@ -28,7 +28,7 @@ namespace VAdvantage.Process
         private bool m_ConsolidateDocument = true;
         /** List of POs for Consolidation	*/
         //private ArrayList<MOrder> m_pos = new ArrayList<MOrder>();
-        private List<MOrder> m_pos = new List<MOrder>();
+        private List<MVABOrder> m_pos = new List<MVABOrder>();
 
         /**
          *  Prepare - e.g., get Parameters.
@@ -116,11 +116,11 @@ namespace VAdvantage.Process
             }
 
             //	Create to Order
-            MOrder order = null;
+            MVABOrder order = null;
             //	try to find PO to VAB_BusinessPartner
             for (int i = 0; i < m_pos.Count; i++)
             {
-                MOrder test = m_pos[i];
+                MVABOrder test = m_pos[i];
                 if (test.GetVAB_BusinessPartner_ID() == pos[0].GetVAB_BusinessPartner_ID())
                 {
                     order = test;
@@ -132,7 +132,7 @@ namespace VAdvantage.Process
                 //	Vendor
                 MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), pos[0].GetVAB_BusinessPartner_ID(), Get_TrxName());
                 //	New Order
-                order = new MOrder(project, false, null);
+                order = new MVABOrder(project, false, null);
                 int VAF_Org_ID = projectLine.GetVAF_Org_ID();
                 if (VAF_Org_ID == 0)
                 {
@@ -151,7 +151,7 @@ namespace VAdvantage.Process
             }
 
             //	Create Line
-            MOrderLine orderLine = new MOrderLine(order);
+            MVABOrderLine orderLine = new MVABOrderLine(order);
             orderLine.SetVAM_Product_ID(projectLine.GetVAM_Product_ID(), true);
             orderLine.SetQty(projectLine.GetPlannedQty());
             orderLine.SetDescription(projectLine.GetDescription());

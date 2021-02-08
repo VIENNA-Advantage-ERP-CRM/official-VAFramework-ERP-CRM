@@ -314,7 +314,7 @@ namespace VAdvantage.Model
 
                 // is Non Business Day?
                 // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-                if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc(), GetVAF_Org_ID()))
+                if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateDoc(), GetVAF_Org_ID()))
                 {
                     _processMsg = Common.Common.NONBUSINESSDAY;
                     return DocActionVariables.STATUS_INVALID;
@@ -924,7 +924,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        MOrderLine ol = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
+                        MVABOrderLine ol = new MVABOrderLine(GetCtx(), line.GetVAB_OrderLine_ID(), Get_TrxName());
                         finalQty = ol.GetQtyOrdered();
                     }
                     Tuple<String, String, String> mInfo = null;

@@ -36,16 +36,16 @@ namespace VAdvantage.Model
     /// They are set in the Process() method. 
     /// Use DocAction and VAB_DocTypesTarget_ID instead.
     /// </summary>
-    public class MOrder : X_VAB_Order, DocAction
+    public class MVABOrder : X_VAB_Order, DocAction
     {
         #region Variables
         /**	Process Message 			*/
         private String _processMsg = null;
 
         /**	Order Lines					*/
-        private MOrderLine[] _lines = null;
+        private MVABOrderLine[] _lines = null;
         /**	Tax Lines					*/
-        private MOrderTax[] _taxes = null;
+        private MVABOrderTax[] _taxes = null;
         /** Force Creation of order		*/
         private bool _forceCreation = false;
         /**	Just Prepared Flag			*/
@@ -91,9 +91,9 @@ namespace VAdvantage.Model
          * 	@param trxName trx
          *	@return Order
          */
-        public static MOrder CopyFrom(MOrder from, DateTime? dateDoc, int VAB_DocTypesTarget_ID, bool counter, bool copyASI, Trx trxName, bool fromCreateSO = false)//added optional parameter which indicates from where this function is being called(If this fuction is called from Create SO Process on Sales Quotation window then fromCreateSO is true otherwise it will be false)----Neha
+        public static MVABOrder CopyFrom(MVABOrder from, DateTime? dateDoc, int VAB_DocTypesTarget_ID, bool counter, bool copyASI, Trx trxName, bool fromCreateSO = false)//added optional parameter which indicates from where this function is being called(If this fuction is called from Create SO Process on Sales Quotation window then fromCreateSO is true otherwise it will be false)----Neha
         {
-            MOrder to = new MOrder(from.GetCtx(), 0, trxName);
+            MVABOrder to = new MVABOrder(from.GetCtx(), 0, trxName);
 
 
             to.Set_TrxName(trxName);
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_Order_ID"></param>
         /// <param name="trxName"></param>
-        public MOrder(Ctx ctx, int VAB_Order_ID, Trx trxName)
+        public MVABOrder(Ctx ctx, int VAB_Order_ID, Trx trxName)
             : base(ctx, VAB_Order_ID, trxName)
         {
 
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         *  @param IsSOTrx sales order
         * 	@param	DocSubTypeSO if SO DocType Target (default DocSubTypeSO_OnCredit)
         */
-        public MOrder(MProject project, bool IsSOTrx, String DocSubTypeSO)
+        public MVABOrder(MProject project, bool IsSOTrx, String DocSubTypeSO)
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
 
@@ -323,7 +323,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MOrder(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABOrder(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -598,7 +598,7 @@ namespace VAdvantage.Model
                         SetInvoiceRule(INVOICERULE_Immediate);
                         SetDeliveryRule(DELIVERYRULE_AfterReceipt);
                     }
-                    else if (OrderType.Equals(MOrder.DocSubTypeSO_POS))	//  for POS
+                    else if (OrderType.Equals(MVABOrder.DocSubTypeSO_POS))	//  for POS
                         SetPaymentRule(PAYMENTRULE_Cash);
                     else
                     {
@@ -757,7 +757,7 @@ namespace VAdvantage.Model
                     SetPaymentRule(PAYMENTRULE_OnCredit);
                     if (OrderType.Equals(DocSubTypeSO_Prepay))
                         SetInvoiceRule(INVOICERULE_Immediate);
-                    else if (OrderType.Equals(MOrder.DocSubTypeSO_POS))	//  for POS
+                    else if (OrderType.Equals(MVABOrder.DocSubTypeSO_POS))	//  for POS
                         SetPaymentRule(PAYMENTRULE_Cash);
                     else
                     {
@@ -984,9 +984,9 @@ namespace VAdvantage.Model
                     if (!isReturnTrx)
                     {
                         //	Delivery Rule
-                        if (DocSubTypeSO.Equals(MOrder.DocSubTypeSO_POS))
+                        if (DocSubTypeSO.Equals(MVABOrder.DocSubTypeSO_POS))
                             SetDeliveryRule(DELIVERYRULE_Force);
-                        else if (DocSubTypeSO.Equals(MOrder.DocSubTypeSO_Prepay))
+                        else if (DocSubTypeSO.Equals(MVABOrder.DocSubTypeSO_Prepay))
                             SetDeliveryRule(DELIVERYRULE_AfterReceipt);
                         else
                             SetDeliveryRule(DELIVERYRULE_Availability);
@@ -1012,7 +1012,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        if (DocSubTypeSO.Equals(MOrder.DocSubTypeSO_POS))
+                        if (DocSubTypeSO.Equals(MVABOrder.DocSubTypeSO_POS))
                             SetDeliveryRule(DELIVERYRULE_Force);
                         else
                             SetDeliveryRule(DELIVERYRULE_Manual);
@@ -1251,14 +1251,14 @@ namespace VAdvantage.Model
         *	@param copyASI copy line attributes Attribute Set Instance, Resaouce Assignment
         *	@return number of lines copied
         */
-        public int CopyLinesFrom(MOrder otherOrder, bool counter, bool copyASI, bool fromCreateSO = false)//added optional parameter which indicates from where this function is being called(If this fuction is called from Create SO Process on Sales Quotation window then fromCreateSO is true otherwise it will be false)----Neha
+        public int CopyLinesFrom(MVABOrder otherOrder, bool counter, bool copyASI, bool fromCreateSO = false)//added optional parameter which indicates from where this function is being called(If this fuction is called from Create SO Process on Sales Quotation window then fromCreateSO is true otherwise it will be false)----Neha
         {
             int count = 0;
             try
             {
                 if (IsProcessed() || IsPosted() || otherOrder == null)
                     return 0;
-                MOrderLine[] fromLines = otherOrder.GetLines(false, null);
+                MVABOrderLine[] fromLines = otherOrder.GetLines(false, null);
 
                 // Added by Bharat on 05 Jan 2018 to set Values for Blanket Sales Order from Sales Quotation.
                 MDocType docType = new MDocType(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_TrxName());
@@ -1277,7 +1277,7 @@ namespace VAdvantage.Model
                         }
                     }
 
-                    MOrderLine line = new MOrderLine(this);
+                    MVABOrderLine line = new MVABOrderLine(this);
                     PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                     line.SetVAB_Order_ID(GetVAB_Order_ID());
@@ -1549,7 +1549,7 @@ namespace VAdvantage.Model
          * 	SOTrx should be set.
          * 	@param origOrder MOrder
          */
-        public void SetOrigOrder(MOrder origOrder)
+        public void SetOrigOrder(MVABOrder origOrder)
         {
             try
             {
@@ -1609,7 +1609,7 @@ namespace VAdvantage.Model
                 }
 
                 //		Get Details
-                MOrder origOrder = new MOrder(GetCtx(), Orig_Order_ID, null);
+                MVABOrder origOrder = new MVABOrder(GetCtx(), Orig_Order_ID, null);
                 if (origOrder.Get_ID() != 0)
                 {
                     SetOrigOrder(origOrder);
@@ -1685,9 +1685,9 @@ namespace VAdvantage.Model
         /// <param name="whereClause">where clause or null (starting with AND)</param>
         /// <param name="orderClause">order clause</param>
         /// <returns>lines</returns>
-        public MOrderLine[] GetLines(String whereClause, String orderClause)
+        public MVABOrderLine[] GetLines(String whereClause, String orderClause)
         {
-            List<MOrderLine> list = new List<MOrderLine>();
+            List<MVABOrderLine> list = new List<MVABOrderLine>();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + "");
             if (whereClause != null)
                 sql.Append(whereClause);
@@ -1700,7 +1700,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+                        MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
                         ol.SetHeaderInfo(this);
                         //JID_1673 Quantity entered should not be zero
                         if ((Utility.Util.GetValueOfDecimal(dr["QtyEntered"])) > 0)
@@ -1713,7 +1713,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
             //
-            MOrderLine[] lines = new MOrderLine[list.Count];
+            MVABOrderLine[] lines = new MVABOrderLine[list.Count];
             lines = list.ToArray();
             return lines;
         }
@@ -1724,7 +1724,7 @@ namespace VAdvantage.Model
         /// <param name="requery">requery</param>
         /// <param name="orderBy">optional order by column</param>
         /// <returns>lines</returns>
-        public MOrderLine[] GetLines(bool requery, String orderBy)
+        public MVABOrderLine[] GetLines(bool requery, String orderBy)
         {
             try
             {
@@ -1757,7 +1757,7 @@ namespace VAdvantage.Model
         /// Get Lines of Order.
         /// </summary>
         /// <returns>lines</returns>
-        public MOrderLine[] GetLines()
+        public MVABOrderLine[] GetLines()
         {
             return GetLines(false, null);
         }
@@ -1771,10 +1771,10 @@ namespace VAdvantage.Model
         /// <returns>lines</returns>
         /// <date>10-March-2011</date>
         /// <writer>raghu</writer>
-        public MOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
+        public MVABOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
         {
-            List<MOrderLine> list = new List<MOrderLine>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + VAM_Product_ID);
+            List<MVABOrderLine> list = new List<MVABOrderLine>();
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + M_Product_ID);
 
             if (whereClause != null)
                 sql.Append(" AND ").Append(whereClause);
@@ -1792,7 +1792,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+                    MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
                     ol.SetHeaderInfo(this);
                     list.Add(ol);
                 }
@@ -1811,7 +1811,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MOrderLine[] lines = new MOrderLine[list.Count]; ;
+            MVABOrderLine[] lines = new MVABOrderLine[list.Count]; ;
             lines = list.ToArray();
             return lines;
         }
@@ -1821,7 +1821,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="orderBy">optional order by column</param>
         /// <returns>lines</returns>
-        public MOrderLine[] GetLines(String orderBy)
+        public MVABOrderLine[] GetLines(String orderBy)
         {
             String orderClause = "ORDER BY ";
             if ((orderBy != null) && (orderBy.Length > 0))
@@ -1840,9 +1840,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <returns>lines</returns>
         /// <writer>Amit</writer>
-        public MOrderLine[] GetLinesOtherthanProduct()
+        public MVABOrderLine[] GetLinesOtherthanProduct()
         {
-            List<MOrderLine> list = new List<MOrderLine>();
+            List<MVABOrderLine> list = new List<MVABOrderLine>();
             StringBuilder sql = new StringBuilder(@"SELECT * FROM VAB_OrderLine ol
                                                         LEFT JOIN VAM_Product p ON p.VAM_Product_id = ol.VAM_Product_id
                                                         WHERE ol.VAB_Order_ID =" + GetVAB_Order_ID() + @" AND ol.isactive = 'Y' 
@@ -1857,7 +1857,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+                    MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
                     ol.SetHeaderInfo(this);
                     list.Add(ol);
                 }
@@ -1876,7 +1876,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MOrderLine[] lines = new MOrderLine[list.Count]; ;
+            MVABOrderLine[] lines = new MVABOrderLine[list.Count]; ;
             lines = list.ToArray();
             return lines;
         }
@@ -1887,10 +1887,10 @@ namespace VAdvantage.Model
         public void RenumberLines(int step)
         {
             int number = step;
-            MOrderLine[] lines = GetLines(true, null);	//	Line is default
+            MVABOrderLine[] lines = GetLines(true, null);	//	Line is default
             for (int i = 0; i < lines.Length; i++)
             {
-                MOrderLine line = lines[i];
+                MVABOrderLine line = lines[i];
                 line.SetLine(number);
                 line.Save(Get_TrxName());
                 number += step;
@@ -1916,12 +1916,12 @@ namespace VAdvantage.Model
          *	@param requery requery
          *	@return array of taxes
          */
-        public MOrderTax[] GetTaxes(bool requery)
+        public MVABOrderTax[] GetTaxes(bool requery)
         {
             if (_taxes != null && !requery)
                 return _taxes;
             //
-            List<MOrderTax> list = new List<MOrderTax>();
+            List<MVABOrderTax> list = new List<MVABOrderTax>();
             String sql = "SELECT * FROM VAB_OrderTax WHERE VAB_Order_ID=" + GetVAB_Order_ID();
             DataTable dt = null;
             try
@@ -1933,7 +1933,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MOrderTax(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABOrderTax(GetCtx(), dr, Get_TrxName()));
                 }
                 dt = null;
             }
@@ -1945,7 +1945,7 @@ namespace VAdvantage.Model
             {
                 dt = null;
             }
-            _taxes = new MOrderTax[list.Count];
+            _taxes = new MVABOrderTax[list.Count];
             _taxes = list.ToArray();
             return _taxes;
         }
@@ -2048,9 +2048,9 @@ namespace VAdvantage.Model
         /*	Get RMAs of Order
         * 	@return RMAs
         */
-        public MOrder[] GetRMAs()
+        public MVABOrder[] GetRMAs()
         {
-            List<MOrder> list = new List<MOrder>();
+            List<MVABOrder> list = new List<MVABOrder>();
             String sql = "SELECT * FROM VAB_Order WHERE Orig_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
             DataTable dt = null;
             try
@@ -2061,7 +2061,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MOrder(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABOrder(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -2071,7 +2071,7 @@ namespace VAdvantage.Model
             finally { dt = null; }
 
 
-            MOrder[] retValue = new MOrder[list.Count];
+            MVABOrder[] retValue = new MVABOrder[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -2243,7 +2243,7 @@ namespace VAdvantage.Model
                 //	Reservations in Warehouse
                 if (!newRecord && Is_ValueChanged("VAM_Warehouse_ID"))
                 {
-                    MOrderLine[] lines = GetLines(false, null);
+                    MVABOrderLine[] lines = GetLines(false, null);
                     for (int i = 0; i < lines.Length; i++)
                     {
                         if (!lines[i].CanChangeWarehouse())		// saves Error	
@@ -2255,7 +2255,7 @@ namespace VAdvantage.Model
                 // JID_0399_1: After change the receipt or order system will give the error message
                 if (!newRecord && (Is_ValueChanged("VAM_PriceList_ID") || Is_ValueChanged("Orig_Order_ID") || Is_ValueChanged("Orig_InOut_ID")))
                 {
-                    MOrderLine[] lines = GetLines(false, null);
+                    MVABOrderLine[] lines = GetLines(false, null);
                     if (lines.Length > 0)
                     {
                         log.SaveWarning("pleaseDeleteLinesFirst", "");
@@ -2704,7 +2704,7 @@ namespace VAdvantage.Model
 
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
-            if (MNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
+            if (MVABNonBusinessDay.IsNonBusinessDay(GetCtx(), GetDateAcct(), GetVAF_Org_ID()))
             {
                 _processMsg = Common.Common.NONBUSINESSDAY;
                 return DocActionVariables.STATUS_INVALID;
@@ -2712,7 +2712,7 @@ namespace VAdvantage.Model
 
 
             //	Lines
-            MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             if (lines.Length == 0)
             {
                 _processMsg = "@NoLines@";
@@ -2780,7 +2780,7 @@ namespace VAdvantage.Model
             // stop completing of RMA when original order and shipment/receipt are not completed or closed            
             if (IsReturnTrx())   // Added by Vivek on 20/01/2018 assigned by Mukesh sir
             {
-                MOrder OrigOrder = new MOrder(GetCtx(), GetOrig_Order_ID(), Get_Trx());
+                MVABOrder OrigOrder = new MVABOrder(GetCtx(), GetOrig_Order_ID(), Get_Trx());
                 MInOut OrigInout = new MInOut(GetCtx(), GetOrig_InOut_ID(), Get_Trx());
                 if (OrigInout.GetDocStatus() == "RE" || OrigInout.GetDocStatus() == "VO")
                 {
@@ -2949,10 +2949,10 @@ namespace VAdvantage.Model
                 RenumberLines(1000);		//	max 999 bom items	
 
                 //	Order Lines with non-stocked BOMs
-                MOrderLine[] lines = GetLines(where, "ORDER BY Line");
+                MVABOrderLine[] lines = GetLines(where, "ORDER BY Line");
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine line = lines[i];
+                    MVABOrderLine line = lines[i];
                     MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
                     log.Fine(product.GetName());
                     //	New Lines
@@ -2961,7 +2961,7 @@ namespace VAdvantage.Model
                     for (int j = 0; j < boms.Length; j++)
                     {
                         MProductBOM bom = boms[j];
-                        MOrderLine newLine = new MOrderLine(this);
+                        MVABOrderLine newLine = new MVABOrderLine(this);
                         newLine.SetLine(++lineNo);
                         newLine.SetVAM_Product_ID(bom.GetProduct()
                             .GetVAM_Product_ID());
@@ -3017,7 +3017,7 @@ namespace VAdvantage.Model
         * 	@param lines order lines (ordered by VAM_Product_ID for deadlock prevention)
         * 	@return true if (un) reserved
         */
-        private bool ReserveStock(MDocType dt, MOrderLine[] lines)
+        private bool ReserveStock(MDocType dt, MVABOrderLine[] lines)
         {
             try
             {
@@ -3056,8 +3056,8 @@ namespace VAdvantage.Model
                 //	Always check and (un) Reserve Inventory		
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine line = lines[i];
-                    int VAM_Locator_ID = 0;
+                    MVABOrderLine line = lines[i];
+                    int M_Locator_ID = 0;
                     MWarehouse wh = MWarehouse.Get(GetCtx(), line.GetVAM_Warehouse_ID());
                     //	Check/set WH/Org
                     if (header_VAM_Warehouse_ID != 0)	//	enforce WH
@@ -3210,7 +3210,7 @@ namespace VAdvantage.Model
 
                         if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))  //if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO") // if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")
                         {
-                            MOrderLine lineBlanket = new MOrderLine(GetCtx(), line.GetVAB_OrderLine_Blanket_ID(), Get_TrxName());
+                            MVABOrderLine lineBlanket = new MVABOrderLine(GetCtx(), line.GetVAB_OrderLine_Blanket_ID(), Get_TrxName());
 
                             if (qtyRel != null)
                             {
@@ -3261,14 +3261,14 @@ namespace VAdvantage.Model
                 //	Lines
                 Decimal totalLines = Env.ZERO;
                 List<int> taxList = new List<int>();
-                MOrderLine[] lines = GetLines();
+                MVABOrderLine[] lines = GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine line = lines[i];
+                    MVABOrderLine line = lines[i];
                     int taxID = line.GetVAB_TaxRate_ID();
                     if (!taxList.Contains(taxID))
                     {
-                        MOrderTax oTax = MOrderTax.Get(line, GetPrecision(),
+                        MVABOrderTax oTax = MVABOrderTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
                         //oTax.SetIsTaxIncluded(IsTaxIncluded());
                         if (!oTax.CalculateTaxFromLines())
@@ -3280,7 +3280,7 @@ namespace VAdvantage.Model
                         // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                         if (line.Get_ColumnIndex("SurchargeAmt") > 0)
                         {
-                            oTax = MOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                            oTax = MVABOrderTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                             if (oTax != null)
                             {
                                 if (!oTax.CalculateSurchargeFromLines())
@@ -3295,10 +3295,10 @@ namespace VAdvantage.Model
 
                 //	Taxes
                 Decimal grandTotal = totalLines;
-                MOrderTax[] taxes = GetTaxes(true);
+                MVABOrderTax[] taxes = GetTaxes(true);
                 for (int i = 0; i < taxes.Length; i++)
                 {
-                    MOrderTax oTax = taxes[i];
+                    MVABOrderTax oTax = taxes[i];
                     MTax tax = oTax.GetTax();
                     if (tax.IsSummary())
                     {
@@ -3316,7 +3316,7 @@ namespace VAdvantage.Model
                                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                                 {
                                     DataRow dr = ds.Tables[0].Rows[0];
-                                    MOrderTax newOTax = new MOrderTax(GetCtx(), dr, Get_TrxName());
+                                    MVABOrderTax newOTax = new MVABOrderTax(GetCtx(), dr, Get_TrxName());
                                     newOTax.SetTaxAmt(Decimal.Add(newOTax.GetTaxAmt(), taxAmt));
                                     newOTax.SetTaxBaseAmt(Decimal.Add(newOTax.GetTaxBaseAmt(), oTax.GetTaxBaseAmt()));
                                     if (!newOTax.Save(Get_TrxName()))
@@ -3329,7 +3329,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 //
-                                MOrderTax newOTax = new MOrderTax(GetCtx(), 0, Get_TrxName());
+                                MVABOrderTax newOTax = new MVABOrderTax(GetCtx(), 0, Get_TrxName());
                                 newOTax.SetClientOrg(this);
                                 newOTax.SetVAB_Order_ID(GetVAB_Order_ID());
                                 newOTax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());
@@ -3426,13 +3426,13 @@ namespace VAdvantage.Model
                         if (PO.Get_Table_ID("VAB_OrderlineHistory") > 0)
                         {
                             #region VAB_OrderlineHistory
-                            MOrderlineHistory lHist = null;
+                            MVABOrderlineHistory lHist = null;
                             GetLines(true, null);
                             if (_lines.Length > 0)
                             {
                                 for (int i = 0; i < _lines.Length; i++)
                                 {
-                                    lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
+                                    lHist = new MVABOrderlineHistory(GetCtx(), 0, Get_TrxName());
                                     lHist.SetClientOrg(_lines[i]);
                                     lHist.SetVAB_OrderLine_ID(_lines[i].Get_ID());
                                     lHist.SetVAB_Charge_ID(_lines[i].GetVAB_Charge_ID());
@@ -3483,9 +3483,9 @@ namespace VAdvantage.Model
                     //by Sukhwinder on 28 July for Release Sales/Purchase order completion
                     if (dt.IsReleaseDocument() && (dt.GetDocBaseType() == "SOO" || dt.GetDocBaseType() == "POO"))// if (dt.GetValue() == "RSO" || dt.GetValue() == "RPO")  ///if (dt.IsSOTrx() && dt.GetDocBaseType() == "SOO" && dt.GetDocSubTypeSO() == "BO")     //if (dt.GetValue() == "RSO")
                     {
-                        MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
-                        MOrder mo = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
-                        MOrder moBlanket = new MOrder(GetCtx(), mo.GetVAB_Order_Blanket(), null);
+                        MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+                        MVABOrder mo = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
+                        MVABOrder moBlanket = new MVABOrder(GetCtx(), mo.GetVAB_Order_Blanket(), null);
 
                         if (lines.Length == 0)
                         {
@@ -3574,13 +3574,13 @@ namespace VAdvantage.Model
                     if (PO.Get_Table_ID("VAB_OrderlineHistory") > 0)
                     {
                         #region VAB_OrderlineHistory
-                        MOrderlineHistory lHist = null;
+                        MVABOrderlineHistory lHist = null;
                         GetLines(true, null);
                         if (_lines.Length > 0)
                         {
                             for (int i = 0; i < _lines.Length; i++)
                             {
-                                lHist = new MOrderlineHistory(GetCtx(), 0, Get_TrxName());
+                                lHist = new MVABOrderlineHistory(GetCtx(), 0, Get_TrxName());
                                 lHist.SetClientOrg(_lines[i]);
                                 lHist.SetVAB_OrderLine_ID(_lines[i].Get_ID());
                                 lHist.SetVAB_Charge_ID(_lines[i].GetVAB_Charge_ID());
@@ -3690,7 +3690,7 @@ namespace VAdvantage.Model
                 try
                 {
                     //	Counter Documents
-                    MOrder counter = CreateCounterDoc();
+                    MVABOrder counter = CreateCounterDoc();
                     if (counter != null)
                         Info.Append(" - @CounterDoc@: @Order@=").Append(counter.GetDocumentNo());
                 }
@@ -3796,7 +3796,7 @@ namespace VAdvantage.Model
                         Char IsCont = Convert.ToChar(orderlines.Tables[0].Rows[i]["IsContract"]);
                         if (IsCont == 'Y')
                         {
-                            MOrder mo = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
+                            MVABOrder mo = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
                             mo.SetIsContract(true);
                             mo.Save();
                         }
@@ -4753,11 +4753,11 @@ namespace VAdvantage.Model
                 //
                 String posStatus = "";
                 MWarehouse wh = null;
-                MOrderLine[] oLines = GetLines(true, null);
+                MVABOrderLine[] oLines = GetLines(true, null);
                 for (int i = 0; i < oLines.Length; i++)
                 {
 
-                    MOrderLine oLine = oLines[i];
+                    MVABOrderLine oLine = oLines[i];
                     if (Util.GetValueOfInt(GetVAPOS_POSTerminal_ID()) > 0)
                     {
                         #region POS Terminal > 0
@@ -4999,7 +4999,7 @@ namespace VAdvantage.Model
         /// <param name="Qty"></param>
         /// <param name="oproduct"></param>
         /// <returns></returns>
-        private String CreateShipmentLineContainer(MInOut inout, MInOutLine ioLine, MOrderLine oLine, int VAM_Locator_ID, Decimal Qty, bool disalowNegativeInventory, MProduct oproduct)
+        private String CreateShipmentLineContainer(MInOut inout, MInOutLine ioLine, MVABOrderLine oLine, int VAM_Locator_ID, Decimal Qty, bool disalowNegativeInventory, MProduct oproduct)
         {
             String pMsg = null;
             List<RecordContainer> shipLine = new List<RecordContainer>();
@@ -5215,7 +5215,7 @@ namespace VAdvantage.Model
                                                 VAPOS_POSTerminal_ID=" + GetVAPOS_POSTerminal_ID()));
                             invoice.SetVAB_CurrencyType_ID(ConversionTypeId);
 
-                            MOrder ord = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
+                            MVABOrder ord = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
 
                             if (ord.GetVAPOS_CreditAmt() > 0)
                             {
@@ -5289,10 +5289,10 @@ namespace VAdvantage.Model
                     if (Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("N"))
                     {
                         // Create Invoice Line for Charge / (Resource - Service - Expense) type product 
-                        MOrderLine[] oLines = GetLinesOtherthanProduct();
+                        MVABOrderLine[] oLines = GetLinesOtherthanProduct();
                         for (int i = 0; i < oLines.Length; i++)
                         {
-                            MOrderLine oLine = oLines[i];
+                            MVABOrderLine oLine = oLines[i];
                             //
                             MInvoiceLine iLine = new MInvoiceLine(invoice);
                             iLine.SetOrderLine(oLine);
@@ -5315,10 +5315,10 @@ namespace VAdvantage.Model
                     if (!INVOICERULE_Immediate.Equals(GetInvoiceRule()))
                         SetInvoiceRule(INVOICERULE_Immediate);
                     //
-                    MOrderLine[] oLines = GetLines();
+                    MVABOrderLine[] oLines = GetLines();
                     for (int i = 0; i < oLines.Length; i++)
                     {
-                        MOrderLine oLine = oLines[i];
+                        MVABOrderLine oLine = oLines[i];
                         //
                         MInvoiceLine iLine = new MInvoiceLine(invoice);
                         iLine.SetOrderLine(oLine);
@@ -5357,7 +5357,7 @@ namespace VAdvantage.Model
         /* 	Create Counter Document
          * 	@return counter order
          */
-        private MOrder CreateCounterDoc()
+        private MVABOrder CreateCounterDoc()
         {
             //	Is this itself a counter doc ?
             if (GetRef_Order_ID() != 0)
@@ -5399,7 +5399,7 @@ namespace VAdvantage.Model
             //	Deep Copy
             // JID_1300: If the PO is created with lines includes Product with attribute set instance, once the counter document is created on completion of PO i.e. SO, 
             // Attribute Set Instance values are not getting fetched into SO lines.
-            MOrder counter = CopyFrom(this, GetDateOrdered(),
+            MVABOrder counter = CopyFrom(this, GetDateOrdered(),
                 VAB_DocTypesTarget_ID, true, true, Get_TrxName());
             //
             counter.SetDatePromised(GetDatePromised());     // default is date ordered 
@@ -5410,10 +5410,10 @@ namespace VAdvantage.Model
             counter.Save(Get_TrxName());
 
             //	Update copied lines
-            MOrderLine[] counterLines = counter.GetLines(true, null);
+            MVABOrderLine[] counterLines = counter.GetLines(true, null);
             for (int i = 0; i < counterLines.Length; i++)
             {
-                MOrderLine counterLine = counterLines[i];
+                MVABOrderLine counterLine = counterLines[i];
                 counterLine.SetOrder(counter);  //	copies header values (BP, etc.)
                 counterLine.SetPrice();
                 counterLine.SetTax();
@@ -5441,7 +5441,7 @@ namespace VAdvantage.Model
         /// <returns>true if success</returns>
         public bool VoidIt()
         {
-            MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             log.Info(ToString());
 
             MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
@@ -5490,7 +5490,7 @@ namespace VAdvantage.Model
             }
             for (int i = 0; i < lines.Length; i++)
             {
-                MOrderLine line = lines[i];
+                MVABOrderLine line = lines[i];
                 Decimal old = line.GetQtyOrdered();
                 if (System.Math.Sign(old) != 0)
                 {
@@ -5517,7 +5517,7 @@ namespace VAdvantage.Model
 
             //************* Changed ***************************
             // Set Status at Order to Rejected if it is Sales Order 
-            MOrder ord = new MOrder(Env.GetCtx(), GetVAB_Order_ID(), Get_TrxName());
+            MVABOrder ord = new MVABOrder(Env.GetCtx(), GetVAB_Order_ID(), Get_TrxName());
             if (IsSOTrx())
             {
                 ord.SetStatusCode("R");
@@ -5644,19 +5644,19 @@ namespace VAdvantage.Model
                 //	Reverse All *RMAs*
                 //Info.Append("@VAB_Order_ID@:");
                 Info.Append(" - " + Msg.GetMsg(GetCtx(), "RMA") + ":");
-                MOrder[] rmas = GetRMAs();
+                MVABOrder[] rmas = GetRMAs();
                 for (int i = 0; i < rmas.Length; i++)
                 {
-                    MOrder rma = rmas[i];
+                    MVABOrder rma = rmas[i];
                     //	if closed - ignore
-                    if (MOrder.DOCSTATUS_Closed.Equals(rma.GetDocStatus())
-                        || MOrder.DOCSTATUS_Reversed.Equals(rma.GetDocStatus())
-                        || MOrder.DOCSTATUS_Voided.Equals(rma.GetDocStatus()))
+                    if (MVABOrder.DOCSTATUS_Closed.Equals(rma.GetDocStatus())
+                        || MVABOrder.DOCSTATUS_Reversed.Equals(rma.GetDocStatus())
+                        || MVABOrder.DOCSTATUS_Voided.Equals(rma.GetDocStatus()))
                         continue;
                     rma.Set_TrxName(Get_TrxName());
 
                     //	If not completed - void - otherwise reverse it
-                    if (!MOrder.DOCSTATUS_Completed.Equals(rma.GetDocStatus()))
+                    if (!MVABOrder.DOCSTATUS_Completed.Equals(rma.GetDocStatus()))
                     {
                         if (rma.VoidIt())
                             rma.SetDocStatus(MInOut.DOCSTATUS_Voided);
@@ -5664,7 +5664,7 @@ namespace VAdvantage.Model
                     //	Create new Reversal with only that order
                     else if (rma.ReverseCorrectIt()) //	completed shipment
                     {
-                        rma.SetDocStatus(MOrder.DOCSTATUS_Reversed);
+                        rma.SetDocStatus(MVABOrder.DOCSTATUS_Reversed);
                         Info.Append(" ").Append(rma.GetDocumentNo());
                     }
                     else
@@ -5709,10 +5709,10 @@ namespace VAdvantage.Model
         {
             log.Info(ToString());
             //	Close Not delivered Qty - SO/PO
-            MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             for (int i = 0; i < lines.Length; i++)
             {
-                MOrderLine line = lines[i];
+                MVABOrderLine line = lines[i];
                 Decimal old = line.GetQtyOrdered();
                 if (old.CompareTo(line.GetQtyDelivered()) != 0)
                 {
@@ -5782,7 +5782,7 @@ namespace VAdvantage.Model
 
                 MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
-                MOrderLine[] lines = null;
+                MVABOrderLine[] lines = null;
                 // Added by Vivek on 08/11/2017 assigned by Mukesh sir
                 // return false if linked document is in completed or closed stage
                 if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)    //	(W)illCall(I)nvoice
@@ -5853,7 +5853,7 @@ namespace VAdvantage.Model
 
                 if (dt.GetDocBaseType() == "BOO")  // if (dt.GetValue() == "BPO" || dt.GetValue() == "BSO")
                 {
-                    MOrder mo = new MOrder(GetCtx(), GetVAB_Order_ID(), null);
+                    MVABOrder mo = new MVABOrder(GetCtx(), GetVAB_Order_ID(), null);
                     if (DateTime.Now.Date > mo.GetOrderValidTo().Value.Date)
                     {
                         _processMsg = "Validity of Order has been finished";

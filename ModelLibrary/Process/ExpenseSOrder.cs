@@ -35,7 +35,7 @@ namespace VAdvantage.Process
         /** No SO generated			*/
         private int _noOrders = 0;
         /**	Current Order			*/
-        private MOrder _order = null;
+        private MVABOrder _order = null;
         private string message="";
         // Time Expense Line
         MTimeExpenseLine tel=null;
@@ -230,9 +230,9 @@ namespace VAdvantage.Process
             if (_order == null)
             {
                 log.Info("New Order for " + bp + ", Project=" + tel.GetVAB_Project_ID());
-                _order = new MOrder(GetCtx(), 0, Get_TrxName());
+                _order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                 _order.SetVAF_Org_ID(tel.GetVAF_Org_ID());
-                _order.SetVAB_DocTypesTarget_ID(MOrder.DocSubTypeSO_Standard);
+                _order.SetVAB_DocTypesTarget_ID(MVABOrder.DocSubTypeSO_Standard);
                 //
                 _order.SetBPartner(bp);
                 if (_order.GetVAB_BPart_Location_ID() == 0)
@@ -407,7 +407,7 @@ namespace VAdvantage.Process
             }
 
             //	OrderLine
-            MOrderLine ol = new MOrderLine(_order);
+            MVABOrderLine ol = new MVABOrderLine(_order);
             //
             if (tel.GetVAM_Product_ID() != 0)
             {

@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MVABBPartLocation : X_VAB_BPart_Location
     {
         //	Cached Location			
-        private MLocation _location = null;
+        private MVABAddress _location = null;
         //	Unique Name			
         private StringBuilder _uniqueName = new StringBuilder();
         private int _unique = 0;
@@ -125,10 +125,10 @@ namespace VAdvantage.Model
          * 	@param requery requery
          *	@return location
          */
-        public MLocation GetLocation(bool requery)
+        public MVABAddress GetLocation(bool requery)
         {
             if (_location == null || requery)
-                _location = MLocation.Get(GetCtx(), GetVAB_Address_ID(), Get_TrxName());
+                _location = MVABAddress.Get(GetCtx(), GetVAB_Address_ID(), Get_TrxName());
             return _location;
         }
 
@@ -198,7 +198,7 @@ namespace VAdvantage.Model
                 return true;
             }
 
-            MLocation address = GetLocation(true);
+            MVABAddress address = GetLocation(true);
             _uniqueName.Append(GetName());
             //if (_uniqueName != null && _uniqueName.Equals("."))	//	default    change by amit
             _uniqueName.Clear();
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
          * 	Make name Unique
          * 	@param address address
          */
-        private void MakeUnique(MLocation address)
+        private void MakeUnique(MVABAddress address)
         {
             //	_uniqueName = address.toString();
             //	return;

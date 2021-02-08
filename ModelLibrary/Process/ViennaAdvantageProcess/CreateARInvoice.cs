@@ -138,7 +138,7 @@ namespace ViennaAdvantage.Process
                     {
                         if (VAB_BusinessPartner_ID.Contains(Util.GetValueOfInt(idr["VAB_BusinessPartner_ID"])))
                         {
-                            VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), Util.GetValueOfInt(idr["VAB_Order_ID"]), null);
+                            VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), Util.GetValueOfInt(idr["VAB_Order_ID"]), null);
                             bool chk = false;
                             for (int i = 0; i < invoices.Count; i++)
                             {
@@ -219,7 +219,7 @@ namespace ViennaAdvantage.Process
                                         bool chk1 = false;
                                         for (int l = 0; l < invoices.Count; l++)
                                         {
-                                            VAdvantage.Model.MOrder ord = new VAdvantage.Model.MOrder(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAB_Order_ID"]), null);
+                                            VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAB_Order_ID"]), null);
                                             VAdvantage.Model.MInvoice inv1 = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[l]), null);
                                             if ((inv1.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv1.GetVAB_BusinessPartner_ID() == ord.GetVAB_BusinessPartner_ID())
                                                 && (inv1.GetVAM_PriceList_ID() == ord.GetVAM_PriceList_ID()))
@@ -457,7 +457,7 @@ namespace ViennaAdvantage.Process
 
                         if (tLine.GetVAB_OrderLine_ID() != 0)
                         {
-                            VAdvantage.Model.MOrderLine oline = new VAdvantage.Model.MOrderLine(GetCtx(), tLine.GetVAB_OrderLine_ID(), null);
+                            VAdvantage.Model.MVABOrderLine oline = new VAdvantage.Model.MVABOrderLine(GetCtx(), tLine.GetVAB_OrderLine_ID(), null);
                             price = oline.GetPriceEntered();
                         }
 

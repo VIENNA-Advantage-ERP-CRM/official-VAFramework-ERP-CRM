@@ -331,7 +331,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     if (impBP.GetVAB_BPart_Location_ID() != 0)		//	Update Location
                     {
                         bpl = new MVABBPartLocation(GetCtx(), impBP.GetVAB_BPart_Location_ID(), Get_TrxName());
-                        MLocation location = new MLocation(GetCtx(), bpl.GetVAB_Address_ID(), Get_TrxName());
+                        MVABAddress location = new MVABAddress(GetCtx(), bpl.GetVAB_Address_ID(), Get_TrxName());
                         location.SetVAB_Country_ID(impBP.GetVAB_Country_ID());
                         location.SetVAB_RegionState_ID(impBP.GetVAB_RegionState_ID());
                         location.SetCity(impBP.GetCity());
@@ -357,7 +357,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             && impBP.GetAddress1() != null
                             && impBP.GetCity() != null)
                         {
-                            MLocation location = new MLocation(GetCtx(), impBP.GetVAB_Country_ID(),
+                            MVABAddress location = new MVABAddress(GetCtx(), impBP.GetVAB_Country_ID(),
                                 impBP.GetVAB_RegionState_ID(), impBP.GetCity(), Get_TrxName());
                             location.SetAddress1(impBP.GetAddress1());
                             location.SetAddress2(impBP.GetAddress2());

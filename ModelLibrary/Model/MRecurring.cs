@@ -113,8 +113,8 @@ namespace VAdvantage.Model
                 //	Copy
                 if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Order))
                 {
-                    MOrder from = new MOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
-                    MOrder order = MOrder.CopyFrom(from, dateDoc,
+                    MVABOrder from = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_TrxName());
+                    MVABOrder order = MVABOrder.CopyFrom(from, dateDoc,
                         from.GetVAB_DocTypes_ID(), false, false, Get_TrxName());
                     run.SetVAB_Order_ID(order.GetVAB_Order_ID());
                     msg += order.GetDocumentNo();

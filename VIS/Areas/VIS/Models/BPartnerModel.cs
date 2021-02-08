@@ -141,7 +141,7 @@ namespace VIS.Models
             if (!ro)
                 ro = !MVAFRole.GetDefault(Env.GetCtx()).CanUpdate(
                     Env.GetCtx().GetVAF_Client_ID(), Env.GetCtx().GetVAF_Org_ID(),
-                    MLocation.Table_ID, 0, false);
+                    MVABAddress.Table_ID, 0, false);
 
             ds = DB.ExecuteDataset("Select VAB_BusinessPartnerRelation_ID, VAB_BusinessPartnerrelation_location_id from VAB_BPart_Relation where VAB_BusinessPartner_id=" + _partner.GetVAB_BusinessPartner_ID());
 

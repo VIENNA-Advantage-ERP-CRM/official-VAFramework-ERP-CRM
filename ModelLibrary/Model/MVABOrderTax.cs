@@ -22,10 +22,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MOrderTax : X_VAB_OrderTax
+    public class MVABOrderTax : X_VAB_OrderTax
     {
         /**	Static Logger	*/
-        private static VLogger s_log = VLogger.GetVLogger(typeof(MOrderTax).FullName);
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MVABOrderTax).FullName);
 
         /** Tax							*/
         private MTax _tax = null;
@@ -40,9 +40,9 @@ namespace VAdvantage.Model
         /// <param name="oldTax">get old tax</param>
         /// <param name="trxName">transaction</param>
         /// <returns>existing or new tax</returns>
-        public static MOrderTax Get(MOrderLine line, int precision, bool oldTax, Trx trxName)
+        public static MVABOrderTax Get(MVABOrderLine line, int precision, bool oldTax, Trx trxName)
         {
-            MOrderTax retValue = null;
+            MVABOrderTax retValue = null;
             if (line == null || line.GetVAB_Order_ID() == 0)
             {
                 //s_log.fine("No Order");
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    retValue = new MOrderTax(line.GetCtx(), dr, trxName);
+                    retValue = new MVABOrderTax(line.GetCtx(), dr, trxName);
                 }
                 ds = null;
             }
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
             }
 
             //	Create New
-            retValue = new MOrderTax(line.GetCtx(), 0, trxName);
+            retValue = new MVABOrderTax(line.GetCtx(), 0, trxName);
             retValue.Set_TrxName(trxName);
             retValue.SetClientOrg(line);
             retValue.SetVAB_Order_ID(line.GetVAB_Order_ID());
@@ -117,9 +117,9 @@ namespace VAdvantage.Model
         /// <param name="oldTax">get old tax</param>
         /// <param name="trxName">transaction</param>
         /// <returns>existing or new tax</returns>
-        public static MOrderTax GetSurcharge(MOrderLine line, int precision, bool oldTax, Trx trxName)
+        public static MVABOrderTax GetSurcharge(MVABOrderLine line, int precision, bool oldTax, Trx trxName)
         {
-            MOrderTax retValue = null;
+            MVABOrderTax retValue = null;
             if (line == null || line.GetVAB_Order_ID() == 0)
             {
                 //s_log.fine("No Order");
@@ -156,7 +156,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DataRow dr = ds.Tables[0].Rows[i];
-                        retValue = new MOrderTax(line.GetCtx(), dr, trxName);
+                        retValue = new MVABOrderTax(line.GetCtx(), dr, trxName);
                     }
                     ds = null;
                 }
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
             }
 
             //	Create New
-            retValue = new MOrderTax(line.GetCtx(), 0, trxName);
+            retValue = new MVABOrderTax(line.GetCtx(), 0, trxName);
             retValue.Set_TrxName(trxName);
             retValue.SetClientOrg(line);
             retValue.SetVAB_Order_ID(line.GetVAB_Order_ID());
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
         *	@param dr result set
         *	@param trxName transaction
         */
-        public MOrderTax(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABOrderTax(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -332,7 +332,7 @@ namespace VAdvantage.Model
 	 *	@param ignored ignored
 	 *	@param trxName transaction
 	 */
-        public MOrderTax(Ctx ctx, int ignored, Trx trxName)
+        public MVABOrderTax(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
 

@@ -66,7 +66,7 @@ namespace ViennaAdvantage.Process
             {
                 throw new Exception("@VAB_Lead_ID@ ID=0");
             }
-            MLead lead = new MLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
+            MVABLead lead = new MVABLead(GetCtx(), _VAB_Lead_ID, Get_TrxName());
             if (lead.GetVAB_BPart_Category_ID() == 0)
             {
                 return Msg.GetMsg(GetCtx(), "SelectBPGroup");

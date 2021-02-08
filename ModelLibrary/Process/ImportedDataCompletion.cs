@@ -51,12 +51,12 @@ namespace VAdvantage.Process
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "dateacct");
                 if (dataRow != null && dataRow.Length > 0)
                 {
-                    MOrder order = null;
+                    MVABOrder order = null;
                     for (int i = 0; i < dataRow.Length; i++)
                     {
                         try
                         {
-                            order = new MOrder(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Order_ID"]), Get_Trx());
+                            order = new MVABOrder(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Order_ID"]), Get_Trx());
                             order.CompleteIt();
                             if (order.GetDocAction() == "CL")
                             {

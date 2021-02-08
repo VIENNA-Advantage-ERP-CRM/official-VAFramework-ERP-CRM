@@ -65,13 +65,13 @@ namespace VAdvantage.Process
         protected override string DoIt()
         {
 
-            MOrder obj = new MOrder(GetCtx(), GetRecord_ID(), Get_Trx());
+            MVABOrder obj = new MVABOrder(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
             MVABCurrency currency = new MVABCurrency(GetCtx(), obj.GetVAB_Currency_ID(), Get_Trx());
             precision = currency.GetStdPrecision();
 
-            MOrderLine[] lines = obj.GetLines();
+            MVABOrderLine[] lines = obj.GetLines();
 
             if (_IsCLearDiscount == "N")
             {
@@ -93,7 +93,7 @@ namespace VAdvantage.Process
 
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine ln = lines[i];
+                    MVABOrderLine ln = lines[i];
                     // this value represent discount on line net amount
                     discountAmountOnTotal = GetDiscountAmountOnTotal(ln.GetLineNetAmt(), discountPercentageOnTotalAmount != 0 ? discountPercentageOnTotalAmount : _DiscountPercent);
 
@@ -117,7 +117,7 @@ namespace VAdvantage.Process
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MOrderLine ln = lines[i];
+                    MVABOrderLine ln = lines[i];
                     ln.SetPriceEntered(Decimal.Add(ln.GetPriceEntered(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetPriceActual(Decimal.Add(ln.GetPriceActual(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetAmountAfterApplyDiscount(0);

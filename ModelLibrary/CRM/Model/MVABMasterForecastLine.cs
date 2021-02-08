@@ -14,15 +14,15 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MMasterForecastLine : X_VAB_MasterForecastLine
+    public class MVABMasterForecastLine : X_VAB_MasterForecastLine
     {
-        public MMasterForecastLine(Ctx ctx, int VAB_MasterForecastLine_ID, Trx trxName) :
+        public MVABMasterForecastLine(Ctx ctx, int VAB_MasterForecastLine_ID, Trx trxName) :
             base(ctx, VAB_MasterForecastLine_ID, null)
         {
 
         }
 
-         public MMasterForecastLine(Ctx ctx, DataRow dr, Trx trxName) :
+         public MVABMasterForecastLine(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 

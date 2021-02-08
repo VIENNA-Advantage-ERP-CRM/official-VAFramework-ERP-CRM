@@ -26,17 +26,17 @@ using System.Web;
 
 namespace VAdvantage.Model
 {
-    public class MLocation : X_VAB_Address, IEquatable<Object> //Comparator<PO>
+    public class MVABAddress : X_VAB_Address, IEquatable<Object> //Comparator<PO>
     {
 
 
         #region Private Variable
         //	Cache						
-        private static CCache<int, MLocation> s_cache = new CCache<int, MLocation>("VAB_Address", 100, 30);
+        private static CCache<int, MVABAddress> s_cache = new CCache<int, MVABAddress>("VAB_Address", 100, 30);
         private MVABCountry _country = null;
         private MRegion _region = null;
         //	Static Logger				
-        private static VLogger _log = VLogger.GetVLogger(typeof(MLocation).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABAddress).FullName);
         #endregion
 
         /// <summary>
@@ -46,17 +46,17 @@ namespace VAdvantage.Model
         /// <param name="VAB_Address_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>MLocation</returns>
-        public static MLocation Get(Ctx ctx, int VAB_Address_ID, Trx trxName)
+        public static MVABAddress Get(Ctx ctx, int VAB_Address_ID, Trx trxName)
         {
             //	New
             if (VAB_Address_ID == 0)
-                return new MLocation(ctx, VAB_Address_ID, trxName);
+                return new MVABAddress(ctx, VAB_Address_ID, trxName);
             //
             int key = (int)VAB_Address_ID;
-            MLocation retValue = (MLocation)s_cache[key];
+            MVABAddress retValue = (MVABAddress)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MLocation(ctx, VAB_Address_ID, trxName);
+            retValue = new MVABAddress(ctx, VAB_Address_ID, trxName);
             if (retValue.Get_ID() != 0)		//	found
             {
                 s_cache.Add(key, retValue);
@@ -72,12 +72,12 @@ namespace VAdvantage.Model
         /// <param name="VAB_BPart_Location_ID">Business Partner Location</param>
         /// <param name="trxName">transaction</param>
         /// <returns>location or null</returns>
-        public static MLocation GetBPLocation(Ctx ctx, int VAB_BPart_Location_ID, Trx trxName)
+        public static MVABAddress GetBPLocation(Ctx ctx, int VAB_BPart_Location_ID, Trx trxName)
         {
             if (VAB_BPart_Location_ID == 0)					//	load default
                 return null;
 
-            MLocation loc = null;
+            MVABAddress loc = null;
             String sql = "SELECT * FROM VAB_Address l "
                 + "WHERE VAB_Address_ID IN (SELECT VAB_Address_ID FROM VAB_BPart_Location WHERE VAB_BPart_Location_ID=" + VAB_BPart_Location_ID + ")";
             try
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    loc = new MLocation(ctx, dr, trxName);
+                    loc = new MVABAddress(ctx, dr, trxName);
                 }
             }
             catch (Exception e)
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Address_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, int VAB_Address_ID, Trx trxName)
+        public MVABAddress(Ctx ctx, int VAB_Address_ID, Trx trxName)
             : base(ctx, VAB_Address_ID, trxName)
         {
             if (VAB_Address_ID == 0)
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="country">mandatory country</param>
         /// <param name="region">optional region</param>
-        public MLocation(MVABCountry country, MRegion region)
+        public MVABAddress(MVABCountry country, MRegion region)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
             SetCountry(country);
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_RegionState_ID">region</param>
         /// <param name="city">city</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, int VAB_Country_ID, int VAB_RegionState_ID, String city, Trx trxName)
+        public MVABAddress(Ctx ctx, int VAB_Country_ID, int VAB_RegionState_ID, String city, Trx trxName)
             : this(ctx, 0, trxName)
         {
             if (VAB_Country_ID != 0)
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MLocation(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABAddress(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

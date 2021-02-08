@@ -31,7 +31,7 @@ namespace VIS.Models
             id = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
 
-            MOrderLine orderline = new MOrderLine(ctx, id, null);
+            MVABOrderLine orderline = new MVABOrderLine(ctx, id, null);
 
             retDic["VAB_TaxRate_ID"] = Util.GetValueOfString(orderline.GetVAB_TaxRate_ID());
             retDic["PriceList"] = Util.GetValueOfString(orderline.GetPriceList());
@@ -86,7 +86,7 @@ namespace VIS.Models
             int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int VAB_OrderLine_ID = Util.GetValueOfInt(paramValue[3].ToString());
             //End Assign parameter value
-            return MOrderLine.GetNotReserved(ctx, VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAB_OrderLine_ID);
+            return MVABOrderLine.GetNotReserved(ctx, VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, VAB_OrderLine_ID);
 
         }
         /// <summary>
@@ -110,7 +110,7 @@ namespace VIS.Models
                 return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder inv = new MVABOrder(ctx, VAB_Order_ID, null);
             MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
@@ -578,7 +578,7 @@ namespace VIS.Models
                 return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MOrder inv = new MOrder(ctx, VAB_Order_ID, null);
+            MVABOrder inv = new MVABOrder(ctx, VAB_Order_ID, null);
             MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {

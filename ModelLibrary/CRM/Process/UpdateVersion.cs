@@ -276,7 +276,7 @@ namespace VAdvantage.Process
         {
             sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + VAM_Product_ID;
             //X_VAB_MasterForecastLine mfLine = new X_VAB_MasterForecastLine(GetCtx(), 0, null);
-            MMasterForecastLine mfLine = new MMasterForecastLine(GetCtx(), 0, null);
+            MVABMasterForecastLine mfLine = new MVABMasterForecastLine(GetCtx(), 0, null);
             mfLine.SetVAF_Client_ID(mf.GetVAF_Client_ID());
             mfLine.SetVAF_Org_ID(mf.GetVAF_Org_ID());
             mfLine.SetVAM_Product_ID(VAM_Product_ID);

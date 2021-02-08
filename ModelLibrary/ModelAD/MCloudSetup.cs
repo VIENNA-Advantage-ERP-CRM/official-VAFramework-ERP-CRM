@@ -3226,7 +3226,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "BPartner NOT inserted");
             }
             //  Location for Standard BP
-            MLocation bpLoc = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+            MVABAddress bpLoc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             bpLoc.Save();
             MProduct product = null;
             if (lstTableName.Contains("VAM_Product") && bp != null) // Update by Paramjeet Singh
@@ -3314,7 +3314,7 @@ namespace VAdvantage.Model
              *  Location, Warehouse, Locator
              */
             //  Location (Company)
-            MLocation loc = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+            MVABAddress loc = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
             loc.Save();
 
 
@@ -3463,7 +3463,7 @@ namespace VAdvantage.Model
                 if (lstTableName.Contains("VAB_BPart_Location"))
                 {
                     //  Location for Client-Admin
-                    MLocation bpLocCA = new MLocation(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
+                    MVABAddress bpLocCA = new MVABAddress(m_ctx, VAB_Country_ID, VAB_RegionState_ID, City, m_trx);
                     bpLocCA.Save();
                     MVABBPartLocation bplCA = new MVABBPartLocation(bpCA);
                     bplCA.SetVAB_Address_ID(bpLocCA.GetVAB_Address_ID());

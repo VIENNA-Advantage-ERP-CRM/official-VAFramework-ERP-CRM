@@ -48,13 +48,13 @@ namespace VAdvantage.Acct
         /// <param name="ass">accounting schemata</param>
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
-        public Doc_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MOrder), idr, null, trxName)
+        public DoVAB_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
+            : base(ass, typeof(MVABOrder), idr, null, trxName)
         {
 
         }
-        public Doc_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MOrder), dr, null, trxName)
+        public DoVAB_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
+            : base(ass, typeof(MVABOrder), dr, null, trxName)
         {
 
         }
@@ -65,7 +65,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MOrder order = (MOrder)GetPO();
+            MVABOrder order = (MVABOrder)GetPO();
             SetDateDoc(order.GetDateOrdered());
             SetIsTaxIncluded(order.IsTaxIncluded());
             //	Amounts
@@ -86,13 +86,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="order">order</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MOrder order)
+        private DocLine[] LoadLines(MVABOrder order)
         {
             List<DocLine> list = new List<DocLine>();
-            MOrderLine[] lines = order.GetLines();
+            MVABOrderLine[] lines = order.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MOrderLine line = lines[i];
+                MVABOrderLine line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 Decimal Qty = line.GetQtyOrdered();
                 docLine.SetQty(Qty, order.IsSOTrx());
@@ -153,12 +153,12 @@ namespace VAdvantage.Acct
         /// <returns>requisition lines of Order</returns>
         private DocLine[] LoadRequisitions()
         {
-            MOrder order = (MOrder)GetPO();
-            MOrderLine[] oLines = order.GetLines();
+            MVABOrder order = (MVABOrder)GetPO();
+            MVABOrderLine[] oLines = order.GetLines();
             Dictionary<int, Decimal> qtys = new Dictionary<int, Decimal>();
             for (int i = 0; i < oLines.Length; i++)
             {
-                MOrderLine line = oLines[i];
+                MVABOrderLine line = oLines[i];
                 qtys.Add(Utility.Util.GetValueOfInt(line.GetVAB_OrderLine_ID()), line.GetQtyOrdered());
             }
             //
@@ -490,7 +490,7 @@ namespace VAdvantage.Acct
                     {
                         continue;
                     }
-                    MOrderLine line = new MOrderLine(doc.GetCtx(), idr, null);
+                    MVABOrderLine line = new MVABOrderLine(doc.GetCtx(), idr, null);
                     DocLine docLine = new DocLine(line, doc);
                     //	Currency
                     if (precision == -1)

@@ -393,7 +393,7 @@ namespace VAdvantage.Process
 
                     if (Utility.Util.GetValueOfInt(dr[3]) > 0)
                     {
-                        MOrderLine _ordline = new MOrderLine(GetCtx(), Utility.Util.GetValueOfInt(dr[3]), Get_TrxName());
+                        MVABOrderLine _ordline = new MVABOrderLine(GetCtx(), Utility.Util.GetValueOfInt(dr[3]), Get_TrxName());
                         _ordline.SetIsCommissionCalculated(true);
                         _ordline.Save();
                     }

@@ -228,7 +228,7 @@ namespace VAdvantage.Model
          * 	Does not Set quantity!
          *	@param oLine line
          */
-        public void SetOrderLine(MOrderLine oLine)
+        public void SetOrderLine(MVABOrderLine oLine)
         {
             try
             {
@@ -300,8 +300,8 @@ namespace VAdvantage.Model
                 int VAB_OrderLine_ID = sLine.GetVAB_OrderLine_ID();
                 if (VAB_OrderLine_ID != 0)
                 {
-                    MOrderLine oLine = new MOrderLine(GetCtx(), VAB_OrderLine_ID, Get_TrxName());
-                    MOrder ord = new MOrder(GetCtx(), oLine.GetVAB_Order_ID(), Get_TrxName());          //Added By Bharat
+                    MVABOrderLine oLine = new MVABOrderLine(GetCtx(), VAB_OrderLine_ID, Get_TrxName());
+                    MVABOrder ord = new MVABOrder(GetCtx(), oLine.GetVAB_Order_ID(), Get_TrxName());          //Added By Bharat
                     SetVAS_Res_Assignment_ID(oLine.GetVAS_Res_Assignment_ID());
                     VAM_PFeature_SetInstance_ID = sLine.GetVAM_PFeature_SetInstance_ID();               //Added By Bharat
                     VAB_UOM_ID = oLine.GetVAB_UOM_ID();
@@ -3218,7 +3218,7 @@ namespace VAdvantage.Model
                 if (MSource.SOURCECREATETYPE_Both.Equals(source.GetSourceCreateType())
                     || MSource.SOURCECREATETYPE_Lead.Equals(source.GetSourceCreateType()))
                 {
-                    MLead lead = new MLead(GetCtx(), 0, Get_TrxName());
+                    MVABLead lead = new MVABLead(GetCtx(), 0, Get_TrxName());
                     lead.SetClientOrg(this);
                     lead.SetDescription(summary);
                     lead.SetVAF_UserContact_ID(invoice.GetVAF_UserContact_ID());
@@ -3228,7 +3228,7 @@ namespace VAdvantage.Model
                     lead.SetVAB_Project_ID(invoice.GetVAB_Project_ID());
                     //
                     MVABBPartLocation bpLoc = new MVABBPartLocation(GetCtx(), invoice.GetVAB_BPart_Location_ID(), null);
-                    MLocation loc = bpLoc.GetLocation(false);
+                    MVABAddress loc = bpLoc.GetLocation(false);
                     lead.SetAddress1(loc.GetAddress1());
                     lead.SetAddress2(loc.GetAddress2());
                     lead.SetCity(loc.GetCity());
@@ -3507,7 +3507,7 @@ namespace VAdvantage.Model
                             //}
                             if (GetVAB_OrderLine_ID() > 0)
                             {
-                                MOrderLine ol = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_TrxName());
+                                MVABOrderLine ol = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_TrxName());
                                 ordAmt = ol.GetPriceEntered();
                                 decimal diffAmt = Decimal.Subtract(invAmt, ordAmt);
                                 if (diffAmt > 0)

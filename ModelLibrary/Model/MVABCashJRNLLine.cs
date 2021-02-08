@@ -259,7 +259,7 @@ namespace VAdvantage.Model
          *	@param order order
          *	@param trxName transaction
          */
-        public void SetOrder(MOrder order, Trx trxName)
+        public void SetOrder(MVABOrder order, Trx trxName)
         {
             SetCashType(CASHTYPE_Invoice);
             SetVAB_Currency_ID(order.GetVAB_Currency_ID());
@@ -270,7 +270,7 @@ namespace VAdvantage.Model
             SetWriteOffAmt(Env.ZERO);
             SetIsGenerated(true);
             //
-            if (MOrder.DOCSTATUS_WaitingPayment.Equals(order.GetDocStatus()))
+            if (MVABOrder.DOCSTATUS_WaitingPayment.Equals(order.GetDocStatus()))
             {
                 Save(trxName);
                 order.SetVAB_CashJRNLLine_ID(GetVAB_CashJRNLLine_ID());

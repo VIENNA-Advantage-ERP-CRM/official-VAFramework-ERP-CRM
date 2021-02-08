@@ -467,7 +467,7 @@ namespace VAdvantage.Process
             int noOrders = 0;
             String info = "";
             //
-            MOrder order = null;
+            MVABOrder order = null;
             MWarehouse wh = null;
             X_VAT_Restock[] replenishs = GetReplenish(_M_WareSource);
             for (int i = 0; i < replenishs.Length; i++)
@@ -482,7 +482,7 @@ namespace VAdvantage.Process
                     || order.GetVAB_BusinessPartner_ID() != replenish.GetVAB_BusinessPartner_ID()
                     || order.GetVAM_Warehouse_ID() != replenish.GetVAM_Warehouse_ID())
                 {
-                    order = new MOrder(GetCtx(), 0, Get_TrxName());
+                    order = new MVABOrder(GetCtx(), 0, Get_TrxName());
                     order.SetIsSOTrx(false);
                     order.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
                     MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), replenish.GetVAB_BusinessPartner_ID(), Get_TrxName());
@@ -501,8 +501,8 @@ namespace VAdvantage.Process
                     noOrders++;
                     info += " - " + order.GetDocumentNo();
                 }
-                MOrderLine line = new MOrderLine(order);
-                line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
+                MVABOrderLine line = new MVABOrderLine(order);
+                line.SetVAM_Product_ID(replenish.GeVAtM_Product_ID());
                 line.SetQty(replenish.GetQtyToOrder());
                 line.SetPrice();
                 line.Save();

@@ -354,7 +354,7 @@ namespace VIS.Models
                     pDetails.StrKExp = _mPayment.GetCreditCardExp(null);
                     pDetails.StrKApproval = _mPayment.GetVoiceAuthCode();
                     pDetails.StrKStatus = _mPayment.GetR_PnRef();
-                    pDetails.CanChange = !_mPayment.IsApproved() || !(_PaymentRule == MOrder.PAYMENTRULE_CreditCard);
+                    pDetails.CanChange = !_mPayment.IsApproved() || !(_PaymentRule == MVABOrder.PAYMENTRULE_CreditCard);
                     //	if approved/paid, don't let it change
 
                     //  Check
@@ -464,8 +464,8 @@ namespace VIS.Models
                 }
 
                 //	T (Transfer)	BPartner_Bank
-                else if (newPaymentRule.Equals(MOrder.PAYMENTRULE_DirectDeposit)
-                    || newPaymentRule.Equals(MOrder.PAYMENTRULE_DirectDebit))
+                else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDeposit)
+                    || newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDebit))
                 {
                     // KeyNamePair myObj = (KeyNamePair)cmbTAccount.SelectedItem;
                 }
@@ -496,15 +496,15 @@ namespace VIS.Models
                 if ("KTSD".IndexOf(newPaymentRule) != -1 && newVAB_Bank_Acct_ID == 0)
                 {
                     String tender = MPayment.TENDERTYPE_CreditCard;
-                    if (newPaymentRule.Equals(MOrder.PAYMENTRULE_DirectDeposit))
+                    if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDeposit))
                     {
                         tender = MPayment.TENDERTYPE_DirectDeposit;
                     }
-                    else if (newPaymentRule.Equals(MOrder.PAYMENTRULE_DirectDebit))
+                    else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDebit))
                     {
                         tender = MPayment.TENDERTYPE_DirectDebit;
                     }
-                    else if (newPaymentRule.Equals(MOrder.PAYMENTRULE_Check))
+                    else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                     {
                         tender = MPayment.TENDERTYPE_Check;
                     }
@@ -597,10 +597,10 @@ namespace VIS.Models
                     invoice = new MInvoice(ctx, inputs.VAB_Invoice_ID, null);
                     negateAmt = invoice.IsCreditMemo();
                 }
-                MOrder order = null;
+                MVABOrder order = null;
                 if (invoice == null && inputs.VAB_Order_ID != 0)
                 {
-                    order = new MOrder(ctx, inputs.VAB_Order_ID, null);
+                    order = new MVABOrder(ctx, inputs.VAB_Order_ID, null);
                 }
                 Decimal payAmount = inputs._Amount;
                 if (negateAmt)
@@ -720,13 +720,13 @@ namespace VIS.Models
                     //log.fine("Payment - " + newPaymentRule);
                     //  Set Amount
                     _mPayment.SetAmount(inputs._VAB_Currency_ID, payAmount);
-                    if (newPaymentRule.Equals(MOrder.PAYMENTRULE_CreditCard))
+                    if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_CreditCard))
                     {
                         _mPayment.SetCreditCard(MPayment.TRXTYPE_Sales, newCCType,
                            inputs.txtKNumber, "", inputs.txtKExp);
                         _mPayment.SetPaymentProcessor();
                     }
-                    else if (newPaymentRule.Equals(MOrder.PAYMENTRULE_Check))
+                    else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                     {
                         _mPayment.SetBankCheck(newVAB_Bank_Acct_ID, inputs._isSOTrx, inputs.txtSRouting,
                             inputs.txtSNumber, inputs.txtSCheck);
@@ -868,14 +868,14 @@ namespace VIS.Models
                  */
 
                 //	B (Cash)		(Currency)
-                if (PaymentRule.Equals(MOrder.PAYMENTRULE_Cash))
+                if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_Cash))
                 {
                     VAB_CashBook_ID = inputs.cmbBCashBook;
                     DateAcct = Convert.ToDateTime(inputs.bDateField);
                 }
 
                 //	K (CreditCard)  Type, Number, Exp, Approval
-                else if (PaymentRule.Equals(MOrder.PAYMENTRULE_CreditCard))
+                else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_CreditCard))
                 {
                     CCType = inputs.cmbKType;
                     //
@@ -931,7 +931,7 @@ namespace VIS.Models
                 }
 
                 //	S (Check)		(Currency) CheckNo, Routing
-                else if (PaymentRule.Equals(MOrder.PAYMENTRULE_Check))
+                else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                 {
                     //	cmbSCurrency.SelectedItem;
                     VAB_Bank_Acct_ID = inputs.cmbSBankAccount;
@@ -971,15 +971,15 @@ namespace VIS.Models
                 if ("KTSD".IndexOf(PaymentRule) != -1 && VAB_Bank_Acct_ID == 0)
                 {
                     String tender = MPayment.TENDERTYPE_CreditCard;
-                    if (PaymentRule.Equals(MOrder.PAYMENTRULE_DirectDeposit))
+                    if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDeposit))
                     {
                         tender = MPayment.TENDERTYPE_DirectDeposit;
                     }
-                    else if (PaymentRule.Equals(MOrder.PAYMENTRULE_DirectDebit))
+                    else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDebit))
                     {
                         tender = MPayment.TENDERTYPE_DirectDebit;
                     }
-                    else if (PaymentRule.Equals(MOrder.PAYMENTRULE_Check))
+                    else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                     {
                         tender = MPayment.TENDERTYPE_Check;
                     }

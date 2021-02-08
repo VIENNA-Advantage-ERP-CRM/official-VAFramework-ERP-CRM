@@ -396,8 +396,8 @@ namespace VIS.Models
             {
                 if (keyColName.ToUpper().Trim() == "VAB_ORDER_ID")
                 {
-                    MOrder ord = new MOrder(ctx, recordID, null);
-                    _Version_ID = GetPLVID(ord.GetVAM_PriceList_ID());
+                    MVABOrder ord = new MVABOrder(ctx, recordID, null);
+                    _Version_ID = GetPLVID(ord.GeVAtM_PriceList_ID());
                     VAF_Client_ID = ord.GetVAF_Client_ID();
                     VAF_Org_ID = ord.GetVAF_Org_ID();
                     isSOTrx = ord.IsSOTrx();
@@ -480,7 +480,7 @@ namespace VIS.Models
             if (keyColName.ToUpper().Trim() == "VAB_ORDER_ID")
             {
                 tbl = new MVAFTableView(ctx, 260, null);
-                MOrder ord = new MOrder(ctx, recordID, null);
+                MVABOrder ord = new MVABOrder(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
                 {

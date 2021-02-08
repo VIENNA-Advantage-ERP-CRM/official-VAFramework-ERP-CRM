@@ -129,7 +129,7 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                MLocation loc = MLocation.Get(ctx, id, null);
+                MVABAddress loc = MVABAddress.Get(ctx, id, null);
 
                 if (loc == null)
                 {

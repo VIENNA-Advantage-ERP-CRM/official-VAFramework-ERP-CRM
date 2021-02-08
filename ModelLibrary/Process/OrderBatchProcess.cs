@@ -137,7 +137,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (Process(new MOrder(GetCtx(), dr, Get_TrxName())))
+                    if (Process(new MVABOrder(GetCtx(), dr, Get_TrxName())))
                     {
                         counter++;
                     }
@@ -172,7 +172,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="order">order</param>
         /// <returns>true if ok</returns>
-        private bool Process(MOrder order)
+        private bool Process(MVABOrder order)
         {
             log.Info(order.ToString());
             //

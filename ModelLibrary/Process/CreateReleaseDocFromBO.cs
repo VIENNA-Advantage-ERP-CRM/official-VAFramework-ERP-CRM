@@ -38,7 +38,7 @@ namespace VAdvantage.Process
                     throw new ArgumentException("No Order");
                 }
 
-                MOrder from = new MOrder(GetCtx(), order_ID, Get_TrxName());
+                MVABOrder from = new MVABOrder(GetCtx(), order_ID, Get_TrxName());
 
                 // Check Validity date of Blanket Order.
                 if (from.GetOrderValidTo() < DateTime.Now.Date)
@@ -54,10 +54,10 @@ namespace VAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound");
                 }
 
-                if (from.GetDocStatus() == MOrder.DOCSTATUS_Drafted ||
-                    from.GetDocStatus() == MOrder.DOCSTATUS_InProgress ||
-                    from.GetDocStatus() == MOrder.DOCSTATUS_Voided ||
-                    from.GetDocStatus() == MOrder.DOCSTATUS_Reversed)
+                if (from.GetDocStatus() == MVABOrder.DOCSTATUS_Drafted ||
+                    from.GetDocStatus() == MVABOrder.DOCSTATUS_InProgress ||
+                    from.GetDocStatus() == MVABOrder.DOCSTATUS_Voided ||
+                    from.GetDocStatus() == MVABOrder.DOCSTATUS_Reversed)
                 {
                     throw new Exception("Order Not Valid");
                 }
@@ -78,7 +78,7 @@ namespace VAdvantage.Process
                 }
 
                 //Creating Release PO/SO against blanket Orders
-                MOrder rposo = MOrder.CopyFrom(from, from.GetDateAcct(),
+                MVABOrder rposo = MVABOrder.CopyFrom(from, from.GetDateAcct(),
                    dt.GetDocumentTypeforReleases(), false, true, Get_TrxName(), false);
 
                 rposo.SetPOReference(Util.GetValueOfString(from.GetDocumentNo()));

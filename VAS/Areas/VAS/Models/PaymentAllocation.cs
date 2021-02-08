@@ -2970,7 +2970,7 @@ namespace VIS.Models
                 return Msg.GetMsg(ctx, "PeriodClosed");
             }
             // is Non Business Day?
-            if (MNonBusinessDay.IsNonBusinessDay(ctx, DateTrx, VAF_Org_ID))
+            if (MVABNonBusinessDay.IsNonBusinessDay(ctx, DateTrx, VAF_Org_ID))
             {
                 return Msg.GetMsg(ctx, "DateIsInNonBusinessDay");
             }

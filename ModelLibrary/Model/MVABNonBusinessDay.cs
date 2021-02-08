@@ -21,10 +21,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MNonBusinessDay : X_VAB_NonBusinessDay
+    public class MVABNonBusinessDay : X_VAB_NonBusinessDay
     {
         //	Logger
-        private static VLogger _log = VLogger.GetVLogger(typeof(MNonBusinessDay).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABNonBusinessDay).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_NonBusinessDay_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MNonBusinessDay(Ctx ctx, int VAB_NonBusinessDay_ID, Trx trxName)
+        public MVABNonBusinessDay(Ctx ctx, int VAB_NonBusinessDay_ID, Trx trxName)
             : base(ctx, VAB_NonBusinessDay_ID, trxName)
         {
 
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MNonBusinessDay(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABNonBusinessDay(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }

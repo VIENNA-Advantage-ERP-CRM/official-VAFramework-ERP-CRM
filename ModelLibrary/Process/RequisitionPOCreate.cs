@@ -56,9 +56,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private Boolean _ConsolidateDocument = false;
 
         // Order				
-        private MOrder _order = null;
+        private MVABOrder _order = null;
         // Order Line			
-        private MOrderLine _orderLine = null;
+        private MVABOrderLine _orderLine = null;
         private string createdPO = null; 
 
         private int _m_VAM_Requisition_ID = 0;
@@ -314,7 +314,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 _m_bpartner = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, null);
             }
             //	Order
-            _order = new MOrder(GetCtx(), 0, Get_TrxName());
+            _order = new MVABOrder(GetCtx(), 0, Get_TrxName());
             _order.SetIsSOTrx(false);
             _order.SetVAB_DocTypesTarget_ID();
             _order.SetBPartner(_m_bpartner);
@@ -426,7 +426,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	No Order Line
-            _orderLine = new MOrderLine(_order);
+            _orderLine = new MVABOrderLine(_order);
             if (product != null)
             {
                 _orderLine.SetProduct(product);
