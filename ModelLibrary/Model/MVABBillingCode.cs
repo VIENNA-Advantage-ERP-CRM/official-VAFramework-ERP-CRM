@@ -62,7 +62,7 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "VAB_BillingCode_ID=" + GetVAB_BillingCode_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAB_BillingCode_ID=" + GetVAB_BillingCode_ID(), Get_TrxName());
             }
             return true;
         }	//	afterSave

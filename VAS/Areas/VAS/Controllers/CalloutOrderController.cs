@@ -25,35 +25,35 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID, VAB_BusinessPartner_ID, M_PriceList_ID, M_PriceList_Version_ID;
+                int VAM_Product_ID, VAB_BusinessPartner_ID, VAM_PriceList_ID, VAM_PriceListVersion_ID;
                 decimal Qty;
                 bool isSOTrx;
 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 VAB_BusinessPartner_ID = Util.GetValueOfInt(paramValue[1].ToString());
                 Qty = Util.GetValueOfDecimal(paramValue[2].ToString());
                 isSOTrx = Util.GetValueOfBool(paramValue[3].ToString());
-                M_PriceList_ID = Util.GetValueOfInt(paramValue[4].ToString());
-                M_PriceList_Version_ID = Util.GetValueOfInt(paramValue[5].ToString());
+                VAM_PriceList_ID = Util.GetValueOfInt(paramValue[4].ToString());
+                VAM_PriceListVersion_ID = Util.GetValueOfInt(paramValue[5].ToString());
                 DateTime orderDate = System.Convert.ToDateTime(paramValue[6].ToString());
 
                 //End Assign parameter value
 
                 MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
-                            M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
+                            VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
 
-                //var M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
-                pp.SetM_PriceList_ID(M_PriceList_ID);
+                //var VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
+                pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 /** PLV is only accurate if PL selected in header */
-                //var M_PriceList_Version_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
-                pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                //var VAM_PriceListVersion_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceListVersion_ID");
+                pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
 
                 //var orderDate = System.Convert.ToDateTime(mTab.getValue("DateOrdered"));
                 pp.SetPriceDate(orderDate);
 
                 //Get product stock
-                MProduct product = MProduct.Get(ctx, M_Product_ID);
+                MProduct product = MProduct.Get(ctx, VAM_Product_ID);
 
 
                 VIS.DataContracts.ProductDataOut objInfo = new VIS.DataContracts.ProductDataOut
@@ -92,22 +92,22 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID, M_Warehouse_ID, M_AttributeSetInstance_ID, VAB_OrderLine_ID;
+                int VAM_Product_ID, VAM_Warehouse_ID, VAM_PFeature_SetInstance_ID, VAB_OrderLine_ID;
                 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                M_Warehouse_ID = Util.GetValueOfInt(paramValue[1].ToString());
-                M_AttributeSetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_Warehouse_ID = Util.GetValueOfInt(paramValue[1].ToString());
+                VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
                 VAB_OrderLine_ID = Util.GetValueOfInt(paramValue[3].ToString());
                 
                 //End Assign parameter value
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-                //var M_Warehouse_ID = ctx.getContextAsInt(WindowNo, "M_Warehouse_ID");
-                //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
-                Decimal? available = MStorage.GetQtyAvailable(M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, null);
+                //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
+                //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
+                Decimal? available = MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
                 
                 Decimal notReserved = MVABOrderLine.GetNotReserved(ctx,
-                                M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,
+                                VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                                 VAB_OrderLine_ID);
                 
                 List<Decimal?> retVal = new List<Decimal?>();
@@ -133,20 +133,20 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID, VAB_UOM_To_ID, QtyEntered;
+                int VAM_Product_ID, VAB_UOM_To_ID, QtyEntered;
 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
                 QtyEntered = Util.GetValueOfInt(paramValue[2].ToString());
                 
 
                 //End Assign parameter value
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-                //var M_Warehouse_ID = ctx.getContextAsInt(WindowNo, "M_Warehouse_ID");
-                //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
+                //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
+                //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
 
-                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
+                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                       VAB_UOM_To_ID, QtyEntered);
 
 
@@ -173,23 +173,23 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 string[] paramValue = fields.Split(',');
-                int M_Product_ID, VAB_UOM_To_ID, Price;
+                int VAM_Product_ID, VAB_UOM_To_ID, Price;
 
                 //Assign parameter value
-                M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[1].ToString());
                 Price = Util.GetValueOfInt(paramValue[2].ToString());
 
 
                 //End Assign parameter value
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-                //var M_Warehouse_ID = ctx.getContextAsInt(WindowNo, "M_Warehouse_ID");
-                //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
+                //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
+                //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
 
-                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
+                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
-                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductFrom(ctx, M_Product_ID,
+                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductFrom(ctx, VAM_Product_ID,
                VAB_UOM_To_ID, Price);
 
                 List<Decimal?> retlst = new List<Decimal?>();
@@ -218,17 +218,17 @@ namespace VIS.Controllers
                 int  VAB_UOM_To_ID;
 
                 //Assign parameter value
-                //M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                //VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
                 //Price = Util.GetValueOfInt(paramValue[2].ToString());
 
 
                 //End Assign parameter value
                 //var QtyOrdered = Utility.Util.getValueOfDecimal(mTab.getValue("QtyOrdered"));
-                //var M_Warehouse_ID = ctx.getContextAsInt(WindowNo, "M_Warehouse_ID");
-                //var M_AttributeSetInstance_ID = ctx.getContextAsInt(WindowNo, "M_AttributeSetInstance_ID");
+                //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
+                //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
 
-                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, M_Product_ID,
+                //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
                 int retValue=MUOM.GetPrecision(ctx, VAB_UOM_To_ID);

@@ -1375,7 +1375,7 @@
             <s:element minOccurs="1" maxOccurs="1" name="CS_CustomerTenentInfo_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="value" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="CS_ZoneMasterServer_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAA_Asset_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
@@ -1409,7 +1409,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="CS_CustomerTenantID" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="value" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="zoneMasterID" type="tns:ArrayOfString" />
-          <s:element minOccurs="0" maxOccurs="1" name="M_Product_ID" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="VAM_Product_ID" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="VAA_Asset_ID" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="VAF_UserContact_ID" type="tns:ArrayOfString" />
         </s:sequence>
@@ -1646,7 +1646,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="DBPort" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="DBService" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_ZoneMasterServer_ID" type="tns:ArrayOfString" />
-          <s:element minOccurs="0" maxOccurs="1" name="M_Product_ID" type="tns:ArrayOfString" />
+          <s:element minOccurs="0" maxOccurs="1" name="VAM_Product_ID" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_ZoneClientServer_ID" type="tns:ArrayOfString" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_DataBase_ID" type="tns:ArrayOfString" />
         </s:sequence>
@@ -1685,7 +1685,7 @@
           <s:element minOccurs="0" maxOccurs="1" name="DBPort" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="DBService" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_ZoneMasterServer_ID" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="M_Product_ID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VAM_Product_ID" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_ZoneClientServer_ID" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="CS_DataBase_ID" type="s:string" />
         </s:sequence>
@@ -2812,7 +2812,7 @@
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="VAA_Asset_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="CS_ZoneMasterServer_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -2958,7 +2958,7 @@
       <s:element name="GetAmount">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="m_product_id" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_id" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="user" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
@@ -2975,7 +2975,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="backupAfter" nillable="true" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="ipaddress" type="s:string" />
@@ -2994,7 +2994,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -3010,7 +3010,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="CS_ZoneMasterServer_ID" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />
           </s:sequence>
         </s:complexType>
@@ -3068,7 +3068,7 @@
       <s:complexType name="AssetInfo">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="ZoneMasterServer" type="tns:ArrayOfInt" />
-          <s:element minOccurs="0" maxOccurs="1" name="M_Product_ID" type="tns:ArrayOfInt" />
+          <s:element minOccurs="0" maxOccurs="1" name="VAM_Product_ID" type="tns:ArrayOfInt" />
           <s:element minOccurs="0" maxOccurs="1" name="VAA_Asset_ID" type="tns:ArrayOfInt" />
           <s:element minOccurs="0" maxOccurs="1" name="IsDBServerCreated" type="tns:ArrayOfBoolean" />
           <s:element minOccurs="0" maxOccurs="1" name="IsAppServerCreated" type="tns:ArrayOfBoolean" />
@@ -3079,7 +3079,7 @@
       <s:element name="GetRelatedProduct">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="M_Product_ID" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="VAM_Product_ID" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="VAF_UserContact_ID" type="s:int" />
             <s:element minOccurs="0" maxOccurs="1" name="SubscriptionType" type="s:string" />
             <s:element minOccurs="0" maxOccurs="1" name="accessKey" type="s:string" />

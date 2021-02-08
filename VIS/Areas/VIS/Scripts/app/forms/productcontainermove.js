@@ -107,14 +107,14 @@
 
             $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
-            $lblFromWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Warehouse_ID") + '</label>');
+            $lblFromWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Warehouse_ID") + '</label>');
             $cmbFromWarehouse = $('<select disabled class="vis-ev-col-readonly">');
             $formData.append($formDataCtrlWrp);
             $formDataCtrlWrp.append($cmbFromWarehouse).append($lblFromWarehouse);
 
             $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
-            $lblToWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_WarehouseTo_ID") + '</label>');
+            $lblToWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_WarehouseTo_ID") + '</label>');
             $cmbToWarehouse = $('<select disabled class="vis-ev-col-readonly">');
             $formDataR.append($formDataRCtrlWrp);
             $formDataRCtrlWrp.append($cmbToWarehouse).append($lblToWarehouse);
@@ -127,14 +127,14 @@
 
             $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
-            $lblFromLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + '</label>');
+            $lblFromLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Locator_ID") + '</label>');
             $cmbFromLocator = $('<select>');
             $formData.append($formDataCtrlWrp);
             $formDataCtrlWrp.append($cmbFromLocator).append($lblFromLocator);
 
             $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
-            $lblToLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_LocatorTo_ID") + '</label>');
+            $lblToLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_LocatorTo_ID") + '</label>');
             $cmbToLocator = $('<select>');
             $formDataR.append($formDataRCtrlWrp);
             $formDataRCtrlWrp.append($cmbToLocator).append($lblToLocator);
@@ -159,7 +159,7 @@
             $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
             var $formDataRBtnWrp = $('<div class="input-group-append">');
-            $lblToContainer = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_M_ProductContainerTo_ID") + '</label>');
+            $lblToContainer = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "Ref_VAM_ProductContainerTo_ID") + '</label>');
             $cmbToContainer = $('<select disabled class="VIS-container-move-combo-width" class="vis-ev-col-readonly" data-hasbtn=" ">');
             $btnToContainerTree = $('<span class="fa fa-cubes input-group-text VIS_buttons-ContainerTree VIS-pallet-icon VIS_Tree-Container-disabled"></span>');
             $formDataR.append($formDataRCtrlWrp);
@@ -540,7 +540,7 @@
 
         // load To warehouse
         function loadToWarehouse() {
-            var fromWarehouse_ID = VIS.context.getWindowContext($self.windowNo, "M_Warehouse_ID", true); // windowNo, context, onlyWindow
+            var fromWarehouse_ID = VIS.context.getWindowContext($self.windowNo, "VAM_Warehouse_ID", true); // windowNo, context, onlyWindow
             if (fromWarehouse_ID == "")
                 fromWarehouse_ID = 0;
             $.ajax({
@@ -682,11 +682,11 @@
                 field: "MoveQty", caption: VIS.Msg.translate(VIS.Env.getCtx(), "MoveQty"),
                 editable: { type: 'float' }, render: 'number:4', sortable: false, size: "10%"
             });
-            grdCols.push({ field: "M_ProductContainer_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_ProductContainer_ID"), hidden: true });
-            grdCols.push({ field: "M_PRODUCT_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_PRODUCT_ID"), hidden: true });
-            grdCols.push({ field: "M_AttributeSetInstance_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_AttributeSetInstance_ID"), size: "15%", hidden: true });
+            grdCols.push({ field: "VAM_ProductContainer_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_ProductContainer_ID"), hidden: true });
+            grdCols.push({ field: "VAM_Product_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"), hidden: true });
+            grdCols.push({ field: "VAM_PFeature_SetInstance_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_PFeature_SetInstance_ID"), size: "15%", hidden: true });
             grdCols.push({ field: "VAB_UOM_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAB_UOM_ID"), size: "15%", hidden: true });
-            grdCols.push({ field: "M_Transaction_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "M_Transaction_ID"), size: "15%", hidden: true });
+            grdCols.push({ field: "VAM_Inv_Trx_ID", caption: VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Inv_Trx_ID"), size: "15%", hidden: true });
 
 
             for (var j = 0; j < data.length; j++) {
@@ -696,14 +696,14 @@
                 row['ASI'] = data[j].ASI;
                 row['UomName'] = data[j].UomName;
                 row['ContainerQty'] = data[j].ContainerQty;
-                row['M_ProductContainer_ID'] = data[j].M_ProductContainer_ID;
-                row['M_Product_ID'] = data[j].M_Product_ID
-                row['M_AttributeSetInstance_ID'] = data[j].M_AttributeSetInstance_ID;
+                row['VAM_ProductContainer_ID'] = data[j].VAM_ProductContainer_ID;
+                row['VAM_Product_ID'] = data[j].VAM_Product_ID
+                row['VAM_PFeature_SetInstance_ID'] = data[j].VAM_PFeature_SetInstance_ID;
                 row['VAB_UOM_ID'] = data[j].VAB_UOM_ID;
 
                 if (multiselectData.length > 0) {
                     var obj = $.map(multiselectData, function (value) {
-                        if (value.M_Product_ID == data[j].M_Product_ID && value.M_AttributeSetInstance_ID == data[j].M_AttributeSetInstance_ID) {
+                        if (value.VAM_Product_ID == data[j].VAM_Product_ID && value.VAM_PFeature_SetInstance_ID == data[j].VAM_PFeature_SetInstance_ID) {
                             return value;
                         }
                     });
@@ -804,7 +804,7 @@
                 return false;
             };
             // get record Id
-            var recordId = VIS.context.getWindowContext($self.windowNo, "M_Movement_ID", true);
+            var recordId = VIS.context.getWindowContext($self.windowNo, "VAM_InventoryTransfer_ID", true);
 
             if (countRecordChanges > 0 || isMoveContainer || isWithoutContainer) {
                 if (!isMoveContainer && !isWithoutContainer && countRecordChanges > 0) {
@@ -818,15 +818,15 @@
                     for (var i = 0; i < w2ui[grdname].records.length; i++) {
                         var row = w2ui[grdname].records[i];
                         moveData.push({
-                            M_Product_ID: row.M_Product_ID,
-                            M_AttributeSetInstance_ID: row.M_AttributeSetInstance_ID,
+                            VAM_Product_ID: row.VAM_Product_ID,
+                            VAM_PFeature_SetInstance_ID: row.VAM_PFeature_SetInstance_ID,
                             VAB_UOM_ID: row.VAB_UOM_ID,
                             FromLocator: parseInt($cmbFromLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                             ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
                             MoveQty: row.ContainerQty,
-                            M_Movement_ID: recordId,
+                            VAM_InventoryTransfer_ID: recordId,
                             IsFullMoveContainer: isMoveContainer ? true : false,
                             IsfullContainerQtyWise: isWithoutContainer ? true : false
                         });
@@ -836,15 +836,15 @@
                     // then pass this limited inforrmation to server side -- for picking data of child record fo movement
                     if (moveData.length == 0 && isMoveContainer) {
                         moveData.push({
-                            M_Product_ID: 0,
-                            M_AttributeSetInstance_ID: 0,
+                            VAM_Product_ID: 0,
+                            VAM_PFeature_SetInstance_ID: 0,
                             VAB_UOM_ID: 0,
                             FromLocator: parseInt($cmbFromLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                             ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
                             MoveQty: 0,
-                            M_Movement_ID: recordId,
+                            VAM_InventoryTransfer_ID: recordId,
                             IsFullMoveContainer: isMoveContainer ? true : false,
                             IsfullContainerQtyWise: isWithoutContainer ? true : false
                         });
@@ -892,21 +892,21 @@
             var isMoveContainer = $moveFullContainer.is(":checked");
             var isWithoutContainer = $withoutContainer.is(":checked");
             // get record Id
-            var recordId = VIS.context.getWindowContext($self.windowNo, "M_Movement_ID", true);
+            var recordId = VIS.context.getWindowContext($self.windowNo, "VAM_InventoryTransfer_ID", true);
             var countRecordChanges = w2ui[grdname].getChanges().length;
             // when product move from continer to container
             if (MoveQty != 0) {
                 var row = w2ui[grdname].get(recid);
                 multiselectData.push({
-                    M_Product_ID: row.M_Product_ID,
-                    M_AttributeSetInstance_ID: row.M_AttributeSetInstance_ID,
+                    VAM_Product_ID: row.VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID: row.VAM_PFeature_SetInstance_ID,
                     VAB_UOM_ID: row.VAB_UOM_ID,
                     FromLocator: parseInt($cmbFromLocator.val()),
                     ToLocator: parseInt($cmbToLocator.val()),
                     FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                     ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
                     MoveQty: MoveQty,
-                    M_Movement_ID: recordId,
+                    VAM_InventoryTransfer_ID: recordId,
                     IsFullMoveContainer: isMoveContainer ? true : false,
                     IsfullContainerQtyWise: isWithoutContainer ? true : false
                 });

@@ -643,7 +643,7 @@ namespace VAdvantage.Model
                 && (Is_ValueChanged("Postal") || Is_ValueChanged("City"))
                 )
             {
-                MAccount.UpdateValueDescription(GetCtx(),
+                MVABAccount.UpdateValueDescription(GetCtx(),
                     "(C_LocFrom_ID=" + GetVAB_Address_ID()
                     + " OR C_LocTo_ID=" + GetVAB_Address_ID() + ")", Get_TrxName());
             }

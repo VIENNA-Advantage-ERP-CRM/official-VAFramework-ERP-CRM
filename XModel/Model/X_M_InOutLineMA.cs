@@ -11,29 +11,29 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_InOutLineMA
+    /** Generated Model for VAM_Inv_InOutLineMP
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_InOutLineMA : PO
+    public class X_VAM_Inv_InOutLineMP : PO
     {
-        public X_M_InOutLineMA(Context ctx, int M_InOutLineMA_ID, Trx trxName)
-            : base(ctx, M_InOutLineMA_ID, trxName)
+        public X_VAM_Inv_InOutLineMP(Context ctx, int VAM_Inv_InOutLineMP_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineMP_ID, trxName)
         {
-            /** if (M_InOutLineMA_ID == 0)
+            /** if (VAM_Inv_InOutLineMP_ID == 0)
             {
-            SetM_AttributeSetInstance_ID (0);
-            SetM_InOutLine_ID (0);
+            SetVAM_PFeature_SetInstance_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
             SetMovementQty (0.0);
             }
              */
         }
-        public X_M_InOutLineMA(Ctx ctx, int M_InOutLineMA_ID, Trx trxName)
-            : base(ctx, M_InOutLineMA_ID, trxName)
+        public X_VAM_Inv_InOutLineMP(Ctx ctx, int VAM_Inv_InOutLineMP_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineMP_ID, trxName)
         {
-            /** if (M_InOutLineMA_ID == 0)
+            /** if (VAM_Inv_InOutLineMP_ID == 0)
             {
-            SetM_AttributeSetInstance_ID (0);
-            SetM_InOutLine_ID (0);
+            SetVAM_PFeature_SetInstance_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
             SetMovementQty (0.0);
             }
              */
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineMA(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOutLineMP(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineMA(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOutLineMP(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOutLineMA(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Inv_InOutLineMP(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_InOutLineMA()
+        static X_VAM_Inv_InOutLineMP()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,8 +81,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =762;
 
-        /** TableName=M_InOutLineMA */
-        public static String Table_Name = "M_InOutLineMA";
+        /** TableName=VAM_Inv_InOutLineMP */
+        public static String Table_Name = "VAM_Inv_InOutLineMP";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -116,36 +116,36 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_InOutLineMA[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Inv_InOutLineMP[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID < 0) throw new ArgumentException("M_AttributeSetInstance_ID is mandatory.");
-            Set_ValueNoCheck("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+            if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException("VAM_PFeature_SetInstance_ID is mandatory.");
+            Set_ValueNoCheck("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID < 1) throw new ArgumentException("M_InOutLine_ID is mandatory.");
-            Set_ValueNoCheck("M_InOutLine_ID", M_InOutLine_ID);
+            if (VAM_Inv_InOutLine_ID < 1) throw new ArgumentException("VAM_Inv_InOutLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -153,7 +153,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetM_InOutLine_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAM_Inv_InOutLine_ID().ToString());
         }
         /** Set Movement Quantity.
         @param MovementQty Quantity of a product moved. */

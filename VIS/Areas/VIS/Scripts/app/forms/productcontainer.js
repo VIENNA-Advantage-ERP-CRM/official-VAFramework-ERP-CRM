@@ -70,14 +70,14 @@
 
             $formDataRow = $('<div class="VIS_formDataRow">');
             $formdata = $('<div id=PCont_WarehouseSearch_' + $self.windowNo + ' class="VIS_formData" style="margin-top:20px">');
-            $lblWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Warehouse_ID") + '</label><br>');
+            $lblWarehouse = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Warehouse_ID") + '</label><br>');
             $formdata.append($lblWarehouse);
             $formDataRow.append($formdata);
             $formLeftWrap.append($formDataRow);
 
             $formDataRow = $('<div class="VIS_formDataRow">');
             $formdata = $('<div id=PCont_LocatorSearch_' + $self.windowNo + ' class="VIS_formData" style="margin-top:20px">');
-            $lblLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "M_Locator_ID") + '</label><br>');
+            $lblLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Locator_ID") + '</label><br>');
             $formdata.append($lblLocator).append($LocatorSearch);
             $formDataRow.append($formdata);
             $formLeftWrap.append($formDataRow);
@@ -151,8 +151,8 @@
 
         //Warehouse control Load
         function loadControlWarehouse() {
-            _ReqLookUpWarehouse = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3798, VIS.DisplayType.Search, "M_Warehouse_ID", 0, false, null); //ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode
-            this.$ReqControlWarehouse = new VIS.Controls.VTextBoxButton("M_Warehouse_ID", true, true, true, VIS.DisplayType.Search, _ReqLookUpWarehouse); // columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup
+            _ReqLookUpWarehouse = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3798, VIS.DisplayType.Search, "VAM_Warehouse_ID", 0, false, null); //ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode
+            this.$ReqControlWarehouse = new VIS.Controls.VTextBoxButton("VAM_Warehouse_ID", true, true, true, VIS.DisplayType.Search, _ReqLookUpWarehouse); // columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup
             this.$ReqControlWarehouse.getControl().css("width", "55%");
             this.$ReqControlWarehouse.getBtn(0).css("height", "29px");
             this.$ReqControlWarehouse.getBtn(0).css("margin-top", "-1px");
@@ -166,15 +166,15 @@
 
             //this.$ReqControlWarehouse.fireValueChanged = locationChanged;
 
-            var WarehouseId = GetValuefromContext($self.windowNo, "M_Warehouse_ID");
+            var WarehouseId = GetValuefromContext($self.windowNo, "VAM_Warehouse_ID");
             $ReqControlWarehouse.setValue(WarehouseId);
         };
 
         // Locator Control Load
         function loadControlLocator() {
-            //_ReqLookUpLocator = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3537, VIS.DisplayType.Locator, "M_Locator_ID", 0, false, null); //ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode
+            //_ReqLookUpLocator = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3537, VIS.DisplayType.Locator, "VAM_Locator_ID", 0, false, null); //ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode
             _ReqLookUpLocator = new VIS.MLocatorLookup(VIS.Env.getCtx(), $self.windowNo);
-            this.$ReqControlLocator = new VIS.Controls.VLocator("M_Locator_ID", true, true, true, VIS.DisplayType.Locator, _ReqLookUpLocator); // columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup
+            this.$ReqControlLocator = new VIS.Controls.VLocator("VAM_Locator_ID", true, true, true, VIS.DisplayType.Locator, _ReqLookUpLocator); // columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup
             this.$ReqControlLocator.getControl().css("width", "55%");
             this.$ReqControlLocator.getBtn(0).css("height", "29px");
             this.$ReqControlLocator.getBtn(0).css("margin-top", "-1px");
@@ -188,7 +188,7 @@
 
             //this.$ReqControlLocator.fireValueChanged = locationChanged;
 
-            var locatorId = GetValuefromContext($self.windowNo, "M_Locator_ID");
+            var locatorId = GetValuefromContext($self.windowNo, "VAM_Locator_ID");
             $ReqControlLocator.setValue(locatorId);
         }; 
 
@@ -230,12 +230,12 @@
             grdCols.push({ field: "Width", caption: VIS.Msg.getMsg("Width"), size: "15%" });
             grdCols.push({ field: "Height", caption: VIS.Msg.getMsg("Height"), size: "15%" });
             grdCols.push({ field: "ParentPath", caption: VIS.Msg.getMsg("ParentPath"), size: "22%" });
-            grdCols.push({ field: "M_ProductContainer_ID", caption: VIS.Msg.getMsg("M_ProductContainer_ID"), hidden: true });
+            grdCols.push({ field: "VAM_ProductContainer_ID", caption: VIS.Msg.getMsg("VAM_ProductContainer_ID"), hidden: true });
             grdCols.push({ field: "Ref_M_Container_ID", caption: VIS.Msg.getMsg("Ref_M_Container_ID"), hidden: true });
 
             for (var j = 0; j < data.length; j++) {
                 var row = {};
-                row['M_ProductContainer_ID'] = data[j].M_ProductContainer_ID;
+                row['VAM_ProductContainer_ID'] = data[j].VAM_ProductContainer_ID;
                 row['Ref_M_Container_ID'] = data[j].Ref_M_Container_ID;
                 row['ContainerName'] = data[j].ContainerName;
                 row['ParentPath'] = data[j].ParentPath;
@@ -270,10 +270,10 @@
                 records: grdRows,
                 onClick: function (event) {
                     //if (event.column < 8 && CGrid.records.length > 0) {
-                    $selectedContainerId = CGrid.get(event.recid).M_ProductContainer_ID;
+                    $selectedContainerId = CGrid.get(event.recid).VAM_ProductContainer_ID;
                     //}
                     //gridRecordId = [];
-                    //gridRecordId.push(CGrid.get(event.recid).M_ProductContainer_ID);
+                    //gridRecordId.push(CGrid.get(event.recid).VAM_ProductContainer_ID);
                 },
             });
         };

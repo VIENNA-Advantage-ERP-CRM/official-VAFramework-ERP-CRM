@@ -69,7 +69,7 @@ namespace VAdvantage.Acct
             _line.SetQty(_issue.GetMovementQty(), true);    //  sets Trx and Storage Qty
 
             //	Pseudo Line Check
-            if (_line.GetM_Product_ID() == 0)
+            if (_line.GetVAM_Product_ID() == 0)
             {
                 log.Warning(_line.ToString() + " - No Product");
             }
@@ -121,7 +121,7 @@ namespace VAdvantage.Acct
 
             MProject project = new MProject(GetCtx(), _issue.GetVAB_Project_ID(), null);
             String ProjectCategory = project.GetProjectCategory();
-            MProduct product = MProduct.Get(GetCtx(), _issue.GetM_Product_ID());
+            MProduct product = MProduct.Get(GetCtx(), _issue.GetVAM_Product_ID());
 
             //  Line pointers
             FactLine dr = null;
@@ -129,7 +129,7 @@ namespace VAdvantage.Acct
 
             //  Issue Cost
             Decimal? cost = null;
-            if (_issue.GetM_InOutLine_ID() != 0)
+            if (_issue.GetVAM_Inv_InOutLine_ID() != 0)
             {
                 cost = GetPOCost(as1);
             }
@@ -159,8 +159,8 @@ namespace VAdvantage.Acct
             cr = fact.CreateLine(_line,
                 _line.GetAccount(acctType, as1),
                 as1.GetVAB_Currency_ID(), null, cost);
-            cr.SetM_Locator_ID(_line.GetM_Locator_ID());
-            cr.SetLocationFromLocator(_line.GetM_Locator_ID(), true);	// from Loc
+            cr.SetVAM_Locator_ID(_line.GetVAM_Locator_ID());
+            cr.SetLocationFromLocator(_line.GetVAM_Locator_ID(), true);	// from Loc
             //
             List<Fact> facts = new List<Fact>();
             facts.Add(fact);
@@ -178,9 +178,9 @@ namespace VAdvantage.Acct
             //	Uses PO Date
             String sql = "SELECT currencyConvert(ol.PriceActual, o.VAB_Currency_ID, @param1, o.DateOrdered, o.VAB_CurrencyType_ID, @param2, @param3) "
                 + "FROM VAB_OrderLine ol"
-                + " INNER JOIN M_InOutLine iol ON (iol.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
+                + " INNER JOIN VAM_Inv_InOutLine iol ON (iol.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
                 + " INNER JOIN VAB_Order o ON (o.VAB_Order_ID=ol.VAB_Order_ID) "
-                + "WHERE iol.M_InOutLine_ID=@param4";
+                + "WHERE iol.VAM_Inv_InOutLine_ID=@param4";
             IDataReader idr = null;
             try
             {
@@ -188,7 +188,7 @@ namespace VAdvantage.Acct
                 param[0] = new SqlParameter("@param1", as1.GetVAB_Currency_ID());
                 param[1] = new SqlParameter("@param2", GetVAF_Client_ID());
                 param[2] = new SqlParameter("@param3", GetVAF_Org_ID());
-                param[3] = new SqlParameter("@param4", _issue.GetM_InOutLine_ID());
+                param[3] = new SqlParameter("@param4", _issue.GetVAM_Inv_InOutLine_ID());
 
                 idr = DataBase.DB.ExecuteReader(sql, param, null);
 
@@ -199,7 +199,7 @@ namespace VAdvantage.Acct
                 }
                 else
                 {
-                    log.Warning("Not found for M_InOutLine_ID=" + _issue.GetM_InOutLine_ID());
+                    log.Warning("Not found for VAM_Inv_InOutLine_ID=" + _issue.GetVAM_Inv_InOutLine_ID());
                 }
                 idr.Close();
             }

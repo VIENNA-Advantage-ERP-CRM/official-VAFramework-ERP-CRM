@@ -76,7 +76,7 @@
                 m_where += " OR VAB_Payment_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 208) {//MProduct.Table_ID){
-                m_where += " OR M_Product_ID=" + Record_ID;
+                m_where += " OR VAM_Product_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 203) {//MProject.Table_ID){
                 m_where += " OR VAB_Project_ID=" + Record_ID;
@@ -181,12 +181,12 @@
                         tab.setValue("VAB_Invoice_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 208)//MProduct.Table_ID)
-                        tab.setValue("M_Product_ID", Record_ID);
+                        tab.setValue("VAM_Product_ID", Record_ID);
                     else if (VAF_TableView_ID == 335)//MPayment.Table_ID)
                         tab.setValue("VAB_Payment_ID", Record_ID);
                         //
                     else if (VAF_TableView_ID == 319)// MInOut.Table_ID)
-                        tab.setValue("M_InOut_ID", Record_ID);
+                        tab.setValue("VAM_Inv_InOut_ID", Record_ID);
                 };
 
 

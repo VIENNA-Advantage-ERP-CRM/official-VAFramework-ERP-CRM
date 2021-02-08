@@ -43,12 +43,12 @@ namespace VIS.Models
         {
             List<Product> lstProduct = new List<Product>();
             DataSet ds = new DataSet();
-            string sql = "SELECT M_Product_ID, Name "
-                    + "FROM M_Product "
+            string sql = "SELECT VAM_Product_ID, Name "
+                    + "FROM VAM_Product "
                     + "WHERE IsBOM='Y' AND IsVerified='Y' AND IsActive='Y' "
                     + "ORDER BY Name";
 
-            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "M_Product", true, false);    
+            sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAM_Product", true, false);    
             ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null)
             {
@@ -58,7 +58,7 @@ namespace VIS.Models
                     {
                         lstProduct.Add(new Product()
                         {
-                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["M_Product_ID"]),
+                            ID = Convert.ToInt32(ds.Tables[0].Rows[i]["VAM_Product_ID"]),
                             Value = Convert.ToString(ds.Tables[0].Rows[i]["NAME"])
                             
                         });
@@ -188,15 +188,15 @@ namespace VIS.Models
                 for (int i = 0; i < bomLines.Length; i++)
                 {
                     AddBOMLine(ctx,bomLines[i], qty);
-                    objproduct = new MProduct(ctx, Util.GetValueOfInt(bomLines[i].GetM_ProductBOM_ID()), null);
+                    objproduct = new MProduct(ctx, Util.GetValueOfInt(bomLines[i].GetVAM_ProductBOM_ID()), null);
                     lstBOMLines.Add(new BOMLines()
                     {
                             BOMType=Util.GetValueOfString(bomLines[i].GetBOMType()),
                             BOMTypeName=GetBOMType(Util.GetValueOfString(bomLines[i].GetBOMType())),
                             BOMQty=Util.GetValueOfString(bomLines[i].GetBOMQty()),
-                            ProductID= Util.GetValueOfString(bomLines[i].GetM_ProductBOM_ID()),
+                            ProductID= Util.GetValueOfString(bomLines[i].GetVAM_ProductBOM_ID()),
                             ProductName = Util.GetValueOfString(objproduct.GetName()),
-                            ProductBOMID=Util.GetValueOfString(bomLines[i].GetM_Product_BOM_ID()),
+                            ProductBOMID=Util.GetValueOfString(bomLines[i].GetVAM_Product_BOM_ID()),
                             LineNo =Util.GetValueOfString(bomLines[i].GetLine()),
                             Description =Util.GetValueOfString(bomLines[i].GetDescription())
                     });
@@ -235,8 +235,8 @@ namespace VIS.Models
             }
             else
             {
-              //  GetDisplay(line.GetM_Product_ID(),
-                //    product.GetM_Product_ID(), bomType, product.GetName(), lineQty);
+              //  GetDisplay(line.GetVAM_Product_ID(),
+                //    product.GetVAM_Product_ID(), bomType, product.GetName(), lineQty);
             }
 
         }
@@ -297,10 +297,10 @@ namespace VIS.Models
                     
                     if (_selectionList[i].IsSelected)
                     {
-                        int M_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
+                        int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
                         MVABOrderLine ol = new MVABOrderLine(order);
-                        ol.SetM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
+                        ol.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         ol.SetQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         ol.SetPrice();
                         ol.SetTax();
@@ -343,10 +343,10 @@ namespace VIS.Models
                 {
                     if (_selectionList[i].IsSelected)
                     {
-                        int M_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
+                        int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
                         MInvoiceLine il = new MInvoiceLine(invoice);
-                        il.SetM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
+                        il.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         il.SetQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         il.SetPrice();
                         il.SetTax();
@@ -391,10 +391,10 @@ namespace VIS.Models
                 {
                     if (_selectionList[i].IsSelected)
                     {
-                        int M_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
+                        int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
                         MProjectLine pl = new MProjectLine(project);
-                        pl.SetM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
+                        pl.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         pl.SetPlannedQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         if (pl.Save())
                         {
@@ -418,7 +418,7 @@ namespace VIS.Models
             string sql = "select lst.Name from VAF_CtrlRef_List  lst "
                        + " INNER JOIN VAF_Control_Ref re"
                        + " ON re.VAF_Control_Ref_id=lst.VAF_Control_Ref_id"
-                       + " where re.name='M_Product BOM Product TypeX' and lst.value='" + BOMTypeValue + "'";
+                       + " where re.name='VAM_Product BOM Product TypeX' and lst.value='" + BOMTypeValue + "'";
             return Util.GetValueOfString(DB.ExecuteScalar(sql));
         }
     }

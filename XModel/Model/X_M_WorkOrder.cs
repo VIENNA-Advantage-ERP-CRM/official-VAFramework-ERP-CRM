@@ -29,9 +29,9 @@
             SetDocumentNo (null);
             SetIsApproved (false);	// @IsApproved@
             SetIsSOTrx (true);	// Y
-            SetM_Locator_ID (0);
-            SetM_Product_ID (0);
-            SetM_Warehouse_ID (0);	// @#M_Warehouse_ID@
+            SetVAM_Locator_ID (0);
+            SetVAM_Product_ID (0);
+            SetVAM_Warehouse_ID (0);	// @#VAM_Warehouse_ID@
             SetM_WorkOrderClass_ID (0);
             SetM_WorkOrder_ID (0);
             SetPosted (false);	// N
@@ -59,9 +59,9 @@
             SetDocumentNo (null);
             SetIsApproved (false);	// @IsApproved@
             SetIsSOTrx (true);	// Y
-            SetM_Locator_ID (0);
-            SetM_Product_ID (0);
-            SetM_Warehouse_ID (0);	// @#M_Warehouse_ID@
+            SetVAM_Locator_ID (0);
+            SetVAM_Product_ID (0);
+            SetVAM_Warehouse_ID (0);	// @#VAM_Warehouse_ID@
             SetM_WorkOrderClass_ID (0);
             SetM_WorkOrder_ID (0);
             SetPosted (false);	// N
@@ -638,67 +638,67 @@
             return Convert.ToInt32(ii);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set BOM.
-        @param M_BOM_ID Bill of Materials */
-        public void SetM_BOM_ID(int M_BOM_ID)
+        @param VAM_BOM_ID Bill of Materials */
+        public void SetVAM_BOM_ID(int VAM_BOM_ID)
         {
-            if (M_BOM_ID <= 0) Set_Value("M_BOM_ID", null);
+            if (VAM_BOM_ID <= 0) Set_Value("VAM_BOM_ID", null);
             else
-                Set_Value("M_BOM_ID", M_BOM_ID);
+                Set_Value("VAM_BOM_ID", VAM_BOM_ID);
         }
         /** Get BOM.
         @return Bill of Materials */
-        public int GetM_BOM_ID()
+        public int GetVAM_BOM_ID()
         {
-            Object ii = Get_Value("M_BOM_ID");
+            Object ii = Get_Value("VAM_BOM_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** M_Locator_ID VAF_Control_Ref_ID=446 */
-        public static int M_LOCATOR_ID_VAF_Control_Ref_ID = 446;
+        /** VAM_Locator_ID VAF_Control_Ref_ID=446 */
+        public static int VAM_Locator_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory.");
-            Set_Value("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory.");
+            Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_Value("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -719,17 +719,17 @@
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_ValueNoCheck("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

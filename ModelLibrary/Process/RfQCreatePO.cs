@@ -158,7 +158,7 @@ namespace VAdvantage.Process
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
                             MVABOrderLine ol = new MVABOrderLine(order);
-                            ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
+                            ol.SetVAM_Product_ID(line.GetRfQLine().GetVAM_Product_ID(),
                                 qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());
                             ol.SetQty(qty.GetRfQLineQty().GetQty());
@@ -166,7 +166,7 @@ namespace VAdvantage.Process
                             ol.SetPrice(price == null ? Env.ZERO : price.Value);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
                             MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
-                            ol.SetM_AttributeSetInstance_ID(Rfqline.GetM_AttributeSetInstance_ID());
+                            ol.SetVAM_PFeature_SetInstance_ID(Rfqline.GetVAM_PFeature_SetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);
                             ol.SetPriceList(price);
@@ -251,7 +251,7 @@ namespace VAdvantage.Process
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
                             MVABOrderLine ol = new MVABOrderLine(order);
-                            ol.SetM_Product_ID(line.GetRfQLine().GetM_Product_ID(),
+                            ol.SetVAM_Product_ID(line.GetRfQLine().GetVAM_Product_ID(),
                                 qty.GetRfQLineQty().GetVAB_UOM_ID());
                             ol.SetDescription(line.GetDescription());
                             ol.SetQty(qty.GetRfQLineQty().GetQty());
@@ -259,7 +259,7 @@ namespace VAdvantage.Process
                             ol.SetPriceActual(price);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
                             MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
-                            ol.SetM_AttributeSetInstance_ID(Rfqline.GetM_AttributeSetInstance_ID());
+                            ol.SetVAM_PFeature_SetInstance_ID(Rfqline.GetVAM_PFeature_SetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);
                             ol.SetPriceList(price);

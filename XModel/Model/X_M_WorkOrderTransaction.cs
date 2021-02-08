@@ -30,7 +30,7 @@
             SetIsApproved (false);	// @IsApproved@
             SetIsOptionalFrom (false);	// N
             SetIsOptionalTo (false);	// N
-            SetM_Product_ID (0);
+            SetVAM_Product_ID (0);
             SetM_WorkOrderTransaction_ID (0);
             SetM_WorkOrder_ID (0);
             SetPosted (false);	// N
@@ -56,7 +56,7 @@
             SetIsApproved (false);	// @IsApproved@
             SetIsOptionalFrom (false);	// N
             SetIsOptionalTo (false);	// N
-            SetM_Product_ID (0);
+            SetVAM_Product_ID (0);
             SetM_WorkOrderTransaction_ID (0);
             SetM_WorkOrder_ID (0);
             SetPosted (false);	// N
@@ -575,36 +575,36 @@
             return false;
         }
 
-        /** M_Locator_ID VAF_Control_Ref_ID=446 */
-        public static int M_LOCATOR_ID_VAF_Control_Ref_ID = 446;
+        /** VAM_Locator_ID VAF_Control_Ref_ID=446 */
+        public static int VAM_Locator_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID <= 0) Set_Value("M_Locator_ID", null);
+            if (VAM_Locator_ID <= 0) Set_Value("VAM_Locator_ID", null);
             else
-                Set_Value("M_Locator_ID", M_Locator_ID);
+                Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_Value("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

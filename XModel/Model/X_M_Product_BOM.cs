@@ -9,44 +9,44 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for M_Product_BOM
+    using System.Data;/** Generated Model for VAM_Product_BOM
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Product_BOM : PO
+    public class X_VAM_Product_BOM : PO
     {
-        public X_M_Product_BOM(Context ctx, int M_Product_BOM_ID, Trx trxName)
-            : base(ctx, M_Product_BOM_ID, trxName)
-        {/** if (M_Product_BOM_ID == 0){SetBOMQty (0.0);SetLine (0);// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_Product_BOM WHERE M_Product_ID=@M_Product_ID@
-SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
+        public X_VAM_Product_BOM(Context ctx, int VAM_Product_BOM_ID, Trx trxName)
+            : base(ctx, VAM_Product_BOM_ID, trxName)
+        {/** if (VAM_Product_BOM_ID == 0){SetBOMQty (0.0);SetLine (0);// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_Product_BOM WHERE VAM_Product_ID=@VAM_Product_ID@
+SetVAM_ProductBOM_ID (0);SetVAM_Product_BOM_ID (0);SetVAM_Product_ID (0);} */
         }
-        public X_M_Product_BOM(Ctx ctx, int M_Product_BOM_ID, Trx trxName)
-            : base(ctx, M_Product_BOM_ID, trxName)
-        {/** if (M_Product_BOM_ID == 0){SetBOMQty (0.0);SetLine (0);// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_Product_BOM WHERE M_Product_ID=@M_Product_ID@
-SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
+        public X_VAM_Product_BOM(Ctx ctx, int VAM_Product_BOM_ID, Trx trxName)
+            : base(ctx, VAM_Product_BOM_ID, trxName)
+        {/** if (VAM_Product_BOM_ID == 0){SetBOMQty (0.0);SetLine (0);// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_Product_BOM WHERE VAM_Product_ID=@VAM_Product_ID@
+SetVAM_ProductBOM_ID (0);SetVAM_Product_BOM_ID (0);SetVAM_Product_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Product_BOM(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Product_BOM(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Product_BOM(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Product_BOM(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_Product_BOM(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_Product_BOM(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_M_Product_BOM() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_Product_BOM() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27763409763836L;/** Last Updated Timestamp 12/9/2016 5:24:07 PM */
         public static long updatedMS = 1481284447047L;/** VAF_TableView_ID=383 */
         public static int Table_ID; // =383;
-        /** TableName=M_Product_BOM */
-        public static String Table_Name = "M_Product_BOM";
+        /** TableName=VAM_Product_BOM */
+        public static String Table_Name = "VAM_Product_BOM";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -61,7 +61,7 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_M_Product_BOM[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Quantity.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAM_Product_BOM[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Quantity.
 @param BOMQty Bill of Materials Quantity */
         public void SetBOMQty(Decimal? BOMQty) { if (BOMQty == null) throw new ArgumentException("BOMQty is mandatory."); Set_Value("BOMQty", (Decimal?)BOMQty); }/** Get Quantity.
 @return Bill of Materials Quantity */
@@ -111,22 +111,22 @@ SetM_ProductBOM_ID (0);SetM_Product_BOM_ID (0);SetM_Product_ID (0);} */
         public void SetLine(int Line) { Set_Value("Line", Line); }/** Get Line No.
 @return Unique line for this document */
         public int GetLine() { Object ii = Get_Value("Line"); if (ii == null) return 0; return Convert.ToInt32(ii); }
-        /** M_ProductBOM_ID VAF_Control_Ref_ID=162 */
-        public static int M_PRODUCTBOM_ID_VAF_Control_Ref_ID = 162;/** Set Component.
-@param M_ProductBOM_ID Bill of Material Component Product */
-        public void SetM_ProductBOM_ID(int M_ProductBOM_ID) { if (M_ProductBOM_ID < 1) throw new ArgumentException("M_ProductBOM_ID is mandatory."); Set_Value("M_ProductBOM_ID", M_ProductBOM_ID); }/** Get Component.
+        /** VAM_ProductBOM_ID VAF_Control_Ref_ID=162 */
+        public static int VAM_ProductBOM_ID_VAF_Control_Ref_ID = 162;/** Set Component.
+@param VAM_ProductBOM_ID Bill of Material Component Product */
+        public void SetVAM_ProductBOM_ID(int VAM_ProductBOM_ID) { if (VAM_ProductBOM_ID < 1) throw new ArgumentException("VAM_ProductBOM_ID is mandatory."); Set_Value("VAM_ProductBOM_ID", VAM_ProductBOM_ID); }/** Get Component.
 @return Bill of Material Component Product */
-        public int GetM_ProductBOM_ID() { Object ii = Get_Value("M_ProductBOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
+        public int GetVAM_ProductBOM_ID() { Object ii = Get_Value("VAM_ProductBOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetM_ProductBOM_ID().ToString()); }/** Set BOM Line.
-@param M_Product_BOM_ID BOM Line */
-        public void SetM_Product_BOM_ID(int M_Product_BOM_ID) { if (M_Product_BOM_ID < 1) throw new ArgumentException("M_Product_BOM_ID is mandatory."); Set_ValueNoCheck("M_Product_BOM_ID", M_Product_BOM_ID); }/** Get BOM Line.
+        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetVAM_ProductBOM_ID().ToString()); }/** Set BOM Line.
+@param VAM_Product_BOM_ID BOM Line */
+        public void SetVAM_Product_BOM_ID(int VAM_Product_BOM_ID) { if (VAM_Product_BOM_ID < 1) throw new ArgumentException("VAM_Product_BOM_ID is mandatory."); Set_ValueNoCheck("VAM_Product_BOM_ID", VAM_Product_BOM_ID); }/** Get BOM Line.
 @return BOM Line */
-        public int GetM_Product_BOM_ID() { Object ii = Get_Value("M_Product_BOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
-@param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID) { if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory."); Set_ValueNoCheck("M_Product_ID", M_Product_ID); }/** Get Product.
+        public int GetVAM_Product_BOM_ID() { Object ii = Get_Value("VAM_Product_BOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
+@param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID) { if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory."); Set_ValueNoCheck("VAM_Product_ID", VAM_Product_ID); }/** Get Product.
 @return Product, Service, Item */
-        public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cost.
+        public int GetVAM_Product_ID() { Object ii = Get_Value("VAM_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Cost.
 @param VA019_Cost Cost */
         public void SetVA019_Cost(Decimal? VA019_Cost) { Set_Value("VA019_Cost", (Decimal?)VA019_Cost); }/** Get Cost.
 @return Cost */

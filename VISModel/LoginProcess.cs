@@ -192,7 +192,7 @@ namespace VAdvantage.Login
             //  Warehouse Info
             if (warehouse != null)
             {
-                m_ctx.SetContext("#M_Warehouse_ID", warehouse.GetKey());
+                m_ctx.SetContext("#VAM_Warehouse_ID", warehouse.GetKey());
                 Ini.SetProperty(Ini.P_WAREHOUSE, warehouse.GetName());
             }
 
@@ -795,13 +795,13 @@ namespace VAdvantage.Login
                 throw new Exception("Org missing");
             m_org = org;
             if (m_store != null)
-                return new KeyNamePair[] { new KeyNamePair(m_store.GetM_Warehouse_ID(), m_store.GetName() + " Warehouse") };
+                return new KeyNamePair[] { new KeyNamePair(m_store.GetVAM_Warehouse_ID(), m_store.GetName() + " Warehouse") };
 
             //	s_log.info("loadWarehouses - Org: " + org.toStringX());
 
             List<KeyNamePair> list = new List<KeyNamePair>();
             KeyNamePair[] retValue = null;
-            String sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse "
+            String sql = "SELECT VAM_Warehouse_ID, Name FROM VAM_Warehouse "
                 + "WHERE VAF_Org_ID=@p1 AND IsActive='Y' "
                 + "ORDER BY Name";
             IDataReader dr = null;

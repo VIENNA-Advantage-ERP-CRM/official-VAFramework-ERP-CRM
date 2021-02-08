@@ -6,7 +6,7 @@
  * Date           :     01-May-2015
   ******************************************************/
 ; (function (VIS, $) {
-    function infoProduct(modal, WindowNo, M_Warehouse_ID, M_PriceList_ID, value, tableName, keyColumn, multiSelection, validationCode) {
+    function infoProduct(modal, WindowNo, VAM_Warehouse_ID, VAM_PriceList_ID, value, tableName, keyColumn, multiSelection, validationCode) {
 
         this.onClose = null;
 
@@ -75,7 +75,7 @@
         var lstWarehouse = null;
         var lstPriceList = null;
         var PriceList = null;
-        var M_PriceList_Version_ID = null;
+        var VAM_PriceListVersion_ID = null;
         var infoLines = [];
         var savedProduct = [];
         var refreshUI = false;
@@ -111,9 +111,9 @@
                 { field: 'OnHand', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOnHand'), size: '100px' },
                 { field: 'Reserved', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyReserved'), size: '100px' },
                 { field: 'Ordered', caption: VIS.Msg.getElement(VIS.Env.getCtx(), 'QtyOrdered'), size: '100px' },
-                { field: 'M_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
-                { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true },
-                { field: 'M_Product_ID', caption: 'M_Product_ID', size: '150px', hidden: true },
+                { field: 'VAM_Warehouse_ID', caption: 'WareHouse ID', size: '150px', hidden: true },
+                { field: 'VAM_PFeature_SetInstance_ID', caption: 'VAM_PFeature_SetInstance_ID', size: '150px', hidden: true },
+                { field: 'VAM_Product_ID', caption: 'VAM_Product_ID', size: '150px', hidden: true },
                 { field: 'ParentRec_ID', caption: 'Parent recid', size: '150px', hidden: true });
 
             inforoot.css("width", "100%");
@@ -190,11 +190,11 @@
             }
 
             //changes Mohit
-            lblAttributeSet = VIS.Msg.getElement(VIS.Env.getCtx(), "M_AttributeSet_ID");
+            lblAttributeSet = VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_PFeature_Set_ID");
             if (lblAttributeSet.indexOf('&') > -1) {
                 lblAttributeSet = lblAttributeSet.replace('&', '');
             }
-            lblAttrSetInstance = VIS.Msg.getElement(VIS.Env.getCtx(), "M_AttributeSetInstance_ID");
+            lblAttrSetInstance = VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_PFeature_SetInstance_ID");
             if (lblAttrSetInstance.indexOf('&') > -1) {
                 lblAttrSetInstance = lblAttrSetInstance.replace('&', '');
             }
@@ -320,10 +320,10 @@
             var srchCtrl = {
             };
 
-            cmbWarehoue = new VIS.Controls.VComboBox("M_Warehouse_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
+            cmbWarehoue = new VIS.Controls.VComboBox("VAM_Warehouse_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbWarehoue;
             srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
-            srchCtrl.ColumnName = "M_Warehouse_ID";
+            srchCtrl.ColumnName = "VAM_Warehouse_ID";
             var tdctrl = $("<td>");
             tr.append(tdctrl);
             Leftformfieldctrlwrp.append(cmbWarehoue.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
@@ -345,10 +345,10 @@
             var srchCtrl = {
             };
 
-            cmbPriceList = new VIS.Controls.VComboBox("M_PriceList_Version_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
+            cmbPriceList = new VIS.Controls.VComboBox("VAM_PriceListVersion_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbPriceList;
             srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
-            srchCtrl.ColumnName = "M_PriceList_Version_ID";
+            srchCtrl.ColumnName = "VAM_PriceListVersion_ID";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
             Leftformfieldctrlwrp.append(cmbPriceList.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
@@ -397,10 +397,10 @@
             //tableSArea.append(tr);
             var srchCtrl = {
             };
-            cmbAttributeSet = new VIS.Controls.VComboBox("M_AttributeSet_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
+            cmbAttributeSet = new VIS.Controls.VComboBox("VAM_PFeature_Set_ID", false, false, true, null, 50);// getControl(schema[item].VAF_Control_Ref_ID, schema[item].ColumnName, schema[item].Name, schema[item].VAF_Control_Ref_Value_ID, schema[item].lookup);
             srchCtrl.Ctrl = cmbAttributeSet;
             srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.tableDir;
-            srchCtrl.ColumnName = "M_AttributeSet_ID";
+            srchCtrl.ColumnName = "VAM_PFeature_Set_ID";
             var tdctrl = $("<td>");
             //tr.append(tdctrl);
             Leftformfieldctrlwrp.append(cmbAttributeSet.getControl().attr('data-placeholder', '').attr('placeholder', ' '));
@@ -508,9 +508,9 @@
             var srchCtrl = {
             };
             tr.empty();
-            var _WhereAttr = " M_AttributeSetInstance_ID IN (SELECT  asi.M_AttributeSetInstance_ID as M_AttributeSetInstance_ID   FROM M_AttributeSetInstance asi   WHERE asi.IsActive='Y' AND asi.M_ATTRIBUTESET_ID=" + cmbAttributeSet.ctrl.val() + ")";
-            _AttrSetInstLookUp = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, 8472, VIS.DisplayType.Search, "M_AttributeSetInstance_ID", 0, false, _WhereAttr);
-            $AttrSetInstControl = new VIS.Controls.VTextBoxButton("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.Search, _AttrSetInstLookUp);
+            var _WhereAttr = " VAM_PFeature_SetInstance_ID IN (SELECT  asi.VAM_PFeature_SetInstance_ID as VAM_PFeature_SetInstance_ID   FROM VAM_PFeature_SetInstance asi   WHERE asi.IsActive='Y' AND asi.VAM_PFeature_Set_ID=" + cmbAttributeSet.ctrl.val() + ")";
+            _AttrSetInstLookUp = VIS.MLookupFactory.get(VIS.Env.getCtx(), WindowNo, 8472, VIS.DisplayType.Search, "VAM_PFeature_SetInstance_ID", 0, false, _WhereAttr);
+            $AttrSetInstControl = new VIS.Controls.VTextBoxButton("VAM_PFeature_SetInstance_ID", false, false, true, VIS.DisplayType.Search, _AttrSetInstLookUp);
             $AttrSetInstControl.getControl();
             //$AttrSetInstControl.getBtn(0).css("height", "26px");
             //$AttrSetInstControl.getBtn(0).css("margin-top", "-1px");
@@ -519,7 +519,7 @@
             //$AttrSetInstControl.getBtn(1).css("margin-top", "-1px");
             srchCtrl.Ctrl = $AttrSetInstControl;
             srchCtrl.VAF_Control_Ref_ID = VIS.DisplayType.Search;
-            srchCtrl.ColumnName = "M_AttributeSetInstance_ID";
+            srchCtrl.ColumnName = "VAM_PFeature_SetInstance_ID";
             var td = $("<td>");
             var Leftformfieldwrp = $('<div class="input-group vis-input-wrap">');
             var Leftformfieldctrlwrp = $('<div class="vis-control-wrap">');
@@ -542,7 +542,7 @@
 
         initializeComponent();
 
-        InitInfo(M_Warehouse_ID, M_PriceList_ID);
+        InitInfo(VAM_Warehouse_ID, VAM_PriceList_ID);
 
         //var winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 0, "VAF_Tab_ID"));
         //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry));
@@ -565,12 +565,12 @@
         }
 
         var s_productFrom =
-            "M_Product p"
-            + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
-            + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
-            + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
+            "VAM_Product p"
+            + " LEFT OUTER JOIN VAM_ProductPrice pr ON (p.VAM_Product_ID=pr.VAM_Product_ID AND pr.IsActive='Y')"
+            + " LEFT OUTER JOIN VAM_PriceListVersion plv ON (pr.VAM_PriceListVersion_ID=plv.VAM_PriceListVersion_ID)"
+            + " LEFT OUTER JOIN VAM_PFeature_Set pa ON (p.VAM_PFeature_Set_ID=pa.VAM_PFeature_Set_ID)"
             + " LEFT OUTER JOIN VAB_UOM c ON (p.VAB_UOM_ID=c.VAB_UOM_ID)";
-        //+ " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+        //+ " LEFT OUTER JOIN VAM_Manufacturer mr ON (p.VAM_Product_ID=mr.VAM_Product_ID) LEFT OUTER JOIN VAM_ProductFeatures patr ON (p.VAM_Product_ID=patr.VAM_Product_ID)"
 
         function bindEvent() {
             if (!VIS.Application.isMobile) {
@@ -650,7 +650,7 @@
                 $AttrSetInstControl = null;
                 _AttrSetInstLookUp = null;
                 for (var i = 0; i < srchCtrls.length; i++) {
-                    if (srchCtrls[i].Ctrl.colName == "M_AttributeSetInstance_ID") {
+                    if (srchCtrls[i].Ctrl.colName == "VAM_PFeature_SetInstance_ID") {
                         srchCtrls.splice(i);
                     }
                 }
@@ -661,21 +661,21 @@
         };
 
         bindEvent();
-        //M_Warehouse_ID = VIS.context.getContextAsInt("#M_Warehouse_ID");
-        //InitInfo(M_Warehouse_ID, M_PriceList_ID);
+        //VAM_Warehouse_ID = VIS.context.getContextAsInt("#VAM_Warehouse_ID");
+        //InitInfo(VAM_Warehouse_ID, VAM_PriceList_ID);
 
-        function InitInfo(M_Warehouse_ID, M_PriceList_ID) {
+        function InitInfo(VAM_Warehouse_ID, VAM_PriceList_ID) {
             pattrLookup = new VIS.MPAttributeLookup(VIS.context, WindowNo);
-            $productAttribute = new VIS.Controls.VPAttribute("M_AttributeSetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, WindowNo, false, false, false, true);
+            $productAttribute = new VIS.Controls.VPAttribute("VAM_PFeature_SetInstance_ID", false, false, true, VIS.DisplayType.PAttribute, pattrLookup, WindowNo, false, false, false, true);
             cmbWarehoue.ctrl.append($('<Option value="' + 0 + '">' + "" + '</option>'));
             cmbPriceList.ctrl.append($('<Option value="' + 0 + '">' + "" + '</option>'));
             cmbAttributeSet.ctrl.append($('<Option value="' + 0 + '">' + "" + '</option>'));
             lstWarehouse = jQuery.parseJSON(lstWarehouse);
             lstPriceList = jQuery.parseJSON(lstPriceList);
-            if (M_PriceList_ID == 0) {
-                M_PriceList_ID = GetDefaultPriceList();
+            if (VAM_PriceList_ID == 0) {
+                VAM_PriceList_ID = GetDefaultPriceList();
             }
-            M_PriceList_Version_ID = FindPLV(VIS.Env.getCtx(), WindowNo, M_PriceList_ID);
+            VAM_PriceListVersion_ID = FindPLV(VIS.Env.getCtx(), WindowNo, VAM_PriceList_ID);
             GetWarehouse();
             //GetUOMS();
         }
@@ -692,8 +692,8 @@
 
         function GetWarehouse() {
             //var sql = VIS.MRole.getDefault().addAccessSQL(
-            //        "SELECT M_Warehouse_ID, Value || ' - ' || Name AS ValueName " + "FROM M_Warehouse " + "WHERE IsActive='Y'",
-            //        "M_Warehouse", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO)
+            //        "SELECT VAM_Warehouse_ID, Value || ' - ' || Name AS ValueName " + "FROM VAM_Warehouse " + "WHERE IsActive='Y'",
+            //        "VAM_Warehouse", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO)
             //        + " ORDER BY Value";
             //VIS.DB.executeReader(sql.toString(), null, GetWarehouseCallBack);
             // Added by Bharat on 31 May 2017 to remove client side queries
@@ -712,11 +712,11 @@
             // Added by Bharat on 31 May 2017 to remove client side queries
             if (data.length > 0) {
                 for (var i in data) {
-                    key = VIS.Utility.Util.getValueOfInt(data[i]["M_Warehouse_ID"]);
+                    key = VIS.Utility.Util.getValueOfInt(data[i]["VAM_Warehouse_ID"]);
                     value = VIS.Utility.Util.getValueOfString(data[i]["Name"]);
                     cmbWarehoue.getControl().append(" <option value=" + key + ">" + value + "</option>");
-                    if (key == M_Warehouse_ID) {
-                        cmbWarehoue.ctrl.val(M_Warehouse_ID);
+                    if (key == VAM_Warehouse_ID) {
+                        cmbWarehoue.ctrl.val(VAM_Warehouse_ID);
                     }
                 }
             }
@@ -724,12 +724,12 @@
             //    key = VIS.Utility.Util.getValueOfInt(dr.getString(0));
             //    value = dr.getString(1);
             //    cmbWarehoue.getControl().append(" <option value=" + key + ">" + value + "</option>");
-            //    if (key == M_Warehouse_ID) {
-            //        cmbWarehoue.ctrl.val(M_Warehouse_ID);
+            //    if (key == VAM_Warehouse_ID) {
+            //        cmbWarehoue.ctrl.val(VAM_Warehouse_ID);
             //    }
             //}
             //dr.close();
-            GetPriceList(M_PriceList_ID);
+            GetPriceList(VAM_PriceList_ID);
         }
 
         // function to check comma or dot from given value and return new value
@@ -783,8 +783,8 @@
 
         function GetDefaultPriceList() {
             var retValue = 0;
-            //var sql = "SELECT M_PriceList_ID FROM M_PriceList WHERE IsActive = 'Y' AND IsDefault = 'Y'";
-            //var qry = VIS.MRole.getDefault().addAccessSQL(sql, "M_PriceList", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO); // fully qualidfied - RO
+            //var sql = "SELECT VAM_PriceList_ID FROM VAM_PriceList WHERE IsActive = 'Y' AND IsDefault = 'Y'";
+            //var qry = VIS.MRole.getDefault().addAccessSQL(sql, "VAM_PriceList", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO); // fully qualidfied - RO
             //retValue = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(qry, null));
             //return retValue;
 
@@ -811,18 +811,18 @@
         //}
 
         function GetPriceList(PriceList) {
-            //var sql = "SELECT plv.M_PriceList_Version_ID,"
+            //var sql = "SELECT plv.VAM_PriceListVersion_ID,"
             //         + " plv.Name || ' (' || c.ISO_Code || ')' AS ValueName "
-            //         + "FROM M_PriceList_Version plv, M_PriceList pl, VAB_Currency c "
-            //         + "WHERE plv.M_PriceList_ID=pl.M_PriceList_ID" + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
+            //         + "FROM VAM_PriceListVersion plv, VAM_PriceList pl, VAB_Currency c "
+            //         + "WHERE plv.VAM_PriceList_ID=pl.VAM_PriceList_ID" + " AND pl.VAB_Currency_ID=c.VAB_Currency_ID"
             //         + " AND plv.IsActive='Y' AND pl.IsActive='Y'";
             //// Same PL currency as original one
             //if (PriceList != 0) {
-            //    sql += " AND EXISTS (SELECT * FROM M_PriceList xp WHERE xp.M_PriceList_ID=" + PriceList + ")";
+            //    sql += " AND EXISTS (SELECT * FROM VAM_PriceList xp WHERE xp.VAM_PriceList_ID=" + PriceList + ")";
             //    //   +" AND pl.VAB_Currency_ID=xp.VAB_Currency_ID)";
             //}
             //// Add Access & Order
-            //var qry = VIS.MRole.getDefault().addAccessSQL(sql, "M_PriceList_Version", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO) // fully qualidfied - RO
+            //var qry = VIS.MRole.getDefault().addAccessSQL(sql, "VAM_PriceListVersion", VIS.MRole.SQL_FULLYQUALIFIED, VIS.MRole.SQL_RO) // fully qualidfied - RO
             //        + " ORDER BY plv.Name";
 
             //VIS.DB.executeReader(qry.toString(), null, PriceListCallBack);
@@ -843,11 +843,11 @@
             // Added by Bharat on 31 May 2017 to remove client side queries
             if (data.length > 0) {
                 for (var i in data) {
-                    key = VIS.Utility.Util.getValueOfInt(data[i]["M_PriceList_Version_ID"]);
+                    key = VIS.Utility.Util.getValueOfInt(data[i]["VAM_PriceListVersion_ID"]);
                     value = VIS.Utility.Util.getValueOfString(data[i]["Name"]);
                     cmbPriceList.getControl().append(" <option value=" + key + ">" + value + "</option>");
-                    if (key == M_PriceList_Version_ID) {
-                        cmbPriceList.ctrl.val(M_PriceList_Version_ID);
+                    if (key == VAM_PriceListVersion_ID) {
+                        cmbPriceList.ctrl.val(VAM_PriceListVersion_ID);
                     }
                 }
             }
@@ -856,8 +856,8 @@
             //    key = VIS.Utility.Util.getValueOfInt(dr.getString(0));
             //    value = dr.getString(1);
             //    cmbPriceList.getControl().append(" <option value=" + key + ">" + value + "</option>");
-            //    if (key == M_PriceList_Version_ID) {
-            //        cmbPriceList.ctrl.val(M_PriceList_Version_ID);
+            //    if (key == VAM_PriceListVersion_ID) {
+            //        cmbPriceList.ctrl.val(VAM_PriceListVersion_ID);
             //    }
             //}
             //dr.close();
@@ -867,8 +867,8 @@
         //Mohit-------------
         function GetAttributeSet() {
             //var sql = VIS.MRole.getDefault().addAccessSQL(
-            //        "SELECT M_AttributeSet_ID, Name FROM M_AttributeSet WHERE IsActive='Y'",
-            //        "M_AttributeSet", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO)
+            //        "SELECT VAM_PFeature_Set_ID, Name FROM VAM_PFeature_Set WHERE IsActive='Y'",
+            //        "VAM_PFeature_Set", VIS.MRole.SQL_NOTQUALIFIED, VIS.MRole.SQL_RO)
             //        + " ORDER BY Name";
             //VIS.DB.executeReader(sql.toString(), null, GetAttributeSetCallBack);
 
@@ -894,7 +894,7 @@
             // Added by Bharat on 31 May 2017 to remove client side queries
             if (data.length > 0) {
                 for (var i in data) {
-                    key = VIS.Utility.Util.getValueOfInt(data[i]["M_AttributeSet_ID"]);
+                    key = VIS.Utility.Util.getValueOfInt(data[i]["VAM_PFeature_Set_ID"]);
                     value = VIS.Utility.Util.getValueOfString(data[i]["Name"]);
                     cmbAttributeSet.getControl().append(" <option value=" + key + ">" + value + "</option>");
                 }
@@ -903,7 +903,7 @@
         //end------------
 
 
-        function FindPLV(ctx, p_WindowNo, M_PriceList_ID) {
+        function FindPLV(ctx, p_WindowNo, VAM_PriceList_ID) {
             var priceDate = null;
             var retValue = 0;
             var dateStr = ctx.getContext(p_WindowNo, "DateOrdered");
@@ -926,17 +926,17 @@
 
             // Added by Bharat on 31 May 2017 to remove client side queries
             try {
-                var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceListVersion", { "PriceList": M_PriceList_ID }, null);
+                var data = VIS.dataContext.getJSONData(VIS.Application.contextUrl + "InfoProduct/GetPriceListVersion", { "PriceList": VAM_PriceList_ID }, null);
                 if (data.length > 0) {
                     for (var i in data) {
-                        var version_ID = VIS.Utility.Util.getValueOfInt(data[i]["M_PriceList_Version_ID"]);
+                        var version_ID = VIS.Utility.Util.getValueOfInt(data[i]["VAM_PriceListVersion_ID"]);
                         var validFrom = VIS.Utility.Util.getValueOfString(data[i]["ValidFrom"]);
                         if (priceDate > validFrom) {
                             retValue = version_ID;
                         }
                     }
                     if (retValue == 0) {
-                        retValue = VIS.Utility.Util.getValueOfInt(data[0]["M_PriceList_Version_ID"]);
+                        retValue = VIS.Utility.Util.getValueOfInt(data[0]["VAM_PriceListVersion_ID"]);
                     }
                 }
             }
@@ -946,11 +946,11 @@
             }
 
             //var retValue = 0;
-            //var sql = "SELECT plv.M_PriceList_Version_ID, plv.ValidFrom "
-            //   + "FROM M_PriceList pl, M_PriceList_Version plv "
-            //   + "WHERE pl.M_PriceList_ID=plv.M_PriceList_ID"
+            //var sql = "SELECT plv.VAM_PriceListVersion_ID, plv.ValidFrom "
+            //   + "FROM VAM_PriceList pl, VAM_PriceListVersion plv "
+            //   + "WHERE pl.VAM_PriceList_ID=plv.VAM_PriceList_ID"
             //   + " AND plv.IsActive='Y'"
-            //   + " AND pl.M_PriceList_ID=" + M_PriceList_ID					//	1
+            //   + " AND pl.VAM_PriceList_ID=" + VAM_PriceList_ID					//	1
             //   + " ORDER BY plv.ValidFrom DESC";
             //	find newest one
             //var dr = null;
@@ -998,38 +998,38 @@
                             var uom_ID = 0;
                             var name = "";
                             //var qty = drProd.getDecimal("vaicnt_quantity");
-                            //var M_Product_ID = drProd.getInt("M_Product_ID");
+                            //var VAM_Product_ID = drProd.getInt("VAM_Product_ID");
                             //var value = drProd.getString("value");
-                            //attr_ID = drProd.getInt("M_AttributeSetInstance_ID");
+                            //attr_ID = drProd.getInt("VAM_PFeature_SetInstance_ID");
                             //var attrName = drProd.getString("description");
                             //var countID = drProd.getInt("VAICNT_InventoryCountLine_ID");
                             //prodName = drProd.getString("name");
                             //uom = drProd.getString("uom");
                             //uom_ID = drProd.getInt("VAB_UOM_ID");
                             var qty = drProd[i]["VAICNT_Quantity"];
-                            var M_Product_ID = drProd[i]["M_Product_ID"];
+                            var VAM_Product_ID = drProd[i]["VAM_Product_ID"];
                             var value = drProd[i]["Value"];
-                            attr_ID = drProd[i]["M_AttributeSetInstance_ID"];
+                            attr_ID = drProd[i]["VAM_PFeature_SetInstance_ID"];
                             var attrName = drProd[i]["Description"];
                             var countID = drProd[i]["VAICNT_InventoryCountLine_ID"];
                             prodName = drProd[i]["Name"];
                             uom = drProd[i]["UOM"];
                             uom_ID = drProd[i]["VAB_UOM_ID"];
 
-                            // Reference Line ID will be Orderline and Requisitionline only in case of Reference no and for M_Inout table and Internal use Inventory and InventoryMove
+                            // Reference Line ID will be Orderline and Requisitionline only in case of Reference no and for VAM_Inv_InOut table and Internal use Inventory and InventoryMove
                             var RefLineID = drProd[i]["LineID"];
 
                             if (qty > 0) {
                                 if (infoLines.length > 0) {
                                     // Consolidate quantity based on 4 parameters Product, UOM , Attribute Set Instance and Line ID
-                                    var removeIndex = infoLines.map(function (i) { return i._prdID == M_Product_ID && i._Attribute == attr_ID && i._uom == uom_ID && i._refLineID == RefLineID; }).indexOf(true);
+                                    var removeIndex = infoLines.map(function (i) { return i._prdID == VAM_Product_ID && i._Attribute == attr_ID && i._uom == uom_ID && i._refLineID == RefLineID; }).indexOf(true);
                                     if (removeIndex > -1) {
                                         infoLines[removeIndex]._prodQty += qty;
                                     }
                                     else {
                                         infoLines.push({
                                             _prodQty: qty,
-                                            _prdID: M_Product_ID,
+                                            _prdID: VAM_Product_ID,
                                             _prdName: prodName,
                                             _value: value,
                                             _uom: uom_ID,
@@ -1049,7 +1049,7 @@
                                 else {
                                     infoLines.push({
                                         _prodQty: qty,
-                                        _prdID: M_Product_ID,
+                                        _prdID: VAM_Product_ID,
                                         _prdName: prodName,
                                         _value: value,
                                         _uom: uom_ID,
@@ -1090,21 +1090,21 @@
                         var prodName = "";
                         var uom = "";
                         var uom_ID = 0;
-                        //var attr_ID = drProd.getInt("M_AttributeSetInstance_ID");
+                        //var attr_ID = drProd.getInt("VAM_PFeature_SetInstance_ID");
                         //var attrName = drProd.getString("description");
                         //var countID = drProd.getInt("VAICNT_InventoryCountLine_ID");
                         //var qty = drProd.getDecimal("vaicnt_quantity");
-                        //var M_Product_ID = drProd.getInt("M_Product_ID");
+                        //var VAM_Product_ID = drProd.getInt("VAM_Product_ID");
                         //var value = drProd.getString("value");
                         //prodName = drProd.getString("name");
                         //uom = drProd.getString("uom");
                         //uom_ID = drProd.getInt("VAB_UOM_ID");
                         //var RefNo = drProd.getString("VAICNT_ReferenceNo");
-                        var attr_ID = drProd[i]["M_AttributeSetInstance_ID"];
+                        var attr_ID = drProd[i]["VAM_PFeature_SetInstance_ID"];
                         var attrName = drProd[i]["Description"];
                         var countID = drProd[i]["VAICNT_InventoryCountLine_ID"];
                         var qty = drProd[i]["VAICNT_Quantity"];
-                        var M_Product_ID = drProd[i]["M_Product_ID"];
+                        var VAM_Product_ID = drProd[i]["VAM_Product_ID"];
                         var value = drProd[i]["Value"];
                         prodName = drProd[i]["Name"];
                         uom = drProd[i]["UOM"];
@@ -1113,20 +1113,20 @@
                         if (RefNo == "") {
                             RefNo = "null";
                         }
-                        // Reference Line ID will be Orderline and Requisitionline only in case of Reference no and for M_Inout table and Internal use Inventory and InventoryMove
+                        // Reference Line ID will be Orderline and Requisitionline only in case of Reference no and for VAM_Inv_InOut table and Internal use Inventory and InventoryMove
                         var RefLineID = drProd[i]["LineID"];
 
                         if (qty > 0) {
                             if (infoLines.length > 0) {
                                 // Consolidate quantity based on 4 parameters Product, UOM , Attribute Set Instance and Line ID
-                                var removeIndex = infoLines.map(function (i) { return i._prdID == M_Product_ID && i._Attribute == attr_ID && i._uom == uom_ID && i._refLineID == RefLineID; }).indexOf(true);
+                                var removeIndex = infoLines.map(function (i) { return i._prdID == VAM_Product_ID && i._Attribute == attr_ID && i._uom == uom_ID && i._refLineID == RefLineID; }).indexOf(true);
                                 if (removeIndex > -1) {
                                     infoLines[removeIndex]._prodQty += qty;
                                 }
                                 else {
                                     infoLines.push({
                                         _prodQty: qty,
-                                        _prdID: M_Product_ID,
+                                        _prdID: VAM_Product_ID,
                                         _prdName: prodName,
                                         _value: value,
                                         _uom: uom_ID,
@@ -1146,7 +1146,7 @@
                             else {
                                 infoLines.push({
                                     _prodQty: qty,
-                                    _prdID: M_Product_ID,
+                                    _prdID: VAM_Product_ID,
                                     _prdName: prodName,
                                     _value: value,
                                     _uom: uom_ID,
@@ -1229,7 +1229,7 @@
                             QtyEntered: qty[i],
                             UOM_ID: uomID[i],
                             UOM: uom[i],
-                            M_Product_ID1: prodID[i],
+                            VAM_Product_ID1: prodID[i],
                             Attribute: Attribute[i],
                             AttributeName: AttributeName[i],
                             RefNo: ReferenceNo[i]
@@ -1263,7 +1263,7 @@
                 row["QtyEntered"] = savedProduct[j].QtyEntered;
                 row["UOM"] = savedProduct[j].UOM;
                 row["Attribute"] = savedProduct[j].Attribute;
-                row["ProdID"] = savedProduct[j].M_Product_ID1;
+                row["ProdID"] = savedProduct[j].VAM_Product_ID1;
                 row['recid'] = j + 1;
                 grdRows[j] = row;
             }
@@ -1365,7 +1365,7 @@
                                 QtyEntered: savedProduct[event.recid - 1].QtyEntered,
                                 UOM_ID: savedProduct[event.recid - 1].UOM_ID,
                                 UOM: savedProduct[event.recid - 1].UOM,
-                                M_Product_ID1: savedProduct[event.recid - 1].M_Product_ID1,
+                                VAM_Product_ID1: savedProduct[event.recid - 1].VAM_Product_ID1,
                                 Attribute: "",
                                 AttributeName: "",
                                 RefNo: savedProduct[event.recid - 1].RefNo
@@ -1373,7 +1373,7 @@
                         );
                         infoLines[infoLines.length] = {
                             _prodQty: savedProduct[savedProduct.length - 1].QtyEntered,
-                            _prdID: savedProduct[savedProduct.length - 1].M_Product_ID1,
+                            _prdID: savedProduct[savedProduct.length - 1].VAM_Product_ID1,
                             _prdName: savedProduct[savedProduct.length - 1].Product,
                             _value: savedProduct[savedProduct.length - 1].Value,
                             _uom: savedProduct[savedProduct.length - 1].UOM_ID,
@@ -1392,21 +1392,21 @@
                     else if (event.column == 4 && dGrid.records.length > 0) {
                         //debugger;
                         //var productWindow = VAF_Column_ID == 8418;		//	HARDCODED
-                        //var M_Locator_ID = VIS.context.getContextAsInt(WindowNo, "M_Locator_ID");
+                        //var VAM_Locator_ID = VIS.context.getContextAsInt(WindowNo, "VAM_Locator_ID");
                         //var VAB_BusinessPartner_ID = VIS.context.getContextAsInt(WindowNo, "VAB_BusinessPartner_ID");
-                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1), M_Locator_ID, VAB_BusinessPartner_ID, productWindow, VAF_Column_ID, WindowNo);
+                        //var obj = new VIS.PAttributesForm(VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].Attribute), VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].VAM_Product_ID1), VAM_Locator_ID, VAB_BusinessPartner_ID, productWindow, VAF_Column_ID, WindowNo);
                         //if (obj.hasAttribute) {
                         //    obj.showDialog();
                         //}
                         //obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
-                        //    this.M_Locator_ID = mLocatorId;
+                        //    this.VAM_Locator_ID = mLocatorId;
                         //    savedProduct[event.recid - 1].AttributeName = name;
                         //    savedProduct[event.recid - 1].Attribute = mAttributeSetInstanceId;
                         //    infoLines[event.recid - 1]._Attribute = mAttributeSetInstanceId;
                         //    infoLines[event.recid - 1]._AttributeName = name;
                         //    BindGridSavedProducts();
                         //};
-                        VIS.Env.getCtx().setContext(WindowNo, "M_Product_ID", VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].M_Product_ID1));
+                        VIS.Env.getCtx().setContext(WindowNo, "VAM_Product_ID", VIS.Utility.Util.getValueOfInt(savedProduct[event.recid - 1].VAM_Product_ID1));
                     }
                 }
             });
@@ -1472,8 +1472,8 @@
                 selectedItems = [];
                 for (var i = 0; i < selection.length; i++) {
                     if (w2ui[grdname].records[selection[i] - 1].QTYENTERED > 0) {
-                        var product_ID = w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID;
-                        var attribute_ID = w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID;
+                        var product_ID = w2ui[grdname].records[selection[i] - 1].VAM_Product_ID;
+                        var attribute_ID = w2ui[grdname].records[selection[i] - 1].VAM_PFeature_SetInstance_ID;
                         //selectedItems.push($.grep(infoLines, function (e) { return e._prdID == prodID && e._Attribute == attrID; })[0]);
                         if (selectedItems.length > 0) {
                             var removeIndex = selectedItems.map(function (i) { return i._prdID == product_ID && i._Attribute == attribute_ID; }).indexOf(true);
@@ -1484,7 +1484,7 @@
                                 selectedItems.push(
                                     {
                                         _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                        _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                        _prdID: w2ui[grdname].records[selection[i] - 1].VAM_Product_ID,
                                         _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
                                         _value: w2ui[grdname].records[selection[i] - 1].NAME,
                                         _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
@@ -1492,7 +1492,7 @@
                                         _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                         _windowNo: WindowNo,
                                         _RefNo: "",
-                                        _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                        _Attribute: w2ui[grdname].records[selection[i] - 1].VAM_PFeature_SetInstance_ID,
                                         _AttributeName: "",
                                         _Locator_ID: 0,
                                         _IsLotSerial: "N",
@@ -1505,7 +1505,7 @@
                             selectedItems.push(
                                 {
                                     _prodQty: w2ui[grdname].records[selection[i] - 1].QTYENTERED,
-                                    _prdID: w2ui[grdname].records[selection[i] - 1].M_PRODUCT_ID,
+                                    _prdID: w2ui[grdname].records[selection[i] - 1].VAM_Product_ID,
                                     _prdName: w2ui[grdname].records[selection[i] - 1].NAME,
                                     _value: w2ui[grdname].records[selection[i] - 1].NAME,
                                     _uom: w2ui[grdname].records[selection[i] - 1].VAB_UOM_ID,
@@ -1513,7 +1513,7 @@
                                     _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                     _windowNo: WindowNo,
                                     _RefNo: "",
-                                    _Attribute: w2ui[grdname].records[selection[i] - 1].M_AttributeSetInstance_ID,
+                                    _Attribute: w2ui[grdname].records[selection[i] - 1].VAM_PFeature_SetInstance_ID,
                                     _AttributeName: "",
                                     _Locator_ID: 0,
                                     _IsLotSerial: "N",
@@ -1564,8 +1564,8 @@
             var keycolName = "";
             var lineID = 0;
             var lineName = "";
-            var M_Locator_ID = 0;
-            var M_LocatorTo_ID = 0;
+            var VAM_Locator_ID = 0;
+            var VAM_LocatorTo_ID = 0;
             var id = 0, lineid = 0;
 
             // Change by Lokesh Chauhan to set Product Container on windows
@@ -1573,23 +1573,23 @@
             var prodContainerID = 0;
             var prodContainerToID = 0;
 
-            //M_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 1, "M_Locator_ID"));
+            //VAM_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 1, "VAM_Locator_ID"));
             // change by Lokesh Chauhan, picked locator selected on Line
             // if not selected pick default locator from header while saving on Server side
-            M_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "M_Locator_ID", true));
+            VAM_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "VAM_Locator_ID", true));
             recordID = VIS.context.getContextAsInt(WindowNo, VIS.context.getWindowTabContext(WindowNo, 0, "KeyColumnName"));
             keycolName = VIS.context.getWindowTabContext(WindowNo, 0, "KeyColumnName");
 
             lineID = VIS.context.getContextAsInt(WindowNo, VIS.context.getWindowTabContext(WindowNo, 1, "KeyColumnName"));
             lineName = VIS.context.getWindowTabContext(WindowNo, 1, "KeyColumnName");
 
-            prodContainerID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "M_ProductContainer_ID", true));
+            prodContainerID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "VAM_ProductContainer_ID", true));
 
             if (window_ID == 170) {
                 // change by Lokesh Chauhan, picked Locator To selected on Line
-                M_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "M_LocatorTo_ID", true));
-                prodContainerToID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "Ref_M_ProductContainerTo_ID", true));
-                //M_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 1, "M_LocatorTo_ID"));
+                VAM_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "VAM_LocatorTo_ID", true));
+                prodContainerToID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(WindowNo, "Ref_VAM_ProductContainerTo_ID", true));
+                //VAM_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(WindowNo, 1, "VAM_LocatorTo_ID"));
             }
 
             if (window_ID == 146) {
@@ -1626,7 +1626,7 @@
                     //ListLoc.push(infoLines[item]._Locator_ID);
                     //}
                     //else {
-                    //ListLoc.push(M_Locator_ID);
+                    //ListLoc.push(VAM_Locator_ID);
                     //}
                     if (lineid != 0) {
                         break;
@@ -1650,7 +1650,7 @@
                     //ListLoc.push(infoLines[item]._Locator_ID);
                     //}
                     //else {
-                    //ListLoc.push(M_Locator_ID);
+                    //ListLoc.push(VAM_Locator_ID);
                     //}
                     if (lineid != 0) {
                         break;
@@ -1673,7 +1673,7 @@
                             VAB_UOM_ID: JSON.stringify(uoms),
                             listAst: JSON.stringify(listAst),
                             qty: JSON.stringify(qty),
-                            locatorTo: M_LocatorTo_ID,
+                            locatorTo: VAM_LocatorTo_ID,
                             lineID: lineid,
                             ContainerID: prodContainerID
                         },
@@ -1704,11 +1704,11 @@
                             VAB_UOM_ID: JSON.stringify(uoms),
                             listAst: JSON.stringify(listAst),
                             qty: JSON.stringify(qty),
-                            locatorTo: M_LocatorTo_ID,
+                            locatorTo: VAM_LocatorTo_ID,
                             lineID: lineid,
                             InvCountID: JSON.stringify(Count_ID),
                             ReferenceNo: JSON.stringify(RefNo),
-                            Locator_ID: M_Locator_ID,
+                            Locator_ID: VAM_Locator_ID,
                             WindowID: window_ID,
                             ContainerID: prodContainerID,
                             ContainerToID: prodContainerToID
@@ -1742,11 +1742,11 @@
                 }
             }
             else {
-                saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, M_Locator_ID, M_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID);
+                saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, VAM_Locator_ID, VAM_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID);
             }
         }
 
-        function saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, M_Locator_ID, M_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID) {
+        function saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, VAM_Locator_ID, VAM_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID) {
             var $status = inforoot.find('.filestatuscounter');
             if ($status.text() != "") {
                 if (TotalPages == insertedCount) {
@@ -1772,7 +1772,7 @@
                         VAB_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
                         listAst: JSON.stringify(listAst.splice(0, saveCount)),
                         qty: JSON.stringify(qty.splice(0, saveCount)),
-                        locatorTo: M_LocatorTo_ID,
+                        locatorTo: VAM_LocatorTo_ID,
                         lineID: lineid,
                         ContainerID: prodContainerID
                     },
@@ -1804,11 +1804,11 @@
                         VAB_UOM_ID: JSON.stringify(uoms.splice(0, saveCount)),
                         listAst: JSON.stringify(listAst.splice(0, saveCount)),
                         qty: JSON.stringify(qty.splice(0, saveCount)),
-                        locatorTo: M_LocatorTo_ID,
+                        locatorTo: VAM_LocatorTo_ID,
                         lineID: lineid,
                         InvCountID: JSON.stringify(Count_ID.splice(0, saveCount)),
                         ReferenceNo: RefNo,
-                        Locator_ID: M_Locator_ID,
+                        Locator_ID: VAM_Locator_ID,
                         WindowID: window_ID,
                         ContainerID: prodContainerID,
                         ContainerToID: prodContainerToID
@@ -1844,7 +1844,7 @@
                                 setErrorMessage(returnValue);
                                 noCount += returnValue.count;
                             }
-                            saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, M_Locator_ID, M_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID)
+                            saveProductPaging(id, keycolName, lineid, prodID, qty, Attr, uoms, RefNo, listAst, VAM_Locator_ID, VAM_LocatorTo_ID, IsLotSerial, Count_ID, prodContainerID, prodContainerToID)
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -1983,7 +1983,7 @@
                     sql += displayCols[item].ColumnSQL + " ";
                 }
 
-                if (displayType == VIS.DisplayType.ID && displayCols[item].ColumnName.toUpperCase() == "M_PRODUCT_ID") {
+                if (displayType == VIS.DisplayType.ID && displayCols[item].ColumnName.toUpperCase() == "VAM_Product_ID") {
                     keyCol = displayCols[item].ColumnName.toUpperCase();
                 }
 
@@ -2002,10 +2002,10 @@
                 var srchValue = null;
                 var upcSearch = false;
                 s_productFrom =
-                    "M_Product p"
-                    + " LEFT OUTER JOIN M_ProductPrice pr ON (p.M_Product_ID=pr.M_Product_ID AND pr.IsActive='Y')"
-                    + " LEFT OUTER JOIN M_PriceList_Version plv ON (pr.M_PriceList_Version_ID=plv.M_PriceList_Version_ID)"
-                    + " LEFT OUTER JOIN M_AttributeSet pa ON (p.M_AttributeSet_ID=pa.M_AttributeSet_ID)"
+                    "VAM_Product p"
+                    + " LEFT OUTER JOIN VAM_ProductPrice pr ON (p.VAM_Product_ID=pr.VAM_Product_ID AND pr.IsActive='Y')"
+                    + " LEFT OUTER JOIN VAM_PriceListVersion plv ON (pr.VAM_PriceListVersion_ID=plv.VAM_PriceListVersion_ID)"
+                    + " LEFT OUTER JOIN VAM_PFeature_Set pa ON (p.VAM_PFeature_Set_ID=pa.VAM_PFeature_Set_ID)"
                     + " LEFT OUTER JOIN VAB_UOM c ON (p.VAB_UOM_ID=c.VAB_UOM_ID)";
                 for (var i = 0; i < srchCtrls.length; i++) {
                     srchValue = srchCtrls[i].Ctrl.getValue();
@@ -2039,7 +2039,7 @@
 
                     else if (srchCtrls[i].Ctrl.colName == "UPC") {
                         upcSearch = true;
-                        //s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+                        //s_productFrom += " LEFT OUTER JOIN VAM_Manufacturer mr ON (p.VAM_Product_ID=mr.VAM_Product_ID) LEFT OUTER JOIN VAM_ProductFeatures patr ON (p.VAM_Product_ID=patr.VAM_Product_ID)"
                         whereClause += " AND (UPPER(patr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(p.UPC) LIKE " + srchValue.toUpperCase()
                             + " OR UPPER(mr.UPC) LIKE " + srchValue.toUpperCase() + " OR UPPER(uc.UPC) LIKE " + srchValue.toUpperCase() + ")"
                     }
@@ -2048,31 +2048,31 @@
                         whereClause += " AND UPPER(p." + srchCtrls[i].ColumnName + ") LIKE " + srchValue.toUpperCase();
                     }
 
-                    else if (srchCtrls[i].Ctrl.colName == "M_Warehouse_ID") {
+                    else if (srchCtrls[i].Ctrl.colName == "VAM_Warehouse_ID") {
                         if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND w.M_Warehouse_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                            whereClause += " AND w.VAM_Warehouse_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
                         }
                     }
-                    else if (srchCtrls[i].Ctrl.colName == "M_PriceList_Version_ID") {
+                    else if (srchCtrls[i].Ctrl.colName == "VAM_PriceListVersion_ID") {
                         if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND pr.M_PriceList_Version_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                            whereClause += " AND pr.VAM_PriceListVersion_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
                         }
                     }
-                    else if (srchCtrls[i].Ctrl.colName == "M_AttributeSet_ID") {
+                    else if (srchCtrls[i].Ctrl.colName == "VAM_PFeature_Set_ID") {
                         if (VIS.Utility.Util.getValueOfInt(srchValue) != 0) {
-                            whereClause += " AND p.M_AttributeSet_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
+                            whereClause += " AND p.VAM_PFeature_Set_ID=" + VIS.Utility.Util.getValueOfInt(srchValue);
                         }
                     }
                     else if (srchCtrls[i].Ctrl.colName == "AttributeCode") {
-                        whereClause += " AND p.M_Product_ID in (SELECT distinct M_Product_ID from M_ProductAttributes WHERE UPPER(UPC) LIKE '" + srchValue.toUpperCase() + "')";
+                        whereClause += " AND p.VAM_Product_ID in (SELECT distinct VAM_Product_ID from VAM_ProductFeatures WHERE UPPER(UPC) LIKE '" + srchValue.toUpperCase() + "')";
                     }
                 }
 
                 if (upcSearch) {
-                    s_productFrom += " LEFT OUTER JOIN M_manufacturer mr ON (p.M_Product_ID=mr.M_Product_ID) LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID=patr.M_Product_ID)"
+                    s_productFrom += " LEFT OUTER JOIN VAM_Manufacturer mr ON (p.VAM_Product_ID=mr.VAM_Product_ID) LEFT OUTER JOIN VAM_ProductFeatures patr ON (p.VAM_Product_ID=patr.VAM_Product_ID)"
                 }
 
-                sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+                sql += " FROM " + s_productFrom + " JOIN VAM_Warehouse w ON (1=1)";
 
                 if (window_ID == 181) {
                     if (validation != null && validation.length > 0) {
@@ -2083,23 +2083,23 @@
                 if (whereClause.length > 1) {
                     sqlWhere += " WHERE " + whereClause;
                     if (validation != null && validation.length > 0) {
-                        sqlWhere += " AND " + validation.replace(/M_Product\./g, "p.");
+                        sqlWhere += " AND " + validation.replace(/VAM_Product\./g, "p.");
                         //sql += " AND " + validationCode;
                     }
                 }
                 else if (validation != null && validation.length > 0) {
-                    sqlWhere += " WHERE " + validation.replace(/M_Product\./g, "p.");
+                    sqlWhere += " WHERE " + validation.replace(/VAM_Product\./g, "p.");
                 }
 
             }
             else {
-                sql += " FROM " + s_productFrom + " JOIN M_Warehouse w ON (1=1)";
+                sql += " FROM " + s_productFrom + " JOIN VAM_Warehouse w ON (1=1)";
 
                 if (validation != null && validation.length > 0 && validation.trim().toUpperCase().startsWith('WHERE')) {
-                    sqlWhere += " " + validation.replace(/M_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
+                    sqlWhere += " " + validation.replace(/VAM_Product\./g, "p.") + " AND " + tableName + "_ID=-1";
                 }
                 else if (validation != null && validation.length > 0) {
-                    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/M_Product\./g, "p.");
+                    sqlWhere += " WHERE p." + tableName + "_ID=-1 AND " + validation.replace(/VAM_Product\./g, "p.");
                 }
                 else {
                     sqlWhere += " WHERE p." + tableName + "_ID=-1";
@@ -2259,7 +2259,7 @@
                 grdCols[item] = oColumn;
             }
 
-            grdCols[grdCols.length] = { field: 'M_AttributeSetInstance_ID', caption: 'M_AttributeSetInstance_ID', size: '150px', hidden: true };
+            grdCols[grdCols.length] = { field: 'VAM_PFeature_SetInstance_ID', caption: 'VAM_PFeature_SetInstance_ID', size: '150px', hidden: true };
 
             //var noofRecords = ismobile ? 50 : 100;
             for (var j = 0; j < dynData[0].RowCount; j++) {
@@ -2268,7 +2268,7 @@
                     //grdCol[item] = { field: dynData[item].ColumnName, sortable: true, attr: 'align=center' };
                     row[dynData[item].ColumnName.toUpperCase()] = dynData[item].Values[j];
                 }
-                row['M_AttributeSetInstance_ID'] = 0;
+                row['VAM_PFeature_SetInstance_ID'] = 0;
                 row['recid'] = j + 1;
                 grdRows[j] = row;
             }
@@ -2331,7 +2331,7 @@
                                 //w2ui[grdname].records[event.index]["QTYENTERED"] = event.value_new;
                                 if (multiValues.length > 0) {
                                     for (var item in multiValues) {
-                                        if (multiValues[item].M_PRODUCT_ID == w2ui[grdname].records[ParentRec_ID - 1].M_PRODUCT_ID && multiValues[item].M_AttributeSetInstance_ID == w2ui[event.target].records[event.index]["M_AttributeSetInstance_ID"]) {
+                                        if (multiValues[item].VAM_Product_ID == w2ui[grdname].records[ParentRec_ID - 1].VAM_Product_ID && multiValues[item].VAM_PFeature_SetInstance_ID == w2ui[event.target].records[event.index]["VAM_PFeature_SetInstance_ID"]) {
                                             chk = item;
                                             break;
                                         }
@@ -2342,7 +2342,7 @@
                                     else {
                                         var obj = w2ui[grdname].records[ParentRec_ID - 1];
                                         var ObjClone = JSON.parse(JSON.stringify(obj));
-                                        ObjClone.M_AttributeSetInstance_ID = w2ui[event.target].records[event.index]["M_AttributeSetInstance_ID"];
+                                        ObjClone.VAM_PFeature_SetInstance_ID = w2ui[event.target].records[event.index]["VAM_PFeature_SetInstance_ID"];
                                         ObjClone.QTYENTERED = event.value_new;
                                         multiValues.push(ObjClone);
                                     }
@@ -2350,7 +2350,7 @@
                                 else {
                                     var obj = w2ui[grdname].records[ParentRec_ID - 1];
                                     var ObjClone = JSON.parse(JSON.stringify(obj));
-                                    ObjClone.M_AttributeSetInstance_ID = w2ui[event.target].records[event.index]["M_AttributeSetInstance_ID"];
+                                    ObjClone.VAM_PFeature_SetInstance_ID = w2ui[event.target].records[event.index]["VAM_PFeature_SetInstance_ID"];
                                     ObjClone.QTYENTERED = event.value_new;
                                     multiValues.push(ObjClone);
                                 }
@@ -2405,7 +2405,7 @@
                     w2ui[grdname].records[event.index]["QTYENTERED"] = _val.toFixed(2);
                     if (multiValues.length > 0) {
                         for (var item in multiValues) {
-                            if (multiValues[item].M_PRODUCT_ID == w2ui[grdname].records[event.index].M_PRODUCT_ID && multiValues[item].M_AttributeSetInstance_ID == 0) {
+                            if (multiValues[item].VAM_Product_ID == w2ui[grdname].records[event.index].VAM_Product_ID && multiValues[item].VAM_PFeature_SetInstance_ID == 0) {
                                 chk = item;
                                 break;
                             }
@@ -2422,11 +2422,11 @@
                     }
                 }
             });
-            w2ui[grdname].hideColumn('M_PRODUCT_ID');
+            w2ui[grdname].hideColumn('VAM_Product_ID');
             w2ui[grdname].hideColumn('VAB_UOM_ID');
             w2ui[grdname].hideColumn('UOM');
-            w2ui[grdname].hideColumn('M_WAREHOUSE_ID');
-            w2ui[grdname].hideColumn('M_PRICELIST_VERSION_ID');
+            w2ui[grdname].hideColumn('VAM_Warehouse_ID');
+            w2ui[grdname].hideColumn('VAM_PriceListVersion_ID');
             if (!multiSelection || updating) {
                 w2ui[grdname].hideColumn('QTYENTERED');
             }
@@ -2463,7 +2463,7 @@
             if (w2ui[grdname].getSelection().length > 0) {
                 var selection = w2ui[grdname].getSelection();
                 for (var item in selection) {
-                    var prd = w2ui[grdname].get(selection[item]).M_PRODUCT_ID;
+                    var prd = w2ui[grdname].get(selection[item]).VAM_Product_ID;
                     // Change By Mohit
                     var childgrdname = 'subgrid-' + w2ui[grdname].get(selection[item]).recid;
                     if (w2ui[childgrdname] != undefined) {
@@ -2474,7 +2474,7 @@
 
                                 if (multiValues.length > 0) {
 
-                                    var removeIndex = multiValues.map(function (i) { return i.M_PRODUCT_ID == prd && i.M_AttributeSetInstance_ID == w2ui[childgrdname].records[ChildSelection[rec] - 1].M_AttributeSetInstance_ID; }).indexOf(true);
+                                    var removeIndex = multiValues.map(function (i) { return i.VAM_Product_ID == prd && i.VAM_PFeature_SetInstance_ID == w2ui[childgrdname].records[ChildSelection[rec] - 1].VAM_PFeature_SetInstance_ID; }).indexOf(true);
                                     if (removeIndex > -1) {
                                         continue;
                                     }
@@ -2482,7 +2482,7 @@
                                     else {
                                         var obj = w2ui[grdname].get(selection[item]);
                                         var ObjClone = JSON.parse(JSON.stringify(obj));
-                                        ObjClone.M_AttributeSetInstance_ID = w2ui[childgrdname].records[ChildSelection[rec] - 1].M_AttributeSetInstance_ID;
+                                        ObjClone.VAM_PFeature_SetInstance_ID = w2ui[childgrdname].records[ChildSelection[rec] - 1].VAM_PFeature_SetInstance_ID;
                                         ObjClone.QTYENTERED = w2ui[childgrdname].records[ChildSelection[rec] - 1].Quantity;
                                         multiValues.push(ObjClone);
                                     }
@@ -2492,7 +2492,7 @@
                                 else {
                                     var obj = w2ui[grdname].get(selection[item]);
                                     var ObjClone = JSON.parse(JSON.stringify(obj));
-                                    ObjClone.M_AttributeSetInstance_ID = w2ui[childgrdname].records[ChildSelection[rec] - 1].M_AttributeSetInstance_ID;
+                                    ObjClone.VAM_PFeature_SetInstance_ID = w2ui[childgrdname].records[ChildSelection[rec] - 1].VAM_PFeature_SetInstance_ID;
                                     ObjClone.QTYENTERED = w2ui[childgrdname].records[ChildSelection[rec] - 1].Quantity;
                                     multiValues.push(ObjClone);
                                 }
@@ -2503,7 +2503,7 @@
                         else {
 
                             if (multiValues.length > 0) {
-                                var removeIndex = multiValues.map(function (i) { return i.M_PRODUCT_ID == prd && i.M_AttributeSetInstance_ID == 0; }).indexOf(true);
+                                var removeIndex = multiValues.map(function (i) { return i.VAM_Product_ID == prd && i.VAM_PFeature_SetInstance_ID == 0; }).indexOf(true);
                                 if (removeIndex > -1) {
                                     continue;
                                 }
@@ -2519,7 +2519,7 @@
                     }
                     else {
                         if (multiValues.length > 0) {
-                            var removeIndex = multiValues.map(function (i) { return i.M_PRODUCT_ID == prd && i.M_AttributeSetInstance_ID == 0; }).indexOf(true);
+                            var removeIndex = multiValues.map(function (i) { return i.VAM_Product_ID == prd && i.VAM_PFeature_SetInstance_ID == 0; }).indexOf(true);
                             if (removeIndex > -1) {
                                 continue;
                             }
@@ -2538,7 +2538,7 @@
                     var qty = multiValues[item].QTYENTERED;
                     if (qty > 0) {
                         if (infoLines.length > 0) {
-                            var removeIndex = infoLines.map(function (i) { return i._prdID == multiValues[item].M_PRODUCT_ID && i._Attribute == multiValues[item].M_AttributeSetInstance_ID; }).indexOf(true);
+                            var removeIndex = infoLines.map(function (i) { return i._prdID == multiValues[item].VAM_Product_ID && i._Attribute == multiValues[item].VAM_PFeature_SetInstance_ID; }).indexOf(true);
                             if (removeIndex > -1) {
                                 infoLines[removeIndex]._prodQty += qty;
                             }
@@ -2546,7 +2546,7 @@
                                 infoLines.push(
                                     {
                                         _prodQty: qty,
-                                        _prdID: multiValues[item].M_PRODUCT_ID,
+                                        _prdID: multiValues[item].VAM_Product_ID,
                                         _prdName: multiValues[item].NAME,
                                         _value: multiValues[item].VALUE,
                                         _uom: multiValues[item].VAB_UOM_ID,
@@ -2554,7 +2554,7 @@
                                         _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                         _windowNo: WindowNo,
                                         _RefNo: "",
-                                        _Attribute: multiValues[item].M_AttributeSetInstance_ID,
+                                        _Attribute: multiValues[item].VAM_PFeature_SetInstance_ID,
                                         _AttributeName: "",
                                         _Locator_ID: 0,
                                         _IsLotSerial: "N",
@@ -2567,7 +2567,7 @@
                             infoLines.push(
                                 {
                                     _prodQty: qty,
-                                    _prdID: multiValues[item].M_PRODUCT_ID,
+                                    _prdID: multiValues[item].VAM_Product_ID,
                                     _prdName: multiValues[item].NAME,
                                     _value: multiValues[item].VALUE,
                                     _uom: multiValues[item].VAB_UOM_ID,
@@ -2575,7 +2575,7 @@
                                     _VAF_Session_ID: VIS.Env.getCtx().getContext("#VAF_Session_ID"),
                                     _windowNo: WindowNo,
                                     _RefNo: "",
-                                    _Attribute: multiValues[item].M_AttributeSetInstance_ID,
+                                    _Attribute: multiValues[item].VAM_PFeature_SetInstance_ID,
                                     _AttributeName: "",
                                     _Locator_ID: 0,
                                     _IsLotSerial: "N",
@@ -2842,13 +2842,13 @@
 
         function getVariantData(event) {
             if (event != null) {
-                var _M_AttributeSetInstance_ID = 0;
-                var _Product_ID = VIS.Utility.Util.getValueOfInt(w2ui[grdname].records[event.recid - 1].M_PRODUCT_ID);
-                var _Warehouse_ID = VIS.Utility.Util.getValueOfInt(w2ui[grdname].records[event.recid - 1].M_WAREHOUSE_ID);
+                var _VAM_PFeature_SetInstance_ID = 0;
+                var _Product_ID = VIS.Utility.Util.getValueOfInt(w2ui[grdname].records[event.recid - 1].VAM_Product_ID);
+                var _Warehouse_ID = VIS.Utility.Util.getValueOfInt(w2ui[grdname].records[event.recid - 1].VAM_Warehouse_ID);
                 var _AttributeCode = "";
                 for (var i = 0; i < srchCtrls.length; i++) {
-                    if (srchCtrls[i].Ctrl.colName == "M_AttributeSetInstance_ID") {
-                        _M_AttributeSetInstance_ID = VIS.Utility.Util.getValueOfInt(srchCtrls[i].Ctrl.value);
+                    if (srchCtrls[i].Ctrl.colName == "VAM_PFeature_SetInstance_ID") {
+                        _VAM_PFeature_SetInstance_ID = VIS.Utility.Util.getValueOfInt(srchCtrls[i].Ctrl.value);
                     }
                 }
                 for (var i = 0; i < srchCtrls.length; i++) {
@@ -2865,10 +2865,10 @@
                         type: "POST",
                         async: false,
                         data: {
-                            M_Product_ID: _Product_ID,
-                            M_Warehouse_ID: _Warehouse_ID,
+                            VAM_Product_ID: _Product_ID,
+                            VAM_Warehouse_ID: _Warehouse_ID,
                             ParentRec_ID: event.recid,
-                            M_AttributeSetInstance_ID: _M_AttributeSetInstance_ID,
+                            VAM_PFeature_SetInstance_ID: _VAM_PFeature_SetInstance_ID,
                             AttributeCode: _AttributeCode,
                         },
                         error: function () {

@@ -11,31 +11,31 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_PackageLine
+    /** Generated Model for VAM_PackagingLine
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_PackageLine : PO
+    public class X_VAM_PackagingLine : PO
     {
-        public X_M_PackageLine(Context ctx, int M_PackageLine_ID, Trx trxName)
-            : base(ctx, M_PackageLine_ID, trxName)
+        public X_VAM_PackagingLine(Context ctx, int VAM_PackagingLine_ID, Trx trxName)
+            : base(ctx, VAM_PackagingLine_ID, trxName)
         {
-            /** if (M_PackageLine_ID == 0)
+            /** if (VAM_PackagingLine_ID == 0)
             {
-            SetM_InOutLine_ID (0);
-            SetM_PackageLine_ID (0);
-            SetM_Package_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
+            SetVAM_PackagingLine_ID (0);
+            SetVAM_Packaging_ID (0);
             SetQty (0.0);
             }
              */
         }
-        public X_M_PackageLine(Ctx ctx, int M_PackageLine_ID, Trx trxName)
-            : base(ctx, M_PackageLine_ID, trxName)
+        public X_VAM_PackagingLine(Ctx ctx, int VAM_PackagingLine_ID, Trx trxName)
+            : base(ctx, VAM_PackagingLine_ID, trxName)
         {
-            /** if (M_PackageLine_ID == 0)
+            /** if (VAM_PackagingLine_ID == 0)
             {
-            SetM_InOutLine_ID (0);
-            SetM_PackageLine_ID (0);
-            SetM_Package_ID (0);
+            SetVAM_Inv_InOutLine_ID (0);
+            SetVAM_PackagingLine_ID (0);
+            SetVAM_Packaging_ID (0);
             SetQty (0.0);
             }
              */
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_PackageLine(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_PackagingLine(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_PackageLine(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_PackagingLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -63,14 +63,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_PackageLine(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_PackagingLine(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_PackageLine()
+        static X_VAM_PackagingLine()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -83,8 +83,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =663;
 
-        /** TableName=M_PackageLine */
-        public static String Table_Name = "M_PackageLine";
+        /** TableName=VAM_PackagingLine */
+        public static String Table_Name = "VAM_PackagingLine";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_PackageLine[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_PackagingLine[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Confirmed Quantity.
@@ -272,79 +272,79 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID < 1) throw new ArgumentException("M_InOutLine_ID is mandatory.");
-            Set_ValueNoCheck("M_InOutLine_ID", M_InOutLine_ID);
+            if (VAM_Inv_InOutLine_ID < 1) throw new ArgumentException("VAM_Inv_InOutLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Move Line.
-        @param M_MovementLine_ID Inventory Move document Line */
-        public void SetM_MovementLine_ID(int M_MovementLine_ID)
+        @param VAM_InvTrf_Line_ID Inventory Move document Line */
+        public void SetVAM_InvTrf_Line_ID(int VAM_InvTrf_Line_ID)
         {
-            if (M_MovementLine_ID <= 0) Set_Value("M_MovementLine_ID", null);
+            if (VAM_InvTrf_Line_ID <= 0) Set_Value("VAM_InvTrf_Line_ID", null);
             else
-                Set_Value("M_MovementLine_ID", M_MovementLine_ID);
+                Set_Value("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
         }
         /** Get Move Line.
         @return Inventory Move document Line */
-        public int GetM_MovementLine_ID()
+        public int GetVAM_InvTrf_Line_ID()
         {
-            Object ii = Get_Value("M_MovementLine_ID");
+            Object ii = Get_Value("VAM_InvTrf_Line_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Package Line.
-        @param M_PackageLine_ID The detail content of the Package */
-        public void SetM_PackageLine_ID(int M_PackageLine_ID)
+        @param VAM_PackagingLine_ID The detail content of the Package */
+        public void SetVAM_PackagingLine_ID(int VAM_PackagingLine_ID)
         {
-            if (M_PackageLine_ID < 1) throw new ArgumentException("M_PackageLine_ID is mandatory.");
-            Set_ValueNoCheck("M_PackageLine_ID", M_PackageLine_ID);
+            if (VAM_PackagingLine_ID < 1) throw new ArgumentException("VAM_PackagingLine_ID is mandatory.");
+            Set_ValueNoCheck("VAM_PackagingLine_ID", VAM_PackagingLine_ID);
         }
         /** Get Package Line.
         @return The detail content of the Package */
-        public int GetM_PackageLine_ID()
+        public int GetVAM_PackagingLine_ID()
         {
-            Object ii = Get_Value("M_PackageLine_ID");
+            Object ii = Get_Value("VAM_PackagingLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Package.
-        @param M_Package_ID Shipment Package */
-        public void SetM_Package_ID(int M_Package_ID)
+        @param VAM_Packaging_ID Shipment Package */
+        public void SetVAM_Packaging_ID(int VAM_Packaging_ID)
         {
-            if (M_Package_ID < 1) throw new ArgumentException("M_Package_ID is mandatory.");
-            Set_ValueNoCheck("M_Package_ID", M_Package_ID);
+            if (VAM_Packaging_ID < 1) throw new ArgumentException("VAM_Packaging_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Packaging_ID", VAM_Packaging_ID);
         }
         /** Get Package.
         @return Shipment Package */
-        public int GetM_Package_ID()
+        public int GetVAM_Packaging_ID()
         {
-            Object ii = Get_Value("M_Package_ID");
+            Object ii = Get_Value("VAM_Packaging_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -352,7 +352,7 @@ namespace VAdvantage.Model
         @return ID/ColumnName pair */
         public KeyNamePair GetKeyNamePair()
         {
-            return new KeyNamePair(Get_ID(), GetM_Package_ID().ToString());
+            return new KeyNamePair(Get_ID(), GetVAM_Packaging_ID().ToString());
         }
         /** Set Quantity.
         @param Qty Quantity */
@@ -384,18 +384,18 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

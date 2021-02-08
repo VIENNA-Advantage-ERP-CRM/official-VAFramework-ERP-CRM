@@ -34,7 +34,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // Org				
         private int _VAF_Org_ID = 0;
         // Warehouse			
-        private int _M_Warehouse_ID = 0;
+        private int _VAM_Warehouse_ID = 0;
         //	Doc Date From		
         private DateTime? _DateDoc_From;
         //	Doc Date To			
@@ -48,9 +48,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         // User				
         private int _VAF_UserContact_ID = 0;
         // Product				
-        private int _M_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
         // Requisition			
-        private int _M_Requisition_ID = 0;
+        private int _VAM_Requisition_ID = 0;
 
         // Consolidate			
         private Boolean _ConsolidateDocument = false;
@@ -61,9 +61,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private MVABOrderLine _orderLine = null;
         private string createdPO = null; 
 
-        private int _m_M_Requisition_ID = 0;
-        private int _m_M_Product_ID = 0;
-        private int _m_M_AttributeSetInstance_ID = 0;
+        private int _m_VAM_Requisition_ID = 0;
+        private int _m_VAM_Product_ID = 0;
+        private int _m_VAM_PFeature_SetInstance_ID = 0;
         // BPartner				
         private MVABBusinessPartner _m_bpartner = null;
 #endregion
@@ -85,9 +85,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _VAF_Org_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Warehouse_ID"))
+                else if (name.Equals("VAM_Warehouse_ID"))
                 {
-                    _M_Warehouse_ID = para[i].GetParameterAsInt();
+                    _VAM_Warehouse_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("DateDoc"))
                 {
@@ -107,13 +107,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _VAF_UserContact_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    _M_Product_ID = para[i].GetParameterAsInt();
+                    _VAM_Product_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Requisition_ID"))
+                else if (name.Equals("VAM_Requisition_ID"))
                 {
-                    _M_Requisition_ID = para[i].GetParameterAsInt();
+                    _VAM_Requisition_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("ConsolidateDocument"))
                 {
@@ -133,10 +133,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             //	Specific
-            if (_M_Requisition_ID != 0)
+            if (_VAM_Requisition_ID != 0)
             {
-                log.Info("M_Requisition_ID=" + _M_Requisition_ID);
-                MRequisition req = new MRequisition(GetCtx(), _M_Requisition_ID, Get_TrxName());
+                log.Info("VAM_Requisition_ID=" + _VAM_Requisition_ID);
+                MRequisition req = new MRequisition(GetCtx(), _VAM_Requisition_ID, Get_TrxName());
                 if (!MRequisition.DOCSTATUS_Completed.Equals(req.GetDocStatus()))
                 {
                     throw new Exception("@DocStatus@ = " + req.GetDocStatus());
@@ -155,30 +155,30 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	
             log.Info("VAF_Org_ID=" + _VAF_Org_ID
-                + ", M_Warehouse_ID=" + _M_Warehouse_ID
+                + ", VAM_Warehouse_ID=" + _VAM_Warehouse_ID
                 + ", DateDoc=" + _DateDoc_From + "/" + _DateDoc_To
                 + ", DateRequired=" + _DateRequired_From + "/" + _DateRequired_To
                 + ", PriorityRule=" + _PriorityRule
                 + ", VAF_UserContact_ID=" + _VAF_UserContact_ID
-                + ", M_Product_ID=" + _M_Product_ID
+                + ", VAM_Product_ID=" + _VAM_Product_ID
                 + ", ConsolidateDocument" + _ConsolidateDocument);
 
-            StringBuilder sql = new StringBuilder("SELECT * FROM M_RequisitionLine rl ")
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAM_RequisitionLine rl ")
                 .Append("WHERE rl.VAB_OrderLine_ID IS NULL");
             if (_VAF_Org_ID != 0)
             {
                 sql.Append(" AND VAF_Org_ID=" + _VAF_Org_ID);
             }
-            if (_M_Product_ID != 0)
+            if (_VAM_Product_ID != 0)
             {
-                sql.Append(" AND M_Product_ID=" + _M_Product_ID);
+                sql.Append(" AND VAM_Product_ID=" + _VAM_Product_ID);
             }
             //	Requisition Header
-            sql.Append(" AND EXISTS (SELECT * FROM M_Requisition r WHERE rl.M_Requisition_ID=r.M_Requisition_ID")
+            sql.Append(" AND EXISTS (SELECT * FROM VAM_Requisition r WHERE rl.VAM_Requisition_ID=r.VAM_Requisition_ID")
                 .Append(" AND r.DocStatus='CO'");
-            if (_M_Warehouse_ID != 0)
+            if (_VAM_Warehouse_ID != 0)
             {
-                sql.Append(" AND r.M_Warehouse_ID=" + _M_Warehouse_ID);
+                sql.Append(" AND r.VAM_Warehouse_ID=" + _VAM_Warehouse_ID);
             }
             //
             if (_DateDoc_From != null && _DateDoc_To != null)
@@ -221,9 +221,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             if (!_ConsolidateDocument)
             {
-                sql.Append("M_Requisition_ID, ");
+                sql.Append("VAM_Requisition_ID, ");
             }
-            sql.Append("M_Product_ID, VAB_Charge_ID, M_AttributeSetInstance_ID");
+            sql.Append("VAM_Product_ID, VAB_Charge_ID, VAM_PFeature_SetInstance_ID");
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -266,7 +266,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="rLine">request line</param>
         private void Process(MRequisitionLine rLine)
         {
-            if (rLine.GetM_Product_ID() == 0 && rLine.GetVAB_Charge_ID() == 0)
+            if (rLine.GetVAM_Product_ID() == 0 && rLine.GetVAB_Charge_ID() == 0)
             {
                 log.Warning("Ignored Line" + rLine.GetLine()
                     + " " + rLine.GetDescription()
@@ -275,13 +275,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             if (!_ConsolidateDocument
-                && rLine.GetM_Requisition_ID() != _m_M_Requisition_ID)
+                && rLine.GetVAM_Requisition_ID() != _m_VAM_Requisition_ID)
             {
                 CloseOrder();
             }
             if (_orderLine == null
-                || rLine.GetM_Product_ID() != _m_M_Product_ID
-                || rLine.GetM_AttributeSetInstance_ID() != _m_M_AttributeSetInstance_ID
+                || rLine.GetVAM_Product_ID() != _m_VAM_Product_ID
+                || rLine.GetVAM_PFeature_SetInstance_ID() != _m_VAM_PFeature_SetInstance_ID
                 || rLine.GetVAB_Charge_ID() != 0)		//	single line per charge
             {
                 NewLine(rLine);
@@ -321,11 +321,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	default po document type
             if (!_ConsolidateDocument)
             {
-                _order.SetDescription(Msg.GetElement(GetCtx(), "M_Requisition_ID")
+                _order.SetDescription(Msg.GetElement(GetCtx(), "VAM_Requisition_ID")
                     + ": " + rLine.GetParent().GetDocumentNo());
             }
             //	Prepare Save
-            _m_M_Requisition_ID = rLine.GetM_Requisition_ID();
+            _m_VAM_Requisition_ID = rLine.GetVAM_Requisition_ID();
             if (!_order.Save())
             {
                 throw new Exception("Cannot save Order");
@@ -388,7 +388,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             else if (rLine.GetVAB_Charge_ID() != 0)
             {
-                MCharge charge = MCharge.Get(GetCtx(), rLine.GetVAB_Charge_ID());
+                MVABCharge charge = MVABCharge.Get(GetCtx(), rLine.GetVAB_Charge_ID());
                 VAB_BusinessPartner_ID = charge.GetVAB_BusinessPartner_ID();
                 if (VAB_BusinessPartner_ID == 0)
                 {
@@ -398,8 +398,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             else
             {
                 //	Find Vendor from Produt
-                product = MProduct.Get(GetCtx(), rLine.GetM_Product_ID());
-                MProductPO[] ppos = MProductPO.GetOfProduct(GetCtx(), product.GetM_Product_ID(), null);
+                product = MProduct.Get(GetCtx(), rLine.GetVAM_Product_ID());
+                MProductPO[] ppos = MProductPO.GetOfProduct(GetCtx(), product.GetVAM_Product_ID(), null);
                 for (int i = 0; i < ppos.Length; i++)
                 {
                     if (ppos[i].IsCurrentVendor() && ppos[i].GetVAB_BusinessPartner_ID() != 0)
@@ -430,7 +430,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (product != null)
             {
                 _orderLine.SetProduct(product);
-                _orderLine.SetM_AttributeSetInstance_ID(rLine.GetM_AttributeSetInstance_ID());
+                _orderLine.SetVAM_PFeature_SetInstance_ID(rLine.GetVAM_PFeature_SetInstance_ID());
             }
             else
             {
@@ -441,8 +441,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 
             //	Prepare Save
-            _m_M_Product_ID = rLine.GetM_Product_ID();
-            _m_M_AttributeSetInstance_ID = rLine.GetM_AttributeSetInstance_ID();
+            _m_VAM_Product_ID = rLine.GetVAM_Product_ID();
+            _m_VAM_PFeature_SetInstance_ID = rLine.GetVAM_PFeature_SetInstance_ID();
             if (!_orderLine.Save())
             {
                 throw new Exception("Cannot save Order Line");

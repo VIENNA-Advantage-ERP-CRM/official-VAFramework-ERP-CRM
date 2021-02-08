@@ -36,8 +36,8 @@ namespace VAdvantage.Model
             {
                 //	setVAB_Project_ID (0);
                 //	setLine (0);
-                //	setM_Locator_ID (0);
-                //	setM_Product_ID (0);
+                //	setVAM_Locator_ID (0);
+                //	setVAM_Product_ID (0);
                 //	setMovementDate (new Timestamp(System.currentTimeMillis()));
                 SetMovementQty(Env.ZERO);
                 SetPosted(false);
@@ -68,8 +68,8 @@ namespace VAdvantage.Model
             SetLine(GetNextLine());
             _parent = project;
             //
-            //	setM_Locator_ID (0);
-            //	setM_Product_ID (0);
+            //	setVAM_Locator_ID (0);
+            //	setVAM_Product_ID (0);
             //
             SetMovementDate(DateTime.Now);
             SetMovementQty(Env.ZERO);
@@ -106,13 +106,13 @@ namespace VAdvantage.Model
         {
             if (!Save())
                 return false;
-            if (GetM_Product_ID() == 0)
+            if (GetVAM_Product_ID() == 0)
             {
                 log.Log(Level.SEVERE, "No Product");
                 return false;
             }
 
-            MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
+            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
 
             //	If not a stocked Item nothing to do
             if (!product.IsStocked())
@@ -126,13 +126,13 @@ namespace VAdvantage.Model
             //	**	Create Material Transactions **
             MTransaction mTrx = new MTransaction(GetCtx(), GetVAF_Org_ID(),
                 MTransaction.MOVEMENTTYPE_WorkOrderPlus,
-                GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(),
+                GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(),
                 Decimal.Negate(GetMovementQty()), GetMovementDate(), Get_TrxName());
             mTrx.SetVAB_ProjectSupply_ID(GetVAB_ProjectSupply_ID());
             //
-            MLocator loc = MLocator.Get(GetCtx(), GetM_Locator_ID());
-            if (MStorage.Add(GetCtx(), loc.GetM_Warehouse_ID(), GetM_Locator_ID(),
-                    GetM_Product_ID(), GetM_AttributeSetInstance_ID(), GetM_AttributeSetInstance_ID(),
+            MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+            if (MStorage.Add(GetCtx(), loc.GetVAM_Warehouse_ID(), GetVAM_Locator_ID(),
+                    GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), GetVAM_PFeature_SetInstance_ID(),
                     Decimal.Negate(GetMovementQty()), null, null, Get_TrxName()))
             {
                 if (mTrx.Save(Get_TrxName()))
@@ -163,13 +163,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Mandatory Values
         /// </summary>
-        /// <param name="M_Locator_ID">locator</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Locator_ID">locator</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="movementQty">qty</param>
-        public void SetMandatory(int M_Locator_ID, int M_Product_ID, Decimal MovementQty)
+        public void SetMandatory(int VAM_Locator_ID, int VAM_Product_ID, Decimal MovementQty)
         {
-            SetM_Locator_ID(M_Locator_ID);
-            SetM_Product_ID(M_Product_ID);
+            SetVAM_Locator_ID(VAM_Locator_ID);
+            SetVAM_Product_ID(VAM_Product_ID);
             SetMovementQty(MovementQty);
         }
     }

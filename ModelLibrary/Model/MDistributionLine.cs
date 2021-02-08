@@ -72,7 +72,7 @@ namespace VAdvantage.Model
         /** The Amount						*/
         private Decimal? _amt = null;
         /** The Base Account				*/
-        private MAccount _account = null;
+        private MVABAccount _account = null;
 
         /// <summary>
         ///	Get Parent
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
         /// Set Account
         /// </summary>
         /// <param name="acct">account</param>
-        public void SetAccount(MAccount acct)
+        public void SetAccount(MVABAccount acct)
         {
             _account = acct;
         }	//	setAccount
@@ -109,16 +109,16 @@ namespace VAdvantage.Model
         ///	Get Account Combination based on Account and Overwrite
         /// </summary>
         /// <returns>account</returns>
-        public MAccount GetAccount()
+        public MVABAccount GetAccount()
         {
-            MAccount acct = MAccount.Get(GetCtx(),
+            MVABAccount acct = MVABAccount.Get(GetCtx(),
                 _account.GetVAF_Client_ID(),
                 IsOverwriteOrg() && GetOrg_ID() != 0 ? GetOrg_ID() : _account.GetVAF_Org_ID(),
                 _account.GetVAB_AccountBook_ID(),
                 IsOverwriteAcct() && GetAccount_ID() != 0 ? GetAccount_ID() : _account.GetAccount_ID(),
                     _account.GetVAB_SubAcct_ID(),
                 //	
-                IsOverwriteProduct() ? GetM_Product_ID() : _account.GetM_Product_ID(),
+                IsOverwriteProduct() ? GetVAM_Product_ID() : _account.GetVAM_Product_ID(),
                 IsOverwriteBPartner() ? GetVAB_BusinessPartner_ID() : _account.GetVAB_BusinessPartner_ID(),
                 IsOverwriteOrgTrx() ? GetVAF_OrgTrx_ID() : _account.GetVAF_OrgTrx_ID(),
                 IsOverwriteLocFrom() ? GetC_LocFrom_ID() : _account.GetC_LocFrom_ID(),
@@ -214,9 +214,9 @@ namespace VAdvantage.Model
             {
                 SetVAF_OrgTrx_ID(0);
             }
-            if (!IsOverwriteProduct() && GetM_Product_ID() != 0)
+            if (!IsOverwriteProduct() && GetVAM_Product_ID() != 0)
             {
-                SetM_Product_ID(0);
+                SetVAM_Product_ID(0);
             }
             if (!IsOverwriteProject() && GetVAB_Project_ID() != 0)
             {

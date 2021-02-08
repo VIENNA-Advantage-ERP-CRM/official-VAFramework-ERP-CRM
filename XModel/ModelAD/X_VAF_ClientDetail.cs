@@ -455,21 +455,21 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_ProductFreight_ID VAF_Control_Ref_ID=162 */
-        public static int M_PRODUCTFREIGHT_ID_VAF_Control_Ref_ID = 162;
+        /** VAM_ProductFreight_ID VAF_Control_Ref_ID=162 */
+        public static int VAM_ProductFREIGHT_ID_VAF_Control_Ref_ID = 162;
         /** Set Product for Freight.
-        @param M_ProductFreight_ID Product for Freight */
-        public void SetM_ProductFreight_ID(int M_ProductFreight_ID)
+        @param VAM_ProductFreight_ID Product for Freight */
+        public void SetVAM_ProductFreight_ID(int VAM_ProductFreight_ID)
         {
-            if (M_ProductFreight_ID <= 0) Set_Value("M_ProductFreight_ID", null);
+            if (VAM_ProductFreight_ID <= 0) Set_Value("VAM_ProductFreight_ID", null);
             else
-                Set_Value("M_ProductFreight_ID", M_ProductFreight_ID);
+                Set_Value("VAM_ProductFreight_ID", VAM_ProductFreight_ID);
         }
         /** Get Product for Freight.
         @return Product for Freight */
-        public int GetM_ProductFreight_ID()
+        public int GetVAM_ProductFreight_ID()
         {
-            Object ii = Get_Value("M_ProductFreight_ID");
+            Object ii = Get_Value("VAM_ProductFreight_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

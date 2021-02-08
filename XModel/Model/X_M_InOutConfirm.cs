@@ -11,31 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_InOutConfirm
+/** Generated Model for VAM_Inv_InOutConfirm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_InOutConfirm : PO
+public class X_VAM_Inv_InOutConfirm : PO
 {
-public X_M_InOutConfirm (Context ctx, int M_InOutConfirm_ID, Trx trxName) : base (ctx, M_InOutConfirm_ID, trxName)
+public X_VAM_Inv_InOutConfirm (Context ctx, int VAM_Inv_InOutConfirm_ID, Trx trxName) : base (ctx, VAM_Inv_InOutConfirm_ID, trxName)
 {
-/** if (M_InOutConfirm_ID == 0)
-{
-SetConfirmType (null);
-SetDocAction (null);	// CO
-SetDocStatus (null);	// DR
-SetDocumentNo (null);
-SetIsApproved (false);
-SetIsCancelled (false);
-SetIsInDispute (false);	// N
-SetM_InOutConfirm_ID (0);
-SetM_InOut_ID (0);
-SetProcessed (false);	// N
-}
- */
-}
-public X_M_InOutConfirm (Ctx ctx, int M_InOutConfirm_ID, Trx trxName) : base (ctx, M_InOutConfirm_ID, trxName)
-{
-/** if (M_InOutConfirm_ID == 0)
+/** if (VAM_Inv_InOutConfirm_ID == 0)
 {
 SetConfirmType (null);
 SetDocAction (null);	// CO
@@ -44,8 +27,25 @@ SetDocumentNo (null);
 SetIsApproved (false);
 SetIsCancelled (false);
 SetIsInDispute (false);	// N
-SetM_InOutConfirm_ID (0);
-SetM_InOut_ID (0);
+SetVAM_Inv_InOutConfirm_ID (0);
+SetVAM_Inv_InOut_ID (0);
+SetProcessed (false);	// N
+}
+ */
+}
+public X_VAM_Inv_InOutConfirm (Ctx ctx, int VAM_Inv_InOutConfirm_ID, Trx trxName) : base (ctx, VAM_Inv_InOutConfirm_ID, trxName)
+{
+/** if (VAM_Inv_InOutConfirm_ID == 0)
+{
+SetConfirmType (null);
+SetDocAction (null);	// CO
+SetDocStatus (null);	// DR
+SetDocumentNo (null);
+SetIsApproved (false);
+SetIsCancelled (false);
+SetIsInDispute (false);	// N
+SetVAM_Inv_InOutConfirm_ID (0);
+SetVAM_Inv_InOut_ID (0);
 SetProcessed (false);	// N
 }
  */
@@ -55,7 +55,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_M_InOutConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Inv_InOutConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,7 +63,7 @@ public X_M_InOutConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_InOutConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Inv_InOutConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -71,13 +71,13 @@ public X_M_InOutConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_InOutConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Inv_InOutConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_InOutConfirm()
+static X_VAM_Inv_InOutConfirm()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -90,8 +90,8 @@ public static long updatedMS = 1280389062811L;
 public static int Table_ID;
  // =727;
 
-/** TableName=M_InOutConfirm */
-public static String Table_Name="M_InOutConfirm";
+/** TableName=VAM_Inv_InOutConfirm */
+public static String Table_Name="VAM_Inv_InOutConfirm";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -125,7 +125,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_InOutConfirm[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Inv_InOutConfirm[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Approval Amount.
@@ -440,48 +440,48 @@ if (oo != null)
 return false;
 }
 /** Set Ship/Receipt Confirmation.
-@param M_InOutConfirm_ID Material Shipment or Receipt Confirmation */
-public void SetM_InOutConfirm_ID (int M_InOutConfirm_ID)
+@param VAM_Inv_InOutConfirm_ID Material Shipment or Receipt Confirmation */
+public void SetVAM_Inv_InOutConfirm_ID (int VAM_Inv_InOutConfirm_ID)
 {
-if (M_InOutConfirm_ID < 1) throw new ArgumentException ("M_InOutConfirm_ID is mandatory.");
-Set_ValueNoCheck ("M_InOutConfirm_ID", M_InOutConfirm_ID);
+if (VAM_Inv_InOutConfirm_ID < 1) throw new ArgumentException ("VAM_Inv_InOutConfirm_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Inv_InOutConfirm_ID", VAM_Inv_InOutConfirm_ID);
 }
 /** Get Ship/Receipt Confirmation.
 @return Material Shipment or Receipt Confirmation */
-public int GetM_InOutConfirm_ID() 
+public int GetVAM_Inv_InOutConfirm_ID() 
 {
-Object ii = Get_Value("M_InOutConfirm_ID");
+Object ii = Get_Value("VAM_Inv_InOutConfirm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Shipment/Receipt.
-@param M_InOut_ID Material Shipment Document */
-public void SetM_InOut_ID (int M_InOut_ID)
+@param VAM_Inv_InOut_ID Material Shipment Document */
+public void SetVAM_Inv_InOut_ID (int VAM_Inv_InOut_ID)
 {
-if (M_InOut_ID < 1) throw new ArgumentException ("M_InOut_ID is mandatory.");
-Set_ValueNoCheck ("M_InOut_ID", M_InOut_ID);
+if (VAM_Inv_InOut_ID < 1) throw new ArgumentException ("VAM_Inv_InOut_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
 }
 /** Get Shipment/Receipt.
 @return Material Shipment Document */
-public int GetM_InOut_ID() 
+public int GetVAM_Inv_InOut_ID() 
 {
-Object ii = Get_Value("M_InOut_ID");
+Object ii = Get_Value("VAM_Inv_InOut_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Phys.Inventory.
-@param M_Inventory_ID Parameters for a Physical Inventory */
-public void SetM_Inventory_ID (int M_Inventory_ID)
+@param VAM_Inventory_ID Parameters for a Physical Inventory */
+public void SetVAM_Inventory_ID (int VAM_Inventory_ID)
 {
-if (M_Inventory_ID <= 0) Set_Value ("M_Inventory_ID", null);
+if (VAM_Inventory_ID <= 0) Set_Value ("VAM_Inventory_ID", null);
 else
-Set_Value ("M_Inventory_ID", M_Inventory_ID);
+Set_Value ("VAM_Inventory_ID", VAM_Inventory_ID);
 }
 /** Get Phys.Inventory.
 @return Parameters for a Physical Inventory */
-public int GetM_Inventory_ID() 
+public int GetVAM_Inventory_ID() 
 {
-Object ii = Get_Value("M_Inventory_ID");
+Object ii = Get_Value("VAM_Inventory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

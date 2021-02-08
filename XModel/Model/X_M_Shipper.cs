@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Shipper
+/** Generated Model for VAM_ShippingMethod
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Shipper : PO
+public class X_VAM_ShippingMethod : PO
 {
-public X_M_Shipper (Context ctx, int M_Shipper_ID, Trx trxName) : base (ctx, M_Shipper_ID, trxName)
+public X_VAM_ShippingMethod (Context ctx, int VAM_ShippingMethod_ID, Trx trxName) : base (ctx, VAM_ShippingMethod_ID, trxName)
 {
-/** if (M_Shipper_ID == 0)
+/** if (VAM_ShippingMethod_ID == 0)
 {
-SetM_Shipper_ID (0);
+SetVAM_ShippingMethod_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_Shipper (Ctx ctx, int M_Shipper_ID, Trx trxName) : base (ctx, M_Shipper_ID, trxName)
+public X_VAM_ShippingMethod (Ctx ctx, int VAM_ShippingMethod_ID, Trx trxName) : base (ctx, VAM_ShippingMethod_ID, trxName)
 {
-/** if (M_Shipper_ID == 0)
+/** if (VAM_ShippingMethod_ID == 0)
 {
-SetM_Shipper_ID (0);
+SetVAM_ShippingMethod_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Shipper (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ShippingMethod (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_Shipper (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Shipper (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ShippingMethod (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_Shipper (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Shipper (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ShippingMethod (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Shipper()
+static X_VAM_ShippingMethod()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389064551L;
 public static int Table_ID;
  // =253;
 
-/** TableName=M_Shipper */
-public static String Table_Name="M_Shipper";
+/** TableName=VAM_ShippingMethod */
+public static String Table_Name="VAM_ShippingMethod";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Shipper[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ShippingMethod[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -146,17 +146,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Freight Carrier.
-@param M_Shipper_ID Method or manner of product delivery */
-public void SetM_Shipper_ID (int M_Shipper_ID)
+@param VAM_ShippingMethod_ID Method or manner of product delivery */
+public void SetVAM_ShippingMethod_ID (int VAM_ShippingMethod_ID)
 {
-if (M_Shipper_ID < 1) throw new ArgumentException ("M_Shipper_ID is mandatory.");
-Set_ValueNoCheck ("M_Shipper_ID", M_Shipper_ID);
+if (VAM_ShippingMethod_ID < 1) throw new ArgumentException ("VAM_ShippingMethod_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
 }
 /** Get Freight Carrier.
 @return Method or manner of product delivery */
-public int GetM_Shipper_ID() 
+public int GetVAM_ShippingMethod_ID() 
 {
-Object ii = Get_Value("M_Shipper_ID");
+Object ii = Get_Value("VAM_ShippingMethod_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

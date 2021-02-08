@@ -22,7 +22,7 @@ public X_M_ChangeRequest (Context ctx, int M_ChangeRequest_ID, Trx trxName) : ba
 {
 SetDocumentNo (null);
 SetIsApproved (false);	// N
-SetM_BOM_ID (0);
+SetVAM_BOM_ID (0);
 SetM_ChangeRequest_ID (0);
 SetName (null);
 SetProcessed (false);	// N
@@ -35,7 +35,7 @@ public X_M_ChangeRequest (Ctx ctx, int M_ChangeRequest_ID, Trx trxName) : base (
 {
 SetDocumentNo (null);
 SetIsApproved (false);	// N
-SetM_BOM_ID (0);
+SetVAM_BOM_ID (0);
 SetM_ChangeRequest_ID (0);
 SetName (null);
 SetProcessed (false);	// N
@@ -209,17 +209,17 @@ if (oo != null)
 return false;
 }
 /** Set BOM.
-@param M_BOM_ID Bill of Material */
-public void SetM_BOM_ID (int M_BOM_ID)
+@param VAM_BOM_ID Bill of Material */
+public void SetVAM_BOM_ID (int VAM_BOM_ID)
 {
-if (M_BOM_ID < 1) throw new ArgumentException ("M_BOM_ID is mandatory.");
-Set_ValueNoCheck ("M_BOM_ID", M_BOM_ID);
+if (VAM_BOM_ID < 1) throw new ArgumentException ("VAM_BOM_ID is mandatory.");
+Set_ValueNoCheck ("VAM_BOM_ID", VAM_BOM_ID);
 }
 /** Get BOM.
 @return Bill of Material */
-public int GetM_BOM_ID() 
+public int GetVAM_BOM_ID() 
 {
-Object ii = Get_Value("M_BOM_ID");
+Object ii = Get_Value("VAM_BOM_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

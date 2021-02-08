@@ -27,7 +27,7 @@ namespace VAdvantage.Process
     public class InventoryCountUpdate : ProcessEngine.SvrProcess
     {
         /** Physical Inventory		*/
-        private int _m_Inventory_ID = 0;
+        private int _VAM_Inventory_ID = 0;
         /** Update to What			*/
         private Boolean _inventoryCountSetZero = false;
         private Boolean _AdjustinventoryCount = false;
@@ -55,7 +55,7 @@ namespace VAdvantage.Process
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
-            _m_Inventory_ID = GetRecord_ID();
+            _VAM_Inventory_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -66,57 +66,57 @@ namespace VAdvantage.Process
         {
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
-            log.Info("M_Inventory_ID=" + _m_Inventory_ID);
-            inventory = new MInventory(GetCtx(), _m_Inventory_ID, Get_TrxName());
+            log.Info("VAM_Inventory_ID=" + _VAM_Inventory_ID);
+            inventory = new MInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
             if (inventory.Get_ID() == 0)
-                throw new SystemException("Not found: M_Inventory_ID=" + _m_Inventory_ID);
+                throw new SystemException("Not found: VAM_Inventory_ID=" + _VAM_Inventory_ID);
 
             //	Multiple Lines for one item
             //jz simple the SQL so that Derby also like it. To avoid testing Oracle by now, leave no change for Oracle
             String sql = null;
             if (DataBase.DB.IsOracle())
             {
-                sql = "UPDATE M_InventoryLine SET IsActive='N' "
-                    + "WHERE M_Inventory_ID=" + _m_Inventory_ID
-                    + " AND (M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID) IN "
-                        + "(SELECT M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
-                        + "FROM M_InventoryLine "
-                        + "WHERE M_Inventory_ID=" + _m_Inventory_ID
-                        + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
-                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
+                sql = "UPDATE VAM_InventoryLine SET IsActive='N' "
+                    + "WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID
+                    + " AND (VAM_Product_ID, VAM_Locator_ID, VAM_PFeature_SetInstance_ID) IN "
+                        + "(SELECT VAM_Product_ID, VAM_Locator_ID, VAM_PFeature_SetInstance_ID "
+                        + "FROM VAM_InventoryLine "
+                        + "WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID
+                        + " GROUP BY VAM_Product_ID, VAM_Locator_ID, VAM_PFeature_SetInstance_ID "
+                        + (isContainerApplicable ? " , VAM_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             else
             {
-                sql = "UPDATE M_InventoryLine SET IsActive='N' "
-                    + "WHERE M_Inventory_ID=" + _m_Inventory_ID
+                sql = "UPDATE VAM_InventoryLine SET IsActive='N' "
+                    + "WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID
                     + " AND EXISTS "
                         + "(SELECT COUNT(*) "
-                        + "FROM M_InventoryLine "
-                        + "WHERE M_Inventory_ID=" + _m_Inventory_ID
-                        + " GROUP BY M_Product_ID, M_Locator_ID, M_AttributeSetInstance_ID "
-                        + (isContainerApplicable ? " , M_ProductContainer_ID" : "")
+                        + "FROM VAM_InventoryLine "
+                        + "WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID
+                        + " GROUP BY VAM_Product_ID, VAM_Locator_ID, VAM_PFeature_SetInstance_ID "
+                        + (isContainerApplicable ? " , VAM_ProductContainer_ID" : "")
                         + "HAVING COUNT(*) > 1)";
             }
             int multiple = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Info("Multiple=" + multiple);
 
-            int delMA = MInventoryLineMA.DeleteInventoryMA(_m_Inventory_ID, Get_TrxName());
+            int delMA = MInventoryLineMA.DeleteInventoryMA(_VAM_Inventory_ID, Get_TrxName());
             log.Info("DeletedMA=" + delMA);
 
             //	ASI
-            sql = "UPDATE M_InventoryLine l "
+            sql = "UPDATE VAM_InventoryLine l "
                 + "SET (QtyBook,QtyCount) = "
-                    + "(SELECT QtyOnHand,QtyOnHand FROM M_Storage s "
-                    + "WHERE s.M_Product_ID=l.M_Product_ID AND s.M_Locator_ID=l.M_Locator_ID"
-                    + " AND s.M_AttributeSetInstance_ID=l.M_AttributeSetInstance_ID),"
+                    + "(SELECT QtyOnHand,QtyOnHand FROM VAM_Storage s "
+                    + "WHERE s.VAM_Product_ID=l.VAM_Product_ID AND s.VAM_Locator_ID=l.VAM_Locator_ID"
+                    + " AND s.VAM_PFeature_SetInstance_ID=l.VAM_PFeature_SetInstance_ID),"
                 + " Updated=SysDate,"
                 + " UpdatedBy=" + GetVAF_UserContact_ID()
                 //
-                + " WHERE M_Inventory_ID=" + _m_Inventory_ID
-                + " AND EXISTS (SELECT * FROM M_Storage s "
-                    + "WHERE s.M_Product_ID=l.M_Product_ID AND s.M_Locator_ID=l.M_Locator_ID"
-                    + " AND s.M_AttributeSetInstance_ID=l.M_AttributeSetInstance_ID)";
+                + " WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID
+                + " AND EXISTS (SELECT * FROM VAM_Storage s "
+                    + "WHERE s.VAM_Product_ID=l.VAM_Product_ID AND s.VAM_Locator_ID=l.VAM_Locator_ID"
+                    + " AND s.VAM_PFeature_SetInstance_ID=l.VAM_PFeature_SetInstance_ID)";
             int no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Info("Update with ASI =" + no);
 
@@ -126,9 +126,9 @@ namespace VAdvantage.Process
             //	Set Count to Zero
             if (_inventoryCountSetZero)
             {
-                sql = "UPDATE M_InventoryLine l "
+                sql = "UPDATE VAM_InventoryLine l "
                     + "SET QtyCount=0 "
-                    + "WHERE M_Inventory_ID=" + _m_Inventory_ID;
+                    + "WHERE VAM_Inventory_ID=" + _VAM_Inventory_ID;
                 no = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 log.Info("Set Count to Zero =" + no);
             }
@@ -141,36 +141,36 @@ namespace VAdvantage.Process
                 //                    string query = "", qry = "";
                 //                    int result = 0;
                 //                    MInventoryLine iLine = lines[i];
-                //                    int M_Product_ID = Utility.Util.GetValueOfInt(iLine.GetM_Product_ID());
-                //                    int M_Locator_ID = Utility.Util.GetValueOfInt(iLine.GetM_Locator_ID());
-                //                    int M_AttributeSetInstance_ID = Util.GetValueOfInt(iLine.GetM_AttributeSetInstance_ID());
+                //                    int VAM_Product_ID = Utility.Util.GetValueOfInt(iLine.GetVAM_Product_ID());
+                //                    int VAM_Locator_ID = Utility.Util.GetValueOfInt(iLine.GetVAM_Locator_ID());
+                //                    int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(iLine.GetVAM_PFeature_SetInstance_ID());
 
-                //                    query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
-                //                           AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID;
+                //                    query = "SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate = " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
+                //                           AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID;
                 //                    result = Util.GetValueOfInt(DB.ExecuteScalar(query));
                 //                    if (result > 0)
                 //                    {
-                //                        qry = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                //                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                //                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID + @")
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID + @")
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID;
+                //                        qry = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_ID =
+                //                            (SELECT MAX(VAM_Inv_Trx_ID)   FROM VAM_Inv_Trx
+                //                            WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID + @")
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID + @")
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID;
                 //                        currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                 //                    }
                 //                    else
                 //                    {
-                //                        query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID;
+                //                        query = "SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID;
                 //                        result = Util.GetValueOfInt(DB.ExecuteScalar(query));
                 //                        if (result > 0)
                 //                        {
-                //                            qry = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                //                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                //                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID + @")
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID + @")
-                //                            AND  M_Product_ID = " + M_Product_ID + " AND M_Locator_ID = " + M_Locator_ID + " AND M_AttributeSetInstance_ID = " + M_AttributeSetInstance_ID;
+                //                            qry = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_ID =
+                //                            (SELECT MAX(VAM_Inv_Trx_ID)   FROM VAM_Inv_Trx
+                //                            WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) + @" 
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID + @")
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID + @")
+                //                            AND  VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + VAM_Locator_ID + " AND VAM_PFeature_SetInstance_ID = " + VAM_PFeature_SetInstance_ID;
                 //                            currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(qry));
                 //                        }
                 //                    }
@@ -194,25 +194,25 @@ namespace VAdvantage.Process
                 // Work done by Bharat on 26/12/2016 for optimization
                 if (isContainerApplicable)
                 {
-                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
-                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_ProductContainer_ID,
-                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
-                INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
-                AND m.M_Locator_ID = mt.M_Locator_ID AND nvl(m.M_ProductContainer_ID, 0) = nvl(mt.M_ProductContainer_ID, 0) 
-                WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
+                    sql = @"SELECT m.VAM_InventoryLine_ID, m.VAM_Locator_ID, m.VAM_Product_ID, m.VAM_PFeature_SetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                nvl(mt.CurrentQty, 0) as CurrentQty FROM VAM_InventoryLine m LEFT JOIN (SELECT DISTINCT t.VAM_Locator_ID, t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_ProductContainer_ID,
+                FIRST_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_Locator_ID, NVL(t.VAM_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t
+                INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
+                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.VAM_Product_ID = mt.VAM_Product_ID AND nvl(m.VAM_PFeature_SetInstance_ID, 0) = nvl(mt.VAM_PFeature_SetInstance_ID, 0) 
+                AND m.VAM_Locator_ID = mt.VAM_Locator_ID AND nvl(m.VAM_ProductContainer_ID, 0) = nvl(mt.VAM_ProductContainer_ID, 0) 
+                WHERE m.VAM_Inventory_ID = " + _VAM_Inventory_ID + " ORDER BY m.Line";
                 }
                 else
                 {
-                    sql = @"SELECT m.M_InventoryLine_ID, m.M_Locator_ID, m.M_Product_ID, m.M_AttributeSetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
-                nvl(mt.CurrentQty, 0) as CurrentQty FROM M_InventoryLine m LEFT JOIN (SELECT DISTINCT t.M_Locator_ID, t.M_Product_ID, t.M_AttributeSetInstance_ID, 
-                FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM M_Transaction t
-                INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
-                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.M_Product_ID = mt.M_Product_ID AND nvl(m.M_AttributeSetInstance_ID, 0) = nvl(mt.M_AttributeSetInstance_ID, 0) 
-                AND m.M_Locator_ID = mt.M_Locator_ID WHERE m.M_Inventory_ID = " + _m_Inventory_ID + " ORDER BY m.Line";
+                    sql = @"SELECT m.VAM_InventoryLine_ID, m.VAM_Locator_ID, m.VAM_Product_ID, m.VAM_PFeature_SetInstance_ID, m.AdjustmentType, m.AsOnDateCount, m.DifferenceQty,
+                nvl(mt.CurrentQty, 0) as CurrentQty FROM VAM_InventoryLine m LEFT JOIN (SELECT DISTINCT t.VAM_Locator_ID, t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, 
+                FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_Locator_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t
+                INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(inventory.GetMovementDate(), true) +
+                    " AND t.VAF_Client_ID = " + inventory.GetVAF_Client_ID() + @") mt ON m.VAM_Product_ID = mt.VAM_Product_ID AND nvl(m.VAM_PFeature_SetInstance_ID, 0) = nvl(mt.VAM_PFeature_SetInstance_ID, 0) 
+                AND m.VAM_Locator_ID = mt.VAM_Locator_ID WHERE m.VAM_Inventory_ID = " + _VAM_Inventory_ID + " ORDER BY m.Line";
                 }
 
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(M_InventoryLine_ID) FROM ( " + sql + " ) t", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAM_InventoryLine_ID) FROM ( " + sql + " ) t", null, null));
                 int pageSize = 500;
                 int TotalPage = (totalRec % pageSize) == 0 ? (totalRec / pageSize) : ((totalRec / pageSize) + 1);
                 int count = 0;
@@ -314,9 +314,9 @@ namespace VAdvantage.Process
 
             }
             if (multiple > 0)
-                return "@M_InventoryLine_ID@ - #" + no + " --> @InventoryProductMultiple@";
+                return "@VAM_InventoryLine_ID@ - #" + no + " --> @InventoryProductMultiple@";
 
-            //return "@M_InventoryLine_ID@ - #" + (no + noMA);
+            //return "@VAM_InventoryLine_ID@ - #" + (no + noMA);
             return "Physical Inventory Updated";
         }
 
@@ -328,18 +328,18 @@ namespace VAdvantage.Process
         {
             int no = 0;
             //
-            String sql = "SELECT * FROM M_InventoryLine WHERE M_Inventory_ID=@iid AND COALESCE(M_AttributeSetInstance_ID,0)=0 ";
+            String sql = "SELECT * FROM VAM_InventoryLine WHERE VAM_Inventory_ID=@iid AND COALESCE(VAM_PFeature_SetInstance_ID,0)=0 ";
 
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@iid", _m_Inventory_ID);
+                param[0] = new SqlParameter("@iid", _VAM_Inventory_ID);
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     MInventoryLine il = new MInventoryLine(GetCtx(), dr, Get_TrxName());
                     Decimal onHand = Env.ZERO;
-                    MStorage[] storages = MStorage.GetAll(GetCtx(), il.GetM_Product_ID(), il.GetM_Locator_ID(), Get_TrxName());
+                    MStorage[] storages = MStorage.GetAll(GetCtx(), il.GetVAM_Product_ID(), il.GetVAM_Locator_ID(), Get_TrxName());
                     MInventoryLineMA ma = null;
                     for (int i = 0; i < storages.Length; i++)
                     {
@@ -348,12 +348,12 @@ namespace VAdvantage.Process
                             continue;
                         onHand = Decimal.Add(onHand, storage.GetQtyOnHand());
                         //	No ASI
-                        if (storage.GetM_AttributeSetInstance_ID() == 0
+                        if (storage.GetVAM_PFeature_SetInstance_ID() == 0
                             && storages.Length == 1)
                             continue;
                         //	Save ASI
                         ma = new MInventoryLineMA(il,
-                            storage.GetM_AttributeSetInstance_ID(), storage.GetQtyOnHand());
+                            storage.GetVAM_PFeature_SetInstance_ID(), storage.GetQtyOnHand());
                         if (!ma.Save())
                             ;
                     }
@@ -376,17 +376,17 @@ namespace VAdvantage.Process
         /// <summary>
         /// Create/Add to Inventory Line Query
         /// </summary>
-        /// <param name="M_Locator_ID">locator</param>
-        /// <param name="M_Product_ID">product</param>
-        /// <param name="M_AttributeSetInstance_ID">asi</param>
+        /// <param name="VAM_Locator_ID">locator</param>
+        /// <param name="VAM_Product_ID">product</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">asi</param>
         /// <param name="currentQty">quantity</param>
-        /// <param name="M_AttributeSet_ID">attribute set</param>
+        /// <param name="VAM_PFeature_Set_ID">attribute set</param>
         /// <returns>lines added</returns>
-        private string UpdateInventoryLine(int M_InventoryLine_ID, int M_Product_ID, int M_Locator_ID, Decimal currentQty, string AdjustType, Decimal AsOnDateCount, Decimal DiffQty)
+        private string UpdateInventoryLine(int VAM_InventoryLine_ID, int VAM_Product_ID, int VAM_Locator_ID, Decimal currentQty, string AdjustType, Decimal AsOnDateCount, Decimal DiffQty)
         {
-            string qry = "select m_warehouse_id from m_locator where m_locator_id=" + M_Locator_ID;
-            int M_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_Trx()));
-            MWarehouse wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
+            string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
+            int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_Trx()));
+            MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
             if (wh.IsDisallowNegativeInv() == true)
             {
                 if (currentQty < 0)
@@ -394,7 +394,7 @@ namespace VAdvantage.Process
                     return "";
                 }
             }
-            MProduct product = MProduct.Get(GetCtx(), M_Product_ID);
+            MProduct product = MProduct.Get(GetCtx(), VAM_Product_ID);
             if (product != null)
             {
                 int precision = product.GetUOMPrecision();
@@ -412,8 +412,8 @@ namespace VAdvantage.Process
             Decimal QtyCount = Util.GetValueOfDecimal(Decimal.Subtract(currentQty, DiffQty));
 
             // Changes by Bharat on 02 Aug 2017 as issue given by Ravikant
-            string sql = @"UPDATE M_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsOnDateCount +
-                ",DifferenceQty = " + DiffQty + " WHERE M_InventoryLine_ID = " + M_InventoryLine_ID;
+            string sql = @"UPDATE VAM_InventoryLine SET QtyBook = " + currentQty + ",QtyCount = " + QtyCount + ",OpeningStock = " + currentQty + ",AsOnDateCount = " + AsOnDateCount +
+                ",DifferenceQty = " + DiffQty + " WHERE VAM_InventoryLine_ID = " + VAM_InventoryLine_ID;
 
             string updateQry = " BEGIN execute immediate('" + sql.Replace("'", "''") + "'); exception when others then null; END;";
             return updateQry;

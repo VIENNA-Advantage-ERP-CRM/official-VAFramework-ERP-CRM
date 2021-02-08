@@ -35,9 +35,9 @@ namespace VAdvantage.Acct
         private int _VAB_OrderLine_ID = 0;
         private MVABOrderLine _oLine = null;
         //
-        private int _M_InOutLine_ID = 0;
+        private int _VAM_Inv_InOutLine_ID = 0;
         private ProductCost _pc;
-        private int _M_AttributeSetInstance_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
 
 
         /// <summary>
@@ -68,17 +68,17 @@ namespace VAdvantage.Acct
             MMatchPO matchPO = (MMatchPO)GetPO();
             SetDateDoc(matchPO.GetDateTrx());
             //
-            _M_AttributeSetInstance_ID = matchPO.GetM_AttributeSetInstance_ID();
+            _VAM_PFeature_SetInstance_ID = matchPO.GetVAM_PFeature_SetInstance_ID();
             SetQty(matchPO.GetQty());
             //
             _VAB_OrderLine_ID = matchPO.GetVAB_OrderLine_ID();
             _oLine = new MVABOrderLine(GetCtx(), _VAB_OrderLine_ID, GetTrxName());
             //
-            _M_InOutLine_ID = matchPO.GetM_InOutLine_ID();
+            _VAM_Inv_InOutLine_ID = matchPO.GetVAM_Inv_InOutLine_ID();
             //	m_VAB_InvoiceLine_ID = matchPO.getVAB_InvoiceLine_ID();
             //
             _pc = new ProductCost(GetCtx(),
-                GetM_Product_ID(), _M_AttributeSetInstance_ID, GetTrxName());
+                GetVAM_Product_ID(), _VAM_PFeature_SetInstance_ID, GetTrxName());
             _pc.SetQty(GetQty());
             return null;
         }
@@ -108,11 +108,11 @@ namespace VAdvantage.Acct
         {
             List<Fact> facts = new List<Fact>();
             //
-            if (GetM_Product_ID() == 0		//  Nothing to do if no Product
+            if (GetVAM_Product_ID() == 0		//  Nothing to do if no Product
                 || Env.Signum(Utility.Util.GetValueOfDecimal(GetQty())) == 0
-                || _M_InOutLine_ID == 0)	//  No posting if not matched to Shipment
+                || _VAM_Inv_InOutLine_ID == 0)	//  No posting if not matched to Shipment
             {
-                log.Fine("No Product/Qty - M_Product_ID=" + GetM_Product_ID()
+                log.Fine("No Product/Qty - VAM_Product_ID=" + GetVAM_Product_ID()
                     + ",Qty=" + GetQty());
                 return facts;
             }
@@ -156,7 +156,7 @@ namespace VAdvantage.Acct
             {
                 //	Create PO Cost Detail Record firs
                 MCostDetail.CreateOrder(as1, _oLine.GetVAF_Org_ID(),
-                        GetM_Product_ID(), _M_AttributeSetInstance_ID,
+                        GetVAM_Product_ID(), _VAM_PFeature_SetInstance_ID,
                         _VAB_OrderLine_ID, 0,		//	no cost element
                         isReturnTrx ? Decimal.Negate(poCost) : poCost, isReturnTrx ? Decimal.Negate(Utility.Util.GetValueOfDecimal(GetQty())) : Utility.Util.GetValueOfDecimal(GetQty()),			//	Delivered
                         _oLine.GetDescription(), GetTrx(), GetRectifyingProcess());
@@ -165,9 +165,9 @@ namespace VAdvantage.Acct
 
             //	Current Costs
             String costingMethod = as1.GetCostingMethod();
-            MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
+            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
             MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
-                product.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), GetTrx());
+                product.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), GetTrx());
             if (pca.GetCostingMethod() != null)
             {
                 costingMethod = pca.GetCostingMethod();
@@ -206,7 +206,7 @@ namespace VAdvantage.Acct
             //	Nothing to post
             if (Env.Signum(difference) == 0)
             {
-                log.Log(Level.FINE, "No Cost Difference for M_Product_ID=" + GetM_Product_ID());
+                log.Log(Level.FINE, "No Cost Difference for VAM_Product_ID=" + GetVAM_Product_ID());
                 facts.Add(fact);
                 return facts;
             }

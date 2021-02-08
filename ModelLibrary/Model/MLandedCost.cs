@@ -35,7 +35,7 @@ namespace VAdvantage.Model
             if (VAB_LCost_ID == 0)
             {
                 //	setVAB_InvoiceLine_ID (0);
-                //	setM_CostElement_ID (0);
+                //	setVAM_ProductCostElement_ID (0);
                 SetLandedCostDistribution(LANDEDCOSTDISTRIBUTION_Quantity);	// Q
             }
         }
@@ -92,31 +92,31 @@ namespace VAdvantage.Model
             if (GetLandedCostDistribution() == LANDEDCOSTDISTRIBUTION_ImportValue)
             {
                 // atleast one reference from Product, Invoice or Invoice Line must be selected if Distribution is based on Import Value.
-                if (GetM_Product_ID() == 0 && GetRef_Invoice_ID() == 0 && GetRef_InvoiceLine_ID() == 0)
+                if (GetVAM_Product_ID() == 0 && GetRef_Invoice_ID() == 0 && GetRef_InvoiceLine_ID() == 0)
                 {
                     log.SaveError("Error", Msg.ParseTranslation(GetCtx(),
-                        "@NotFound@ @M_Product_ID@ | @VAB_Invoice_ID@ | @VAB_InvoiceLine_ID@"));
+                        "@NotFound@ @VAM_Product_ID@ | @VAB_Invoice_ID@ | @VAB_InvoiceLine_ID@"));
                     return false;
                 }
             }
-            else if (GetM_Product_ID() == 0
-                && GetM_InOut_ID() == 0
-                && GetM_InOutLine_ID() == 0)
+            else if (GetVAM_Product_ID() == 0
+                && GetVAM_Inv_InOut_ID() == 0
+                && GetVAM_Inv_InOutLine_ID() == 0)
             {
                 // atleast one reference from Product, Receipt, Receipt Line, Invoice or Invoice Line must be selected if distribution is other than Import Value.
-                if (Get_ColumnIndex("M_Movement_ID") > 0)
+                if (Get_ColumnIndex("VAM_InventoryTransfer_ID") > 0)
                 {
-                    if (GetM_Movement_ID() == 0 && GetM_MovementLine_ID() == 0)
+                    if (GetVAM_InventoryTransfer_ID() == 0 && GetVAM_InvTrf_Line_ID() == 0)
                     {
                         log.SaveError("Error", Msg.ParseTranslation(GetCtx(),
-                        "@NotFound@ @M_Product_ID@ | @M_InOut_ID@ | @M_InOutLine_ID@ | @M_Movement_ID@ | @M_MovementLine_ID@"));
+                        "@NotFound@ @VAM_Product_ID@ | @VAM_Inv_InOut_ID@ | @VAM_Inv_InOutLine_ID@ | @VAM_InventoryTransfer_ID@ | @VAM_InvTrf_Line_ID@"));
                         return false;
                     }
                 }
                 else
                 {
                     log.SaveError("Error", Msg.ParseTranslation(GetCtx(),
-                        "@NotFound@ @M_Product_ID@ | @M_InOut_ID@ | @M_InOutLine_ID@"));
+                        "@NotFound@ @VAM_Product_ID@ | @VAM_Inv_InOut_ID@ | @VAM_Inv_InOutLine_ID@"));
                     return false;
                 }
             }
@@ -124,29 +124,29 @@ namespace VAdvantage.Model
             //	No Product if Line entered
             if (GetLandedCostDistribution() == LANDEDCOSTDISTRIBUTION_ImportValue)
             {
-                if (GetRef_InvoiceLine_ID() != 0 && GetM_Product_ID() != 0)
-                    SetM_Product_ID(0);
+                if (GetRef_InvoiceLine_ID() != 0 && GetVAM_Product_ID() != 0)
+                    SetVAM_Product_ID(0);
             }
-            else if (Get_ColumnIndex("M_Movement_ID") > 0)
+            else if (Get_ColumnIndex("VAM_InventoryTransfer_ID") > 0)
             {
-                if ((GetM_InOutLine_ID() != 0 || GetM_MovementLine_ID() != 0) && GetM_Product_ID() != 0)
-                    SetM_Product_ID(0);
+                if ((GetVAM_Inv_InOutLine_ID() != 0 || GetVAM_InvTrf_Line_ID() != 0) && GetVAM_Product_ID() != 0)
+                    SetVAM_Product_ID(0);
             }
             else
             {
-                if (GetM_InOutLine_ID() != 0 && GetM_Product_ID() != 0)
-                    SetM_Product_ID(0);
+                if (GetVAM_Inv_InOutLine_ID() != 0 && GetVAM_Product_ID() != 0)
+                    SetVAM_Product_ID(0);
             }
 
             //JID_0032 : Unique Constraint handling
             StringBuilder sql = new StringBuilder();
-            if (GetM_InOut_ID() > 0)
+            if (GetVAM_Inv_InOut_ID() > 0)
             {
                 // Saved unique data basd on CostElement / Shipment / ShipmentLine
                 // not to consider Reversed or voided InvoiceLine record
                 sql.Clear();
-                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
-                    " AND M_InOut_ID = " + GetM_InOut_ID() + " AND (M_InOutLine_ID = " + GetM_InOutLine_ID() + " OR NVL(M_InOutLine_ID,0) = 0) " +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() +
+                    " AND VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID() + " AND (VAM_Inv_InOutLine_ID = " + GetVAM_Inv_InOutLine_ID() + " OR NVL(VAM_Inv_InOutLine_ID,0) = 0) " +
                     @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
                    AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
                 if (Get_ColumnIndex("ReversalDoc_ID") > 0)
@@ -160,12 +160,12 @@ namespace VAdvantage.Model
                     sql.Append(" AND VAB_LCost_ID <> " + GetVAB_LCost_ID());
                 }
             }
-            else if (GetM_Movement_ID() > 0)
+            else if (GetVAM_InventoryTransfer_ID() > 0)
             {
                 // Saved unique data basd on CostElement / Movement / MovementLine
                 sql.Clear();
-                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
-                       " AND M_Movement_ID = " + GetM_Movement_ID() + " AND (M_MovementLine_ID = " + GetM_MovementLine_ID() + " OR NVL(M_MovementLine_ID,0) = 0) " +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() +
+                       " AND VAM_InventoryTransfer_ID = " + GetVAM_InventoryTransfer_ID() + " AND (VAM_InvTrf_Line_ID = " + GetVAM_InvTrf_Line_ID() + " OR NVL(VAM_InvTrf_Line_ID,0) = 0) " +
                        @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
                    AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
                 if (Get_ColumnIndex("ReversalDoc_ID") > 0)
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
             {
                 // Saved unique data basd on CostElement / Invoice / InvoiceLine
                 sql.Clear();
-                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE M_CostElement_ID = " + GetM_CostElement_ID() +
+                sql.Append("SELECT COUNT(VAB_LCost_ID) FROM VAB_LCost WHERE VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() +
                        " AND Ref_Invoice_ID = " + GetRef_Invoice_ID() + " AND (Ref_InvoiceLine_ID = " + GetRef_InvoiceLine_ID() + " OR NVL(Ref_InvoiceLine_ID,0) = 0) " +
                        @" AND NOT EXISTS (SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice i ON i.VAB_Invoice_ID = il.VAB_Invoice_ID 
                    AND VAB_LCost.VAB_InvoiceLine_ID = il.VAB_InvoiceLine_ID WHERE i.DocStatus IN ('RE' , 'VO'))");
@@ -224,13 +224,13 @@ namespace VAdvantage.Model
             StringBuilder sb = new StringBuilder("MLandedCost[");
             sb.Append(Get_ID())
                 .Append(",CostDistribution=").Append(GetLandedCostDistribution())
-                .Append(",M_CostElement_ID=").Append(GetM_CostElement_ID());
-            if (GetM_InOut_ID() != 0)
-                sb.Append(",M_InOut_ID=").Append(GetM_InOut_ID());
-            if (GetM_InOutLine_ID() != 0)
-                sb.Append(",M_InOutLine_ID=").Append(GetM_InOutLine_ID());
-            if (GetM_Product_ID() != 0)
-                sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
+                .Append(",VAM_ProductCostElement_ID=").Append(GetVAM_ProductCostElement_ID());
+            if (GetVAM_Inv_InOut_ID() != 0)
+                sb.Append(",VAM_Inv_InOut_ID=").Append(GetVAM_Inv_InOut_ID());
+            if (GetVAM_Inv_InOutLine_ID() != 0)
+                sb.Append(",VAM_Inv_InOutLine_ID=").Append(GetVAM_Inv_InOutLine_ID());
+            if (GetVAM_Product_ID() != 0)
+                sb.Append(",VAM_Product_ID=").Append(GetVAM_Product_ID());
             sb.Append("]");
             return sb.ToString();
         }

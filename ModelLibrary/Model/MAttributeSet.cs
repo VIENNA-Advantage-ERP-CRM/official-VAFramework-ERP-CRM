@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MAttributeSet
- * Purpose        : Gat the value using M_AttributeUse table 
- * Class Used     : X_M_AttributeSet
+ * Purpose        : Gat the value using VAM_PFeature_Use table 
+ * Class Used     : X_VAM_PFeature_Set
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeSet : X_M_AttributeSet
+    public class MAttributeSet : X_VAM_PFeature_Set
     {
         #region Private Variables
         //	Instance Attributes					
@@ -33,27 +33,27 @@ namespace VAdvantage.Model
         //	Instance Attributes					
         private MVAMProductFeature[] _productAttributes = null;
         // Entry Exclude						
-        private X_M_AttributeSetExclude[] _excludes = null;
+        private X_VAM_PFeature_SetExclude[] _excludes = null;
         // Lot create Exclude					
-        private X_M_LotCtlExclude[] _excludeLots = null;
+        private X_VAM_LotControlExclude[] _excludeLots = null;
         //Serial No create Exclude				
-        private X_M_SerNoCtlExclude[] _excludeSerNos = null;
+        private X_VAM_ExcludeCtlSerialNo[] _excludeSerNos = null;
         //	Cache						
-        private static CCache<int, MAttributeSet> s_cache = new CCache<int, MAttributeSet>("M_AttributeSet", 20);
+        private static CCache<int, MAttributeSet> s_cache = new CCache<int, MAttributeSet>("VAM_PFeature_Set", 20);
         #endregion
 
         /* Get MAttributeSet from Cache
         *	@param ctx context
-        *	@param M_AttributeSet_ID id
+        *	@param VAM_PFeature_Set_ID id
         *	@return MAttributeSet
         */
-        public static MAttributeSet Get(Ctx ctx, int M_AttributeSet_ID)
+        public static MAttributeSet Get(Ctx ctx, int VAM_PFeature_Set_ID)
         {
-            int key = M_AttributeSet_ID;
+            int key = VAM_PFeature_Set_ID;
             MAttributeSet retValue = (MAttributeSet)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MAttributeSet(ctx, M_AttributeSet_ID, null);
+            retValue = new MAttributeSet(ctx, VAM_PFeature_Set_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -62,14 +62,14 @@ namespace VAdvantage.Model
         /**
          * 	Standard constructor
          *	@param ctx context
-         *	@param M_AttributeSet_ID id
+         *	@param VAM_PFeature_Set_ID id
          *	@param trxName transaction
          */
-        public MAttributeSet(Ctx ctx, int M_AttributeSet_ID, Trx trxName)
-            : base(ctx, M_AttributeSet_ID, trxName)
+        public MAttributeSet(Ctx ctx, int VAM_PFeature_Set_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_Set_ID, trxName)
         {
 
-            if (M_AttributeSet_ID == 0)
+            if (VAM_PFeature_Set_ID == 0)
             {
                 //	setName (null);
                 SetIsGuaranteeDate(false);
@@ -106,10 +106,10 @@ namespace VAdvantage.Model
                 || _productAttributes == null && !instanceAttributes)
             {
                 String sql = "SELECT mau.VAM_ProductFeature_ID "
-                    + "FROM M_AttributeUse mau"
+                    + "FROM VAM_PFeature_Use mau"
                     + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
                     + "WHERE mau.IsActive='Y' AND ma.IsActive='Y'"
-                    + " AND mau.M_AttributeSet_ID=" + GetM_AttributeSet_ID() + " AND ma.IsInstanceAttribute= " +
+                    + " AND mau.VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID() + " AND ma.IsInstanceAttribute= " +
                     ((instanceAttributes) ? "'Y'" : "'N'").ToString()
                     + " ORDER BY mau.VAM_ProductFeature_ID";
                 List<MVAMProductFeature> list = new List<MVAMProductFeature>();
@@ -205,8 +205,8 @@ namespace VAdvantage.Model
         {
             if (_excludes == null)
             {
-                List<X_M_AttributeSetExclude> list = new List<X_M_AttributeSetExclude>();
-                String sql = "SELECT * FROM M_AttributeSetExclude WHERE IsActive='Y' AND M_AttributeSet_ID=" + GetM_AttributeSet_ID();
+                List<X_VAM_PFeature_SetExclude> list = new List<X_VAM_PFeature_SetExclude>();
+                String sql = "SELECT * FROM VAM_PFeature_SetExclude WHERE IsActive='Y' AND VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID();
                 DataSet ds = new DataSet();
                 try
                 {
@@ -214,7 +214,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DataRow dr = ds.Tables[0].Rows[i];
-                        list.Add(new X_M_AttributeSetExclude(GetCtx(), dr, null));
+                        list.Add(new X_VAM_PFeature_SetExclude(GetCtx(), dr, null));
                     }
                     ds = null;
                 }
@@ -222,7 +222,7 @@ namespace VAdvantage.Model
                 {
                     log.Log (Level.SEVERE, sql, e);
                 }
-                _excludes = new X_M_AttributeSetExclude[list.Count];
+                _excludes = new X_VAM_PFeature_SetExclude[list.Count];
                 _excludes = list.ToArray();
             }
             //	Find it
@@ -247,12 +247,12 @@ namespace VAdvantage.Model
          */
         public bool IsExcludeLot(int VAF_Column_ID, bool isSOTrx)
         {
-            if (GetM_LotCtl_ID() == 0)
+            if (GetVAM_LotControl_ID() == 0)
                 return true;
             if (_excludeLots == null)
             {
-                List<X_M_LotCtlExclude> list = new List<X_M_LotCtlExclude>();
-                String sql = "SELECT * FROM M_LotCtlExclude WHERE IsActive='Y' AND M_LotCtl_ID=" + GetM_LotCtl_ID();
+                List<X_VAM_LotControlExclude> list = new List<X_VAM_LotControlExclude>();
+                String sql = "SELECT * FROM VAM_LotControlExclude WHERE IsActive='Y' AND VAM_LotControl_ID=" + GetVAM_LotControl_ID();
                 DataSet ds = null;
                 try
                 {
@@ -260,7 +260,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DataRow dr = ds.Tables[0].Rows[i];
-                        list.Add(new X_M_LotCtlExclude(GetCtx(), dr, null));
+                        list.Add(new X_VAM_LotControlExclude(GetCtx(), dr, null));
                     }
                     ds = null;
                 }
@@ -269,7 +269,7 @@ namespace VAdvantage.Model
                     log.Log (Level.SEVERE, sql, e);
                 }
 
-                _excludeLots = new X_M_LotCtlExclude[list.Count];
+                _excludeLots = new X_VAM_LotControlExclude[list.Count];
                 _excludeLots = list.ToArray();
             }
             //	Find it
@@ -294,12 +294,12 @@ namespace VAdvantage.Model
          */
         public bool IsExcludeSerNo(int VAF_Column_ID, bool isSOTrx)
         {
-            if (GetM_SerNoCtl_ID() == 0)
+            if (GetVAM_CtlSerialNo_ID() == 0)
                 return true;
             if (_excludeSerNos == null)
             {
-                List<X_M_SerNoCtlExclude> list = new List<X_M_SerNoCtlExclude>();
-                String sql = "SELECT * FROM M_SerNoCtlExclude WHERE IsActive='Y' AND M_SerNoCtl_ID=" + GetM_SerNoCtl_ID();
+                List<X_VAM_ExcludeCtlSerialNo> list = new List<X_VAM_ExcludeCtlSerialNo>();
+                String sql = "SELECT * FROM VAM_ExcludeCtlSerialNo WHERE IsActive='Y' AND VAM_CtlSerialNo_ID=" + GetVAM_CtlSerialNo_ID();
                 DataSet ds = null;
                 try
                 {
@@ -307,7 +307,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DataRow dr = ds.Tables[0].Rows[i];
-                        list.Add(new X_M_SerNoCtlExclude(GetCtx(), dr, null));
+                        list.Add(new X_VAM_ExcludeCtlSerialNo(GetCtx(), dr, null));
                     }
                     ds = null;
                 }
@@ -316,7 +316,7 @@ namespace VAdvantage.Model
                     log.Log (Level.SEVERE, sql, e);
                 }
 
-                _excludeSerNos = new X_M_SerNoCtlExclude[list.Count];
+                _excludeSerNos = new X_VAM_ExcludeCtlSerialNo[list.Count];
                 _excludeSerNos = list.ToArray();
             }
             //	Find it
@@ -407,14 +407,14 @@ namespace VAdvantage.Model
             //	Set Instance Attribute
             if (!IsInstanceAttribute())
             {
-                String sql = "UPDATE M_AttributeSet mas"
+                String sql = "UPDATE VAM_PFeature_Set mas"
                     + " SET IsInstanceAttribute='Y' "
-                    + "WHERE M_AttributeSet_ID=" + GetM_AttributeSet_ID()
+                    + "WHERE VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID()
                     + " AND IsInstanceAttribute='N'"
                     + " AND (IsSerNo='Y' OR IsLot='Y' OR IsGuaranteeDate='Y'"
-                        + " OR EXISTS (SELECT * FROM M_AttributeUse mau"
+                        + " OR EXISTS (SELECT * FROM VAM_PFeature_Use mau"
                             + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
-                            + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
+                            + "WHERE mau.VAM_PFeature_Set_ID=mas.VAM_PFeature_Set_ID"
                             + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                             + " AND ma.IsInstanceAttribute='Y')"
                             + ")";
@@ -428,14 +428,14 @@ namespace VAdvantage.Model
             //	Reset Instance Attribute
             if (IsInstanceAttribute() && !IsSerNo() && !IsLot() && !IsGuaranteeDate())
             {
-                String sql = "UPDATE M_AttributeSet mas"
+                String sql = "UPDATE VAM_PFeature_Set mas"
                     + " SET IsInstanceAttribute='N' "
-                    + "WHERE M_AttributeSet_ID=" + GetM_AttributeSet_ID()
+                    + "WHERE VAM_PFeature_Set_ID=" + GetVAM_PFeature_Set_ID()
                     + " AND IsInstanceAttribute='Y'"
                     + "	AND IsSerNo='N' AND IsLot='N' AND IsGuaranteeDate='N'"
-                    + " AND NOT EXISTS (SELECT * FROM M_AttributeUse mau"
+                    + " AND NOT EXISTS (SELECT * FROM VAM_PFeature_Use mau"
                         + " INNER JOIN VAM_ProductFeature ma ON (mau.VAM_ProductFeature_ID=ma.VAM_ProductFeature_ID) "
-                        + "WHERE mau.M_AttributeSet_ID=mas.M_AttributeSet_ID"
+                        + "WHERE mau.VAM_PFeature_Set_ID=mas.VAM_PFeature_Set_ID"
                         + " AND mau.IsActive='Y' AND ma.IsActive='Y'"
                         + " AND ma.IsInstanceAttribute='Y')";
                 int no = DataBase.DB.ExecuteQuery(sql, null, null);

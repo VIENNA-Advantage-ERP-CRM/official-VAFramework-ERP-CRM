@@ -11,36 +11,36 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_PriceList
+/** Generated Model for VAM_PriceList
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_PriceList : PO
+public class X_VAM_PriceList : PO
 {
-public X_M_PriceList (Context ctx, int M_PriceList_ID, Trx trxName) : base (ctx, M_PriceList_ID, trxName)
+public X_VAM_PriceList (Context ctx, int VAM_PriceList_ID, Trx trxName) : base (ctx, VAM_PriceList_ID, trxName)
 {
-/** if (M_PriceList_ID == 0)
-{
-SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
-SetEnforcePriceLimit (false);
-SetIsDefault (false);
-SetIsSOPriceList (false);
-SetIsTaxIncluded (false);
-SetM_PriceList_ID (0);
-SetName (null);
-SetPricePrecision (0);	// 2
-}
- */
-}
-public X_M_PriceList (Ctx ctx, int M_PriceList_ID, Trx trxName) : base (ctx, M_PriceList_ID, trxName)
-{
-/** if (M_PriceList_ID == 0)
+/** if (VAM_PriceList_ID == 0)
 {
 SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
 SetEnforcePriceLimit (false);
 SetIsDefault (false);
 SetIsSOPriceList (false);
 SetIsTaxIncluded (false);
-SetM_PriceList_ID (0);
+SetVAM_PriceList_ID (0);
+SetName (null);
+SetPricePrecision (0);	// 2
+}
+ */
+}
+public X_VAM_PriceList (Ctx ctx, int VAM_PriceList_ID, Trx trxName) : base (ctx, VAM_PriceList_ID, trxName)
+{
+/** if (VAM_PriceList_ID == 0)
+{
+SetVAB_Currency_ID (0);	// @$VAB_Currency_ID@
+SetEnforcePriceLimit (false);
+SetIsDefault (false);
+SetIsSOPriceList (false);
+SetIsTaxIncluded (false);
+SetVAM_PriceList_ID (0);
 SetName (null);
 SetPricePrecision (0);	// 2
 }
@@ -51,7 +51,7 @@ SetPricePrecision (0);	// 2
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,7 +59,7 @@ public X_M_PriceList (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,13 +67,13 @@ public X_M_PriceList (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PriceList (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_PriceList()
+static X_VAM_PriceList()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -86,8 +86,8 @@ public static long updatedMS = 1280389063595L;
 public static int Table_ID;
  // =255;
 
-/** TableName=M_PriceList */
-public static String Table_Name="M_PriceList";
+/** TableName=VAM_PriceList */
+public static String Table_Name="VAM_PriceList";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -121,7 +121,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_PriceList[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PriceList[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -248,17 +248,17 @@ if (oo != null)
 return false;
 }
 /** Set Price List.
-@param M_PriceList_ID Unique identifier of a Price List */
-public void SetM_PriceList_ID (int M_PriceList_ID)
+@param VAM_PriceList_ID Unique identifier of a Price List */
+public void SetVAM_PriceList_ID (int VAM_PriceList_ID)
 {
-if (M_PriceList_ID < 1) throw new ArgumentException ("M_PriceList_ID is mandatory.");
-Set_ValueNoCheck ("M_PriceList_ID", M_PriceList_ID);
+if (VAM_PriceList_ID < 1) throw new ArgumentException ("VAM_PriceList_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PriceList_ID", VAM_PriceList_ID);
 }
 /** Get Price List.
 @return Unique identifier of a Price List */
-public int GetM_PriceList_ID() 
+public int GetVAM_PriceList_ID() 
 {
-Object ii = Get_Value("M_PriceList_ID");
+Object ii = Get_Value("VAM_PriceList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

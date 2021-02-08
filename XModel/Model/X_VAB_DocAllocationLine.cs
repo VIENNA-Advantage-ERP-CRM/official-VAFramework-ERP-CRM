@@ -166,16 +166,16 @@ namespace VAdvantage.Model
 @param IsManual This is a manual process */
         public void SetIsManual(Boolean IsManual) { Set_ValueNoCheck("IsManual", IsManual); }/** Get Manual.
 @return This is a manual process */
-        public Boolean IsManual() { Object oo = Get_Value("IsManual"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set M_CostAllocation_ID.
-@param M_CostAllocation_ID M_CostAllocation_ID */
-        public void SetM_CostAllocation_ID(int M_CostAllocation_ID)
+        public Boolean IsManual() { Object oo = Get_Value("IsManual"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set VAM_ProductCostAllocation_ID.
+@param VAM_ProductCostAllocation_ID VAM_ProductCostAllocation_ID */
+        public void SetVAM_ProductCostAllocation_ID(int VAM_ProductCostAllocation_ID)
         {
-            if (M_CostAllocation_ID <= 0) Set_Value("M_CostAllocation_ID", null);
+            if (VAM_ProductCostAllocation_ID <= 0) Set_Value("VAM_ProductCostAllocation_ID", null);
             else
-                Set_Value("M_CostAllocation_ID", M_CostAllocation_ID);
-        }/** Get M_CostAllocation_ID.
-@return M_CostAllocation_ID */
-        public int GetM_CostAllocation_ID() { Object ii = Get_Value("M_CostAllocation_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Over/Under Payment.
+                Set_Value("VAM_ProductCostAllocation_ID", VAM_ProductCostAllocation_ID);
+        }/** Get VAM_ProductCostAllocation_ID.
+@return VAM_ProductCostAllocation_ID */
+        public int GetVAM_ProductCostAllocation_ID() { Object ii = Get_Value("VAM_ProductCostAllocation_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Over/Under Payment.
 @param OverUnderAmt Over-Payment (unallocated) or Under-Payment (partial payment) Amount */
         public void SetOverUnderAmt(Decimal? OverUnderAmt) { Set_Value("OverUnderAmt", (Decimal?)OverUnderAmt); }/** Get Over/Under Payment.
 @return Over-Payment (unallocated) or Under-Payment (partial payment) Amount */

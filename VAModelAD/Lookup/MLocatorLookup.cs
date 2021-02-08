@@ -231,11 +231,11 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public NamePair GetDirect(Object keyValue, bool saveInCache, Trx trxName)
         {
-            X_M_Locator loc = GetMLocator(keyValue, trxName);
+            X_VAM_Locator loc = GetMLocator(keyValue, trxName);
             if (loc == null)
                 return null;
             //
-            int key = loc.GetM_Locator_ID();
+            int key = loc.GetVAM_Locator_ID();
             KeyNamePair retValue = new KeyNamePair(key, loc.GetValue());
             if (saveInCache)
                 _lookup.Add(key, retValue);
@@ -248,22 +248,22 @@ namespace VAdvantage.Model
         /// <param name="keyValue"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public X_M_Locator GetMLocator(Object keyValue, Trx trxName)
+        public X_VAM_Locator GetMLocator(Object keyValue, Trx trxName)
         {
             //	log.fine( "MLocatorLookup.getDirect " + keyValue.getClass() + "=" + keyValue);
-            int M_Locator_ID = -1;
+            int VAM_Locator_ID = -1;
             try
             {
-                M_Locator_ID = int.Parse(keyValue.ToString());
+                VAM_Locator_ID = int.Parse(keyValue.ToString());
             }
             catch 
             { }
-            if (M_Locator_ID == -1)
+            if (VAM_Locator_ID == -1)
             {
                 log.Log(Level.SEVERE, "Invalid key=" + keyValue);
                 return null;
             }
-            return new X_M_Locator((Context)GetCtx(), M_Locator_ID, trxName);
+            return new X_VAM_Locator((Context)GetCtx(), VAM_Locator_ID, trxName);
         }
 
         /// <summary>
@@ -304,35 +304,35 @@ namespace VAdvantage.Model
             int only_Product_ID = GetOnly_Product_ID();
             bool? only_IsSOTrx = IsOnly_Outgoing();
             //int sqlParaCount = 0;
-            StringBuilder sql = new StringBuilder("SELECT * FROM M_Locator ")
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAM_Locator ")
                 .Append(" WHERE IsActive='Y'");
             if (only_Warehouse_ID != 0)
-                sql.Append(" AND M_Warehouse_ID=@w");
+                sql.Append(" AND VAM_Warehouse_ID=@w");
             if (only_Product_ID != 0)
             {
                 sql.Append(" AND (IsDefault='Y' ");	//	Default Locator
                 //	Something already stored
-                sql.Append("OR EXISTS (SELECT * FROM M_Storage s ")	//	Storage Locator
-                    .Append("WHERE s.M_Locator_ID=M_Locator.M_Locator_ID AND s.M_Product_ID=@p)");
+                sql.Append("OR EXISTS (SELECT * FROM VAM_Storage s ")	//	Storage Locator
+                    .Append("WHERE s.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND s.VAM_Product_ID=@p)");
 
                 if (only_IsSOTrx == null || !only_IsSOTrx.Value)
                 {
                     //	Default Product
-                    sql.Append("OR EXISTS (SELECT * FROM M_Product p ")	//	Default Product Locator
-                    .Append("WHERE p.M_Locator_ID=M_Locator.M_Locator_ID AND p.M_Product_ID=@p)");
+                    sql.Append("OR EXISTS (SELECT * FROM VAM_Product p ")	//	Default Product Locator
+                    .Append("WHERE p.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND p.VAM_Product_ID=@p)");
                     //	Product Locators
-                    sql.Append("OR EXISTS (SELECT * FROM M_ProductLocator pl ")	//	Product Locator
-                    .Append("WHERE pl.M_Locator_ID=M_Locator.M_Locator_ID AND pl.M_Product_ID=@p)");
+                    sql.Append("OR EXISTS (SELECT * FROM VAM_ProductLocator pl ")	//	Product Locator
+                    .Append("WHERE pl.VAM_Locator_ID=VAM_Locator.VAM_Locator_ID AND pl.VAM_Product_ID=@p)");
                     // No locators defined for the warehouse
                     sql.Append("OR 0 = (SELECT COUNT(*) ");
-                    sql.Append("FROM M_ProductLocator pl");
-                    sql.Append(" INNER JOIN M_Locator l2 ON (pl.M_Locator_ID=l2.M_Locator_ID) ");
-                    sql.Append("WHERE pl.M_Product_ID=@p AND l2.M_Warehouse_ID=M_Locator.M_Warehouse_ID )");
+                    sql.Append("FROM VAM_ProductLocator pl");
+                    sql.Append(" INNER JOIN VAM_Locator l2 ON (pl.VAM_Locator_ID=l2.VAM_Locator_ID) ");
+                    sql.Append("WHERE pl.VAM_Product_ID=@p AND l2.VAM_Warehouse_ID=VAM_Locator.VAM_Warehouse_ID )");
                 }
                 sql.Append(" ) ");
             }
             String finalSql = MVAFRole.GetDefault((Context)GetCtx(), false).AddAccessSQL(
-                sql.ToString(), "M_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
+                sql.ToString(), "VAM_Locator", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
             //if (_loader.ThreadState == ThreadState.Suspended)
             //{
             //    log.log(Level.SEVERE, "Interrupted");
@@ -366,10 +366,10 @@ namespace VAdvantage.Model
                         log.Warning("Over Max Rows - " + rows);
                         break;
                     }
-                    X_M_Locator loc = new X_M_Locator((Context)GetCtx(), dr, null);
-                    int M_Locator_ID = loc.GetM_Locator_ID();
-                    KeyNamePair pp = new KeyNamePair(M_Locator_ID, loc.GetValue());
-                    _lookup.Add(M_Locator_ID, pp);
+                    X_VAM_Locator loc = new X_VAM_Locator((Context)GetCtx(), dr, null);
+                    int VAM_Locator_ID = loc.GetVAM_Locator_ID();
+                    KeyNamePair pp = new KeyNamePair(VAM_Locator_ID, loc.GetValue());
+                    _lookup.Add(VAM_Locator_ID, pp);
                 }
                 ds.Dispose();
                 ds = null;
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override String GetColumnName()
         {
-            return "M_Locator.M_Locator_ID";
+            return "VAM_Locator.VAM_Locator_ID";
         }
     }
 }

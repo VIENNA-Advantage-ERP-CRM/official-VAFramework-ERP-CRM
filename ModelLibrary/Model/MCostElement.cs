@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MCostElement
  * Purpose        : Product/element cost purpose 
- * Class Used     : X_M_CostElement
+ * Class Used     : X_VAM_ProductCostElement
  * Chronological    Development
  * Raghunandan     18-Jun-2009
   ******************************************************/
@@ -27,10 +27,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCostElement : X_M_CostElement
+    public class MCostElement : X_VAM_ProductCostElement
     {
         //Cache					
-        private static CCache<int, MCostElement> s_cache = new CCache<int, MCostElement>("M_CostElement", 20);
+        private static CCache<int, MCostElement> s_cache = new CCache<int, MCostElement>("VAM_ProductCostElement", 20);
 
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MCostElement).FullName);
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
             }
             //
             MCostElement retValue = null;
-            String sql = "SELECT * FROM M_CostElement WHERE VAF_Client_ID=" + po.GetVAF_Client_ID() + " AND CostingMethod=@costingMethod ORDER BY VAF_Org_ID";
+            String sql = "SELECT * FROM VAM_ProductCostElement WHERE VAF_Client_ID=" + po.GetVAF_Client_ID() + " AND CostingMethod=@costingMethod ORDER BY VAF_Org_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         public static MCostElement GetMaterialCostElement(Ctx ctx, String CostingMethod)
         {
             MCostElement retValue = null;
-            String sql = "SELECT * FROM M_CostElement WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND CostingMethod=@CostingMethod ORDER BY VAF_Org_ID";
+            String sql = "SELECT * FROM VAM_ProductCostElement WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND CostingMethod=@CostingMethod ORDER BY VAF_Org_ID";
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -154,7 +154,7 @@ namespace VAdvantage.Model
         public static MCostElement[] GetCostingMethods(PO po)
         {
             List<MCostElement> list = new List<MCostElement>();
-            String sql = "SELECT * FROM M_CostElement "
+            String sql = "SELECT * FROM VAM_ProductCostElement "
                 + "WHERE VAF_Client_ID=@Client_ID"
                 + " AND IsActive='Y' AND CostElementType='M' AND CostingMethod IS NOT NULL";
             DataTable dt = null;
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
         public static MCostElement[] GetMaterialCostingMethods(PO po)
         {
             List<MCostElement> list = new List<MCostElement>();
-            String sql = "SELECT * FROM M_CostElement "
+            String sql = "SELECT * FROM VAM_ProductCostElement "
                 + "WHERE VAF_Client_ID=@Client_ID"
                 + " AND IsActive='Y' AND CostElementType='M'";
             DataTable dt = null;
@@ -237,16 +237,16 @@ namespace VAdvantage.Model
         /**
          * 	Get Cost Element from Cache
          *	@param ctx context
-         *	@param M_CostElement_ID id
+         *	@param VAM_ProductCostElement_ID id
          *	@return Cost Element
          */
-        public static MCostElement Get(Ctx ctx, int M_CostElement_ID)
+        public static MCostElement Get(Ctx ctx, int VAM_ProductCostElement_ID)
         {
-            int key = M_CostElement_ID;
+            int key = VAM_ProductCostElement_ID;
             MCostElement retValue = (MCostElement)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCostElement(ctx, M_CostElement_ID, null);
+            retValue = new MCostElement(ctx, VAM_ProductCostElement_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -256,13 +256,13 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_CostElement_ID id
+         *	@param VAM_ProductCostElement_ID id
          *	@param trxName trx
          */
-        public MCostElement(Ctx ctx, int M_CostElement_ID, Trx trxName)
-            : base(ctx, M_CostElement_ID, trxName)
+        public MCostElement(Ctx ctx, int VAM_ProductCostElement_ID, Trx trxName)
+            : base(ctx, VAM_ProductCostElement_ID, trxName)
         {
-            if (M_CostElement_ID == 0)
+            if (VAM_ProductCostElement_ID == 0)
             {
                 //	setName (null);
                 SetCostElementType(COSTELEMENTTYPE_Material);
@@ -293,7 +293,7 @@ namespace VAdvantage.Model
             if (COSTELEMENTTYPE_Material.Equals(GetCostElementType())
                 && (newRecord || Is_ValueChanged("CostingMethod")))
             {
-                String sql = "SELECT COALESCE(MAX(M_CostElement_ID),0) FROM M_CostElement "
+                String sql = "SELECT COALESCE(MAX(VAM_ProductCostElement_ID),0) FROM VAM_ProductCostElement "
                     + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND CostingMethod='" + GetCostingMethod() + "'";
                 int id = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteScalar(sql, null, null));
                 if (id > 0 && id != Get_ID())
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
                 || !COSTELEMENTTYPE_Material.Equals(GetCostElementType()))
                 return true;
             // JID_0096: System should not allow to delete the costing element if costing is already calculated against that element
-            String qry = "SELECT Count(M_CostElement_ID) FROM M_Cost WHERE IsActive = 'Y' AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND M_CostElement_ID=" + GetM_CostElement_ID();
+            String qry = "SELECT Count(VAM_ProductCostElement_ID) FROM VAM_ProductCost WHERE IsActive = 'Y' AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAM_ProductCostElement_ID=" + GetVAM_ProductCostElement_ID();
             int id = Util.GetValueOfInt(DataBase.DB.ExecuteScalar(qry, null, Get_Trx()));
             if (id > 0)
             {
@@ -358,8 +358,8 @@ namespace VAdvantage.Model
             }
 
             //	Costing Methods on PC level
-            String sql = "SELECT M_Product_Category_ID FROM M_Product_Category_Acct WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND CostingMethod=@costingMethod";
-            int M_Product_Category_ID = 0;
+            String sql = "SELECT VAM_ProductCategory_ID FROM VAM_ProductCategory_Acct WHERE VAF_Client_ID=" + GetVAF_Client_ID() + " AND CostingMethod=@costingMethod";
+            int VAM_ProductCategory_ID = 0;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -373,7 +373,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    M_Product_Category_ID = Convert.ToInt32(dr[0]);
+                    VAM_ProductCategory_ID = Convert.ToInt32(dr[0]);
                 }
             }
             catch (Exception e)
@@ -389,10 +389,10 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            if (M_Product_Category_ID != 0)
+            if (VAM_ProductCategory_ID != 0)
             {
-                log.SaveError("CannotDeleteUsed", Msg.GetElement(GetCtx(), "M_Product_Category_ID")
-                   + " (ID=" + M_Product_Category_ID + ")");
+                log.SaveError("CannotDeleteUsed", Msg.GetElement(GetCtx(), "VAM_ProductCategory_ID")
+                   + " (ID=" + VAM_ProductCategory_ID + ")");
                 return false;
             }
             return true;
@@ -553,7 +553,7 @@ namespace VAdvantage.Model
         public static int GetMfgCostElement(int VAF_Client_ID)
         {
             int ce = 0;
-            String sql = " SELECT M_CostElement_ID FROM M_CostElement WHERE VAF_Client_ID =" + VAF_Client_ID + " AND IsMfgMaterialCost = 'Y'";
+            String sql = " SELECT VAM_ProductCostElement_ID FROM VAM_ProductCostElement WHERE VAF_Client_ID =" + VAF_Client_ID + " AND IsMfgMaterialCost = 'Y'";
             IDataReader idr = null;
             try
             {
@@ -584,28 +584,28 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">current context</param>
         /// <param name="VAF_Client_ID">Client reference</param>
-        /// <param name="M_Product_ID">Product whom costing method is to be determine</param>
+        /// <param name="VAM_Product_ID">Product whom costing method is to be determine</param>
         /// <param name="trxName">Transaction</param>
         /// <returns>True/False</returns>
-        public static bool IsPOCostingmethod(Ctx ctx, int VAF_Client_ID, int M_Product_ID, Trx trxName)
+        public static bool IsPOCostingmethod(Ctx ctx, int VAF_Client_ID, int VAM_Product_ID, Trx trxName)
         {
             MProductCategory pc = null;
             bool isPOcostingMethod = false;
             string costingMethod = null;
             MVAFClient client = MVAFClient.Get(ctx, VAF_Client_ID);
-            MProduct product = MProduct.Get(ctx, M_Product_ID);
+            MProduct product = MProduct.Get(ctx, VAM_Product_ID);
 
             if (product != null)
             {
-                pc = MProductCategory.Get(product.GetCtx(), product.GetM_Product_Category_ID());
+                pc = MProductCategory.Get(product.GetCtx(), product.GetVAM_ProductCategory_ID());
                 if (pc != null)
                 {
                     // check costing method from product category
                     costingMethod = pc.GetCostingMethod();
                     if (costingMethod == "C")
                     {
-                        costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
-                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=" + pc.GetM_CostElement_ID() + @" )
+                        costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_ID IN 
+                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM VAM_ProductCostElementLine WHERE VAM_ProductCostElement_ID=" + pc.GetVAM_ProductCostElement_ID() + @" )
                                         AND CostingMethod IS NOT NULL", null, trxName));
                     }
                 }
@@ -619,8 +619,8 @@ namespace VAdvantage.Model
                         costingMethod = actSchema.GetCostingMethod();
                         if (costingMethod == "C")
                         {
-                            costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM M_CostElement WHERE M_CostElement_ID IN 
-                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM M_CostElementLine WHERE M_CostElement_ID=" + actSchema.GetM_CostElement_ID() + @" )
+                            costingMethod = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT costingmethod FROM VAM_ProductCostElement WHERE VAM_ProductCostElement_ID IN 
+                                        (SELECT CAST(M_Ref_CostElement AS INTEGER) FROM VAM_ProductCostElementLine WHERE VAM_ProductCostElement_ID=" + actSchema.GetVAM_ProductCostElement_ID() + @" )
                                         AND CostingMethod IS NOT NULL", null, trxName));
                         }
                     }

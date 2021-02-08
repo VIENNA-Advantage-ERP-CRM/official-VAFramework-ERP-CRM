@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
  * Class Name     : MAttributeSetInstance
- * Purpose        : Get attribute instance from M_Product tab;e
- * Class Used     : X_M_AttributeSetInstance
+ * Purpose        : Get attribute instance from VAM_Product tab;e
+ * Class Used     : X_VAM_PFeature_SetInstance
  * Chronological    Development
  * Raghunandan     08-Jun-2009
   ******************************************************/
@@ -23,7 +23,7 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MAttributeSetInstance : X_M_AttributeSetInstance
+    public class MAttributeSetInstance : X_VAM_PFeature_SetInstance
     {
         #region Private variable
         /**	Attribute Set				*/
@@ -39,12 +39,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_AttributeSetInstance_ID">id</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeSetInstance(Ctx ctx, int M_AttributeSetInstance_ID, Trx trxName)
-            : base(ctx, M_AttributeSetInstance_ID, trxName)
+        public MAttributeSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID, Trx trxName)
+            : base(ctx, VAM_PFeature_SetInstance_ID, trxName)
         {
-            if (M_AttributeSetInstance_ID == 0)
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
             }
         }
@@ -52,27 +52,27 @@ namespace VAdvantage.Model
         /**
  * 	Get Attribute Set Instance from ID or Product
  *	@param ctx context
- * 	@param M_AttributeSetInstance_ID id or 0
- * 	@param M_Product_ID required if id is 0
+ * 	@param VAM_PFeature_SetInstance_ID id or 0
+ * 	@param VAM_Product_ID required if id is 0
  * 	@return Attribute Set Instance or null
  */
         public static MAttributeSetInstance Get(Ctx ctx,
-            int M_AttributeSetInstance_ID, int M_Product_ID)
+            int VAM_PFeature_SetInstance_ID, int VAM_Product_ID)
         {
             MAttributeSetInstance retValue = null;
             //	Load Instance if not 0
-            if (M_AttributeSetInstance_ID != 0)
+            if (VAM_PFeature_SetInstance_ID != 0)
             {
-               _log.Fine("From M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID);
-                return new MAttributeSetInstance(ctx, M_AttributeSetInstance_ID, null);
+               _log.Fine("From VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID);
+                return new MAttributeSetInstance(ctx, VAM_PFeature_SetInstance_ID, null);
             }
             //	Get new from Product
-           _log.Fine("From M_Product_ID=" + M_Product_ID);
-            if (M_Product_ID == 0)
+           _log.Fine("From VAM_Product_ID=" + VAM_Product_ID);
+            if (VAM_Product_ID == 0)
                 return null;
-            String sql = "SELECT M_AttributeSet_ID, M_AttributeSetInstance_ID "
-                + "FROM M_Product "
-                + "WHERE M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT VAM_PFeature_Set_ID, VAM_PFeature_SetInstance_ID "
+                + "FROM VAM_Product "
+                + "WHERE VAM_Product_ID=" + VAM_Product_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -83,9 +83,9 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    int M_AttributeSet_ID = Utility.Util.GetValueOfInt(dr[0].ToString()); //Convert.ToInt32(dr[0]);//.getInt(1);
-                    //	M_AttributeSetInstance_ID = dr.getInt(2);	//	needed ?
-                    retValue = new MAttributeSetInstance(ctx, 0, M_AttributeSet_ID, null);
+                    int VAM_PFeature_Set_ID = Utility.Util.GetValueOfInt(dr[0].ToString()); //Convert.ToInt32(dr[0]);//.getInt(1);
+                    //	VAM_PFeature_SetInstance_ID = dr.getInt(2);	//	needed ?
+                    retValue = new MAttributeSetInstance(ctx, 0, VAM_PFeature_Set_ID, null);
                 }
             }
             catch (Exception ex)
@@ -115,15 +115,15 @@ namespace VAdvantage.Model
         /**
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_AttributeSetInstance_ID id
-         * 	@param M_AttributeSet_ID attribute set
+         *	@param VAM_PFeature_SetInstance_ID id
+         * 	@param VAM_PFeature_Set_ID attribute set
          *	@param trxName transaction
          */
-        public MAttributeSetInstance(Ctx ctx, int M_AttributeSetInstance_ID,
-            int M_AttributeSet_ID, Trx trxName)
-            : this(ctx, M_AttributeSetInstance_ID, trxName)
+        public MAttributeSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID,
+            int VAM_PFeature_Set_ID, Trx trxName)
+            : this(ctx, VAM_PFeature_SetInstance_ID, trxName)
         {
-            SetM_AttributeSet_ID(M_AttributeSet_ID);
+            SetVAM_PFeature_Set_ID(VAM_PFeature_Set_ID);
         }
 
         /**
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
         public void SetMAttributeSet(MAttributeSet mas)
         {
             _mas = mas;
-            SetM_AttributeSet_ID(mas.GetM_AttributeSet_ID());
+            SetVAM_PFeature_Set_ID(mas.GetVAM_PFeature_Set_ID());
         }
 
         /**
@@ -142,8 +142,8 @@ namespace VAdvantage.Model
          */
         public MAttributeSet GetMAttributeSet()
         {
-            if (_mas == null && GetM_AttributeSet_ID() != 0)
-                _mas = new MAttributeSet(GetCtx(), GetM_AttributeSet_ID(), Get_TrxName());
+            if (_mas == null && GetVAM_PFeature_Set_ID() != 0)
+                _mas = new MAttributeSet(GetCtx(), GetVAM_PFeature_Set_ID(), Get_TrxName());
             return _mas;
         }
 
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
             MVAMProductFeature[] attributes = _mas.GetMAttributes(true);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetM_AttributeSetInstance_ID());
+                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetVAM_PFeature_SetInstance_ID());
                 if (mai != null && mai.GetValue() != null)
                 {
                     if (sb.Length > 0)
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
             attributes = _mas.GetMAttributes(false);
             for (int i = 0; i < attributes.Length; i++)
             {
-                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetM_AttributeSetInstance_ID());
+                MAttributeInstance mai = attributes[i].GetMAttributeInstance(GetVAM_PFeature_SetInstance_ID());
                 if (mai != null && mai.GetValue() != null)
                 {
                     if (sb.Length > 0)
@@ -239,32 +239,32 @@ namespace VAdvantage.Model
         /**
          * 	Get Lot No
          * 	@param getNew if true create/set new lot
-         * 	@param M_Product_ID product used if new
+         * 	@param VAM_Product_ID product used if new
          *	@return lot
          */
-        public String GetLot(bool getNew, int M_Product_ID)
+        public String GetLot(bool getNew, int VAM_Product_ID)
         {
             if (getNew)
-                CreateLot(M_Product_ID);
+                CreateLot(VAM_Product_ID);
             return GetLot();
         }
 
         /**
          * 	Create Lot
-         * 	@param M_Product_ID product used if new
+         * 	@param VAM_Product_ID product used if new
          *	@return lot info
          */
-        public KeyNamePair CreateLot(int M_Product_ID)
+        public KeyNamePair CreateLot(int VAM_Product_ID)
         {
             KeyNamePair retValue = null;
-            int M_LotCtl_ID = GetMAttributeSet().GetM_LotCtl_ID();
-            if (M_LotCtl_ID != 0)
+            int VAM_LotControl_ID = GetMAttributeSet().GetVAM_LotControl_ID();
+            if (VAM_LotControl_ID != 0)
             {
-                MLotCtl ctl = new MLotCtl(GetCtx(), M_LotCtl_ID, null);
-                MLot lot = ctl.CreateLot(M_Product_ID);
-                SetM_Lot_ID(lot.GetM_Lot_ID());
+                MLotCtl ctl = new MLotCtl(GetCtx(), VAM_LotControl_ID, null);
+                MLot lot = ctl.CreateLot(VAM_Product_ID);
+                SetVAM_Lot_ID(lot.GetVAM_Lot_ID());
                 SetLot(lot.GetName());
-                retValue = new KeyNamePair(lot.GetM_Lot_ID(), lot.GetName());
+                retValue = new KeyNamePair(lot.GetVAM_Lot_ID(), lot.GetName());
             }
             return retValue;
         }
@@ -272,14 +272,14 @@ namespace VAdvantage.Model
         /**
          * 	To to find lot and set Lot/ID
          *	@param Lot lot
-         *	@param M_Product_ID product
+         *	@param VAM_Product_ID product
          */
-        public void SetLot(String Lot, int M_Product_ID)
+        public void SetLot(String Lot, int VAM_Product_ID)
         {
             //	Try to find it
-            MLot mLot = MLot.GetProductLot(GetCtx(), M_Product_ID, Lot, Get_TrxName());
+            MLot mLot = MLot.GetProductLot(GetCtx(), VAM_Product_ID, Lot, Get_TrxName());
             if (mLot != null)
-                SetM_Lot_ID(mLot.GetM_Lot_ID());
+                SetVAM_Lot_ID(mLot.GetVAM_Lot_ID());
             SetLot(Lot);
         }
 
@@ -306,10 +306,10 @@ namespace VAdvantage.Model
         {
             if (getNew)
             {
-                int M_SerNoCtl_ID = GetMAttributeSet().GetM_SerNoCtl_ID();
-                if (M_SerNoCtl_ID != 0)
+                int VAM_CtlSerialNo_ID = GetMAttributeSet().GetVAM_CtlSerialNo_ID();
+                if (VAM_CtlSerialNo_ID != 0)
                 {
-                    MSerNoCtl ctl = new MSerNoCtl(GetCtx(), M_SerNoCtl_ID, Get_TrxName());
+                    MSerNoCtl ctl = new MSerNoCtl(GetCtx(), VAM_CtlSerialNo_ID, Get_TrxName());
                     SetSerNo(ctl.CreateSerNo());
                 }
             }

@@ -32,7 +32,7 @@ namespace VAdvantage.Process
         /** Effective						*/
         private DateTime? _DateValue = null;
         /** Pricelist to Update				*/
-        private int _M_PriceList_Version_ID = 0;
+        private int _VAM_PriceListVersion_ID = 0;
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -47,8 +47,8 @@ namespace VAdvantage.Process
                     _VAF_Client_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 else if (name.Equals("DeleteOldImported"))
                     _deleteOldImported = "Y".Equals(para[i].GetParameter());
-                else if (name.Equals("M_PriceList_Version_ID"))
-                    _M_PriceList_Version_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAM_PriceListVersion_ID"))
+                    _VAM_PriceListVersion_ID = para[i].GetParameterAsInt();
                 else
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
             }
@@ -116,46 +116,46 @@ namespace VAdvantage.Process
             //	****	Find Product
             //	EAN/UPC
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product p"
+                + "SET VAM_Product_ID=(SELECT VAM_Product_ID FROM VAM_Product p"
                 + " WHERE i.UPC=p.UPC AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE M_Product_ID IS NULL"
+                + "WHERE VAM_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Product Existing UPC=" + no);
 
             //	Value
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product p"
+                + "SET VAM_Product_ID=(SELECT VAM_Product_ID FROM VAM_Product p"
                 + " WHERE i.Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE M_Product_ID IS NULL"
+                + "WHERE VAM_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Product Existing Value=" + no);
 
             //	BP ProdNo
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET M_Product_ID=(SELECT M_Product_ID FROM M_Product_po p"
+                + "SET VAM_Product_ID=(SELECT VAM_Product_ID FROM VAM_Product_PO p"
                 + " WHERE i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID"
                 + " AND i.VendorProductNo=p.VendorProductNo AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                + "WHERE M_Product_ID IS NULL"
+                + "WHERE VAM_Product_ID IS NULL"
                 + " AND I_IsImported='N'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Product Existing Vendor ProductNo=" + no);
 
             //	Set Product Category
             sql = new StringBuilder("UPDATE I_Product "
-                + "SET ProductCategory_Value=(SELECT MAX(Value) FROM M_Product_Category"
+                + "SET ProductCategory_Value=(SELECT MAX(Value) FROM VAM_ProductCategory"
                 + " WHERE IsDefault='Y' AND VAF_Client_ID=").Append(_VAF_Client_ID).Append(") "
-                + "WHERE ProductCategory_Value IS NULL AND M_Product_Category_ID IS NULL"
-                + " AND M_Product_ID IS NULL"	//	set category only if product not found 
+                + "WHERE ProductCategory_Value IS NULL AND VAM_ProductCategory_ID IS NULL"
+                + " AND VAM_Product_ID IS NULL"	//	set category only if product not found 
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Category Default Value=" + no);
             //
             sql = new StringBuilder("UPDATE I_Product i "
-                + "SET M_Product_Category_ID=(SELECT M_Product_Category_ID FROM M_Product_Category c"
+                + "SET VAM_ProductCategory_ID=(SELECT VAM_ProductCategory_ID FROM VAM_ProductCategory c"
                 + " WHERE i.ProductCategory_Value=c.Value AND i.VAF_Client_ID=c.VAF_Client_ID) "
-                + "WHERE ProductCategory_Value IS NOT NULL AND M_Product_Category_ID IS NULL"
+                + "WHERE ProductCategory_Value IS NOT NULL AND VAM_ProductCategory_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Info("Set Category=" + no);
@@ -168,23 +168,23 @@ namespace VAdvantage.Process
             for (int i = 0; i < strFields.Length; i++)
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
-                    + "SET ").Append(strFields[i]).Append(" = (SELECT ").Append(strFields[i]).Append(" FROM M_Product p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL"
+                    + "SET ").Append(strFields[i]).Append(" = (SELECT ").Append(strFields[i]).Append(" FROM VAM_Product p"
+                    + " WHERE i.VAM_Product_ID=p.VAM_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE VAM_Product_ID IS NOT NULL"
                     + " AND ").Append(strFields[i]).Append(" IS NULL"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 if (no != 0)
                     log.Fine(strFields[i] + " - default from existing Product=" + no);
             }
-            String[] numFields = new String[] {"VAB_UOM_ID","M_Product_Category_ID",
+            String[] numFields = new String[] {"VAB_UOM_ID","VAM_ProductCategory_ID",
 			"Volume","Weight","ShelfWidth","ShelfHeight","ShelfDepth","UnitsPerPallet"};
             for (int i = 0; i < numFields.Length; i++)
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
-                    + "SET ").Append(numFields[i]).Append(" = (SELECT ").Append(numFields[i]).Append(" FROM M_Product p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL"
+                    + "SET ").Append(numFields[i]).Append(" = (SELECT ").Append(numFields[i]).Append(" FROM VAM_Product p"
+                    + " WHERE i.VAM_Product_ID=p.VAM_Product_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE VAM_Product_ID IS NOT NULL"
                     + " AND (").Append(numFields[i]).Append(" IS NULL OR ").Append(numFields[i]).Append("=0)"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -200,9 +200,9 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(strFieldsPO[i]).Append(" = (SELECT ").Append(strFieldsPO[i])
-                    .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
+                    .Append(" FROM VAM_Product_PO p"
+                    + " WHERE i.VAM_Product_ID=p.VAM_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE VAM_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
                     + " AND ").Append(strFieldsPO[i]).Append(" IS NULL"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -216,9 +216,9 @@ namespace VAdvantage.Process
             {
                 sql = new StringBuilder("UPDATE I_PRODUCT i "
                     + "SET ").Append(numFieldsPO[i]).Append(" = (SELECT ").Append(numFieldsPO[i])
-                    .Append(" FROM M_Product_PO p"
-                    + " WHERE i.M_Product_ID=p.M_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                    + "WHERE M_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
+                    .Append(" FROM VAM_Product_PO p"
+                    + " WHERE i.VAM_Product_ID=p.VAM_Product_ID AND i.VAB_BusinessPartner_ID=p.VAB_BusinessPartner_ID AND i.VAF_Client_ID=p.VAF_Client_ID) "
+                    + "WHERE VAM_Product_ID IS NOT NULL AND VAB_BusinessPartner_ID IS NOT NULL"
                     + " AND (").Append(numFieldsPO[i]).Append(" IS NULL OR ").Append(numFieldsPO[i]).Append("=0)"
                     + " AND I_IsImported='N'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -229,7 +229,7 @@ namespace VAdvantage.Process
             //	Invalid Category
             sql = new StringBuilder("UPDATE I_Product "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ProdCategorty,' "
-                + "WHERE M_Product_Category_ID IS NULL"
+                + "WHERE VAM_ProductCategory_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -389,15 +389,15 @@ namespace VAdvantage.Process
             {
                 /*	Insert Product from Import
                 PreparedStatement pstmt_insertProduct = conn.prepareStatement
-                    ("INSERT INTO M_Product (M_Product_ID,"
+                    ("INSERT INTO VAM_Product (VAM_Product_ID,"
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,VAB_UOM_ID,IsSummary,M_Product_Category_ID,VAB_TaxCategory_ID,"
+                    + "UPC,SKU,VAB_UOM_ID,IsSummary,VAM_ProductCategory_ID,VAB_TaxCategory_ID,"
                     + "ProductType,ImageURL,DescriptionURL) "
                     + "SELECT ?,"
                     + "VAF_Client_ID,VAF_Org_ID,'Y',SysDate,CreatedBy,SysDate,UpdatedBy,"
                     + "Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,VAB_UOM_ID,'N',M_Product_Category_ID," + VAB_TaxCategory_ID + ","
+                    + "UPC,SKU,VAB_UOM_ID,'N',VAM_ProductCategory_ID," + VAB_TaxCategory_ID + ","
                     + "ProductType,ImageURL,DescriptionURL "
                     + "FROM I_Product "
                     + "WHERE I_Product_ID=?");
@@ -405,22 +405,22 @@ namespace VAdvantage.Process
                 //	Update Product from Import
                 //jz moved
                 /*
-                String sqlt = "UPDATE M_PRODUCT "
+                String sqlt = "UPDATE VAM_Product "
                     + "SET (Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                    + "UPC,SKU,VAB_UOM_ID,VAM_ProductCategory_ID,Classification,ProductType,"
                     + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                     + "Discontinued,DiscontinuedBy,Updated,UpdatedBy)= "
                     + "(SELECT Value,Name,Description,DocumentNote,Help,"
-                    + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                    + "UPC,SKU,VAB_UOM_ID,VAM_ProductCategory_ID,Classification,ProductType,"
                     + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                     + "Discontinued,DiscontinuedBy,SysDate,UpdatedBy"
                     + " FROM I_Product WHERE I_Product_ID=?) "
-                    + "WHERE M_Product_ID=?";
+                    + "WHERE VAM_Product_ID=?";
                 PreparedStatement pstmt_updateProduct = DataBase.prepareStatement
                     (sqlt, Get_TrxName());
 
                 //	Update Product_PO from Import
-                sqlt = "UPDATE M_Product_PO "
+                sqlt = "UPDATE VAM_Product_PO "
                     + "SET (IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                     + "VendorProductNo,VendorCategory,Manufacturer,"
@@ -433,13 +433,13 @@ namespace VAdvantage.Process
                     + "CostPerOrder,DeliveryTime_Promised,SysDate,UpdatedBy"
                     + " FROM I_Product"
                     + " WHERE I_Product_ID=?) "
-                    + "WHERE M_Product_ID=? AND VAB_BusinessPartner_ID=?";
+                    + "WHERE VAM_Product_ID=? AND VAB_BusinessPartner_ID=?";
                 PreparedStatement pstmt_updateProductPO = DataBase.prepareStatement
                     (sqlt, Get_TrxName());
     */
                 //	Insert Product from Import
                 //PreparedStatement pstmt_insertProductPO = DataBase.prepareStatement
-                String _insertProductPO = "INSERT INTO M_Product_PO (M_Product_ID,VAB_BusinessPartner_ID, "
+                String _insertProductPO = "INSERT INTO VAM_Product_PO (VAM_Product_ID,VAB_BusinessPartner_ID, "
                     + "VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,"
                     + "IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                     + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
@@ -458,7 +458,7 @@ namespace VAdvantage.Process
 
                 //	Set Imported = Y
                 //PreparedStatement pstmt_setImported = DataBase.prepareStatement
-                String _setImported = "UPDATE I_Product SET I_IsImported='Y', M_Product_ID=@param1, "
+                String _setImported = "UPDATE I_Product SET I_IsImported='Y', VAM_Product_ID=@param1, "
                 + "Updated=SysDate, Processed='Y' WHERE I_Product_ID=@param2";
 
                 //
@@ -468,10 +468,10 @@ namespace VAdvantage.Process
                 {
                     X_I_Product imp = new X_I_Product(GetCtx(), idr, Get_TrxName());
                     int I_Product_ID = imp.GetI_Product_ID();
-                    int M_Product_ID = imp.GetM_Product_ID();
+                    int VAM_Product_ID = imp.GetVAM_Product_ID();
                     int VAB_BusinessPartner_ID = imp.GetVAB_BusinessPartner_ID();
-                    bool newProduct = M_Product_ID == 0;
-                    log.Fine("I_Product_ID=" + I_Product_ID + ", M_Product_ID=" + M_Product_ID
+                    bool newProduct = VAM_Product_ID == 0;
+                    log.Fine("I_Product_ID=" + I_Product_ID + ", VAM_Product_ID=" + VAM_Product_ID
                         + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID);
 
                     //	Product
@@ -481,7 +481,7 @@ namespace VAdvantage.Process
                         product.SetVAB_TaxCategory_ID(VAB_TaxCategory_ID);
                         if (product.Save())
                         {
-                            M_Product_ID = product.GetM_Product_ID();
+                            VAM_Product_ID = product.GetVAM_Product_ID();
                             log.Finer("Insert Product");
                             noInsert++;
                         }
@@ -496,22 +496,22 @@ namespace VAdvantage.Process
                     }
                     else					//	Update Product
                     {
-                        String sqlt = "UPDATE M_PRODUCT "
+                        String sqlt = "UPDATE VAM_Product "
                             + "SET (Value,Name,Description,DocumentNote,Help,"
-                            + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                            + "UPC,SKU,VAB_UOM_ID,VAM_ProductCategory_ID,Classification,ProductType,"
                             + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                             + "Discontinued,DiscontinuedBy,Updated,UpdatedBy)= "
                             + "(SELECT Value,Name,Description,DocumentNote,Help,"
-                            + "UPC,SKU,VAB_UOM_ID,M_Product_Category_ID,Classification,ProductType,"
+                            + "UPC,SKU,VAB_UOM_ID,VAM_ProductCategory_ID,Classification,ProductType,"
                             + "Volume,Weight,ShelfWidth,ShelfHeight,ShelfDepth,UnitsPerPallet,"
                             + "Discontinued,DiscontinuedBy,SysDate,UpdatedBy"
                             + " FROM I_Product WHERE I_Product_ID=" + I_Product_ID + ") "
-                            + "WHERE M_Product_ID=" + M_Product_ID;
+                            + "WHERE VAM_Product_ID=" + VAM_Product_ID;
                         //PreparedStatement pstmt_updateProduct = DataBase.prepareStatement
                         //(sqlt, Get_TrxName());
 
                         //jz pstmt_updateProduct.setInt(1, I_Product_ID);
-                        //   pstmt_updateProduct.setInt(2, M_Product_ID);
+                        //   pstmt_updateProduct.setInt(2, VAM_Product_ID);
                         try
                         {
                             //no = pstmt_updateProduct.ExecuteQuery();
@@ -539,7 +539,7 @@ namespace VAdvantage.Process
                         //	If Product existed, Try to Update first
                         if (!newProduct)
                         {
-                            String sqlt = "UPDATE M_Product_PO "
+                            String sqlt = "UPDATE VAM_Product_PO "
                                 + "SET (IsCurrentVendor,VAB_UOM_ID,VAB_Currency_ID,UPC,"
                                 + "PriceList,PricePO,RoyaltyAmt,PriceEffective,"
                                 + "VendorProductNo,VendorCategory,Manufacturer,"
@@ -552,11 +552,11 @@ namespace VAdvantage.Process
                                 + "CostPerOrder,DeliveryTime_Promised,SysDate,UpdatedBy"
                                 + " FROM I_Product"
                                 + " WHERE I_Product_ID=" + I_Product_ID + ") "
-                                + "WHERE M_Product_ID=" + M_Product_ID + " AND VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
+                                + "WHERE VAM_Product_ID=" + VAM_Product_ID + " AND VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
                             //PreparedStatement pstmt_updateProductPO = DataBase.prepareStatement
                             //(sqlt, Get_TrxName());
                             //jz pstmt_updateProductPO.setInt(1, I_Product_ID);
-                            // pstmt_updateProductPO.setInt(2, M_Product_ID);
+                            // pstmt_updateProductPO.setInt(2, VAM_Product_ID);
                             // pstmt_updateProductPO.setInt(3, VAB_BusinessPartner_ID);
                             try
                             {
@@ -581,8 +581,8 @@ namespace VAdvantage.Process
                         if (no == 0)		//	Insert PO
                         {
                             SqlParameter[] param = new SqlParameter[3];
-                            param[0] = new SqlParameter("@param1", M_Product_ID);
-                            //pstmt_insertProductPO.setInt(1, M_Product_ID);
+                            param[0] = new SqlParameter("@param1", VAM_Product_ID);
+                            //pstmt_insertProductPO.setInt(1, VAM_Product_ID);
                             param[1] = new SqlParameter("@param1", VAB_BusinessPartner_ID);
                             //pstmt_insertProductPO.setInt(2, VAB_BusinessPartner_ID);
                             param[2] = new SqlParameter("@param1", I_Product_ID);
@@ -610,7 +610,7 @@ namespace VAdvantage.Process
                     }	//	VAB_BusinessPartner_ID != 0
 
                     //	Price List
-                    if (_M_PriceList_Version_ID != 0)
+                    if (_VAM_PriceListVersion_ID != 0)
                     {
                         Decimal PriceList = imp.GetPriceList();
                         Decimal PriceStd = imp.GetPriceStd();
@@ -618,20 +618,20 @@ namespace VAdvantage.Process
                         if (Env.Signum(PriceStd) != 0 && Env.Signum(PriceLimit) != 0 && Env.Signum(PriceList) != 0)
                         {
                             MProductPrice pp = MProductPrice.Get(GetCtx(),
-                                _M_PriceList_Version_ID, M_Product_ID, Get_TrxName());
+                                _VAM_PriceListVersion_ID, VAM_Product_ID, Get_TrxName());
                             if (pp == null)
                                 pp = new MProductPrice(GetCtx(),
-                                    _M_PriceList_Version_ID, M_Product_ID, Get_TrxName());
+                                    _VAM_PriceListVersion_ID, VAM_Product_ID, Get_TrxName());
                             pp.SetPrices(PriceList, PriceStd, PriceLimit);
                             pp.Save();
                         }
                     }
 
                     //	Update I_Product
-                    //pstmt_setImported.setInt(1, M_Product_ID);
+                    //pstmt_setImported.setInt(1, VAM_Product_ID);
                     //pstmt_setImported.setInt(2, I_Product_ID);
                     SqlParameter[] param1 = new SqlParameter[2];
-                    param1[0] = new SqlParameter("@param1", M_Product_ID);
+                    param1[0] = new SqlParameter("@param1", VAM_Product_ID);
                     param1[1] = new SqlParameter("@param2", I_Product_ID);
                     no = DataBase.DB.ExecuteQuery(_setImported, param1, Get_TrxName());
                     //
@@ -661,10 +661,10 @@ namespace VAdvantage.Process
                 + "WHERE I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@M_Product_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@M_Product_ID@: @Updated@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertPO), "@M_Product_ID@ @Purchase@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdatePO), "@M_Product_ID@ @Purchase@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAM_Product_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdate), "@VAM_Product_ID@: @Updated@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertPO), "@VAM_Product_ID@ @Purchase@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noUpdatePO), "@VAM_Product_ID@ @Purchase@: @Updated@");
             return "";
         }	//	doIt
 

@@ -18,11 +18,11 @@ namespace VIS.Models
         public Dictionary<string, string> GetMInventory(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Inventory_ID;
+            int VAM_Inventory_ID;
 
             //Assign parameter value
-            M_Inventory_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MInventory inv = new MInventory(ctx, M_Inventory_ID, null);
+            VAM_Inventory_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            MInventory inv = new MInventory(ctx, VAM_Inventory_ID, null);
             DateTime? MovementDate = inv.GetMovementDate();
             int VAF_Org_ID = inv.GetVAF_Org_ID();
 

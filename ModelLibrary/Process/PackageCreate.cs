@@ -27,9 +27,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class PackageCreate : ProcessEngine.SvrProcess
     {
         //	Shipper				
-        private int _M_Shipper_ID = 0;
+        private int _VAM_ShippingMethod_ID = 0;
         // Parent				
-        private int _M_InOut_ID = 0;
+        private int _VAM_Inv_InOut_ID = 0;
 
 
         /// <summary>
@@ -45,22 +45,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Shipper_ID"))
+                else if (name.Equals("VAM_ShippingMethod_ID"))
                 {
-                    _M_Shipper_ID = para[i].GetParameterAsInt();
+                    _VAM_ShippingMethod_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_Invoice_ID"))
                 {
-                    _M_InOut_ID = para[i].GetParameterAsInt();
+                    _VAM_Inv_InOut_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
                     log.Log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            if (_M_InOut_ID == 0)
+            if (_VAM_Inv_InOut_ID == 0)
             {
-                _M_InOut_ID = GetRecord_ID();
+                _VAM_Inv_InOut_ID = GetRecord_ID();
             }
         }
 
@@ -70,28 +70,28 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("doIt - M_InOut_ID=" + _M_InOut_ID + ", M_Shipper_ID=" + _M_Shipper_ID);
-            if (_M_InOut_ID == 0)
+            log.Info("doIt - VAM_Inv_InOut_ID=" + _VAM_Inv_InOut_ID + ", VAM_ShippingMethod_ID=" + _VAM_ShippingMethod_ID);
+            if (_VAM_Inv_InOut_ID == 0)
             {
                 throw new Exception("No Shipment");
             }
-            if (_M_Shipper_ID == 0)
+            if (_VAM_ShippingMethod_ID == 0)
             {
                 throw new Exception("No Shipper");
             }
 
-            string sql = "select M_Inout_ID from M_InoutConfirm where M_InoutConfirm_ID = " + _M_InOut_ID;
+            string sql = "select VAM_Inv_InOut_ID from VAM_Inv_InOutConfirm where VAM_Inv_InOutConfirm_ID = " + _VAM_Inv_InOut_ID;
             int _M_Shipment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
             MInOut shipment = new MInOut(GetCtx(), _M_Shipment_ID, null);
             if (shipment.Get_ID() != _M_Shipment_ID)
             {
-                throw new Exception("Cannot find Shipment ID=" + _M_InOut_ID);
+                throw new Exception("Cannot find Shipment ID=" + _VAM_Inv_InOut_ID);
             }
-            MShipper shipper = new MShipper(GetCtx(), _M_Shipper_ID, Get_TrxName());
-            if (shipper.Get_ID() != _M_Shipper_ID)
+            MShipper shipper = new MShipper(GetCtx(), _VAM_ShippingMethod_ID, Get_TrxName());
+            if (shipper.Get_ID() != _VAM_ShippingMethod_ID)
             {
-                throw new Exception("Cannot find Shipper ID=" + _M_InOut_ID);
+                throw new Exception("Cannot find Shipper ID=" + _VAM_Inv_InOut_ID);
             }
            
             MPackage pack = MPackage.Create(shipment, shipper, null, Get_TrxName());

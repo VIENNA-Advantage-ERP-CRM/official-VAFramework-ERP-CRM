@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         {
            // this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(invoice);
-            SetVAVAB_TaxRateComputation_ID(parent.GetVAVAB_TaxRateComputation_ID());
+            SetVAB_TaxRateComputation_ID(parent.GetVAB_TaxRateComputation_ID());
             SetIsManual(false);
             //
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
         {
             //this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(invoice);
-            SetVAVAB_TaxRateComputation_ID(parent.GetVAVAB_TaxRateComputation_ID());
+            SetVAB_TaxRateComputation_ID(parent.GetVAB_TaxRateComputation_ID());
             SetIsManual(false);
             //
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());

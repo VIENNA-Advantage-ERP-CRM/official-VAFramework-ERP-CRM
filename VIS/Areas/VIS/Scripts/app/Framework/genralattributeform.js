@@ -1,6 +1,6 @@
 ﻿; (function (VIS, $) {
     // GenralAttributeForm form declraion for constructor class
-    function GenralAttributeForm(M_AttributeSetInstance_ID, VADMS_AttributeSet_ID, windowNoP, searchP, canSaveRecord, fromDMS) {
+    function GenralAttributeForm(VAM_PFeature_SetInstance_ID, VADMS_AttributeSet_ID, windowNoP, searchP, canSaveRecord, fromDMS) {
 
         this.onClose = null;
         var $self = this;
@@ -26,10 +26,10 @@
         var btnSelect = null;
         var controlList = null;
 
-        this.log.config("VAB_GenFeatureSetInstance_ID=" + M_AttributeSetInstance_ID);
+        this.log.config("VAB_GenFeatureSetInstance_ID=" + VAM_PFeature_SetInstance_ID);
 
         //constructor load
-        mAttributeSetInstanceId = M_AttributeSetInstance_ID;
+        mAttributeSetInstanceId = VAM_PFeature_SetInstance_ID;
         vadms_AttributeSet_ID = VADMS_AttributeSet_ID;
         dms = fromDMS;
         search = searchP;
@@ -113,7 +113,7 @@
                 success: function (data) {
                     returnValue = data.result;
                     if ($self.onClose) {
-                        $self.onClose(returnValue.M_AttributeSetInstance_ID, returnValue.M_AttributeSetInstanceName);
+                        $self.onClose(returnValue.VAM_PFeature_SetInstance_ID, returnValue.VAM_PFeature_SetInstanceName);
                     }
                 }
             });
@@ -148,11 +148,11 @@
                 success: function (data) {
                     returnValue = data.result;
                     if ($self.onClose) {
-                        if (returnValue.M_AttributeSetInstanceName == null) {
+                        if (returnValue.VAM_PFeature_SetInstanceName == null) {
 
-                            returnValue.M_AttributeSetInstanceName = returnValue.Description;
+                            returnValue.VAM_PFeature_SetInstanceName = returnValue.Description;
                         }
-                        $self.onClose(returnValue.M_AttributeSetInstance_ID, returnValue.M_AttributeSetInstanceName, returnValue.GenSetInstance);
+                        $self.onClose(returnValue.VAM_PFeature_SetInstance_ID, returnValue.VAM_PFeature_SetInstanceName, returnValue.GenSetInstance);
                     }
                 }
             });
@@ -196,7 +196,7 @@
             if (cancelbtn)
                 cancelbtn.off("click");
             VIS.Env.clearWinContext(VIS.Env.getCtx(), windowNo);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "M_AttributeSetInstance_ID", mAttributeSetInstanceId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", mAttributeSetInstanceId);
 
             Okbtn = null;
             cancelbtn = null;

@@ -11,32 +11,32 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_ForecastLine
+/** Generated Model for VAM_TeamForecastLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ForecastLine : PO
+public class X_VAM_TeamForecastLine : PO
 {
-public X_M_ForecastLine (Context ctx, int M_ForecastLine_ID, Trx trxName) : base (ctx, M_ForecastLine_ID, trxName)
+public X_VAM_TeamForecastLine (Context ctx, int VAM_TeamForecastLine_ID, Trx trxName) : base (ctx, VAM_TeamForecastLine_ID, trxName)
 {
-/** if (M_ForecastLine_ID == 0)
+/** if (VAM_TeamForecastLine_ID == 0)
 {
 SetVAB_YearPeriod_ID (0);
-SetM_ForecastLine_ID (0);
-SetM_Forecast_ID (0);
-SetM_Product_ID (0);
+SetVAM_TeamForecastLine_ID (0);
+SetVAM_TeamForecast_ID (0);
+SetVAM_Product_ID (0);
 SetQty (0.0);
 SetQtyCalculated (0.0);
 }
  */
 }
-public X_M_ForecastLine (Ctx ctx, int M_ForecastLine_ID, Trx trxName) : base (ctx, M_ForecastLine_ID, trxName)
+public X_VAM_TeamForecastLine (Ctx ctx, int VAM_TeamForecastLine_ID, Trx trxName) : base (ctx, VAM_TeamForecastLine_ID, trxName)
 {
-/** if (M_ForecastLine_ID == 0)
+/** if (VAM_TeamForecastLine_ID == 0)
 {
 SetVAB_YearPeriod_ID (0);
-SetM_ForecastLine_ID (0);
-SetM_Forecast_ID (0);
-SetM_Product_ID (0);
+SetVAM_TeamForecastLine_ID (0);
+SetVAM_TeamForecast_ID (0);
+SetVAM_Product_ID (0);
 SetQty (0.0);
 SetQtyCalculated (0.0);
 }
@@ -47,7 +47,7 @@ SetQtyCalculated (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ForecastLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_TeamForecastLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_ForecastLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ForecastLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_TeamForecastLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_ForecastLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ForecastLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_TeamForecastLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ForecastLine()
+static X_VAM_TeamForecastLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389062561L;
 public static int Table_ID;
  // =722;
 
-/** TableName=M_ForecastLine */
-public static String Table_Name="M_ForecastLine";
+/** TableName=VAM_TeamForecastLine */
+public static String Table_Name="VAM_TeamForecastLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_ForecastLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_TeamForecastLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Period.
@@ -142,47 +142,47 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_YearPeriod_ID().ToString());
 }
 /** Set Forecast Line.
-@param M_ForecastLine_ID Forecast Line */
-public void SetM_ForecastLine_ID (int M_ForecastLine_ID)
+@param VAM_TeamForecastLine_ID Forecast Line */
+public void SetVAM_TeamForecastLine_ID (int VAM_TeamForecastLine_ID)
 {
-if (M_ForecastLine_ID < 1) throw new ArgumentException ("M_ForecastLine_ID is mandatory.");
-Set_ValueNoCheck ("M_ForecastLine_ID", M_ForecastLine_ID);
+if (VAM_TeamForecastLine_ID < 1) throw new ArgumentException ("VAM_TeamForecastLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_TeamForecastLine_ID", VAM_TeamForecastLine_ID);
 }
 /** Get Forecast Line.
 @return Forecast Line */
-public int GetM_ForecastLine_ID() 
+public int GetVAM_TeamForecastLine_ID() 
 {
-Object ii = Get_Value("M_ForecastLine_ID");
+Object ii = Get_Value("VAM_TeamForecastLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Forecast.
-@param M_Forecast_ID Material Forecast */
-public void SetM_Forecast_ID (int M_Forecast_ID)
+@param VAM_TeamForecast_ID Material Forecast */
+public void SetVAM_TeamForecast_ID (int VAM_TeamForecast_ID)
 {
-if (M_Forecast_ID < 1) throw new ArgumentException ("M_Forecast_ID is mandatory.");
-Set_ValueNoCheck ("M_Forecast_ID", M_Forecast_ID);
+if (VAM_TeamForecast_ID < 1) throw new ArgumentException ("VAM_TeamForecast_ID is mandatory.");
+Set_ValueNoCheck ("VAM_TeamForecast_ID", VAM_TeamForecast_ID);
 }
 /** Get Forecast.
 @return Material Forecast */
-public int GetM_Forecast_ID() 
+public int GetVAM_TeamForecast_ID() 
 {
-Object ii = Get_Value("M_Forecast_ID");
+Object ii = Get_Value("VAM_TeamForecast_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

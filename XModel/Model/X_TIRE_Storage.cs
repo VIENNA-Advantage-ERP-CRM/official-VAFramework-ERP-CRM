@@ -229,18 +229,18 @@ if (oo != null)
 return false;
 }
 /** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-public void SetM_Locator_ID (int M_Locator_ID)
+@param VAM_Locator_ID Warehouse Locator */
+public void SetVAM_Locator_ID (int VAM_Locator_ID)
 {
-if (M_Locator_ID <= 0) Set_Value ("M_Locator_ID", null);
+if (VAM_Locator_ID <= 0) Set_Value ("VAM_Locator_ID", null);
 else
-Set_Value ("M_Locator_ID", M_Locator_ID);
+Set_Value ("VAM_Locator_ID", VAM_Locator_ID);
 }
 /** Get Locator.
 @return Warehouse Locator */
-public int GetM_Locator_ID() 
+public int GetVAM_Locator_ID() 
 {
-Object ii = Get_Value("M_Locator_ID");
+Object ii = Get_Value("VAM_Locator_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

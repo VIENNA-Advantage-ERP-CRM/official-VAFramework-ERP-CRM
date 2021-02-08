@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_BOMAlternative
+/** Generated Model for VAM_BOMSubsitutue
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_BOMAlternative : PO
+public class X_VAM_BOMSubsitutue : PO
 {
-public X_M_BOMAlternative (Context ctx, int M_BOMAlternative_ID, Trx trxName) : base (ctx, M_BOMAlternative_ID, trxName)
+public X_VAM_BOMSubsitutue (Context ctx, int VAM_BOMSubsitutue_ID, Trx trxName) : base (ctx, VAM_BOMSubsitutue_ID, trxName)
 {
-/** if (M_BOMAlternative_ID == 0)
+/** if (VAM_BOMSubsitutue_ID == 0)
 {
-SetM_BOMAlternative_ID (0);
-SetM_Product_ID (0);
+SetVAM_BOMSubsitutue_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_BOMAlternative (Ctx ctx, int M_BOMAlternative_ID, Trx trxName) : base (ctx, M_BOMAlternative_ID, trxName)
+public X_VAM_BOMSubsitutue (Ctx ctx, int VAM_BOMSubsitutue_ID, Trx trxName) : base (ctx, VAM_BOMSubsitutue_ID, trxName)
 {
-/** if (M_BOMAlternative_ID == 0)
+/** if (VAM_BOMSubsitutue_ID == 0)
 {
-SetM_BOMAlternative_ID (0);
-SetM_Product_ID (0);
+SetVAM_BOMSubsitutue_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_BOMAlternative (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_BOMSubsitutue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_BOMAlternative (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_BOMAlternative (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_BOMSubsitutue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_BOMAlternative (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_BOMAlternative (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_BOMSubsitutue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_BOMAlternative()
+static X_VAM_BOMSubsitutue()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389061699L;
 public static int Table_ID;
  // =795;
 
-/** TableName=M_BOMAlternative */
-public static String Table_Name="M_BOMAlternative";
+/** TableName=VAM_BOMSubsitutue */
+public static String Table_Name="VAM_BOMSubsitutue";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_BOMAlternative[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_BOMSubsitutue[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -132,32 +132,32 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Alternative Group.
-@param M_BOMAlternative_ID Product BOM Alternative Group */
-public void SetM_BOMAlternative_ID (int M_BOMAlternative_ID)
+@param VAM_BOMSubsitutue_ID Product BOM Alternative Group */
+public void SetVAM_BOMSubsitutue_ID (int VAM_BOMSubsitutue_ID)
 {
-if (M_BOMAlternative_ID < 1) throw new ArgumentException ("M_BOMAlternative_ID is mandatory.");
-Set_ValueNoCheck ("M_BOMAlternative_ID", M_BOMAlternative_ID);
+if (VAM_BOMSubsitutue_ID < 1) throw new ArgumentException ("VAM_BOMSubsitutue_ID is mandatory.");
+Set_ValueNoCheck ("VAM_BOMSubsitutue_ID", VAM_BOMSubsitutue_ID);
 }
 /** Get Alternative Group.
 @return Product BOM Alternative Group */
-public int GetM_BOMAlternative_ID() 
+public int GetVAM_BOMSubsitutue_ID() 
 {
-Object ii = Get_Value("M_BOMAlternative_ID");
+Object ii = Get_Value("VAM_BOMSubsitutue_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

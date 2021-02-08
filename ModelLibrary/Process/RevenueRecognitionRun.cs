@@ -299,7 +299,7 @@ namespace VAdvantage.Process
                 int combination_ID = 0;
                 if (k == 0)
                 {
-                    combination_ID = GetCombinationID(invoiceLine.GetM_Product_ID(), invoiceLine.GetVAB_Charge_ID(), journal.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetC_RevenueRecognition_ID());
+                    combination_ID = GetCombinationID(invoiceLine.GetVAM_Product_ID(), invoiceLine.GetVAB_Charge_ID(), journal.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetC_RevenueRecognition_ID());
                     journalLine.SetLine(lineno);
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
@@ -336,7 +336,7 @@ namespace VAdvantage.Process
                     journalLine.Set_ValueNoCheck("VAB_Project_ID", invoiceLine.GetVAB_Project_ID() > 0 ? invoiceLine.GetVAB_Project_ID() : invoice.Get_Value("VAB_ProjectRef_ID"));
                     journalLine.Set_ValueNoCheck("VAB_Promotion_ID", invoiceLine.Get_ColumnIndex("VAB_Promotion_ID") > 0 ? invoiceLine.GetVAB_Promotion_ID() : invoice.GetVAB_Promotion_ID());
                     journalLine.Set_ValueNoCheck("VAB_BillingCode_ID", invoiceLine.Get_ColumnIndex("VAB_BillingCode_ID") > 0 ? invoiceLine.GetVAB_BillingCode_ID() : invoice.GetVAB_BillingCode_ID());
-                    journalLine.Set_ValueNoCheck("M_Product_ID", invoiceLine.GetM_Product_ID());
+                    journalLine.Set_ValueNoCheck("VAM_Product_ID", invoiceLine.GetVAM_Product_ID());
                                    
                 }
                 else
@@ -344,7 +344,7 @@ namespace VAdvantage.Process
                     combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From VAB_Acct_ValidParameter Where VAB_Acct_ValidParameter_ID=" + combination_ID));
 
-                    journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetM_Product_ID(), invoiceLine.GetVAB_Charge_ID(),
+                    journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetVAM_Product_ID(), invoiceLine.GetVAB_Charge_ID(),
                         invoiceLine.Get_ColumnIndex("VAB_Promotion_ID") > 0 ? invoiceLine.GetVAB_Promotion_ID() : invoice.GetVAB_Promotion_ID(),
                     account_ID, invoiceLine.GetVAB_Project_ID() > 0 ? invoiceLine.GetVAB_Project_ID() : Util.GetValueOfInt(invoice.Get_Value("VAB_ProjectRef_ID")),
                     invoiceLine.Get_ColumnIndex("VAB_BillingCode_ID") > 0 ? invoiceLine.GetVAB_BillingCode_ID() : invoice.GetVAB_BillingCode_ID(), invoice.GetVAB_BusinessPartner_ID(),
@@ -456,7 +456,7 @@ namespace VAdvantage.Process
             
             if (Product_ID > 0)
             {
-                sql += "FRPT_Product_Acct WHERE M_Product_ID= "+ Product_ID;
+                sql += "FRPT_Product_Acct WHERE VAM_Product_ID= "+ Product_ID;
             }
             else if (Charge_ID > 0)
             {
@@ -491,7 +491,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="Journal">GL Journal</param>
         /// <param name="Line">GL Journal Line</param>
-        /// <param name="M_Product_ID">Product</param>
+        /// <param name="VAM_Product_ID">Product</param>
         /// <param name="VAB_Charge_ID">Charge</param>
         /// <param name="Campaign_ID">Campaign</param>
         /// <param name="Account_ID">Account</param>
@@ -501,12 +501,12 @@ namespace VAdvantage.Process
         /// <param name="Org_Id">Organization</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>journal line object</returns>
-        public MJournalLine GetOrCreate(MJournal Journal, MJournalLine Line, int M_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
+        public MJournalLine GetOrCreate(MJournal Journal, MJournalLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
         {
             MJournalLine retValue = null;
             String sql = "SELECT * FROM VAGL_JRNLLine " +
                          " WHERE  VAGL_JRNL_ID = " + Journal.GetVAGL_JRNL_ID() +
-                         " AND NVL(M_Product_ID,0)=" + M_Product_ID +                        
+                         " AND NVL(VAM_Product_ID,0)=" + VAM_Product_ID +                        
                          " AND NVL(ACCOUNT_ID,0)=" + Account_ID +
                          " AND NVL(VAB_PROMOTION_ID,0)=" + Campaign_ID +
                          " AND NVL(VAB_PROJECT_ID,0)=" + Opprtunity_ID +
@@ -546,7 +546,7 @@ namespace VAdvantage.Process
                 dt = null;
             }
             if (retValue == null)
-                retValue = CreateJournalLine(Journal, Line, M_Product_ID, VAB_Charge_ID, Campaign_ID, Account_ID, Opprtunity_ID, Activity_ID, BPartner_ID, trxOrg_ID);
+                retValue = CreateJournalLine(Journal, Line, VAM_Product_ID, VAB_Charge_ID, Campaign_ID, Account_ID, Opprtunity_ID, Activity_ID, BPartner_ID, trxOrg_ID);
 
 
             return retValue;
@@ -557,7 +557,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="Journal">GL Journal</param>
         /// <param name="Line">Gl Journal line</param>
-        /// <param name="M_Product_ID">Product</param>
+        /// <param name="VAM_Product_ID">Product</param>
         /// <param name="VAB_Charge_ID">Charge</param>
         /// <param name="Campaign_ID">Campaign</param>
         /// <param name="Account_ID">Account</param>
@@ -566,13 +566,13 @@ namespace VAdvantage.Process
         /// <param name="BPartner_ID">Business Partner</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>object of journal line</returns>
-        public MJournalLine CreateJournalLine(MJournal Journal, MJournalLine Line, int M_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
+        public MJournalLine CreateJournalLine(MJournal Journal, MJournalLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
         {
             Line = new MJournalLine(Journal);
             Line.SetLine(lineno);
             Line.Set_ValueNoCheck("Account_ID", Account_ID);
             Line.Set_ValueNoCheck("VAB_BusinessPartner_ID", BPartner_ID);
-            Line.Set_ValueNoCheck("M_Product_ID", M_Product_ID);
+            Line.Set_ValueNoCheck("VAM_Product_ID", VAM_Product_ID);
             Line.SetVAF_OrgTrx_ID(trxOrg_ID);
             //Line.Set_ValueNoCheck("VAB_Charge_ID", VAB_Charge_ID);
             Line.Set_ValueNoCheck("VAB_Promotion_ID", Campaign_ID);

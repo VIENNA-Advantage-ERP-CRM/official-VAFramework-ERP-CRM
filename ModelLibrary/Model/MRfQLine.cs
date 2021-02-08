@@ -173,12 +173,12 @@ namespace VAdvantage.Model
         /// <returns>Product Name, etc.</returns>
         public String GetProductDetailHTML()
         {
-            if (GetM_Product_ID() == 0)
+            if (GetVAM_Product_ID() == 0)
             {
                 return "";
             }
             StringBuilder sb = new StringBuilder();
-            MProduct product = MProduct.Get(GetCtx(), GetM_Product_ID());
+            MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
             sb.Append(product.GetName());
             if (product.GetDescription() != null && product.GetDescription().Length > 0)
             {

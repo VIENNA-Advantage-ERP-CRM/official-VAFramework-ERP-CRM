@@ -66,7 +66,7 @@ namespace VAdvantage.Model
 
             // check Unique constraints basedon Org + Order + cost element + landed cost distribution
             String sql = "SELECT COUNT(VAB_ExpectedCost_ID) FROM VAB_ExpectedCost WHERE IsActive = 'Y' AND VAF_Org_ID = " + GetVAF_Org_ID() +
-                @" AND VAB_Order_ID = " + GetVAB_Order_ID() + @" AND M_CostElement_ID = " + GetM_CostElement_ID() +
+                @" AND VAB_Order_ID = " + GetVAB_Order_ID() + @" AND VAM_ProductCostElement_ID = " + GetVAM_ProductCostElement_ID() +
                 @" AND LandedCostDistribution = '" + GetLandedCostDistribution() + "'";
             if (!newRecord)
             {
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         {
             List<MVABOrderLine> list = new List<MVABOrderLine>();
             StringBuilder sql = new StringBuilder(@"SELECT * FROM VAB_OrderLine ol
-                                                        INNER JOIN m_product p ON p.m_product_id = ol.m_product_id
+                                                        INNER JOIN VAM_Product p ON p.VAM_Product_id = ol.VAM_Product_id
                                                         WHERE ol.VAB_Order_ID =" + VAB_Order_ID + @" AND ol.isactive = 'Y' 
                                                         AND  p.ProductType  = '" + MProduct.PRODUCTTYPE_Item + "'");
             IDataReader idr = null;

@@ -173,9 +173,9 @@ namespace VAdvantage.Model
         /// Get Default Org Warehouse
         /// </summary>
         /// <returns>warehouse</returns>
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            return GetInfo().GetM_Warehouse_ID();
+            return GetInfo().GetVAM_Warehouse_ID();
         }
 
         /// <summary>
@@ -200,9 +200,9 @@ namespace VAdvantage.Model
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
             {
-                MAccount.UpdateValueDescription(GetCtx(), "VAF_Org_ID=" + GetVAF_Org_ID(), Get_Trx());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAF_Org_ID=" + GetVAF_Org_ID(), Get_Trx());
                 if ("Y".Equals(GetCtx().GetContext("$Element_OT")))
-                    MAccount.UpdateValueDescription(GetCtx(), "VAF_OrgTrx_ID=" + GetVAF_Org_ID(), Get_Trx());
+                    MVABAccount.UpdateValueDescription(GetCtx(), "VAF_OrgTrx_ID=" + GetVAF_Org_ID(), Get_Trx());
             }
 
             if (!newRecord)

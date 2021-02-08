@@ -28,7 +28,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Organization to be imported to	*/
         private int _VAF_Org_ID = 0;
         /**	Locator to be imported to		*/
-        private int _M_Locator_ID = 0;
+        private int _VAM_Locator_ID = 0;
         /**	Default Date					*/
         private DateTime? _MovementDate = null;
         /**	Delete old Imported				*/
@@ -55,9 +55,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     _VAF_Org_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
-                else if (name.Equals("M_Locator_ID"))
+                else if (name.Equals("VAM_Locator_ID"))
                 {
-                    _M_Locator_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
+                    _VAM_Locator_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                 }
                 else if (name.Equals("MovementDate"))
                     _MovementDate = (DateTime?)para[i].GetParameter();
@@ -75,7 +75,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Info</returns>
         protected override String DoIt()
         {
-            log.Info("M_Locator_ID=" + _M_Locator_ID + ",MovementDate=" + _MovementDate);
+            log.Info("VAM_Locator_ID=" + _VAM_Locator_ID + ",MovementDate=" + _MovementDate);
             //
             StringBuilder sql = null;
             int no = 0;
@@ -106,7 +106,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                   + " Updated = COALESCE (Updated, SysDate),"
                   + " UpdatedBy = COALESCE (UpdatedBy, 0),"
                   + " I_ErrorMsg = NULL,"
-                  + " M_Warehouse_ID = NULL,"	//	reset
+                  + " VAM_Warehouse_ID = NULL,"	//	reset
                   + " I_IsImported = 'N' "
                   + "WHERE I_IsImported<>'Y' OR I_IsImported IS NULL");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -127,56 +127,56 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             // gwu: bug 1703137
             // if Warehouse key provided, get Warehouse ID
             sql = new StringBuilder("UPDATE I_Inventory i "
-                    + "SET M_Warehouse_ID=(SELECT MAX(M_Warehouse_ID) FROM M_Warehouse w"
+                    + "SET VAM_Warehouse_ID=(SELECT MAX(VAM_Warehouse_ID) FROM VAM_Warehouse w"
                     + " WHERE i.WarehouseValue=w.Value AND i.VAF_Client_ID=w.VAF_Client_ID) "
-                    + "WHERE M_Warehouse_ID IS NULL AND WarehouseValue IS NOT NULL"
+                    + "WHERE VAM_Warehouse_ID IS NULL AND WarehouseValue IS NOT NULL"
                     + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Warehouse from Value =" + no);
 
             //	Location
             sql = new StringBuilder("UPDATE I_Inventory i "
-                + "SET M_Locator_ID=(SELECT MAX(M_Locator_ID) FROM M_Locator l"
-                + " WHERE i.LocatorValue=l.Value AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
-                + "WHERE M_Locator_ID IS NULL AND LocatorValue IS NOT NULL"
+                + "SET VAM_Locator_ID=(SELECT MAX(VAM_Locator_ID) FROM VAM_Locator l"
+                + " WHERE i.LocatorValue=l.Value AND COALESCE (i.VAM_Warehouse_ID, l.VAM_Warehouse_ID)=l.VAM_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
+                + "WHERE VAM_Locator_ID IS NULL AND LocatorValue IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Locator from Value =" + no);
             sql = new StringBuilder("UPDATE I_Inventory i "
-                + "SET M_Locator_ID=(SELECT MAX(M_Locator_ID) FROM M_Locator l"
-                + " WHERE i.X=l.X AND i.Y=l.Y AND i.Z=l.Z AND COALESCE (i.M_Warehouse_ID, l.M_Warehouse_ID)=l.M_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
-                + "WHERE M_Locator_ID IS NULL AND X IS NOT NULL AND Y IS NOT NULL AND Z IS NOT NULL"
+                + "SET VAM_Locator_ID=(SELECT MAX(VAM_Locator_ID) FROM VAM_Locator l"
+                + " WHERE i.X=l.X AND i.Y=l.Y AND i.Z=l.Z AND COALESCE (i.VAM_Warehouse_ID, l.VAM_Warehouse_ID)=l.VAM_Warehouse_ID AND i.VAF_Client_ID=l.VAF_Client_ID) "
+                + "WHERE VAM_Locator_ID IS NULL AND X IS NOT NULL AND Y IS NOT NULL AND Z IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Locator from X,Y,Z =" + no);
-            if (_M_Locator_ID != 0)
+            if (_VAM_Locator_ID != 0)
             {
                 sql = new StringBuilder("UPDATE I_Inventory "
-                    + "SET M_Locator_ID = ").Append(_M_Locator_ID).Append(
-                    " WHERE M_Locator_ID IS NULL"
+                    + "SET VAM_Locator_ID = ").Append(_VAM_Locator_ID).Append(
+                    " WHERE VAM_Locator_ID IS NULL"
                     + " AND I_IsImported<>'Y'").Append(clientCheck);
                 no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Set Locator from Parameter=" + no);
             }
             sql = new StringBuilder("UPDATE I_Inventory "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No Location, ' "
-                + "WHERE M_Locator_ID IS NULL"
+                + "WHERE VAM_Locator_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
                 log.Warning("No Location=" + no);
 
 
-            //	Set M_Warehouse_ID 
+            //	Set VAM_Warehouse_ID 
             sql = new StringBuilder("UPDATE I_Inventory i "
-                + "SET M_Warehouse_ID=(SELECT M_Warehouse_ID FROM M_Locator l WHERE i.M_Locator_ID=l.M_Locator_ID) "
-                + "WHERE M_Locator_ID IS NOT NULL"
+                + "SET VAM_Warehouse_ID=(SELECT VAM_Warehouse_ID FROM VAM_Locator l WHERE i.VAM_Locator_ID=l.VAM_Locator_ID) "
+                + "WHERE VAM_Locator_ID IS NOT NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Warehouse from Locator =" + no);
             sql = new StringBuilder("UPDATE I_Inventory "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No Warehouse, ' "
-                + "WHERE M_Warehouse_ID IS NULL"
+                + "WHERE VAM_Warehouse_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -185,22 +185,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Product
             sql = new StringBuilder("UPDATE I_Inventory i "
-                  + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
+                  + "SET VAM_Product_ID=(SELECT MAX(VAM_Product_ID) FROM VAM_Product p"
                   + " WHERE i.Value=p.Value AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_Product_ID IS NULL AND Value IS NOT NULL"
+                  + "WHERE VAM_Product_ID IS NULL AND Value IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_Inventory i "
-                  + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
+                  + "SET VAM_Product_ID=(SELECT MAX(VAM_Product_ID) FROM VAM_Product p"
                   + " WHERE i.UPC=p.UPC AND i.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_Product_ID IS NULL AND UPC IS NOT NULL"
+                  + "WHERE VAM_Product_ID IS NULL AND UPC IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from UPC=" + no);
             sql = new StringBuilder("UPDATE I_Inventory "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No Product, ' "
-                + "WHERE M_Product_ID IS NULL"
+                + "WHERE VAM_Product_ID IS NULL"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -227,7 +227,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Go through Inventory Records
             sql = new StringBuilder("SELECT * FROM I_Inventory "
                 + "WHERE I_IsImported='N'").Append(clientCheck)
-                .Append(" ORDER BY M_Warehouse_ID, TRUNC(MovementDate,'DD'), I_Inventory_ID");
+                .Append(" ORDER BY VAM_Warehouse_ID, TRUNC(MovementDate,'DD'), I_Inventory_ID");
             IDataReader idr = null;
             try
             {
@@ -235,7 +235,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //ResultSet rs = pstmt.executeQuery ();
                 idr = DataBase.DB.ExecuteReader(sql.ToString(), null, Get_TrxName());
                 //
-                int x_M_Warehouse_ID = -1;
+                int x_VAM_Warehouse_ID = -1;
                 DateTime? x_MovementDate = null;
                 while (idr.Read())
                 {
@@ -243,13 +243,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     DateTime? MovementDate = TimeUtil.GetDay(imp.GetMovementDate());
 
                     if (inventory == null
-                        || imp.GetM_Warehouse_ID() != x_M_Warehouse_ID
+                        || imp.GetVAM_Warehouse_ID() != x_VAM_Warehouse_ID
                         || !MovementDate.Equals(x_MovementDate))
                     {
                         inventory = new MInventory(GetCtx(), 0, Get_TrxName());
                         inventory.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
-                        inventory.SetDescription("I " + imp.GetM_Warehouse_ID() + " " + MovementDate);
-                        inventory.SetM_Warehouse_ID(imp.GetM_Warehouse_ID());
+                        inventory.SetDescription("I " + imp.GetVAM_Warehouse_ID() + " " + MovementDate);
+                        inventory.SetVAM_Warehouse_ID(imp.GetVAM_Warehouse_ID());
                         inventory.SetMovementDate(MovementDate);
                         //
                         if (!inventory.Save())
@@ -257,37 +257,37 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             log.Log(Level.SEVERE, "Inventory not saved");
                             break;
                         }
-                        x_M_Warehouse_ID = imp.GetM_Warehouse_ID();
+                        x_VAM_Warehouse_ID = imp.GetVAM_Warehouse_ID();
                         x_MovementDate = MovementDate;
                         noInsert++;
                     }
 
                     //	Line
-                    int M_AttributeSetInstance_ID = 0;
+                    int VAM_PFeature_SetInstance_ID = 0;
                     if (imp.GetLot() != null || imp.GetSerNo() != null)
                     {
-                        MProduct product = MProduct.Get(GetCtx(), imp.GetM_Product_ID());
+                        MProduct product = MProduct.Get(GetCtx(), imp.GetVAM_Product_ID());
                         if (product.IsInstanceAttribute())
                         {
                             MAttributeSet mas = product.GetAttributeSet();
-                            MAttributeSetInstance masi = new MAttributeSetInstance(GetCtx(), 0, mas.GetM_AttributeSet_ID(), Get_TrxName());
+                            MAttributeSetInstance masi = new MAttributeSetInstance(GetCtx(), 0, mas.GetVAM_PFeature_Set_ID(), Get_TrxName());
                             if (mas.IsLot() && imp.GetLot() != null)
-                                masi.SetLot(imp.GetLot(), imp.GetM_Product_ID());
+                                masi.SetLot(imp.GetLot(), imp.GetVAM_Product_ID());
                             if (mas.IsSerNo() && imp.GetSerNo() != null)
                                 masi.SetSerNo(imp.GetSerNo());
                             masi.SetDescription();
                             masi.Save();
-                            M_AttributeSetInstance_ID = masi.GetM_AttributeSetInstance_ID();
+                            VAM_PFeature_SetInstance_ID = masi.GetVAM_PFeature_SetInstance_ID();
                         }
                     }
                     MInventoryLine line = new MInventoryLine(inventory,
-                        imp.GetM_Locator_ID(), imp.GetM_Product_ID(), M_AttributeSetInstance_ID,
+                        imp.GetVAM_Locator_ID(), imp.GetVAM_Product_ID(), VAM_PFeature_SetInstance_ID,
                         imp.GetQtyBook(), imp.GetQtyCount());
                     if (line.Save())
                     {
                         imp.SetI_IsImported(X_I_Inventory.I_ISIMPORTED_Yes);
-                        imp.SetM_Inventory_ID(line.GetM_Inventory_ID());
-                        imp.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
+                        imp.SetVAM_Inventory_ID(line.GetVAM_Inventory_ID());
+                        imp.SetVAM_InventoryLine_ID(line.GetVAM_InventoryLine_ID());
                         imp.SetProcessed(true);
                         if (imp.Save())
                             noInsertLine++;
@@ -309,8 +309,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             AddLog(0, null, Utility.Util.GetValueOfDecimal(no), "@Errors@");
             //
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@M_Inventory_ID@: @Inserted@");
-            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@M_InventoryLine_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsert), "@VAM_Inventory_ID@: @Inserted@");
+            AddLog(0, null, Utility.Util.GetValueOfDecimal(noInsertLine), "@VAM_InventoryLine_ID@: @Inserted@");
             return "";
         }	//	doIt
 

@@ -99,7 +99,7 @@ namespace VAdvantage.Acct
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt)
+        public FactLine CreateLine(DocLine docLine, MVABAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt)
         {
             //  Data Check
             if (account == null)
@@ -167,7 +167,7 @@ namespace VAdvantage.Acct
         /// <param name="debitAmt">debit amount, can be null</param>
         /// <param name="creditAmt">credit amount, can be null</param>
         /// <returns>Fact Line</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int VAF_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MVABAccount account, int VAB_Currency_ID, Decimal? debitAmt, Decimal? creditAmt, int VAF_Org_ID)
         {
             //  Data Check
             if (account == null)
@@ -231,7 +231,7 @@ namespace VAdvantage.Acct
         /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount accountDr, MAccount accountCr, int VAB_Currency_ID, Decimal? Amt)
+        public FactLine CreateLine(DocLine docLine, MVABAccount accountDr, MVABAccount accountCr, int VAB_Currency_ID, Decimal? Amt)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
@@ -252,7 +252,7 @@ namespace VAdvantage.Acct
         /// <param name="VAB_Currency_ID">Currency</param>
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? Amt)
+        public FactLine CreateLine(DocLine docLine, MVABAccount account, int VAB_Currency_ID, Decimal? Amt)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
@@ -274,7 +274,7 @@ namespace VAdvantage.Acct
         /// <param name="Amt">if negative Cr else Dr</param>
         /// <param name ="VAF_Org_ID">Set Line Org</param>
         /// <returns>FactLine</returns>
-        public FactLine CreateLine(DocLine docLine, MAccount account, int VAB_Currency_ID, Decimal? Amt, int VAF_Org_ID)
+        public FactLine CreateLine(DocLine docLine, MVABAccount account, int VAB_Currency_ID, Decimal? Amt, int VAF_Org_ID)
         {
             if (Env.Signum(Amt.Value) < 0)
             {
@@ -781,7 +781,7 @@ namespace VAdvantage.Acct
             for (int i = 0; i < _lines.Count; i++)
             {
                 FactLine line = (FactLine)_lines[i];
-                MAccount account = line.GetAccount();
+                MVABAccount account = line.GetAccount();
                 if (account == null)
                 {
                     log.Warning("No Account for " + line);

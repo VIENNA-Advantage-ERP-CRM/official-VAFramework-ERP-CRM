@@ -11,7 +11,7 @@ using System.Web;
 
 namespace VAdvantage.Model
 {
-    public class MLocator : X_M_Locator
+    public class MLocator : X_VAM_Locator
     {
         //	Logger						
         private static VLogger _log = VLogger.GetVLogger(typeof(MLocator).FullName);
@@ -24,15 +24,15 @@ namespace VAdvantage.Model
         /// Standard Locator Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Locator_ID">id</param>
+        /// <param name="VAM_Locator_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLocator(Ctx ctx, int M_Locator_ID, Trx trxName)
-            : base(ctx, M_Locator_ID, trxName)
+        public MLocator(Ctx ctx, int VAM_Locator_ID, Trx trxName)
+            : base(ctx, VAM_Locator_ID, trxName)
         {
-            if (M_Locator_ID == 0)
+            if (VAM_Locator_ID == 0)
             {
-                //SetM_Locator_ID(0);		//	PK
-                //SetM_Warehouse_ID(0);		//	Parent
+                //SetVAM_Locator_ID(0);		//	PK
+                //SetVAM_Warehouse_ID(0);		//	Parent
                 SetIsDefault(false);
                 SetPriorityNo(50);
                 //SetValue(null);
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
             : this(warehouse.GetCtx(), 0, warehouse.Get_TrxName())
         {
             SetClientOrg(warehouse);
-            SetM_Warehouse_ID(warehouse.GetM_Warehouse_ID());		//	Parent
+            SetVAM_Warehouse_ID(warehouse.GetVAM_Warehouse_ID());		//	Parent
             SetValue(value);
             // Added by Mohit VAWMS 20-8-2015
             if (Env.HasModulePrefix("VAWMS_", out mInfo))
@@ -99,9 +99,9 @@ namespace VAdvantage.Model
         /// <returns>name</returns>
         public String GetWarehouseName()
         {
-            MWarehouse wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+            MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
             if (wh.Get_ID() == 0)
-                return "<" + GetM_Warehouse_ID() + ">";
+                return "<" + GetVAM_Warehouse_ID() + ">";
             return wh.GetName();
         }
 
@@ -109,13 +109,13 @@ namespace VAdvantage.Model
         /// Get Locator from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Locator_ID">id</param>
+        /// <param name="VAM_Locator_ID">id</param>
         /// <returns>MLocator</returns>
-        public static MLocator Get(Ctx ctx, int M_Locator_ID)
+        public static MLocator Get(Ctx ctx, int VAM_Locator_ID)
         {
             if (cache == null)
-                cache = new CCache<int, MLocator>("M_Locator", 20);
-            int key = M_Locator_ID;
+                cache = new CCache<int, MLocator>("VAM_Locator", 20);
+            int key = VAM_Locator_ID;
             MLocator retValue = null;
             if (cache.ContainsKey(key))
             {
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
             }
             if (retValue != null)
                 return retValue;
-            retValue = new MLocator(ctx, M_Locator_ID, null);
+            retValue = new MLocator(ctx, VAM_Locator_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -133,17 +133,17 @@ namespace VAdvantage.Model
         /// Get the Locator with the combination or create new one
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Warehouse_ID">id</param>
+        /// <param name="VAM_Warehouse_ID">id</param>
         /// <param name="value">value</param>
         /// <param name="X">x</param>
         /// <param name="Y">y</param>
         /// <param name="Z">z</param>
         /// <returns>locator</returns>
-        public static MLocator Get(Ctx ctx, int M_Warehouse_ID, String value,
+        public static MLocator Get(Ctx ctx, int VAM_Warehouse_ID, String value,
             String X, String Y, String Z)
         {
             MLocator retValue = null;
-            String sql = "SELECT * FROM M_Locator WHERE M_Warehouse_ID=" + M_Warehouse_ID + " AND " +
+            String sql = "SELECT * FROM VAM_Locator WHERE VAM_Warehouse_ID=" + VAM_Warehouse_ID + " AND " +
                 "X='" + X + "' AND Y='" + Y + "' AND Z='" + Z + "'";
             DataSet ds = null;
             try
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
             if (retValue == null)
             {
 
-                MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+                MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
                 retValue = new MLocator(wh, HttpUtility.HtmlEncode(value));
                 retValue.SetXYZ(HttpUtility.HtmlEncode(X), HttpUtility.HtmlEncode(Y), HttpUtility.HtmlEncode(Z));
                 if (!retValue.Save())
@@ -177,16 +177,16 @@ namespace VAdvantage.Model
         /// Get oldest Default Locator of warehouse with locator
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Locator_ID">locator</param>
+        /// <param name="VAM_Locator_ID">locator</param>
         /// <returns>locator or null</returns>
-        public static MLocator GetDefault(Ctx ctx, int M_Locator_ID)
+        public static MLocator GetDefault(Ctx ctx, int VAM_Locator_ID)
         {
             Trx trxName = null;
             MLocator retValue = null;
-            String sql = "SELECT * FROM M_Locator l "
+            String sql = "SELECT * FROM VAM_Locator l "
                 + "WHERE IsDefault='Y'"
-                + " AND EXISTS (SELECT * FROM M_Locator lx "
-                    + "WHERE l.M_Warehouse_ID=lx.M_Warehouse_ID AND lx.M_Locator_ID=" + M_Locator_ID + ") "
+                + " AND EXISTS (SELECT * FROM VAM_Locator lx "
+                    + "WHERE l.VAM_Warehouse_ID=lx.VAM_Warehouse_ID AND lx.VAM_Locator_ID=" + VAM_Locator_ID + ") "
                 + "ORDER BY Created";
             DataSet ds = null;
             try
@@ -219,7 +219,7 @@ namespace VAdvantage.Model
             MLocator retValue = null;
             List<int> defaultlocators = new List<int>();
             List<int> locators = new List<int>();
-            String sql = "SELECT M_Locator_ID, IsDefault FROM M_Locator WHERE (VAF_Org_ID=" + VAF_Org_ID + " OR 0=" + VAF_Org_ID + ")";
+            String sql = "SELECT VAM_Locator_ID, IsDefault FROM VAM_Locator WHERE (VAF_Org_ID=" + VAF_Org_ID + " OR 0=" + VAF_Org_ID + ")";
             IDataReader idr = null;
             try
             {
@@ -287,7 +287,7 @@ namespace VAdvantage.Model
 
                 // JID:1888 Checks for the duplicate Searchkey
 
-                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM M_Locator WHERE Value= '" + GetValue() + "' AND M_Locator_ID !=" + GetM_Locator_ID()));
+                int count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(Value) FROM VAM_Locator WHERE Value= '" + GetValue() + "' AND VAM_Locator_ID !=" + GetVAM_Locator_ID()));
                 if (count > 0)
                 {
                     log.SaveError("", Msg.GetMsg(GetCtx(), "SearchKeyUnique"));
@@ -301,7 +301,7 @@ namespace VAdvantage.Model
                         || Is_ValueChanged("POSITION")
                         || Is_ValueChanged("Bin"))
                 {
-                    MWarehouse wh = new MWarehouse(GetCtx(), GetM_Warehouse_ID(), Get_TrxName());
+                    MWarehouse wh = new MWarehouse(GetCtx(), GetVAM_Warehouse_ID(), Get_TrxName());
 
                     //if (GetBin() != null && GetPOSITION() != null || GetPOSITION()==null)
                     //{
@@ -349,13 +349,13 @@ namespace VAdvantage.Model
                     }
                     log.Fine("Set Locator Combination :" + combination);
 
-                    //String sql = "SELECT count(*) FROM M_Locator WHERE M_Locator_ID<>?" +
-                    //                " AND M_Warehouse_ID = ?" +
+                    //String sql = "SELECT count(*) FROM VAM_Locator WHERE VAM_Locator_ID<>?" +
+                    //                " AND VAM_Warehouse_ID = ?" +
                     //                " AND UPPER(LocatorCombination) = UPPER(?)";
-                    String sql = "SELECT count(*) FROM M_Locator WHERE M_Locator_ID<>" + GetM_Locator_ID() +
-                                  " AND M_Warehouse_ID =" + GetM_Warehouse_ID() +
+                    String sql = "SELECT count(*) FROM VAM_Locator WHERE VAM_Locator_ID<>" + GetVAM_Locator_ID() +
+                                  " AND VAM_Warehouse_ID =" + GetVAM_Warehouse_ID() +
                                   " AND UPPER(LocatorCombination) = UPPER('" + combination + "')";
-                    //int ii = QueryUtil.GetSQLValue(Get_TrxName(), sql, GetM_Locator_ID(), GetM_Warehouse_ID(), combination);
+                    //int ii = QueryUtil.GetSQLValue(Get_TrxName(), sql, GetVAM_Locator_ID(), GetVAM_Warehouse_ID(), combination);
                     int ii = Convert.ToInt32(DB.ExecuteScalar(sql, null, Get_TrxName()));
                     if (ii != 0)
                     {
@@ -380,13 +380,13 @@ namespace VAdvantage.Model
             }
             return true;
         }
-        public static Boolean checkStock(Ctx ctx, int M_Locator_ID, Trx trx)
+        public static Boolean checkStock(Ctx ctx, int VAM_Locator_ID, Trx trx)
         {
             //ArrayList<MStorage> list = new ArrayList<MStorage>();
             String sql = "SELECT COALESCE(SUM(CASE WHEN QtyType LIKE 'H' THEN Qty ELSE 0 END), 0) QtyOnHand, " +
                                 "COALESCE(SUM(CASE WHEN QtyType LIKE 'O' THEN Qty ELSE 0 END), 0) QtyOrdered, " +
                                 "COALESCE(SUM(CASE WHEN QtyType LIKE 'R' THEN Qty ELSE 0 END), 0) QtyReserved " +
-                    "FROM M_StorageDetail WHERE M_Locator_ID=" + M_Locator_ID;
+                    "FROM VAM_StorageDetail WHERE VAM_Locator_ID=" + VAM_Locator_ID;
             Decimal OnHand = Env.ZERO;
             Decimal Ordered = Env.ZERO;
             Decimal Reserved = Env.ZERO;
@@ -398,7 +398,7 @@ namespace VAdvantage.Model
             {
 
                 //pstmt = DB.prepareStatement(sql, trx);
-                //pstmt.setInt(1, M_Locator_ID);
+                //pstmt.setInt(1, VAM_Locator_ID);
                 //rs = pstmt.executeQuery();
                 //while (rs.next())
                 //{
@@ -441,10 +441,10 @@ namespace VAdvantage.Model
             SetBin(Bin);
             SetPOSITION(Position);
         }
-        public static MLocator Get(Ctx ctx, int M_Warehouse_ID, String value, String X, String Y, String Z, String Position, String Bin)
+        public static MLocator Get(Ctx ctx, int VAM_Warehouse_ID, String value, String X, String Y, String Z, String Position, String Bin)
         {
             MLocator retValue = null;
-            String sql = "SELECT * FROM M_Locator WHERE M_Warehouse_ID=" + M_Warehouse_ID + " AND " +
+            String sql = "SELECT * FROM VAM_Locator WHERE VAM_Warehouse_ID=" + VAM_Warehouse_ID + " AND " +
                 "X='" + X + "' AND Y='" + Y + "' AND Z='" + Z + "'";
             DataSet ds = null;
             try
@@ -464,7 +464,7 @@ namespace VAdvantage.Model
             //
             if (retValue == null)
             {
-                MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
+                MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
                 retValue = new MLocator(wh, value);
                 retValue.SetXYZ(X, Y, Z, Position, Bin);
                 if (!retValue.Save())
@@ -474,10 +474,10 @@ namespace VAdvantage.Model
         }
         public Boolean IsFixed()
         {
-            String sql = "SELECT count(*) FROM M_ProductLocator pl " +
-                            "WHERE pl.M_Locator_ID = @param1 ";
+            String sql = "SELECT count(*) FROM VAM_ProductLocator pl " +
+                            "WHERE pl.VAM_Locator_ID = @param1 ";
 
-            int ii = DB.GetSQLValue(Get_TrxName(), sql, GetM_Locator_ID());
+            int ii = DB.GetSQLValue(Get_TrxName(), sql, GetVAM_Locator_ID());
             if (ii != 0)
             {
                 return true;

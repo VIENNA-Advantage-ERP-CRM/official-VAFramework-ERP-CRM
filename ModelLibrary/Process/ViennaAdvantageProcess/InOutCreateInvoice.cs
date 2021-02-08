@@ -30,9 +30,9 @@ namespace ViennaAdvantage.Process
     public class InOutCreateInvoice : VAdvantage.ProcessEngine.SvrProcess
     {
         //	Shipment					
-        private int _M_InOut_ID = 0;
+        private int _VAM_Inv_InOut_ID = 0;
         //Price List Version		
-        private int _M_PriceList_ID = 0;
+        private int _VAM_PriceList_ID = 0;
         //Document No					
         private String _InvoiceDocumentNo = null;
         //Document Type
@@ -54,9 +54,9 @@ namespace ViennaAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_PriceList_ID"))
+                else if (name.Equals("VAM_PriceList_ID"))
                 {
-                    _M_PriceList_ID = para[i].GetParameterAsInt();
+                    _VAM_PriceList_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("InvoiceDocumentNo"))
                 {
@@ -75,7 +75,7 @@ namespace ViennaAdvantage.Process
                     //log.log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _M_InOut_ID = GetRecord_ID();
+            _VAM_Inv_InOut_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -85,17 +85,17 @@ namespace ViennaAdvantage.Process
         protected override String DoIt()
         {
             StringBuilder invDocumentNo = new StringBuilder();
-            int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM M_Inout WHERE  ISSOTRX='Y' AND  M_Inout_ID=" + GetRecord_ID()));
+            int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM VAM_Inv_InOut WHERE  ISSOTRX='Y' AND  VAM_Inv_InOut_ID=" + GetRecord_ID()));
             MInOut ship = null;
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             if (count > 0)
             {
-                if (_M_InOut_ID == 0)
+                if (_VAM_Inv_InOut_ID == 0)
                 {
                     throw new ArgumentException("No Shipment");
                 }
                 //
-                ship = new MInOut(GetCtx(), _M_InOut_ID, Get_Trx());
+                ship = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
                 if (ship.Get_ID() == 0)
                 {
                     throw new ArgumentException("Shipment not found");
@@ -115,12 +115,12 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                if (_M_InOut_ID == 0)
+                if (_VAM_Inv_InOut_ID == 0)
                 {
                     throw new ArgumentException("No Material Receipt");
                 }
                 //
-                ship = new MInOut(GetCtx(), _M_InOut_ID, Get_Trx());
+                ship = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
                 if (ship.Get_ID() == 0)
                 {
                     throw new ArgumentException("Material Receipt not found");
@@ -141,10 +141,10 @@ namespace ViennaAdvantage.Process
 
             // When record contain more than single order and order having different Payment term or Price List then not to generate invoices
             // JID_0976 - For conversion Type
-            if (ship.GetVAB_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  VAB_Order.m_pricelist_id) +  count(distinct VAB_Order.VAB_Paymentterm_id) + count(distinct COALESCE( VAB_Order.VAB_CurrencyType_ID , " + MVABCurrencyType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
-                            FROM m_inoutline INNER JOIN VAB_Orderline ON m_inoutline.VAB_Orderline_id = VAB_Orderline.VAB_Orderline_id
+            if (ship.GetVAB_Order_ID() > 0 && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT  COUNT(DISTINCT  VAB_Order.VAM_PriceList_id) +  count(distinct VAB_Order.VAB_Paymentterm_id) + count(distinct COALESCE( VAB_Order.VAB_CurrencyType_ID , " + MVABCurrencyType.GetDefault(GetVAF_Client_ID()) + @"))  as recordcount
+                            FROM VAM_Inv_InOutLine INNER JOIN VAB_Orderline ON VAM_Inv_InOutLine.VAB_Orderline_id = VAB_Orderline.VAB_Orderline_id
                             INNER JOIN VAB_Order ON VAB_Order.VAB_Order_id = VAB_Orderline.VAB_Order_id
-                            WHERE m_inoutline.m_inout_id = " + _M_InOut_ID + @"  GROUP BY   m_inoutline.m_inout_id ", null, Get_Trx())) > 3)
+                            WHERE VAM_Inv_InOutLine.VAM_Inv_InOut_id = " + _VAM_Inv_InOut_ID + @"  GROUP BY   VAM_Inv_InOutLine.VAM_Inv_InOut_id ", null, Get_Trx())) > 3)
             {
                 if (ship.IsSOTrx())
                 {
@@ -253,9 +253,9 @@ namespace ViennaAdvantage.Process
                     }
                 }
             }
-            if (_M_PriceList_ID != 0)
+            if (_VAM_PriceList_ID != 0)
             {
-                invoice.SetM_PriceList_ID(_M_PriceList_ID);
+                invoice.SetVAM_PriceList_ID(_VAM_PriceList_ID);
             }
             //Set InvoiceDocumentNo to InvoiceReference
             if (_InvoiceDocumentNo != null && _InvoiceDocumentNo.Length > 0)
@@ -298,8 +298,8 @@ namespace ViennaAdvantage.Process
                 MInOutLine sLine = shipLines[i];
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
                 string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty- SUM(COALESCE(li.QtyInvoiced, 0)) as QtyInvoiced" +
-                    " FROM M_InOutLine ml INNER JOIN VAB_InvoiceLine li ON li.M_InOutLine_ID = ml.M_InOutLine_ID INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
-                    " WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.M_InOutLine_ID =" + sLine.GetM_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
+                    " FROM VAM_Inv_InOutLine ml INNER JOIN VAB_InvoiceLine li ON li.VAM_Inv_InOutLine_ID = ml.VAM_Inv_InOutLine_ID INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
+                    " WHERE ci.DocStatus NOT IN ('VO', 'RE') AND ml.VAM_Inv_InOutLine_ID =" + sLine.GetVAM_Inv_InOutLine_ID() + " GROUP BY ml.MovementQty, ml.QtyEntered";
                 ds = DB.ExecuteDataset(sql, null, Get_Trx());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
@@ -308,8 +308,8 @@ namespace ViennaAdvantage.Process
                     if (qtyEntered <= 0)
                     {
                         // Getting document number Count if Invoice already generated for Material Receipt
-                        string StrSql = "SELECT ci.DocumentNo,li.M_InOutLine_ID FROM VAB_InvoiceLine li INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
-                            "  WHERE ci.DocStatus NOT IN ('VO', 'RE') AND li.M_InOutLine_ID = " + sLine.GetM_InOutLine_ID();
+                        string StrSql = "SELECT ci.DocumentNo,li.VAM_Inv_InOutLine_ID FROM VAB_InvoiceLine li INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
+                            "  WHERE ci.DocStatus NOT IN ('VO', 'RE') AND li.VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID();
                         dsDoc = DB.ExecuteDataset(StrSql, null, Get_Trx());
                         if (dsDoc != null && dsDoc.Tables[0].Rows.Count > 0)
                         {
@@ -327,7 +327,7 @@ namespace ViennaAdvantage.Process
                                     invDocumentNo.Append(Util.GetValueOfString(dsDoc.Tables[0].Rows[j]["DocumentNo"]));
                                 }
                                 ds.Dispose();
-                                log.Info("Invoice Line already exist for Receipt Line ID - " + sLine.GetM_InOutLine_ID());
+                                log.Info("Invoice Line already exist for Receipt Line ID - " + sLine.GetVAM_Inv_InOutLine_ID());
                                 continue;
                             }
                             dsDoc.Dispose();
@@ -342,11 +342,11 @@ namespace ViennaAdvantage.Process
                         // Change By Mohit Amortization process -------------
                         if (_CountVA038 > 0)
                         {
-                            if (line.GetM_Product_ID() > 0)
+                            if (line.GetVAM_Product_ID() > 0)
                             {
-                                //MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+                                //MProduct pro = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
                                 int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
-                                     FROM M_Product WHERE M_Product_ID = " + sLine.GetM_Product_ID(), null, Get_Trx()));
+                                     FROM VAM_Product WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID(), null, Get_Trx()));
                                 if (VA038_AmortizationTemplate_ID > 0)
                                 {
                                     line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
@@ -380,7 +380,7 @@ namespace ViennaAdvantage.Process
                             }
                             if (line.GetVAB_Charge_ID() > 0)
                             {
-                                //MCharge charge = new MCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
+                                //MVABCharge charge = new MVABCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
                                 int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
                                      FROM VAB_Charge WHERE VAB_Charge_ID = " + sLine.GetVAB_Charge_ID(), null, Get_Trx()));
                                 if (VA038_AmortizationTemplate_ID > 0)
@@ -444,11 +444,11 @@ namespace ViennaAdvantage.Process
                     // Change By Mohit Amortization process -------------
                     if (_CountVA038 > 0)
                     {
-                        if (line.GetM_Product_ID() > 0)
+                        if (line.GetVAM_Product_ID() > 0)
                         {
-                            //MProduct pro = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+                            //MProduct pro = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
                             int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
-                                     FROM M_Product WHERE M_Product_ID = " + sLine.GetM_Product_ID(), null, Get_Trx()));
+                                     FROM VAM_Product WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID(), null, Get_Trx()));
                             if (VA038_AmortizationTemplate_ID > 0)
                             {
                                 line.Set_Value("VA038_AmortizationTemplate_ID", VA038_AmortizationTemplate_ID);
@@ -482,7 +482,7 @@ namespace ViennaAdvantage.Process
                         }
                         if (line.GetVAB_Charge_ID() > 0)
                         {
-                            //MCharge charge = new MCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
+                            //MVABCharge charge = new MVABCharge(GetCtx(), sLine.GetVAB_Charge_ID(), Get_TrxName());
                             int VA038_AmortizationTemplate_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VA038_AmortizationTemplate_ID 
                                      FROM VAB_Charge WHERE VAB_Charge_ID = " + sLine.GetVAB_Charge_ID(), null, Get_Trx()));
                             if (VA038_AmortizationTemplate_ID > 0)
@@ -539,12 +539,12 @@ namespace ViennaAdvantage.Process
                 OrderSql.Append("   SELECT CO.VAB_ORDER_ID,                    "
                                + "      SUM(ML.QTYENTERED) AS MRLINEQTY,     "
                                + "      SUM(OL.QTYENTERED) AS ORDERQTY       "
-                               + "  FROM M_INOUTLINE ML                      "
+                               + "  FROM VAM_Inv_InOutLine ML                      "
                                + "  INNER JOIN VAB_ORDERLINE OL                "
                                + "  ON OL.VAB_ORDERLINE_ID = ML.VAB_ORDERLINE_ID "
                                + " INNER JOIN VAB_ORDER CO                     "
                                + " ON CO.VAB_ORDER_ID     = OL.VAB_ORDER_ID      "
-                               + " WHERE ML.M_INOUT_ID  = " + _M_InOut_ID
+                               + " WHERE ML.VAM_Inv_InOut_ID  = " + _VAM_Inv_InOut_ID
                                + " AND (OL.VAB_CHARGE_ID IS NULL               "
                                + " OR OL.VAB_CHARGE_ID    = 0)                 "
                                + " GROUP BY CO.VAB_ORDER_ID                    ");
@@ -614,7 +614,7 @@ namespace ViennaAdvantage.Process
                                 {
                                     if (line.GetVAB_Charge_ID() > 0)
                                     {
-                                        MCharge charge = new MCharge(GetCtx(), line.GetVAB_Charge_ID(), Get_TrxName());
+                                        MVABCharge charge = new MVABCharge(GetCtx(), line.GetVAB_Charge_ID(), Get_TrxName());
                                         if (Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")) > 0)
                                         {
                                             line.Set_Value("VA038_AmortizationTemplate_ID", Util.GetValueOfInt(charge.Get_Value("VA038_AmortizationTemplate_ID")));

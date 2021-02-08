@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_CostElementLine
+/** Generated Model for VAM_ProductCostElementLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_CostElementLine : PO
+public class X_VAM_ProductCostElementLine : PO
 {
-public X_M_CostElementLine (Context ctx, int M_CostElementLine_ID, Trx trxName) : base (ctx, M_CostElementLine_ID, trxName)
+public X_VAM_ProductCostElementLine (Context ctx, int VAM_ProductCostElementLine_ID, Trx trxName) : base (ctx, VAM_ProductCostElementLine_ID, trxName)
 {
-/** if (M_CostElementLine_ID == 0)
+/** if (VAM_ProductCostElementLine_ID == 0)
 {
-SetM_CostElementLine_ID (0);
-SetM_CostElement_ID (0);
+SetVAM_ProductCostElementLine_ID (0);
+SetVAM_ProductCostElement_ID (0);
 }
  */
 }
-public X_M_CostElementLine(Ctx ctx, int M_CostElementLine_ID, Trx trxName)
-    : base(ctx, M_CostElementLine_ID, trxName)
+public X_VAM_ProductCostElementLine(Ctx ctx, int VAM_ProductCostElementLine_ID, Trx trxName)
+    : base(ctx, VAM_ProductCostElementLine_ID, trxName)
 {
-/** if (M_CostElementLine_ID == 0)
+/** if (VAM_ProductCostElementLine_ID == 0)
 {
-SetM_CostElementLine_ID (0);
-SetM_CostElement_ID (0);
+SetVAM_ProductCostElementLine_ID (0);
+SetVAM_ProductCostElement_ID (0);
 }
  */
 }
@@ -40,7 +40,7 @@ SetM_CostElement_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElementLine(Context ctx, DataRow rs, Trx trxName)
+public X_VAM_ProductCostElementLine(Context ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -49,7 +49,7 @@ public X_M_CostElementLine(Context ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElementLine(Ctx ctx, DataRow rs, Trx trxName)
+public X_VAM_ProductCostElementLine(Ctx ctx, DataRow rs, Trx trxName)
     : base(ctx, rs, trxName)
 {
 }
@@ -58,14 +58,14 @@ public X_M_CostElementLine(Ctx ctx, DataRow rs, Trx trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_M_CostElementLine(Ctx ctx, IDataReader dr, Trx trxName)
+public X_VAM_ProductCostElementLine(Ctx ctx, IDataReader dr, Trx trxName)
     : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_CostElementLine()
+static X_VAM_ProductCostElementLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1460010660238L;
 public static int Table_ID;
  // =1000479;
 
-/** TableName=M_CostElementLine */
-public static String Table_Name="M_CostElementLine";
+/** TableName=VAM_ProductCostElementLine */
+public static String Table_Name="VAM_ProductCostElementLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_CostElementLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ProductCostElementLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Export.
@@ -147,33 +147,33 @@ Object ii = Get_Value("LineNo");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
-/** Set M_CostElementLine_ID.
-@param M_CostElementLine_ID M_CostElementLine_ID */
-public void SetM_CostElementLine_ID (int M_CostElementLine_ID)
+/** Set VAM_ProductCostElementLine_ID.
+@param VAM_ProductCostElementLine_ID VAM_ProductCostElementLine_ID */
+public void SetVAM_ProductCostElementLine_ID (int VAM_ProductCostElementLine_ID)
 {
-if (M_CostElementLine_ID < 1) throw new ArgumentException ("M_CostElementLine_ID is mandatory.");
-Set_ValueNoCheck ("M_CostElementLine_ID", M_CostElementLine_ID);
+if (VAM_ProductCostElementLine_ID < 1) throw new ArgumentException ("VAM_ProductCostElementLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostElementLine_ID", VAM_ProductCostElementLine_ID);
 }
-/** Get M_CostElementLine_ID.
-@return M_CostElementLine_ID */
-public int GetM_CostElementLine_ID() 
+/** Get VAM_ProductCostElementLine_ID.
+@return VAM_ProductCostElementLine_ID */
+public int GetVAM_ProductCostElementLine_ID() 
 {
-Object ii = Get_Value("M_CostElementLine_ID");
+Object ii = Get_Value("VAM_ProductCostElementLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Cost Element.
-@param M_CostElement_ID Product Cost Element */
-public void SetM_CostElement_ID (int M_CostElement_ID)
+@param VAM_ProductCostElement_ID Product Cost Element */
+public void SetVAM_ProductCostElement_ID (int VAM_ProductCostElement_ID)
 {
-if (M_CostElement_ID < 1) throw new ArgumentException ("M_CostElement_ID is mandatory.");
-Set_ValueNoCheck ("M_CostElement_ID", M_CostElement_ID);
+if (VAM_ProductCostElement_ID < 1) throw new ArgumentException ("VAM_ProductCostElement_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
 }
 /** Get Cost Element.
 @return Product Cost Element */
-public int GetM_CostElement_ID() 
+public int GetVAM_ProductCostElement_ID() 
 {
-Object ii = Get_Value("M_CostElement_ID");
+Object ii = Get_Value("VAM_ProductCostElement_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

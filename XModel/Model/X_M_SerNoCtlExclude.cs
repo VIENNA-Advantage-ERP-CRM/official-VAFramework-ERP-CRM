@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_SerNoCtlExclude
+/** Generated Model for VAM_ExcludeCtlSerialNo
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_SerNoCtlExclude : PO
+public class X_VAM_ExcludeCtlSerialNo : PO
 {
-public X_M_SerNoCtlExclude (Context ctx, int M_SerNoCtlExclude_ID, Trx trxName) : base (ctx, M_SerNoCtlExclude_ID, trxName)
+public X_VAM_ExcludeCtlSerialNo (Context ctx, int VAM_ExcludeCtlSerialNo_ID, Trx trxName) : base (ctx, VAM_ExcludeCtlSerialNo_ID, trxName)
 {
-/** if (M_SerNoCtlExclude_ID == 0)
-{
-SetVAF_TableView_ID (0);
-SetIsSOTrx (false);
-SetM_SerNoCtlExclude_ID (0);
-SetM_SerNoCtl_ID (0);
-}
- */
-}
-public X_M_SerNoCtlExclude (Ctx ctx, int M_SerNoCtlExclude_ID, Trx trxName) : base (ctx, M_SerNoCtlExclude_ID, trxName)
-{
-/** if (M_SerNoCtlExclude_ID == 0)
+/** if (VAM_ExcludeCtlSerialNo_ID == 0)
 {
 SetVAF_TableView_ID (0);
 SetIsSOTrx (false);
-SetM_SerNoCtlExclude_ID (0);
-SetM_SerNoCtl_ID (0);
+SetVAM_ExcludeCtlSerialNo_ID (0);
+SetVAM_CtlSerialNo_ID (0);
+}
+ */
+}
+public X_VAM_ExcludeCtlSerialNo (Ctx ctx, int VAM_ExcludeCtlSerialNo_ID, Trx trxName) : base (ctx, VAM_ExcludeCtlSerialNo_ID, trxName)
+{
+/** if (VAM_ExcludeCtlSerialNo_ID == 0)
+{
+SetVAF_TableView_ID (0);
+SetIsSOTrx (false);
+SetVAM_ExcludeCtlSerialNo_ID (0);
+SetVAM_CtlSerialNo_ID (0);
 }
  */
 }
@@ -43,7 +43,7 @@ SetM_SerNoCtl_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_SerNoCtlExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ExcludeCtlSerialNo (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_M_SerNoCtlExclude (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_SerNoCtlExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ExcludeCtlSerialNo (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_M_SerNoCtlExclude (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_SerNoCtlExclude (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ExcludeCtlSerialNo (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_SerNoCtlExclude()
+static X_VAM_ExcludeCtlSerialNo()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389064520L;
 public static int Table_ID;
  // =811;
 
-/** TableName=M_SerNoCtlExclude */
-public static String Table_Name="M_SerNoCtlExclude";
+/** TableName=VAM_ExcludeCtlSerialNo */
+public static String Table_Name="VAM_ExcludeCtlSerialNo";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(2);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_SerNoCtlExclude[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ExcludeCtlSerialNo[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Table.
@@ -150,32 +150,32 @@ if (oo != null)
 return false;
 }
 /** Set Exclude SerNo.
-@param M_SerNoCtlExclude_ID Exclude the ability to create Serial Numbers in Attribute Sets */
-public void SetM_SerNoCtlExclude_ID (int M_SerNoCtlExclude_ID)
+@param VAM_ExcludeCtlSerialNo_ID Exclude the ability to create Serial Numbers in Attribute Sets */
+public void SetVAM_ExcludeCtlSerialNo_ID (int VAM_ExcludeCtlSerialNo_ID)
 {
-if (M_SerNoCtlExclude_ID < 1) throw new ArgumentException ("M_SerNoCtlExclude_ID is mandatory.");
-Set_ValueNoCheck ("M_SerNoCtlExclude_ID", M_SerNoCtlExclude_ID);
+if (VAM_ExcludeCtlSerialNo_ID < 1) throw new ArgumentException ("VAM_ExcludeCtlSerialNo_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ExcludeCtlSerialNo_ID", VAM_ExcludeCtlSerialNo_ID);
 }
 /** Get Exclude SerNo.
 @return Exclude the ability to create Serial Numbers in Attribute Sets */
-public int GetM_SerNoCtlExclude_ID() 
+public int GetVAM_ExcludeCtlSerialNo_ID() 
 {
-Object ii = Get_Value("M_SerNoCtlExclude_ID");
+Object ii = Get_Value("VAM_ExcludeCtlSerialNo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Serial No Control.
-@param M_SerNoCtl_ID Product Serial Number Control */
-public void SetM_SerNoCtl_ID (int M_SerNoCtl_ID)
+@param VAM_CtlSerialNo_ID Product Serial Number Control */
+public void SetVAM_CtlSerialNo_ID (int VAM_CtlSerialNo_ID)
 {
-if (M_SerNoCtl_ID < 1) throw new ArgumentException ("M_SerNoCtl_ID is mandatory.");
-Set_ValueNoCheck ("M_SerNoCtl_ID", M_SerNoCtl_ID);
+if (VAM_CtlSerialNo_ID < 1) throw new ArgumentException ("VAM_CtlSerialNo_ID is mandatory.");
+Set_ValueNoCheck ("VAM_CtlSerialNo_ID", VAM_CtlSerialNo_ID);
 }
 /** Get Serial No Control.
 @return Product Serial Number Control */
-public int GetM_SerNoCtl_ID() 
+public int GetVAM_CtlSerialNo_ID() 
 {
-Object ii = Get_Value("M_SerNoCtl_ID");
+Object ii = Get_Value("VAM_CtlSerialNo_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

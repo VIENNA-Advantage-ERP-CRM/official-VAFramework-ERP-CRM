@@ -38,7 +38,7 @@ namespace VIS.Models
             _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
             if (_masi == null)
             {
-                //  log.Severe("No Model for M_AttributeSetInstance_ID=" + _M_AttributeSetInstance_ID + ", M_Product_ID=" + _M_Product_ID);
+                //  log.Severe("No Model for VAM_PFeature_SetInstance_ID=" + _VAM_PFeature_SetInstance_ID + ", VAM_Product_ID=" + _VAM_Product_ID);
                 return null;
             }
             /* set context to client side */
@@ -286,15 +286,15 @@ namespace VIS.Models
             if (_changed || _masi.GetVAB_GenFeatureSetInstance_ID() == 0)
             {
                 _masi.Save();
-                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                 mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
-                obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             else
             {
-                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
                 mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
-                obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             //	Save Instance Attributes
             attributes = aset.GetCGenAttributes(false);
@@ -377,13 +377,13 @@ namespace VIS.Models
                 _masi.SetDescription();
                 _masi.Save();
 
-                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             else
             {
-                obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             return obj;
         }
@@ -409,8 +409,8 @@ namespace VIS.Models
                 if (_masi.GetVAB_GenFeatureSetInstance_ID() == 0)
                 {
                     // _masi.Save();
-                    obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                    obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                    obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                    obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
                 }
                 else
                 {
@@ -421,8 +421,8 @@ namespace VIS.Models
                     _masi = null;
                     _masi = _masi1;
 
-                    obj.M_AttributeSetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                    obj.M_AttributeSetInstanceName = _masi.GetDescription();
+                    obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
+                    obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
                 }
 
                 //	Save Instance Attributes
@@ -451,7 +451,7 @@ namespace VIS.Models
                         {
                             if (attributes[i].IsMandatory() && value == null)
                                 mandatory += " - " + attributes[i].GetName();
-                            // attributes[i].SetMAttributeInstance(_M_AttributeSetInstance_ID, value);
+                            // attributes[i].SetMAttributeInstance(_VAM_PFeature_SetInstance_ID, value);
                             lst[attributes[i]] = value;
                             description.Append(value + "_");
 
@@ -495,7 +495,7 @@ namespace VIS.Models
                             if (attributes[i].IsMandatory())
                                 mandatory += " - " + attributes[i].GetName();
 
-                            //attributes[i].SetMAttributeInstance(_M_AttributeSetInstance_ID, value);
+                            //attributes[i].SetMAttributeInstance(_VAM_PFeature_SetInstance_ID, value);
                             lst[attributes[i]] = value;
 
                             if (i == 0)

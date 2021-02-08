@@ -24,19 +24,19 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model 
 {
-    public class MProductPO : X_M_Product_PO
+    public class MProductPO : X_VAM_Product_PO
     {
         /*	Get current PO of Product
         * 	@param ctx context
-        *	@param M_Product_ID product
+        *	@param VAM_Product_ID product
         *	@param trxName transaction
         *	@return PO - current vendor first
         */
-        public static MProductPO[] GetOfProduct(Ctx ctx, int M_Product_ID, Trx trxName)
+        public static MProductPO[] GetOfProduct(Ctx ctx, int VAM_Product_ID, Trx trxName)
         {
             List<MProductPO> list = new List<MProductPO>();
-            String sql = "SELECT * FROM M_Product_PO "
-                + "WHERE M_Product_ID=" + M_Product_ID + " AND IsActive='Y' "
+            String sql = "SELECT * FROM VAM_Product_PO "
+                + "WHERE VAM_Product_ID=" + VAM_Product_ID + " AND IsActive='Y' "
                 + "ORDER BY IsCurrentVendor DESC";
             DataTable dt = null;
             IDataReader idr = null;
@@ -74,11 +74,11 @@ namespace VAdvantage.Model
         }
 
         // added By Amit 4-8-2015 VAMRP
-        public static MProductPO GetOfVendorProduct(Ctx ctx, int VAB_BusinessPartner_ID, int M_Product_ID, Trx trx)
+        public static MProductPO GetOfVendorProduct(Ctx ctx, int VAB_BusinessPartner_ID, int VAM_Product_ID, Trx trx)
         {
             MProductPO productPO = null;
-            String sql = "SELECT * FROM M_Product_PO "
-                + "WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND M_Product_ID = " + M_Product_ID;
+            String sql = "SELECT * FROM VAM_Product_PO "
+                + "WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + " AND VAM_Product_ID = " + VAM_Product_ID;
 
             IDataReader idr = null;
             try
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                 throw new ArgumentException("Multi-Key");
             else
             {
-                //	setM_Product_ID (0);	// @M_Product_ID@
+                //	setVAM_Product_ID (0);	// @VAM_Product_ID@
                 //	setVAB_BusinessPartner_ID (0);	// 0
                 //	setVendorProductNo (null);	// @Value@
                 SetIsCurrentVendor(true);	// Y
@@ -154,8 +154,8 @@ namespace VAdvantage.Model
             // JID_0527: System is allowing to select 2 vendors as current vendor
             if (IsCurrentVendor())
             {
-                String sql = "SELECT COUNT(M_Product_ID) FROM M_Product_PO "
-                    + "WHERE VAB_BusinessPartner_ID != " + GetVAB_BusinessPartner_ID() + " AND M_Product_ID = " + GetM_Product_ID() + " AND IsActive = 'Y' "
+                String sql = "SELECT COUNT(VAM_Product_ID) FROM VAM_Product_PO "
+                    + "WHERE VAB_BusinessPartner_ID != " + GetVAB_BusinessPartner_ID() + " AND VAM_Product_ID = " + GetVAM_Product_ID() + " AND IsActive = 'Y' "
                     + " AND IsCurrentVendor = 'Y'";
                 int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 if (no > 0)

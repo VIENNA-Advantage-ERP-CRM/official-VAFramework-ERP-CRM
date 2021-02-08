@@ -11,24 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for VAVAR_CategoryUpdateAlert
+/** Generated Model for VAR_CategoryUpdateAlert
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAVAR_CategoryUpdateAlert : PO
+public class X_VAR_CategoryUpdateAlert : PO
 {
-public X_VAVAR_CategoryUpdateAlert (Context ctx, int VAVAR_CategoryUpdateAlert_ID, Trx trxName) : base (ctx, VAVAR_CategoryUpdateAlert_ID, trxName)
+public X_VAR_CategoryUpdateAlert (Context ctx, int VAR_CategoryUpdateAlert_ID, Trx trxName) : base (ctx, VAR_CategoryUpdateAlert_ID, trxName)
 {
-/** if (VAVAR_CategoryUpdateAlert_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetIsSelfService (false);
-SetVAR_Category_ID (0);
-}
- */
-}
-public X_VAVAR_CategoryUpdateAlert (Ctx ctx, int VAVAR_CategoryUpdateAlert_ID, Trx trxName) : base (ctx, VAVAR_CategoryUpdateAlert_ID, trxName)
-{
-/** if (VAVAR_CategoryUpdateAlert_ID == 0)
+/** if (VAR_CategoryUpdateAlert_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetIsSelfService (false);
@@ -36,12 +26,22 @@ SetVAR_Category_ID (0);
 }
  */
 }
+public X_VAR_CategoryUpdateAlert (Ctx ctx, int VAR_CategoryUpdateAlert_ID, Trx trxName) : base (ctx, VAR_CategoryUpdateAlert_ID, trxName)
+{
+/** if (VAR_CategoryUpdateAlert_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetIsSelfService (false);
+SetVAR_Category_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAR_CategoryUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_CategoryUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_VAVAR_CategoryUpdateAlert (Context ctx, DataRow rs, Trx trxName) : base
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAR_CategoryUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_CategoryUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_VAVAR_CategoryUpdateAlert (Ctx ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_VAVAR_CategoryUpdateAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_CategoryUpdateAlert (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAVAR_CategoryUpdateAlert()
+static X_VAR_CategoryUpdateAlert()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389065915L;
 public static int Table_ID;
  // =785;
 
-/** TableName=VAVAR_CategoryUpdateAlert */
-public static String Table_Name="VAVAR_CategoryUpdateAlert";
+/** TableName=VAR_CategoryUpdateAlert */
+public static String Table_Name="VAR_CategoryUpdateAlert";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(7);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAVAR_CategoryUpdateAlert[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_CategoryUpdateAlert[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.

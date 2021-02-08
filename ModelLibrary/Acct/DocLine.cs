@@ -64,7 +64,7 @@ namespace VAdvantage.Acct
         // Production indicator	
         private bool _productionBOM = false;
         // Account used only for GL Journal    
-        private MAccount _account = null;
+        private MVABAccount _account = null;
 
         // Accounting Date				
         private DateTime? _DateAcct = null;
@@ -458,7 +458,7 @@ namespace VAdvantage.Acct
         /// Set GL Journal Account
         /// </summary>
         /// <param name="acct">account</param>
-        public void SetAccount(MAccount acct)
+        public void SetAccount(MVABAccount acct)
         {
             _account = acct;
         }
@@ -467,7 +467,7 @@ namespace VAdvantage.Acct
         /// Get GL Journal Account
         /// </summary>
         /// <returns>account</returns>
-        public MAccount GetAccount()
+        public MVABAccount GetAccount()
         {
             return _account;
         }
@@ -478,17 +478,17 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Requested Product Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             //	Charge Account
-            if (GetM_Product_ID() == 0 && GetVAB_Charge_ID() != 0)
+            if (GetVAM_Product_ID() == 0 && GetVAB_Charge_ID() != 0)
             {
                 Decimal amt = new Decimal(-1);		//	Revenue (-)
                 if (!_doc.IsSOTrx())
                 {
                     amt = new Decimal(+1);				//	Expense (+)
                 }
-                MAccount acct = GetChargeAccount(as1, amt);
+                MVABAccount acct = GetChargeAccount(as1, amt);
                 if (acct != null)
                 {
                     return acct;
@@ -522,14 +522,14 @@ namespace VAdvantage.Acct
         /// <param name="as1">account schema</param>
         /// <param name="amount">amount for expense(+)/revenue(-)</param>
         /// <returns>Charge Account or null</returns>
-        public MAccount GetChargeAccount(MVABAccountBook as1, Decimal? amount)
+        public MVABAccount GetChargeAccount(MVABAccountBook as1, Decimal? amount)
         {
             int VAB_Charge_ID = GetVAB_Charge_ID();
             if (VAB_Charge_ID == 0)
             {
                 return null;
             }
-            return MCharge.GetAccount(VAB_Charge_ID, as1, amount.Value);
+            return MVABCharge.GetAccount(VAB_Charge_ID, as1, amount.Value);
         }
 
         /// <summary>
@@ -631,10 +631,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Product
         /// </summary>
-        /// <returns>M_Product_ID</returns>
-        public int GetM_Product_ID()
+        /// <returns>VAM_Product_ID</returns>
+        public int GetVAM_Product_ID()
         {
-            int index = _po.Get_ColumnIndex("M_Product_ID");
+            int index = _po.Get_ColumnIndex("VAM_Product_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -658,10 +658,10 @@ namespace VAdvantage.Acct
             }
 
             _isItem = false;
-            if (GetM_Product_ID() != 0)
+            if (GetVAM_Product_ID() != 0)
             {
-                MProduct product = MProduct.Get(_po.GetCtx(), GetM_Product_ID());
-                if (product.Get_ID() == GetM_Product_ID() && product.IsItem())
+                MProduct product = MProduct.Get(_po.GetCtx(), GetVAM_Product_ID());
+                if (product.Get_ID() == GetVAM_Product_ID() && product.IsItem())
                 {
                     _isItem = true;
                 }
@@ -672,10 +672,10 @@ namespace VAdvantage.Acct
         /// <summary>
         ///  ASI
         /// </summary>
-        /// <returns>M_AttributeSetInstance_ID</returns>
-        public int GetM_AttributeSetInstance_ID()
+        /// <returns>VAM_PFeature_SetInstance_ID</returns>
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            int index = _po.Get_ColumnIndex("M_AttributeSetInstance_ID");
+            int index = _po.Get_ColumnIndex("VAM_PFeature_SetInstance_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -688,10 +688,10 @@ namespace VAdvantage.Acct
         /// <summary>
         ///  Get Warehouse Locator (from)
         /// </summary>
-        /// <returns>M_Locator_ID</returns>
-        public int GetM_Locator_ID()
+        /// <returns>VAM_Locator_ID</returns>
+        public int GetVAM_Locator_ID()
         {
-            int index = _po.Get_ColumnIndex("M_Locator_ID");
+            int index = _po.Get_ColumnIndex("VAM_Locator_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -706,10 +706,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Warehouse Locator To
         /// </summary>
-        /// <returns>M_Locator_ID</returns>
-        public int GetM_LocatorTo_ID()
+        /// <returns>VAM_Locator_ID</returns>
+        public int GetVAM_LocatorTo_ID()
         {
-            int index = _po.Get_ColumnIndex("M_LocatorTo_ID");
+            int index = _po.Get_ColumnIndex("VAM_LocatorTo_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -742,10 +742,10 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Production Plan
         /// </summary>
-        /// <returns>M_ProductionPlan_ID</returns>
-        public int GetM_ProductionPlan_ID()
+        /// <returns>VAM_ProductionPlan_ID</returns>
+        public int GetVAM_ProductionPlan_ID()
         {
-            int index = _po.Get_ColumnIndex("M_ProductionPlan_ID");
+            int index = _po.Get_ColumnIndex("VAM_ProductionPlan_ID");
             if (index != -1)
             {
                 int? ii = (int?)_po.Get_Value(index);
@@ -820,7 +820,7 @@ namespace VAdvantage.Acct
             if (_productCost == null)
             {
                 _productCost = new ProductCost(_po.GetCtx(),
-                    GetM_Product_ID(), GetM_AttributeSetInstance_ID(), _po.Get_TrxName());
+                    GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), _po.Get_TrxName());
             }
             return _productCost;
         }
@@ -854,7 +854,7 @@ namespace VAdvantage.Acct
             if (_productCost == null)
             {
                 _productCost = new ProductCost(_po.GetCtx(),
-                    GetM_Product_ID(), GetM_AttributeSetInstance_ID(), _po.Get_TrxName());
+                    GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), _po.Get_TrxName());
             }
             if (_productCost != null)
             {
@@ -1414,9 +1414,9 @@ namespace VAdvantage.Acct
             {
                 sb.Append(",").Append(GetDescription());
             }
-            if (GetM_Product_ID() != 0)
+            if (GetVAM_Product_ID() != 0)
             {
-                sb.Append(",M_Product_ID=").Append(GetM_Product_ID());
+                sb.Append(",VAM_Product_ID=").Append(GetVAM_Product_ID());
             }
             sb.Append(",Qty=").Append(_qty)
                 .Append(",Amt=").Append(GetAmtSource())

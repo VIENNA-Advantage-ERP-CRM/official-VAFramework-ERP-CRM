@@ -33,14 +33,14 @@ namespace VIS.Controllers
         }
 
         // Added By Amit
-        public JsonResult GetM_PriceList(string fields)
+        public JsonResult GetVAM_PriceList(string fields)
         {
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MOrderModel objOrder = new MOrderModel();
-                retJSON = JsonConvert.SerializeObject(objOrder.GetM_PriceList(ctx, fields));
+                retJSON = JsonConvert.SerializeObject(objOrder.GetVAM_PriceList(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

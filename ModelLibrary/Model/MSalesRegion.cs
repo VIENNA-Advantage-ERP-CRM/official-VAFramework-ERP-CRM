@@ -102,7 +102,7 @@ namespace VAdvantage.Model
                 return success;
             //	Value/Name change
             if (!newRecord && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
-                MAccount.UpdateValueDescription(GetCtx(), "VAB_SalesRegionState_ID=" + GetVAB_SalesRegionState_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAB_SalesRegionState_ID=" + GetVAB_SalesRegionState_ID(), Get_TrxName());
             return true;
         }
     }

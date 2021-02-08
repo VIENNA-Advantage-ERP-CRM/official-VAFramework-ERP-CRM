@@ -58,7 +58,7 @@ namespace VAdvantage.Model
             SetResult(parent.GetResult());
             SetQtySpent(parent.GetQtySpent());
             SetQtyInvoiced(parent.GetQtyInvoiced());
-            SetM_ProductSpent_ID(parent.GetM_ProductSpent_ID());
+            SetVAM_ProductSpent_ID(parent.GetVAM_ProductSpent_ID());
             SetConfidentialTypeEntry(parent.GetConfidentialTypeEntry());
         }	//	MRequestUpdate
 

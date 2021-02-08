@@ -156,7 +156,7 @@ namespace VAdvantage.Model
             String sql = "SELECT ra.A_RegistrationAttribute_ID "
                 + "FROM A_RegistrationAttribute ra"
                 + " LEFT OUTER JOIN A_RegistrationProduct rp ON (rp.A_RegistrationAttribute_ID=ra.A_RegistrationAttribute_ID)"
-                + " LEFT OUTER JOIN A_Registration r ON (r.M_Product_ID=rp.M_Product_ID) "
+                + " LEFT OUTER JOIN A_Registration r ON (r.VAM_Product_ID=rp.VAM_Product_ID) "
                 + "WHERE r.A_Registration_ID=@param"
                 //	Not in Registration
                 + " AND NOT EXISTS (SELECT A_RegistrationAttribute_ID FROM A_RegistrationValue v "

@@ -427,10 +427,10 @@
                 if (dep == null)
                     continue;
 
-                // If M_Product_ID and M_Locator_ID is used as parameter in same report, 
-                //then on change M_product_ID system clears value of M_Locator_ID, bcoz M_Locator is depednet on M_Product.
+                // If VAM_Product_ID and VAM_Locator_ID is used as parameter in same report, 
+                //then on change VAM_Product_ID system clears value of VAM_Locator_ID, bcoz VAM_Locator is depednet on VAM_Product.
                 // then in this case we will not refresh lookup of Locator.
-                if (columnName == "M_Product_ID" && (dep.getColumnName() == "M_Locator_ID" || dep.getColumnName() == "M_LocatorTo_ID")) {
+                if (columnName == "VAM_Product_ID" && (dep.getColumnName() == "VAM_Locator_ID" || dep.getColumnName() == "VAM_LocatorTo_ID")) {
                     continue;
                 }
                 else {

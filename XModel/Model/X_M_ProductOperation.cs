@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_ProductOperation
+/** Generated Model for VAM_ProductOperation
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ProductOperation : PO
+public class X_VAM_ProductOperation : PO
 {
-public X_M_ProductOperation (Context ctx, int M_ProductOperation_ID, Trx trxName) : base (ctx, M_ProductOperation_ID, trxName)
+public X_VAM_ProductOperation (Context ctx, int VAM_ProductOperation_ID, Trx trxName) : base (ctx, VAM_ProductOperation_ID, trxName)
 {
-/** if (M_ProductOperation_ID == 0)
+/** if (VAM_ProductOperation_ID == 0)
 {
-SetM_ProductOperation_ID (0);
-SetM_Product_ID (0);
+SetVAM_ProductOperation_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_ProductOperation (Ctx ctx, int M_ProductOperation_ID, Trx trxName) : base (ctx, M_ProductOperation_ID, trxName)
+public X_VAM_ProductOperation (Ctx ctx, int VAM_ProductOperation_ID, Trx trxName) : base (ctx, VAM_ProductOperation_ID, trxName)
 {
-/** if (M_ProductOperation_ID == 0)
+/** if (VAM_ProductOperation_ID == 0)
 {
-SetM_ProductOperation_ID (0);
-SetM_Product_ID (0);
+SetVAM_ProductOperation_ID (0);
+SetVAM_Product_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductOperation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductOperation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_ProductOperation (Context ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductOperation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ProductOperation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_ProductOperation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ProductOperation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ProductOperation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ProductOperation()
+static X_VAM_ProductOperation()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389063924L;
 public static int Table_ID;
  // =796;
 
-/** TableName=M_ProductOperation */
-public static String Table_Name="M_ProductOperation";
+/** TableName=VAM_ProductOperation */
+public static String Table_Name="VAM_ProductOperation";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_ProductOperation[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ProductOperation[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -149,32 +149,32 @@ public String GetHelp()
 return (String)Get_Value("Help");
 }
 /** Set Product Operation.
-@param M_ProductOperation_ID Product Manufacturing Operation */
-public void SetM_ProductOperation_ID (int M_ProductOperation_ID)
+@param VAM_ProductOperation_ID Product Manufacturing Operation */
+public void SetVAM_ProductOperation_ID (int VAM_ProductOperation_ID)
 {
-if (M_ProductOperation_ID < 1) throw new ArgumentException ("M_ProductOperation_ID is mandatory.");
-Set_ValueNoCheck ("M_ProductOperation_ID", M_ProductOperation_ID);
+if (VAM_ProductOperation_ID < 1) throw new ArgumentException ("VAM_ProductOperation_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductOperation_ID", VAM_ProductOperation_ID);
 }
 /** Get Product Operation.
 @return Product Manufacturing Operation */
-public int GetM_ProductOperation_ID() 
+public int GetVAM_ProductOperation_ID() 
 {
-Object ii = Get_Value("M_ProductOperation_ID");
+Object ii = Get_Value("VAM_ProductOperation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

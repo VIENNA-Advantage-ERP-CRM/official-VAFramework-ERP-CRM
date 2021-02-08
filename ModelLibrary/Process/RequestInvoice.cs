@@ -39,7 +39,7 @@ namespace VAdvantage.Process
         // Business Partner (opt)		
         private int _VAB_BusinessPartner_ID = 0;
         // Default product				
-        private int _M_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
 
         // The invoice					
         private MInvoice _m_invoice = null;
@@ -77,9 +77,9 @@ namespace VAdvantage.Process
                 {
                     _VAB_BusinessPartner_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    _M_Product_ID = para[i].GetParameterAsInt();
+                    _VAM_Product_ID = para[i].GetParameterAsInt();
                 }
                 else
                 {
@@ -98,7 +98,7 @@ namespace VAdvantage.Process
             int lenth = 1;
             log.Info("VAR_Req_Type_ID=" + _VAR_Req_Type_ID + ", VAR_Group_ID=" + _R_Group_ID
                 + ", VAR_Category_ID=" + _VAR_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID
-                + ", _M_Product_ID=" + _M_Product_ID);
+                + ", _VAM_Product_ID=" + _VAM_Product_ID);
 
             MRequestType type = MRequestType.Get(GetCtx(), _VAR_Req_Type_ID);
             if (type.Get_ID() == 0)
@@ -240,7 +240,7 @@ namespace VAdvantage.Process
             _m_invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
             MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
-            _m_invoice.SetM_PriceList_ID(partner.GetM_PriceList_ID());
+            _m_invoice.SetVAM_PriceList_ID(partner.GetVAM_PriceList_ID());
             int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0)
             {
@@ -281,12 +281,12 @@ namespace VAdvantage.Process
                 //
                 il.SetQty(qty);
                 //	Product
-                int M_Product_ID = updates[i].GetM_ProductSpent_ID();
-                if (M_Product_ID == 0)
+                int VAM_Product_ID = updates[i].GetVAM_ProductSpent_ID();
+                if (VAM_Product_ID == 0)
                 {
-                    M_Product_ID = _M_Product_ID;
+                    VAM_Product_ID = _VAM_Product_ID;
                 }
-                il.SetM_Product_ID(M_Product_ID);
+                il.SetVAM_Product_ID(VAM_Product_ID);
                 //
                 //il.SetPrice();
                 il.SetPrice(true);

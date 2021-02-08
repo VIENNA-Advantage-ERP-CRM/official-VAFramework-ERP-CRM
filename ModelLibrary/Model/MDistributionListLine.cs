@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionListLine
  * Purpose        :Distribution List Line
- * Class Used     : X_M_DistributionListLine
+ * Class Used     : X_VAM_DistributionListLine
  * Chronological    Development
  * Raghunandan     03-Nov-2009
   ******************************************************/
@@ -26,16 +26,16 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionListLine : X_M_DistributionListLine
+    public class MDistributionListLine : X_VAM_DistributionListLine
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DistributionListLine_ID">id</param>
+        /// <param name="VAM_DistributionListLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDistributionListLine(Ctx ctx, int M_DistributionListLine_ID, Trx trxName)
-            : base(ctx, M_DistributionListLine_ID, trxName)
+        public MDistributionListLine(Ctx ctx, int VAM_DistributionListLine_ID, Trx trxName)
+            : base(ctx, VAM_DistributionListLine_ID, trxName)
         {
 
         }

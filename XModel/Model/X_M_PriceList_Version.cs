@@ -11,30 +11,30 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_PriceList_Version
+/** Generated Model for VAM_PriceListVersion
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_PriceList_Version : PO
+public class X_VAM_PriceListVersion : PO
 {
-public X_M_PriceList_Version (Context ctx, int M_PriceList_Version_ID, Trx trxName) : base (ctx, M_PriceList_Version_ID, trxName)
+public X_VAM_PriceListVersion (Context ctx, int VAM_PriceListVersion_ID, Trx trxName) : base (ctx, VAM_PriceListVersion_ID, trxName)
 {
-/** if (M_PriceList_Version_ID == 0)
+/** if (VAM_PriceListVersion_ID == 0)
 {
-SetM_DiscountSchema_ID (0);
-SetM_PriceList_ID (0);
-SetM_PriceList_Version_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_PriceListVersion_ID (0);
 SetName (null);	// @#Date@
 SetValidFrom (DateTime.Now);	// @#Date@
 }
  */
 }
-public X_M_PriceList_Version (Ctx ctx, int M_PriceList_Version_ID, Trx trxName) : base (ctx, M_PriceList_Version_ID, trxName)
+public X_VAM_PriceListVersion (Ctx ctx, int VAM_PriceListVersion_ID, Trx trxName) : base (ctx, VAM_PriceListVersion_ID, trxName)
 {
-/** if (M_PriceList_Version_ID == 0)
+/** if (VAM_PriceListVersion_ID == 0)
 {
-SetM_DiscountSchema_ID (0);
-SetM_PriceList_ID (0);
-SetM_PriceList_Version_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_PriceListVersion_ID (0);
 SetName (null);	// @#Date@
 SetValidFrom (DateTime.Now);	// @#Date@
 }
@@ -45,7 +45,7 @@ SetValidFrom (DateTime.Now);	// @#Date@
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList_Version (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceListVersion (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -53,7 +53,7 @@ public X_M_PriceList_Version (Context ctx, DataRow rs, Trx trxName) : base(ctx, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList_Version (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceListVersion (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,13 +61,13 @@ public X_M_PriceList_Version (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PriceList_Version (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PriceListVersion (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_PriceList_Version()
+static X_VAM_PriceListVersion()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -80,8 +80,8 @@ public static long updatedMS = 1280389063626L;
 public static int Table_ID;
  // =295;
 
-/** TableName=M_PriceList_Version */
-public static String Table_Name="M_PriceList_Version";
+/** TableName=VAM_PriceListVersion */
+public static String Table_Name="VAM_PriceListVersion";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -115,7 +115,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_PriceList_Version[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PriceListVersion[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -136,66 +136,66 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Discount Schema.
-@param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
-public void SetM_DiscountSchema_ID (int M_DiscountSchema_ID)
+@param VAM_DiscountCalculation_ID Schema to calculate price lists or the trade discount percentage */
+public void SetVAM_DiscountCalculation_ID (int VAM_DiscountCalculation_ID)
 {
-if (M_DiscountSchema_ID < 1) throw new ArgumentException ("M_DiscountSchema_ID is mandatory.");
-Set_Value ("M_DiscountSchema_ID", M_DiscountSchema_ID);
+if (VAM_DiscountCalculation_ID < 1) throw new ArgumentException ("VAM_DiscountCalculation_ID is mandatory.");
+Set_Value ("VAM_DiscountCalculation_ID", VAM_DiscountCalculation_ID);
 }
 /** Get Discount Schema.
 @return Schema to calculate price lists or the trade discount percentage */
-public int GetM_DiscountSchema_ID() 
+public int GetVAM_DiscountCalculation_ID() 
 {
-Object ii = Get_Value("M_DiscountSchema_ID");
+Object ii = Get_Value("VAM_DiscountCalculation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Price List.
-@param M_PriceList_ID Unique identifier of a Price List */
-public void SetM_PriceList_ID (int M_PriceList_ID)
+@param VAM_PriceList_ID Unique identifier of a Price List */
+public void SetVAM_PriceList_ID (int VAM_PriceList_ID)
 {
-if (M_PriceList_ID < 1) throw new ArgumentException ("M_PriceList_ID is mandatory.");
-Set_ValueNoCheck ("M_PriceList_ID", M_PriceList_ID);
+if (VAM_PriceList_ID < 1) throw new ArgumentException ("VAM_PriceList_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PriceList_ID", VAM_PriceList_ID);
 }
 /** Get Price List.
 @return Unique identifier of a Price List */
-public int GetM_PriceList_ID() 
+public int GetVAM_PriceList_ID() 
 {
-Object ii = Get_Value("M_PriceList_ID");
+Object ii = Get_Value("VAM_PriceList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Price List Version.
-@param M_PriceList_Version_ID Identifies a unique instance of a Price List */
-public void SetM_PriceList_Version_ID (int M_PriceList_Version_ID)
+@param VAM_PriceListVersion_ID Identifies a unique instance of a Price List */
+public void SetVAM_PriceListVersion_ID (int VAM_PriceListVersion_ID)
 {
-if (M_PriceList_Version_ID < 1) throw new ArgumentException ("M_PriceList_Version_ID is mandatory.");
-Set_ValueNoCheck ("M_PriceList_Version_ID", M_PriceList_Version_ID);
+if (VAM_PriceListVersion_ID < 1) throw new ArgumentException ("VAM_PriceListVersion_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PriceListVersion_ID", VAM_PriceListVersion_ID);
 }
 /** Get Price List Version.
 @return Identifies a unique instance of a Price List */
-public int GetM_PriceList_Version_ID() 
+public int GetVAM_PriceListVersion_ID() 
 {
-Object ii = Get_Value("M_PriceList_Version_ID");
+Object ii = Get_Value("VAM_PriceListVersion_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_Pricelist_Version_Base_ID VAF_Control_Ref_ID=188 */
-public static int M_PRICELIST_VERSION_BASE_ID_VAF_Control_Ref_ID=188;
+/** VAM_PriceListVersion_Base_ID VAF_Control_Ref_ID=188 */
+public static int VAM_PriceListVersion_BASE_ID_VAF_Control_Ref_ID=188;
 /** Set Base Price List.
-@param M_Pricelist_Version_Base_ID Source for Price list calculations */
-public void SetM_Pricelist_Version_Base_ID (int M_Pricelist_Version_Base_ID)
+@param VAM_PriceListVersion_Base_ID Source for Price list calculations */
+public void SetVAM_PriceListVersion_Base_ID (int VAM_PriceListVersion_Base_ID)
 {
-if (M_Pricelist_Version_Base_ID <= 0) Set_Value ("M_Pricelist_Version_Base_ID", null);
+if (VAM_PriceListVersion_Base_ID <= 0) Set_Value ("VAM_PriceListVersion_Base_ID", null);
 else
-Set_Value ("M_Pricelist_Version_Base_ID", M_Pricelist_Version_Base_ID);
+Set_Value ("VAM_PriceListVersion_Base_ID", VAM_PriceListVersion_Base_ID);
 }
 /** Get Base Price List.
 @return Source for Price list calculations */
-public int GetM_Pricelist_Version_Base_ID() 
+public int GetVAM_PriceListVersion_Base_ID() 
 {
-Object ii = Get_Value("M_Pricelist_Version_Base_ID");
+Object ii = Get_Value("VAM_PriceListVersion_Base_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -127,7 +127,7 @@ namespace VAdvantage.Model
 
                 //	Product on "Only" list
                 if (subscriber != null
-                    && !subscriber.IsIncluded(lines[i].GetM_Product_ID()))
+                    && !subscriber.IsIncluded(lines[i].GetVAM_Product_ID()))
                 {
                     continue;
                 }

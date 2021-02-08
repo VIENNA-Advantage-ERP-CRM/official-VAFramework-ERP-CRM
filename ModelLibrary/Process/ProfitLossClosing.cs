@@ -71,12 +71,12 @@ namespace VAdvantage.Process
 
                 insert.Clear();
                 insert.Append(@"INSERT INTO VAB_ProfitLossLines (VAB_ProfitLossLines_ID , VAF_Client_ID , VAF_Org_ID , VAB_ProfitLoss_ID , VAB_ProfitAndLoss_ID , VAB_AccountBook_ID , PostingType ,
-                            AccountCredit ,AccountDebit,Account_ID, VAB_SubAcct_ID,  VAB_BusinessPartner_ID , M_Product_ID , VAB_Project_ID , VAB_SalesRegionState_ID ,  VAB_Promotion_ID , VAF_OrgTrx_ID ,
+                            AccountCredit ,AccountDebit,Account_ID, VAB_SubAcct_ID,  VAB_BusinessPartner_ID , VAM_Product_ID , VAB_Project_ID , VAB_SalesRegionState_ID ,  VAB_Promotion_ID , VAF_OrgTrx_ID ,
                            C_LocFrom_ID , C_LocTo_ID , VAB_BillingCode_ID, User1_ID , User2_ID , UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID,
                           UserElement5_ID, UserElement6_ID, UserElement7_ID, UserElement8_ID, UserElement9_ID , VAGL_Budget_ID, VAB_ProjectStage_ID, VAB_ProjectJob_ID, LedgerCode,LedgerName, Line ) ");
 
                 qry.Clear();
-                qry.Append(@"select " + VAB_ProfitLossLines_ID + " + " + DBFunctionCollection.RowNumAggregation("rownum") + " AS VAB_ProfitLossLines_id, ft.VAF_Client_ID , ft.VAF_Org_ID , " + PL.GetVAB_ProfitLoss_ID() + " , " + prof.GetVAB_ProfitAndLoss_ID() + ",  ft.VAB_AccountBook_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.VAB_SubAcct_ID,ft.VAB_BusinessPartner_ID,ft.M_Product_ID,ft.VAB_Project_ID,ft.VAB_SalesRegionState_ID,ft.VAB_Promotion_ID,ft.VAF_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.VAB_BillingCode_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
+                qry.Append(@"select " + VAB_ProfitLossLines_ID + " + " + DBFunctionCollection.RowNumAggregation("rownum") + " AS VAB_ProfitLossLines_id, ft.VAF_Client_ID , ft.VAF_Org_ID , " + PL.GetVAB_ProfitLoss_ID() + " , " + prof.GetVAB_ProfitAndLoss_ID() + ",  ft.VAB_AccountBook_ID,ft.PostingType,ft.AmtAcctDr,ft.AmtAcctCr,ft.Account_ID,ft.VAB_SubAcct_ID,ft.VAB_BusinessPartner_ID,ft.VAM_Product_ID,ft.VAB_Project_ID,ft.VAB_SalesRegionState_ID,ft.VAB_Promotion_ID,ft.VAF_OrgTrx_ID,ft.C_LocFrom_ID,ft.C_LocTo_ID,ft.VAB_BillingCode_ID,ft.User1_ID,ft.User2_ID,ft.UserElement1_ID,ft.UserElement2_ID,"
                          + " ft.UserElement3_ID,ft.UserElement4_ID, ft.UserElement5_ID, ft.UserElement6_ID, ft.UserElement7_ID,ft.UserElement8_ID, ft.UserElement9_ID,ft.VAGL_Budget_ID,ft.VAB_ProjectStage_ID,ft.VAB_ProjectJob_ID,"
                          + @" ev.Value as LedgerCode,ev.Name as LedgerName , (SELECT NVL(MAX(Line),0) FROM VAB_ProfitLossLines   WHERE VAB_ProfitLoss_ID=" + PL.GetVAB_ProfitLoss_ID() + "   ) + (" + DBFunctionCollection.RowNumAggregation("rownum") + " *10) AS lineno from Actual_Acct_Detail ft inner join VAB_Acct_Element ev on ft.account_id=ev.VAB_Acct_Element_id where ft.vaf_client_id= " + GetVAF_Client_ID());
 
@@ -155,7 +155,7 @@ namespace VAdvantage.Process
                 // get Valid Combination against Income Summary Acct  from accounting schema
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT IncomeSummary_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=" + Util.GetValueOfInt(Profit.Get_Value("VAB_AccountBook_ID"))));
                 // get account id 
-                MAccount acct = MAccount.Get(GetCtx(), validComID);
+                MVABAccount acct = MVABAccount.Get(GetCtx(), validComID);
 
                 for (int i = 0; i < dsProfit.Tables[0].Rows.Count; i++)
                 {

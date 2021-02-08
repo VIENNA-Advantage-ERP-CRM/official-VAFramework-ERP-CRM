@@ -15,32 +15,32 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
 
             //Assign parameter value
-            int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int M_Warehouse_ID = 0;
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAM_Warehouse_ID = 0;
             if (paramValue.Length > 1)
             {
-                M_Warehouse_ID = Util.GetValueOfInt(paramValue[1].ToString());
+                VAM_Warehouse_ID = Util.GetValueOfInt(paramValue[1].ToString());
             }
             //End Assign parameter value
 
-            MProduct product = MProduct.Get(ctx, M_Product_ID);
+            MProduct product = MProduct.Get(ctx, VAM_Product_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_UOM_ID"] = product.GetVAB_UOM_ID().ToString();
             result["IsStocked"] = product.IsStocked() ? "Y" : "N";
-            if (M_Product_ID > 0)
+            if (VAM_Product_ID > 0)
             {
-                if(M_Warehouse_ID>0)
-                result["M_Locator_ID"] = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID).ToString();
+                if(VAM_Warehouse_ID>0)
+                result["VAM_Locator_ID"] = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID).ToString();
             }
-            //if (product.GetM_Product_Category_ID() > 0)
+            //if (product.GetVAM_ProductCategory_ID() > 0)
             //{
-            //    result["M_Product_Category_ID"] = product.GetM_Product_Category_ID().ToString();
+            //    result["VAM_ProductCategory_ID"] = product.GetVAM_ProductCategory_ID().ToString();
             //}
             //else
             //{
-            //    result["M_Product_Category_ID"] = "0";
+            //    result["VAM_ProductCategory_ID"] = "0";
             //}
-            //result["M_Product_ID"] = product.GetM_Product_ID().ToString();
+            //result["VAM_Product_ID"] = product.GetVAM_Product_ID().ToString();
             return result;
         }
         public string GetProductType(Ctx ctx, string fields)
@@ -48,9 +48,9 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
 
             //Assign parameter value
-            int M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
           
-             MProduct prod = new MProduct(ctx, M_Product_ID, null);
+             MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
              return prod.GetProductType(); ;
             
             
@@ -64,9 +64,9 @@ namespace VIS.Models
         public int GetUOMPrecision(Ctx ctx,string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID;
-            M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            return MProduct.Get(ctx, M_Product_ID).GetUOMPrecision();
+            int VAM_Product_ID;
+            VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            return MProduct.Get(ctx, VAM_Product_ID).GetUOMPrecision();
             
         }
         /// <summary>
@@ -77,9 +77,9 @@ namespace VIS.Models
         public int GetVAB_UOM_ID(Ctx ctx,string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID;
-            M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            return MProduct.Get(ctx, M_Product_ID).GetVAB_UOM_ID();
+            int VAM_Product_ID;
+            VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            return MProduct.Get(ctx, VAM_Product_ID).GetVAB_UOM_ID();
            
         }
 
@@ -87,9 +87,9 @@ namespace VIS.Models
         public int GetTaxCategory(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
-            int M_Product_ID;
-            M_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            return MProduct.Get(ctx, M_Product_ID).GetVAB_TaxCategory_ID();
+            int VAM_Product_ID;
+            VAM_Product_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            return MProduct.Get(ctx, VAM_Product_ID).GetVAB_TaxCategory_ID();
         }
         //End
 
@@ -97,11 +97,11 @@ namespace VIS.Models
         /// Get C_RevenueRecognition_ID
         /// </summary>
         /// <param name="ctx">Context</param>
-        /// <param name="fields">M_Product_ID</param>
+        /// <param name="fields">VAM_Product_ID</param>
         /// <returns>C_RevenueRecognition_ID</returns>
         public int GetRevenuRecognition(Ctx ctx, string fields)
         {
-            string sql = "SELECT C_RevenueRecognition_ID FROM M_Product WHERE IsActive = 'Y' AND M_Product_ID = " + Util.GetValueOfInt(fields);
+            string sql = "SELECT C_RevenueRecognition_ID FROM VAM_Product WHERE IsActive = 'Y' AND VAM_Product_ID = " + Util.GetValueOfInt(fields);
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
         }
     }

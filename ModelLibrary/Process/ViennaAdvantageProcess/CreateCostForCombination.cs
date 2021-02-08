@@ -27,9 +27,9 @@ namespace ViennaAdvantageServer.Process
         private DataSet dsCostCombination = null;
         private DataSet dsProductCost = null;
         MCost costcombination = null;
-        private int _m_Product_ID = 0;
+        private int _VAM_Product_ID = 0;
         private int _vaf_org_ID = 0;
-        private int _m_Attributesetinstance_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
         private int _VAB_AccountBook_ID = 0;
         List<int> costElement = new List<int>();
         MCostElement ce = null;
@@ -44,9 +44,9 @@ namespace ViennaAdvantageServer.Process
             try
             {
                 // Get Combination Record
-                sql = @"SELECT ce.M_CostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement
-                            FROM M_CostElement ce INNER JOIN m_costelementline cel ON ce.M_CostElement_ID = cel.M_CostElement_ID "
-                              + " WHERE ce.VAF_Client_ID=" + GetVAF_Client_ID() + " AND ce.M_CostElement_ID = " + costElement_ID
+                sql = @"SELECT ce.VAM_ProductCostElement_ID ,  ce.Name ,  cel.lineno ,  cel.m_ref_costelement
+                            FROM VAM_ProductCostElement ce INNER JOIN VAM_ProductCostElementLine cel ON ce.VAM_ProductCostElement_ID = cel.VAM_ProductCostElement_ID "
+                              + " WHERE ce.VAF_Client_ID=" + GetVAF_Client_ID() + " AND ce.VAM_ProductCostElement_ID = " + costElement_ID
                               + " AND ce.IsActive='Y'  AND cel.IsActive='Y'";
                 dsCostCombination = DB.ExecuteDataset(sql, null, null);
                 if (dsCostCombination != null && dsCostCombination.Tables.Count > 0 && dsCostCombination.Tables[0].Rows.Count > 0)
@@ -59,39 +59,39 @@ namespace ViennaAdvantageServer.Process
                 //var costElementRecord = dsCostCombination.Tables[0].AsEnumerable().Select(r => r.Field<int>("m_ref_costelement")).ToList();
 
                 // Get All Product
-                sql = @"SELECT vaf_client_id ,  vaf_org_id ,  m_product_id ,  m_attributesetinstance_id ,  VAB_AccountBook_id ,
-                           m_costtype_id ,   m_costelement_id ,  cumulatedamt ,  cumulatedqty ,  currentcostprice ,  currentqty
-                      FROM m_cost WHERE vaf_client_id = " + GetVAF_Client_ID() +
-                          " ORDER BY m_product_id ,   vaf_org_id ,  m_attributesetinstance_id ,  VAB_AccountBook_id";
+                sql = @"SELECT vaf_client_id ,  vaf_org_id ,  VAM_Product_id ,  VAM_PFeature_SetInstance_id ,  VAB_AccountBook_id ,
+                           VAM_ProductCostType_id ,   VAM_ProductCostElement_id ,  cumulatedamt ,  cumulatedqty ,  currentcostprice ,  currentqty
+                      FROM VAM_ProductCost WHERE vaf_client_id = " + GetVAF_Client_ID() +
+                          " ORDER BY VAM_Product_id ,   vaf_org_id ,  VAM_PFeature_SetInstance_id ,  VAB_AccountBook_id";
                 dsProductCost = DB.ExecuteDataset(sql, null, null);
 
                 if (dsProductCost != null && dsProductCost.Tables.Count > 0 && dsProductCost.Tables[0].Rows.Count > 0)
                 {
-                    // update all record of m_Cost having cost Element = costElement_ID
-                    sql = "UPDATE M_Cost SET currentcostprice = 0 , currentqty = 0 , cumulatedamt = 0 , cumulatedqty = 0 WHERE M_CostElement_ID = " + costElement_ID +
+                    // update all record of VAM_ProductCost having cost Element = costElement_ID
+                    sql = "UPDATE VAM_ProductCost SET currentcostprice = 0 , currentqty = 0 , cumulatedamt = 0 , cumulatedqty = 0 WHERE VAM_ProductCostElement_ID = " + costElement_ID +
                          " AND VAF_Client_ID = " + GetVAF_Client_ID();
                     int no = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
 
                     for (int i = 0; i < dsProductCost.Tables[0].Rows.Count; i++)
                     {
-                        if (!costElement.Contains(Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_costelement_id"])))
+                        if (!costElement.Contains(Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_ProductCostElement_id"])))
                             continue;
-                        if (_m_Product_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_product_id"]) ||
+                        if (_VAM_Product_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_Product_id"]) ||
                              _vaf_org_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["vaf_org_id"]) ||
-                             _m_Attributesetinstance_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_attributesetinstance_id"]) ||
+                             _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_PFeature_SetInstance_id"]) ||
                             _VAB_AccountBook_ID != Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]))
                         {
-                            _m_Product_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_product_id"]);
+                            _VAM_Product_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_Product_id"]);
                             _vaf_org_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["vaf_org_id"]);
-                            _m_Attributesetinstance_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_attributesetinstance_id"]);
+                            _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_PFeature_SetInstance_id"]);
                             _VAB_AccountBook_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]);
-                            MProduct product = new MProduct(GetCtx(), _m_Product_ID, Get_TrxName());
+                            MProduct product = new MProduct(GetCtx(), _VAM_Product_ID, Get_TrxName());
                             MVABAccountBook acctSchema = new MVABAccountBook(GetCtx(), _VAB_AccountBook_ID, Get_TrxName());
-                            costcombination = MCost.Get(product, _m_Attributesetinstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["M_CostElement_ID"]));
+                            costcombination = MCost.Get(product, _VAM_PFeature_SetInstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["VAM_ProductCostElement_ID"]));
                         }
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
-                        ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_costelement_id"]));
+                        ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_ProductCostElement_id"]));
 
                         costcombination.SetCurrentCostPrice(Decimal.Add(costcombination.GetCurrentCostPrice(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["currentcostprice"])));
                         costcombination.SetCumulatedAmt(Decimal.Add(costcombination.GetCumulatedAmt(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["cumulatedamt"])));
@@ -108,7 +108,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else
                         {
-                            log.Info("Cost Combination not updated for this product <===> " + Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["m_product_id"]));
+                            log.Info("Cost Combination not updated for this product <===> " + Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_Product_id"]));
                         }
                     }
                     dsProductCost.Dispose();

@@ -32,7 +32,7 @@ namespace VIS.Models
             //Added By amit
             result["IsReturnTrx"] = inv.IsReturnTrx().ToString();
             result["VAB_BusinessPartner_ID"] = inv.GetVAB_BusinessPartner_ID().ToString();
-            result["M_PriceList_ID"] = inv.GetM_PriceList_ID().ToString();
+            result["VAM_PriceList_ID"] = inv.GetVAM_PriceList_ID().ToString();
             result["VAF_Org_ID"] = inv.GetVAF_Org_ID().ToString();
             result["VAB_BPart_Location_ID"] = inv.GetVAB_BPart_Location_ID().ToString();
             result["VAB_Currency_ID"] = inv.GetVAB_Currency_ID().ToString();
@@ -53,11 +53,11 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_TaxRate_ID = 0;
             int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
+            if ((VAM_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
             {
                 return VAB_TaxRate_ID;
             }
@@ -69,14 +69,14 @@ namespace VIS.Models
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
                 return VAB_TaxRate_ID;
             }
-            if (M_Product_ID > 0)
+            if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, M_Product_ID, null);
+                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
             {
-                MCharge chrg = new MCharge(ctx, VAB_Charge_ID, null);
+                MVABCharge chrg = new MVABCharge(ctx, VAB_Charge_ID, null);
                 taxCategory = Util.GetValueOfInt(chrg.GetVAB_TaxCategory_ID());
             }
             if (taxCategory > 0)
@@ -508,7 +508,7 @@ namespace VIS.Models
 
             //Assign parameter value            
             int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             //End Assign parameter value
 
@@ -538,7 +538,7 @@ namespace VIS.Models
                 sql = "SELECT Count(*) FROM VAF_Column WHERE ColumnName = 'VAB_TaxRate_ID' AND VAF_TableView_ID = (SELECT VAF_TableView_ID FROM VAF_TableView WHERE TableName = 'VAB_TaxCategory')";
                 if (Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)) > 0)
                 {
-                    var paramString = (VAB_Invoice_ID).ToString() + "," + (M_Product_ID).ToString() + "," + (VAB_Charge_ID).ToString();
+                    var paramString = (VAB_Invoice_ID).ToString() + "," + (VAM_Product_ID).ToString() + "," + (VAB_Charge_ID).ToString();
 
                     taxId = GetTax(ctx, paramString);
                 }
@@ -554,7 +554,7 @@ namespace VIS.Models
                     }
 
                     MProductModel objProduct = new MProductModel();
-                    var prodtaxCategory = objProduct.GetTaxCategory(ctx, M_Product_ID.ToString());
+                    var prodtaxCategory = objProduct.GetTaxCategory(ctx, VAM_Product_ID.ToString());
                     sql = "SELECT VAB_TaxRate_ID FROM VATAX_TaxCatRate WHERE VAB_TaxCategory_ID = " + prodtaxCategory + " AND IsActive ='Y' AND VATAX_TaxType_ID =" + taxType;
                     taxId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 }
@@ -577,11 +577,11 @@ namespace VIS.Models
             //Assign parameter value
             int VAB_TaxRate_ID = 0;
             int VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
             int VAB_Charge_ID = Util.GetValueOfInt(paramValue[2].ToString());
             int taxCategory = 0;
             string sql = "";
-            if ((M_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
+            if ((VAM_Product_ID == 0 && VAB_Charge_ID == 0) || VAB_Invoice_ID == 0)
             {
                 return VAB_TaxRate_ID;
             }
@@ -593,14 +593,14 @@ namespace VIS.Models
                 VAB_TaxRate_ID = GetExemptTax(ctx, inv.GetVAF_Org_ID());
                 return VAB_TaxRate_ID;
             }
-            if (M_Product_ID > 0)
+            if (VAM_Product_ID > 0)
             {
-                MProduct prod = new MProduct(ctx, M_Product_ID, null);
+                MProduct prod = new MProduct(ctx, VAM_Product_ID, null);
                 taxCategory = Util.GetValueOfInt(prod.GetVAB_TaxCategory_ID());
             }
             if (VAB_Charge_ID > 0)
             {
-                MCharge chrg = new MCharge(ctx, VAB_Charge_ID, null);
+                MVABCharge chrg = new MVABCharge(ctx, VAB_Charge_ID, null);
                 taxCategory = Util.GetValueOfInt(chrg.GetVAB_TaxCategory_ID());
             }
             if (taxCategory > 0)
@@ -1141,14 +1141,14 @@ namespace VIS.Models
             Dictionary<String, Object> retDic = new Dictionary<String, Object>();
 
             //Assign parameter value
-            int _m_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
+            int _VAM_Product_Id = Util.GetValueOfInt(paramValue[0].ToString());
             //int _priceListVersion_Id = Util.GetValueOfInt(paramValue[1].ToString());
             int _VAB_Invoice_Id = Util.GetValueOfInt(paramValue[1].ToString());
-            int _m_AttributeSetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
+            int _VAM_PFeature_SetInstance_Id = Util.GetValueOfInt(paramValue[2].ToString());
             int _VAB_UOM_Id = Util.GetValueOfInt(paramValue[3].ToString());
             int _vaf_client_Id = Util.GetValueOfInt(paramValue[4].ToString());
             int _VAB_BusinessPartner_Id = Util.GetValueOfInt(paramValue[5].ToString());
-            //int _m_DiscountSchema_ID = Util.GetValueOfInt(paramValue[5].ToString());
+            //int _VAM_DiscountCalculation_ID = Util.GetValueOfInt(paramValue[5].ToString());
             //decimal _flatDiscount = Util.GetValueOfInt(paramValue[6].ToString());
             decimal _qtyEntered = Util.GetValueOfInt(paramValue[6].ToString());
             //End Assign parameter value
@@ -1157,9 +1157,9 @@ namespace VIS.Models
             decimal PriceEntered = 0;
             decimal PriceList = 0;
             decimal PriceLimit = 0;
-            int _m_PriceList_ID = 0;
+            int _VAM_PriceList_ID = 0;
             int _priceListVersion_Id = 0;
-            int _m_DiscountSchema_ID = 0;
+            int _VAM_DiscountCalculation_ID = 0;
             decimal _flatDiscount = 0;
             int countEd011 = 0;
             int countVAPRC = 0;
@@ -1173,29 +1173,29 @@ namespace VIS.Models
             if (countEd011 > 0)
             {
                 MOrderLineModel objOrd = new MOrderLineModel();
-                _m_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + _VAB_Invoice_Id, null, null));
+                _VAM_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + _VAB_Invoice_Id, null, null));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+                _priceListVersion_Id = objPLV.GetVAM_PriceListVersion_ID(ctx, _VAM_PriceList_ID.ToString());
 
 
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _VAB_BusinessPartner_Id.ToString());
-                _m_DiscountSchema_ID = Util.GetValueOfInt(bpartner1["M_DiscountSchema_ID"]);
+                _VAM_DiscountCalculation_ID = Util.GetValueOfInt(bpartner1["VAM_DiscountCalculation_ID"]);
                 _flatDiscount = Util.GetValueOfInt(bpartner1["FlatDiscount"]);
 
-                if (_m_AttributeSetInstance_Id > 0)
+                if (_VAM_PFeature_SetInstance_Id > 0)
                 {
-                    sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                     + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                     + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                    sql.Append("SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                     + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                     + " AND  VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_Id
                                      + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 else
                 {
-                    sql.Append("SELECT COUNT(*) FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                   + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                   + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                    sql.Append("SELECT COUNT(*) FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                   + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                   + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                    + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                 }
                 int countrecord = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
@@ -1203,18 +1203,18 @@ namespace VIS.Models
                 {
                     // Selected UOM Price Exist
                     sql.Clear();
-                    if (_m_AttributeSetInstance_Id > 0)
+                    if (_VAM_PFeature_SetInstance_Id > 0)
                     {
-                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                    + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                    + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                    + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                    + " AND  VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_Id
                                     + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                     else
                     {
-                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                  + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                  + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                        sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                  + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                  + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                   + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     }
                     DataSet ds = DB.ExecuteDataset(sql.ToString());
@@ -1223,27 +1223,27 @@ namespace VIS.Models
                         if (ds.Tables[0].Rows.Count > 0)
                         {
                             //Flat Discount
-                            PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
-                            _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                            PriceEntered = objOrd.FlatDiscount(_VAM_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                            _VAM_DiscountCalculation_ID, _flatDiscount, _qtyEntered);
                             //end
                             PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
                             PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
                         }
                     }
                 }
-                else //if (_m_AttributeSetInstance_Id > 0 && countrecord == 0)
+                else //if (_VAM_PFeature_SetInstance_Id > 0 && countrecord == 0)
                 {
                     sql.Clear();
-                    sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                    sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                 + "  AND VAB_UOM_ID=" + _VAB_UOM_Id);
                     DataSet ds1 = DB.ExecuteDataset(sql.ToString());
                     if (ds1 != null && ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                     {
                         //Flat Discount
-                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
-                       _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                        PriceEntered = objOrd.FlatDiscount(_VAM_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceStd"]),
+                       _VAM_DiscountCalculation_ID, _flatDiscount, _qtyEntered);
                         //End
                         PriceList = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceList"]);
                         PriceLimit = Util.GetValueOfDecimal(ds1.Tables[0].Rows[0]["PriceLimit"]);
@@ -1251,22 +1251,22 @@ namespace VIS.Models
                     else
                     {
                         // get uom from product
-                        var paramStr = _m_Product_Id.ToString();
+                        var paramStr = _VAM_Product_Id.ToString();
                         MProductModel objProduct = new MProductModel();
                         var prodVAB_UOM_ID = objProduct.GetVAB_UOM_ID(ctx, paramStr);
                         sql.Clear();
-                        if (_m_AttributeSetInstance_Id > 0)
+                        if (_VAM_PFeature_SetInstance_Id > 0)
                         {
-                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                        + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                        + " AND  M_AttributeSetInstance_ID = " + _m_AttributeSetInstance_Id
+                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                        + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                        + " AND  VAM_PFeature_SetInstance_ID = " + _VAM_PFeature_SetInstance_Id
                                         + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                         else
                         {
-                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                      + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                      + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                            sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                      + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                      + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                       + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                         }
                         DataSet ds = DB.ExecuteDataset(sql.ToString());
@@ -1275,18 +1275,18 @@ namespace VIS.Models
                             if (ds.Tables[0].Rows.Count > 0)
                             {
                                 //Flat Discount
-                                PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
-                                _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                                PriceEntered = objOrd.FlatDiscount(_VAM_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceStd"]),
+                                _VAM_DiscountCalculation_ID, _flatDiscount, _qtyEntered);
                                 //end
                                 PriceList = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceList"]);
                                 PriceLimit = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["PriceLimit"]);
                             }
-                            else if (_m_AttributeSetInstance_Id > 0)
+                            else if (_VAM_PFeature_SetInstance_Id > 0)
                             {
                                 sql.Clear();
-                                sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
-                                            + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
-                                            + " AND  ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) "
+                                sql.Append("SELECT PriceStd , PriceList, PriceLimit FROM VAM_ProductPrice WHERE Isactive='Y' AND VAM_Product_ID = " + _VAM_Product_Id
+                                            + " AND VAM_PriceListVersion_ID = " + _priceListVersion_Id
+                                            + " AND  ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) "
                                             + "  AND VAB_UOM_ID=" + prodVAB_UOM_ID);
                                 DataSet ds2 = DB.ExecuteDataset(sql.ToString());
                                 if (ds2 != null && ds.Tables.Count > 0)
@@ -1294,8 +1294,8 @@ namespace VIS.Models
                                     if (ds2.Tables[0].Rows.Count > 0)
                                     {
                                         //Flat Discount
-                                        PriceEntered = objOrd.FlatDiscount(_m_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
-                                                                    _m_DiscountSchema_ID, _flatDiscount, _qtyEntered);
+                                        PriceEntered = objOrd.FlatDiscount(_VAM_Product_Id, _vaf_client_Id, Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceStd"]),
+                                                                    _VAM_DiscountCalculation_ID, _flatDiscount, _qtyEntered);
                                         //End
                                         PriceList = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceList"]);
                                         PriceLimit = Util.GetValueOfDecimal(ds2.Tables[0].Rows[0]["PriceLimit"]);
@@ -1305,7 +1305,7 @@ namespace VIS.Models
                         }
                         sql.Clear();
                         sql.Append("SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
-                                                   " AND con.M_Product_ID = " + _m_Product_Id +
+                                                   " AND con.VAM_Product_ID = " + _VAM_Product_Id +
                                                    " AND con.VAB_UOM_ID = " + prodVAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + _VAB_UOM_Id);
                         var rate = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, null));
                         if (rate == 0)

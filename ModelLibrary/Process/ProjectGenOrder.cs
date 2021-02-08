@@ -135,7 +135,7 @@ namespace VAdvantage.Process
                     ol.SetLine(lines[i].GetLine());
                     ol.SetDescription(lines[i].GetDescription());
                     //
-                    ol.SetM_Product_ID(lines[i].GetM_Product_ID(), true);
+                    ol.SetVAM_Product_ID(lines[i].GetVAM_Product_ID(), true);
 
                     //ol.SetQty(lines[i].GetPlannedQty().subtract(lines[i].GetInvoicedQty()));
                     ol.SetQty(Decimal.Subtract(lines[i].GetPlannedQty(), lines[i].GetInvoicedQty()));
@@ -180,11 +180,11 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("Project not found VAB_Project_ID=" + VAB_Project_ID);
             }
-            if (fromProject.GetM_PriceList_Version_ID() == 0)
+            if (fromProject.GetVAM_PriceListVersion_ID() == 0)
             {
                 throw new ArgumentException("Project has no Price List");
             }
-            if (fromProject.GetM_Warehouse_ID() == 0)
+            if (fromProject.GetVAM_Warehouse_ID() == 0)
             {
                 throw new ArgumentException("Project has no Warehouse");
             }

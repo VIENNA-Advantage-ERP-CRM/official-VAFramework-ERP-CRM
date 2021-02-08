@@ -370,7 +370,7 @@ namespace VAdvantage.Model
                     _bp.SetVAB_BPart_Category_ID(GetVAB_BPart_Category_ID());
                 }
                 MVABBPartCategory gp = new MVABBPartCategory(GetCtx(), GetVAB_BPart_Category_ID(), Get_TrxName());
-                _bp.SetM_PriceList_ID(gp.GetM_PriceList_ID());
+                _bp.SetVAM_PriceList_ID(gp.GetVAM_PriceList_ID());
                 if (GetVAB_BPart_Strength_ID() != 0)
                     _bp.SetVAB_BPart_Strength_ID(GetVAB_BPart_Strength_ID());
                 if (GetURL() != null)

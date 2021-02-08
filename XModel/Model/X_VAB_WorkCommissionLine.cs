@@ -308,34 +308,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID <= 0) Set_Value ("M_Product_Category_ID", null);
+if (VAM_ProductCategory_ID <= 0) Set_Value ("VAM_ProductCategory_ID", null);
 else
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);
 else
-Set_Value ("M_Product_ID", M_Product_ID);
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

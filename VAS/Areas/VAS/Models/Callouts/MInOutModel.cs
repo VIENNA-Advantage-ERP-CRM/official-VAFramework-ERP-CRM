@@ -37,25 +37,25 @@ namespace VIS.Models
             retDic["User1_ID"] = io.GetUser1_ID().ToString();
             retDic["User2_ID"] = io.GetUser2_ID().ToString();
             retDic["IsDropShip"] = io.IsDropShip() ? "Y" : "N";
-            retDic["M_Warehouse_ID"] = io.GetM_Warehouse_ID().ToString();
+            retDic["VAM_Warehouse_ID"] = io.GetVAM_Warehouse_ID().ToString();
             return retDic;
         }
 
         // Added by Bharat on 19 May 2017
         public Dictionary<String, Object> GetWarehouse(Ctx ctx, string param)
         {
-            int M_Warehouse_ID = Util.GetValueOfInt(param);
+            int VAM_Warehouse_ID = Util.GetValueOfInt(param);
             Dictionary<string, object> retDic = null;
-            string sql = "SELECT w.VAF_Org_ID, l.M_Locator_ID"
-            + " FROM M_Warehouse w"
-            + " LEFT OUTER JOIN M_Locator l ON (l.M_Warehouse_ID=w.M_Warehouse_ID AND l.IsDefault='Y') "
-            + "WHERE w.M_Warehouse_ID=" + M_Warehouse_ID;		//	1
+            string sql = "SELECT w.VAF_Org_ID, l.VAM_Locator_ID"
+            + " FROM VAM_Warehouse w"
+            + " LEFT OUTER JOIN VAM_Locator l ON (l.VAM_Warehouse_ID=w.VAM_Warehouse_ID AND l.IsDefault='Y') "
+            + "WHERE w.VAM_Warehouse_ID=" + VAM_Warehouse_ID;		//	1
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
                 retDic = new Dictionary<string, object>();
                 retDic["VAF_Org_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAF_Org_ID"]);
-                retDic["M_Locator_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["M_Locator_ID"]);
+                retDic["VAM_Locator_ID"] = Util.GetValueOfInt(ds.Tables[0].Rows[0]["VAM_Locator_ID"]);
             }
             return retDic;
         }
@@ -96,7 +96,7 @@ namespace VIS.Models
 
         public int GetWarehouseLocator(string fields)
         {
-            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT MIN(M_Locator_ID) FROM M_Locator WHERE IsActive = 'Y' AND M_Warehouse_ID = " + Util.GetValueOfInt(fields), null, null));
+            return Util.GetValueOfInt(DB.ExecuteScalar("SELECT MIN(VAM_Locator_ID) FROM VAM_Locator WHERE IsActive = 'Y' AND VAM_Warehouse_ID = " + Util.GetValueOfInt(fields), null, null));
         }
         //Get UOM Conversion
         public Dictionary<string, object> GetUOMConversion(Ctx ctx, string fields)
@@ -104,11 +104,11 @@ namespace VIS.Models
             Dictionary<string, object> retValue = null;
             string[] paramString = fields.Split(',');
             MInOut inout = new MInOut(ctx, Util.GetValueOfInt(paramString[0]), null);
-            int M_Product_ID = Util.GetValueOfInt(paramString[1]);
+            int VAM_Product_ID = Util.GetValueOfInt(paramString[1]);
             int VAB_UOM_ID = Util.GetValueOfInt(paramString[2]);
             try
             {
-                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.VAB_UOM_ID FROM M_Product p LEFT JOIN M_Product_Po vdr ON p.M_Product_ID= vdr.M_Product_ID WHERE p.M_Product_ID=" + M_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + inout.GetVAB_BusinessPartner_ID(), null, null));
+                int uom = Util.GetValueOfInt(DB.ExecuteScalar("SELECT vdr.VAB_UOM_ID FROM VAM_Product p LEFT JOIN VAM_Product_PO vdr ON p.VAM_Product_ID= vdr.VAM_Product_ID WHERE p.VAM_Product_ID=" + VAM_Product_ID + " AND vdr.VAB_BusinessPartner_ID = " + inout.GetVAB_BusinessPartner_ID(), null, null));
 
                 if (VAB_UOM_ID != 0)
                 {
@@ -116,7 +116,7 @@ namespace VIS.Models
                     if (VAB_UOM_ID != uom && uom != 0)
                     {
                         retValue = new Dictionary<string, object>();
-                        retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM VAB_UOM_Conversion WHERE VAB_UOM_ID = " + VAB_UOM_ID + " AND VAB_UOM_To_ID = " + uom + " AND M_Product_ID= " + M_Product_ID + " AND IsActive='Y'"));
+                        retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM VAB_UOM_Conversion WHERE VAB_UOM_ID = " + VAB_UOM_ID + " AND VAB_UOM_To_ID = " + uom + " AND VAM_Product_ID= " + VAM_Product_ID + " AND IsActive='Y'"));
                         if (Util.GetValueOfDecimal(retValue["multiplyrate"]) <= 0)
                         {
                             retValue["multiplyrate"] = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT trunc(multiplyrate,4) FROM VAB_UOM_Conversion WHERE VAB_UOM_ID = " + VAB_UOM_ID + " AND VAB_UOM_To_ID = " + uom + " AND IsActive='Y'"));

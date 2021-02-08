@@ -2207,8 +2207,8 @@
                 || (columnName.equals("VAB_BusinessPartner_To_ID") && lookup.getColumnName().equals("VAB_BusinessPartner.VAB_BusinessPartner_ID"))) {
                 src += "fa fa-handshake-o";
             }
-            else if (columnName.equals("M_Product_ID")
-                || (columnName.equals("M_Product_To_ID") && lookup.getColumnName().equals("M_Product.M_Product_ID"))) {
+            else if (columnName.equals("VAM_Product_ID")
+                || (columnName.equals("VAM_Product_To_ID") && lookup.getColumnName().equals("VAM_Product.VAM_Product_ID"))) {
                 src += "vis vis-product";
             }
             else {
@@ -2509,11 +2509,11 @@
             var _tableName = _columnName.substring(0, _columnName.length - 3);
             var _keyColumnName = _columnName;
             //
-            if (_columnName.equals("M_Product_ID")) {
+            if (_columnName.equals("VAM_Product_ID")) {
                 //	Reset
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Product_ID", "0");
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_AttributeSetInstance_ID", "0");
-                ctx.setContext(WINDOW_INFO, TAB_INFO, "M_Locator_ID", "0");
+                ctx.setContext(WINDOW_INFO, TAB_INFO, "VAM_Product_ID", "0");
+                ctx.setContext(WINDOW_INFO, TAB_INFO, "VAM_PFeature_SetInstance_ID", "0");
+                ctx.setContext(WINDOW_INFO, TAB_INFO, "VAM_Locator_ID", "0");
             }
             else if (_columnName.equals("SalesRep_ID")) {
                 _tableName = "VAF_UserContact";
@@ -2537,9 +2537,9 @@
             //	Predefined
             if (sql.length > 0) {
                 var wc = self.getWhereClause(ctx, _columnName, _lookup);
-                if (_columnName.equals("M_Product_ID")) {
+                if (_columnName.equals("VAM_Product_ID")) {
                     if (wc != null && wc.length > 0)
-                        sql += " AND " + wc.replace(/M_Product\./g, "p.") + " AND p.IsActive='Y'";
+                        sql += " AND " + wc.replace(/VAM_Product\./g, "p.") + " AND p.IsActive='Y'";
                 }
                 else {
                     if (wc != null && wc.length > 0)
@@ -2894,7 +2894,7 @@
                 var dr = null;
 
                 // Added by Bharat 
-                var M_Warehouse_ID = 0, M_PriceList_ID = 0, window_ID = 0;
+                var VAM_Warehouse_ID = 0, VAM_PriceList_ID = 0, window_ID = 0;
 
                 //
                 var VAF_Control_Ref_ID = self.lookup.getVAF_Control_Ref_Value_ID();
@@ -2936,30 +2936,30 @@
                 param[0] = new VIS.DB.SqlParam("@VAF_Tab_ID", VIS.context.getContext(self.lookup.windowNo, "0|VAF_Tab_ID", true));
 
                 window_ID = executeScalar(query, param);
-                if (_keyColumnName.equals("M_Product_ID") && window_ID) {
+                if (_keyColumnName.equals("VAM_Product_ID") && window_ID) {
                     if (window.DTD001 && window_ID == 170) {
-                        M_Warehouse_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "DTD001_MWarehouseSource_ID");
+                        VAM_Warehouse_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "DTD001_MWarehouseSource_ID");
                     }
                     else {
-                        M_Warehouse_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "M_Warehouse_ID");
+                        VAM_Warehouse_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "VAM_Warehouse_ID");
                     }
-                    M_PriceList_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "M_PriceList_ID");
+                    VAM_PriceList_ID = VIS.context.getContextAsInt(self.lookup.windowNo, "VAM_PriceList_ID");
                     var multipleSelection = false;
                     if (self.lookup.windowNo > 0) {
                         multipleSelection = (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_OrderLine_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_InvoiceLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InOutLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_PackageLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_MovementLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_InventoryLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_ProductPrice_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_Inv_InOutLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_PackagingLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_InvTrf_Line_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_InventoryLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_ProductPrice_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAB_ProjectLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "M_RequisitionLine_ID") ||
-                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "M_PriceList_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "VAM_RequisitionLine_ID") ||
+                            (VIS.context.getWindowTabContext(self.lookup.windowNo, 0, "KeyColumnName") == "VAM_PriceList_ID") ||
                             (VIS.context.getWindowTabContext(self.lookup.windowNo, 1, "KeyColumnName") == "SAP001_StockTransferLine_ID") //;
                             ;
                     }
-                    InfoWindow = new VIS.infoProduct(true, self.lookup.windowNo, M_Warehouse_ID, M_PriceList_ID,
+                    InfoWindow = new VIS.infoProduct(true, self.lookup.windowNo, VAM_Warehouse_ID, VAM_PriceList_ID,
                         text, tableName, _keyColumnName, multipleSelection, wc);
                 }
                 else {
@@ -4221,7 +4221,7 @@
         if ("572" == VAF_TableView_ID) {
             return 0;
         }
-        var only_Warehouse = ctx.getContext(this.windowNum, "M_Warehouse_ID", true);
+        var only_Warehouse = ctx.getContext(this.windowNum, "VAM_Warehouse_ID", true);
         var only_Warehouse_ID = 0;
         try {
             if (only_Warehouse != null && only_Warehouse.length > 0) {
@@ -4244,7 +4244,7 @@
             return 0;
         }
 
-        var only_Product = ctx.getContext(this.windowNum, "M_Product_ID", true);
+        var only_Product = ctx.getContext(this.windowNum, "VAM_Product_ID", true);
         var only_Product_ID = 0;
         try {
             if (only_Product != null && only_Product.length > 0) {
@@ -4259,9 +4259,9 @@
 
     //Function which show form
     VLocator.prototype.showLocatorForm = function (warehouseId, productId) {
-        var M_Locator_ID = 0;
+        var VAM_Locator_ID = 0;
         if (this.value != null) {
-            M_Locator_ID = Number(this.value);
+            VAM_Locator_ID = Number(this.value);
         }
 
         this.lookup.setOnlyWarehouseID(warehouseId);
@@ -4270,13 +4270,13 @@
         var isReturnTrx = "Y".equals(VIS.context.getWindowContext(this.windowNum, "IsReturnTrx"))
         var isSOTrx = VIS.Env.getCtx().isSOTrx(this.windowNum);
 
-        var isOnlyOutgoing = ((isSOTrx && !isReturnTrx) || (!isSOTrx && isReturnTrx)) && this.columnName == "M_Locator_ID";
+        var isOnlyOutgoing = ((isSOTrx && !isReturnTrx) || (!isSOTrx && isReturnTrx)) && this.columnName == "VAM_Locator_ID";
         this.lookup.setOnlyOutgoing(isOnlyOutgoing);
         this.lookup.refresh();
 
         //Open locator form
         self = this;
-        var obj = new VIS.LocatorForm(this.columnName, this.lookup, M_Locator_ID, this.mandatory, warehouseId, this.windowNum);
+        var obj = new VIS.LocatorForm(this.columnName, this.lookup, VAM_Locator_ID, this.mandatory, warehouseId, this.windowNum);
         obj.load();
         obj.showDialog();
         obj.onClose = function (locator) {
@@ -4346,13 +4346,13 @@
         this.NO_INSTANCE = 0;
         /**	Calling Window Info	*/
         this.VAF_Column_ID = 0;
-        var colName = "M_AttributeSetInstance_ID";
+        var colName = "VAM_PFeature_SetInstance_ID";
         var focus = false;
 
         //For genral attribute variable settings
         this.VAB_GenFeatureSet_ID = 0;
         this.VAB_GenFeatureSetInstance_ID = 0;
-        this.M_Locator_ID = 0;
+        this.VAM_Locator_ID = 0;
         colName = columnName;
         this.value = null;
 
@@ -4464,7 +4464,7 @@
         }
 
         function setValueInControl(mAttributeSetInstanceId, name) {
-            self.log.finest("Changed M_AttributeSetInstance_ID=" + mAttributeSetInstanceId);
+            self.log.finest("Changed VAM_PFeature_SetInstance_ID=" + mAttributeSetInstanceId);
             if (self.oldValue != mAttributeSetInstanceId) {
                 if (mAttributeSetInstanceId == 0) {
                     self.setValue(null);
@@ -4478,30 +4478,30 @@
 
         //Open PAttribute form
         function OpenPAttributeDialog(oldValue) {
-            var M_AttributeSetInstance_ID = (oldValue == null) ? 0 : oldValue;
-            var M_Product_ID = VIS.Env.getCtx().getTabRecordContext(windowNop, tabNo, "M_Product_ID");
-            var M_ProductBOM_ID = VIS.context.getTabRecordContext(windowNop, tabNo, "M_ProductBOM_ID");
-            var M_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "M_Locator_ID");
-            self.log.config("M_Product_ID=" + M_Product_ID + "/" + M_ProductBOM_ID + ",M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + ", VAF_Column_ID=" + self.VAF_Column_ID);
+            var VAM_PFeature_SetInstance_ID = (oldValue == null) ? 0 : oldValue;
+            var VAM_Product_ID = VIS.Env.getCtx().getTabRecordContext(windowNop, tabNo, "VAM_Product_ID");
+            var VAM_ProductBOM_ID = VIS.context.getTabRecordContext(windowNop, tabNo, "VAM_ProductBOM_ID");
+            var VAM_Locator_ID = VIS.Env.getCtx().getContextAsInt(windowNop, "VAM_Locator_ID");
+            self.log.config("VAM_Product_ID=" + VAM_Product_ID + "/" + VAM_ProductBOM_ID + ",VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + ", VAF_Column_ID=" + self.VAF_Column_ID);
             var productWindow = self.VAF_Column_ID == 8418;		//	HARDCODED
 
             //	Exclude ability to enter ASI
             var exclude = true;
             var changed = false;
 
-            if (M_ProductBOM_ID != 0)	//	Use BOM Component
+            if (VAM_ProductBOM_ID != 0)	//	Use BOM Component
             {
-                M_Product_ID = M_ProductBOM_ID;
+                VAM_Product_ID = VAM_ProductBOM_ID;
             }
 
-            if (M_Product_ID != 0) {
+            if (VAM_Product_ID != 0) {
                 //call controller of pAttributeForm to get is value should include or exclude
                 $.ajax({
                     url: VIS.Application.contextUrl + "PAttributes/ExcludeEntry",
                     dataType: "json",
                     async: false,
                     data: {
-                        productId: M_Product_ID,
+                        productId: VAM_Product_ID,
                         adColumn: self.VAF_Column_ID,
                         windowNo: windowNop,
                     },
@@ -4513,21 +4513,21 @@
 
 
 
-            if (!productWindow && (M_Product_ID == 0 || exclude)) {
+            if (!productWindow && (VAM_Product_ID == 0 || exclude)) {
                 changed = true;
-                M_AttributeSetInstance_ID = 0;
-                setValueInControl(M_AttributeSetInstance_ID);
+                VAM_PFeature_SetInstance_ID = 0;
+                setValueInControl(VAM_PFeature_SetInstance_ID);
 
                 // JID_0898: Need to show the Info message when no attribute set is defined on product or having exclude entry for this table.
                 VIS.ADialog.info("VIS_PAttributeNotFound", null, null, null);
             }
             else {
-                var obj = new VIS.PAttributesForm(M_AttributeSetInstance_ID, M_Product_ID, M_Locator_ID, self.VAB_BusinessPartner_ID, productWindow, self.VAF_Column_ID, windowNop);
+                var obj = new VIS.PAttributesForm(VAM_PFeature_SetInstance_ID, VAM_Product_ID, VAM_Locator_ID, self.VAB_BusinessPartner_ID, productWindow, self.VAF_Column_ID, windowNop);
                 if (obj.hasAttribute) {
                     obj.showDialog();
                 }
                 obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
-                    this.M_Locator_ID = mLocatorId;
+                    this.VAM_Locator_ID = mLocatorId;
                     setValueInControl(mAttributeSetInstanceId, name);
                 };
             }
@@ -5905,7 +5905,7 @@
 
             //Create Zoom Query to Zoom to product Container window
             zoomQuery = new VIS.Query();
-            zoomQuery.addRestriction("M_ProductContainer_ID", VIS.Query.prototype.EQUAL, value);
+            zoomQuery.addRestriction("VAM_ProductContainer_ID", VIS.Query.prototype.EQUAL, value);
             zoomQuery.setRecordCount(1);	//	guess
             //}
 

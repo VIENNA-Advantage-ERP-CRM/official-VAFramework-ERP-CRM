@@ -86,7 +86,7 @@ namespace VAdvantage.Acct
         /// <param name="AcctType"></param>
         /// <param name="as1"></param>
         /// <returns>Account</returns>
-        public MAccount GetAccount(int AcctType, MVABAccountBook as1)
+        public MVABAccount GetAccount(int AcctType, MVABAccountBook as1)
         {
             if (AcctType < 0 || AcctType > 4)
             {
@@ -119,7 +119,7 @@ namespace VAdvantage.Acct
             {
                 return null;
             }
-            return MAccount.Get(as1.GetCtx(), validCombination_ID);
+            return MVABAccount.Get(as1.GetCtx(), validCombination_ID);
         }
 
         /// <summary>

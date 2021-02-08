@@ -305,7 +305,7 @@ namespace VAdvantage.Process
                                 invoice = null;
                                 break;
                             }
-                            invoice.SetM_PriceList_ID(te.GetM_PriceList_ID());
+                            invoice.SetVAM_PriceList_ID(te.GetVAM_PriceList_ID());
                             invoice.SetSalesRep_ID(te.GetDoc_User_ID());
                             String descr = Msg.Translate(GetCtx(), "VAS_ExpenseReport_ID")
                                 + ": " + te.GetDocumentNo() + " "
@@ -366,9 +366,9 @@ namespace VAdvantage.Process
                             //	Create OrderLine
                             MInvoiceLine il = new MInvoiceLine(invoice);
                             //
-                            if (line.GetM_Product_ID() != 0)
+                            if (line.GetVAM_Product_ID() != 0)
                             {
-                                il.SetM_Product_ID(line.GetM_Product_ID(), true);
+                                il.SetVAM_Product_ID(line.GetVAM_Product_ID(), true);
                             }
                             //added by arpit asked by Surya Sir on 28/12/2015_____***************************
                             if (line.GetVAB_Charge_ID() != 0)

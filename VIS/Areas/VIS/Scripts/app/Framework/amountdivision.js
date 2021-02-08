@@ -1783,7 +1783,7 @@
 				else if (DimensionTypeVal == "MC") { sql += " and VAB_Promotion_ID=" + DimensionNameVal }//Campaign
 				else if (DimensionTypeVal == "OO" || DimensionTypeVal == "OT") { sql += " and Org_ID=" + DimensionNameVal }//Organization//Org Trx
 				else if (DimensionTypeVal == "PJ") { sql += " and VAB_Project_ID=" + DimensionNameVal }//Project
-				else if (DimensionTypeVal == "PR") { sql += " and M_Product_ID=" + DimensionNameVal }//Product
+				else if (DimensionTypeVal == "PR") { sql += " and VAM_Product_ID=" + DimensionNameVal }//Product
 				else if (DimensionTypeVal == "SA") { }//Sub Account
 				else if (DimensionTypeVal == "SR") { sql += " and VAB_SalesRegionState_ID=" + DimensionNameVal }//Sales Region
 				else if (DimensionTypeVal == "U1" || DimensionTypeVal == "U2") {
@@ -1835,7 +1835,7 @@
 					else if (DimensionTypeVal == "MC") { sql += " and VAB_Promotion_ID=" + DimensionNameVal }//Campaign
 					else if (DimensionTypeVal == "OO" || DimensionTypeVal == "OT") { sql += " and Org_ID=" + DimensionNameVal }//Organization//Org Trx
 					else if (DimensionTypeVal == "PJ") { sql += " and VAB_Project_ID=" + DimensionNameVal }//Project
-					else if (DimensionTypeVal == "PR") { sql += " and M_Product_ID=" + DimensionNameVal }//Product
+					else if (DimensionTypeVal == "PR") { sql += " and VAM_Product_ID=" + DimensionNameVal }//Product
 					else if (DimensionTypeVal == "SA") { }//Sub Account
 					else if (DimensionTypeVal == "SR") { sql += " and VAB_SalesRegionState_ID=" + DimensionNameVal }//Sales Region
 					else if (DimensionTypeVal == "U1" || DimensionTypeVal == "U2") {
@@ -2323,11 +2323,11 @@
 			////divbutton.css("width", "6%");
 			//modalDivAmount.css("width", "33.3%");
 			lblProduct = $("<label>");
-			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "M_Product_ID", 0, false, null);
-			txtProd = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, lookup);
+			var lookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAM_Product_ID", 0, false, null);
+			txtProd = new VIS.Controls.VTextBoxButton("VAM_Product_ID", false, false, true, VIS.DisplayType.Search, lookup);
 			txtProduct = txtProd.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			txtProduct.attr("tabindex", "4");
-			lblProduct.append(VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"));
+			lblProduct.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"));
 			divProduct = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var divProductCtrlWrap = $('<div class="vis-control-wrap">');
 			var divProductBtnWrap = $('<div class="input-group-append">');
@@ -2338,11 +2338,11 @@
 			divProductBtnWrap.append(txtProd.getBtn(0));//.append(txtProd.getBtn(1));
 			generateControl.append(divProduct);
 			modalLblProduct = $("<label>");
-			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "M_Product_ID", 0, false, null);
-			modalTxtProd = new VIS.Controls.VTextBoxButton("M_Product_ID", false, false, true, VIS.DisplayType.Search, modalLookup);
+			var modalLookup = VIS.MLookupFactory.get(VIS.Env.getCtx(), windowNo, 0, VIS.DisplayType.TableDir, "VAM_Product_ID", 0, false, null);
+			modalTxtProd = new VIS.Controls.VTextBoxButton("VAM_Product_ID", false, false, true, VIS.DisplayType.Search, modalLookup);
 			modalTxtProduct = modalTxtProd.getControl().attr('placeholder', ' ').attr('data-placeholder', '').attr('data-hasbtn', ' ');
 			modalTxtProduct.attr("tabindex", "9");
-			modalLblProduct.append(VIS.Msg.translate(VIS.Env.getCtx(), "M_Product_ID"));
+			modalLblProduct.append(VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Product_ID"));
 			modalDivProduct = $("<div class='VIS-AMTD-formData VIS-AMTD-InputBtns input-group vis-input-wrap'>");
 			var modalDivProductCtrlWrap = $('<div class="vis-control-wrap">');
 			var modalDivProductBtnWrap = $('<div class="input-group-append">');

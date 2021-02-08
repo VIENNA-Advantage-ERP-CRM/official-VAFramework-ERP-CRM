@@ -11,10 +11,10 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MCostType : X_M_CostType
+    public class MCostType : X_VAM_ProductCostType
     {
-        public MCostType(Ctx ctx, int M_CostType_ID, Trx trxName)
-            : base(ctx, M_CostType_ID, trxName)
+        public MCostType(Ctx ctx, int VAM_ProductCostType_ID, Trx trxName)
+            : base(ctx, VAM_ProductCostType_ID, trxName)
         {
 
         }	//	MCostType
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
             MVABAccountBook[] ass = MVABAccountBook.GetClientAcctSchema(GetCtx(), GetVAF_Client_ID());
             for (int i = 0; i < ass.Length; i++)
             {
-                if (ass[i].GetM_CostType_ID() == GetM_CostType_ID())
+                if (ass[i].GetVAM_ProductCostType_ID() == GetVAM_ProductCostType_ID())
                 {
                     log.SaveError("CannotDelete", Msg.GetElement(GetCtx(), "VAB_AccountBook_ID") + " - " + ass[i].GetName());
                     return false;

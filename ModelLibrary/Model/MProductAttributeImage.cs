@@ -10,15 +10,15 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-  public  class MProductAttributeImage : X_M_ProductAttributeImage
+  public  class MProductAttributeImage : X_VAM_ProdcutFeatureImage
     {/// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VA022_BPartnerLocaton_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProductAttributeImage(Ctx ctx, int M_ProductAttributeImage_ID, Trx trxName)
-            : base(ctx, M_ProductAttributeImage_ID, trxName)
+        public MProductAttributeImage(Ctx ctx, int VAM_ProdcutFeatureImage_ID, Trx trxName)
+            : base(ctx, VAM_ProdcutFeatureImage_ID, trxName)
         {
             
         }	

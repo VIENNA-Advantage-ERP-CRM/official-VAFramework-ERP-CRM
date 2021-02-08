@@ -3,7 +3,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInOut
  * Purpose        : Class linked with the shipment,invoice window
- * Class Used     : X_M_InOut, DocAction
+ * Class Used     : X_VAM_Inv_InOut, DocAction
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -28,7 +28,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MInOut : X_M_InOut, DocAction
+    public class MInOut : X_VAM_Inv_InOut, DocAction
     {
         #region variable
         //	Process Message 			
@@ -74,18 +74,18 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_InOut_ID"></param>
+        /// <param name="VAM_Inv_InOut_ID"></param>
         /// <param name="trxName">rx name</param>
-        public MInOut(Ctx ctx, int M_InOut_ID, Trx trxName)
-            : base(ctx, M_InOut_ID, trxName)
+        public MInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOut_ID, trxName)
         {
 
-            if (M_InOut_ID == 0)
+            if (VAM_Inv_InOut_ID == 0)
             {
                 //	setDocumentNo (null);
                 //	setVAB_BusinessPartner_ID (0);
                 //	setVAB_BPart_Location_ID (0);
-                //	setM_Warehouse_ID (0);
+                //	setVAM_Warehouse_ID (0);
                 //	setVAB_DocTypes_ID (0);
                 SetIsSOTrx(false);
                 SetMovementDate(DateTime.Now);
@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             retValue.SetDocAction(complete ? DOCACTION_Complete : DOCACTION_Prepare);
 
             //	Check if we can create the lines
-            MVABOrderLine[] oLines = order.GetLines(true, "M_Product_ID");
+            MOrderLine[] oLines = order.GetLines(true, "VAM_Product_ID");
             for (int i = 0; i < oLines.Length; i++)
             {
                 //Decimal qty = oLines[i].GetQtyOrdered().subtract(oLines[i].getQtyDelivered());
@@ -155,16 +155,16 @@ namespace VAdvantage.Model
                 MProduct product = oLines[i].GetProduct();
                 if (product != null && product.Get_ID() != 0 && product.IsStocked())
                 {
-                    MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetM_Product_Category_ID());
+                    MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
                     String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
                         MVAFClient client = MVAFClient.Get(order.GetCtx());
                         MMPolicy = client.GetMMPolicy();
                     }
-                    storages = MStorage.GetWarehouse(order.GetCtx(), order.GetM_Warehouse_ID(),
-                        oLines[i].GetM_Product_ID(), oLines[i].GetM_AttributeSetInstance_ID(),
-                        product.GetM_AttributeSet_ID(),
+                    storages = MStorage.GetWarehouse(order.GetCtx(), order.GetVAM_Warehouse_ID(),
+                        oLines[i].GetVAM_Product_ID(), oLines[i].GetVAM_PFeature_SetInstance_ID(),
+                        product.GetVAM_PFeature_Set_ID(),
                         allAttributeInstances, minGuaranteeDate,
                         MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
                 }
@@ -194,7 +194,7 @@ namespace VAdvantage.Model
                     if (lineQty.CompareTo(qty) > 0)
                         lineQty = qty;
                     MInOutLine line = new MInOutLine(retValue);
-                    line.SetOrderLine(oLines[i], storages[ll].GetM_Locator_ID(),
+                    line.SetOrderLine(oLines[i], storages[ll].GetVAM_Locator_ID(),
                         order.IsSOTrx() ? lineQty : Env.ZERO);
                     line.SetQty(lineQty);	//	Correct UOM for QtyEntered
                     if (oLines[i].GetQtyEntered().CompareTo(oLines[i].GetQtyOrdered()) != 0)
@@ -234,7 +234,7 @@ namespace VAdvantage.Model
         *	@return Shipment or null
         */
         public static MInOut CreateShipment(MVABOrder order, MInOut inout, DateTime? movementDate, bool forceDelivery,
-                    bool allAttributeInstances, int M_Warehouse_ID, DateTime? minGuaranteeDate, Trx trxName)
+                    bool allAttributeInstances, int VAM_Warehouse_ID, DateTime? minGuaranteeDate, Trx trxName)
         {
             if (order == null)
             {
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
 
             //	Create Meader
             MInOut retValue = new MInOut(order, 0, movementDate);
-            retValue.SetM_Warehouse_ID(M_Warehouse_ID);
+            retValue.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             retValue.SetIsDropShip(true);
             //	Check if we can create the lines
             MInOutLine[] iolines = inout.GetLines(false);
@@ -264,16 +264,16 @@ namespace VAdvantage.Model
                 MProduct product = olines.GetProduct();
                 if (product != null && product.Get_ID() != 0 && product.IsStocked())
                 {
-                    MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetM_Product_Category_ID());
+                    MProductCategory pc = MProductCategory.Get(order.GetCtx(), product.GetVAM_ProductCategory_ID());
                     String MMPolicy = pc.GetMMPolicy();
                     if (MMPolicy == null || MMPolicy.Length == 0)
                     {
                         MVAFClient client = MVAFClient.Get(order.GetCtx());
                         MMPolicy = client.GetMMPolicy();
                     }
-                    storages = MStorage.GetWarehouse(order.GetCtx(), M_Warehouse_ID,
-                        olines.GetM_Product_ID(), olines.GetM_AttributeSetInstance_ID(),
-                        product.GetM_AttributeSet_ID(),
+                    storages = MStorage.GetWarehouse(order.GetCtx(), VAM_Warehouse_ID,
+                        olines.GetVAM_Product_ID(), olines.GetVAM_PFeature_SetInstance_ID(),
+                        product.GetVAM_PFeature_Set_ID(),
                         allAttributeInstances, minGuaranteeDate,
                         MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), trxName);
                 }
@@ -305,7 +305,7 @@ namespace VAdvantage.Model
                     MInOutLine line = new MInOutLine(retValue);
                     line.SetIsDropShip(true);
 
-                    line.SetOrderLine(olines, storages[ll].GetM_Locator_ID(),
+                    line.SetOrderLine(olines, storages[ll].GetVAM_Locator_ID(),
                         order.IsSOTrx() ? lineQty : Env.ZERO);
                     line.SetQty(lineQty);	//	Correct UOM for QtyEntered
                     if (olines.GetQtyEntered().CompareTo(olines.GetQtyEntered()) != 0)
@@ -351,7 +351,7 @@ namespace VAdvantage.Model
             MInOut to = new MInOut(from.GetCtx(), 0, null);
             to.Set_TrxName(trxName);
             CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
-            to.Set_ValueNoCheck("M_InOut_ID", I_ZERO);
+            to.Set_ValueNoCheck("VAM_Inv_InOut_ID", I_ZERO);
             to.Set_ValueNoCheck("DocumentNo", null);
             //
             to.SetDocStatus(DOCSTATUS_Drafted);		//	Draft
@@ -395,7 +395,7 @@ namespace VAdvantage.Model
             if (counter)
             {
                 to.SetVAB_Order_ID(0);
-                to.SetRef_InOut_ID(from.GetM_InOut_ID());
+                to.SetRef_InOut_ID(from.GetVAM_Inv_InOut_ID());
                 //	Try to find Order/Invoice link
                 if (from.GetVAB_Order_ID() != 0)
                 {
@@ -443,7 +443,7 @@ namespace VAdvantage.Model
             }
             if (counter)
             {
-                from.SetRef_InOut_ID(to.GetM_InOut_ID());
+                from.SetRef_InOut_ID(to.GetVAM_Inv_InOut_ID());
             }
 
             // Check applied by Mohit - JID_1640 - 18 Feb 2020
@@ -509,10 +509,10 @@ namespace VAdvantage.Model
          *	@param invoice invoice
          *	@param VAB_DocTypesShipment_ID document type or 0
          *	@param movementDate optional movement date (default today)
-         *	@param M_Warehouse_ID warehouse
+         *	@param VAM_Warehouse_ID warehouse
          */
         public MInOut(MInvoice invoice, int VAB_DocTypesShipment_ID,
-            DateTime? movementDate, int M_Warehouse_ID)
+            DateTime? movementDate, int VAM_Warehouse_ID)
             : this(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
             SetClientOrg(invoice);
@@ -522,7 +522,7 @@ namespace VAdvantage.Model
             SetVAB_BPart_Location_ID(ord.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(ord.GetVAF_UserContact_ID());
             //
-            SetM_Warehouse_ID(M_Warehouse_ID);
+            SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             SetIsSOTrx(invoice.IsSOTrx());
             SetIsReturnTrx(invoice.IsReturnTrx());
 
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             {
                 SetDeliveryRule(order.GetDeliveryRule());
                 SetDeliveryViaRule(order.GetDeliveryViaRule());
-                SetM_Shipper_ID(order.GetM_Shipper_ID());
+                SetVAM_ShippingMethod_ID(order.GetVAM_ShippingMethod_ID());
                 SetFreightCostRule(order.GetFreightCostRule());
                 SetFreightAmt(order.GetFreightAmt());
             }
@@ -588,7 +588,7 @@ namespace VAdvantage.Model
             SetVAB_BPart_Location_ID(original.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(original.GetVAF_UserContact_ID());
             //
-            SetM_Warehouse_ID(original.GetM_Warehouse_ID());
+            SetVAM_Warehouse_ID(original.GetVAM_Warehouse_ID());
             SetIsSOTrx(original.IsSOTrx());
             SetMovementType(original.GetMovementType());
             if (VAB_DocTypesShipment_ID == 0)
@@ -608,7 +608,7 @@ namespace VAdvantage.Model
             SetVAB_Order_ID(original.GetVAB_Order_ID());
             SetDeliveryRule(original.GetDeliveryRule());
             SetDeliveryViaRule(original.GetDeliveryViaRule());
-            SetM_Shipper_ID(original.GetM_Shipper_ID());
+            SetVAM_ShippingMethod_ID(original.GetVAM_ShippingMethod_ID());
             SetFreightCostRule(original.GetFreightCostRule());
             SetFreightAmt(original.GetFreightAmt());
             SetSalesRep_ID(original.GetSalesRep_ID());
@@ -737,7 +737,7 @@ namespace VAdvantage.Model
             if (_lines != null && !requery)
                 return _lines;
             List<MInOutLine> list = new List<MInOutLine>();
-            String sql = "SELECT * FROM M_InOutLine WHERE M_InOut_ID=" + GetM_InOut_ID() + " ORDER BY Line";
+            String sql = "SELECT * FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOut_ID=" + GetVAM_Inv_InOut_ID() + " ORDER BY Line";
             DataSet ds = null;
             DataRow dr = null;
             try
@@ -784,7 +784,7 @@ namespace VAdvantage.Model
                 return _confirms;
 
             List<MInOutConfirm> list = new List<MInOutConfirm>();
-            String sql = "SELECT * FROM M_InOutConfirm WHERE M_InOut_ID=" + GetM_InOut_ID();
+            String sql = "SELECT * FROM VAM_Inv_InOutConfirm WHERE VAM_Inv_InOut_ID=" + GetVAM_Inv_InOut_ID();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -820,15 +820,15 @@ namespace VAdvantage.Model
         {
             String sql = "SELECT VAB_OrderLine_ID "
                           + " FROM VAB_OrderLine ol"
-                          + " LEFT OUTER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
+                          + " LEFT OUTER JOIN VAM_Product p ON (ol.VAM_Product_ID=p.VAM_Product_ID)"
                           + " WHERE ol.VAB_Order_ID=@param1"
-                          + " AND (ol.M_Product_ID IS NULL"
+                          + " AND (ol.VAM_Product_ID IS NULL"
                           + " OR p.IsStocked = 'N'"
                           + " OR p.ProductType != 'I')"
                           + " AND (QtyOrdered=0 OR (QtyOrdered > QtyDelivered))"
-                          + " AND NOT EXISTS (SELECT 1 FROM M_InOut io "
-                          + " INNER JOIN M_InOutLine iol ON (io.M_InOut_ID=iol.M_InOut_ID)"
-                          + " WHERE io.M_InOut_ID=@param2"
+                          + " AND NOT EXISTS (SELECT 1 FROM VAM_Inv_InOut io "
+                          + " INNER JOIN VAM_Inv_InOutLine iol ON (io.VAM_Inv_InOut_ID=iol.VAM_Inv_InOut_ID)"
+                          + " WHERE io.VAM_Inv_InOut_ID=@param2"
                           + " AND iol.VAB_OrderLine_ID=ol.VAB_OrderLine_ID)"
                           + " ORDER BY VAB_OrderLine_ID";
             //PreparedStatement pstmt = null;
@@ -839,11 +839,11 @@ namespace VAdvantage.Model
             {
                 param = new SqlParameter[2];
                 param[0] = new SqlParameter("@param1", GetVAB_Order_ID());
-                param[1] = new SqlParameter("@param2", GetM_InOut_ID());
+                param[1] = new SqlParameter("@param2", GetVAM_Inv_InOut_ID());
                 idr = DB.ExecuteReader(sql, param, Get_Trx());
                 //pstmt = DB.prepareStatement(sql, get_Trx());
                 //pstmt.setInt(1, getVAB_Order_ID());
-                //pstmt.setInt(2, getM_InOut_ID());
+                //pstmt.setInt(2, getVAM_Inv_InOut_ID());
                 //rs = pstmt.executeQuery();
                 ArrayList serviceLines = new ArrayList();// ArrayList<MInOutLine> serviceLines = new ArrayList<MInOutLine>();
                 ////while (rs.next())
@@ -938,15 +938,15 @@ namespace VAdvantage.Model
                     PO.CopyValues(fromLine, line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 else
                     PO.CopyValues(fromLine, line, fromLine.GetVAF_Client_ID(), fromLine.GetVAF_Org_ID());
-                line.SetM_InOut_ID(GetM_InOut_ID());
-                line.Set_ValueNoCheck("M_InOutLine_ID", I_ZERO);	//	new
+                line.SetVAM_Inv_InOut_ID(GetVAM_Inv_InOut_ID());
+                line.Set_ValueNoCheck("VAM_Inv_InOutLine_ID", I_ZERO);	//	new
                 //	Reset
                 if (!setOrder)
                     line.SetVAB_OrderLine_ID(0);
                 // SI_0642 : when we reverse MR or Customer Return, at that tym - on Save - system also check - qty availablity agaisnt same attribute 
                 // on storage. If we set ASI as 0, then system not find qty and not able to save record
                 if (!counter && !IsReversal())
-                    line.SetM_AttributeSetInstance_ID(0);
+                    line.SetVAM_PFeature_SetInstance_ID(0);
                 //	line.setVAS_Res_Assignment_ID(0);
                 line.SetRef_InOutLine_ID(0);
                 line.SetIsInvoiced(false);
@@ -956,16 +956,16 @@ namespace VAdvantage.Model
                 line.SetScrappedQty(Env.ZERO);
                 line.SetTargetQty(Env.ZERO);
                 //	Set Locator based on header Warehouse
-                if (GetM_Warehouse_ID() != otherShipment.GetM_Warehouse_ID())
+                if (GetVAM_Warehouse_ID() != otherShipment.GetVAM_Warehouse_ID())
                 {
-                    line.SetM_Locator_ID(0);
-                    line.SetM_Locator_ID((int)Env.ZERO);
+                    line.SetVAM_Locator_ID(0);
+                    line.SetVAM_Locator_ID((int)Env.ZERO);
                 }
                 //
                 if (counter)
                 {
                     line.SetVAB_OrderLine_ID(0);
-                    line.SetRef_InOutLine_ID(fromLine.GetM_InOutLine_ID());
+                    line.SetRef_InOutLine_ID(fromLine.GetVAM_Inv_InOutLine_ID());
                     if (fromLine.GetVAB_OrderLine_ID() != 0)
                     {
                         MVABOrderLine peer = new MVABOrderLine(GetCtx(), fromLine.GetVAB_OrderLine_ID(), Get_TrxName());
@@ -980,12 +980,12 @@ namespace VAdvantage.Model
                     line.SetMovementQty(Decimal.Negate(line.GetMovementQty()));
                     if (line.Get_ColumnIndex("ReversalDoc_ID") > 0)
                     {
-                        line.SetReversalDoc_ID(fromLine.GetM_InOutLine_ID());
+                        line.SetReversalDoc_ID(fromLine.GetVAM_Inv_InOutLine_ID());
                     }
                     // to set OrderLine in case of reversal if it is available 
                     line.SetVAB_OrderLine_ID(fromLine.GetVAB_OrderLine_ID());
                     //set container reference(if, not a copy record)
-                    line.SetM_ProductContainer_ID(fromLine.GetM_ProductContainer_ID());
+                    line.SetVAM_ProductContainer_ID(fromLine.GetVAM_ProductContainer_ID());
                 }
                 line.SetProcessed(false);
                 if (line.Save(Get_TrxName()))
@@ -993,7 +993,7 @@ namespace VAdvantage.Model
                 //	Cross Link
                 if (counter)
                 {
-                    fromLine.SetRef_InOutLine_ID(line.GetM_InOutLine_ID());
+                    fromLine.SetRef_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
                     fromLine.Save(Get_TrxName());
                 }
             }
@@ -1036,7 +1036,7 @@ namespace VAdvantage.Model
             SetVAB_BPart_Location_ID(order.GetVAB_BPart_Location_ID());	//	shipment address
             SetVAF_UserContact_ID(order.GetVAF_UserContact_ID());
             //
-            SetM_Warehouse_ID(order.GetM_Warehouse_ID());
+            SetVAM_Warehouse_ID(order.GetVAM_Warehouse_ID());
             SetIsSOTrx(order.IsSOTrx());
             SetIsReturnTrx(order.IsReturnTrx());
 
@@ -1047,7 +1047,7 @@ namespace VAdvantage.Model
             //
             SetDeliveryRule(order.GetDeliveryRule());
             SetDeliveryViaRule(order.GetDeliveryViaRule());
-            SetM_Shipper_ID(order.GetM_Shipper_ID());
+            SetVAM_ShippingMethod_ID(order.GetVAM_ShippingMethod_ID());
             SetFreightCostRule(order.GetFreightCostRule());
             SetFreightAmt(order.GetFreightAmt());
             SetSalesRep_ID(order.GetSalesRep_ID());
@@ -1098,9 +1098,9 @@ namespace VAdvantage.Model
             base.SetProcessed(processed);
             if (Get_ID() == 0)
                 return;
-            String sql = "UPDATE M_InOutLine SET Processed='"
+            String sql = "UPDATE VAM_Inv_InOutLine SET Processed='"
                 + (processed ? "Y" : "N")
-                + "' WHERE M_InOut_ID=" + GetM_InOut_ID();
+                + "' WHERE VAM_Inv_InOut_ID=" + GetVAM_Inv_InOut_ID();
             int noLine = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             _lines = null;
             log.Fine(processed + " - Lines=" + noLine);
@@ -1352,20 +1352,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Warehouse and check/set Organization
         /// </summary>
-        /// <param name="M_Warehouse_ID">id</param>
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        /// <param name="VAM_Warehouse_ID">id</param>
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID == 0)
+            if (VAM_Warehouse_ID == 0)
             {
                 log.Severe("Ignored - Cannot set AD_Warehouse_ID to 0");
                 return;
             }
-            base.SetM_Warehouse_ID(M_Warehouse_ID);
+            base.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             //
-            MWarehouse wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+            MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
             if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
             {
-                log.Warning("M_Warehouse_ID=" + M_Warehouse_ID
+                log.Warning("VAM_Warehouse_ID=" + VAM_Warehouse_ID
                 + ", Overwritten VAF_Org_ID=" + GetVAF_Org_ID() + "->" + wh.GetVAF_Org_ID());
                 SetVAF_Org_ID(wh.GetVAF_Org_ID());
             }
@@ -1378,19 +1378,19 @@ namespace VAdvantage.Model
         /// <param name="newVAB_BusinessPartner_ID">new BP</param>
         /// <param name="windowNo">window no</param>
         /// @UICallout
-        public void SetM_Warehouse_ID(String oldM_Warehouse_ID,
-            String newM_Warehouse_ID, int windowNo)
+        public void SetVAM_Warehouse_ID(String oldVAM_Warehouse_ID,
+            String newVAM_Warehouse_ID, int windowNo)
         {
-            if (newM_Warehouse_ID == null || newM_Warehouse_ID.Length == 0)
+            if (newVAM_Warehouse_ID == null || newVAM_Warehouse_ID.Length == 0)
                 return;
-            int M_Warehouse_ID = int.Parse(newM_Warehouse_ID);
-            if (M_Warehouse_ID == 0)
+            int VAM_Warehouse_ID = int.Parse(newVAM_Warehouse_ID);
+            if (VAM_Warehouse_ID == 0)
                 return;
             //
-            String sql = "SELECT w.VAF_Org_ID, l.M_Locator_ID "
-                + "FROM M_Warehouse w"
-                + " LEFT OUTER JOIN M_Locator l ON (l.M_Warehouse_ID=w.M_Warehouse_ID AND l.IsDefault='Y') "
-                + "WHERE w.M_Warehouse_ID=" + M_Warehouse_ID;		//	1
+            String sql = "SELECT w.VAF_Org_ID, l.VAM_Locator_ID "
+                + "FROM VAM_Warehouse w"
+                + " LEFT OUTER JOIN VAM_Locator l ON (l.VAM_Warehouse_ID=w.VAM_Warehouse_ID AND l.IsDefault='Y') "
+                + "WHERE w.VAM_Warehouse_ID=" + VAM_Warehouse_ID;		//	1
 
             try
             {
@@ -1398,19 +1398,19 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    SetM_Warehouse_ID(M_Warehouse_ID);
+                    SetVAM_Warehouse_ID(VAM_Warehouse_ID);
                     //	Org
                     int VAF_Org_ID = (int)dr[0];
                     SetVAF_Org_ID(VAF_Org_ID);
                     //	Locator
-                    int M_Locator_ID = (int)dr[1];
-                    if (M_Locator_ID != 0)
+                    int VAM_Locator_ID = (int)dr[1];
+                    if (VAM_Locator_ID != 0)
                     {
-                        //p_changeVO.setContext(getCtx(), windowNo, "M_Locator_ID", M_Locator_ID);
+                        //p_changeVO.setContext(getCtx(), windowNo, "VAM_Locator_ID", VAM_Locator_ID);
                     }
                     else
                     {
-                        //p_changeVO.setContext(getCtx(), windowNo, "M_Locator_ID", (String)null);
+                        //p_changeVO.setContext(getCtx(), windowNo, "VAM_Locator_ID", (String)null);
                     }
                 }
             }
@@ -1496,17 +1496,17 @@ namespace VAdvantage.Model
             //	Warehouse Org
             if (newRecord)
             {
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
                 if (wh.GetVAF_Org_ID() != GetVAF_Org_ID())
                 {
                     log.SaveError("WarehouseOrgConflict", "");
                     return false;
                 }
             }
-            else if (Is_ValueChanged("M_Warehouse_ID"))
+            else if (Is_ValueChanged("VAM_Warehouse_ID"))
             {
                 //JID_0858: when line exist then not able to update / change warehouse
-                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx())) > 0)
+                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID(), null, Get_Trx())) > 0)
                 {
                     log.SaveError("VIS_WarehouseCantChange", "");
                     return false;
@@ -1616,11 +1616,11 @@ namespace VAdvantage.Model
             {
                 if (Is_ValueChanged("VAF_Org_ID"))
                 {
-                    String sql = "UPDATE M_InOutLine ol"
+                    String sql = "UPDATE VAM_Inv_InOutLine ol"
                         + " SET VAF_Org_ID ="
                             + "(SELECT VAF_Org_ID"
-                            + " FROM M_InOut o WHERE ol.M_InOut_ID=o.M_InOut_ID) "
-                        + "WHERE M_InOut_ID=" + GetVAB_Order_ID();
+                            + " FROM VAM_Inv_InOut o WHERE ol.VAM_Inv_InOut_ID=o.VAM_Inv_InOut_ID) "
+                        + "WHERE VAM_Inv_InOut_ID=" + GetVAB_Order_ID();
                     int no = Utility.Util.GetValueOfInt(DataBase.DB.ExecuteQuery(sql, null, Get_TrxName()));
                     log.Fine("Lines -> #" + no);
                 }
@@ -1827,20 +1827,20 @@ namespace VAdvantage.Model
                     Weight = Decimal.Add(Weight, Decimal.Multiply(product.GetWeight(),
                         line.GetMovementQty()));
                 }
-                if (line.GetM_AttributeSetInstance_ID() != 0)
+                if (line.GetVAM_PFeature_SetInstance_ID() != 0)
                     continue;
                 if (product != null)
                 {
-                    int M_AttributeSet_ID = product.GetM_AttributeSet_ID();
-                    if (M_AttributeSet_ID != 0)
+                    int VAM_PFeature_Set_ID = product.GetVAM_PFeature_Set_ID();
+                    if (VAM_PFeature_Set_ID != 0)
                     {
-                        MAttributeSet mas = MAttributeSet.Get(GetCtx(), M_AttributeSet_ID);
+                        MAttributeSet mas = MAttributeSet.Get(GetCtx(), VAM_PFeature_Set_ID);
                         if (mas != null
                             && ((IsSOTrx() && mas.IsMandatory())
                                 || (!IsSOTrx() && mas.IsMandatoryAlways())))
                         {
                             // JID_0259: Here we need to show the name of the product for which attribute is mandatory.
-                            _processMsg = product.GetName() + ": " + "@M_AttributeSet_ID@ @IsMandatory@";
+                            _processMsg = product.GetName() + ": " + "@VAM_PFeature_Set_ID@ @IsMandatory@";
                             return DocActionVariables.STATUS_INVALID;
                         }
                     }
@@ -1915,52 +1915,52 @@ namespace VAdvantage.Model
                 {
                     #region Prevent from completing, If qty on Product trnsaction on specified movement date not available as per qty entered at line and Disallow negative is true at Warehouse
                     sql.Clear();
-                    sql.Append("SELECT ISDISALLOWNEGATIVEINV FROM M_Warehouse WHERE M_Warehouse_ID = " + Util.GetValueOfInt(GetM_Warehouse_ID()));
+                    sql.Append("SELECT ISDISALLOWNEGATIVEINV FROM VAM_Warehouse WHERE VAM_Warehouse_ID = " + Util.GetValueOfInt(GetVAM_Warehouse_ID()));
                     string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
 
                     if (disallow.ToUpper() == "Y")
                     {
                         // is used to handle Non Stocked Item which are not in Storage
-                        string whereClause = "M_Inout_ID = " + GetM_InOut_ID() + @" AND VAB_Charge_ID IS NULL AND M_Product_ID NOT IN 
-                            (SELECT M_InoutLine.M_Product_ID FROM M_InoutLine INNER JOIN M_Product ON M_InoutLine.M_Product_ID = M_Product.M_Product_ID 
-                            WHERE M_Product.IsStocked = 'N' AND M_InoutLine.M_Inout_ID  = " + GetM_InOut_ID() + " ) ";
-                        int[] ioLine = MInOutLine.GetAllIDs("M_InoutLine", whereClause, Get_TrxName());
-                        int m_locator_id = 0;
-                        int m_product_id = 0;
+                        string whereClause = "VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID() + @" AND VAB_Charge_ID IS NULL AND VAM_Product_ID NOT IN 
+                            (SELECT VAM_Inv_InOutLine.VAM_Product_ID FROM VAM_Inv_InOutLine INNER JOIN VAM_Product ON VAM_Inv_InOutLine.VAM_Product_ID = VAM_Product.VAM_Product_ID 
+                            WHERE VAM_Product.IsStocked = 'N' AND VAM_Inv_InOutLine.VAM_Inv_InOut_ID  = " + GetVAM_Inv_InOut_ID() + " ) ";
+                        int[] ioLine = MInOutLine.GetAllIDs("VAM_Inv_InOutLine", whereClause, Get_TrxName());
+                        int VAM_Locator_id = 0;
+                        int VAM_Product_id = 0;
                         StringBuilder products = new StringBuilder();   // Added by sukhwinder for storing product aand locators IDs. on 19Dec, 2017
                         StringBuilder locators = new StringBuilder();
                         bool check = false;
                         for (int i = 0; i < ioLine.Length; i++)
                         {
                             MInOutLine iol = new MInOutLine(Env.GetCtx(), ioLine[i], Get_TrxName());
-                            m_locator_id = Util.GetValueOfInt(iol.GetM_Locator_ID());
-                            m_product_id = Util.GetValueOfInt(iol.GetM_Product_ID());
+                            VAM_Locator_id = Util.GetValueOfInt(iol.GetVAM_Locator_ID());
+                            VAM_Product_id = Util.GetValueOfInt(iol.GetVAM_Product_ID());
 
                             sql.Clear();
-                            sql.Append("SELECT M_AttributeSet_ID FROM M_Product WHERE M_Product_ID = " + m_product_id);
-                            int m_attribute_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
-                            if (m_attribute_ID == 0)
+                            sql.Append("SELECT VAM_PFeature_Set_ID FROM VAM_Product WHERE VAM_Product_ID = " + VAM_Product_id);
+                            int VAM_ProductFeature_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
+                            if (VAM_ProductFeature_ID == 0)
                             {
                                 sql.Clear();
                                 if (!isContainrApplicable)
                                 {
-                                    sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id);
+                                    sql.Append("SELECT SUM(QtyOnHand) FROM VAM_Storage WHERE VAM_Locator_ID = " + VAM_Locator_id + " AND VAM_Product_ID = " + VAM_Product_id);
                                 }
                                 else
                                 {
-                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                                        INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                            " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + iol.GetM_Locator_ID() +
-                                            " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
-                                            " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
+                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_Locator_ID, NVL(t.VAM_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t 
+                                        INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                                            " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.VAM_Locator_ID = " + iol.GetVAM_Locator_ID() +
+                                            " AND t.VAM_Product_ID = " + iol.GetVAM_Product_ID() + " AND NVL(t.VAM_PFeature_SetInstance_ID,0) = " + iol.GetVAM_PFeature_SetInstance_ID() +
+                                            " AND NVL(t.VAM_ProductContainer_ID, 0) = " + iol.GetVAM_ProductContainer_ID());
                                 }
                                 int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                                 int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
-                                    products.Append(m_product_id + ", ");
-                                    locators.Append(m_locator_id + ", ");
+                                    products.Append(VAM_Product_id + ", ");
+                                    locators.Append(VAM_Locator_id + ", ");
                                     continue;
                                 }
                             }
@@ -1969,23 +1969,23 @@ namespace VAdvantage.Model
                                 sql.Clear();
                                 if (!isContainrApplicable)
                                 {
-                                    sql.Append("SELECT SUM(QtyOnHand) FROM M_Storage WHERE M_Locator_ID = " + m_locator_id + " AND M_Product_ID = " + m_product_id + " AND NVL(M_AttributeSetInstance_ID , 0) = " + iol.GetM_AttributeSetInstance_ID());
+                                    sql.Append("SELECT SUM(QtyOnHand) FROM VAM_Storage WHERE VAM_Locator_ID = " + VAM_Locator_id + " AND VAM_Product_ID = " + VAM_Product_id + " AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + iol.GetVAM_PFeature_SetInstance_ID());
                                 }
                                 else
                                 {
-                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID, t.M_Locator_ID, NVL(t.M_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                                        INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                            " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + iol.GetM_Locator_ID() +
-                                            " AND t.M_Product_ID = " + iol.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + iol.GetM_AttributeSetInstance_ID() +
-                                            " AND NVL(t.M_ProductContainer_ID, 0) = " + iol.GetM_ProductContainer_ID());
+                                    sql.Append(@"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID, t.VAM_Locator_ID, NVL(t.VAM_ProductContainer_ID, 0) ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t 
+                                        INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                                            " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.VAM_Locator_ID = " + iol.GetVAM_Locator_ID() +
+                                            " AND t.VAM_Product_ID = " + iol.GetVAM_Product_ID() + " AND NVL(t.VAM_PFeature_SetInstance_ID,0) = " + iol.GetVAM_PFeature_SetInstance_ID() +
+                                            " AND NVL(t.VAM_ProductContainer_ID, 0) = " + iol.GetVAM_ProductContainer_ID());
                                 }
                                 int qty = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, Get_TrxName()));
                                 int qtyToMove = Util.GetValueOfInt(iol.GetMovementQty());
                                 if (qty < qtyToMove)
                                 {
                                     check = true;
-                                    products.Append(m_product_id + ",");
-                                    locators.Append(m_locator_id + ",");
+                                    products.Append(VAM_Product_id + ",");
+                                    locators.Append(VAM_Locator_id + ",");
                                     continue;
                                 }
                             }
@@ -2016,12 +2016,12 @@ namespace VAdvantage.Model
             //    //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
             //    //MProduct pro = null;
             //    lineAttributes = new Dictionary<int, MInOutLineMA[]>();
-            //    sql = "select m_inoutline_id,qtyentered,line,m_Product_id from m_inoutline where m_inout_id=" + GetM_InOut_ID();
+            //    sql = "select VAM_Inv_InOutLine_id,qtyentered,line,VAM_Product_id from VAM_Inv_InOutLine where VAM_Inv_InOut_id=" + GetVAM_Inv_InOut_ID();
             //    idr = DB.ExecuteReader(sql);
             //    while (idr.Read())
             //    {
-            //        pro = new MProduct(GetCtx(), Util.GetValueOfInt(idr["m_Product_id"]), null);
-            //        if (pro.GetM_AttributeSetInstance_ID() != 0)
+            //        pro = new MProduct(GetCtx(), Util.GetValueOfInt(idr["VAM_Product_id"]), null);
+            //        if (pro.GetVAM_PFeature_SetInstance_ID() != 0)
             //        {
             //            MInOutLineMA[] attrib = MInOutLineMA.Get(GetCtx(), Util.GetValueOfInt(idr[0]), Get_Trx());
             //            if (Util.GetValueOfInt(idr[1]) != attrib.Length)
@@ -2043,18 +2043,18 @@ namespace VAdvantage.Model
             //    string msg = "";
 
             //    //----------------------Change by Lokesh Chauhan--------------------------
-            //    X_M_InOut inOut = new X_M_InOut(GetCtx(), GetM_InOut_ID(), null);
+            //    X_VAM_Inv_InOut inOut = new X_VAM_Inv_InOut(GetCtx(), GetVAM_Inv_InOut_ID(), null);
             //    string sqlL = "select name from VAB_BPart_Location where VAB_BPart_Location_id=" + inOut.GetVAB_BPart_Location_ID();
             //    string name = VAdvantage.Utility.Util.GetValueOfString(DB.ExecuteScalar(sqlL));
             //    Boolean result = name.StartsWith("POS -");
             //    if (result)
             //    {
-            //        int[] allIds = X_M_InOutLine.GetAllIDs("M_InOutLine", "M_InOut_ID=" + inOut.GetM_InOut_ID(), null);
+            //        int[] allIds = X_VAM_Inv_InOutLine.GetAllIDs("VAM_Inv_InOutLine", "VAM_Inv_InOut_ID=" + inOut.GetVAM_Inv_InOut_ID(), null);
             //        if (allIds.Length > 0)
             //        {
             //            for (int i = 0; i < allIds.Length; i++)
             //            {
-            //                X_M_InOutLine IOLine = new X_M_InOutLine(GetCtx(), allIds[i], null);
+            //                X_VAM_Inv_InOutLine IOLine = new X_VAM_Inv_InOutLine(GetCtx(), allIds[i], null);
             //                MProdReceived ProdReceived = new MProdReceived(GetCtx(), 0, null);
             //                ProdReceived.SetVAF_Client_ID(inOut.GetVAF_Client_ID());
             //                ProdReceived.SetVAF_Org_ID(inOut.GetVAF_Org_ID());
@@ -2062,11 +2062,11 @@ namespace VAdvantage.Model
             //                ProdReceived.SetVAB_BPart_Location_ID(inOut.GetVAB_BPart_Location_ID());
             //                ProdReceived.SetDS_AREA_ID(inOut.GetDS_AREA_ID());
             //                ProdReceived.SetDS_SUBLOCATION_ID(inOut.GetDS_SUBLOCATION_ID());
-            //                ProdReceived.SetM_InOut_ID(GetM_InOut_ID());
-            //                ProdReceived.SetM_Product_ID(IOLine.GetM_Product_ID());
-            //                sqlL = "select m_product_category_id from M_product where m_product_id =" + IOLine.GetM_Product_ID();
-            //                int M_Product_Category_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlL));
-            //                ProdReceived.SetM_Product_Category_ID(M_Product_Category_ID);
+            //                ProdReceived.SetVAM_Inv_InOut_ID(GetVAM_Inv_InOut_ID());
+            //                ProdReceived.SetVAM_Product_ID(IOLine.GetVAM_Product_ID());
+            //                sqlL = "select VAM_ProductCategory_id from VAM_Product where VAM_Product_id =" + IOLine.GetVAM_Product_ID();
+            //                int VAM_ProductCategory_ID = VAdvantage.Utility.Util.GetValueOfInt(DB.ExecuteScalar(sqlL));
+            //                ProdReceived.SetVAM_ProductCategory_ID(VAM_ProductCategory_ID);
             //                ProdReceived.SetDate1(inOut.GetMovementDate());
             //                ProdReceived.SetQuantity(IOLine.GetQtyEntered());
             //                ProdReceived.SetDocStatus1("C");
@@ -2092,7 +2092,7 @@ namespace VAdvantage.Model
                 // if container avialble on line is belongs to same warehouse and locator
                 // if not then not to complete this record
                 sql.Clear();
-                sql.Append(DBFunctionCollection.MInOutContainerNotMatched(GetM_InOut_ID()));
+                sql.Append(DBFunctionCollection.MInOutContainerNotMatched(GetVAM_Inv_InOut_ID()));
                 string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -2105,7 +2105,7 @@ namespace VAdvantage.Model
                 // If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container
                 // then we need to stop that transaction to Complete.
                 sql.Clear();
-                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetM_InOut_ID()));
+                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetVAM_Inv_InOut_ID()));
                 string misMatch = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
@@ -2128,7 +2128,7 @@ namespace VAdvantage.Model
 
             // To check weather future date records are available in Transaction window
             // this check implement after "SetCompletedDocumentNo" function, because this function overwrit movement date
-            _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetM_InOut_ID(), Get_Trx());
+            _processMsg = MTransaction.CheckFutureDateRecord(GetMovementDate(), Get_TableName(), GetVAM_Inv_InOut_ID(), Get_Trx());
             if (!string.IsNullOrEmpty(_processMsg))
             {
                 return DocActionVariables.STATUS_INVALID;
@@ -2177,7 +2177,7 @@ namespace VAdvantage.Model
                             if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                                 continue;
                             //
-                            _processMsg = "Open @M_InOutConfirm_ID@: " +
+                            _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
                                 confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
                             FreezeDoc();//Arpit
                             return DocActionVariables.STATUS_INPROGRESS;
@@ -2195,7 +2195,7 @@ namespace VAdvantage.Model
                         if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                             continue;
                         //
-                        _processMsg = "Open @M_InOutConfirm_ID@: " +
+                        _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
                             confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
                         FreezeDoc();//Arpit                  
                         return DocActionVariables.STATUS_INPROGRESS;
@@ -2208,7 +2208,7 @@ namespace VAdvantage.Model
                 //    if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                 //        continue;
                 //    //
-                //    _processMsg = "Open @M_InOutConfirm_ID@: " +
+                //    _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
                 //        confirm.GetConfirmTypeName() + " - " + confirm.GetDocumentNo();
                 //    FreezeDoc();//Arpit
                 //    return DocActionVariables.STATUS_INPROGRESS;
@@ -2228,7 +2228,7 @@ namespace VAdvantage.Model
                 {
                     MInOutLine Line = lines[Index];
                     // Change done by mohit as discussed by ravikant and mukesh sir - do not check locator if there is charge on shipment line- 01/06/2017 (PMS TaskID=3893)
-                    if (Line.GetM_Locator_ID() == 0 && Line.GetM_Product_ID() != 0)
+                    if (Line.GetVAM_Locator_ID() == 0 && Line.GetVAM_Product_ID() != 0)
                     {
                         _processMsg = Msg.GetMsg(Env.GetCtx(), "LocatorNotFound");
                         return DocActionVariables.STATUS_INVALID;
@@ -2253,7 +2253,7 @@ namespace VAdvantage.Model
                     #region Asset Work
                     if (product != null)
                     {
-                        MProductCategory pc = new MProductCategory(Env.GetCtx(), product.GetM_Product_Category_ID(), Get_TrxName());
+                        MProductCategory pc = new MProductCategory(Env.GetCtx(), product.GetVAM_ProductCategory_ID(), Get_TrxName());
                         if (VAPOS_POSTerminal_ID > 0)
                         {
                             if (IsSOTrx() && pc.GetVAA_AssetGroup_ID() > 0 && sLine.GetA_Asset_ID() == 0)
@@ -2294,8 +2294,8 @@ namespace VAdvantage.Model
                 {
                     if (Env.IsModuleInstalled("VAWMS_"))
                     {
-                        MStorage allocatedStorage = MStorage.GetCreate(GetCtx(), sLine.GetM_Locator_ID(), sLine.GetM_Product_ID(),
-                            sLine.GetM_AttributeSetInstance_ID(), Get_Trx());
+                        MStorage allocatedStorage = MStorage.GetCreate(GetCtx(), sLine.GetVAM_Locator_ID(), sLine.GetVAM_Product_ID(),
+                            sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                         allocatedStorage.SetQtyAllocated(Decimal.Subtract(allocatedStorage.GetQtyAllocated(), sLine.GetMovementQty()));
                         if (!allocatedStorage.Save())
                         {
@@ -2357,12 +2357,12 @@ namespace VAdvantage.Model
                     //{                 
                     //if (pro != null)
                     //{
-                    //    attribCheck = pro.GetM_AttributeSetInstance_ID() != 0;
+                    //    attribCheck = pro.GetVAM_PFeature_SetInstance_ID() != 0;
                     //}
                     ////attribute stirage update logic
                     //if (IsSOTrx() && attribCheck)
                     //{
-                    //    MInOutLineMA[] mas = lineAttributes[sLine.GetM_InOutLine_ID()];
+                    //    MInOutLineMA[] mas = lineAttributes[sLine.GetVAM_Inv_InOutLine_ID()];
                     //    for (int j = 0; j < mas.Length; j++)
                     //    {
                     //        MInOutLineMA ma = mas[j];
@@ -2388,21 +2388,21 @@ namespace VAdvantage.Model
 
                     //        //	Update Storage - see also VMatch.createMatchRecord
                     //        /**********/
-                    //        string sqlatr = "SELECT SUM(movementqty) FROM m_inoutlinema WHERE m_inoutline_id=" + sLine.GetM_InOutLine_ID();
+                    //        string sqlatr = "SELECT SUM(movementqty) FROM VAM_Inv_InOutLineMP WHERE VAM_Inv_InOutLine_id=" + sLine.GetVAM_Inv_InOutLine_ID();
                     //        int totalmovqty = Util.GetValueOfInt(DB.ExecuteScalar(sqlatr, null, null));
 
-                    //        string sqty = "SELECT qtyentered FROM m_inoutline WHERE m_inoutline_id=" + sLine.GetM_InOutLine_ID();
+                    //        string sqty = "SELECT qtyentered FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOutLine_id=" + sLine.GetVAM_Inv_InOutLine_ID();
                     //        int quantity = Util.GetValueOfInt(DB.ExecuteScalar(sqty, null, null));
 
-                    //        //MInOutLine minline = new MInOutLine(GetCtx(), m_inoutline_id, Get_TrxName());
+                    //        //MInOutLine minline = new MInOutLine(GetCtx(), VAM_Inv_InOutLine_id, Get_TrxName());
                     //        if (totalmovqty == quantity)
                     //        {
 
-                    //            if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                    //              sLine.GetM_Locator_ID(),
-                    //              sLine.GetM_Product_ID(),
-                    //              ma.GetM_AttributeSetInstance_ID(), ma.GetM_AttributeSetInstance_ID(),
-                    //              QtyMA, QtySOMA, QtyPOMA, Get_Trx(), sLine.GetM_InOutLine_ID()))
+                    //            if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                    //              sLine.GetVAM_Locator_ID(),
+                    //              sLine.GetVAM_Product_ID(),
+                    //              ma.GetVAM_PFeature_SetInstance_ID(), ma.GetVAM_PFeature_SetInstance_ID(),
+                    //              QtyMA, QtySOMA, QtyPOMA, Get_Trx(), sLine.GetVAM_Inv_InOutLine_ID()))
                     //            {
                     //                _processMsg = "Cannot correct Inventory (MA)";
                     //                return DocActionVariables.STATUS_INVALID;
@@ -2412,10 +2412,10 @@ namespace VAdvantage.Model
                     //        {
                     //            return "";
                     //        }
-                    //        if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                    //            sLine.GetM_Locator_ID(),
-                    //            sLine.GetM_Product_ID(),
-                    //            ma.GetM_AttributeSetInstance_ID(), ma.GetM_AttributeSetInstance_ID(),
+                    //        if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                    //            sLine.GetVAM_Locator_ID(),
+                    //            sLine.GetVAM_Product_ID(),
+                    //            ma.GetVAM_PFeature_SetInstance_ID(), ma.GetVAM_PFeature_SetInstance_ID(),
                     //            QtyMA, QtySOMA, QtyPOMA, Get_TrxName()))
                     //        {
                     //            _processMsg = "Cannot correct Inventory (MA)";
@@ -2423,10 +2423,10 @@ namespace VAdvantage.Model
                     //        }
                     //        //	Create Transaction
                     //        mtrx = new MTransaction(GetCtx(), sLine.GetVAF_Org_ID(),
-                    //            MovementType, sLine.GetM_Locator_ID(),
-                    //            sLine.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
+                    //            MovementType, sLine.GetVAM_Locator_ID(),
+                    //            sLine.GetVAM_Product_ID(), ma.GetVAM_PFeature_SetInstance_ID(),
                     //            QtyMA, GetMovementDate(), Get_TrxName());
-                    //        mtrx.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+                    //        mtrx.SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
                     //        if (!mtrx.Save())
                     //        {
                     //            _processMsg = "Could not create Material Transaction (MA)";
@@ -2439,14 +2439,14 @@ namespace VAdvantage.Model
 
 
                     ////	Reservation ASI - assume none
-                    int reservationAttributeSetInstance_ID = 0; // sLine.getM_AttributeSetInstance_ID();
+                    int reservationAttributeSetInstance_ID = 0; // sLine.getVAM_PFeature_SetInstance_ID();
                     if (oLine != null)
-                        reservationAttributeSetInstance_ID = oLine.GetM_AttributeSetInstance_ID();
+                        reservationAttributeSetInstance_ID = oLine.GetVAM_PFeature_SetInstance_ID();
                     //
-                    if (sLine.GetM_AttributeSetInstance_ID() == 0 || sLine.GetM_AttributeSetInstance_ID() != 0)
+                    if (sLine.GetVAM_PFeature_SetInstance_ID() == 0 || sLine.GetVAM_PFeature_SetInstance_ID() != 0)
                     {
                         MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(),
-                            sLine.GetM_InOutLine_ID(), Get_TrxName());
+                            sLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                         for (int j = 0; j < mas.Length; j++)
                         {
                             Decimal? containerCurrentQty = 0;
@@ -2537,10 +2537,10 @@ namespace VAdvantage.Model
                                     // if MR/Shipment line is not of drop ship type then second warehouse wil be order's header else current warehouse
                                     if (!sLine.IsDropShip())
                                     {
-                                        if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                        sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
-                                        sLine.GetM_Product_ID(),
-                                        sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                        if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                        sLine.GetVAM_Locator_ID(), ord.GetVAM_Warehouse_ID(),
+                                        sLine.GetVAM_Product_ID(),
+                                        sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                              //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
@@ -2554,10 +2554,10 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                        sLine.GetM_Locator_ID(), GetM_Warehouse_ID(),
-                                        sLine.GetM_Product_ID(),
-                                        sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                        if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                        sLine.GetVAM_Locator_ID(), GetVAM_Warehouse_ID(),
+                                        sLine.GetVAM_Product_ID(),
+                                        sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                              //Qty, QtySO, QtyPO, Get_TrxName()))
                                              QtyMA, QtySO, QtyPO, Get_TrxName()))
                                         {
@@ -2573,10 +2573,10 @@ namespace VAdvantage.Model
                                 }
                                 else if (VAPOS_POSTerminal_ID > 0)
                                 {
-                                    if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                   sLine.GetM_Locator_ID(),
-                                   sLine.GetM_Product_ID(),
-                                   ma.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                    if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                   sLine.GetVAM_Locator_ID(),
+                                   sLine.GetVAM_Product_ID(),
+                                   ma.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                    QtyMA, QtySOMA, QtyPOMA, Get_TrxName()))
                                     {
                                         ValueNamePair pp = VLogger.RetrieveError();
@@ -2591,10 +2591,10 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                    sLine.GetM_Locator_ID(),
-                                    sLine.GetM_Product_ID(),
-                                    ma.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                    sLine.GetVAM_Locator_ID(),
+                                    sLine.GetVAM_Product_ID(),
+                                    ma.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                     QtyMA, QtySOMA, QtyPOMA, Get_TrxName()))
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -2608,31 +2608,31 @@ namespace VAdvantage.Model
 
                             #region Update Transaction / Future Date entry
                             sql.Clear();
-                            sql.Append(@"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                                   " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + sLine.GetM_Locator_ID() +
-                               " AND t.M_Product_ID = " + sLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + sLine.GetM_AttributeSetInstance_ID());
+                            sql.Append(@"SELECT DISTINCT First_VALUE(t.CurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t 
+                            INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                                   " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() +
+                               " AND t.VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND NVL(t.VAM_PFeature_SetInstance_ID,0) = " + sLine.GetVAM_PFeature_SetInstance_ID());
                             trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
                             // get container Current qty from transaction
-                            if (isContainrApplicable && sLine.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                            if (isContainrApplicable && sLine.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                             {
                                 containerCurrentQty = GetContainerQtyFromTransaction(sLine, GetMovementDate());
                             }
 
                             //	Create Transaction
                             mtrx = new MTransaction(GetCtx(), sLine.GetVAF_Org_ID(),
-                                MovementType, sLine.GetM_Locator_ID(),
-                                sLine.GetM_Product_ID(), ma.GetM_AttributeSetInstance_ID(),
+                                MovementType, sLine.GetVAM_Locator_ID(),
+                                sLine.GetVAM_Product_ID(), ma.GetVAM_PFeature_SetInstance_ID(),
                                 QtyMA, GetMovementDate(), Get_TrxName());
-                            mtrx.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+                            mtrx.SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
                             mtrx.SetCurrentQty(trxQty + QtyMA);
                             // set Material Policy Date
                             mtrx.SetMMPolicyDate(ma.GetMMPolicyDate());
-                            if (isContainrApplicable && mtrx.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                            if (isContainrApplicable && mtrx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                             {
                                 // Update Product Container on Transaction
-                                mtrx.SetM_ProductContainer_ID(sLine.GetM_ProductContainer_ID());
+                                mtrx.SetVAM_ProductContainer_ID(sLine.GetVAM_ProductContainer_ID());
                                 // update containr or withot container qty Current Qty 
                                 mtrx.SetContainerCurrentQty(containerCurrentQty + QtyMA);
                             }
@@ -2647,7 +2647,7 @@ namespace VAdvantage.Model
                             }
 
                             //Update Transaction for Current Quantity
-                            if (isContainrApplicable && mtrx.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                            if (isContainrApplicable && mtrx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                             {
                                 //String errorMessage = UpdateTransactionContainer(sLine, mtrx, Qty + trxQty.Value);
                                 String errorMessage = UpdateTransactionContainer(sLine, mtrx, QtyMA + trxQty.Value);
@@ -2726,10 +2726,10 @@ namespace VAdvantage.Model
                                 // if MR/Shipment is not of drop ship type then old warehouse will be of order's header else new warehouse
                                 if (!sLine.IsDropShip())
                                 {
-                                    if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                                                sLine.GetM_Locator_ID(), ord.GetM_Warehouse_ID(),
-                                                                sLine.GetM_Product_ID(),
-                                                                sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                    if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                                                sLine.GetVAM_Locator_ID(), ord.GetVAM_Warehouse_ID(),
+                                                                sLine.GetVAM_Product_ID(),
+                                                                sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                                                 Qty, QtySO, QtyPO, Get_TrxName()))
                                     {
                                         ValueNamePair pp = VLogger.RetrieveError();
@@ -2742,10 +2742,10 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                                                sLine.GetM_Locator_ID(), GetM_Warehouse_ID(),
-                                                                sLine.GetM_Product_ID(),
-                                                                sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                    if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                                                sLine.GetVAM_Locator_ID(), GetVAM_Warehouse_ID(),
+                                                                sLine.GetVAM_Product_ID(),
+                                                                sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                                                 Qty, QtySO, QtyPO, Get_TrxName()))
                                     {
                                         ValueNamePair pp = VLogger.RetrieveError();
@@ -2759,10 +2759,10 @@ namespace VAdvantage.Model
                             }
                             else if (VAPOS_POSTerminal_ID > 0)
                             {
-                                if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                sLine.GetM_Locator_ID(),
-                                sLine.GetM_Product_ID(),
-                                sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                                if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                sLine.GetVAM_Locator_ID(),
+                                sLine.GetVAM_Product_ID(),
+                                sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                 Qty, QtySO, QtyPO, Get_TrxName()))
                                 {
                                     ValueNamePair pp = VLogger.RetrieveError();
@@ -2776,10 +2776,10 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (!MStorage.Add(GetCtx(), GetM_Warehouse_ID(),
-                                sLine.GetM_Locator_ID(),
-                                sLine.GetM_Product_ID(),
-                                sLine.GetM_AttributeSetInstance_ID(), reservationAttributeSetInstance_ID,
+                            if (!MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(),
+                                sLine.GetVAM_Locator_ID(),
+                                sLine.GetVAM_Product_ID(),
+                                sLine.GetVAM_PFeature_SetInstance_ID(), reservationAttributeSetInstance_ID,
                                 Qty, QtySO, QtyPO, Get_TrxName()))
                             {
                                 ValueNamePair pp = VLogger.RetrieveError();
@@ -2793,28 +2793,28 @@ namespace VAdvantage.Model
 
                         // Get Current Qty from Transaction
                         sql.Clear();
-                        sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS CurrentQty FROM m_transaction t 
-                            INNER JOIN M_Locator l ON t.M_Locator_ID = l.M_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.M_Locator_ID = " + sLine.GetM_Locator_ID() +
-                           " AND t.M_Product_ID = " + sLine.GetM_Product_ID() + " AND NVL(t.M_AttributeSetInstance_ID,0) = " + sLine.GetM_AttributeSetInstance_ID());
+                        sql.Append(@"SELECT DISTINCT FIRST_VALUE(t.CurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS CurrentQty FROM VAM_Inv_Trx t 
+                            INNER JOIN VAM_Locator l ON t.VAM_Locator_ID = l.VAM_Locator_ID WHERE t.MovementDate <= " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
+                               " AND t.VAF_Client_ID = " + GetVAF_Client_ID() + " AND t.VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() +
+                           " AND t.VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND NVL(t.VAM_PFeature_SetInstance_ID,0) = " + sLine.GetVAM_PFeature_SetInstance_ID());
                         trxQty = Util.GetValueOfDecimal(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
 
-                        if (isContainrApplicable && sLine.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                        if (isContainrApplicable && sLine.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                         {
                             // get Container qty from transaction
                             containerCurrentQty = GetContainerQtyFromTransaction(sLine, GetMovementDate());
                         }
 
                         //	FallBack: Create Transaction
-                        mtrx = new MTransaction(GetCtx(), sLine.GetVAF_Org_ID(), MovementType, sLine.GetM_Locator_ID(),
-                            sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(),
+                        mtrx = new MTransaction(GetCtx(), sLine.GetVAF_Org_ID(), MovementType, sLine.GetVAM_Locator_ID(),
+                            sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(),
                             Qty, GetMovementDate(), Get_TrxName());
-                        mtrx.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+                        mtrx.SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
                         mtrx.SetCurrentQty(trxQty + Qty);
-                        if (isContainrApplicable && mtrx.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                        if (isContainrApplicable && mtrx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                         {
                             // Update Product Container on Transaction
-                            mtrx.SetM_ProductContainer_ID(sLine.GetM_ProductContainer_ID());
+                            mtrx.SetVAM_ProductContainer_ID(sLine.GetVAM_ProductContainer_ID());
                             // update containr Current Qty 
                             mtrx.SetContainerCurrentQty(containerCurrentQty + Qty);
                         }
@@ -2829,7 +2829,7 @@ namespace VAdvantage.Model
                         }
 
                         //Update Transaction for Current Quantity
-                        if (isContainrApplicable && mtrx.Get_ColumnIndex("M_ProductContainer_ID") >= 0)
+                        if (isContainrApplicable && mtrx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0)
                         {
                             String errorMessage = UpdateTransactionContainer(sLine, mtrx, Qty + trxQty.Value);
                             if (!String.IsNullOrEmpty(errorMessage))
@@ -2884,7 +2884,7 @@ namespace VAdvantage.Model
                     if (!IsReturnTrx())
                     {
                         if (IsSOTrx()							//	PO is done by Matching
-                                || sLine.GetM_Product_ID() == 0)	//	PO Charges, empty lines
+                                || sLine.GetVAM_Product_ID() == 0)	//	PO Charges, empty lines
                         {
                             if (IsSOTrx())
                                 oLine.SetQtyDelivered(Decimal.Subtract(oLine.GetQtyDelivered(), Qty));
@@ -2897,7 +2897,7 @@ namespace VAdvantage.Model
                     {
                         MVABOrderLine origOrderLine = new MVABOrderLine(GetCtx(), oLine.GetOrig_OrderLine_ID(), Get_TrxName());
                         if (IsSOTrx()							//	PO is done by Matching
-                                || sLine.GetM_Product_ID() == 0)	//	PO Charges, empty lines
+                                || sLine.GetVAM_Product_ID() == 0)	//	PO Charges, empty lines
                         {
                             if (IsSOTrx())
                             {
@@ -3011,21 +3011,21 @@ namespace VAdvantage.Model
                 List<MMatchInv> matchedInvoice = new List<MMatchInv>();
                 //	Matching
                 if (!IsSOTrx()
-                    && sLine.GetM_Product_ID() != 0
+                    && sLine.GetVAM_Product_ID() != 0
                     && !IsReversal())
                 {
                     Decimal matchQty = sLine.GetMovementQty();
                     //	Invoice - Receipt Match (requires Product)
                     MInvoiceLine iLine = MInvoiceLine.GetOfInOutLine(sLine);
 
-                    if (iLine != null && iLine.GetM_Product_ID() != 0)
+                    if (iLine != null && iLine.GetVAM_Product_ID() != 0)
                     {
                         if (matchQty.CompareTo(iLine.GetQtyInvoiced()) > 0)
                             matchQty = iLine.GetQtyInvoiced();
 
                         // JID_0209: Need to set the correct qty on ‘Matched Receipts/Invoice’. System should set minimum qty of MR and invoice, whichever is lower. on match receipt
 
-                        decimal alreadyMatchedQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM M_MatchInv WHERE VAB_InvoiceLine_ID = " + iLine.GetVAB_InvoiceLine_ID(), null, Get_Trx()));
+                        decimal alreadyMatchedQty = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(QTY) FROM VAM_MatchInvoice WHERE VAB_InvoiceLine_ID = " + iLine.GetVAB_InvoiceLine_ID(), null, Get_Trx()));
 
                         if ((alreadyMatchedQty + matchQty) > iLine.GetQtyInvoiced())
                         {
@@ -3033,15 +3033,15 @@ namespace VAdvantage.Model
                         }
 
                         MMatchInv[] matches = MMatchInv.Get(GetCtx(),
-                            sLine.GetM_InOutLine_ID(), iLine.GetVAB_InvoiceLine_ID(), Get_TrxName());
+                            sLine.GetVAM_Inv_InOutLine_ID(), iLine.GetVAB_InvoiceLine_ID(), Get_TrxName());
                         if (matches == null || matches.Length == 0)
                         {
                             MMatchInv inv = new MMatchInv(iLine, GetMovementDate(), matchQty);
-                            if (sLine.GetM_AttributeSetInstance_ID() != iLine.GetM_AttributeSetInstance_ID())
+                            if (sLine.GetVAM_PFeature_SetInstance_ID() != iLine.GetVAM_PFeature_SetInstance_ID())
                             {
-                                iLine.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+                                iLine.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
                                 iLine.Save();	//	update matched invoice with ASI
-                                inv.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+                                inv.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
                             }
                             try
                             {
@@ -3081,9 +3081,9 @@ namespace VAdvantage.Model
                             return DocActionVariables.STATUS_INVALID;
                         }
                         //	Update PO with ASI                      Commented by Bharat
-                        //if (oLine != null && oLine.GetM_AttributeSetInstance_ID() == 0)
+                        //if (oLine != null && oLine.GetVAM_PFeature_SetInstance_ID() == 0)
                         //{
-                        //    oLine.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+                        //    oLine.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
                         //    oLine.Save(Get_TrxName());
                         //}
                     }
@@ -3108,9 +3108,9 @@ namespace VAdvantage.Model
                             }
                             //	Update PO with ASI                   Commented by Bharat
                             //oLine = new MOrderLine(GetCtx(), po.GetVAB_OrderLine_ID(), Get_TrxName());
-                            //if (oLine != null && oLine.GetM_AttributeSetInstance_ID() == 0)
+                            //if (oLine != null && oLine.GetVAM_PFeature_SetInstance_ID() == 0)
                             //{
-                            //    oLine.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+                            //    oLine.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
                             //    oLine.Save(Get_TrxName());
                             //}
                         }
@@ -3122,15 +3122,15 @@ namespace VAdvantage.Model
                 {
                     if (!IsSOTrx() && !IsReturnTrx() && sLine.GetVAB_OrderLine_ID() > 0) // for MR against PO
                     {
-                        MProduct product1 = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
-                        MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
+                        MProduct product1 = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_Trx());
+                        MVABOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         MVABOrder order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
-                        if (product1 != null && product1.GetProductType() == "I" && product1.GetM_Product_ID() > 0) // for Item Type product
+                        if (product1 != null && product1.GetProductType() == "I" && product1.GetVAM_Product_ID() > 0) // for Item Type product
                         {
                             //if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
                             //{
                             //    Get_Trx().Rollback();
-                            //    log.Severe("Error occured during updating/inserting M_Cost_ForeignCurrency against Average PO.");
+                            //    log.Severe("Error occured during updating/inserting VAM_ProductCost_ForeignCurrency against Average PO.");
                             //    _processMsg = "Could not update Foreign Currency Cost";
                             //    return DocActionVariables.STATUS_INVALID;
                             //}
@@ -3147,7 +3147,7 @@ namespace VAdvantage.Model
                     bool isCostAdjustableOnLost = false;
                     int count = 0;
 
-                    productCQ = new MProduct(GetCtx(), sLine.GetM_Product_ID(), Get_Trx());
+                    productCQ = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_Trx());
                     if (productCQ.GetProductType() == "I") // for Item Type product
                     {
                         //if (GetReversalDoc_ID() > 0 || (GetDescription() != null && GetDescription().Contains("RC")))
@@ -3156,25 +3156,25 @@ namespace VAdvantage.Model
                         //}
                         //else
                         //{
-                        // get price from m_cost (Current Cost Price)
+                        // get price from VAM_ProductCost (Current Cost Price)
                         currentCostPrice = 0;
                         if ((!IsSOTrx() && IsReturnTrx()) || (IsSOTrx() && !IsReturnTrx())) // Return to vendor / Shipment
                         {
                             currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                                sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
+                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
                         }
                         else // Material Receipt / Customer Return
                         {
                             currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                               sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                         }
-                        DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = " + currentCostPrice +
-                                                          @" WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                        DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = " + currentCostPrice +
+                                                          @" WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                         //sLine.SetCurrentCostPrice(currentCostPrice);
                         //if (!sLine.Save(Get_Trx()))
                         //{
                         //    ValueNamePair pp = VLogger.RetrieveError();
-                        //    _log.Info("Error found for Material Receipt for this Line ID = " + sLine.GetM_InOutLine_ID() +
+                        //    _log.Info("Error found for Material Receipt for this Line ID = " + sLine.GetVAM_Inv_InOutLine_ID() +
                         //               " Error Name is " + pp.GetName());
                         //}
                         //}
@@ -3183,11 +3183,11 @@ namespace VAdvantage.Model
                         orderLine = new MVABOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         if (!IsSOTrx() && !IsReturnTrx()) // Material Receipt
                         {
-                            bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), productCQ.GetM_Product_ID(), Get_Trx());
+                            bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), productCQ.GetVAM_Product_ID(), Get_Trx());
                             if (orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)  // MR without PO
                             {
                                 #region MR without PO
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                     "Material Receipt", null, sLine, null, null, null, 0, sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
                                     if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3203,12 +3203,12 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                                                                             sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                             sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
+                                    DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                       @" END , IsCostImmediate = 'Y' , 
                                                      PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                      @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
-                                                WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                                 }
                                 #endregion
                             }
@@ -3218,7 +3218,7 @@ namespace VAdvantage.Model
                                 // check IsCostAdjustmentOnLost exist on product 
                                 sql.Clear();
                                 sql.Append(@"SELECT COUNT(*) FROM VAF_Column WHERE IsActive = 'Y' AND 
-                                       VAF_TableView_ID =  ( SELECT VAF_TableView_ID FROM VAF_TableView WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
+                                       VAF_TableView_ID =  ( SELECT VAF_TableView_ID FROM VAF_TableView WHERE IsActive = 'Y' AND TableName LIKE 'VAM_Product' ) 
                                         AND ColumnName LIKE 'IsCostAdjustmentOnLost' ");
                                 count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
 
@@ -3258,7 +3258,7 @@ namespace VAdvantage.Model
                                     amt = Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered());
                                 }
 
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                    "Material Receipt", null, sLine, null, null, null, amt,
                                    sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3275,12 +3275,12 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                                                                             sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                             sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
+                                    DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' ,
                                                       PostCurrentCostPrice = CASE WHEN 1 = " + (isUpdatePostCurrentcostPriceFromMR ? 1 : 0) +
                                                       @" THEN " + currentCostPrice + @" ELSE PostCurrentCostPrice END 
-                                                    WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                                                    WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
 
                                     // calculate cost of Invoice if invoice created before this MR
                                     if (matchedInvoice.Count > 0)
@@ -3297,16 +3297,16 @@ namespace VAdvantage.Model
                                             {
                                                 // get cost from Product Cost before cost calculation
                                                 currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                                                                   matchedInvoice[mi].GetM_Product_ID(), matchedInvoice[mi].GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                                DB.ExecuteQuery("UPDATE M_MatchInv SET CurrentCostPrice = " + currentCostPrice +
-                                                                 @" WHERE M_MatchInv_ID = " + matchedInvoice[mi].GetM_MatchInv_ID(), null, Get_Trx());
+                                                                   matchedInvoice[mi].GetVAM_Product_ID(), matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
+                                                DB.ExecuteQuery("UPDATE VAM_MatchInvoice SET CurrentCostPrice = " + currentCostPrice +
+                                                                 @" WHERE VAM_MatchInvoice_ID = " + matchedInvoice[mi].GetVAM_MatchInvoice_ID(), null, Get_Trx());
 
                                             }
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetVAB_InvoiceLine_ID(), Get_Trx());
                                             Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
-                                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetM_AttributeSetInstance_ID(),
+                                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
                                                   count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
                                                 matchedInvoice[mi].GetQty(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
@@ -3325,7 +3325,7 @@ namespace VAdvantage.Model
                                                 {
                                                     // get cost from Product Cost after cost calculation
                                                     currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                                                                     matchedInvoice[mi].GetM_Product_ID(), matchedInvoice[mi].GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
+                                                                     matchedInvoice[mi].GetVAM_Product_ID(), matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                                     matchedInvoice[mi].SetPostCurrentCostPrice(currentCostPrice);
                                                 }
                                                 matchedInvoice[mi].SetIsCostImmediate(true);
@@ -3334,8 +3334,8 @@ namespace VAdvantage.Model
                                                 // update the Post current price after Invoice receving on inoutline
                                                 if (!isUpdatePostCurrentcostPriceFromMR)
                                                 {
-                                                    DB.ExecuteQuery("UPDATE M_InoutLine SET PostCurrentCostPrice =  " + currentCostPrice +
-                                                                     @"  WHERE M_InoutLine_ID = " + matchedInvoice[mi].GetM_InOutLine_ID(), null, Get_Trx());
+                                                    DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET PostCurrentCostPrice =  " + currentCostPrice +
+                                                                     @"  WHERE VAM_Inv_InOutLine_ID = " + matchedInvoice[mi].GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                                                 }
                                             }
                                         }
@@ -3358,7 +3358,7 @@ namespace VAdvantage.Model
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
 
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                   "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
                                   sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
@@ -3375,9 +3375,9 @@ namespace VAdvantage.Model
                             else
                             {
                                 currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID(), false);
-                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                     @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                               sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
+                                DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                     @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                             }
                             #endregion
                         }
@@ -3393,7 +3393,7 @@ namespace VAdvantage.Model
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
 
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                   "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
                                  Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
@@ -3410,9 +3410,9 @@ namespace VAdvantage.Model
                             else
                             {
                                 currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                     @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                               sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
+                                DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                     @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                             }
                             #endregion
                         }
@@ -3421,7 +3421,7 @@ namespace VAdvantage.Model
                             if (GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)
                             {
                                 #region Return To Vendor -- without order refernce
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                "Return To Vendor", null, sLine, null, null, null, 0, Decimal.Negate(sLine.GetMovementQty()), Get_Trx(),
                                 out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3438,9 +3438,9 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                      @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                               sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
+                                    DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                      @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                                     //sLine.SetIsCostImmediate(true);
                                     //sLine.Save();
                                 }
@@ -3458,7 +3458,7 @@ namespace VAdvantage.Model
                                 // check IsCostAdjustmentOnLost exist on product 
                                 sql.Clear();
                                 sql.Append(@"SELECT COUNT(*) FROM VAF_Column WHERE IsActive = 'Y' AND 
-                                       VAF_TableView_ID =  ( SELECT VAF_TableView_ID FROM VAF_TableView WHERE IsActive = 'Y' AND TableName LIKE 'M_Product' ) 
+                                       VAF_TableView_ID =  ( SELECT VAF_TableView_ID FROM VAF_TableView WHERE IsActive = 'Y' AND TableName LIKE 'VAM_Product' ) 
                                        AND ColumnName LIKE 'IsCostAdjustmentOnLost' ");
                                 count = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
 
@@ -3492,7 +3492,7 @@ namespace VAdvantage.Model
                                     amt = Decimal.Multiply(ProductOrderPriceActual, Decimal.Negate(sLine.GetQtyEntered()));
                                 }
 
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetM_AttributeSetInstance_ID(),
+                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                     "Return To Vendor", null, sLine, null, null, null, amt,
                                     Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3509,9 +3509,9 @@ namespace VAdvantage.Model
                                 else
                                 {
                                     currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
-                               sLine.GetM_Product_ID(), sLine.GetM_AttributeSetInstance_ID(), Get_Trx(), GetM_Warehouse_ID());
-                                    DB.ExecuteQuery("UPDATE M_InoutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
-                                                                     @" END , IsCostImmediate = 'Y' WHERE M_InoutLine_ID = " + sLine.GetM_InOutLine_ID(), null, Get_Trx());
+                               sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
+                                    DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
+                                                                     @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
                                     //sLine.SetIsCostImmediate(true);
                                     //sLine.Save();
                                 }
@@ -3528,7 +3528,7 @@ namespace VAdvantage.Model
                 {
                     //	Create Asset during receiving
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
-                    if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                    if (product != null && product.GetProductType() == X_VAM_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
                        && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0)
                     {
                         log.Fine("Asset");
@@ -3590,15 +3590,15 @@ namespace VAdvantage.Model
                     // shipment Or Return To Vendor
                     try
                     {
-                        if (sLine.GetM_Product_ID() > 0 &&
+                        if (sLine.GetVAM_Product_ID() > 0 &&
                             ((IsSOTrx() && !IsReturnTrx()) || (!IsSOTrx() && IsReturnTrx())))
                         {
                             sql.Clear();
                             sql.Append(@"SELECT * FROM va024_t_obsoleteinventory
                                      WHERE vaf_client_id    = " + GetVAF_Client_ID() + " AND vaf_org_id = " + GetVAF_Org_ID() +
-                                     "   AND M_Product_ID = " + sLine.GetM_Product_ID() +
-                                       " AND NVL(M_AttributeSetInstance_ID , 0) = " + sLine.GetM_AttributeSetInstance_ID());
-                            //" AND M_Warehouse_Id = " + GetM_Warehouse_ID();
+                                     "   AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() +
+                                       " AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + sLine.GetVAM_PFeature_SetInstance_ID());
+                            //" AND VAM_Warehouse_Id = " + GetVAM_Warehouse_ID();
                             if (GetDescription() != null && !GetDescription().Contains("{->"))
                             {
                                 sql.Append(" AND va024_isdelivered = 'N' ");
@@ -3738,12 +3738,12 @@ namespace VAdvantage.Model
                                     if (Util.GetValueOfString(po.Get_Value("VA026_ReceievedIssue")) == "I")
                                     {
                                         po.Set_Value("VA026_ReceiptDate", GetDateAcct());
-                                        po.Set_Value("M_InOut_ID", GetM_InOut_ID());
+                                        po.Set_Value("VAM_Inv_InOut_ID", GetVAM_Inv_InOut_ID());
                                     }
                                     else if (Util.GetValueOfString(po.Get_Value("VA026_ReceievedIssue")) == "R")
                                     {
                                         po.Set_Value("VA026_ShipmentDate", GetDateAcct());
-                                        po.Set_Value("Va026_InOut_ID", GetM_InOut_ID());
+                                        po.Set_Value("Va026_InOut_ID", GetVAM_Inv_InOut_ID());
                                     }
                                     if (!po.Save(Get_Trx()))
                                     {
@@ -3782,9 +3782,9 @@ namespace VAdvantage.Model
             {
                 if (!IsSOTrx() && !IsReturnTrx()) // for MR against PO
                 {
-                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + GetM_InOut_ID(), null, Get_Trx())) <= 0)
+                    if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_InOutLine WHERE IsFutureCostCalculated = 'N' AND VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID(), null, Get_Trx())) <= 0)
                     {
-                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + GetM_InOut_ID(), null, Get_Trx()));
+                        int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VAM_Inv_InOut Set IsFutureCostCalculated = 'Y' WHERE VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID(), null, Get_Trx()));
                     }
                 }
             }
@@ -3796,7 +3796,7 @@ namespace VAdvantage.Model
             {
                 MInOut counter = CreateCounterDoc();
                 if (counter != null)
-                    Info.Append(" - @CounterDoc@: @M_InOut_ID@=").Append(counter.GetDocumentNo());
+                    Info.Append(" - @CounterDoc@: @VAM_Inv_InOut_ID@=").Append(counter.GetDocumentNo());
             }
             catch (Exception e)
             {
@@ -3860,13 +3860,13 @@ namespace VAdvantage.Model
                         MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         MVABOrder ref_order = new MVABOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
                         MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
-                                    true, false, GetM_Warehouse_ID(), GetMovementDate(), Get_Trx());
+                                    true, false, GetVAM_Warehouse_ID(), GetMovementDate(), Get_Trx());
                         if (ret_Shipment.CompleteIt() == "CO")
                         {
-                            ret_Shipment.SetRef_ShipMR_ID(GetM_InOut_ID());
+                            ret_Shipment.SetRef_ShipMR_ID(GetVAM_Inv_InOut_ID());
                             ret_Shipment.SetDocStatus(DOCACTION_Complete);
                             ret_Shipment.Save(Get_Trx());
-                            SetRef_ShipMR_ID(ret_Shipment.GetM_InOut_ID());
+                            SetRef_ShipMR_ID(ret_Shipment.GetVAM_Inv_InOut_ID());
                             _processMsg = "Shipment Generated :" + ret_Shipment.GetDocumentNo();
                         }
                     }
@@ -3936,7 +3936,7 @@ namespace VAdvantage.Model
         private void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
             int Org_ID, MCostElement ce, decimal movementQty)
         {
-            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetM_AttributeSetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
+            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
             MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
             if (cQueue != null && cQueue.Length > 0)
             {
@@ -3961,7 +3961,7 @@ namespace VAdvantage.Model
                     //    if (!queue.Save())
                     //    {
                     //        ValueNamePair pp = VLogger.RetrieveError();
-                    //        log.Info("Cost Queue not updated for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                    //        log.Info("Cost Queue not updated for  <===> " + product.GetVAM_Product_ID() + " Error Type is : " + pp.GetName());
                     //    }
                     //}
                     if (qty <= 0)
@@ -3975,7 +3975,7 @@ namespace VAdvantage.Model
                         if (!queue.Save())
                         {
                             ValueNamePair pp = VLogger.RetrieveError();
-                            log.Info("Cost Queue not updated for  <===> " + product.GetM_Product_ID() + " Error Type is : " + pp.GetName());
+                            log.Info("Cost Queue not updated for  <===> " + product.GetVAM_Product_ID() + " Error Type is : " + pp.GetName());
                         }
                     }
                     if (value)
@@ -3995,11 +3995,11 @@ namespace VAdvantage.Model
         private String UpdateTransactionContainer(MInOutLine sLine, MTransaction mtrx, decimal Qty)
         {
             string errorMessage = null;
-            MProduct pro = new MProduct(Env.GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+            MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
             MTransaction trx = null;
             MInventoryLine inventoryLine = null;
             MInventory inventory = null;
-            int attribSet_ID = pro.GetM_AttributeSet_ID();
+            int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
             DataSet ds = new DataSet();
             Decimal containerCurrentQty = mtrx.GetContainerCurrentQty();
@@ -4007,17 +4007,17 @@ namespace VAdvantage.Model
             {
                 if (attribSet_ID > 0)
                 {
-                    sql = @"SELECT M_AttributeSetInstance_ID ,  M_Locator_ID ,  M_Product_ID ,  movementqty ,  currentqty , NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty  ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , m_transaction_id ,  MovementType , M_InventoryLine_ID
-                              FROM m_transaction WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
-                              + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + sLine.GetM_AttributeSetInstance_ID()
-                              + " ORDER BY movementdate ASC , m_transaction_id ASC, created ASC";
+                    sql = @"SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty , NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty  ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID
+                              FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
+                              + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + sLine.GetVAM_PFeature_SetInstance_ID()
+                              + " ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC, created ASC";
                 }
                 else
                 {
-                    sql = @"SELECT M_AttributeSetInstance_ID ,  M_Locator_ID ,  M_Product_ID ,  movementqty ,  currentqty, NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , m_transaction_id ,  MovementType , M_InventoryLine_ID
-                              FROM m_transaction WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
-                              + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = 0 "
-                              + " ORDER BY movementdate ASC , m_transaction_id ASC , created ASC";
+                    sql = @"SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty, NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID
+                              FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
+                              + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = 0 "
+                              + " ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC , created ASC";
                 }
                 ds = DB.ExecuteDataset(sql, null, Get_TrxName());
                 if (ds.Tables.Count > 0)
@@ -4028,21 +4028,21 @@ namespace VAdvantage.Model
                         for (i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
-                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
+                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                 if (!inventory.IsInternalUse())
                                 {
                                     #region update Physical Inventory
-                                    if (inventoryLine.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
+                                    if (inventoryLine.GetVAM_ProductContainer_ID() == sLine.GetVAM_ProductContainer_ID())
                                     {
                                         inventoryLine.SetQtyBook(containerCurrentQty);
                                         inventoryLine.SetOpeningStock(containerCurrentQty);
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"])));
                                         if (!inventoryLine.Save())
                                         {
-                                            log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]));
+                                            log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]));
                                             Get_TrxName().Rollback();
                                             ValueNamePair pp = VLogger.RetrieveError();
                                             if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
@@ -4059,8 +4059,8 @@ namespace VAdvantage.Model
                                     #endregion
 
                                     #region Update Transaction
-                                    trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]), Get_TrxName());
-                                    if (trx.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
+                                    trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]), Get_TrxName());
+                                    if (trx.GetVAM_ProductContainer_ID() == sLine.GetVAM_ProductContainer_ID())
                                     {
                                         trx.SetMovementQty(Decimal.Negate(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["ContainerCurrentQty"]))));
                                     }
@@ -4070,7 +4070,7 @@ namespace VAdvantage.Model
                                     }
                                     if (!trx.Save())
                                     {
-                                        log.Info("Movement Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]));
+                                        log.Info("Movement Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]));
                                         Get_TrxName().Rollback();
                                         ValueNamePair pp = VLogger.RetrieveError();
                                         if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
@@ -4086,7 +4086,7 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         Qty = trx.GetCurrentQty();
-                                        if (sLine.Get_ColumnIndex("M_ProductContainer_ID") >= 0 && trx.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
+                                        if (sLine.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0 && trx.GetVAM_ProductContainer_ID() == sLine.GetVAM_ProductContainer_ID())
                                             containerCurrentQty = trx.GetContainerCurrentQty();
                                     }
                                     #endregion
@@ -4094,12 +4094,12 @@ namespace VAdvantage.Model
                                     #region update Storage if last record of loop
                                     if (i == ds.Tables[0].Rows.Count - 1)
                                     {
-                                        MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                        MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                         if (storage == null)
                                         {
-                                            storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                            storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                         }
                                         if (storage.GetQtyOnHand() != Qty)
                                         {
@@ -4127,13 +4127,13 @@ namespace VAdvantage.Model
                             }
 
                             #region Update Transaction
-                            trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]), Get_TrxName());
+                            trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]), Get_TrxName());
                             trx.SetCurrentQty(Qty + trx.GetMovementQty());
-                            if (trx.Get_ColumnIndex("M_ProductContainer_ID") >= 0 && trx.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
+                            if (trx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0 && trx.GetVAM_ProductContainer_ID() == sLine.GetVAM_ProductContainer_ID())
                                 trx.SetContainerCurrentQty(containerCurrentQty + trx.GetMovementQty());
                             if (!trx.Save())
                             {
-                                log.Info("Current Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]));
+                                log.Info("Current Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]));
                                 Get_TrxName().Rollback();
                                 ValueNamePair pp = VLogger.RetrieveError();
                                 if (pp != null && !String.IsNullOrEmpty(pp.GetName()))
@@ -4149,7 +4149,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 Qty = trx.GetCurrentQty();
-                                if (trx.Get_ColumnIndex("M_ProductContainer_ID") >= 0 && trx.GetM_ProductContainer_ID() == sLine.GetM_ProductContainer_ID())
+                                if (trx.Get_ColumnIndex("VAM_ProductContainer_ID") >= 0 && trx.GetVAM_ProductContainer_ID() == sLine.GetVAM_ProductContainer_ID())
                                     containerCurrentQty = trx.GetContainerCurrentQty();
                             }
                             #endregion
@@ -4157,12 +4157,12 @@ namespace VAdvantage.Model
                             #region update Storage if last record of loop
                             if (i == ds.Tables[0].Rows.Count - 1)
                             {
-                                MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                 if (storage == null)
                                 {
-                                    storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                             Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                    storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                             Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                 }
                                 if (storage.GetQtyOnHand() != Qty)
                                 {
@@ -4211,30 +4211,30 @@ namespace VAdvantage.Model
         /// <param name="Qty"></param>
         private void UpdateTransaction(MInOutLine sLine, MTransaction mtrx, decimal Qty)
         {
-            MProduct pro = new MProduct(Env.GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
+            MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
             MTransaction trx = null;
             MInventoryLine inventoryLine = null;
             MInventory inventory = null;
-            int attribSet_ID = pro.GetM_AttributeSet_ID();
+            int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
             DataSet ds = new DataSet();
             try
             {
                 if (attribSet_ID > 0)
                 {
-                    //sql = "UPDATE M_Transaction SET CurrentQty = MovementQty + " + Qty + " WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true) + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + sLine.GetM_AttributeSetInstance_ID();
-                    sql = @"SELECT M_AttributeSetInstance_ID ,  M_Locator_ID ,  M_Product_ID ,  movementqty ,  currentqty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , m_transaction_id ,  MovementType , M_InventoryLine_ID
-                              FROM m_transaction WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
-                              + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + sLine.GetM_AttributeSetInstance_ID()
-                              + " ORDER BY movementdate ASC , m_transaction_id ASC, created ASC";
+                    //sql = "UPDATE VAM_Inv_Trx SET CurrentQty = MovementQty + " + Qty + " WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true) + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + sLine.GetVAM_PFeature_SetInstance_ID();
+                    sql = @"SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID
+                              FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
+                              + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + sLine.GetVAM_PFeature_SetInstance_ID()
+                              + " ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC, created ASC";
                 }
                 else
                 {
-                    //sql = "UPDATE M_Transaction SET CurrentQty = MovementQty + " + Qty + " WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true) + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = 0 ";
-                    sql = @"SELECT M_AttributeSetInstance_ID ,  M_Locator_ID ,  M_Product_ID ,  movementqty ,  currentqty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , m_transaction_id ,  MovementType , M_InventoryLine_ID
-                              FROM m_transaction WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
-                              + " AND M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = 0 "
-                              + " ORDER BY movementdate ASC , m_transaction_id ASC , created ASC";
+                    //sql = "UPDATE VAM_Inv_Trx SET CurrentQty = MovementQty + " + Qty + " WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true) + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = 0 ";
+                    sql = @"SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID
+                              FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1), true)
+                              + " AND VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = 0 "
+                              + " ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC , created ASC";
                 }
                 //int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_TrxName()));
                 ds = DB.ExecuteDataset(sql, null, Get_TrxName());
@@ -4246,10 +4246,10 @@ namespace VAdvantage.Model
                         for (i = 0; i < ds.Tables[0].Rows.Count; i++)
                         {
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
-                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
+                                 Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                 if (!inventory.IsInternalUse())
                                 {
                                     //break;
@@ -4258,14 +4258,14 @@ namespace VAdvantage.Model
                                     inventoryLine.SetDifferenceQty(Decimal.Subtract(Qty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"])));
                                     if (!inventoryLine.Save())
                                     {
-                                        log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_InventoryLine_ID"]));
+                                        log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]));
                                     }
 
-                                    trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]), Get_TrxName());
+                                    trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]), Get_TrxName());
                                     trx.SetMovementQty(Decimal.Negate(Decimal.Subtract(Qty, Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["currentqty"]))));
                                     if (!trx.Save())
                                     {
-                                        log.Info("Movement Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]));
+                                        log.Info("Movement Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]));
                                     }
                                     else
                                     {
@@ -4273,12 +4273,12 @@ namespace VAdvantage.Model
                                     }
                                     if (i == ds.Tables[0].Rows.Count - 1)
                                     {
-                                        MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                        MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                         if (storage == null)
                                         {
-                                            storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                            storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                         }
                                         if (storage.GetQtyOnHand() != Qty)
                                         {
@@ -4289,11 +4289,11 @@ namespace VAdvantage.Model
                                     continue;
                                 }
                             }
-                            trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]), Get_TrxName());
+                            trx = new MTransaction(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]), Get_TrxName());
                             trx.SetCurrentQty(Qty + trx.GetMovementQty());
                             if (!trx.Save())
                             {
-                                log.Info("Current Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_transaction_id"]));
+                                log.Info("Current Quantity Not Updated at Transaction Tab for this ID" + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_Trx_id"]));
                             }
                             else
                             {
@@ -4301,12 +4301,12 @@ namespace VAdvantage.Model
                             }
                             if (i == ds.Tables[0].Rows.Count - 1)
                             {
-                                MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                MStorage storage = MStorage.Get(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                 if (storage == null)
                                 {
-                                    storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Locator_ID"]),
-                                                             Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), Get_TrxName());
+                                    storage = MStorage.GetCreate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Locator_ID"]),
+                                                             Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]), Get_TrxName());
                                 }
                                 if (storage.GetQtyOnHand() != Qty)
                                 {
@@ -4331,27 +4331,27 @@ namespace VAdvantage.Model
 
         private void UpdateCurrentRecord(MInOutLine line, MTransaction trxM, decimal qtyDiffer)
         {
-            MProduct pro = new MProduct(Env.GetCtx(), line.GetM_Product_ID(), Get_TrxName());
-            int attribSet_ID = pro.GetM_AttributeSet_ID();
+            MProduct pro = new MProduct(Env.GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
+            int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
 
             try
             {
                 if (attribSet_ID > 0)
                 {
-                    sql = @"SELECT Count(*) from M_Transaction  WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID();
+                    sql = @"SELECT Count(*) from VAM_Inv_Trx  WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID();
                     int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (count > 0)
                     {
-                        sql = @"SELECT count(*)  FROM m_transaction tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
-                     tr.m_product_id =" + line.GetM_Product_ID() + "  and tr.m_locator_ID=" + line.GetM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from m_transaction where
-                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and m_product_id =" + line.GetM_Product_ID() + "  and m_locator_ID=" + line.GetM_Locator_ID() + " )order by m_transaction_id desc";
+                        sql = @"SELECT count(*)  FROM VAM_Inv_Trx tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
+                     tr.VAM_Product_id =" + line.GetVAM_Product_ID() + "  and tr.VAM_Locator_ID=" + line.GetVAM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from VAM_Inv_Trx where
+                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and VAM_Product_id =" + line.GetVAM_Product_ID() + "  and VAM_Locator_ID=" + line.GetVAM_Locator_ID() + " )order by VAM_Inv_Trx_id desc";
                         int recordcount = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                         if (recordcount > 0)
                         {
-                            sql = @"SELECT tr.currentqty  FROM m_transaction tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
-                     tr.m_product_id =" + line.GetM_Product_ID() + "  and tr.m_locator_ID=" + line.GetM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from m_transaction where
-                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and m_product_id =" + line.GetM_Product_ID() + " and m_locator_ID=" + line.GetM_Locator_ID() + ") order by m_transaction_id desc";
+                            sql = @"SELECT tr.currentqty  FROM VAM_Inv_Trx tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
+                     tr.VAM_Product_id =" + line.GetVAM_Product_ID() + "  and tr.VAM_Locator_ID=" + line.GetVAM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from VAM_Inv_Trx where
+                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and VAM_Product_id =" + line.GetVAM_Product_ID() + " and VAM_Locator_ID=" + line.GetVAM_Locator_ID() + ") order by VAM_Inv_Trx_id desc";
 
                             Decimal? quantity = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                             trxM.SetCurrentQty(Util.GetValueOfDecimal(Decimal.Add(Util.GetValueOfDecimal(quantity), Util.GetValueOfDecimal(qtyDiffer))));
@@ -4372,24 +4372,24 @@ namespace VAdvantage.Model
 
                     }
 
-                    //sql = "UPDATE M_Transaction SET CurrentQty = CurrentQty + " + qtyDiffer + " WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID()
-                    //     + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID();
+                    //sql = "UPDATE VAM_Inv_Trx SET CurrentQty = CurrentQty + " + qtyDiffer + " WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID()
+                    //     + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID();
                 }
                 else
                 {
-                    sql = @"SELECT Count(*) from M_Transaction  WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID();
+                    sql = @"SELECT Count(*) from VAM_Inv_Trx  WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID();
                     int count = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (count > 0)
                     {
-                        sql = @"SELECT count(*)  FROM m_transaction tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
-                     tr.m_product_id =" + line.GetM_Product_ID() + "  and tr.m_locator_ID=" + line.GetM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from m_transaction where
-                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and m_product_id =" + line.GetM_Product_ID() + "  and m_locator_ID=" + line.GetM_Locator_ID() + " )order by m_transaction_id desc";
+                        sql = @"SELECT count(*)  FROM VAM_Inv_Trx tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
+                     tr.VAM_Product_id =" + line.GetVAM_Product_ID() + "  and tr.VAM_Locator_ID=" + line.GetVAM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from VAM_Inv_Trx where
+                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and VAM_Product_id =" + line.GetVAM_Product_ID() + "  and VAM_Locator_ID=" + line.GetVAM_Locator_ID() + " )order by VAM_Inv_Trx_id desc";
                         int recordcount = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                         if (recordcount > 0)
                         {
-                            sql = @"SELECT tr.currentqty  FROM m_transaction tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
-                     tr.m_product_id =" + line.GetM_Product_ID() + "  and tr.m_locator_ID=" + line.GetM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from m_transaction where
-                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and m_product_id =" + line.GetM_Product_ID() + " and m_locator_ID=" + line.GetM_Locator_ID() + ") order by m_transaction_id desc";
+                            sql = @"SELECT tr.currentqty  FROM VAM_Inv_Trx tr  WHERE tr.movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + @" and
+                     tr.VAM_Product_id =" + line.GetVAM_Product_ID() + "  and tr.VAM_Locator_ID=" + line.GetVAM_Locator_ID() + @" and tr.movementdate in (select max(movementdate) from VAM_Inv_Trx where
+                     movementdate<=" + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " and VAM_Product_id =" + line.GetVAM_Product_ID() + " and VAM_Locator_ID=" + line.GetVAM_Locator_ID() + ") order by VAM_Inv_Trx_id desc";
 
                             Decimal? quantity = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                             trxM.SetCurrentQty(Util.GetValueOfDecimal(Decimal.Add(Util.GetValueOfDecimal(quantity), Util.GetValueOfDecimal(qtyDiffer))));
@@ -4409,7 +4409,7 @@ namespace VAdvantage.Model
                         //trxM.SetCurrentQty(
 
                     }
-                    //sql = "UPDATE M_Transaction SET CurrentQty = CurrentQty + " + qtyDiffer + " WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID();
+                    //sql = "UPDATE VAM_Inv_Trx SET CurrentQty = CurrentQty + " + qtyDiffer + " WHERE MovementDate > " + GlobalVariable.TO_DATE(trxM.GetMovementDate(), true) + " AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID();
                 }
 
                 // int countUpd = Util.GetValueOfInt(DB.ExecuteQuery(sql, null, Get_TrxName()));
@@ -4428,18 +4428,18 @@ namespace VAdvantage.Model
         private decimal? GetProductQtyFromStorage(MInOutLine sLine)
         {
             return 0;
-            //    MProduct pro = new MProduct(Env.GetCtx(), sLine.GetM_Product_ID(), Get_TrxName());
-            //    int attribSet_ID = pro.GetM_AttributeSet_ID();
+            //    MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
+            //    int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             //    string sql = "";
 
             //    if (attribSet_ID > 0)
             //    {
-            //        sql = @"SELECT SUM(qtyonhand) FROM M_Storage WHERE M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID()
-            //             + " AND M_AttributeSetInstance_ID = " + sLine.GetM_AttributeSetInstance_ID();
+            //        sql = @"SELECT SUM(qtyonhand) FROM VAM_Storage WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID()
+            //             + " AND VAM_PFeature_SetInstance_ID = " + sLine.GetVAM_PFeature_SetInstance_ID();
             //    }
             //    else
             //    {
-            //        sql = @"SELECT SUM(qtyonhand) FROM M_Storage WHERE M_Product_ID = " + sLine.GetM_Product_ID() + " AND M_Locator_ID = " + sLine.GetM_Locator_ID();
+            //        sql = @"SELECT SUM(qtyonhand) FROM VAM_Storage WHERE VAM_Product_ID = " + sLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + sLine.GetVAM_Locator_ID();
             //    }
             //    return Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
         }
@@ -4456,48 +4456,48 @@ namespace VAdvantage.Model
             decimal result = 0;
             string sql = "";
 
-            if (isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM m_transaction WHERE movementdate = " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID(), null, Get_Trx())) > 0)
+            if (isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate = " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID(), null, Get_Trx())) > 0)
             {
-                sql = @"SELECT currentqty FROM m_transaction WHERE m_transaction_id =
-                        (SELECT MAX(m_transaction_id)   FROM m_transaction
-                          WHERE movementdate =     (SELECT MAX(movementdate) FROM m_transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID() + @")
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID() + @")
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID();
+                sql = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_id =
+                        (SELECT MAX(VAM_Inv_Trx_id)   FROM VAM_Inv_Trx
+                          WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate <= " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID() + @")
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID() + @")
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID();
                 result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
-            else if (isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM m_transaction WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID(), null, Get_Trx())) > 0)
+            else if (isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID(), null, Get_Trx())) > 0)
             {
-                sql = @"SELECT currentqty FROM m_transaction WHERE m_transaction_id =
-                        (SELECT MAX(m_transaction_id)   FROM m_transaction
-                          WHERE movementdate =     (SELECT MAX(movementdate) FROM m_transaction WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID() + @")
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID() + @")
-                           AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + line.GetM_AttributeSetInstance_ID();
+                sql = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_id =
+                        (SELECT MAX(VAM_Inv_Trx_id)   FROM VAM_Inv_Trx
+                          WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID() + @")
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID() + @")
+                           AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + line.GetVAM_PFeature_SetInstance_ID();
                 result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
-            else if (!isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM m_transaction WHERE movementdate = " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                                   AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = 0 ", null, Get_Trx())) > 0)
+            else if (!isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate = " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                                   AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = 0 ", null, Get_Trx())) > 0)
             {
-                sql = @"SELECT currentqty FROM m_transaction WHERE m_transaction_id =
-                        (SELECT MAX(m_transaction_id )   FROM m_transaction
-                          WHERE movementdate =     (SELECT MAX(movementdate) FROM m_transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(movementDate, true) + @"
-                          AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) " + @")
-                          AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) " + @")
-                          AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) ";
+                sql = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_id =
+                        (SELECT MAX(VAM_Inv_Trx_id )   FROM VAM_Inv_Trx
+                          WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate <= " + GlobalVariable.TO_DATE(movementDate, true) + @"
+                          AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) " + @")
+                          AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) " + @")
+                          AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) ";
                 result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
-            else if (!isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM m_transaction WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
-                                      AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = 0 ", null, Get_Trx())) > 0)
+            else if (!isAttribute && Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @" 
+                                      AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = 0 ", null, Get_Trx())) > 0)
             {
-                sql = @"SELECT currentqty FROM m_transaction WHERE m_transaction_id =
-                        (SELECT MAX(m_transaction_id)   FROM m_transaction
-                          WHERE movementdate =     (SELECT MAX(movementdate) FROM m_transaction WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @"
-                          AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) " + @")
-                          AND  M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) " + @")
-                          AND M_Product_ID = " + line.GetM_Product_ID() + " AND M_Locator_ID = " + line.GetM_Locator_ID() + " AND ( M_AttributeSetInstance_ID = 0 OR M_AttributeSetInstance_ID IS NULL ) ";
+                sql = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_id =
+                        (SELECT MAX(VAM_Inv_Trx_id)   FROM VAM_Inv_Trx
+                          WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(movementDate, true) + @"
+                          AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) " + @")
+                          AND  VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) " + @")
+                          AND VAM_Product_ID = " + line.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() + " AND ( VAM_PFeature_SetInstance_ID = 0 OR VAM_PFeature_SetInstance_ID IS NULL ) ";
                 result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_TrxName()));
             }
             return result;
@@ -4512,13 +4512,13 @@ namespace VAdvantage.Model
         private Decimal? GetContainerQtyFromTransaction(MInOutLine line, DateTime? movementDate)
         {
             Decimal result = 0;
-            string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.M_Product_ID, t.M_AttributeSetInstance_ID ORDER BY t.MovementDate DESC, t.M_Transaction_ID DESC) AS ContainerCurrentQty                           FROM M_Transaction t
+            string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS ContainerCurrentQty                           FROM VAM_Inv_Trx t
                            WHERE t.MovementDate <=" + GlobalVariable.TO_DATE(movementDate, true) + @" 
                            AND t.VAF_Client_ID                       = " + line.GetVAF_Client_ID() + @"
-                           AND t.M_Locator_ID                       = " + line.GetM_Locator_ID() + @"
-                           AND t.M_Product_ID                       = " + line.GetM_Product_ID() + @"
-                           AND NVL(t.M_AttributeSetInstance_ID , 0) = COALESCE(" + line.GetM_AttributeSetInstance_ID() + @",0)
-                           AND NVL(t.M_ProductContainer_ID, 0)              = " + line.GetM_ProductContainer_ID();
+                           AND t.VAM_Locator_ID                       = " + line.GetVAM_Locator_ID() + @"
+                           AND t.VAM_Product_ID                       = " + line.GetVAM_Product_ID() + @"
+                           AND NVL(t.VAM_PFeature_SetInstance_ID , 0) = COALESCE(" + line.GetVAM_PFeature_SetInstance_ID() + @",0)
+                           AND NVL(t.VAM_ProductContainer_ID, 0)              = " + line.GetVAM_ProductContainer_ID();
             result = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, Get_Trx()));
             return result;
         }
@@ -4529,7 +4529,7 @@ namespace VAdvantage.Model
         /// <param name="line">Sets line ASI</param>
         private void CheckMaterialPolicy(MInOutLine line)
         {
-            int no = MInOutLineMA.DeleteInOutLineMA(line.GetM_InOutLine_ID(), Get_TrxName());
+            int no = MInOutLineMA.DeleteInOutLineMA(line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             if (no > 0)
             {
                 log.Config("Delete old #" + no);
@@ -4537,12 +4537,12 @@ namespace VAdvantage.Model
 
             // check is any record available of physical Inventory after date Movement -
             // if available - then not to create Attribute Record - neither to take impacts on Container Storage
-            if (isContainrApplicable && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM M_ContainerStorage WHERE IsPhysicalInventory = 'Y'
+            if (isContainrApplicable && Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAM_ContainerStorage WHERE IsPhysicalInventory = 'Y'
                  AND MMPolicyDate > " + GlobalVariable.TO_DATE(GetMovementDate(), true) +
-                      @" AND M_Product_ID = " + line.GetM_Product_ID() +
-                      @" AND NVL(M_AttributeSetInstance_ID , 0) = " + line.GetM_AttributeSetInstance_ID() +
-                      @" AND M_Locator_ID = " + line.GetM_Locator_ID() +
-                      @" AND NVL(M_ProductContainer_ID , 0) = " + line.GetM_ProductContainer_ID(), null, Get_Trx())) > 0)
+                      @" AND VAM_Product_ID = " + line.GetVAM_Product_ID() +
+                      @" AND NVL(VAM_PFeature_SetInstance_ID , 0) = " + line.GetVAM_PFeature_SetInstance_ID() +
+                      @" AND VAM_Locator_ID = " + line.GetVAM_Locator_ID() +
+                      @" AND NVL(VAM_ProductContainer_ID , 0) = " + line.GetVAM_ProductContainer_ID(), null, Get_Trx())) > 0)
             {
                 return;
             }
@@ -4558,10 +4558,10 @@ namespace VAdvantage.Model
 
             //	Need to have Location
             if (product != null
-                && line.GetM_Locator_ID() == 0)
+                && line.GetVAM_Locator_ID() == 0)
             {
-                line.SetM_Warehouse_ID(GetM_Warehouse_ID());
-                line.SetM_Locator_ID(inTrx ? Env.ZERO : line.GetMovementQty());	//	default Locator
+                line.SetVAM_Warehouse_ID(GetVAM_Warehouse_ID());
+                line.SetVAM_Locator_ID(inTrx ? Env.ZERO : line.GetMovementQty());	//	default Locator
                 needSave = true;
             }
 
@@ -4580,7 +4580,7 @@ namespace VAdvantage.Model
                     //Allocate remaining qty.
                     if (qtyToReceive.CompareTo(Env.ZERO) > 0)
                     {
-                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetM_AttributeSetInstance_ID(), qtyToReceive, GetMovementDate());
+                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReceive, GetMovementDate());
                         if (!ma.Save(line.Get_Trx()))
                         {
                             // Handle exception
@@ -4621,7 +4621,7 @@ namespace VAdvantage.Model
                                         lineMAQty = qtyToReturn;
                                     }
 
-                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetM_AttributeSetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
+                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
                                     if (!ma.Save(line.Get_Trx()))
                                     {
                                         // Handle exception
@@ -4641,7 +4641,7 @@ namespace VAdvantage.Model
                         if (qtyToReturn.CompareTo(Env.ZERO) > 0)
                         {
                             //Use movement data for  Material policy if no linkage found to Shipment.
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetM_AttributeSetInstance_ID(), qtyToReturn, GetMovementDate());
+                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
                             if (ma.Save(line.Get_Trx()))
                             {
                                 // Handle exception
@@ -4678,7 +4678,7 @@ namespace VAdvantage.Model
                                         lineMAQty = qtyToReturn;
                                     }
 
-                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetM_AttributeSetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
+                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
                                     if (!ma.Save(line.Get_Trx()))
                                     {
                                         // Handle exception
@@ -4698,7 +4698,7 @@ namespace VAdvantage.Model
                         if (qtyToReturn.CompareTo(Env.ZERO) > 0)
                         {
                             //Use movement data for  Material policy if no linkage found to MR.
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetM_AttributeSetInstance_ID(), qtyToReturn, GetMovementDate());
+                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
                             if (ma.Save(line.Get_Trx()))
                             {
                                 // Handle exception
@@ -4722,7 +4722,7 @@ namespace VAdvantage.Model
                     dynamic[] storages = null;
 
                     // Is Used to get Material Policy
-                    MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+                    MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
                     String MMPolicy = pc.GetMMPolicy();
 
                     // Is used for handling Gurantee Date - In Case of ASI
@@ -4731,16 +4731,16 @@ namespace VAdvantage.Model
                     // Get Data from Container Storage based on Policy
                     if (isContainrApplicable)
                     {
-                        storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
-                      line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
-                      line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
+                        storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetVAM_Locator_ID(), line.GetVAM_ProductContainer_ID(),
+                      line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), product.GetVAM_PFeature_Set_ID(),
+                      line.GetVAM_PFeature_SetInstance_ID() == 0, (DateTime?)GetMovementDate(),
                       MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), false, Get_TrxName());
                     }
                     else
                     {
-                        storages = MStorage.GetWarehouse(GetCtx(), GetM_Warehouse_ID(), line.GetM_Product_ID(),
-                            line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
-                               line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
+                        storages = MStorage.GetWarehouse(GetCtx(), GetVAM_Warehouse_ID(), line.GetVAM_Product_ID(),
+                            line.GetVAM_PFeature_SetInstance_ID(), product.GetVAM_PFeature_Set_ID(),
+                               line.GetVAM_PFeature_SetInstance_ID() == 0, (DateTime?)GetMovementDate(),
                                MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), Get_TrxName());
                     }
 
@@ -4761,7 +4761,7 @@ namespace VAdvantage.Model
                         if ((isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()).CompareTo(qtyToDeliver) >= 0)
                         {
                             MInOutLineMA ma = MInOutLineMA.GetOrCreate(line,
-                                    storage.GetM_AttributeSetInstance_ID(),
+                                    storage.GetVAM_PFeature_SetInstance_ID(),
                                     GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver,
                                     isContainrApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
                             //ma.SetIsPhysicalInventory(storage.IsPhysicalInventory());
@@ -4780,7 +4780,7 @@ namespace VAdvantage.Model
                         {
                             log.Config("Split - " + line);
                             MInOutLineMA ma = MInOutLineMA.GetOrCreate(line,
-                                    storage.GetM_AttributeSetInstance_ID(),
+                                    storage.GetVAM_PFeature_SetInstance_ID(),
                                     GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ?
                                     Decimal.Negate(isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()) :
                                     (isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()),
@@ -4804,9 +4804,9 @@ namespace VAdvantage.Model
 
                         if (isContainrApplicable && ii == storages.Length - 1 && !MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy))
                         {
-                            storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
-                                         line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
-                                         line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
+                            storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetVAM_Locator_ID(), line.GetVAM_ProductContainer_ID(),
+                                         line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), product.GetVAM_PFeature_Set_ID(),
+                                         line.GetVAM_PFeature_SetInstance_ID() == 0, (DateTime?)GetMovementDate(),
                                          MVAFClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
                             ii = -1;
                         }
@@ -4816,9 +4816,9 @@ namespace VAdvantage.Model
                     //{
                     //    isLifoChecked = true;
                     //    // Get Data from Container Storage based on Policy
-                    //    storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetM_Locator_ID(), line.GetM_ProductContainer_ID(),
-                    //  line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), product.GetM_AttributeSet_ID(),
-                    //  line.GetM_AttributeSetInstance_ID() == 0, (DateTime?)GetMovementDate(),
+                    //    storages = MProductContainer.GetContainerStorage(GetCtx(), 0, line.GetVAM_Locator_ID(), line.GetVAM_ProductContainer_ID(),
+                    //  line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), product.GetVAM_PFeature_Set_ID(),
+                    //  line.GetVAM_PFeature_SetInstance_ID() == 0, (DateTime?)GetMovementDate(),
                     //  MClient.MMPOLICY_FiFo.Equals(MMPolicy), true, Get_TrxName());
                     //    goto LIFOManage;
                     //}
@@ -4827,7 +4827,7 @@ namespace VAdvantage.Model
                     if (qtyToDeliver != 0)
                     {
                         //Over Delivery
-                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetM_AttributeSetInstance_ID(),
+                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(),
                             GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver, GetMovementDate());
                         if (!ma.Save(line.Get_Trx()))
                         {
@@ -4860,18 +4860,18 @@ namespace VAdvantage.Model
         protected Decimal autoBalanceNegative(MInOutLine line, MProduct product, Decimal qtyToReceive)
         {
             // Is Used to get Material Policy
-            MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetM_Product_Category_ID());
+            MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
 
             // Is Used to get all Negative records from Contaner Storage
-            X_M_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetM_Warehouse_ID(), line.GetM_Locator_ID(),
-                                              line.GetM_ProductContainer_ID(), line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+            X_VAM_ContainerStorage[] storages = MProductContainer.GetContainerStorageNegative(GetCtx(), GetVAM_Warehouse_ID(), line.GetVAM_Locator_ID(),
+                                              line.GetVAM_ProductContainer_ID(), line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                     null, MVAFClient.MMPOLICY_FiFo.Equals(pc.GetMMPolicy()), Get_Trx());
 
             DateTime? dateMPolicy = null;
 
             for (int ii = 0; ii < storages.Length; ii++)
             {
-                X_M_ContainerStorage storage = storages[ii];
+                X_VAM_ContainerStorage storage = storages[ii];
                 if (storage.GetQty() < 0 && qtyToReceive.CompareTo(Env.ZERO) > 0)
                 {
                     dateMPolicy = storage.GetMMPolicyDate();
@@ -4880,7 +4880,7 @@ namespace VAdvantage.Model
                         lineMAQty = Decimal.Negate(storage.GetQty());
 
                     //Using ASI from storage record
-                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, storage.GetM_AttributeSetInstance_ID(), lineMAQty, dateMPolicy);
+                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, storage.GetVAM_PFeature_SetInstance_ID(), lineMAQty, dateMPolicy);
                     //ma.SetIsPhysicalInventory(storage.IsPhysicalInventory());
                     if (!ma.Save(line.Get_Trx()))
                     {
@@ -4945,9 +4945,9 @@ namespace VAdvantage.Model
             // when we reverse document, and if counter document is created agaisnt its orignal document then need to reverse that document also
             if (Get_ColumnIndex("ReversalDoc_ID") > 0 && GetReversalDoc_ID() > 0)
             {
-                int counterOrderId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Ref_InOut_ID FROM M_InOut WHERE M_InOut_ID = " + GetReversalDoc_ID(), null, Get_Trx()));
+                int counterOrderId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Ref_InOut_ID FROM VAM_Inv_InOut WHERE VAM_Inv_InOut_ID = " + GetReversalDoc_ID(), null, Get_Trx()));
                 MInOut counterReversed = new MInOut(GetCtx(), counterOrderId, Get_Trx());
-                if (counterReversed != null && counterReversed.GetM_InOut_ID() > 0)
+                if (counterReversed != null && counterReversed.GetVAM_Inv_InOut_ID() > 0)
                 {
                     counterReversed.SetDocAction(DOCACTION_Void);
                     counterReversed.ProcessIt(DOCACTION_Void);
@@ -4963,7 +4963,7 @@ namespace VAdvantage.Model
 
             //
             counter.SetVAF_Org_ID(counterVAF_Org_ID);
-            counter.SetM_Warehouse_ID(counterOrgInfo.GetM_Warehouse_ID());
+            counter.SetVAM_Warehouse_ID(counterOrgInfo.GetVAM_Warehouse_ID());
             //
             counter.SetBPartner(counterBP);
             //	Refernces (Should not be required
@@ -4994,20 +4994,20 @@ namespace VAdvantage.Model
             {
                 MInOutLine counterLine = counterLines[i];
                 counterLine.SetClientOrg(counter);
-                counterLine.SetM_Warehouse_ID(counter.GetM_Warehouse_ID());
-                counterLine.SetM_Locator_ID(0);
+                counterLine.SetVAM_Warehouse_ID(counter.GetVAM_Warehouse_ID());
+                counterLine.SetVAM_Locator_ID(0);
                 int locatorId = 0;
                 if (!inTrx)
                 {
-                    locatorId = MStorage.GetM_Locator_ID(counter.GetM_Warehouse_ID(), counterLine.GetM_Product_ID(), counterLine.GetM_AttributeSetInstance_ID(),
+                    locatorId = MStorage.GetVAM_Locator_ID(counter.GetVAM_Warehouse_ID(), counterLine.GetVAM_Product_ID(), counterLine.GetVAM_PFeature_SetInstance_ID(),
                                                             counterLine.GetMovementQty(), Get_TrxName());
                 }
                 else
                 {
-                    locatorId = MWarehouse.Get(GetCtx(), counter.GetM_Warehouse_ID()).GetDefaultM_Locator_ID();
+                    locatorId = MWarehouse.Get(GetCtx(), counter.GetVAM_Warehouse_ID()).GetDefaultVAM_Locator_ID();
                 }
-                //counterLine.SetM_Locator_ID(Convert.ToInt32(inTrx ? Env.ZERO : counterLine.GetMovementQty()));
-                counterLine.SetM_Locator_ID(locatorId);
+                //counterLine.SetVAM_Locator_ID(Convert.ToInt32(inTrx ? Env.ZERO : counterLine.GetMovementQty()));
+                counterLine.SetVAM_Locator_ID(locatorId);
                 //
                 counterLine.Save(Get_TrxName());
             }
@@ -5065,7 +5065,7 @@ namespace VAdvantage.Model
                         line.Save(Get_TrxName());
                         //if (countVA038 > 0)
                         //{
-                        //    Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAA_Asset_ID FROM VAA_Asset WHERE M_INOUTLINE_ID=" + line.GetM_InOutLine_ID()));
+                        //    Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAA_Asset_ID FROM VAA_Asset WHERE VAM_Inv_InOutLine_ID=" + line.GetVAM_Inv_InOutLine_ID()));
                         //    if (Asset_ID > 0)
                         //    {
                         //        MAsset Asset = new MAsset(GetCtx(), Asset_ID, Get_TrxName());
@@ -5169,7 +5169,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                if (!linkedDocumentAgainstInOut(GetM_InOut_ID()))
+                if (!linkedDocumentAgainstInOut(GetVAM_Inv_InOut_ID()))
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "LinkedDocStatus");
                     return false;
@@ -5201,17 +5201,17 @@ namespace VAdvantage.Model
             //	Reverse/Delete Matching
             if (!IsSOTrx())
             {
-                MMatchInv[] mInv = MMatchInv.GetInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+                MMatchInv[] mInv = MMatchInv.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
                 for (int i = 0; i < mInv.Length; i++)
                     mInv[i].Delete(true);
-                MMatchPO[] mPO = MMatchPO.GetInOut(GetCtx(), GetM_InOut_ID(), Get_TrxName());
+                MMatchPO[] mPO = MMatchPO.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetVAB_InvoiceLine_ID() == 0)
                         mPO[i].Delete(true);
                     else
                     {
-                        mPO[i].SetM_InOutLine_ID(0);
+                        mPO[i].SetVAM_Inv_InOutLine_ID(0);
                         mPO[i].Save();
                     }
                 }
@@ -5226,7 +5226,7 @@ namespace VAdvantage.Model
             }
             if (reversal.Get_ColumnIndex("ReversalDoc_ID") > 0)
             {
-                reversal.SetReversalDoc_ID(GetM_InOut_ID());
+                reversal.SetReversalDoc_ID(GetVAM_Inv_InOut_ID());
             }
             if (reversal.Get_ColumnIndex("IsReversal") > 0)
             {
@@ -5263,7 +5263,7 @@ namespace VAdvantage.Model
                 MInOutLine rLine = rLines[i];
                 //rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
                 //rLine.SetMovementQty(Decimal.Negate(rLine.GetMovementQty()));
-                rLine.SetM_AttributeSetInstance_ID(sLines[i].GetM_AttributeSetInstance_ID());
+                rLine.SetVAM_PFeature_SetInstance_ID(sLines[i].GetVAM_PFeature_SetInstance_ID());
                 if (rLine.Get_ColumnIndex("IsFutureCostCalculated") > 0)
                 {
                     rLine.SetIsFutureCostCalculated(false);
@@ -5281,7 +5281,7 @@ namespace VAdvantage.Model
                 MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
-                    MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetM_AttributeSetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
+                    MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetVAM_PFeature_SetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
                     if (!ma.Save(rLine.Get_Trx()))
                     {
                         pp = VLogger.RetrieveError();
@@ -5294,7 +5294,7 @@ namespace VAdvantage.Model
                 }
                 //	De-Activate Asset 
 
-                List<MVAAsset> asset = MVAAsset.GetFromShipment(GetCtx(), sLines[i].GetM_InOutLine_ID(), Get_TrxName());
+                List<MVAAsset> asset = MVAAsset.GetFromShipment(GetCtx(), sLines[i].GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                 foreach (MVAAsset ass in asset)
                 {
                     ass.SetIsActive(false);
@@ -5341,9 +5341,9 @@ namespace VAdvantage.Model
                     MInOutConfirm confirm = confirmations[i];
                     if (confirm.GetDocStatus() == DOCSTATUS_Completed)
                     {
-                        if (confirm.GetM_Inventory_ID() > 0)
+                        if (confirm.GetVAM_Inventory_ID() > 0)
                         {   //For inventory reversal 
-                            MInventory _Inventory = new MInventory(GetCtx(), confirm.GetM_Inventory_ID(), Get_TrxName());
+                            MInventory _Inventory = new MInventory(GetCtx(), confirm.GetVAM_Inventory_ID(), Get_TrxName());
 
                             //JID_1163: If Internal Use is void and we try to void  Material Recipt System will void Material Recipt and Confirmation
                             if (_Inventory.GetDocStatus() != DOCSTATUS_Voided && _Inventory.GetDocStatus() != DOCSTATUS_Reversed)
@@ -5509,16 +5509,16 @@ namespace VAdvantage.Model
             return true;
         }
 
-        // checked M_Inout reference is available on VAB_Invoice then not to reverse this M_Inout
-        private bool linkedDocumentAgainstInOut(int M_Inout_ID)
+        // checked VAM_Inv_InOut reference is available on VAB_Invoice then not to reverse this VAM_Inv_InOut
+        private bool linkedDocumentAgainstInOut(int VAM_Inv_InOut_ID)
         {
             // JID_1310: At the time of void MR need to check if any RMA and Custmer/Vendor RMA has MR refrence. If found need to give message
             string sql = @"SELECT SUM(Result) From (
-                          SELECT COUNT(il.M_InOutLine_ID) AS Result FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
-                          WHERE il.M_InOutLine_ID = (SELECT M_InOutLine_ID FROM M_InOutLine mil WHERE mil.M_InOut_ID = " + M_Inout_ID + @"
-                          AND mil.M_InOutLine_ID = il.M_InOutLine_ID) AND il.IsActive = 'Y' AND i.DocStatus NOT IN ('RE' , 'VO')
+                          SELECT COUNT(il.VAM_Inv_InOutLine_ID) AS Result FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_ID = il.VAB_Invoice_ID
+                          WHERE il.VAM_Inv_InOutLine_ID = (SELECT VAM_Inv_InOutLine_ID FROM VAM_Inv_InOutLine mil WHERE mil.VAM_Inv_InOut_ID = " + VAM_Inv_InOut_ID + @"
+                          AND mil.VAM_Inv_InOutLine_ID = il.VAM_Inv_InOutLine_ID) AND il.IsActive = 'Y' AND i.DocStatus NOT IN ('RE' , 'VO')
                           UNION ALL
-                          SELECT COUNT(o.VAB_Order_ID) AS Result FROM VAB_Order o WHERE o.Orig_InOut_ID = " + M_Inout_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) t";
+                          SELECT COUNT(o.VAB_Order_ID) AS Result FROM VAB_Order o WHERE o.Orig_InOut_ID = " + VAM_Inv_InOut_ID + @" AND o.DocStatus NOT IN ('RE' , 'VO')) t";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
             {
                 return false;

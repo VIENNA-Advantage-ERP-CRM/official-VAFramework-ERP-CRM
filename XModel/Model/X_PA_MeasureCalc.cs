@@ -288,7 +288,7 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Column.
-@param ProductColumn Fully qualified Product column (M_Product_ID) */
+@param ProductColumn Fully qualified Product column (VAM_Product_ID) */
 public void SetProductColumn (String ProductColumn)
 {
 if (ProductColumn != null && ProductColumn.Length > 60)
@@ -299,7 +299,7 @@ ProductColumn = ProductColumn.Substring(0,60);
 Set_Value ("ProductColumn", ProductColumn);
 }
 /** Get Product Column.
-@return Fully qualified Product column (M_Product_ID) */
+@return Fully qualified Product column (VAM_Product_ID) */
 public String GetProductColumn() 
 {
 return (String)Get_Value("ProductColumn");

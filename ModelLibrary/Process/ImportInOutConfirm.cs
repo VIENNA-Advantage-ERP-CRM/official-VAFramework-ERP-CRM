@@ -99,8 +99,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String ts = DataBase.DB.IsPostgreSQL() ? "COALESCE(I_ErrorMsg,'')" : "I_ErrorMsg";  //java bug, it could not be used directly
             sql = new StringBuilder("UPDATE I_InOutLineConfirm i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Confirmation Line, '"
-                + "WHERE (M_InOutLineConfirm_ID IS NULL OR M_InOutLineConfirm_ID=0"
-                + " OR NOT EXISTS (SELECT * FROM M_InOutLineConfirm c WHERE i.M_InOutLineConfirm_ID=c.M_InOutLineConfirm_ID))"
+                + "WHERE (VAM_Inv_InOutLineConfirm_ID IS NULL OR VAM_Inv_InOutLineConfirm_ID=0"
+                + " OR NOT EXISTS (SELECT * FROM VAM_Inv_InOutLineConfirm c WHERE i.VAM_Inv_InOutLineConfirm_ID=c.VAM_Inv_InOutLineConfirm_ID))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -118,8 +118,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Qty
             sql = new StringBuilder("UPDATE I_InOutLineConfirm i "
                 + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Target<>(Confirmed+Difference+Scrapped), ' "
-                + "WHERE EXISTS (SELECT * FROM M_InOutLineConfirm c "
-                    + "WHERE i.M_InOutLineConfirm_ID=c.M_InOutLineConfirm_ID"
+                + "WHERE EXISTS (SELECT * FROM VAM_Inv_InOutLineConfirm c "
+                    + "WHERE i.VAM_Inv_InOutLineConfirm_ID=c.VAM_Inv_InOutLineConfirm_ID"
                     + " AND c.TargetQty<>(i.ConfirmedQty+i.ScrappedQty+i.DifferenceQty))"
                 + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
@@ -143,9 +143,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     X_I_InOutLineConfirm importLine = new X_I_InOutLineConfirm(GetCtx(), idr, Get_TrxName());
                     MInOutLineConfirm confirmLine = new MInOutLineConfirm(GetCtx(),
-                        importLine.GetM_InOutLineConfirm_ID(), Get_TrxName());
+                        importLine.GetVAM_Inv_InOutLineConfirm_ID(), Get_TrxName());
                     if (confirmLine.Get_ID() == 0
-                        || confirmLine.Get_ID() != importLine.GetM_InOutLineConfirm_ID())
+                        || confirmLine.Get_ID() != importLine.GetVAM_Inv_InOutLineConfirm_ID())
                     {
                         importLine.SetI_IsImported(X_I_InOutLineConfirm.I_ISIMPORTED_No);
                         importLine.SetI_ErrorMsg("ID Not Found");

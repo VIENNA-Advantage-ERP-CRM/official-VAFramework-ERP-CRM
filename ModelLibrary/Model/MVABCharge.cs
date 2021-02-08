@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MCharge
+ * Class Name     : MVABCharge
  * Purpose        : Charge Modle
  * Class Used     : X_VAB_Charge
  * Chronological    Development
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
          *  @param amount amount for expense(+)/revenue(-)
          *  @return Charge Account or null
          */
-        public static MAccount GetAccount(int VAB_Charge_ID, MVABAccountBook aSchema, Decimal amount)
+        public static MVABAccount GetAccount(int VAB_Charge_ID, MVABAccountBook aSchema, Decimal amount)
         {
             if (VAB_Charge_ID == 0 || aSchema == null)
                 return null;
@@ -93,35 +93,35 @@ namespace VAdvantage.Model
             }
 
             //	Return Account
-            MAccount acct = MAccount.Get(aSchema.GetCtx(), Account_ID);
+            MVABAccount acct = MVABAccount.Get(aSchema.GetCtx(), Account_ID);
             return acct;
 
 
         }   //  getAccount
 
         /**
-         * 	Get MCharge from Cache
+         * 	Get MVABCharge from Cache
          *	@param ctx context
          *	@param VAB_Charge_ID id
-         *	@return MCharge
+         *	@return MVABCharge
          */
-        public static MCharge Get(Ctx ctx, int VAB_Charge_ID)
+        public static MVABCharge Get(Ctx ctx, int VAB_Charge_ID)
         {
             int key = VAB_Charge_ID;
-            MCharge retValue = _cache[key];
+            MVABCharge retValue = _cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCharge(ctx, VAB_Charge_ID, null);
+            retValue = new MVABCharge(ctx, VAB_Charge_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         }	//	get
 
         /**	Cache						*/
-        private static CCache<int, MCharge> _cache = new CCache<int, MCharge>("VAB_Charge", 10);
+        private static CCache<int, MVABCharge> _cache = new CCache<int, MVABCharge>("VAB_Charge", 10);
 
         //	Static Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MCharge).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABCharge).FullName);
 
 
         /**************************************************************************
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
          *	@param VAB_Charge_ID id
          *	@param trxName transaction
          */
-        public MCharge(Ctx ctx, int VAB_Charge_ID, Trx trxName) :
+        public MVABCharge(Ctx ctx, int VAB_Charge_ID, Trx trxName) :
             base(ctx, VAB_Charge_ID, null)
         {
             //super (ctx, VAB_Charge_ID, null);
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
                 //	setName (null);
                 //	setVAB_TaxCategory_ID (0);
             }
-        }	//	MCharge
+        }	//	MVABCharge
 
         /**
          * 	Load Constructor
@@ -151,11 +151,11 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MCharge(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABCharge(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //super(ctx, dr, trxName);
-        }	//	MCharge
+        }	//	MVABCharge
 
         /**
          * 	After Save

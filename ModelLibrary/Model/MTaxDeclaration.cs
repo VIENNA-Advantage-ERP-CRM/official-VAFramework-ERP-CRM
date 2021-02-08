@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MTaxDeclaration
  * Purpose        : Tax Declaration Model
- * Class Used     : X_VAVAB_TaxRateComputation class
+ * Class Used     : X_VAB_TaxRateComputation class
  * Chronological    Development
  * Deepak           20-Nov-2009
   ******************************************************/
@@ -22,17 +22,17 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxDeclaration : X_VAVAB_TaxRateComputation
+    public class MTaxDeclaration : X_VAB_TaxRateComputation
     {
         /// <summary>
         /// Standard Constructors
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="VAVAB_TaxRateComputation_ID">id</param>
+        /// <param name="VAB_TaxRateComputation_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclaration(Ctx ctx, int VAVAB_TaxRateComputation_ID, Trx trxName): base(ctx, VAVAB_TaxRateComputation_ID, trxName)
+        public MTaxDeclaration(Ctx ctx, int VAB_TaxRateComputation_ID, Trx trxName): base(ctx, VAB_TaxRateComputation_ID, trxName)
         {
-           // super(ctx, VAVAB_TaxRateComputation_ID, trxName);
+           // super(ctx, VAB_TaxRateComputation_ID, trxName);
         }	//	MTaxDeclaration
 
         /// <summary>

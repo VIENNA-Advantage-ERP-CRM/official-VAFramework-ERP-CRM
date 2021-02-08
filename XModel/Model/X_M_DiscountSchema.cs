@@ -11,32 +11,32 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DiscountSchema
+/** Generated Model for VAM_DiscountCalculation
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DiscountSchema : PO
+public class X_VAM_DiscountCalculation : PO
 {
-public X_M_DiscountSchema (Context ctx, int M_DiscountSchema_ID, Trx trxName) : base (ctx, M_DiscountSchema_ID, trxName)
+public X_VAM_DiscountCalculation (Context ctx, int VAM_DiscountCalculation_ID, Trx trxName) : base (ctx, VAM_DiscountCalculation_ID, trxName)
 {
-/** if (M_DiscountSchema_ID == 0)
+/** if (VAM_DiscountCalculation_ID == 0)
 {
 SetDiscountType (null);
 SetIsBPartnerFlatDiscount (false);
 SetIsQuantityBased (true);	// Y
-SetM_DiscountSchema_ID (0);
+SetVAM_DiscountCalculation_ID (0);
 SetName (null);
 SetValidFrom (DateTime.Now);
 }
  */
 }
-public X_M_DiscountSchema (Ctx ctx, int M_DiscountSchema_ID, Trx trxName) : base (ctx, M_DiscountSchema_ID, trxName)
+public X_VAM_DiscountCalculation (Ctx ctx, int VAM_DiscountCalculation_ID, Trx trxName) : base (ctx, VAM_DiscountCalculation_ID, trxName)
 {
-/** if (M_DiscountSchema_ID == 0)
+/** if (VAM_DiscountCalculation_ID == 0)
 {
 SetDiscountType (null);
 SetIsBPartnerFlatDiscount (false);
 SetIsQuantityBased (true);	// Y
-SetM_DiscountSchema_ID (0);
+SetVAM_DiscountCalculation_ID (0);
 SetName (null);
 SetValidFrom (DateTime.Now);
 }
@@ -47,7 +47,7 @@ SetValidFrom (DateTime.Now);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DiscountCalculation (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_DiscountSchema (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DiscountCalculation (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_DiscountSchema (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchema (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_DiscountCalculation (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DiscountSchema()
+static X_VAM_DiscountCalculation()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389062294L;
 public static int Table_ID;
  // =475;
 
-/** TableName=M_DiscountSchema */
-public static String Table_Name="M_DiscountSchema";
+/** TableName=VAM_DiscountCalculation */
+public static String Table_Name="VAM_DiscountCalculation";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DiscountSchema[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_DiscountCalculation[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -261,17 +261,17 @@ if (oo != null)
 return false;
 }
 /** Set Discount Schema.
-@param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
-public void SetM_DiscountSchema_ID (int M_DiscountSchema_ID)
+@param VAM_DiscountCalculation_ID Schema to calculate price lists or the trade discount percentage */
+public void SetVAM_DiscountCalculation_ID (int VAM_DiscountCalculation_ID)
 {
-if (M_DiscountSchema_ID < 1) throw new ArgumentException ("M_DiscountSchema_ID is mandatory.");
-Set_ValueNoCheck ("M_DiscountSchema_ID", M_DiscountSchema_ID);
+if (VAM_DiscountCalculation_ID < 1) throw new ArgumentException ("VAM_DiscountCalculation_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DiscountCalculation_ID", VAM_DiscountCalculation_ID);
 }
 /** Get Discount Schema.
 @return Schema to calculate price lists or the trade discount percentage */
-public int GetM_DiscountSchema_ID() 
+public int GetVAM_DiscountCalculation_ID() 
 {
-Object ii = Get_Value("M_DiscountSchema_ID");
+Object ii = Get_Value("VAM_DiscountCalculation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

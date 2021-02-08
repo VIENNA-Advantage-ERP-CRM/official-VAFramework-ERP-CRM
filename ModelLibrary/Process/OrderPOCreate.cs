@@ -145,7 +145,7 @@ namespace VAdvantage.Process
                 if (_Vendor_ID != 0)
                 {
                     sql += " AND EXISTS (SELECT * FROM VAB_OrderLine ol"
-                        + " INNER JOIN M_Product_PO po ON (ol.M_Product_ID=po.M_Product_ID) "
+                        + " INNER JOIN VAM_Product_PO po ON (ol.VAM_Product_ID=po.VAM_Product_ID) "
                             + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID AND po.VAB_BusinessPartner_ID=" + _Vendor_ID + ")";
                 }
                 if (_DateOrdered_From != null && _DateOrdered_To != null)
@@ -229,14 +229,14 @@ namespace VAdvantage.Process
             //
             int counter = 0;
             //	Order Lines with a Product which has a current vendor 
-            sql.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, po.M_Product_ID ,ol.Isdropship, po.PriceList , po.PricePO , po.VAB_Currency_ID
-                FROM  M_Product_PO po
-                INNER JOIN M_Product prd ON po.M_Product_ID=prd.M_Product_ID
-                INNER JOIN VAB_OrderLine ol ON (po.M_Product_ID=ol.M_Product_ID ");       // changes done by bharat on 26 June 2018 If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
+            sql.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, po.VAM_Product_ID ,ol.Isdropship, po.PriceList , po.PricePO , po.VAB_Currency_ID
+                FROM  VAM_Product_PO po
+                INNER JOIN VAM_Product prd ON po.VAM_Product_ID=prd.VAM_Product_ID
+                INNER JOIN VAB_OrderLine ol ON (po.VAM_Product_ID=ol.VAM_Product_ID ");       // changes done by bharat on 26 June 2018 If purchased Checkbox is false on Finished Good Product, System should not generate Purchase Order.
 
-            sqlErrorMessage.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, bp.name AS BPName,  ol.M_Product_ID , p.Name,  ol.Isdropship,  po.VAB_Currency_ID,  bp.PO_PaymentTerm_ID,  bp.PO_PriceList_ID 
-                FROM  VAB_OrderLine ol INNER JOIN m_product p ON (p.M_Product_ID =ol.M_Product_ID)
-                LEFT JOIN M_Product_PO po ON (po.M_Product_ID=ol.M_Product_ID  AND po.isactive = 'Y' AND po.IsCurrentVendor = 'Y' )
+            sqlErrorMessage.Append(@"SELECT DISTINCT po.VAB_BusinessPartner_ID, bp.name AS BPName,  ol.VAM_Product_ID , p.Name,  ol.Isdropship,  po.VAB_Currency_ID,  bp.PO_PaymentTerm_ID,  bp.PO_PriceList_ID 
+                FROM  VAB_OrderLine ol INNER JOIN VAM_Product p ON (p.VAM_Product_ID =ol.VAM_Product_ID)
+                LEFT JOIN VAM_Product_PO po ON (po.VAM_Product_ID=ol.VAM_Product_ID  AND po.isactive = 'Y' AND po.IsCurrentVendor = 'Y' )
                 LEFT JOIN VAB_BusinessPartner bp ON (bp.VAB_BusinessPartner_id = po.VAB_BusinessPartner_id ");
 
             // Added by Vivek on  20/09/2017 Assigned By Pradeep for drop shipment
@@ -329,7 +329,7 @@ namespace VAdvantage.Process
 
                     _Dropship = Utility.Util.GetValueOfString(dr[2]);
                     //	Line
-                    int M_Product_ID = Utility.Util.GetValueOfInt(dr[1]);//.getInt(2);
+                    int VAM_Product_ID = Utility.Util.GetValueOfInt(dr[1]);//.getInt(2);
                     for (int i = 0; i < soLines.Length; i++)
                     {
                         // When Drop ship parameter is yes but SO line does not contains any drop shipment product
@@ -350,12 +350,12 @@ namespace VAdvantage.Process
                             {
                                 _Drop = "Y";
                             }
-                            if (soLines[i].GetM_Product_ID() == M_Product_ID && _Drop == _Dropship)
+                            if (soLines[i].GetVAM_Product_ID() == VAM_Product_ID && _Drop == _Dropship)
                             {
                                 MVABOrderLine poLine = new MVABOrderLine(po);
                                 poLine.SetRef_OrderLine_ID(soLines[i].GetVAB_OrderLine_ID());
-                                poLine.SetM_Product_ID(soLines[i].GetM_Product_ID());
-                                poLine.SetM_AttributeSetInstance_ID(soLines[i].GetM_AttributeSetInstance_ID());
+                                poLine.SetVAM_Product_ID(soLines[i].GetVAM_Product_ID());
+                                poLine.SetVAM_PFeature_SetInstance_ID(soLines[i].GetVAM_PFeature_SetInstance_ID());
                                 poLine.SetVAB_UOM_ID(soLines[i].GetVAB_UOM_ID());
                                 poLine.SetQtyEntered(soLines[i].GetQtyEntered());
                                 poLine.SetQtyOrdered(soLines[i].GetQtyOrdered());
@@ -378,8 +378,8 @@ namespace VAdvantage.Process
                                 //        consolidatePOLine = new ConsolidatePOLine();
                                 //        consolidatePOLine.VAB_Order_ID = poLine.GetVAB_Order_ID();
                                 //        consolidatePOLine.VAB_OrderLine_ID = poLine.GetVAB_OrderLine_ID();
-                                //        consolidatePOLine.M_Product_ID = poLine.GetM_Product_ID();
-                                //        consolidatePOLine.M_AttributeSetInstance_ID = poLine.GetM_AttributeSetInstance_ID();
+                                //        consolidatePOLine.VAM_Product_ID = poLine.GetVAM_Product_ID();
+                                //        consolidatePOLine.VAM_PFeature_SetInstance_ID = poLine.GetVAM_PFeature_SetInstance_ID();
                                 //        consolidatePOLine.VAB_UOM_ID = poLine.GetVAB_UOM_ID();
                                 //        consolidatePOLine.IsDropShip = soLines[i].IsDropShip() ? "Y" : "N";
                                 //        listConsolidatePOLine.Add(consolidatePOLine);
@@ -431,7 +431,7 @@ namespace VAdvantage.Process
             po.SetPriorityRule(so.GetPriorityRule());
             po.SetSalesRep_ID(so.GetSalesRep_ID());
             // Code Commented by Vivek Kumar on 20/09/2017 Assigned By Pradeep for drop shipment
-            //po.SetM_Warehouse_ID(so.GetM_Warehouse_ID());
+            //po.SetVAM_Warehouse_ID(so.GetVAM_Warehouse_ID());
             //	Set Vendor
             MVABBusinessPartner vendor = new MVABBusinessPartner(GetCtx(), VAB_BusinessPartner_ID, Get_TrxName());
             if (Env.IsModuleInstalled("VA009_"))
@@ -459,7 +459,7 @@ namespace VAdvantage.Process
             //JID_1252: If Vendor do not have Po Pricelist bind. System should give message.
             if (vendor.GetPO_PriceList_ID() > 0)
             {
-                po.SetM_PriceList_ID(vendor.GetPO_PriceList_ID());
+                po.SetVAM_PriceList_ID(vendor.GetPO_PriceList_ID());
             }
             else
             {
@@ -511,10 +511,10 @@ namespace VAdvantage.Process
                 po.SetIsDropShip(true);
                 po.SetShipToPartner_ID(so.GetVAB_BusinessPartner_ID());
                 po.SetShipToLocation_ID(so.GetVAB_BPart_Location_ID());
-                int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select M_WareHouse_ID From M_Warehouse Where VAF_Org_ID=" + so.GetVAF_Org_ID() + " AND Isdropship='Y' AND IsActive='Y'"));
+                int _Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAM_Warehouse_ID From VAM_Warehouse Where VAF_Org_ID=" + so.GetVAF_Org_ID() + " AND Isdropship='Y' AND IsActive='Y'"));
                 if (_Warehouse_ID >= 0)
                 {
-                    po.SetM_Warehouse_ID(_Warehouse_ID);
+                    po.SetVAM_Warehouse_ID(_Warehouse_ID);
                 }
             }
 
@@ -607,8 +607,8 @@ namespace VAdvantage.Process
     //{
     //    public int VAB_Order_ID { get; set; }
     //    public int VAB_OrderLine_ID { get; set; }
-    //    public int M_Product_ID { get; set; }
-    //    public int M_AttributeSetInstance_ID { get; set; }
+    //    public int VAM_Product_ID { get; set; }
+    //    public int VAM_PFeature_SetInstance_ID { get; set; }
     //    public int VAB_UOM_ID { get; set; }
     //    public string IsDropShip { get; set; }
     //}

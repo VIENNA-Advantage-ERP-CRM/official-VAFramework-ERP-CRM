@@ -24,7 +24,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //Delete Old Prices			
         private bool _deleteOld = false;
         // Price List Version			
-        private int _M_PriceList_Version_ID = 0;
+        private int _VAM_PriceListVersion_ID = 0;
         // Price List Version			
         private MPriceListVersion _plv = null;
 
@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     log.Log(Level.SEVERE, "Unknown Parameter: " + name);
                 }
             }
-            _M_PriceList_Version_ID = GetRecord_ID();
+            _VAM_PriceListVersion_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -59,12 +59,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("M_PriceList_Version_ID=" + _M_PriceList_Version_ID
+            log.Info("VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID
                     + ", DeleteOld=" + _deleteOld);
-            _plv = new MPriceListVersion(GetCtx(), _M_PriceList_Version_ID, Get_TrxName());
-            if (_plv.Get_ID() == 0 || _plv.Get_ID() != _M_PriceList_Version_ID)
+            _plv = new MPriceListVersion(GetCtx(), _VAM_PriceListVersion_ID, Get_TrxName());
+            if (_plv.Get_ID() == 0 || _plv.Get_ID() != _VAM_PriceListVersion_ID)
             {
-                throw new Exception("@NotFound@  @M_PriceList_Version_ID@=" + _M_PriceList_Version_ID);
+                throw new Exception("@NotFound@  @VAM_PriceListVersion_ID@=" + _VAM_PriceListVersion_ID);
             }
             //	
             String error = CheckPrerequisites();
@@ -84,35 +84,35 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             String clientWhere = " AND VAF_Client_ID=" + _plv.GetVAF_Client_ID();
 
             //	PO Prices must exists
-            int no = DataBase.DB.ExecuteQuery("UPDATE M_Product_PO SET PriceList = 0 WHERE PriceList IS NULL" + clientWhere, null, Get_TrxName());
-            no = DataBase.DB.ExecuteQuery("UPDATE M_Product_PO SET PriceLastPO = 0 WHERE PriceLastPO IS NULL" + clientWhere, null, Get_TrxName());
-            no = DataBase.DB.ExecuteQuery("UPDATE M_Product_PO SET PricePO = PriceLastPO "
+            int no = DataBase.DB.ExecuteQuery("UPDATE VAM_Product_PO SET PriceList = 0 WHERE PriceList IS NULL" + clientWhere, null, Get_TrxName());
+            no = DataBase.DB.ExecuteQuery("UPDATE VAM_Product_PO SET PriceLastPO = 0 WHERE PriceLastPO IS NULL" + clientWhere, null, Get_TrxName());
+            no = DataBase.DB.ExecuteQuery("UPDATE VAM_Product_PO SET PricePO = PriceLastPO "
                 + "WHERE (PricePO IS NULL OR PricePO = 0) AND PriceLastPO <> 0" + clientWhere, null,
                 Get_TrxName());
             no = DataBase.DB.ExecuteQuery(
-                "UPDATE	M_Product_PO SET PricePO = 0 WHERE PricePO IS NULL" + clientWhere, null,
+                "UPDATE	VAM_Product_PO SET PricePO = 0 WHERE PricePO IS NULL" + clientWhere, null,
                 Get_TrxName());
             //	Set default current vendor
             no = DataBase.DB.ExecuteQuery(
-                "UPDATE M_Product_PO p SET IsCurrentVendor = 'Y' "
+                "UPDATE VAM_Product_PO p SET IsCurrentVendor = 'Y' "
                 + "WHERE IsCurrentVendor = 'N'"
                 + " AND NOT EXISTS "
-                    + "(SELECT pp.M_Product_ID FROM M_Product_PO pp "
-                    + "WHERE pp.M_Product_ID=p.M_Product_ID "
-                    + "GROUP BY pp.M_Product_ID HAVING COUNT(*) > 1)" + clientWhere, null,
+                    + "(SELECT pp.VAM_Product_ID FROM VAM_Product_PO pp "
+                    + "WHERE pp.VAM_Product_ID=p.VAM_Product_ID "
+                    + "GROUP BY pp.VAM_Product_ID HAVING COUNT(*) > 1)" + clientWhere, null,
                 Get_TrxName());
 
             /**
              *	Make sure that we have only one active product vendor
              */
-            String sql = "SELECT * FROM M_Product_PO po "
+            String sql = "SELECT * FROM VAM_Product_PO po "
                 + "WHERE IsCurrentVendor='Y' AND IsActive='Y'"
                 + clientWhere
-                + " AND EXISTS (SELECT M_Product_ID FROM M_Product_PO x "
-                    + "WHERE x.M_Product_ID=po.M_Product_ID"
+                + " AND EXISTS (SELECT VAM_Product_ID FROM VAM_Product_PO x "
+                    + "WHERE x.VAM_Product_ID=po.VAM_Product_ID"
                     + " AND IsCurrentVendor='Y' AND IsActive='Y' "
-                    + "GROUP BY M_Product_ID HAVING COUNT(*) > 1) "
-                + "ORDER BY M_Product_ID, Created";
+                    + "GROUP BY VAM_Product_ID HAVING COUNT(*) > 1) "
+                + "ORDER BY VAM_Product_ID, Created";
 
             int success = 0;
             int errors = 0;
@@ -125,13 +125,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 dt = new DataTable();
                 dt.Load(idr);
                 idr.Close();
-                int M_Product_ID = 0;
+                int VAM_Product_ID = 0;
                 foreach (DataRow dr in dt.Rows)
                 {
                     MProductPO po = new MProductPO(GetCtx(), dr, Get_TrxName());
-                    if (M_Product_ID != po.GetM_Product_ID())
+                    if (VAM_Product_ID != po.GetVAM_Product_ID())
                     {
-                        M_Product_ID = po.GetM_Product_ID();
+                        VAM_Product_ID = po.GetVAM_Product_ID();
                         continue;
                     }
                     po.SetIsCurrentVendor(false);
@@ -177,21 +177,21 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (_deleteOld)
             {
                 int no = DataBase.DB.ExecuteQuery(
-                    "DELETE M_ProductPrice "
-                    + "WHERE M_PriceList_Version_ID=" + _M_PriceList_Version_ID, null,
+                    "DELETE VAM_ProductPrice "
+                    + "WHERE VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID, null,
                     Get_TrxName());
                 log.Info("Deleted=" + no);
                 info.Append("@Deleted@=").Append(no).Append(" - ");
             }
 
-            int M_Pricelist_Version_Base_ID = _plv.GetM_Pricelist_Version_Base_ID();
+            int VAM_PriceListVersion_Base_ID = _plv.GetVAM_PriceListVersion_Base_ID();
             MPriceList pl = _plv.GetPriceList();
             int curPrecision = pl.GetStandardPrecision();
 
             /**
              *	For All Discount Lines in Sequence
              */
-            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _plv.GetM_DiscountSchema_ID(), Get_TrxName());
+            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _plv.GetVAM_DiscountCalculation_ID(), Get_TrxName());
             MDiscountSchemaLine[] dsl = ds.GetLines(false);
             for (int i = 0; i < dsl.Length; i++)
             {
@@ -203,70 +203,70 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     message += " " + dd;
                 }
                 //	Clear Temporary Table
-                int noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAVAT_Selection", null, Get_TrxName());
+                int noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAT_Selection", null, Get_TrxName());
                 //	Create Selection in Temporary Table
                 String sql = null;
-                int M_DiscountSchemaLine_ID = dsLine.GetM_DiscountSchemaLine_ID();
-                int p2 = M_Pricelist_Version_Base_ID;
+                int VAM_PriceDiscount_ID = dsLine.GetVAM_PriceDiscount_ID();
+                int p2 = VAM_PriceListVersion_Base_ID;
                 if (p2 == 0)	//	Create from PO
                 {
                     p2 = dsLine.GetVAF_Client_ID();
-                    sql = "INSERT INTO VAVAT_Selection (VAT_Selection_ID) "
-                        + "SELECT DISTINCT po.M_Product_ID "
-                        + "FROM M_Product_PO po "
-                        + " INNER JOIN M_Product p ON (p.M_Product_ID=po.M_Product_ID)"
-                        + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#1
+                    sql = "INSERT INTO VAT_Selection (VAT_Selection_ID) "
+                        + "SELECT DISTINCT po.VAM_Product_ID "
+                        + "FROM VAM_Product_PO po "
+                        + " INNER JOIN VAM_Product p ON (p.VAM_Product_ID=po.VAM_Product_ID)"
+                        + " INNER JOIN VAM_PriceDiscount dl ON (dl.VAM_PriceDiscount_ID=" + VAM_PriceDiscount_ID + ") "	//	#1
                         + "WHERE p.VAF_Client_ID IN (" + p2 + ", 0)"		//	#2
                         + " AND p.IsActive='Y' AND po.IsActive='Y' AND po.IsCurrentVendor='Y'"
                         //	Optional Restrictions
-                        + " AND (dl.M_Product_Category_ID IS NULL OR p.M_Product_Category_ID=dl.M_Product_Category_ID)"
+                        + " AND (dl.VAM_ProductCategory_ID IS NULL OR p.VAM_ProductCategory_ID=dl.VAM_ProductCategory_ID)"
                         + " AND (dl.VAB_BusinessPartner_ID IS NULL OR po.VAB_BusinessPartner_ID=dl.VAB_BusinessPartner_ID)"
-                        + " AND (dl.M_Product_ID IS NULL OR p.M_Product_ID=dl.M_Product_ID)";
+                        + " AND (dl.VAM_Product_ID IS NULL OR p.VAM_Product_ID=dl.VAM_Product_ID)";
                 }
                 else			//	Create from Price List **
                 {
-                    sql = "INSERT INTO VAVAT_Selection (VAT_Selection_ID) "
-                        + "SELECT DISTINCT p.M_Product_ID "
-                        + "FROM M_ProductPrice pp"
-                        + " INNER JOIN M_Product p ON (p.M_Product_ID=pp.M_Product_ID)"
-                        + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#1
-                        + "WHERE pp.M_PriceList_Version_ID=" + p2	//#2 PriceList_Version_Base_ID
+                    sql = "INSERT INTO VAT_Selection (VAT_Selection_ID) "
+                        + "SELECT DISTINCT p.VAM_Product_ID "
+                        + "FROM VAM_ProductPrice pp"
+                        + " INNER JOIN VAM_Product p ON (p.VAM_Product_ID=pp.VAM_Product_ID)"
+                        + " INNER JOIN VAM_PriceDiscount dl ON (dl.VAM_PriceDiscount_ID=" + VAM_PriceDiscount_ID + ") "	//	#1
+                        + "WHERE pp.VAM_PriceListVersion_ID=" + p2	//#2 PriceList_Version_Base_ID
                         + " AND p.IsActive='Y' AND pp.IsActive='Y'"
                         //	Optional Restrictions
-                        + " AND (dl.M_Product_Category_ID IS NULL OR p.M_Product_Category_ID=dl.M_Product_Category_ID)"
+                        + " AND (dl.VAM_ProductCategory_ID IS NULL OR p.VAM_ProductCategory_ID=dl.VAM_ProductCategory_ID)"
                         + " AND (dl.VAB_BusinessPartner_ID IS NULL OR EXISTS "
-                            + "(SELECT * FROM M_Product_PO po "
-                            + "WHERE po.M_Product_ID=p.M_Product_ID AND po.VAB_BusinessPartner_ID=dl.VAB_BusinessPartner_ID))"
-                        + " AND (dl.M_Product_ID IS NULL OR p.M_Product_ID=dl.M_Product_ID)";
+                            + "(SELECT * FROM VAM_Product_PO po "
+                            + "WHERE po.VAM_Product_ID=p.VAM_Product_ID AND po.VAB_BusinessPartner_ID=dl.VAB_BusinessPartner_ID))"
+                        + " AND (dl.VAM_Product_ID IS NULL OR p.VAM_Product_ID=dl.VAM_Product_ID)";
                 }
                 //idr = DataBase.prepareStatement(sql, get_TrxName());
                 int noSelected = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                 message += ": @Selected@=" + noSelected;
                 //	Delete Prices in Selection, so that we can insert
-                if (M_Pricelist_Version_Base_ID == 0
-                    || M_Pricelist_Version_Base_ID != _M_PriceList_Version_ID)
+                if (VAM_PriceListVersion_Base_ID == 0
+                    || VAM_PriceListVersion_Base_ID != _VAM_PriceListVersion_ID)
                 {
-                    sql = "DELETE FROM M_ProductPrice pp "
-                        + "WHERE pp.M_PriceList_Version_ID=" + _M_PriceList_Version_ID
-                        + " AND EXISTS (SELECT * FROM VAVAT_Selection s WHERE pp.M_Product_ID=s.VAT_Selection_ID)";
+                    sql = "DELETE FROM VAM_ProductPrice pp "
+                        + "WHERE pp.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID
+                        + " AND EXISTS (SELECT * FROM VAT_Selection s WHERE pp.VAM_Product_ID=s.VAT_Selection_ID)";
                     noDeleted = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                     message += ", @Deleted@=" + noDeleted;
                 }
                 //	Copy (Insert) Prices
                 int noInserted = 0;
-                sql = "INSERT INTO M_ProductPrice "
-                    + "(M_PriceList_Version_ID, M_Product_ID,"
+                sql = "INSERT INTO VAM_ProductPrice "
+                    + "(VAM_PriceListVersion_ID, VAM_Product_ID,"
                     + " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
                     + " PriceList, PriceStd, PriceLimit) ";
                 //
-                if (M_Pricelist_Version_Base_ID == _M_PriceList_Version_ID)
+                if (VAM_PriceListVersion_Base_ID == _VAM_PriceListVersion_ID)
                 {
                     sql = null;	//	We have Prices already
                 }
-                else if (M_Pricelist_Version_Base_ID == 0)
+                else if (VAM_PriceListVersion_Base_ID == 0)
                 {
                     /**	Copy and Convert from Product_PO	*/
-                    sql += "SELECT plv.M_PriceList_Version_ID, po.M_Product_ID,"
+                    sql += "SELECT plv.VAM_PriceListVersion_ID, po.VAM_Product_ID,"
                         + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(po.PriceList,"
@@ -278,18 +278,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " COALESCE(currencyConvert(po.PricePO,"
                         + " po.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -po.PricePO) "
                         //
-                        + "FROM M_Product_PO po"
-                        + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1
-                        + " INNER JOIN M_PriceList pl ON (pl.M_PriceList_ID=plv.M_PriceList_ID)"
-                        + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#2
+                        + "FROM VAM_Product_PO po"
+                        + " INNER JOIN VAM_PriceListVersion plv ON (plv.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID + ")"	//	#1
+                        + " INNER JOIN VAM_PriceList pl ON (pl.VAM_PriceList_ID=plv.VAM_PriceList_ID)"
+                        + " INNER JOIN VAM_PriceDiscount dl ON (dl.VAM_PriceDiscount_ID=" + VAM_PriceDiscount_ID + ") "	//	#2
                         //
-                        + "WHERE EXISTS (SELECT * FROM VAVAT_Selection s WHERE po.M_Product_ID=s.VAT_Selection_ID)"
+                        + "WHERE EXISTS (SELECT * FROM VAT_Selection s WHERE po.VAM_Product_ID=s.VAT_Selection_ID)"
                         + " AND po.IsCurrentVendor='Y' AND po.IsActive='Y'";
                 }
                 else
                 {
                     /**	Copy and Convert from other PriceList_Version	*/
-                    sql += "SELECT plv.M_PriceList_Version_ID, pp.M_Product_ID,"
+                    sql += "SELECT plv.VAM_PriceListVersion_ID, pp.VAM_Product_ID,"
                         + " plv.VAF_Client_ID, plv.VAF_Org_ID, 'Y', SysDate, plv.UpdatedBy, SysDate, plv.UpdatedBy,"
                         //	Price List
                         + " COALESCE(currencyConvert(pp.PriceList,"
@@ -301,29 +301,29 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         + " COALESCE(currencyConvert(pp.PriceLimit,"
                         + " bpl.VAB_Currency_ID, pl.VAB_Currency_ID, dl.ConversionDate, dl.VAB_CurrencyType_ID, plv.VAF_Client_ID, plv.VAF_Org_ID), -pp.PriceLimit) "
                         //
-                        + "FROM M_ProductPrice pp"
-                        + " INNER JOIN M_PriceList_Version plv ON (plv.M_PriceList_Version_ID=" + _M_PriceList_Version_ID + ")"	//	#1
-                        + " INNER JOIN M_PriceList pl ON (pl.M_PriceList_ID=plv.M_PriceList_ID)"
-                        + " INNER JOIN M_PriceList_Version bplv ON (pp.M_PriceList_Version_ID=bplv.M_PriceList_Version_ID)"
-                        + " INNER JOIN M_PriceList bpl ON (bplv.M_PriceList_ID=bpl.M_PriceList_ID)"
-                        + " INNER JOIN M_DiscountSchemaLine dl ON (dl.M_DiscountSchemaLine_ID=" + M_DiscountSchemaLine_ID + ") "	//	#2
+                        + "FROM VAM_ProductPrice pp"
+                        + " INNER JOIN VAM_PriceListVersion plv ON (plv.VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID + ")"	//	#1
+                        + " INNER JOIN VAM_PriceList pl ON (pl.VAM_PriceList_ID=plv.VAM_PriceList_ID)"
+                        + " INNER JOIN VAM_PriceListVersion bplv ON (pp.VAM_PriceListVersion_ID=bplv.VAM_PriceListVersion_ID)"
+                        + " INNER JOIN VAM_PriceList bpl ON (bplv.VAM_PriceList_ID=bpl.VAM_PriceList_ID)"
+                        + " INNER JOIN VAM_PriceDiscount dl ON (dl.VAM_PriceDiscount_ID=" + VAM_PriceDiscount_ID + ") "	//	#2
                         //
                         + "WHERE ";
-                    if (M_Pricelist_Version_Base_ID != 0)
+                    if (VAM_PriceListVersion_Base_ID != 0)
                     {
-                        sql += "pp.M_PriceList_Version_ID=" + M_Pricelist_Version_Base_ID + " AND";	//	#3 M_PriceList_Version_Base_ID
+                        sql += "pp.VAM_PriceListVersion_ID=" + VAM_PriceListVersion_Base_ID + " AND";	//	#3 VAM_PriceListVersion_Base_ID
                     }
-                    sql += "  EXISTS (SELECT * FROM VAVAT_Selection s WHERE pp.M_Product_ID=s.VAT_Selection_ID)"
+                    sql += "  EXISTS (SELECT * FROM VAT_Selection s WHERE pp.VAM_Product_ID=s.VAT_Selection_ID)"
                         + " AND pp.IsActive='Y'";
                 }
                 if (sql != null)
                 {
                     //pstmt = DataBase.prepareStatement(sql, get_TrxName());
-                    //pstmt.setInt(1, _M_PriceList_Version_ID);
-                    // pstmt.setInt(2, M_DiscountSchemaLine_ID);
-                    //if (M_Pricelist_Version_Base_ID != 0)
+                    //pstmt.setInt(1, _VAM_PriceListVersion_ID);
+                    // pstmt.setInt(2, VAM_PriceDiscount_ID);
+                    //if (VAM_PriceListVersion_Base_ID != 0)
                     //{
-                    //    pstmt.setInt(3, M_Pricelist_Version_Base_ID);
+                    //    pstmt.setInt(3, VAM_PriceListVersion_Base_ID);
                     // }
                     noInserted = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
                     message += " @Inserted@=" + noInserted;
@@ -331,8 +331,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                 /** Calculations	**/
                 MProductPrice[] pp = _plv.GetProductPrice(
-                    "AND EXISTS (SELECT * FROM VAVAT_Selection s "
-                    + "WHERE s.VAT_Selection_ID=M_ProductPrice.M_Product_ID)");
+                    "AND EXISTS (SELECT * FROM VAT_Selection s "
+                    + "WHERE s.VAT_Selection_ID=VAM_ProductPrice.VAM_Product_ID)");
                 for (int j = 0; j < pp.Length; j++)
                 {
                     MProductPrice price = pp[j];
@@ -358,7 +358,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }	//	for all products
 
                 //	Clear Temporary Table
-                noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAVAT_Selection", null, Get_TrxName());
+                noDeleted = DataBase.DB.ExecuteQuery("DELETE FROM VAT_Selection", null, Get_TrxName());
                 //
                 AddLog(message);
             }	//	for all lines

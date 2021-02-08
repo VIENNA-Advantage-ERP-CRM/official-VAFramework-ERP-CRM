@@ -11,21 +11,21 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_MatchPO
+    /** Generated Model for VAM_MatchPO
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_MatchPO : PO
+    public class X_VAM_MatchPO : PO
     {
-        public X_M_MatchPO(Context ctx, int M_MatchPO_ID, Trx trxName)
-            : base(ctx, M_MatchPO_ID, trxName)
+        public X_VAM_MatchPO(Context ctx, int VAM_MatchPO_ID, Trx trxName)
+            : base(ctx, VAM_MatchPO_ID, trxName)
         {
-            /** if (M_MatchPO_ID == 0)
+            /** if (VAM_MatchPO_ID == 0)
             {
             SetVAB_OrderLine_ID (0);
             SetDateAcct (DateTime.Now);
             SetDateTrx (DateTime.Now);
-            SetM_MatchPO_ID (0);
-            SetM_Product_ID (0);
+            SetVAM_MatchPO_ID (0);
+            SetVAM_Product_ID (0);
             SetPosted (false);
             SetProcessed (false);	// N
             SetProcessing (false);	// N
@@ -33,16 +33,16 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_M_MatchPO(Ctx ctx, int M_MatchPO_ID, Trx trxName)
-            : base(ctx, M_MatchPO_ID, trxName)
+        public X_VAM_MatchPO(Ctx ctx, int VAM_MatchPO_ID, Trx trxName)
+            : base(ctx, VAM_MatchPO_ID, trxName)
         {
-            /** if (M_MatchPO_ID == 0)
+            /** if (VAM_MatchPO_ID == 0)
             {
             SetVAB_OrderLine_ID (0);
             SetDateAcct (DateTime.Now);
             SetDateTrx (DateTime.Now);
-            SetM_MatchPO_ID (0);
-            SetM_Product_ID (0);
+            SetVAM_MatchPO_ID (0);
+            SetVAM_Product_ID (0);
             SetPosted (false);
             SetProcessed (false);	// N
             SetProcessing (false);	// N
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_MatchPO(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_MatchPO(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_MatchPO(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_MatchPO(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -73,14 +73,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_MatchPO(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_MatchPO(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_MatchPO()
+        static X_VAM_MatchPO()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -93,8 +93,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =473;
 
-        /** TableName=M_MatchPO */
-        public static String Table_Name = "M_MatchPO";
+        /** TableName=VAM_MatchPO */
+        public static String Table_Name = "VAM_MatchPO";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_MatchPO[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_MatchPO[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice Line.
@@ -253,64 +253,64 @@ namespace VAdvantage.Model
         public Boolean IsCostCalculated() { Object oo = Get_Value("IsCostCalculated"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_ValueNoCheck("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_ValueNoCheck("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_ValueNoCheck("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_ValueNoCheck("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID <= 0) Set_ValueNoCheck("M_InOutLine_ID", null);
+            if (VAM_Inv_InOutLine_ID <= 0) Set_ValueNoCheck("VAM_Inv_InOutLine_ID", null);
             else
-                Set_ValueNoCheck("M_InOutLine_ID", M_InOutLine_ID);
+                Set_ValueNoCheck("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Match PO.
-        @param M_MatchPO_ID Match Purchase Order to Shipment/Receipt and Invoice */
-        public void SetM_MatchPO_ID(int M_MatchPO_ID)
+        @param VAM_MatchPO_ID Match Purchase Order to Shipment/Receipt and Invoice */
+        public void SetVAM_MatchPO_ID(int VAM_MatchPO_ID)
         {
-            if (M_MatchPO_ID < 1) throw new ArgumentException("M_MatchPO_ID is mandatory.");
-            Set_ValueNoCheck("M_MatchPO_ID", M_MatchPO_ID);
+            if (VAM_MatchPO_ID < 1) throw new ArgumentException("VAM_MatchPO_ID is mandatory.");
+            Set_ValueNoCheck("VAM_MatchPO_ID", VAM_MatchPO_ID);
         }
         /** Get Match PO.
         @return Match Purchase Order to Shipment/Receipt and Invoice */
-        public int GetM_MatchPO_ID()
+        public int GetVAM_MatchPO_ID()
         {
-            Object ii = Get_Value("M_MatchPO_ID");
+            Object ii = Get_Value("VAM_MatchPO_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_ValueNoCheck("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -24,7 +24,7 @@ namespace VAdvantage.Model
             SetVAB_InvoiceLine_ID (0);
             SetVAB_LCost_ID (0);
             SetLandedCostDistribution (null);	// Q
-            SetM_CostElement_ID (0);
+            SetVAM_ProductCostElement_ID (0);
             }
              */
         }
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
             SetVAB_InvoiceLine_ID (0);
             SetVAB_LCost_ID (0);
             SetLandedCostDistribution (null);	// Q
-            SetM_CostElement_ID (0);
+            SetVAM_ProductCostElement_ID (0);
             }
              */
         }
@@ -217,83 +217,83 @@ namespace VAdvantage.Model
             return (String)Get_Value("LandedCostDistribution");
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0)
-                Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0)
+                Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
     @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null)
                 return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Cost Element.
-        @param M_CostElement_ID Product Cost Element */
-        public void SetM_CostElement_ID(int M_CostElement_ID)
+        @param VAM_ProductCostElement_ID Product Cost Element */
+        public void SetVAM_ProductCostElement_ID(int VAM_ProductCostElement_ID)
         {
-            if (M_CostElement_ID < 1) throw new ArgumentException("M_CostElement_ID is mandatory.");
-            Set_Value("M_CostElement_ID", M_CostElement_ID);
+            if (VAM_ProductCostElement_ID < 1) throw new ArgumentException("VAM_ProductCostElement_ID is mandatory.");
+            Set_Value("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID);
         }
         /** Get Cost Element.
         @return Product Cost Element */
-        public int GetM_CostElement_ID()
+        public int GetVAM_ProductCostElement_ID()
         {
-            Object ii = Get_Value("M_CostElement_ID");
+            Object ii = Get_Value("VAM_ProductCostElement_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID <= 0) Set_Value("M_InOutLine_ID", null);
+            if (VAM_Inv_InOutLine_ID <= 0) Set_Value("VAM_Inv_InOutLine_ID", null);
             else
-                Set_Value("M_InOutLine_ID", M_InOutLine_ID);
+                Set_Value("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt.
-        @param M_InOut_ID Material Shipment Document */
-        public void SetM_InOut_ID(int M_InOut_ID)
+        @param VAM_Inv_InOut_ID Material Shipment Document */
+        public void SetVAM_Inv_InOut_ID(int VAM_Inv_InOut_ID)
         {
-            if (M_InOut_ID <= 0) Set_Value("M_InOut_ID", null);
+            if (VAM_Inv_InOut_ID <= 0) Set_Value("VAM_Inv_InOut_ID", null);
             else
-                Set_Value("M_InOut_ID", M_InOut_ID);
+                Set_Value("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
         }
         /** Get Shipment/Receipt.
         @return Material Shipment Document */
-        public int GetM_InOut_ID()
+        public int GetVAM_Inv_InOut_ID()
         {
-            Object ii = Get_Value("M_InOut_ID");
+            Object ii = Get_Value("VAM_Inv_InOut_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -316,26 +316,26 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Move Line.
-        @param M_MovementLine_ID Inventory Move document Line */
-        public void SetM_MovementLine_ID(int M_MovementLine_ID)
+        @param VAM_InvTrf_Line_ID Inventory Move document Line */
+        public void SetVAM_InvTrf_Line_ID(int VAM_InvTrf_Line_ID)
         {
-            if (M_MovementLine_ID <= 0) Set_Value("M_MovementLine_ID", null);
+            if (VAM_InvTrf_Line_ID <= 0) Set_Value("VAM_InvTrf_Line_ID", null);
             else
-                Set_Value("M_MovementLine_ID", M_MovementLine_ID);
+                Set_Value("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
         }/** Get Move Line.
 @return Inventory Move document Line */
-        public int GetM_MovementLine_ID() { Object ii = Get_Value("M_MovementLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_InvTrf_Line_ID() { Object ii = Get_Value("VAM_InvTrf_Line_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** Set Inventory Move.
-        @param M_Movement_ID Movement of Inventory */
-        public void SetM_Movement_ID(int M_Movement_ID)
+        @param VAM_InventoryTransfer_ID Movement of Inventory */
+        public void SetVAM_InventoryTransfer_ID(int VAM_InventoryTransfer_ID)
         {
-            if (M_Movement_ID <= 0) Set_Value("M_Movement_ID", null);
+            if (VAM_InventoryTransfer_ID <= 0) Set_Value("VAM_InventoryTransfer_ID", null);
             else
-                Set_Value("M_Movement_ID", M_Movement_ID);
+                Set_Value("VAM_InventoryTransfer_ID", VAM_InventoryTransfer_ID);
         }
         /** Get Inventory Move.
         @return Movement of Inventory */
-        public int GetM_Movement_ID() { Object ii = Get_Value("M_Movement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_InventoryTransfer_ID() { Object ii = Get_Value("VAM_InventoryTransfer_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** Ref_InvoiceLine_ID VAF_Control_Ref_ID=1000215 */
         public static int REF_INVOICELINE_ID_VAF_Control_Ref_ID = 1000215;
         /** Set Referenced Invoice Line.

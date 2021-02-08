@@ -50,7 +50,7 @@ namespace VAdvantage.Process
                 sql = @"SELECT i.VAB_Invoice_id ,  il.VAB_InvoiceLine_id 
                         FROM VAB_Invoice i INNER JOIN VAB_InvoiceLine il ON i.VAB_Invoice_id = il.VAB_Invoice_id
                         WHERE il.isactive = 'Y' AND il.isfuturecostcalculated = 'N' AND i.isfuturecostcalculated  = 'N'
-                         AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.m_inoutline_ID , 0) <> 0
+                         AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.VAM_Inv_InOutLine_ID , 0) <> 0
                         ORDER BY i.VAB_Invoice_id ASC";
                 ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
@@ -84,11 +84,11 @@ namespace VAdvantage.Process
                 }
 
                 // Calculate Foriegn Cost for Average PO
-                sql = @"SELECT i.m_inout_id ,  il.m_inoutline_id , il.VAB_Orderline_id
-                        FROM m_inout i INNER JOIN m_inoutline il ON i.m_inout_id = il.m_inout_id
+                sql = @"SELECT i.VAM_Inv_InOut_id ,  il.VAM_Inv_InOutLine_id , il.VAB_Orderline_id
+                        FROM VAM_Inv_InOut i INNER JOIN VAM_Inv_InOutLine il ON i.VAM_Inv_InOut_id = il.VAM_Inv_InOut_id
                         WHERE il.isactive = 'Y' AND il.isfuturecostcalculated = 'N' AND i.isfuturecostcalculated  = 'N'
                          AND docstatus IN ('CO' , 'CL') AND i.issotrx = 'N' AND i.isreturntrx = 'N' AND NVL(il.VAB_Orderline_ID , 0) <> 0
-                        ORDER BY i.m_inout_id ASC";
+                        ORDER BY i.VAM_Inv_InOut_id ASC";
                 ds = DB.ExecuteDataset(sql, null, null);
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
@@ -99,20 +99,20 @@ namespace VAdvantage.Process
                         {
                             orderLine = new MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
                             order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
-                            inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["m_inoutline_id"]), Get_Trx());
+                            inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_InOutLine_id"]), Get_Trx());
                             if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();
                                 ValueNamePair pp = VLogger.RetrieveError();
-                                _log.Info("Error found for calcualting Av. PO Foreign Cost for this record ID = " + inoutLine.GetM_InOut_ID() +
+                                _log.Info("Error found for calcualting Av. PO Foreign Cost for this record ID = " + inoutLine.GetVAM_Inv_InOut_ID() +
                                            " Error Name is " + pp.GetName() + " And Error Value is " + pp.GetValue());
                                 continue;
                             }
                             else
                             {
-                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM M_InoutLine WHERE IsFutureCostCalculated = 'N' AND M_InOut_ID = " + inoutLine.GetM_InOut_ID(), null, Get_Trx())) <= 0)
+                                if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAM_Inv_InOutLine WHERE IsFutureCostCalculated = 'N' AND VAM_Inv_InOut_ID = " + inoutLine.GetVAM_Inv_InOut_ID(), null, Get_Trx())) <= 0)
                                 {
-                                    int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE M_Inout Set IsFutureCostCalculated = 'Y' WHERE M_Inout_ID = " + inoutLine.GetM_InOut_ID(), null, Get_Trx()));
+                                    int no = Util.GetValueOfInt(DB.ExecuteQuery("UPDATE VAM_Inv_InOut Set IsFutureCostCalculated = 'Y' WHERE VAM_Inv_InOut_ID = " + inoutLine.GetVAM_Inv_InOut_ID(), null, Get_Trx()));
                                 }
                                 Get_Trx().Commit();
                             }

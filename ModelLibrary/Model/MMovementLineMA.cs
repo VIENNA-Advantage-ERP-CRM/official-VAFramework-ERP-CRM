@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Movement Material Allocation
- * Class Used     : X_M_MovementLineMA
+ * Class Used     : X_VAM_InvTrf_LineMP
  * Chronological Development
  * Veena         27-Oct-2009  
  ******************************************************/
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Movement Material Allocation
     /// </summary>
-    public class MMovementLineMA : X_M_MovementLineMA
+    public class MMovementLineMA : X_VAM_InvTrf_LineMP
     {
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MMovementLineMA).FullName);
@@ -34,12 +34,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MovementLineMA_ID">id (ignored)</param>
+        /// <param name="VAM_InvTrf_LineMP_ID">id (ignored)</param>
         /// <param name="trxName">transaction</param>
-        public MMovementLineMA(Ctx ctx, int M_MovementLineMA_ID, Trx trxName)
-            : base(ctx, M_MovementLineMA_ID, trxName)
+        public MMovementLineMA(Ctx ctx, int VAM_InvTrf_LineMP_ID, Trx trxName)
+            : base(ctx, VAM_InvTrf_LineMP_ID, trxName)
         {
-            if (M_MovementLineMA_ID != 0)
+            if (VAM_InvTrf_LineMP_ID != 0)
                 throw new ArgumentException("Multi-Key");
         }
 
@@ -58,15 +58,15 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        /// <param name="M_AttributeSetInstance_ID">asi</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">asi</param>
         /// <param name="movementQty">qty</param>
-        public MMovementLineMA(MMovementLine parent, int M_AttributeSetInstance_ID, Decimal movementQty)
+        public MMovementLineMA(MMovementLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_MovementLine_ID(parent.GetM_MovementLine_ID());
+            SetVAM_InvTrf_Line_ID(parent.GetVAM_InvTrf_Line_ID());
             //
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(movementQty);
         }
 
@@ -74,16 +74,16 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="movementQty"></param>
         /// <param name="MMPloicyDate"></param>
-        public MMovementLineMA(MMovementLine parent, int M_AttributeSetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+        public MMovementLineMA(MMovementLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
-            SetM_MovementLine_ID(parent.GetM_MovementLine_ID());
+            SetVAM_InvTrf_Line_ID(parent.GetVAM_InvTrf_Line_ID());
             //
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(movementQty);
             if (MMPloicyDate == null)
             {
@@ -97,20 +97,20 @@ namespace VAdvantage.Model
         /// Is Used to Get or Create  Instance of MMovementLineMA (Attribute)
         /// </summary>
         /// <param name="line"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="MovementQty"></param>
         /// <param name="DateMaterialPolicy"></param>
         /// <returns></returns>
-        public static MMovementLineMA GetOrCreate(MMovementLine line, int M_AttributeSetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        public static MMovementLineMA GetOrCreate(MMovementLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
         {
             MMovementLineMA retValue = null;
-            String sql = "SELECT * FROM M_MovementLineMA " +
-                         @" WHERE  M_MovementLine_ID = " + line.GetM_MovementLine_ID() +
+            String sql = "SELECT * FROM VAM_InvTrf_LineMP " +
+                         @" WHERE  VAM_InvTrf_Line_ID = " + line.GetVAM_InvTrf_Line_ID() +
                          @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
-            if (M_AttributeSetInstance_ID == 0)
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+            if (VAM_PFeature_SetInstance_ID == 0)
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             else
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MMovementLineMA(line, M_AttributeSetInstance_ID, MovementQty, DateMaterialPolicy);
+                retValue = new MMovementLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
             else
                 retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
             return retValue;
@@ -151,17 +151,17 @@ namespace VAdvantage.Model
         /// Get Material Allocations for Line
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MovementLine_ID">id</param>
+        /// <param name="VAM_InvTrf_Line_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>allocations</returns>
-        public static MMovementLineMA[] Get(Ctx ctx, int M_MovementLine_ID, Trx trxName)
+        public static MMovementLineMA[] Get(Ctx ctx, int VAM_InvTrf_Line_ID, Trx trxName)
         {
             List<MMovementLineMA> list = new List<MMovementLineMA>();
-            String sql = "SELECT * FROM M_MovementLineMA WHERE M_MovementLine_ID=@mlid";
+            String sql = "SELECT * FROM VAM_InvTrf_LineMP WHERE VAM_InvTrf_Line_ID=@mlid";
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@mlid", M_MovementLine_ID);
+                param[0] = new SqlParameter("@mlid", VAM_InvTrf_Line_ID);
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, trxName);
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -182,28 +182,28 @@ namespace VAdvantage.Model
         /// <summary>
         /// Delete all Material Allocation for Movement
         /// </summary>
-        /// <param name="M_Movement_ID">movement id</param>
+        /// <param name="VAM_InventoryTransfer_ID">movement id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>number of rows deleted or -1 for error</returns>
-        public static int DeleteMovementMA(int M_Movement_ID, Trx trxName)
+        public static int DeleteMovementMA(int VAM_InventoryTransfer_ID, Trx trxName)
         {
-            String sql = "DELETE FROM M_MovementLineMA ma WHERE EXISTS "
-                + "(SELECT * FROM M_MovementLine l WHERE l.M_MovementLine_ID=ma.M_MovementLine_ID"
-                + " AND M_Movement_ID=" + M_Movement_ID + ")";
+            String sql = "DELETE FROM VAM_InvTrf_LineMP ma WHERE EXISTS "
+                + "(SELECT * FROM VAM_InvTrf_Line l WHERE l.VAM_InvTrf_Line_ID=ma.VAM_InvTrf_Line_ID"
+                + " AND VAM_InventoryTransfer_ID=" + VAM_InventoryTransfer_ID + ")";
             return DataBase.DB.ExecuteQuery(sql, null, trxName);
         }
 
         /// <summary>
         /// Delete all Material Allocation for Movement Line
         /// </summary>
-        /// <param name="M_MovementLine_ID">movement line id</param>
+        /// <param name="VAM_InvTrf_Line_ID">movement line id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>number of rows deleted or -1 for error</returns>
-        public static int DeleteMovementLineMA(int M_MovementLine_ID, Trx trxName)
+        public static int DeleteMovementLineMA(int VAM_InvTrf_Line_ID, Trx trxName)
         {
-            String sql = "DELETE FROM M_MovementLineMA ma WHERE EXISTS "
-                + "(SELECT * FROM M_MovementLine l WHERE l.M_MovementLine_ID=ma.M_MovementLine_ID"
-                + " AND M_MovementLine_ID=" + M_MovementLine_ID + ")";
+            String sql = "DELETE FROM VAM_InvTrf_LineMP ma WHERE EXISTS "
+                + "(SELECT * FROM VAM_InvTrf_Line l WHERE l.VAM_InvTrf_Line_ID=ma.VAM_InvTrf_Line_ID"
+                + " AND VAM_InvTrf_Line_ID=" + VAM_InvTrf_Line_ID + ")";
             return DataBase.DB.ExecuteQuery(sql, null, trxName);
         }
 
@@ -214,8 +214,8 @@ namespace VAdvantage.Model
         public override String ToString()
         {
             StringBuilder sb = new StringBuilder("MMovementLineMA[");
-            sb.Append("M_MovementLine_ID=").Append(GetM_MovementLine_ID())
-                .Append(",M_AttributeSetInstance_ID=").Append(GetM_AttributeSetInstance_ID())
+            sb.Append("VAM_InvTrf_Line_ID=").Append(GetVAM_InvTrf_Line_ID())
+                .Append(",VAM_PFeature_SetInstance_ID=").Append(GetVAM_PFeature_SetInstance_ID())
                 .Append(", Qty=").Append(GetMovementQty())
                 .Append("]");
             return sb.ToString();

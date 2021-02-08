@@ -24,12 +24,12 @@ namespace VIS.Models
             //End Assign parameter value
             MInOutLine ioLine = new MInOutLine(ctx, Orig_InOutLine_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
-            result["M_Locator_ID"] = ioLine.GetM_Locator_ID().ToString();
+            result["VAM_Locator_ID"] = ioLine.GetVAM_Locator_ID().ToString();
             result["MovementQty"] = ioLine.GetMovementQty().ToString();
             result["VAB_Project_ID"] = ioLine.GetVAB_Project_ID().ToString();
             result["VAB_Promotion_ID"] = ioLine.GetVAB_Promotion_ID().ToString();
-            result["M_Product_ID"] = ioLine.GetM_Product_ID().ToString();
-            result["M_AttributeSetInstance_ID"] = ioLine.GetM_AttributeSetInstance_ID().ToString();
+            result["VAM_Product_ID"] = ioLine.GetVAM_Product_ID().ToString();
+            result["VAM_PFeature_SetInstance_ID"] = ioLine.GetVAM_PFeature_SetInstance_ID().ToString();
             result["VAB_UOM_ID"] = ioLine.GetVAB_UOM_ID().ToString();
             result["IsDropShip"] = ioLine.IsDropShip() ? "Y" : "N";
 

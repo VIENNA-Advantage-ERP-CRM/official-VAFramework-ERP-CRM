@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_M_Lot
+ * Class Used     : X_VAM_Lot
  * Chronological Development
  * Veena Pandey     16-June-2009
  ******************************************************/
@@ -18,7 +18,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLot : X_M_Lot
+    public class MLot : X_VAM_Lot
     {
         //	Logger					
         private static VLogger _log = VLogger.GetVLogger(typeof(MLot).FullName);
@@ -27,15 +27,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Lot_ID">id</param>
+        /// <param name="VAM_Lot_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLot(Ctx ctx, int M_Lot_ID, Trx trxName)
-            : base(ctx, M_Lot_ID, trxName)
+        public MLot(Ctx ctx, int VAM_Lot_ID, Trx trxName)
+            : base(ctx, VAM_Lot_ID, trxName)
         {
-            /** if (M_Lot_ID == 0)
+            /** if (VAM_Lot_ID == 0)
             {
-                setM_Lot_ID (0);
-                setM_Product_ID (0);
+                setVAM_Lot_ID (0);
+                setVAM_Product_ID (0);
                 setName (null);
             }
             **/
@@ -56,14 +56,14 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="ctl">lot control</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="Name">name</param>
-        public MLot(MLotCtl ctl, int M_Product_ID, String Name)
+        public MLot(MLotCtl ctl, int VAM_Product_ID, String Name)
             : this(ctl.GetCtx(), 0, ctl.Get_TrxName())
         {
             SetClientOrg(ctl);
-            SetM_LotCtl_ID(ctl.GetM_LotCtl_ID());
-            SetM_Product_ID(M_Product_ID);
+            SetVAM_LotControl_ID(ctl.GetVAM_LotControl_ID());
+            SetVAM_Product_ID(VAM_Product_ID);
             SetName(Name);
         }
 
@@ -71,12 +71,12 @@ namespace VAdvantage.Model
         /// Get Lots for Product
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">id</param>
+        /// <param name="VAM_Product_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of Lots for Product</returns>
-        public static MLot[] GetProductLots(Ctx ctx, int M_Product_ID, Trx trxName)
+        public static MLot[] GetProductLots(Ctx ctx, int VAM_Product_ID, Trx trxName)
         {
-            String sql = "SELECT * FROM M_Lot WHERE M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT * FROM VAM_Lot WHERE VAM_Product_ID=" + VAM_Product_ID;
             List<MLot> list = new List<MLot>();
             try
             {
@@ -104,13 +104,13 @@ namespace VAdvantage.Model
         /// Get Lot for Product
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="lot">lot</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of Lots for Product</returns>
-        public static MLot GetProductLot(Ctx ctx, int M_Product_ID, String lot, Trx trxName)
+        public static MLot GetProductLot(Ctx ctx, int VAM_Product_ID, String lot, Trx trxName)
         {
-            String sql = "SELECT * FROM M_Lot WHERE M_Product_ID=" + M_Product_ID + " AND Name='" + lot + "'";
+            String sql = "SELECT * FROM VAM_Lot WHERE VAM_Product_ID=" + VAM_Product_ID + " AND Name='" + lot + "'";
             MLot retValue = null;
             try
             {
@@ -133,12 +133,12 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Lot Key Name Pairs for Product
         /// </summary>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of Lot Key Name Pairs for Product</returns>
-        public static KeyNamePair[] GetProductLotPairs(int M_Product_ID, Trx trxName)
+        public static KeyNamePair[] GetProductLotPairs(int VAM_Product_ID, Trx trxName)
         {
-            String sql = "SELECT M_Lot_ID, Name FROM M_Lot WHERE M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT VAM_Lot_ID, Name FROM VAM_Lot WHERE VAM_Product_ID=" + VAM_Product_ID;
             List<KeyNamePair> list = new List<KeyNamePair>();
             IDataReader dr = null;
             try

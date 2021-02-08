@@ -28,7 +28,7 @@ namespace VAdvantage.Process
      	private VAdvantage.Model.MVAFClient		_client = null;
 
 	private int			_VAA_AssetGroup_ID = 0;
-	private int			_M_Product_ID = 0;
+	private int			_VAM_Product_ID = 0;
 	private int			_VAB_BusinessPartner_ID = 0;
 	private int			_A_Asset_ID = 0;
 	private DateTime?	_GuaranteeDate = null;
@@ -53,8 +53,8 @@ namespace VAdvantage.Process
             }
 			else if (name.Equals("VAA_AssetGroup_ID"))
 				_VAA_AssetGroup_ID = element.GetParameterAsInt();
-			else if (name.Equals("M_Product_ID"))
-				_M_Product_ID = element.GetParameterAsInt();
+			else if (name.Equals("VAM_Product_ID"))
+				_VAM_Product_ID = element.GetParameterAsInt();
 			else if (name.Equals("VAB_BusinessPartner_ID"))
 				_VAB_BusinessPartner_ID = element.GetParameterAsInt();
 			else if (name.Equals("VAA_Asset_ID"))
@@ -99,12 +99,12 @@ namespace VAdvantage.Process
 		//
 		StringBuilder sql = new StringBuilder ("SELECT VAA_Asset_ID, GuaranteeDate "
 			+ "FROM VAA_Asset a"
-			+ " INNER JOIN M_Product p ON (a.M_Product_ID=p.M_Product_ID) "
+			+ " INNER JOIN VAM_Product p ON (a.VAM_Product_ID=p.VAM_Product_ID) "
 			+ "WHERE ");
 		if (_VAA_AssetGroup_ID != 0 && _VAA_AssetGroup_ID!=-1)
 			sql.Append("a.VAA_AssetGroup_ID=").Append(_VAA_AssetGroup_ID).Append(" AND ");
-		if (_M_Product_ID != 0)
-			sql.Append("p.M_Product_ID=").Append(_M_Product_ID).Append(" AND ");
+		if (_VAM_Product_ID != 0)
+			sql.Append("p.VAM_Product_ID=").Append(_VAM_Product_ID).Append(" AND ");
 		if (_VAB_BusinessPartner_ID != 0)
 			sql.Append("a.VAB_BusinessPartner_ID=").Append(_VAB_BusinessPartner_ID).Append(" AND ");
 		String s = sql.ToString();

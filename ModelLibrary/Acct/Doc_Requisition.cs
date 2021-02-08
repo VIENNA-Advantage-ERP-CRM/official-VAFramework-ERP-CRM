@@ -3,7 +3,7 @@
  * Class Name     : Doc_Requisition
  * Purpose        : Post Order Documents.
  *                  <pre>
- *                  Table:              M_Requisition
+ *                  Table:              VAM_Requisition
  *                  Document Types:     POR (Requisition)
  *                  </pre>
  *                  * Class Used     : Doc
@@ -134,12 +134,12 @@ namespace VAdvantage.Acct
                     Decimal cost = line.GetAmtSource();
                     total = Decimal.Add(total, cost);
                     // Account
-                    MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                    MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                     //
                     fact.CreateLine(line, expense, as1.GetVAB_Currency_ID(), cost, null);
                 }
                 // Offset
-                MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
+                MVABAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
                 if (offset == null)
                 {
                     _error = "@NotFound@ @CommitmentOffset_Acct@";

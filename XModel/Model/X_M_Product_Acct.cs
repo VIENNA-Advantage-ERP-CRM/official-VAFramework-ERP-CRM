@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Product_Acct
+/** Generated Model for VAM_Product_Acct
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Product_Acct : PO
+public class X_VAM_Product_Acct : PO
 {
-public X_M_Product_Acct (Context ctx, int M_Product_Acct_ID, Trx trxName) : base (ctx, M_Product_Acct_ID, trxName)
+public X_VAM_Product_Acct (Context ctx, int VAM_Product_Acct_ID, Trx trxName) : base (ctx, VAM_Product_Acct_ID, trxName)
 {
-/** if (M_Product_Acct_ID == 0)
+/** if (VAM_Product_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetP_Asset_Acct (0);
 SetP_COGS_Acct (0);
 SetP_CostAdjustment_Acct (0);
@@ -35,12 +35,12 @@ SetP_TradeDiscountRec_Acct (0);
 }
  */
 }
-public X_M_Product_Acct (Ctx ctx, int M_Product_Acct_ID, Trx trxName) : base (ctx, M_Product_Acct_ID, trxName)
+public X_VAM_Product_Acct (Ctx ctx, int VAM_Product_Acct_ID, Trx trxName) : base (ctx, VAM_Product_Acct_ID, trxName)
 {
-/** if (M_Product_Acct_ID == 0)
+/** if (VAM_Product_Acct_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetP_Asset_Acct (0);
 SetP_COGS_Acct (0);
 SetP_CostAdjustment_Acct (0);
@@ -59,7 +59,7 @@ SetP_TradeDiscountRec_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Product_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -67,7 +67,7 @@ public X_M_Product_Acct (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Product_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -75,13 +75,13 @@ public X_M_Product_Acct (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Product_Acct (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Product_Acct()
+static X_VAM_Product_Acct()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -94,8 +94,8 @@ public static long updatedMS = 1280389063955L;
 public static int Table_ID;
  // =273;
 
-/** TableName=M_Product_Acct */
-public static String Table_Name="M_Product_Acct";
+/** TableName=VAM_Product_Acct */
+public static String Table_Name="VAM_Product_Acct";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -129,7 +129,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Product_Acct[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Product_Acct[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -154,17 +154,17 @@ public KeyNamePair GetKeyNamePair()
 return new KeyNamePair(Get_ID(), GetVAB_AccountBook_ID().ToString());
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

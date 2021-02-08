@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPriceListVersion : X_M_PriceList_Version
+    public class MPriceListVersion : X_VAM_PriceListVersion
     {
         // Product Prices			
         private MProductPrice[] _pp = null;
@@ -35,17 +35,17 @@ namespace VAdvantage.Model
         /// Standard Cinstructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_Version_ID">id</param>
+        /// <param name="VAM_PriceListVersion_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPriceListVersion(Ctx ctx, int M_PriceList_Version_ID, Trx trxName)
-            : base(ctx, M_PriceList_Version_ID, trxName)
+        public MPriceListVersion(Ctx ctx, int VAM_PriceListVersion_ID, Trx trxName)
+            : base(ctx, VAM_PriceListVersion_ID, trxName)
         {
-            if (M_PriceList_Version_ID == 0)
+            if (VAM_PriceListVersion_ID == 0)
             {
                 //	setName (null);	// @#Date@
-                //	setM_PriceList_ID (0);
+                //	setVAM_PriceList_ID (0);
                 //	setValidFrom (TimeUtil.getDay(null));	// @#Date@
-                //	setM_DiscountSchema_ID (0);
+                //	setVAM_DiscountCalculation_ID (0);
             }
         }
 
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
             : this(pl.GetCtx(), 0, pl.Get_TrxName())
         {
             SetClientOrg(pl);
-            SetM_PriceList_ID(pl.GetM_PriceList_ID());
+            SetVAM_PriceList_ID(pl.GetVAM_PriceList_ID());
         }
 
         /// <summary>
@@ -77,9 +77,9 @@ namespace VAdvantage.Model
         /// <returns>v</returns>
         public MPriceList GetPriceList()
         {
-            if (_pl == null && GetM_PriceList_ID() != 0)
+            if (_pl == null && GetVAM_PriceList_ID() != 0)
             {
-                _pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), null);
+                _pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), null);
             }
             return _pl;
         }
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
         public MProductPrice[] GetProductPrice(String whereClause)
         {
             List<MProductPrice> list = new List<MProductPrice>();
-            String sql = "SELECT * FROM M_ProductPrice WHERE M_PriceList_Version_ID=" + GetM_PriceList_Version_ID();
+            String sql = "SELECT * FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID=" + GetVAM_PriceListVersion_ID();
             if (whereClause != null)
                 sql += " " + whereClause;
             DataSet ds = null;

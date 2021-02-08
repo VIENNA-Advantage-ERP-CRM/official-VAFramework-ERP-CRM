@@ -91,7 +91,7 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
                 return "VAB_BusinessPartner_ID";
             else if (elementType.Equals(ELEMENTTYPE_Product))
-                return "M_Product_ID";
+                return "VAM_Product_ID";
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 return "VAB_BillingCode_ID";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
                 return "SELECT Value,Name FROM VAB_BusinessPartner WHERE VAB_BusinessPartner_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Product))
-                return "SELECT Value,Name FROM M_Product WHERE M_Product_ID=";
+                return "SELECT Value,Name FROM VAM_Product WHERE VAM_Product_ID=";
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 return "SELECT Value,Name FROM VAB_BillingCode WHERE VAB_BillingCode_ID=";
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
@@ -278,13 +278,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="SeqNo">sequence</param>
         /// <param name="Name">name</param>
-        /// <param name="M_Product_ID">id</param>
-        public void SetTypeProduct(int SeqNo, String Name, int M_Product_ID)
+        /// <param name="VAM_Product_ID">id</param>
+        public void SetTypeProduct(int SeqNo, String Name, int VAM_Product_ID)
         {
             SetElementType(ELEMENTTYPE_Product);
             SetSeqNo(SeqNo);
             SetName(Name);
-            SetM_Product_ID(M_Product_ID);
+            SetVAM_Product_ID(VAM_Product_ID);
         }
 
         /// <summary>
@@ -328,7 +328,7 @@ namespace VAdvantage.Model
             else if (elementType.Equals(ELEMENTTYPE_BPartner))
                 defaultValue = GetVAB_BusinessPartner_ID();
             else if (elementType.Equals(ELEMENTTYPE_Product))
-                defaultValue = GetM_Product_ID();
+                defaultValue = GetVAM_Product_ID();
             else if (elementType.Equals(ELEMENTTYPE_Activity))
                 defaultValue = GetVAB_BillingCode_ID();
             else if (elementType.Equals(ELEMENTTYPE_LocationFrom))
@@ -451,8 +451,8 @@ namespace VAdvantage.Model
                     errorField = "Org_ID";
                 else if (ELEMENTTYPE_OrgTrx.Equals(et) && GetOrg_ID() == 0)
                     errorField = "Org_ID";
-                else if (ELEMENTTYPE_Product.Equals(et) && GetM_Product_ID() == 0)
-                    errorField = "M_Product_ID";
+                else if (ELEMENTTYPE_Product.Equals(et) && GetVAM_Product_ID() == 0)
+                    errorField = "VAM_Product_ID";
                 else if (ELEMENTTYPE_Project.Equals(et) && GetVAB_Project_ID() == 0)
                     errorField = "VAB_Project_ID";
                 else if (ELEMENTTYPE_SalesRegion.Equals(et) && GetVAB_SalesRegionState_ID() == 0)
@@ -489,13 +489,13 @@ namespace VAdvantage.Model
                 else if (ELEMENTTYPE_BPartner.Equals(GetElementType()))
                     UpdateData("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
                 else if (ELEMENTTYPE_Product.Equals(GetElementType()))
-                    UpdateData("M_Product_ID", GetM_Product_ID());
+                    UpdateData("VAM_Product_ID", GetVAM_Product_ID());
                 else if (ELEMENTTYPE_Project.Equals(GetElementType()))
                     UpdateData("VAB_Project_ID", GetVAB_Project_ID());
             }
             //	Resequence
             if (newRecord || Is_ValueChanged("SeqNo"))
-                MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
+                MVABAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //	Clear Cache
             s_cache.Clear();
             return success;
@@ -508,7 +508,7 @@ namespace VAdvantage.Model
         /// <param name="id">new default</param>
         private void UpdateData(String element, int id)
         {
-            MAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
+            MVABAccount.UpdateValueDescription(GetCtx(), element + "=" + id, Get_TrxName());
             //
             String sql = "UPDATE VAB_Acct_ValidParameter SET " + element + "=" + id
                 + " WHERE " + element + " IS NULL AND VAF_Client_ID=" + GetVAF_Client_ID();
@@ -529,7 +529,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             //	Update Account Info
-            MAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
+            MVABAccount.UpdateValueDescription(GetCtx(), "VAF_Client_ID=" + GetVAF_Client_ID(), Get_TrxName());
             //
             s_cache.Clear();
             return success;

@@ -11,32 +11,32 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_LotCtl
+    /** Generated Model for VAM_LotControl
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_LotCtl : PO
+    public class X_VAM_LotControl : PO
     {
-        public X_M_LotCtl(Context ctx, int M_LotCtl_ID, Trx trxName)
-            : base(ctx, M_LotCtl_ID, trxName)
+        public X_VAM_LotControl(Context ctx, int VAM_LotControl_ID, Trx trxName)
+            : base(ctx, VAM_LotControl_ID, trxName)
         {
-            /** if (M_LotCtl_ID == 0)
+            /** if (VAM_LotControl_ID == 0)
             {
             SetCurrentNext (0);	// 100
             SetIncrementNo (0);	// 1
-            SetM_LotCtl_ID (0);
+            SetVAM_LotControl_ID (0);
             SetName (null);
             SetStartNo (0);	// 100
             }
              */
         }
-        public X_M_LotCtl(Ctx ctx, int M_LotCtl_ID, Trx trxName)
-            : base(ctx, M_LotCtl_ID, trxName)
+        public X_VAM_LotControl(Ctx ctx, int VAM_LotControl_ID, Trx trxName)
+            : base(ctx, VAM_LotControl_ID, trxName)
         {
-            /** if (M_LotCtl_ID == 0)
+            /** if (VAM_LotControl_ID == 0)
             {
             SetCurrentNext (0);	// 100
             SetIncrementNo (0);	// 1
-            SetM_LotCtl_ID (0);
+            SetVAM_LotControl_ID (0);
             SetName (null);
             SetStartNo (0);	// 100
             }
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_LotCtl(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_LotControl(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_LotCtl(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_LotControl(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_LotCtl(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_LotControl(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_LotCtl()
+        static X_VAM_LotControl()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =556;
 
-        /** TableName=M_LotCtl */
-        public static String Table_Name = "M_LotCtl";
+        /** TableName=VAM_LotControl */
+        public static String Table_Name = "VAM_LotControl";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_LotCtl[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_LotControl[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Current Next.
@@ -169,17 +169,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Lot Control.
-        @param M_LotCtl_ID Product Lot Control */
-        public void SetM_LotCtl_ID(int M_LotCtl_ID)
+        @param VAM_LotControl_ID Product Lot Control */
+        public void SetVAM_LotControl_ID(int VAM_LotControl_ID)
         {
-            if (M_LotCtl_ID < 1) throw new ArgumentException("M_LotCtl_ID is mandatory.");
-            Set_ValueNoCheck("M_LotCtl_ID", M_LotCtl_ID);
+            if (VAM_LotControl_ID < 1) throw new ArgumentException("VAM_LotControl_ID is mandatory.");
+            Set_ValueNoCheck("VAM_LotControl_ID", VAM_LotControl_ID);
         }
         /** Get Lot Control.
         @return Product Lot Control */
-        public int GetM_LotCtl_ID()
+        public int GetVAM_LotControl_ID()
         {
-            Object ii = Get_Value("M_LotCtl_ID");
+            Object ii = Get_Value("VAM_LotControl_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

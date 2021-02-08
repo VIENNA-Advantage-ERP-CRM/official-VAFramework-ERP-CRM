@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Inventory Movement Confirmation Model
- * Class Used     : X_M_MovementConfirm, DocAction(Interface)
+ * Class Used     : X_VAM_InvTrf_Confirm, DocAction(Interface)
  * Chronological Development
  * Veena         27-Oct-2009
  ******************************************************/
@@ -26,7 +26,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Inventory Movement Confirmation Model
     /// </summary>
-    public class MMovementConfirm : X_M_MovementConfirm, DocAction
+    public class MMovementConfirm : X_VAM_InvTrf_Confirm, DocAction
     {
         /**	Confirm Lines					*/
         private MMovementLineConfirm[] _lines = null;
@@ -48,14 +48,14 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MovementLineConfirm_ID">id</param>
+        /// <param name="VAM_InvTrf_LineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMovementConfirm(Ctx ctx, int M_MovementLineConfirm_ID, Trx trxName)
-            : base(ctx, M_MovementLineConfirm_ID, trxName)
+        public MMovementConfirm(Ctx ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName)
+            : base(ctx, VAM_InvTrf_LineConfirm_ID, trxName)
         {
-            if (M_MovementLineConfirm_ID == 0)
+            if (VAM_InvTrf_LineConfirm_ID == 0)
             {
-                //	SetM_Movement_ID (0);
+                //	SetVAM_InventoryTransfer_ID (0);
                 SetDocAction(DOCACTION_Complete);
                 SetDocStatus(DOCSTATUS_Drafted);
                 SetIsApproved(false);	// N
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
             : this(move.GetCtx(), 0, move.Get_TrxName())
         {
             SetClientOrg(move);
-            SetM_Movement_ID(move.GetM_Movement_ID());
+            SetVAM_InventoryTransfer_ID(move.GetVAM_InventoryTransfer_ID());
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
             // Change By Arpit Rai on 24th August,2017 To Check if VA Material Quality Control Module exists or not
             if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAF_ModuleInfo WHERE Prefix='VA010_'", null, null)) > 0)
             {
-                CreateConfirmParameters(move, confirm.GetM_MovementConfirm_ID(), confirm.GetCtx());
+                CreateConfirmParameters(move, confirm.GetVAM_InvTrf_Confirm_ID(), confirm.GetCtx());
             }
             return confirm;
         }
@@ -128,13 +128,13 @@ namespace VAdvantage.Model
         // Change By Arpit to Create Parameters on Ship/Reciept Confirm Quality Control Tab 24th Aug,2017
         public static void CreateConfirmParameters(MMovement move, int M_MoveConfirm_ID, Ctx ctx)
         {
-            String _Sql = @" SELECT movln.M_MovementLine_ID,  mlnconf.M_MovementLineConfirm_ID,  movln.M_Product_ID , 
-                           pr.VA010_QualityPlan_ID ,  movln.MovementQty  FROM M_MovementLine movln INNER JOIN M_Product pr  
-                             ON (movln.M_Product_ID =pr.M_Product_ID) INNER JOIN m_movementlineconfirm mlnconf   
-                             ON (movln.m_movementline_id=mlnconf.m_movementline_id) 
-                             inner join m_movementconfirm mconf  on (mlnconf.m_movementconfirm_ID= mconf.m_movementconfirm_id)
-                             WHERE movln.M_Movement_ID =" + move.GetM_Movement_ID() + " ORDER BY  Line";
-            //" ORDER BY movln.M_Product_ID, pr.VA010_QualityPlan_ID ASC, movln.MovementQty,  Line";
+            String _Sql = @" SELECT movln.VAM_InvTrf_Line_ID,  mlnconf.VAM_InvTrf_LineConfirm_ID,  movln.VAM_Product_ID , 
+                           pr.VA010_QualityPlan_ID ,  movln.MovementQty  FROM VAM_InvTrf_Line movln INNER JOIN VAM_Product pr  
+                             ON (movln.VAM_Product_ID =pr.VAM_Product_ID) INNER JOIN VAM_InvTrf_LineConfirm mlnconf   
+                             ON (movln.VAM_InvTrf_Line_id=mlnconf.VAM_InvTrf_Line_id) 
+                             inner join VAM_InvTrf_Confirm mconf  on (mlnconf.VAM_InvTrf_Confirm_ID= mconf.VAM_InvTrf_Confirm_id)
+                             WHERE movln.VAM_InventoryTransfer_ID =" + move.GetVAM_InventoryTransfer_ID() + " ORDER BY  Line";
+            //" ORDER BY movln.VAM_Product_ID, pr.VA010_QualityPlan_ID ASC, movln.MovementQty,  Line";
             DataSet ds = new DataSet();
             //int _currentPlanQlty_ID = 0, CurrentLoopQty = 0, currProduct_ID = 0;
             int _currentPlanQlty_ID = 0, CurrentLoopQty = 0;
@@ -154,15 +154,15 @@ namespace VAdvantage.Model
                         //{
                         _currentPlanQlty_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VA010_QualityPlan_ID"]);
                         //}
-                        //currProduct_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]);
-                        CurrentLoopProduct.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_Product_ID"]));
+                        //currProduct_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]);
+                        CurrentLoopProduct.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Product_ID"]));
                         ProductQty.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["MovementQty"]));
                         CurrentLoopQty = Util.GetValueOfInt(ds.Tables[0].Rows[i]["MovementQty"]);
-                        MoveConfirmLine_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_MovementLineConfirm_ID"]));
+                        MoveConfirmLine_ID.Add(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InvTrf_LineConfirm_ID"]));
                         //if (i < ds.Tables[0].Rows.Count - 1)
                         //{
                         //    if (_currentPlanQlty_ID == Util.GetValueOfInt(ds.Tables[0].Rows[i + 1]["VA010_QualityPlan_ID"])
-                        //        && currProduct_ID == Util.GetValueOfInt(ds.Tables[0].Rows[i + 1]["M_Product_ID"]))
+                        //        && currProduct_ID == Util.GetValueOfInt(ds.Tables[0].Rows[i + 1]["VAM_Product_ID"]))
                         //    {
                         //        continue;
                         //    }
@@ -274,9 +274,9 @@ namespace VAdvantage.Model
                                 //Created Table object because not to use Mclass of Quality Control Module in our Base
                                 MVAFTableView table = MVAFTableView.Get(ctx, "VA010_MoveConfParameters");
                                 PO pos = table.GetPO(ctx, 0, Trx_Name);
-                                pos.Set_ValueNoCheck("M_Product_ID", Util.GetValueOfInt(_ProductList[i]));
+                                pos.Set_ValueNoCheck("VAM_Product_ID", Util.GetValueOfInt(_ProductList[i]));
                                 pos.Set_ValueNoCheck("VA010_QualityParameters_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_QualityParameters_ID"]));
-                                pos.Set_ValueNoCheck("M_MovementLineConfirm_ID", Util.GetValueOfInt(M_MoveConfirmLine_ID[i]));
+                                pos.Set_ValueNoCheck("VAM_InvTrf_LineConfirm_ID", Util.GetValueOfInt(M_MoveConfirmLine_ID[i]));
                                 pos.Set_ValueNoCheck("VA010_TestPrmtrList_ID", Util.GetValueOfInt(_ds.Tables[0].Rows[j]["VA010_TestPrmtrList_ID"]));
                                 pos.Set_ValueNoCheck("VA010_QuantityToVerify", Util.GetValueOfDecimal(_qty));
                                 pos.Set_ValueNoCheck("VAF_Client_ID", ctx.GetVAF_Client_ID());
@@ -292,7 +292,7 @@ namespace VAdvantage.Model
                                     Trx_Name.Close();
                                 }
                             }
-                            DB.ExecuteQuery(" UPDATE M_MovementLineConfirm SET VA010_QualCheckMark ='Y'  WHERE M_MovementLineConfirm_ID=" + M_MoveConfirmLine_ID[i], null, Trx_Name);
+                            DB.ExecuteQuery(" UPDATE VAM_InvTrf_LineConfirm SET VA010_QualCheckMark ='Y'  WHERE VAM_InvTrf_LineConfirm_ID=" + M_MoveConfirmLine_ID[i], null, Trx_Name);
                         }
                     }
                 }
@@ -319,13 +319,13 @@ namespace VAdvantage.Model
         {
             if (_lines != null && !requery)
                 return _lines;
-            String sql = "SELECT * FROM M_MovementLineConfirm "
-                + "WHERE M_MovementConfirm_ID=@mcid";
+            String sql = "SELECT * FROM VAM_InvTrf_LineConfirm "
+                + "WHERE VAM_InvTrf_Confirm_ID=@mcid";
             List<MMovementLineConfirm> list = new List<MMovementLineConfirm>();
             try
             {
                 SqlParameter[] param = new SqlParameter[1];
-                param[0] = new SqlParameter("@mcid", GetM_MovementConfirm_ID());
+                param[0] = new SqlParameter("@mcid", GetVAM_InvTrf_Confirm_ID());
 
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
@@ -381,7 +381,7 @@ namespace VAdvantage.Model
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            return Msg.GetElement(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo();
+            return Msg.GetElement(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo();
         }
 
         /// <summary>
@@ -510,7 +510,7 @@ namespace VAdvantage.Model
             //	SetIsInDispute(difference);
             if (difference)
             {
-                _processMsg = "@M_MovementLineConfirm_ID@ <> @IsFullyConfirmed@";
+                _processMsg = "@VAM_InvTrf_LineConfirm_ID@ <> @IsFullyConfirmed@";
                 return DocActionVariables.STATUS_INVALID;
             }
 
@@ -569,7 +569,7 @@ namespace VAdvantage.Model
                 ApproveIt();
             log.Info("CompleteIt - " + ToString());
             //
-            MMovement move = new MMovement(GetCtx(), GetM_Movement_ID(), Get_TrxName());
+            MMovement move = new MMovement(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_TrxName());
             MMovementLineConfirm[] lines = GetLines(false);
 
 
@@ -652,8 +652,8 @@ namespace VAdvantage.Model
 
             if (_inventoryInfo != null)
             {
-                _processMsg = " @M_Inventory_ID@: " + _inventoryInfo;
-                AddDescription(Msg.Translate(GetCtx(), "M_Inventory_ID")
+                _processMsg = " @VAM_Inventory_ID@: " + _inventoryInfo;
+                AddDescription(Msg.Translate(GetCtx(), "VAM_Inventory_ID")
                     + ": " + _inventoryInfo);
             }
             //Amit 21-nov-2014 (Reduce reserved quantity from requisition and warehouse distribution center)
@@ -668,10 +668,10 @@ namespace VAdvantage.Model
                     MMovementLineConfirm confirm = lines[i];
                     if (confirm.GetDifferenceQty() > 0)
                     {
-                        movementLine = new MMovementLine(GetCtx(), confirm.GetM_MovementLine_ID(), Get_Trx());
-                        if (movementLine.GetM_RequisitionLine_ID() > 0)
+                        movementLine = new MMovementLine(GetCtx(), confirm.GetVAM_InvTrf_Line_ID(), Get_Trx());
+                        if (movementLine.GetVAM_RequisitionLine_ID() > 0)
                         {
-                            requisitionLine = new MRequisitionLine(GetCtx(), movementLine.GetM_RequisitionLine_ID(), Get_Trx());
+                            requisitionLine = new MRequisitionLine(GetCtx(), movementLine.GetVAM_RequisitionLine_ID(), Get_Trx());
                             requisitionLine.SetDTD001_ReservedQty(decimal.Subtract(requisitionLine.GetDTD001_ReservedQty(), confirm.GetDifferenceQty()));
                             if (!requisitionLine.Save(Get_Trx()))
                             {
@@ -679,10 +679,10 @@ namespace VAdvantage.Model
                                 // _processMsg = "Requisitionline not updated";
                                 return DocActionVariables.STATUS_INVALID;
                             }
-                            storage = MStorage.Get(GetCtx(), movementLine.GetM_Locator_ID(), movementLine.GetM_Product_ID(), movementLine.GetM_AttributeSetInstance_ID(), Get_Trx());
+                            storage = MStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), movementLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                             if (storage == null)
                             {
-                                storage = MStorage.Get(GetCtx(), movementLine.GetM_Locator_ID(), movementLine.GetM_Product_ID(), 0, Get_Trx());
+                                storage = MStorage.Get(GetCtx(), movementLine.GetVAM_Locator_ID(), movementLine.GetVAM_Product_ID(), 0, Get_Trx());
                             }
                             storage.SetQtyReserved(decimal.Subtract(storage.GetQtyReserved(), confirm.GetDifferenceQty()));
                             if (!storage.Save(Get_Trx()))
@@ -701,7 +701,7 @@ namespace VAdvantage.Model
             SetDocAction(DOCACTION_Close);
             Save(Get_Trx());
             //Adde by Arpit To complete The Inventory Move if Move Confirmation is completed ,16th Dec,2016
-            MMovement Mov = new MMovement(GetCtx(), GetM_Movement_ID(), Get_Trx());
+            MMovement Mov = new MMovement(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_Trx());
             if (move.GetDocStatus() != DOCSTATUS_Completed)
             {
                 string Status = Mov.CompleteIt();
@@ -742,32 +742,32 @@ namespace VAdvantage.Model
             //Opening Stock , Qunatity Book => CurrentQty From Transaction of MovementDate
             //As On Date Count = Opening Stock - Diff Qty
             //Qty Count = Qty Book - Diff Qty
-            query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                           AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+            query = "SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate = " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                           AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID();
             result = Util.GetValueOfInt(DB.ExecuteScalar(query));
             if (result > 0)
             {
-                query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                query = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_ID =
+                            (SELECT MAX(VAM_Inv_Trx_ID)   FROM VAM_Inv_Trx
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate <= " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID() + @")
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID() + @")
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID();
                 currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
             }
             else
             {
-                query = "SELECT COUNT(*) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                query = "SELECT COUNT(*) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID();
                 result = Util.GetValueOfInt(DB.ExecuteScalar(query));
                 if (result > 0)
                 {
-                    query = @"SELECT currentqty FROM M_Transaction WHERE M_Transaction_ID =
-                            (SELECT MAX(M_Transaction_ID)   FROM M_Transaction
-                            WHERE movementdate =     (SELECT MAX(movementdate) FROM M_Transaction WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID() + @")
-                            AND  M_Product_ID = " + mLine.GetM_Product_ID() + " AND M_Locator_ID = " + mLine.GetM_Locator_ID() + " AND M_AttributeSetInstance_ID = " + mLine.GetM_AttributeSetInstance_ID();
+                    query = @"SELECT currentqty FROM VAM_Inv_Trx WHERE VAM_Inv_Trx_ID =
+                            (SELECT MAX(VAM_Inv_Trx_ID)   FROM VAM_Inv_Trx
+                            WHERE movementdate =     (SELECT MAX(movementdate) FROM VAM_Inv_Trx WHERE movementdate < " + GlobalVariable.TO_DATE(move.GetMovementDate(), true) + @" 
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID() + @")
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID() + @")
+                            AND  VAM_Product_ID = " + mLine.GetVAM_Product_ID() + " AND VAM_Locator_ID = " + mLine.GetVAM_Locator_ID() + " AND VAM_PFeature_SetInstance_ID = " + mLine.GetVAM_PFeature_SetInstance_ID();
                     currentQty = Util.GetValueOfDecimal(DB.ExecuteScalar(query));
                 }
             }
@@ -777,25 +777,25 @@ namespace VAdvantage.Model
             if (Env.ZERO.CompareTo(confirm.GetDifferenceQty()) != 0)
             {
                 //	Get Warehouse for Source
-                MLocator loc = MLocator.Get(GetCtx(), mLine.GetM_Locator_ID());
+                MLocator loc = MLocator.Get(GetCtx(), mLine.GetVAM_Locator_ID());
                 if (_inventoryFrom != null
-                    && _inventoryFrom.GetM_Warehouse_ID() != loc.GetM_Warehouse_ID())
+                    && _inventoryFrom.GetVAM_Warehouse_ID() != loc.GetVAM_Warehouse_ID())
                     _inventoryFrom = null;
 
                 if (_inventoryFrom == null)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
+                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
                     _inventoryFrom = new MInventory(wh);
-                    _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
+                    _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryFrom.Save(Get_TrxName()))
                     {
                         _processMsg += "Inventory not created";
                         return false;
                     }
                     //	First Inventory
-                    if (GetM_Inventory_ID() == 0)
+                    if (GetVAM_Inventory_ID() == 0)
                     {
-                        SetM_Inventory_ID(_inventoryFrom.GetM_Inventory_ID());
+                        SetVAM_Inventory_ID(_inventoryFrom.GetVAM_Inventory_ID());
                         _inventoryInfo = _inventoryFrom.GetDocumentNo();
                     }
                     else
@@ -804,8 +804,8 @@ namespace VAdvantage.Model
 
                 log.Info("createDifferenceDoc - Difference=" + confirm.GetDifferenceQty());
 
-                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetM_Locator_ID(), mLine.GetM_Product_ID(),
-                        mLine.GetM_AttributeSetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);
+                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetVAM_Locator_ID(), mLine.GetVAM_Product_ID(),
+                        mLine.GetVAM_PFeature_SetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);
 
                 line.SetAdjustmentType("D");
                 line.SetDifferenceQty(Util.GetValueOfDecimal(confirm.GetDifferenceQty()));
@@ -824,32 +824,32 @@ namespace VAdvantage.Model
                     _processMsg += "Inventory Line not created";
                     return false;
                 }
-                confirm.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
+                confirm.SetVAM_InventoryLine_ID(line.GetVAM_InventoryLine_ID());
             }	//	Difference
 
             //	Scrapped - Create Inventory Difference for TarGet Location
             if (Env.ZERO.CompareTo(confirm.GetScrappedQty()) != 0)
             {
                 //	Get Warehouse for TarGet
-                MLocator loc = MLocator.Get(GetCtx(), mLine.GetM_LocatorTo_ID());
+                MLocator loc = MLocator.Get(GetCtx(), mLine.GetVAM_LocatorTo_ID());
                 if (_inventoryTo != null
-                    && _inventoryTo.GetM_Warehouse_ID() != loc.GetM_Warehouse_ID())
+                    && _inventoryTo.GetVAM_Warehouse_ID() != loc.GetVAM_Warehouse_ID())
                     _inventoryTo = null;
 
                 if (_inventoryTo == null)
                 {
-                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
+                    MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
                     _inventoryTo = new MInventory(wh);
-                    _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
+                    _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryTo.Save(Get_TrxName()))
                     {
                         _processMsg += "Inventory not created";
                         return false;
                     }
                     //	First Inventory
-                    if (GetM_Inventory_ID() == 0)
+                    if (GetVAM_Inventory_ID() == 0)
                     {
-                        SetM_Inventory_ID(_inventoryTo.GetM_Inventory_ID());
+                        SetVAM_Inventory_ID(_inventoryTo.GetVAM_Inventory_ID());
                         _inventoryInfo = _inventoryTo.GetDocumentNo();
                     }
                     else
@@ -858,7 +858,7 @@ namespace VAdvantage.Model
 
                 log.Info("CreateDifferenceDoc - Scrapped=" + confirm.GetScrappedQty());
                 MInventoryLine line = new MInventoryLine(_inventoryTo,
-                    mLine.GetM_LocatorTo_ID(), mLine.GetM_Product_ID(), mLine.GetM_AttributeSetInstance_ID(),
+                    mLine.GetVAM_LocatorTo_ID(), mLine.GetVAM_Product_ID(), mLine.GetVAM_PFeature_SetInstance_ID(),
                     confirm.GetScrappedQty(), Env.ZERO);
                 line.SetDescription(Msg.Translate(GetCtx(), "ScrappedQty"));
 
@@ -879,7 +879,7 @@ namespace VAdvantage.Model
                     _processMsg += "Inventory Line not created";
                     return false;
                 }
-                confirm.SetM_InventoryLine_ID(line.GetM_InventoryLine_ID());
+                confirm.SetVAM_InventoryLine_ID(line.GetVAM_InventoryLine_ID());
             }	//	Scrapped
 
             return true;
@@ -917,7 +917,7 @@ namespace VAdvantage.Model
                         MMovementLineConfirm oLines = Lines[i];
                         MMovementLineConfirm revLines = new MMovementLineConfirm(GetCtx(), 0, Get_TrxName());
                         CopyValues(oLines, revLines, oLines.GetVAF_Client_ID(), oLines.GetVAF_Org_ID());
-                        revLines.SetM_MovementConfirm_ID(RevMoveConf.GetM_MovementConfirm_ID());
+                        revLines.SetVAM_InvTrf_Confirm_ID(RevMoveConf.GetVAM_InvTrf_Confirm_ID());
                         revLines.SetConfirmedQty(Decimal.Negate(revLines.GetConfirmedQty()));
                         revLines.SetDifferenceQty(Decimal.Negate(revLines.GetDifferenceQty()));
                         revLines.SetScrappedQty(Decimal.Negate(revLines.GetScrappedQty()));
@@ -987,15 +987,15 @@ namespace VAdvantage.Model
             if (reversal.Save())
             {
                 // Move Confirm Line
-                DataSet ds = DB.ExecuteDataset("Select M_MovementLineConfirm_ID from M_MovementLineConfirm Where M_MovementConfirm_ID =" + GetM_MovementConfirm_ID());
+                DataSet ds = DB.ExecuteDataset("Select VAM_InvTrf_LineConfirm_ID from VAM_InvTrf_LineConfirm Where VAM_InvTrf_Confirm_ID =" + GetVAM_InvTrf_Confirm_ID());
                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                 {
                     for (Int32 i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MMovementLineConfirm linesfrom = new MMovementLineConfirm(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_MovementLineConfirm_ID"]), Get_TrxName());
+                        MMovementLineConfirm linesfrom = new MMovementLineConfirm(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InvTrf_LineConfirm_ID"]), Get_TrxName());
                         MMovementLineConfirm linesTo = new MMovementLineConfirm(GetCtx(), 0, Get_TrxName());
                         CopyValues(linesfrom, linesTo, GetVAF_Client_ID(), GetVAF_Org_ID());
-                        linesTo.SetM_MovementConfirm_ID(reversal.GetM_MovementConfirm_ID());
+                        linesTo.SetVAM_InvTrf_Confirm_ID(reversal.GetVAM_InvTrf_Confirm_ID());
                         linesTo.SetConfirmedQty(Decimal.Negate(linesfrom.GetConfirmedQty()));
                         linesTo.SetDifferenceQty(Decimal.Negate(linesfrom.GetDifferenceQty()));
                         linesTo.SetScrappedQty(Decimal.Negate(linesfrom.GetScrappedQty()));
@@ -1093,7 +1093,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_Currency_ID</returns>
         public int GetVAB_Currency_ID()
         {
-            //	MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID());
+            //	MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID());
             //	return pl.GetVAB_Currency_ID();
             return 0;
         }

@@ -16,11 +16,11 @@ namespace VAdvantage.Model
     {
         public X_VAB_ExpectedCost(Context ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
         {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetVAB_Order_ID (0);SetLandedCostDistribution (null);// Q
-SetM_CostElement_ID (0);} */
+SetVAM_ProductCostElement_ID (0);} */
         }
         public X_VAB_ExpectedCost(Ctx ctx, int VAB_ExpectedCost_ID, Trx trxName) : base(ctx, VAB_ExpectedCost_ID, trxName)
         {/** if (VAB_ExpectedCost_ID == 0){SetAmt (0.0);SetVAB_ExpectedCost_ID (0);SetVAB_Order_ID (0);SetLandedCostDistribution (null);// Q
-SetM_CostElement_ID (0);} */
+SetVAM_ProductCostElement_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
@@ -100,9 +100,9 @@ SetM_CostElement_ID (0);} */
         }/** Get Cost Distribution.
 @return Landed Cost Distribution */
         public String GetLandedCostDistribution() { return (String)Get_Value("LandedCostDistribution"); }/** Set Cost Element.
-@param M_CostElement_ID Product Cost Element */
-        public void SetM_CostElement_ID(int M_CostElement_ID) { if (M_CostElement_ID < 1) throw new ArgumentException("M_CostElement_ID is mandatory."); Set_Value("M_CostElement_ID", M_CostElement_ID); }/** Get Cost Element.
+@param VAM_ProductCostElement_ID Product Cost Element */
+        public void SetVAM_ProductCostElement_ID(int VAM_ProductCostElement_ID) { if (VAM_ProductCostElement_ID < 1) throw new ArgumentException("VAM_ProductCostElement_ID is mandatory."); Set_Value("VAM_ProductCostElement_ID", VAM_ProductCostElement_ID); }/** Get Cost Element.
 @return Product Cost Element */
-        public int GetM_CostElement_ID() { Object ii = Get_Value("M_CostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_ProductCostElement_ID() { Object ii = Get_Value("VAM_ProductCostElement_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }

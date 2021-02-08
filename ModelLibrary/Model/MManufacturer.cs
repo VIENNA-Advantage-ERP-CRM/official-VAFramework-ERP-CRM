@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MManufacturer
  * Purpose        : Product Manufacturer setting using x-classes
- * Class Used     : X_M_Manufacturer
+ * Class Used     : X_VAM_Manufacturer
  * Chronological    Development
  * Raghunandan     27-March-2015
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MManufacturer : X_M_Manufacturer
+    public class MManufacturer : X_VAM_Manufacturer
     {
         #region variable
 
@@ -51,8 +51,8 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MManufacturer(Ctx ctx, int M_Manufacturer_ID, Trx trxName)
-            : base(ctx, M_Manufacturer_ID, trxName)
+        public MManufacturer(Ctx ctx, int VAM_Manufacturer_ID, Trx trxName)
+            : base(ctx, VAM_Manufacturer_ID, trxName)
         {
         }
 
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
 
                 manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
-                //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+                //if (manu_ID != 0 && manu_ID != GetVAM_Product_ID())
                 {
                     _log.SaveError("UPCUnique", "");
                     return false;
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
 
         //protected override bool AfterDelete(bool success)
         //{
-        //    sql = "DELETE FROM M_ProductAttributes WHERE IsActive = 'Y' AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID() + " AND UPC = '" + GetUPC() + "'";
+        //    sql = "DELETE FROM VAM_ProductFeatures WHERE IsActive = 'Y' AND VAM_PFeature_SetInstance_ID = " + GetVAM_PFeature_SetInstance_ID() + " AND UPC = '" + GetUPC() + "'";
         //    manu_ID = DB.ExecuteQuery(sql, null, null);
         //    if (manu_ID <= 0)
         //    {

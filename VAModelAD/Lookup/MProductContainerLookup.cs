@@ -42,7 +42,7 @@ namespace VAdvantage.Model
                 list.Add(new KeyNamePair(-1, ""));
             //
             StringBuilder sql = new StringBuilder(
-                    "SELECT M_ProductContainer_ID, Value || '_' || Name as valu from M_ProductContainer WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
+                    "SELECT VAM_ProductContainer_ID, Value || '_' || Name as valu from VAM_ProductContainer WHERE VAF_Client_ID = @ClientId AND (VAF_Org_ID = 0 OR @parameter = 0)");
             if (onlyActive)
                 sql.Append(" AND IsActive='Y'");
             sql.Append(" ORDER BY 1");
@@ -83,30 +83,30 @@ namespace VAdvantage.Model
 
         public override string GetColumnName()
         {
-            return "M_ProductContainer_ID";
+            return "VAM_ProductContainer_ID";
         }
 
         public override NamePair Get(object value)
         {
             if (value == null)
                 return null;
-            int M_ProductContainer_ID = 0;
+            int VAM_ProductContainer_ID = 0;
             if (value is int)
             {
-                M_ProductContainer_ID = (int)value;
+                VAM_ProductContainer_ID = (int)value;
             }
             else
             {
                 try
                 {
-                    M_ProductContainer_ID = int.Parse(value.ToString());
+                    VAM_ProductContainer_ID = int.Parse(value.ToString());
                 }
                 catch (Exception e)
                 {
                     log.Log(Level.SEVERE, "Value=" + value, e);
                 }
             }
-            if (M_ProductContainer_ID == 0)
+            if (VAM_ProductContainer_ID == 0)
             {
                 return NO_INSTANCE;
             }
@@ -116,8 +116,8 @@ namespace VAdvantage.Model
             try
             {
                 dr = DataBase.DB.ExecuteReader("SELECT Value || '_' || Name "
-                    + "FROM M_ProductContainer "
-                    + "WHERE M_ProductContainer_ID=" + M_ProductContainer_ID);
+                    + "FROM VAM_ProductContainer "
+                    + "WHERE VAM_ProductContainer_ID=" + VAM_ProductContainer_ID);
 
                 if (dr.Read())
                 {
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
                     {
                         if (VLogMgt.IsLevelFinest())
                         {
-                            description = "{" + M_ProductContainer_ID.ToString() + "}";
+                            description = "{" + VAM_ProductContainer_ID.ToString() + "}";
                         }
                         else
                         {
@@ -150,7 +150,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            return new KeyNamePair(M_ProductContainer_ID, description);
+            return new KeyNamePair(VAM_ProductContainer_ID, description);
         }
 
         public override string GetDisplay(object value)

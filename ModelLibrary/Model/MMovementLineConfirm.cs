@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : 
  * Purpose        : Inventory Movement Confirmation Line
- * Class Used     : X_M_MovementLineConfirm
+ * Class Used     : X_VAM_InvTrf_LineConfirm
  * Chronological Development
  * Veena         27-Oct-2009
  ******************************************************/
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Inventory Movement Confirmation Line
     /// </summary>
-    public class MMovementLineConfirm : X_M_MovementLineConfirm
+    public class MMovementLineConfirm : X_VAM_InvTrf_LineConfirm
     {
         /**	Movement Line			*/
         private MMovementLine _line = null;
@@ -34,15 +34,15 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MovementLineConfirm_ID">id</param>
+        /// <param name="VAM_InvTrf_LineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMovementLineConfirm(Ctx ctx, int M_MovementLineConfirm_ID, Trx trxName)
-            : base(ctx, M_MovementLineConfirm_ID, trxName)
+        public MMovementLineConfirm(Ctx ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName)
+            : base(ctx, VAM_InvTrf_LineConfirm_ID, trxName)
 	    {
-            if (M_MovementLineConfirm_ID == 0)
+            if (VAM_InvTrf_LineConfirm_ID == 0)
 		    {
-                //	SetM_MovementConfirm_ID (0);	Parent
-                //	SetM_MovementLine_ID (0);
+                //	SetVAM_InvTrf_Confirm_ID (0);	Parent
+                //	SetVAM_InvTrf_Line_ID (0);
                 SetConfirmedQty(Env.ZERO);
                 SetDifferenceQty(Env.ZERO);
                 SetScrappedQty(Env.ZERO);
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
 	    {
             SetClientOrg(parent);
-            SetM_MovementConfirm_ID(parent.GetM_MovementConfirm_ID());
+            SetVAM_InvTrf_Confirm_ID(parent.GetVAM_InvTrf_Confirm_ID());
 	    }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         /// <param name="line">line</param>
         public void SetMovementLine(MMovementLine line)
         {
-            SetM_MovementLine_ID(line.GetM_MovementLine_ID());
+            SetVAM_InvTrf_Line_ID(line.GetVAM_InvTrf_Line_ID());
             SetTargetQty(line.GetMovementQty());
             //Amit 25-nov-2014
             // SetConfirmedQty(GetTargetQty());	//	suggestion
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         public MMovementLine GetLine()
         {
             if (_line == null)
-                _line = new MMovementLine(GetCtx(), GetM_MovementLine_ID(), Get_TrxName());
+                _line = new MMovementLine(GetCtx(), GetVAM_InvTrf_Line_ID(), Get_TrxName());
             return _line;
         }
 

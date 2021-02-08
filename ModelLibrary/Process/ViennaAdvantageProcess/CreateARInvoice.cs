@@ -30,7 +30,7 @@ namespace ViennaAdvantage.Process
         //string msg = "";
         List<int> VAB_BusinessPartner_ID = new List<int>();
         // List<int> VAB_BusinessPartner_IDAP = new List<int>();
-        List<int> M_Product_ID = new List<int>();
+        List<int> VAM_Product_ID = new List<int>();
         Dictionary<int, int> BPInvoice = new Dictionary<int, int>();
         // Dictionary<int, int> BPAPInvoice = new Dictionary<int, int>();
         int VAF_Org_ID = 0;
@@ -144,7 +144,7 @@ namespace ViennaAdvantage.Process
                             {
                                 VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
 
-                                if ((inv.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv.GetM_PriceList_ID() == ord.GetM_PriceList_ID()))
+                                if ((inv.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv.GetVAM_PriceList_ID() == ord.GetVAM_PriceList_ID()))
                                 {
                                     chk = true;
                                     break;
@@ -222,7 +222,7 @@ namespace ViennaAdvantage.Process
                                             VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAB_Order_ID"]), null);
                                             VAdvantage.Model.MInvoice inv1 = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[l]), null);
                                             if ((inv1.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv1.GetVAB_BusinessPartner_ID() == ord.GetVAB_BusinessPartner_ID())
-                                                && (inv1.GetM_PriceList_ID() == ord.GetM_PriceList_ID()))
+                                                && (inv1.GetVAM_PriceList_ID() == ord.GetVAM_PriceList_ID()))
                                             {
                                                 chk1 = true;
                                                 invID = inv1.GetVAB_Invoice_ID();
@@ -397,25 +397,25 @@ namespace ViennaAdvantage.Process
 
             if (tLine.IsARInvoice())
             {
-                if (Util.GetValueOfInt(tLine.GetM_Product_ID()) != 0)
+                if (Util.GetValueOfInt(tLine.GetVAM_Product_ID()) != 0)
                 {
                     sql = "select max(line) from VAB_InvoiceLine where VAB_Invoice_id = " + VAB_Invoice_ID;
                     int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and m_product_id = " + tLine.GetM_Product_ID();
+                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and VAM_Product_id = " + tLine.GetVAM_Product_ID();
                     int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (VAB_InvoiceLine_ID != 0)
                     {
                         sql = "select VAB_UOM_id from VAB_Orderline where VAB_Orderline_id = " + tLine.GetVAB_OrderLine_ID();
                         int VAB_UOM_IDTo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                        sql = "select VAB_UOM_id from m_product where m_product_id = " + tLine.GetM_Product_ID();
+                        sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + tLine.GetVAM_Product_ID();
                         int VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                         Decimal? qty = 0;
 
                         // qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetARApprovedHrs(), true);
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
+                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetQtyEntered(Decimal.Add(iLine.GetQtyEntered(), qty.Value));
@@ -437,12 +437,12 @@ namespace ViennaAdvantage.Process
                         sql = "select VAB_UOM_id from VAB_Orderline where VAB_Orderline_id = " + tLine.GetVAB_OrderLine_ID();
                         int VAB_UOM_IDTo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                        sql = "select VAB_UOM_id from m_product where m_product_id = " + tLine.GetM_Product_ID();
+                        sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + tLine.GetVAM_Product_ID();
                         int VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                         Decimal? qty = 0;
 
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
+                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
@@ -451,7 +451,7 @@ namespace ViennaAdvantage.Process
                         iLine.SetVAB_TaxRate_ID(tLine.GetVAB_TaxRate_ID());
                         iLine.SetVAB_UOM_ID(tLine.GetVAB_UOM_ID());
                         iLine.SetDescription(tLine.GetDescription());
-                        iLine.SetM_Product_ID(tLine.GetM_Product_ID());
+                        iLine.SetVAM_Product_ID(tLine.GetVAM_Product_ID());
                         iLine.SetQtyEntered(qty);
                         iLine.SetQtyInvoiced(qty);
 
@@ -567,7 +567,7 @@ namespace ViennaAdvantage.Process
             inv.SetVAB_BPart_Location_ID(VAB_BPart_Location_ID);
             inv.SetVAB_Currency_ID(tLine.GetVAB_Currency_ID());
             inv.SetDateInvoiced(_DateInvoiced);
-            inv.SetM_PriceList_ID(tExp.GetM_PriceList_ID());
+            inv.SetVAM_PriceList_ID(tExp.GetVAM_PriceList_ID());
             inv.SetDateAcct(_DateInvoiced);
             inv.SetIsApproved(true);
 
@@ -596,7 +596,7 @@ namespace ViennaAdvantage.Process
                 inv.SetVAB_PaymentTerm_ID(ord.GetVAB_PaymentTerm_ID());
                 inv.SetSalesRep_ID(ord.GetSalesRep_ID());
                 inv.SetVAB_Order_ID(ord.GetVAB_Order_ID());
-                inv.SetM_PriceList_ID(ord.GetM_PriceList_ID());
+                inv.SetVAM_PriceList_ID(ord.GetVAM_PriceList_ID());
             }
             else
             {
@@ -609,8 +609,8 @@ namespace ViennaAdvantage.Process
                     VAB_PaymentTerm_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                 }
 
-                sql = "select M_Pricelist_ID from m_Pricelist where issopricelist = 'Y' and isactive = 'Y'";
-                inv.SetM_PriceList_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
+                sql = "select VAM_PriceList_ID from VAM_PriceList where issopricelist = 'Y' and isactive = 'Y'";
+                inv.SetVAM_PriceList_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
 
                 inv.SetVAB_PaymentTerm_ID(VAB_PaymentTerm_ID);
                 inv.SetSalesRep_ID(tExp.GetSalesRep_ID());

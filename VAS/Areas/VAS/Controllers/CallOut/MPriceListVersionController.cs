@@ -16,7 +16,7 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetM_PriceList_Version_ID(string fields)
+        public JsonResult GetVAM_PriceListVersion_ID(string fields)
         {
             string retError = "";
             string retJSON = "";
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
                 MPriceListVersionModel objPriceList = new MPriceListVersionModel();
-                retJSON = JsonConvert.SerializeObject(objPriceList.GetM_PriceList_Version_ID(ctx, fields));
+                retJSON = JsonConvert.SerializeObject(objPriceList.GetVAM_PriceListVersion_ID(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

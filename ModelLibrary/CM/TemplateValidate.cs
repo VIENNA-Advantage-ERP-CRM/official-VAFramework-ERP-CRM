@@ -33,7 +33,7 @@ namespace VAdvantage.CM
 
         protected override String DoIt()
         {
-            MTemplate thisTemplate = new MTemplate(GetCtx(), GetRecord_ID(), Get_Trx());
+            MVACMLayout thisTemplate = new MVACMLayout(GetCtx(), GetRecord_ID(), Get_Trx());
             thisTemplate.SetIsValid(true);
             thisTemplate.Save();
             return null;

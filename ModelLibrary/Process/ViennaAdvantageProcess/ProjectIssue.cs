@@ -22,21 +22,21 @@ namespace ViennaAdvantage.Process
         /**	Project - Mandatory Parameter		*/
         private int m_VAB_Project_ID = 0;
         /**	Receipt - Option 1					*/
-        private int m_M_InOut_ID = 0;
+        private int m_VAM_Inv_InOut_ID = 0;
         /**	Expenses - Option 2					*/
         private int m_VAS_ExpenseReport_ID = 0;
         /** Locator - Option 3,4				*/
-        private int m_M_Locator_ID = 0;
+        private int m_VAM_Locator_ID = 0;
         /** Project Line - Option 3				*/
         private int m_VAB_ProjectLine_ID = 0;
         /** Product - Option 4					*/
-        private int m_M_Product_ID = 0;
+        private int m_VAM_Product_ID = 0;
         /** Attribute - Option 4				*/
-        private int m_M_AttributeSetInstance_ID = 0;
+        private int m_VAM_PFeature_SetInstance_ID = 0;
         /** Qty - Option 4						*/
-        private Decimal? m_MovementQty = null;
+        private Decimal? VAM_InventoryTransferQty = null;
         /** Date - Option						*/
-        private DateTime? m_MovementDate = null;
+        private DateTime? VAM_InventoryTransferDate = null;
         /** Description - Option				*/
         private String m_Description = null;
 
@@ -61,43 +61,43 @@ namespace ViennaAdvantage.Process
                     // m_VAB_Project_ID = ((Decimal)para[i].GetParameter()).intValue();
                     m_VAB_Project_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_InOut_ID"))
+                else if (name.Equals("VAM_Inv_InOut_ID"))
                 {
-                    //m_M_InOut_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    m_M_InOut_ID = para[i].GetParameterAsInt();
+                    //m_VAM_Inv_InOut_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    m_VAM_Inv_InOut_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAS_ExpenseReport_ID"))
                 {
                     // m_VAS_ExpenseReport_ID = ((BigDecimal)para[i].getParameter()).intValue();
                     m_VAS_ExpenseReport_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Locator_ID"))
+                else if (name.Equals("VAM_Locator_ID"))
                 {
-                    //m_M_Locator_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    m_M_Locator_ID = para[i].GetParameterAsInt();
+                    //m_VAM_Locator_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    m_VAM_Locator_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("VAB_ProjectLine_ID"))
                 {
                     // m_VAB_ProjectLine_ID = ((BigDecimal)para[i].getParameter()).intValue();
                     m_VAB_ProjectLine_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
-                    //m_M_Product_ID = ((BigDecimal)para[i].getParameter()).intValue();
-                    m_M_Product_ID = para[i].GetParameterAsInt();
+                    //m_VAM_Product_ID = ((BigDecimal)para[i].getParameter()).intValue();
+                    m_VAM_Product_ID = para[i].GetParameterAsInt();
                 }
-                else if (name.Equals("M_AttributeSetInstance_ID"))
+                else if (name.Equals("VAM_PFeature_SetInstance_ID"))
                 {
-                    //m_M_AttributeSetInstance_ID = ((BigDecimal)para[i].GetParameter()).intValue();
-                    m_M_AttributeSetInstance_ID = para[i].GetParameterAsInt();
+                    //m_VAM_PFeature_SetInstance_ID = ((BigDecimal)para[i].GetParameter()).intValue();
+                    m_VAM_PFeature_SetInstance_ID = para[i].GetParameterAsInt();
                 }
                 else if (name.Equals("MovementQty"))
                 {
-                    m_MovementQty = Util.GetValueOfDecimal(para[i].GetParameter());
+                    VAM_InventoryTransferQty = Util.GetValueOfDecimal(para[i].GetParameter());
                 }
                 else if (name.Equals("MovementDate"))
                 {
-                    m_MovementDate = Util.GetValueOfDateTime(para[i].GetParameter());
+                    VAM_InventoryTransferDate = Util.GetValueOfDateTime(para[i].GetParameter());
                 }
                 else if (name.Equals("Description"))
                 {
@@ -127,7 +127,7 @@ namespace ViennaAdvantage.Process
             log.Info(m_project.ToString());
 
             //
-            if (m_M_InOut_ID != 0)
+            if (m_VAM_Inv_InOut_ID != 0)
             {
                 return IssueReceipt();
             }
@@ -135,7 +135,7 @@ namespace ViennaAdvantage.Process
             {
                 return IssueExpense();
             }
-            if (m_M_Locator_ID == 0)
+            if (m_VAM_Locator_ID == 0)
             {
                 throw new ArgumentException("Locator missing");
             }
@@ -154,7 +154,7 @@ namespace ViennaAdvantage.Process
 	 */
         private String IssueReceipt()
         {
-            MInOut inOut = new MInOut(GetCtx(), m_M_InOut_ID, null);
+            MInOut inOut = new MInOut(GetCtx(), m_VAM_Inv_InOut_ID, null);
             if (inOut.IsSOTrx() || !inOut.IsProcessed()
                 || !(MInOut.DOCSTATUS_Completed.Equals(inOut.GetDocStatus()) || MInOut.DOCSTATUS_Closed.Equals(inOut.GetDocStatus())))
             {
@@ -177,20 +177,20 @@ namespace ViennaAdvantage.Process
             for (int i = 0; i < inOutLines.Length; i++)
             {
                 //	Need to have a Product
-                if (inOutLines[i].GetM_Product_ID() == 0)
+                if (inOutLines[i].GetVAM_Product_ID() == 0)
                     continue;
                 //	Need to have Quantity
                 if ( Env.Signum(inOutLines[i].GetMovementQty()) == 0)
                     continue;
                 //	not issued yet
-                if (ProjectIssueHasReceipt(inOutLines[i].GetM_InOutLine_ID()))
+                if (ProjectIssueHasReceipt(inOutLines[i].GetVAM_Inv_InOutLine_ID()))
                     continue;
                 //	Create Issue
                 MProjectIssue pi = new MProjectIssue(m_project);
-                pi.SetMandatory(inOutLines[i].GetM_Locator_ID(), inOutLines[i].GetM_Product_ID(), inOutLines[i].GetMovementQty());
-                if (m_MovementDate != null)		//	default today
+                pi.SetMandatory(inOutLines[i].GetVAM_Locator_ID(), inOutLines[i].GetVAM_Product_ID(), inOutLines[i].GetMovementQty());
+                if (VAM_InventoryTransferDate != null)		//	default today
                 {
-                    pi.SetMovementDate(m_MovementDate);
+                    pi.SetMovementDate(VAM_InventoryTransferDate);
                 }
                 if (m_Description != null && m_Description.Length > 0)
                 {
@@ -204,7 +204,7 @@ namespace ViennaAdvantage.Process
                 {
                     pi.SetDescription(inOut.GetDescription());
                 }
-                pi.SetM_InOutLine_ID(inOutLines[i].GetM_InOutLine_ID());
+                pi.SetVAM_Inv_InOutLine_ID(inOutLines[i].GetVAM_Inv_InOutLine_ID());
                 pi.Process();
 
                 //	Find/Create Project Line
@@ -214,7 +214,7 @@ namespace ViennaAdvantage.Process
                 {
                     //	The Order we generated is the same as the Order of the receipt
                     if (pls[ii].GetVAB_OrderPO_ID() == inOut.GetVAB_Order_ID()
-                        && pls[ii].GetM_Product_ID() == inOutLines[i].GetM_Product_ID()
+                        && pls[ii].GetVAM_Product_ID() == inOutLines[i].GetVAM_Product_ID()
                         && pls[ii].GetVAB_ProjectSupply_ID() == 0)		//	not issued
                     {
                         pl = pls[ii];
@@ -252,7 +252,7 @@ namespace ViennaAdvantage.Process
             for (int i = 0; i < expenseLines.Length; i++)
             {
                 //	Need to have a Product
-                if (expenseLines[i].GetM_Product_ID() == 0)
+                if (expenseLines[i].GetVAM_Product_ID() == 0)
                     continue;
                 //	Need to have Quantity
                 if ( Env.Signum(expenseLines[i].GetQty()) == 0)
@@ -265,20 +265,20 @@ namespace ViennaAdvantage.Process
                     continue;
 
                 //	Find Location
-                int M_Locator_ID = 0;
-                //	MProduct product = new MProduct (getCtx(), expenseLines[i].getM_Product_ID());
+                int VAM_Locator_ID = 0;
+                //	MProduct product = new MProduct (getCtx(), expenseLines[i].getVAM_Product_ID());
                 //	if (product.isStocked())
-                M_Locator_ID = MStorage.GetM_Locator_ID(expense.GetM_Warehouse_ID(),
-                    expenseLines[i].GetM_Product_ID(), 0, 	//	no ASI
+                VAM_Locator_ID = MStorage.GetVAM_Locator_ID(expense.GetVAM_Warehouse_ID(),
+                    expenseLines[i].GetVAM_Product_ID(), 0, 	//	no ASI
                     expenseLines[i].GetQty(), null);
-                if (M_Locator_ID == 0)	//	Service/Expense - get default (and fallback)
-                    M_Locator_ID = expense.GetM_Locator_ID();
+                if (VAM_Locator_ID == 0)	//	Service/Expense - get default (and fallback)
+                    VAM_Locator_ID = expense.GetVAM_Locator_ID();
 
                 //	Create Issue
                 MProjectIssue pi = new MProjectIssue(m_project);
-                pi.SetMandatory(M_Locator_ID, expenseLines[i].GetM_Product_ID(), expenseLines[i].GetQty());
-                if (m_MovementDate != null)		//	default today
-                    pi.SetMovementDate(m_MovementDate);
+                pi.SetMandatory(VAM_Locator_ID, expenseLines[i].GetVAM_Product_ID(), expenseLines[i].GetQty());
+                if (VAM_InventoryTransferDate != null)		//	default today
+                    pi.SetMovementDate(VAM_InventoryTransferDate);
                 if (m_Description != null && m_Description.Length > 0)
                     pi.SetDescription(m_Description);
                 else if (expenseLines[i].GetDescription() != null)
@@ -304,7 +304,7 @@ namespace ViennaAdvantage.Process
         private String IssueProjectLine()
         {
             MProjectLine pl = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
-            if (pl.GetM_Product_ID() == 0)
+            if (pl.GetVAM_Product_ID() == 0)
             {
                 throw new ArgumentException("Projet Line has no Product");
             }
@@ -312,7 +312,7 @@ namespace ViennaAdvantage.Process
             {
                 throw new ArgumentException("Projet Line already been issued");
             }
-            if (m_M_Locator_ID == 0)
+            if (m_VAM_Locator_ID == 0)
             {
                 throw new ArgumentException("No Locator");
             }
@@ -323,10 +323,10 @@ namespace ViennaAdvantage.Process
             }
             //
             MProjectIssue pi = new MProjectIssue(m_project);
-            pi.SetMandatory(m_M_Locator_ID, pl.GetM_Product_ID(), pl.GetPlannedQty());
-            if (m_MovementDate != null)		//	default today
+            pi.SetMandatory(m_VAM_Locator_ID, pl.GetVAM_Product_ID(), pl.GetPlannedQty());
+            if (VAM_InventoryTransferDate != null)		//	default today
             {
-                pi.SetMovementDate(m_MovementDate);
+                pi.SetMovementDate(VAM_InventoryTransferDate);
             }
             if (m_Description != null && m_Description.Length > 0)
             {
@@ -352,25 +352,25 @@ namespace ViennaAdvantage.Process
          */
         private String IssueInventory()
         {
-            if (m_M_Locator_ID == 0)
+            if (m_VAM_Locator_ID == 0)
             {
                 throw new ArgumentException("No Locator");
             }
-            if (m_M_Product_ID == 0)
+            if (m_VAM_Product_ID == 0)
             {
                 throw new ArgumentException("No Product");
             }
             //	Set to Qty 1
-            if (m_MovementQty == null || (m_MovementQty) == 0)
+            if (VAM_InventoryTransferQty == null || (VAM_InventoryTransferQty) == 0)
             {
-                m_MovementQty = Env.ONE;
+                VAM_InventoryTransferQty = Env.ONE;
             }
             //
             MProjectIssue pi = new MProjectIssue(m_project);
-            pi.SetMandatory(m_M_Locator_ID, m_M_Product_ID, m_MovementQty.Value);
-            if (m_MovementDate != null)		//	default today
+            pi.SetMandatory(m_VAM_Locator_ID, m_VAM_Product_ID, VAM_InventoryTransferQty.Value);
+            if (VAM_InventoryTransferDate != null)		//	default today
             {
-                pi.SetMovementDate(m_MovementDate);
+                pi.SetMovementDate(VAM_InventoryTransferDate);
             }
             if (m_Description != null && m_Description.Length > 0)
             {
@@ -409,10 +409,10 @@ namespace ViennaAdvantage.Process
 
         /**
          * 	Check if Project Isssye already has Receipt
-         *	@param M_InOutLine_ID line
+         *	@param VAM_Inv_InOutLine_ID line
          *	@return true if exists
          */
-        private Boolean ProjectIssueHasReceipt(int M_InOutLine_ID)
+        private Boolean ProjectIssueHasReceipt(int VAM_Inv_InOutLine_ID)
         {
             if (m_projectIssues == null)
             {
@@ -420,7 +420,7 @@ namespace ViennaAdvantage.Process
             }
             for (int i = 0; i < m_projectIssues.Length; i++)
             {
-                if (m_projectIssues[i].GetM_InOutLine_ID() == M_InOutLine_ID)
+                if (m_projectIssues[i].GetVAM_Inv_InOutLine_ID() == VAM_Inv_InOutLine_ID)
                 {
                     return true;
                 }

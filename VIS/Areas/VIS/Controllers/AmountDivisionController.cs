@@ -263,7 +263,7 @@ namespace VIS.Controllers
                         }
                         else
                         {
-                            Id = model.DimnesionValue("M_Product_ID", "M_Product", dt.Rows[i][1].ToString());
+                            Id = model.DimnesionValue("VAM_Product_ID", "VAM_Product", dt.Rows[i][1].ToString());
                             dt.Rows[i]["Record_ID"] = Id;
                             totalAmt = totalAmt + Util.GetValueOfDecimal(dt.Rows[i]["Amount"]);
                         }

@@ -11,29 +11,29 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Product_PO
+/** Generated Model for VAM_Product_PO
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Product_PO : PO
+public class X_VAM_Product_PO : PO
 {
-public X_M_Product_PO (Context ctx, int M_Product_PO_ID, Trx trxName) : base (ctx, M_Product_PO_ID, trxName)
+public X_VAM_Product_PO (Context ctx, int VAM_Product_PO_ID, Trx trxName) : base (ctx, VAM_Product_PO_ID, trxName)
 {
-/** if (M_Product_PO_ID == 0)
+/** if (VAM_Product_PO_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetIsCurrentVendor (true);	// Y
-SetM_Product_ID (0);	// @M_Product_ID@
+SetVAM_Product_ID (0);	// @VAM_Product_ID@
 SetVendorProductNo (null);	// @Value@
 }
  */
 }
-public X_M_Product_PO (Ctx ctx, int M_Product_PO_ID, Trx trxName) : base (ctx, M_Product_PO_ID, trxName)
+public X_VAM_Product_PO (Ctx ctx, int VAM_Product_PO_ID, Trx trxName) : base (ctx, VAM_Product_PO_ID, trxName)
 {
-/** if (M_Product_PO_ID == 0)
+/** if (VAM_Product_PO_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
 SetIsCurrentVendor (true);	// Y
-SetM_Product_ID (0);	// @M_Product_ID@
+SetVAM_Product_ID (0);	// @VAM_Product_ID@
 SetVendorProductNo (null);	// @Value@
 }
  */
@@ -43,7 +43,7 @@ SetVendorProductNo (null);	// @Value@
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_PO (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Product_PO (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_M_Product_PO (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_PO (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Product_PO (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_M_Product_PO (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Product_PO (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Product_PO (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Product_PO()
+static X_VAM_Product_PO()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389064128L;
 public static int Table_ID;
  // =210;
 
-/** TableName=M_Product_PO */
-public static String Table_Name="M_Product_PO";
+/** TableName=VAM_Product_PO */
+public static String Table_Name="VAM_Product_PO";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Product_PO[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Product_PO[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -254,17 +254,17 @@ if (oo != null)
 return false;
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -272,7 +272,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_Product_ID().ToString());
 }
 /** Set Manufacturer.
 @param Manufacturer Manufacturer of the Product */

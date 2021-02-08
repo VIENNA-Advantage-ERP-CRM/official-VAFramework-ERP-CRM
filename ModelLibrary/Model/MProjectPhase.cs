@@ -81,8 +81,8 @@ namespace VAdvantage.Model
             SetSeqNo(phase.GetSeqNo());
             SetDescription(phase.GetDescription());
             SetHelp(phase.GetHelp());
-            if (phase.GetM_Product_ID() != 0)
-                SetM_Product_ID(phase.GetM_Product_ID());
+            if (phase.GetVAM_Product_ID() != 0)
+                SetVAM_Product_ID(phase.GetVAM_Product_ID());
             SetQty(phase.GetStandardQty());
         }
 

@@ -66,35 +66,35 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>info</returns>
 	protected override String DoIt() 
 	{
-		log.Info("M_InOut_ID=" + _Search_InOut_ID + ", VAB_Order_ID=" + _Search_Order_ID
+		log.Info("VAM_Inv_InOut_ID=" + _Search_InOut_ID + ", VAB_Order_ID=" + _Search_Order_ID
 			+ ", VAB_Invoice_ID=" + _Search_Invoice_ID);
 		//
         if (_Search_InOut_ID != 0)
         {
             InsertTrx(
-                "SELECT NVL(ma.M_AttributeSetInstance_ID,iol.M_AttributeSetInstance_ID) "
-                + "FROM M_InOutLine iol"
-                + " LEFT OUTER JOIN M_InOutLineMA ma ON (iol.M_InOutLine_ID=ma.M_InOutLine_ID) "
-                + "WHERE M_InOut_ID=" + _Search_InOut_ID
+                "SELECT NVL(ma.VAM_PFeature_SetInstance_ID,iol.VAM_PFeature_SetInstance_ID) "
+                + "FROM VAM_Inv_InOutLine iol"
+                + " LEFT OUTER JOIN VAM_Inv_InOutLineMP ma ON (iol.VAM_Inv_InOutLine_ID=ma.VAM_Inv_InOutLine_ID) "
+                + "WHERE VAM_Inv_InOut_ID=" + _Search_InOut_ID
                 );
         }
         else if (_Search_Order_ID != 0)
         {
             InsertTrx(
-                "SELECT NVL(ma.M_AttributeSetInstance_ID,iol.M_AttributeSetInstance_ID) "
-                + "FROM M_InOutLine iol"
-                + " LEFT OUTER JOIN M_InOutLineMA ma ON (iol.M_InOutLine_ID=ma.M_InOutLine_ID) "
-                + " INNER JOIN M_InOut io ON (iol.M_InOut_ID=io.M_InOut_ID)"
+                "SELECT NVL(ma.VAM_PFeature_SetInstance_ID,iol.VAM_PFeature_SetInstance_ID) "
+                + "FROM VAM_Inv_InOutLine iol"
+                + " LEFT OUTER JOIN VAM_Inv_InOutLineMP ma ON (iol.VAM_Inv_InOutLine_ID=ma.VAM_Inv_InOutLine_ID) "
+                + " INNER JOIN VAM_Inv_InOut io ON (iol.VAM_Inv_InOut_ID=io.VAM_Inv_InOut_ID)"
                 + "WHERE io.VAB_Order_ID=" + _Search_Order_ID
                 );
         }
         else if (_Search_Invoice_ID != 0)
         {
             InsertTrx(
-                "SELECT NVL(ma.M_AttributeSetInstance_ID,iol.M_AttributeSetInstance_ID) "
-                + "FROM M_InOutLine iol"
-                + " LEFT OUTER JOIN M_InOutLineMA ma ON (iol.M_InOutLine_ID=ma.M_InOutLine_ID) "
-                + " INNER JOIN VAB_InvoiceLine il ON (iol.M_InOutLine_ID=il.M_InOutLine_ID) "
+                "SELECT NVL(ma.VAM_PFeature_SetInstance_ID,iol.VAM_PFeature_SetInstance_ID) "
+                + "FROM VAM_Inv_InOutLine iol"
+                + " LEFT OUTER JOIN VAM_Inv_InOutLineMP ma ON (iol.VAM_Inv_InOutLine_ID=ma.VAM_Inv_InOutLine_ID) "
+                + " INNER JOIN VAB_InvoiceLine il ON (iol.VAM_Inv_InOutLine_ID=il.VAM_Inv_InOutLine_ID) "
                 + "WHERE il.VAB_Invoice_ID=" + _Search_Invoice_ID
                 );
         }
@@ -113,15 +113,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private void InsertTrx (String sqlSubSelect)
 	{
 		String sql = "INSERT INTO VAT_Transaction "
-			+ "(VAF_JInstance_ID, M_Transaction_ID,"
+			+ "(VAF_JInstance_ID, VAM_Inv_Trx_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-			+ " MovementType, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"
+			+ " MovementType, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,"
 			+ " MovementDate, MovementQty,"
-			+ " M_InOutLine_ID, M_InOut_ID,"
-			+ " M_MovementLine_ID, M_Movement_ID,"
-			+ " M_InventoryLine_ID, M_Inventory_ID, "
+			+ " VAM_Inv_InOutLine_ID, VAM_Inv_InOut_ID,"
+			+ " VAM_InvTrf_Line_ID, VAM_InventoryTransfer_ID,"
+			+ " VAM_InventoryLine_ID, VAM_Inventory_ID, "
 			+ " VAB_ProjectSupply_ID, VAB_Project_ID, "
-			+ " M_ProductionLine_ID, M_Production_ID ";
+			+ " VAM_ProductionLine_ID, VAM_Production_ID ";
 
         if (_Search_Order_ID != 0)
         {
@@ -141,15 +141,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			
 			/*+ " Search_Order_ID, Search_Invoice_ID, Search_InOut_ID) "*/
 			//	Data
-		sql +=	 ") SELECT " + GetVAF_JInstance_ID() + ", M_Transaction_ID,"
+		sql +=	 ") SELECT " + GetVAF_JInstance_ID() + ", VAM_Inv_Trx_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created,CreatedBy, Updated,UpdatedBy,"
-			+ " MovementType, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,"
+			+ " MovementType, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,"
 			+ " MovementDate, MovementQty,"
-			+ " M_InOutLine_ID, M_InOut_ID, "
-			+ " M_MovementLine_ID, M_Movement_ID,"
-			+ " M_InventoryLine_ID, M_Inventory_ID, "
+			+ " VAM_Inv_InOutLine_ID, VAM_Inv_InOut_ID, "
+			+ " VAM_InvTrf_Line_ID, VAM_InventoryTransfer_ID,"
+			+ " VAM_InventoryLine_ID, VAM_Inventory_ID, "
 			+ " VAB_ProjectSupply_ID, VAB_Project_ID, "
-			+ " M_ProductionLine_ID, M_Production_ID ";
+			+ " VAM_ProductionLine_ID, VAM_Production_ID ";
 		
 			//	Parameter
         if (_Search_Order_ID != 0)
@@ -167,17 +167,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
 			//+ _Search_Order_ID + ", " + _Search_Invoice_ID + "," + _Search_InOut_ID + " "
 			//
-		sql += " FROM M_Transaction_v "
-			+ "WHERE M_AttributeSetInstance_ID > 0 AND M_AttributeSetInstance_ID IN (" 
+		sql += " FROM VAM_Inv_Trx_v "
+			+ "WHERE VAM_PFeature_SetInstance_ID > 0 AND VAM_PFeature_SetInstance_ID IN (" 
 			+ sqlSubSelect
 			+ ") ";
         //Code changes by Anuj (behalf of Kanchan Rana)
          if (_Search_InOut_ID != 0)
         {
-            sql += "AND M_InOut_ID=" + _Search_InOut_ID;
+            sql += "AND VAM_Inv_InOut_ID=" + _Search_InOut_ID;
         }
 
-         sql += " ORDER BY M_Transaction_ID";
+         sql += " ORDER BY VAM_Inv_Trx_ID";
 		// -------------code done------------
 
 		int no = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());

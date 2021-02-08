@@ -11,18 +11,18 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_PerpetualInv
+/** Generated Model for VAM_PerpetualInventory
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_PerpetualInv : PO
+public class X_VAM_PerpetualInventory : PO
 {
-public X_M_PerpetualInv (Context ctx, int M_PerpetualInv_ID, Trx trxName) : base (ctx, M_PerpetualInv_ID, trxName)
+public X_VAM_PerpetualInventory (Context ctx, int VAM_PerpetualInventory_ID, Trx trxName) : base (ctx, VAM_PerpetualInventory_ID, trxName)
 {
-/** if (M_PerpetualInv_ID == 0)
+/** if (VAM_PerpetualInventory_ID == 0)
 {
 SetCountHighMovement (false);
 SetDateNextRun (DateTime.Now);
-SetM_PerpetualInv_ID (0);
+SetVAM_PerpetualInventory_ID (0);
 SetName (null);
 SetNoInventoryCount (0);	// 1
 SetNoProductCount (0);	// 1
@@ -30,13 +30,13 @@ SetNumberOfRuns (0);	// 1
 }
  */
 }
-public X_M_PerpetualInv (Ctx ctx, int M_PerpetualInv_ID, Trx trxName) : base (ctx, M_PerpetualInv_ID, trxName)
+public X_VAM_PerpetualInventory (Ctx ctx, int VAM_PerpetualInventory_ID, Trx trxName) : base (ctx, VAM_PerpetualInventory_ID, trxName)
 {
-/** if (M_PerpetualInv_ID == 0)
+/** if (VAM_PerpetualInventory_ID == 0)
 {
 SetCountHighMovement (false);
 SetDateNextRun (DateTime.Now);
-SetM_PerpetualInv_ID (0);
+SetVAM_PerpetualInventory_ID (0);
 SetName (null);
 SetNoInventoryCount (0);	// 1
 SetNoProductCount (0);	// 1
@@ -49,7 +49,7 @@ SetNumberOfRuns (0);	// 1
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PerpetualInv (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PerpetualInventory (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_M_PerpetualInv (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PerpetualInv (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PerpetualInventory (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_M_PerpetualInv (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_M_PerpetualInv (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PerpetualInventory (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_PerpetualInv()
+static X_VAM_PerpetualInventory()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389063548L;
 public static int Table_ID;
  // =342;
 
-/** TableName=M_PerpetualInv */
-public static String Table_Name="M_PerpetualInv";
+/** TableName=VAM_PerpetualInventory */
+public static String Table_Name="VAM_PerpetualInventory";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_PerpetualInv[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PerpetualInventory[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Count high turnover items.
@@ -183,49 +183,49 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Perpetual Inventory.
-@param M_PerpetualInv_ID Rules for generating physical inventory */
-public void SetM_PerpetualInv_ID (int M_PerpetualInv_ID)
+@param VAM_PerpetualInventory_ID Rules for generating physical inventory */
+public void SetVAM_PerpetualInventory_ID (int VAM_PerpetualInventory_ID)
 {
-if (M_PerpetualInv_ID < 1) throw new ArgumentException ("M_PerpetualInv_ID is mandatory.");
-Set_ValueNoCheck ("M_PerpetualInv_ID", M_PerpetualInv_ID);
+if (VAM_PerpetualInventory_ID < 1) throw new ArgumentException ("VAM_PerpetualInventory_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PerpetualInventory_ID", VAM_PerpetualInventory_ID);
 }
 /** Get Perpetual Inventory.
 @return Rules for generating physical inventory */
-public int GetM_PerpetualInv_ID() 
+public int GetVAM_PerpetualInventory_ID() 
 {
-Object ii = Get_Value("M_PerpetualInv_ID");
+Object ii = Get_Value("VAM_PerpetualInventory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID <= 0) Set_Value ("M_Product_Category_ID", null);
+if (VAM_ProductCategory_ID <= 0) Set_Value ("VAM_ProductCategory_ID", null);
 else
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID <= 0) Set_Value ("M_Warehouse_ID", null);
+if (VAM_Warehouse_ID <= 0) Set_Value ("VAM_Warehouse_ID", null);
 else
-Set_Value ("M_Warehouse_ID", M_Warehouse_ID);
+Set_Value ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

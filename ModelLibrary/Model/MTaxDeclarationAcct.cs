@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         {
             //super(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(fact);
-            SetVAVAB_TaxRateComputation_ID(parent.GetVAVAB_TaxRateComputation_ID());
+            SetVAB_TaxRateComputation_ID(parent.GetVAB_TaxRateComputation_ID());
             //
             SetActual_Acct_Detail_ID(fact.GetActual_Acct_Detail_ID());
             SetVAB_AccountBook_ID(fact.GetVAB_AccountBook_ID());

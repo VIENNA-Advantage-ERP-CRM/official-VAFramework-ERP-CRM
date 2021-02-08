@@ -632,20 +632,20 @@ namespace VAdvantage.Print
         /******************Manufacturing**************/
 
         private static String[] DOC_TABLES = new String[] {
-		"VAB_Order_Hdr_v", "M_InOut_Header_v", "VAB_Invoice_Target_v", "VAB_Project_Hdr_v",
+		"VAB_Order_Hdr_v", "VAM_Inv_InOut_Header_v", "VAB_Invoice_Target_v", "VAB_Project_Hdr_v",
         "VAB_RFQReply_v",
 		"VAB_PaymentOptionCheck_vt", "VAB_PaymentOptionCheck_vt",  
-		"VAB_DunningExeEntry_v", "M_Movement", "M_Inventory" ,
+		"VAB_DunningExeEntry_v", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
         "M_WorkOrder_Header_v", "M_TaskList",
 		"M_WorkOrderTxn_Header_V", "M_StandardOperation_Header_v", "M_Routing_Header_v"
         /******************Manufacturing**************/
         };
         private static String[] DOC_BASETABLES = new String[] {
-		"VAB_Order", "M_InOut", "VAB_Invoice", "VAB_Project",
+		"VAB_Order", "VAM_Inv_InOut", "VAB_Invoice", "VAB_Project",
 		"VAB_RFQReply",
 		"VAB_PaymentOptionCheck", "VAB_PaymentOptionCheck", 
-		"VAB_DunningExeEntry", "M_Movement", "M_Inventory" ,
+		"VAB_DunningExeEntry", "VAM_InventoryTransfer", "VAM_Inventory" ,
         /******************Manufacturing**************/
          "M_WorkOrder", "M_TaskList",
 		"M_WorkOrderTransaction", "M_StandardOperation", "M_Routing"
@@ -653,10 +653,10 @@ namespace VAdvantage.Print
         
         };
         private static String[] DOC_IDS = new String[] {
-		"VAB_Order_ID", "M_InOut_ID", "VAB_Invoice_ID", "VAB_Project_ID",
+		"VAB_Order_ID", "VAM_Inv_InOut_ID", "VAB_Invoice_ID", "VAB_Project_ID",
 		"VAB_RFQReply_ID",
 		"VAB_PaymentOptionCheck_ID", "VAB_PaymentOptionCheck_ID", 
-		"VAB_DunningExeEntry_ID", "M_Movement_ID",  "M_Inventory_ID" ,
+		"VAB_DunningExeEntry_ID", "VAM_InventoryTransfer_ID",  "VAM_Inventory_ID" ,
          /******************Manufacturing**************/
           "M_WorkOrder_ID", "M_TaskList_ID",
 		"M_WorkOrderTransaction_ID", "M_StandardOperation_ID", "M_Routing_ID"
@@ -664,10 +664,10 @@ namespace VAdvantage.Print
         
         };
         private static int[] DOC_TABLE_ID = new int[] {
-		X_VAB_Order.Table_ID, X_M_InOut.Table_ID, X_VAB_Invoice.Table_ID, X_VAB_Project.Table_ID,
+		X_VAB_Order.Table_ID, X_VAM_Inv_InOut.Table_ID, X_VAB_Invoice.Table_ID, X_VAB_Project.Table_ID,
 		X_VAB_RFQReply.Table_ID,
 		X_VAB_PaymentOptionCheck.Table_ID, X_VAB_PaymentOptionCheck.Table_ID, 
-		X_VAB_DunningExeEntry.Table_ID, X_M_Movement.Table_ID, X_M_Inventory.Table_ID ,
+		X_VAB_DunningExeEntry.Table_ID, X_VAM_InventoryTransfer.Table_ID, X_VAM_Inventory.Table_ID ,
         /******************Manufacturing**************/
          X_M_WorkOrder.Table_ID, X_M_TaskList.Table_ID,
 		X_M_WorkOrderTransaction.Table_ID, X_M_StandardOperation.Table_ID, X_M_Routing.Table_ID
@@ -883,8 +883,8 @@ namespace VAdvantage.Print
                 sql = "SELECT VAB_Invoice_ID REC FROM VAB_Invoice WHERE VAB_Order_ID='" + VAB_Order_ID + "'"	//	1
                     + " ORDER BY VAB_Invoice_ID DESC";
             else
-                sql = "SELECT M_InOut_ID REC FROM M_InOut WHERE VAB_Order_ID='" + VAB_Order_ID + "'" 	//	1
-                    + " ORDER BY M_InOut_ID DESC";
+                sql = "SELECT VAM_Inv_InOut_ID REC FROM VAM_Inv_InOut WHERE VAB_Order_ID='" + VAB_Order_ID + "'" 	//	1
+                    + " ORDER BY VAM_Inv_InOut_ID DESC";
             IDataReader idr = null;
             try
             {
@@ -1007,21 +1007,21 @@ namespace VAdvantage.Print
             else if (type == MOVEMENT)
                 sql = "SELECT pf.Movement_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0) "
-                    + "FROM M_Movement d"
+                    + "FROM VAM_InventoryTransfer d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.M_Movement_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAM_InventoryTransfer_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Movement_PrintFormat_ID IS NOT NULL "
                     + "ORDER BY pf.VAF_Client_ID DESC, pf.VAF_Org_ID DESC";
             else if (type == INVENTORY)
                 sql = "SELECT pf.Inventory_PrintFormat_ID,"
                     + " c.IsMultiLingualDocument, COALESCE(dt.DocumentCopies,0) "
-                    + "FROM M_Inventory d"
+                    + "FROM VAM_Inventory d"
                     + " INNER JOIN VAF_Client c ON (d.VAF_Client_ID=c.VAF_Client_ID)"
                     + " INNER JOIN VAF_Print_Rpt_Page pf ON (d.VAF_Client_ID=pf.VAF_Client_ID OR pf.VAF_Client_ID=0)"
                     + " LEFT OUTER JOIN VAB_DocTypes dt ON (d.VAB_DocTypes_ID=dt.VAB_DocTypes_ID) "
-                    + "WHERE d.M_Inventory_ID=@recordid"                 //  info from PrintForm
+                    + "WHERE d.VAM_Inventory_ID=@recordid"                 //  info from PrintForm
                     + " AND pf.VAF_Org_ID IN (0,d.VAF_Org_ID) AND pf.Inventory_PrintFormat_ID IS NOT NULL "
                     + "ORDER BY pf.VAF_Client_ID DESC,  pf.VAF_Org_ID DESC";
             /****************Manfacturing***********************/

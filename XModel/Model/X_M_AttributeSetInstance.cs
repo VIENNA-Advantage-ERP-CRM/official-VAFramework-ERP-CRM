@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_AttributeSetInstance
+/** Generated Model for VAM_PFeature_SetInstance
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_AttributeSetInstance : PO
+public class X_VAM_PFeature_SetInstance : PO
 {
-public X_M_AttributeSetInstance (Context ctx, int M_AttributeSetInstance_ID, Trx trxName) : base (ctx, M_AttributeSetInstance_ID, trxName)
+public X_VAM_PFeature_SetInstance (Context ctx, int VAM_PFeature_SetInstance_ID, Trx trxName) : base (ctx, VAM_PFeature_SetInstance_ID, trxName)
 {
-/** if (M_AttributeSetInstance_ID == 0)
+/** if (VAM_PFeature_SetInstance_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_AttributeSet_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_PFeature_Set_ID (0);
 }
  */
 }
-public X_M_AttributeSetInstance (Ctx ctx, int M_AttributeSetInstance_ID, Trx trxName) : base (ctx, M_AttributeSetInstance_ID, trxName)
+public X_VAM_PFeature_SetInstance (Ctx ctx, int VAM_PFeature_SetInstance_ID, Trx trxName) : base (ctx, VAM_PFeature_SetInstance_ID, trxName)
 {
-/** if (M_AttributeSetInstance_ID == 0)
+/** if (VAM_PFeature_SetInstance_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_AttributeSet_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_PFeature_Set_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetM_AttributeSet_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSetInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_SetInstance (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_AttributeSetInstance (Context ctx, DataRow rs, Trx trxName) : base(ct
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSetInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_SetInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_AttributeSetInstance (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, r
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSetInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PFeature_SetInstance (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_AttributeSetInstance()
+static X_VAM_PFeature_SetInstance()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389061605L;
 public static int Table_ID;
  // =559;
 
-/** TableName=M_AttributeSetInstance */
-public static String Table_Name="M_AttributeSetInstance";
+/** TableName=VAM_PFeature_SetInstance */
+public static String Table_Name="VAM_PFeature_SetInstance";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_AttributeSetInstance[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PFeature_SetInstance[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -159,17 +159,17 @@ public String GetLot()
 return (String)Get_Value("Lot");
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -177,36 +177,36 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_AttributeSetInstance_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_PFeature_SetInstance_ID().ToString());
 }
 /** Set Attribute Set.
-@param M_AttributeSet_ID Product Attribute Set */
-public void SetM_AttributeSet_ID (int M_AttributeSet_ID)
+@param VAM_PFeature_Set_ID Product Attribute Set */
+public void SetVAM_PFeature_Set_ID (int VAM_PFeature_Set_ID)
 {
-if (M_AttributeSet_ID < 0) throw new ArgumentException ("M_AttributeSet_ID is mandatory.");
-Set_Value ("M_AttributeSet_ID", M_AttributeSet_ID);
+if (VAM_PFeature_Set_ID < 0) throw new ArgumentException ("VAM_PFeature_Set_ID is mandatory.");
+Set_Value ("VAM_PFeature_Set_ID", VAM_PFeature_Set_ID);
 }
 /** Get Attribute Set.
 @return Product Attribute Set */
-public int GetM_AttributeSet_ID() 
+public int GetVAM_PFeature_Set_ID() 
 {
-Object ii = Get_Value("M_AttributeSet_ID");
+Object ii = Get_Value("VAM_PFeature_Set_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Lot.
-@param M_Lot_ID Product Lot Definition */
-public void SetM_Lot_ID (int M_Lot_ID)
+@param VAM_Lot_ID Product Lot Definition */
+public void SetVAM_Lot_ID (int VAM_Lot_ID)
 {
-if (M_Lot_ID <= 0) Set_Value ("M_Lot_ID", null);
+if (VAM_Lot_ID <= 0) Set_Value ("VAM_Lot_ID", null);
 else
-Set_Value ("M_Lot_ID", M_Lot_ID);
+Set_Value ("VAM_Lot_ID", VAM_Lot_ID);
 }
 /** Get Lot.
 @return Product Lot Definition */
-public int GetM_Lot_ID() 
+public int GetVAM_Lot_ID() 
 {
-Object ii = Get_Value("M_Lot_ID");
+Object ii = Get_Value("VAM_Lot_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -58,7 +58,7 @@ namespace VIS.Controllers
                 MVAFOrgDetail oInfo = new MVAFOrgDetail(ctx, VAF_Org_ID, null);                
                 if (oInfo != null)
                 {
-                    warehouse_ID = Util.GetValueOfInt(oInfo.Get_Value("M_Warehouse_ID"));
+                    warehouse_ID = Util.GetValueOfInt(oInfo.Get_Value("VAM_Warehouse_ID"));
                 }
                 retJSON = JsonConvert.SerializeObject(warehouse_ID);
             }

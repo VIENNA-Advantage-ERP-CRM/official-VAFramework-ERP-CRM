@@ -60,25 +60,25 @@ namespace ViennaAdvantageServer.Process
                     {
 
                         contact = new VAdvantage.Model.X_VAB_Contract(GetCtx(), 0, Get_TrxName());
-                        int M_PriceList_ID = Util.GetValueOfInt(order.GetM_PriceList_ID());
+                        int VAM_PriceList_ID = Util.GetValueOfInt(order.GetVAM_PriceList_ID());
 
                         //Neha---Commented code because object created but not used in further class---04 Sep,2018
 
                         //VAdvantage.Model.MProductPricing pp = new VAdvantage.Model.MProductPricing(GetCtx().GetVAF_Client_ID(), GetCtx().GetVAF_Org_ID(),
-                        //    line.GetM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);                        
-                        //pp.SetM_PriceList_ID(M_PriceList_ID);
-                        //VAdvantage.Model.MProduct prd = new VAdvantage.Model.MProduct(GetCtx(), line.GetM_Product_ID(), null);
+                        //    line.GetVAM_Product_ID(), order.GetVAB_BusinessPartner_ID(), line.GetQtyOrdered(), true);                        
+                        //pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
+                        //VAdvantage.Model.MProduct prd = new VAdvantage.Model.MProduct(GetCtx(), line.GetVAM_Product_ID(), null);
                         //pp.SetVAB_UOM_ID(prd.GetVAB_UOM_ID());
 
                         string sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
-                        + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                        + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                        + "plv.VAM_PriceListVersion_ID,plv.ValidFrom "
+                        + "FROM VAM_PriceList pl,VAB_Currency c,VAM_PriceListVersion plv "
                         + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
-                        + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
-                        + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
+                        + " AND pl.VAM_PriceList_ID=plv.VAM_PriceList_ID"
+                        + " AND pl.VAM_PriceList_ID=" + VAM_PriceList_ID						//	1
                         + "ORDER BY plv.ValidFrom DESC";
 
-                        //int M_PriceList_Version_ID = 0;
+                        //int VAM_PriceListVersion_ID = 0;
                         int VAB_Currency_ID = 0;
                         DataSet ds = DB.ExecuteDataset(sql, null, Get_TrxName());
                         for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -96,10 +96,10 @@ namespace ViennaAdvantageServer.Process
                             StdPrecision = Util.GetValueOfInt(ds.Tables[0].Rows[i]["StdPrecision"]);
                             // int prislst = Util.GetValueOfInt(dr[4].ToString());
                             //	PriceList Version
-                            //M_PriceList_Version_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_PriceList_Version_ID"]);
+                            //VAM_PriceListVersion_ID = Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PriceListVersion_ID"]);
                         }
-                        //int M_PriceList_Version_ID = GetCtx().GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
-                        //pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                        //int VAM_PriceListVersion_ID = GetCtx().GetContextAsInt(WindowNo, "VAM_PriceListVersion_ID");
+                        //pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
                         //Neha---Set Tenant,Organization from Sales Order---11 Sep,2018
                         contact.SetVAF_Client_ID(order.GetVAF_Client_ID());
                         contact.SetVAF_Org_ID(order.GetVAF_Org_ID());
@@ -117,7 +117,7 @@ namespace ViennaAdvantageServer.Process
                         contact.SetVAB_Currency_ID(line.GetVAB_Currency_ID());
                         contact.SetVAB_CurrencyType_ID(order.GetVAB_CurrencyType_ID());
                         contact.SetVAB_PaymentTerm_ID(order.GetVAB_PaymentTerm_ID());
-                        contact.SetM_PriceList_ID(order.GetM_PriceList_ID());
+                        contact.SetVAM_PriceList_ID(order.GetVAM_PriceList_ID());
                         contact.SetVAB_Frequency_ID(line.GetVAB_Frequency_ID());
 
                         //Neha--Set List Price,Price,Unit Price,Discount from Order Line--4 Sep,2018
@@ -148,9 +148,9 @@ namespace ViennaAdvantageServer.Process
                         // contact.SetPriceList(line.GetPriceList());
                         //contact.SetPriceActual(line.GetPriceActual());
                         contact.SetVAB_UOM_ID(line.GetVAB_UOM_ID());
-                        contact.SetM_Product_ID(line.GetM_Product_ID());
+                        contact.SetVAM_Product_ID(line.GetVAM_Product_ID());
                         // Added by Vivek on 21/11/2017 asigned by Pradeep
-                        contact.SetM_AttributeSetInstance_ID(line.GetM_AttributeSetInstance_ID());
+                        contact.SetVAM_PFeature_SetInstance_ID(line.GetVAM_PFeature_SetInstance_ID());
                         // contact.SetPriceEntered(line.GetPriceEntered());
                         //contact.SetQtyEntered(line.GetQtyEntered());
                         // contact.SetDiscount(line.GetDiscount());
@@ -254,12 +254,12 @@ namespace ViennaAdvantageServer.Process
                 Decimal Qty = Util.GetValueOfDecimal(mTab.GetValue("QtyOrdered"));
                 bool isSOTrx = ctx.GetContext(WindowNo, "IsSOTrx").Equals("Y");
                 MProductPricing pp = new MProductPricing(ctx.GetVAF_Client_ID(), ctx.GetVAF_Org_ID(),
-                        M_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
-                int M_PriceList_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_ID");
-                pp.SetM_PriceList_ID(M_PriceList_ID);
+                        VAM_Product_ID, VAB_BusinessPartner_ID, Qty, isSOTrx);
+                int VAM_PriceList_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceList_ID");
+                pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 /** PLV is only accurate if PL selected in header
-                int M_PriceList_Version_ID = ctx.GetContextAsInt(WindowNo, "M_PriceList_Version_ID");
-                pp.SetM_PriceList_Version_ID(M_PriceList_Version_ID);
+                int VAM_PriceListVersion_ID = ctx.GetContextAsInt(WindowNo, "VAM_PriceListVersion_ID");
+                pp.SetVAM_PriceListVersion_ID(VAM_PriceListVersion_ID);
                 DateTime orderDate = System.Convert.ToDateTime(mTab.GetValue("DateOrdered"));
                 pp.SetPriceDate(orderDate);
                 //		

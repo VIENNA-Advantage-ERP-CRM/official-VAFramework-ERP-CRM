@@ -11,35 +11,35 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_MovementConfirm
+/** Generated Model for VAM_InvTrf_Confirm
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_MovementConfirm : PO
+public class X_VAM_InvTrf_Confirm : PO
 {
-public X_M_MovementConfirm (Context ctx, int M_MovementConfirm_ID, Trx trxName) : base (ctx, M_MovementConfirm_ID, trxName)
+public X_VAM_InvTrf_Confirm (Context ctx, int VAM_InvTrf_Confirm_ID, Trx trxName) : base (ctx, VAM_InvTrf_Confirm_ID, trxName)
 {
-/** if (M_MovementConfirm_ID == 0)
-{
-SetDocAction (null);	// CO
-SetDocStatus (null);	// DR
-SetDocumentNo (null);
-SetIsApproved (false);	// N
-SetM_MovementConfirm_ID (0);
-SetM_Movement_ID (0);
-SetProcessed (false);	// N
-}
- */
-}
-public X_M_MovementConfirm (Ctx ctx, int M_MovementConfirm_ID, Trx trxName) : base (ctx, M_MovementConfirm_ID, trxName)
-{
-/** if (M_MovementConfirm_ID == 0)
+/** if (VAM_InvTrf_Confirm_ID == 0)
 {
 SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
 SetIsApproved (false);	// N
-SetM_MovementConfirm_ID (0);
-SetM_Movement_ID (0);
+SetVAM_InvTrf_Confirm_ID (0);
+SetVAM_InventoryTransfer_ID (0);
+SetProcessed (false);	// N
+}
+ */
+}
+public X_VAM_InvTrf_Confirm (Ctx ctx, int VAM_InvTrf_Confirm_ID, Trx trxName) : base (ctx, VAM_InvTrf_Confirm_ID, trxName)
+{
+/** if (VAM_InvTrf_Confirm_ID == 0)
+{
+SetDocAction (null);	// CO
+SetDocStatus (null);	// DR
+SetDocumentNo (null);
+SetIsApproved (false);	// N
+SetVAM_InvTrf_Confirm_ID (0);
+SetVAM_InventoryTransfer_ID (0);
 SetProcessed (false);	// N
 }
  */
@@ -49,7 +49,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_Confirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_M_MovementConfirm (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_Confirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_M_MovementConfirm (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementConfirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_InvTrf_Confirm (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_MovementConfirm()
+static X_VAM_InvTrf_Confirm()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389063297L;
 public static int Table_ID;
  // =738;
 
-/** TableName=M_MovementConfirm */
-public static String Table_Name="M_MovementConfirm";
+/** TableName=VAM_InvTrf_Confirm */
+public static String Table_Name="VAM_InvTrf_Confirm";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_MovementConfirm[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_InvTrf_Confirm[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Approval Amount.
@@ -308,48 +308,48 @@ if (oo != null)
 return false;
 }
 /** Set Phys.Inventory.
-@param M_Inventory_ID Parameters for a Physical Inventory */
-public void SetM_Inventory_ID (int M_Inventory_ID)
+@param VAM_Inventory_ID Parameters for a Physical Inventory */
+public void SetVAM_Inventory_ID (int VAM_Inventory_ID)
 {
-if (M_Inventory_ID <= 0) Set_Value ("M_Inventory_ID", null);
+if (VAM_Inventory_ID <= 0) Set_Value ("VAM_Inventory_ID", null);
 else
-Set_Value ("M_Inventory_ID", M_Inventory_ID);
+Set_Value ("VAM_Inventory_ID", VAM_Inventory_ID);
 }
 /** Get Phys.Inventory.
 @return Parameters for a Physical Inventory */
-public int GetM_Inventory_ID() 
+public int GetVAM_Inventory_ID() 
 {
-Object ii = Get_Value("M_Inventory_ID");
+Object ii = Get_Value("VAM_Inventory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Move Confirm.
-@param M_MovementConfirm_ID Inventory Move Confirmation */
-public void SetM_MovementConfirm_ID (int M_MovementConfirm_ID)
+@param VAM_InvTrf_Confirm_ID Inventory Move Confirmation */
+public void SetVAM_InvTrf_Confirm_ID (int VAM_InvTrf_Confirm_ID)
 {
-if (M_MovementConfirm_ID < 1) throw new ArgumentException ("M_MovementConfirm_ID is mandatory.");
-Set_ValueNoCheck ("M_MovementConfirm_ID", M_MovementConfirm_ID);
+if (VAM_InvTrf_Confirm_ID < 1) throw new ArgumentException ("VAM_InvTrf_Confirm_ID is mandatory.");
+Set_ValueNoCheck ("VAM_InvTrf_Confirm_ID", VAM_InvTrf_Confirm_ID);
 }
 /** Get Move Confirm.
 @return Inventory Move Confirmation */
-public int GetM_MovementConfirm_ID() 
+public int GetVAM_InvTrf_Confirm_ID() 
 {
-Object ii = Get_Value("M_MovementConfirm_ID");
+Object ii = Get_Value("VAM_InvTrf_Confirm_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Inventory Move.
-@param M_Movement_ID Movement of Inventory */
-public void SetM_Movement_ID (int M_Movement_ID)
+@param VAM_InventoryTransfer_ID Movement of Inventory */
+public void SetVAM_InventoryTransfer_ID (int VAM_InventoryTransfer_ID)
 {
-if (M_Movement_ID < 1) throw new ArgumentException ("M_Movement_ID is mandatory.");
-Set_Value ("M_Movement_ID", M_Movement_ID);
+if (VAM_InventoryTransfer_ID < 1) throw new ArgumentException ("VAM_InventoryTransfer_ID is mandatory.");
+Set_Value ("VAM_InventoryTransfer_ID", VAM_InventoryTransfer_ID);
 }
 /** Get Inventory Move.
 @return Movement of Inventory */
-public int GetM_Movement_ID() 
+public int GetVAM_InventoryTransfer_ID() 
 {
-Object ii = Get_Value("M_Movement_ID");
+Object ii = Get_Value("VAM_InventoryTransfer_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

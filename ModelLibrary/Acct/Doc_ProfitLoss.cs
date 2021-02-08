@@ -205,7 +205,7 @@ namespace ModelLibrary.Acct
                             }
 
                             //	Account
-                            MAccount expense = MAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetVAB_SubAcct_ID(), line.GetM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
+                            MVABAccount expense = MVABAccount.Get(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), AccountingSchema.GetVAB_AccountBook_ID(), line.GetAccount_ID(), line.GetVAB_SubAcct_ID(), line.GetVAM_Product_ID(), line.GetVAB_BusinessPartner_ID(), line.GetVAF_OrgTrx_ID(),
                                 line.GetC_LocFrom_ID(), line.GetC_LocTo_ID(), line.GetVAB_SalesRegionState_ID(), line.GetVAB_Project_ID(), line.GetVAB_Promotion_ID(), line.GetVAB_BillingCode_ID(), line.GetUser1_ID(), line.GetUser2_ID(), line.GetUserElement1_ID(), line.GetUserElement2_ID(),
                                 line.GetUserElement3_ID(), line.GetUserElement4_ID(), line.GetUserElement5_ID(), line.GetUserElement6_ID(), line.GetUserElement7_ID(), line.GetUserElement8_ID(), line.GetUserElement9_ID());
 
@@ -215,13 +215,13 @@ namespace ModelLibrary.Acct
                         if (total != Env.ZERO)
                         {
                             int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT IncomeSummary_Acct FROM VAB_AccountBook_GL WHERE VAB_AccountBook_ID=" + AccountingSchema.GetVAB_AccountBook_ID() + " AND VAF_Client_ID = " + GetVAF_Client_ID()));
-                            MAccount acct = MAccount.Get(GetCtx(), validComID);
+                            MVABAccount acct = MVABAccount.Get(GetCtx(), validComID);
                             fact.CreateLine(null, acct, GetVAB_Currency_ID(), total);
                         }
                         //if (TotalCurrLoss != Env.ZERO)
                         //{
                         //    int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
-                        //    MAccount acct = MAccount.Get(GetCtx(), validComID);
+                        //    MVABAccount acct = MVABAccount.Get(GetCtx(), validComID);
                         //    TotalCurrLoss = MConversionRate.Convert(GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
                         //    fact.CreateLine(null, acct,
                         //     GetVAB_Currency_ID(), (TotalCurrLoss));

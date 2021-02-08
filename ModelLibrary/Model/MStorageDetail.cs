@@ -18,7 +18,7 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MStorageDetail : X_M_StorageDetail
+    public class MStorageDetail : X_VAM_StorageDetail
     {
         #region Private Variables
         // Logger for class MStorageDetail 
@@ -27,7 +27,7 @@ namespace VAdvantage.Model
         private Boolean isBulkUpdate = false;
 
         //Warehouse 
-        private int _M_Warehouse_ID = 0;
+        private int _VAM_Warehouse_ID = 0;
 
         #endregion
 
@@ -35,34 +35,34 @@ namespace VAdvantage.Model
         /// Standard Constructors
         /// </summary>
         /// <param name="locator"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="type"></param>
-        public MStorageDetail(MLocator locator, int M_Product_ID,
-                int M_AttributeSetInstance_ID, String type)
+        public MStorageDetail(MLocator locator, int VAM_Product_ID,
+                int VAM_PFeature_SetInstance_ID, String type)
             : this(locator.GetCtx(), 0, locator.Get_TrxName())
         {
             SetClientOrg(locator);
-            SetM_Locator_ID(locator.GetM_Locator_ID());
-            SetM_Product_ID(M_Product_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_Locator_ID(locator.GetVAM_Locator_ID());
+            SetVAM_Product_ID(VAM_Product_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetQtyType(type);//type.GetValue()
             SetQty(Env.ZERO);
         }
 
-        public MStorageDetail(Ctx ctx, int M_Locator_ID, int M_Product_ID,
-                int M_AttributeSetInstance_ID, X_Ref_Quantity_Type type, Trx trx)
+        public MStorageDetail(Ctx ctx, int VAM_Locator_ID, int VAM_Product_ID,
+                int VAM_PFeature_SetInstance_ID, X_Ref_Quantity_Type type, Trx trx)
             : this(ctx, 0, trx)
         {
-            SetM_Locator_ID(M_Locator_ID);
-            SetM_Product_ID(M_Product_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_Locator_ID(VAM_Locator_ID);
+            SetVAM_Product_ID(VAM_Product_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetQtyType(type.GetValue());
             SetQty(Env.ZERO);
         }
 
-        private MStorageDetail(Ctx ctx, int M_StorageDetail_ID, Trx trx)
-            : base(ctx, M_StorageDetail_ID, trx)
+        private MStorageDetail(Ctx ctx, int VAM_StorageDetail_ID, Trx trx)
+            : base(ctx, VAM_StorageDetail_ID, trx)
         {
         }
 
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
         {
             //Check for lock on Locator and Product
             //if (Is_ValueChanged("Qty") && IsType(X_Ref_Quantity_Type.ON_HAND) &&
-            //        MCycleCountLock.LockExists(GetCtx(), GetM_Product_ID(), GetM_Locator_ID(), Get_TrxName()))
+            //        MCycleCountLock.LockExists(GetCtx(), GetVAM_Product_ID(), GetVAM_Locator_ID(), Get_TrxName()))
             //{
             //    s_log.SaveError("Error", Msg.GetMsg(GetCtx(), "LocatorLocked"));
             //    return false;
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
                 )
             {
 
-                MWarehouse wh = MWarehouse.Get(GetCtx(), GetM_Warehouse_ID());
+                MWarehouse wh = MWarehouse.Get(GetCtx(), GetVAM_Warehouse_ID());
 
                 if (wh.IsDisallowNegativeInv())
                 {
@@ -123,11 +123,11 @@ namespace VAdvantage.Model
                     Decimal qtyAllocated = Env.ZERO;
 
                     String sql = "SELECT SUM(QtyOnHand),SUM(QtyDedicated),SUM(QtyAllocated) "
-                        + "FROM M_Storage_V s"
-                        + " INNER JOIN M_Locator l ON (s.M_Locator_ID=l.M_Locator_ID) "
-                        + "WHERE s.M_Product_ID=" + GetM_Product_ID()		//	#1
-                        + " AND l.M_Warehouse_ID=" + GetM_Warehouse_ID()
-                        + " AND l.M_Locator_ID=" + GetM_Locator_ID();
+                        + "FROM VAM_Storage_V s"
+                        + " INNER JOIN VAM_Locator l ON (s.VAM_Locator_ID=l.VAM_Locator_ID) "
+                        + "WHERE s.VAM_Product_ID=" + GetVAM_Product_ID()		//	#1
+                        + " AND l.VAM_Warehouse_ID=" + GetVAM_Warehouse_ID()
+                        + " AND l.VAM_Locator_ID=" + GetVAM_Locator_ID();
                     IDataReader idr = null;
                     try
                     {
@@ -177,8 +177,8 @@ namespace VAdvantage.Model
                             qtyOnHand = Decimal.Subtract(Decimal.Add(qtyOnHand, GetQty()), Util.GetValueOfDecimal(Get_ValueOld("Qty")));
                         }
                         asiQtyOnHand = GetQty();
-                        asiQtyAllocated = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.ALLOCATED, Get_TrxName());
-                        asiQtyDedicated = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.DEDICATED, Get_TrxName());
+                        asiQtyAllocated = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.ALLOCATED, Get_TrxName());
+                        asiQtyDedicated = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.DEDICATED, Get_TrxName());
                     }
                     else if (IsType(X_Ref_Quantity_Type.DEDICATED))
                     {
@@ -188,8 +188,8 @@ namespace VAdvantage.Model
                         {
                             qtyDedicated = Decimal.Subtract(Decimal.Add(qtyDedicated, GetQty()), Util.GetValueOfDecimal(Get_ValueOld("Qty")));
                         }
-                        asiQtyOnHand = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.ON_HAND, Get_TrxName());
-                        asiQtyAllocated = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.ALLOCATED, Get_TrxName());
+                        asiQtyOnHand = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.ON_HAND, Get_TrxName());
+                        asiQtyAllocated = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.ALLOCATED, Get_TrxName());
                         asiQtyDedicated = GetQty();
                     }
                     else if (IsType(X_Ref_Quantity_Type.ALLOCATED))
@@ -202,9 +202,9 @@ namespace VAdvantage.Model
                         {
                             qtyAllocated = Decimal.Subtract(Decimal.Add(qtyAllocated, GetQty()), Util.GetValueOfDecimal(Get_ValueOld("Qty")));
                         }
-                        asiQtyOnHand = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.ON_HAND, Get_TrxName());
+                        asiQtyOnHand = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.ON_HAND, Get_TrxName());
                         asiQtyAllocated = GetQty();
-                        asiQtyDedicated = MStorageDetail.GetQty(GetCtx(), GetM_Locator_ID(), GetM_Product_ID(), GetM_AttributeSetInstance_ID(), X_Ref_Quantity_Type.DEDICATED, Get_TrxName());
+                        asiQtyDedicated = MStorageDetail.GetQty(GetCtx(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), X_Ref_Quantity_Type.DEDICATED, Get_TrxName());
                     }
                     asiQtyOnHand = asiQtyOnHand == null ? Env.ZERO : asiQtyOnHand;
                     asiQtyDedicated = asiQtyDedicated == null ? Env.ZERO : asiQtyDedicated;
@@ -225,42 +225,42 @@ namespace VAdvantage.Model
         /// Static Get/update
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Locator_ID"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Locator_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="type"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public static MStorageDetail GetForRead(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static MStorageDetail GetForRead(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 String type, Trx trx)
         {
-            return Get(ctx, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,
+            return Get(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     type, false, trx);
         }
 
-        public static MStorageDetail GetForUpdate(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static MStorageDetail GetForUpdate(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 String type, Trx trx)
         {
-            return Get(ctx, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID,
+            return Get(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     type, true, trx);
         }
 
-        private static MStorageDetail Get(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        private static MStorageDetail Get(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 String type, Boolean forUpdate, Trx trx)
         {
             MStorageDetail retValue = null;
-            String sql = "SELECT * FROM M_StorageDetail "
-                    + "WHERE M_Locator_ID=" + M_Locator_ID + " AND M_Product_ID=" + M_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
-            if (M_AttributeSetInstance_ID == 0)
+            String sql = "SELECT * FROM VAM_StorageDetail "
+                    + "WHERE VAM_Locator_ID=" + VAM_Locator_ID + " AND VAM_Product_ID=" + VAM_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             }
             else
             {
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             }
             if (forUpdate)
             {
@@ -291,32 +291,32 @@ namespace VAdvantage.Model
                 }
             }
             if (retValue == null)
-                s_log.Fine("Not Found - M_Locator_ID=" + M_Locator_ID
-                        + ", M_Product_ID=" + M_Product_ID
-                        + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("Not Found - VAM_Locator_ID=" + VAM_Locator_ID
+                        + ", VAM_Product_ID=" + VAM_Product_ID
+                        + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             else
             {
-                s_log.Fine("M_Locator_ID=" + M_Locator_ID + ", M_Product_ID="
-                        + M_Product_ID + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("VAM_Locator_ID=" + VAM_Locator_ID + ", VAM_Product_ID="
+                        + VAM_Product_ID + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             }
             return retValue;
         }
 
-        public static Decimal? GetQty(Ctx ctx, int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static Decimal? GetQty(Ctx ctx, int VAM_Locator_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 String type, Trx trx)
         {
             Decimal? retValue = Decimal.Zero; ;
-            String sql = "SELECT Qty FROM M_StorageDetail "
-                    + "WHERE M_Locator_ID=" + M_Locator_ID + " AND M_Product_ID=" + M_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
-            if (M_AttributeSetInstance_ID == 0)
+            String sql = "SELECT Qty FROM VAM_StorageDetail "
+                    + "WHERE VAM_Locator_ID=" + VAM_Locator_ID + " AND VAM_Product_ID=" + VAM_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             }
             else
             {
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             }
 
             IDataReader idr = null;
@@ -342,34 +342,34 @@ namespace VAdvantage.Model
                 }
             }
             if (retValue == null)
-                s_log.Fine("Not Found - M_Locator_ID=" + M_Locator_ID
-                        + ", M_Product_ID=" + M_Product_ID
-                        + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("Not Found - VAM_Locator_ID=" + VAM_Locator_ID
+                        + ", VAM_Product_ID=" + VAM_Product_ID
+                        + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             else
             {
-                s_log.Fine("M_Locator_ID=" + M_Locator_ID + ", M_Product_ID="
-                        + M_Product_ID + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("VAM_Locator_ID=" + VAM_Locator_ID + ", VAM_Product_ID="
+                        + VAM_Product_ID + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             }
             return retValue;
         }
         //Collection
-        public static List<MStorageDetail> GetMultipleForUpdate(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static List<MStorageDetail> GetMultipleForUpdate(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 List<String> types, Trx trx)
         {
-            return GetMultiple(ctx, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, types, true, trx);
+            return GetMultiple(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, types, true, trx);
         }
-        public static List<MStorageDetail> GetMultipleForRead(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static List<MStorageDetail> GetMultipleForRead(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 List<String> types, Trx trx)
         {
-            return GetMultiple(ctx, M_Locator_ID, M_Product_ID, M_AttributeSetInstance_ID, types, false, trx);
+            return GetMultiple(ctx, VAM_Locator_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, types, false, trx);
         }
 
-        private static List<MStorageDetail> GetMultiple(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        private static List<MStorageDetail> GetMultiple(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 List<String> types, Boolean forUpdate, Trx trx)
         {
             List<MStorageDetail> retValue = new List<MStorageDetail>();
@@ -389,15 +389,15 @@ namespace VAdvantage.Model
                 qtyTypesSql.Append("') ");
             }
 
-            String sql = "SELECT * FROM M_StorageDetail "
-                    + "WHERE M_Locator_ID=" + M_Locator_ID + " AND M_Product_ID=" + M_Product_ID + " AND ";
-            if (M_AttributeSetInstance_ID == 0)
+            String sql = "SELECT * FROM VAM_StorageDetail "
+                    + "WHERE VAM_Locator_ID=" + VAM_Locator_ID + " AND VAM_Product_ID=" + VAM_Product_ID + " AND ";
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             }
             else
             {
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             }
             if (qtyTypesSql.Length > 1)
             {
@@ -433,67 +433,67 @@ namespace VAdvantage.Model
             }
             if (retValue.Count == 0)//   isEmpty())
             {
-                s_log.Fine("Not Found - M_Locator_ID=" + M_Locator_ID
-                        + ", M_Product_ID=" + M_Product_ID
-                        + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("Not Found - VAM_Locator_ID=" + VAM_Locator_ID
+                        + ", VAM_Product_ID=" + VAM_Product_ID
+                        + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             }
             else
             {
-                s_log.Fine("M_Locator_ID=" + M_Locator_ID + ", M_Product_ID="
-                        + M_Product_ID + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("VAM_Locator_ID=" + VAM_Locator_ID + ", VAM_Product_ID="
+                        + VAM_Product_ID + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             }
             return retValue;
         }
 
-        public static MStorageDetail GetCreate(Ctx ctx, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID, String type, Trx trx)
+        public static MStorageDetail GetCreate(Ctx ctx, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID, String type, Trx trx)
         {
-            if (M_Locator_ID == 0)
+            if (VAM_Locator_ID == 0)
             {
-                throw new ArgumentException("M_Locator_ID=0");
+                throw new ArgumentException("VAM_Locator_ID=0");
             }
-            if (M_Product_ID == 0)
+            if (VAM_Product_ID == 0)
             {
-                throw new ArgumentException("M_Product_ID=0");
+                throw new ArgumentException("VAM_Product_ID=0");
             }
-            MStorageDetail retValue = GetForUpdate(ctx, M_Locator_ID, M_Product_ID,
-                    M_AttributeSetInstance_ID, type, trx);
+            MStorageDetail retValue = GetForUpdate(ctx, VAM_Locator_ID, VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID, type, trx);
             if (retValue != null)
             {
                 return retValue;
             }
             // Insert row based on locator
-            MLocator locator = new MLocator(ctx, M_Locator_ID, trx);
-            if (locator.Get_ID() != M_Locator_ID)
+            MLocator locator = new MLocator(ctx, VAM_Locator_ID, trx);
+            if (locator.Get_ID() != VAM_Locator_ID)
             {
-                throw new ArgumentException("Not found M_Locator_ID="
-                        + M_Locator_ID);
+                throw new ArgumentException("Not found VAM_Locator_ID="
+                        + VAM_Locator_ID);
             }
             //
-            retValue = new MStorageDetail(locator, M_Product_ID,
-                    M_AttributeSetInstance_ID, type);
+            retValue = new MStorageDetail(locator, VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID, type);
             retValue.Save(trx);
             s_log.Fine("New " + retValue);
             return retValue;
         }
 
-        public static Boolean Set(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static Boolean Set(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 int reservationAttributeSetInstance_ID, Decimal newQty,
                 String type, Trx trx)
         {
             MStorageDetail retValue = null;
-            String sql = "UPDATE M_StorageDetail " + "SET QTY=" + newQty
-                    + "WHERE M_Locator_ID=" + M_Locator_ID + " AND M_Product_ID=" + M_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
-            if (M_AttributeSetInstance_ID == 0)
+            String sql = "UPDATE VAM_StorageDetail " + "SET QTY=" + newQty
+                    + "WHERE VAM_Locator_ID=" + VAM_Locator_ID + " AND VAM_Product_ID=" + VAM_Product_ID + " AND QtyType='" + type + "' AND ";//type.GetValue()
+            if (VAM_PFeature_SetInstance_ID == 0)
             {
-                sql += "(M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID + " OR M_AttributeSetInstance_ID IS NULL)";
+                sql += "(VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + " OR VAM_PFeature_SetInstance_ID IS NULL)";
             }
             else
             {
-                sql += "M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID;
+                sql += "VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID;
             }
 
             try
@@ -501,7 +501,7 @@ namespace VAdvantage.Model
                 int i = DB.ExecuteQuery(sql, null, trx);
                 if (i != 1)
                 {
-                    s_log.SaveError("M_StorageDetailNotUpdated", sql);
+                    s_log.SaveError("VAM_StorageDetailNotUpdated", sql);
                 }
             }
             catch (Exception ex)
@@ -510,14 +510,14 @@ namespace VAdvantage.Model
             }
 
             if (retValue == null)
-                s_log.Fine("Not Found - M_Locator_ID=" + M_Locator_ID
-                        + ", M_Product_ID=" + M_Product_ID
-                        + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("Not Found - VAM_Locator_ID=" + VAM_Locator_ID
+                        + ", VAM_Product_ID=" + VAM_Product_ID
+                        + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             else
-                s_log.Fine("M_Locator_ID=" + M_Locator_ID + ", M_Product_ID="
-                        + M_Product_ID + ", M_AttributeSetInstance_ID="
-                        + M_AttributeSetInstance_ID);
+                s_log.Fine("VAM_Locator_ID=" + VAM_Locator_ID + ", VAM_Product_ID="
+                        + VAM_Product_ID + ", VAM_PFeature_SetInstance_ID="
+                        + VAM_PFeature_SetInstance_ID);
             return true;
         }
 
@@ -525,35 +525,35 @@ namespace VAdvantage.Model
         /// Get all Storages for Product
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_Locator_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_Locator_ID"></param>
         /// <param name="qtyType"></param>
         /// <param name="isFIFO"></param>
         /// <param name="withASI"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public static List<MStorageDetail> GetAll(Ctx ctx, int M_Product_ID,
-                int M_Locator_ID, X_Ref_Quantity_Type qtyType, Boolean isFIFO,
+        public static List<MStorageDetail> GetAll(Ctx ctx, int VAM_Product_ID,
+                int VAM_Locator_ID, X_Ref_Quantity_Type qtyType, Boolean isFIFO,
                 Boolean withASI, Trx trx)
         {
             List<MStorageDetail> list = new List<MStorageDetail>();
             String sql = "select s.* "
-                    + "from M_STORAGEDETAIL  s INNER JOIN M_STORAGEDETAIL  t "
+                    + "from VAM_StorageDETAIL  s INNER JOIN VAM_StorageDETAIL  t "
                     + "on ( s.VAF_CLIENT_ID = t.VAF_CLIENT_ID "
                     + "and s.VAF_ORG_ID    = t.VAF_ORG_ID "
-                    + "and s.M_PRODUCT_ID = t.M_PRODUCT_ID "
-                    + "and s.M_LOCATOR_ID = t.M_LOCATOR_ID) "
-                    + "where s.QTYTYPE ='" + qtyType.GetValue() + "' " + "and s.M_PRODUCT_ID =" + M_Product_ID
-                    + "and s.M_LOCATOR_ID =" + M_Locator_ID + " and t.QTYTYPE = 'H' ";
+                    + "and s.VAM_Product_ID = t.VAM_Product_ID "
+                    + "and s.VAM_Locator_ID = t.VAM_Locator_ID) "
+                    + "where s.QTYTYPE ='" + qtyType.GetValue() + "' " + "and s.VAM_Product_ID =" + VAM_Product_ID
+                    + "and s.VAM_Locator_ID =" + VAM_Locator_ID + " and t.QTYTYPE = 'H' ";
             if (withASI)
             {
-                sql += "and t.QTY > 0 " + "and s.M_ATTRIBUTESETINSTANCE_ID > 0 ";
+                sql += "and t.QTY > 0 " + "and s.VAM_PFeature_SetInstance_ID > 0 ";
             }
             else
             {
                 sql += "and t.QTY <> 0 ";
             }
-            sql += " order by s.M_ATTRIBUTESETINSTANCE_ID ";
+            sql += " order by s.VAM_PFeature_SetInstance_ID ";
 
             if (!isFIFO)
             {
@@ -589,29 +589,29 @@ namespace VAdvantage.Model
 
 
         /*  public static Map<X_Ref_Quantity_Type, MStorageDetail> getAllForUpdate(
-                Ctx ctx, int M_Locator_ID, int M_Product_ID,
-                int M_AttributeSetInstance_ID,
+                Ctx ctx, int VAM_Locator_ID, int VAM_Product_ID,
+                int VAM_PFeature_SetInstance_ID,
                 Set<X_Ref_Quantity_Type> updateQtyTypes, Trx trx) {
 		Map<X_Ref_Quantity_Type, MStorageDetail> storageDetails = new HashMap<X_Ref_Quantity_Type, MStorageDetail>();
 		for (X_Ref_Quantity_Type qtyType : X_Ref_Quantity_Type.values()) {
-			MStorageDetail store = MStorageDetail.Get(ctx, M_Locator_ID,
-					M_Product_ID, M_AttributeSetInstance_ID, qtyType,
+			MStorageDetail store = MStorageDetail.Get(ctx, VAM_Locator_ID,
+					VAM_Product_ID, VAM_PFeature_SetInstance_ID, qtyType,
 					(updateQtyTypes == null ? false : updateQtyTypes
 							.contains(qtyType)), trx);
 			storageDetails.put(qtyType, store);
 		}
 		return storageDetails;
 	}*/
-        public static Dictionary<String, MStorageDetail> GetAllForUpdate(Ctx ctx, int M_Locator_ID, int M_Product_ID,
-                int M_AttributeSetInstance_ID, List<String> updateQtyTypes, Trx trx)
+        public static Dictionary<String, MStorageDetail> GetAllForUpdate(Ctx ctx, int VAM_Locator_ID, int VAM_Product_ID,
+                int VAM_PFeature_SetInstance_ID, List<String> updateQtyTypes, Trx trx)
         {
             Dictionary<String, MStorageDetail> storageDetails = new Dictionary<String, MStorageDetail>();
             //Array qtyType = Enum.GetValues(typeof(X_Ref_Quantity_Type.X_Ref_Quantity_TypeEnum));
             Array qtyType = X_Ref_Quantity_Type.Get().ToArray();
             for (int i = 0; i < qtyType.Length; i++)
             {
-                MStorageDetail store = MStorageDetail.Get(ctx, M_Locator_ID,
-                        M_Product_ID, M_AttributeSetInstance_ID, qtyType.GetValue(i).ToString(),
+                MStorageDetail store = MStorageDetail.Get(ctx, VAM_Locator_ID,
+                        VAM_Product_ID, VAM_PFeature_SetInstance_ID, qtyType.GetValue(i).ToString(),
                         (updateQtyTypes == null ? false : updateQtyTypes.Contains(qtyType.GetValue(i).ToString())), trx);
                 //storageDetails.put(qtyType, store);
                 storageDetails[qtyType.GetValue(i).ToString()] = store;
@@ -625,59 +625,59 @@ namespace VAdvantage.Model
         /// diffQty must always be positive; negative values are not processed
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_Warehouse_ID"></param>
-        /// <param name="M_Locator_ID"></param>
-        /// <param name="M_Product_ID"></param>
-        /// <param name="M_AttributeSetInstance_ID"></param>
+        /// <param name="VAM_Warehouse_ID"></param>
+        /// <param name="VAM_Locator_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
+        /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="reservationAttributeSetInstance_ID"></param>
         /// <param name="diffQty"></param>
         /// <param name="type"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public static Boolean Add(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static Boolean Add(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 int reservationAttributeSetInstance_ID, Decimal diffQty,
                 String type, Trx trx)
         {
             StringBuilder diffText = new StringBuilder("(");
             MStorageDetail storage = null;
-            storage = MStorageDetail.GetCreate(ctx, M_Locator_ID, M_Product_ID,
-                    M_AttributeSetInstance_ID, type, trx);
+            storage = MStorageDetail.GetCreate(ctx, VAM_Locator_ID, VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID, type, trx);
             // Verify
-            if (storage.GetM_Locator_ID() != M_Locator_ID
-                    && storage.GetM_Product_ID() != M_Product_ID
-                    && storage.GetM_AttributeSetInstance_ID() != M_AttributeSetInstance_ID)
+            if (storage.GetVAM_Locator_ID() != VAM_Locator_ID
+                    && storage.GetVAM_Product_ID() != VAM_Product_ID
+                    && storage.GetVAM_PFeature_SetInstance_ID() != VAM_PFeature_SetInstance_ID)
             {
-                s_log.Severe("No Storage found - M_Locator_ID=" + M_Locator_ID
-                        + ",M_Product_ID=" + M_Product_ID + ",ASI="
-                        + M_AttributeSetInstance_ID);
+                s_log.Severe("No Storage found - VAM_Locator_ID=" + VAM_Locator_ID
+                        + ",VAM_Product_ID=" + VAM_Product_ID + ",ASI="
+                        + VAM_PFeature_SetInstance_ID);
                 return false;
             }
 
             MStorageDetail storageASI = null;
-            if ((M_AttributeSetInstance_ID != reservationAttributeSetInstance_ID)
+            if ((VAM_PFeature_SetInstance_ID != reservationAttributeSetInstance_ID)
                     && (type == X_Ref_Quantity_Type.RESERVED || type == X_Ref_Quantity_Type.ORDERED))
             {
-                int reservationM_Locator_ID = M_Locator_ID;
+                int reservationVAM_Locator_ID = VAM_Locator_ID;
                 if (reservationAttributeSetInstance_ID == 0)
                 {
-                    MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
-                    reservationM_Locator_ID = wh.GetDefaultM_Locator_ID();
+                    MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                    reservationVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                 }
-                storageASI = MStorageDetail.Get(ctx, reservationM_Locator_ID,
-                        M_Product_ID, reservationAttributeSetInstance_ID, type,
+                storageASI = MStorageDetail.Get(ctx, reservationVAM_Locator_ID,
+                        VAM_Product_ID, reservationAttributeSetInstance_ID, type,
                         true, trx);
                 if (storageASI == null) // create if not existing - should not happen
                 {
-                    MProduct product = MProduct.Get(ctx, M_Product_ID);
-                    int xM_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
-                    if (xM_Locator_ID == 0)
+                    MProduct product = MProduct.Get(ctx, VAM_Product_ID);
+                    int xVAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+                    if (xVAM_Locator_ID == 0)
                     {
-                        MWarehouse wh = MWarehouse.Get(ctx, M_Warehouse_ID);
-                        xM_Locator_ID = wh.GetDefaultM_Locator_ID();
+                        MWarehouse wh = MWarehouse.Get(ctx, VAM_Warehouse_ID);
+                        xVAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
                     }
-                    storageASI = MStorageDetail.GetCreate(ctx, xM_Locator_ID,
-                            M_Product_ID, reservationAttributeSetInstance_ID, type,
+                    storageASI = MStorageDetail.GetCreate(ctx, xVAM_Locator_ID,
+                            VAM_Product_ID, reservationAttributeSetInstance_ID, type,
                             trx);
                 }
             }
@@ -709,23 +709,23 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public static void Transfer(Ctx ctx, int M_Warehouse_ID, int M_Locator_ID,
-                int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static void Transfer(Ctx ctx, int VAM_Warehouse_ID, int VAM_Locator_ID,
+                int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 int reservationAttributeSetInstance_ID, Decimal diffQty,
                 String subtractFromType,
                 String addToType, Trx trx)
         {
-            Add(ctx, M_Warehouse_ID, M_Locator_ID, M_Product_ID,
-                    M_AttributeSetInstance_ID, reservationAttributeSetInstance_ID,
+            Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID, reservationAttributeSetInstance_ID,
                     Decimal.Negate(diffQty), subtractFromType, trx);
 
-            Add(ctx, M_Warehouse_ID, M_Locator_ID, M_Product_ID,
-                    M_AttributeSetInstance_ID, reservationAttributeSetInstance_ID,
+            Add(ctx, VAM_Warehouse_ID, VAM_Locator_ID, VAM_Product_ID,
+                    VAM_PFeature_SetInstance_ID, reservationAttributeSetInstance_ID,
                     Decimal.Negate(diffQty), addToType, trx);
         }
 
-        public static Decimal GetForUpdate(Ctx ctx, int M_Warehouse_ID,
-                int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public static Decimal GetForUpdate(Ctx ctx, int VAM_Warehouse_ID,
+                int VAM_Locator_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
                 int reservationAttributeSetInstance_ID, X_Ref_Quantity_Type type,
                 Trx trx)
         {
@@ -733,17 +733,17 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get M_Warehouse_ID of Locator
+        /// Get VAM_Warehouse_ID of Locator
         /// </summary>
         /// <returns>warehouse</returns>
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            if (_M_Warehouse_ID == 0)
+            if (_VAM_Warehouse_ID == 0)
             {
-                MLocator loc = MLocator.Get(GetCtx(), GetM_Locator_ID());
-                _M_Warehouse_ID = loc.GetM_Warehouse_ID();
+                MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+                _VAM_Warehouse_ID = loc.GetVAM_Warehouse_ID();
             }
-            return _M_Warehouse_ID;
+            return _VAM_Warehouse_ID;
         }
 
         ///**
@@ -751,12 +751,12 @@ namespace VAdvantage.Model
         // * 
         // * @param ctx
         // *            context
-        // * @param M_Warehouse_ID
-        // * @param M_Product_ID
+        // * @param VAM_Warehouse_ID
+        // * @param VAM_Product_ID
         // *            product
-        // * @param M_AttributeSetInstance_ID
+        // * @param VAM_PFeature_SetInstance_ID
         // *            instance
-        // * @param M_AttributeSet_ID
+        // * @param VAM_PFeature_Set_ID
         // *            attribute set
         // * @param allAttributeInstances
         // *            if true, all attribute set instances
@@ -769,76 +769,76 @@ namespace VAdvantage.Model
         // * @return existing - ordered by location priority (desc) and/or guarantee
         // *         date
         // */
-        //public static List<Storage.VO> GetWarehouse(Ctx ctx, int M_Warehouse_ID,
-        //        int M_Product_ID, int M_AttributeSetInstance_ID,
-        //        int M_AttributeSet_ID, Boolean allAttributeInstances,
+        //public static List<Storage.VO> GetWarehouse(Ctx ctx, int VAM_Warehouse_ID,
+        //        int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
+        //        int VAM_PFeature_Set_ID, Boolean allAttributeInstances,
         //        Timestamp minGuaranteeDate, Boolean FiFo, Boolean allocationCheck,
         //        int M_SourceZone_ID, Trx trx)
         //{
-        //    if (M_Warehouse_ID == 0 || M_Product_ID == 0)
+        //    if (VAM_Warehouse_ID == 0 || VAM_Product_ID == 0)
         //        return null;
 
-        //    if (M_AttributeSet_ID == 0)
+        //    if (VAM_PFeature_Set_ID == 0)
         //        allAttributeInstances = true;
         //    else
         //    {
-        //        MAttributeSet mas = MAttributeSet.Get(ctx, M_AttributeSet_ID);
+        //        MAttributeSet mas = MAttributeSet.Get(ctx, VAM_PFeature_Set_ID);
         //        if (!mas.isInstanceAttribute())
         //            allAttributeInstances = true;
         //    }
 
         //    List<Storage.VO> list = new ArrayList<Storage.VO>();
         //    // Specific Attribute Set Instance
-        //    String sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
+        //    String sql = "SELECT s.VAM_Product_ID,s.VAM_Locator_ID,s.VAM_PFeature_SetInstance_ID,"
         //            + "COALESCE(SUM(CASE WHEN QtyType LIKE 'H' THEN Qty ELSE 0 END),0) QtyOnhand,"
         //            + "COALESCE(SUM(CASE WHEN QtyType LIKE 'D' THEN Qty ELSE 0 END),0) QtyDedicated,"
         //            + "COALESCE(SUM(CASE WHEN QtyType LIKE 'A' THEN Qty ELSE 0 END),0) QtyAllocated "
-        //            + "FROM M_StorageDetail s"
-        //            + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
-        //            + "WHERE l.M_Warehouse_ID=?"
-        //            + " AND s.M_Product_ID=?"
-        //            + " AND COALESCE(s.M_AttributeSetInstance_ID,0)=? ";
+        //            + "FROM VAM_StorageDetail s"
+        //            + " INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID=s.VAM_Locator_ID) "
+        //            + "WHERE l.VAM_Warehouse_ID=?"
+        //            + " AND s.VAM_Product_ID=?"
+        //            + " AND COALESCE(s.VAM_PFeature_SetInstance_ID,0)=? ";
 
         //    if (allocationCheck)
         //        sql += "AND l.IsAvailableForAllocation='Y' ";
 
         //    if (M_SourceZone_ID != 0)
-        //        sql += "AND l.M_Locator_ID IN "
-        //                + " (SELECT M_Locator_ID FROM M_ZoneLocator WHERE M_Zone_ID = ? ) ";
-        //    sql += "GROUP BY l.PriorityNo, s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID "
-        //            + "ORDER BY l.PriorityNo DESC, M_AttributeSetInstance_ID";
+        //        sql += "AND l.VAM_Locator_ID IN "
+        //                + " (SELECT VAM_Locator_ID FROM M_ZoneLocator WHERE M_Zone_ID = ? ) ";
+        //    sql += "GROUP BY l.PriorityNo, s.VAM_Product_ID,s.VAM_Locator_ID,s.VAM_PFeature_SetInstance_ID "
+        //            + "ORDER BY l.PriorityNo DESC, VAM_PFeature_SetInstance_ID";
 
         //    if (!FiFo)
         //        sql += " DESC";
         //    // All Attribute Set Instances
         //    if (allAttributeInstances)
         //    {
-        //        sql = "SELECT s.M_Product_ID,s.M_Locator_ID,s.M_AttributeSetInstance_ID,"
+        //        sql = "SELECT s.VAM_Product_ID,s.VAM_Locator_ID,s.VAM_PFeature_SetInstance_ID,"
         //                + "COALESCE(SUM(CASE WHEN QtyType LIKE 'H' THEN Qty ELSE 0 END),0) QtyOnhand,"
         //                + "COALESCE(SUM(CASE WHEN QtyType LIKE 'D' THEN Qty ELSE 0 END),0) QtyDedicated,"
         //                + "COALESCE(SUM(CASE WHEN QtyType LIKE 'A' THEN Qty ELSE 0 END),0) QtyAllocated "
-        //                + "FROM M_StorageDetail s"
-        //                + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID)"
-        //                + " LEFT OUTER JOIN M_AttributeSetInstance asi ON (s.M_AttributeSetInstance_ID=asi.M_AttributeSetInstance_ID) "
-        //                + "WHERE l.M_Warehouse_ID=?" + " AND s.M_Product_ID=? ";
+        //                + "FROM VAM_StorageDetail s"
+        //                + " INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID=s.VAM_Locator_ID)"
+        //                + " LEFT OUTER JOIN VAM_PFeature_SetInstance asi ON (s.VAM_PFeature_SetInstance_ID=asi.VAM_PFeature_SetInstance_ID) "
+        //                + "WHERE l.VAM_Warehouse_ID=?" + " AND s.VAM_Product_ID=? ";
 
         //        if (allocationCheck)
         //            sql += "AND l.IsAvailableForAllocation='Y' ";
 
         //        if (M_SourceZone_ID != 0)
-        //            sql += "AND l.M_Locator_ID IN "
-        //                    + " (SELECT M_Locator_ID FROM M_ZoneLocator WHERE M_Zone_ID = ? ) ";
+        //            sql += "AND l.VAM_Locator_ID IN "
+        //                    + " (SELECT VAM_Locator_ID FROM M_ZoneLocator WHERE M_Zone_ID = ? ) ";
 
         //        if (minGuaranteeDate != null)
         //        {
         //            sql += "AND (asi.GuaranteeDate IS NULL OR asi.GuaranteeDate>?) "
-        //                    + "GROUP BY asi.GuaranteeDate, l.PriorityNo, s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID "
-        //                    + "ORDER BY asi.GuaranteeDate, l.PriorityNo DESC, M_AttributeSetInstance_ID";
+        //                    + "GROUP BY asi.GuaranteeDate, l.PriorityNo, s.VAM_Product_ID, s.VAM_Locator_ID, s.VAM_PFeature_SetInstance_ID "
+        //                    + "ORDER BY asi.GuaranteeDate, l.PriorityNo DESC, VAM_PFeature_SetInstance_ID";
         //        }
         //        else
         //        {
-        //            sql += "GROUP BY l.PriorityNo, s.M_Product_ID, s.M_Locator_ID, s.M_AttributeSetInstance_ID "
-        //                    + "ORDER BY l.PriorityNo DESC, s.M_AttributeSetInstance_ID";
+        //            sql += "GROUP BY l.PriorityNo, s.VAM_Product_ID, s.VAM_Locator_ID, s.VAM_PFeature_SetInstance_ID "
+        //                    + "ORDER BY l.PriorityNo DESC, s.VAM_PFeature_SetInstance_ID";
         //        }
         //        if (!FiFo)
         //            sql += " DESC";
@@ -850,26 +850,26 @@ namespace VAdvantage.Model
         //    {
         //        pstmt = DB.prepareStatement(sql, trx);
         //        int index = 1;
-        //        pstmt.setInt(index++, M_Warehouse_ID);
-        //        pstmt.setInt(index++, M_Product_ID);
+        //        pstmt.setInt(index++, VAM_Warehouse_ID);
+        //        pstmt.setInt(index++, VAM_Product_ID);
         //        if (M_SourceZone_ID != 0)
         //            pstmt.setInt(index++, M_SourceZone_ID);
         //        if (!allAttributeInstances)
-        //            pstmt.setInt(index++, M_AttributeSetInstance_ID);
+        //            pstmt.setInt(index++, VAM_PFeature_SetInstance_ID);
         //        else if (minGuaranteeDate != null)
         //            pstmt.setTimestamp(index++, minGuaranteeDate);
         //        dr = pstmt.executeQuery();
         //        while (dr.next())
         //        {
         //            index = 1;
-        //            int rs_M_Product_ID = dr.getInt(1);
-        //            int rs_M_Locator_ID = dr.getInt(index++);
-        //            int rs_M_AttributeSetInstance_ID = dr.getInt(index++);
+        //            int rs_VAM_Product_ID = dr.getInt(1);
+        //            int rs_VAM_Locator_ID = dr.getInt(index++);
+        //            int rs_VAM_PFeature_SetInstance_ID = dr.getInt(index++);
         //            Decimal rs_QtyOnhand = dr.getBigDecimal(index++);
         //            Decimal rs_QtyDedicated = dr.getBigDecimal(index++);
         //            Decimal rs_QtyAllocated = dr.getBigDecimal(index++);
-        //            list.add(new Storage.VO(rs_M_Product_ID, rs_M_Locator_ID,
-        //                    rs_M_AttributeSetInstance_ID, rs_QtyOnhand,
+        //            list.add(new Storage.VO(rs_VAM_Product_ID, rs_VAM_Locator_ID,
+        //                    rs_VAM_PFeature_SetInstance_ID, rs_QtyOnhand,
         //                    rs_QtyDedicated, rs_QtyAllocated));
         //        }
         //    }
@@ -886,13 +886,13 @@ namespace VAdvantage.Model
         //} // getWarehouse
 
         //public static List<Storage.VO> getWarehouse(Ctx ctx,
-        //        int M_Warehouse_ID, int M_Product_ID,
-        //        int M_AttributeSetInstance_ID, int M_AttributeSet_ID,
+        //        int VAM_Warehouse_ID, int VAM_Product_ID,
+        //        int VAM_PFeature_SetInstance_ID, int VAM_PFeature_Set_ID,
         //        Boolean allAttributeInstances, Timestamp minGuaranteeDate,
         //        Boolean FiFo, Trx trx)
         //{
-        //    return getWarehouse(ctx, M_Warehouse_ID, M_Product_ID,
-        //            M_AttributeSetInstance_ID, M_AttributeSet_ID,
+        //    return getWarehouse(ctx, VAM_Warehouse_ID, VAM_Product_ID,
+        //            VAM_PFeature_SetInstance_ID, VAM_PFeature_Set_ID,
         //            allAttributeInstances, minGuaranteeDate, FiFo, false, 0, trx);
         //}
 
@@ -903,16 +903,16 @@ namespace VAdvantage.Model
         public MInOutLine GetInOutLineOf()
         {
             // Don't try to trace back to receipt line for ASI=0 records
-            if (GetM_AttributeSetInstance_ID() == 0)
+            if (GetVAM_PFeature_SetInstance_ID() == 0)
             {
                 return null;
             }
             MInOutLine retValue = null;
-            String sql = "SELECT * FROM M_InOutLine line "
-                + "WHERE M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID()
+            String sql = "SELECT * FROM VAM_Inv_InOutLine line "
+                + "WHERE VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID()
                 + "OR EXISTS (SELECT 1 FROM "
-                + "M_InOutLineMA ma WHERE line.M_InOutLine_ID = ma.M_InOutLine_ID "
-                + "AND M_AttributeSetInstance_ID=" + GetM_AttributeSetInstance_ID() + ")";
+                + "VAM_Inv_InOutLineMP ma WHERE line.VAM_Inv_InOutLine_ID = ma.VAM_Inv_InOutLine_ID "
+                + "AND VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID() + ")";
 
             IDataReader idr = null;
             try

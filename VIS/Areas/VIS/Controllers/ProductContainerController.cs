@@ -180,7 +180,7 @@ namespace VIS.Controllers
         /// <summary>
         /// Is Used to get Name of Warehouse and Locator
         /// </summary>
-        /// <param name="fields">contain M_Locator_ID reference</param>
+        /// <param name="fields">contain VAM_Locator_ID reference</param>
         /// <returns>Warehouse and Locator Name</returns>
         /// <writer>Amit Bansal</writer>
         public JsonResult GetWarehouseAndLocatorName(string fields)
@@ -188,9 +188,9 @@ namespace VIS.Controllers
             var labelInfo = "";
             Ctx ctx = Session["ctx"] as Ctx;
             VAdvantage.Model.MLocator loc = VAdvantage.Model.MLocator.Get(ctx, Util.GetValueOfInt(fields));
-            if (loc != null && loc.GetM_Locator_ID() > 0)
+            if (loc != null && loc.GetVAM_Locator_ID() > 0)
             {
-                labelInfo = Msg.GetMsg(ctx, "M_Warehouse_ID") + " : " + loc.GetWarehouseName() + " , " + Msg.GetMsg(ctx, "M_Locator_ID") + " : " + loc.GetValue();
+                labelInfo = Msg.GetMsg(ctx, "VAM_Warehouse_ID") + " : " + loc.GetWarehouseName() + " , " + Msg.GetMsg(ctx, "VAM_Locator_ID") + " : " + loc.GetValue();
             }
             return Json(JsonConvert.SerializeObject(labelInfo), JsonRequestBehavior.AllowGet);
         }

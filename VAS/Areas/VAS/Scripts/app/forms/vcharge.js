@@ -91,7 +91,7 @@
             btnCancel = $("<input id='btnCancel_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("Cancel", false, false) + "'>");
             //JID_0134: Change the button name as "Create From Account" at right section.
             //Create charge from Account
-            btnAccount = $("<input id='btnAccount_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("ChargeFromAccount", false, false) + "'>");
+            btnAccount = $("<input id='btnAccount_" + $self.windowNo + "' class='VIS_Pref_btn-2 vis-frm-button' type='button' value='" + VIS.Msg.getMsg("ChargeFroMVABAccount", false, false) + "'>");
 
 
             var tble = $("<table style='width: 100%;'>");

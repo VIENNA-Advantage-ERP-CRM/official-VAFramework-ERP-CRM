@@ -11,17 +11,17 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Production
+/** Generated Model for VAM_Production
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Production : PO
+public class X_VAM_Production : PO
 {
-public X_M_Production (Context ctx, int M_Production_ID, Trx trxName) : base (ctx, M_Production_ID, trxName)
+public X_VAM_Production (Context ctx, int VAM_Production_ID, Trx trxName) : base (ctx, VAM_Production_ID, trxName)
 {
-/** if (M_Production_ID == 0)
+/** if (VAM_Production_ID == 0)
 {
 SetIsCreated (false);
-SetM_Production_ID (0);
+SetVAM_Production_ID (0);
 SetMovementDate (DateTime.Now);	// @#Date@
 SetName (null);
 SetPosted (false);
@@ -29,12 +29,12 @@ SetProcessed (false);	// N
 }
  */
 }
-public X_M_Production (Ctx ctx, int M_Production_ID, Trx trxName) : base (ctx, M_Production_ID, trxName)
+public X_VAM_Production (Ctx ctx, int VAM_Production_ID, Trx trxName) : base (ctx, VAM_Production_ID, trxName)
 {
-/** if (M_Production_ID == 0)
+/** if (VAM_Production_ID == 0)
 {
 SetIsCreated (false);
-SetM_Production_ID (0);
+SetVAM_Production_ID (0);
 SetMovementDate (DateTime.Now);	// @#Date@
 SetName (null);
 SetPosted (false);
@@ -47,7 +47,7 @@ SetProcessed (false);	// N
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Production (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Production (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_Production (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Production (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Production (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_Production (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Production (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Production (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Production()
+static X_VAM_Production()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -82,8 +82,8 @@ public static long updatedMS = 1280389064159L;
 public static int Table_ID;
  // =325;
 
-/** TableName=M_Production */
-public static String Table_Name="M_Production";
+/** TableName=VAM_Production */
+public static String Table_Name="VAM_Production";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Production[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Production[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 
@@ -223,17 +223,17 @@ if (oo != null)
 return false;
 }
 /** Set Production.
-@param M_Production_ID Plan for producing a product */
-public void SetM_Production_ID (int M_Production_ID)
+@param VAM_Production_ID Plan for producing a product */
+public void SetVAM_Production_ID (int VAM_Production_ID)
 {
-if (M_Production_ID < 1) throw new ArgumentException ("M_Production_ID is mandatory.");
-Set_ValueNoCheck ("M_Production_ID", M_Production_ID);
+if (VAM_Production_ID < 1) throw new ArgumentException ("VAM_Production_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Production_ID", VAM_Production_ID);
 }
 /** Get Production.
 @return Plan for producing a product */
-public int GetM_Production_ID() 
+public int GetVAM_Production_ID() 
 {
-Object ii = Get_Value("M_Production_ID");
+Object ii = Get_Value("VAM_Production_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

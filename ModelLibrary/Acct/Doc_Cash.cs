@@ -519,8 +519,8 @@ namespace VAdvantage.Acct
                     //        dueFrom = Util.GetValueOfInt(ds.Tables[0].Rows[0]["INTERCOMPANYDUEFROM_ACCT"]);
                     //        if (dueFrom > 0 && dueTo > 0)
                     //        {
-                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueFrom),line.GetVAB_Currency_ID(), line.GetAmount());
-                    //            fact.CreateLine(line, MAccount.Get(Env.GetCtx(), dueTo), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
+                    //            fact.CreateLine(line, MVABAccount.Get(Env.GetCtx(), dueFrom),line.GetVAB_Currency_ID(), line.GetAmount());
+                    //            fact.CreateLine(line, MVABAccount.Get(Env.GetCtx(), dueTo), line.GetVAB_Currency_ID(), Decimal.Negate(line.GetAmount()));
                     //        }
                     //    }
 
@@ -538,7 +538,7 @@ namespace VAdvantage.Acct
             if (TotalCurrGain != Env.ZERO)
             {
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='80540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
-                MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
+                MVABAccount acct = MVABAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrGain = MVABExchangeRate.Convert(Env.GetCtx(), TotalCurrGain, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 
@@ -550,7 +550,7 @@ namespace VAdvantage.Acct
             if (TotalCurrLoss != Env.ZERO)
             {
                 int validComID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_ValidParameter_ID FROM VAB_Acct_ValidParameter WHERE Account_ID= ( SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element WHERE Value='82540' AND VAF_Client_ID = " + GetVAF_Client_ID() + " )"));
-                MAccount acct = MAccount.Get(Env.GetCtx(), validComID);
+                MVABAccount acct = MVABAccount.Get(Env.GetCtx(), validComID);
                 TotalCurrLoss = MVABExchangeRate.Convert(Env.GetCtx(), TotalCurrLoss, childCashCurrency, headerCashCurrency, GetVAF_Client_ID(), GetVAF_Org_ID());
 
 

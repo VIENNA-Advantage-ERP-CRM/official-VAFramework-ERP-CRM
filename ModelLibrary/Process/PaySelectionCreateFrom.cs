@@ -227,7 +227,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 sql += " AND i._MatchRequirementI NOT IN ('N','R')"
                     + " AND EXISTS (SELECT * FROM VAB_InvoiceLine il "
                     + "WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID"
-                    + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM M_MatchPO m "
+                    + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM VAM_MatchPO m "
                         + "WHERE il.VAB_InvoiceLine_ID=m.VAB_InvoiceLine_ID))";
             }
             //	Receipt Matching Requiremnent
@@ -237,7 +237,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 sql += " AND i._MatchRequirementI NOT IN ('N','P')"
                     + " AND EXISTS (SELECT * FROM VAB_InvoiceLine il "
                     + "WHERE i.VAB_Invoice_ID=il.VAB_Invoice_ID"
-                    + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM M_MatchInv m "
+                    + " AND QtyInvoiced IN (SELECT SUM(Qty) FROM VAM_MatchInvoice m "
                         + "WHERE il.VAB_InvoiceLine_ID=m.VAB_InvoiceLine_ID))";
             }
 

@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">attribute set instance</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">attribute set instance</param>
         /// <returns>Attribute Instance or null</returns>
         public MGenAttributeInstance GetCGenAttributeInstance(int VAB_GenFeatureSetInstance_ID)
         {
@@ -106,23 +106,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">value</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">value</param>
         /// <param name="value">id</param>
-        public void SetCGenAttributeInstance(int M_AttributeSetInstance_ID, MGenAttributeValue value)
+        public void SetCGenAttributeInstance(int VAM_PFeature_SetInstance_ID, MGenAttributeValue value)
         {
-            MGenAttributeInstance instance = GetCGenAttributeInstance(M_AttributeSetInstance_ID);
+            MGenAttributeInstance instance = GetCGenAttributeInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 if (value != null)
                 {
                     instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
-                      M_AttributeSetInstance_ID, value.GetVAB_GenFeatureValue_ID(),
+                      VAM_PFeature_SetInstance_ID, value.GetVAB_GenFeatureValue_ID(),
                     value.GetName(), Get_TrxName()); 					//	Cached !!
                 }
                 else
                 {
                     instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
-                        M_AttributeSetInstance_ID, 0, null, Get_TrxName());
+                        VAM_PFeature_SetInstance_ID, 0, null, Get_TrxName());
                 }
             }
             else
@@ -144,15 +144,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">number value</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">number value</param>
         /// <param name="value">id</param>
-        public void SetCGenAttributeInstance(int M_AttributeSetInstance_ID, Decimal? value)
+        public void SetCGenAttributeInstance(int VAM_PFeature_SetInstance_ID, Decimal? value)
         {
-            MGenAttributeInstance instance = GetCGenAttributeInstance(M_AttributeSetInstance_ID);
+            MGenAttributeInstance instance = GetCGenAttributeInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)
             {
                 instance = new MGenAttributeInstance(GetCtx(), GetVAB_GenFeature_ID(),
-                    M_AttributeSetInstance_ID, value, Get_TrxName());
+                    VAM_PFeature_SetInstance_ID, value, Get_TrxName());
             }
             else
             {
@@ -164,7 +164,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Attribute Instance
         /// </summary>
-        /// <param name="M_AttributeSetInstance_ID">id</param>
+        /// <param name="VAM_PFeature_SetInstance_ID">id</param>
         /// <param name="value">string value</param>
         public void SetCGenAttributeInstance(int VAB_GenFeatureSetInstance_ID, String value)
         {

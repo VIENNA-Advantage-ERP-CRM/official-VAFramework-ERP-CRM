@@ -86,8 +86,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 newLine.SetLine(lines[i].GetLine());
                 newLine.SetDescription(lines[i].GetDescription());
                 newLine.SetHelp(lines[i].GetHelp());
-                newLine.SetM_Product_ID(lines[i].GetM_Product_ID());
-                newLine.SetM_AttributeSetInstance_ID(lines[i].GetM_AttributeSetInstance_ID());
+                newLine.SetVAM_Product_ID(lines[i].GetVAM_Product_ID());
+                newLine.SetVAM_PFeature_SetInstance_ID(lines[i].GetVAM_PFeature_SetInstance_ID());
                 //	newLine.setDateWorkStart();
                 //	newLine.setDateWorkComplete();
                 newLine.SetDeliveryDays(lines[i].GetDeliveryDays());

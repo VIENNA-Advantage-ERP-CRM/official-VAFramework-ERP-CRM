@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_AttributeValue
+/** Generated Model for VAM_PFeature_Value
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_AttributeValue : PO
+public class X_VAM_PFeature_Value : PO
 {
-public X_M_AttributeValue (Context ctx, int M_AttributeValue_ID, Trx trxName) : base (ctx, M_AttributeValue_ID, trxName)
+public X_VAM_PFeature_Value (Context ctx, int VAM_PFeature_Value_ID, Trx trxName) : base (ctx, VAM_PFeature_Value_ID, trxName)
 {
-/** if (M_AttributeValue_ID == 0)
+/** if (VAM_PFeature_Value_ID == 0)
 {
-SetM_AttributeValue_ID (0);
+SetVAM_PFeature_Value_ID (0);
 SetVAM_ProductFeature_ID (0);
 SetName (null);
 SetValue (null);
 }
  */
 }
-public X_M_AttributeValue (Ctx ctx, int M_AttributeValue_ID, Trx trxName) : base (ctx, M_AttributeValue_ID, trxName)
+public X_VAM_PFeature_Value (Ctx ctx, int VAM_PFeature_Value_ID, Trx trxName) : base (ctx, VAM_PFeature_Value_ID, trxName)
 {
-/** if (M_AttributeValue_ID == 0)
+/** if (VAM_PFeature_Value_ID == 0)
 {
-SetM_AttributeValue_ID (0);
+SetVAM_PFeature_Value_ID (0);
 SetVAM_ProductFeature_ID (0);
 SetName (null);
 SetValue (null);
@@ -43,7 +43,7 @@ SetValue (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_Value (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_M_AttributeValue (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_Value (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_M_AttributeValue (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeValue (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PFeature_Value (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_AttributeValue()
+static X_VAM_PFeature_Value()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -78,8 +78,8 @@ public static long updatedMS = 1280389061636L;
 public static int Table_ID;
  // =558;
 
-/** TableName=M_AttributeValue */
-public static String Table_Name="M_AttributeValue";
+/** TableName=VAM_PFeature_Value */
+public static String Table_Name="VAM_PFeature_Value";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_AttributeValue[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PFeature_Value[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -134,17 +134,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Attribute Value.
-@param M_AttributeValue_ID Product Attribute Value */
-public void SetM_AttributeValue_ID (int M_AttributeValue_ID)
+@param VAM_PFeature_Value_ID Product Attribute Value */
+public void SetVAM_PFeature_Value_ID (int VAM_PFeature_Value_ID)
 {
-if (M_AttributeValue_ID < 1) throw new ArgumentException ("M_AttributeValue_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeValue_ID", M_AttributeValue_ID);
+if (VAM_PFeature_Value_ID < 1) throw new ArgumentException ("VAM_PFeature_Value_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_Value_ID", VAM_PFeature_Value_ID);
 }
 /** Get Attribute Value.
 @return Product Attribute Value */
-public int GetM_AttributeValue_ID() 
+public int GetVAM_PFeature_Value_ID() 
 {
-Object ii = Get_Value("M_AttributeValue_ID");
+Object ii = Get_Value("VAM_PFeature_Value_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

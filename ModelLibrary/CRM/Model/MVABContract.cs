@@ -62,9 +62,9 @@ namespace VAdvantage.Model
          * 	@param trxName trx
          *	@return Order
          */
-        public static MContract CopyFrom(MContract from, DateTime? dateDoc, int VAB_DocTypesTarget_ID, bool counter, bool copyASI, Trx trxName)
+        public static MVABContract CopyFrom(MVABContract from, DateTime? dateDoc, int VAB_DocTypesTarget_ID, bool counter, bool copyASI, Trx trxName)
         {
-            MContract to = new MContract(from.GetCtx(), 0, trxName);
+            MVABContract to = new MVABContract(from.GetCtx(), 0, trxName);
 
             //to.Set_TrxName(trxName);
             //VAdvantage.Model.PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_Order_ID"></param>
         /// <param name="trxName"></param>
-        public MContract(Ctx ctx, int VAB_Contract_ID, Trx trxName)
+        public MVABContract(Ctx ctx, int VAB_Contract_ID, Trx trxName)
             : base(ctx, VAB_Contract_ID, trxName)
         {
 
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
         *  @param IsSOTrx sales order
         * 	@param	DocSubTypeSO if SO DocType Target (default DocSubTypeSO_OnCredit)
         */
-        //public MContract(MProject project, bool IsSOTrx, String DocSubTypeSO)
+        //public MVABContract(MProject project, bool IsSOTrx, String DocSubTypeSO)
         //    : this(project.GetCtx(), 0, project.Get_TrxName())
         //{
 
@@ -166,8 +166,8 @@ namespace VAdvantage.Model
         //    SetVAB_BPart_Location_ID(project.GetVAB_BPart_Location_ID());
         //    SetVAF_UserContact_ID(project.GetVAF_UserContact_ID());
         //    //
-        //    SetM_Warehouse_ID(project.GetM_Warehouse_ID());
-        //    SetM_PriceList_ID(project.GetM_PriceList_ID());
+        //    SetVAM_Warehouse_ID(project.GetVAM_Warehouse_ID());
+        //    SetVAM_PriceList_ID(project.GetVAM_PriceList_ID());
         //    SetVAB_PaymentTerm_ID(project.GetVAB_PaymentTerm_ID());
         //    //
         //    SetIsSOTrx(IsSOTrx);
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MContract(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABContract(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -258,11 +258,11 @@ namespace VAdvantage.Model
             ////        SetVAB_PaymentTerm_ID(ii);
             ////    //	Default Price List
             ////    if (IsSOTrx())
-            ////        ii = bp.GetM_PriceList_ID();
+            ////        ii = bp.GetVAM_PriceList_ID();
             ////    else
             ////        ii = bp.GetPO_PriceList_ID();
             ////    if (ii != 0)
-            ////        SetM_PriceList_ID(ii);
+            ////        SetVAM_PriceList_ID(ii);
             ////    //	Default Delivery/Via Rule
             ////    String ss = bp.GetDeliveryRule();
             ////    if (ss != null)
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             //    return;
 
             //String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
-            //    + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
+            //    + " COALESCE(p.VAM_PriceList_ID,g.VAM_PriceList_ID) AS VAM_PriceList_ID, p.PaymentRule,p.POReference,"
             //    + " p.SO_Description,p.IsDiscountPrinted,"
             //    + " p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
             //    + " p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -376,14 +376,14 @@ namespace VAdvantage.Model
             //        base.SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
 
             //        //	PriceList (indirect: IsTaxIncluded & Currency)
-            //        int ii = Util.GetValueOfInt(dr[isSOTrx ? "M_PriceList_ID" : "PO_PriceList_ID"].ToString());
+            //        int ii = Util.GetValueOfInt(dr[isSOTrx ? "VAM_PriceList_ID" : "PO_PriceList_ID"].ToString());
             //        if (ii != 0)
-            //            SetM_PriceList_ID(null, ii.ToString(), windowNo);
+            //            SetVAM_PriceList_ID(null, ii.ToString(), windowNo);
             //        else
             //        {	//	get default PriceList
-            //            ii = GetCtx().GetContextAsInt("#M_PriceList_ID");
+            //            ii = GetCtx().GetContextAsInt("#VAM_PriceList_ID");
             //            if (ii != 0)
-            //                SetM_PriceList_ID(null, ii.ToString(), windowNo);
+            //                SetVAM_PriceList_ID(null, ii.ToString(), windowNo);
             //        }
 
             //        //	Bill-To BPartner
@@ -534,7 +534,7 @@ namespace VAdvantage.Model
             //    return;
 
             //String sql = "SELECT p.VAF_Language,p.VAB_PaymentTerm_ID,"
-            //    + "p.M_PriceList_ID,p.PaymentRule,p.POReference,"
+            //    + "p.VAM_PriceList_ID,p.PaymentRule,p.POReference,"
             //    + "p.SO_Description,p.IsDiscountPrinted,"
             //    + "p.InvoiceRule,p.DeliveryRule,p.FreightCostRule,DeliveryViaRule,"
             //    + "p.SO_CreditLimit, p.SO_CreditLimit-p.SO_CreditUsed AS CreditAvailable,"
@@ -559,14 +559,14 @@ namespace VAdvantage.Model
             //    {
             //        base.SetBill_BPartner_ID(bill_BPartner_ID);
             //        //	PriceList (indirect: IsTaxIncluded & Currency)
-            //        int ii = Util.GetValueOfInt(dr[isSOTrx ? "M_PriceList_ID" : "PO_PriceList_ID"].ToString());
+            //        int ii = Util.GetValueOfInt(dr[isSOTrx ? "VAM_PriceList_ID" : "PO_PriceList_ID"].ToString());
             //        if (ii != 0)
-            //            SetM_PriceList_ID(null, ii.ToString(), windowNo);
+            //            SetVAM_PriceList_ID(null, ii.ToString(), windowNo);
             //        else
             //        {	//	get default PriceList
-            //            ii = GetCtx().GetContextAsInt("#M_PriceList_ID");
+            //            ii = GetCtx().GetContextAsInt("#VAM_PriceList_ID");
             //            if (ii != 0)
-            //                SetM_PriceList_ID(null, ii.ToString(), windowNo);
+            //                SetVAM_PriceList_ID(null, ii.ToString(), windowNo);
             //        }
 
             //        int bill_Location_ID = Util.GetValueOfInt(dr["Bill_Location_ID"].ToString());
@@ -716,11 +716,11 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Warehouse
-         *	@param M_Warehouse_ID warehouse
+         *	@param VAM_Warehouse_ID warehouse
          */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            // base.SetM_Warehouse_ID(M_Warehouse_ID);
+            // base.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
         }
 
         /**
@@ -1078,7 +1078,7 @@ namespace VAdvantage.Model
         *	@param copyASI copy line attributes Attribute Set Instance, Resaouce Assignment
         *	@return number of lines copied
         */
-        public int CopyLinesFrom(MContract otherOrder, bool counter, bool copyASI)
+        public int CopyLinesFrom(MVABContract otherOrder, bool counter, bool copyASI)
         {
             int count = 0;
             try
@@ -1097,7 +1097,7 @@ namespace VAdvantage.Model
                 //    //	References
                 //    if (!copyASI)
                 //    {
-                //        line.SetM_AttributeSetInstance_ID(0);
+                //        line.SetVAM_PFeature_SetInstance_ID(0);
                 //        line.SetVAS_Res_Assignment_ID(0);
                 //    }
                 //    if (counter)
@@ -1214,40 +1214,40 @@ namespace VAdvantage.Model
         }
 
         /*	Set Price List (and Currency, TaxIncluded) when valid
-        * 	@param M_PriceList_ID price list
+        * 	@param VAM_PriceList_ID price list
         */
-        public new void SetM_PriceList_ID(int M_PriceList_ID)
+        public new void SetVAM_PriceList_ID(int VAM_PriceList_ID)
         {
-            MPriceList pl = MPriceList.Get(GetCtx(), M_PriceList_ID, null);
-            if (pl.Get_ID() == M_PriceList_ID)
+            MPriceList pl = MPriceList.Get(GetCtx(), VAM_PriceList_ID, null);
+            if (pl.Get_ID() == VAM_PriceList_ID)
             {
-                base.SetM_PriceList_ID(M_PriceList_ID);
+                base.SetVAM_PriceList_ID(VAM_PriceList_ID);
                 SetVAB_Currency_ID(pl.GetVAB_Currency_ID());
                 // SetIsTaxIncluded(pl.IsTaxIncluded());
             }
         }
 
         /*	Set Price List - Callout
-        *	@param oldM_PriceList_ID old value
-        *	@param newM_PriceList_ID new value
+        *	@param oldVAM_PriceList_ID old value
+        *	@param newVAM_PriceList_ID new value
         *	@param windowNo window
         *	@throws Exception
         */
         //@UICallout
-        public void SetM_PriceList_ID(String oldM_PriceList_ID, String newM_PriceList_ID, int windowNo)
+        public void SetVAM_PriceList_ID(String oldVAM_PriceList_ID, String newVAM_PriceList_ID, int windowNo)
         {
-            if (newM_PriceList_ID == null || newM_PriceList_ID.Length == 0)
+            if (newVAM_PriceList_ID == null || newVAM_PriceList_ID.Length == 0)
                 return;
-            int M_PriceList_ID = int.Parse(newM_PriceList_ID);
-            if (M_PriceList_ID == 0)
+            int VAM_PriceList_ID = int.Parse(newVAM_PriceList_ID);
+            if (VAM_PriceList_ID == 0)
                 return;
 
             String sql = "SELECT pl.IsTaxIncluded,pl.EnforcePriceLimit,pl.VAB_Currency_ID,c.StdPrecision,"
-                + "plv.M_PriceList_Version_ID,plv.ValidFrom "
-                + "FROM M_PriceList pl,VAB_Currency c,M_PriceList_Version plv "
+                + "plv.VAM_PriceListVersion_ID,plv.ValidFrom "
+                + "FROM VAM_PriceList pl,VAB_Currency c,VAM_PriceListVersion plv "
                 + "WHERE pl.VAB_Currency_ID=c.VAB_Currency_ID"
-                + " AND pl.M_PriceList_ID=plv.M_PriceList_ID"
-                + " AND pl.M_PriceList_ID=" + M_PriceList_ID						//	1
+                + " AND pl.VAM_PriceList_ID=plv.VAM_PriceList_ID"
+                + " AND pl.VAM_PriceList_ID=" + VAM_PriceList_ID						//	1
                 + "ORDER BY plv.ValidFrom DESC";
 
             //	Use newest price list - may not be future
@@ -1261,7 +1261,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    base.SetM_PriceList_ID(M_PriceList_ID);
+                    base.SetVAM_PriceList_ID(VAM_PriceList_ID);
                     //	Tax Included
                     // SetIsTaxIncluded("Y".Equals(dr[0].ToString()));
                     //	Price Limit Enforce
@@ -1272,7 +1272,7 @@ namespace VAdvantage.Model
                     SetVAB_Currency_ID(ii);
                     //	PriceList Version
                     //if (p_changeVO != null)
-                    //    p_changeVO.setContext(GetCtx(), windowNo, "M_PriceList_Version_ID", dr.getInt(5));
+                    //    p_changeVO.setContext(GetCtx(), windowNo, "VAM_PriceListVersion_ID", dr.getInt(5));
                 }
 
             }
@@ -1289,7 +1289,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Return Policy
         /// </summary>
-        public void SetM_ReturnPolicy_ID()
+        public void SetVAM_ReturnRule_ID()
         {
             try
             {
@@ -1298,17 +1298,17 @@ namespace VAdvantage.Model
                 //{
                 //    if (IsSOTrx())
                 //    {
-                //        base.SetM_ReturnPolicy_ID(bpartner.GetM_ReturnPolicy_ID());
+                //        base.SetVAM_ReturnRule_ID(bpartner.GetVAM_ReturnRule_ID());
                 //    }
                 //    else
                 //    {
-                //        base.SetM_ReturnPolicy_ID(bpartner.GetPO_ReturnPolicy_ID());
+                //        base.SetVAM_ReturnRule_ID(bpartner.GetPO_ReturnPolicy_ID());
                 //    }
                 //}
             }
             catch
             {
-                // // MessageBox.Show("MOrder--SetM_ReturnPolicy_ID()");
+                // // MessageBox.Show("MOrder--SetVAM_ReturnRule_ID()");
             }
 
         }
@@ -1317,7 +1317,7 @@ namespace VAdvantage.Model
          * 	SOTrx should be set.
          * 	@param origOrder MOrder
          */
-        public void SetOrigOrder(MContract origOrder)
+        public void SetOrigOrder(MVABContract origOrder)
         {
             try
             {
@@ -1337,9 +1337,9 @@ namespace VAdvantage.Model
                 SetBill_Location_ID(origOrder.GetBill_Location_ID());
                 SetBill_User_ID(origOrder.GetBill_User_ID());
 
-                SetM_ReturnPolicy_ID();
+                SetVAM_ReturnRule_ID();
 
-                SetM_PriceList_ID(origOrder.GetM_PriceList_ID());
+                SetVAM_PriceList_ID(origOrder.GetVAM_PriceList_ID());
                 //SetPaymentRule(origOrder.GetPaymentRule());
                 SetVAB_PaymentTerm_ID(origOrder.GetVAB_PaymentTerm_ID());
                 //setDeliveryRule(X_VAB_Order.DELIVERYRULE_Manual);
@@ -1377,7 +1377,7 @@ namespace VAdvantage.Model
                 }
 
                 //		Get Details
-                MContract origOrder = new MContract(GetCtx(), Orig_Order_ID, null);
+                MVABContract origOrder = new MVABContract(GetCtx(), Orig_Order_ID, null);
                 if (origOrder.Get_ID() != 0)
                 {
                     SetOrigOrder(origOrder);
@@ -1402,7 +1402,7 @@ namespace VAdvantage.Model
                 {
                     return;
                 }
-                //  SetOrig_InOut_ID(origInOut.GetM_InOut_ID());
+                //  SetOrig_InOut_ID(origInOut.GetVAM_Inv_InOut_ID());
                 // SetVAB_Project_ID(origInOut.GetVAB_Project_ID());
                 SetVAB_Promotion_ID(origInOut.GetVAB_Promotion_ID());
                 // SetVAB_BillingCode_ID(origInOut.GetVAB_BillingCode_ID());
@@ -1529,16 +1529,16 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Lines of Order for a given product
         /// </summary>
-        /// <param name="M_Product_ID"></param>
+        /// <param name="VAM_Product_ID"></param>
         /// <param name="whereClause"></param>
         /// <param name="orderClause">order clause</param>
         /// <returns>lines</returns>
         /// <date>10-March-2011</date>
         /// <writer>raghu</writer>
-        //public MOrderLine[] GetLines(int M_Product_ID, String whereClause, String orderClause)
+        //public MOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
         //{
         //    List<MOrderLine> list = new List<MOrderLine>();
-        //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND M_Product_ID=" + M_Product_ID);
+        //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + VAM_Product_ID);
 
         //    if (whereClause != null)
         //        sql.Append(" AND ").Append(whereClause);
@@ -1739,7 +1739,7 @@ namespace VAdvantage.Model
         //{
         //    //	TODO: getShipment if linked on line
         //    List<MInOut> list = new List<MInOut>();
-        //    String sql = "SELECT * FROM M_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
+        //    String sql = "SELECT * FROM VAM_Inv_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1800,10 +1800,10 @@ namespace VAdvantage.Model
         //public MInOutLine[] GetShipmentLines()
         //{
         //    List<MInOutLine> list = new List<MInOutLine>();
-        //    String sql = "SELECT * FROM M_InOutLine iol "
+        //    String sql = "SELECT * FROM VAM_Inv_InOutLine iol "
         //        + "WHERE iol.VAB_OrderLine_ID IN "
         //            + "(SELECT VAB_OrderLine_ID FROM VAB_OrderLine WHERE VAB_Order_ID=@VAB_Order_ID) "
-        //        + "ORDER BY M_InOutLine_ID";
+        //        + "ORDER BY VAM_Inv_InOutLine_ID";
         //    DataTable dt = null;
         //    try
         //    {
@@ -1908,7 +1908,7 @@ namespace VAdvantage.Model
             }
 
             // calculate tax amount and surcharge amount 
-            if (newRecord || Is_ValueChanged("VAB_TaxRate_ID") || Is_ValueChanged("M_PriceList_ID")
+            if (newRecord || Is_ValueChanged("VAB_TaxRate_ID") || Is_ValueChanged("VAM_PriceList_ID")
                 || Is_ValueChanged("QtyEntered") || Is_ValueChanged("PriceActual") || Is_ValueChanged("Discount"))
             {
                 CalculateAndUpdateTaxes();
@@ -1923,7 +1923,7 @@ namespace VAdvantage.Model
         private void CalculateAndUpdateTaxes()
         {
             // PriceList Object
-            MPriceList priceList = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), Get_Trx());
+            MPriceList priceList = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), Get_Trx());
             // Currency Object
             MVABCurrency currency = MVABCurrency.Get(GetCtx(), priceList.GetVAB_Currency_ID());
             //Tax Object 
@@ -2074,7 +2074,7 @@ namespace VAdvantage.Model
             //}
 
             //	Lines
-            //MOrderLine[] lines = GetLines(true, "M_Product_ID");
+            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //if (lines.Length == 0)
             //{
             //    _processMsg = "@NoLines@";
@@ -2093,7 +2093,7 @@ namespace VAdvantage.Model
             //        {
             //            for (int i = 0; i < lines.Length; i++)
             //            {
-            //                if (lines[i].GetM_Warehouse_ID() != GetM_Warehouse_ID())
+            //                if (lines[i].GetVAM_Warehouse_ID() != GetVAM_Warehouse_ID())
             //                {
             //                    log.Warning("different Warehouse " + lines[i]);
             //                    _processMsg = "@CannotChangeDocType@";
@@ -2127,10 +2127,10 @@ namespace VAdvantage.Model
             //String mandatoryType = "='Y'";	//	IN ('Y','S')
             //String sql = "SELECT COUNT(*) "
             //    + "FROM VAB_OrderLine ol"
-            //    + " INNER JOIN M_Product p ON (ol.M_Product_ID=p.M_Product_ID)"
-            //    + " INNER JOIN M_AttributeSet pas ON (p.M_AttributeSet_ID=pas.M_AttributeSet_ID) "
+            //    + " INNER JOIN VAM_Product p ON (ol.VAM_Product_ID=p.VAM_Product_ID)"
+            //    + " INNER JOIN VAM_PFeature_Set pas ON (p.VAM_PFeature_Set_ID=pas.VAM_PFeature_Set_ID) "
             //    + "WHERE pas.MandatoryType" + mandatoryType
-            //    + " AND ol.M_AttributeSetInstance_ID IS NULL"
+            //    + " AND ol.VAM_PFeature_SetInstance_ID IS NULL"
             //    + " AND ol.VAB_Order_ID=" + GetVAB_Order_ID();
             //int no = DB.GetSQLValue(Get_TrxName(), sql);
             //if (no != 0)
@@ -2141,7 +2141,7 @@ namespace VAdvantage.Model
 
             //	Lines
             //if (ExplodeBOM())
-            //    lines = GetLines(true, "M_Product_ID");
+            //    lines = GetLines(true, "VAM_Product_ID");
             //if (!ReserveStock(dt, lines))
             //{
             //    _processMsg = "Cannot reserve Stock";
@@ -2197,7 +2197,7 @@ namespace VAdvantage.Model
         //{
         //    bool retValue = false;
         //    String where = "AND IsActive='Y' AND EXISTS "
-        //        + "(SELECT * FROM M_Product p WHERE VAB_OrderLine.M_Product_ID=p.M_Product_ID"
+        //        + "(SELECT * FROM VAM_Product p WHERE VAB_OrderLine.VAM_Product_ID=p.VAM_Product_ID"
         //        + " AND	p.IsBOM='Y' AND p.IsVerified='Y' AND p.IsStocked='N')";
         //    //
         //    String sql = "SELECT COUNT(*) FROM VAB_OrderLine "
@@ -2213,7 +2213,7 @@ namespace VAdvantage.Model
         //        for (int i = 0; i < lines.Length; i++)
         //        {
         //            MOrderLine line = lines[i];
-        //            MProduct product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+        //            MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
         //            log.Fine(product.GetName());
         //            //	New Lines
         //            int lineNo = line.GetLine();
@@ -2223,8 +2223,8 @@ namespace VAdvantage.Model
         //                MProductBOM bom = boms[j];
         //                MOrderLine newLine = new MOrderLine(this);
         //                newLine.SetLine(++lineNo);
-        //                newLine.SetM_Product_ID(bom.GetProduct()
-        //                    .GetM_Product_ID());
+        //                newLine.SetVAM_Product_ID(bom.GetProduct()
+        //                    .GetVAM_Product_ID());
         //                newLine.SetVAB_UOM_ID(bom.GetProduct().GetVAB_UOM_ID());
         //                newLine.SetQty(Decimal.Multiply(line.GetQtyOrdered(), bom.GetBOMQty()));
         //                if (bom.GetDescription() != null)
@@ -2234,8 +2234,8 @@ namespace VAdvantage.Model
         //                newLine.Save(Get_TrxName());
         //            }
         //            //	Convert into Comment Line
-        //            line.SetM_Product_ID(0);
-        //            line.SetM_AttributeSetInstance_ID(0);
+        //            line.SetVAM_Product_ID(0);
+        //            line.SetVAM_PFeature_SetInstance_ID(0);
         //            line.SetPrice(Env.ZERO);
         //            line.SetPriceLimit(Env.ZERO);
         //            line.SetPriceList(Env.ZERO);
@@ -2261,7 +2261,7 @@ namespace VAdvantage.Model
         /* Reserve Inventory.
         * 	Counterpart: MInOut.completeIt()
         * 	@param dt document type or null
-        * 	@param lines order lines (ordered by M_Product_ID for deadlock prevention)
+        * 	@param lines order lines (ordered by VAM_Product_ID for deadlock prevention)
         * 	@return true if (un) reserved
         */
         //private bool ReserveStock(VAdvantage.Model.MDocType dt, MOrderLine[] lines)
@@ -2287,10 +2287,10 @@ namespace VAdvantage.Model
         //        bool isSOTrx = IsSOTrx();
         //        log.Fine("Binding=" + binding + " - IsSOTrx=" + isSOTrx);
         //        //	Force same WH for all but SO/VAdvantage.Model.PO
-        //        int header_M_Warehouse_ID = GetM_Warehouse_ID();
+        //        int header_VAM_Warehouse_ID = GetVAM_Warehouse_ID();
         //        if (VAdvantage.Model.MDocType.DOCSUBTYPESO_StandardOrder.Equals(dt.GetDocSubTypeSO())
         //            || VAdvantage.Model.MDocBaseType.DOCBASETYPE_PURCHASEORDER.Equals(dt.GetDocBaseType()))
-        //            header_M_Warehouse_ID = 0;		//	don't enforce
+        //            header_VAM_Warehouse_ID = 0;		//	don't enforce
 
         //        Decimal Volume = Env.ZERO;
         //        Decimal Weight = Env.ZERO;
@@ -2300,10 +2300,10 @@ namespace VAdvantage.Model
         //        {
         //            MOrderLine line = lines[i];
         //            //	Check/set WH/Org
-        //            if (header_M_Warehouse_ID != 0)	//	enforce WH
+        //            if (header_VAM_Warehouse_ID != 0)	//	enforce WH
         //            {
-        //                if (header_M_Warehouse_ID != line.GetM_Warehouse_ID())
-        //                    line.SetM_Warehouse_ID(header_M_Warehouse_ID);
+        //                if (header_VAM_Warehouse_ID != line.GetVAM_Warehouse_ID())
+        //                    line.SetVAM_Warehouse_ID(header_VAM_Warehouse_ID);
         //                if (GetVAF_Org_ID() != line.GetVAF_Org_ID())
         //                    line.SetVAF_Org_ID(GetVAF_Org_ID());
         //            }
@@ -2334,22 +2334,22 @@ namespace VAdvantage.Model
         //                {
         //                    Decimal ordered = isSOTrx ? Env.ZERO : difference;
         //                    Decimal reserved = isSOTrx ? difference : Env.ZERO;
-        //                    int M_Locator_ID = 0;
+        //                    int VAM_Locator_ID = 0;
         //                    //	Get Locator to reserve
-        //                    if (line.GetM_AttributeSetInstance_ID() != 0)	//	Get existing Location
-        //                        M_Locator_ID = MStorage.GetM_Locator_ID(line.GetM_Warehouse_ID(),
-        //                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+        //                    if (line.GetVAM_PFeature_SetInstance_ID() != 0)	//	Get existing Location
+        //                        VAM_Locator_ID = MStorage.GetVAM_Locator_ID(line.GetVAM_Warehouse_ID(),
+        //                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
         //                            ordered, Get_TrxName());
         //                    //	Get default Location
-        //                    if (M_Locator_ID == 0)
+        //                    if (VAM_Locator_ID == 0)
         //                    {
-        //                        MWarehouse wh = MWarehouse.Get(GetCtx(), line.GetM_Warehouse_ID());
-        //                        M_Locator_ID = wh.GetDefaultM_Locator_ID();
+        //                        MWarehouse wh = MWarehouse.Get(GetCtx(), line.GetVAM_Warehouse_ID());
+        //                        VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
         //                    }
         //                    //	Update Storage
-        //                    if (!MStorage.Add(GetCtx(), line.GetM_Warehouse_ID(), M_Locator_ID,
-        //                        line.GetM_Product_ID(),
-        //                        line.GetM_AttributeSetInstance_ID(), line.GetM_AttributeSetInstance_ID(),
+        //                    if (!MStorage.Add(GetCtx(), line.GetVAM_Warehouse_ID(), VAM_Locator_ID,
+        //                        line.GetVAM_Product_ID(),
+        //                        line.GetVAM_PFeature_SetInstance_ID(), line.GetVAM_PFeature_SetInstance_ID(),
         //                        Env.ZERO, reserved, ordered, Get_TrxName()))
         //                        return false;
         //                }	//	stockec
@@ -2606,22 +2606,22 @@ namespace VAdvantage.Model
         //            //	Qty = Ordered - Delivered
         //            Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
         //            //	Location
-        //            int M_Locator_ID = MStorage.GetM_Locator_ID(oLine.GetM_Warehouse_ID(),
-        //                    oLine.GetM_Product_ID(), oLine.GetM_AttributeSetInstance_ID(),
+        //            int VAM_Locator_ID = MStorage.GetVAM_Locator_ID(oLine.GetVAM_Warehouse_ID(),
+        //                    oLine.GetVAM_Product_ID(), oLine.GetVAM_PFeature_SetInstance_ID(),
         //                    MovementQty, Get_TrxName());
-        //            if (M_Locator_ID == 0)		//	Get default Location
+        //            if (VAM_Locator_ID == 0)		//	Get default Location
         //            {
         //                MProduct product = ioLine.GetProduct();
-        //                int M_Warehouse_ID = oLine.GetM_Warehouse_ID();
-        //                M_Locator_ID = MProductLocator.GetFirstM_Locator_ID(product, M_Warehouse_ID);
-        //                if (M_Locator_ID == 0)
+        //                int VAM_Warehouse_ID = oLine.GetVAM_Warehouse_ID();
+        //                VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, VAM_Warehouse_ID);
+        //                if (VAM_Locator_ID == 0)
         //                {
-        //                    MWarehouse wh = MWarehouse.Get(GetCtx(), M_Warehouse_ID);
-        //                    M_Locator_ID = wh.GetDefaultM_Locator_ID();
+        //                    MWarehouse wh = MWarehouse.Get(GetCtx(), VAM_Warehouse_ID);
+        //                    VAM_Locator_ID = wh.GetDefaultVAM_Locator_ID();
         //                }
         //            }
         //            //
-        //            ioLine.SetOrderLine(oLine, M_Locator_ID, MovementQty);
+        //            ioLine.SetOrderLine(oLine, VAM_Locator_ID, MovementQty);
         //            ioLine.SetQty(MovementQty);
         //            if (oLine.GetQtyEntered().CompareTo(oLine.GetQtyOrdered()) != 0)
         //            {
@@ -2640,7 +2640,7 @@ namespace VAdvantage.Model
         //        shipment.Save(Get_TrxName());
         //        if (!DOCSTATUS_Completed.Equals(status))
         //        {
-        //            _processMsg = "@M_InOut_ID@: " + shipment.GetProcessMsg();
+        //            _processMsg = "@VAM_Inv_InOut_ID@: " + shipment.GetProcessMsg();
         //            return null;
         //        }
         //    }
@@ -2753,7 +2753,7 @@ namespace VAdvantage.Model
         public bool VoidIt()
         {
             /***********************************/
-            //MOrderLine[] lines = GetLines(true, "M_Product_ID");
+            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //log.Info(ToString());
             //for (int i = 0; i < lines.Length; i++)
             //{
@@ -2801,7 +2801,7 @@ namespace VAdvantage.Model
                 StringBuilder Info = new StringBuilder();
 
                 //	Reverse All *Shipments*
-                Info.Append("@M_InOut_ID@:");
+                Info.Append("@VAM_Inv_InOut_ID@:");
                 //MInOut[] shipments = GetShipments(false);	//	get all (line based)
                 //for (int i = 0; i < shipments.Length; i++)
                 //{
@@ -2927,7 +2927,7 @@ namespace VAdvantage.Model
 
             //	Close Not delivered Qty - SO/VAdvantage.Model.PO
             /*********************************/
-            //MOrderLine[] lines = GetLines(true, "M_Product_ID");
+            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //for (int i = 0; i < lines.Length; i++)
             //{
             //    MOrderLine line = lines[i];
@@ -3088,17 +3088,17 @@ namespace VAdvantage.Model
         ///// Get Latest Shipment for the Order
         ///// </summary>
         ///// <param name="VAB_DocTypes_ID"></param>
-        ///// <param name="M_Warehouse_ID"></param>
+        ///// <param name="VAM_Warehouse_ID"></param>
         ///// <param name="VAB_BusinessPartner_ID"></param>
         ///// <param name="VAB_BPart_Location_ID"></param>
         ///// <returns>latest shipment</returns>
-        //public MInOut GetOpenInOut(int VAB_DocTypes_ID, int M_Warehouse_ID, int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID)
+        //public MInOut GetOpenInOut(int VAB_DocTypes_ID, int VAM_Warehouse_ID, int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID)
         //{
         //    //	TODO: getShipment if linked on line
         //    MInOut inout = null;
-        //    String sql = "SELECT M_InOut_ID " +
-        //    "FROM M_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID()
-        //   + " AND M_Warehouse_ID=" + M_Warehouse_ID
+        //    String sql = "SELECT VAM_Inv_InOut_ID " +
+        //    "FROM VAM_Inv_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID()
+        //   + " AND VAM_Warehouse_ID=" + VAM_Warehouse_ID
         //   + " AND VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID
         //   + " AND VAB_BPart_Location_ID= " + VAB_BPart_Location_ID
         //   + " AND VAB_DocTypes_ID= " + VAB_DocTypes_ID

@@ -165,34 +165,34 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Forecast Line.
-@param M_ForecastLine_ID Forecast Line */
-public void SetM_ForecastLine_ID (int M_ForecastLine_ID)
+@param VAM_TeamForecastLine_ID Forecast Line */
+public void SetVAM_TeamForecastLine_ID (int VAM_TeamForecastLine_ID)
 {
-if (M_ForecastLine_ID <= 0) Set_Value ("M_ForecastLine_ID", null);
+if (VAM_TeamForecastLine_ID <= 0) Set_Value ("VAM_TeamForecastLine_ID", null);
 else
-Set_Value ("M_ForecastLine_ID", M_ForecastLine_ID);
+Set_Value ("VAM_TeamForecastLine_ID", VAM_TeamForecastLine_ID);
 }
 /** Get Forecast Line.
 @return Forecast Line */
-public int GetM_ForecastLine_ID() 
+public int GetVAM_TeamForecastLine_ID() 
 {
-Object ii = Get_Value("M_ForecastLine_ID");
+Object ii = Get_Value("VAM_TeamForecastLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Requisition Line.
-@param M_RequisitionLine_ID Material Requisition Line */
-public void SetM_RequisitionLine_ID (int M_RequisitionLine_ID)
+@param VAM_RequisitionLine_ID Material Requisition Line */
+public void SetVAM_RequisitionLine_ID (int VAM_RequisitionLine_ID)
 {
-if (M_RequisitionLine_ID <= 0) Set_Value ("M_RequisitionLine_ID", null);
+if (VAM_RequisitionLine_ID <= 0) Set_Value ("VAM_RequisitionLine_ID", null);
 else
-Set_Value ("M_RequisitionLine_ID", M_RequisitionLine_ID);
+Set_Value ("VAM_RequisitionLine_ID", VAM_RequisitionLine_ID);
 }
 /** Get Requisition Line.
 @return Material Requisition Line */
-public int GetM_RequisitionLine_ID() 
+public int GetVAM_RequisitionLine_ID() 
 {
-Object ii = Get_Value("M_RequisitionLine_ID");
+Object ii = Get_Value("VAM_RequisitionLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

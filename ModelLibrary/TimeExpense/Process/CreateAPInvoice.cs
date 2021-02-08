@@ -32,7 +32,7 @@ namespace VAdvantage.Process
         string fromDate = "";
         string toDate = "";
         List<int> VAB_BusinessPartner_ID = new List<int>();
-        List<int> M_Product_ID = new List<int>();
+        List<int> VAM_Product_ID = new List<int>();
         Dictionary<int, int> BPInvoice = new Dictionary<int, int>();
         private List<int> invoices = new List<int>();
         #endregion
@@ -219,13 +219,13 @@ namespace VAdvantage.Process
 
             if (tLine.IsAPInvoice())
             {
-                if (Util.GetValueOfInt(tLine.GetM_Product_ID()) != 0)
+                if (Util.GetValueOfInt(tLine.GetVAM_Product_ID()) != 0)
                 {
                     sql = "select max(line) from VAB_InvoiceLine where VAB_Invoice_id = " + VAB_Invoice_ID;
                     int lineNo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
 
-                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and m_product_id = " + tLine.GetM_Product_ID();
+                    sql = "select VAB_InvoiceLine_ID from VAB_InvoiceLine where VAB_Invoice_ID = " + VAB_Invoice_ID + " and VAM_Product_id = " + tLine.GetVAM_Product_ID();
                     int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (VAB_InvoiceLine_ID != 0)
                     {
@@ -233,14 +233,14 @@ namespace VAdvantage.Process
                         sql = "select VAB_UOM_id from VAB_Orderline where VAB_Orderline_id = " + tLine.GetVAB_OrderLine_ID();
                         int VAB_UOM_IDTo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                        sql = "select VAB_UOM_id from m_product where m_product_id = " + tLine.GetM_Product_ID();
+                        sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + tLine.GetVAM_Product_ID();
                         int VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                         Decimal? qty = 0;
                         if (VAB_UOM_IDTo != 0 && VAB_UOM_ID != 0)
                         {
                             //qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetAPApprovedHrs(), true);
-                            qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
+                            qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
                         }
 
                         VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
@@ -259,7 +259,7 @@ namespace VAdvantage.Process
                         lineNo = lineNo + 10;
                         Decimal? price = 0;
                         //sql = "select VAS_Resource_ID from VAS_Resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
-                        //    + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
+                        //    + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and VAM_Product_id = " + tLine.GetVAM_Product_ID() + " and isactive = 'Y'";
                         //sql = "select VAS_Resource_ID from  where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID();
 
 
@@ -267,17 +267,17 @@ namespace VAdvantage.Process
                         sql = "select VAB_UOM_id from VAB_Orderline where VAB_Orderline_id = " + tLine.GetVAB_OrderLine_ID();
                         int VAB_UOM_IDTo = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-                        sql = "select VAB_UOM_id from m_product where m_product_id = " + tLine.GetM_Product_ID();
+                        sql = "select VAB_UOM_id from VAM_Product where VAM_Product_id = " + tLine.GetVAM_Product_ID();
                         int VAB_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
                         Decimal? qty = 0;
 
                         //qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetAPApprovedHrs(), true);
 
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
-                        //Decimal? qty2 = MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
-                        //Decimal? qty3 = MUOMConversion.GetProductRateTo(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo);
-                        //Decimal? qty4 = MUOMConversion.GetProductRateFrom(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_ID);
+                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
+                        //Decimal? qty2 = MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
+                        //Decimal? qty3 = MUOMConversion.GetProductRateTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo);
+                        //Decimal? qty4 = MUOMConversion.GetProductRateFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_ID);
 
 
                         int VAS_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
@@ -286,15 +286,15 @@ namespace VAdvantage.Process
                         {
                             sql = "select HourlyRate from VAS_Resource where VAS_Resource_ID = " + VAS_Resource_ID;
                             price = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                            price = VAdvantage.Model.MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetM_Product_ID(), VAB_UOM_IDTo, price.Value);
+                            price = VAdvantage.Model.MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, price.Value);
                         }
                         else
                         {
-                            sql = "select m_pricelist_version_id from m_pricelist_version where isactive = 'Y' and m_pricelist_id = " + tExp.GetM_PriceList_ID();
+                            sql = "select VAM_PriceListVersion_id from VAM_PriceListVersion where isactive = 'Y' and VAM_PriceList_id = " + tExp.GetVAM_PriceList_ID();
                             int plv_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                             if (plv_ID != 0)
                             {
-                                sql = "select pricestd from m_productprice where m_pricelist_version_id = " + plv_ID + " and m_product_ID = " + tLine.GetM_Product_ID();
+                                sql = "select pricestd from VAM_ProductPrice where VAM_PriceListVersion_id = " + plv_ID + " and VAM_Product_ID = " + tLine.GetVAM_Product_ID();
                                 price = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
                             }
                         }
@@ -308,7 +308,7 @@ namespace VAdvantage.Process
                         iLine.SetVAB_TaxRate_ID(tLine.GetVAB_TaxRate_ID());
                         iLine.SetVAB_UOM_ID(tLine.GetVAB_UOM_ID());
                         iLine.SetDescription(tLine.GetDescription());
-                        iLine.SetM_Product_ID(tLine.GetM_Product_ID());
+                        iLine.SetVAM_Product_ID(tLine.GetVAM_Product_ID());
                         iLine.SetQtyEntered(qty);
                         iLine.SetQtyInvoiced(qty);
                         iLine.SetPriceEntered(price);
@@ -402,7 +402,7 @@ namespace VAdvantage.Process
             }
 
             //sql = "select VAS_Resource_ID from VAS_Resource where VAB_BusinessPartner_id = " + tLine.GetVAB_BusinessPartner_ID()
-            //               + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and m_product_id = " + tLine.GetM_Product_ID() + " and isactive = 'Y'";
+            //               + " and VAF_UserContact_id = " + tExp.GetVAF_UserContact_ID() + " and VAM_Product_id = " + tLine.GetVAM_Product_ID() + " and isactive = 'Y'";
             //int VAS_Resource_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             int VAS_Resource_ID = Util.GetValueOfInt(tLine.GetS_Resource_ID());
             int VAB_Currency_ID = 0;
@@ -417,7 +417,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                sql = "select VAB_Currency_ID from m_pricelist where isactive = 'Y' and m_pricelist_id = " + tExp.GetM_PriceList_ID();
+                sql = "select VAB_Currency_ID from VAM_PriceList where isactive = 'Y' and VAM_PriceList_id = " + tExp.GetVAM_PriceList_ID();
                 VAB_Currency_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
             }
 
@@ -437,7 +437,7 @@ namespace VAdvantage.Process
             inv.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
             inv.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
             inv.SetDateInvoiced(System.DateTime.Now);
-            inv.SetM_PriceList_ID(tExp.GetM_PriceList_ID());
+            inv.SetVAM_PriceList_ID(tExp.GetVAM_PriceList_ID());
             inv.SetDateAcct(System.DateTime.Now);
             inv.SetIsApproved(true);
             //inv.SetPaymentRule();
@@ -451,7 +451,7 @@ namespace VAdvantage.Process
                 inv.SetVAB_PaymentTerm_ID(ord.GetVAB_PaymentTerm_ID());
                 inv.SetSalesRep_ID(ord.GetSalesRep_ID());
                 // inv.SetVAB_Order_ID(ord.GetVAB_Order_ID());
-                // inv.SetM_PriceList_ID(ord.GetM_PriceList_ID());
+                // inv.SetVAM_PriceList_ID(ord.GetVAM_PriceList_ID());
             }
             else
             {

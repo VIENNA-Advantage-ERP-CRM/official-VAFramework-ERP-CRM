@@ -326,11 +326,11 @@
             var query = "";
             var whereClause = "";
             
-            var M_Locator_ID = 0;
-            var M_LocatorTo_ID = 0;
+            var VAM_Locator_ID = 0;
+            var VAM_LocatorTo_ID = 0;
 
-            var M_Warehouse_ID = 0;
-            var M_WarehouseTo_ID = 0;
+            var VAM_Warehouse_ID = 0;
+            var VAM_WarehouseTo_ID = 0;
 
             if (requery == true) {
                 //var name = "";
@@ -368,26 +368,26 @@
                     query += " AND VAICNVAT_TransactionType = 'OT' ";
                 }
                 else {
-                    if (window_ID == 184) {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on M_inout and internal use move line respectively
+                    if (window_ID == 184) {   // JID_1026: System is not checking the document status of Order and requisition while loading cart on VAM_Inv_InOut and internal use move line respectively
                         query += " AND VAICNVAT_TransactionType = 'MR' and VAICNT_ReferenceNo in (SELECT DocumentNo from VAB_Order WHERE VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO', 'CL'))";
                     }
                     else if (window_ID == 319 || window_ID == 170) {
                         query += " AND VAICNVAT_TransactionType = 'IM' ";
                         // extra parameters only for these windows
-                        M_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Locator_ID", true))
-                        M_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_LocatorTo_ID", true));
-                        M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "DTD001_MWarehouseSource_ID", true));
-                        M_WarehouseTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
+                        VAM_Locator_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "VAM_Locator_ID", true))
+                        VAM_LocatorTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "VAM_LocatorTo_ID", true));
+                        VAM_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "DTD001_MWarehouseSource_ID", true));
+                        VAM_WarehouseTo_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "VAM_Warehouse_ID", true));
                     }
                     else if (window_ID == 168) {
                         query += " AND VAICNVAT_TransactionType = 'PI' ";
-                        M_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true));
+                        VAM_Warehouse_ID = VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "VAM_Warehouse_ID", true));
                     }
                     else if (window_ID == 169) {
                         query += " AND VAICNVAT_TransactionType = 'SH' and VAICNT_ReferenceNo in (SELECT DocumentNo from VAB_Order WHERE  VAB_BusinessPartner_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNo, 0, "VAB_BusinessPartner_ID")) + " AND DocStatus IN ('CO'))";
                     }
                     else if (window_ID == 341) {
-                        query += " AND VAICNVAT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM M_Requisition WHERE IsActive = 'Y' AND M_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "M_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";
+                        query += " AND VAICNVAT_TransactionType = 'IU' AND VAICNT_ReferenceNo IN (SELECT DocumentNo FROM VAM_Requisition WHERE IsActive = 'Y' AND VAM_Warehouse_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowContext(windowNo, "VAM_Warehouse_ID", true)) + " AND DocStatus IN ('CO'))";
                     }
                     else {
                         query += " AND VAICNVAT_TransactionType = 'OT' ";
@@ -414,10 +414,10 @@
                     pageNo: pNo,
                     isCart: showCart,
                     windowID: window_ID,
-                    WarehouseID: M_Warehouse_ID,
-                    WarehouseToID: M_WarehouseTo_ID,
-                    LocatorID: M_Locator_ID,
-                    LocatorToID: M_LocatorTo_ID,
+                    WarehouseID: VAM_Warehouse_ID,
+                    WarehouseToID: VAM_WarehouseTo_ID,
+                    LocatorID: VAM_Locator_ID,
+                    LocatorToID: VAM_LocatorTo_ID,
                 },
                 error: function () {
                     alert(VIS.Msg.getMsg('ErrorWhileGettingData'));
@@ -526,20 +526,20 @@
                         countID += selectedItems[item] + ",";
                     }
                     countID = countID.substr(0, countID.length - 1);
-                    //_query = "SELECT cl.M_Product_ID,prd.Name,prd.Value,cl.VAICNT_Quantity,cl.M_AttributeSetInstance_ID,cl.VAB_UOM_ID,uom.Name as UOM,ic.VAICNT_ReferenceNo,cl.VAICNT_InventoryCountLine_ID,"
+                    //_query = "SELECT cl.VAM_Product_ID,prd.Name,prd.Value,cl.VAICNT_Quantity,cl.VAM_PFeature_SetInstance_ID,cl.VAB_UOM_ID,uom.Name as UOM,ic.VAICNT_ReferenceNo,cl.VAICNT_InventoryCountLine_ID,"
                     //    + " ats.Description FROM VAICNT_InventoryCount ic INNER JOIN VAICNT_InventoryCountLine cl ON ic.VAICNT_InventoryCount_ID = cl.VAICNT_InventoryCount_ID"
-                    //    + " INNER JOIN M_Product prd ON cl.M_Product_ID = prd.M_Product_ID INNER JOIN VAB_UOM uom ON cl.VAB_UOM_ID = uom.VAB_UOM_ID LEFT JOIN M_AttributeSetInstance ats"
-                    //    + " ON cl.M_AttributeSetInstance_ID = ats.M_AttributeSetInstance_ID WHERE ic.VAICNT_InventoryCount_ID IN (" + countID + ") ORDER BY cl.Line";
+                    //    + " INNER JOIN VAM_Product prd ON cl.VAM_Product_ID = prd.VAM_Product_ID INNER JOIN VAB_UOM uom ON cl.VAB_UOM_ID = uom.VAB_UOM_ID LEFT JOIN VAM_PFeature_SetInstance ats"
+                    //    + " ON cl.VAM_PFeature_SetInstance_ID = ats.VAM_PFeature_SetInstance_ID WHERE ic.VAICNT_InventoryCount_ID IN (" + countID + ") ORDER BY cl.Line";
 
                     //}
                     //else {
-                    //_query = "select cnt.M_Product_ID,p.Value,cnt.vaicnt_quantity,cnt.vaicnt_attributeno,ats.Islot,ats.IsSerNo,ats.IsGuaranteeDate,case when (ats.IsGuaranteeDate = 'Y') then"
-                    //+ " sysdate+p.GuaranteeDays end as ExpiryDate,cnt.VAICNT_ReferenceNo,NVL(cnt.M_AttributeSetInstance_ID,0) as M_AttributeSetInstance_ID FROM (SELECT CASE WHEN (cl.upc = mr.upc) THEN mr.M_product_ID"
-                    //+ " ELSE CASE WHEN (cl.upc = prd.upc) THEN prd.M_Product_ID ELSE CASE WHEN (cl.upc = patr.upc) THEN patr.M_Product_ID END END END AS M_Product_ID,patr.M_AttributeSetInstance_ID,cl.vaicnt_quantity,"
+                    //_query = "select cnt.VAM_Product_ID,p.Value,cnt.vaicnt_quantity,cnt.vaicnt_attributeno,ats.Islot,ats.IsSerNo,ats.IsGuaranteeDate,case when (ats.IsGuaranteeDate = 'Y') then"
+                    //+ " sysdate+p.GuaranteeDays end as ExpiryDate,cnt.VAICNT_ReferenceNo,NVL(cnt.VAM_PFeature_SetInstance_ID,0) as VAM_PFeature_SetInstance_ID FROM (SELECT CASE WHEN (cl.upc = mr.upc) THEN mr.VAM_Product_ID"
+                    //+ " ELSE CASE WHEN (cl.upc = prd.upc) THEN prd.VAM_Product_ID ELSE CASE WHEN (cl.upc = patr.upc) THEN patr.VAM_Product_ID END END END AS VAM_Product_ID,patr.VAM_PFeature_SetInstance_ID,cl.vaicnt_quantity,"
                     //+ " cl.vaicnt_attributeno,ic.VAICNT_ReferenceNo FROM VAICNT_InventoryCount ic INNER JOIN VAICNT_InventoryCountLine cl ON (ic.VAICNT_InventoryCount_ID = cl.VAICNT_InventoryCount_ID)"
-                    //+ " LEFT JOIN M_manufacturer mr ON cl.upc = mr.upc LEFT JOIN M_product prd ON cl.upc = prd.upc LEFT JOIN M_ProductAttributes patr ON cl.upc = patr.upc WHERE ic.IsActive = 'Y'"
+                    //+ " LEFT JOIN VAM_Manufacturer mr ON cl.upc = mr.upc LEFT JOIN VAM_Product prd ON cl.upc = prd.upc LEFT JOIN VAM_ProductFeatures patr ON cl.upc = patr.upc WHERE ic.IsActive = 'Y'"
                     //+ " AND cl.IsActive = 'Y' AND (cl.upc = mr.upc OR cl.upc = prd.upc OR cl.upc = patr.upc) AND ic.vaf_client_id = " + VIS.context.getVAF_Client_ID() +
-                    //" AND ic.VAICNT_InventoryCount_ID = " + countID + " ) cnt INNER JOIN M_Product p on cnt.M_Product_ID=p.M_Product_ID LEFT JOIN M_AttributeSet ats on p.M_attributeset_id=ats.M_attributeset_id"
+                    //" AND ic.VAICNT_InventoryCount_ID = " + countID + " ) cnt INNER JOIN VAM_Product p on cnt.VAM_Product_ID=p.VAM_Product_ID LEFT JOIN VAM_PFeature_Set ats on p.VAM_PFeature_Set_id=ats.VAM_PFeature_Set_id"
                     //+ " WHERE p.vaf_client_id = " + VIS.context.getVAF_Client_ID();
                     //}
 

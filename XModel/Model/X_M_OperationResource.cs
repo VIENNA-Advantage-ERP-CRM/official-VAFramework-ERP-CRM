@@ -21,7 +21,7 @@ public X_M_OperationResource (Context ctx, int M_OperationResource_ID, Trx trxNa
 /** if (M_OperationResource_ID == 0)
 {
 SetM_OperationResource_ID (0);
-SetM_ProductOperation_ID (0);
+SetVAM_ProductOperation_ID (0);
 SetName (null);
 SetSetupTime (0.0);
 SetTeardownTime (0.0);
@@ -34,7 +34,7 @@ public X_M_OperationResource (Ctx ctx, int M_OperationResource_ID, Trx trxName) 
 /** if (M_OperationResource_ID == 0)
 {
 SetM_OperationResource_ID (0);
-SetM_ProductOperation_ID (0);
+SetVAM_ProductOperation_ID (0);
 SetName (null);
 SetSetupTime (0.0);
 SetTeardownTime (0.0);
@@ -202,17 +202,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Operation.
-@param M_ProductOperation_ID Product Manufacturing Operation */
-public void SetM_ProductOperation_ID (int M_ProductOperation_ID)
+@param VAM_ProductOperation_ID Product Manufacturing Operation */
+public void SetVAM_ProductOperation_ID (int VAM_ProductOperation_ID)
 {
-if (M_ProductOperation_ID < 1) throw new ArgumentException ("M_ProductOperation_ID is mandatory.");
-Set_ValueNoCheck ("M_ProductOperation_ID", M_ProductOperation_ID);
+if (VAM_ProductOperation_ID < 1) throw new ArgumentException ("VAM_ProductOperation_ID is mandatory.");
+Set_ValueNoCheck ("VAM_ProductOperation_ID", VAM_ProductOperation_ID);
 }
 /** Get Product Operation.
 @return Product Manufacturing Operation */
-public int GetM_ProductOperation_ID() 
+public int GetVAM_ProductOperation_ID() 
 {
-Object ii = Get_Value("M_ProductOperation_ID");
+Object ii = Get_Value("VAM_ProductOperation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

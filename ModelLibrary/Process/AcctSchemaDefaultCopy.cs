@@ -88,7 +88,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update existing Product Category
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE M_Product_Category_Acct pa "
+			sql = "UPDATE VAM_ProductCategory_Acct pa "
 				+ "SET P_Revenue_Acct=" + acct.GetP_Revenue_Acct()
 				+ ", P_Expense_Acct=" + acct.GetP_Expense_Acct()
 				+ ", P_CostAdjustment_Acct=" + acct.GetP_CostAdjustment_Acct()
@@ -105,16 +105,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 // ****************
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE pa.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-				+ " AND EXISTS (SELECT * FROM M_Product_Category p "
-					+ "WHERE p.M_Product_Category_ID=pa.M_Product_Category_ID)";
+				+ " AND EXISTS (SELECT * FROM VAM_ProductCategory p "
+					+ "WHERE p.VAM_ProductCategory_ID=pa.VAM_ProductCategory_ID)";
 			//updated = DataBase.executeUpdate(sql, Get_Trx());
             updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @M_Product_Category_ID@");
+			AddLog(0, null, Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAM_ProductCategory_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Product Category
-		sql = "INSERT INTO M_Product_Category_Acct "
-			+ "(M_Product_Category_ID, VAB_AccountBook_ID,"
+		sql = "INSERT INTO VAM_ProductCategory_Acct "
+			+ "(VAM_ProductCategory_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " P_Revenue_Acct, P_Expense_Acct, P_CostAdjustment_Acct, P_InventoryClearing_Acct, P_Asset_Acct, P_CoGs_Acct,"
 			+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct,"
@@ -123,7 +123,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             + " ,P_Resource_Absorption_Acct, P_MaterialOverhd_Acct "
             // **************** 
             + " ) "
-			+ "SELECT p.M_Product_Category_ID, acct.VAB_AccountBook_ID,"
+			+ "SELECT p.VAM_ProductCategory_ID, acct.VAB_AccountBook_ID,"
 			+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 			+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct,"
@@ -131,37 +131,37 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             // Added **************** Lokesh Chauhan **************** 
             + " ,acct.P_Resource_Absorption_Acct, acct.P_MaterialOverhd_Acct "
             // Added ****************  
-			+ " FROM M_Product_Category p"
+			+ " FROM VAM_ProductCategory p"
 			+ " INNER JOIN VAB_AccountBook_Default acct ON (p.VAF_Client_ID=acct.VAF_Client_ID) "
 			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-			+ " AND NOT EXISTS (SELECT * FROM M_Product_Category_Acct pa "
-				+ "WHERE pa.M_Product_Category_ID=p.M_Product_Category_ID"
+			+ " AND NOT EXISTS (SELECT * FROM VAM_ProductCategory_Acct pa "
+				+ "WHERE pa.VAM_ProductCategory_ID=p.VAM_ProductCategory_ID"
 				+ " AND pa.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Product_Category_ID@");
+		AddLog(0, null,Utility.Util.GetValueOfDecimal(created), "@Created@ @VAM_ProductCategory_ID@");
 		createdTotal += created;
 		if (!_CopyOverwriteAcct)	//	Insert new Products
 		{
-			sql = "INSERT INTO M_Product_Acct "
-				+ "(M_Product_ID, VAB_AccountBook_ID,"
+			sql = "INSERT INTO VAM_Product_Acct "
+				+ "(VAM_Product_ID, VAB_AccountBook_ID,"
 				+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 				+ " P_Revenue_Acct, P_Expense_Acct, P_CostAdjustment_Acct, P_InventoryClearing_Acct, P_Asset_Acct, P_CoGs_Acct,"
 				+ " P_PurchasePriceVariance_Acct, P_InvoicePriceVariance_Acct,"
                 + " P_TradeDiscountRec_Acct, P_TradeDiscountGrant_Acct,P_Resource_Absorption_Acct, P_MaterialOverhd_Acct) "
-				+ "SELECT p.M_Product_ID, acct.VAB_AccountBook_ID,"
+				+ "SELECT p.VAM_Product_ID, acct.VAB_AccountBook_ID,"
 				+ " p.VAF_Client_ID, p.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 				+ " acct.P_Revenue_Acct, acct.P_Expense_Acct, acct.P_CostAdjustment_Acct, acct.P_InventoryClearing_Acct, acct.P_Asset_Acct, acct.P_CoGs_Acct,"
 				+ " acct.P_PurchasePriceVariance_Acct, acct.P_InvoicePriceVariance_Acct,"
                 + " acct.P_TradeDiscountRec_Acct, acct.P_TradeDiscountGrant_Acct, acct.P_Resource_Absorption_Acct, acct.P_MaterialOverhd_Acct "
-				+ "FROM M_Product p"
-				+ " INNER JOIN M_Product_Category_Acct acct ON (acct.M_Product_Category_ID=p.M_Product_Category_ID)"
+				+ "FROM VAM_Product p"
+				+ " INNER JOIN VAM_ProductCategory_Acct acct ON (acct.VAM_ProductCategory_ID=p.VAM_ProductCategory_ID)"
 				+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-				+ " AND p.M_Product_Category_ID=acct.M_Product_Category_ID"
-				+ " AND NOT EXISTS (SELECT * FROM M_Product_Acct pa "
-					+ "WHERE pa.M_Product_ID=p.M_Product_ID"
+				+ " AND p.VAM_ProductCategory_ID=acct.VAM_ProductCategory_ID"
+				+ " AND NOT EXISTS (SELECT * FROM VAM_Product_Acct pa "
+					+ "WHERE pa.VAM_Product_ID=p.VAM_Product_ID"
 					+ " AND pa.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 			created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Product_ID@");
+			AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @VAM_Product_ID@");
 			createdTotal += created;
 		}
 		
@@ -291,35 +291,35 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		//	Update Warehouse
 		if (_CopyOverwriteAcct)
 		{
-			sql = "UPDATE M_Warehouse_Acct a "
+			sql = "UPDATE VAM_Warehouse_Acct a "
 				+ "SET W_Inventory_Acct=" + acct.GetW_Inventory_Acct()
 				+ ", W_Differences_Acct=" + acct.GetW_Differences_Acct()
 				+ ", W_Revaluation_Acct=" + acct.GetW_Revaluation_Acct()
 				+ ", W_InvActualAdjust_Acct=" + acct.GetW_InvActualAdjust_Acct()
 				+ ", Updated=SysDate, UpdatedBy=0 "
 				+ "WHERE a.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-				+ " AND EXISTS (SELECT * FROM M_Warehouse_Acct x "
-					+ "WHERE x.M_Warehouse_ID=a.M_Warehouse_ID)";
+				+ " AND EXISTS (SELECT * FROM VAM_Warehouse_Acct x "
+					+ "WHERE x.VAM_Warehouse_ID=a.VAM_Warehouse_ID)";
 			updated = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @M_Warehouse_ID@");
+			AddLog(0, null,Utility.Util.GetValueOfDecimal(updated), "@Updated@ @VAM_Warehouse_ID@");
 			updatedTotal += updated;
 		}
 		//	Insert new Warehouse
-		sql = "INSERT INTO M_Warehouse_Acct "
-			+ "(M_Warehouse_ID, VAB_AccountBook_ID,"
+		sql = "INSERT INTO VAM_Warehouse_Acct "
+			+ "(VAM_Warehouse_ID, VAB_AccountBook_ID,"
 			+ " VAF_Client_ID, VAF_Org_ID, IsActive, Created, CreatedBy, Updated, UpdatedBy,"
 			+ " W_Inventory_Acct, W_Differences_Acct, W_Revaluation_Acct, W_InvActualAdjust_Acct) "
-			+ "SELECT x.M_Warehouse_ID, acct.VAB_AccountBook_ID,"
+			+ "SELECT x.VAM_Warehouse_ID, acct.VAB_AccountBook_ID,"
 			+ " x.VAF_Client_ID, x.VAF_Org_ID, 'Y', SysDate, 0, SysDate, 0,"
 			+ " acct.W_Inventory_Acct, acct.W_Differences_Acct, acct.W_Revaluation_Acct, acct.W_InvActualAdjust_Acct "
-			+ "FROM M_Warehouse x"
+			+ "FROM VAM_Warehouse x"
 			+ " INNER JOIN VAB_AccountBook_Default acct ON (x.VAF_Client_ID=acct.VAF_Client_ID) "
 			+ "WHERE acct.VAB_AccountBook_ID=" + _VAB_AccountBook_ID
-			+ " AND NOT EXISTS (SELECT * FROM M_Warehouse_Acct a "
-				+ "WHERE a.M_Warehouse_ID=x.M_Warehouse_ID"
+			+ " AND NOT EXISTS (SELECT * FROM VAM_Warehouse_Acct a "
+				+ "WHERE a.VAM_Warehouse_ID=x.VAM_Warehouse_ID"
 				+ " AND a.VAB_AccountBook_ID=acct.VAB_AccountBook_ID)";
 		created = DataBase.DB.ExecuteQuery(sql,null, Get_Trx());
-		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @M_Warehouse_ID@");
+		AddLog(0, null, Utility.Util.GetValueOfDecimal(created), "@Created@ @VAM_Warehouse_ID@");
 		createdTotal += created;
 
 

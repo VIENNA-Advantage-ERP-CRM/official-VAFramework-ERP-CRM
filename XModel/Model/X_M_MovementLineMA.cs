@@ -11,26 +11,26 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_MovementLineMA
+/** Generated Model for VAM_InvTrf_LineMP
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_MovementLineMA : PO
+public class X_VAM_InvTrf_LineMP : PO
 {
-public X_M_MovementLineMA (Context ctx, int M_MovementLineMA_ID, Trx trxName) : base (ctx, M_MovementLineMA_ID, trxName)
+public X_VAM_InvTrf_LineMP (Context ctx, int VAM_InvTrf_LineMP_ID, Trx trxName) : base (ctx, VAM_InvTrf_LineMP_ID, trxName)
 {
-/** if (M_MovementLineMA_ID == 0)
+/** if (VAM_InvTrf_LineMP_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_MovementLine_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_InvTrf_Line_ID (0);
 }
  */
 }
-public X_M_MovementLineMA (Ctx ctx, int M_MovementLineMA_ID, Trx trxName) : base (ctx, M_MovementLineMA_ID, trxName)
+public X_VAM_InvTrf_LineMP (Ctx ctx, int VAM_InvTrf_LineMP_ID, Trx trxName) : base (ctx, VAM_InvTrf_LineMP_ID, trxName)
 {
-/** if (M_MovementLineMA_ID == 0)
+/** if (VAM_InvTrf_LineMP_ID == 0)
 {
-SetM_AttributeSetInstance_ID (0);
-SetM_MovementLine_ID (0);
+SetVAM_PFeature_SetInstance_ID (0);
+SetVAM_InvTrf_Line_ID (0);
 }
  */
 }
@@ -39,7 +39,7 @@ SetM_MovementLine_ID (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineMA (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_LineMP (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_MovementLineMA (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineMA (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_InvTrf_LineMP (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_MovementLineMA (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_MovementLineMA (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_InvTrf_LineMP (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_MovementLineMA()
+static X_VAM_InvTrf_LineMP()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389063407L;
 public static int Table_ID;
  // =764;
 
-/** TableName=M_MovementLineMA */
-public static String Table_Name="M_MovementLineMA";
+/** TableName=VAM_InvTrf_LineMP */
+public static String Table_Name="VAM_InvTrf_LineMP";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -109,36 +109,36 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_MovementLineMA[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_InvTrf_LineMP[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-public void SetM_AttributeSetInstance_ID (int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+public void SetVAM_PFeature_SetInstance_ID (int VAM_PFeature_SetInstance_ID)
 {
-if (M_AttributeSetInstance_ID < 0) throw new ArgumentException ("M_AttributeSetInstance_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException ("VAM_PFeature_SetInstance_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
 }
 /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-public int GetM_AttributeSetInstance_ID() 
+public int GetVAM_PFeature_SetInstance_ID() 
 {
-Object ii = Get_Value("M_AttributeSetInstance_ID");
+Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Move Line.
-@param M_MovementLine_ID Inventory Move document Line */
-public void SetM_MovementLine_ID (int M_MovementLine_ID)
+@param VAM_InvTrf_Line_ID Inventory Move document Line */
+public void SetVAM_InvTrf_Line_ID (int VAM_InvTrf_Line_ID)
 {
-if (M_MovementLine_ID < 1) throw new ArgumentException ("M_MovementLine_ID is mandatory.");
-Set_ValueNoCheck ("M_MovementLine_ID", M_MovementLine_ID);
+if (VAM_InvTrf_Line_ID < 1) throw new ArgumentException ("VAM_InvTrf_Line_ID is mandatory.");
+Set_ValueNoCheck ("VAM_InvTrf_Line_ID", VAM_InvTrf_Line_ID);
 }
 /** Get Move Line.
 @return Inventory Move document Line */
-public int GetM_MovementLine_ID() 
+public int GetVAM_InvTrf_Line_ID() 
 {
-Object ii = Get_Value("M_MovementLine_ID");
+Object ii = Get_Value("VAM_InvTrf_Line_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -146,7 +146,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_MovementLine_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_InvTrf_Line_ID().ToString());
 }
 /** Set Movement Quantity.
 @param MovementQty Quantity of a product moved. */

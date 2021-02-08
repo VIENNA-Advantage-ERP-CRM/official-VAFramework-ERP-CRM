@@ -57,7 +57,7 @@ namespace VAdvantage.Model
             SetName(Msg.GetElement(GetCtx(), "VAR_Request_ID") + ": " + request.GetDocumentNo());
             SetHelp(request.GetSummary());
             //
-            SetM_BOM_ID(group.GetM_BOM_ID());
+            SetVAM_BOM_ID(group.GetVAM_BOM_ID());
             SetM_ChangeNotice_ID(group.GetM_ChangeNotice_ID());
         }	//	MChangeRequest
 
@@ -92,18 +92,18 @@ namespace VAdvantage.Model
         protected override Boolean BeforeSave(Boolean newRecord)
         {
             //	Have at least one
-            if (GetM_BOM_ID() == 0 && GetM_ChangeNotice_ID() == 0)
+            if (GetVAM_BOM_ID() == 0 && GetM_ChangeNotice_ID() == 0)
             {
-                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@: @M_BOM_ID@ / @M_ChangeNotice_ID@"));
+                log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@NotFound@: @VAM_BOM_ID@ / @M_ChangeNotice_ID@"));
                 return false;
             }
 
             //	Derive ChangeNotice from BOM if defined
-            if (newRecord && GetM_BOM_ID() != 0 && GetM_ChangeNotice_ID() == 0)
+            if (newRecord && GetVAM_BOM_ID() != 0 && GetM_ChangeNotice_ID() == 0)
             {
-                MBOM bom = new MBOM(GetCtx(), GetM_BOM_ID(), Get_Trx());
+                MBOM bom = new MBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
                 if (bom.GetM_ChangeNotice_ID() != 0)
-                    SetM_BOM_ID(bom.GetM_ChangeNotice_ID());
+                    SetVAM_BOM_ID(bom.GetM_ChangeNotice_ID());
             }
 
             return true;

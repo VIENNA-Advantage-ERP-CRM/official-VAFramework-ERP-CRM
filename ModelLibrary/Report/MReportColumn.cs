@@ -178,7 +178,7 @@ namespace VAdvantage.Report
 		else if (MReportColumn.ELEMENTTYPE_BPartner.Equals(et))
 			ID = GetVAB_BusinessPartner_ID();
 		else if (MReportColumn.ELEMENTTYPE_Product.Equals(et))
-			ID = GetM_Product_ID();
+			ID = GetVAM_Product_ID();
 		else if (MReportColumn.ELEMENTTYPE_Project.Equals(et))
 			ID = GetVAB_Project_ID();
 		else if (MReportColumn.ELEMENTTYPE_Activity.Equals(et))

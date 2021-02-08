@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDistributionRun
  * Purpose        :Distribution Run Model
- * Class Used     : X_M_DistributionListLine
+ * Class Used     : X_VAM_DistributionListLine
  * Chronological    Development
  * Raghunandan     03-Nov-2009
   ******************************************************/
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDistributionRun : X_M_DistributionRun
+    public class MDistributionRun : X_VAM_DistributionRun
     {
         // Cached Lines					
         private MDistributionRunLine[] _lines = null;
@@ -35,10 +35,10 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DistributionRun_ID">id</param>
+        /// <param name="VAM_DistributionRun_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MDistributionRun(Ctx ctx, int M_DistributionRun_ID, Trx trxName)
-            : base(ctx, M_DistributionRun_ID, trxName)
+        public MDistributionRun(Ctx ctx, int VAM_DistributionRun_ID, Trx trxName)
+            : base(ctx, VAM_DistributionRun_ID, trxName)
         {
 
         }
@@ -67,8 +67,8 @@ namespace VAdvantage.Model
                 return _lines;
             }
             //
-            String sql = "SELECT * FROM M_DistributionRunLine "
-                + "WHERE M_DistributionRun_ID=" + GetM_DistributionRun_ID() + " AND IsActive='Y' AND TotalQty IS NOT NULL AND TotalQty<> 0 ORDER BY Line";
+            String sql = "SELECT * FROM VAM_DistributionRunLine "
+                + "WHERE VAM_DistributionRun_ID=" + GetVAM_DistributionRun_ID() + " AND IsActive='Y' AND TotalQty IS NOT NULL AND TotalQty<> 0 ORDER BY Line";
             List<MDistributionRunLine> list = new List<MDistributionRunLine>();
             DataTable dt = null;
             IDataReader idr = null;

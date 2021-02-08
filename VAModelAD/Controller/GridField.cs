@@ -122,7 +122,7 @@ namespace VAdvantage.Model
             //}
             //else if (_vo.displayType == DisplayType.Account)    //  not cached
             //{
-            //    MAccountLookup ma = new MAccountLookup(_vo.GetCtx(), _vo.windowNo);
+            //    MVABAccountLookup ma = new MVABAccountLookup(_vo.GetCtx(), _vo.windowNo);
             //    _lookup = ma;
             //}
             //else if (_vo.displayType == DisplayType.PAttribute)    //  not cached
@@ -294,12 +294,12 @@ namespace VAdvantage.Model
         {
             List<string> list = new List<String>();
             //	Implicit Dependencies
-            if (GetColumnName().Equals("M_AttributeSetInstance_ID"))
-                list.Add("M_Product_ID");
-            else if (GetColumnName().Equals("M_Locator_ID") || GetColumnName().Equals("M_LocatorTo_ID"))
+            if (GetColumnName().Equals("VAM_PFeature_SetInstance_ID"))
+                list.Add("VAM_Product_ID");
+            else if (GetColumnName().Equals("VAM_Locator_ID") || GetColumnName().Equals("VAM_LocatorTo_ID"))
             {
-                list.Add("M_Product_ID");
-                list.Add("M_Warehouse_ID");
+                list.Add("VAM_Product_ID");
+                list.Add("VAM_Warehouse_ID");
             }
             //  Display dependent
             Evaluator.ParseDepends(list, _vo.DisplayLogic);
@@ -418,7 +418,7 @@ namespace VAdvantage.Model
                     || _vo.ColumnName.StartsWith("Created") || _vo.ColumnName.StartsWith("Updated")
                     || _vo.ColumnName.Equals("Value")
                     || _vo.ColumnName.Equals("DocumentNo")
-                    || _vo.ColumnName.Equals("M_AttributeSetInstance_ID"))	//	0 is valid
+                    || _vo.ColumnName.Equals("VAM_PFeature_SetInstance_ID"))	//	0 is valid
                 return false;
 
             //  Mandatory if displayed

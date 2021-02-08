@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MInOutLineConfirm
  * Purpose        : For 2nd tab of the shipment window
- * Class Used     : X_M_InOutLineConfirm
+ * Class Used     : X_VAM_Inv_InOutLineConfirm
  * Chronological    Development
  * Raghunandan     05-Jun-2009
   ******************************************************/
@@ -28,22 +28,22 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInOutLineConfirm : X_M_InOutLineConfirm
+    public class MInOutLineConfirm : X_VAM_Inv_InOutLineConfirm
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_InOutLineConfirm_ID">id</param>
+        /// <param name="VAM_Inv_InOutLineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MInOutLineConfirm(Ctx ctx, int M_InOutLineConfirm_ID, Trx trxName)
-            : base(ctx, M_InOutLineConfirm_ID, trxName)
+        public MInOutLineConfirm(Ctx ctx, int VAM_Inv_InOutLineConfirm_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOutLineConfirm_ID, trxName)
         {
 
-            if (M_InOutLineConfirm_ID == 0)
+            if (VAM_Inv_InOutLineConfirm_ID == 0)
             {
-                //	setM_InOutConfirm_ID (0);
-                //	setM_InOutLine_ID (0);
+                //	setVAM_Inv_InOutConfirm_ID (0);
+                //	setVAM_Inv_InOutLine_ID (0);
                 //	setTargetQty (Env.ZERO);
                 //	setConfirmedQty (Env.ZERO);
                 SetDifferenceQty(Env.ZERO);
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
             : this(header.GetCtx(), 0, header.Get_TrxName())
         {
             SetClientOrg(header);
-            SetM_InOutConfirm_ID(header.GetM_InOutConfirm_ID());
+            SetVAM_Inv_InOutConfirm_ID(header.GetVAM_Inv_InOutConfirm_ID());
         }	
 
         //Ship Line				*/
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         /// <param name="line">shipment line</param>
         public void SetInOutLine(MInOutLine line)
         {
-            SetM_InOutLine_ID(line.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
             SetTargetQty(line.GetMovementQty());	//	Confirmations in Storage UOM	
             SetConfirmedQty(GetTargetQty());		//	suggestion
             _line = line;
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
         public MInOutLine GetLine()
         {
             if (_line == null)
-                _line = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
+                _line = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             return _line;
         }	
 
@@ -143,11 +143,11 @@ namespace VAdvantage.Model
                 {
                     GetCtx().SetContext("DifferenceQty_", VAdvantage.Utility.Util.GetValueOfString(GetDifferenceQty()));
                 }
-                MProduct _pro = new MProduct(GetCtx(), line.GetM_Product_ID(), Get_TrxName());
+                MProduct _pro = new MProduct(GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
                 if (_pro.GetVAB_UOM_ID() != line.GetVAB_UOM_ID())
                 {
                     decimal? pc = null;
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetVAB_UOM_ID(), GetTargetQty());
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetTargetQty());
                     line.SetTargetQty(Util.GetValueOfDecimal( pc)); //TargetQty
 
                     Decimal qty = GetConfirmedQty();
@@ -157,13 +157,13 @@ namespace VAdvantage.Model
                      */
                     if ((!isSOTrx && !isReturnTrx) || (isSOTrx && isReturnTrx))
                         qty = Decimal.Add(qty, GetScrappedQty());
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetVAB_UOM_ID(), qty);
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), qty);
                     line.SetMovementQty(Util.GetValueOfDecimal(pc)); //MovementQty
 
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetVAB_UOM_ID(), GetScrappedQty());
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetScrappedQty());
                     line.SetScrappedQty(Util.GetValueOfDecimal(pc));  //ScrappedQty 
 
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetM_Product_ID(), GetVAB_UOM_ID(), GetConfirmedQty());
+                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetConfirmedQty());
                     line.SetConfirmedQty(Util.GetValueOfDecimal(pc)); //confirm Qty
 
                 }

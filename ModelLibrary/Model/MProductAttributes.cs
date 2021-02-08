@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MProductAttributes
  * Purpose        : Product attributes setting using x-classes
- * Class Used     : X_M_ProductAttributes
+ * Class Used     : X_VAM_ProductFeatures
  * Chronological    Development
  * Raghunandan     04-Feb-2015
   ******************************************************/
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProductAttributes : X_M_ProductAttributes
+    public class MProductAttributes : X_VAM_ProductFeatures
     {
         #region variable
 
@@ -52,8 +52,8 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MProductAttributes(Ctx ctx, int M_ProductAttributes_ID, Trx trxName)
-            : base(ctx, M_ProductAttributes_ID, trxName)
+        public MProductAttributes(Ctx ctx, int VAM_ProductFeatures_ID, Trx trxName)
+            : base(ctx, VAM_ProductFeatures_ID, trxName)
         {
         }
 
@@ -62,24 +62,24 @@ namespace VAdvantage.Model
             //Arpit
             StringBuilder sql = new StringBuilder();
             //For checking if record is without attribute
-            //if (GetM_AttributeSetInstance_ID() == 0 || GetM_AttributeSetInstance_ID() == null)
+            //if (GetVAM_PFeature_SetInstance_ID() == 0 || GetVAM_PFeature_SetInstance_ID() == null)
             //{
             //    _log.SaveError("", Msg.GetMsg(GetCtx(), "NoAttributeSet"));
             //    return false;
             //}
 
             ////For checking if attribute is already defined
-            //sql.Append("SELECT M_AttributeSetInstance_ID FROM M_ProductAttributes WHERE M_Product_ID=" + GetM_Product_ID() +
-            //    " AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND M_ProductAttributes_ID!=" + GetM_ProductAttributes_ID());
+            //sql.Append("SELECT VAM_PFeature_SetInstance_ID FROM VAM_ProductFeatures WHERE VAM_Product_ID=" + GetVAM_Product_ID() +
+            //    " AND VAF_Client_ID=" + GetVAF_Client_ID() + " AND VAM_ProductFeatures_ID!=" + GetVAM_ProductFeatures_ID());
             //DataSet ds = new DataSet();
             //ds = DB.ExecuteDataset(sql.ToString(), null, null);
             //if (ds != null && ds.Tables[0].Rows.Count > 0)
             //{
             //    for (Int32 i = 0; i < ds.Tables[0].Rows.Count; i++)
             //    {
-            //        if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) > 0)
+            //        if (Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) > 0)
             //        {
-            //            if (GetM_AttributeSetInstance_ID() == Util.GetValueOfInt(ds.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //            if (GetVAM_PFeature_SetInstance_ID() == Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //            {
             //                _log.SaveError("", Msg.GetMsg(GetCtx(), "AttributeCodeExists"));
             //                return false;
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             {
                 //sql.Append(@"SELECT UPCUNIQUE('a','" + GetUPC() + "') as productID FROM Dual");
                 //manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
-                //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+                //if (manu_ID != 0 && manu_ID != GetVAM_Product_ID())
 
                 manu_ID = MProduct.UpcUniqueClientWise(GetVAF_Client_ID(), GetUPC());
                 if (manu_ID > 0)
@@ -112,11 +112,11 @@ namespace VAdvantage.Model
         /// <returns>true if it can be deleted</returns>
         protected override bool BeforeDelete()
         {
-            string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM M_MovementLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM VAB_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + ")";
+            string uqry = "SELECT SUM(cc) as count FROM  (SELECT COUNT(*) AS cc FROM VAM_InvTrf_Line WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID = "
+                + GetVAM_PFeature_SetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM VAM_InventoryLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID = "
+                + GetVAM_PFeature_SetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM VAB_OrderLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID = "
+                + GetVAM_PFeature_SetInstance_ID() + " UNION  SELECT COUNT(*) AS cc FROM VAM_Inv_InOutLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID = "
+                + GetVAM_PFeature_SetInstance_ID() + ")";
             int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
             if (no > 0)
             {
@@ -127,7 +127,7 @@ namespace VAdvantage.Model
             Tuple<String, String, String> aInfo = null;
             if (Env.HasModulePrefix("VAICNT_", out aInfo))
             {
-                uqry = "SELECT COUNT(*) AS cc FROM VAICNT_InventoryCountLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = " + GetM_AttributeSetInstance_ID();
+                uqry = "SELECT COUNT(*) AS cc FROM VAICNT_InventoryCountLine WHERE VAM_Product_ID = " + GetVAM_Product_ID() + " AND VAM_PFeature_SetInstance_ID = " + GetVAM_PFeature_SetInstance_ID();
                 no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
                 if (no > 0)
                 {

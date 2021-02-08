@@ -9,42 +9,42 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for M_MatchInvCostTrack
+    using System.Data;/** Generated Model for VAM_MatchInvoiceoiceCostTrack
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_MatchInvCostTrack : PO
+    public class X_VAM_MatchInvoiceoiceCostTrack : PO
     {
-        public X_M_MatchInvCostTrack(Context ctx, int M_MatchInvCostTrack_ID, Trx trxName)
-            : base(ctx, M_MatchInvCostTrack_ID, trxName)
-        {/** if (M_MatchInvCostTrack_ID == 0){SetM_MatchInvCostTrack_ID (0);} */
+        public X_VAM_MatchInvoiceoiceCostTrack(Context ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
+            : base(ctx, VAM_MatchInvoiceoiceCostTrack_ID, trxName)
+        {/** if (VAM_MatchInvoiceoiceCostTrack_ID == 0){SetVAM_MatchInvoiceoiceCostTrack_ID (0);} */
         }
-        public X_M_MatchInvCostTrack(Ctx ctx, int M_MatchInvCostTrack_ID, Trx trxName)
-            : base(ctx, M_MatchInvCostTrack_ID, trxName)
-        {/** if (M_MatchInvCostTrack_ID == 0){SetM_MatchInvCostTrack_ID (0);} */
+        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, int VAM_MatchInvoiceoiceCostTrack_ID, Trx trxName)
+            : base(ctx, VAM_MatchInvoiceoiceCostTrack_ID, trxName)
+        {/** if (VAM_MatchInvoiceoiceCostTrack_ID == 0){SetVAM_MatchInvoiceoiceCostTrack_ID (0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_MatchInvCostTrack(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_MatchInvoiceoiceCostTrack(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_MatchInvCostTrack(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_MatchInvCostTrack(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_MatchInvoiceoiceCostTrack(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_M_MatchInvCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_MatchInvoiceoiceCostTrack() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27793156050767L;/** Last Updated Timestamp 11/19/2017 12:15:34 AM */
         public static long updatedMS = 1511030733978L;/** VAF_TableView_ID=1000806 */
         public static int Table_ID; // =1000806;
-        /** TableName=M_MatchInvCostTrack */
-        public static String Table_Name = "M_MatchInvCostTrack";
+        /** TableName=VAM_MatchInvoiceoiceCostTrack */
+        public static String Table_Name = "VAM_MatchInvoiceoiceCostTrack";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
 */
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_M_MatchInvCostTrack[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Invoice Line.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAM_MatchInvoiceoiceCostTrack[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Invoice Line.
 @param VAB_InvoiceLine_ID Invoice Detail Line */
         public void SetVAB_InvoiceLine_ID(int VAB_InvoiceLine_ID)
         {
@@ -73,28 +73,28 @@ namespace VAdvantage.Model
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Shipment/Receipt Line.
-@param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+@param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID <= 0) Set_Value("M_InOutLine_ID", null);
+            if (VAM_Inv_InOutLine_ID <= 0) Set_Value("VAM_Inv_InOutLine_ID", null);
             else
-                Set_Value("M_InOutLine_ID", M_InOutLine_ID);
+                Set_Value("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }/** Get Shipment/Receipt Line.
 @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID() { Object ii = Get_Value("M_InOutLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set M_MatchInvCostTrack_ID.
-@param M_MatchInvCostTrack_ID M_MatchInvCostTrack_ID */
-        public void SetM_MatchInvCostTrack_ID(int M_MatchInvCostTrack_ID) { if (M_MatchInvCostTrack_ID < 1) throw new ArgumentException("M_MatchInvCostTrack_ID is mandatory."); Set_ValueNoCheck("M_MatchInvCostTrack_ID", M_MatchInvCostTrack_ID); }/** Get M_MatchInvCostTrack_ID.
-@return M_MatchInvCostTrack_ID */
-        public int GetM_MatchInvCostTrack_ID() { Object ii = Get_Value("M_MatchInvCostTrack_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
-@param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        public int GetVAM_Inv_InOutLine_ID() { Object ii = Get_Value("VAM_Inv_InOutLine_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set VAM_MatchInvoiceoiceCostTrack_ID.
+@param VAM_MatchInvoiceoiceCostTrack_ID VAM_MatchInvoiceoiceCostTrack_ID */
+        public void SetVAM_MatchInvoiceoiceCostTrack_ID(int VAM_MatchInvoiceoiceCostTrack_ID) { if (VAM_MatchInvoiceoiceCostTrack_ID < 1) throw new ArgumentException("VAM_MatchInvoiceoiceCostTrack_ID is mandatory."); Set_ValueNoCheck("VAM_MatchInvoiceoiceCostTrack_ID", VAM_MatchInvoiceoiceCostTrack_ID); }/** Get VAM_MatchInvoiceoiceCostTrack_ID.
+@return VAM_MatchInvoiceoiceCostTrack_ID */
+        public int GetVAM_MatchInvoiceoiceCostTrack_ID() { Object ii = Get_Value("VAM_MatchInvoiceoiceCostTrack_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
+@param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }/** Get Product.
 @return Product, Service, Item */
-        public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Quantity.
+        public int GetVAM_Product_ID() { Object ii = Get_Value("VAM_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Quantity.
 @param Qty Quantity */
         public void SetQty(Decimal? Qty) { Set_Value("Qty", (Decimal?)Qty); }/** Get Quantity.
 @return Quantity */
@@ -109,15 +109,15 @@ namespace VAdvantage.Model
 @return Update Costs immediately for testing */
         public Boolean IsCostImmediate() { Object oo = Get_Value("IsCostImmediate"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
         /** Set Match Invoice.
-        @param M_MatchInv_ID Match Shipment/Receipt to Invoice */
-        public void SetM_MatchInv_ID(int M_MatchInv_ID)
+        @param VAM_MatchInvoice_ID Match Shipment/Receipt to Invoice */
+        public void SetVAM_MatchInvoice_ID(int VAM_MatchInvoice_ID)
         {
-            if (M_MatchInv_ID <= 0) Set_Value("M_MatchInv_ID", null);
+            if (VAM_MatchInvoice_ID <= 0) Set_Value("VAM_MatchInvoice_ID", null);
             else
-                Set_Value("M_MatchInv_ID", M_MatchInv_ID);
+                Set_Value("VAM_MatchInvoice_ID", VAM_MatchInvoice_ID);
         }/** Get Match Invoice.
 @return Match Shipment/Receipt to Invoice */
-        public int GetM_MatchInv_ID() { Object ii = Get_Value("M_MatchInv_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+        public int GetVAM_MatchInvoice_ID() { Object ii = Get_Value("VAM_MatchInvoice_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
         /** Rev_VAB_InvoiceLine_ID VAF_Control_Ref_ID=1000371 */
         public static int REV_VAB_INVOICELINE_ID_VAF_Control_Ref_ID = 1000371;/** Set Reverse Invoice Line.
 @param Rev_VAB_InvoiceLine_ID Reverse Invoice Line */

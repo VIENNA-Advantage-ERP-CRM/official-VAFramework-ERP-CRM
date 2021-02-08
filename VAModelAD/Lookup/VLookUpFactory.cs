@@ -365,8 +365,8 @@ namespace VAdvantage.Classes
             if (columnName.Equals("VAF_OrgBP_ID"))
                 columnName = "VAF_Org_ID";
 
-            if (columnName.IndexOf("M_Locator") != -1)
-                columnName = "M_Locator_ID";
+            if (columnName.IndexOf("VAM_Locator") != -1)
+                columnName = "VAM_Locator_ID";
 
             string tableName = columnName.Substring(0, columnName.Length - 3);
             //	boolean isSOTrx = !"N".Equals(ctx.getContext( WindowNo, "IsSOTrx"));
@@ -1105,12 +1105,12 @@ namespace VAdvantage.Classes
             //    return retValue.Clone();
             //}
             string displayColumn = "Name";
-            string sql = "SELECT M_ProductContainer_ID, NULL, " + displayColumn + ", IsActive FROM M_ProductContainer";
+            string sql = "SELECT VAM_ProductContainer_ID, NULL, " + displayColumn + ", IsActive FROM VAM_ProductContainer";
             int zoomWindow = 0;
-            Query zoomQuery = new Query("M_ProductContainer");
+            Query zoomQuery = new Query("VAM_ProductContainer");
             //
-            retValue = new VLookUpInfo(sql, "M_ProductContainer",
-                "M_ProductContainer.M_ProductContainer_ID",
+            retValue = new VLookUpInfo(sql, "VAM_ProductContainer",
+                "VAM_ProductContainer.VAM_ProductContainer_ID",
                 zoomWindow, zoomWindow, zoomQuery);
             //_sCacheRefTable.Add(key, retValue.Clone());
 

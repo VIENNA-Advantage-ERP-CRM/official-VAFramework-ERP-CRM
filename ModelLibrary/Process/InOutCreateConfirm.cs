@@ -34,7 +34,7 @@ namespace VAdvantage.Process
         //	Process Message 			
         private String _processMsg = null;
         //	Shipment				
-        private int _M_InOut_ID = 0;
+        private int _VAM_Inv_InOut_ID = 0;
         //	Confirmation Type		
         private String _ConfirmType = null;
         #endregion
@@ -61,7 +61,7 @@ namespace VAdvantage.Process
                     //log.log(Level.SEVERE, "prepare - Unknown Parameter: " + name);
                 }
             }
-            _M_InOut_ID = GetRecord_ID();
+            _VAM_Inv_InOut_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -70,11 +70,11 @@ namespace VAdvantage.Process
         /// <returns>document no</returns>
         protected override String DoIt()
         {
-            //log.info("M_InOut_ID=" + _M_InOut_ID + ", Type=" + _ConfirmType);
-            MInOut shipment = new MInOut(GetCtx(), _M_InOut_ID, null);
+            //log.info("VAM_Inv_InOut_ID=" + _VAM_Inv_InOut_ID + ", Type=" + _ConfirmType);
+            MInOut shipment = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, null);
             if (shipment.Get_ID() == 0)
             {
-                throw new ArgumentException("Not found M_InOut_ID=" + _M_InOut_ID);
+                throw new ArgumentException("Not found VAM_Inv_InOut_ID=" + _VAM_Inv_InOut_ID);
             }
 
             MInOutLine[] lines = shipment.GetLines();

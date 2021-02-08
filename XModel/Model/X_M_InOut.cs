@@ -11,15 +11,15 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_InOut
+    /** Generated Model for VAM_Inv_InOut
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_InOut : PO
+    public class X_VAM_Inv_InOut : PO
     {
-        public X_M_InOut(Context ctx, int M_InOut_ID, Trx trxName)
-            : base(ctx, M_InOut_ID, trxName)
+        public X_VAM_Inv_InOut(Context ctx, int VAM_Inv_InOut_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOut_ID, trxName)
         {
-            /** if (M_InOut_ID == 0)
+            /** if (VAM_Inv_InOut_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
@@ -37,8 +37,8 @@ namespace VAdvantage.Model
             SetIsPrinted (false);
             SetIsReturnTrx (false);	// N
             SetIsSOTrx (false);	// @IsSOTrx@
-            SetM_InOut_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Inv_InOut_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetMovementType (null);
             SetPosted (false);
@@ -48,10 +48,10 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_M_InOut(Ctx ctx, int M_InOut_ID, Trx trxName)
-            : base(ctx, M_InOut_ID, trxName)
+        public X_VAM_Inv_InOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
+            : base(ctx, VAM_Inv_InOut_ID, trxName)
         {
-            /** if (M_InOut_ID == 0)
+            /** if (VAM_Inv_InOut_ID == 0)
             {
             SetVAB_BusinessPartner_ID (0);
             SetVAB_BPart_Location_ID (0);
@@ -69,8 +69,8 @@ namespace VAdvantage.Model
             SetIsPrinted (false);
             SetIsReturnTrx (false);	// N
             SetIsSOTrx (false);	// @IsSOTrx@
-            SetM_InOut_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_Inv_InOut_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetMovementType (null);
             SetPosted (false);
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOut(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOut(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOut(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_InOut(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -103,14 +103,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_InOut(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Inv_InOut(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_InOut()
+        static X_VAM_Inv_InOut()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -123,8 +123,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =319;
 
-        /** TableName=M_InOut */
-        public static String Table_Name = "M_InOut";
+        /** TableName=VAM_Inv_InOut */
+        public static String Table_Name = "VAM_Inv_InOut";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_InOut[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Inv_InOut[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -866,48 +866,48 @@ namespace VAdvantage.Model
             return false;
         }
         /** Set Shipment/Receipt.
-        @param M_InOut_ID Material Shipment Document */
-        public void SetM_InOut_ID(int M_InOut_ID)
+        @param VAM_Inv_InOut_ID Material Shipment Document */
+        public void SetVAM_Inv_InOut_ID(int VAM_Inv_InOut_ID)
         {
-            if (M_InOut_ID < 1) throw new ArgumentException("M_InOut_ID is mandatory.");
-            Set_ValueNoCheck("M_InOut_ID", M_InOut_ID);
+            if (VAM_Inv_InOut_ID < 1) throw new ArgumentException("VAM_Inv_InOut_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
         }
         /** Get Shipment/Receipt.
         @return Material Shipment Document */
-        public int GetM_InOut_ID()
+        public int GetVAM_Inv_InOut_ID()
         {
-            Object ii = Get_Value("M_InOut_ID");
+            Object ii = Get_Value("VAM_Inv_InOut_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Freight Carrier.
-        @param M_Shipper_ID Method or manner of product delivery */
-        public void SetM_Shipper_ID(int M_Shipper_ID)
+        @param VAM_ShippingMethod_ID Method or manner of product delivery */
+        public void SetVAM_ShippingMethod_ID(int VAM_ShippingMethod_ID)
         {
-            if (M_Shipper_ID <= 0) Set_Value("M_Shipper_ID", null);
+            if (VAM_ShippingMethod_ID <= 0) Set_Value("VAM_ShippingMethod_ID", null);
             else
-                Set_Value("M_Shipper_ID", M_Shipper_ID);
+                Set_Value("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
         }
         /** Get Freight Carrier.
         @return Method or manner of product delivery */
-        public int GetM_Shipper_ID()
+        public int GetVAM_ShippingMethod_ID()
         {
-            Object ii = Get_Value("M_Shipper_ID");
+            Object ii = Get_Value("VAM_ShippingMethod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_ValueNoCheck("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -1335,18 +1335,18 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Package.
-        @param M_Package_ID Shipment Package */
-        public void SetM_Package_ID(int M_Package_ID)
+        @param VAM_Packaging_ID Shipment Package */
+        public void SetVAM_Packaging_ID(int VAM_Packaging_ID)
         {
-            if (M_Package_ID <= 0) Set_Value("M_Package_ID", null);
+            if (VAM_Packaging_ID <= 0) Set_Value("VAM_Packaging_ID", null);
             else
-                Set_Value("M_Package_ID", M_Package_ID);
+                Set_Value("VAM_Packaging_ID", VAM_Packaging_ID);
         }
         /** Get Package.
         @return Shipment Package */
-        public int GetM_Package_ID()
+        public int GetVAM_Packaging_ID()
         {
-            Object ii = Get_Value("M_Package_ID");
+            Object ii = Get_Value("VAM_Packaging_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

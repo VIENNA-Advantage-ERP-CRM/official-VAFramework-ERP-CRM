@@ -460,22 +460,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set ProductSpent from ProductSpentKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_ProductSpent_ID=(SELECT M_Product_ID FROM M_Product m"
+                      + " SET VAM_ProductSpent_ID=(SELECT VAM_Product_ID FROM VAM_Product m"
                       + " WHERE r.ProductSpentValue=m.Value AND r.VAF_Client_ID=m.VAF_Client_ID ), "
-                      + " ProductSpentName =(SELECT Name FROM M_Product m"
+                      + " ProductSpentName =(SELECT Name FROM VAM_Product m"
                       + " WHERE r.ProductSpentValue=m.Value AND r.VAF_Client_ID=m.VAF_Client_ID ) "
-                      + " WHERE M_ProductSpent_ID IS NULL AND ProductSpentValue IS NOT NULL"
+                      + " WHERE VAM_ProductSpent_ID IS NULL AND ProductSpentValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set ProductSpent from ProductSpentValue =" + no);
 
             //	Set ProductSpent from ProductSpentName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_ProductSpent_ID = (SELECT M_Product_ID FROM M_Product m"
+                      + " SET VAM_ProductSpent_ID = (SELECT VAM_Product_ID FROM VAM_Product m"
                       + " WHERE r.ProductSpentName=m.Name AND r.VAF_Client_ID=m.VAF_Client_ID ), "
-                      + " ProductSpentValue =(SELECT Value FROM M_Product m"
+                      + " ProductSpentValue =(SELECT Value FROM VAM_Product m"
                       + " WHERE r.ProductSpentName=m.Name AND r.VAF_Client_ID=m.VAF_Client_ID )"
-                      + " WHERE M_ProductSpent_ID IS NULL AND ProductSpentName IS NOT NULL"
+                      + " WHERE VAM_ProductSpent_ID IS NULL AND ProductSpentName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set ProductSpent from ProductSpentValue =" + no);
@@ -485,7 +485,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ProductSpent, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.M_ProductSpent_ID IS NULL"
+                      + " AND r.VAM_ProductSpent_ID IS NULL"
                       + " AND (r.productSpentName IS NOT NULL OR r.ProductSpentValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -623,22 +623,22 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Product from ProductKey
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_Product_ID=(SELECT M_Product_ID FROM M_Product m"
+                      + " SET VAM_Product_ID=(SELECT VAM_Product_ID FROM VAM_Product m"
                       + " WHERE r.ProductValue=m.Value AND r.VAF_Client_ID=m.VAF_Client_ID ), "
-                      + " ProductName=(SELECT Name FROM M_Product m"
+                      + " ProductName=(SELECT Name FROM VAM_Product m"
                       + " WHERE r.ProductValue=m.Value AND r.VAF_Client_ID=m.VAF_Client_ID )"
-                      + " WHERE M_Product_ID IS NULL AND ProductValue IS NOT NULL"
+                      + " WHERE VAM_Product_ID IS NULL AND ProductValue IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from ProductValue =" + no);
 
             //	Set Product from ProductName
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_Product_ID =(SELECT M_Product_ID FROM M_Product m"
+                      + " SET VAM_Product_ID =(SELECT VAM_Product_ID FROM VAM_Product m"
                       + " WHERE r.ProductName=m.Name AND r.VAF_Client_ID=m.VAF_Client_ID ), "
-                      + " ProductValue =(SELECT Value FROM M_Product m"
+                      + " ProductValue =(SELECT Value FROM VAM_Product m"
                       + " WHERE r.ProductName=m.Name AND r.VAF_Client_ID=m.VAF_Client_ID )"
-                      + " WHERE M_Product_ID IS NULL AND ProductName IS NOT NULL"
+                      + " WHERE VAM_Product_ID IS NULL AND ProductName IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from ProductName =" + no);
@@ -648,7 +648,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid ProductSpent, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.M_Product_ID IS NULL"
+                      + " AND r.VAM_Product_ID IS NULL"
                       + " AND (r.productName IS NOT NULL OR r.ProductValue is NOT NULL)").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -778,9 +778,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Set Order from InOutDocumentNo
             sql = new StringBuilder("UPDATE I_Request r"
-                      + " SET M_InOut_ID =(SELECT M_InOut_ID FROM M_InOut i"
+                      + " SET VAM_Inv_InOut_ID =(SELECT VAM_Inv_InOut_ID FROM VAM_Inv_InOut i"
                       + " WHERE r.InOutDocumentNo = i.DocumentNo AND r.VAF_Client_ID=i.VAF_Client_ID )"
-                      + " WHERE M_InOut_ID IS NULL AND InOutDocumentNo IS NOT NULL"
+                      + " WHERE VAM_Inv_InOut_ID IS NULL AND InOutDocumentNo IS NOT NULL"
                       + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Shipment/Receipt from InOutDocumentNo =" + no);
@@ -789,7 +789,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE I_Request r"
                       + " SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid InOutDocumentNo, ' "
                       + " WHERE (I_IsImported<>'Y' OR I_IsImported IS NULL)"
-                      + " AND r.M_InOut_ID IS NULL"
+                      + " AND r.VAM_Inv_InOut_ID IS NULL"
                       + " AND r.InOutDocumentNo IS NOT NULL ").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)

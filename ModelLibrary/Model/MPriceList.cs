@@ -25,14 +25,14 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPriceList : X_M_PriceList
+    public class MPriceList : X_VAM_PriceList
     {
         #region Private Variable
         //Static Logger		
         private static VLogger _log = VLogger.GetVLogger(typeof(MPriceList).FullName);
         //private static CLogger 	s_log = CLogger.getCLogger(MPriceList.class);
         // Cache of Price Lists	
-        private static CCache<int, MPriceList> _cache = new CCache<int, MPriceList>("M_PriceList", 5);
+        private static CCache<int, MPriceList> _cache = new CCache<int, MPriceList>("VAM_PriceList", 5);
         //	Cached PLV				
         private MPriceListVersion _plv = null;
         // Cached Precision			
@@ -43,18 +43,18 @@ namespace VAdvantage.Model
         /// Get Price List (cached)
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_ID">id</param>
+        /// <param name="VAM_PriceList_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>PriceList</returns>
-        public static MPriceList Get(Ctx ctx, int M_PriceList_ID, Trx trxName)
+        public static MPriceList Get(Ctx ctx, int VAM_PriceList_ID, Trx trxName)
         {
-            int key = M_PriceList_ID;
+            int key = VAM_PriceList_ID;
             MPriceList retValue = (MPriceList)_cache[key];
             try
             {
                 if (retValue == null)
                 {
-                    retValue = new MPriceList(ctx, M_PriceList_ID, trxName);
+                    retValue = new MPriceList(ctx, VAM_PriceList_ID, trxName);
                     _cache.Add(key, retValue);
                 }
             }
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
             //Get from DB 
             retValue = null;
             StringBuilder sql = new StringBuilder();
-            sql.Append("SELECT * FROM M_PriceList "
+            sql.Append("SELECT * FROM VAM_PriceList "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND IsDefault='Y'");
             if (IsSOPriceList)
             {
@@ -100,13 +100,13 @@ namespace VAdvantage.Model
                 //pstmt.setString(2, "N");
                 sql.Append(" AND IsSOPriceList='N'"); // YS: Changed from hard code to Parameter
             }
-            sql.Append("ORDER BY M_PriceList_ID");
+            sql.Append("ORDER BY VAM_PriceList_ID");
 
-            //String sql = "SELECT * FROM M_PriceList "
+            //String sql = "SELECT * FROM VAM_PriceList "
             //    + "WHERE VAF_Client_ID=" + VAF_Client_ID
             //    + " AND IsDefault='Y'"
             //    + " AND IsSOPriceList=?" // YS: Changed from hard code to Parameter
-            //    + "ORDER BY M_PriceList_ID";
+            //    + "ORDER BY VAM_PriceList_ID";
             DataSet ds = null;
             try
             {
@@ -125,7 +125,7 @@ namespace VAdvantage.Model
             //	Return value
             if (retValue != null)
             {
-                int key = retValue.GetM_PriceList_ID();
+                int key = retValue.GetVAM_PriceList_ID();
                 _cache.Add(key, retValue);
             }
             return retValue;
@@ -135,11 +135,11 @@ namespace VAdvantage.Model
         /// Get Standard Currency Precision
         /// </summary>
         /// <param name="ctx">context </param>
-        /// <param name="M_PriceList_ID">price list</param>
+        /// <param name="VAM_PriceList_ID">price list</param>
         /// <returns>precision</returns>
-        public static int GetStandardPrecision(Ctx ctx, int M_PriceList_ID)
+        public static int GetStandardPrecision(Ctx ctx, int VAM_PriceList_ID)
         {
-            MPriceList pl = MPriceList.Get(ctx, M_PriceList_ID, null);
+            MPriceList pl = MPriceList.Get(ctx, VAM_PriceList_ID, null);
             return pl.GetStandardPrecision();
         }
 
@@ -147,11 +147,11 @@ namespace VAdvantage.Model
         /// Get Price List Precision
         /// </summary>
         /// <param name="ctx">context </param>
-        /// <param name="M_PriceList_ID">price list</param>
+        /// <param name="VAM_PriceList_ID">price list</param>
         /// <returns>precision</returns>
-        public static int GetPricePrecision(Ctx ctx, int M_PriceList_ID)
+        public static int GetPricePrecision(Ctx ctx, int VAM_PriceList_ID)
         {
-            MPriceList pl = MPriceList.Get(ctx, M_PriceList_ID, null);
+            MPriceList pl = MPriceList.Get(ctx, VAM_PriceList_ID, null);
             return pl.GetPricePrecision();
         }
 
@@ -159,12 +159,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_PriceList_ID">id</param>
+        /// <param name="VAM_PriceList_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPriceList(Ctx ctx, int M_PriceList_ID, Trx trxName)
-            : base(ctx, M_PriceList_ID, trxName)
+        public MPriceList(Ctx ctx, int VAM_PriceList_ID, Trx trxName)
+            : base(ctx, VAM_PriceList_ID, trxName)
         {
-            if (M_PriceList_ID == 0)
+            if (VAM_PriceList_ID == 0)
             {
                 SetEnforcePriceLimit(false);
                 SetIsDefault(false);
@@ -203,8 +203,8 @@ namespace VAdvantage.Model
                 return _plv;
             }
 
-            String sql = "SELECT * FROM M_PriceList_Version "
-                + "WHERE M_PriceList_ID=" + GetM_PriceList_ID()
+            String sql = "SELECT * FROM VAM_PriceListVersion "
+                + "WHERE VAM_PriceList_ID=" + GetVAM_PriceList_ID()
                 + " AND TRUNC(ValidFrom,'DD')<='" + valid + "' AND IsActive='Y'"
                 + "ORDER BY ValidFrom DESC";
             DataSet ds = new DataSet();
@@ -225,8 +225,8 @@ namespace VAdvantage.Model
 
             if (_plv == null)
             {
-                log.Warning("None found M_PriceList_ID="
-                 + GetM_PriceList_ID() + " - " + valid + " - " + sql);
+                log.Warning("None found VAM_PriceList_ID="
+                 + GetVAM_PriceList_ID() + " - " + valid + " - " + sql);
             }
             else
             {

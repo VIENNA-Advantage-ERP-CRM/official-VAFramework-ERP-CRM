@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MDiscountSchema
  * Purpose        : Discount Schema Model
- * Class Used     : X_M_DiscountSchema 
+ * Class Used     : X_VAM_DiscountCalculation 
  * Chronological    Development
  * Raghunandan     10-Jun-2009
   ******************************************************/
@@ -25,11 +25,11 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDiscountSchema : X_M_DiscountSchema
+    public class MDiscountSchema : X_VAM_DiscountCalculation
     {
         #region Privatevariables
         //	Cache						
-        private static CCache<int, MDiscountSchema> s_cache = new CCache<int, MDiscountSchema>("M_DiscountSchema", 20);
+        private static CCache<int, MDiscountSchema> s_cache = new CCache<int, MDiscountSchema>("VAM_DiscountCalculation", 20);
         //	Breaks						
         private MDiscountSchemaBreak[] _breaks = null;
         //Lines							
@@ -40,15 +40,15 @@ namespace VAdvantage.Model
         /// Get Discount Schema from Cache
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_DiscountSchema_ID">id</param>
+        /// <param name="VAM_DiscountCalculation_ID">id</param>
         /// <returns><MDiscountSchema/returns>
-        public static MDiscountSchema Get(Ctx ctx, int M_DiscountSchema_ID)
+        public static MDiscountSchema Get(Ctx ctx, int VAM_DiscountCalculation_ID)
         {
-            int key = M_DiscountSchema_ID;
+            int key = VAM_DiscountCalculation_ID;
             MDiscountSchema retValue = (MDiscountSchema)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MDiscountSchema(ctx, M_DiscountSchema_ID, null);
+            retValue = new MDiscountSchema(ctx, VAM_DiscountCalculation_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -58,12 +58,12 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="M_DiscountSchema_ID"></param>
+        /// <param name="VAM_DiscountCalculation_ID"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchema(Ctx ctx, int M_DiscountSchema_ID, Trx trxName)
-            : base(ctx, M_DiscountSchema_ID, trxName)
+        public MDiscountSchema(Ctx ctx, int VAM_DiscountCalculation_ID, Trx trxName)
+            : base(ctx, VAM_DiscountCalculation_ID, trxName)
         {
-            if (M_DiscountSchema_ID == 0)
+            if (VAM_DiscountCalculation_ID == 0)
             {
                 //	setName();
                 SetDiscountType(DISCOUNTTYPE_FlatPercent);
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
             if (_breaks != null && !reload)
                 return _breaks;
 
-            String sql = "SELECT * FROM M_DiscountSchemaBreak WHERE M_DiscountSchema_ID=" + GetM_DiscountSchema_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAM_BreakDiscount WHERE VAM_DiscountCalculation_ID=" + GetVAM_DiscountCalculation_ID() + " ORDER BY SeqNo";
             List<MDiscountSchemaBreak> list = new List<MDiscountSchemaBreak>();
             DataSet ds = new DataSet();
             try
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
             if (_lines != null && !reload)
                 return _lines;
 
-            String sql = "SELECT * FROM M_DiscountSchemaLine WHERE M_DiscountSchema_ID=" + GetM_DiscountSchema_ID() + " ORDER BY SeqNo";
+            String sql = "SELECT * FROM VAM_PriceDiscount WHERE VAM_DiscountCalculation_ID=" + GetVAM_DiscountCalculation_ID() + " ORDER BY SeqNo";
             List<MDiscountSchemaLine> list = new List<MDiscountSchemaLine>();
             DataSet ds = new DataSet();
             try
@@ -156,11 +156,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="Qty">quantity</param>
         /// <param name="Price">price</param>
-        /// <param name="M_Product_ID">product</param>
-        /// <param name="M_Product_Category_ID">category</param>
+        /// <param name="VAM_Product_ID">product</param>
+        /// <param name="VAM_ProductCategory_ID">category</param>
         /// <param name="BPartnerFlatDiscount">flat discount</param>
         /// <returns>discount or zero</returns>
-        public Decimal CalculatePrice(Decimal Qty, Decimal Price, int M_Product_ID, int M_Product_Category_ID,
+        public Decimal CalculatePrice(Decimal Qty, Decimal Price, int VAM_Product_ID, int VAM_ProductCategory_ID,
             Decimal BPartnerFlatDiscount)
         {
             log.Fine("Price=" + Price + ",Qty=" + Qty);
@@ -169,7 +169,7 @@ namespace VAdvantage.Model
                 return Price;
             }
             //get discount accordinf to Bpartner
-            Decimal discount = CalculateDiscount(Qty, Price, M_Product_ID, M_Product_Category_ID, BPartnerFlatDiscount);
+            Decimal discount = CalculateDiscount(Qty, Price, VAM_Product_ID, VAM_ProductCategory_ID, BPartnerFlatDiscount);
             //	nothing to calculate
             if (discount == null || discount == 0)
             {
@@ -189,11 +189,11 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="Qty">quantity</param>
         /// <param name="Price">price</param>
-        /// <param name="M_Product_ID">product</param>
-        /// <param name="M_Product_Category_ID">category</param>
+        /// <param name="VAM_Product_ID">product</param>
+        /// <param name="VAM_ProductCategory_ID">category</param>
         /// <param name="BPartnerFlatDiscount">flat discount</param>
         /// <returns>discount or zero</returns>
-        public Decimal CalculateDiscount(Decimal Qty, Decimal Price, int M_Product_ID, int M_Product_Category_ID,
+        public Decimal CalculateDiscount(Decimal Qty, Decimal Price, int VAM_Product_ID, int VAM_ProductCategory_ID,
             Decimal BPartnerFlatDiscount)
         {
             //if (BPartnerFlatDiscount == null)
@@ -224,11 +224,11 @@ namespace VAdvantage.Model
             Decimal Amt = Decimal.Multiply(Price, Qty);
             if (IsQuantityBased())
             {
-                log.Finer("Qty=" + Qty + ",M_Product_ID=" + M_Product_ID + ",M_Product_Category_ID=" + M_Product_Category_ID);
+                log.Finer("Qty=" + Qty + ",VAM_Product_ID=" + VAM_Product_ID + ",VAM_ProductCategory_ID=" + VAM_ProductCategory_ID);
             }
             else
             {
-                log.Finer("Amt=" + Amt + ",M_Product_ID=" + M_Product_ID + ",M_Product_Category_ID=" + M_Product_Category_ID);
+                log.Finer("Amt=" + Amt + ",VAM_Product_ID=" + VAM_Product_ID + ",VAM_ProductCategory_ID=" + VAM_ProductCategory_ID);
             }
             for (int i = 0; i < _breaks.Length; i++)
             {
@@ -239,7 +239,7 @@ namespace VAdvantage.Model
                 }
                 if (IsQuantityBased())
                 {
-                    if (!br.Applies(Qty, M_Product_ID, M_Product_Category_ID))
+                    if (!br.Applies(Qty, VAM_Product_ID, VAM_ProductCategory_ID))
                     {
                         log.Finer("No: " + br);
                         continue;
@@ -248,7 +248,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    if (!br.Applies(Amt, M_Product_ID, M_Product_Category_ID))
+                    if (!br.Applies(Amt, VAM_Product_ID, VAM_ProductCategory_ID))
                     {
                         log.Finer("No: " + br);
                         continue;

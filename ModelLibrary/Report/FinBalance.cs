@@ -278,7 +278,7 @@ namespace VAdvantage.Report
                 //param = new List<Object>();
                 String insert = "INSERT INTO Actual_Acct_Balance "
                     + "(VAF_Client_ID, VAF_Org_ID, VAF_OrgTrx_ID, VAB_AccountBook_ID, DateAcct,"
-                    + " Account_ID, PostingType, Actual_Accumulation_ID, M_Product_ID, VAB_BusinessPartner_ID,"
+                    + " Account_ID, PostingType, Actual_Accumulation_ID, VAM_Product_ID, VAB_BusinessPartner_ID,"
                     + "	VAB_Project_ID,	VAB_SalesRegionState_ID,VAB_BillingCode_ID,"
                     + " VAB_Promotion_ID, C_LocTo_ID, C_LocFrom_ID, User1_ID, User2_ID, VAGL_Budget_ID,"
                     + " UserElement1_ID, UserElement2_ID, UserElement3_ID, UserElement4_ID, UserElement5_ID, UserElement6_ID,"
@@ -298,7 +298,7 @@ namespace VAdvantage.Report
                 }
                 select = select + " ,Account_ID, PostingType, " + accum.GetACTUAL_ACCUMULATION_ID();
                 if (accum.IsPRODUCT())
-                    select = select + " ,M_Product_ID ";
+                    select = select + " ,VAM_Product_ID ";
                 else
                     select = select + " , NULL ";
 
@@ -432,7 +432,7 @@ namespace VAdvantage.Report
                     groupBy = groupBy + " , " + dateClause;
                 }
                 if (accum.IsPRODUCT())
-                    groupBy = groupBy + " ,M_Product_ID ";
+                    groupBy = groupBy + " ,VAM_Product_ID ";
                 if (accum.IsBUSINESSPARTNER())
                     groupBy = groupBy + " ,VAB_BusinessPartner_ID ";
                 if (accum.IsPROJECT())

@@ -74,7 +74,7 @@ namespace VAdvantage.Model
 		    TREETYPE_CMContainer,
 		    TREETYPE_CMMedia,
 		    TREETYPE_CMContainerStage,
-		    TREETYPE_CMTemplate,
+		    TREETYPE_CMVACMLayout,
 		    TREETYPE_ElementValue,
 		    TREETYPE_Campaign,
 		    TREETYPE_Menu,
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
         /** Table ID Array				*/
         private static int[] TABLEIDS = new int[] {
 		    X_VAB_BillingCode.Table_ID,
-		    X_M_BOM.Table_ID,
+		    X_VAM_BOM.Table_ID,
 		    X_VAB_BusinessPartner.Table_ID,
 		    X_CM_Container.Table_ID,
 		    X_CM_Media.Table_ID,
@@ -102,9 +102,9 @@ namespace VAdvantage.Model
 		    X_VAB_Promotion.Table_ID,
 		    X_VAF_MenuConfig.Table_ID,
 		    X_VAF_Org.Table_ID,
-		    X_M_Product_Category.Table_ID,
+		    X_VAM_ProductCategory.Table_ID,
 		    X_VAB_Project.Table_ID,
-		    X_M_Product.Table_ID,
+		    X_VAM_Product.Table_ID,
 		    X_VAB_SalesRegionState.Table_ID,
 		    0,0,0,0,0
 	    };
@@ -406,7 +406,7 @@ namespace VAdvantage.Model
                 nodeTableName += "CMS";
             else if (TREETYPE_CMMedia.Equals(treeType))
                 nodeTableName += "CMM";
-            else if (TREETYPE_CMTemplate.Equals(treeType))
+            else if (TREETYPE_CMVACMLayout.Equals(treeType))
                 nodeTableName += "CMT";
             //
             else if (TREETYPE_User1.Equals(treeType))
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
                 nodeTableName += "MM";
             else if (X_VAB_BusinessPartner.Table_ID == VAF_TableView_ID)
                 nodeTableName += "BP";
-            else if (X_M_Product.Table_ID == VAF_TableView_ID)
+            else if (X_VAM_Product.Table_ID == VAF_TableView_ID)
                 nodeTableName += "PR";
             //
             else if (X_CM_Container.Table_ID == VAF_TableView_ID)
@@ -966,7 +966,7 @@ namespace VAdvantage.Model
                 + " AND tn.Node_ID=tb.Node_ID AND tb.VAF_UserContact_ID=@userid) ");	//	#1
 
             string tblName = MVAFTableView.GetTableName(p_ctx, GetVAF_TableView_ID());
-            //on (mp.M_Product_ID= tn.Node_ID)
+            //on (mp.VAM_Product_ID= tn.Node_ID)
 
             //if (onDemand || VAF_Tab_ID > 0)
             //{
@@ -1445,8 +1445,8 @@ namespace VAdvantage.Model
             //
             if (tableNameOnly)
                 return tableName;
-            if ("M_Product".Equals(tableName))
-                return "M_Product M_Product INNER JOIN M_Product_Category x ON (M_Product.M_Product_Category_ID=x.M_Product_Category_ID)";
+            if ("VAM_Product".Equals(tableName))
+                return "VAM_Product VAM_Product INNER JOIN VAM_ProductCategory x ON (VAM_Product.VAM_ProductCategory_ID=x.VAM_ProductCategory_ID)";
             if ("VAB_BusinessPartner".Equals(tableName))
                 return "VAB_BusinessPartner VAB_BusinessPartner INNER JOIN VAB_BPart_Category x ON (VAB_BusinessPartner.VAB_BPart_Category_ID=x.VAB_BPart_Category_ID)";
             if ("VAF_Org".Equals(tableName))
@@ -1528,7 +1528,7 @@ namespace VAdvantage.Model
             //
             if ("VAF_MenuConfig".Equals(tableName))
                 return "t.Action";
-            if ("M_Product".Equals(tableName) || "VAB_BusinessPartner".Equals(tableName)
+            if ("VAM_Product".Equals(tableName) || "VAB_BusinessPartner".Equals(tableName)
                 || "VAF_Org".Equals(tableName) || "VAB_Promotion".Equals(tableName))
                 return "x.VAF_Print_Rpt_Colour_ID";
             return "NULL";

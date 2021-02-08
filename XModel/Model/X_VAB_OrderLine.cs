@@ -31,7 +31,7 @@ namespace VAdvantage.Model
             SetIsDescription (false);	// N
             SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_OrderLine WHERE VAB_Order_ID=@VAB_Order_ID@
             SetLineNetAmt (0.0);
-            SetM_Warehouse_ID (0);	// @M_Warehouse_ID@
+            SetVAM_Warehouse_ID (0);	// @VAM_Warehouse_ID@
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
             SetPriceLimit (0.0);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
             SetIsDescription (false);	// N
             SetLine (0);	// @SQL=SELECT COALESCE(MAX(Line),0)+10 AS DefaultValue FROM VAB_OrderLine WHERE VAB_Order_ID=@VAB_Order_ID@
             SetLineNetAmt (0.0);
-            SetM_Warehouse_ID (0);	// @M_Warehouse_ID@
+            SetVAM_Warehouse_ID (0);	// @VAM_Warehouse_ID@
             SetPriceActual (0.0);
             SetPriceEntered (0.0);
             SetPriceLimit (0.0);
@@ -543,68 +543,68 @@ namespace VAdvantage.Model
             return Convert.ToDecimal(bd);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID <= 0) Set_Value("M_Product_ID", null);
+            if (VAM_Product_ID <= 0) Set_Value("VAM_Product_ID", null);
             else
-                Set_Value("M_Product_ID", M_Product_ID);
+                Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Freight Carrier.
-        @param M_Shipper_ID Method or manner of product delivery */
-        public void SetM_Shipper_ID(int M_Shipper_ID)
+        @param VAM_ShippingMethod_ID Method or manner of product delivery */
+        public void SetVAM_ShippingMethod_ID(int VAM_ShippingMethod_ID)
         {
-            if (M_Shipper_ID <= 0) Set_Value("M_Shipper_ID", null);
+            if (VAM_ShippingMethod_ID <= 0) Set_Value("VAM_ShippingMethod_ID", null);
             else
-                Set_Value("M_Shipper_ID", M_Shipper_ID);
+                Set_Value("VAM_ShippingMethod_ID", VAM_ShippingMethod_ID);
         }
         /** Get Freight Carrier.
         @return Method or manner of product delivery */
-        public int GetM_Shipper_ID()
+        public int GetVAM_ShippingMethod_ID()
         {
-            Object ii = Get_Value("M_Shipper_ID");
+            Object ii = Get_Value("VAM_ShippingMethod_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** M_Warehouse_ID VAF_Control_Ref_ID=197 */
-        public static int M_WAREHOUSE_ID_VAF_Control_Ref_ID = 197;
+        /** VAM_Warehouse_ID VAF_Control_Ref_ID=197 */
+        public static int VAM_Warehouse_ID_VAF_Control_Ref_ID = 197;
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

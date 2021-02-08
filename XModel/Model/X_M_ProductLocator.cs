@@ -11,30 +11,30 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_ProductLocator
+    /** Generated Model for VAM_ProductLocator
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_ProductLocator : PO
+    public class X_VAM_ProductLocator : PO
     {
-        public X_M_ProductLocator(Context ctx, int M_ProductLocator_ID, Trx trxName)
-            : base(ctx, M_ProductLocator_ID, trxName)
+        public X_VAM_ProductLocator(Context ctx, int VAM_ProductLocator_ID, Trx trxName)
+            : base(ctx, VAM_ProductLocator_ID, trxName)
         {
-            /** if (M_ProductLocator_ID == 0)
+            /** if (VAM_ProductLocator_ID == 0)
             {
-            SetM_Locator_ID (0);
-            SetM_ProductLocator_ID (0);
-            SetM_Product_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_ProductLocator_ID (0);
+            SetVAM_Product_ID (0);
             }
              */
         }
-        public X_M_ProductLocator(Ctx ctx, int M_ProductLocator_ID, Trx trxName)
-            : base(ctx, M_ProductLocator_ID, trxName)
+        public X_VAM_ProductLocator(Ctx ctx, int VAM_ProductLocator_ID, Trx trxName)
+            : base(ctx, VAM_ProductLocator_ID, trxName)
         {
-            /** if (M_ProductLocator_ID == 0)
+            /** if (VAM_ProductLocator_ID == 0)
             {
-            SetM_Locator_ID (0);
-            SetM_ProductLocator_ID (0);
-            SetM_Product_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_ProductLocator_ID (0);
+            SetVAM_Product_ID (0);
             }
              */
         }
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductLocator(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductLocator(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductLocator(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_ProductLocator(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -61,14 +61,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_ProductLocator(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_ProductLocator(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_ProductLocator()
+        static X_VAM_ProductLocator()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -81,8 +81,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =915;
 
-        /** TableName=M_ProductLocator */
-        public static String Table_Name = "M_ProductLocator";
+        /** TableName=VAM_ProductLocator */
+        public static String Table_Name = "VAM_ProductLocator";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -116,7 +116,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_ProductLocator[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_ProductLocator[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Description.
@@ -137,47 +137,47 @@ namespace VAdvantage.Model
             return (String)Get_Value("Description");
         }
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory.");
-            Set_Value("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory.");
+            Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product Locator.
-        @param M_ProductLocator_ID The preferred Locators for a Product */
-        public void SetM_ProductLocator_ID(int M_ProductLocator_ID)
+        @param VAM_ProductLocator_ID The preferred Locators for a Product */
+        public void SetVAM_ProductLocator_ID(int VAM_ProductLocator_ID)
         {
-            if (M_ProductLocator_ID < 1) throw new ArgumentException("M_ProductLocator_ID is mandatory.");
-            Set_ValueNoCheck("M_ProductLocator_ID", M_ProductLocator_ID);
+            if (VAM_ProductLocator_ID < 1) throw new ArgumentException("VAM_ProductLocator_ID is mandatory.");
+            Set_ValueNoCheck("VAM_ProductLocator_ID", VAM_ProductLocator_ID);
         }
         /** Get Product Locator.
         @return The preferred Locators for a Product */
-        public int GetM_ProductLocator_ID()
+        public int GetVAM_ProductLocator_ID()
         {
-            Object ii = Get_Value("M_ProductLocator_ID");
+            Object ii = Get_Value("VAM_ProductLocator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_Value("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

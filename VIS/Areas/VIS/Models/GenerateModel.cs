@@ -477,7 +477,7 @@ namespace VAdvantage.Tool
                         if (columnName.Equals("VAF_Client_ID") || columnName.Equals("VAF_Org_ID")
                             || columnName.Equals("Record_ID") || columnName.Equals("VAB_DocTypes_ID")
                             || columnName.Equals("Node_ID") || columnName.Equals("VAF_Role_ID")
-                            || columnName.Equals("M_AttributeSet_ID") || columnName.Equals("M_AttributeSetInstance_ID"))
+                            || columnName.Equals("VAM_PFeature_Set_ID") || columnName.Equals("VAM_PFeature_SetInstance_ID"))
                             firstOK = 0;
                         sb.Append("if (").Append(columnName)
                             .Append(" < ").Append(firstOK).Append(") throw new ArgumentException (\"")

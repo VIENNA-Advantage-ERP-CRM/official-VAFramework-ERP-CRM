@@ -11,34 +11,34 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DistributionRunLine
+/** Generated Model for VAM_DistributionRunLine
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DistributionRunLine : PO
+public class X_VAM_DistributionRunLine : PO
 {
-public X_M_DistributionRunLine (Context ctx, int M_DistributionRunLine_ID, Trx trxName) : base (ctx, M_DistributionRunLine_ID, trxName)
+public X_VAM_DistributionRunLine (Context ctx, int VAM_DistributionRunLine_ID, Trx trxName) : base (ctx, VAM_DistributionRunLine_ID, trxName)
 {
-/** if (M_DistributionRunLine_ID == 0)
+/** if (VAM_DistributionRunLine_ID == 0)
 {
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_DistributionRunLine WHERE M_DistributionRun_ID=@M_DistributionRun_ID@
-SetM_DistributionList_ID (0);
-SetM_DistributionRunLine_ID (0);
-SetM_DistributionRun_ID (0);
-SetM_Product_ID (0);
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_DistributionRunLine WHERE VAM_DistributionRun_ID=@VAM_DistributionRun_ID@
+SetVAM_DistributionList_ID (0);
+SetVAM_DistributionRunLine_ID (0);
+SetVAM_DistributionRun_ID (0);
+SetVAM_Product_ID (0);
 SetMinQty (0.0);	// 0
 SetTotalQty (0.0);
 }
  */
 }
-public X_M_DistributionRunLine (Ctx ctx, int M_DistributionRunLine_ID, Trx trxName) : base (ctx, M_DistributionRunLine_ID, trxName)
+public X_VAM_DistributionRunLine (Ctx ctx, int VAM_DistributionRunLine_ID, Trx trxName) : base (ctx, VAM_DistributionRunLine_ID, trxName)
 {
-/** if (M_DistributionRunLine_ID == 0)
+/** if (VAM_DistributionRunLine_ID == 0)
 {
-SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM M_DistributionRunLine WHERE M_DistributionRun_ID=@M_DistributionRun_ID@
-SetM_DistributionList_ID (0);
-SetM_DistributionRunLine_ID (0);
-SetM_DistributionRun_ID (0);
-SetM_Product_ID (0);
+SetLine (0);	// @SQL=SELECT NVL(MAX(Line),0)+10 AS DefaultValue FROM VAM_DistributionRunLine WHERE VAM_DistributionRun_ID=@VAM_DistributionRun_ID@
+SetVAM_DistributionList_ID (0);
+SetVAM_DistributionRunLine_ID (0);
+SetVAM_DistributionRun_ID (0);
+SetVAM_Product_ID (0);
 SetMinQty (0.0);	// 0
 SetTotalQty (0.0);
 }
@@ -49,7 +49,7 @@ SetTotalQty (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRunLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionRunLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,7 +57,7 @@ public X_M_DistributionRunLine (Context ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRunLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionRunLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -65,13 +65,13 @@ public X_M_DistributionRunLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRunLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_DistributionRunLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DistributionRunLine()
+static X_VAM_DistributionRunLine()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -84,8 +84,8 @@ public static long updatedMS = 1280389062514L;
 public static int Table_ID;
  // =713;
 
-/** TableName=M_DistributionRunLine */
-public static String Table_Name="M_DistributionRunLine";
+/** TableName=VAM_DistributionRunLine */
+public static String Table_Name="VAM_DistributionRunLine";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -119,7 +119,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DistributionRunLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_DistributionRunLine[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -154,47 +154,47 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Distribution List.
-@param M_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
-public void SetM_DistributionList_ID (int M_DistributionList_ID)
+@param VAM_DistributionList_ID Distribution Lists allow to distribute products to a selected list of partners */
+public void SetVAM_DistributionList_ID (int VAM_DistributionList_ID)
 {
-if (M_DistributionList_ID < 1) throw new ArgumentException ("M_DistributionList_ID is mandatory.");
-Set_Value ("M_DistributionList_ID", M_DistributionList_ID);
+if (VAM_DistributionList_ID < 1) throw new ArgumentException ("VAM_DistributionList_ID is mandatory.");
+Set_Value ("VAM_DistributionList_ID", VAM_DistributionList_ID);
 }
 /** Get Distribution List.
 @return Distribution Lists allow to distribute products to a selected list of partners */
-public int GetM_DistributionList_ID() 
+public int GetVAM_DistributionList_ID() 
 {
-Object ii = Get_Value("M_DistributionList_ID");
+Object ii = Get_Value("VAM_DistributionList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Distribution Run Line.
-@param M_DistributionRunLine_ID Distribution Run Lines defines Distribution List, the Product and Quantities */
-public void SetM_DistributionRunLine_ID (int M_DistributionRunLine_ID)
+@param VAM_DistributionRunLine_ID Distribution Run Lines defines Distribution List, the Product and Quantities */
+public void SetVAM_DistributionRunLine_ID (int VAM_DistributionRunLine_ID)
 {
-if (M_DistributionRunLine_ID < 1) throw new ArgumentException ("M_DistributionRunLine_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionRunLine_ID", M_DistributionRunLine_ID);
+if (VAM_DistributionRunLine_ID < 1) throw new ArgumentException ("VAM_DistributionRunLine_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionRunLine_ID", VAM_DistributionRunLine_ID);
 }
 /** Get Distribution Run Line.
 @return Distribution Run Lines defines Distribution List, the Product and Quantities */
-public int GetM_DistributionRunLine_ID() 
+public int GetVAM_DistributionRunLine_ID() 
 {
-Object ii = Get_Value("M_DistributionRunLine_ID");
+Object ii = Get_Value("VAM_DistributionRunLine_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Distribution Run.
-@param M_DistributionRun_ID Distribution Run create Orders to distribute products to a selected list of partners */
-public void SetM_DistributionRun_ID (int M_DistributionRun_ID)
+@param VAM_DistributionRun_ID Distribution Run create Orders to distribute products to a selected list of partners */
+public void SetVAM_DistributionRun_ID (int VAM_DistributionRun_ID)
 {
-if (M_DistributionRun_ID < 1) throw new ArgumentException ("M_DistributionRun_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionRun_ID", M_DistributionRun_ID);
+if (VAM_DistributionRun_ID < 1) throw new ArgumentException ("VAM_DistributionRun_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionRun_ID", VAM_DistributionRun_ID);
 }
 /** Get Distribution Run.
 @return Distribution Run create Orders to distribute products to a selected list of partners */
-public int GetM_DistributionRun_ID() 
+public int GetVAM_DistributionRun_ID() 
 {
-Object ii = Get_Value("M_DistributionRun_ID");
+Object ii = Get_Value("VAM_DistributionRun_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -202,20 +202,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_DistributionRun_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_DistributionRun_ID().ToString());
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_Value ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -26,46 +26,46 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MProductCategory : X_M_Product_Category
+    public class MProductCategory : X_VAM_ProductCategory
     {
         /**	Categopry Cache				*/
-        private static CCache<int, MProductCategory> s_cache = new CCache<int, MProductCategory>("M_Product_Category", 20);
+        private static CCache<int, MProductCategory> s_cache = new CCache<int, MProductCategory>("VAM_ProductCategory", 20);
         /**	Product Cache				*/
-        private static CCache<int, int?> s_products = new CCache<int, int?>("M_Product", 100);
+        private static CCache<int, int?> s_products = new CCache<int, int?>("VAM_Product", 100);
         /**	Static Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MProductCategory).FullName);
 
         /* 	Get from Cache
         *	@param ctx context
-        *	@param M_Product_Category_ID id
+        *	@param VAM_ProductCategory_ID id
         *	@return category
         */
-        public static MProductCategory Get(Ctx ctx, int M_Product_Category_ID)
+        public static MProductCategory Get(Ctx ctx, int VAM_ProductCategory_ID)
         {
-            int ii = M_Product_Category_ID;
+            int ii = VAM_ProductCategory_ID;
             MProductCategory pc = (MProductCategory)s_cache[ii];
             if (pc == null)
-                pc = new MProductCategory(ctx, M_Product_Category_ID, null);
+                pc = new MProductCategory(ctx, VAM_ProductCategory_ID, null);
             return pc;
         }
 
         /**
          * 	Is Product in Category
-         *	@param M_Product_Category_ID category
-         *	@param M_Product_ID product
+         *	@param VAM_ProductCategory_ID category
+         *	@param VAM_Product_ID product
          *	@return true if product has category
          */
-        public static bool IsCategory(int M_Product_Category_ID, int M_Product_ID)
+        public static bool IsCategory(int VAM_ProductCategory_ID, int VAM_Product_ID)
         {
-            if (M_Product_ID == 0 || M_Product_Category_ID == 0)
+            if (VAM_Product_ID == 0 || VAM_ProductCategory_ID == 0)
                 return false;
             //	Look up
-            int product = (int)M_Product_ID;
+            int product = (int)VAM_Product_ID;
             int? category = s_products[product];
             if (category != null)
-                return category == M_Product_Category_ID;
+                return category == VAM_ProductCategory_ID;
 
-            String sql = "SELECT M_Product_Category_ID FROM M_Product WHERE M_Product_ID=" + M_Product_ID;
+            String sql = "SELECT VAM_ProductCategory_ID FROM VAM_Product WHERE VAM_Product_ID=" + VAM_Product_ID;
             DataSet ds = null;
             try
             {
@@ -87,26 +87,26 @@ namespace VAdvantage.Model
                 //	TODO: LRU logic  
                 s_products.Add(product, category);
                 //
-                _log.Fine("M_Product_ID=" + M_Product_ID + "(" + category
-                    + ") in M_Product_Category_ID=" + M_Product_Category_ID
-                    + " - " + (category == M_Product_Category_ID));
-                return category.Value == M_Product_Category_ID;
+                _log.Fine("VAM_Product_ID=" + VAM_Product_ID + "(" + category
+                    + ") in VAM_ProductCategory_ID=" + VAM_ProductCategory_ID
+                    + " - " + (category == VAM_ProductCategory_ID));
+                return category.Value == VAM_ProductCategory_ID;
             }
-            _log.Log(Level.SEVERE, "Not found M_Product_ID=" + M_Product_ID);
+            _log.Log(Level.SEVERE, "Not found VAM_Product_ID=" + VAM_Product_ID);
             return false;
         }
 
         /**************************************************************************
          * 	Default Constructor
          *	@param ctx context
-         *	@param M_Product_Category_ID id
+         *	@param VAM_ProductCategory_ID id
          *	@param trxName transaction
          */
-        public MProductCategory(Ctx ctx, int M_Product_Category_ID, Trx trxName)
-            : base(ctx, M_Product_Category_ID, trxName)
+        public MProductCategory(Ctx ctx, int VAM_ProductCategory_ID, Trx trxName)
+            : base(ctx, VAM_ProductCategory_ID, trxName)
         {
 
-            if (M_Product_Category_ID == 0)
+            if (VAM_ProductCategory_ID == 0)
             {
                 //	setName (null);
                 //	setValue (null);
@@ -176,17 +176,17 @@ namespace VAdvantage.Model
                                     if (_relatedTo == relatedtoProduct)
                                     {
                                         _sql.Clear();
-                                        //                                        _sql.Append(@"Select Bp.M_Product_Category_ID,ca.Frpt_Acctdefault_Id From M_Product_Category Bp
-                                        //                                                                                               Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
+                                        //                                        _sql.Append(@"Select Bp.VAM_ProductCategory_ID,ca.Frpt_Acctdefault_Id From VAM_ProductCategory Bp
+                                        //                                                                                               Left Join FRPT_Product_Category_Acct ca On Bp.VAM_ProductCategory_ID=ca.VAM_ProductCategory_ID 
                                         //                                                                                                And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                         //                                                        + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID +
                                         //                                                        " AND VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
-                                        _sql.Append(@"Select count(*) From M_Product_Category Bp
-                                                       Left Join FRPT_Product_Category_Acct ca On Bp.M_Product_Category_ID=ca.M_Product_Category_ID 
+                                        _sql.Append(@"Select count(*) From VAM_ProductCategory Bp
+                                                       Left Join FRPT_Product_Category_Acct ca On Bp.VAM_ProductCategory_ID=ca.VAM_ProductCategory_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                                        + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + _client_ID +
                                                        " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) +
-                                                       " AND Bp.M_Product_Category_ID = " + GetM_Product_Category_ID());
+                                                       " AND Bp.VAM_ProductCategory_ID = " + GetVAM_ProductCategory_ID());
                                         //ds2 = DB.ExecuteDataset(_sql.ToString(), null , Get_Trx());
                                         int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                         //if (ds2 != null && ds2.Tables[0].Rows.Count > 0)
@@ -201,8 +201,8 @@ namespace VAdvantage.Model
                                         {
                                             prdctact = MVAFTableView.GetPO(GetCtx(), "FRPT_Product_Category_Acct", 0, null);
                                             prdctact.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                            //prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["M_Product_Category_ID"]));
-                                            prdctact.Set_ValueNoCheck("M_Product_Category_ID", Util.GetValueOfInt(GetM_Product_Category_ID()));
+                                            //prdctact.Set_ValueNoCheck("VAM_ProductCategory_ID", Util.GetValueOfInt(ds2.Tables[0].Rows[j]["VAM_ProductCategory_ID"]));
+                                            prdctact.Set_ValueNoCheck("VAM_ProductCategory_ID", Util.GetValueOfInt(GetVAM_ProductCategory_ID()));
                                             prdctact.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                             prdctact.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                             prdctact.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
@@ -225,7 +225,7 @@ namespace VAdvantage.Model
             {
                 if (newRecord & success && (String.IsNullOrEmpty(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) || Util.GetValueOfString(GetCtx().GetContext("#DEFAULT_ACCOUNTING_APPLICABLE")) == "Y"))
                 {
-                    bool sucs = Insert_Accounting("M_Product_Category_Acct", "VAB_AccountBook_Default", null);
+                    bool sucs = Insert_Accounting("VAM_ProductCategory_Acct", "VAB_AccountBook_Default", null);
 
                     //Karan. work done to show message if data not saved in accounting tab. but will save data in current tab.
                     // Before this, data was being saved but giving message "record not saved".
@@ -245,7 +245,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeDelete()
         {
-            return Delete_Accounting("M_Product_Category_Acct");
+            return Delete_Accounting("VAM_ProductCategory_Acct");
         }
 
         /**
@@ -258,7 +258,7 @@ namespace VAdvantage.Model
         }
 
         // Added by Mohit 20-8-2015 VAWMS
-        public static MProductCategory GetOfProduct(Ctx ctx, int M_Product_ID)
+        public static MProductCategory GetOfProduct(Ctx ctx, int VAM_Product_ID)
         {
             MProductCategory retValue = null;
             //PreparedStatement pstmt = null;
@@ -266,17 +266,17 @@ namespace VAdvantage.Model
             SqlParameter[] param = null;
             IDataReader idr = null;
             DataTable dt = new DataTable();
-            String sql = "SELECT * FROM M_Product_Category pc "
-                        + "WHERE EXISTS (SELECT * FROM M_Product p "
-                        + "WHERE p.M_Product_ID=@param1 AND p.M_Product_Category_ID=pc.M_Product_Category_ID)";
+            String sql = "SELECT * FROM VAM_ProductCategory pc "
+                        + "WHERE EXISTS (SELECT * FROM VAM_Product p "
+                        + "WHERE p.VAM_Product_ID=@param1 AND p.VAM_ProductCategory_ID=pc.VAM_ProductCategory_ID)";
             try
             {
                 //pstmt = DB.prepareStatement(sql, (Trx)null);
-                //pstmt.setInt(1, M_Product_ID);
+                //pstmt.setInt(1, VAM_Product_ID);
                 //rs = pstmt.executeQuery();
                 //if (rs.next())
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", M_Product_ID);
+                param[0] = new SqlParameter("@param1", VAM_Product_ID);
                 idr = DB.ExecuteReader(sql, param, null);
                 dt.Load(idr);
                 idr.Close();
@@ -307,12 +307,12 @@ namespace VAdvantage.Model
         public MProduct[] GetProductsofCategory(String WhereClause, Trx trx)
         {
             List<MProduct> list = new List<MProduct>();
-            StringBuilder sql = new StringBuilder(" SELECT * FROM M_Product WHERE M_Product_Category_ID = @param1 ");
+            StringBuilder sql = new StringBuilder(" SELECT * FROM VAM_Product WHERE VAM_ProductCategory_ID = @param1 ");
 
             if (WhereClause != null && WhereClause.Length != 0)
                 sql.Append(WhereClause);
             MVAFRole role = MVAFRole.GetDefault(GetCtx(), false);
-            String stmt = role.AddAccessSQL(sql.ToString(), "M_Product", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
+            String stmt = role.AddAccessSQL(sql.ToString(), "VAM_Product", MVAFRole.SQL_NOTQUALIFIED, MVAFRole.SQL_RO);
 
             SqlParameter[] param = null;
             IDataReader idr = null;
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
             try
             {
                 param = new SqlParameter[1];
-                param[0] = new SqlParameter("@param1", GetM_Product_Category_ID());
+                param[0] = new SqlParameter("@param1", GetVAM_ProductCategory_ID());
                 idr = DB.ExecuteReader(sql.ToString(), param, null);
                 dt.Load(idr);
                 if (idr != null)

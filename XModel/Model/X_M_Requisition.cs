@@ -11,36 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_Requisition
+/** Generated Model for VAM_Requisition
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_Requisition : PO
+public class X_VAM_Requisition : PO
 {
-public X_M_Requisition (Context ctx, int M_Requisition_ID, Trx trxName) : base (ctx, M_Requisition_ID, trxName)
+public X_VAM_Requisition (Context ctx, int VAM_Requisition_ID, Trx trxName) : base (ctx, VAM_Requisition_ID, trxName)
 {
-/** if (M_Requisition_ID == 0)
-{
-SetVAF_UserContact_ID (0);
-SetVAB_DocTypes_ID (0);
-SetDateDoc (DateTime.Now);	// @#Date@
-SetDateRequired (DateTime.Now);
-SetDocAction (null);	// CO
-SetDocStatus (null);	// DR
-SetDocumentNo (null);
-SetIsApproved (false);
-SetM_PriceList_ID (0);
-SetM_Requisition_ID (0);
-SetM_Warehouse_ID (0);
-SetPosted (false);
-SetPriorityRule (null);	// 5
-SetProcessed (false);	// N
-SetTotalLines (0.0);
-}
- */
-}
-public X_M_Requisition (Ctx ctx, int M_Requisition_ID, Trx trxName) : base (ctx, M_Requisition_ID, trxName)
-{
-/** if (M_Requisition_ID == 0)
+/** if (VAM_Requisition_ID == 0)
 {
 SetVAF_UserContact_ID (0);
 SetVAB_DocTypes_ID (0);
@@ -50,9 +28,31 @@ SetDocAction (null);	// CO
 SetDocStatus (null);	// DR
 SetDocumentNo (null);
 SetIsApproved (false);
-SetM_PriceList_ID (0);
-SetM_Requisition_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_Requisition_ID (0);
+SetVAM_Warehouse_ID (0);
+SetPosted (false);
+SetPriorityRule (null);	// 5
+SetProcessed (false);	// N
+SetTotalLines (0.0);
+}
+ */
+}
+public X_VAM_Requisition (Ctx ctx, int VAM_Requisition_ID, Trx trxName) : base (ctx, VAM_Requisition_ID, trxName)
+{
+/** if (VAM_Requisition_ID == 0)
+{
+SetVAF_UserContact_ID (0);
+SetVAB_DocTypes_ID (0);
+SetDateDoc (DateTime.Now);	// @#Date@
+SetDateRequired (DateTime.Now);
+SetDocAction (null);	// CO
+SetDocStatus (null);	// DR
+SetDocumentNo (null);
+SetIsApproved (false);
+SetVAM_PriceList_ID (0);
+SetVAM_Requisition_ID (0);
+SetVAM_Warehouse_ID (0);
 SetPosted (false);
 SetPriorityRule (null);	// 5
 SetProcessed (false);	// N
@@ -65,7 +65,7 @@ SetTotalLines (0.0);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Requisition (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Requisition (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -73,7 +73,7 @@ public X_M_Requisition (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Requisition (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_Requisition (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -81,13 +81,13 @@ public X_M_Requisition (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNam
 @param rs result set 
 @param trxName transaction
 */
-public X_M_Requisition (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_Requisition (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_Requisition()
+static X_VAM_Requisition()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -100,8 +100,8 @@ public static long updatedMS = 1280389064332L;
 public static int Table_ID;
  // =702;
 
-/** TableName=M_Requisition */
-public static String Table_Name="M_Requisition";
+/** TableName=VAM_Requisition */
+public static String Table_Name="VAM_Requisition";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -135,7 +135,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_Requisition[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_Requisition[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set User/Contact.
@@ -383,47 +383,47 @@ if (oo != null)
 return false;
 }
 /** Set Price List.
-@param M_PriceList_ID Unique identifier of a Price List */
-public void SetM_PriceList_ID (int M_PriceList_ID)
+@param VAM_PriceList_ID Unique identifier of a Price List */
+public void SetVAM_PriceList_ID (int VAM_PriceList_ID)
 {
-if (M_PriceList_ID < 1) throw new ArgumentException ("M_PriceList_ID is mandatory.");
-Set_Value ("M_PriceList_ID", M_PriceList_ID);
+if (VAM_PriceList_ID < 1) throw new ArgumentException ("VAM_PriceList_ID is mandatory.");
+Set_Value ("VAM_PriceList_ID", VAM_PriceList_ID);
 }
 /** Get Price List.
 @return Unique identifier of a Price List */
-public int GetM_PriceList_ID() 
+public int GetVAM_PriceList_ID() 
 {
-Object ii = Get_Value("M_PriceList_ID");
+Object ii = Get_Value("VAM_PriceList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Requisition.
-@param M_Requisition_ID Material Requisition */
-public void SetM_Requisition_ID (int M_Requisition_ID)
+@param VAM_Requisition_ID Material Requisition */
+public void SetVAM_Requisition_ID (int VAM_Requisition_ID)
 {
-if (M_Requisition_ID < 1) throw new ArgumentException ("M_Requisition_ID is mandatory.");
-Set_ValueNoCheck ("M_Requisition_ID", M_Requisition_ID);
+if (VAM_Requisition_ID < 1) throw new ArgumentException ("VAM_Requisition_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Requisition_ID", VAM_Requisition_ID);
 }
 /** Get Requisition.
 @return Material Requisition */
-public int GetM_Requisition_ID() 
+public int GetVAM_Requisition_ID() 
 {
-Object ii = Get_Value("M_Requisition_ID");
+Object ii = Get_Value("VAM_Requisition_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");
-Set_Value ("M_Warehouse_ID", M_Warehouse_ID);
+if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");
+Set_Value ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

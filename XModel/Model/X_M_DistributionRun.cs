@@ -11,27 +11,27 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DistributionRun
+/** Generated Model for VAM_DistributionRun
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DistributionRun : PO
+public class X_VAM_DistributionRun : PO
 {
-public X_M_DistributionRun (Context ctx, int M_DistributionRun_ID, Trx trxName) : base (ctx, M_DistributionRun_ID, trxName)
+public X_VAM_DistributionRun (Context ctx, int VAM_DistributionRun_ID, Trx trxName) : base (ctx, VAM_DistributionRun_ID, trxName)
 {
-/** if (M_DistributionRun_ID == 0)
+/** if (VAM_DistributionRun_ID == 0)
 {
 SetIsCreateSingleOrder (false);	// N
-SetM_DistributionRun_ID (0);
+SetVAM_DistributionRun_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_DistributionRun (Ctx ctx, int M_DistributionRun_ID, Trx trxName) : base (ctx, M_DistributionRun_ID, trxName)
+public X_VAM_DistributionRun (Ctx ctx, int VAM_DistributionRun_ID, Trx trxName) : base (ctx, VAM_DistributionRun_ID, trxName)
 {
-/** if (M_DistributionRun_ID == 0)
+/** if (VAM_DistributionRun_ID == 0)
 {
 SetIsCreateSingleOrder (false);	// N
-SetM_DistributionRun_ID (0);
+SetVAM_DistributionRun_ID (0);
 SetName (null);
 }
  */
@@ -41,7 +41,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRun (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionRun (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -49,7 +49,7 @@ public X_M_DistributionRun (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRun (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_DistributionRun (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -57,13 +57,13 @@ public X_M_DistributionRun (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DistributionRun (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_DistributionRun (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DistributionRun()
+static X_VAM_DistributionRun()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -76,8 +76,8 @@ public static long updatedMS = 1280389062482L;
 public static int Table_ID;
  // =712;
 
-/** TableName=M_DistributionRun */
-public static String Table_Name="M_DistributionRun";
+/** TableName=VAM_DistributionRun */
+public static String Table_Name="VAM_DistributionRun";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -111,7 +111,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DistributionRun[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_DistributionRun[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -182,17 +182,17 @@ if (oo != null)
 return false;
 }
 /** Set Distribution Run.
-@param M_DistributionRun_ID Distribution Run create Orders to distribute products to a selected list of partners */
-public void SetM_DistributionRun_ID (int M_DistributionRun_ID)
+@param VAM_DistributionRun_ID Distribution Run create Orders to distribute products to a selected list of partners */
+public void SetVAM_DistributionRun_ID (int VAM_DistributionRun_ID)
 {
-if (M_DistributionRun_ID < 1) throw new ArgumentException ("M_DistributionRun_ID is mandatory.");
-Set_ValueNoCheck ("M_DistributionRun_ID", M_DistributionRun_ID);
+if (VAM_DistributionRun_ID < 1) throw new ArgumentException ("VAM_DistributionRun_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DistributionRun_ID", VAM_DistributionRun_ID);
 }
 /** Get Distribution Run.
 @return Distribution Run create Orders to distribute products to a selected list of partners */
-public int GetM_DistributionRun_ID() 
+public int GetVAM_DistributionRun_ID() 
 {
-Object ii = Get_Value("M_DistributionRun_ID");
+Object ii = Get_Value("VAM_DistributionRun_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

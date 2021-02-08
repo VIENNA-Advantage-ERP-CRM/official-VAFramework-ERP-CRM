@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : DoVAB_Order
+ * Class Name     : Doc_Order
  * Purpose        : Post Order Documents.
                     <pre>
                     Table:              VAB_Order (259)
@@ -30,7 +30,7 @@ using VAdvantage.Acct;
 
 namespace VAdvantage.Acct
 {
-    public class DoVAB_Order : Doc
+    public class Doc_Order : Doc
     {
 
         #region
@@ -163,7 +163,7 @@ namespace VAdvantage.Acct
             }
             //
             List<DocLine> list = new List<DocLine>();
-            String sql = "SELECT * FROM M_RequisitionLine rl "
+            String sql = "SELECT * FROM VAM_RequisitionLine rl "
                 + "WHERE EXISTS (SELECT * FROM VAB_Order o "
                     + " INNER JOIN VAB_OrderLine ol ON (o.VAB_Order_ID=ol.VAB_Order_ID) "
                     + "WHERE ol.VAB_OrderLine_ID=rl.VAB_OrderLine_ID"
@@ -363,11 +363,11 @@ namespace VAdvantage.Acct
                         total = Decimal.Add(total, cost);
 
                         //	Account
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         fact.CreateLine(line, expense, GetVAB_Currency_ID(), cost, null);
                     }
                     //	Offset
-                    MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
+                    MVABAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
                     if (offset == null)
                     {
                         _error = "@NotFound@ @CommitmentOffset_Acct@";
@@ -395,11 +395,11 @@ namespace VAdvantage.Acct
                         total = Decimal.Add(total, cost);
 
                         //	Account
-                        MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                        MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                         fact.CreateLine(line, expense, GetVAB_Currency_ID(), null, cost);
                     }
                     //	Offset
-                    MAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
+                    MVABAccount offset = GetAccount(ACCTTYPE_CommitmentOffset, as1);
                     if (offset == null)
                     {
                         _error = "@NotFound@ @CommitmentOffset_Acct@";
@@ -429,11 +429,11 @@ namespace VAdvantage.Acct
             }
 
             StringBuilder sql = new StringBuilder(
-                "UPDATE M_Product_PO po "
+                "UPDATE VAM_Product_PO po "
                 + "SET PriceLastPO = (SELECT currencyConvert(ol.PriceActual,ol.VAB_Currency_ID,po.VAB_Currency_ID,o.DateOrdered,o.VAB_CurrencyType_ID,o.VAF_Client_ID,o.VAF_Org_ID) "
                 + "FROM VAB_Order o, VAB_OrderLine ol "
                 + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID"
-                + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID");
+                + " AND po.VAM_Product_ID=ol.VAM_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID");
             //	AND ROWNUM=1 AND o.VAB_Order_ID=").Append(get_ID()).Append(") ")
             if (DataBase.DB.IsOracle()) //jz
             {
@@ -444,7 +444,7 @@ namespace VAdvantage.Acct
                 sql.Append(" AND o.UPDATED IN (SELECT MAX(o1.UPDATED) "
                         + "FROM VAB_Order o1, VAB_OrderLine ol1 "
                         + "WHERE o1.VAB_Order_ID=ol1.VAB_Order_ID"
-                        + " AND po.M_Product_ID=ol1.M_Product_ID AND po.VAB_BusinessPartner_ID=o1.VAB_BusinessPartner_ID")
+                        + " AND po.VAM_Product_ID=ol1.VAM_Product_ID AND po.VAB_BusinessPartner_ID=o1.VAB_BusinessPartner_ID")
                         .Append("  AND o1.VAB_Order_ID=").Append(Get_ID()).Append(") ");
             }
 
@@ -452,7 +452,7 @@ namespace VAdvantage.Acct
             .Append("WHERE EXISTS (SELECT * "
             + "FROM VAB_Order o, VAB_OrderLine ol "
             + "WHERE o.VAB_Order_ID=ol.VAB_Order_ID"
-            + " AND po.M_Product_ID=ol.M_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID"
+            + " AND po.VAM_Product_ID=ol.VAM_Product_ID AND po.VAB_BusinessPartner_ID=o.VAB_BusinessPartner_ID"
             + " AND o.VAB_Order_ID=").Append(Get_ID()).Append(")");
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
             log.Fine("Updated=" + no);
@@ -477,7 +477,7 @@ namespace VAdvantage.Acct
                     + "WHERE il.VAB_OrderLine_ID=ol.VAB_OrderLine_ID"
                     + " AND il.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")"
                 + " OR EXISTS "
-                    + "(SELECT * FROM M_MatchPO po "
+                    + "(SELECT * FROM VAM_MatchPO po "
                     + "WHERE po.VAB_OrderLine_ID=ol.VAB_OrderLine_ID"
                     + " AND po.VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID + ")";
             IDataReader idr = null;
@@ -572,7 +572,7 @@ namespace VAdvantage.Acct
             Decimal Qty, int VAB_InvoiceLine_ID, Decimal multiplier)
         {
             Fact fact = new Fact(doc, as1, Fact.POST_Commitment);
-            DocLine[] commitments = DoVAB_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
+            DocLine[] commitments = Doc_Order.GetCommitments(doc, Qty, VAB_InvoiceLine_ID);
             Decimal total = Env.ZERO;
             int VAB_Currency_ID = -1;
             for (int i = 0; i < commitments.Length; i++)
@@ -592,11 +592,11 @@ namespace VAdvantage.Acct
                 total = Decimal.Add(total, cost);
 
                 //	Account
-                MAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
+                MVABAccount expense = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
                 fact.CreateLine(line, expense, VAB_Currency_ID, null, cost);
             }
             //	Offset
-            MAccount offset = doc.GetAccount(ACCTTYPE_CommitmentOffset, as1);
+            MVABAccount offset = doc.GetAccount(ACCTTYPE_CommitmentOffset, as1);
             if (offset == null)
             {
                 doc._error = "@NotFound@ @CommitmentOffset_Acct@";

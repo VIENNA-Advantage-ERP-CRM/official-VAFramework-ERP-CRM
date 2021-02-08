@@ -109,11 +109,11 @@ public int GetVAB_SalesRegionState_ID() {Object ii = Get_Value("VAB_SalesRegionS
 public void SetExport_ID (String Export_ID){if (Export_ID != null && Export_ID.Length > 50){log.Warning("Length > 50 - truncated");Export_ID = Export_ID.Substring(0,50);}Set_Value ("Export_ID", Export_ID);}/** Get Export.
 @return Export */
 public String GetExport_ID() {return (String)Get_Value("Export_ID");}/** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID){if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);else
-Set_Value ("M_Product_ID", M_Product_ID);}/** Get Product.
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID){if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);else
+Set_Value ("VAM_Product_ID", VAM_Product_ID);}/** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() {Object ii = Get_Value("M_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Organization.
+public int GetVAM_Product_ID() {Object ii = Get_Value("VAM_Product_ID");if (ii == null) return 0;return Convert.ToInt32(ii);}/** Set Organization.
 @param Org_ID Organizational entity within client */
 public void SetOrg_ID (int Org_ID){if (Org_ID <= 0) Set_Value ("Org_ID", null);else
 Set_Value ("Org_ID", Org_ID);}/** Get Organization.

@@ -180,33 +180,33 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Price List
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
+                  + "SET VAM_PriceList_ID=(SELECT MAX(VAM_PriceList_ID) FROM VAM_PriceList p WHERE p.IsDefault='Y'"
                   + " AND p.VAB_Currency_ID=o.VAB_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAM_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p WHERE p.IsDefault='Y'"
+                  + "SET VAM_PriceList_ID=(SELECT MAX(VAM_PriceList_ID) FROM VAM_PriceList p WHERE p.IsDefault='Y'"
                   + " AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAM_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Default PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
+                  + "SET VAM_PriceList_ID=(SELECT MAX(VAM_PriceList_ID) FROM VAM_PriceList p "
                   + " WHERE p.VAB_Currency_ID=o.VAB_Currency_ID AND p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAM_PriceList_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Currency PriceList=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_PriceList_ID=(SELECT MAX(M_PriceList_ID) FROM M_PriceList p "
+                  + "SET VAM_PriceList_ID=(SELECT MAX(VAM_PriceList_ID) FROM VAM_PriceList p "
                   + " WHERE p.IsSOPriceList=o.IsSOTrx AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAM_PriceList_ID IS NULL AND VAB_Currency_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set PriceList=" + no);
             //
             sql = new StringBuilder("UPDATE I_Order "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No PriceList, ' "
-                  + "WHERE M_PriceList_ID IS NULL"
+                  + "WHERE VAM_PriceList_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -257,17 +257,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Warehouse
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_Warehouse_ID=(SELECT MAX(M_Warehouse_ID) FROM M_Warehouse w"
+                  + "SET VAM_Warehouse_ID=(SELECT MAX(VAM_Warehouse_ID) FROM VAM_Warehouse w"
                   + " WHERE o.VAF_Client_ID=w.VAF_Client_ID AND o.VAF_Org_ID=w.VAF_Org_ID) "
-                  + "WHERE M_Warehouse_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
+                  + "WHERE VAM_Warehouse_ID IS NULL AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());	//	Warehouse for Org
             if (no != 0)
                 log.Fine("Set Warehouse=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_Warehouse_ID=(SELECT M_Warehouse_ID FROM M_Warehouse w"
+                  + "SET VAM_Warehouse_ID=(SELECT VAM_Warehouse_ID FROM VAM_Warehouse w"
                   + " WHERE o.VAF_Client_ID=w.VAF_Client_ID) "
-                  + "WHERE M_Warehouse_ID IS NULL"
-                  + " AND EXISTS (SELECT VAF_Client_ID FROM M_Warehouse w WHERE w.VAF_Client_ID=o.VAF_Client_ID GROUP BY VAF_Client_ID HAVING COUNT(*)=1)"
+                  + "WHERE VAM_Warehouse_ID IS NULL"
+                  + " AND EXISTS (SELECT VAF_Client_ID FROM VAM_Warehouse w WHERE w.VAF_Client_ID=o.VAF_Client_ID GROUP BY VAF_Client_ID HAVING COUNT(*)=1)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -275,7 +275,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             sql = new StringBuilder("UPDATE I_Order "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=No Warehouse, ' "
-                  + "WHERE M_Warehouse_ID IS NULL"
+                  + "WHERE VAM_Warehouse_ID IS NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -413,29 +413,29 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Product
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
+                  + "SET VAM_Product_ID=(SELECT MAX(VAM_Product_ID) FROM VAM_Product p"
                   + " WHERE o.ProductValue=p.Value AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_Product_ID IS NULL AND ProductValue IS NOT NULL"
+                  + "WHERE VAM_Product_ID IS NULL AND ProductValue IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from Value=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
+                  + "SET VAM_Product_ID=(SELECT MAX(VAM_Product_ID) FROM VAM_Product p"
                   + " WHERE o.UPC=p.UPC AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_Product_ID IS NULL AND UPC IS NOT NULL"
+                  + "WHERE VAM_Product_ID IS NULL AND UPC IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product from UPC=" + no);
             sql = new StringBuilder("UPDATE I_Order o "
-                  + "SET M_Product_ID=(SELECT MAX(M_Product_ID) FROM M_Product p"
+                  + "SET VAM_Product_ID=(SELECT MAX(VAM_Product_ID) FROM VAM_Product p"
                   + " WHERE o.SKU=p.SKU AND o.VAF_Client_ID=p.VAF_Client_ID) "
-                  + "WHERE M_Product_ID IS NULL AND SKU IS NOT NULL"
+                  + "WHERE VAM_Product_ID IS NULL AND SKU IS NOT NULL"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Set Product fom SKU=" + no);
             sql = new StringBuilder("UPDATE I_Order "
                   + "SET I_IsImported='E', I_ErrorMsg=" + ts + "||'ERR=Invalid Product, ' "
-                  + "WHERE M_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
+                  + "WHERE VAM_Product_ID IS NULL AND (ProductValue IS NOT NULL OR UPC IS NOT NULL OR SKU IS NOT NULL)"
                   + " AND I_IsImported<>'Y'").Append(clientCheck);
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             if (no != 0)
@@ -666,10 +666,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (imp.GetPaymentRule() != null)
                             order.SetPaymentRule(imp.GetPaymentRule());
                         order.SetVAB_PaymentTerm_ID(imp.GetVAB_PaymentTerm_ID());
-                        order.SetM_PriceList_ID(imp.GetM_PriceList_ID());
-                        order.SetM_Warehouse_ID(imp.GetM_Warehouse_ID());
-                        if (imp.GetM_Shipper_ID() != 0)
-                            order.SetM_Shipper_ID(imp.GetM_Shipper_ID());
+                        order.SetVAM_PriceList_ID(imp.GetVAM_PriceList_ID());
+                        order.SetVAM_Warehouse_ID(imp.GetVAM_Warehouse_ID());
+                        if (imp.GetVAM_ShippingMethod_ID() != 0)
+                            order.SetVAM_ShippingMethod_ID(imp.GetVAM_ShippingMethod_ID());
                         //	SalesRep from Import or the person running the import
                         if (imp.GetSalesRep_ID() != 0)
                             order.SetSalesRep_ID(imp.GetSalesRep_ID());
@@ -712,20 +712,20 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     // gwu: 1712639, added support for UOM conversions
                     bool convertUOM = false;
-                    if (imp.GetM_Product_ID() != 0 && imp.GetVAB_UOM_ID() != 0)
+                    if (imp.GetVAM_Product_ID() != 0 && imp.GetVAB_UOM_ID() != 0)
                     {
-                        line.SetM_Product_ID(imp.GetM_Product_ID(), imp.GetVAB_UOM_ID());
+                        line.SetVAM_Product_ID(imp.GetVAM_Product_ID(), imp.GetVAB_UOM_ID());
                         convertUOM = (line.GetProduct().GetVAB_UOM_ID() != imp.GetVAB_UOM_ID());
                     }
-                    else if (imp.GetM_Product_ID() != 0)
+                    else if (imp.GetVAM_Product_ID() != 0)
                     {
-                        line.SetM_Product_ID(imp.GetM_Product_ID(), true);
+                        line.SetVAM_Product_ID(imp.GetVAM_Product_ID(), true);
                         convertUOM = false;
                     }
 
                     if (convertUOM)
                     {
-                        Decimal? rateQty = MUOMConversion.GetProductRateFrom(GetCtx(), line.GetM_Product_ID(), imp.GetVAB_UOM_ID());
+                        Decimal? rateQty = MUOMConversion.GetProductRateFrom(GetCtx(), line.GetVAM_Product_ID(), imp.GetVAB_UOM_ID());
                         if (rateQty == null)
                         {
                             String msg = Msg.Translate(GetCtx(), "NoProductUOMConversion");

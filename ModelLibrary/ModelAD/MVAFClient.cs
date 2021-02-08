@@ -458,18 +458,18 @@ namespace VAdvantage.Model
             {
                 // check columnname exist in table or not
                 if (Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT count(*) FROM vaf_column WHERE 
-                    vaf_tableview_id = ( SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename LIKE 'M_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
+                    vaf_tableview_id = ( SELECT vaf_tableview_id FROM vaf_tableview WHERE tablename LIKE 'VAM_Inventory' ) AND columnname LIKE 'IsCostCalculated'", null, null)) > 0)
                 {
                     // check module exist or not
                     count = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VAMFG_' AND Isactive = 'Y' "));
 
                     // check how many records in system whose costing not calculated based on client
                     sql = @"SELECT SUM(record) FROM (
-                            SELECT COUNT(*) AS record FROM m_Inventory WHERE VAF_Client_ID = " + client_ID + @" AND IsActive = 'Y'
+                            SELECT COUNT(*) AS record FROM VAM_Inventory WHERE VAF_Client_ID = " + client_ID + @" AND IsActive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL')  AND iscostcalculated = 'N')  OR (docstatus IN ('RE')  AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N'  AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_movement WHERE VAF_Client_ID  = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM VAM_InventoryTransfer WHERE VAF_Client_ID  = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y' 
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
@@ -478,7 +478,7 @@ namespace VAdvantage.Model
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))
                             UNION
-                            SELECT COUNT(*) AS record FROM m_inout  WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
+                            SELECT COUNT(*) AS record FROM VAM_Inv_InOut  WHERE VAF_Client_ID = " + client_ID + @" AND isactive = 'Y'
                             AND ((docstatus IN ('CO' , 'CL') AND iscostcalculated = 'N') OR (docstatus IN ('RE') AND iscostcalculated = 'Y'
                             AND ISREVERSEDCOSTCALCULATED= 'N' AND description LIKE '%{->%'))";
                     if (count > 0)

@@ -19,12 +19,12 @@ namespace VIS.Models
             string[] paramValue = fields.Split(',');
 
             //Assign parameter value
-            int M_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            int M_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
-            int M_AttributeSetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
+            int VAM_Warehouse_ID = Util.GetValueOfInt(paramValue[0].ToString());
+            int VAM_Product_ID = Util.GetValueOfInt(paramValue[1].ToString());
+            int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(paramValue[2].ToString());
             //End Assign parameter value
 
-            return MStorage.GetQtyAvailable(M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID, null);
+            return MStorage.GetQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID, null);
            
         }
     }

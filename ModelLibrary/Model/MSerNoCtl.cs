@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_M_SerNoCtl
+ * Class Used     : X_VAM_CtlSerialNo
  * Chronological Development
  * Veena Pandey     16-June-2009
  ******************************************************/
@@ -18,21 +18,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MSerNoCtl : X_M_SerNoCtl
+    public class MSerNoCtl : X_VAM_CtlSerialNo
     {
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_SerNoCtl_ID">id</param>
+        /// <param name="VAM_CtlSerialNo_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MSerNoCtl(Ctx ctx, int M_SerNoCtl_ID, Trx trxName)
-            : base(ctx, M_SerNoCtl_ID, trxName)
+        public MSerNoCtl(Ctx ctx, int VAM_CtlSerialNo_ID, Trx trxName)
+            : base(ctx, VAM_CtlSerialNo_ID, trxName)
         {
-            if (M_SerNoCtl_ID == 0)
+            if (VAM_CtlSerialNo_ID == 0)
             {
-                //	setM_SerNoCtl_ID (0);
+                //	setVAM_CtlSerialNo_ID (0);
                 SetStartNo(1);
                 SetCurrentNext(1);
                 SetIncrementNo(1);
@@ -92,9 +92,9 @@ namespace VAdvantage.Model
             if (isUseOrgLevel)
             {
                 selectSQL = "SELECT y.CurrentNext, s.CurrentNext, y.prefix, y.suffix "
-                        + "FROM M_SerNoCtl_No y, M_SerNoCtl s "
-                        + "WHERE y.M_SerNoCtl_ID = s.M_SerNoCtl_ID "
-                        + "AND s.M_SerNoCtl_ID = " + GetM_SerNoCtl_ID()
+                        + "FROM VAM_SerialNoCtl_No y, VAM_CtlSerialNo s "
+                        + "WHERE y.VAM_CtlSerialNo_ID = s.VAM_CtlSerialNo_ID "
+                        + "AND s.VAM_CtlSerialNo_ID = " + GetVAM_CtlSerialNo_ID()
                         + " AND y.VAF_Org_ID = @param1"
                         + " AND s.IsActive='Y' "
                         + "ORDER BY s.VAF_Client_ID DESC";
@@ -102,8 +102,8 @@ namespace VAdvantage.Model
             else
             {
                 selectSQL = "SELECT s.CurrentNext "
-                        + "FROM M_SerNoCtl s "
-                        + "WHERE s.M_SerNoCtl_ID = " + GetM_SerNoCtl_ID()
+                        + "FROM VAM_CtlSerialNo s "
+                        + "WHERE s.VAM_CtlSerialNo_ID = " + GetVAM_CtlSerialNo_ID()
                         + " AND s.IsActive='Y' "
                         + "ORDER BY s.VAF_Client_ID DESC";
             }
@@ -147,13 +147,13 @@ namespace VAdvantage.Model
                 if (rs != null && rs.Tables.Count > 0 && rs.Tables[0].Rows.Count > 0)
                 {
                     if (log.IsLoggable(Level.FINE))
-                        log.Fine("M_SerNoCtl_ID=" + GetM_SerNoCtl_ID());
+                        log.Fine("VAM_CtlSerialNo_ID=" + GetVAM_CtlSerialNo_ID());
 
                     // Update current next on Serial No Control.
                     if (isUseOrgLevel)
-                        updateSQL = "UPDATE M_SerNoCtl_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE M_SerNoCtl_ID= " + GetM_SerNoCtl_ID() + " AND VAF_Org_ID=" + docOrg_ID;
+                        updateSQL = "UPDATE VAM_SerialNoCtl_No SET CurrentNext = CurrentNext + " + incrementNo + " WHERE VAM_CtlSerialNo_ID= " + GetVAM_CtlSerialNo_ID() + " AND VAF_Org_ID=" + docOrg_ID;
                     else
-                        updateSQL = "UPDATE M_SerNoCtl SET CurrentNext = CurrentNext + " + incrementNo + " WHERE M_SerNoCtl_ID=" + GetM_SerNoCtl_ID();
+                        updateSQL = "UPDATE VAM_CtlSerialNo SET CurrentNext = CurrentNext + " + incrementNo + " WHERE VAM_CtlSerialNo_ID=" + GetVAM_CtlSerialNo_ID();
 
                     next = int.Parse(rs.Tables[0].Rows[0]["CurrentNext"].ToString());
 
@@ -168,8 +168,8 @@ namespace VAdvantage.Model
                     {   // create Serial no (CurrentNo = StartNo + IncrementNo) for this Organization and return first number (=StartNo)
                         next = startNo;
 
-                        X_M_SerNoCtl_No seqno = new X_M_SerNoCtl_No(po.GetCtx(), 0, null);
-                        seqno.SetM_SerNoCtl_ID(GetM_SerNoCtl_ID());
+                        X_VAM_SerialNoCtl_No seqno = new X_VAM_SerialNoCtl_No(po.GetCtx(), 0, null);
+                        seqno.SetVAM_CtlSerialNo_ID(GetVAM_CtlSerialNo_ID());
                         seqno.SetVAF_Org_ID(docOrg_ID);
                         seqno.SetCurrentNext(startNo + incrementNo);
                         seqno.Save();

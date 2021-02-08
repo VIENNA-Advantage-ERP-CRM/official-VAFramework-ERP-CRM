@@ -707,53 +707,53 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Shipment/Receipt.
-@param M_InOut_ID Material Shipment Document */
-public void SetM_InOut_ID (int M_InOut_ID)
+@param VAM_Inv_InOut_ID Material Shipment Document */
+public void SetVAM_Inv_InOut_ID (int VAM_Inv_InOut_ID)
 {
-if (M_InOut_ID <= 0) Set_Value ("M_InOut_ID", null);
+if (VAM_Inv_InOut_ID <= 0) Set_Value ("VAM_Inv_InOut_ID", null);
 else
-Set_Value ("M_InOut_ID", M_InOut_ID);
+Set_Value ("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
 }
 /** Get Shipment/Receipt.
 @return Material Shipment Document */
-public int GetM_InOut_ID() 
+public int GetVAM_Inv_InOut_ID() 
 {
-Object ii = Get_Value("M_InOut_ID");
+Object ii = Get_Value("VAM_Inv_InOut_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 
-/** M_ProductSpent_ID VAF_Control_Ref_ID=162 */
-public static int M_PRODUCTSPENT_ID_VAF_Control_Ref_ID=162;
+/** VAM_ProductSpent_ID VAF_Control_Ref_ID=162 */
+public static int VAM_ProductSPENT_ID_VAF_Control_Ref_ID=162;
 /** Set Product Used.
-@param M_ProductSpent_ID Product/Resource/Service used in Request */
-public void SetM_ProductSpent_ID (int M_ProductSpent_ID)
+@param VAM_ProductSpent_ID Product/Resource/Service used in Request */
+public void SetVAM_ProductSpent_ID (int VAM_ProductSpent_ID)
 {
-if (M_ProductSpent_ID <= 0) Set_Value ("M_ProductSpent_ID", null);
+if (VAM_ProductSpent_ID <= 0) Set_Value ("VAM_ProductSpent_ID", null);
 else
-Set_Value ("M_ProductSpent_ID", M_ProductSpent_ID);
+Set_Value ("VAM_ProductSpent_ID", VAM_ProductSpent_ID);
 }
 /** Get Product Used.
 @return Product/Resource/Service used in Request */
-public int GetM_ProductSpent_ID() 
+public int GetVAM_ProductSpent_ID() 
 {
-Object ii = Get_Value("M_ProductSpent_ID");
+Object ii = Get_Value("VAM_ProductSpent_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);
 else
-Set_Value ("M_Product_ID", M_Product_ID);
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

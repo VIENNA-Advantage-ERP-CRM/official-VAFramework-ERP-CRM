@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Module Name    : Workflow
  * Purpose        : 
- * Class Used     : X_M_LotCtl
+ * Class Used     : X_VAM_LotControl
  * Chronological Development
  * Veena Pandey     16-June-2009
  ******************************************************/
@@ -17,20 +17,20 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MLotCtl : X_M_LotCtl
+    public class MLotCtl : X_VAM_LotControl
     {
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_LotCtl_ID">id</param>
+        /// <param name="VAM_LotControl_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLotCtl(Ctx ctx, int M_LotCtl_ID, Trx trxName)
-            : base(ctx, M_LotCtl_ID, trxName)
+        public MLotCtl(Ctx ctx, int VAM_LotControl_ID, Trx trxName)
+            : base(ctx, VAM_LotControl_ID, trxName)
         {
-            if (M_LotCtl_ID == 0)
+            if (VAM_LotControl_ID == 0)
             {
-                //	setM_LotCtl_ID (0);
+                //	setVAM_LotControl_ID (0);
                 SetStartNo(1);
                 SetCurrentNext(1);
                 SetIncrementNo(1);
@@ -53,9 +53,9 @@ namespace VAdvantage.Model
         /// Create new Lot.
         /// Increments Current Next and Commits
         /// </summary>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <returns>saved Lot</returns>
-        public MLot CreateLot(int M_Product_ID)
+        public MLot CreateLot(int VAM_Product_ID)
         {
             StringBuilder name = new StringBuilder();
             if (GetPrefix() != null)
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
             SetCurrentNext(no);
             Save();
             //
-            MLot retValue = new MLot(this, M_Product_ID, name.ToString());
+            MLot retValue = new MLot(this, VAM_Product_ID, name.ToString());
             retValue.Save();
             return retValue;
         }

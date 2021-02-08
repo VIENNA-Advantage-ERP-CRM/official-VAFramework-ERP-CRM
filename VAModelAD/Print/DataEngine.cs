@@ -457,14 +457,14 @@ namespace VAdvantage.Print
                         }
                         else if (VAF_Control_Ref_ID == DisplayType.Locator)
                         {
-                            table = "M_Locator";
-                            key = "M_Locator_ID";
+                            table = "VAM_Locator";
+                            key = "VAM_Locator_ID";
                             display = "Value";
                         }
                         else if (VAF_Control_Ref_ID == DisplayType.PAttribute)
                         {
-                            table = "M_AttributeSetInstance";
-                            key = "M_AttributeSetInstance_ID";
+                            table = "VAM_PFeature_SetInstance";
+                            key = "VAM_PFeature_SetInstance_ID";
                             display = "Description";
                             //if (CLogMgt.IsLevelFinest())
                             //jz display += "||'{'||" + _synonym + "._AttributeSetInstance_ID||'}'";

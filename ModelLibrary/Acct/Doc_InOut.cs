@@ -3,7 +3,7 @@
  * Class Name     : Doc_InOut
  * Purpose        : Post Shipment/Receipt Documents.
  *                  <pre>
- *                  Table:              M_InOut (319)
+ *                  Table:              VAM_Inv_InOut (319)
  *                  Document Types:     MMS, MMR
  *                  </pre>
  * Class Used     : Doc
@@ -104,15 +104,15 @@ namespace VAdvantage.Acct
             {
                 MInOutLine line = lines[i];
                 if (line.IsDescription()
-                    || line.GetM_Product_ID() == 0
+                    || line.GetVAM_Product_ID() == 0
                     || Env.Signum(line.GetMovementQty()) == 0)
                 {
                     log.Finer("Ignored: " + line);
                     continue;
                 }
                 //	PO Matching
-                if (_MatchRequirementR.Equals(X_M_InOut.MATCHREQUIREMENTR_PurchaseOrder)
-                    || _MatchRequirementR.Equals(X_M_InOut.MATCHREQUIREMENTR_PurchaseOrderAndInvoice))
+                if (_MatchRequirementR.Equals(X_VAM_Inv_InOut.MATCHREQUIREMENTR_PurchaseOrder)
+                    || _MatchRequirementR.Equals(X_VAM_Inv_InOut.MATCHREQUIREMENTR_PurchaseOrderAndInvoice))
                 {
                     Decimal poDiff = line.GetMatchPODifference();
                     if (Env.Signum(poDiff) != 0)
@@ -126,8 +126,8 @@ namespace VAdvantage.Acct
                     }
                 }
                 //	Inv Matching
-                else if (_MatchRequirementR.Equals(X_M_InOut.MATCHREQUIREMENTR_Invoice)
-                    || _MatchRequirementR.Equals(X_M_InOut.MATCHREQUIREMENTR_PurchaseOrderAndInvoice))
+                else if (_MatchRequirementR.Equals(X_VAM_Inv_InOut.MATCHREQUIREMENTR_Invoice)
+                    || _MatchRequirementR.Equals(X_VAM_Inv_InOut.MATCHREQUIREMENTR_PurchaseOrderAndInvoice))
                 {
                     Decimal invDiff = line.GetMatchInvDifference();
                     if (Env.Signum(invDiff) != 0)
@@ -203,12 +203,12 @@ namespace VAdvantage.Acct
                     if (sLine.GetA_Asset_ID() > 0)
                     {
                         costs = Util.GetValueOfDecimal(DB.ExecuteScalar(@"SELECT cost.CUrrentcostPrice
-                                                                            FROM m_cost cost
+                                                                            FROM VAM_ProductCost cost
                                                                             INNER JOIN VAA_Asset ass
                                                                             ON(ass.VAA_Asset_ID=cost.VAA_Asset_ID)
-                                                                            INNER JOIN M_InOutLine IOL
+                                                                            INNER JOIN VAM_Inv_InOutLine IOL
                                                                             ON(IOL.VAA_Asset_ID       =ass.VAA_Asset_ID)
-                                                                            WHERE IOL.M_InOutLine_ID=" + sLine.GetM_InOutLine_ID() + @"
+                                                                            WHERE IOL.VAM_Inv_InOutLine_ID=" + sLine.GetVAM_Inv_InOutLine_ID() + @"
                                                                               ORDER By cost.created desc"));
                         // Change if Cost not found against Asset then get Product Cost
                         if (Env.Signum(costs) == 0)	//	zero costs OK
@@ -248,8 +248,8 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        dr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        dr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
+                        dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
+                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         dr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
@@ -263,8 +263,8 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        cr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        cr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    // from Loc
+                        cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
+                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    // from Loc
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     else // Reverse accounting entries for returns
@@ -279,8 +279,8 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        cr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        cr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    //  from Loc
+                        cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
+                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         cr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
@@ -295,17 +295,17 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        dr.SetM_Locator_ID(line.GetM_Locator_ID());
-                        dr.SetLocationFromLocator(line.GetM_Locator_ID(), true);    // from Loc
+                        dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
+                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    // from Loc
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     //
-                    if (line.GetM_Product_ID() != 0)
+                    if (line.GetVAM_Product_ID() != 0)
                     {
                         if (!IsPosted())
                         {
                             MCostDetail.CreateShipment(as1, line.GetVAF_Org_ID(),
-                                line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                                line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                                 line.Get_ID(), 0,
                                 costs, IsReturnTrx() ? Decimal.Negate(line.GetQty().Value) : line.GetQty().Value,
                                 line.GetDescription(), true, GetTrx(), GetRectifyingProcess());
@@ -332,7 +332,7 @@ namespace VAdvantage.Acct
                     //Special Check to restic Price varience posting in case of
                     //AvarageInvoice Selected on product Category.Then Neglact the AverageInvoice Cost
                     MProductCategoryAcct pca = MProductCategoryAcct.Get(product.GetCtx(),
-                product.GetM_Product_Category_ID(), as1.GetVAB_AccountBook_ID(), null);
+                product.GetVAM_ProductCategory_ID(), as1.GetVAB_AccountBook_ID(), null);
                     try
                     {
                         if (as1.IsNotPostPOVariance() && line.GetVAB_OrderLine_ID() > 0)
@@ -368,7 +368,7 @@ namespace VAdvantage.Acct
                         return null;
                     }
                     //  Inventory/Asset			DR
-                    MAccount assets = line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1);
+                    MVABAccount assets = line.GetAccount(ProductCost.ACCTTYPE_P_Asset, as1);
                     if (product.IsService())
                         assets = line.GetAccount(ProductCost.ACCTTYPE_P_Expense, as1);
 
@@ -383,9 +383,9 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        dr.SetM_Locator_ID(line.GetM_Locator_ID());
+                        dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
-                        dr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   // to Loc
+                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				CR
                         cr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
@@ -396,9 +396,9 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        cr.SetM_Locator_ID(line.GetM_Locator_ID());
+                        cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
-                        cr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   //  to Loc
+                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
                     }
                     else // reverse accounting entries for returns
@@ -412,9 +412,9 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        cr.SetM_Locator_ID(line.GetM_Locator_ID());
+                        cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
-                        cr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   // to Loc
+                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				DR
                         dr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
@@ -425,9 +425,9 @@ namespace VAdvantage.Acct
                             log.Log(Level.WARNING, _error);
                             return null;
                         }
-                        dr.SetM_Locator_ID(line.GetM_Locator_ID());
+                        dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
-                        dr.SetLocationFromLocator(line.GetM_Locator_ID(), false);   //  to Loc
+                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                     }
@@ -456,23 +456,23 @@ namespace VAdvantage.Acct
         /// <param name="VAB_AccountBook_ID">accounting schema</param>
         private void UpdateProductInfo(int VAB_AccountBook_ID)
         {
-            log.Fine("M_InOut_ID=" + Get_ID());
+            log.Fine("VAM_Inv_InOut_ID=" + Get_ID());
             //	Old Model
             StringBuilder sql = new StringBuilder(
-                "UPDATE M_Product_Costing pc "
+                "UPDATE VAM_ProductCosting pc "
                 + "SET (CostAverageCumQty, CostAverageCumAmt)="
                 + "(SELECT CostAverageCumQty - SUM(il.MovementQty),"
                 + " CostAverageCumAmt - SUM(il.MovementQty*CurrentCostPrice) "
-                + "FROM M_InOutLine il "
-                + "WHERE pc.M_Product_ID=il.M_Product_ID"
-                + " AND il.M_InOut_ID=").Append(Get_ID()).Append(") ")
+                + "FROM VAM_Inv_InOutLine il "
+                + "WHERE pc.VAM_Product_ID=il.VAM_Product_ID"
+                + " AND il.VAM_Inv_InOut_ID=").Append(Get_ID()).Append(") ")
                 .Append("WHERE EXISTS (SELECT * "
-                + "FROM M_InOutLine il "
-                + "WHERE pc.M_Product_ID=il.M_Product_ID"
-                + " AND il.M_InOut_ID=").Append(Get_ID()).Append(")");
+                + "FROM VAM_Inv_InOutLine il "
+                + "WHERE pc.VAM_Product_ID=il.VAM_Product_ID"
+                + " AND il.VAM_Inv_InOut_ID=").Append(Get_ID()).Append(")");
 
             int no = DataBase.DB.ExecuteQuery(sql.ToString(), null, GetTrx());
-            log.Fine("M_Product_Costing - Updated=" + no);
+            log.Fine("VAM_ProductCosting - Updated=" + no);
             //
         }
     }

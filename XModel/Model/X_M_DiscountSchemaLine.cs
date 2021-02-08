@@ -11,44 +11,14 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_DiscountSchemaLine
+/** Generated Model for VAM_PriceDiscount
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_DiscountSchemaLine : PO
+public class X_VAM_PriceDiscount : PO
 {
-public X_M_DiscountSchemaLine (Context ctx, int M_DiscountSchemaLine_ID, Trx trxName) : base (ctx, M_DiscountSchemaLine_ID, trxName)
+public X_VAM_PriceDiscount (Context ctx, int VAM_PriceDiscount_ID, Trx trxName) : base (ctx, VAM_PriceDiscount_ID, trxName)
 {
-/** if (M_DiscountSchemaLine_ID == 0)
-{
-SetVAB_CurrencyType_ID (0);
-SetConversionDate (DateTime.Now);	// @#Date@
-SetLimit_AddAmt (0.0);
-SetLimit_Base (null);	// X
-SetLimit_Discount (0.0);
-SetLimit_MaxAmt (0.0);
-SetLimit_MinAmt (0.0);
-SetLimit_Rounding (null);	// C
-SetList_AddAmt (0.0);
-SetList_Base (null);	// L
-SetList_Discount (0.0);
-SetList_MaxAmt (0.0);
-SetList_MinAmt (0.0);
-SetList_Rounding (null);	// C
-SetM_DiscountSchemaLine_ID (0);
-SetM_DiscountSchema_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_DiscountSchemaLine WHERE M_DiscountSchema_ID=@M_DiscountSchema_ID@
-SetStd_AddAmt (0.0);
-SetStd_Base (null);	// S
-SetStd_Discount (0.0);
-SetStd_MaxAmt (0.0);
-SetStd_MinAmt (0.0);
-SetStd_Rounding (null);	// C
-}
- */
-}
-public X_M_DiscountSchemaLine (Ctx ctx, int M_DiscountSchemaLine_ID, Trx trxName) : base (ctx, M_DiscountSchemaLine_ID, trxName)
-{
-/** if (M_DiscountSchemaLine_ID == 0)
+/** if (VAM_PriceDiscount_ID == 0)
 {
 SetVAB_CurrencyType_ID (0);
 SetConversionDate (DateTime.Now);	// @#Date@
@@ -64,9 +34,39 @@ SetList_Discount (0.0);
 SetList_MaxAmt (0.0);
 SetList_MinAmt (0.0);
 SetList_Rounding (null);	// C
-SetM_DiscountSchemaLine_ID (0);
-SetM_DiscountSchema_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_DiscountSchemaLine WHERE M_DiscountSchema_ID=@M_DiscountSchema_ID@
+SetVAM_PriceDiscount_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PriceDiscount WHERE VAM_DiscountCalculation_ID=@VAM_DiscountCalculation_ID@
+SetStd_AddAmt (0.0);
+SetStd_Base (null);	// S
+SetStd_Discount (0.0);
+SetStd_MaxAmt (0.0);
+SetStd_MinAmt (0.0);
+SetStd_Rounding (null);	// C
+}
+ */
+}
+public X_VAM_PriceDiscount (Ctx ctx, int VAM_PriceDiscount_ID, Trx trxName) : base (ctx, VAM_PriceDiscount_ID, trxName)
+{
+/** if (VAM_PriceDiscount_ID == 0)
+{
+SetVAB_CurrencyType_ID (0);
+SetConversionDate (DateTime.Now);	// @#Date@
+SetLimit_AddAmt (0.0);
+SetLimit_Base (null);	// X
+SetLimit_Discount (0.0);
+SetLimit_MaxAmt (0.0);
+SetLimit_MinAmt (0.0);
+SetLimit_Rounding (null);	// C
+SetList_AddAmt (0.0);
+SetList_Base (null);	// L
+SetList_Discount (0.0);
+SetList_MaxAmt (0.0);
+SetList_MinAmt (0.0);
+SetList_Rounding (null);	// C
+SetVAM_PriceDiscount_ID (0);
+SetVAM_DiscountCalculation_ID (0);
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PriceDiscount WHERE VAM_DiscountCalculation_ID=@VAM_DiscountCalculation_ID@
 SetStd_AddAmt (0.0);
 SetStd_Base (null);	// S
 SetStd_Discount (0.0);
@@ -81,7 +81,7 @@ SetStd_Rounding (null);	// C
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaLine (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceDiscount (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -89,7 +89,7 @@ public X_M_DiscountSchemaLine (Context ctx, DataRow rs, Trx trxName) : base(ctx,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PriceDiscount (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -97,13 +97,13 @@ public X_M_DiscountSchemaLine (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs,
 @param rs result set 
 @param trxName transaction
 */
-public X_M_DiscountSchemaLine (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PriceDiscount (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_DiscountSchemaLine()
+static X_VAM_PriceDiscount()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -116,8 +116,8 @@ public static long updatedMS = 1280389062373L;
 public static int Table_ID;
  // =477;
 
-/** TableName=M_DiscountSchemaLine */
-public static String Table_Name="M_DiscountSchemaLine";
+/** TableName=VAM_PriceDiscount */
+public static String Table_Name="VAM_PriceDiscount";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -151,7 +151,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_DiscountSchemaLine[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PriceDiscount[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Business Partner.
@@ -540,64 +540,64 @@ public String GetList_Rounding()
 return (String)Get_Value("List_Rounding");
 }
 /** Set Discount Pricelist.
-@param M_DiscountSchemaLine_ID Line of the pricelist trade discount schema */
-public void SetM_DiscountSchemaLine_ID (int M_DiscountSchemaLine_ID)
+@param VAM_PriceDiscount_ID Line of the pricelist trade discount schema */
+public void SetVAM_PriceDiscount_ID (int VAM_PriceDiscount_ID)
 {
-if (M_DiscountSchemaLine_ID < 1) throw new ArgumentException ("M_DiscountSchemaLine_ID is mandatory.");
-Set_ValueNoCheck ("M_DiscountSchemaLine_ID", M_DiscountSchemaLine_ID);
+if (VAM_PriceDiscount_ID < 1) throw new ArgumentException ("VAM_PriceDiscount_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PriceDiscount_ID", VAM_PriceDiscount_ID);
 }
 /** Get Discount Pricelist.
 @return Line of the pricelist trade discount schema */
-public int GetM_DiscountSchemaLine_ID() 
+public int GetVAM_PriceDiscount_ID() 
 {
-Object ii = Get_Value("M_DiscountSchemaLine_ID");
+Object ii = Get_Value("VAM_PriceDiscount_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Discount Schema.
-@param M_DiscountSchema_ID Schema to calculate price lists or the trade discount percentage */
-public void SetM_DiscountSchema_ID (int M_DiscountSchema_ID)
+@param VAM_DiscountCalculation_ID Schema to calculate price lists or the trade discount percentage */
+public void SetVAM_DiscountCalculation_ID (int VAM_DiscountCalculation_ID)
 {
-if (M_DiscountSchema_ID < 1) throw new ArgumentException ("M_DiscountSchema_ID is mandatory.");
-Set_ValueNoCheck ("M_DiscountSchema_ID", M_DiscountSchema_ID);
+if (VAM_DiscountCalculation_ID < 1) throw new ArgumentException ("VAM_DiscountCalculation_ID is mandatory.");
+Set_ValueNoCheck ("VAM_DiscountCalculation_ID", VAM_DiscountCalculation_ID);
 }
 /** Get Discount Schema.
 @return Schema to calculate price lists or the trade discount percentage */
-public int GetM_DiscountSchema_ID() 
+public int GetVAM_DiscountCalculation_ID() 
 {
-Object ii = Get_Value("M_DiscountSchema_ID");
+Object ii = Get_Value("VAM_DiscountCalculation_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product Category.
-@param M_Product_Category_ID Category of a Product */
-public void SetM_Product_Category_ID (int M_Product_Category_ID)
+@param VAM_ProductCategory_ID Category of a Product */
+public void SetVAM_ProductCategory_ID (int VAM_ProductCategory_ID)
 {
-if (M_Product_Category_ID <= 0) Set_Value ("M_Product_Category_ID", null);
+if (VAM_ProductCategory_ID <= 0) Set_Value ("VAM_ProductCategory_ID", null);
 else
-Set_Value ("M_Product_Category_ID", M_Product_Category_ID);
+Set_Value ("VAM_ProductCategory_ID", VAM_ProductCategory_ID);
 }
 /** Get Product Category.
 @return Category of a Product */
-public int GetM_Product_Category_ID() 
+public int GetVAM_ProductCategory_ID() 
 {
-Object ii = Get_Value("M_Product_Category_ID");
+Object ii = Get_Value("VAM_ProductCategory_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID <= 0) Set_Value ("M_Product_ID", null);
+if (VAM_Product_ID <= 0) Set_Value ("VAM_Product_ID", null);
 else
-Set_Value ("M_Product_ID", M_Product_ID);
+Set_Value ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -21,7 +21,7 @@ public X_VAB_BPart_Product (Context ctx, int VAB_BPart_Product_ID, Trx trxName) 
 /** if (VAB_BPart_Product_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetShelfLifeMinDays (0);
 SetShelfLifeMinPct (0);
 }
@@ -32,7 +32,7 @@ public X_VAB_BPart_Product (Ctx ctx, int VAB_BPart_Product_ID, Trx trxName) : ba
 /** if (VAB_BPart_Product_ID == 0)
 {
 SetVAB_BusinessPartner_ID (0);
-SetM_Product_ID (0);
+SetVAM_Product_ID (0);
 SetShelfLifeMinDays (0);
 SetShelfLifeMinPct (0);
 }
@@ -149,17 +149,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Product.
-@param M_Product_ID Product, Service, Item */
-public void SetM_Product_ID (int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+public void SetVAM_Product_ID (int VAM_Product_ID)
 {
-if (M_Product_ID < 1) throw new ArgumentException ("M_Product_ID is mandatory.");
-Set_ValueNoCheck ("M_Product_ID", M_Product_ID);
+if (VAM_Product_ID < 1) throw new ArgumentException ("VAM_Product_ID is mandatory.");
+Set_ValueNoCheck ("VAM_Product_ID", VAM_Product_ID);
 }
 /** Get Product.
 @return Product, Service, Item */
-public int GetM_Product_ID() 
+public int GetVAM_Product_ID() 
 {
-Object ii = Get_Value("M_Product_ID");
+Object ii = Get_Value("VAM_Product_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -167,7 +167,7 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetM_Product_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAM_Product_ID().ToString());
 }
 /** Set Manufacturer.
 @param Manufacturer Manufacturer of the Product */

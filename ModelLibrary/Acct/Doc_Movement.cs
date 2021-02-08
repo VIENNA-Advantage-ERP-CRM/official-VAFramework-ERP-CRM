@@ -3,7 +3,7 @@
  * Class Name     : Doc_Movement
  * Purpose        : Post Invoice Documents.
  *                  <pre>
- *                  Table:              M_Movement (323)
+ *                  Table:              VAM_InventoryTransfer (323)
  *                  Document Types:     MMM
  *                  </pre>
  *                  * Class Used     : Doc
@@ -134,7 +134,7 @@ namespace VAdvantage.Acct
                 {
                     continue;
                 }
-                dr.SetM_Locator_ID(line.GetM_Locator_ID());
+                dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                 dr.SetQty(Decimal.Negate(line.GetQty().Value));	//	outgoing
 
                 //  ** InventoryTo     DR      CR
@@ -145,7 +145,7 @@ namespace VAdvantage.Acct
                 {
                     continue;
                 }
-                cr.SetM_Locator_ID(line.GetM_LocatorTo_ID());
+                cr.SetVAM_Locator_ID(line.GetVAM_LocatorTo_ID());
                 cr.SetQty(line.GetQty());
 
                 //	Only for between-org movements
@@ -153,7 +153,7 @@ namespace VAdvantage.Acct
                 {
                     String costingLevel = as1.GetCostingLevel();
                     MProductCategoryAcct pca = MProductCategoryAcct.Get(GetCtx(),
-                        line.GetProduct().GetM_Product_Category_ID(),
+                        line.GetProduct().GetVAM_ProductCategory_ID(),
                         as1.GetVAB_AccountBook_ID(), GetTrx());
                     if (pca.GetCostingLevel() != null)
                     {
@@ -174,7 +174,7 @@ namespace VAdvantage.Acct
 
                         //	Cost Detail From
                         MCostDetail.CreateMovement(as1, dr.GetVAF_Org_ID(), 	//	locator org
-                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             Decimal.Negate(costs), Decimal.Negate(line.GetQty().Value), true,
                             description + "(|->)", GetTrx(), GetRectifyingProcess());
@@ -182,7 +182,7 @@ namespace VAdvantage.Acct
 
                         //	Cost Detail To
                         MCostDetail.CreateMovement(as1, cr.GetVAF_Org_ID(),	//	locator org 
-                            line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                             line.Get_ID(), 0,
                             costs, line.GetQty().Value, false,
                             description + "(|<-)", GetTrx(), GetRectifyingProcess());

@@ -11,15 +11,15 @@
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_WarehouseTask
+    /** Generated Model for VAM_WarehouseTask
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_WarehouseTask : PO
+    public class X_VAM_WarehouseTask : PO
     {
-        public X_M_WarehouseTask(Context ctx, int M_WarehouseTask_ID, Trx trxName)
-            : base(ctx, M_WarehouseTask_ID, trxName)
+        public X_VAM_WarehouseTask(Context ctx, int VAM_WarehouseTask_ID, Trx trxName)
+            : base(ctx, VAM_WarehouseTask_ID, trxName)
         {
-            /** if (M_WarehouseTask_ID == 0)
+            /** if (VAM_WarehouseTask_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetVAB_UOM_ID (0);
@@ -27,11 +27,11 @@
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
             SetIsApproved (false);	// N
-            SetM_LocatorTo_ID (0);
-            SetM_Locator_ID (0);
-            SetM_Product_ID (0);
-            SetM_WarehouseTask_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_LocatorTo_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_Product_ID (0);
+            SetVAM_WarehouseTask_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetMovementQty (0.0);
             SetQtyDedicated (0.0);	// 0
@@ -41,10 +41,10 @@
             }
              */
         }
-        public X_M_WarehouseTask(Ctx ctx, int M_WarehouseTask_ID, Trx trxName)
-            : base(ctx, M_WarehouseTask_ID, trxName)
+        public X_VAM_WarehouseTask(Ctx ctx, int VAM_WarehouseTask_ID, Trx trxName)
+            : base(ctx, VAM_WarehouseTask_ID, trxName)
         {
-            /** if (M_WarehouseTask_ID == 0)
+            /** if (VAM_WarehouseTask_ID == 0)
             {
             SetVAB_DocTypes_ID (0);
             SetVAB_UOM_ID (0);
@@ -52,11 +52,11 @@
             SetDocStatus (null);	// DR
             SetDocumentNo (null);
             SetIsApproved (false);	// N
-            SetM_LocatorTo_ID (0);
-            SetM_Locator_ID (0);
-            SetM_Product_ID (0);
-            SetM_WarehouseTask_ID (0);
-            SetM_Warehouse_ID (0);
+            SetVAM_LocatorTo_ID (0);
+            SetVAM_Locator_ID (0);
+            SetVAM_Product_ID (0);
+            SetVAM_WarehouseTask_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetMovementDate (DateTime.Now);	// @#Date@
             SetMovementQty (0.0);
             SetQtyDedicated (0.0);	// 0
@@ -71,7 +71,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_WarehouseTask(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_WarehouseTask(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -80,7 +80,7 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_WarehouseTask(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_WarehouseTask(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -89,14 +89,14 @@
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_WarehouseTask(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_WarehouseTask(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_WarehouseTask()
+        static X_VAM_WarehouseTask()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -109,8 +109,8 @@
         public static int Table_ID;
         // =1018;
 
-        /** TableName=M_WarehouseTask */
-        public static String Table_Name = "M_WarehouseTask";
+        /** TableName=VAM_WarehouseTask */
+        public static String Table_Name = "VAM_WarehouseTask";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -144,7 +144,7 @@
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_WarehouseTask[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_WarehouseTask[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 
@@ -465,88 +465,88 @@
             return Convert.ToInt32(ii);
         }
         /** Set Attribute Set Instance.
-        @param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        @param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            if (VAM_PFeature_SetInstance_ID <= 0) Set_Value("VAM_PFeature_SetInstance_ID", null);
             else
-                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+                Set_Value("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
         @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID");
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Shipment/Receipt Line.
-        @param M_InOutLine_ID Line on Shipment or Receipt document */
-        public void SetM_InOutLine_ID(int M_InOutLine_ID)
+        @param VAM_Inv_InOutLine_ID Line on Shipment or Receipt document */
+        public void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            if (M_InOutLine_ID <= 0) Set_ValueNoCheck("M_InOutLine_ID", null);
+            if (VAM_Inv_InOutLine_ID <= 0) Set_ValueNoCheck("VAM_Inv_InOutLine_ID", null);
             else
-                Set_ValueNoCheck("M_InOutLine_ID", M_InOutLine_ID);
+                Set_ValueNoCheck("VAM_Inv_InOutLine_ID", VAM_Inv_InOutLine_ID);
         }
         /** Get Shipment/Receipt Line.
         @return Line on Shipment or Receipt document */
-        public int GetM_InOutLine_ID()
+        public int GetVAM_Inv_InOutLine_ID()
         {
-            Object ii = Get_Value("M_InOutLine_ID");
+            Object ii = Get_Value("VAM_Inv_InOutLine_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** M_LocatorTo_ID VAF_Control_Ref_ID=446 */
-        public static int M_LOCATORTO_ID_VAF_Control_Ref_ID = 446;
+        /** VAM_LocatorTo_ID VAF_Control_Ref_ID=446 */
+        public static int VAM_LocatorTO_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator To.
-        @param M_LocatorTo_ID Location inventory is moved to */
-        public void SetM_LocatorTo_ID(int M_LocatorTo_ID)
+        @param VAM_LocatorTo_ID Location inventory is moved to */
+        public void SetVAM_LocatorTo_ID(int VAM_LocatorTo_ID)
         {
-            if (M_LocatorTo_ID < 1) throw new ArgumentException("M_LocatorTo_ID is mandatory.");
-            Set_Value("M_LocatorTo_ID", M_LocatorTo_ID);
+            if (VAM_LocatorTo_ID < 1) throw new ArgumentException("VAM_LocatorTo_ID is mandatory.");
+            Set_Value("VAM_LocatorTo_ID", VAM_LocatorTo_ID);
         }
         /** Get Locator To.
         @return Location inventory is moved to */
-        public int GetM_LocatorTo_ID()
+        public int GetVAM_LocatorTo_ID()
         {
-            Object ii = Get_Value("M_LocatorTo_ID");
+            Object ii = Get_Value("VAM_LocatorTo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** M_Locator_ID VAF_Control_Ref_ID=446 */
-        public static int M_LOCATOR_ID_VAF_Control_Ref_ID = 446;
+        /** VAM_Locator_ID VAF_Control_Ref_ID=446 */
+        public static int VAM_Locator_ID_VAF_Control_Ref_ID = 446;
         /** Set Locator.
-        @param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+        @param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory.");
-            Set_Value("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory.");
+            Set_Value("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
         @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID");
+            Object ii = Get_Value("VAM_Locator_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
 
-        /** M_Product_ID VAF_Control_Ref_ID=162 */
-        public static int M_PRODUCT_ID_VAF_Control_Ref_ID = 162;
+        /** VAM_Product_ID VAF_Control_Ref_ID=162 */
+        public static int VAM_Product_ID_VAF_Control_Ref_ID = 162;
         /** Set Product.
-        @param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+        @param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory.");
-            Set_Value("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory.");
+            Set_Value("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
         @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID");
+            Object ii = Get_Value("VAM_Product_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
@@ -570,32 +570,32 @@
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse Task.
-        @param M_WarehouseTask_ID A Warehouse Task represents a basic warehouse operation such as putaway, picking or replenishment. */
-        public void SetM_WarehouseTask_ID(int M_WarehouseTask_ID)
+        @param VAM_WarehouseTask_ID A Warehouse Task represents a basic warehouse operation such as putaway, picking or replenishment. */
+        public void SetVAM_WarehouseTask_ID(int VAM_WarehouseTask_ID)
         {
-            if (M_WarehouseTask_ID < 1) throw new ArgumentException("M_WarehouseTask_ID is mandatory.");
-            Set_ValueNoCheck("M_WarehouseTask_ID", M_WarehouseTask_ID);
+            if (VAM_WarehouseTask_ID < 1) throw new ArgumentException("VAM_WarehouseTask_ID is mandatory.");
+            Set_ValueNoCheck("VAM_WarehouseTask_ID", VAM_WarehouseTask_ID);
         }
         /** Get Warehouse Task.
         @return A Warehouse Task represents a basic warehouse operation such as putaway, picking or replenishment. */
-        public int GetM_WarehouseTask_ID()
+        public int GetVAM_WarehouseTask_ID()
         {
-            Object ii = Get_Value("M_WarehouseTask_ID");
+            Object ii = Get_Value("VAM_WarehouseTask_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_Value("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_Value("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

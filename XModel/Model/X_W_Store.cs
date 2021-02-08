@@ -31,8 +31,8 @@ SetIsMenuRegistrations (true);	// Y
 SetIsMenuRequests (true);	// Y
 SetIsMenuRfQs (true);	// Y
 SetIsMenuShipments (true);	// Y
-SetM_PriceList_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_Warehouse_ID (0);
 SetName (null);
 SetSalesRep_ID (0);
 SetURL (null);
@@ -56,8 +56,8 @@ SetIsMenuRegistrations (true);	// Y
 SetIsMenuRequests (true);	// Y
 SetIsMenuRfQs (true);	// Y
 SetIsMenuShipments (true);	// Y
-SetM_PriceList_ID (0);
-SetM_Warehouse_ID (0);
+SetVAM_PriceList_ID (0);
+SetVAM_Warehouse_ID (0);
 SetName (null);
 SetSalesRep_ID (0);
 SetURL (null);
@@ -443,32 +443,32 @@ if (oo != null)
 return false;
 }
 /** Set Price List.
-@param M_PriceList_ID Unique identifier of a Price List */
-public void SetM_PriceList_ID (int M_PriceList_ID)
+@param VAM_PriceList_ID Unique identifier of a Price List */
+public void SetVAM_PriceList_ID (int VAM_PriceList_ID)
 {
-if (M_PriceList_ID < 1) throw new ArgumentException ("M_PriceList_ID is mandatory.");
-Set_Value ("M_PriceList_ID", M_PriceList_ID);
+if (VAM_PriceList_ID < 1) throw new ArgumentException ("VAM_PriceList_ID is mandatory.");
+Set_Value ("VAM_PriceList_ID", VAM_PriceList_ID);
 }
 /** Get Price List.
 @return Unique identifier of a Price List */
-public int GetM_PriceList_ID() 
+public int GetVAM_PriceList_ID() 
 {
-Object ii = Get_Value("M_PriceList_ID");
+Object ii = Get_Value("VAM_PriceList_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Warehouse.
-@param M_Warehouse_ID Storage Warehouse and Service Point */
-public void SetM_Warehouse_ID (int M_Warehouse_ID)
+@param VAM_Warehouse_ID Storage Warehouse and Service Point */
+public void SetVAM_Warehouse_ID (int VAM_Warehouse_ID)
 {
-if (M_Warehouse_ID < 1) throw new ArgumentException ("M_Warehouse_ID is mandatory.");
-Set_Value ("M_Warehouse_ID", M_Warehouse_ID);
+if (VAM_Warehouse_ID < 1) throw new ArgumentException ("VAM_Warehouse_ID is mandatory.");
+Set_Value ("VAM_Warehouse_ID", VAM_Warehouse_ID);
 }
 /** Get Warehouse.
 @return Storage Warehouse and Service Point */
-public int GetM_Warehouse_ID() 
+public int GetVAM_Warehouse_ID() 
 {
-Object ii = Get_Value("M_Warehouse_ID");
+Object ii = Get_Value("VAM_Warehouse_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

@@ -44,8 +44,8 @@ namespace VIS.Models
             }
             //Issue ID= SI_0468 Reported by Ankita Work Done by Manjot 
             //To get the actual value from the right field
-            Sql = "SELECT PriceList, PriceStd, PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM VAB_Project c WHERE c.VAB_Project_ID = "
-                + projID + ")  AND M_Product_ID=" + ProductID;
+            Sql = "SELECT PriceList, PriceStd, PriceLimit FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID = (SELECT c.VAM_PriceListVersion_ID FROM VAB_Project c WHERE c.VAB_Project_ID = "
+                + projID + ")  AND VAM_Product_ID=" + ProductID;
             DataSet ds = DB.ExecuteDataset(Sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {
@@ -73,8 +73,8 @@ namespace VIS.Models
                 projID = id;
             }
 
-            Sql = "SELECT PriceLimit FROM M_ProductPrice WHERE M_PriceList_Version_ID = (SELECT c.M_PriceList_Version_ID FROM  VAB_Project c WHERE c.VAB_Project_ID = "
-                + projID + ")  AND M_Product_ID=" + ProductID;
+            Sql = "SELECT PriceLimit FROM VAM_ProductPrice WHERE VAM_PriceListVersion_ID = (SELECT c.VAM_PriceListVersion_ID FROM  VAB_Project c WHERE c.VAB_Project_ID = "
+                + projID + ")  AND VAM_Product_ID=" + ProductID;
             Decimal PriceLimit = Util.GetValueOfDecimal(DB.ExecuteScalar(Sql, null, null));
             return PriceLimit;
         }

@@ -235,8 +235,8 @@ namespace VIS.Helpers
                                                " (SELECT o.Name FROM VAF_Org o WHERE o.VAF_Org_ID=l.VAF_Org_ID) as OrgName," +
                                                " l.VAF_Client_ID," +
                                                " (SELECT c.Name FROM VAF_Client c WHERE c.VAF_Client_ID=l.VAF_Client_ID) as ClientName," +
-                                               " l.M_Warehouse_ID," +
-                                               " (SELECT m.Name FROM M_Warehouse m WHERE m.M_Warehouse_Id = l.M_Warehouse_ID) as WarehouseName" +
+                                               " l.VAM_Warehouse_ID," +
+                                               " (SELECT m.Name FROM VAM_Warehouse m WHERE m.VAM_Warehouse_Id = l.VAM_Warehouse_ID) as WarehouseName" +
                                                " FROM VAF_LoginSetting l WHERE l.IsActive = 'Y' AND l.VAF_UserContact_ID=" + VAF_UserContact_ID);
                     if (drLogin.Read())
                     {
@@ -569,7 +569,7 @@ namespace VIS.Helpers
         {
             List<KeyNamePair> list = new List<KeyNamePair>();
 
-            String sql = "SELECT M_Warehouse_ID, Name FROM M_Warehouse "
+            String sql = "SELECT VAM_Warehouse_ID, Name FROM VAM_Warehouse "
                 + "WHERE VAF_Org_ID=@p1 AND IsActive='Y' "
                 + "ORDER BY Name";
             IDataReader dr = null;
@@ -627,8 +627,8 @@ namespace VIS.Helpers
             ctx.SetContext("#VAF_Org_ID", model.Login2Model.Org);
             ctx.SetContext("#VAF_Org_Name", model.Login2Model.OrgName);
 
-            ctx.SetContext("#M_Warehouse_ID", model.Login2Model.Warehouse);
-            ctx.SetContext("#M_Warehouse_Name", model.Login2Model.WarehouseName);
+            ctx.SetContext("#VAM_Warehouse_ID", model.Login2Model.Warehouse);
+            ctx.SetContext("#VAM_Warehouse_Name", model.Login2Model.WarehouseName);
             ctx.SetContext("#Date", model.Login2Model.Date.ToString());
             ctx.SetContext("#VAF_AlterLogBatch", "");
 
@@ -677,8 +677,8 @@ namespace VIS.Helpers
             ctx.SetContext("#VAF_Org_ID", model.Login2Model.Org);
             ctx.SetContext("#VAF_Org_Name", model.Login2Model.OrgName);
 
-            ctx.SetContext("#M_Warehouse_ID", model.Login2Model.Warehouse);
-            ctx.SetContext("#M_Warehouse_Name", model.Login2Model.WarehouseName);
+            ctx.SetContext("#VAM_Warehouse_ID", model.Login2Model.Warehouse);
+            ctx.SetContext("#VAM_Warehouse_Name", model.Login2Model.WarehouseName);
             //ctx.SetContext("#Date", model.Login2Model.Date.ToString());
             return ctx;
         }
@@ -692,7 +692,7 @@ namespace VIS.Helpers
                 if (id > 0)
                 {
                     string sql = "INSERT INTO VAF_LoginSetting " +
-                                 "(VAF_Client_ID,VAF_LoginSetting_ID,VAF_Org_ID,VAF_Role_ID,VAF_UserContact_ID,Created,CreatedBy,IsActive,M_WareHouse_ID,Updated,UpdatedBy) " +
+                                 "(VAF_Client_ID,VAF_LoginSetting_ID,VAF_Org_ID,VAF_Role_ID,VAF_UserContact_ID,Created,CreatedBy,IsActive,VAM_Warehouse_ID,Updated,UpdatedBy) " +
                           " VALUES (" + model.Login2Model.Client + "," + id + "," + model.Login2Model.Org + "," + model.Login2Model.Role + "," + model.Login1Model.VAF_UserContact_ID + ",sysdate," + model.Login1Model.VAF_UserContact_ID + ",'Y',";
                     if (!String.IsNullOrEmpty(model.Login2Model.Warehouse) && model.Login2Model.Warehouse != "-1")
                     {

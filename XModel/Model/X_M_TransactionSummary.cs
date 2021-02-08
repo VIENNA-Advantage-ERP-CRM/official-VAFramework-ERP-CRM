@@ -9,24 +9,24 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for M_TransactionSummary
+    using System.Data;/** Generated Model for VAM_Inv_TrxSummary
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_TransactionSummary : PO
+    public class X_VAM_Inv_TrxSummary : PO
     {
-        public X_M_TransactionSummary(Context ctx, int M_TransactionSummary_ID, Trx trxName)
-            : base(ctx, M_TransactionSummary_ID, trxName)
-        {/** if (M_TransactionSummary_ID == 0){SetClosingStock (0.0);SetM_AttributeSetInstance_ID (0);SetM_Locator_ID (0);SetM_Product_ID (0);SetM_TransactionSummary_ID (0);SetMovementDate (DateTime.Now);SetOpeningStock (0.0);} */
+        public X_VAM_Inv_TrxSummary(Context ctx, int VAM_Inv_TrxSummary_ID, Trx trxName)
+            : base(ctx, VAM_Inv_TrxSummary_ID, trxName)
+        {/** if (VAM_Inv_TrxSummary_ID == 0){SetClosingStock (0.0);SetVAM_PFeature_SetInstance_ID (0);SetVAM_Locator_ID (0);SetVAM_Product_ID (0);SetVAM_Inv_TrxSummary_ID (0);SetMovementDate (DateTime.Now);SetOpeningStock (0.0);} */
         }
-        public X_M_TransactionSummary(Ctx ctx, int M_TransactionSummary_ID, Trx trxName)
-            : base(ctx, M_TransactionSummary_ID, trxName)
-        {/** if (M_TransactionSummary_ID == 0){SetClosingStock (0.0);SetM_AttributeSetInstance_ID (0);SetM_Locator_ID (0);SetM_Product_ID (0);SetM_TransactionSummary_ID (0);SetMovementDate (DateTime.Now);SetOpeningStock (0.0);} */
+        public X_VAM_Inv_TrxSummary(Ctx ctx, int VAM_Inv_TrxSummary_ID, Trx trxName)
+            : base(ctx, VAM_Inv_TrxSummary_ID, trxName)
+        {/** if (VAM_Inv_TrxSummary_ID == 0){SetClosingStock (0.0);SetVAM_PFeature_SetInstance_ID (0);SetVAM_Locator_ID (0);SetVAM_Product_ID (0);SetVAM_Inv_TrxSummary_ID (0);SetMovementDate (DateTime.Now);SetOpeningStock (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_TransactionSummary(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_TrxSummary(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_TransactionSummary(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Inv_TrxSummary(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -44,14 +44,14 @@ namespace VAdvantage.Model
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_TransactionSummary(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Inv_TrxSummary(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_M_TransactionSummary()
+        static X_VAM_Inv_TrxSummary()
         {
             Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name);
         }
@@ -61,8 +61,8 @@ namespace VAdvantage.Model
         public static long updatedMS = 1477657048065L;
         /** VAF_TableView_ID=1000498 */
         public static int Table_ID; // =1000498;
-        /** TableName=M_TransactionSummary */
-        public static String Table_Name = "M_TransactionSummary";
+        /** TableName=VAM_Inv_TrxSummary */
+        public static String Table_Name = "VAM_Inv_TrxSummary";
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 3 - Client - Org 
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
 */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_TransactionSummary[").Append(Get_ID()).Append("]"); return sb.ToString();
+            StringBuilder sb = new StringBuilder("X_VAM_Inv_TrxSummary[").Append(Get_ID()).Append("]"); return sb.ToString();
         }
         /** Set Closing Stock.
 @param ClosingStock Closing Stock */
@@ -119,52 +119,52 @@ namespace VAdvantage.Model
             return (String)Get_Value("Export_ID");
         }
         /** Set Attribute Set Instance.
-@param M_AttributeSetInstance_ID Product Attribute Set Instance */
-        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+@param VAM_PFeature_SetInstance_ID Product Attribute Set Instance */
+        public void SetVAM_PFeature_SetInstance_ID(int VAM_PFeature_SetInstance_ID)
         {
-            if (M_AttributeSetInstance_ID < 0) throw new ArgumentException("M_AttributeSetInstance_ID is mandatory."); Set_ValueNoCheck("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+            if (VAM_PFeature_SetInstance_ID < 0) throw new ArgumentException("VAM_PFeature_SetInstance_ID is mandatory."); Set_ValueNoCheck("VAM_PFeature_SetInstance_ID", VAM_PFeature_SetInstance_ID);
         }
         /** Get Attribute Set Instance.
 @return Product Attribute Set Instance */
-        public int GetM_AttributeSetInstance_ID()
+        public int GetVAM_PFeature_SetInstance_ID()
         {
-            Object ii = Get_Value("M_AttributeSetInstance_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
+            Object ii = Get_Value("VAM_PFeature_SetInstance_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
         /** Set Locator.
-@param M_Locator_ID Warehouse Locator */
-        public void SetM_Locator_ID(int M_Locator_ID)
+@param VAM_Locator_ID Warehouse Locator */
+        public void SetVAM_Locator_ID(int VAM_Locator_ID)
         {
-            if (M_Locator_ID < 1) throw new ArgumentException("M_Locator_ID is mandatory."); Set_ValueNoCheck("M_Locator_ID", M_Locator_ID);
+            if (VAM_Locator_ID < 1) throw new ArgumentException("VAM_Locator_ID is mandatory."); Set_ValueNoCheck("VAM_Locator_ID", VAM_Locator_ID);
         }
         /** Get Locator.
 @return Warehouse Locator */
-        public int GetM_Locator_ID()
+        public int GetVAM_Locator_ID()
         {
-            Object ii = Get_Value("M_Locator_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
+            Object ii = Get_Value("VAM_Locator_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
         /** Set Product.
-@param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID)
+@param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID)
         {
-            if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory."); Set_ValueNoCheck("M_Product_ID", M_Product_ID);
+            if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory."); Set_ValueNoCheck("VAM_Product_ID", VAM_Product_ID);
         }
         /** Get Product.
 @return Product, Service, Item */
-        public int GetM_Product_ID()
+        public int GetVAM_Product_ID()
         {
-            Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
+            Object ii = Get_Value("VAM_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
-        /** Set M_TransactionSummary_ID.
-@param M_TransactionSummary_ID M_TransactionSummary_ID */
-        public void SetM_TransactionSummary_ID(int M_TransactionSummary_ID)
+        /** Set VAM_Inv_TrxSummary_ID.
+@param VAM_Inv_TrxSummary_ID VAM_Inv_TrxSummary_ID */
+        public void SetVAM_Inv_TrxSummary_ID(int VAM_Inv_TrxSummary_ID)
         {
-            if (M_TransactionSummary_ID < 1) throw new ArgumentException("M_TransactionSummary_ID is mandatory."); Set_ValueNoCheck("M_TransactionSummary_ID", M_TransactionSummary_ID);
+            if (VAM_Inv_TrxSummary_ID < 1) throw new ArgumentException("VAM_Inv_TrxSummary_ID is mandatory."); Set_ValueNoCheck("VAM_Inv_TrxSummary_ID", VAM_Inv_TrxSummary_ID);
         }
-        /** Get M_TransactionSummary_ID.
-@return M_TransactionSummary_ID */
-        public int GetM_TransactionSummary_ID()
+        /** Get VAM_Inv_TrxSummary_ID.
+@return VAM_Inv_TrxSummary_ID */
+        public int GetVAM_Inv_TrxSummary_ID()
         {
-            Object ii = Get_Value("M_TransactionSummary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
+            Object ii = Get_Value("VAM_Inv_TrxSummary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii);
         }
         /** Set Movement Date.
 @param MovementDate Date a product was moved in or out of inventory */

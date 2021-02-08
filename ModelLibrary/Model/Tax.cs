@@ -31,37 +31,37 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Tax ID - converts parameters to call Get Tax.
         ///   <pre>
-        ///   M_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
+        ///   VAM_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
         ///   VAF_Org_ID					->	billFromVAB_Address_ID
-        ///   M_Warehouse_ID				->	shipFromVAB_Address_ID
+        ///   VAM_Warehouse_ID				->	shipFromVAB_Address_ID
         ///   billVAB_BPart_Location_ID  ->	billToVAB_Address_ID
         ///   shipVAB_BPart_Location_ID 	->	shipToVAB_Address_ID
         ///   if IsSOTrx is false, bill and ship are reversed
         ///   </pre>
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
         /// <param name="VAF_Org_ID"></param>
-        /// <param name="M_Warehouse_ID">warehouse</param>
+        /// <param name="VAM_Warehouse_ID">warehouse</param>
         /// <param name="billVAB_BPart_Location_ID">invoice location</param>
         /// <param name="shipVAB_BPart_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>VAB_TaxRate_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
-        public static int Get(Ctx ctx, int M_Product_ID, int VAB_Charge_ID, DateTime? billDate, DateTime? shipDate,
-            int VAF_Org_ID, int M_Warehouse_ID, int billVAB_BPart_Location_ID, int shipVAB_BPart_Location_ID, bool IsSOTrx)
+        public static int Get(Ctx ctx, int VAM_Product_ID, int VAB_Charge_ID, DateTime? billDate, DateTime? shipDate,
+            int VAF_Org_ID, int VAM_Warehouse_ID, int billVAB_BPart_Location_ID, int shipVAB_BPart_Location_ID, bool IsSOTrx)
         {
-            if (M_Product_ID != 0)
+            if (VAM_Product_ID != 0)
             {
-                return GetProduct(ctx, M_Product_ID, billDate, shipDate, VAF_Org_ID, M_Warehouse_ID,
+                return GetProduct(ctx, VAM_Product_ID, billDate, shipDate, VAF_Org_ID, VAM_Warehouse_ID,
                     billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID, IsSOTrx);
             }
             else if (VAB_Charge_ID != 0)
             {
-                return GetCharge(ctx, VAB_Charge_ID, billDate, shipDate, VAF_Org_ID, M_Warehouse_ID,
+                return GetCharge(ctx, VAB_Charge_ID, billDate, shipDate, VAF_Org_ID, VAM_Warehouse_ID,
                     billVAB_BPart_Location_ID, shipVAB_BPart_Location_ID, IsSOTrx);
             }
             else
@@ -73,32 +73,32 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Tax ID - converts parameters to call Get Tax.
         ///   <pre>
-        ///   M_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
+        ///   VAM_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
         ///   VAF_Org_ID					->	billFromVAB_Address_ID
-        ///   M_Warehouse_ID				->	shipFromVAB_Address_ID
+        ///   VAM_Warehouse_ID				->	shipFromVAB_Address_ID
         ///   billVAB_BPart_Location_ID  ->	billToVAB_Address_ID
         ///   shipVAB_BPart_Location_ID 	->	shipToVAB_Address_ID
         ///   if IsSOTrx is false, bill and ship are reversed
         ///   </pre>
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
         /// <param name="VAF_Org_ID"></param>
-        /// <param name="M_Warehouse_ID">warehouse</param>
+        /// <param name="VAM_Warehouse_ID">warehouse</param>
         /// <param name="billVAB_BPart_Location_ID">invoice location</param>
         /// <param name="shipVAB_BPart_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>VAB_TaxRate_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
-        public static int GetCharge(Ctx ctx, int VAB_Charge_ID, DateTime? billDate, DateTime? shipDate, int VAF_Org_ID, int M_Warehouse_ID,
+        public static int GetCharge(Ctx ctx, int VAB_Charge_ID, DateTime? billDate, DateTime? shipDate, int VAF_Org_ID, int VAM_Warehouse_ID,
             int billVAB_BPart_Location_ID, int shipVAB_BPart_Location_ID, bool IsSOTrx)
         {
-            if (M_Warehouse_ID == 0)
-                M_Warehouse_ID = ctx.GetContextAsInt("M_Warehouse_ID");
-            if (M_Warehouse_ID == 0)
+            if (VAM_Warehouse_ID == 0)
+                VAM_Warehouse_ID = ctx.GetContextAsInt("VAM_Warehouse_ID");
+            if (VAM_Warehouse_ID == 0)
             {
                 log.Warning("No Warehouse - VAB_Charge_ID=" + VAB_Charge_ID);
                 return 0;
@@ -116,11 +116,11 @@ namespace VAdvantage.Model
                  + " w.VAB_Address_ID, sl.VAB_Address_ID "
                  + "FROM VAB_Charge c, VAF_OrgDetail o,"
                  + " VAB_BPart_Location il INNER JOIN VAB_BusinessPartner b ON (il.VAB_BusinessPartner_ID=b.VAB_BusinessPartner_ID),"
-                 + " M_Warehouse w, VAB_BPart_Location sl "
+                 + " VAM_Warehouse w, VAB_BPart_Location sl "
                  + "WHERE c.VAB_Charge_ID=" + VAB_Charge_ID
                  + " AND o.VAF_Org_ID=" + VAF_Org_ID
                  + " AND il.VAB_BPart_Location_ID=" + billVAB_BPart_Location_ID
-                 + " AND w.M_Warehouse_ID=" + M_Warehouse_ID
+                 + " AND w.VAM_Warehouse_ID=" + VAM_Warehouse_ID
                  + " AND sl.VAB_BPart_Location_ID=" + shipVAB_BPart_Location_ID;
             try
             {
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                 if (!found)
                 {
                     log.Warning("Not found for VAB_Charge_ID=" + VAB_Charge_ID 
-                        + ", VAF_Org_ID=" + VAF_Org_ID + ", M_Warehouse_ID=" + M_Warehouse_ID
+                        + ", VAF_Org_ID=" + VAF_Org_ID + ", VAM_Warehouse_ID=" + VAM_Warehouse_ID
                         + ", VAB_BPart_Location_ID=" + billVAB_BPart_Location_ID 
                        + "/" + shipVAB_BPart_Location_ID);
                     return 0;
@@ -179,28 +179,28 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Tax ID - converts parameters to call Get Tax.
         ///   <pre>
-        ///   M_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
+        ///   VAM_Product_ID/VAB_Charge_ID	->	VAB_TaxCategory_ID
         ///   billDate, shipDate			->	billDate, shipDate
         ///   VAF_Org_ID					->	billFromVAB_Address_ID
-        ///   M_Warehouse_ID				->	shipFromVAB_Address_ID
+        ///   VAM_Warehouse_ID				->	shipFromVAB_Address_ID
         ///   billVAB_BPart_Location_ID  ->	billToVAB_Address_ID
         ///   shipVAB_BPart_Location_ID 	->	shipToVAB_Address_ID
         ///   if IsSOTrx is false, bill and ship are reversed
         ///   </pre>
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_Product_ID">product</param>
+        /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAB_Charge_ID">product</param>
         /// <param name="billDate">invoice date</param>
         /// <param name="shipDate">ship date</param>
         /// <param name="VAF_Org_ID"></param>
-        /// <param name="M_Warehouse_ID">warehouse</param>
+        /// <param name="VAM_Warehouse_ID">warehouse</param>
         /// <param name="billVAB_BPart_Location_ID">invoice location</param>
         /// <param name="shipVAB_BPart_Location_ID">ship location</param>
         /// <param name="IsSOTrx">is a sales trx</param>
         /// <returns>VAB_TaxRate_ID If error it returns 0 and sets error log (TaxCriteriaNotFound)</returns>
-        public static int GetProduct(Ctx ctx, int M_Product_ID, DateTime? billDate, DateTime? shipDate,
-            int VAF_Org_ID, int M_Warehouse_ID, int billVAB_BPart_Location_ID, int shipVAB_BPart_Location_ID,
+        public static int GetProduct(Ctx ctx, int VAM_Product_ID, DateTime? billDate, DateTime? shipDate,
+            int VAF_Org_ID, int VAM_Warehouse_ID, int billVAB_BPart_Location_ID, int shipVAB_BPart_Location_ID,
             bool IsSOTrx)
         {
             String variable = "";
@@ -216,13 +216,13 @@ namespace VAdvantage.Model
                 //	Get all at once
                 String sql = "SELECT p.VAB_TaxCategory_ID, o.VAB_Address_ID, il.VAB_Address_ID, b.IsTaxExempt,"
                     + " w.VAB_Address_ID, sl.VAB_Address_ID "
-                    + "FROM M_Product p, VAF_OrgDetail o,"
+                    + "FROM VAM_Product p, VAF_OrgDetail o,"
                     + " VAB_BPart_Location il INNER JOIN VAB_BusinessPartner b ON (il.VAB_BusinessPartner_ID=b.VAB_BusinessPartner_ID),"
-                    + " M_Warehouse w, VAB_BPart_Location sl "
-                    + "WHERE p.M_Product_ID=" + M_Product_ID
+                    + " VAM_Warehouse w, VAB_BPart_Location sl "
+                    + "WHERE p.VAM_Product_ID=" + VAM_Product_ID
                     + " AND o.VAF_Org_ID=" + VAF_Org_ID
                     + " AND il.VAB_BPart_Location_ID=" + billVAB_BPart_Location_ID
-                    + " AND w.M_Warehouse_ID=" + M_Warehouse_ID
+                    + " AND w.VAM_Warehouse_ID=" + VAM_Warehouse_ID
                     + " AND sl.VAB_BPart_Location_ID=" + shipVAB_BPart_Location_ID;
                 DataSet pstmt = ExecuteQuery.ExecuteDataset(sql, null);
                 bool found = false;
@@ -269,10 +269,10 @@ namespace VAdvantage.Model
 
                 //	Detail for error isolation
 
-                //	M_Product_ID				->	VAB_TaxCategory_ID
-                sql = "SELECT VAB_TaxCategory_ID FROM M_Product "
-                    + "WHERE M_Product_ID=" + M_Product_ID;
-                variable = "M_Product_ID";
+                //	VAM_Product_ID				->	VAB_TaxCategory_ID
+                sql = "SELECT VAB_TaxCategory_ID FROM VAM_Product "
+                    + "WHERE VAM_Product_ID=" + VAM_Product_ID;
+                variable = "VAM_Product_ID";
                 pstmt = ExecuteQuery.ExecuteDataset(sql, null);
                 found = false;
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
                 if (VAB_TaxCategory_ID == 0)
                 {
                     log.SaveError("TaxCriteriaNotFound", Msg.Translate(ctx, variable)
-                       + (found ? "" : " (Product=" + M_Product_ID + " not found)"));
+                       + (found ? "" : " (Product=" + VAM_Product_ID + " not found)"));
                     return 0;
                 }
                 log.Fine("VAB_TaxCategory_ID=" + VAB_TaxCategory_ID);
@@ -341,10 +341,10 @@ namespace VAdvantage.Model
                 
                 //-----------------------------------------------------------------
 
-                //	M_Warehouse_ID				->	shipFromVAB_Address_ID
-                sql = "SELECT VAB_Address_ID FROM M_Warehouse "
-                    + "WHERE M_Warehouse_ID=" + M_Warehouse_ID;
-                variable = "M_Warehouse_ID";
+                //	VAM_Warehouse_ID				->	shipFromVAB_Address_ID
+                sql = "SELECT VAB_Address_ID FROM VAM_Warehouse "
+                    + "WHERE VAM_Warehouse_ID=" + VAM_Warehouse_ID;
+                variable = "VAM_Warehouse_ID";
                 pstmt = ExecuteQuery.ExecuteDataset(sql, null);
                 found = false;
                 for (int i = 0; i < pstmt.Tables[0].Rows.Count; i++)
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
                 if (shipFromVAB_Address_ID == 0)
                 {
                     log.SaveError("TaxCriteriaNotFound", Msg.Translate(Env.GetVAF_Language(ctx), variable)
-                        + (found ? "" : " (Warehouse=" + M_Warehouse_ID + " not found)"));
+                        + (found ? "" : " (Warehouse=" + VAM_Warehouse_ID + " not found)"));
                     return 0;
                 }
                 //	shipVAB_BPart_Location_ID 	->	shipToVAB_Address_ID

@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * ModuleName     : 
  * Purpose        : 
- * Class Used     : X_M_TransactionSummary
+ * Class Used     : X_VAM_Inv_TrxSummary
  * Chronological    Development
  * Bharat     28-Oct-2016
   ******************************************************/
@@ -20,16 +20,16 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    class MTransactionSummary : X_M_TransactionSummary
+    class MTransactionSummary : X_VAM_Inv_TrxSummary
     {
         /**
   * 	Standard Constructor
   *	@param ctx context
-  *	@param M_TransactionSummary_ID id
+  *	@param VAM_Inv_TrxSummary_ID id
   *	@param trxName transaction
   */
-        public MTransactionSummary(Ctx ctx, int M_TransactionSummary_ID, Trx trxName)
-            : base(ctx, M_TransactionSummary_ID, trxName)
+        public MTransactionSummary(Ctx ctx, int VAM_Inv_TrxSummary_ID, Trx trxName)
+            : base(ctx, VAM_Inv_TrxSummary_ID, trxName)
         {
             
         }
@@ -49,27 +49,27 @@ namespace VAdvantage.Model
         * 	Detail Constructor
         *	@param ctx context
         *	@param VAF_Org_ID org
-        * 	@param M_Locator_ID locator
-        * 	@param M_Product_ID product
-        * 	@param M_AttributeSetInstance_ID attribute
+        * 	@param VAM_Locator_ID locator
+        * 	@param VAM_Product_ID product
+        * 	@param VAM_PFeature_SetInstance_ID attribute
         * 	@param Opening Stock
          * 	@param Opening Stock
         * 	@param MovementDate optional date
         *	@param trxName transaction
         */
-        public MTransactionSummary(Ctx ctx, int VAF_Org_ID, int M_Locator_ID, int M_Product_ID, int M_AttributeSetInstance_ID,
+        public MTransactionSummary(Ctx ctx, int VAF_Org_ID, int VAM_Locator_ID, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID,
             Decimal OpeningStock, Decimal ClosingStock, DateTime? MovementDate, Trx trxName)
             : base(ctx, 0, trxName)
         {
 
             SetVAF_Org_ID(VAF_Org_ID);
-            if (M_Locator_ID == 0)
+            if (VAM_Locator_ID == 0)
                 throw new ArgumentException("No Locator");
-            SetM_Locator_ID(M_Locator_ID);
-            if (M_Product_ID == 0)
+            SetVAM_Locator_ID(VAM_Locator_ID);
+            if (VAM_Product_ID == 0)
                 throw new ArgumentException("No Product");
-            SetM_Product_ID(M_Product_ID);
-            SetM_AttributeSetInstance_ID(M_AttributeSetInstance_ID);
+            SetVAM_Product_ID(VAM_Product_ID);
+            SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetOpeningStock(OpeningStock);
             SetClosingStock(ClosingStock);
             if (MovementDate == null)

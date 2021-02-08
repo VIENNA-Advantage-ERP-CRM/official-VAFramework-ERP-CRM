@@ -189,8 +189,7 @@
     <Compile Include="Model\AcctViewerData.cs" />
     <Compile Include="Model\CTreeNode.cs" />
     <Compile Include="Model\ListBoxVO.cs" />
-    <Compile Include="Model\MAccessProfile.cs" />
-    <Compile Include="Model\MAccount.cs" />
+    <Compile Include="Model\MVABAccount.cs" />
     <Compile Include="Model\MVABAccountGroup.cs" />
     <Compile Include="Model\MVABAccountGroupBatch.cs" />
     <Compile Include="Model\MVABAccountGroupTL.cs" />
@@ -202,9 +201,8 @@
     <Compile Include="Model\MVABAccountBookDefault.cs" />
     <Compile Include="Model\MVABAccountBookElement.cs" />
     <Compile Include="Model\MVABAccountBookGL.cs" />
-    <Compile Include="Model\MAchievement.cs" />
+    <Compile Include="Model\MVAPAAccomplishment.cs" />
     <Compile Include="Model\MVABBillingCode.cs" />
-    <Compile Include="Model\MAd.cs" />
     <Compile Include="Model\MAging.cs" />
     <Compile Include="Model\MVAFAlert.cs" />
     <Compile Include="Model\MVAFAlertHandler.cs" />

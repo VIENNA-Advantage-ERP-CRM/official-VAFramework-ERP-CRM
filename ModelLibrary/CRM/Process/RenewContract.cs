@@ -109,12 +109,12 @@ namespace VAdvantage.Process
                     //invoice Count end
                     if (Record_id != 0)
                     {
-                        New.SetM_PriceList_ID(contact.GetRef_PriceList_ID());
-                        String Query = "Select M_PriceList_Version_id from M_PriceList_Version where IsActive='Y' and M_PriceList_Id=" + contact.GetRef_PriceList_ID();
+                        New.SetVAM_PriceList_ID(contact.GetRef_PriceList_ID());
+                        String Query = "Select VAM_PriceListVersion_id from VAM_PriceListVersion where IsActive='Y' and VAM_PriceList_Id=" + contact.GetRef_PriceList_ID();
                         int Version = Util.GetValueOfInt(DB.ExecuteScalar(Query));
-                        Query = "Select PriceList from M_ProductPrice where M_PriceList_Version_id=" + Version + " and M_Product_ID=" + contact.GetM_Product_ID();
+                        Query = "Select PriceList from VAM_ProductPrice where VAM_PriceListVersion_id=" + Version + " and VAM_Product_ID=" + contact.GetVAM_Product_ID();
                         decimal Listprice = Util.GetValueOfInt(DB.ExecuteScalar(Query));
-                        Query = "Select PriceStd from M_ProductPrice where M_PriceList_Version_id=" + Version + " and M_Product_ID=" + contact.GetM_Product_ID();
+                        Query = "Select PriceStd from VAM_ProductPrice where VAM_PriceListVersion_id=" + Version + " and VAM_Product_ID=" + contact.GetVAM_Product_ID();
                         decimal Stdprice = Util.GetValueOfInt(DB.ExecuteScalar(Query));
                         if (Stdprice == 0 && Listprice == 0)
                         {
@@ -132,13 +132,13 @@ namespace VAdvantage.Process
                     else
                     {
 
-                        New.SetM_PriceList_ID(contact.GetM_PriceList_ID());
+                        New.SetVAM_PriceList_ID(contact.GetVAM_PriceList_ID());
                         New.SetPriceEntered(contact.GetPriceEntered());
                         New.SetPriceActual(contact.GetPriceActual());
                         New.SetPriceList(contact.GetPriceList());
                     }
                     New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
-                    New.SetM_Product_ID(contact.GetM_Product_ID());
+                    New.SetVAM_Product_ID(contact.GetVAM_Product_ID());
                     // New.SetLineNetAmt(contact.GetLineNetAmt());
 
                     New.SetQtyEntered(contact.GetQtyEntered());
@@ -246,12 +246,12 @@ namespace VAdvantage.Process
                         {
                             return Msg.GetMsg(GetCtx(), "FirstSelectPriceList");
                         }
-                        New.SetM_PriceList_ID(contact.GetRef_PriceList_ID());
-                        String Query = "Select M_PriceList_Version_id from M_PriceList_Version where IsActive='Y' and M_PriceList_Id=" + contact.GetRef_PriceList_ID();
+                        New.SetVAM_PriceList_ID(contact.GetRef_PriceList_ID());
+                        String Query = "Select VAM_PriceListVersion_id from VAM_PriceListVersion where IsActive='Y' and VAM_PriceList_Id=" + contact.GetRef_PriceList_ID();
                         int Version = Util.GetValueOfInt(DB.ExecuteScalar(Query));
-                        Query = "Select PriceList,PriceStd from M_ProductPrice where M_PriceList_Version_id=" + Version + " and M_Product_ID=" + contact.GetM_Product_ID();
+                        Query = "Select PriceList,PriceStd from VAM_ProductPrice where VAM_PriceListVersion_id=" + Version + " and VAM_Product_ID=" + contact.GetVAM_Product_ID();
                         decimal Listprice = Util.GetValueOfInt(DB.ExecuteScalar(Query));
-                        Query = "Select PriceList,PriceStd from M_ProductPrice where M_PriceList_Version_id=" + Version + " and M_Product_ID=" + contact.GetM_Product_ID();
+                        Query = "Select PriceList,PriceStd from VAM_ProductPrice where VAM_PriceListVersion_id=" + Version + " and VAM_Product_ID=" + contact.GetVAM_Product_ID();
                         decimal Stdprice = Util.GetValueOfInt(DB.ExecuteScalar(Query));
                         if (Stdprice == 0 && Listprice == 0)
                         {
@@ -272,13 +272,13 @@ namespace VAdvantage.Process
                         New.SetPriceActual(contact.GetPriceActual());
                         New.SetPriceList(contact.GetPriceList());
                         New.SetPriceEntered(contact.GetPriceEntered());
-                        New.SetM_PriceList_ID(contact.GetM_PriceList_ID());
+                        New.SetVAM_PriceList_ID(contact.GetVAM_PriceList_ID());
                     }
                     New.SetTotalInvoice(contact.GetCycles());
                     //invoice Count end
 
                     New.SetVAB_UOM_ID(contact.GetVAB_UOM_ID());
-                    New.SetM_Product_ID(contact.GetM_Product_ID());
+                    New.SetVAM_Product_ID(contact.GetVAM_Product_ID());
                     // New.SetLineNetAmt(contact.GetLineNetAmt());
 
                     New.SetQtyEntered(contact.GetQtyEntered());
@@ -378,8 +378,8 @@ namespace VAdvantage.Process
                         CSchedule.SetEndDate(end);
                         // CSchedule.SetNoOfDays((end - start).Days+1);
                     }
-                    CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
-                    CSchedule.SetM_Product_ID(contract.GetM_Product_ID());
+                    CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
+                    CSchedule.SetVAM_Product_ID(contract.GetVAM_Product_ID());
                     CSchedule.SetTotalAmt(contract.GetLineNetAmt());
                     CSchedule.SetGrandTotal(contract.GetGrandTotal());
                     CSchedule.SetTaxAmt(contract.GetTaxAmt());

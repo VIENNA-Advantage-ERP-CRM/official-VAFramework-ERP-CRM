@@ -200,7 +200,7 @@
             var dProduct = $('<div class="vis-initial-form-checkbox">');
             chkProduct = $('<input type="checkbox" checked disabled>');
             dProduct.append(chkProduct);
-            dProduct.append($("<label>").append(VIS.Msg.translate(VIS.context, "M_Product_ID")));
+            dProduct.append($("<label>").append(VIS.Msg.translate(VIS.context, "VAM_Product_ID")));
             dChkBox.append(dProduct);
 
             var dCam = $('<div class="vis-initial-form-checkbox">');

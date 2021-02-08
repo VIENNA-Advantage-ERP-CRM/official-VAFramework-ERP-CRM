@@ -28,7 +28,7 @@ using ModelLibrary.Classes;
 
 namespace VAdvantage.Model
 {
-    public class MRequisition : X_M_Requisition, DocAction
+    public class MRequisition : X_VAM_Requisition, DocAction
     {
         //	Process Message 		
         private String _processMsg = null;
@@ -44,20 +44,20 @@ namespace VAdvantage.Model
         /**
         * 	Standard Constructor
         *	@param Ctx context
-        *	@param M_Requisition_ID id
+        *	@param VAM_Requisition_ID id
         */
-        public MRequisition(Ctx ctx, int M_Requisition_ID, Trx trxName)
-            : base(ctx, M_Requisition_ID, trxName)
+        public MRequisition(Ctx ctx, int VAM_Requisition_ID, Trx trxName)
+            : base(ctx, VAM_Requisition_ID, trxName)
         {
             try
             {
 
-                if (M_Requisition_ID == 0)
+                if (VAM_Requisition_ID == 0)
                 {
                     //	setDocumentNo (null);
                     //	setVAF_UserContact_ID (0);
-                    //	setM_PriceList_ID (0);
-                    //	setM_Warehouse_ID(0);
+                    //	setVAM_PriceList_ID (0);
+                    //	setVAM_Warehouse_ID(0);
                     //SetDateDoc(new Timestamp(System.currentTimeMillis()));
                     SetDateDoc(CommonFunctions.CovertMilliToDate(CommonFunctions.CurrentTimeMillis()));
                     //SetDateDoc(Convert.ToDateTime(DateTime.Now));
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
                 }
 
                 List<MRequisitionLine> list = new List<MRequisitionLine>();
-                String sql = "SELECT * FROM M_RequisitionLine WHERE M_Requisition_ID=" + GetM_Requisition_ID() + " ORDER BY Line";
+                String sql = "SELECT * FROM VAM_RequisitionLine WHERE VAM_Requisition_ID=" + GetVAM_Requisition_ID() + " ORDER BY Line";
                 DataTable dt = null;
                 IDataReader idr = null;
                 try
@@ -166,8 +166,8 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            //return Msg.getElement(getContext(), "M_Requisition_ID") + " " + getDocumentNo();
-            return Msg.GetElement(GetCtx(), "M_Requisition_ID") + " " + GetDocumentNo();
+            //return Msg.getElement(getContext(), "VAM_Requisition_ID") + " " + getDocumentNo();
+            return Msg.GetElement(GetCtx(), "VAM_Requisition_ID") + " " + GetDocumentNo();
         }
 
         /**
@@ -207,7 +207,7 @@ namespace VAdvantage.Model
         /**
          * 	Set default PriceList
          */
-        public void SetM_PriceList_ID()
+        public void SetVAM_PriceList_ID()
         {
             try
             {
@@ -218,12 +218,12 @@ namespace VAdvantage.Model
                 }
                 if (defaultPL != null)
                 {
-                    SetM_PriceList_ID(defaultPL.GetM_PriceList_ID());
+                    SetVAM_PriceList_ID(defaultPL.GetVAM_PriceList_ID());
                 }
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("MRequisition--SetM_PriceList_ID");
+                // MessageBox.Show("MRequisition--SetVAM_PriceList_ID");
                 log.Severe(ex.ToString());
             }
         }
@@ -235,9 +235,9 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            if (GetM_PriceList_ID() == 0)
+            if (GetVAM_PriceList_ID() == 0)
             {
-                SetM_PriceList_ID();
+                SetVAM_PriceList_ID();
             }
             return true;
         }
@@ -299,8 +299,8 @@ namespace VAdvantage.Model
 
                 //	Invalid
                 if (GetVAF_UserContact_ID() == 0
-                    || GetM_PriceList_ID() == 0
-                    || GetM_Warehouse_ID() == 0)
+                    || GetVAM_PriceList_ID() == 0
+                    || GetVAM_Warehouse_ID() == 0)
                     return DocActionVariables.STATUS_INVALID;
 
 
@@ -323,7 +323,7 @@ namespace VAdvantage.Model
 
 
                 //	Add up Amounts
-                int precision = MPriceList.GetStandardPrecision(GetCtx(), GetM_PriceList_ID());
+                int precision = MPriceList.GetStandardPrecision(GetCtx(), GetVAM_PriceList_ID());
                 Decimal totalLines = Env.ZERO;
                 for (int i = 0; i < lines.Length; i++)
                 {
@@ -445,10 +445,10 @@ namespace VAdvantage.Model
                     for (int i = 0; i < lines.Length; i++)
                     {
                         MRequisitionLine line = lines[i];
-                        if (line.GetM_Product_ID() > 0)
-                            product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+                        if (line.GetVAM_Product_ID() > 0)
+                            product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
 
-                        int loc_id = GetLocation(GetM_Warehouse_ID());
+                        int loc_id = GetLocation(GetVAM_Warehouse_ID());
                         //new 6jan 1
                         int Sourcewhloc_id = GetSwhLocation(GetDTD001_MWarehouseSource_ID());
                         if (Sourcewhloc_id == 0)
@@ -475,43 +475,43 @@ namespace VAdvantage.Model
                         }
                         //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
                         // SI_0686_2 :  storage should not update in case of product is other than item type.
-                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_VAM_Product.PRODUCTTYPE_Item)
                         {
-                            storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                            storage = MStorage.Get(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                             if (storage == null)
                             {
-                                storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                             }
                             storage.SetDTD001_QtyReserved((Decimal.Add(storage.GetDTD001_QtyReserved(), (Decimal)line.GetQty())));
                             if (!storage.Save())
                             {
-                                log.Info("Requisition Reserverd Quantity not saved at storage at locator " + loc_id + " and product is " + line.GetM_Product_ID());
+                                log.Info("Requisition Reserverd Quantity not saved at storage at locator " + loc_id + " and product is " + line.GetVAM_Product_ID());
                             }
                             ///new 6jan 2
                             if (_count > 0)
                             {
-                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                 if (Swhstorage == null)
                                 {
-                                    Swhstorage = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    Swhstorage = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                 }
                                 Swhstorage.SetDTD001_SourceReserve((Decimal.Add(Swhstorage.GetDTD001_SourceReserve(), (Decimal)line.GetQty())));
                                 if (!Swhstorage.Save())
                                 {
-                                    log.Info("Requisition Reserverd Quantity not saved at storage at locator " + Sourcewhloc_id + " and product is " + line.GetM_Product_ID());
+                                    log.Info("Requisition Reserverd Quantity not saved at storage at locator " + Sourcewhloc_id + " and product is " + line.GetVAM_Product_ID());
                                 }
                             }
                             //End
                         }
                         //(JID_1365)shubham add code below line after && 
-                        else if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsStocked())
+                        else if (product != null && product.GetProductType() == X_VAM_Product.PRODUCTTYPE_Item && product.IsStocked())
                         {
                             // SI_0657: consider Attribute also
-                            storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                            storage = MStorage.Get(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                             if (storage == null)
                             {
-                                //MStorage.Add(GetCtx(), GetM_Warehouse_ID(), loc_id, line.GetM_Product_ID(), 0, 0, 0, 0, line.GetQty(), null);
-                                MStorage.Add(GetCtx(), GetM_Warehouse_ID(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, line.GetQty(), Get_Trx());
+                                //MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(), loc_id, line.GetVAM_Product_ID(), 0, 0, 0, 0, line.GetQty(), null);
+                                MStorage.Add(GetCtx(), GetVAM_Warehouse_ID(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), line.GetVAM_PFeature_SetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, line.GetQty(), Get_Trx());
                             }
                             else
                             {
@@ -521,13 +521,13 @@ namespace VAdvantage.Model
                             //new 6jan 3
                             if (_count > 0)
                             {
-                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                Swhstorage = MStorage.Get(GetCtx(), Sourcewhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                 if (Swhstorage == null)
                                 {
 
-                                    MStorage.Add(GetCtx(), GetDTD001_MWarehouseSource_ID(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), line.GetM_AttributeSetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, 0, Get_Trx());
+                                    MStorage.Add(GetCtx(), GetDTD001_MWarehouseSource_ID(), Sourcewhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), line.GetVAM_PFeature_SetInstance_ID(), (Decimal)0, (Decimal)0, (Decimal)0, 0, Get_Trx());
                                     MStorage StrgResrvQty = null;
-                                    StrgResrvQty = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    StrgResrvQty = MStorage.GetCreate(GetCtx(), Sourcewhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                     StrgResrvQty.SetDTD001_SourceReserve(Decimal.Add(StrgResrvQty.GetDTD001_SourceReserve(), line.GetQty()));
                                     StrgResrvQty.Save();
                                 }
@@ -604,11 +604,11 @@ namespace VAdvantage.Model
 
             sql.Clear();
             sql.Append(@"SELECT VAGL_Budget.VAGL_Budget_ID , VAGL_Budget.BudgetControlBasis, VAGL_Budget.VAB_Year_ID , VAGL_Budget.VAB_YearPeriod_ID,VAGL_Budget.Name As BudgetName, 
-                  VAVAGL_BudgetActivation.VAB_AccountBook_ID, VAVAGL_BudgetActivation.CommitmentType, VAVAGL_BudgetActivation.BudgetControlScope,  VAVAGL_BudgetActivation.VAVAGL_BudgetActivation_ID, VAVAGL_BudgetActivation.Name AS ControlName 
-                FROM VAGL_Budget INNER JOIN VAVAGL_BudgetActivation ON VAGL_Budget.VAGL_Budget_ID = VAVAGL_BudgetActivation.VAGL_Budget_ID
+                  VAGL_BudgetActivation.VAB_AccountBook_ID, VAGL_BudgetActivation.CommitmentType, VAGL_BudgetActivation.BudgetControlScope,  VAGL_BudgetActivation.VAGL_BudgetActivation_ID, VAGL_BudgetActivation.Name AS ControlName 
+                FROM VAGL_Budget INNER JOIN VAGL_BudgetActivation ON VAGL_Budget.VAGL_Budget_ID = VAGL_BudgetActivation.VAGL_Budget_ID
                 INNER JOIN VAF_ClientDetail ON VAF_ClientDetail.VAF_Client_ID = VAGL_Budget.VAF_Client_ID
-                WHERE VAVAGL_BudgetActivation.IsActive = 'Y' AND VAGL_Budget.IsActive = 'Y' AND VAVAGL_BudgetActivation.VAF_Org_ID IN (0 , " + GetVAF_Org_ID() + @")  
-                   AND VAVAGL_BudgetActivation.CommitmentType IN ('B' ) AND 
+                WHERE VAGL_BudgetActivation.IsActive = 'Y' AND VAGL_Budget.IsActive = 'Y' AND VAGL_BudgetActivation.VAF_Org_ID IN (0 , " + GetVAF_Org_ID() + @")  
+                   AND VAGL_BudgetActivation.CommitmentType IN ('B' ) AND 
                   (( VAGL_Budget.BudgetControlBasis = 'P' AND VAGL_Budget.VAB_YearPeriod_ID =
                   (SELECT VAB_YearPeriod.VAB_YearPeriod_ID FROM VAB_YearPeriod INNER JOIN VAB_Year ON VAB_Year.VAB_Year_ID      = VAB_YearPeriod.VAB_Year_ID
                   WHERE VAB_YearPeriod.IsActive  = 'Y'  AND VAB_Year.VAB_Calender_ID = VAF_ClientDetail.VAB_Calender_ID
@@ -649,8 +649,8 @@ namespace VAdvantage.Model
                                 for (int j = 0; j < drBudgetControl.Length; j++)
                                 {
                                     // get budget Dimension datarow 
-                                    drBudgetControlDimension = dsBudgetControlDimension.Tables[0].Select("VAVAGL_BudgetActivation_ID  = "
-                                                                + Util.GetValueOfInt(drBudgetControl[j]["VAVAGL_BudgetActivation_ID"]));
+                                    drBudgetControlDimension = dsBudgetControlDimension.Tables[0].Select("VAGL_BudgetActivation_ID  = "
+                                                                + Util.GetValueOfInt(drBudgetControl[j]["VAGL_BudgetActivation_ID"]));
 
                                     // get BUdgeted Controlled Value based on dimension
                                     _budgetControl = budget.GetBudgetControlValue(drRecordData[i], drBudgetControl[j], drBudgetControlDimension,
@@ -695,8 +695,8 @@ namespace VAdvantage.Model
                     {
                         object[] parametersArray = new object[] { GetCtx(),
                                                                 Util.GetValueOfInt(GetVAF_Client_ID()),
-                                                                Util.GetValueOfInt(X_M_Requisition.Table_ID),//MVAFTableView.Get(GetCtx() , "M_Requisition").GetVAF_TableView_ID()
-                                                                Util.GetValueOfInt(GetM_Requisition_ID()),
+                                                                Util.GetValueOfInt(X_VAM_Requisition.Table_ID),//MVAFTableView.Get(GetCtx() , "VAM_Requisition").GetVAF_TableView_ID()
+                                                                Util.GetValueOfInt(GetVAM_Requisition_ID()),
                                                                 true,
                                                                 Util.GetValueOfInt(GetVAF_Org_ID()),
                                                                 ad_window_id,
@@ -729,11 +729,11 @@ namespace VAdvantage.Model
             }
 
             if (_listBudgetControl.Exists(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
-                                              (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
+                                              (x.VAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_BudgetActivation_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
                                               (x.VAF_Org_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.VAB_BusinessPartner_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["VAB_BusinessPartner_ID"]) : 0)) &&
-                                              (x.M_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.VAM_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["VAM_Product_ID"]) : 0)) &&
                                               (x.VAB_BillingCode_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["VAB_BillingCode_ID"]) : 0)) &&
                                               (x.VAB_AddressFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["VAB_AddressFrom_ID"]) : 0)) &&
                                               (x.VAB_AddressTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["VAB_AddressTo_ID"]) : 0)) &&
@@ -755,11 +755,11 @@ namespace VAdvantage.Model
                                              ))
             {
                 _budgetControl = _listBudgetControl.Find(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
-                                              (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
+                                              (x.VAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_BudgetActivation_ID"])) &&
                                               (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"])) &&
                                               (x.VAF_Org_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Organization) ? Util.GetValueOfInt(drDataRecord["VAF_Org_ID"]) : 0)) &&
                                               (x.VAB_BusinessPartner_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_BPartner) ? Util.GetValueOfInt(drDataRecord["VAB_BusinessPartner_ID"]) : 0)) &&
-                                              (x.M_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["M_Product_ID"]) : 0)) &&
+                                              (x.VAM_Product_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Product) ? Util.GetValueOfInt(drDataRecord["VAM_Product_ID"]) : 0)) &&
                                               (x.VAB_BillingCode_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_Activity) ? Util.GetValueOfInt(drDataRecord["VAB_BillingCode_ID"]) : 0)) &&
                                               (x.VAB_AddressFrom_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationFrom) ? Util.GetValueOfInt(drDataRecord["VAB_AddressFrom_ID"]) : 0)) &&
                                               (x.VAB_AddressTo_ID == (selectedDimension.Contains(X_VAB_AccountBook_Element.ELEMENTTYPE_LocationTo) ? Util.GetValueOfInt(drDataRecord["VAB_AddressTo_ID"]) : 0)) &&
@@ -795,7 +795,7 @@ namespace VAdvantage.Model
             else
             {
                 if (_listBudgetControl.Exists(x => (x.VAGL_Budget_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_Budget_ID"])) &&
-                                             (x.VAVAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAVAGL_BudgetActivation_ID"])) &&
+                                             (x.VAGL_BudgetActivation_ID == Util.GetValueOfInt(drBUdgetControl["VAGL_BudgetActivation_ID"])) &&
                                              (x.Account_ID == Util.GetValueOfInt(drDataRecord["Account_ID"]))
                                             ))
                 {
@@ -828,8 +828,8 @@ namespace VAdvantage.Model
             {
                 String set = "SET Processed='"
                     + (processed ? "Y" : "N")
-                    + "' WHERE M_Requisition_ID=" + GetM_Requisition_ID();
-                int noLine = DataBase.DB.ExecuteQuery("UPDATE M_RequisitionLine " + set, null, Get_TrxName());
+                    + "' WHERE VAM_Requisition_ID=" + GetVAM_Requisition_ID();
+                int noLine = DataBase.DB.ExecuteQuery("UPDATE VAM_RequisitionLine " + set, null, Get_TrxName());
                 _lines = null;
                 log.Fine(processed + " - Lines=" + noLine);
             }
@@ -837,17 +837,17 @@ namespace VAdvantage.Model
 
         public int GetLocation(int ware_ID)
         {
-            //string qry = @"SELECT sg.M_Locator_ID FROM M_Storage sg INNER JOIN M_Locator loc ON sg.M_Locator_ID=loc.M_Locator_ID INNER JOIN M_Warehouse wh ON loc.M_Warehouse_ID=wh.M_Warehouse_ID where wh.M_Warehouse_ID = " + ware_ID + " and sg.M_Product_ID = " + prod_ID + " and loc.IsActive = 'Y'";
+            //string qry = @"SELECT sg.VAM_Locator_ID FROM VAM_Storage sg INNER JOIN VAM_Locator loc ON sg.VAM_Locator_ID=loc.VAM_Locator_ID INNER JOIN VAM_Warehouse wh ON loc.VAM_Warehouse_ID=wh.VAM_Warehouse_ID where wh.VAM_Warehouse_ID = " + ware_ID + " and sg.VAM_Product_ID = " + prod_ID + " and loc.IsActive = 'Y'";
             //IDataReader idrloc =DB.ExecuteReader(qry);
-            int location = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Locator_ID FROM M_Locator where M_Warehouse_ID = " + ware_ID + " and IsActive = 'Y' and IsDefault='Y'"));
+            int location = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_Locator_ID FROM VAM_Locator where VAM_Warehouse_ID = " + ware_ID + " and IsActive = 'Y' and IsDefault='Y'"));
             if (location > 0)
             {
                 return location;
             }
             else
             {
-                //qry = @"SELECT sg.M_Locator_ID FROM M_Storage sg INNER JOIN M_Locator loc ON sg.M_Locator_ID=loc.M_Locator_ID INNER JOIN M_Warehouse wh ON loc.M_Warehouse_ID=wh.M_Warehouse_ID where wh.M_Warehouse_ID = " + ware_ID + " and loc.IsDefault='Y' and loc.IsActive = 'Y'";
-                location = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Locator_ID FROM M_Locator where M_Warehouse_ID = " + ware_ID + " and IsActive = 'Y'"));
+                //qry = @"SELECT sg.VAM_Locator_ID FROM VAM_Storage sg INNER JOIN VAM_Locator loc ON sg.VAM_Locator_ID=loc.VAM_Locator_ID INNER JOIN VAM_Warehouse wh ON loc.VAM_Warehouse_ID=wh.VAM_Warehouse_ID where wh.VAM_Warehouse_ID = " + ware_ID + " and loc.IsDefault='Y' and loc.IsActive = 'Y'";
+                location = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_Locator_ID FROM VAM_Locator where VAM_Warehouse_ID = " + ware_ID + " and IsActive = 'Y'"));
                 if (location > 0)
                 {
                     return location;
@@ -862,14 +862,14 @@ namespace VAdvantage.Model
         // Get Locator_ID for SourceWarehouse  //new 6 jan 3 4
         public int GetSwhLocation(int Swh_ID)
         {
-            int Swhlocation = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Locator_ID FROM M_Locator where M_Warehouse_ID = " + Swh_ID + " and IsActive = 'Y' and IsDefault='Y'"));
+            int Swhlocation = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_Locator_ID FROM VAM_Locator where VAM_Warehouse_ID = " + Swh_ID + " and IsActive = 'Y' and IsDefault='Y'"));
             if (Swhlocation > 0)
             {
                 return Swhlocation;
             }
             else
             {
-                Swhlocation = Util.GetValueOfInt(DB.ExecuteScalar("SELECT M_Locator_ID FROM M_Locator where M_Warehouse_ID = " + Swh_ID + " and IsActive = 'Y'"));
+                Swhlocation = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_Locator_ID FROM VAM_Locator where VAM_Warehouse_ID = " + Swh_ID + " and IsActive = 'Y'"));
                 if (Swhlocation > 0)
                 {
                     return Swhlocation;
@@ -914,8 +914,8 @@ namespace VAdvantage.Model
                 {
                     MRequisitionLine line = lines[i];
 
-                    if (line.GetM_Product_ID() > 0)
-                        product = MProduct.Get(GetCtx(), line.GetM_Product_ID());
+                    if (line.GetVAM_Product_ID() > 0)
+                        product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
 
                     Decimal finalQty = line.GetQty();
                     if (line.GetVAB_OrderLine_ID() == 0)
@@ -936,18 +936,18 @@ namespace VAdvantage.Model
 
                         //Update storage requisition reserved qty
                         //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA203_'", null, null)) > 0)
-                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        if (Env.IsModuleInstalled("VA203_") && product != null && product.GetProductType() == X_VAM_Product.PRODUCTTYPE_Item)
                         {
                             if (GetDocAction() != "VO" && GetDocStatus() != "DR")
                             {
                                 if (quant > 0)
                                 {
-                                    //int loc_id = GetLocation(GetM_Warehouse_ID());
+                                    //int loc_id = GetLocation(GetVAM_Warehouse_ID());
                                     int loc_id = line.GetOrderLocator_ID();
-                                    storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    storage = MStorage.Get(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                     if (storage == null)
                                     {
-                                        storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                        storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                     }
                                     storage.SetDTD001_QtyReserved((Decimal.Subtract(storage.GetDTD001_QtyReserved(), (Decimal)quant)));
                                     storage.Save();
@@ -956,10 +956,10 @@ namespace VAdvantage.Model
                                     {
                                         //int Swhloc_id = GetSwhLocation(GetDTD001_MWarehouseSource_ID());
                                         int Swhloc_id = line.GetReserveLocator_ID();
-                                        Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                        Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                         if (Swhstorage == null)
                                         {
-                                            Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                            Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                         }
                                         Swhstorage.SetDTD001_SourceReserve((Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), (Decimal)quant)));
                                         Swhstorage.Save();
@@ -968,7 +968,7 @@ namespace VAdvantage.Model
                                 }
                             }
                         }
-                        else if (GetDocAction() != "VO" && GetDocStatus() != "DR" && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item)
+                        else if (GetDocAction() != "VO" && GetDocStatus() != "DR" && product != null && product.GetProductType() == X_VAM_Product.PRODUCTTYPE_Item)
                         {
                             if (quant > 0)
                             {
@@ -979,12 +979,12 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    loc_id = GetLocation(GetM_Warehouse_ID());
+                                    loc_id = GetLocation(GetVAM_Warehouse_ID());
                                 }
-                                storage = MStorage.Get(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                storage = MStorage.Get(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                 if (storage == null)
                                 {
-                                    storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    storage = MStorage.GetCreate(GetCtx(), loc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                 }
                                 storage.SetDTD001_QtyReserved((Decimal.Subtract(storage.GetDTD001_QtyReserved(), (Decimal)quant)));
                                 storage.Save();
@@ -999,12 +999,12 @@ namespace VAdvantage.Model
                                     }
                                     else
                                     {
-                                        Swhloc_id = GetSwhLocation(GetM_Warehouse_ID());
+                                        Swhloc_id = GetSwhLocation(GetVAM_Warehouse_ID());
                                     }
-                                    Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                    Swhstorage = MStorage.Get(GetCtx(), Swhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                     if (Swhstorage == null)
                                     {
-                                        Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(), Get_Trx());
+                                        Swhstorage = MStorage.GetCreate(GetCtx(), Swhloc_id, line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx());
                                     }
                                     Swhstorage.SetDTD001_SourceReserve((Decimal.Subtract(Swhstorage.GetDTD001_SourceReserve(), (Decimal)quant)));
                                     Swhstorage.Save();
@@ -1123,7 +1123,7 @@ namespace VAdvantage.Model
          */
         public int GetVAB_Currency_ID()
         {
-            MPriceList pl = MPriceList.Get(GetCtx(), GetM_PriceList_ID(), Get_TrxName());
+            MPriceList pl = MPriceList.Get(GetCtx(), GetVAM_PriceList_ID(), Get_TrxName());
             return pl.GetVAB_Currency_ID();
         }
 

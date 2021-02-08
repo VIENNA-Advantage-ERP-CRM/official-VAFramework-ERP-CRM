@@ -544,7 +544,7 @@
             }
             //	PO only  Rule
             if (!_onlyRule		//	Only order has Warehouse
-                && !_isSOTrx && mTab.getValue("M_Warehouse_ID") != null) {
+                && !_isSOTrx && mTab.getValue("VAM_Warehouse_ID") != null) {
                 _onlyRule = true;
             }
 

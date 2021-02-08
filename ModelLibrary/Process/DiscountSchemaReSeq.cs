@@ -17,7 +17,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
     public class DiscountSchemaReSeq : ProcessEngine.SvrProcess
     {
         //Discount Schema			
-        private int _M_DiscountSchema_ID = 0;
+        private int _VAM_DiscountCalculation_ID = 0;
 
         /// <summary>
         /// Prepare
@@ -25,7 +25,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         protected override void Prepare()
         {
-            _M_DiscountSchema_ID = GetRecord_ID();
+            _VAM_DiscountCalculation_ID = GetRecord_ID();
         }
 
         /// <summary>
@@ -34,15 +34,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            log.Info("M_DiscountSchema_ID=" + _M_DiscountSchema_ID);
-            if (_M_DiscountSchema_ID == 0)
+            log.Info("VAM_DiscountCalculation_ID=" + _VAM_DiscountCalculation_ID);
+            if (_VAM_DiscountCalculation_ID == 0)
             {
-                throw new Exception("@M_DiscountSchema_ID@ = 0");
+                throw new Exception("@VAM_DiscountCalculation_ID@ = 0");
             }
-            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _M_DiscountSchema_ID, Get_TrxName());
+            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _VAM_DiscountCalculation_ID, Get_TrxName());
             if (ds.Get_ID() == 0)
             {
-                throw new Exception("@NotFound@ M_DiscountSchema_ID=" + _M_DiscountSchema_ID);
+                throw new Exception("@NotFound@ VAM_DiscountCalculation_ID=" + _VAM_DiscountCalculation_ID);
             }
             //
             int updated = ds.ReSeq();

@@ -20,15 +20,15 @@
         var MODE_PO = 0;
         var MODE_PRICE = 0;
         // Price List Version	
-        var _M_PriceList_Version_ID = 0;
+        var _VAM_PriceListVersion_ID = 0;
         // Warehouse		
-        var _M_Warehouse_ID = 0;
+        var _VAM_Warehouse_ID = 0;
         var _attributes = [];
 
         var lblA1 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
         var lblA2 = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_ProductFeature_ID"), "VAM_ProductFeature_ID", false, true);
-        var lblPriceList = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_PriceList_ID"), "M_PriceList_ID", false, true);
-        var lblWareHouse = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "M_Warehouse_ID"), "M_Warehouse_ID", false, true);
+        var lblPriceList = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_PriceList_ID"), "VAM_PriceList_ID", false, true);
+        var lblWareHouse = new VIS.Controls.VLabel(VIS.Msg.getElement(VIS.Env.getCtx(), "VAM_Warehouse_ID"), "VAM_Warehouse_ID", false, true);
         var lblMode = new VIS.Controls.VLabel(VIS.Msg.getMsg("Mode", false, false), "Mode", false, true);
 
         var cmbA1 = new VIS.Controls.VComboBox('', false, false, true);
@@ -276,23 +276,23 @@
 
             if (xValue) {
                 attributeId = xValue.GetVAM_ProductFeature_ID;
-                attributeValueId = xValue.GetM_AttributeValue_ID;
+                attributeValueId = xValue.GetVAM_PFeature_Value_ID;
             }
             if (yValue) {
                 attributeyId = yValue.GetVAM_ProductFeature_ID;
-                attributeValueyId = yValue.GetM_AttributeValue_ID;
+                attributeValueyId = yValue.GetVAM_PFeature_Value_ID;
             }
 
             $.ajax({
                 url: VIS.Application.contextUrl + "Common/GetGridElement",
                 dataType: "json",
                 data: {
-                    xM_Attribute_ID: attributeId,
-                    xM_AttributeValue_ID: attributeValueId,
-                    yM_Attribute_ID: attributeyId,
-                    yM_AttributeValue_ID: attributeValueyId,
-                    M_PriceList_Version_ID: _M_PriceList_Version_ID,
-                    M_Warehouse_ID: _M_Warehouse_ID,
+                    xVAM_ProductFeature_ID: attributeId,
+                    xVAM_PFeature_Value_ID: attributeValueId,
+                    yVAM_ProductFeature_ID: attributeyId,
+                    yVAM_PFeature_Value_ID: attributeValueyId,
+                    VAM_PriceListVersion_ID: _VAM_PriceListVersion_ID,
+                    VAM_Warehouse_ID: _VAM_Warehouse_ID,
                     windowNo: $self.windowNo
                 },
                 async: false,
@@ -314,8 +314,8 @@
                 return;
             }
             _setting = true;
-            _M_PriceList_Version_ID = cmbPrice.getControl().find('option:selected').val();
-            _M_Warehouse_ID = cmbWH.getControl().find('option:selected').val();
+            _VAM_PriceListVersion_ID = cmbPrice.getControl().find('option:selected').val();
+            _VAM_Warehouse_ID = cmbWH.getControl().find('option:selected').val();
 
             //	x dimension
             var cols = 2;

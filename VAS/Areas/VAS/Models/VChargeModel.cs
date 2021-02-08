@@ -58,7 +58,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         public int CreateCharge(Ctx ctx, int m_VAB_AccountBook_ID, int m_VAB_TaxCategory_ID, String name, int primaryVAB_Acct_Element_ID, Boolean expense)
         {
-            MCharge charge = new MCharge(ctx, 0, null);
+            MVABCharge charge = new MVABCharge(ctx, 0, null);
             charge.SetName(name);
             charge.SetVAB_TaxCategory_ID(m_VAB_TaxCategory_ID);
             if (!charge.Save())
@@ -87,7 +87,7 @@ namespace VIS.Controllers
             foreach (MVABAccountBook ac in ass)
             {
                 //	Target Account
-                MAccount defaultAcct = MAccount.GetDefault(ac, true);	//	optional null
+                MVABAccount defaultAcct = MVABAccount.GetDefault(ac, true);	//	optional null
                 //	Natural Account
                 int VAB_Acct_Element_ID = primaryVAB_Acct_Element_ID;
                 MVABAccountBookElement ase = ac.GetAcctSchemaElement(X_VAB_AccountBook_Element.ELEMENTTYPE_Account);
@@ -99,7 +99,7 @@ namespace VIS.Controllers
                     {
                         VAB_Acct_ValidParameter_ID = defAccts.GetCh_Revenue_Acct();
                     }
-                    MAccount chargeAcct = MAccount.Get(ctx, VAB_Acct_ValidParameter_ID);
+                    MVABAccount chargeAcct = MVABAccount.Get(ctx, VAB_Acct_ValidParameter_ID);
                     VAB_Acct_Element_ID = chargeAcct.GetAccount_ID();
                     //	Fallback
                     if (VAB_Acct_Element_ID == 0)
@@ -118,11 +118,11 @@ namespace VIS.Controllers
                     }
                 }
 
-                MAccount acct = MAccount.Get(ctx,
+                MVABAccount acct = MVABAccount.Get(ctx,
                     charge.GetVAF_Client_ID(), charge.GetVAF_Org_ID(),
                     ac.GetVAB_AccountBook_ID(),
                     VAB_Acct_Element_ID, defaultAcct.GetVAB_SubAcct_ID(),
-                    defaultAcct.GetM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
+                    defaultAcct.GetVAM_Product_ID(), defaultAcct.GetVAB_BusinessPartner_ID(), defaultAcct.GetVAF_OrgTrx_ID(),
                     defaultAcct.GetC_LocFrom_ID(), defaultAcct.GetC_LocTo_ID(), defaultAcct.GetVAB_SalesRegionState_ID(),
                     defaultAcct.GetVAB_Project_ID(), defaultAcct.GetVAB_Promotion_ID(), defaultAcct.GetVAB_BillingCode_ID(),
                     defaultAcct.GetUser1_ID(), defaultAcct.GetUser2_ID(),

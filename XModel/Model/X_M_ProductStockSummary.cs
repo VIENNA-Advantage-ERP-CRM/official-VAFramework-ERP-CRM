@@ -9,42 +9,42 @@ namespace VAdvantage.Model
     using VAdvantage.Process;
     using VAdvantage.Model;
     using VAdvantage.Utility;
-    using System.Data;/** Generated Model for M_ProductStockSummary
+    using System.Data;/** Generated Model for VAM_Prod_StockSummary
  *  @author Raghu (Updated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_ProductStockSummary : PO
+    public class X_VAM_Prod_StockSummary : PO
     {
-        public X_M_ProductStockSummary(Context ctx, int M_ProductStockSummary_ID, Trx trxName)
-            : base(ctx, M_ProductStockSummary_ID, trxName)
-        {/** if (M_ProductStockSummary_ID == 0){SetM_ProductStockSummary_ID (0);SetM_Product_ID (0);SetMovementFromDate (DateTime.Now);} */
+        public X_VAM_Prod_StockSummary(Context ctx, int VAM_Prod_StockSummary_ID, Trx trxName)
+            : base(ctx, VAM_Prod_StockSummary_ID, trxName)
+        {/** if (VAM_Prod_StockSummary_ID == 0){SetVAM_Prod_StockSummary_ID (0);SetVAM_Product_ID (0);SetMovementFromDate (DateTime.Now);} */
         }
-        public X_M_ProductStockSummary(Ctx ctx, int M_ProductStockSummary_ID, Trx trxName)
-            : base(ctx, M_ProductStockSummary_ID, trxName)
-        {/** if (M_ProductStockSummary_ID == 0){SetM_ProductStockSummary_ID (0);SetM_Product_ID (0);SetMovementFromDate (DateTime.Now);} */
+        public X_VAM_Prod_StockSummary(Ctx ctx, int VAM_Prod_StockSummary_ID, Trx trxName)
+            : base(ctx, VAM_Prod_StockSummary_ID, trxName)
+        {/** if (VAM_Prod_StockSummary_ID == 0){SetVAM_Prod_StockSummary_ID (0);SetVAM_Product_ID (0);SetMovementFromDate (DateTime.Now);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_ProductStockSummary(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Prod_StockSummary(Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_ProductStockSummary(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
+        public X_VAM_Prod_StockSummary(Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName) { }/** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-        public X_M_ProductStockSummary(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
+        public X_VAM_Prod_StockSummary(Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName) { }/** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-        static X_M_ProductStockSummary() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
+        static X_VAM_Prod_StockSummary() { Table_ID = Get_Table_ID(Table_Name); model = new KeyNamePair(Table_ID, Table_Name); }/** Serial Version No */
         static long serialVersionUID = 27760365347817L;/** Last Updated Timestamp 11/4/2016 11:43:51 AM */
         public static long updatedMS = 1478240031028L;/** VAF_TableView_ID=1000499 */
         public static int Table_ID; // =1000499;
-        /** TableName=M_ProductStockSummary */
-        public static String Table_Name = "M_ProductStockSummary";
+        /** TableName=VAM_Prod_StockSummary */
+        public static String Table_Name = "VAM_Prod_StockSummary";
         protected static KeyNamePair model; protected Decimal accessLevel = new Decimal(3);/** AccessLevel
 @return 4 - System 
 */
@@ -59,19 +59,19 @@ namespace VAdvantage.Model
         protected override POInfo InitPO(Ctx ctx) { POInfo poi = POInfo.GetPOInfo(ctx, Table_ID); return poi; }/** Info
 @return info
 */
-        public override String ToString() { StringBuilder sb = new StringBuilder("X_M_ProductStockSummary[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Export.
+        public override String ToString() { StringBuilder sb = new StringBuilder("X_VAM_Prod_StockSummary[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Export.
 @param Export_ID Export */
         public void SetExport_ID(String Export_ID) { if (Export_ID != null && Export_ID.Length > 50) { log.Warning("Length > 50 - truncated"); Export_ID = Export_ID.Substring(0, 50); } Set_Value("Export_ID", Export_ID); }/** Get Export.
 @return Export */
         public String GetExport_ID() { return (String)Get_Value("Export_ID"); }/** Set Product Stock Summary.
-@param M_ProductStockSummary_ID Product Stock Summary */
-        public void SetM_ProductStockSummary_ID(int M_ProductStockSummary_ID) { if (M_ProductStockSummary_ID < 1) throw new ArgumentException("M_ProductStockSummary_ID is mandatory."); Set_ValueNoCheck("M_ProductStockSummary_ID", M_ProductStockSummary_ID); }/** Get Product Stock Summary.
+@param VAM_Prod_StockSummary_ID Product Stock Summary */
+        public void SetVAM_Prod_StockSummary_ID(int VAM_Prod_StockSummary_ID) { if (VAM_Prod_StockSummary_ID < 1) throw new ArgumentException("VAM_Prod_StockSummary_ID is mandatory."); Set_ValueNoCheck("VAM_Prod_StockSummary_ID", VAM_Prod_StockSummary_ID); }/** Get Product Stock Summary.
 @return Product Stock Summary */
-        public int GetM_ProductStockSummary_ID() { Object ii = Get_Value("M_ProductStockSummary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
-@param M_Product_ID Product, Service, Item */
-        public void SetM_Product_ID(int M_Product_ID) { if (M_Product_ID < 1) throw new ArgumentException("M_Product_ID is mandatory."); Set_ValueNoCheck("M_Product_ID", M_Product_ID); }/** Get Product.
+        public int GetVAM_Prod_StockSummary_ID() { Object ii = Get_Value("VAM_Prod_StockSummary_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Product.
+@param VAM_Product_ID Product, Service, Item */
+        public void SetVAM_Product_ID(int VAM_Product_ID) { if (VAM_Product_ID < 1) throw new ArgumentException("VAM_Product_ID is mandatory."); Set_ValueNoCheck("VAM_Product_ID", VAM_Product_ID); }/** Get Product.
 @return Product, Service, Item */
-        public int GetM_Product_ID() { Object ii = Get_Value("M_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Movement From Date.
+        public int GetVAM_Product_ID() { Object ii = Get_Value("VAM_Product_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Set Movement From Date.
 @param MovementFromDate Movement From Date */
         public void SetMovementFromDate(DateTime? MovementFromDate) { if (MovementFromDate == null) throw new ArgumentException("MovementFromDate is mandatory."); Set_ValueNoCheck("MovementFromDate", (DateTime?)MovementFromDate); }/** Get Movement From Date.
 @return Movement From Date */

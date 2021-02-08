@@ -1151,7 +1151,7 @@ namespace VIS.Helpers
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_BPartner, Convert.ToInt32(values[i]));
                         }
-                        else if (columnName.Equals("M_Product_ID", StringComparison.OrdinalIgnoreCase))
+                        else if (columnName.Equals("VAM_Product_ID", StringComparison.OrdinalIgnoreCase))
                         {
                             result1 = MReportTree.GetWhereClause(_ctx, _VAPA_FinancialReportingOrder_ID, MVABAccountBookElement.ELEMENTTYPE_Product, Convert.ToInt32(values[i]));
                         }

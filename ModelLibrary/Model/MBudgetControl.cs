@@ -18,10 +18,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MBudgetControl : X_VAVAGL_BudgetActivation
+    public class MBudgetControl : X_VAGL_BudgetActivation
     {
-        public MBudgetControl(Ctx ctx, int VAVAGL_BudgetActivation_ID, Trx trxName)
-           : base(ctx, VAVAGL_BudgetActivation_ID, trxName)
+        public MBudgetControl(Ctx ctx, int VAGL_BudgetActivation_ID, Trx trxName)
+           : base(ctx, VAGL_BudgetActivation_ID, trxName)
         {
 
         }

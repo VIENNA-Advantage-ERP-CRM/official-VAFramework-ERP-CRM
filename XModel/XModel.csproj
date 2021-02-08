@@ -288,9 +288,7 @@
     <Compile Include="Model\X_CM_AccessListRole.cs" />
     <Compile Include="Model\X_CM_AccessMedia.cs" />
     <Compile Include="Model\X_CM_AccessNewsChannel.cs" />
-    <Compile Include="Model\X_CM_AccessProfile.cs" />
     <Compile Include="Model\X_CM_AccessStage.cs" />
-    <Compile Include="Model\X_CM_Ad.cs" />
     <Compile Include="Model\X_CM_Ad_Cat.cs" />
     <Compile Include="Model\X_CM_BroadcastServer.cs" />
     <Compile Include="Model\X_VACM_ChatType.cs" />
@@ -676,7 +674,7 @@
     <Compile Include="Model\X_M_Warehouse_Acct.cs" />
     <Compile Include="Model\X_M_WorkOrder.cs" />
     <Compile Include="Model\X_M_WorkOrderTransaction.cs" />
-    <Compile Include="Model\X_PA_Achievement.cs" />
+    <Compile Include="Model\X_VAPA_Achievement.cs" />
     <Compile Include="Model\X_PA_Benchmark.cs" />
     <Compile Include="Model\X_PA_BenchmarkData.cs" />
     <Compile Include="Model\X_PA_ColorSchema.cs" />

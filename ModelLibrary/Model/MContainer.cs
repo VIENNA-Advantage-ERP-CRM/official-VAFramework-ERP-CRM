@@ -328,7 +328,7 @@ namespace VAdvantage.Model
 	private MCStage	 _stage   = null;
 	
 	/** Template */
-	private MTemplate _template = null;
+	private MVACMLayout _template = null;
 
 	/// <summary>
     /// Get Web Project
@@ -345,11 +345,11 @@ namespace VAdvantage.Model
     /// Get Template from Cache, or load it
 	/// </summary>
 	/// <returns>template</returns>
-	public MTemplate GetTemplate() 
+	public MVACMLayout GetTemplate() 
 	{
         if (GetVACM_Layout_ID() > 0 && _template == null)
         {
-            _template = MTemplate.Get(GetCtx(), GetVACM_Layout_ID(), null);
+            _template = MVACMLayout.Get(GetCtx(), GetVACM_Layout_ID(), null);
         }
 		return _template;
 	} // getTemplate

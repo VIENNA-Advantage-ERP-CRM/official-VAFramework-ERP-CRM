@@ -11,35 +11,35 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_Warehouse
+    /** Generated Model for VAM_Warehouse
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_Warehouse : PO
+    public class X_VAM_Warehouse : PO
     {
-        public X_M_Warehouse(Context ctx, int M_Warehouse_ID, Trx trxName)
-            : base(ctx, M_Warehouse_ID, trxName)
+        public X_VAM_Warehouse(Context ctx, int VAM_Warehouse_ID, Trx trxName)
+            : base(ctx, VAM_Warehouse_ID, trxName)
         {
-            /** if (M_Warehouse_ID == 0)
+            /** if (VAM_Warehouse_ID == 0)
             {
             SetVAB_Address_ID (0);
             SetIsDisallowNegativeInv (false);	// N
             SetIsWMSEnabled (false);	// N
-            SetM_Warehouse_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetName (null);
             SetSeparator (null);	// *
             SetValue (null);
             }
              */
         }
-        public X_M_Warehouse(Ctx ctx, int M_Warehouse_ID, Trx trxName)
-            : base(ctx, M_Warehouse_ID, trxName)
+        public X_VAM_Warehouse(Ctx ctx, int VAM_Warehouse_ID, Trx trxName)
+            : base(ctx, VAM_Warehouse_ID, trxName)
         {
-            /** if (M_Warehouse_ID == 0)
+            /** if (VAM_Warehouse_ID == 0)
             {
             SetVAB_Address_ID (0);
             SetIsDisallowNegativeInv (false);	// N
             SetIsWMSEnabled (false);	// N
-            SetM_Warehouse_ID (0);
+            SetVAM_Warehouse_ID (0);
             SetName (null);
             SetSeparator (null);	// *
             SetValue (null);
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Warehouse(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_Warehouse(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Warehouse(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_Warehouse(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -69,14 +69,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_Warehouse(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_Warehouse(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_Warehouse()
+        static X_VAM_Warehouse()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -89,8 +89,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =190;
 
-        /** TableName=M_Warehouse */
-        public static String Table_Name = "M_Warehouse";
+        /** TableName=VAM_Warehouse */
+        public static String Table_Name = "VAM_Warehouse";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_Warehouse[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_Warehouse[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Address.
@@ -302,36 +302,36 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
 
-        /** M_WarehouseSource_ID VAF_Control_Ref_ID=197 */
-        public static int M_WAREHOUSESOURCE_ID_VAF_Control_Ref_ID = 197;
+        /** VAM_WarehouseSource_ID VAF_Control_Ref_ID=197 */
+        public static int VAM_WarehouseSOURCE_ID_VAF_Control_Ref_ID = 197;
         /** Set Source Warehouse.
-        @param M_WarehouseSource_ID Optional Warehouse to replenish from */
-        public void SetM_WarehouseSource_ID(int M_WarehouseSource_ID)
+        @param VAM_WarehouseSource_ID Optional Warehouse to replenish from */
+        public void SetVAM_WarehouseSource_ID(int VAM_WarehouseSource_ID)
         {
-            if (M_WarehouseSource_ID <= 0) Set_Value("M_WarehouseSource_ID", null);
+            if (VAM_WarehouseSource_ID <= 0) Set_Value("VAM_WarehouseSource_ID", null);
             else
-                Set_Value("M_WarehouseSource_ID", M_WarehouseSource_ID);
+                Set_Value("VAM_WarehouseSource_ID", VAM_WarehouseSource_ID);
         }
         /** Get Source Warehouse.
         @return Optional Warehouse to replenish from */
-        public int GetM_WarehouseSource_ID()
+        public int GetVAM_WarehouseSource_ID()
         {
-            Object ii = Get_Value("M_WarehouseSource_ID");
+            Object ii = Get_Value("VAM_WarehouseSource_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }
         /** Set Warehouse.
-        @param M_Warehouse_ID Storage Warehouse and Service Point */
-        public void SetM_Warehouse_ID(int M_Warehouse_ID)
+        @param VAM_Warehouse_ID Storage Warehouse and Service Point */
+        public void SetVAM_Warehouse_ID(int VAM_Warehouse_ID)
         {
-            if (M_Warehouse_ID < 1) throw new ArgumentException("M_Warehouse_ID is mandatory.");
-            Set_ValueNoCheck("M_Warehouse_ID", M_Warehouse_ID);
+            if (VAM_Warehouse_ID < 1) throw new ArgumentException("VAM_Warehouse_ID is mandatory.");
+            Set_ValueNoCheck("VAM_Warehouse_ID", VAM_Warehouse_ID);
         }
         /** Get Warehouse.
         @return Storage Warehouse and Service Point */
-        public int GetM_Warehouse_ID()
+        public int GetVAM_Warehouse_ID()
         {
-            Object ii = Get_Value("M_Warehouse_ID");
+            Object ii = Get_Value("VAM_Warehouse_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -11,32 +11,32 @@ namespace VAdvantage.Model
     using VAdvantage.Model;
     using VAdvantage.Utility;
     using System.Data;
-    /** Generated Model for M_SerNoCtl
+    /** Generated Model for VAM_CtlSerialNo
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_M_SerNoCtl : PO
+    public class X_VAM_CtlSerialNo : PO
     {
-        public X_M_SerNoCtl(Context ctx, int M_SerNoCtl_ID, Trx trxName)
-            : base(ctx, M_SerNoCtl_ID, trxName)
+        public X_VAM_CtlSerialNo(Context ctx, int VAM_CtlSerialNo_ID, Trx trxName)
+            : base(ctx, VAM_CtlSerialNo_ID, trxName)
         {
-            /** if (M_SerNoCtl_ID == 0)
+            /** if (VAM_CtlSerialNo_ID == 0)
             {
             SetCurrentNext (0);	// 100
             SetIncrementNo (0);	// 1
-            SetM_SerNoCtl_ID (0);
+            SetVAM_CtlSerialNo_ID (0);
             SetName (null);
             SetStartNo (0);	// 100
             }
              */
         }
-        public X_M_SerNoCtl(Ctx ctx, int M_SerNoCtl_ID, Trx trxName)
-            : base(ctx, M_SerNoCtl_ID, trxName)
+        public X_VAM_CtlSerialNo(Ctx ctx, int VAM_CtlSerialNo_ID, Trx trxName)
+            : base(ctx, VAM_CtlSerialNo_ID, trxName)
         {
-            /** if (M_SerNoCtl_ID == 0)
+            /** if (VAM_CtlSerialNo_ID == 0)
             {
             SetCurrentNext (0);	// 100
             SetIncrementNo (0);	// 1
-            SetM_SerNoCtl_ID (0);
+            SetVAM_CtlSerialNo_ID (0);
             SetName (null);
             SetStartNo (0);	// 100
             }
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_SerNoCtl(Context ctx, DataRow rs, Trx trxName)
+        public X_VAM_CtlSerialNo(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_SerNoCtl(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAM_CtlSerialNo(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -65,14 +65,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_M_SerNoCtl(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAM_CtlSerialNo(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_M_SerNoCtl()
+        static X_VAM_CtlSerialNo()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -85,8 +85,8 @@ namespace VAdvantage.Model
         public static int Table_ID;
         // =555;
 
-        /** TableName=M_SerNoCtl */
-        public static String Table_Name = "M_SerNoCtl";
+        /** TableName=VAM_CtlSerialNo */
+        public static String Table_Name = "VAM_CtlSerialNo";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(3);
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_M_SerNoCtl[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAM_CtlSerialNo[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Current Next.
@@ -169,17 +169,17 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Serial No Control.
-        @param M_SerNoCtl_ID Product Serial Number Control */
-        public void SetM_SerNoCtl_ID(int M_SerNoCtl_ID)
+        @param VAM_CtlSerialNo_ID Product Serial Number Control */
+        public void SetVAM_CtlSerialNo_ID(int VAM_CtlSerialNo_ID)
         {
-            if (M_SerNoCtl_ID < 1) throw new ArgumentException("M_SerNoCtl_ID is mandatory.");
-            Set_ValueNoCheck("M_SerNoCtl_ID", M_SerNoCtl_ID);
+            if (VAM_CtlSerialNo_ID < 1) throw new ArgumentException("VAM_CtlSerialNo_ID is mandatory.");
+            Set_ValueNoCheck("VAM_CtlSerialNo_ID", VAM_CtlSerialNo_ID);
         }
         /** Get Serial No Control.
         @return Product Serial Number Control */
-        public int GetM_SerNoCtl_ID()
+        public int GetVAM_CtlSerialNo_ID()
         {
-            Object ii = Get_Value("M_SerNoCtl_ID");
+            Object ii = Get_Value("VAM_CtlSerialNo_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

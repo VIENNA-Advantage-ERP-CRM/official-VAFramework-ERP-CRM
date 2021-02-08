@@ -81,7 +81,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MVABOrderLine[] lines = order.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    lines[i].SetPrice(order.GetM_PriceList_ID());
+                    lines[i].SetPrice(order.GetVAM_PriceList_ID());
                     lines[i].Save();
                 }
                 order = new MVABOrder(GetCtx(), _VAB_Order_ID, Get_TrxName());
@@ -95,7 +95,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MInvoiceLine[] lines = invoice.GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    lines[i].SetPrice(invoice.GetM_PriceList_ID(), invoice.GetVAB_BusinessPartner_ID());
+                    lines[i].SetPrice(invoice.GetVAM_PriceList_ID(), invoice.GetVAB_BusinessPartner_ID());
                     lines[i].Save();
                 }
                 invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, null);

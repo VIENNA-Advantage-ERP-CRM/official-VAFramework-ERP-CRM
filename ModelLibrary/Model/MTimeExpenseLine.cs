@@ -192,13 +192,13 @@ namespace VAdvantage.Model
             //
             base.SetVAS_Res_Assignment_ID(VAS_Res_Assignment_ID);
 
-            int M_Product_ID = 0;
+            int VAM_Product_ID = 0;
             String Name = null;
             String Description = null;
             Decimal? Qty = null;
-            String sql = "SELECT p.M_Product_ID, ra.Name, ra.Description, ra.Qty "
+            String sql = "SELECT p.VAM_Product_ID, ra.Name, ra.Description, ra.Qty "
                 + "FROM VAS_Res_Assignment ra"
-                + " INNER JOIN M_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
+                + " INNER JOIN VAM_Product p ON (p.VAS_Resource_ID=ra.VAS_Resource_ID) "
                 + "WHERE ra.VAS_Res_Assignment_ID=@param";
             SqlParameter[] param = new SqlParameter[1];
             IDataReader dr = null;
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
                 dr = DB.ExecuteReader(sql, param, null);
                 if (dr.Read())
                 {
-                    M_Product_ID = Util.GetValueOfInt(dr[0]);// rs.getInt (1);
+                    VAM_Product_ID = Util.GetValueOfInt(dr[0]);// rs.getInt (1);
                     Name = Util.GetValueOfString(dr[1]);// rs.getString(2);
                     Description = Util.GetValueOfString(dr[2]);// rs.getString(3);
                     Qty = Util.GetValueOfDecimal(dr[3]);// rs.getBigDecimal(4);
@@ -228,10 +228,10 @@ namespace VAdvantage.Model
             }
 
             log.Fine("VAS_Res_Assignment_ID=" + VAS_Res_Assignment_ID
-                    + " - M_Product_ID=" + M_Product_ID);
-            if (M_Product_ID != 0)
+                    + " - VAM_Product_ID=" + VAM_Product_ID);
+            if (VAM_Product_ID != 0)
             {
-                SetM_Product_ID(M_Product_ID);
+                SetVAM_Product_ID(VAM_Product_ID);
                 if (Description != null)
                 {
                     Name += " (" + Description + ")";
@@ -250,20 +250,20 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Product - Callout
         /// </summary>
-        /// <param name="oldM_Product_ID">old value</param>
-        /// <param name="newM_Product_ID">new value</param>
+        /// <param name="oldVAM_Product_ID">old value</param>
+        /// <param name="newVAM_Product_ID">new value</param>
         /// <param name="windowNo">window</param>
-        public void SetM_Product_ID(String oldM_Product_ID,
-                String newM_Product_ID, int windowNo)
+        public void SetVAM_Product_ID(String oldVAM_Product_ID,
+                String newVAM_Product_ID, int windowNo)
         {
-            if (newM_Product_ID == null || newM_Product_ID.Length == 0)
+            if (newVAM_Product_ID == null || newVAM_Product_ID.Length == 0)
             {
                 return;
             }
-            //int M_Product_ID = Integer.parseInt(newM_Product_ID);
-            int M_Product_ID = Util.GetValueOfInt(newM_Product_ID);
-            base.SetM_Product_ID(M_Product_ID);
-            if (M_Product_ID == 0)
+            //int VAM_Product_ID = Integer.parseInt(newVAM_Product_ID);
+            int VAM_Product_ID = Util.GetValueOfInt(newVAM_Product_ID);
+            base.SetVAM_Product_ID(VAM_Product_ID);
+            if (VAM_Product_ID == 0)
             {
                 return;
             }
@@ -274,17 +274,17 @@ namespace VAdvantage.Model
             Decimal Qty = GetQty();
             Boolean IsSOTrx = true;
             MProductPricing pp = new MProductPricing(GetVAF_Client_ID(), GetVAF_Org_ID(),
-                    M_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
+                    VAM_Product_ID, VAB_BusinessPartner_ID, Qty, IsSOTrx);
             //
-            int M_PriceList_ID = hdr.GetM_PriceList_ID();
-            pp.SetM_PriceList_ID(M_PriceList_ID);
+            int VAM_PriceList_ID = hdr.GetVAM_PriceList_ID();
+            pp.SetVAM_PriceList_ID(VAM_PriceList_ID);
             DateTime? orderDate = GetDateExpense();
             pp.SetPriceDate(orderDate);
             //
             SetExpenseAmt(pp.GetPriceStd());
             SetVAB_Currency_ID(pp.GetVAB_Currency_ID());
-            SetAmt(windowNo, "M_Product_ID");
-        }	//	setM_Product_ID
+            SetAmt(windowNo, "VAM_Product_ID");
+        }	//	setVAM_Product_ID
 
         /// <summary>
         /// Set Currency - Callout

@@ -163,7 +163,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		
 		//	Update/Save Org Info
-		oInfo.SetM_Warehouse_ID(wh.GetM_Warehouse_ID());
+		oInfo.SetVAM_Warehouse_ID(wh.GetVAM_Warehouse_ID());
         if (!oInfo.Save(Get_Trx()))
         {
             return GetRetrievedError(oInfo, "Organization Info not saved");

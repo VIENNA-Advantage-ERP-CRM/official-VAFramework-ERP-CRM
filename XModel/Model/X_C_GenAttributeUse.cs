@@ -22,7 +22,7 @@ public X_VAB_GenFeatureUse (Context ctx, int VAB_GenFeatureUse_ID, Trx trxName) 
 {
 SetVAB_GenFeatureSet_ID (0);
 SetVAB_GenFeature_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_AttributeUse WHERE M_AttributeSet_ID=@M_AttributeSet_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PFeature_Use WHERE VAM_PFeature_Set_ID=@VAM_PFeature_Set_ID@
 }
  */
 }
@@ -32,7 +32,7 @@ public X_VAB_GenFeatureUse (Ctx ctx, int VAB_GenFeatureUse_ID, Trx trxName) : ba
 {
 SetVAB_GenFeatureSet_ID (0);
 SetVAB_GenFeature_ID (0);
-SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM M_AttributeUse WHERE M_AttributeSet_ID=@M_AttributeSet_ID@
+SetSeqNo (0);	// @SQL=SELECT NVL(MAX(SeqNo),0)+10 AS DefaultValue FROM VAM_PFeature_Use WHERE VAM_PFeature_Set_ID=@VAM_PFeature_Set_ID@
 }
  */
 }

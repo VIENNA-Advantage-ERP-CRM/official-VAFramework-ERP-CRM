@@ -1,7 +1,7 @@
 ﻿/********************************************************
  * Class Name     : MMatchPO
  * Purpose        : 
- * Class Used     : X_M_MatchPO
+ * Class Used     : X_VAM_MatchPO
  * Chronological    Development
  * Raghunandan     08-Jun-2009
  * Veena Pandey    16-Jun-2009
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
     ///	- Updates Order (delivered, invoiced)
     ///	- Creates PPV acct
     /// </summary>
-    public class MMatchPO : X_M_MatchPO
+    public class MMatchPO : X_VAM_MatchPO
     {
 
         /** Invoice Changed			*/
@@ -48,18 +48,18 @@ namespace VAdvantage.Model
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_MatchPO_ID">id</param>
+        /// <param name="VAM_MatchPO_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMatchPO(Ctx ctx, int M_MatchPO_ID, Trx trxName)
-            : base(ctx, M_MatchPO_ID, trxName)
+        public MMatchPO(Ctx ctx, int VAM_MatchPO_ID, Trx trxName)
+            : base(ctx, VAM_MatchPO_ID, trxName)
         {
-            if (M_MatchPO_ID == 0)
+            if (VAM_MatchPO_ID == 0)
             {
                 //	setVAB_OrderLine_ID (0);
                 //	setDateTrx (new Timestamp(System.currentTimeMillis()));
-                //	setM_InOutLine_ID (0);
-                //	setM_Product_ID (0);
-                SetM_AttributeSetInstance_ID(0);
+                //	setVAM_Inv_InOutLine_ID (0);
+                //	setVAM_Product_ID (0);
+                SetVAM_PFeature_SetInstance_ID(0);
                 //	setQty (Env.ZERO);
                 SetPosted(false);
                 SetProcessed(false);
@@ -88,12 +88,12 @@ namespace VAdvantage.Model
             : this(sLine.GetCtx(), 0, sLine.Get_Trx())
         {
             SetClientOrg(sLine);
-            SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
+            SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
             SetVAB_OrderLine_ID(sLine.GetVAB_OrderLine_ID());
             if (dateTrx != null)
                 SetDateTrx(dateTrx);
-            SetM_Product_ID(sLine.GetM_Product_ID());
-            SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
+            SetVAM_Product_ID(sLine.GetVAM_Product_ID());
+            SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
             SetQty(qty);
             SetProcessed(true);		//	auto
         }
@@ -113,8 +113,8 @@ namespace VAdvantage.Model
                 SetVAB_OrderLine_ID(iLine.GetVAB_OrderLine_ID());
             if (dateTrx != null)
                 SetDateTrx(dateTrx);
-            SetM_Product_ID(iLine.GetM_Product_ID());
-            SetM_AttributeSetInstance_ID(iLine.GetM_AttributeSetInstance_ID());
+            SetVAM_Product_ID(iLine.GetVAM_Product_ID());
+            SetVAM_PFeature_SetInstance_ID(iLine.GetVAM_PFeature_SetInstance_ID());
             SetQty(qty);
             SetProcessed(true);		//	auto
         }
@@ -125,14 +125,14 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         public static void Consolidate(Ctx ctx)
         {
-            String sql = "SELECT * FROM M_MatchPO po "
-                //jz + "WHERE EXISTS (SELECT * FROM M_MatchPO x "
-                + "WHERE EXISTS (SELECT 1 FROM M_MatchPO x "
+            String sql = "SELECT * FROM VAM_MatchPO po "
+                //jz + "WHERE EXISTS (SELECT * FROM VAM_MatchPO x "
+                + "WHERE EXISTS (SELECT 1 FROM VAM_MatchPO x "
                     + "WHERE po.VAB_OrderLine_ID=x.VAB_OrderLine_ID AND po.Qty=x.Qty "
                     + "GROUP BY VAB_OrderLine_ID, Qty "
                     + "HAVING COUNT(*) = 2) "
                 + " AND VAF_Client_ID=" + ctx.GetVAF_Client_ID()
-                + "ORDER BY VAB_OrderLine_ID, M_InOutLine_ID";
+                + "ORDER BY VAB_OrderLine_ID, VAM_Inv_InOutLine_ID";
             int success = 0;
             int errors = 0;
             try
@@ -151,29 +151,29 @@ namespace VAdvantage.Model
                         {
                             dr = ds.Tables[0].Rows[i];
                             MMatchPO po2 = new MMatchPO(ctx, dr, null);
-                            if (po1.GetM_InOutLine_ID() != 0 && po1.GetVAB_InvoiceLine_ID() == 0
-                                && po2.GetM_InOutLine_ID() == 0 && po2.GetVAB_InvoiceLine_ID() != 0)
+                            if (po1.GetVAM_Inv_InOutLine_ID() != 0 && po1.GetVAB_InvoiceLine_ID() == 0
+                                && po2.GetVAM_Inv_InOutLine_ID() == 0 && po2.GetVAB_InvoiceLine_ID() != 0)
                             {
-                                String s1 = "UPDATE M_MatchPO SET VAB_InvoiceLine_ID="
+                                String s1 = "UPDATE VAM_MatchPO SET VAB_InvoiceLine_ID="
                                     + po2.GetVAB_InvoiceLine_ID()
-                                    + " WHERE M_MatchPO_ID=" + po1.GetM_MatchPO_ID();
+                                    + " WHERE VAM_MatchPO_ID=" + po1.GetVAM_MatchPO_ID();
                                 int no1 = ExecuteQuery.ExecuteNonQuery(s1);
                                 if (no1 != 1)
                                 {
                                     errors++;
-                                    //s_log.warning("Not updated M_MatchPO_ID=" + po1.GetM_MatchPO_ID());
+                                    //s_log.warning("Not updated VAM_MatchPO_ID=" + po1.GetVAM_MatchPO_ID());
                                     continue;
                                 }
                                 //
-                                String s2 = "DELETE FROM Actual_Acct_Detail WHERE VAF_TableView_ID=473 AND Record_ID=" + po2.GetM_MatchPO_ID();
+                                String s2 = "DELETE FROM Actual_Acct_Detail WHERE VAF_TableView_ID=473 AND Record_ID=" + po2.GetVAM_MatchPO_ID();
                                 int no2 = ExecuteQuery.ExecuteNonQuery(s2);
-                                String s3 = "DELETE FROM M_MatchPO WHERE M_MatchPO_ID=" + po2.GetM_MatchPO_ID();
+                                String s3 = "DELETE FROM VAM_MatchPO WHERE VAM_MatchPO_ID=" + po2.GetVAM_MatchPO_ID();
                                 int no3 = ExecuteQuery.ExecuteNonQuery(s3);
                                 if (no2 == 0 && no3 == 1)
                                     success++;
                                 else
                                 {
-                                    //s_log.warning("M_MatchPO_ID=" + po2.GetM_MatchPO_ID()
+                                    //s_log.warning("VAM_MatchPO_ID=" + po2.GetVAM_MatchPO_ID()
                                     //    + " - Deleted=" + no2 + ", Acct=" + no3);
                                     errors++;
                                 }
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
             }
 
             MMatchPO retValue = null;
-            String sql = "SELECT * FROM M_MatchPO WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;
+            String sql = "SELECT * FROM VAM_MatchPO WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;
             //		ArrayList list = new ArrayList();
             DataSet ds = null;
             try
@@ -240,11 +240,11 @@ namespace VAdvantage.Model
                                 || mpo.GetVAB_InvoiceLine_ID() == iLine.GetVAB_InvoiceLine_ID())
                             {
                                 mpo.SetVAB_InvoiceLine_ID(iLine);
-                                if (iLine.GetM_AttributeSetInstance_ID() != 0)
+                                if (iLine.GetVAM_PFeature_SetInstance_ID() != 0)
                                 {
-                                    if (mpo.GetM_AttributeSetInstance_ID() == 0)
-                                        mpo.SetM_AttributeSetInstance_ID(iLine.GetM_AttributeSetInstance_ID());
-                                    else if (mpo.GetM_AttributeSetInstance_ID() != iLine.GetM_AttributeSetInstance_ID())
+                                    if (mpo.GetVAM_PFeature_SetInstance_ID() == 0)
+                                        mpo.SetVAM_PFeature_SetInstance_ID(iLine.GetVAM_PFeature_SetInstance_ID());
+                                    else if (mpo.GetVAM_PFeature_SetInstance_ID() != iLine.GetVAM_PFeature_SetInstance_ID())
                                         continue;
                                 }
                             }
@@ -253,15 +253,15 @@ namespace VAdvantage.Model
                         }
                         if (sLine != null)
                         {
-                            if (mpo.GetM_InOutLine_ID() == 0
-                                || mpo.GetM_InOutLine_ID() == sLine.GetM_InOutLine_ID())
+                            if (mpo.GetVAM_Inv_InOutLine_ID() == 0
+                                || mpo.GetVAM_Inv_InOutLine_ID() == sLine.GetVAM_Inv_InOutLine_ID())
                             {
-                                mpo.SetM_InOutLine_ID(sLine.GetM_InOutLine_ID());
-                                if (sLine.GetM_AttributeSetInstance_ID() != 0)
+                                mpo.SetVAM_Inv_InOutLine_ID(sLine.GetVAM_Inv_InOutLine_ID());
+                                if (sLine.GetVAM_PFeature_SetInstance_ID() != 0)
                                 {
-                                    if (mpo.GetM_AttributeSetInstance_ID() == 0)
-                                        mpo.SetM_AttributeSetInstance_ID(sLine.GetM_AttributeSetInstance_ID());
-                                    else if (mpo.GetM_AttributeSetInstance_ID() != sLine.GetM_AttributeSetInstance_ID())
+                                    if (mpo.GetVAM_PFeature_SetInstance_ID() == 0)
+                                        mpo.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
+                                    else if (mpo.GetVAM_PFeature_SetInstance_ID() != sLine.GetVAM_PFeature_SetInstance_ID())
                                         continue;
                                 }
                             }
@@ -298,17 +298,17 @@ namespace VAdvantage.Model
         /// Get PO Matches of receipt
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_InOut_ID">receipt</param>
+        /// <param name="VAM_Inv_InOut_ID">receipt</param>
         /// <param name="trxName">transaction</param>
         /// <returns>array of matches</returns>
-        public static MMatchPO[] GetInOut(Ctx ctx, int M_InOut_ID, Trx trxName)
+        public static MMatchPO[] GetInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
         {
-            if (M_InOut_ID == 0)
+            if (VAM_Inv_InOut_ID == 0)
                 return new MMatchPO[] { };
             //
-            String sql = "SELECT * FROM M_MatchPO m"
-                + " INNER JOIN M_InOutLine l ON (m.M_InOutLine_ID=l.M_InOutLine_ID) "
-                + "WHERE l.M_InOut_ID=" + M_InOut_ID;
+            String sql = "SELECT * FROM VAM_MatchPO m"
+                + " INNER JOIN VAM_Inv_InOutLine l ON (m.VAM_Inv_InOutLine_ID=l.VAM_Inv_InOutLine_ID) "
+                + "WHERE l.VAM_Inv_InOut_ID=" + VAM_Inv_InOut_ID;
             List<MMatchPO> list = new List<MMatchPO>();
             try
             {
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             if (VAB_OrderLine_ID == 0 || VAB_InvoiceLine_ID == 0)
                 return new MMatchPO[] { };
             //
-            String sql = "SELECT * FROM M_MatchPO WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID;
+            String sql = "SELECT * FROM VAM_MatchPO WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID;
             List<MMatchPO> list = new List<MMatchPO>();
             try
             {
@@ -372,15 +372,15 @@ namespace VAdvantage.Model
         /// Get PO Match of Receipt Line
         /// </summary>
         /// <param name="ctx">context</param>
-        /// <param name="M_InOutLine_ID">receipt</param>
+        /// <param name="VAM_Inv_InOutLine_ID">receipt</param>
         /// <param name="trxName">transaction</param>
         /// <returns>array of matches</returns>
-        public static MMatchPO[] Get(Ctx ctx, int M_InOutLine_ID, Trx trxName)
+        public static MMatchPO[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
-            if (M_InOutLine_ID == 0)
+            if (VAM_Inv_InOutLine_ID == 0)
                 return new MMatchPO[] { };
             //
-            String sql = "SELECT * FROM M_MatchPO WHERE M_InOutLine_ID=" + M_InOutLine_ID;
+            String sql = "SELECT * FROM VAM_MatchPO WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID;
             List<MMatchPO> list = new List<MMatchPO>();
             try
             {
@@ -415,7 +415,7 @@ namespace VAdvantage.Model
             if (VAB_Invoice_ID == 0)
                 return new MMatchPO[] { };
             //
-            String sql = "SELECT * FROM M_MatchPO mi"
+            String sql = "SELECT * FROM VAM_MatchPO mi"
                 + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID) "
                 + "WHERE il.VAB_Invoice_ID=" + VAB_Invoice_ID;
             List<MMatchPO> list = new List<MMatchPO>();
@@ -454,7 +454,7 @@ namespace VAdvantage.Model
             {
                 MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
                 Boolean IsReturnTrx = orderLine.GetParent().IsReturnTrx();
-                if (GetM_InOutLine_ID() != 0)
+                if (GetVAM_Inv_InOutLine_ID() != 0)
                 {
                     orderLine.SetQtyDelivered(Decimal.Subtract(orderLine.GetQtyDelivered(), GetQty()));
                     if (IsReturnTrx)
@@ -490,7 +490,7 @@ namespace VAdvantage.Model
                 if (_isInOutLineChange)
                 {
 
-                    if (GetM_InOutLine_ID() != 0)							//	new delivery
+                    if (GetVAM_Inv_InOutLine_ID() != 0)							//	new delivery
                     {
                         orderLine.SetQtyDelivered(Decimal.Add(orderLine.GetQtyDelivered(), GetQty()));
                         if (isReturnTrx)
@@ -501,7 +501,7 @@ namespace VAdvantage.Model
                             origOrderLine.Save();
                         }
                     }
-                    else //	if (getM_InOutLine_ID() == 0)					//	reset to 0
+                    else //	if (getVAM_Inv_InOutLine_ID() == 0)					//	reset to 0
                     {
                         orderLine.SetQtyDelivered(Decimal.Subtract(orderLine.GetQtyDelivered(), GetQty()));
                         if (isReturnTrx)
@@ -524,12 +524,12 @@ namespace VAdvantage.Model
                 }
 
                 //	Update Order ASI if full match
-                //if (orderLine.GetM_AttributeSetInstance_ID() == 0
-                //    && GetM_InOutLine_ID() != 0)
+                //if (orderLine.GetVAM_PFeature_SetInstance_ID() == 0
+                //    && GetVAM_Inv_InOutLine_ID() != 0)
                 //{
-                //    MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                //    MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
                 //    if (iol.GetMovementQty().CompareTo(orderLine.GetQtyOrdered()) == 0)
-                //        orderLine.SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
+                //        orderLine.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
                 //}
                 orderLine.Save();
             }
@@ -562,10 +562,10 @@ namespace VAdvantage.Model
                 }
             }
 
-            if (GetM_InOutLine_ID() != 0)
+            if (GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine line = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_TrxName());
-                MInOut ino = new MInOut(GetCtx(), line.GetM_InOut_ID(), Get_TrxName());
+                MInOutLine line = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                MInOut ino = new MInOut(GetCtx(), line.GetVAM_Inv_InOut_ID(), Get_TrxName());
                 if (ino.GetDocStatus() != DocumentEngine.ACTION_COMPLETE)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted"));
@@ -594,10 +594,10 @@ namespace VAdvantage.Model
                 SetDateAcct((DateTime?)ts);
             }
             //	Set ASI from Receipt
-            if (GetM_AttributeSetInstance_ID() == 0 && GetM_InOutLine_ID() != 0)
+            if (GetVAM_PFeature_SetInstance_ID() == 0 && GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
-                SetM_AttributeSetInstance_ID(iol.GetM_AttributeSetInstance_ID());
+                MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
             }
 
             //	Find OrderLine
@@ -610,9 +610,9 @@ namespace VAdvantage.Model
                     if (il.GetVAB_OrderLine_ID() != 0)
                         SetVAB_OrderLine_ID(il.GetVAB_OrderLine_ID());
                 }	//	get from invoice
-                if (GetVAB_OrderLine_ID() == 0 && GetM_InOutLine_ID() != 0)
+                if (GetVAB_OrderLine_ID() == 0 && GetVAM_Inv_InOutLine_ID() != 0)
                 {
-                    MInOutLine iol = new MInOutLine(GetCtx(), GetM_InOutLine_ID(), Get_Trx());
+                    MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
                     if (iol.GetVAB_OrderLine_ID() != 0)
                     {
                         SetVAB_OrderLine_ID(iol.GetVAB_OrderLine_ID());
@@ -717,10 +717,10 @@ namespace VAdvantage.Model
             }
             //
             sql = "SELECT io.DateAcct "
-                + "FROM M_InOutLine iol"
-                + " INNER JOIN M_InOut io ON (io.M_InOut_ID=iol.M_InOut_ID) "
-                + "WHERE iol.M_InOutLine_ID=" + GetM_InOutLine_ID();
-            if (GetM_InOutLine_ID() != 0)
+                + "FROM VAM_Inv_InOutLine iol"
+                + " INNER JOIN VAM_Inv_InOut io ON (io.VAM_Inv_InOut_ID=iol.VAM_Inv_InOut_ID) "
+                + "WHERE iol.VAM_Inv_InOutLine_ID=" + GetVAM_Inv_InOutLine_ID();
+            if (GetVAM_Inv_InOutLine_ID() != 0)
             {
                 IDataReader dr = null;
                 try
@@ -812,13 +812,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set VAB_OrderLine_ID
         /// </summary>
-        /// <param name="M_InOutLine_ID">id</param>
-        public new void SetM_InOutLine_ID(int M_InOutLine_ID)
+        /// <param name="VAM_Inv_InOutLine_ID">id</param>
+        public new void SetVAM_Inv_InOutLine_ID(int VAM_Inv_InOutLine_ID)
         {
-            int old = GetM_InOutLine_ID();
-            if (old != M_InOutLine_ID)
+            int old = GetVAM_Inv_InOutLine_ID();
+            if (old != VAM_Inv_InOutLine_ID)
             {
-                base.SetM_InOutLine_ID(M_InOutLine_ID);
+                base.SetVAM_Inv_InOutLine_ID(VAM_Inv_InOutLine_ID);
                 _isInOutLineChange = true;
             }
         }
@@ -833,7 +833,7 @@ namespace VAdvantage.Model
             sb.Append(Get_ID())
                 .Append(",Qty=").Append(GetQty())
                 .Append(",VAB_OrderLine_ID=").Append(GetVAB_OrderLine_ID())
-                .Append(",M_InOutLine_ID=").Append(GetM_InOutLine_ID())
+                .Append(",VAM_Inv_InOutLine_ID=").Append(GetVAM_Inv_InOutLine_ID())
                 .Append(",VAB_InvoiceLine_ID=").Append(GetVAB_InvoiceLine_ID())
                 .Append("]");
             return sb.ToString();

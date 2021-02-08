@@ -32,7 +32,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         static private String VAF_ORG_ID = "VAF_Org_ID";
         static private String VAB_BUSINESSPARTNER_ID = "VAB_BusinessPartner_ID";
         static private String VAF_USERCONTACT_ID = "VAF_UserContact_ID";
-        static private String M_PRODUCT_ID = "M_Product_ID";
+        static private String VAM_Product_ID = "VAM_Product_ID";
 
         private String columnName = null;
 
@@ -44,12 +44,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         static private String[] s_delete_BPartner = new String[]
 		{"C_BP_Employee_Acct", "C_BP_Vendor_Acct", "C_BP_Customer_Acct", 
 		"VAT_Aging", "FRPT_BP_Customer_Acct"};                               // Added Table FRPT_BP_Customer_Acct by Bharat on 01 May 2019
-        /** Tables to delete (not update) for M_Product		*/
+        /** Tables to delete (not update) for VAM_Product		*/
         static private String[] s_delete_Product = new String[]
-		{"M_Product_PO", "M_Replenish", "VAT_Restock", 
-		"M_ProductPrice", "M_Product_Costing",                          
-		"M_Product_Trl", "M_Product_Acct", "FRPT_Product_Acct",             // Added Table FRPT_Product_Acct and M_Cost by Bharat on 19 April 2019
-        "M_Cost"};		//	M_Storage
+		{"VAM_Product_PO", "VAM_Inv_Replenish", "VAT_Restock", 
+		"VAM_ProductPrice", "VAM_ProductCosting",                          
+		"VAM_Product_TL", "VAM_Product_Acct", "FRPT_Product_Acct",             // Added Table FRPT_Product_Acct and VAM_ProductCost by Bharat on 19 April 2019
+        "VAM_ProductCost"};		//	VAM_Storage
         /**	Total Count			*/
         private int m_totalCount = 0;
         /** Error Log			*/
@@ -106,15 +106,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     m_deleteTables = s_delete_BPartner;
                     columnName = VAB_BUSINESSPARTNER_ID;
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
                     from_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();					
                 }
-                else if (name.Equals("M_Product_To_ID"))
+                else if (name.Equals("VAM_Product_To_ID"))
                 {
                     to_ID = Utility.Util.GetValueOfInt((Decimal)para[i].GetParameter());//.intValue();
                     m_deleteTables = s_delete_Product;
-                    columnName = M_PRODUCT_ID;
+                    columnName = VAM_Product_ID;
                 }
             }
         }	//	prepare
@@ -450,7 +450,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     bp.Save();
                 }
             }
-            else if (ColumnName.Equals(M_PRODUCT_ID))
+            else if (ColumnName.Equals(VAM_Product_ID))
             {
 
             }

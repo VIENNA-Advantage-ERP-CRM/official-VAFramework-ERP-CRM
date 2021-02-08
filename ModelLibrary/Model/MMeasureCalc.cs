@@ -364,10 +364,10 @@ namespace VAdvantage.Model
                 for (int i = 0; i < restrictions.Length; i++)
                 {
                     if (MGoalRestriction.GOALRESTRICTIONTYPE_Product.Equals(restrictions[i].GetGoalRestrictionType()))
-                        listP.Add(restrictions[i].GetM_Product_ID());
+                        listP.Add(restrictions[i].GetVAM_Product_ID());
                     //	Hierarchy comes here
                     if (MGoalRestriction.GOALRESTRICTIONTYPE_ProductCategory.Equals(restrictions[i].GetGoalRestrictionType()))
-                        listPC.Add(restrictions[i].GetM_Product_Category_ID());
+                        listPC.Add(restrictions[i].GetVAM_ProductCategory_ID());
                 }
                 //	Product
                 if (listP.Count == 1)
@@ -388,15 +388,15 @@ namespace VAdvantage.Model
                 if (pColumn.IndexOf(".") == -1)
                     pColumn = tableName + "." + pColumn;
                 if (listPC.Count == 1)
-                    sb.Append(" AND EXISTS (SELECT * FROM M_Product px WHERE ")
+                    sb.Append(" AND EXISTS (SELECT * FROM VAM_Product px WHERE ")
                         .Append(pColumn)
-                        .Append("=px.M_Product_ID AND px.M_Product_Category_ID=")
+                        .Append("=px.VAM_Product_ID AND px.VAM_ProductCategory_ID=")
                         .Append(listPC[0]).Append(")");
                 else if (listPC.Count > 1)
                 {
-                    sb.Append(" AND EXISTS (SELECT * FROM M_Product px WHERE ")
+                    sb.Append(" AND EXISTS (SELECT * FROM VAM_Product px WHERE ")
                     .Append(pColumn)
-                    .Append("=px.M_Product_ID AND px.M_Product_Category_ID IN (");
+                    .Append("=px.VAM_Product_ID AND px.VAM_ProductCategory_ID IN (");
                     for (int i = 0; i < listPC.Count; i++)
                     {
                         if (i > 0)

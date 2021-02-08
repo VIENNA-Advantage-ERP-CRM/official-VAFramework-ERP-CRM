@@ -28,15 +28,15 @@ namespace VAdvantage.Process
     public class InventoryValue : ProcessEngine.SvrProcess
     {
         /** Price List Used         */
-        private int _M_PriceList_Version_ID;
+        private int _VAM_PriceListVersion_ID;
         /** Valuation Date          */
         private DateTime? _DateValue;
         /** Warehouse               */
-        private int _M_Warehouse_ID;
+        private int _VAM_Warehouse_ID;
         /** Currency                */
         private int _VAB_Currency_ID;
         /** Optional Cost Element	*/
-        private int _M_CostElement_ID;
+        private int _VAM_ProductCostElement_ID;
 
         /// <summary>
         /// Prepare
@@ -51,16 +51,16 @@ namespace VAdvantage.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_PriceList_Version_ID"))
-                    _M_PriceList_Version_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAM_PriceListVersion_ID"))
+                    _VAM_PriceListVersion_ID = para[i].GetParameterAsInt();
                 else if (name.Equals("DateValue"))
                     _DateValue = (DateTime?)para[i].GetParameter();
-                else if (name.Equals("M_Warehouse_ID"))
-                    _M_Warehouse_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAM_Warehouse_ID"))
+                    _VAM_Warehouse_ID = para[i].GetParameterAsInt();
                 else if (name.Equals("VAB_Currency_ID"))
                     _VAB_Currency_ID = para[i].GetParameterAsInt();
-                else if (name.Equals("M_CostElement_ID"))
-                    _M_CostElement_ID = para[i].GetParameterAsInt();
+                else if (name.Equals("VAM_ProductCostElement_ID"))
+                    _VAM_ProductCostElement_ID = para[i].GetParameterAsInt();
             }
             if (_DateValue == null)
                 _DateValue = new DateTime(CommonFunctions.CurrentTimeMillis());
@@ -74,13 +74,13 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            log.Info("M_Warehouse_ID=" + _M_Warehouse_ID
+            log.Info("VAM_Warehouse_ID=" + _VAM_Warehouse_ID
                 + ",VAB_Currency_ID=" + _VAB_Currency_ID
                 + ",DateValue=" + _DateValue
-                + ",M_PriceList_Version_ID=" + _M_PriceList_Version_ID
-                + ",M_CostElement_ID=" + _M_CostElement_ID);
+                + ",VAM_PriceListVersion_ID=" + _VAM_PriceListVersion_ID
+                + ",VAM_ProductCostElement_ID=" + _VAM_ProductCostElement_ID);
 
-            MWarehouse wh = MWarehouse.Get(GetCtx(), _M_Warehouse_ID);
+            MWarehouse wh = MWarehouse.Get(GetCtx(), _VAM_Warehouse_ID);
             MVAFClient c = MVAFClient.Get(GetCtx(), wh.GetVAF_Client_ID());
             MVABAccountBook mas = c.GetAcctSchema();
 
@@ -99,17 +99,17 @@ namespace VAdvantage.Process
 
             //	Insert Standard Costs
             sql = new StringBuilder("INSERT INTO VAT_StockData "
-                + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
+                + "(VAF_JInstance_ID, VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,"
                 + " VAF_Client_ID, VAF_Org_ID, CostStandard) "
                 + "SELECT ").Append(GetVAF_JInstance_ID())
-                .Append(", w.M_Warehouse_ID, c.M_Product_ID, c.M_AttributeSetInstance_ID,"
+                .Append(", w.VAM_Warehouse_ID, c.VAM_Product_ID, c.VAM_PFeature_SetInstance_ID,"
                 + " w.VAF_Client_ID, w.VAF_Org_ID, c.CurrentCostPrice "
-                + "FROM M_Warehouse w"
+                + "FROM VAM_Warehouse w"
                 + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                 + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
-                + " INNER JOIN M_Cost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID))"
-                + " INNER JOIN M_CostElement ce ON (c.M_CostElement_ID=ce.M_CostElement_ID AND ce.CostingMethod='S' AND ce.CostElementType='M') "
-                + "WHERE w.M_Warehouse_ID=").Append(_M_Warehouse_ID);
+                + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID))"
+                + " INNER JOIN VAM_ProductCostElement ce ON (c.VAM_ProductCostElement_ID=ce.VAM_ProductCostElement_ID AND ce.CostingMethod='S' AND ce.CostElementType='M') "
+                + "WHERE w.VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID);
             int noInsertStd = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Inserted Std=" + noInsertStd);
             if (noInsertStd == 0)
@@ -117,43 +117,43 @@ namespace VAdvantage.Process
 
             //	Insert addl Costs
             int noInsertCost = 0;
-            if (_M_CostElement_ID != 0)
+            if (_VAM_ProductCostElement_ID != 0)
             {
                 sql = new StringBuilder("INSERT INTO VAT_StockData "
-                    + "(VAF_JInstance_ID, M_Warehouse_ID, M_Product_ID, M_AttributeSetInstance_ID,"
-                    + " VAF_Client_ID, VAF_Org_ID, CostStandard, Cost, M_CostElement_ID) "
+                    + "(VAF_JInstance_ID, VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,"
+                    + " VAF_Client_ID, VAF_Org_ID, CostStandard, Cost, VAM_ProductCostElement_ID) "
                     + "SELECT ").Append(GetVAF_JInstance_ID())
-                    .Append(", w.M_Warehouse_ID, c.M_Product_ID, c.M_AttributeSetInstance_ID,"
-                    + " w.VAF_Client_ID, w.VAF_Org_ID, 0, c.CurrentCostPrice, c.M_CostElement_ID "
-                    + "FROM M_Warehouse w"
+                    .Append(", w.VAM_Warehouse_ID, c.VAM_Product_ID, c.VAM_PFeature_SetInstance_ID,"
+                    + " w.VAF_Client_ID, w.VAF_Org_ID, 0, c.CurrentCostPrice, c.VAM_ProductCostElement_ID "
+                    + "FROM VAM_Warehouse w"
                     + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                     + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
-                    + " INNER JOIN M_Cost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
-                    + "WHERE w.M_Warehouse_ID=").Append(_M_Warehouse_ID)
-                    .Append(" AND c.M_CostElement_ID=").Append(_M_CostElement_ID)
+                    + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
+                    + "WHERE w.VAM_Warehouse_ID=").Append(_VAM_Warehouse_ID)
+                    .Append(" AND c.VAM_ProductCostElement_ID=").Append(_VAM_ProductCostElement_ID)
                     .Append(" AND NOT EXISTS (SELECT * FROM VAT_StockData iv "
                         + "WHERE iv.VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
-                        .Append(" AND iv.M_Warehouse_ID=w.M_Warehouse_ID"
-                        + " AND iv.M_Product_ID=c.M_Product_ID"
-                        + " AND iv.M_AttributeSetInstance_ID=c.M_AttributeSetInstance_ID)");
+                        .Append(" AND iv.VAM_Warehouse_ID=w.VAM_Warehouse_ID"
+                        + " AND iv.VAM_Product_ID=c.VAM_Product_ID"
+                        + " AND iv.VAM_PFeature_SetInstance_ID=c.VAM_PFeature_SetInstance_ID)");
                 noInsertCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Inserted Cost=" + noInsertCost);
                 //	Update Std Cost Records
                 sql = new StringBuilder("UPDATE VAT_StockData iv "
-                    + "SET (Cost, M_CostElement_ID)="
-                        + "(SELECT c.CurrentCostPrice, c.M_CostElement_ID "
-                        + "FROM M_Warehouse w"
+                    + "SET (Cost, VAM_ProductCostElement_ID)="
+                        + "(SELECT c.CurrentCostPrice, c.VAM_ProductCostElement_ID "
+                        + "FROM VAM_Warehouse w"
                         + " INNER JOIN VAF_ClientDetail ci ON (w.VAF_Client_ID=ci.VAF_Client_ID)"
                         + " INNER JOIN VAB_AccountBook acs ON (ci.VAB_AccountBook1_ID=acs.VAB_AccountBook_ID)"
-                        + " INNER JOIN M_Cost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID"
-                            + " AND acs.M_CostType_ID=c.M_CostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
-                        + "WHERE c.M_CostElement_ID=" + _M_CostElement_ID
-                        + " AND w.M_Warehouse_ID=iv.M_Warehouse_ID"
-                        + " AND c.M_Product_ID=iv.M_Product_ID"
-                        + " AND c.M_AttributeSetInstance_ID=iv.M_AttributeSetInstance_ID AND rownum=1 AND w.m_warehouse_ID=" + _M_Warehouse_ID + ") "
+                        + " INNER JOIN VAM_ProductCost c ON (acs.VAB_AccountBook_ID=c.VAB_AccountBook_ID"
+                            + " AND acs.VAM_ProductCostType_ID=c.VAM_ProductCostType_ID AND c.VAF_Org_ID IN (0, w.VAF_Org_ID)) "
+                        + "WHERE c.VAM_ProductCostElement_ID=" + _VAM_ProductCostElement_ID
+                        + " AND w.VAM_Warehouse_ID=iv.VAM_Warehouse_ID"
+                        + " AND c.VAM_Product_ID=iv.VAM_Product_ID"
+                        + " AND c.VAM_PFeature_SetInstance_ID=iv.VAM_PFeature_SetInstance_ID AND rownum=1 AND w.VAM_Warehouse_ID=" + _VAM_Warehouse_ID + ") "
                     + "WHERE EXISTS (SELECT * FROM VAT_StockData ivv "
                         + "WHERE ivv.VAF_JInstance_ID=" + GetVAF_JInstance_ID()
-                        + " AND ivv.M_CostElement_ID IS NULL) AND iv.VAF_JInstance_ID ="+GetVAF_JInstance_ID());
+                        + " AND ivv.VAM_ProductCostElement_ID IS NULL) AND iv.VAF_JInstance_ID ="+GetVAF_JInstance_ID());
                 int noUpdatedCost = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
                 log.Fine("Updated Cost=" + noUpdatedCost);
             }
@@ -167,34 +167,34 @@ namespace VAdvantage.Process
                 //.Append("DateValue=To_Date('").Append(myDate.Substring(0,10))
                 //.Append("23:59:59','MM-DD-YYYY HH24:MI:SS'),")
              .Append("DateValue=").Append(GlobalVariable.TO_DATE(_DateValue, true)).Append(",")
-            .Append("M_PriceList_Version_ID=").Append(_M_PriceList_Version_ID).Append(",")
+            .Append("VAM_PriceListVersion_ID=").Append(_VAM_PriceListVersion_ID).Append(",")
             .Append("VAB_Currency_ID=").Append(_VAB_Currency_ID);
-            if (_M_CostElement_ID != 0)
+            if (_VAM_ProductCostElement_ID != 0)
             {
-                sql.Append(",").Append("M_CostElement_ID=").Append(_M_CostElement_ID);
+                sql.Append(",").Append("VAM_ProductCostElement_ID=").Append(_VAM_ProductCostElement_ID);
             }
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Constants=" + no);
 
             //  Get current QtyOnHand with ASI
             sql = new StringBuilder("UPDATE VAT_StockData iv SET QtyOnHand = "
-                    + "(SELECT SUM(QtyOnHand) FROM M_Storage s"
-                    + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
-                    + "WHERE iv.M_Product_ID=s.M_Product_ID"
-                    + " AND iv.M_Warehouse_ID=l.M_Warehouse_ID"
-                    + " AND iv.M_AttributeSetInstance_ID=s.M_AttributeSetInstance_ID) "
+                    + "(SELECT SUM(QtyOnHand) FROM VAM_Storage s"
+                    + " INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID=s.VAM_Locator_ID) "
+                    + "WHERE iv.VAM_Product_ID=s.VAM_Product_ID"
+                    + " AND iv.VAM_Warehouse_ID=l.VAM_Warehouse_ID"
+                    + " AND iv.VAM_PFeature_SetInstance_ID=s.VAM_PFeature_SetInstance_ID) "
                 + "WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
-                .Append(" AND iv.M_AttributeSetInstance_ID<>0");
+                .Append(" AND iv.VAM_PFeature_SetInstance_ID<>0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("QtHand with ASI=" + no);
             //  Get current QtyOnHand without ASI
             sql = new StringBuilder("UPDATE VAT_StockData iv SET QtyOnHand = "
-                    + "(SELECT SUM(QtyOnHand) FROM M_Storage s"
-                    + " INNER JOIN M_Locator l ON (l.M_Locator_ID=s.M_Locator_ID) "
-                    + "WHERE iv.M_Product_ID=s.M_Product_ID"
-                    + " AND iv.M_Warehouse_ID=l.M_Warehouse_ID) "
+                    + "(SELECT SUM(QtyOnHand) FROM VAM_Storage s"
+                    + " INNER JOIN VAM_Locator l ON (l.VAM_Locator_ID=s.VAM_Locator_ID) "
+                    + "WHERE iv.VAM_Product_ID=s.VAM_Product_ID"
+                    + " AND iv.VAM_Warehouse_ID=l.VAM_Warehouse_ID) "
                 + "WHERE VAF_JInstance_ID=").Append(GetVAF_JInstance_ID())
-                .Append(" AND iv.M_AttributeSetInstance_ID=0");
+                .Append(" AND iv.VAM_PFeature_SetInstance_ID=0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("QtHand w/o ASI=" + no);
 
@@ -202,25 +202,25 @@ namespace VAdvantage.Process
             sql = new StringBuilder("UPDATE VAT_StockData iv "
                 + "SET QtyOnHand="
                     + "(SELECT iv.QtyOnHand - NVL(SUM(t.MovementQty), 0) "
-                    + "FROM M_Transaction t"
-                    + " INNER JOIN M_Locator l ON (t.M_Locator_ID=l.M_Locator_ID) "
-                    + "WHERE t.M_Product_ID=iv.M_Product_ID"
-                    + " AND t.M_AttributeSetInstance_ID=iv.M_AttributeSetInstance_ID"
+                    + "FROM VAM_Inv_Trx t"
+                    + " INNER JOIN VAM_Locator l ON (t.VAM_Locator_ID=l.VAM_Locator_ID) "
+                    + "WHERE t.VAM_Product_ID=iv.VAM_Product_ID"
+                    + " AND t.VAM_PFeature_SetInstance_ID=iv.VAM_PFeature_SetInstance_ID"
                     + " AND t.MovementDate > iv.DateValue"
-                    + " AND l.M_Warehouse_ID=iv.M_Warehouse_ID) "
-                + "WHERE iv.M_AttributeSetInstance_ID<>0");
+                    + " AND l.VAM_Warehouse_ID=iv.VAM_Warehouse_ID) "
+                + "WHERE iv.VAM_PFeature_SetInstance_ID<>0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Update with ASI=" + no);
             //
             sql = new StringBuilder("UPDATE VAT_StockData iv "
                 + "SET QtyOnHand="
                     + "(SELECT iv.QtyOnHand - NVL(SUM(t.MovementQty), 0) "
-                    + "FROM M_Transaction t"
-                    + " INNER JOIN M_Locator l ON (t.M_Locator_ID=l.M_Locator_ID) "
-                    + "WHERE t.M_Product_ID=iv.M_Product_ID"
+                    + "FROM VAM_Inv_Trx t"
+                    + " INNER JOIN VAM_Locator l ON (t.VAM_Locator_ID=l.VAM_Locator_ID) "
+                    + "WHERE t.VAM_Product_ID=iv.VAM_Product_ID"
                     + " AND t.MovementDate > iv.DateValue"
-                    + " AND l.M_Warehouse_ID=iv.M_Warehouse_ID) "
-                + "WHERE iv.M_AttributeSetInstance_ID=0");
+                    + " AND l.VAM_Warehouse_ID=iv.VAM_Warehouse_ID) "
+                + "WHERE iv.VAM_PFeature_SetInstance_ID=0");
             no = DataBase.DB.ExecuteQuery(sql.ToString(), null, Get_TrxName());
             log.Fine("Update w/o ASI=" + no);
 
@@ -234,26 +234,26 @@ namespace VAdvantage.Process
             no = DataBase.DB.ExecuteQuery("UPDATE VAT_StockData iv "
                 + "SET PricePO = "
                     + "(SELECT MAX(currencyConvert (po.PriceList,po.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, po.VAF_Client_ID,po.VAF_Org_ID))"
-                    + " FROM M_Product_PO po WHERE po.M_Product_ID=iv.M_Product_ID"
+                    + " FROM VAM_Product_PO po WHERE po.VAM_Product_ID=iv.VAM_Product_ID"
                     + " AND po.IsCurrentVendor='Y'), "
                 + "PriceList = "
                     + "(SELECT currencyConvert(pp.PriceList,pl.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
-                    + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
-                    + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
-                    + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
-                    + " AND plv.M_PriceList_ID=pl.M_PriceList_ID), "
+                    + " FROM VAM_PriceList pl, VAM_PriceListVersion plv, VAM_ProductPrice pp"
+                    + " WHERE pp.VAM_Product_ID=iv.VAM_Product_ID AND pp.VAM_PriceListVersion_ID=iv.VAM_PriceListVersion_ID"
+                    + " AND pp.VAM_PriceListVersion_ID=plv.VAM_PriceListVersion_ID"
+                    + " AND plv.VAM_PriceList_ID=pl.VAM_PriceList_ID), "
                 + "PriceStd = "
                     + "(SELECT currencyConvert(pp.PriceStd,pl.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
-                    + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
-                    + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
-                    + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
-                    + " AND plv.M_PriceList_ID=pl.M_PriceList_ID), "
+                    + " FROM VAM_PriceList pl, VAM_PriceListVersion plv, VAM_ProductPrice pp"
+                    + " WHERE pp.VAM_Product_ID=iv.VAM_Product_ID AND pp.VAM_PriceListVersion_ID=iv.VAM_PriceListVersion_ID"
+                    + " AND pp.VAM_PriceListVersion_ID=plv.VAM_PriceListVersion_ID"
+                    + " AND plv.VAM_PriceList_ID=pl.VAM_PriceList_ID), "
                 + "PriceLimit = "
                     + "(SELECT currencyConvert(pp.PriceLimit,pl.VAB_Currency_ID,iv.VAB_Currency_ID,iv.DateValue,null, pl.VAF_Client_ID,pl.VAF_Org_ID)"
-                    + " FROM M_PriceList pl, M_PriceList_Version plv, M_ProductPrice pp"
-                    + " WHERE pp.M_Product_ID=iv.M_Product_ID AND pp.M_PriceList_Version_ID=iv.M_PriceList_Version_ID"
-                    + " AND pp.M_PriceList_Version_ID=plv.M_PriceList_Version_ID"
-                    + " AND plv.M_PriceList_ID=pl.M_PriceList_ID)"
+                    + " FROM VAM_PriceList pl, VAM_PriceListVersion plv, VAM_ProductPrice pp"
+                    + " WHERE pp.VAM_Product_ID=iv.VAM_Product_ID AND pp.VAM_PriceListVersion_ID=iv.VAM_PriceListVersion_ID"
+                    + " AND pp.VAM_PriceListVersion_ID=plv.VAM_PriceListVersion_ID"
+                    + " AND plv.VAM_PriceList_ID=pl.VAM_PriceList_ID)"
                     , null, Get_TrxName());
             String msg = "";
             if (no == 0)

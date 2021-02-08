@@ -3,7 +3,7 @@
  * Class Name     : Doc_InOut
  * Purpose        : Post Inventory Documents.
  *                  <pre>
- *                  Table:  M_Inventory (321)
+ *                  Table:  VAM_Inventory (321)
  *                  Document Types:     MMI
  *                  </pre>
  * Class Used     : Doc
@@ -157,11 +157,11 @@ namespace VAdvantage.Acct
                 {
                     continue;
                 }
-                dr.SetM_Locator_ID(line.GetM_Locator_ID());
+                dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
 
                 //  InventoryDiff   DR      CR
                 //	or Charge
-                MAccount invDiff = line.GetChargeAccount(as1, Decimal.Negate(costs));
+                MVABAccount invDiff = line.GetChargeAccount(as1, Decimal.Negate(costs));
                 if (invDiff == null)
                 {
                     invDiff = GetAccount(Doc.ACCTTYPE_InvDifferences, as1);
@@ -172,7 +172,7 @@ namespace VAdvantage.Acct
                 {
                     continue;
                 }
-                cr.SetM_Locator_ID(line.GetM_Locator_ID());
+                cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                 cr.SetQty(Decimal.Negate(line.GetQty().Value));
                 if (line.GetVAB_Charge_ID() != 0)	//	explicit overwrite for charge
                 {
@@ -182,7 +182,7 @@ namespace VAdvantage.Acct
                 {
                     //	Cost Detail
                     MCostDetail.CreateInventory(as1, line.GetVAF_Org_ID(),
-                        line.GetM_Product_ID(), line.GetM_AttributeSetInstance_ID(),
+                        line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(),
                         line.Get_ID(), 0,
                         costs, line.GetQty().Value,
                         line.GetDescription(), GetTrx(), GetRectifyingProcess());

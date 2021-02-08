@@ -162,7 +162,7 @@ namespace ViennaAdvantage.Process
             // Add Parameter - Selection=Y
             MVAFJInstancePara para = new MVAFJInstancePara(instance, 10);
 
-            // Add Parameter - M_Warehouse_ID=x
+            // Add Parameter - VAM_Warehouse_ID=x
             para = new MVAFJInstancePara(instance, 20);
             para.setParameter("_VAB_Lead_ID", lead_id);
             if (!para.Save())

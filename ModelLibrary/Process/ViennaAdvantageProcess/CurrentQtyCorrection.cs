@@ -28,9 +28,9 @@ namespace ViennaAdvantageServer.Process
         //private string[] productCollection;
         private string orgId = "";
         //private string[] OrgCollection;
-        private int _M_Product_ID = 0;
-        private int _M_Locator_ID = 0;
-        private int _M_AttributeSetInstance_ID = 0;
+        private int _VAM_Product_ID = 0;
+        private int _VAM_Locator_ID = 0;
+        private int _VAM_PFeature_SetInstance_ID = 0;
         private decimal _currentQty = 0;
         VAdvantage.Model.MTransaction transaction = null;
         //ViennaAdvantage.Model.MInventoryLine inventoryLine = null;
@@ -52,7 +52,7 @@ namespace ViennaAdvantageServer.Process
                 {
                     ;
                 }
-                else if (name.Equals("M_Product_ID"))
+                else if (name.Equals("VAM_Product_ID"))
                 {
                     productId = (String)para[i].GetParameter();
                     //productCollection = productId.Split(',');
@@ -70,18 +70,18 @@ namespace ViennaAdvantageServer.Process
         }
         protected override string DoIt()
         {
-            sql = @"SELECT   M_Product_ID ,   M_Locator_ID ,   M_AttributeSetInstance_ID ,  M_Transaction_ID , M_InventoryLine_ID , 
+            sql = @"SELECT   VAM_Product_ID ,   VAM_Locator_ID ,   VAM_PFeature_SetInstance_ID ,  VAM_Inv_Trx_ID , VAM_InventoryLine_ID , 
                            CurrentQty ,   MovementQty ,  MovementType , movementdate , TO_Char(Created, 'DD-MON-YY HH24:MI:SS')
-                    FROM M_Transaction WHERE IsActive= 'Y' ";
+                    FROM VAM_Inv_Trx WHERE IsActive= 'Y' ";
             //if (orgId != null && !string.IsNullOrEmpty(orgId))
             //{
             //    sql += " AND VAF_Org_ID  IN ( " + orgId + " )";
             //}
             if (productId != null && !string.IsNullOrEmpty(productId))
             {
-                sql += " AND M_Product_ID IN ( " + productId + " )";
+                sql += " AND VAM_Product_ID IN ( " + productId + " )";
             }
-            sql += " ORDER BY   M_Product_ID  ,  M_Locator_ID ,  M_AttributeSetInstance_ID , movementdate , M_Transaction_ID ASC ";
+            sql += " ORDER BY   VAM_Product_ID  ,  VAM_Locator_ID ,  VAM_PFeature_SetInstance_ID , movementdate , VAM_Inv_Trx_ID ASC ";
             dsTransaction = new DataSet();
             try
             {
@@ -95,15 +95,15 @@ namespace ViennaAdvantageServer.Process
                             int i = 0;
                             for (i = 0; i < dsTransaction.Tables[0].Rows.Count; i++)
                             {
-                                if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                    _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                    _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]) &&
+                                if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                    _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                    _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) &&
                                     Util.GetValueOfString(dsTransaction.Tables[0].Rows[i]["MovementType"]) == "I+" &&
-                                    Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
+                                    Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                                 {
                                     //update Quantity Book at inventory line 
-                                    inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_InventoryLine_ID"]), Get_Trx());
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetM_Inventory_ID()), null);
+                                    inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_Trx());
+                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                     if (!inventory.IsInternalUse())
                                     {
                                         inventoryLine.SetQtyBook(_currentQty);
@@ -111,7 +111,7 @@ namespace ViennaAdvantageServer.Process
                                         inventoryLine.SetDifferenceQty(Decimal.Subtract(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"])));
                                         if (!inventoryLine.Save())
                                         {
-                                            log.Info("Quantity Book Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_InventoryLine_ID"]));
+                                            log.Info("Quantity Book Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]));
                                             Rollback();
                                             continue;
                                         }
@@ -121,12 +121,12 @@ namespace ViennaAdvantageServer.Process
                                         }
 
                                         // update movement Qty at Transaction for the same record
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                        // transaction.SetMovementQty(Decimal.Subtract(inventoryLine.GetQtyCount(), _currentQty));
                                         transaction.SetMovementQty(Decimal.Negate(Decimal.Subtract(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]))));
                                         if (!transaction.Save())
                                         {
-                                            log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]));
+                                            log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]));
                                         }
                                         else
                                         {
@@ -137,11 +137,11 @@ namespace ViennaAdvantageServer.Process
                                     }
                                     else
                                     {
-                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]), Get_Trx());
+                                        transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                         transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
                                         if (!transaction.Save())
                                         {
-                                            log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]));
+                                            log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]));
                                         }
                                         else
                                         {
@@ -152,139 +152,139 @@ namespace ViennaAdvantageServer.Process
                                     }
                                 }
                                 else if (Util.GetValueOfString(dsTransaction.Tables[0].Rows[i]["MovementType"]) == "I+" &&
-                                    Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_InventoryLine_ID"]) > 0)
+                                    Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
 
-                                if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                          _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                          _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                          _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                          _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]), Get_Trx());
+                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), Get_Trx());
                                     transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
                                     if (!transaction.Save())
                                     {
-                                        log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]));
+                                        log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]));
                                     }
                                     else
                                     {
                                         Commit();
-                                        log.Info("Current Quantity  Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]));
+                                        log.Info("Current Quantity  Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]));
                                         _currentQty = Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"]));
                                     }
                                 }
                                 //when Attribute not matched
-                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                          _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                          _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                          _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                          _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 // when Locator not Matched
-                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                         _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                         _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                         _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                         _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 // when Product not Matched (Changed by Amit on 5-11-2015)
-                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                         _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                         _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                         _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                         _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 //when Product , Locator n Attribute both not matched (means First Record)
-                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                        _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                        _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                        _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                        _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 //when Locator n Attribute both not matched
-                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                   _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                   _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                   _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                   _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 // when product and Locator not Matched
-                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                        _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                        _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                        _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                        _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                                 // when product and Attribute not Matched
-                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-                                        _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-                                        _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+                                        _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+                                        _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
                                 {
-                                    if (_M_Product_ID > 0)
+                                    if (_VAM_Product_ID > 0)
                                     {
-                                        UpdateStorage(_M_Product_ID, _M_Locator_ID, _M_AttributeSetInstance_ID, _currentQty);
+                                        UpdateStorage(_VAM_Product_ID, _VAM_Locator_ID, _VAM_PFeature_SetInstance_ID, _currentQty);
                                     }
                                     _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
                                     continue;
                                 }
                             }
@@ -310,18 +310,18 @@ namespace ViennaAdvantageServer.Process
             }
             return Msg.GetMsg(GetCtx(), "SucessfullyCompleted");
             #region
-            //            sql = @"SELECT   M_Product_ID ,   M_Locator_ID ,   M_AttributeSetInstance_ID ,  M_Transaction_ID , 
+            //            sql = @"SELECT   VAM_Product_ID ,   VAM_Locator_ID ,   VAM_PFeature_SetInstance_ID ,  VAM_Inv_Trx_ID , 
             //                           CurrentQty ,   MovementQty ,  MovementType , TO_Char(Created, 'DD-MON-YY HH24:MI:SS')
-            //                    FROM M_Transaction WHERE IsActive= 'Y' ";
+            //                    FROM VAM_Inv_Trx WHERE IsActive= 'Y' ";
             //            //if (orgId != null && !string.IsNullOrEmpty(orgId))
             //            //{
             //            //    sql += " AND VAF_Org_ID  IN ( " + orgId + " )";
             //            //}
             //            if (productId != null && !string.IsNullOrEmpty(productId))
             //            {
-            //                sql += " AND M_Product_ID IN ( " + productId + " )";
+            //                sql += " AND VAM_Product_ID IN ( " + productId + " )";
             //            }
-            //            sql += " ORDER BY   M_Product_ID  ,  M_Locator_ID ,  M_AttributeSetInstance_ID , Created ASC ";
+            //            sql += " ORDER BY   VAM_Product_ID  ,  VAM_Locator_ID ,  VAM_PFeature_SetInstance_ID , Created ASC ";
             //            dsTransaction = new DataSet();
             //            try
             //            {
@@ -338,20 +338,20 @@ namespace ViennaAdvantageServer.Process
             //                                if (Util.GetValueOfString(dsTransaction.Tables[0].Rows[i]["MovementType"]) == "I+")
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
-            //                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                          _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                          _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                          _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                          _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
-            //                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]), null);
+            //                                    transaction = new VAdvantage.Model.MTransaction(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]), null);
             //                                    transaction.SetCurrentQty(Decimal.Add(_currentQty, Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["MovementQty"])));
             //                                    if (!transaction.Save())
             //                                    {
-            //                                        log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Transaction_ID"]));
+            //                                        log.Info("Current Quantity Not Updated at Transaction Tab <===> " + Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Inv_Trx_ID"]));
             //                                    }
             //                                    else
             //                                    {
@@ -360,69 +360,69 @@ namespace ViennaAdvantageServer.Process
             //                                    }
             //                                }
             //                                //when Attribute not matched
-            //                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                          _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                          _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                          _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                          _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                                // when Locator not Matched
-            //                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                         _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                         _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                         _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                         _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                                //when Product , Locator n Attribute both not matched (means First Record)
-            //                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                        _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                        _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                        _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                        _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                                //when Locator n Attribute both not matched
-            //                                else if (_M_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                   _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                   _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                   _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                   _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                                // when product and Locator not Matched
-            //                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                        _M_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                        _M_AttributeSetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                        _VAM_Locator_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                        _VAM_PFeature_SetInstance_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                                // when product and Attribute not Matched
-            //                                else if (_M_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]) &&
-            //                                        _M_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]) &&
-            //                                        _M_AttributeSetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]))
+            //                                else if (_VAM_Product_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]) &&
+            //                                        _VAM_Locator_ID == Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]) &&
+            //                                        _VAM_PFeature_SetInstance_ID != Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]))
             //                                {
             //                                    _currentQty = Util.GetValueOfDecimal(dsTransaction.Tables[0].Rows[i]["CurrentQty"]);
-            //                                    _M_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Product_ID"]);
-            //                                    _M_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_Locator_ID"]);
-            //                                    _M_AttributeSetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]);
+            //                                    _VAM_Product_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Product_ID"]);
+            //                                    _VAM_Locator_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_Locator_ID"]);
+            //                                    _VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]);
             //                                    continue;
             //                                }
             //                            }
@@ -450,13 +450,13 @@ namespace ViennaAdvantageServer.Process
             #endregion
         }
 
-        private void UpdateStorage(int M_Product_ID, int M_Locator_ID, int M_AttributeInstance_ID, decimal QtyOnHand)
+        private void UpdateStorage(int VAM_Product_ID, int VAM_Locator_ID, int VAM_PFeatue_Instance_ID, decimal QtyOnHand)
         {
-            storage = MStorage.Get(GetCtx(), M_Locator_ID,
-                               M_Product_ID, M_AttributeInstance_ID, Get_Trx());
+            storage = MStorage.Get(GetCtx(), VAM_Locator_ID,
+                               VAM_Product_ID, VAM_PFeatue_Instance_ID, Get_Trx());
             if (storage == null)
-                storage = MStorage.GetCreate(GetCtx(), M_Locator_ID,
-                   M_Product_ID, 0, Get_Trx());
+                storage = MStorage.GetCreate(GetCtx(), VAM_Locator_ID,
+                   VAM_Product_ID, 0, Get_Trx());
             storage.SetQtyOnHand(QtyOnHand);
             if (!storage.Save())
             {

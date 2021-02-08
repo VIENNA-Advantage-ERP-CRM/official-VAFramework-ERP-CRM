@@ -11,25 +11,25 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for M_AttributeSearch
+/** Generated Model for VAM_PFeature_Search
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_AttributeSearch : PO
+public class X_VAM_PFeature_Search : PO
 {
-public X_M_AttributeSearch (Context ctx, int M_AttributeSearch_ID, Trx trxName) : base (ctx, M_AttributeSearch_ID, trxName)
+public X_VAM_PFeature_Search (Context ctx, int VAM_PFeature_Search_ID, Trx trxName) : base (ctx, VAM_PFeature_Search_ID, trxName)
 {
-/** if (M_AttributeSearch_ID == 0)
+/** if (VAM_PFeature_Search_ID == 0)
 {
-SetM_AttributeSearch_ID (0);
+SetVAM_PFeature_Search_ID (0);
 SetName (null);
 }
  */
 }
-public X_M_AttributeSearch (Ctx ctx, int M_AttributeSearch_ID, Trx trxName) : base (ctx, M_AttributeSearch_ID, trxName)
+public X_VAM_PFeature_Search (Ctx ctx, int VAM_PFeature_Search_ID, Trx trxName) : base (ctx, VAM_PFeature_Search_ID, trxName)
 {
-/** if (M_AttributeSearch_ID == 0)
+/** if (VAM_PFeature_Search_ID == 0)
 {
-SetM_AttributeSearch_ID (0);
+SetVAM_PFeature_Search_ID (0);
 SetName (null);
 }
  */
@@ -39,7 +39,7 @@ SetName (null);
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSearch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_Search (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_M_AttributeSearch (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSearch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_PFeature_Search (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_M_AttributeSearch (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_M_AttributeSearch (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_PFeature_Search (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_AttributeSearch()
+static X_VAM_PFeature_Search()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -74,8 +74,8 @@ public static long updatedMS = 1280389061511L;
 public static int Table_ID;
  // =564;
 
-/** TableName=M_AttributeSearch */
-public static String Table_Name="M_AttributeSearch";
+/** TableName=VAM_PFeature_Search */
+public static String Table_Name="VAM_PFeature_Search";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(3);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_AttributeSearch[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_PFeature_Search[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.
@@ -130,17 +130,17 @@ public String GetDescription()
 return (String)Get_Value("Description");
 }
 /** Set Attribute Search.
-@param M_AttributeSearch_ID Common Search Attribute */
-public void SetM_AttributeSearch_ID (int M_AttributeSearch_ID)
+@param VAM_PFeature_Search_ID Common Search Attribute */
+public void SetVAM_PFeature_Search_ID (int VAM_PFeature_Search_ID)
 {
-if (M_AttributeSearch_ID < 1) throw new ArgumentException ("M_AttributeSearch_ID is mandatory.");
-Set_ValueNoCheck ("M_AttributeSearch_ID", M_AttributeSearch_ID);
+if (VAM_PFeature_Search_ID < 1) throw new ArgumentException ("VAM_PFeature_Search_ID is mandatory.");
+Set_ValueNoCheck ("VAM_PFeature_Search_ID", VAM_PFeature_Search_ID);
 }
 /** Get Attribute Search.
 @return Common Search Attribute */
-public int GetM_AttributeSearch_ID() 
+public int GetVAM_PFeature_Search_ID() 
 {
-Object ii = Get_Value("M_AttributeSearch_ID");
+Object ii = Get_Value("VAM_PFeature_Search_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

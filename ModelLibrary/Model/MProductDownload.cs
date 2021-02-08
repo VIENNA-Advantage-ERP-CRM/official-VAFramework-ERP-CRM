@@ -29,11 +29,11 @@ using System.Security.Policy;
 
 namespace VAdvantage.Model
 {
-    public class MProductDownload : X_M_ProductDownload
+    public class MProductDownload : X_VAM_ProductDownload
     {
         /**	Cache						*/
         private static CCache<int, MProductDownload> s_cache
-            = new CCache<int, MProductDownload>("M_ProductDownload", 20);
+            = new CCache<int, MProductDownload>("VAM_ProductDownload", 20);
 
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MProductDownload).FullName);
@@ -44,14 +44,14 @@ namespace VAdvantage.Model
          */
         public static void MigrateDownloads(Ctx ctx)
         {
-            String sql = "SELECT COUNT(*) FROM M_ProductDownload";
+            String sql = "SELECT COUNT(*) FROM VAM_ProductDownload";
             int no = DataBase.DB.GetSQLValue(null, sql);
             if (no > 0)
                 return;
             //
             int count = 0;
-            sql = "SELECT VAF_Client_ID, VAF_Org_ID, M_Product_ID, Name, DownloadURL "
-                + "FROM M_Product "
+            sql = "SELECT VAF_Client_ID, VAF_Org_ID, VAM_Product_ID, Name, DownloadURL "
+                + "FROM VAM_Product "
                 + "WHERE DownloadURL IS NOT NULL";
             IDataReader idr = null;
             try
@@ -61,19 +61,19 @@ namespace VAdvantage.Model
                 {
                     int VAF_Client_ID = Utility.Util.GetValueOfInt(idr[0].ToString());
                     int VAF_Org_ID = Utility.Util.GetValueOfInt(idr[1].ToString());
-                    int M_Product_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
+                    int VAM_Product_ID = Utility.Util.GetValueOfInt(idr[2].ToString());
                     String Name = idr[3].ToString();
                     String DownloadURL = idr[4].ToString();
                     //
                     MProductDownload pdl = new MProductDownload(ctx, 0, null);
                     pdl.SetClientOrg(VAF_Client_ID, VAF_Org_ID);
-                    pdl.SetM_Product_ID(M_Product_ID);
+                    pdl.SetVAM_Product_ID(VAM_Product_ID);
                     pdl.SetName(Name);
                     pdl.SetDownloadURL(DownloadURL);
                     if (pdl.Save())
                     {
                         count++;
-                        String sqlUpdate = "UPDATE M_Product SET DownloadURL = NULL WHERE M_Product_ID=" + M_Product_ID;
+                        String sqlUpdate = "UPDATE VAM_Product SET DownloadURL = NULL WHERE VAM_Product_ID=" + VAM_Product_ID;
                         int updated = DataBase.DB.ExecuteQuery(sqlUpdate, null,null);
                         if (updated != 1)
                         {
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        _log.Warning("Product Download not created M_Product_ID=" + M_Product_ID);
+                        _log.Warning("Product Download not created VAM_Product_ID=" + VAM_Product_ID);
                     }
                 }
                 idr.Close();
@@ -102,16 +102,16 @@ namespace VAdvantage.Model
         /**
          * 	Get Product Download from Cache
          *	@param ctx context
-         *	@param M_ProductDownload_ID id
+         *	@param VAM_ProductDownload_ID id
          *	@return MProductDownload
          */
-        public static MProductDownload Get(Ctx ctx, int M_ProductDownload_ID)
+        public static MProductDownload Get(Ctx ctx, int VAM_ProductDownload_ID)
         {
-            int key = M_ProductDownload_ID;
+            int key = VAM_ProductDownload_ID;
             MProductDownload retValue = (MProductDownload)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MProductDownload(ctx, M_ProductDownload_ID, null);
+            retValue = new MProductDownload(ctx, VAM_ProductDownload_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -121,16 +121,16 @@ namespace VAdvantage.Model
         /**************************************************************************
          * 	Standard Constructor
          *	@param ctx context
-         *	@param M_ProductDownload_ID id
+         *	@param VAM_ProductDownload_ID id
          *	@param trxName trx
          */
-        public MProductDownload(Ctx ctx, int M_ProductDownload_ID,
+        public MProductDownload(Ctx ctx, int VAM_ProductDownload_ID,
             Trx trxName)
-            : base(ctx, M_ProductDownload_ID, trxName)
+            : base(ctx, VAM_ProductDownload_ID, trxName)
         {
-            if (M_ProductDownload_ID == 0)
+            if (VAM_ProductDownload_ID == 0)
             {
-                //	setM_Product_ID (0);
+                //	setVAM_Product_ID (0);
                 //	setName (null);
                 //	setDownloadURL (null);
             }
@@ -155,7 +155,7 @@ namespace VAdvantage.Model
         {
             StringBuilder sb = new StringBuilder("MProductDownload[")
                 .Append(Get_ID())
-                .Append(",M_Product_ID=").Append(GetM_Product_ID())
+                .Append(",VAM_Product_ID=").Append(GetVAM_Product_ID())
                 .Append(",").Append(GetDownloadURL())
                 .Append("]");
             return sb.ToString();
