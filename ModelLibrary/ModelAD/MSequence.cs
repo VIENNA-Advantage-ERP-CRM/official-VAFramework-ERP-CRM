@@ -490,7 +490,7 @@ namespace VAdvantage.Model
         public int GetNextID()
         {
             int retValue = GetCurrentNext();
-            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false)!= "Y" && IsTableID())
+            if (MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE ,false)!= "Y" && IsTableID())
             {
                 SetCurrentNext(retValue + GetIncrementNo());
             }
@@ -500,7 +500,7 @@ namespace VAdvantage.Model
 
         public int GetCurrentNext()
         {
-            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) != "Y" && IsTableID())
+            if (MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false) != "Y" && IsTableID())
             {
                 return DB.GetNextID(GetAD_Client_ID(), GetName(), Get_TrxName());
             }
@@ -512,7 +512,7 @@ namespace VAdvantage.Model
 
         public void SetCurrentNext(int CurrentNext)
         {
-            if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) != "Y" && IsTableID())
+            if (MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false) != "Y" && IsTableID())
             {
                 while (true)
                 {
@@ -1665,7 +1665,7 @@ namespace VAdvantage.Model
         /// <returns>true if created</returns>
         public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, Boolean tableID)
         {
-            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y"; //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
+            bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false) == "Y"; //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
             if (tableID)
             {
                 // If SYSTEM_NATIVE_SEQUENCE is true, then fetch curent next value from AD_Sequence and create new sequence in respective DB from that value.ue.
