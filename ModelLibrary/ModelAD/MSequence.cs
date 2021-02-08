@@ -1668,7 +1668,8 @@ namespace VAdvantage.Model
             bool SYSTEM_NATIVE_SEQUENCE = MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y"; //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
             if (tableID)
             {
-                if (SYSTEM_NATIVE_SEQUENCE)
+                // If SYSTEM_NATIVE_SEQUENCE is true, then fetch curent next value from AD_Sequence and create new sequence in respective DB from that value.ue.
+               if (SYSTEM_NATIVE_SEQUENCE)
                 {
                     int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
 
@@ -1678,6 +1679,7 @@ namespace VAdvantage.Model
                         nextid = INIT_NO;
                     }
 
+                    // Creeate sequence in respective DB.
                     if (!VConnection.Get().GetDatabase().CreateSequence(TableName , 1, INIT_NO, int.MaxValue, nextid, trxName))
                         return false;
 

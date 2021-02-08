@@ -189,7 +189,8 @@ namespace VAdvantage.DataBase
             //TODO
             //if (isDB2())
             //    trxName = null;	//	tries 3 times
-           
+
+            // if SYSTEM_NATIVE_SEQUENCE is Y in System Config, then fetch enxt ID from DB sequence
             if (MSysConfig.GetValue("SYSTEM_NATIVE_SEQUENCE",false) == "Y")
             {
                 
