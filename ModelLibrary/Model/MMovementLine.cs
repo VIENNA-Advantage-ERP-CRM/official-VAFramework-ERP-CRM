@@ -221,7 +221,7 @@ namespace VAdvantage.Model
             {
                 if (product != null && product.GetVAM_PFeature_Set_ID() != 0)
                 {
-                    MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+                    MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
                     if (mas.IsMandatory() || mas.IsMandatoryAlways())
                     {
                         log.SaveError("FillMandatory", Msg.GetElement(GetCtx(), "VAM_PFeature_SetInstance_ID"));
@@ -448,7 +448,7 @@ namespace VAdvantage.Model
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MCost.GetproductCosts(move.GetVAF_Client_ID(), move.GetVAF_Org_ID(), GetVAM_Product_ID(),
+                    Decimal cost = MVAMProductCost.GetproductCosts(move.GetVAF_Client_ID(), move.GetVAF_Org_ID(), GetVAM_Product_ID(),
                          GetVAM_PFeature_SetInstance_ID(), Get_Trx(), move.GetDTD001_MWarehouseSource_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
@@ -467,7 +467,7 @@ namespace VAdvantage.Model
                         if (product != null
                             && product.GetVAM_PFeature_Set_ID() != 0)
                         {
-                            //MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+                            //MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
                             //if (mas.IsInstanceAttribute() 
                             //    && (mas.IsMandatory() || mas.IsMandatoryAlways()))
                             //{
@@ -548,7 +548,7 @@ namespace VAdvantage.Model
                         if (product != null
                             && product.GetVAM_PFeature_Set_ID() != 0)
                         {
-                            MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+                            MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
                             if (mas.IsInstanceAttribute()
                                 && (mas.IsMandatory() || mas.IsMandatoryAlways()))
                             {

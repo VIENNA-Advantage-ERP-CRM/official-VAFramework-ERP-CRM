@@ -316,7 +316,7 @@ namespace VAdvantage.Process
             Boolean oneLinePerASI = false;
             if (VAM_PFeature_Set_ID != 0)
             {
-                MAttributeSet mas = MAttributeSet.Get(GetCtx(), VAM_PFeature_Set_ID);
+                MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), VAM_PFeature_Set_ID);
                 oneLinePerASI = mas.IsInstanceAttribute();
             }
             if (oneLinePerASI)

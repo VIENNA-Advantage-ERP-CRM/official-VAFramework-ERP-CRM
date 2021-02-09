@@ -48,12 +48,12 @@ namespace VAdvantage.Acct
         /// <param name="ass">accounting schemata</param>
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
-        public DoVAB_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
+        public Doc_Order(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
             : base(ass, typeof(MVABOrder), idr, null, trxName)
         {
 
         }
-        public DoVAB_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
+        public Doc_Order(MVABAccountBook[] ass, DataRow dr, Trx trxName)
             : base(ass, typeof(MVABOrder), dr, null, trxName)
         {
 

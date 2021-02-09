@@ -28,7 +28,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MContactInterest : X_VAR_InterestedUser
+    public class MVARInterestedUser : X_VAR_InterestedUser
     {
         /**
 	 * 	Get Contact Interest
@@ -39,10 +39,10 @@ namespace VAdvantage.Model
 	 *	@param trxName transaction
 	 *	@return Contact Interest 
 	 */
-        public static MContactInterest Get(Ctx ctx,
+        public static MVARInterestedUser Get(Ctx ctx,
             int VAR_InterestArea_ID, int VAF_UserContact_ID, Boolean isActive, Trx trxName)
         {
-            MContactInterest retValue = null;
+            MVARInterestedUser retValue = null;
             String sql = "SELECT * FROM VAR_InterestedUser "
                 + "WHERE VAR_InterestArea_ID=@VAR_InterestArea_ID AND VAF_UserContact_ID=@VAF_UserContact_ID";
             DataTable dt = null;
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MContactInterest(ctx, dr, trxName);
+                    retValue = new MVARInterestedUser(ctx, dr, trxName);
                     break;
                 }
 
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
             //	New
             if (retValue == null)
             {
-                retValue = new MContactInterest(ctx, VAR_InterestArea_ID, VAF_UserContact_ID,isActive, trxName);
+                retValue = new MVARInterestedUser(ctx, VAR_InterestArea_ID, VAF_UserContact_ID,isActive, trxName);
                 	_log.Fine("NOT found - " + retValue);
             }
             else
@@ -96,13 +96,13 @@ namespace VAdvantage.Model
          *	@param ignored ignored
          *	@param trxName transaction
          */
-        public MContactInterest(Ctx ctx, int ignored, Trx trxName) :
+        public MVARInterestedUser(Ctx ctx, int ignored, Trx trxName) :
             base(ctx, 0, trxName)
         {
 
             if (ignored != 0)
                 throw new ArgumentException("Multi-Key");
-        }	//	MContactInterest
+        }	//	MVARInterestedUser
 
         /**
          * 	Constructor
@@ -112,7 +112,7 @@ namespace VAdvantage.Model
          * 	@param isActive create as active
          *	@param trxName transaction
          */
-        public MContactInterest(Ctx ctx, int VAR_InterestArea_ID, int VAF_UserContact_ID,
+        public MVARInterestedUser(Ctx ctx, int VAR_InterestArea_ID, int VAF_UserContact_ID,
             Boolean isActive, Trx trxName) :
             base(ctx, 0, trxName)
         {
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
             SetR_InterestArea_ID(VAR_InterestArea_ID);
             SetVAF_UserContact_ID(VAF_UserContact_ID);
             SetIsActive(isActive);
-        }	//	MContactInterest
+        }	//	MVARInterestedUser
 
         /**
          *  Create & Load existing Persistent Object.
@@ -128,14 +128,14 @@ namespace VAdvantage.Model
          *  @param dr load from current result Set position (no navigation, not closed)
          *	@param trxName transaction
          */
-        public MContactInterest(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVARInterestedUser(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //	super();
-        }	//	MContactInterest
+        }	//	MVARInterestedUser
 
         //	Static Logger				
-        private static VLogger _log = VLogger.GetVLogger(typeof(MContactInterest).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVARInterestedUser).FullName);
 
         /**
          * 	Set OptOut Date
@@ -277,7 +277,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MContactInterest[")
+            StringBuilder sb = new StringBuilder("MVARInterestedUser[")
                 .Append("VAR_InterestArea_ID=").Append(GetR_InterestArea_ID())
                 .Append(",VAF_UserContact_ID=").Append(GetVAF_UserContact_ID())
                 .Append(",Subscribed=").Append(IsSubscribed())

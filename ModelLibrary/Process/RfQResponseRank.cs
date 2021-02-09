@@ -31,7 +31,7 @@ namespace VAdvantage.Process
     {
         //RfQ 			
         private int _VAB_RFQ_ID = 0;
-        //private Logging.VLogger s_log = Logging.VLogger.GetVLogger(typeof(MOrderLine).FullName);
+        //private Logging.VLogger s_log = Logging.VLogger.GetVLogger(typeof(MVABOrderLine).FullName);
 
         /// <summary>
         /// Prepare

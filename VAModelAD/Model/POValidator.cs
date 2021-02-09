@@ -19,11 +19,11 @@ namespace VAModelAD.Model
         private void RegisterPORecordList()
         {
             PORecord.AddParent(X_VAB_Order.Table_ID, X_VAB_Order.Table_Name);
-            PORecord.AddParent(X_CM_Container.Table_ID, X_CM_Container.Table_Name);
+           // PORecord.AddParent(X_VACM_Container.Table_ID, X_VACM_Container.Table_Name);
 
             //parent child7
             PORecord.AddParentChild(X_VAB_OrderLine.Table_ID, X_VAB_OrderLine.Table_Name);
-            PORecord.AddParentChild(X_CM_Container_Element.Table_ID, X_CM_Container_Element.Table_Name);
+           // PORecord.AddParentChild(X_VACM_Container_Element.Table_ID, X_VACM_Container_Element.Table_Name);
 
             //cascade
             PORecord.AddCascade(X_VAF_Attachment.Table_ID, X_VAF_Attachment.Table_Name);

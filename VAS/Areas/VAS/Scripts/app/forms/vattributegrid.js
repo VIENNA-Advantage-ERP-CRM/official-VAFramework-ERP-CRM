@@ -325,7 +325,7 @@
             var yValue = null;
 
             if (indexAttr1 > 0) {
-                xValues = _attributes[indexAttr1 - 1].GetMAttributeValues;
+                xValues = _attributes[indexAttr1 - 1].GetMVAMPFeatureValues;
             }
             if (xValues != null) {
                 cols = xValues.length + 1;;
@@ -335,7 +335,7 @@
             //	y dimension
             var rows = 2;
             if (indexAttr2 > 0) {
-                yValues = _attributes[indexAttr2 - 1].GetMAttributeValues;
+                yValues = _attributes[indexAttr2 - 1].GetMVAMPFeatureValues;
             }
             if (yValues.length > 0) {
                 rows = yValues.length + 1;

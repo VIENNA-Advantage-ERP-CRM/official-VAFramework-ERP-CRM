@@ -782,7 +782,7 @@ namespace VAdvantage.Model
         //        allAttributeInstances = true;
         //    else
         //    {
-        //        MAttributeSet mas = MAttributeSet.Get(ctx, VAM_PFeature_Set_ID);
+        //        MVAMPFeatureSet mas = MVAMPFeatureSet.Get(ctx, VAM_PFeature_Set_ID);
         //        if (!mas.isInstanceAttribute())
         //            allAttributeInstances = true;
         //    }

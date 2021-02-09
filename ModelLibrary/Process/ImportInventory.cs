@@ -269,8 +269,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         MProduct product = MProduct.Get(GetCtx(), imp.GetVAM_Product_ID());
                         if (product.IsInstanceAttribute())
                         {
-                            MAttributeSet mas = product.GetAttributeSet();
-                            MAttributeSetInstance masi = new MAttributeSetInstance(GetCtx(), 0, mas.GetVAM_PFeature_Set_ID(), Get_TrxName());
+                            MVAMPFeatureSet mas = product.GetAttributeSet();
+                            MVAMPFeatureSetInstance masi = new MVAMPFeatureSetInstance(GetCtx(), 0, mas.GetVAM_PFeature_Set_ID(), Get_TrxName());
                             if (mas.IsLot() && imp.GetLot() != null)
                                 masi.SetLot(imp.GetLot(), imp.GetVAM_Product_ID());
                             if (mas.IsSerNo() && imp.GetSerNo() != null)

@@ -292,7 +292,7 @@ namespace VAdvantage.Model
                 {
                     if (product.GetVAM_PFeature_Set_ID() != 0)
                     {
-                        MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+                        MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
                         //uncomment by Amit on behalf of Mandeep 7-3-2016
                         //if (mas.IsInstanceAttribute()
                         //    && (mas.IsMandatory() || mas.IsMandatoryAlways()))

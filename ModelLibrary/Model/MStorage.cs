@@ -314,7 +314,7 @@ namespace VAdvantage.Model
                 allAttributeInstances = true;
             else
             {
-                MAttributeSet mas = MAttributeSet.Get(Ctx, VAM_PFeature_Set_ID);
+                MVAMPFeatureSet mas = MVAMPFeatureSet.Get(Ctx, VAM_PFeature_Set_ID);
                 if (!mas.IsInstanceAttribute())
                     allAttributeInstances = true;
             }
@@ -413,7 +413,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                MAttributeSet mas = MAttributeSet.Get(ctx, VAM_PFeature_Set_ID);
+                MVAMPFeatureSet mas = MVAMPFeatureSet.Get(ctx, VAM_PFeature_Set_ID);
                 if (!mas.IsInstanceAttribute())
                     allAttributeInstances = true;
             }
@@ -2314,7 +2314,7 @@ namespace VAdvantage.Model
     //            allAttributeInstances = true;
     //        else
     //        {
-    //            MAttributeSet mas = MAttributeSet.Get(Ctx, VAM_PFeature_Set_ID);
+    //            MVAMPFeatureSet mas = MVAMPFeatureSet.Get(Ctx, VAM_PFeature_Set_ID);
     //            if (!mas.IsInstanceAttribute())
     //                allAttributeInstances = true;
     //        }

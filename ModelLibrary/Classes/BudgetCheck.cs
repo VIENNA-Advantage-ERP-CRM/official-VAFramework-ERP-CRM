@@ -179,7 +179,7 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
 
                         // Amount = 0;
 
-                        VAdvantage.Model.MOrderLine ol = new VAdvantage.Model.MOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]), _trx);
+                        VAdvantage.Model.MVABOrderLine ol = new VAdvantage.Model.MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_OrderLine_ID"]), _trx);
                         VAM_Product_ID = ol.GetVAM_Product_ID();
                         int Account_ID = 0;
                         if (VAM_Product_ID > 0)

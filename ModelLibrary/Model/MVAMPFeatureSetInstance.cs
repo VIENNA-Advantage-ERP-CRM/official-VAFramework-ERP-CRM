@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttributeSetInstance
+ * Class Name     : MVAMPFeatureSetInstance
  * Purpose        : Get attribute instance from VAM_Product tab;e
  * Class Used     : X_VAM_PFeature_SetInstance
  * Chronological    Development
@@ -23,16 +23,16 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MAttributeSetInstance : X_VAM_PFeature_SetInstance
+    public class MVAMPFeatureSetInstance : X_VAM_PFeature_SetInstance
     {
         #region Private variable
         /**	Attribute Set				*/
-        private MAttributeSet _mas = null;
+        private MVAMPFeatureSet _mas = null;
         /**	Date Format					*/
         private SimpleDateFormat _dateFormat = DisplayType.GetDateFormat(DisplayType.Date);
         //private DateTimePickerFormat _dateFormat = DisplayType.getDateFormat(DisplayType.Date);
         //private DateTime _dateFormat = new DateTime();
-        private static VLogger _log = VLogger.GetVLogger(typeof(MAttributeSetInstance).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMPFeatureSetInstance).FullName);
         #endregion
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_PFeature_SetInstance_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID, Trx trxName)
+        public MVAMPFeatureSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID, Trx trxName)
             : base(ctx, VAM_PFeature_SetInstance_ID, trxName)
         {
             if (VAM_PFeature_SetInstance_ID == 0)
@@ -56,15 +56,15 @@ namespace VAdvantage.Model
  * 	@param VAM_Product_ID required if id is 0
  * 	@return Attribute Set Instance or null
  */
-        public static MAttributeSetInstance Get(Ctx ctx,
+        public static MVAMPFeatureSetInstance Get(Ctx ctx,
             int VAM_PFeature_SetInstance_ID, int VAM_Product_ID)
         {
-            MAttributeSetInstance retValue = null;
+            MVAMPFeatureSetInstance retValue = null;
             //	Load Instance if not 0
             if (VAM_PFeature_SetInstance_ID != 0)
             {
                _log.Fine("From VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID);
-                return new MAttributeSetInstance(ctx, VAM_PFeature_SetInstance_ID, null);
+                return new MVAMPFeatureSetInstance(ctx, VAM_PFeature_SetInstance_ID, null);
             }
             //	Get new from Product
            _log.Fine("From VAM_Product_ID=" + VAM_Product_ID);
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 {
                     int VAM_PFeature_Set_ID = Utility.Util.GetValueOfInt(dr[0].ToString()); //Convert.ToInt32(dr[0]);//.getInt(1);
                     //	VAM_PFeature_SetInstance_ID = dr.getInt(2);	//	needed ?
-                    retValue = new MAttributeSetInstance(ctx, 0, VAM_PFeature_Set_ID, null);
+                    retValue = new MVAMPFeatureSetInstance(ctx, 0, VAM_PFeature_Set_ID, null);
                 }
             }
             catch (Exception ex)
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MAttributeSetInstance(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMPFeatureSetInstance(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
          * 	@param VAM_PFeature_Set_ID attribute set
          *	@param trxName transaction
          */
-        public MAttributeSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID,
+        public MVAMPFeatureSetInstance(Ctx ctx, int VAM_PFeature_SetInstance_ID,
             int VAM_PFeature_Set_ID, Trx trxName)
             : this(ctx, VAM_PFeature_SetInstance_ID, trxName)
         {
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
          * 	Set Attribute Set
          * 	@param mas attribute set
          */
-        public void SetMAttributeSet(MAttributeSet mas)
+        public void SetMVAMPFeatureSet(MVAMPFeatureSet mas)
         {
             _mas = mas;
             SetVAM_PFeature_Set_ID(mas.GetVAM_PFeature_Set_ID());
@@ -140,10 +140,10 @@ namespace VAdvantage.Model
          * 	Get Attribute Set
          *	@return Attrbute Set or null
          */
-        public MAttributeSet GetMAttributeSet()
+        public MVAMPFeatureSet GetMVAMPFeatureSet()
         {
             if (_mas == null && GetVAM_PFeature_Set_ID() != 0)
-                _mas = new MAttributeSet(GetCtx(), GetVAM_PFeature_Set_ID(), Get_TrxName());
+                _mas = new MVAMPFeatureSet(GetCtx(), GetVAM_PFeature_Set_ID(), Get_TrxName());
             return _mas;
         }
 
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
         public void SetDescription()
         {
             //	Make sure we have a Attribute Set
-            GetMAttributeSet();
+            GetMVAMPFeatureSet();
             if (_mas == null)
             {
                 SetDescription("");
@@ -226,7 +226,7 @@ namespace VAdvantage.Model
         {
             if (getNew)
             {
-                int days = GetMAttributeSet().GetGuaranteeDays();
+                int days = GetMVAMPFeatureSet().GetGuaranteeDays();
                 if (days > 0)
                 {
                     DateTime ts = TimeUtil.AddDays( DateTime.Now, days);
@@ -257,7 +257,7 @@ namespace VAdvantage.Model
         public KeyNamePair CreateLot(int VAM_Product_ID)
         {
             KeyNamePair retValue = null;
-            int VAM_LotControl_ID = GetMAttributeSet().GetVAM_LotControl_ID();
+            int VAM_LotControl_ID = GetMVAMPFeatureSet().GetVAM_LotControl_ID();
             if (VAM_LotControl_ID != 0)
             {
                 MLotCtl ctl = new MLotCtl(GetCtx(), VAM_LotControl_ID, null);
@@ -291,7 +291,7 @@ namespace VAdvantage.Model
          */
         public bool IsExcludeLot(int VAF_Column_ID, bool isSOTrx)
         {
-            GetMAttributeSet();
+            GetMVAMPFeatureSet();
             if (_mas != null)
                 return _mas.IsExcludeLot(VAF_Column_ID, isSOTrx);
             return false;
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
         {
             if (getNew)
             {
-                int VAM_CtlSerialNo_ID = GetMAttributeSet().GetVAM_CtlSerialNo_ID();
+                int VAM_CtlSerialNo_ID = GetMVAMPFeatureSet().GetVAM_CtlSerialNo_ID();
                 if (VAM_CtlSerialNo_ID != 0)
                 {
                     MSerNoCtl ctl = new MSerNoCtl(GetCtx(), VAM_CtlSerialNo_ID, Get_TrxName());
@@ -324,7 +324,7 @@ namespace VAdvantage.Model
          */
         public bool IsExcludeSerNo(int VAF_Column_ID, bool isSOTrx)
         {
-            GetMAttributeSet();
+            GetMVAMPFeatureSet();
             if (_mas != null)
                 return _mas.IsExcludeSerNo(VAF_Column_ID, isSOTrx);
             return false;

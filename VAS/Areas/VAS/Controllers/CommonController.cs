@@ -262,13 +262,13 @@ namespace VIS.Controllers
                 {
                     AttributeGrid lstObj = new AttributeGrid();
                     lstObj.GetKeyNamePair = value[i].GetKeyNamePair();
-                    List<MAttributeValueList> lstAttValueObj = new List<MAttributeValueList>();
-                    for (int k = 0; k < value[i].GetMAttributeValues().Length; k++)
+                    List<MVAMPFeatureValueList> lstAttValueObj = new List<MVAMPFeatureValueList>();
+                    for (int k = 0; k < value[i].GetMVAMPFeatureValues().Length; k++)
                     {
-                        var attrValue = value[i].GetMAttributeValues()[k];
+                        var attrValue = value[i].GetMVAMPFeatureValues()[k];
                         if (attrValue != null)
                         {
-                            MAttributeValueList localObj = new MAttributeValueList();
+                            MVAMPFeatureValueList localObj = new MVAMPFeatureValueList();
                             localObj.GetVAM_ProductFeature_ID = attrValue.GetVAM_ProductFeature_ID();
                             localObj.GetVAM_PFeature_Value_ID = attrValue.GetVAM_PFeature_Value_ID();
                             localObj.Name = attrValue.GetName();
@@ -276,7 +276,7 @@ namespace VIS.Controllers
                         }
                     }
 
-                    lstObj.GetMAttributeValues = lstAttValueObj.ToArray();
+                    lstObj.GetMVAMPFeatureValues = lstAttValueObj.ToArray();
                     lstObj.GetName = value[i].GetName();
                     lst.Add(lstObj);
                 }
@@ -450,11 +450,11 @@ namespace VIS.Controllers
     public class AttributeGrid
     {
         public KeyNamePair GetKeyNamePair { get; set; }
-        public MAttributeValueList[] GetMAttributeValues { get; set; }
+        public MVAMPFeatureValueList[] GetMVAMPFeatureValues { get; set; }
         public String GetName { get; set; }
     }
 
-    public class MAttributeValueList
+    public class MVAMPFeatureValueList
     {
         public int GetVAM_ProductFeature_ID { get; set; }
         public int GetVAM_PFeature_Value_ID { get; set; }
@@ -2443,7 +2443,7 @@ namespace VIS.Controllers
                                         MProduct product = new MProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                         // Not returning any value as No effect
-                                        MCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
+                                        MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product,
                                              match.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                              Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), match.GetQty()),
                                              match.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2482,7 +2482,7 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, matchPO.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
+                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, matchPO.GetVAF_Client_ID(), matchPO.GetVAF_Org_ID(), product,
                                           matchPO.GetVAM_PFeature_SetInstance_ID(), "Match IV", null, sLine, null, iLine, null,
                                           Decimal.Multiply(Decimal.Divide(iLine.GetLineNetAmt(), iLine.GetQtyInvoiced()), matchPO.GetQty()),
                                           matchPO.GetQty(), trx, out conversionNotFoundMatch, "window");
@@ -2541,7 +2541,7 @@ namespace VIS.Controllers
                                     MProduct product = new MProduct(ctx, match.GetVAM_Product_ID(), trx);
 
                                     // Not returning any value as No effect
-                                    MCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
+                                    MVAMProductCostQueue.CreateProductCostsDetails(ctx, match.GetVAF_Client_ID(), match.GetVAF_Org_ID(), product, match.GetVAM_PFeature_SetInstance_ID(),
                                         "Match PO", null, sLine, null, null, null, oLine.GetVAB_OrderLine_ID(), match.GetQty(), trx, out conversionNotFoundMatch, "window");
                                     if (!string.IsNullOrEmpty(conversionNotFoundMatch))
                                     {

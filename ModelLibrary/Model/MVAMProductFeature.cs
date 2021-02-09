@@ -102,18 +102,18 @@ namespace VAdvantage.Model
         }
 
         //Values						
-        private MAttributeValue[] m_values = null;
+        private MVAMPFeatureValue[] m_values = null;
 
         /// <summary>
         /// Get Values if List
         /// </summary>
         /// <returns>Values or null if not list</returns>
-        public MAttributeValue[] GetMAttributeValues()
+        public MVAMPFeatureValue[] GetMVAMPFeatureValues()
         {
             if (m_values == null && ATTRIBUTEVALUETYPE_List.Equals(GetAttributeValueType()))
             {
-                List<MAttributeValue> list = new List<MAttributeValue>();
-                MAttributeValue val = null;
+                List<MVAMPFeatureValue> list = new List<MVAMPFeatureValue>();
+                MVAMPFeatureValue val = null;
                 if (!IsMandatory())
                     list.Add(val);
                 //
@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         DataRow dr = ds.Tables[0].Rows[i];
-                        list.Add(new MAttributeValue(GetCtx(), dr, null));
+                        list.Add(new MVAMPFeatureValue(GetCtx(), dr, null));
                     }
                     ds = null;
                 }
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
                 }
 
                 ds = null;
-                m_values = new MAttributeValue[list.Count];
+                m_values = new MVAMPFeatureValue[list.Count];
                 m_values = list.ToArray();
             }
             return m_values;
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="VAM_PFeature_SetInstance_ID">value</param>
         /// <param name="value">id</param>
-        public void SetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID, MAttributeValue value)
+        public void SetMVAMPFeatueInstance(int VAM_PFeature_SetInstance_ID, MVAMPFeatureValue value)
         {
             MVAMPFeatueInstance instance = GetMVAMPFeatueInstance(VAM_PFeature_SetInstance_ID);
             if (instance == null)

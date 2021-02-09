@@ -9,8 +9,8 @@
         this.log = VIS.Logging.VLogger.getVLogger("GenralAttributeForm");
 
         var windowNo = VIS.Env.getWindowNo();
-        var mAttributeSetInstanceId = null;
-        var mAttributeSetInstanceName = null;
+        var MVAMPFeatureSetInstanceId = null;
+        var MVAMPFeatureSetInstanceName = null;
         var cBPartnerId = null;
         var windowNoParent = windowNoP;
         var vadms_AttributeSet_ID = 0;
@@ -29,7 +29,7 @@
         this.log.config("VAB_GenFeatureSetInstance_ID=" + VAM_PFeature_SetInstance_ID);
 
         //constructor load
-        mAttributeSetInstanceId = VAM_PFeature_SetInstance_ID;
+        MVAMPFeatureSetInstanceId = VAM_PFeature_SetInstance_ID;
         vadms_AttributeSet_ID = VADMS_AttributeSet_ID;
         dms = fromDMS;
         search = searchP;
@@ -42,7 +42,7 @@
                 dataType: "json",
                 async: false,
                 data: {
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     vadms_AttributeSet_ID: vadms_AttributeSet_ID,
                     windowNo: windowNo,
                 },
@@ -105,7 +105,7 @@
                 async: false,
                 data: JSON.stringify({
                     windowNoParent: windowNoParent,
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     vadms_AttributeSet_ID: vadms_AttributeSet_ID,
                     windowNo: windowNo,
                     lst: lst
@@ -140,7 +140,7 @@
                 async: false,
                 data: JSON.stringify({
                     windowNoParent: Number(windowNoParent),
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     vadms_AttributeSet_ID: vadms_AttributeSet_ID,
                     windowNo: windowNo,
                     lst: lst
@@ -196,12 +196,12 @@
             if (cancelbtn)
                 cancelbtn.off("click");
             VIS.Env.clearWinContext(VIS.Env.getCtx(), windowNo);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", mAttributeSetInstanceId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", MVAMPFeatureSetInstanceId);
 
             Okbtn = null;
             cancelbtn = null;
             mLocatorId = null;
-            mAttributeSetInstanceName = null;
+            MVAMPFeatureSetInstanceName = null;
             mProductId = null;
             cBPartnerId = null;
             adColumnId = null;
@@ -225,7 +225,7 @@
 
             $self = null;
             windowNo = null;
-            mAttributeSetInstanceId = null;
+            MVAMPFeatureSetInstanceId = null;
             this.disposeComponent = null;
         };
 

@@ -3045,9 +3045,9 @@
             //if (obj.hasAttribute) {
             //    obj.showDialog();
             //}
-            //obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
+            //obj.onClose = function (MVAMPFeatureSetInstanceId, name, mLocatorId) {
             //    $("#grid_" + $self.dGrid.name + "_rec_" + (e.recid)).find("input[type=text]").val(name);
-            //    $self.dGrid.records[e.recid - 1].VAM_PFeature_SetInstance_ID_K = mAttributeSetInstanceId;
+            //    $self.dGrid.records[e.recid - 1].VAM_PFeature_SetInstance_ID_K = MVAMPFeatureSetInstanceId;
             //    $self.dGrid.records[e.recid - 1].VAM_PFeature_SetInstance_ID = name;
             //};
 

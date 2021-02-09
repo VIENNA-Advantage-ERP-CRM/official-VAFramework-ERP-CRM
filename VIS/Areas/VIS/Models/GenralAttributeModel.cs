@@ -21,12 +21,12 @@ namespace VIS.Models
         /// <summary>
         /// Load genral attribute
         /// </summary>
-        /// <param name="mAttributeSetInstanceId"></param>
+        /// <param name="MVAMPFeatureSetInstanceId"></param>
         /// <param name="vadms_AttributeSet_ID"></param>
         /// <param name="windowNo"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public AttributesObjects LoadInit(int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo, Ctx ctx, HttpServerUtilityBase objBase)
+        public AttributesObjects LoadInit(int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo, Ctx ctx, HttpServerUtilityBase objBase)
         {
             AttributesObjects obj = new AttributesObjects();
 
@@ -34,7 +34,7 @@ namespace VIS.Models
             MGenAttribute[] attributes = null;
 
             //	Get Model
-            var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
+            var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
             _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
             if (_masi == null)
             {
@@ -58,12 +58,12 @@ namespace VIS.Models
             for (int i = 0; i < attributes.Length; i++)
             {
                 MGenAttribute a = attributes[i];
-                MGenAttributeInstance ins = a.GetCGenAttributeInstance(mAttributeSetInstanceId);
+                MGenAttributeInstance ins = a.GetCGenAttributeInstance(MVAMPFeatureSetInstanceId);
                 MGenAttributeValue[] v = null;
 
                 if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(a.GetAttributeValueType()))
                 {
-                    v = a.GetMAttributeValues();
+                    v = a.GetMVAMPFeatureValues();
                 }
                 attributesList[a] = new KeyValuePair<MGenAttributeInstance, MGenAttributeValue[]>(ins, v);
             }
@@ -251,12 +251,12 @@ namespace VIS.Models
         /// Save Genral attribute
         /// </summary>
         /// <param name="windowNoParent"></param>
-        /// <param name="mAttributeSetInstanceId"></param>
+        /// <param name="MVAMPFeatureSetInstanceId"></param>
         /// <param name="windowNo"></param>
         /// <param name="values"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public AttributeInstance SaveGenAttribute(int windowNoParent, int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> values, Ctx ctx)
+        public AttributeInstance SaveGenAttribute(int windowNoParent, int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> values, Ctx ctx)
         {
             var editors = values;
             AttributeInstance obj = new AttributeInstance();
@@ -266,12 +266,12 @@ namespace VIS.Models
             MGenAttributeSet aset = null;
             MGenAttribute[] attributes = null;
             String mandatory = "";
-            var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
+            var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
 
             //if there is different attribute set then delete old instance
-            if (mAttributeSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetVAB_GenFeatureSet_ID()))
+            if (MVAMPFeatureSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetVAB_GenFeatureSet_ID()))
             {
-                DB.ExecuteQuery("DELETE FROM VAB_GenFeatureInstance WHERE VAB_GenFeatureSetInstance_ID=" + mAttributeSetInstanceId);
+                DB.ExecuteQuery("DELETE FROM VAB_GenFeatureInstance WHERE VAB_GenFeatureSetInstance_ID=" + MVAMPFeatureSetInstanceId);
             }
 
             _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
@@ -287,13 +287,13 @@ namespace VIS.Models
             {
                 _masi.Save();
                 obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
+                MVAMPFeatureSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             else
             {
                 obj.VAM_PFeature_SetInstance_ID = _masi.GetVAB_GenFeatureSetInstance_ID();
-                mAttributeSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
+                MVAMPFeatureSetInstanceId = _masi.GetVAB_GenFeatureSetInstance_ID();
                 obj.VAM_PFeature_SetInstanceName = _masi.GetDescription();
             }
             //	Save Instance Attributes
@@ -355,7 +355,7 @@ namespace VIS.Models
                         {
                             continue;
                         }
-                        attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, value);
+                        attributes[i].SetCGenAttributeInstance(MVAMPFeatureSetInstanceId, value);
                     }
                     else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
@@ -363,7 +363,7 @@ namespace VIS.Models
                         {
                             continue;
                         }
-                        attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, (decimal?)lst[attributes[i]]);
+                        attributes[i].SetCGenAttributeInstance(MVAMPFeatureSetInstanceId, (decimal?)lst[attributes[i]]);
                     }
                     else
                     {
@@ -371,7 +371,7 @@ namespace VIS.Models
                         {
                             continue;
                         }
-                        attributes[i].SetCGenAttributeInstance(mAttributeSetInstanceId, (String)lst[attributes[i]]);
+                        attributes[i].SetCGenAttributeInstance(MVAMPFeatureSetInstanceId, (String)lst[attributes[i]]);
                     }
                 }
                 _masi.SetDescription();
@@ -388,7 +388,7 @@ namespace VIS.Models
             return obj;
         }
 
-        public AttributeInstance SearchValuesAttribute(int windowNoParent, int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> values, Ctx ctx)
+        public AttributeInstance SearchValuesAttribute(int windowNoParent, int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> values, Ctx ctx)
         {
             AttributeInstance obj = new AttributeInstance();
             try
@@ -398,7 +398,7 @@ namespace VIS.Models
                 MGenAttribute[] attributes = null;
                 String mandatory = "";
 
-                var _masi = new MGenAttributeSetInstance(ctx, mAttributeSetInstanceId, null);
+                var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
                 _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
                 aset = _masi.GetMGenAttributeSet();
                 if (aset == null)

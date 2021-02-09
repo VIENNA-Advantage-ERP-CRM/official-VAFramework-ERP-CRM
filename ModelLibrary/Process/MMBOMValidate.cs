@@ -16,7 +16,7 @@ using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Process
 {
-    class MMBOMValidate: ProcessEngine.SvrProcess
+    class MMVAMBOMValidate: ProcessEngine.SvrProcess
     
         
     {
@@ -153,7 +153,7 @@ namespace VAdvantage.Process
             }
 
             //	New Structure
-            MBOM[] boms = MBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(), null);
+            MVAMBOM[] boms = MVAMBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(), null);
             for (int i = 0; i < boms.Length; i++)
             {
                 _products = new List<MProduct>();
@@ -214,12 +214,12 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="bom">bom</param>
         /// <returns>true if valid</returns>
-        private bool ValidateBOM(MBOM bom)
+        private bool ValidateBOM(MVAMBOM bom)
         {
-            MBOMProduct[] BOMproducts = MBOMProduct.GetOfBOM(bom);
+            MVAMBOMProduct[] BOMproducts = MVAMBOMProduct.GetOfBOM(bom);
             for (int i = 0; i < BOMproducts.Length; i++)
             {
-                MBOMProduct BOMproduct = BOMproducts[i];
+                MVAMBOMProduct BOMproduct = BOMproducts[i];
                 MProduct pp = new MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
                 if (pp.IsBOM())
                 {
@@ -244,7 +244,7 @@ namespace VAdvantage.Process
             }
             //
             String restriction = "BOMType='" + BOMType + "' AND BOMUse='" + BOMUse + "'";
-            MBOM[] boms = MBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(),
+            MVAMBOM[] boms = MVAMBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(),
                 restriction);
             if (boms.Length != 1)
             {
@@ -259,11 +259,11 @@ namespace VAdvantage.Process
             _products.Add(product);
             log.Fine(product.GetName());
             //
-            MBOM bom = boms[0];
-            MBOMProduct[] BOMproducts = MBOMProduct.GetOfBOM(bom);
+            MVAMBOM bom = boms[0];
+            MVAMBOMProduct[] BOMproducts = MVAMBOMProduct.GetOfBOM(bom);
             for (int i = 0; i < BOMproducts.Length; i++)
             {
-                MBOMProduct BOMproduct = BOMproducts[i];
+                MVAMBOMProduct BOMproduct = BOMproducts[i];
                 MProduct pp = new MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
                 if (pp.IsBOM())
                 {

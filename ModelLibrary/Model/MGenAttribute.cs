@@ -65,7 +65,7 @@ namespace VAdvantage.Model
         /// Get Values if List
         /// </summary>
         /// <returns>Values or null if not list</returns>
-        public MGenAttributeValue[] GetMAttributeValues()
+        public MGenAttributeValue[] GetMVAMPFeatureValues()
         {
             if (m_values == null && ATTRIBUTEVALUETYPE_List.Equals(GetAttributeValueType()))
             {

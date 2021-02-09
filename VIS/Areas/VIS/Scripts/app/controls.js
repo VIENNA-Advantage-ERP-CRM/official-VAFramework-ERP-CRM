@@ -4463,14 +4463,14 @@
             };
         }
 
-        function setValueInControl(mAttributeSetInstanceId, name) {
-            self.log.finest("Changed VAM_PFeature_SetInstance_ID=" + mAttributeSetInstanceId);
-            if (self.oldValue != mAttributeSetInstanceId) {
-                if (mAttributeSetInstanceId == 0) {
+        function setValueInControl(MVAMPFeatureSetInstanceId, name) {
+            self.log.finest("Changed VAM_PFeature_SetInstance_ID=" + MVAMPFeatureSetInstanceId);
+            if (self.oldValue != MVAMPFeatureSetInstanceId) {
+                if (MVAMPFeatureSetInstanceId == 0) {
                     self.setValue(null);
                 }
-                self.setValue(mAttributeSetInstanceId);
-                var evt = { newValue: mAttributeSetInstanceId, propertyName: self.colName };
+                self.setValue(MVAMPFeatureSetInstanceId);
+                var evt = { newValue: MVAMPFeatureSetInstanceId, propertyName: self.colName };
                 self.fireValueChanged(evt);
                 evt = null;
             }
@@ -4526,9 +4526,9 @@
                 if (obj.hasAttribute) {
                     obj.showDialog();
                 }
-                obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
+                obj.onClose = function (MVAMPFeatureSetInstanceId, name, mLocatorId) {
                     this.VAM_Locator_ID = mLocatorId;
-                    setValueInControl(mAttributeSetInstanceId, name);
+                    setValueInControl(MVAMPFeatureSetInstanceId, name);
                 };
             }
         }

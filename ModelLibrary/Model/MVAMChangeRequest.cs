@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MChangeRequest
+ * Class Name     : MVAMChangeRequest
  * Purpose        : To handle change request
- * Class Used     : X_M_ChangeRequest
+ * Class Used     : X_VAM_ChangeRequest
  * Chronological    Development
  * Raghunandan     23-Jun-2009
   ******************************************************/
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MChangeRequest : X_M_ChangeRequest
+    public class MVAMChangeRequest : X_VAM_ChangeRequest
     {
         /**
 	 * 	Standard Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
 	 *	@param M_ChangeRequest_ID ix
 	 *	@param trxName trx
 	 */
-        public MChangeRequest(Ctx ctx, int M_ChangeRequest_ID, Trx trxName) :
+        public MVAMChangeRequest(Ctx ctx, int M_ChangeRequest_ID, Trx trxName) :
             base(ctx, M_ChangeRequest_ID, trxName)
         {
 
@@ -42,14 +42,14 @@ namespace VAdvantage.Model
                 SetIsApproved(false);
                 SetProcessed(false);
             }
-        }	//	MChangeRequest
+        }	//	MVAMChangeRequest
 
         /**
          * 	CRM Request Constructor
          *	@param request request
          *	@param group request group
          */
-        public MChangeRequest(MRequest request, MGroup group)
+        public MVAMChangeRequest(MRequest request, MGroup group)
             : this(request.GetCtx(), 0, request.Get_Trx())
         {
 
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
             //
             SetVAM_BOM_ID(group.GetVAM_BOM_ID());
             SetM_ChangeNotice_ID(group.GetM_ChangeNotice_ID());
-        }	//	MChangeRequest
+        }	//	MVAMChangeRequest
 
         /**
          * 	Load Constructor
@@ -67,11 +67,11 @@ namespace VAdvantage.Model
          *	@param dr result Set
          *	@param trxName trx
          */
-        public MChangeRequest(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAMChangeRequest(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
-        }	//	MChangeRequest
+        }	//	MVAMChangeRequest
 
         /**
          * 	Get CRM Requests of Change Requests
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
             //	Derive ChangeNotice from BOM if defined
             if (newRecord && GetVAM_BOM_ID() != 0 && GetM_ChangeNotice_ID() == 0)
             {
-                MBOM bom = new MBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
+                MVAMBOM bom = new MVAMBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
                 if (bom.GetM_ChangeNotice_ID() != 0)
                     SetVAM_BOM_ID(bom.GetM_ChangeNotice_ID());
             }

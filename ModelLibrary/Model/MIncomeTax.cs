@@ -354,7 +354,7 @@ namespace VAdvantage.Model
                 StringBuilder Info = new StringBuilder();
 
                 /* nnayak - Bug 1720003 - We need to set the processed flag so the Tax Summary Line
-                does not get recreated in the afterSave procedure of the MOrderLine class */
+                does not get recreated in the afterSave procedure of the MVABOrderLine class */
                 //SetProcessed(true);
 
                 //bool realTimePOS = false;
@@ -429,11 +429,11 @@ namespace VAdvantage.Model
 
         public bool VoidIt()
         {
-            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            //MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //log.Info(ToString());
             //for (int i = 0; i < lines.Length; i++)
             //{
-            //    MOrderLine line = lines[i];
+            //    MVABOrderLine line = lines[i];
             //    Decimal old = line.GetQtyOrdered();
             //    if (System.Math.Sign(old) != 0)
             //    {
@@ -474,10 +474,10 @@ namespace VAdvantage.Model
             log.Info(ToString());
 
             //	Close Not delivered Qty - SO/PO
-            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            //MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //for (int i = 0; i < lines.Length; i++)
             //{
-            //    MOrderLine line = lines[i];
+            //    MVABOrderLine line = lines[i];
             //    Decimal old = line.GetQtyOrdered();
             //    if (old.CompareTo(line.GetQtyDelivered()) != 0)
             //    {

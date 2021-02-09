@@ -11,19 +11,19 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MCostType : X_VAM_ProductCostType
+    public class MVAMProductCostType : X_VAM_ProductCostType
     {
-        public MCostType(Ctx ctx, int VAM_ProductCostType_ID, Trx trxName)
+        public MVAMProductCostType(Ctx ctx, int VAM_ProductCostType_ID, Trx trxName)
             : base(ctx, VAM_ProductCostType_ID, trxName)
         {
 
-        }	//	MCostType
+        }	//	MVAMProductCostType
 
-        public MCostType(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMProductCostType(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
-        }	//	MCostType
+        }	//	MVAMProductCostType
 
         protected override bool BeforeSave(bool newRecord)
         {
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
 
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MCostType[");
+            StringBuilder sb = new StringBuilder("MVAMProductCostType[");
             sb.Append(Get_ID()).Append("-").Append(GetName()).Append("]");
             return sb.ToString();
         }	//	toString

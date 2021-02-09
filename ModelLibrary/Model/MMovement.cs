@@ -50,7 +50,7 @@ namespace VAdvantage.Model
         string conversionNotFoundInOut = "";
         string conversionNotFoundMovement = "";
         string conversionNotFoundMovement1 = "";
-        MCostElement costElement = null;
+        MVAMProductCostElement costElement = null;
         ValueNamePair pp = null;
         /**is container applicable */
         private bool isContainerApplicable = false;
@@ -1773,11 +1773,11 @@ namespace VAdvantage.Model
                     {
                         // For From Warehouse
                         currentCostPrice = 0;
-                        currentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
+                        currentCostPrice = MVAMProductCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
                             line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
 
                         // For To Warehouse
-                        toCurrentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
+                        toCurrentCostPrice = MVAMProductCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), locatorTo.GetVAM_Warehouse_ID());
 
                         //line.SetCurrentCostPrice(currentCostPrice);
@@ -1802,7 +1802,7 @@ namespace VAdvantage.Model
                     product1 = new MProduct(GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
                     if (product1.GetProductType() == "I") // for Item Type product
                     {
-                        if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
+                        if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
                           "Inventory Move", null, null, line, null, null, 0, line.GetMovementQty(), Get_TrxName(), out conversionNotFoundInOut, optionalstr: "window"))
                         {
                             if (!conversionNotFoundMovement1.Contains(conversionNotFoundMovement))
@@ -1817,10 +1817,10 @@ namespace VAdvantage.Model
                         }
                         else if (!IsReversal()) // not to update cost for reversed document
                         {
-                            currentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
+                            currentCostPrice = MVAMProductCost.GetproductCosts(line.GetVAF_Client_ID(), line.GetVAF_Org_ID(),
                          line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetDTD001_MWarehouseSource_ID());
 
-                            toCurrentCostPrice = MCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
+                            toCurrentCostPrice = MVAMProductCost.GetproductCosts(line.GetVAF_Client_ID(), locatorTo.GetVAF_Org_ID(),
                            line.GetVAM_Product_ID(), line.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), locatorTo.GetVAM_Warehouse_ID());
 
                             DB.ExecuteQuery("UPDATE VAM_InvTrf_Line SET PostCurrentCostPrice = " + currentCostPrice +
@@ -2277,17 +2277,17 @@ namespace VAdvantage.Model
 
 
         private void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
-          int Org_ID, MCostElement ce, decimal movementQty)
+          int Org_ID, MVAMProductCostElement ce, decimal movementQty)
         {
-            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
-            MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
+            //MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
+            MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
             if (cQueue != null && cQueue.Length > 0)
             {
                 Decimal qty = movementQty;
                 bool value = false;
                 for (int cq = 0; cq < cQueue.Length; cq++)
                 {
-                    MCostQueue queue = cQueue[cq];
+                    MVAMProductCostQueue queue = cQueue[cq];
                     if (queue.GetCurrentQty() < 0) continue;
                     if (queue.GetCurrentQty() > qty)
                     {
@@ -2297,7 +2297,7 @@ namespace VAdvantage.Model
                     {
                         value = false;
                     }
-                    qty = MCostQueue.Quantity(queue.GetCurrentQty(), qty);
+                    qty = MVAMProductCostQueue.Quantity(queue.GetCurrentQty(), qty);
                     //if (cq == cQueue.Length - 1 && qty < 0) // last record
                     //{
                     //    queue.SetCurrentQty(qty);

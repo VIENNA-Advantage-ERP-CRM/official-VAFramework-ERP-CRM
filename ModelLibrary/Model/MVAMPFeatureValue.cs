@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttributeValue
+ * Class Name     : MVAMPFeatureValue
  * Purpose        : Set the attribute vlue from Table
  * Class Used     : X_VAM_PFeature_Value
  * Chronological    Development
@@ -26,7 +26,7 @@ using System.Drawing;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeValue : X_VAM_PFeature_Value
+    public class MVAMPFeatureValue : X_VAM_PFeature_Value
     {
         /// <summary>
         /// Constructor
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_PFeature_Value_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeValue(Ctx ctx, int VAM_PFeature_Value_ID, Trx trxName)
+        public MVAMPFeatureValue(Ctx ctx, int VAM_PFeature_Value_ID, Trx trxName)
             : base(ctx, VAM_PFeature_Value_ID, trxName)
         {
             /** if (VAM_PFeature_Value_ID == 0)
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeValue(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMPFeatureValue(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }

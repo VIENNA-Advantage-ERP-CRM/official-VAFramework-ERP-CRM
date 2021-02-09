@@ -31,7 +31,7 @@ namespace VAdvantage.Model
     public class MInterestArea : X_R_InterestArea
     {
         private int _VAF_UserContact_ID = -1;
-        private MContactInterest _ci = null;
+        private MVARInterestedUser _ci = null;
         /**	Cache						*/
         private static CCache<int, MInterestArea> _cache =
             new CCache<int, MInterestArea>("VAR_InterestArea", 5);
@@ -158,7 +158,7 @@ namespace VAdvantage.Model
         public void SetSubscriptionInfo(int VAF_UserContact_ID)
         {
             _VAF_UserContact_ID = VAF_UserContact_ID;
-            _ci = MContactInterest.Get(GetCtx(), GetR_InterestArea_ID(), VAF_UserContact_ID,
+            _ci = MVARInterestedUser.Get(GetCtx(), GetR_InterestArea_ID(), VAF_UserContact_ID,
                 false, Get_TrxName());
         }
 

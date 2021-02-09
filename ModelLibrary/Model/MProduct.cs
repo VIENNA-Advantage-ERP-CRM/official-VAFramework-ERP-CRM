@@ -423,10 +423,10 @@ namespace VAdvantage.Model
         /* 	Get Attribute Set
         *	@return set or null
         */
-        public MAttributeSet GetAttributeSet()
+        public MVAMPFeatureSet GetAttributeSet()
         {
             if (GetVAM_PFeature_Set_ID() != 0)
-                return MAttributeSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
+                return MVAMPFeatureSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
             return null;
         }
 
@@ -438,7 +438,7 @@ namespace VAdvantage.Model
         {
             if (GetVAM_PFeature_Set_ID() == 0)
                 return false;
-            MAttributeSet mas = MAttributeSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
+            MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), GetVAM_PFeature_Set_ID());
             return mas.IsInstanceAttribute();
         }
 
@@ -827,7 +827,7 @@ namespace VAdvantage.Model
                 // by Amit 22-12-2015
                 //if (newRecord || Is_ValueChanged("VAM_ProductCategory_ID"))
                 //{
-                //    MCost.Create(this);
+                //    MVAMProductCost.Create(this);
                 //}
             }
 
@@ -835,7 +835,7 @@ namespace VAdvantage.Model
             //by Amit for creating records ffor product foe all Costing Element whose costing elemnt type is 'Material'
             //if (newRecord || Is_ValueChanged("VAM_ProductCategory_ID"))
             //{
-            //    MCost.CreateRecords(this);
+            //    MVAMProductCost.CreateRecords(this);
             //}
             //20-12-2016
             //By Vivek Chauhan saving Nutrition value against product...........

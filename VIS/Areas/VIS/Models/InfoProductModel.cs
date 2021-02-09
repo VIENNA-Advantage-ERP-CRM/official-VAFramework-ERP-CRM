@@ -397,7 +397,7 @@ namespace VIS.Models
                 if (keyColName.ToUpper().Trim() == "VAB_ORDER_ID")
                 {
                     MVABOrder ord = new MVABOrder(ctx, recordID, null);
-                    _Version_ID = GetPLVID(ord.GeVAtM_PriceList_ID());
+                    _Version_ID = GetPLVID(ord.GetVAM_PriceList_ID());
                     VAF_Client_ID = ord.GetVAF_Client_ID();
                     VAF_Org_ID = ord.GetVAF_Org_ID();
                     isSOTrx = ord.IsSOTrx();
@@ -1630,7 +1630,7 @@ namespace VIS.Models
             string name = "";
             KeyNamePair attribute = null;
             StringBuilder sql = new StringBuilder();
-            MAttributeSetInstance _mast = MAttributeSetInstance.Get(Env.GetCtx(), 0, VAM_Product_ID);
+            MVAMPFeatureSetInstance _mast = MVAMPFeatureSetInstance.Get(Env.GetCtx(), 0, VAM_Product_ID);
             if (!string.IsNullOrEmpty(attributeNo))
             {
                 qry = "SELECT VAM_PFeature_SetInstance_ID FROM VAM_ProductFeatures WHERE VAM_Product_ID = " + VAM_Product_ID + "AND UPC = '" + attributeNo + "'";
@@ -1694,7 +1694,7 @@ namespace VIS.Models
                 }
                 if (attrID > 0)
                 {
-                    MAttributeSetInstance mas = new MAttributeSetInstance(ctx, attrID, null);
+                    MVAMPFeatureSetInstance mas = new MVAMPFeatureSetInstance(ctx, attrID, null);
                     name = mas.GetDescription();
                 }
                 attribute = new KeyNamePair(attrID, name);

@@ -67,7 +67,7 @@ public MVACMLayout (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 		
 	} 
 	/** Web Project */
-	private MWebProject _project = null;
+	//private MWebProject _project = null;
 	/** 
      * preBuildTemplate contains a preset Version including needed Subtemplates
      */
@@ -121,14 +121,14 @@ public MVACMLayout (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
     /// Get Web Project
 	/// </summary>
     /// <returns>Web Project</returns>
-	public MWebProject GetWebProject ()
-	{
-        if (_project == null)
-        {
-            _project = MWebProject.Get(GetCtx(), GetCM_WebProject_ID());
-        }
-		return _project;
-	}	// getWebProject
+	//public MWebProject GetWebProject ()
+	//{
+ //       if (_project == null)
+ //       {
+ //           _project = MWebProject.Get(GetCtx(), GetCM_WebProject_ID());
+ //       }
+	//	return _project;
+	//}	// getWebProject
 
 	/// <summary>
     /// Get VAF_TreeInfo_ID
@@ -136,7 +136,7 @@ public MVACMLayout (Ctx ctx,IDataReader idr, Trx trxName):base(ctx,idr, trxName)
 	/// <returns>tree</returns>
 	public int GetVAF_TreeInfo_ID ()
 	{
-		return GetWebProject ().GetVAF_TreeInfoCMT_ID ();
+			return 0;// GetWebProject ().GetVAF_TreeInfoCMT_ID ();
 	}	// getVAF_TreeInfo_ID;
 	
 	/**	_isUseAd Global Use Ad **/

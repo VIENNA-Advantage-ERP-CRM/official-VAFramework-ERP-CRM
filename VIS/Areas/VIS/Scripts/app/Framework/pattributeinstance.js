@@ -16,8 +16,8 @@
         this.arrListColumns = [];
         this.dGrid = null;
 
-        var mAttributeSetInstanceID = -1;
-        var mAttributeSetInstanceName = null;
+        var MVAMPFeatureSetInstanceID = -1;
+        var MVAMPFeatureSetInstanceName = null;
         var attrCode = "";
         var msql = "";
         var msqlNonZero = "";
@@ -298,15 +298,15 @@
             var enabled = recid != -1;
             if ($self.dGrid != null) {
                 recid = Number($self.dGrid.getSelection().toString());
-                mAttributeSetInstanceID = -1;
-                mAttributeSetInstanceName = null;
+                MVAMPFeatureSetInstanceID = -1;
+                MVAMPFeatureSetInstanceName = null;
                 mLocatorID = 0;
                 enabled = recid != -1;
                 if (enabled && recid > 0) {
                     var id = $self.dGrid.get(recid).VAM_PFeature_SetInstance_ID;
                     if (id > 0) {
-                        mAttributeSetInstanceID = id;
-                        mAttributeSetInstanceName = $self.dGrid.get(recid).Description;
+                        MVAMPFeatureSetInstanceID = id;
+                        MVAMPFeatureSetInstanceName = $self.dGrid.get(recid).Description;
                         mLocatorID = $self.dGrid.get(recid).VAM_Locator_ID;
                         attrCode = $self.dGrid.get(recid).AttrCode;
                     }
@@ -318,7 +318,7 @@
                 btnOk.removeAttr("disabled");
             }
 
-            $self.log.fine("VAM_PFeature_SetInstance_ID=" + mAttributeSetInstanceID + " - " + mAttributeSetInstanceName + "; VAM_Locator_ID=" + mLocatorID);
+            $self.log.fine("VAM_PFeature_SetInstance_ID=" + MVAMPFeatureSetInstanceID + " - " + MVAMPFeatureSetInstanceName + "; VAM_Locator_ID=" + mLocatorID);
         }
 
         function events() {
@@ -327,7 +327,7 @@
                 btnOk.on(VIS.Events.onTouchStartOrClick, function () {
                     enableButtons();
                     if ($self.onClose)
-                        $self.onClose(mAttributeSetInstanceID, mAttributeSetInstanceName, mLocatorID, attrCode);
+                        $self.onClose(MVAMPFeatureSetInstanceID, MVAMPFeatureSetInstanceName, mLocatorID, attrCode);
                     $root.dialog('close');
                 });
 
@@ -403,8 +403,8 @@
             middeldiv = null;
             bottomdiv = null;
 
-            mAttributeSetInstanceID = null;
-            mAttributeSetInstanceName = null;
+            MVAMPFeatureSetInstanceID = null;
+            MVAMPFeatureSetInstanceName = null;
             msql = null;
             this.disposeComponent = null;
         };

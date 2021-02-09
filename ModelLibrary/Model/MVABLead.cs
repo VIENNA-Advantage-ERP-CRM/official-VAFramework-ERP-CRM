@@ -704,7 +704,7 @@ namespace VAdvantage.Model
             if (GetVAF_UserContact_ID() != 0 && GetR_InterestArea_ID() != 0
                 && (Is_ValueChanged("VAF_UserContact_ID") || Is_ValueChanged("VAR_InterestArea_ID")))
             {
-                MContactInterest ci = MContactInterest.Get(GetCtx(),
+                MVARInterestedUser ci = MVARInterestedUser.Get(GetCtx(),
                     GetR_InterestArea_ID(), GetVAF_UserContact_ID(),
                     true, Get_TrxName());
                 ci.Save();		//	don't subscribe or re-activate

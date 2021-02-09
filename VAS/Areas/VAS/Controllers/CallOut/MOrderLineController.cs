@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MOrderLineController : Controller
+    public class MVABOrderLineController : Controller
     {
         public ActionResult Index()
         {
@@ -23,7 +23,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetOrderLine(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -35,7 +35,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetNotReserved(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -47,7 +47,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetTax(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -61,7 +61,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetPrices(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -75,7 +75,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetPricesOnChange(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -89,7 +89,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetPricesOnUomChange(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -102,7 +102,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetProductPriceOnUomChange(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -116,7 +116,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetPricesOnProductChange(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -130,7 +130,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetTaxId(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -144,7 +144,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetProductInfo(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -157,7 +157,7 @@ namespace VIS.Controllers
         //    if (Session["ctx"] != null)
         //    {
         //        VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-        //        MOrderLineModel objOrderLine = new MOrderLineModel();
+        //        MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
         //        retJSON = JsonConvert.SerializeObject(objOrderLine.GetChargeAmount(ctx, fields));
         //    }
         //    return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -170,7 +170,7 @@ namespace VIS.Controllers
         //    if (Session["ctx"] != null)
         //    {
         //        VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-        //        MOrderLineModel objOrderLine = new MOrderLineModel();
+        //        MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
         //        retJSON = JsonConvert.SerializeObject(objOrderLine.GetEnforcePriceLimit(fields));
         //    }
         //    return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -183,7 +183,7 @@ namespace VIS.Controllers
         //    if (Session["ctx"] != null)
         //    {
         //        VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-        //        MOrderLineModel objOrderLine = new MOrderLineModel();
+        //        MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
         //        retJSON = JsonConvert.SerializeObject(objOrderLine.GetProdAttributeSetInstance(fields));
         //    }
         //    return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -196,7 +196,7 @@ namespace VIS.Controllers
         //    if (Session["ctx"] != null)
         //    {
         //        VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-        //        MOrderLineModel objOrderLine = new MOrderLineModel();
+        //        MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
         //        retJSON = JsonConvert.SerializeObject(objOrderLine.GetProductprices(fields));
         //    }
         //    return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -210,7 +210,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetProductCost(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -224,7 +224,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.GetNoOfMonths(Util.GetValueOfInt(fields)));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -249,7 +249,7 @@ namespace VIS.Controllers
                 decimal QtyEntered = Util.GetValueOfDecimal(paramValue[5]);
 
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MOrderLineModel objOrderLine = new MOrderLineModel();
+                MVABOrderLineModel objOrderLine = new MVABOrderLineModel();
                 retJSON = JsonConvert.SerializeObject(objOrderLine.FlatDiscount(ProductId, ClientId, amount, DiscountSchemaId, FlatDiscount, QtyEntered));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

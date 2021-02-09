@@ -11,7 +11,7 @@ using VIS.DBase;
 
 namespace VIS.Models
 {
-    public class MOrderLineModel
+    public class MVABOrderLineModel
     {
         /// <summary>
         /// GetOrderLine

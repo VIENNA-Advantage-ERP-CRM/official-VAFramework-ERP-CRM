@@ -8,9 +8,9 @@
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var windowNo = VIS.Env.getWindowNo();
-        var mAttributeSetInstanceId = null;
+        var MVAMPFeatureSetInstanceId = null;
         var mLocatorId = null;
-        var mAttributeSetInstanceName = null;
+        var MVAMPFeatureSetInstanceName = null;
         var mProductId = null;
         var cBPartnerId = null;
         var adColumnId = null;
@@ -26,7 +26,7 @@
         var attributesList = {};
 
         var controlList = null;
-        var mAttributeSetID = null;
+        var MVAMPFeatureSetID = null;
         var winQry = "";
         var window_ID = 0;
         var windowName = "";
@@ -36,7 +36,7 @@
         this.log.config("VAM_PFeature_SetInstance_ID=" + VAM_PFeature_SetInstance_ID + ", VAM_Product_ID=" + VAM_Product_ID + ", VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID + ", ProductW=" + productWindow + ", Column=" + VAF_Column_ID);
 
         //constructor load
-        mAttributeSetInstanceId = VAM_PFeature_SetInstance_ID;
+        MVAMPFeatureSetInstanceId = VAM_PFeature_SetInstance_ID;
         mProductId = VAM_Product_ID;
         cBPartnerId = VAB_BusinessPartner_ID;
         productWindow = proWindow;
@@ -95,8 +95,8 @@
         //	New/Edit Window
         // JID_1070: Enabled Create new checkbox on Attribute set Instance
         if (!productWindow) {
-            chkNewEdit.prop("checked", mAttributeSetInstanceId == 0);
-            if (mAttributeSetInstanceId > 0) {
+            chkNewEdit.prop("checked", MVAMPFeatureSetInstanceId == 0);
+            if (MVAMPFeatureSetInstanceId > 0) {
                 if (txtLotString) {
                     txtLotString.attr("readOnly", true);
                     txtLotString.addClass("vis-gc-vpanel-table-readOnly");
@@ -150,7 +150,7 @@
                 dataType: "json",
                 async: false,
                 data: {
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     mProductId: mProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
@@ -172,7 +172,7 @@
                     if (returnValue.ControlList) {
                         controlList = returnValue.ControlList.split(',');
                     }
-                    mAttributeSetID = returnValue.MAttributeSetID;
+                    MVAMPFeatureSetID = returnValue.MVAMPFeatureSetID;
                 }
             });
         };
@@ -245,7 +245,7 @@
                 flag = false;
                 VIS.Env.getCtx().setContext(windowNoParent, "AttrCode", attrCode);
                 if ($self.onClose)
-                    $self.onClose(mAttributeSetInstanceId, mAttributeSetInstanceName, mLocatorId);
+                    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, mLocatorId);
                 setBusy(false);
                 $root.dialog('close');
             }
@@ -301,7 +301,7 @@
                     dtGuaranteeDate: dtGuaranteeDate.val(),
                     strAttrCode: txtAttrCode.val(),
                     productWindow: productWindow,
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     mProductId: VAM_Product_ID,
                     windowNo: windowNo,
                     description: txtDescription.val(),
@@ -377,8 +377,8 @@
             //JID_1140: On OK of select existing record  pop up system should not close the control Of ASI should only close the Select existing record control.
             obj.onClose = function (attributeSetInstanceID, name, VAM_Locator_ID, AttrCode) {
                 if (attributeSetInstanceID != -1) {
-                    mAttributeSetInstanceId = attributeSetInstanceID;
-                    mAttributeSetInstanceName = name;
+                    MVAMPFeatureSetInstanceId = attributeSetInstanceID;
+                    MVAMPFeatureSetInstanceName = name;
                     mLocatorId = VAM_Locator_ID;
                     attrCode = AttrCode;
                     changed = true;
@@ -397,7 +397,7 @@
                     lblEdit.show();
                     chkEdit.show();
                     //if ($self.onClose) {
-                    //    $self.onClose(mAttributeSetInstanceId, mAttributeSetInstanceName, mLocatorId);
+                    //    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, mLocatorId);
                     //    $root.dialog('close');
                     //}
                 }
@@ -654,7 +654,7 @@
                 dataType: "json",
                 //async: false,
                 data: {
-                    mAttributeSetInstanceId: mAttributeSetInstanceId,
+                    MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                     mProductId: mProductId,
                     productWindow: productWindow,
                     windowNo: windowNo,
@@ -750,7 +750,7 @@
                         dataType: "json",
                         async: false,
                         data: {
-                            mAttributeSetInstanceId: mAttributeSetInstanceId,
+                            MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                             mProductId: mProductId
                         },
                         success: function (data) {
@@ -768,7 +768,7 @@
                         dataType: "json",
                         async: false,
                         data: {
-                            mAttributeSetInstanceId: mAttributeSetInstanceId,
+                            MVAMPFeatureSetInstanceId: MVAMPFeatureSetInstanceId,
                             mProductId: mProductId
                         },
                         success: function (data) {
@@ -818,11 +818,11 @@
             if (cancelbtn)
                 cancelbtn.off("click");
             VIS.Env.clearWinContext(VIS.Env.getCtx(), windowNo);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", mAttributeSetInstanceId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", MVAMPFeatureSetInstanceId);
             VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_Locator_ID", mLocatorId);
 
             mLocatorId = null;
-            mAttributeSetInstanceName = null;
+            MVAMPFeatureSetInstanceName = null;
             mProductId = null;
             cBPartnerId = null;
             adColumnId = null;
@@ -847,7 +847,7 @@
 
             $self = null;
             windowNo = null;
-            mAttributeSetInstanceId = null;
+            MVAMPFeatureSetInstanceId = null;
             this.disposeComponent = null;
         };
 

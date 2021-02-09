@@ -22,37 +22,37 @@ namespace VIS.Controllers
             return PartialView();
         }
 
-        public JsonResult Load(int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo)
+        public JsonResult Load(int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo)
         {
             GenralAttributeModel obj = new GenralAttributeModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.LoadInit(mAttributeSetInstanceId, vadms_AttributeSet_ID, windowNo, ctx, Server);
+                var value = obj.LoadInit(MVAMPFeatureSetInstanceId, vadms_AttributeSet_ID, windowNo, ctx, Server);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult Save(int windowNoParent, int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> lst)
+        public JsonResult Save(int windowNoParent, int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> lst)
         {
             GenralAttributeModel obj = new GenralAttributeModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.SaveGenAttribute(windowNoParent, mAttributeSetInstanceId, vadms_AttributeSet_ID, windowNo, lst, ctx);
+                var value = obj.SaveGenAttribute(windowNoParent, MVAMPFeatureSetInstanceId, vadms_AttributeSet_ID, windowNo, lst, ctx);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SearchValues(int windowNoParent, int mAttributeSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> lst)
+        public JsonResult SearchValues(int windowNoParent, int MVAMPFeatureSetInstanceId, int vadms_AttributeSet_ID, int windowNo, List<KeyNamePair> lst)
         {
             GenralAttributeModel obj = new GenralAttributeModel();
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                var value = obj.SearchValuesAttribute(windowNoParent, mAttributeSetInstanceId, vadms_AttributeSet_ID, windowNo, lst, ctx);
+                var value = obj.SearchValuesAttribute(windowNoParent, MVAMPFeatureSetInstanceId, vadms_AttributeSet_ID, windowNo, lst, ctx);
                 return Json(new { result = value }, JsonRequestBehavior.AllowGet);
             } 
             return Json(new { result = false }, JsonRequestBehavior.AllowGet);

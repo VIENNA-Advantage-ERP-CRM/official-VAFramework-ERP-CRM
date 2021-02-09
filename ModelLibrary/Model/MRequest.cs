@@ -1615,7 +1615,7 @@ namespace VAdvantage.Model
                     if (oldG.GetVAM_BOM_ID() != newG.GetVAM_BOM_ID()
                         || oldG.GetM_ChangeNotice_ID() != newG.GetM_ChangeNotice_ID())
                     {
-                        MChangeRequest ecr = new MChangeRequest(GetCtx(), GetM_ChangeRequest_ID(), Get_TrxName());
+                        MVAMChangeRequest ecr = new MVAMChangeRequest(GetCtx(), GetM_ChangeRequest_ID(), Get_TrxName());
                         if (!ecr.IsProcessed()
                             || ecr.GetM_FixChangeNotice_ID() == 0)
                         {

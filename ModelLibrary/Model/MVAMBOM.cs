@@ -19,27 +19,27 @@ using VAdvantage.Process;
 using VAdvantage.Utility;
 namespace VAdvantage.Model
 {
-    public class MBOM : X_VAM_BOM
+    public class MVAMBOM : X_VAM_BOM
     {
         //	Cache						
-        private static CCache<int, MBOM> _cache = new CCache<int, MBOM>("VAM_BOM", 20);
+        private static CCache<int, MVAMBOM> _cache = new CCache<int, MVAMBOM>("VAM_BOM", 20);
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MBOM).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMBOM).FullName);
 
 
         /**
         * 	Get BOM from Cache
         *	@param ctx context
         *	@param VAM_BOM_ID id
-        *	@return MBOM
+        *	@return MVAMBOM
         */
-        public static MBOM Get(Ctx ctx, int VAM_BOM_ID)
+        public static MVAMBOM Get(Ctx ctx, int VAM_BOM_ID)
         {
             int key = VAM_BOM_ID;
-            MBOM retValue = (MBOM)_cache[key];
+            MVAMBOM retValue = (MVAMBOM)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MBOM(ctx, VAM_BOM_ID, null);
+            retValue = new MVAMBOM(ctx, VAM_BOM_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -53,10 +53,10 @@ namespace VAdvantage.Model
          *	@param whereClause optional WHERE clause w/o AND
          *	@return array of BOMs
          */
-        public static MBOM[] GetOfProduct(Ctx ctx, int VAM_Product_ID,
+        public static MVAMBOM[] GetOfProduct(Ctx ctx, int VAM_Product_ID,
             Trx trxName, String whereClause)
         {
-            List<MBOM> list = new List<MBOM>();
+            List<MVAMBOM> list = new List<MVAMBOM>();
             String sql = "SELECT * FROM VAM_BOM WHERE IsActive = 'Y' AND VAM_Product_ID=" + VAM_Product_ID;
             if (whereClause != null && whereClause.Length > 0)
                 sql += " AND " + whereClause;
@@ -74,7 +74,7 @@ namespace VAdvantage.Model
                 idr.Close();
 
                 foreach (DataRow dr in dt.Rows)
-                    list.Add(new MBOM(ctx, dr, trxName));
+                    list.Add(new MVAMBOM(ctx, dr, trxName));
                 //rs.close ();
                 //pstmt.close ();
                 //pstmt = null;
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
             //    pstmt = null;
             //}
 
-            MBOM[] retValue = new MBOM[list.Count];
+            MVAMBOM[] retValue = new MVAMBOM[list.Count];
             retValue = list.ToArray();
             return retValue;
         }	//	GetOfProduct
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
          *	@param VAM_BOM_ID id
          *	@param trxName trx
          */
-        public MBOM(Ctx ctx, int VAM_BOM_ID, Trx trxName) :
+        public MVAMBOM(Ctx ctx, int VAM_BOM_ID, Trx trxName) :
             base(ctx, VAM_BOM_ID, trxName)
         {
 
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
                 SetBOMType(BOMTYPE_CurrentActive);	// A
                 SetBOMUse(BOMUSE_Master);	// A
             }
-        }	//	MBOM
+        }	//	MVAMBOM
 
         /**
          * 	Load Constructor
@@ -134,11 +134,11 @@ namespace VAdvantage.Model
          *	@param rs result Set
          *	@param trxName trx
          */
-        public MBOM(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAMBOM(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //super (ctx, rs, trxName);
-        }	//	MBOM
+        }	//	MVAMBOM
 
         /**
          * 	Before Save
@@ -154,7 +154,7 @@ namespace VAdvantage.Model
                 //	Only one Current Active
                 if (GetBOMType().Equals(BOMTYPE_CurrentActive))
                 {
-                    MBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
+                    MVAMBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
                         "BOMType='A' AND BOMUse='" + GetBOMUse() + "' AND IsActive='Y' AND VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID());
                     if (boms.Length == 0	//	only one = this 
                         || (boms.Length == 1 && boms[0].GetVAM_BOM_ID() == GetVAM_BOM_ID()))
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                 //	Only one MTO
                 else if (GetBOMType().Equals(BOMTYPE_Make_To_Order))
                 {
-                    MBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
+                    MVAMBOM[] boms = GetOfProduct(GetCtx(), GetVAM_Product_ID(), Get_Trx(),
                         "IsActive='Y'");
                     if (boms.Length == 0	//	only one = this 
                         || (boms.Length == 1 && boms[0].GetVAM_BOM_ID() == GetVAM_BOM_ID()))

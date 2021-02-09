@@ -26,13 +26,13 @@ namespace ViennaAdvantageServer.Process
         private String sql = null;
         private DataSet dsCostCombination = null;
         private DataSet dsProductCost = null;
-        MCost costcombination = null;
+        MVAMProductCost costcombination = null;
         private int _VAM_Product_ID = 0;
         private int _vaf_org_ID = 0;
         private int _VAM_PFeature_SetInstance_ID = 0;
         private int _VAB_AccountBook_ID = 0;
         List<int> costElement = new List<int>();
-        MCostElement ce = null;
+        MVAMProductCostElement ce = null;
 
         protected override void Prepare()
         {
@@ -87,17 +87,17 @@ namespace ViennaAdvantageServer.Process
                             _VAB_AccountBook_ID = Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAB_AccountBook_id"]);
                             MProduct product = new MProduct(GetCtx(), _VAM_Product_ID, Get_TrxName());
                             MVABAccountBook acctSchema = new MVABAccountBook(GetCtx(), _VAB_AccountBook_ID, Get_TrxName());
-                            costcombination = MCost.Get(product, _VAM_PFeature_SetInstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["VAM_ProductCostElement_ID"]));
+                            costcombination = MVAMProductCost.Get(product, _VAM_PFeature_SetInstance_ID, acctSchema, _vaf_org_ID, Util.GetValueOfInt(dsCostCombination.Tables[0].Rows[0]["VAM_ProductCostElement_ID"]));
                         }
 
                         // created object of Cost elemnt for checking iscalculated = true/ false
-                        ce = MCostElement.Get(GetCtx(), Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_ProductCostElement_id"]));
+                        ce = MVAMProductCostElement.Get(GetCtx(), Util.GetValueOfInt(dsProductCost.Tables[0].Rows[i]["VAM_ProductCostElement_id"]));
 
                         costcombination.SetCurrentCostPrice(Decimal.Add(costcombination.GetCurrentCostPrice(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["currentcostprice"])));
                         costcombination.SetCumulatedAmt(Decimal.Add(costcombination.GetCumulatedAmt(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["cumulatedamt"])));
                         
                         // if calculated = true then we added qty else not and costing method is Standard Costing
-                        if (ce.IsCalculated() || ce.GetCostingMethod() == MCostElement.COSTINGMETHOD_StandardCosting)
+                        if (ce.IsCalculated() || ce.GetCostingMethod() == MVAMProductCostElement.COSTINGMETHOD_StandardCosting)
                         {
                             costcombination.SetCurrentQty(Decimal.Add(costcombination.GetCurrentQty(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["currentqty"])));
                             costcombination.SetCumulatedQty(Decimal.Add(costcombination.GetCumulatedQty(), Util.GetValueOfDecimal(dsProductCost.Tables[0].Rows[i]["cumulatedqty"])));

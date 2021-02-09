@@ -33,7 +33,7 @@ namespace VIS.Models
         /// <returns>VAM_PFeature_SetInstance_ID</returns>
         public int GetAttributeSetInstance(Ctx ctx, string VAM_BOM_ID)
         {
-            MBOM bom = MBOM.Get(ctx, Convert.ToInt32(VAM_BOM_ID));
+            MVAMBOM bom = MVAMBOM.Get(ctx, Convert.ToInt32(VAM_BOM_ID));
             return bom.GetVAM_PFeature_SetInstance_ID();
         }
 

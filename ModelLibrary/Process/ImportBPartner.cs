@@ -500,7 +500,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	Interest Area
                     if (impBP.GetR_InterestArea_ID() != 0 && user != null)
                     {
-                        MContactInterest ci = MContactInterest.Get(GetCtx(),
+                        MVARInterestedUser ci = MVARInterestedUser.Get(GetCtx(),
                             impBP.GetR_InterestArea_ID(), user.GetVAF_UserContact_ID(),
                             true, Get_TrxName());
                         ci.Save();		//	don't subscribe or re-activate

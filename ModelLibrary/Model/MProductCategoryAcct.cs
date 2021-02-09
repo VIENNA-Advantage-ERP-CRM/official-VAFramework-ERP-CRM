@@ -86,7 +86,7 @@ namespace VAdvantage.Model
         {
             //	Create Cost Elements
             if (GetCostingMethod() != null && GetCostingMethod().Length > 0)
-                MCostElement.GetMaterialCostElement(this, GetCostingMethod());
+                MVAMProductCostElement.GetMaterialCostElement(this, GetCostingMethod());
         }
 
         /// <summary>

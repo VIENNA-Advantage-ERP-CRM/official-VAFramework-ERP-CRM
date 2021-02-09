@@ -3470,7 +3470,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MOrderLine[")
+            StringBuilder sb = new StringBuilder("MVABOrderLine[")
                 .Append(Get_ID()).Append(",Line=").Append(GetLine())
                 .Append(",Ordered=").Append(GetQtyOrdered())
                 .Append(",Delivered=").Append(GetQtyDelivered())
@@ -3902,7 +3902,7 @@ namespace VAdvantage.Model
                 decimal currentcostprice = 0;
                 if (!Ord.IsReturnTrx())
                 {
-                    currentcostprice = MCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx(), Ord.GetVAM_Warehouse_ID());
+                    currentcostprice = MVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx(), Ord.GetVAM_Warehouse_ID());
                     primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Currency_ID from VAB_AccountBook WHERE VAB_AccountBook_ID = 
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (Ord.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)
@@ -3991,7 +3991,7 @@ namespace VAdvantage.Model
                     bool isInstance = VAM_PFeature_Set_ID != 0;
                     if (isInstance)
                     {
-                        MAttributeSet mas = MAttributeSet.Get(GetCtx(), VAM_PFeature_Set_ID);
+                        MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), VAM_PFeature_Set_ID);
                         isInstance = mas.IsInstanceAttribute();
                     }
                     //	Max

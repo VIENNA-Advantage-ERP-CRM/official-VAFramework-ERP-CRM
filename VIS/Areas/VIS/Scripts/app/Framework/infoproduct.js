@@ -1398,11 +1398,11 @@
                         //if (obj.hasAttribute) {
                         //    obj.showDialog();
                         //}
-                        //obj.onClose = function (mAttributeSetInstanceId, name, mLocatorId) {
+                        //obj.onClose = function (MVAMPFeatureSetInstanceId, name, mLocatorId) {
                         //    this.VAM_Locator_ID = mLocatorId;
                         //    savedProduct[event.recid - 1].AttributeName = name;
-                        //    savedProduct[event.recid - 1].Attribute = mAttributeSetInstanceId;
-                        //    infoLines[event.recid - 1]._Attribute = mAttributeSetInstanceId;
+                        //    savedProduct[event.recid - 1].Attribute = MVAMPFeatureSetInstanceId;
+                        //    infoLines[event.recid - 1]._Attribute = MVAMPFeatureSetInstanceId;
                         //    infoLines[event.recid - 1]._AttributeName = name;
                         //    BindGridSavedProducts();
                         //};

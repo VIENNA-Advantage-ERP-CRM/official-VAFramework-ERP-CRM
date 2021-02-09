@@ -58,13 +58,13 @@ namespace VAdvantage.Model
         // Child Table ID
 
         //X_VAB_OrderLine.Table_ID,
-        //X_CM_Container_Element.Table_ID
+        //X_VACM_Container_Element.Table_ID
         //};
 
         // Child Table Names
         // private static string[] _parentChildNames = new string[]{
         //X_VAB_OrderLine.Table_Name,
-        //X_CM_Container_Element.Table_Name
+        //X_VACM_Container_Element.Table_Name
         //};
 
         private static Dictionary<int, string> _cascades =

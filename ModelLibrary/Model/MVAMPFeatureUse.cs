@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttributeUse
+ * Class Name     : MVAMPFeatureUse
  * Purpose        : Attribute Use Model 
  * Class Used     : X_VAM_PFeature_Use
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeUse : X_VAM_PFeature_Use
+    public class MVAMPFeatureUse : X_VAM_PFeature_Use
     {
         /// <summary>
         /// Persistency Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="ignored">ignored</param>
         /// <param name="trxName">transaction</param>
-        public MAttributeUse(Ctx ctx, int ignored, Trx trxName)
+        public MVAMPFeatureUse(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, ignored, trxName)
         {
             if (ignored != 0)
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr"></param>
         /// <param name="trxName">transaction</param>
-        public MAttributeUse(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMPFeatureUse(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

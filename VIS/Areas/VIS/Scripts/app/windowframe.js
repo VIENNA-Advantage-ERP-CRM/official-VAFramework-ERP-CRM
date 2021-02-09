@@ -6926,14 +6926,14 @@
             {
                 var keyColumnName = this.gTab.getKeyColumnName();
                 var treeName = "VAF_TreeInfo_ID";
-                if (keyColumnName.startsWith("CM")) {
-                    if (keyColumnName.equals("CM_Container_ID"))
+                if (keyColumnName.startsWith("VACM")) {
+                    if (keyColumnName.equals("VACM_Container_ID"))
                         treeName = "VAF_TreeInfoCMC_ID";
-                    else if (keyColumnName.equals("CM_CStage_ID"))
+                    else if (keyColumnName.equals("VACM_CStage_ID"))
                         treeName = "VAF_TreeInfoCMS_ID";
                     else if (keyColumnName.equals("VACM_Layout_ID"))
                         treeName = "VAF_TreeInfoCMT_ID";
-                    else if (keyColumnName.equals("CM_Media_ID"))
+                    else if (keyColumnName.equals("VACM_Media_ID"))
                         treeName = "VAF_TreeInfoCMM_ID";
                 }
                 VAF_TreeInfo_ID = VIS.Env.getCtx().getWindowContextAsInt(this.windowNo, treeName);

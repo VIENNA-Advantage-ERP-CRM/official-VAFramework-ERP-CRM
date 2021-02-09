@@ -1172,7 +1172,7 @@ namespace VIS.Models
 
             if (countEd011 > 0)
             {
-                MOrderLineModel objOrd = new MOrderLineModel();
+                MVABOrderLineModel objOrd = new MVABOrderLineModel();
                 _VAM_PriceList_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAM_PriceList_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + _VAB_Invoice_Id, null, null));
 
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();

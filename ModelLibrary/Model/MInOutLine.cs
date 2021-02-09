@@ -1246,7 +1246,7 @@ namespace VAdvantage.Model
             //decimal currentcostprice = 0;
             //if (inO.IsReturnTrx() && GetVAB_OrderLine_ID() > 0)
             //{
-            //    MOrderLine RMALine = new MOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
+            //    MVABOrderLine RMALine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
             //    if (RMALine != null)
             //    {
             //        MInOutLine origInOutLine = new MInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());
@@ -1274,7 +1274,7 @@ namespace VAdvantage.Model
                     SetVA024_UnitPrice(Util.GetValueOfDecimal(VA024_ProvisionPrice * GetMovementQty()));
 
                     // is used to get cost of binded cost method / costing level of primary accounting schema
-                    Decimal cost = MCost.GetproductCosts(inO.GetVAF_Client_ID(), inO.GetVAF_Org_ID(), GetVAM_Product_ID(),
+                    Decimal cost = MVAMProductCost.GetproductCosts(inO.GetVAF_Client_ID(), inO.GetVAF_Org_ID(), GetVAM_Product_ID(),
                          GetVAM_PFeature_SetInstance_ID(), Get_Trx(), inO.GetVAM_Warehouse_ID());
                     SetVA024_CostPrice((cost - VA024_ProvisionPrice) * GetMovementQty());
                 }
@@ -1291,7 +1291,7 @@ namespace VAdvantage.Model
                     if (product != null
                         && product.GetVAM_PFeature_Set_ID() != 0)
                     {
-                        //MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+                        //MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
                         //if (mas.IsInstanceAttribute() 
                         //    && (mas.IsMandatory() || mas.IsMandatoryAlways()))
                         //{

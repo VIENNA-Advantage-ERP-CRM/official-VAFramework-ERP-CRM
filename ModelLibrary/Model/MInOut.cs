@@ -140,7 +140,7 @@ namespace VAdvantage.Model
             retValue.SetDocAction(complete ? DOCACTION_Complete : DOCACTION_Prepare);
 
             //	Check if we can create the lines
-            MOrderLine[] oLines = order.GetLines(true, "VAM_Product_ID");
+            MVABOrderLine[] oLines = order.GetLines(true, "VAM_Product_ID");
             for (int i = 0; i < oLines.Length; i++)
             {
                 //Decimal qty = oLines[i].GetQtyOrdered().subtract(oLines[i].getQtyDelivered());
@@ -248,7 +248,7 @@ namespace VAdvantage.Model
             //	Check if we can create the lines
             MInOutLine[] iolines = inout.GetLines(false);
 
-            //MOrderLine[] oLines = order.GetLines('
+            //MVABOrderLine[] oLines = order.GetLines('
             for (int i = 0; i < iolines.Length; i++)
             {
                 MVABOrderLine ol = new MVABOrderLine(inout.GetCtx(), iolines[i].GetVAB_OrderLine_ID(), inout.Get_Trx());
@@ -1834,7 +1834,7 @@ namespace VAdvantage.Model
                     int VAM_PFeature_Set_ID = product.GetVAM_PFeature_Set_ID();
                     if (VAM_PFeature_Set_ID != 0)
                     {
-                        MAttributeSet mas = MAttributeSet.Get(GetCtx(), VAM_PFeature_Set_ID);
+                        MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), VAM_PFeature_Set_ID);
                         if (mas != null
                             && ((IsSOTrx() && mas.IsMandatory())
                                 || (!IsSOTrx() && mas.IsMandatoryAlways())))
@@ -3107,7 +3107,7 @@ namespace VAdvantage.Model
                                 return DocActionVariables.STATUS_INVALID;
                             }
                             //	Update PO with ASI                   Commented by Bharat
-                            //oLine = new MOrderLine(GetCtx(), po.GetVAB_OrderLine_ID(), Get_TrxName());
+                            //oLine = new MVABOrderLine(GetCtx(), po.GetVAB_OrderLine_ID(), Get_TrxName());
                             //if (oLine != null && oLine.GetVAM_PFeature_SetInstance_ID() == 0)
                             //{
                             //    oLine.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
@@ -3123,11 +3123,11 @@ namespace VAdvantage.Model
                     if (!IsSOTrx() && !IsReturnTrx() && sLine.GetVAB_OrderLine_ID() > 0) // for MR against PO
                     {
                         MProduct product1 = new MProduct(GetCtx(), sLine.GetVAM_Product_ID(), Get_Trx());
-                        MVABOrderLine orderLine = new MOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
+                        MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         MVABOrder order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
                         if (product1 != null && product1.GetProductType() == "I" && product1.GetVAM_Product_ID() > 0) // for Item Type product
                         {
-                            //if (!MCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
+                            //if (!MVAMProductCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, sLine, Get_Trx()))
                             //{
                             //    Get_Trx().Rollback();
                             //    log.Severe("Error occured during updating/inserting VAM_ProductCost_ForeignCurrency against Average PO.");
@@ -3160,12 +3160,12 @@ namespace VAdvantage.Model
                         currentCostPrice = 0;
                         if ((!IsSOTrx() && IsReturnTrx()) || (IsSOTrx() && !IsReturnTrx())) // Return to vendor / Shipment
                         {
-                            currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                            currentCostPrice = MVAMProductCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                 sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
                         }
                         else // Material Receipt / Customer Return
                         {
-                            currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                            currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                         }
                         DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = " + currentCostPrice +
@@ -3183,11 +3183,11 @@ namespace VAdvantage.Model
                         orderLine = new MVABOrderLine(GetCtx(), lines[lineIndex].GetVAB_OrderLine_ID(), null);
                         if (!IsSOTrx() && !IsReturnTrx()) // Material Receipt
                         {
-                            bool isUpdatePostCurrentcostPriceFromMR = MCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), productCQ.GetVAM_Product_ID(), Get_Trx());
+                            bool isUpdatePostCurrentcostPriceFromMR = MVAMProductCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), productCQ.GetVAM_Product_ID(), Get_Trx());
                             if (orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)  // MR without PO
                             {
                                 #region MR without PO
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                                if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                     "Material Receipt", null, sLine, null, null, null, 0, sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
                                     if (!conversionNotFoundInOut1.Contains(conversionNotFoundInOut))
@@ -3202,7 +3202,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                    currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                                                              sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                     DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                       @" END , IsCostImmediate = 'Y' , 
@@ -3258,7 +3258,7 @@ namespace VAdvantage.Model
                                     amt = Decimal.Multiply(ProductOrderPriceActual, sLine.GetQtyEntered());
                                 }
 
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                                if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                    "Material Receipt", null, sLine, null, null, null, amt,
                                    sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3274,7 +3274,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                    currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                                                              sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                     DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' ,
@@ -3296,7 +3296,7 @@ namespace VAdvantage.Model
                                             if (matchedInvoice[mi].Get_ColumnIndex("CurrentCostPrice") >= 0)
                                             {
                                                 // get cost from Product Cost before cost calculation
-                                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
+                                                currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
                                                                    matchedInvoice[mi].GetVAM_Product_ID(), matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                                 DB.ExecuteQuery("UPDATE VAM_MatchInvoice SET CurrentCostPrice = " + currentCostPrice +
                                                                  @" WHERE VAM_MatchInvoice_ID = " + matchedInvoice[mi].GetVAM_MatchInvoice_ID(), null, Get_Trx());
@@ -3306,7 +3306,7 @@ namespace VAdvantage.Model
                                             // calculate invoice line costing after calculating costing of linked MR line 
                                             MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetVAB_InvoiceLine_ID(), Get_Trx());
                                             Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
-                                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(),
+                                            if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
                                                   count > 0 && isCostAdjustableOnLost && (matchedInvoice[mi].GetQty() < invoiceLine.GetQtyInvoiced()) ? ProductLineCost : Decimal.Multiply(Decimal.Divide(ProductLineCost, invoiceLine.GetQtyInvoiced()), matchedInvoice[mi].GetQty()),
                                                 matchedInvoice[mi].GetQty(), Get_Trx(), out conversionNotFoundInvoice, optionalstr: "window"))
@@ -3324,7 +3324,7 @@ namespace VAdvantage.Model
                                                 if (matchedInvoice[mi].Get_ColumnIndex("PostCurrentCostPrice") >= 0)
                                                 {
                                                     // get cost from Product Cost after cost calculation
-                                                    currentCostPrice = MCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
+                                                    currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(GetVAF_Client_ID(), GetVAF_Org_ID(),
                                                                      matchedInvoice[mi].GetVAM_Product_ID(), matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                                     matchedInvoice[mi].SetPostCurrentCostPrice(currentCostPrice);
                                                 }
@@ -3358,7 +3358,7 @@ namespace VAdvantage.Model
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
 
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                            if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                   "Customer Return", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), sLine.GetMovementQty()),
                                   sLine.GetMovementQty(), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
@@ -3374,7 +3374,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                currentCostPrice = MCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                currentCostPrice = MVAMProductCost.GetproductCostAndQtyMaterial(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID(), false);
                                 DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
@@ -3393,7 +3393,7 @@ namespace VAdvantage.Model
 
                             Decimal ProductOrderLineCost = orderLine.GetProductLineCost(orderLine);
 
-                            if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                            if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                   "Shipment", null, sLine, null, null, null, Decimal.Multiply(Decimal.Divide(ProductOrderLineCost, orderLine.GetQtyOrdered()), Decimal.Negate(sLine.GetMovementQty())),
                                  Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                             {
@@ -3409,7 +3409,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                currentCostPrice = MVAMProductCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
                                 DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
@@ -3421,7 +3421,7 @@ namespace VAdvantage.Model
                             if (GetOrig_Order_ID() == 0 || orderLine == null || orderLine.GetVAB_OrderLine_ID() == 0)
                             {
                                 #region Return To Vendor -- without order refernce
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                                if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                "Return To Vendor", null, sLine, null, null, null, 0, Decimal.Negate(sLine.GetMovementQty()), Get_Trx(),
                                 out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3437,7 +3437,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                    currentCostPrice = MVAMProductCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
                                     DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                       @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
@@ -3492,7 +3492,7 @@ namespace VAdvantage.Model
                                     amt = Decimal.Multiply(ProductOrderPriceActual, Decimal.Negate(sLine.GetQtyEntered()));
                                 }
 
-                                if (!MCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
+                                if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, sLine.GetVAM_PFeature_SetInstance_ID(),
                                     "Return To Vendor", null, sLine, null, null, null, amt,
                                     Decimal.Negate(sLine.GetMovementQty()), Get_Trx(), out conversionNotFoundInOut, optionalstr: "window"))
                                 {
@@ -3508,7 +3508,7 @@ namespace VAdvantage.Model
                                 }
                                 else
                                 {
-                                    currentCostPrice = MCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
+                                    currentCostPrice = MVAMProductCost.GetproductCosts(sLine.GetVAF_Client_ID(), sLine.GetVAF_Org_ID(),
                                sLine.GetVAM_Product_ID(), sLine.GetVAM_PFeature_SetInstance_ID(), Get_Trx(), GetVAM_Warehouse_ID());
                                     DB.ExecuteQuery("UPDATE VAM_Inv_InOutLine SET CurrentCostPrice = CASE WHEN CurrentCostPrice <> 0 THEN CurrentCostPrice ELSE " + currentCostPrice +
                                                                      @" END , IsCostImmediate = 'Y' WHERE VAM_Inv_InOutLine_ID = " + sLine.GetVAM_Inv_InOutLine_ID(), null, Get_Trx());
@@ -3934,17 +3934,17 @@ namespace VAdvantage.Model
 
         // Amit not used 24-12-2015
         private void updateCostQueue(MProduct product, int M_ASI_ID, MVABAccountBook mas,
-            int Org_ID, MCostElement ce, decimal movementQty)
+            int Org_ID, MVAMProductCostElement ce, decimal movementQty)
         {
-            //MCostQueue[] cQueue = MCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
-            MCostQueue[] cQueue = MCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
+            //MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product1, sLine.GetVAM_PFeature_SetInstance_ID(), acctSchema, GetVAF_Org_ID(), costElement, null);
+            MVAMProductCostQueue[] cQueue = MVAMProductCostQueue.GetQueue(product, M_ASI_ID, mas, Org_ID, ce, null);
             if (cQueue != null && cQueue.Length > 0)
             {
                 Decimal qty = movementQty;
                 bool value = false;
                 for (int cq = 0; cq < cQueue.Length; cq++)
                 {
-                    MCostQueue queue = cQueue[cq];
+                    MVAMProductCostQueue queue = cQueue[cq];
                     if (queue.GetCurrentQty() < 0) continue;
                     if (queue.GetCurrentQty() > qty)
                     {
@@ -3954,7 +3954,7 @@ namespace VAdvantage.Model
                     {
                         value = false;
                     }
-                    qty = MCostQueue.Quantity(queue.GetCurrentQty(), qty);
+                    qty = MVAMProductCostQueue.Quantity(queue.GetCurrentQty(), qty);
                     //if (cq == cQueue.Length - 1 && qty < 0) // last record
                     //{
                     //    queue.SetCurrentQty(qty);

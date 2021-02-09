@@ -22,43 +22,43 @@ namespace VAdvantage.Acct
     {
         #region Private Variables
         private MProductCategory mpc = null;
-        private MCostElement m_ce;
+        private MVAMProductCostElement m_ce;
         private String costingMethod;
         private String costingLevel;
-        MCostUpdate costupdate;
+        MVAMProductCostUpdate costupdate;
 
         #endregion
 
         public Doc_CostUpdate(MVABAccountBook[] ass, DataRow dr, Trx trx)
-            : base(ass, typeof(MCostUpdate), dr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMProductCostUpdate), dr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
         public Doc_CostUpdate(MVABAccountBook[] ass, IDataReader idr, Trx trx)
-            : base(ass, typeof(MCostUpdate), idr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMProductCostUpdate), idr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
         public override String LoadDocumentDetails()
         {
-            costupdate = (MCostUpdate)GetPO();
+            costupdate = (MVAMProductCostUpdate)GetPO();
             if (costupdate.GetVAM_ProductCategory_ID() != 0)
                 mpc = MProductCategory.Get(GetCtx(), costupdate.GetVAM_ProductCategory_ID());
 
             _lines = LoadLines(costupdate);
-            m_ce = MCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
+            m_ce = MVAMProductCostElement.GetMaterialCostElement(MVAFClient.Get(GetCtx()), X_VAB_AccountBook.COSTINGMETHOD_StandardCosting);
             SetDateAcct(costupdate.GetDateAcct());
             SetDateDoc(costupdate.GetDateAcct());
             return null;
         }
 
-        private DocLine[] LoadLines(MCostUpdate costupdate)
+        private DocLine[] LoadLines(MVAMProductCostUpdate costupdate)
         {
             List<DocLine> list = new List<DocLine>();
-            MCostUpdateLine[] lines = costupdate.GetLines();
+            MVAMProductCostUpdateLine[] lines = costupdate.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MCostUpdateLine line = lines[i];
+                MVAMProductCostUpdateLine line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 list.Add(docLine);
             }

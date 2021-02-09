@@ -605,7 +605,7 @@ namespace VAdvantage.Model
             }
             else
             {
-                MAttributeSet mas = MAttributeSet.Get(ctx, VAM_PFeature_Set_ID);
+                MVAMPFeatureSet mas = MVAMPFeatureSet.Get(ctx, VAM_PFeature_Set_ID);
                 if (!mas.IsInstanceAttribute())
                 {
                     allAttributeInstances = true;

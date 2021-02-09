@@ -23,20 +23,20 @@ namespace VAdvantage.Model
     /// <summary>
     /// BOM Product/Component Model
     /// </summary>
-    public class MBOMProduct : X_VAM_BOMProduct
+    public class MVAMBOMProduct : X_VAM_BOMProduct
     {
 
         #region Private Variables
         //BOM Parent
-        private MBOM _bom = null;
+        private MVAMBOM _bom = null;
 
         //Component BOM				
-        private MBOM _componentBOM = null;
+        private MVAMBOM _componentBOM = null;
 
         //Included Component 
         private MProduct _component = null;
         //Logger
-        private static VLogger _log = VLogger.GetVLogger(typeof(MBOMProduct).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMBOMProduct).FullName);
 
         #endregion
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_BOMProduct_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MBOMProduct(Ctx ctx, int VAM_BOMProduct_ID, Trx trxName)
+        public MVAMBOMProduct(Ctx ctx, int VAM_BOMProduct_ID, Trx trxName)
             : base(ctx, VAM_BOMProduct_ID, trxName)
         {
             if (VAM_BOMProduct_ID == 0)
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MBOMProduct(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMBOMProduct(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="bom">product</param>
-        public MBOMProduct(MBOM bom)
+        public MVAMBOMProduct(MVAMBOM bom)
             : this(bom.GetCtx(), 0, bom.Get_Trx())
         {
             _bom = bom;
@@ -86,9 +86,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="bom">bom</param>
         /// <returns>array of BOM Products</returns>
-        public static MBOMProduct[] GetOfBOM(MBOM bom)
+        public static MVAMBOMProduct[] GetOfBOM(MVAMBOM bom)
         {
-            List<MBOMProduct> list = new List<MBOMProduct>();
+            List<MVAMBOMProduct> list = new List<MVAMBOMProduct>();
             String sql = "SELECT * FROM VAM_BOMProduct WHERE IsActive = 'Y' AND VAM_BOM_ID=@bomid ORDER BY SeqNo";
             try
             {
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MBOMProduct(bom.GetCtx(), dr, bom.Get_Trx()));
+                        list.Add(new MVAMBOMProduct(bom.GetCtx(), dr, bom.Get_Trx()));
                     }
                 }
             }
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MBOMProduct[] retValue = new MBOMProduct[list.Count];
+            MVAMBOMProduct[] retValue = new MVAMBOMProduct[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -117,10 +117,10 @@ namespace VAdvantage.Model
         /// Get Parent
         /// </summary>
         /// <returns>parent</returns>
-        public MBOM GetBOM()
+        public MVAMBOM GetBOM()
         {
             if (_bom == null && GetVAM_BOM_ID() != 0)
-                _bom = MBOM.Get(GetCtx(), GetVAM_BOM_ID());
+                _bom = MVAMBOM.Get(GetCtx(), GetVAM_BOM_ID());
             return _bom;
         }
 
@@ -159,7 +159,7 @@ namespace VAdvantage.Model
             //{
             //    GetBOM();
             //    if (_bom != null
-            //        && MBOM.BOMTYPE_Make_To_Order.Equals(_bom.GetBOMType()))
+            //        && MVAMBOM.BOMTYPE_Make_To_Order.Equals(_bom.GetBOMType()))
             //    {
             //        ;
             //    }
@@ -217,11 +217,11 @@ namespace VAdvantage.Model
         /// <date>08-march-2011</date>
         protected override Boolean AfterDelete(Boolean success)
         {
-            //MBOMProduct[] lines = MBOMProduct.GetBOMLines(GetBOM());
+            //MVAMBOMProduct[] lines = MVAMBOMProduct.GetBOMLines(GetBOM());
             //if (lines == null || 0 == lines.Length || (1 == lines.Length && lines[0].GetVAM_BOMProduct_ID() == GetVAM_BOMProduct_ID()))
             //{
             // when we delete any record, then make isverfied as false on product
-            MBOM _bom = new MBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
+            MVAMBOM _bom = new MVAMBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
             MProduct product = MProduct.Get(GetCtx(), _bom.GetVAM_Product_ID());
             product.SetIsVerified(false);
             if (!product.Save(Get_Trx()))
@@ -241,7 +241,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMs</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLines(MProduct product, String bomType, String bomUse)
+        public static MVAMBOMProduct[] GetBOMLines(MProduct product, String bomType, String bomUse)
         {
             // return lines for Current Active, Master BOM
             String sql = "SELECT VAM_BOM_ID FROM VAM_BOM WHERE VAM_Product_ID= " + product.GetVAM_Product_ID() +
@@ -270,7 +270,7 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            return GetBOMLines(MBOM.Get(product.GetCtx(), bomID));
+            return GetBOMLines(MVAMBOM.Get(product.GetCtx(), bomID));
         }
 
         // New function added by vivek on 12/12/2017 
@@ -283,7 +283,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMs</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLines(MProduct product, String bomType, int VAM_PFeature_SetInstance_ID)
+        public static MVAMBOMProduct[] GetBOMLines(MProduct product, String bomType, int VAM_PFeature_SetInstance_ID)
         {
             // return lines for Current Active, Master BOM
             String sql = "SELECT VAM_BOM_ID FROM VAM_BOM WHERE VAM_Product_ID= " + product.GetVAM_Product_ID() +
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            return GetBOMLines(MBOM.Get(product.GetCtx(), bomID));
+            return GetBOMLines(MVAMBOM.Get(product.GetCtx(), bomID));
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMs</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLines(MProduct product)
+        public static MVAMBOMProduct[] GetBOMLines(MProduct product)
         {
             // return lines for Current Active, Master BOM
             return GetBOMLines(product, X_VAM_BOM.BOMTYPE_CurrentActive, X_VAM_BOM.BOMUSE_Master);
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMs</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLines(MProduct product, int VAM_PFeature_SetInstance_ID)
+        public static MVAMBOMProduct[] GetBOMLines(MProduct product, int VAM_PFeature_SetInstance_ID)
         {
             // return lines for Current Active, Master BOM
             return GetBOMLines(product, X_VAM_BOM.BOMTYPE_CurrentActive, VAM_PFeature_SetInstance_ID);
@@ -351,10 +351,10 @@ namespace VAdvantage.Model
         /// <returns>array of BOMProducts.</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLines(MBOM bom)
+        public static MVAMBOMProduct[] GetBOMLines(MVAMBOM bom)
         {
             String sql = "SELECT * FROM VAM_BOMProduct WHERE VAM_BOM_ID=" + bom.GetVAM_BOM_ID() + " AND IsActive='Y' ORDER BY Line";
-            List<MBOMProduct> list = new List<MBOMProduct>();
+            List<MVAMBOMProduct> list = new List<MVAMBOMProduct>();
             IDataReader idr = null;
             try
             {
@@ -364,7 +364,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MBOMProduct(bom.GetCtx(), dr, bom.Get_Trx()));
+                    list.Add(new MVAMBOMProduct(bom.GetCtx(), dr, bom.Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -380,7 +380,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MBOMProduct[] retValue = new MBOMProduct[list.Count];
+            MVAMBOMProduct[] retValue = new MVAMBOMProduct[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -393,10 +393,10 @@ namespace VAdvantage.Model
         /// <date>08-march-2011</date>
         public override String ToString()
         {
-            //StringBuilder sb = new StringBuilder("MBOMProduct[").Append(Get_ID()).Append(",ComponentProduct=").
+            //StringBuilder sb = new StringBuilder("MVAMBOMProduct[").Append(Get_ID()).Append(",ComponentProduct=").
             //Append(GetComponent().GetName()).Append("]");
 
-            StringBuilder sb = new StringBuilder("MBOMProduct[").Append(Get_ID()).Append(",ComponentProduct=")
+            StringBuilder sb = new StringBuilder("MVAMBOMProduct[").Append(Get_ID()).Append(",ComponentProduct=")
                 .Append(GetComponent() != null ? GetComponent().GetName() : "").Append("]");
             return sb.ToString();
         }
@@ -412,7 +412,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMs</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLinesOrderByProductName(MProduct product, String bomType, String bomUse, Boolean isAscending)
+        public static MVAMBOMProduct[] GetBOMLinesOrderByProductName(MProduct product, String bomType, String bomUse, Boolean isAscending)
         {
             // return lines for Current Active, Master BOM
             String sql = "SELECT VAM_BOM_ID FROM VAM_BOM WHERE VAM_Product_ID= " + product.GetVAM_Product_ID() +
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            return GetBOMLinesOrderByProductName(MBOM.Get(product.GetCtx(), bomID), isAscending);
+            return GetBOMLinesOrderByProductName(MVAMBOM.Get(product.GetCtx(), bomID), isAscending);
         }
 
         /// <summary>
@@ -453,7 +453,7 @@ namespace VAdvantage.Model
         /// <returns>array of BOMProducts.</returns>
         ///  /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public static MBOMProduct[] GetBOMLinesOrderByProductName(MBOM bom, Boolean isAscending)
+        public static MVAMBOMProduct[] GetBOMLinesOrderByProductName(MVAMBOM bom, Boolean isAscending)
         {
             StringBuilder sql = new StringBuilder("SELECT * FROM VAM_BOMProduct WHERE VAM_BOM_ID=" + bom.GetVAM_BOM_ID() + " AND IsActive='Y'");
             if (isAscending)
@@ -464,7 +464,7 @@ namespace VAdvantage.Model
             {
                 sql.Append(" ORDER BY getProductName(VAM_ProductBOM_ID) DESC");
             }
-            List<MBOMProduct> list = new List<MBOMProduct>();
+            List<MVAMBOMProduct> list = new List<MVAMBOMProduct>();
             IDataReader idr = null;
             try
             {
@@ -474,7 +474,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    list.Add(new MBOMProduct(bom.GetCtx(), dt.Rows[i], bom.Get_Trx()));
+                    list.Add(new MVAMBOMProduct(bom.GetCtx(), dt.Rows[i], bom.Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
 
             }
             //
-            MBOMProduct[] retValue = new MBOMProduct[list.Count];
+            MVAMBOMProduct[] retValue = new MVAMBOMProduct[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -534,9 +534,9 @@ namespace VAdvantage.Model
             if (newRecord || Is_ValueChanged("VAM_ProductBOM_ID") || Is_ValueChanged("VAM_ProductBOMVersion_ID") || Is_ValueChanged("IsActive")
                 || Is_ValueChanged("BOMQty") || Is_ValueChanged("SupplyType"))
             {
-                MBOM mbom = new MBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
+                MVAMBOM MVAMBOM = new MVAMBOM(GetCtx(), GetVAM_BOM_ID(), Get_Trx());
                 //	Invalidate BOM
-                MProduct product = new MProduct(GetCtx(), mbom.GetVAM_Product_ID(), Get_Trx());
+                MProduct product = new MProduct(GetCtx(), MVAMBOM.GetVAM_Product_ID(), Get_Trx());
                 if (Get_Trx() != null)
                 {
                     product.Load(Get_Trx());
@@ -566,13 +566,13 @@ namespace VAdvantage.Model
         /// <summary>
         /// Get Component BOM
         /// </summary>
-        /// <returns>MBOM</returns>
+        /// <returns>MVAMBOM</returns>
         /// <writer>raghu</writer>
         /// <date>08-march-2011</date>
-        public MBOM GetComponentBOM()
+        public MVAMBOM GetComponentBOM()
         {
             if (_componentBOM == null && GetVAM_ProductBOMVersion_ID() != 0)
-                _componentBOM = MBOM.Get(GetCtx(), GetVAM_ProductBOMVersion_ID());
+                _componentBOM = MVAMBOM.Get(GetCtx(), GetVAM_ProductBOMVersion_ID());
             return _componentBOM;
         }
 

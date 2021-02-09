@@ -1774,7 +1774,7 @@ namespace VAdvantage.Model
         public MVABOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
         {
             List<MVABOrderLine> list = new List<MVABOrderLine>();
-            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + M_Product_ID);
+            StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + VAM_Product_ID);
 
             if (whereClause != null)
                 sql.Append(" AND ").Append(whereClause);
@@ -3057,7 +3057,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MVABOrderLine line = lines[i];
-                    int M_Locator_ID = 0;
+                    int VAM_Locator_ID = 0;
                     MWarehouse wh = MWarehouse.Get(GetCtx(), line.GetVAM_Warehouse_ID());
                     //	Check/set WH/Org
                     if (header_VAM_Warehouse_ID != 0)	//	enforce WH
@@ -3514,7 +3514,7 @@ namespace VAdvantage.Model
 
                         //    difference = Decimal.Subtract(lines[i].GetQtyReserved(), lines[i].GetQtyDelivered());
 
-                        //    MOrderLine lineBlanket = new MOrderLine(GetCtx(), lines[i].GetVAB_OrderLine_Blanket_ID(), null);
+                        //    MVABOrderLine lineBlanket = new MVABOrderLine(GetCtx(), lines[i].GetVAB_OrderLine_Blanket_ID(), null);
 
                         //    lineBlanket.SetQty(Decimal.Subtract(lineBlanket.GetQtyEntered(), difference));
                         //    lineBlanket.SetQtyReleased(Decimal.Add(lineBlanket.GetQtyReleased(), difference));
@@ -3528,7 +3528,7 @@ namespace VAdvantage.Model
 
                         //for (int i = 0; i < lines.Length; i++)
                         //{
-                        //    MOrderLine lineBlanket = new MOrderLine(GetCtx(), lines[i].GetVAB_OrderLine_Blanket_ID(), null);
+                        //    MVABOrderLine lineBlanket = new MVABOrderLine(GetCtx(), lines[i].GetVAB_OrderLine_Blanket_ID(), null);
 
                         //    if (lineBlanket.GetQtyEntered() > 0
                         //        && Decimal.Subtract(lines[i].GetQtyBlanket(), lines[i].GetQtyEntered()) > 0
@@ -3682,7 +3682,7 @@ namespace VAdvantage.Model
                 StringBuilder Info = new StringBuilder();
 
                 /* nnayak - Bug 1720003 - We need to set the processed flag so the Tax Summary Line
-                does not get recreated in the afterSave procedure of the MOrderLine class */
+                does not get recreated in the afterSave procedure of the MVABOrderLine class */
                 SetProcessed(true);
 
                 bool realTimePOS = false;
@@ -5819,11 +5819,11 @@ namespace VAdvantage.Model
                 // Added by Vivek on 27/02/2018 assigned by mukesh sir
                 /* SI_0561 : when we Re-Activate -- we can not set as "0" to QtyReserved because we are not updating qtyeserved on storage.
                              Otherwise system reserving again the same qty which define on the same record*/
-                //MOrderLine line = null;
+                //MVABOrderLine line = null;
                 //lines = GetLines(true, "VAM_Product_ID");
                 //for (int i = 0; i < lines.Length; i++)
                 //{
-                //    line = new MOrderLine(GetCtx(), _lines[i].GetVAB_OrderLine_ID(), Get_Trx());
+                //    line = new MVABOrderLine(GetCtx(), _lines[i].GetVAB_OrderLine_ID(), Get_Trx());
                 //    line.SetQtyReserved(0);
                 //    line.Save(Get_Trx());
                 //}

@@ -26,7 +26,7 @@ namespace VAdvantage.Model
         /**	Process Message 			*/
         private String _processMsg = null;
         /**	Order Lines					*/
-        // private MOrderLine[] _lines = null;
+        // private MVABOrderLine[] _lines = null;
         /**	Tax Lines					*/
         // private MOrderTax[] _taxes = null;
         /** Force Creation of order		*/
@@ -1085,11 +1085,11 @@ namespace VAdvantage.Model
             {
                 if (IsProcessed() || otherOrder == null)
                     return 0;
-                //MOrderLine[] fromLines = otherOrder.GetLines(false, null);
+                //MVABOrderLine[] fromLines = otherOrder.GetLines(false, null);
 
                 //for (int i = 0; i < fromLines.Length; i++)
                 //{
-                //    MOrderLine line = new MOrderLine(this);
+                //    MVABOrderLine line = new MVABOrderLine(this);
                 //    VAdvantage.Model.PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 //    line.SetVAB_Order_ID(GetVAB_Order_ID());
                 //    line.SetOrder(this);
@@ -1452,9 +1452,9 @@ namespace VAdvantage.Model
         /// <param name="whereClause">where clause or null (starting with AND)</param>
         /// <param name="orderClause">order clause</param>
         /// <returns>lines</returns>
-        //public MOrderLine[] GetLines(String whereClause, String orderClause)
+        //public MVABOrderLine[] GetLines(String whereClause, String orderClause)
         //{
-        //    List<MOrderLine> list = new List<MOrderLine>();
+        //    List<MVABOrderLine> list = new List<MVABOrderLine>();
         //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + "");
         //    if (whereClause != null)
         //        sql.Append(whereClause);
@@ -1467,7 +1467,7 @@ namespace VAdvantage.Model
         //        {
         //            foreach (DataRow dr in ds.Tables[0].Rows)
         //            {
-        //                MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+        //                MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
         //                ol.SetHeaderInfo(this);
         //                list.Add(ol);
         //            }
@@ -1478,7 +1478,7 @@ namespace VAdvantage.Model
         //        log.Log(Level.SEVERE, sql.ToString(), e);
         //    }
         //    //
-        //    MOrderLine[] lines = new MOrderLine[list.Count];
+        //    MVABOrderLine[] lines = new MVABOrderLine[list.Count];
         //    lines = list.ToArray();
         //    return lines;
         //}
@@ -1489,7 +1489,7 @@ namespace VAdvantage.Model
         /// <param name="requery">requery</param>
         /// <param name="orderBy">optional order by column</param>
         /// <returns>lines</returns>
-        //public MOrderLine[] GetLines(bool requery, String orderBy)
+        //public MVABOrderLine[] GetLines(bool requery, String orderBy)
         //{
         //    try
         //    {
@@ -1521,7 +1521,7 @@ namespace VAdvantage.Model
         /// Get Lines of Order.
         /// </summary>
         /// <returns>lines</returns>
-        //public MOrderLine[] GetLines()
+        //public MVABOrderLine[] GetLines()
         //{
         //    return GetLines(false, null);
         //}
@@ -1535,9 +1535,9 @@ namespace VAdvantage.Model
         /// <returns>lines</returns>
         /// <date>10-March-2011</date>
         /// <writer>raghu</writer>
-        //public MOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
+        //public MVABOrderLine[] GetLines(int VAM_Product_ID, String whereClause, String orderClause)
         //{
-        //    List<MOrderLine> list = new List<MOrderLine>();
+        //    List<MVABOrderLine> list = new List<MVABOrderLine>();
         //    StringBuilder sql = new StringBuilder("SELECT * FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAM_Product_ID=" + VAM_Product_ID);
 
         //    if (whereClause != null)
@@ -1556,7 +1556,7 @@ namespace VAdvantage.Model
 
         //        foreach (DataRow dr in dt.Rows)
         //        {
-        //            MOrderLine ol = new MOrderLine(GetCtx(), dr, Get_TrxName());
+        //            MVABOrderLine ol = new MVABOrderLine(GetCtx(), dr, Get_TrxName());
         //            ol.SetHeaderInfo(this);
         //            list.Add(ol);
         //        }
@@ -1575,7 +1575,7 @@ namespace VAdvantage.Model
         //        }
         //    }
         //    //
-        //    MOrderLine[] lines = new MOrderLine[list.Count]; ;
+        //    MVABOrderLine[] lines = new MVABOrderLine[list.Count]; ;
         //    lines = list.ToArray();
         //    return lines;
         //}
@@ -1585,7 +1585,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="orderBy">optional order by column</param>
         /// <returns>lines</returns>
-        //public MOrderLine[] GetLines(String orderBy)
+        //public MVABOrderLine[] GetLines(String orderBy)
         //{
         //    String orderClause = "ORDER BY ";
         //    if ((orderBy != null) && (orderBy.Length > 0))
@@ -1605,10 +1605,10 @@ namespace VAdvantage.Model
         //public void RenumberLines(int step)
         //{
         //    int number = step;
-        //    MOrderLine[] lines = GetLines(true, null);	//	Line is default
+        //    MVABOrderLine[] lines = GetLines(true, null);	//	Line is default
         //    for (int i = 0; i < lines.Length; i++)
         //    {
-        //        MOrderLine line = lines[i];
+        //        MVABOrderLine line = lines[i];
         //        line.SetLine(number);
         //        line.Save(Get_TrxName());
         //        number += step;
@@ -2074,7 +2074,7 @@ namespace VAdvantage.Model
             //}
 
             //	Lines
-            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            //MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //if (lines.Length == 0)
             //{
             //    _processMsg = "@NoLines@";
@@ -2209,10 +2209,10 @@ namespace VAdvantage.Model
         //        RenumberLines(1000);		//	max 999 bom items	
 
         //        //	Order Lines with non-stocked BOMs
-        //        MOrderLine[] lines = GetLines(where, "ORDER BY Line");
+        //        MVABOrderLine[] lines = GetLines(where, "ORDER BY Line");
         //        for (int i = 0; i < lines.Length; i++)
         //        {
-        //            MOrderLine line = lines[i];
+        //            MVABOrderLine line = lines[i];
         //            MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
         //            log.Fine(product.GetName());
         //            //	New Lines
@@ -2221,7 +2221,7 @@ namespace VAdvantage.Model
         //            for (int j = 0; j < boms.Length; j++)
         //            {
         //                MProductBOM bom = boms[j];
-        //                MOrderLine newLine = new MOrderLine(this);
+        //                MVABOrderLine newLine = new MVABOrderLine(this);
         //                newLine.SetLine(++lineNo);
         //                newLine.SetVAM_Product_ID(bom.GetProduct()
         //                    .GetVAM_Product_ID());
@@ -2264,7 +2264,7 @@ namespace VAdvantage.Model
         * 	@param lines order lines (ordered by VAM_Product_ID for deadlock prevention)
         * 	@return true if (un) reserved
         */
-        //private bool ReserveStock(VAdvantage.Model.MDocType dt, MOrderLine[] lines)
+        //private bool ReserveStock(VAdvantage.Model.MDocType dt, MVABOrderLine[] lines)
         //{
         //    try
         //    {
@@ -2298,7 +2298,7 @@ namespace VAdvantage.Model
         //        //	Always check and (un) Reserve Inventory		
         //        for (int i = 0; i < lines.Length; i++)
         //        {
-        //            MOrderLine line = lines[i];
+        //            MVABOrderLine line = lines[i];
         //            //	Check/set WH/Org
         //            if (header_VAM_Warehouse_ID != 0)	//	enforce WH
         //            {
@@ -2388,10 +2388,10 @@ namespace VAdvantage.Model
         //        //	Lines
         //        Decimal totalLines = Env.ZERO;
         //        List<int> taxList = new List<int>();
-        //        MOrderLine[] lines = GetLines();
+        //        MVABOrderLine[] lines = GetLines();
         //        for (int i = 0; i < lines.Length; i++)
         //        {
-        //            MOrderLine line = lines[i];
+        //            MVABOrderLine line = lines[i];
         //            int taxID = line.GetVAB_TaxRate_ID();
         //            if (!taxList.Contains(taxID))
         //            {
@@ -2538,7 +2538,7 @@ namespace VAdvantage.Model
                 StringBuilder Info = new StringBuilder();
 
                 /* nnayak - Bug 1720003 - We need to set the processed flag so the Tax Summary Line
-                does not get recreated in the afterSave procedure of the MOrderLine class */
+                does not get recreated in the afterSave procedure of the MVABOrderLine class */
                 SetProcessed(true);
 
 
@@ -2597,10 +2597,10 @@ namespace VAdvantage.Model
         //            return null;
         //        }
         //        //
-        //        MOrderLine[] oLines = GetLines(true, null);
+        //        MVABOrderLine[] oLines = GetLines(true, null);
         //        for (int i = 0; i < oLines.Length; i++)
         //        {
-        //            MOrderLine oLine = oLines[i];
+        //            MVABOrderLine oLine = oLines[i];
         //            //
         //            MInOutLine ioLine = new MInOutLine(shipment);
         //            //	Qty = Ordered - Delivered
@@ -2703,10 +2703,10 @@ namespace VAdvantage.Model
         //            if (!INVOICERULE_Immediate.Equals(GetInvoiceRule()))
         //                SetInvoiceRule(INVOICERULE_Immediate);
         //            //
-        //            MOrderLine[] oLines = GetLines();
+        //            MVABOrderLine[] oLines = GetLines();
         //            for (int i = 0; i < oLines.Length; i++)
         //            {
-        //                MOrderLine oLine = oLines[i];
+        //                MVABOrderLine oLine = oLines[i];
         //                //
         //                MInvoiceLine iLine = new MInvoiceLine(invoice);
         //                iLine.SetOrderLine(oLine);
@@ -2753,11 +2753,11 @@ namespace VAdvantage.Model
         public bool VoidIt()
         {
             /***********************************/
-            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            //MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //log.Info(ToString());
             //for (int i = 0; i < lines.Length; i++)
             //{
-            //    MOrderLine line = lines[i];
+            //    MVABOrderLine line = lines[i];
             //    Decimal old = line.GetQtyOrdered();
             //    if (System.Math.Sign(old) != 0)
             //    {
@@ -2927,10 +2927,10 @@ namespace VAdvantage.Model
 
             //	Close Not delivered Qty - SO/VAdvantage.Model.PO
             /*********************************/
-            //MOrderLine[] lines = GetLines(true, "VAM_Product_ID");
+            //MVABOrderLine[] lines = GetLines(true, "VAM_Product_ID");
             //for (int i = 0; i < lines.Length; i++)
             //{
-            //    MOrderLine line = lines[i];
+            //    MVABOrderLine line = lines[i];
             //    Decimal old = line.GetQtyOrdered();
             //    if (old.CompareTo(line.GetQtyDelivered()) != 0)
             //    {

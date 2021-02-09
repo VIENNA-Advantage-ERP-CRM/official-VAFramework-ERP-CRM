@@ -20,11 +20,11 @@ namespace VAdvantage.Model
     /// <summary>
     /// BOM Alternative Model
     /// </summary>
-    public class MBOMAlternative : X_VAM_BOMSubsitutue
+    public class MVAMBOMSubsitutue : X_VAM_BOMSubsitutue
     {
         #region Private Variables
-        //Logger for class MBOMAlternative 
-        private static VLogger s_log = VLogger.GetVLogger(typeof(MBOMAlternative).FullName);
+        //Logger for class MVAMBOMSubsitutue 
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MVAMBOMSubsitutue).FullName);
        // private static long SERIALVERSIONUID = 1L;
         #endregion
 
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAM_BOMSubsitutue_ID"></param>
         /// <param name="trx"></param>
-        public MBOMAlternative(Ctx ctx, int VAM_BOMSubsitutue_ID, Trx trx)
+        public MVAMBOMSubsitutue(Ctx ctx, int VAM_BOMSubsitutue_ID, Trx trx)
             : base(ctx, VAM_BOMSubsitutue_ID, trx)
         {
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trx"></param>
-        public MBOMAlternative(Ctx ctx, DataRow dr, Trx trx)
+        public MVAMBOMSubsitutue(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
         {
 

@@ -179,7 +179,7 @@ namespace ViennaAdvantage.Process
                     return _product.GetName() + " @NotValid@";
                 }
 
-                VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(), null);
+                VAdvantage.Model.MVAMBOM[] boms = VAdvantage.Model.MVAMBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(), null);
                 // if manufacturing module  exist and  BOM not contain any record against this product then not to verify Product
                 // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
                 //if (count > 0 && boms.Length == 0)
@@ -256,10 +256,10 @@ namespace ViennaAdvantage.Process
         /// </summary>
         /// <param name="bom">bom</param>
         /// <returns>true if valid</returns>
-        private bool ValidateBOM(VAdvantage.Model.MBOM bom)
+        private bool ValidateBOM(VAdvantage.Model.MVAMBOM bom)
         {
             //count = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(*) FROM VAF_MODULEINFO WHERE IsActive = 'Y' AND PREFIX ='VAMFG_'"));
-            VAdvantage.Model.MBOMProduct[] BOMproducts = VAdvantage.Model.MBOMProduct.GetOfBOM(bom);
+            VAdvantage.Model.MVAMBOMProduct[] BOMproducts = VAdvantage.Model.MVAMBOMProduct.GetOfBOM(bom);
             // if manufacturing module  exist and  BOM Componet not contain any record against this BOM then not to verify Product
             //if (count > 0 && BOMproducts.Length == 0)
             // JID_0690: If manufaturing Module is not downloaded validate BOM Process was not working.
@@ -270,7 +270,7 @@ namespace ViennaAdvantage.Process
 
             for (int i = 0; i < BOMproducts.Length; i++)
             {
-                VAdvantage.Model.MBOMProduct BOMproduct = BOMproducts[i];
+                VAdvantage.Model.MVAMBOMProduct BOMproduct = BOMproducts[i];
                 //VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
                 VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetVAM_ProductBOM_ID(), Get_Trx());
 
@@ -308,9 +308,9 @@ namespace ViennaAdvantage.Process
             }
             //
             String restriction = "BOMType='" + BOMType + "' AND BOMUse='" + BOMUse + "'";
-            VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(),
+            VAdvantage.Model.MVAMBOM[] boms = VAdvantage.Model.MVAMBOM.GetOfProduct(GetCtx(), _VAM_Product_ID, Get_Trx(),
                 restriction);
-            //VAdvantage.Model.MBOM[] boms = VAdvantage.Model.MBOM.GetOfProduct(GetCtx(), product.GetVAM_Product_ID(), Get_Trx(), restriction);
+            //VAdvantage.Model.MVAMBOM[] boms = VAdvantage.Model.MVAMBOM.GetOfProduct(GetCtx(), product.GetVAM_Product_ID(), Get_Trx(), restriction);
             if (boms.Length != 1)
             {
                 log.Warning(restriction + " - Length=" + boms.Length);
@@ -324,11 +324,11 @@ namespace ViennaAdvantage.Process
             _products.Add(product);
             log.Fine(product.GetName());
             //
-            VAdvantage.Model.MBOM bom = boms[0];
-            VAdvantage.Model.MBOMProduct[] BOMproducts = VAdvantage.Model.MBOMProduct.GetOfBOM(bom);
+            VAdvantage.Model.MVAMBOM bom = boms[0];
+            VAdvantage.Model.MVAMBOMProduct[] BOMproducts = VAdvantage.Model.MVAMBOMProduct.GetOfBOM(bom);
             for (int i = 0; i < BOMproducts.Length; i++)
             {
-                VAdvantage.Model.MBOMProduct BOMproduct = BOMproducts[i];
+                VAdvantage.Model.MVAMBOMProduct BOMproduct = BOMproducts[i];
                 VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetVAM_BOMProduct_ID(), Get_Trx());
                 //VAdvantage.Model.MProduct pp = new VAdvantage.Model.MProduct(GetCtx(), BOMproduct.GetVAM_ProductBOM_ID(), Get_Trx());
                 if (pp.IsBOM())

@@ -900,13 +900,13 @@ namespace VAdvantage.Model
           Trx _trx)
         {
             string str = "";
-            int mAttributeSetId = new MProduct(ctx, VAM_Product_ID, _trx).GetVAM_PFeature_Set_ID();
+            int MVAMPFeatureSetId = new MProduct(ctx, VAM_Product_ID, _trx).GetVAM_PFeature_Set_ID();
             DataSet dataSet = new DataSet();
             Decimal containerCurrentQty = mtrx.GetContainerCurrentQty();
             try
             {
                 string sql;
-                if (mAttributeSetId > 0)
+                if (MVAMPFeatureSetId > 0)
                     sql = "SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty , NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty  ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1.0), true) + " AND VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + loc_ID + " AND VAM_PFeature_SetInstance_ID = " + ASIID + " ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC, created ASC";
                 else
                     sql = "SELECT VAM_PFeature_SetInstance_ID ,  VAM_Locator_ID ,  VAM_Product_ID ,  movementqty ,  currentqty, NVL(ContainerCurrentQty, 0) AS ContainerCurrentQty ,  movementdate ,  TO_CHAR(Created, 'DD-MON-YY HH24:MI:SS') , VAM_Inv_Trx_id ,  MovementType , VAM_InventoryLine_ID FROM VAM_Inv_Trx WHERE movementdate >= " + GlobalVariable.TO_DATE(mtrx.GetMovementDate().Value.AddDays(1.0), true) + " AND VAM_Product_ID = " + VAM_Product_ID + " AND VAM_Locator_ID = " + loc_ID + " AND VAM_PFeature_SetInstance_ID = 0  ORDER BY movementdate ASC , VAM_Inv_Trx_id ASC , created ASC";

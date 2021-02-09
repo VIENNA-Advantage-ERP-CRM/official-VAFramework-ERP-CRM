@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MCostElement
+ * Class Name     : MVAMProductCostElement
  * Purpose        : Product/element cost purpose 
  * Class Used     : X_VAM_ProductCostElement
  * Chronological    Development
@@ -27,13 +27,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCostElement : X_VAM_ProductCostElement
+    public class MVAMProductCostElement : X_VAM_ProductCostElement
     {
         //Cache					
-        private static CCache<int, MCostElement> s_cache = new CCache<int, MCostElement>("VAM_ProductCostElement", 20);
+        private static CCache<int, MVAMProductCostElement> s_cache = new CCache<int, MVAMProductCostElement>("VAM_ProductCostElement", 20);
 
         /**	Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MCostElement).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductCostElement).FullName);
 
 
         /**
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
          *	@param CostingMethod method
          *	@return cost element
          */
-        public static MCostElement GetMaterialCostElement(PO po, String CostingMethod)
+        public static MVAMProductCostElement GetMaterialCostElement(PO po, String CostingMethod)
         {
             if (CostingMethod == null || CostingMethod.Length == 0)
             {
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
                 return null;
             }
             //
-            MCostElement retValue = null;
+            MVAMProductCostElement retValue = null;
             String sql = "SELECT * FROM VAM_ProductCostElement WHERE VAF_Client_ID=" + po.GetVAF_Client_ID() + " AND CostingMethod=@costingMethod ORDER BY VAF_Org_ID";
             DataTable dt = null;
             IDataReader idr = null;
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
                 //if (n)
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MCostElement(po.GetCtx(), dr, po.Get_TrxName());
+                    retValue = new MVAMProductCostElement(po.GetCtx(), dr, po.Get_TrxName());
                 }
                 //if (n && dr.next())
                 //    s_log.warning("More then one Material Cost Element for CostingMethod=" + CostingMethod);
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
                 return retValue;
 
             //	Create New
-            retValue = new MCostElement(po.GetCtx(), 0, po.Get_TrxName());
+            retValue = new MVAMProductCostElement(po.GetCtx(), 0, po.Get_TrxName());
             retValue.SetClientOrg(po.GetVAF_Client_ID(), 0);
             String name = MVAFCtrlRefList.GetListName(po.GetCtx(), COSTINGMETHOD_VAF_Control_Ref_ID, CostingMethod);
             if (name == null || name.Length == 0)
@@ -108,9 +108,9 @@ namespace VAdvantage.Model
          *	@param CostingMethod costing method
          *	@return Cost Element or null
          */
-        public static MCostElement GetMaterialCostElement(Ctx ctx, String CostingMethod)
+        public static MVAMProductCostElement GetMaterialCostElement(Ctx ctx, String CostingMethod)
         {
-            MCostElement retValue = null;
+            MVAMProductCostElement retValue = null;
             String sql = "SELECT * FROM VAM_ProductCostElement WHERE VAF_Client_ID=" + ctx.GetVAF_Client_ID() + " AND CostingMethod=@CostingMethod ORDER BY VAF_Org_ID";
             DataTable dt = null;
             IDataReader idr = null;
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MCostElement(ctx, dr, null);
+                    retValue = new MVAMProductCostElement(ctx, dr, null);
                 }
                 //if (dr.next())
                 //    s_log.info("More then one Material Cost Element for CostingMethod=" + CostingMethod);
@@ -151,9 +151,9 @@ namespace VAdvantage.Model
          *	@param po parent
          *	@return cost element array
          */
-        public static MCostElement[] GetCostingMethods(PO po)
+        public static MVAMProductCostElement[] GetCostingMethods(PO po)
         {
-            List<MCostElement> list = new List<MCostElement>();
+            List<MVAMProductCostElement> list = new List<MVAMProductCostElement>();
             String sql = "SELECT * FROM VAM_ProductCostElement "
                 + "WHERE VAF_Client_ID=@Client_ID"
                 + " AND IsActive='Y' AND CostElementType='M' AND CostingMethod IS NOT NULL";
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                 //idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MCostElement(po.GetCtx(), dr, po.Get_TrxName()));
+                    list.Add(new MVAMProductCostElement(po.GetCtx(), dr, po.Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -186,16 +186,16 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MCostElement[] retValue = new MCostElement[list.Count];
+            MVAMProductCostElement[] retValue = new MVAMProductCostElement[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
 
 
         // By Amit 23-12-2015 not used
-        public static MCostElement[] GetMaterialCostingMethods(PO po)
+        public static MVAMProductCostElement[] GetMaterialCostingMethods(PO po)
         {
-            List<MCostElement> list = new List<MCostElement>();
+            List<MVAMProductCostElement> list = new List<MVAMProductCostElement>();
             String sql = "SELECT * FROM VAM_ProductCostElement "
                 + "WHERE VAF_Client_ID=@Client_ID"
                 + " AND IsActive='Y' AND CostElementType='M'";
@@ -212,7 +212,7 @@ namespace VAdvantage.Model
                 //idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MCostElement(po.GetCtx(), dr, po.Get_TrxName()));
+                    list.Add(new MVAMProductCostElement(po.GetCtx(), dr, po.Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -228,7 +228,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MCostElement[] retValue = new MCostElement[list.Count];
+            MVAMProductCostElement[] retValue = new MVAMProductCostElement[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -240,13 +240,13 @@ namespace VAdvantage.Model
          *	@param VAM_ProductCostElement_ID id
          *	@return Cost Element
          */
-        public static MCostElement Get(Ctx ctx, int VAM_ProductCostElement_ID)
+        public static MVAMProductCostElement Get(Ctx ctx, int VAM_ProductCostElement_ID)
         {
             int key = VAM_ProductCostElement_ID;
-            MCostElement retValue = (MCostElement)s_cache[key];
+            MVAMProductCostElement retValue = (MVAMProductCostElement)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MCostElement(ctx, VAM_ProductCostElement_ID, null);
+            retValue = new MVAMProductCostElement(ctx, VAM_ProductCostElement_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -259,7 +259,7 @@ namespace VAdvantage.Model
          *	@param VAM_ProductCostElement_ID id
          *	@param trxName trx
          */
-        public MCostElement(Ctx ctx, int VAM_ProductCostElement_ID, Trx trxName)
+        public MVAMProductCostElement(Ctx ctx, int VAM_ProductCostElement_ID, Trx trxName)
             : base(ctx, VAM_ProductCostElement_ID, trxName)
         {
             if (VAM_ProductCostElement_ID == 0)
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName trx
          */
-        public MCostElement(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMProductCostElement(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -536,7 +536,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MCostElement[");
+            StringBuilder sb = new StringBuilder("MVAMProductCostElement[");
             sb.Append(Get_ID())
                 .Append("-").Append(GetName())
                 .Append(",Type=").Append(GetCostElementType())

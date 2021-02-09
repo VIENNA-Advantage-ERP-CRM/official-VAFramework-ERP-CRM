@@ -122,14 +122,6 @@
     <Compile Include="Classes\AdvanceDocumentType.cs" />
     <Compile Include="Classes\BudgetCheck.cs" />
     <Compile Include="Classes\MyModelValidator.cs" />
-    <Compile Include="CM\CacheClearAll.cs" />
-    <Compile Include="CM\CacheClearServer.cs" />
-    <Compile Include="CM\CacheHandler.cs" />
-    <Compile Include="CM\CalloutTemplate.cs" />
-    <Compile Include="CM\CStageValidate.cs" />
-    <Compile Include="CM\MediaDirectDeploy.cs" />
-    <Compile Include="CM\TemplateValidate.cs" />
-    <Compile Include="CM\WebProjectDeploy.cs" />
     <Compile Include="CRM\Model\MVABPromotionPhase.cs" />
     <Compile Include="CRM\Model\MVABPromotionTask.cs" />
     <Compile Include="CRM\Model\MVABPromotionType.cs" />
@@ -218,11 +210,11 @@
     <Compile Include="Model\MAssignmentSlot.cs" />
     <Compile Include="Model\MRevenueRecognitionRun.cs" />
     <Compile Include="Model\MVAMProductFeature.cs" />
-    <Compile Include="Model\MAttributeInstance.cs" />
-    <Compile Include="Model\MAttributeSet.cs" />
-    <Compile Include="Model\MAttributeSetInstance.cs" />
-    <Compile Include="Model\MAttributeUse.cs" />
-    <Compile Include="Model\MAttributeValue.cs" />
+    <Compile Include="Model\MVAMPFeatueInstance.cs" />
+    <Compile Include="Model\MVAMPFeatureSet.cs" />
+    <Compile Include="Model\MVAMPFeatureSetInstance.cs" />
+    <Compile Include="Model\MVAMPFeatureUse.cs" />
+    <Compile Include="Model\MVAMPFeatureValue.cs" />
     <Compile Include="Model\MVABBank.cs" />
     <Compile Include="Model\MVABBankAcct.cs" />
     <Compile Include="Model\MVABBankAcctDoc.cs" />
@@ -231,22 +223,22 @@
     <Compile Include="Model\MVABBankingJRNLLine.cs" />
     <Compile Include="Model\MVABBankingJRNLLoader.cs" />
     <Compile Include="Model\MVABBankingJRNLMatcher.cs" />
-    <Compile Include="Model\MBOM.cs" />
-    <Compile Include="Model\MBOMAlternative.cs" />
-    <Compile Include="Model\MBOMProduct.cs" />
+    <Compile Include="Model\MVAMBOM.cs" />
+    <Compile Include="Model\MVAMBOMSubsitutue.cs" />
+    <Compile Include="Model\MVAMBOMProduct.cs" />
     <Compile Include="Model\MVABBusinessPartner.cs" />
     <Compile Include="Model\MVABBPartLocation.cs" />
     <Compile Include="Model\MVABBPartBankAcct.cs" />
     <Compile Include="Model\MVABBPartCategory.cs" />
     <Compile Include="Model\MVABBPartWithholding.cs" />
-    <Compile Include="Model\MBudgetControl.cs" />
+    <Compile Include="Model\MVAGLBudgetActivation.cs" />
     <Compile Include="Model\MVABCalendar.cs" />
     <Compile Include="Model\MVABPromotion.cs" />
     <Compile Include="Model\MVABCashJRNL.cs" />
     <Compile Include="Model\MVABCashBook.cs" />
     <Compile Include="Model\MVABCashbookLine.cs" />
     <Compile Include="Model\MVABCashJRNLLine.cs" />
-    <Compile Include="Model\MChangeRequest.cs" />
+    <Compile Include="Model\MVAMChangeRequest.cs" />
     <Compile Include="Model\MVABCharge.cs" />
     <Compile Include="Model\MVACMChatType.cs" />
     <Compile Include="Model\MVABWorkCommission.cs" />
@@ -254,12 +246,10 @@
     <Compile Include="Model\MVABWorkCommissionDetail.cs" />
     <Compile Include="Model\MVABWorkCommissionLine.cs" />
     <Compile Include="Model\MVABWorkCommissionCalc.cs" />
-    <Compile Include="Model\MContactInterest.cs" />
-    <Compile Include="Model\MContainer.cs" />
-    <Compile Include="Model\MContainerElement.cs" />
+    <Compile Include="Model\MVARInterestedUser.cs" />
     <Compile Include="Model\MVABExchangeRate.cs" />
     <Compile Include="Model\MVABCurrencyType.cs" />
-    <Compile Include="Model\MCost.cs" />
+    <Compile Include="Model\MVAMProductCost.cs" />
     <Compile Include="Model\MCostDetail.cs" />
     <Compile Include="Model\MCostElement.cs" />
     <Compile Include="Model\MCostElementDetail.cs" />
@@ -270,9 +260,7 @@
     <Compile Include="Model\MCostUpdate.cs" />
     <Compile Include="Model\MCostUpdateLine.cs" />
     <Compile Include="Model\MVABCountry.cs" />
-    <Compile Include="Model\MCStage.cs" />
-    <Compile Include="Model\MCStageElement.cs" />
-    <Compile Include="Model\MContextScope.cs" />
+    <Compile Include="Model\MVAFContextScope.cs" />
     <Compile Include="Model\MCurrCrossRate.cs" />
     <Compile Include="Model\MVABCurrency.cs" />
     <Compile Include="Model\MVABCurrencyAcct.cs" />
@@ -367,17 +355,12 @@
     <Compile Include="Model\MMatchPO.cs" />
     <Compile Include="Model\MMeasure.cs" />
     <Compile Include="Model\MMeasureCalc.cs" />
-    <Compile Include="Model\MMedia.cs" />
-    <Compile Include="Model\MMediaDeploy.cs" />
-    <Compile Include="Model\MMediaServer.cs" />
     <Compile Include="Model\MMovement.cs" />
     <Compile Include="Model\MMovementConfirm.cs" />
     <Compile Include="Model\MMovementConfirmLine.cs" />
     <Compile Include="Model\MMovementLine.cs" />
     <Compile Include="Model\MMovementLineConfirm.cs" />
     <Compile Include="Model\MMovementLineMA.cs" />
-    <Compile Include="Model\MNewsChannel.cs" />
-    <Compile Include="Model\MNewsItem.cs" />
     <Compile Include="Model\MVABNonBusinessDay.cs" />
     <Compile Include="Model\MVABOrder.cs" />
     <Compile Include="Model\MVABOrderLine.cs" />
@@ -480,7 +463,6 @@
     <Compile Include="Model\MTaxDeclarationLine.cs" />
     <Compile Include="Model\MTaxPostal.cs" />
     <Compile Include="Model\MTeamMember.cs" />
-    <Compile Include="Model\MVACMLayout.cs" />
     <Compile Include="Model\MTest.cs" />
     <Compile Include="Model\MTimeExpense.cs" />
     <Compile Include="Model\MTimeExpenseLine.cs" />
@@ -492,9 +474,6 @@
     <Compile Include="Model\MValRule.cs" />
     <Compile Include="Model\MVASCAppointmentsInfo.cs" />
     <Compile Include="Model\MWarehouse.cs" />
-    <Compile Include="Model\MWebProject.cs" />
-    <Compile Include="Model\MWebProjectDomain.cs" />
-    <Compile Include="Model\MWikiToken.cs" />
     <Compile Include="Model\MWithholding.cs" />
     <Compile Include="Model\MYear.cs" />
     <Compile Include="Model\NaturalAccountMap.cs" />
@@ -599,7 +578,6 @@
     <Compile Include="Process\InvoicePrint.cs" />
     <Compile Include="Process\InvoiceWriteOff.cs" />
     <Compile Include="Process\IssueReport.cs" />
-    <Compile Include="Process\KIndexRerun.cs" />
     <Compile Include="Process\LandedCostDistribute.cs" />
     <Compile Include="Process\LeadProject.cs" />
     <Compile Include="Process\LeadRequest.cs" />
@@ -759,6 +737,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CM\" />
     <Folder Include="Utility\" />
   </ItemGroup>
   <ItemGroup>

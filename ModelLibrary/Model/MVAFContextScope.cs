@@ -17,7 +17,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MContextScope : X_VAF_ContextScope
+    public class MVAFContextScope : X_VAF_ContextScope
     {
         /// <summary>
         /// Standard Constructor
@@ -25,7 +25,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAF_ContextScope_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MContextScope(Context ctx, int VAF_ContextScope_ID, Trx trxName)
+        public MVAFContextScope(Context ctx, int VAF_ContextScope_ID, Trx trxName)
             : base(ctx, VAF_ContextScope_ID, trxName)
         {
             if (VAF_ContextScope_ID == 0)
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         }
 
 
-        public MContextScope(Ctx ctx, int VAF_ContextScope_ID, Trx trxName)
+        public MVAFContextScope(Ctx ctx, int VAF_ContextScope_ID, Trx trxName)
             : base(ctx, VAF_ContextScope_ID, trxName)
         {
             if (VAF_ContextScope_ID == 0)
@@ -52,13 +52,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MContextScope(Context ctx, DataRow dr, Trx trxName)
+        public MVAFContextScope(Context ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
 
         /// <param name="trxName">transaction</param>
-        public MContextScope(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAFContextScope(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }

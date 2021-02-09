@@ -502,7 +502,7 @@ namespace VAdvantage.Process
                     info += " - " + order.GetDocumentNo();
                 }
                 MVABOrderLine line = new MVABOrderLine(order);
-                line.SetVAM_Product_ID(replenish.GeVAtM_Product_ID());
+                line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                 line.SetQty(replenish.GetQtyToOrder());
                 line.SetPrice();
                 line.Save();

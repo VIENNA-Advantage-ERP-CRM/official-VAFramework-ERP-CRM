@@ -14,22 +14,9 @@ using System.Data;
 /** Generated Model for M_ChangeRequest
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_M_ChangeRequest : PO
+public class X_VAM_ChangeRequest : PO
 {
-public X_M_ChangeRequest (Context ctx, int M_ChangeRequest_ID, Trx trxName) : base (ctx, M_ChangeRequest_ID, trxName)
-{
-/** if (M_ChangeRequest_ID == 0)
-{
-SetDocumentNo (null);
-SetIsApproved (false);	// N
-SetVAM_BOM_ID (0);
-SetM_ChangeRequest_ID (0);
-SetName (null);
-SetProcessed (false);	// N
-}
- */
-}
-public X_M_ChangeRequest (Ctx ctx, int M_ChangeRequest_ID, Trx trxName) : base (ctx, M_ChangeRequest_ID, trxName)
+public X_VAM_ChangeRequest (Context ctx, int M_ChangeRequest_ID, Trx trxName) : base (ctx, M_ChangeRequest_ID, trxName)
 {
 /** if (M_ChangeRequest_ID == 0)
 {
@@ -42,12 +29,25 @@ SetProcessed (false);	// N
 }
  */
 }
+public X_VAM_ChangeRequest (Ctx ctx, int M_ChangeRequest_ID, Trx trxName) : base (ctx, M_ChangeRequest_ID, trxName)
+{
+/** if (M_ChangeRequest_ID == 0)
+{
+SetDocumentNo (null);
+SetIsApproved (false);	// N
+SetVAM_BOM_ID (0);
+SetM_ChangeRequest_ID (0);
+SetName (null);
+SetProcessed (false);	// N
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ChangeRequest (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ChangeRequest (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_M_ChangeRequest (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, 
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ChangeRequest (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAM_ChangeRequest (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_M_ChangeRequest (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxN
 @param rs result set 
 @param trxName transaction
 */
-public X_M_ChangeRequest (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAM_ChangeRequest (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_M_ChangeRequest()
+static X_VAM_ChangeRequest()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_M_ChangeRequest[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAM_ChangeRequest[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.

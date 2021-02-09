@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MCost
+ * Class Name     : MVAMProductCost
  * Purpose        : Cost calculation
  * Class Used     : X_VAM_ProductCost
  * Chronological    Development
@@ -25,10 +25,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MCost : X_VAM_ProductCost
+    public class MVAMProductCost : X_VAM_ProductCost
     {
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MCost).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMProductCost).FullName);
         // Data is entered Manually		
         private bool _manual = true;
 
@@ -318,7 +318,7 @@ namespace VAdvantage.Model
                 VAF_Org_ID = 0;
 
             //	Create/Update Costs
-            MCostDetail.ProcessProduct(product, trxName);
+            MVAMProductCostDetail.ProcessProduct(product, trxName);
 
             return Util.GetValueOfDecimal(GetCurrentCost(
                 product, VAM_PFeature_SetInstance_ID,
@@ -537,16 +537,16 @@ namespace VAdvantage.Model
             //	Material Costs
             Decimal materialCost = Decimal.Multiply(materialCostEach, qty);
             //	Standard costs - just Material Costs
-            if (VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 _log.Finer("MaterialCosts = " + materialCost);
                 return materialCost;
             }
-            if (VAdvantage.Model.MCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod)
-                || VAdvantage.Model.MCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
             {
-                VAdvantage.Model.MCostElement ce = VAdvantage.Model.MCostElement.GetMaterialCostElement(as1, costingMethod);
-                materialCost = Util.GetValueOfDecimal(MCostQueue.GetCosts(product, M_ASI_ID, as1, Org_ID, ce, qty, trxName));
+                VAdvantage.Model.MVAMProductCostElement ce = VAdvantage.Model.MVAMProductCostElement.GetMaterialCostElement(as1, costingMethod);
+                materialCost = Util.GetValueOfDecimal(MVAMProductCostQueue.GetCosts(product, M_ASI_ID, as1, Org_ID, ce, qty, trxName));
             }
 
             //	Other Costs
@@ -599,24 +599,24 @@ namespace VAdvantage.Model
         {
             Decimal? retValue = null;
             //	Direct Data
-            if (VAdvantage.Model.MCostElement.COSTINGMETHOD_AverageInvoice.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AverageInvoice.Equals(costingMethod))
                 retValue = CalculateAverageInv(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod))
                 retValue = CalculateAveragePO(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Fifo.Equals(costingMethod))
                 retValue = CalculateFiFo(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_Lifo.Equals(costingMethod))
                 retValue = CalculateLiFo(product, M_ASI_ID, as1, Org_ID);
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_LastInvoice.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastInvoice.Equals(costingMethod))
                 retValue = GetLastInvoicePrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod))
             {
                 if (VAB_OrderLine_ID != 0)
                     retValue = GetPOPrice(product, VAB_OrderLine_ID, as1.GetVAB_Currency_ID());
                 if (retValue == null || Env.Signum((Decimal)retValue) == 0)
                     retValue = GetLastPOPrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
             }
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	migrate old costs
                 MProductCosting pc = MProductCosting.Get(product.GetCtx(), product.GetVAM_Product_ID(),
@@ -624,11 +624,11 @@ namespace VAdvantage.Model
                 if (pc != null)
                     retValue = pc.GetCurrentCostPrice();
             }
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_UserDefined.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_UserDefined.Equals(costingMethod))
             {
                 ;
             }
-            else if (VAdvantage.Model.MCostElement.COSTINGMETHOD_CostCombination.Equals(costingMethod))
+            else if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_CostCombination.Equals(costingMethod))
             {
                 return 0;
             }
@@ -652,10 +652,10 @@ namespace VAdvantage.Model
             }
 
             //	Look for Standard Costs first
-            if (!VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (!VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
-                VAdvantage.Model.MCostElement ce = VAdvantage.Model.MCostElement.GetMaterialCostElement(as1, VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting);
-                MCost cost = Get(product, M_ASI_ID, as1, Org_ID, ce.GetVAM_ProductCostElement_ID());
+                VAdvantage.Model.MVAMProductCostElement ce = VAdvantage.Model.MVAMProductCostElement.GetMaterialCostElement(as1, VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting);
+                MVAMProductCost cost = Get(product, M_ASI_ID, as1, Org_ID, ce.GetVAM_ProductCostElement_ID());
                 if (cost != null && Env.Signum(cost.GetCurrentCostPrice()) != 0)
                 {
                     _log.Fine(product.GetName() + ", Standard - " + retValue);
@@ -665,9 +665,9 @@ namespace VAdvantage.Model
 
             //	We do not have a price
             //	VAdvantage.Model.PO first
-            if (VAdvantage.Model.MCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
-                || VAdvantage.Model.MCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
-                || VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	try Last VAdvantage.Model.PO
                 retValue = GetLastPOPrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
@@ -694,9 +694,9 @@ namespace VAdvantage.Model
 
             //	Still Nothing
             //	Inv second
-            if (VAdvantage.Model.MCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
-                || VAdvantage.Model.MCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
-                || VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
+            if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_AveragePO.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_LastPOPrice.Equals(costingMethod)
+                || VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(costingMethod))
             {
                 //	try last Inv
                 retValue = GetLastInvoicePrice(product, M_ASI_ID, Org_ID, as1.GetVAB_Currency_ID());
@@ -997,11 +997,11 @@ namespace VAdvantage.Model
         {
             _log.Config(product.GetName());
             //	Cost Elements
-            VAdvantage.Model.MCostElement[] ces = VAdvantage.Model.MCostElement.GetCostingMethods(product);
-            VAdvantage.Model.MCostElement ce = null;
+            VAdvantage.Model.MVAMProductCostElement[] ces = VAdvantage.Model.MVAMProductCostElement.GetCostingMethods(product);
+            VAdvantage.Model.MVAMProductCostElement ce = null;
             for (int i = 0; i < ces.Length; i++)
             {
-                if (VAdvantage.Model.MCostElement.COSTINGMETHOD_StandardCosting.Equals(ces[i].GetCostingMethod()))
+                if (VAdvantage.Model.MVAMProductCostElement.COSTINGMETHOD_StandardCosting.Equals(ces[i].GetCostingMethod()))
                 {
                     ce = ces[i];
                     break;
@@ -1048,7 +1048,7 @@ namespace VAdvantage.Model
                 //	Create Std Costing
                 if (VAdvantage.Model.MVABAccountBook.COSTINGLEVEL_Client.Equals(cl))
                 {
-                    MCost cost = MCost.Get(product, M_ASI_ID,
+                    MVAMProductCost cost = MVAMProductCost.Get(product, M_ASI_ID,
                         as1, 0, ce.GetVAM_ProductCostElement_ID());
                     if (cost.Is_New())
                     {
@@ -1068,7 +1068,7 @@ namespace VAdvantage.Model
                         orgs = VAdvantage.Model.MVAFOrg.GetOfClient(product);
                     for (int o = 0; o < orgs.Length; o++)
                     {
-                        MCost cost = MCost.Get(product, M_ASI_ID,
+                        MVAMProductCost cost = MVAMProductCost.Get(product, M_ASI_ID,
                             as1, orgs[o].GetVAF_Org_ID(), ce.GetVAM_ProductCostElement_ID());
                         if (cost.Is_New())
                         {
@@ -1100,8 +1100,8 @@ namespace VAdvantage.Model
         {
             _log.Config(product.GetName());
             //	Cost Elements
-            VAdvantage.Model.MCostElement[] ces = VAdvantage.Model.MCostElement.GetCostingMethods(product);
-            VAdvantage.Model.MCostElement ce = null;
+            VAdvantage.Model.MVAMProductCostElement[] ces = VAdvantage.Model.MVAMProductCostElement.GetCostingMethods(product);
+            VAdvantage.Model.MVAMProductCostElement ce = null;
             for (int j = 0; j < ces.Length; j++)
             {
                 ce = ces[j];
@@ -1141,7 +1141,7 @@ namespace VAdvantage.Model
 
                     if (VAdvantage.Model.MVABAccountBook.COSTINGLEVEL_Client.Equals(cl))
                     {
-                        MCost cost = MCost.Get(product, M_ASI_ID,
+                        MVAMProductCost cost = MVAMProductCost.Get(product, M_ASI_ID,
                             as1, 0, ce.GetVAM_ProductCostElement_ID());
                         if (cost.Is_New())
                         {
@@ -1161,7 +1161,7 @@ namespace VAdvantage.Model
                             orgs = VAdvantage.Model.MVAFOrg.GetOfClient(product);
                         for (int o = 0; o < orgs.Length; o++)
                         {
-                            MCost cost = MCost.Get(product, M_ASI_ID,
+                            MVAMProductCost cost = MVAMProductCost.Get(product, M_ASI_ID,
                                 as1, orgs[o].GetVAF_Org_ID(), ce.GetVAM_ProductCostElement_ID());
                             if (cost.Is_New())
                             {
@@ -1642,7 +1642,7 @@ namespace VAdvantage.Model
 
 
         /**
-         *	MCost Qty-Cost Pair
+         *	MVAMProductCost Qty-Cost Pair
          */
         /****************************************************************************************
         In java instance of static class is creted not in .net also .net no parametrised constructor used
@@ -1692,10 +1692,10 @@ namespace VAdvantage.Model
          */
 
         /* Addes By Bharat 08/July/2014 */
-        public static MCost Get(MProduct product, int VAM_PFeature_SetInstance_ID,
+        public static MVAMProductCost Get(MProduct product, int VAM_PFeature_SetInstance_ID,
             VAdvantage.Model.MVABAccountBook as1, int VAF_Org_ID, int VAM_ProductCostElement_ID, int VAA_Asset_ID, int VAM_Warehouse_ID = 0)
         {
-            MCost cost = null;
+            MVAMProductCost cost = null;
             String sql = "SELECT * "
                 + "FROM VAM_ProductCost c "
                 + "WHERE VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND VAF_Org_ID=" + VAF_Org_ID
@@ -1714,7 +1714,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    cost = new MCost(product.GetCtx(), dr, product.Get_TrxName());
+                    cost = new MVAMProductCost(product.GetCtx(), dr, product.Get_TrxName());
                 }
             }
             catch (Exception e)
@@ -1729,7 +1729,7 @@ namespace VAdvantage.Model
             //	New
             if (cost == null)
             {
-                cost = new MCost(product, VAM_PFeature_SetInstance_ID,
+                cost = new MVAMProductCost(product, VAM_PFeature_SetInstance_ID,
                     as1, VAF_Org_ID, VAM_ProductCostElement_ID, VAA_Asset_ID);
                 cost.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             }
@@ -1747,11 +1747,11 @@ namespace VAdvantage.Model
         /// <param name="VAF_Org_ID">Costing level - Organization</param>
         /// <param name="VAM_ProductCostElement_ID">cost element</param>
         /// <param name="VAM_Warehouse_ID">costing level - warehouse</param>
-        /// <returns>MCost Object</returns>
-        public static MCost Get(MProduct product, int VAM_PFeature_SetInstance_ID,
+        /// <returns>MVAMProductCost Object</returns>
+        public static MVAMProductCost Get(MProduct product, int VAM_PFeature_SetInstance_ID,
             VAdvantage.Model.MVABAccountBook as1, int VAF_Org_ID, int VAM_ProductCostElement_ID, int VAM_Warehouse_ID = 0)
         {
-            MCost cost = null;
+            MVAMProductCost cost = null;
             String sql = "SELECT * "
                 + "FROM VAM_ProductCost c "
                 + "WHERE VAF_Client_ID=" + product.GetVAF_Client_ID() + " AND VAF_Org_ID=" + VAF_Org_ID
@@ -1770,7 +1770,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    cost = new MCost(product.GetCtx(), dr, product.Get_TrxName());
+                    cost = new MVAMProductCost(product.GetCtx(), dr, product.Get_TrxName());
                 }
             }
             catch (Exception e)
@@ -1785,14 +1785,14 @@ namespace VAdvantage.Model
             //	New
             if (cost == null)
             {
-                cost = new MCost(product, VAM_PFeature_SetInstance_ID,
+                cost = new MVAMProductCost(product, VAM_PFeature_SetInstance_ID,
                     as1, VAF_Org_ID, VAM_ProductCostElement_ID);
                 cost.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             }
             return cost;
         }
 
-        public static MCost[] Get(int VAM_PFeature_SetInstance_ID,
+        public static MVAMProductCost[] Get(int VAM_PFeature_SetInstance_ID,
         VAdvantage.Model.MVABAccountBook as1, int VAM_ProductCostType_ID, int VAF_Org_ID, MProduct product)
         {
             String CostingMethod = as1.GetCostingMethod();
@@ -1879,8 +1879,8 @@ namespace VAdvantage.Model
             }
             //end
 
-            MCost cost = null;
-            List<MCost> list = new List<MCost>();
+            MVAMProductCost cost = null;
+            List<MVAMProductCost> list = new List<MVAMProductCost>();
             String sql = "SELECT c.* "
                 + "FROM VAM_ProductCost c "
                 + " LEFT OUTER JOIN VAM_ProductCostElement ce ON (c.VAM_ProductCostElement_ID=ce.VAM_ProductCostElement_ID) "
@@ -1923,7 +1923,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    cost = new MCost(product.GetCtx(), dr, null);
+                    cost = new MVAMProductCost(product.GetCtx(), dr, null);
                     list.Add(cost);
                 }
             }
@@ -1939,12 +1939,12 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            MCost[] costs = new MCost[list.Count];
+            MVAMProductCost[] costs = new MVAMProductCost[list.Count];
             costs = list.ToArray();
             return costs;
         }
 
-        public static MCost[] Get(int VAM_PFeature_SetInstance_ID,
+        public static MVAMProductCost[] Get(int VAM_PFeature_SetInstance_ID,
        VAdvantage.Model.MVABAccountBook as1, int VAM_ProductCostType_ID, int VAF_Org_ID, int productID)
         {
             MProduct product = new MProduct(Env.GetCtx(), productID, null);
@@ -1999,8 +1999,8 @@ namespace VAdvantage.Model
 
             //	TODO Create/Update Costs Do we need this
 
-            MCost cost = null;
-            List<MCost> list = new List<MCost>();
+            MVAMProductCost cost = null;
+            List<MVAMProductCost> list = new List<MVAMProductCost>();
             String sql = "SELECT c.* "
                 + "FROM VAM_ProductCost c "
                 + " LEFT OUTER JOIN VAM_ProductCostElement ce ON (c.VAM_ProductCostElement_ID=ce.VAM_ProductCostElement_ID) "
@@ -2034,7 +2034,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    cost = new MCost(product.GetCtx(), dr, null);
+                    cost = new MVAMProductCost(product.GetCtx(), dr, null);
                     list.Add(cost);
                 }
             }
@@ -2050,12 +2050,12 @@ namespace VAdvantage.Model
                     idr = null;
                 }
             }
-            MCost[] costs = new MCost[list.Count];
+            MVAMProductCost[] costs = new MVAMProductCost[list.Count];
             costs = list.ToArray();
             return costs;
         }
 
-        public static MCost GetDefaultCost(Ctx ctx, int VAM_Product_ID)
+        public static MVAMProductCost GetDefaultCost(Ctx ctx, int VAM_Product_ID)
         {
             //String sql = "SELECT VAM_ProductCategory_ID FROM VAM_Product WHERE IsActive='Y' AND VAM_Product_ID=" + VAM_Product_ID;
             //int pCategory = Util.GetValueOfInt(DB.ExecuteScalar(sql));
@@ -2104,7 +2104,7 @@ namespace VAdvantage.Model
             sql = MVAFRole.GetDefault(ctx).AddAccessSQL(sql, "VAM_ProductCostElement", true, true);
             int costElementID = Convert.ToInt32(DB.ExecuteScalar(sql));
 
-            MCost cost = MCost.Get(mproduct, M_ASI_ID, acctSchema, VAF_Org_ID, costElementID);
+            MVAMProductCost cost = MVAMProductCost.Get(mproduct, M_ASI_ID, acctSchema, VAF_Org_ID, costElementID);
 
             return cost;
         }
@@ -2123,11 +2123,11 @@ namespace VAdvantage.Model
          *	@param VAM_PFeature_SetInstance_ID asi
          *	@return cost or null
          */
-        public static MCost Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAM_Product_ID,
+        public static MVAMProductCost Get(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, int VAM_Product_ID,
             int VAM_ProductCostType_ID, int VAB_AccountBook_ID, int VAM_ProductCostElement_ID,
             int VAM_PFeature_SetInstance_ID)
         {
-            MCost retValue = null;
+            MVAMProductCost retValue = null;
             String sql = "SELECT * FROM VAM_ProductCost "
                 + "WHERE VAF_Client_ID=" + VAF_Client_ID + " AND VAF_Org_ID=" + VAF_Org_ID + " AND VAM_Product_ID=" + VAM_Product_ID
                 + " AND VAM_ProductCostType_ID=" + VAM_ProductCostType_ID + " AND VAB_AccountBook_ID=" + VAB_AccountBook_ID + " AND VAM_ProductCostElement_ID=" + VAM_ProductCostElement_ID
@@ -2142,7 +2142,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MCost(ctx, dr, null);
+                    retValue = new MVAMProductCost(ctx, dr, null);
                 }
             }
             catch (Exception e)
@@ -2163,7 +2163,7 @@ namespace VAdvantage.Model
          *	@param ignored multi-key
          *	@param trxName trx
          */
-        public MCost(Ctx ctx, int ignored, Trx trxName)
+        public MVAMProductCost(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, ignored, trxName)
         {
 
@@ -2192,7 +2192,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName trx
          */
-        public MCost(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMProductCost(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             _manual = false;
@@ -2207,7 +2207,7 @@ namespace VAdvantage.Model
          *	@param VAF_Org_ID org
          *	@param VAM_ProductCostElement_ID cost element
          */
-        public MCost(MProduct product, int VAM_PFeature_SetInstance_ID,
+        public MVAMProductCost(MProduct product, int VAM_PFeature_SetInstance_ID,
             VAdvantage.Model.MVABAccountBook as1, int VAF_Org_ID, int VAM_ProductCostElement_ID, int VAA_Asset_ID)
             : this(product.GetCtx(), 0, product.Get_TrxName())
         {
@@ -2234,7 +2234,7 @@ namespace VAdvantage.Model
          *	@param VAF_Org_ID org
          *	@param VAM_ProductCostElement_ID cost element
          */
-        public MCost(MProduct product, int VAM_PFeature_SetInstance_ID,
+        public MVAMProductCost(MProduct product, int VAM_PFeature_SetInstance_ID,
             VAdvantage.Model.MVABAccountBook as1, int VAF_Org_ID, int VAM_ProductCostElement_ID)
             : this(product.GetCtx(), 0, product.Get_TrxName())
         {
@@ -2338,7 +2338,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MCost[");
+            StringBuilder sb = new StringBuilder("MVAMProductCost[");
             sb.Append("VAF_Client_ID=").Append(GetVAF_Client_ID());
             if (GetVAF_Org_ID() != 0)
                 sb.Append(",VAF_Org_ID=").Append(GetVAF_Org_ID());
@@ -2360,12 +2360,12 @@ namespace VAdvantage.Model
          * 	Get Cost Element
          *	@return cost element
          */
-        public VAdvantage.Model.MCostElement GetCostElement()
+        public VAdvantage.Model.MVAMProductCostElement GetCostElement()
         {
             int VAM_ProductCostElement_ID = GetVAM_ProductCostElement_ID();
             if (VAM_ProductCostElement_ID == 0)
                 return null;
-            return VAdvantage.Model.MCostElement.Get(GetCtx(), VAM_ProductCostElement_ID);
+            return VAdvantage.Model.MVAMProductCostElement.Get(GetCtx(), VAM_ProductCostElement_ID);
         }
 
         /**
@@ -2375,7 +2375,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeSave(bool newRecord)
         {
-            VAdvantage.Model.MCostElement ce = GetCostElement();
+            VAdvantage.Model.MVAMProductCostElement ce = GetCostElement();
             //	Check if data entry makes sense
             if (_manual)
             {
@@ -2446,7 +2446,7 @@ namespace VAdvantage.Model
             if (ce != null)
             {
                 if (ce.IsCalculated()
-                    || VAdvantage.Model.MCostElement.COSTELEMENTTYPE_Material.Equals(ce.GetCostElementType())
+                    || VAdvantage.Model.MVAMProductCostElement.COSTELEMENTTYPE_Material.Equals(ce.GetCostElementType())
                     && Env.Signum(GetPercentCost()) != 0)
                     SetPercentCost(Env.ZERO);
             }

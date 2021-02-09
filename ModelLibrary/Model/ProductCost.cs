@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : ProductCost.
  * Purpose        : Product Cost model.
- *	                Summarizes Info in MCost
+ *	                Summarizes Info in MVAMProductCost
  * Class Used     : none
  * Chronological    Development
  * Raghunandan      13-Jan-2010
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
                 return null;
             }
             //
-            Decimal? cost = MCost.GetCurrentCost(_product, _VAM_PFeature_SetInstance_ID,
+            Decimal? cost = MVAMProductCost.GetCurrentCost(_product, _VAM_PFeature_SetInstance_ID,
                 as1, VAF_Org_ID, costingMethod, Utility.Util.GetValueOfDecimal(_qty), VAB_OrderLine_ID, zeroCostsOK, _trx);
             if (cost == null || cost == 0)
             {
@@ -338,7 +338,7 @@ namespace VAdvantage.Model
         /// <param name="as1"></param>
         /// <param name="costType">if null uses Accounting Schema Costs - see AcctSchema.COSTING_*</param>
         /// <returns>product costs</returns>
-        private Decimal? GetProductItemCostOld(MVABAccountBook as1, String costType)
+        private Decimal? GetProductIteMVAMProductCostOld(MVABAccountBook as1, String costType)
         {
             Decimal? current = null;
             Decimal? cost = null;

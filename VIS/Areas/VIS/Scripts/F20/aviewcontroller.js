@@ -1090,7 +1090,7 @@
                 var keyColumnName = this.gTab.getKeyColumnName();
                 var treeName = "VAF_TreeInfo_ID";
                 if (keyColumnName.startsWith("CM")) {
-                    if (keyColumnName.equals("CM_Container_ID"))
+                    if (keyColumnName.equals("VACM_Container_ID"))
                         treeName = "VAF_TreeInfoCMC_ID";
                     else if (keyColumnName.equals("CM_CStage_ID"))
                         treeName = "VAF_TreeInfoCMS_ID";

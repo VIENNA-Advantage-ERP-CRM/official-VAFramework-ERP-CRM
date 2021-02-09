@@ -351,7 +351,7 @@
             this.setCalloutActive(true);
 
             var param = C_BlanketOrderLine.toString();
-            dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", param);
+            dr = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", param);
             if (dr != null) {
                 var VAM_Product_ID = Util.getValueOfInt(dr["VAM_Product_ID"]);
                 var VAB_Charge_ID = Util.getValueOfInt(dr["VAB_Charge_ID"]);
@@ -1717,7 +1717,7 @@
 
             // Amit 26-05-2015
             var params = mTab.getValue("VAM_Product_ID").toString().concat(",", (mTab.getValue("VAB_BusinessPartner_ID")).toString());
-            var productInfo = VIS.dataContext.getJSONRecord("MOrderLine/GetProductInfo", params);
+            var productInfo = VIS.dataContext.getJSONRecord("MVABOrderLine/GetProductInfo", params);
 
             //
             //var sql = "SELECT producttype FROM VAM_Product where isactive = 'Y' AND VAM_Product_ID = " + VAM_Product_ID;
@@ -1740,7 +1740,7 @@
 
             // JID_0165 -  Not updating current cost price on product selection, it will update on Before Save 
             //var params = mTab.getValue("VAM_Product_ID").toString();
-            //var productCost = VIS.dataContext.getJSONRecord("MOrderLine/GetProductCost", params);
+            //var productCost = VIS.dataContext.getJSONRecord("MVABOrderLine/GetProductCost", params);
             //var cost = productCost["Cost"].toString();
             //mTab.setValue("CurrentCostPrice", cost);
 
@@ -1820,7 +1820,7 @@
 
                         var params = mTab.getValue("VAM_Product_ID").toString().concat("," + ctx.getVAF_Client_ID().toString() + "," + (mTab.getValue("VAB_Order_ID")).toString() +
                             "," + (VAB_BusinessPartner_ID).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(purchasingUom));
-                        var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnProductChange", params);
+                        var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPricesOnProductChange", params);
 
                         PriceList = Util.getValueOfDecimal(prices["PriceList"]);
                         mTab.setValue("PriceList", PriceList);
@@ -1885,7 +1885,7 @@
                         else {
 
                             var paramString = VAM_Warehouse_ID.toString() + "," + VAM_Product_ID.toString() + "," + VAM_PFeature_SetInstance_ID.toString() + "," + VAB_OrderLine_ID.toString();
-                            var notReserved = VIS.dataContext.getJSONRecord("MOrderLine/GetNotReserved", paramString);
+                            var notReserved = VIS.dataContext.getJSONRecord("MVABOrderLine/GetNotReserved", paramString);
 
                             if (notReserved == null)
                                 notReserved = VIS.Env.ZERO;
@@ -2058,7 +2058,7 @@
             //change by amit 7-june-2016
             var params = Util.getValueOfString(mTab.getValue("VAM_Product_ID")).concat(",", Util.getValueOfString(mTab.getValue("VAB_Order_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")));
-            var recDic = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
+            var recDic = VIS.dataContext.getJSONRecord("MVABOrderLine/GetTaxId", params);
             //end 
 
             //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
@@ -2083,7 +2083,7 @@
                 //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
                 //    paramString = Util.getValueOfInt(mTab.getValue("VAB_Order_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("VAM_Product_ID")).toString() +
                 //        "," + Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")).toString();
-                //    taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTax", paramString);
+                //    taxId = VIS.dataContext.getJSONRecord("MVABOrderLine/GetTax", paramString);
                 //}
                 //else {
                 //    sql = "SELECT VATAX_TaxType_ID FROM VAB_BPart_Location WHERE VAB_BusinessPartner_ID =" + Util.getValueOfInt(order["VAB_BusinessPartner_ID"]) +
@@ -2101,7 +2101,7 @@
                 //change by amit 7-june-2016
                 //var params = mTab.getValue("VAM_Product_ID").toString().concat(",", (mTab.getValue("VAB_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")) +
                 //    "," + Util.getValueOfString(order["VAB_BusinessPartner_ID"]) + "," + Util.getValueOfString(order["Bill_Location_ID"]));
-                //taxId = VIS.dataContext.getJSONRecord("MOrderLine/GetTaxId", params);
+                //taxId = VIS.dataContext.getJSONRecord("MVABOrderLine/GetTaxId", params);
                 //end 
 
                 if (Util.getValueOfInt(taxId) > 0) {
@@ -2294,7 +2294,7 @@
                 "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("VAB_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID1.toString() +
                 "," + (mTab.getValue("QtyEntered")).toString());
-            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
+            var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPrices", params);
 
             countEd011 = Util.getValueOfInt(prices["countEd011"]);
             var countVAPRC = Util.getValueOfInt(prices["countVAPRC"]);
@@ -2381,7 +2381,7 @@
                                 "," + Util.getValueOfString(mTab.getValue("VAB_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() +
                                 "," + VAB_BusinessPartner_ID1.toString() +
                                 "," + (mTab.getValue("QtyEntered")).toString() + "," + countEd011.toString() + "," + countVAPRC.toString());
-                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
+                            var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPricesOnChange", params);
 
                             PriceList = Util.getValueOfDecimal(prices["PriceList"]);
                             mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
@@ -2592,7 +2592,7 @@
                 //Check if it is RSO/RPO and prices available which are entered through blanket sales order.
                 var BlanketOrderLineID = Util.getValueOfDecimal(mTab.getValue("VAB_OrderLine_Blanket_ID"));
 
-                dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", BlanketOrderLineID.toString());
+                dr = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", BlanketOrderLineID.toString());
                 if (dr != null) {
 
                     var PriceList = Util.getValueOfDouble(dr["PriceList"]);
@@ -2898,7 +2898,7 @@
                     "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                     "," + Util.getValueOfString(VAB_UOM_To_ID) + "," + ctx.getVAF_Client_ID().toString() +
                     "," + (mTab.getValue("VAM_Product_ID")).toString() + "," + (mTab.getValue("QtyEntered")).toString());
-                var productPrices = VIS.dataContext.getJSONRecord("MOrderLine/GetProductPriceOnUomChange", params);
+                var productPrices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetProductPriceOnUomChange", params);
 
                 countEd011 = Util.getValueOfInt(productPrices["countEd011"]);
 
@@ -3063,7 +3063,7 @@
                                 var params = VAM_Product_ID.toString().concat(",", (mTab.getValue("VAB_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                                     "," + Util.getValueOfString(VAB_UOM_To_ID) + "," + ctx.getVAF_Client_ID().toString() + "," + bpartner["VAM_DiscountCalculation_ID"].toString() +
                                     "," + (bpartner["FlatDiscount"]).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(prodVAB_UOM_ID));
-                                var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnUomChange", params);
+                                var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPricesOnUomChange", params);
 
                                 PriceList = Util.getValueOfDecimal(prices["PriceList"]);
                                 mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
@@ -3263,7 +3263,7 @@
                     "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                     "," + Util.getValueOfString(mTab.getValue("VAB_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                     "," + QtyEntered.toString());
-                var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPrices", params);
+                var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPrices", params);
                 if (prices != null) {
 
                     countEd011 = Util.getValueOfInt(prices["countEd011"]);
@@ -3323,7 +3323,7 @@
                             params = VAM_Product_ID.toString().concat(",", (mTab.getValue("VAB_Order_ID")).toString() + "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                                 "," + Util.getValueOfString(mTab.getValue("VAB_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                                 "," + QtyEntered.toString() + "," + countEd011.toString() + "," + _countVAPRC.toString());
-                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnChange", params);
+                            var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPricesOnChange", params);
 
                             pricelist = Util.getValueOfDecimal(prices["PriceList"]);
                             mTab.setValue("PriceList", pricelist);
@@ -3399,7 +3399,7 @@
                 //                    // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                    paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", dsPrice.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                    bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                    var actualPrice4 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //                    var actualPrice4 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
 
                 //                    mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceList")));
                 //                    mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -3428,7 +3428,7 @@
                 //                            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                            paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                            bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                            actualPrice5 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //                            actualPrice5 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
 
                 //                            mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
                 //                            mTab.setValue("PriceLimit", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -3523,7 +3523,7 @@
                 //                            var params = (mTab.getValue("VAM_Product_ID")).toString().concat(",", (mTab.getValue("VAB_Order_ID")).toString() + "," + Util.getValueOfString(0) +
                 //                           "," + Util.getValueOfString(mTab.getValue("VAB_UOM_ID")) + "," + ctx.getVAF_Client_ID().toString() + "," + bpartner1["VAM_DiscountCalculation_ID"].toString() +
                 //                           "," + (bpartner1["FlatDiscount"]).toString() + "," + (mTab.getValue("QtyEntered")).toString() + "," + Util.getValueOfString(prodVAB_UOM_ID));
-                //                            var prices = VIS.dataContext.getJSONRecord("MOrderLine/GetPricesOnUomChange", params);
+                //                            var prices = VIS.dataContext.getJSONRecord("MVABOrderLine/GetPricesOnUomChange", params);
 
                 //                            PriceList = Util.getValueOfDecimal(prices["PriceList"]);
                 //                            mTab.setValue("PriceList", Util.getValueOfDecimal(prices["PriceList"]));
@@ -3558,7 +3558,7 @@
                 //                // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                var actualPrice7 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //                var actualPrice7 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
 
                 //                mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceList")));
                 //                mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice1.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -3584,7 +3584,7 @@
                 //                            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                            paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", dsPrice1.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                            bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                            var actualPrice8 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //                            var actualPrice8 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
 
                 //                            mTab.setValue("PriceList", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceList")));
                 //                            mTab.setValue("PriceLimit", Util.getValueOfDecimal(dsPrice.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -3649,7 +3649,7 @@
                         if (VAB_OrderLine_ID == null)
                             VAB_OrderLine_ID = 0;
 
-                        var notReserved = dr.notReserved;//MOrderLine.getNotReserved(ctx,
+                        var notReserved = dr.notReserved;//MVABOrderLine.getNotReserved(ctx,
                         //VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                         //VAB_OrderLine_ID);
                         if (notReserved == null)
@@ -3843,8 +3843,8 @@
                 return "";
             this.setCalloutActive(true);
 
-            //MOrderLine orderline = new MOrderLine(ctx, Orig_OrderLine_ID, null);
-            var orderline = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", Orig_OrderLine_ID.toString());
+            //MVABOrderLine orderline = new MVABOrderLine(ctx, Orig_OrderLine_ID, null);
+            var orderline = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", Orig_OrderLine_ID.toString());
             mTab.setValue("Orig_InOutLine_ID", null);
             mTab.setValue("VAB_TaxRate_ID", Util.getValueOfInt(orderline["VAB_TaxRate_ID"]));
             mTab.setValue("PriceList", Util.getValueOfDecimal(orderline["PriceList"]));
@@ -12542,7 +12542,7 @@
                         // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                         paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                             bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                        var actualPrice1 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                        var actualPrice1 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                         mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
                         mTab.setValue("PriceLimit", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -12582,7 +12582,7 @@
                         // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                         paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", pricestd.toString(), ",",
                             bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                        pricestd = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                        pricestd = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                         sql = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' AND con.VAM_Product_ID = " + Util.getValueOfInt(mTab.getValue("VAM_Product_ID")) +
                             " AND con.VAB_UOM_ID = " + VAB_UOM_ID + " AND con.VAB_UOM_To_ID = " + purchasingUom;
@@ -13189,7 +13189,7 @@
                 //                // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                 //                //PriceEntered = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceStd"));
                 //                PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
@@ -13217,7 +13217,7 @@
                 //                // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                 //                PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
                 //                mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
@@ -13256,7 +13256,7 @@
                 //                // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //                paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //                bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                //                PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                 //                //PriceEntered = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceStd"));
                 //                PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
@@ -13408,7 +13408,7 @@
                         //            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                         //            paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                         //            bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                         //            //PriceEntered = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceStd"));
                         //            PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
@@ -13434,7 +13434,7 @@
                         //            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                         //            paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                         //            bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                         //            PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
                         //            mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
@@ -13472,7 +13472,7 @@
                         //            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                         //            paramString = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                         //            bpartner1["VAM_DiscountCalculation_ID"].toString(), ",", bpartner1["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramString));
+                        //            PriceEntered = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramString));
 
                         //            //PriceEntered = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceStd"));
                         //            PriceList = Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList"));
@@ -13873,7 +13873,7 @@
                 //            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //            paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", ds.getTables()[0].getRows()[0].getCell("PriceStd").toString(), ",",
                 //            bpartner["VAM_DiscountCalculation_ID"].toString(), ",", bpartner["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //            var actualPrice1 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //            var actualPrice1 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
                 //            //end
                 //            mTab.setValue("PriceList", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceList")));
                 //            mTab.setValue("PriceLimit", Util.getValueOfDecimal(ds.getTables()[0].getRows()[0].getCell("PriceLimit")));
@@ -13975,7 +13975,7 @@
                 //            // JID_0487: Calculate Discount based on Discount Schema selected on Business Partner
                 //            paramStr = VAM_Product_ID.toString().concat(",", ctx.getVAF_Client_ID().toString(), ",", pricestd.toString(), ",",
                 //            bpartner["VAM_DiscountCalculation_ID"].toString(), ",", bpartner["FlatDiscount"].toString(), ",", mTab.getValue("QtyEntered").toString());
-                //            var actualPrice3 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/FlatDiscount", paramStr));
+                //            var actualPrice3 = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/FlatDiscount", paramStr));
 
                 //            sql = "SELECT con.DivideRate FROM VAB_UOM_Conversion con INNER JOIN VAB_UOM uom ON con.VAB_UOM_ID = uom.VAB_UOM_ID WHERE con.IsActive = 'Y' " +
                 //                       " AND con.VAM_Product_ID = " + Util.getValueOfInt(mTab.getValue("VAM_Product_ID")) +
@@ -16104,7 +16104,7 @@
         try {
             this.setCalloutActive(true);
             var paramString = Util.getValueOfInt(value);
-            var dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
+            var dr = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", paramString);
 
             //X_VAB_OrderLine ol = new X_VAB_OrderLine(Env.GetCtx(), Util.getValueOfInt(value), null);
             mTab.setValue("VAM_Product_ID", dr["VAM_Product_ID"]);
@@ -16283,7 +16283,7 @@
         var SDate = new Date(mTab.getValue("StartDate"));
         var startDate = new Date(mTab.getValue("StartDate"));
         //var frequency = Util.getValueOfInt(mTab.getValue("VAB_Frequency_ID"));
-        var months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
+        var months = VIS.dataContext.getJSONRecord("MVABOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
         //var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
         //var months = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
         var invoice = Util.getValueOfInt(mTab.getValue("TotalInvoice"));
@@ -17391,8 +17391,8 @@
         try {
             //	Get Details
             var paramString = VAB_OrderLine_ID.toString();
-            var dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
-            // MOrderLine ol = new MOrderLine(ctx, VAB_OrderLine_ID, null);
+            var dr = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", paramString);
+            // MVABOrderLine ol = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
 
             //	Get Details
             if (Util.getValueOfInt(dr["GetID"]) != 0) {
@@ -17692,8 +17692,8 @@
             if (VAM_Product_ID != 0 && isReturnTrx) {
                 var oLine_ID = Util.getValueOfInt(mTab.getValue("VAB_OrderLine_ID"));
                 paramString = oLine_ID.toString();
-                var oLine = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
-                //  MOrderLine oLine = new MOrderLine(ctx, oLine_ID, null);
+                var oLine = VIS.dataContext.getJSONRecord("MVABOrderLine/GetOrderLine", paramString);
+                //  MVABOrderLine oLine = new MVABOrderLine(ctx, oLine_ID, null);
                 if (oLine.Get_ID() != 0) {
                     var orig_IOLine_ID = oLine["Orig_InOutLine_ID"];
                     if (orig_IOLine_ID != 0) {
@@ -19913,8 +19913,8 @@
                         if (VAB_OrderLine_ID == null)
                             VAB_OrderLine_ID = 0;
                         paramString = VAM_Warehouse_ID.toString() + "," + VAM_Product_ID.toString() + "," + VAM_PFeature_SetInstance_ID.toString() + "," + VAB_OrderLine_ID.toString();
-                        var notReserved = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MOrderLine/GetNotReserved", paramString));
-                        //var notReserved = MOrderLine.GetNotReserved(ctx,
+                        var notReserved = Util.getValueOfDecimal(VIS.dataContext.getJSONRecord("MVABOrderLine/GetNotReserved", paramString));
+                        //var notReserved = MVABOrderLine.GetNotReserved(ctx,
                         //    VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                         //    VAB_OrderLine_ID);
                         if (notReserved == null)
@@ -20819,7 +20819,7 @@
                 //var Sql = "Select NoOfMonths from VAB_Frequency where VAB_Frequency_ID=" + frequency;
                 //var months = Util.getValueOfInt(VIS.DB.executeScalar(Sql, null, null));
                 var months = "";
-                months = VIS.dataContext.getJSONRecord("MOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
+                months = VIS.dataContext.getJSONRecord("MVABOrderLine/GetNoOfMonths", Util.getValueOfString(mTab.getValue("VAB_Frequency_ID")));
                 var SDate = new Date(mTab.getValue("StartDate"));
                 var endDate = SDate.setMonth(SDate.getMonth() + (months * Util.getValueOfInt(mTab.getValue("NoofCycle"))));
                 endDate = new Date(SDate.setDate(SDate.getDate() - 1));

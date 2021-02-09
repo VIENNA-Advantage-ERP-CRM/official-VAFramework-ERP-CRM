@@ -659,7 +659,7 @@ namespace ViennaAdvantage.Process
             // need to consolidate record every time when locator and product container matched
             //if (product.GetVAM_PFeature_Set_ID() != 0)
             //{
-            //    MAttributeSet mas = MAttributeSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
+            //    MVAMPFeatureSet mas = MVAMPFeatureSet.Get(GetCtx(), product.GetVAM_PFeature_Set_ID());
             //    linePerASI = mas.IsInstanceAttribute();
             //}
 

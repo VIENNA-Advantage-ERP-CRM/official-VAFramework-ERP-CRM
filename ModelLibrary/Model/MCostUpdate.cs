@@ -14,10 +14,10 @@ using VAdvantage.VOS;
 
 namespace VAdvantage.Model
 {
-    public class MCostUpdate : X_VAM_ProductCostUpdate
+    public class MVAMProductCostUpdate : X_VAM_ProductCostUpdate
     {
         #region Private Variables
-        //Logger for class MCostUpdate 
+        //Logger for class MVAMProductCostUpdate 
        // private static long serialVersionUID = 1L;
         #endregion
 
@@ -27,7 +27,7 @@ namespace VAdvantage.Model
 	 *  @param  VAB_Order_ID    order to load, (0 create new order)
 	 *  @param trx p_trx name
 	 */
-        public MCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
+        public MVAMProductCostUpdate(Ctx ctx, int VAM_ProductCostUpdate_ID, Trx trx)
             : base(ctx, VAM_ProductCostUpdate_ID, trx)
         {
 
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
          *  @param rs result set record
          *  @param trx transaction
          */
-        public MCostUpdate(Ctx ctx, DataRow dr, Trx trx)
+        public MVAMProductCostUpdate(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
         {
 
@@ -63,9 +63,9 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public MCostUpdateLine[] GetLines()
+        public MVAMProductCostUpdateLine[] GetLines()
         {
-            List<MCostUpdateLine> list = new List<MCostUpdateLine>();
+            List<MVAMProductCostUpdateLine> list = new List<MVAMProductCostUpdateLine>();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAM_ProductCostUpdateLine WHERE VAM_ProductCostUpdate_ID=" + this.GetVAM_ProductCostUpdate_ID());
             IDataReader idr = null;
             try
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    MCostUpdateLine ol = new MCostUpdateLine(GetCtx(), dt.Rows[i], Get_Trx());
+                    MVAMProductCostUpdateLine ol = new MVAMProductCostUpdateLine(GetCtx(), dt.Rows[i], Get_Trx());
                     list.Add(ol);
                 }
             }
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
                 }
             }
             //
-            MCostUpdateLine[] lines = new MCostUpdateLine[list.Count];
+            MVAMProductCostUpdateLine[] lines = new MVAMProductCostUpdateLine[list.Count];
             lines = list.ToArray();
             return lines;
         }

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : WebProjectDeploy
  * Purpose        : Deploy Web Project
- * Class Used     : X_CM_Container
+ * Class Used     : X_VACM_Container
  * Chronological    Development
  * Deepak           12-Feb-2010
   ******************************************************/

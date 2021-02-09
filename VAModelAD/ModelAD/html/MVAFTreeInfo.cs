@@ -71,10 +71,10 @@ namespace VAdvantage.Model
 		    TREETYPE_Activity,
 		    TREETYPE_BoM,
 		    TREETYPE_BPartner,
-		    TREETYPE_CMContainer,
-		    TREETYPE_CMMedia,
-		    TREETYPE_CMContainerStage,
-		    TREETYPE_CMVACMLayout,
+		   // TREETYPE_CMContainer,
+		   // TREETYPE_CMMedia,
+		    //TREETYPE_CMContainerStage,
+		    TREETYPE_CMLayout,
 		    TREETYPE_ElementValue,
 		    TREETYPE_Campaign,
 		    TREETYPE_Menu,
@@ -94,9 +94,9 @@ namespace VAdvantage.Model
 		    X_VAB_BillingCode.Table_ID,
 		    X_VAM_BOM.Table_ID,
 		    X_VAB_BusinessPartner.Table_ID,
-		    X_CM_Container.Table_ID,
-		    X_CM_Media.Table_ID,
-		    X_CM_CStage.Table_ID,
+		   // X_VACM_Container.Table_ID,
+		   // X_VACM_Media.Table_ID,
+		   // X_VACM_CStage.Table_ID,
 		    X_VACM_Layout.Table_ID,
 		    X_VAB_Acct_Element.Table_ID,
 		    X_VAB_Promotion.Table_ID,
@@ -406,7 +406,7 @@ namespace VAdvantage.Model
                 nodeTableName += "CMS";
             else if (TREETYPE_CMMedia.Equals(treeType))
                 nodeTableName += "CMM";
-            else if (TREETYPE_CMVACMLayout.Equals(treeType))
+            else if (TREETYPE_CMLayout.Equals(treeType))
                 nodeTableName += "CMT";
             //
             else if (TREETYPE_User1.Equals(treeType))
@@ -435,12 +435,12 @@ namespace VAdvantage.Model
             else if (X_VAM_Product.Table_ID == VAF_TableView_ID)
                 nodeTableName += "PR";
             //
-            else if (X_CM_Container.Table_ID == VAF_TableView_ID)
-                nodeTableName += "CMC";
-            else if (X_CM_CStage.Table_ID == VAF_TableView_ID)
-                nodeTableName += "CMS";
-            else if (X_CM_Media.Table_ID == VAF_TableView_ID)
-                nodeTableName += "CMM";
+            //else if (X_VACM_Container.Table_ID == VAF_TableView_ID)
+            //    nodeTableName += "CMC";
+            //else if (X_VACM_CStage.Table_ID == VAF_TableView_ID)
+            //    nodeTableName += "CMS";
+            //else if (X_VACM_Media.Table_ID == VAF_TableView_ID)
+            //    nodeTableName += "CMM";
             else if (X_VACM_Layout.Table_ID == VAF_TableView_ID)
                 nodeTableName += "CMT";
             else

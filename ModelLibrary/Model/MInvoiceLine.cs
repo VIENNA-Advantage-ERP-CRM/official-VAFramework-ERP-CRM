@@ -3382,7 +3382,7 @@ namespace VAdvantage.Model
                 if (newRecord || (Is_ValueChanged("VAM_Product_ID")) || (Is_ValueChanged("VAM_PFeature_SetInstance_ID")))
                 {
 
-                    decimal currentcostprice = MCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx());
+                    decimal currentcostprice = MVAMProductCost.GetproductCosts(GetVAF_Client_ID(), GetVAF_Org_ID(), GetVAM_Product_ID(), Util.GetValueOfInt(GetVAM_PFeature_SetInstance_ID()), Get_Trx());
                     primaryAcctSchemaCurrency = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Currency_ID from VAB_AccountBook WHERE VAB_AccountBook_ID = 
                                             (SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE vaf_client_id = " + GetVAF_Client_ID() + ")", null, Get_Trx()));
                     if (inv.GetVAB_Currency_ID() != primaryAcctSchemaCurrency)

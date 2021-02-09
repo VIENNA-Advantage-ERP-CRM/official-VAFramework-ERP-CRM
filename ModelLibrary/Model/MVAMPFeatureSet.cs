@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MAttributeSet
+ * Class Name     : MVAMPFeatureSet
  * Purpose        : Gat the value using VAM_PFeature_Use table 
  * Class Used     : X_VAM_PFeature_Set
  * Chronological    Development
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MAttributeSet : X_VAM_PFeature_Set
+    public class MVAMPFeatureSet : X_VAM_PFeature_Set
     {
         #region Private Variables
         //	Instance Attributes					
@@ -39,21 +39,21 @@ namespace VAdvantage.Model
         //Serial No create Exclude				
         private X_VAM_ExcludeCtlSerialNo[] _excludeSerNos = null;
         //	Cache						
-        private static CCache<int, MAttributeSet> s_cache = new CCache<int, MAttributeSet>("VAM_PFeature_Set", 20);
+        private static CCache<int, MVAMPFeatureSet> s_cache = new CCache<int, MVAMPFeatureSet>("VAM_PFeature_Set", 20);
         #endregion
 
-        /* Get MAttributeSet from Cache
+        /* Get MVAMPFeatureSet from Cache
         *	@param ctx context
         *	@param VAM_PFeature_Set_ID id
-        *	@return MAttributeSet
+        *	@return MVAMPFeatureSet
         */
-        public static MAttributeSet Get(Ctx ctx, int VAM_PFeature_Set_ID)
+        public static MVAMPFeatureSet Get(Ctx ctx, int VAM_PFeature_Set_ID)
         {
             int key = VAM_PFeature_Set_ID;
-            MAttributeSet retValue = (MAttributeSet)s_cache[key];
+            MVAMPFeatureSet retValue = (MVAMPFeatureSet)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MAttributeSet(ctx, VAM_PFeature_Set_ID, null);
+            retValue = new MVAMPFeatureSet(ctx, VAM_PFeature_Set_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -65,7 +65,7 @@ namespace VAdvantage.Model
          *	@param VAM_PFeature_Set_ID id
          *	@param trxName transaction
          */
-        public MAttributeSet(Ctx ctx, int VAM_PFeature_Set_ID, Trx trxName)
+        public MVAMPFeatureSet(Ctx ctx, int VAM_PFeature_Set_ID, Trx trxName)
             : base(ctx, VAM_PFeature_Set_ID, trxName)
         {
 
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MAttributeSet(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMPFeatureSet(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
