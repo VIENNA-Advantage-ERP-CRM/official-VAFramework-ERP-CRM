@@ -219,11 +219,9 @@ namespace ViennaAdvantage.Process
             //+ ": " + newOrder.GetDocumentNo()
             return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName();
         }
-        /// <summary>
-        /// Add Sales Order Header for VA077 Module
-        /// </summary>
-        /// <param name="newOrder">Moder Object</param>
+        /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
+        /// <param name="orgId"></param>
         /// <returns>bool</returns>
         public bool AddHeader(int destinationorg, int orgId)
         {
