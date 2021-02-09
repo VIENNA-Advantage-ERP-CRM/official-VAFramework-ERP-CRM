@@ -1782,6 +1782,7 @@
     <Compile Include="Process\PaymentTermValidate.cs" />
     <Compile Include="Process\PaySelectionCreateCheck.cs" />
     <Compile Include="Process\PaySelectionCreateFrom.cs" />
+    <Compile Include="Process\PeriodCloseScheduler.cs" />
     <Compile Include="Process\PeriodControlStatus.cs" />
     <Compile Include="Process\PeriodStatus.cs" />
     <Compile Include="ProcessAD\PrepareModuleSchema.cs" />
