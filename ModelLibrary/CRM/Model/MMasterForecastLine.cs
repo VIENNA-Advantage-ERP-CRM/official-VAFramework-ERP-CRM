@@ -11,11 +11,14 @@ using System.Windows;
 using VAdvantage.Utility;
 using System.Data;
 using VAdvantage.DataBase;
+using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
     public class MMasterForecastLine : X_C_MasterForecastLine
     {
+        private static VLogger log = VLogger.GetVLogger(typeof(MMasterForecastLine).FullName);
+
         public MMasterForecastLine(Ctx ctx, int C_MasterForecastLine_ID, Trx trxName) :
             base(ctx, C_MasterForecastLine_ID, null)
         {
@@ -28,7 +31,28 @@ namespace VAdvantage.Model
 
         }
 
-         protected override bool AfterSave(bool newRecord, bool success)
+        /// <summary>
+        /// Create new Master Forecast Line
+        /// </summary>
+        /// <param name="Parent">Master Forecast</param>
+        /// <param name="M_Product_ID">Product</param>
+        public MMasterForecastLine( X_C_MasterForecast Parent ,int M_Product_ID)
+            : base(Parent.GetCtx(), 0, Parent.Get_Trx())
+        {
+          
+                string sql = "SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + M_Product_ID;
+                SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
+           
+                SetAD_Client_ID(Parent.GetAD_Client_ID());
+                SetAD_Org_ID(Parent.GetAD_Org_ID());
+                SetM_Product_ID(M_Product_ID);
+            if (!Env.IsModuleInstalled("VA073_"))
+            {
+                SetProcessed(true);
+            }           
+        }
+
+        protected override bool AfterSave(bool newRecord, bool success)
          {
              if (!success)
                  return success;
@@ -47,5 +71,55 @@ namespace VAdvantage.Model
              return true;
             // return base.AfterDelete(success);
          }
+
+        /// <summary>
+        /// Is Used to Get or Create  Instance of Master ForecastLine
+        /// </summary>
+        /// <param name="ForeCast">MasterForecast</param>
+        /// <param name="M_Product_ID">Product</param>
+        /// <returns>Object</returns>
+        public static MMasterForecastLine GetOrCreate( X_C_MasterForecast ForeCast, int M_Product_ID)
+        {
+            MMasterForecastLine retValue = null;
+            String sql = "SELECT * FROM C_MasterForecastLine " +
+                         " WHERE  M_Product_ID = " + M_Product_ID+
+                         " AND C_MasterForecast_ID =" +ForeCast.GetC_MasterForecast_ID();
+           
+
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DB.ExecuteReader(sql, null, ForeCast.Get_Trx());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    retValue = new MMasterForecastLine(ForeCast.GetCtx(), dr, ForeCast.Get_Trx());
+                }
+            }
+            catch (Exception ex)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+               log.Log(Level.SEVERE, sql, ex);
+            }
+            finally
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                dt = null;
+            }
+            if (retValue == null)
+                retValue = new MMasterForecastLine(ForeCast, M_Product_ID);
+
+            return retValue;
+        }
+
     }
 }
