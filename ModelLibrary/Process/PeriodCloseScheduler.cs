@@ -8,7 +8,7 @@ using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 
-namespace VA073.Process
+namespace VAdvantage.Process
 {
     class PeriodCloseScheduler : SvrProcess
     {
