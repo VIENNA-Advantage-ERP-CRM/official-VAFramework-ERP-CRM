@@ -250,10 +250,10 @@
     <Compile Include="Model\MVABExchangeRate.cs" />
     <Compile Include="Model\MVABCurrencyType.cs" />
     <Compile Include="Model\MVAMProductCost.cs" />
-    <Compile Include="Model\MCostDetail.cs" />
-    <Compile Include="Model\MCostElement.cs" />
-    <Compile Include="Model\MCostElementDetail.cs" />
-    <Compile Include="Model\MCostElementLine.cs" />
+    <Compile Include="Model\MVAMProductCostDetail.cs" />
+    <Compile Include="Model\MVAMProductCostElement.cs" />
+    <Compile Include="Model\MVAMProductCostElementDetail.cs" />
+    <Compile Include="Model\MVAMProductCostElementLine.cs" />
     <Compile Include="Model\MCostForeignCurrency.cs" />
     <Compile Include="Model\MCostQueue.cs" />
     <Compile Include="Model\MCostType.cs" />

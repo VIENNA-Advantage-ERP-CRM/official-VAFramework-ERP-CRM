@@ -552,10 +552,10 @@
     <Compile Include="Model\X_VAM_ChangeRequest.cs" />
     <Compile Include="Model\X_M_ContainerStorage.cs" />
     <Compile Include="Model\X_VAM_ProductCost.cs" />
-    <Compile Include="Model\X_M_CostDetail.cs" />
-    <Compile Include="Model\X_M_CostElement.cs" />
-    <Compile Include="Model\X_M_CostElementDetail.cs" />
-    <Compile Include="Model\X_M_CostElementLine.cs" />
+    <Compile Include="Model\X_VAM_ProductCostDetail.cs" />
+    <Compile Include="Model\X_VAM_ProductCostElement.cs" />
+    <Compile Include="Model\X_VAM_ProductCostElementDetail.cs" />
+    <Compile Include="Model\X_VAM_ProductCostElementLine.cs" />
     <Compile Include="Model\X_M_CostQueue.cs" />
     <Compile Include="Model\X_M_CostType.cs" />
     <Compile Include="Model\X_M_CostUpdate.cs" />
