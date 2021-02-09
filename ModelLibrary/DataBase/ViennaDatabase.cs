@@ -141,7 +141,7 @@ namespace VAdvantage.DataBase
         /// </summary>
         /// <param name="Name">Sequence Name</param>
         /// <returns></returns>
-        //int GetNextID(String Name);
+        int GetNextID(String Name);
 
         /// <summary>
         /// Create Native Sequence

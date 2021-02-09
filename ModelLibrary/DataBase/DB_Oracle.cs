@@ -116,7 +116,16 @@ namespace VAdvantage.DataBase
         //{
         //    throw new NotImplementedException();
         //}
-
+        /// <summary>
+        /// Drop Existing if any and create new Sequence.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="increment"></param>
+        /// <param name="minvalue"></param>
+        /// <param name="maxvalue"></param>
+        /// <param name="start"></param>
+        /// <param name="trxName"></param>
+        /// <returns></returns>
         public bool CreateSequence(string name, int increment, int minvalue, int maxvalue, int start, Trx trxName)
         {
 
@@ -125,7 +134,7 @@ namespace VAdvantage.DataBase
                                 + " MINVALUE " + minvalue
                                 + " MAXVALUE " + maxvalue
                                 + " START WITH " + start
-                                + " INCREMENT BY " + increment + " CACHE 20", null, trxName)
+                                + " INCREMENT BY " + increment, null, trxName)
                                 ;
 
             if (no == -1)
@@ -247,7 +256,12 @@ namespace VAdvantage.DataBase
             return ds;
         }
 
-        public static int GetNextID(String Name)
+        /// <summary>
+        /// Get next ID fromm Sequence
+        /// </summary>
+        /// <param name="Name"></param>
+        /// <returns></returns>
+        public int GetNextID(String Name)
         {
             int m_sequence_id = DB.GetSQLValue(null, "SELECT " + Name.ToUpper() + ".nextval FROM DUAL");
             return m_sequence_id;

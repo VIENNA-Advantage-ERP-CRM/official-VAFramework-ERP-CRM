@@ -252,7 +252,7 @@ namespace VAdvantage.Model
                     {
                         //	int AD_Sequence_ID = dr.getInt(4);
                         //
-                        int tempRetValue =-1;
+                        int tempRetValue = -1;
                         int incrementNo = int.Parse(ds.Tables[0].Rows[0]["IncrementNo"].ToString());
                         if (viennaSys)
                         {
@@ -264,7 +264,7 @@ namespace VAdvantage.Model
                             tempRetValue = int.Parse(ds.Tables[0].Rows[0]["Export_ID"].ToString());
                             ds.Tables[0].Rows[0]["Export_ID"] = tempRetValue + incrementNo;
                         }
-                       
+
                         da.Update(ds);
                         retValue = tempRetValue;
                         s_log.Info("Export ID for Table " + TableName + ": " + retValue);
@@ -490,8 +490,41 @@ namespace VAdvantage.Model
         public int GetNextID()
         {
             int retValue = GetCurrentNext();
-            SetCurrentNext(retValue + GetIncrementNo());
+            if (MSysConfig.IsNativeSequence(false) && IsTableID())
+            {
+                SetCurrentNext(retValue + GetIncrementNo());
+            }
+
             return retValue;
+        }
+
+        public int GetCurrentNext()
+        {
+            if (MSysConfig.IsNativeSequence(false) && IsTableID())
+            {
+                return DB.GetNextID(GetAD_Client_ID(), GetName(), Get_TrxName());
+            }
+            else
+            {
+                return base.GetCurrentNext();
+            }
+        }
+
+        public void SetCurrentNext(int CurrentNext)
+        {
+            if (MSysConfig.IsNativeSequence(false) && IsTableID())
+            {
+                while (true)
+                {
+                    int id = DB.GetNextID(GetAD_Client_ID(), GetName(), Get_TrxName());
+                    if (id < 0 || id >= (CurrentNext - 1))
+                        break;
+                }
+            }
+            else
+            {
+                base.SetCurrentNext(CurrentNext);
+            }
         }
 
 
@@ -1632,9 +1665,30 @@ namespace VAdvantage.Model
         /// <returns>true if created</returns>
         public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, Boolean tableID)
         {
+             //MSysConfig.getBooleanValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, false);
             if (tableID)
             {
-                return MSequence.CreateTableSequence(ctx, TableName, trxName);
+                // If SYSTEM_NATIVE_SEQUENCE is true, then fetch curent next value from AD_Sequence and create new sequence in respective DB from that value.ue.
+               if (MSysConfig.IsNativeSequence(false))
+                {
+                    int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
+
+                    if (nextid == -1)
+                    {
+                        MSequence.CreateTableSequence(ctx, TableName, trxName);
+                        nextid = INIT_NO;
+                    }
+
+                    // Creeate sequence in respective DB.
+                    if (!VConnection.Get().GetDatabase().CreateSequence(TableName , 1, INIT_NO, int.MaxValue, nextid, trxName))
+                        return false;
+
+                    return true;
+                }
+                else
+                {
+                    return MSequence.CreateTableSequence(ctx, TableName, trxName);
+                }
             }
             else
             {
