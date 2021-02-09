@@ -221,7 +221,7 @@ namespace ViennaAdvantage.Process
         }
         /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
-        /// <param name="orgId"></param>
+        /// <param name="orgId">Organization Id</param>
         /// <returns>bool</returns>
         public bool AddHeader(int destinationorg, int orgId)
         {
