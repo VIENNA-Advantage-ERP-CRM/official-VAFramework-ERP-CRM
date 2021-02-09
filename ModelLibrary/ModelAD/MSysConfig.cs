@@ -89,7 +89,9 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public static bool IsNativeSequence(bool reload)
         {
-            return MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, reload) != "Y";
+
+            return MSysConfig.GetValue(MSysConfig.SYSTEM_NATIVE_SEQUENCE, reload) == "Y";
+
         }
     }
 }
