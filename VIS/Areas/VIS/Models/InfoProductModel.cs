@@ -202,7 +202,7 @@ namespace VIS.Models
                 sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " ) t", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(p.M_Product_ID) " + sqlWhere.Substring(sqlWhere.IndexOf("FROM")), null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;

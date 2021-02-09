@@ -13322,8 +13322,16 @@
 
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
 
+            //** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **//
+                var paramsPrice;                
+                paramsPrice = invoiceRecord["M_PriceList_ID"].toString().concat(",", mTab.getValue("C_Invoice_ID").toString(), ",",
+                        M_Product_ID.toString(), ",", 
+                        C_UOM_To_ID.toString(), ",",    
+                        Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                        "2");
+
                 //Get PriceListversion based on Pricelist
-                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", invoiceRecord["M_PriceList_ID"].toString());
+                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", paramsPrice);
 
                 if (orderline_ID == 0) {
 
@@ -22529,5 +22537,27 @@
         return "";
     }
     VIS.Model.CalloutRFQ = CalloutRFQ;
+
+    //** clearing WeekDay value when FixDueDate checkbox is true ** Dt: 02/04/2021 ** Modified By: Kumar ** //
+    //*************CalloutPaymentTerm Start**************
+    function CalloutPaymentTerm() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutPaymentTerm");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutPaymentTerm, VIS.CalloutEngine); //inherit prototype
+    CalloutPaymentTerm.prototype.ClearWeekDay = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (value == true) {
+            mTab.setValue("NetDay", "");
+            mTab.setValue("WeekOffset", VIS.Env.ZERO);
+        }
+
+        this.setCalloutActive(false);
+        return "";
+    };
+    VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
+    //**************CalloutPaymentTerm End*************
 
 })(VIS, jQuery);
