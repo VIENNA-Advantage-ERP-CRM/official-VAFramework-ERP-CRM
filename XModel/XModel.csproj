@@ -403,7 +403,7 @@
     <Compile Include="Model\X_VAB_OrderLine.cs" />
     <Compile Include="Model\X_VAB_OrderlineHistory.cs" />
     <Compile Include="Model\X_VAB_OrderTax.cs" />
-    <Compile Include="Model\X_C_OrgAssignment.cs" />
+    <Compile Include="Model\X_VAB_AssignOrg.cs" />
     <Compile Include="Model\X_C_Payment.cs" />
     <Compile Include="Model\X_C_PaymentAllocate.cs" />
     <Compile Include="Model\X_C_PaymentBatch.cs" />
