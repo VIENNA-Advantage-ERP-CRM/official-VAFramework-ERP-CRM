@@ -8,7 +8,7 @@ using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
 
-namespace VA073.Process
+namespace VAdvantage.Process
 {
     class PeriodCloseScheduler : SvrProcess
     {
@@ -16,6 +16,7 @@ namespace VA073.Process
         private int day = 0;
         private int calendar_id = 0;
         DateTime date = DateTime.Today;
+
 
 
         /// <summary>
