@@ -17,7 +17,6 @@ namespace VAdvantage.Process
         private int calendar_id = 0;
         DateTime date = DateTime.Today;
 
-
         /// <summary>
         /// prepare
         /// </summary>
