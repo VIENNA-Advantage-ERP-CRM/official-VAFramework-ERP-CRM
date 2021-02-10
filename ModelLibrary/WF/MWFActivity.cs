@@ -27,7 +27,7 @@ using System.Reflection;
 namespace VAdvantage.WF
 {
     public class MWFActivity : X_AD_WF_Activity
-    {        
+    {
         /**	State Machine				*/
         private StateEngine _state = null;
         /**	Workflow Node				*/
@@ -73,7 +73,7 @@ namespace VAdvantage.WF
                 throw new ArgumentException("Cannot create new WF Activity directly");
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
-            
+
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace VAdvantage.WF
         {
             _state = new StateEngine(GetWFState());
             _state.SetCtx(GetCtx());
-          
+
         }
 
         /// <summary>
@@ -1561,6 +1561,17 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
 
                 return ok;
             }
+
+            // User Message
+            else if (MWFNode.ACTION_UserMessage.Equals(action))
+            {
+                SetAD_Message_ID(_node.GetAD_Message_ID());
+                string res = Util.GetValueOfString(DB.ExecuteScalar("SELECT Value FROM AD_Message WHERE AD_Message_ID = " + _node.GetAD_Message_ID()));
+                SetTextMsg(Msg.GetMsg(GetCtx(), res));
+                _process.SetProcessMsg(Msg.GetMsg(GetCtx(), res));
+                return true;
+            }
+
             //
             //
             throw new ArgumentException("Invalid Action (Not Implemented) =" + action);
@@ -1574,7 +1585,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
         public bool CheckUser(int AD_User_ID)
         {
             if (AD_User_ID == 0)
-                throw new Exception(Msg.GetMsg(GetCtx(),"Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotFound"));
+                throw new Exception(Msg.GetMsg(GetCtx(), "Terminated") + " :: " + Msg.GetMsg(GetCtx(), "ApproverNotFound"));
             else
             {
                 bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM AD_User WHERE AD_User_ID = " + AD_User_ID)).ToLower() == "y";
@@ -3012,12 +3023,12 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 for (int i = 0; i < recipentUsers.Count; i++)
                 {
                     SendEMail(client, recipentUsers[i], null, subject, message, pdf, isHTML, tableID, RecID, action);
-                    
+
 
                 }
             }
 
-           
+
         }
 
         private String ParseVariable(String variable, PO po)
@@ -3254,7 +3265,7 @@ WHERE VADMS_Document_ID = " + (int)_po.Get_Value("VADMS_Document_ID") + @" AND R
                 }
             }
         }
-        
+
 
         // Save email to database and call singleton call object to start its working, if node is set as run background otherwise run simply
         public bool SendEMailBack(MClient client, String toEMail, String toName, String subject, String message, FileInfo attachment, bool isHtml, int AD_Table_ID, int Record_ID, byte[] array = null, String fileName = "Rpt.pdf")

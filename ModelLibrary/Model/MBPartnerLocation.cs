@@ -437,7 +437,22 @@ namespace VAdvantage.Model
             else
             {
                 //	Above Watch Limit
-                Decimal watchAmt = Decimal.Multiply(creditLimit, bp.GetCreditWatchRatio());
+                //Peference check if credit watch per is zero on header then gets the value from bpgroup 
+                Decimal watchAmt;
+                if (bp.Get_ColumnIndex("CreditWatchPercent") > 0)
+                {
+                    if (bp.GetCreditWatchPercent() == 0)
+                    {
+                        watchAmt = Decimal.Multiply(creditLimit, bp.GetCreditWatchRatio());
+
+                    }
+                    else
+                        watchAmt = Decimal.Multiply(creditLimit, bp.GetCustomerCreditWatch());
+                }
+                else
+                {
+                    watchAmt = Decimal.Multiply(creditLimit, bp.GetCreditWatchRatio());
+                }
                 if (watchAmt.CompareTo(GetTotalOpenBalance()) < 0)
                     SetSOCreditStatus(SOCREDITSTATUS_CreditWatch);
                 else	//	is OK
@@ -467,3 +482,4 @@ namespace VAdvantage.Model
         }
     }
 }
+
