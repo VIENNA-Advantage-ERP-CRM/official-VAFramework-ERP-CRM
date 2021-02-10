@@ -964,7 +964,7 @@ namespace VAdvantage.Model
                     MVABOrder order = new MVABOrder(GetCtx(), Util.GetValueOfInt(GetVAB_Order_ID()), null);
                     MProduct product = new MProduct(GetCtx(), Util.GetValueOfInt(GetVAM_Product_ID()), null);
                     MVABBusinessPartner bPartner = new MVABBusinessPartner(GetCtx(), order.GetVAB_BusinessPartner_ID(), null);
-                    MDiscountSchema discountSchema = new MDiscountSchema(GetCtx(), bPartner.GetVAM_DiscountCalculation_ID(), null);
+                    MVAMDiscountCalculation discountSchema = new MVAMDiscountCalculation(GetCtx(), bPartner.GetVAM_DiscountCalculation_ID(), null);
                     int precision = MVABCurrency.GetStdPrecision(GetCtx(), order.GetVAB_Currency_ID());
                     String epl = GetCtx().GetContext("EnforcePriceLimit");
                     bool enforce = order.IsSOTrx() && epl != null && epl.Equals("Y");

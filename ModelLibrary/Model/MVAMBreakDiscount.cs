@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MDiscountSchema
+ * Class Name     : MVAMDiscountCalculation
  * Purpose        : Discount Calculation purposes
  * Class Used     : X_VAM_BreakDiscount
  * Chronological    Development
@@ -24,7 +24,7 @@ using System.Data;
 
 namespace VAdvantage.Model
 {
-    public class MDiscountSchemaBreak : X_VAM_BreakDiscount
+    public class MVAMBreakDiscount : X_VAM_BreakDiscount
     {
         /// <summary>
         /// Standard Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAM_BreakDiscount_ID"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchemaBreak(Ctx ctx, int VAM_BreakDiscount_ID, Trx trxName)
+        public MVAMBreakDiscount(Ctx ctx, int VAM_BreakDiscount_ID, Trx trxName)
             : base(ctx, VAM_BreakDiscount_ID, trxName)
         {
 
@@ -44,7 +44,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchemaBreak(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMBreakDiscount(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MDiscountSchemaBreak[");
+            StringBuilder sb = new StringBuilder("MVAMBreakDiscount[");
             sb.Append(Get_ID()).Append("-Seq=").Append(GetSeqNo());
             if (GetVAM_ProductCategory_ID() != 0)
                 sb.Append(",VAM_ProductCategory_ID=").Append(GetVAM_ProductCategory_ID());

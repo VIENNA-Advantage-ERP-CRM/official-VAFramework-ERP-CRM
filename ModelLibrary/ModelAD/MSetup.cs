@@ -3689,9 +3689,9 @@ namespace VAdvantage.Model
                 if (!pl.Save())
                     log.Log(Level.SEVERE, "PriceList NOT inserted");
                 //  Price List
-                MDiscountSchema ds = new MDiscountSchema(m_ctx, 0, m_trx);
+                MVAMDiscountCalculation ds = new MVAMDiscountCalculation(m_ctx, 0, m_trx);
                 ds.SetName(defaultName);
-                ds.SetDiscountType(MDiscountSchema.DISCOUNTTYPE_Pricelist);
+                ds.SetDiscountType(MVAMDiscountCalculation.DISCOUNTTYPE_Pricelist);
                 if (!ds.Save())
                     log.Log(Level.SEVERE, "DiscountSchema NOT inserted");
                 //  PriceList Version

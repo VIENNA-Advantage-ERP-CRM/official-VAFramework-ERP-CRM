@@ -39,7 +39,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new Exception("@VAM_DiscountCalculation_ID@ = 0");
             }
-            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _VAM_DiscountCalculation_ID, Get_TrxName());
+            MVAMDiscountCalculation ds = new MVAMDiscountCalculation(GetCtx(), _VAM_DiscountCalculation_ID, Get_TrxName());
             if (ds.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ VAM_DiscountCalculation_ID=" + _VAM_DiscountCalculation_ID);

@@ -1851,7 +1851,7 @@ namespace VIS.Models
             if (dsDiscountBreak != null && dsDiscountBreak.Tables.Count > 0 && dsDiscountBreak.Tables[0].Rows.Count > 0)
             {
                 discountType = Util.GetValueOfString(dsDiscountBreak.Tables[0].Rows[0]["DiscountType"]);
-                if (discountType == MDiscountSchema.DISCOUNTTYPE_FlatPercent)
+                if (discountType == MVAMDiscountCalculation.DISCOUNTTYPE_FlatPercent)
                 {
                     isCalulate = true;
                     if (Util.GetValueOfString(dsDiscountBreak.Tables[0].Rows[0]["IsBPartnerFlatDiscount"]) == "N")
@@ -1867,7 +1867,7 @@ namespace VIS.Models
                     return amountAfterBreak;
                 }
 
-                else if (discountType == MDiscountSchema.DISCOUNTTYPE_Breaks)
+                else if (discountType == MVAMDiscountCalculation.DISCOUNTTYPE_Breaks)
                 {
                     // Product Based
                     sql = "SELECT VAM_ProductCategory_ID , VAM_Product_ID , BreakValue , IsBPartnerFlatDiscount , BreakDiscount FROM VAM_BreakDiscount WHERE "

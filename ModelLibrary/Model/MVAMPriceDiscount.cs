@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MDiscountSchemaLine
+ * Class Name     : MVAMPriceDiscount
  * Purpose        : Discount Schema Line (Price List) Model
  * Class Used     : X_VAM_PriceDiscount
  * Chronological    Development
@@ -23,7 +23,7 @@ using VAdvantage.Utility;
 using System.Data;
 namespace VAdvantage.Model
 {
-    public class MDiscountSchemaLine : X_VAM_PriceDiscount
+    public class MVAMPriceDiscount : X_VAM_PriceDiscount
     {
         /// <summary>
         /// Standard Constructor
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAM_PriceDiscount_ID"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchemaLine(Ctx ctx, int VAM_PriceDiscount_ID, Trx trxName)
+        public MVAMPriceDiscount(Ctx ctx, int VAM_PriceDiscount_ID, Trx trxName)
             : base(ctx, VAM_PriceDiscount_ID, trxName)
         {
 
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchemaLine(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMPriceDiscount(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 

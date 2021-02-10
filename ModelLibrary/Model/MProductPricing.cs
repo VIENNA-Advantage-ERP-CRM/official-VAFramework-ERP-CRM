@@ -698,7 +698,7 @@ namespace VAdvantage.Model
                 if (VAM_DiscountCalculation_ID == 0)
                     return;
 
-                MDiscountSchema sd = MDiscountSchema.Get(Env.GetContext(), VAM_DiscountCalculation_ID);	//	not correct
+                MVAMDiscountCalculation sd = MVAMDiscountCalculation.Get(Env.GetContext(), VAM_DiscountCalculation_ID);	//	not correct
                 if (sd.Get_ID() == 0)
                     return;
                 //

@@ -191,11 +191,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             /**
              *	For All Discount Lines in Sequence
              */
-            MDiscountSchema ds = new MDiscountSchema(GetCtx(), _plv.GetVAM_DiscountCalculation_ID(), Get_TrxName());
-            MDiscountSchemaLine[] dsl = ds.GetLines(false);
+            MVAMDiscountCalculation ds = new MVAMDiscountCalculation(GetCtx(), _plv.GetVAM_DiscountCalculation_ID(), Get_TrxName());
+            MVAMPriceDiscount[] dsl = ds.GetLines(false);
             for (int i = 0; i < dsl.Length; i++)
             {
-                MDiscountSchemaLine dsLine = dsl[i];
+                MVAMPriceDiscount dsLine = dsl[i];
                 String message = "#" + dsLine.GetSeqNo();
                 String dd = dsLine.GetDescription();
                 if (dd != null && dd.Length > 0)
@@ -387,19 +387,19 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             Decimal? calc = null;
             double dd = 0.0;
-            if (MDiscountSchemaLine.LIST_BASE_ListPrice.Equals(base1))
+            if (MVAMPriceDiscount.LIST_BASE_ListPrice.Equals(base1))
             {
                 dd = Convert.ToDouble(list);//.doubleValue();
             }
-            else if (MDiscountSchemaLine.LIST_BASE_StandardPrice.Equals(base1))
+            else if (MVAMPriceDiscount.LIST_BASE_StandardPrice.Equals(base1))
             {
                 dd = Convert.ToDouble(std);//.doubleValue();
             }
-            else if (MDiscountSchemaLine.LIST_BASE_LimitPOPrice.Equals(base1))
+            else if (MVAMPriceDiscount.LIST_BASE_LimitPOPrice.Equals(base1))
             {
                 dd = Convert.ToDouble(limit);//.doubleValue();
             }
-            else if (MDiscountSchemaLine.LIST_BASE_FixedPrice.Equals(base1))
+            else if (MVAMPriceDiscount.LIST_BASE_FixedPrice.Equals(base1))
             {
                 calc = fix;
             }
@@ -420,45 +420,45 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 calc = new Decimal(dd);
             }
             //	Rounding
-            if (MDiscountSchemaLine.LIST_ROUNDING_CurrencyPrecision.Equals(round))
+            if (MVAMPriceDiscount.LIST_ROUNDING_CurrencyPrecision.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, curPrecision, MidpointRounding.AwayFromZero);//calc.setScale(curPrecision, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Dime102030.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Dime102030.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, 1, MidpointRounding.AwayFromZero);//calc.setScale(1, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Hundred.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Hundred.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, -2, MidpointRounding.AwayFromZero);//calc.setScale(-2, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Nickel051015.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Nickel051015.Equals(round))
             {
                 Decimal mm = new Decimal(20);
                 calc = Decimal.Multiply(calc.Value, mm);
                 calc = Decimal.Round(calc.Value, 0, MidpointRounding.AwayFromZero);//calc.setScale(0, Decimal.ROUND_HALF_UP);
                 calc = Decimal.Round(Decimal.Divide(calc.Value, mm), 2, MidpointRounding.AwayFromZero);// Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_NoRounding.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_NoRounding.Equals(round))
             {
                 ;
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Quarter255075.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Quarter255075.Equals(round))
             {
                 Decimal mm = new Decimal(4);
                 calc = Decimal.Multiply(calc.Value, mm);
                 calc = Decimal.Round(calc.Value, 0, MidpointRounding.AwayFromZero);// calc.setScale(0, Decimal.ROUND_HALF_UP);
                 calc = Decimal.Round(Decimal.Divide(calc.Value, mm), 2, MidpointRounding.AwayFromZero);// calc.divide(mm, 2, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Ten10002000.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Ten10002000.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, -1, MidpointRounding.AwayFromZero);//calc.setScale(-1, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_Thousand.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_Thousand.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, -3, MidpointRounding.AwayFromZero);//calc.setScale(-3, Decimal.ROUND_HALF_UP);
             }
-            else if (MDiscountSchemaLine.LIST_ROUNDING_WholeNumber00.Equals(round))
+            else if (MVAMPriceDiscount.LIST_ROUNDING_WholeNumber00.Equals(round))
             {
                 calc = Decimal.Round(calc.Value, 0, MidpointRounding.AwayFromZero);//calc.setScale(0, Decimal.ROUND_HALF_UP);
             }

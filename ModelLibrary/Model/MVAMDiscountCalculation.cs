@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MDiscountSchema
+ * Class Name     : MVAMDiscountCalculation
  * Purpose        : Discount Schema Model
  * Class Used     : X_VAM_DiscountCalculation 
  * Chronological    Development
@@ -25,15 +25,15 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MDiscountSchema : X_VAM_DiscountCalculation
+    public class MVAMDiscountCalculation : X_VAM_DiscountCalculation
     {
         #region Privatevariables
         //	Cache						
-        private static CCache<int, MDiscountSchema> s_cache = new CCache<int, MDiscountSchema>("VAM_DiscountCalculation", 20);
+        private static CCache<int, MVAMDiscountCalculation> s_cache = new CCache<int, MVAMDiscountCalculation>("VAM_DiscountCalculation", 20);
         //	Breaks						
-        private MDiscountSchemaBreak[] _breaks = null;
+        private MVAMBreakDiscount[] _breaks = null;
         //Lines							
-        private MDiscountSchemaLine[] _lines = null;
+        private MVAMPriceDiscount[] _lines = null;
         #endregion
 
         /// <summary>
@@ -41,14 +41,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAM_DiscountCalculation_ID">id</param>
-        /// <returns><MDiscountSchema/returns>
-        public static MDiscountSchema Get(Ctx ctx, int VAM_DiscountCalculation_ID)
+        /// <returns><MVAMDiscountCalculation/returns>
+        public static MVAMDiscountCalculation Get(Ctx ctx, int VAM_DiscountCalculation_ID)
         {
             int key = VAM_DiscountCalculation_ID;
-            MDiscountSchema retValue = (MDiscountSchema)s_cache[key];
+            MVAMDiscountCalculation retValue = (MVAMDiscountCalculation)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MDiscountSchema(ctx, VAM_DiscountCalculation_ID, null);
+            retValue = new MVAMDiscountCalculation(ctx, VAM_DiscountCalculation_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAM_DiscountCalculation_ID"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchema(Ctx ctx, int VAM_DiscountCalculation_ID, Trx trxName)
+        public MVAMDiscountCalculation(Ctx ctx, int VAM_DiscountCalculation_ID, Trx trxName)
             : base(ctx, VAM_DiscountCalculation_ID, trxName)
         {
             if (VAM_DiscountCalculation_ID == 0)
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MDiscountSchema(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMDiscountCalculation(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -91,13 +91,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="reload">reload</param>
         /// <returns>breaks</returns>
-        public MDiscountSchemaBreak[] GetBreaks(bool reload)
+        public MVAMBreakDiscount[] GetBreaks(bool reload)
         {
             if (_breaks != null && !reload)
                 return _breaks;
 
             String sql = "SELECT * FROM VAM_BreakDiscount WHERE VAM_DiscountCalculation_ID=" + GetVAM_DiscountCalculation_ID() + " ORDER BY SeqNo";
-            List<MDiscountSchemaBreak> list = new List<MDiscountSchemaBreak>();
+            List<MVAMBreakDiscount> list = new List<MVAMBreakDiscount>();
             DataSet ds = new DataSet();
             try
             {
@@ -105,7 +105,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MDiscountSchemaBreak(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMBreakDiscount(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -113,7 +113,7 @@ namespace VAdvantage.Model
             {
                 log.Log(Level.SEVERE, sql, e);
             }
-            _breaks = new MDiscountSchemaBreak[list.Count];
+            _breaks = new MVAMBreakDiscount[list.Count];
             _breaks = list.ToArray();
             return _breaks;
         }
@@ -123,13 +123,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="reload">reload</param>
         /// <returns>lines</returns>
-        public MDiscountSchemaLine[] GetLines(bool reload)
+        public MVAMPriceDiscount[] GetLines(bool reload)
         {
             if (_lines != null && !reload)
                 return _lines;
 
             String sql = "SELECT * FROM VAM_PriceDiscount WHERE VAM_DiscountCalculation_ID=" + GetVAM_DiscountCalculation_ID() + " ORDER BY SeqNo";
-            List<MDiscountSchemaLine> list = new List<MDiscountSchemaLine>();
+            List<MVAMPriceDiscount> list = new List<MVAMPriceDiscount>();
             DataSet ds = new DataSet();
             try
             {
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MDiscountSchemaLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMPriceDiscount(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            _lines = new MDiscountSchemaLine[list.Count];
+            _lines = new MVAMPriceDiscount[list.Count];
             _lines = list.ToArray();
             return _lines;
         }
@@ -232,7 +232,7 @@ namespace VAdvantage.Model
             }
             for (int i = 0; i < _breaks.Length; i++)
             {
-                MDiscountSchemaBreak br = _breaks[i];
+                MVAMBreakDiscount br = _breaks[i];
                 if (!br.IsActive())
                 {
                     continue;
@@ -296,7 +296,7 @@ namespace VAdvantage.Model
         {
             int count = 0;
             //	Lines
-            MDiscountSchemaLine[] lines = GetLines(true);
+            MVAMPriceDiscount[] lines = GetLines(true);
             for (int i = 0; i < lines.Length; i++)
             {
                 int line = (i + 1) * 10;
@@ -312,7 +312,7 @@ namespace VAdvantage.Model
             _lines = null;
 
             //	Breaks
-            MDiscountSchemaBreak[] breaks = GetBreaks(true);
+            MVAMBreakDiscount[] breaks = GetBreaks(true);
             for (int i = 0; i < breaks.Length; i++)
             {
                 int line = (i + 1) * 10;
