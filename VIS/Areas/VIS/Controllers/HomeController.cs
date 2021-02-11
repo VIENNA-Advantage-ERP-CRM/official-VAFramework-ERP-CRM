@@ -44,6 +44,20 @@ namespace VIS.Controllers
 
         private static readonly object _lock = new object();
 
+
+       
+        //public ActionResult Index(string param )
+        //{
+        //   // FormCollection fc = null;
+        //    if (!string.IsNullOrEmpty(param))
+        //    {
+        //     //   fc = new FormCollection();
+        //        TempData["param"] =  param;
+        //        RedirectToAction("Index");
+        //    }
+        //    return Home(null);
+        //}
+
         //[MethodImpl(MethodImplOptions.Synchronized)]
         //[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         /// <summary>
@@ -53,6 +67,20 @@ namespace VIS.Controllers
         /// <returns></returns>
         public ActionResult Index(FormCollection form)
         {
+            if (Request.QueryString.Count>0)
+            {
+               // string user = Request.QueryString["U"];
+               // string pwd = Request.QueryString["P"];
+               // AccountController ac = new AccountController();
+               // LoginModel md = new LoginModel();
+               // md.Login1Model = new Login1Model();
+               // md.Login1Model.UserValue = user;
+               // md.Login1Model.Password = pwd;
+               //JsonResult jr =  ac.JsonLogin(md, "");
+               // ac.SetAuthCookie(md, Response); //AutoLogin if all passed
+               // return RedirectToAction("Index");
+            }
+
             //if (!User.Identity.IsAuthenticated)
             //{
             //    // Required to allow javascript redirection through to browser
@@ -74,11 +102,15 @@ namespace VIS.Controllers
             }
 
             VAdvantage.DataBase.DBConn.SetConnectionString();//Init database conection
+            Language.GetLanguages();
             LoginModel model = null;
             if (User.Identity.IsAuthenticated)
             {
-                
 
+                if (Request.QueryString.Count > 0) /* if has value */
+                {
+                    return RedirectToAction("Index"); /*redirect to same url without querystring*/
+                }
                 try
                 {
                     //var conf = WebConfigurationManager.OpenWebConfiguration(System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath);
@@ -304,10 +336,29 @@ namespace VIS.Controllers
 
             else
             {
+
                 model = new LoginModel();
                 model.Login1Model = new Login1Model();
-                //model.Login1Model.UserName = "SuperUser";
-                //model.Login1Model.Password = "System";
+                if (Request.QueryString.Count > 0) /* if query has values*/
+                {
+                    try
+                    {
+                        TempData["user"] = SecureEngine.Decrypt(Request.QueryString["U"]); //get uservalue
+                        TempData["pwd"] = SecureEngine.Decrypt(Request.QueryString["P"]);//get userpwd
+                    }
+                    catch
+                    {
+                        TempData.Clear();
+                    }
+                    return RedirectToAction("Index"); // redirect to same url to remove cookie
+                }
+
+                if (TempData.ContainsKey("user"))
+                {
+                    model.Login1Model.UserValue = TempData["user"].ToString() + "^Y^"+ TempData["pwd"].ToString();
+                   // model.Login1Model.Password = TempData.Peek("pwd").ToString();
+                }
+
                 model.Login1Model.LoginLanguage = "en_US";
                 model.Login2Model = new Login2Model();
 

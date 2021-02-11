@@ -3820,9 +3820,21 @@ namespace VAdvantage.Model
                     resetTotalAmtDim = true;
                 }
 
-                //}
-                // End CHange
-
+                //Develop by Deekshant Girotra Calculate total margin ,margin percentage,
+                if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                {
+                    
+                    decimal margin = 0;
+                    decimal marginper = 0;
+                    if (GetPriceEntered() != 0)
+                    {
+                        margin = GetPriceEntered() - Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"));
+                        marginper = (margin / GetPriceEntered()) * 100;
+                    }
+                    Set_Value("VA077_MarginAmt", margin);
+                    Set_Value("VA077_MarginPercent", marginper);
+                    
+                }
             }
             catch (Exception ex)
             {
@@ -3914,6 +3926,24 @@ namespace VAdvantage.Model
                     {
                         log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_HoldPaymentNotUpdated")); ;
                         return false;
+
+                    }
+                }
+                //Develop by Deekshant For VA077 Module sales,purchase,margin
+                if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
+                {
+                    string sql = "UPDATE C_Invoice  p SET " +
+        "VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
+        ",VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
+        ",VA077_MarginPercent=(SELECT COALESCE(SUM(pl.VA077_MarginPercent),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
+        ",VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0)  FROM C_InvoiceLine pl WHERE pl.IsActive = 'Y' AND pl.C_Invoice_ID = " + GetC_Invoice_ID() + ")" +
+
+        " WHERE p.C_Invoice_ID=" + GetC_Invoice_ID();
+                    int no = DB.ExecuteQuery(sql, null, Get_TrxName());
+                    if (no <= 0)
+                    {
+                        log.SaveWarning("", Msg.GetMsg(GetCtx(), "VIS_NotUpdated"));
+                        return false;
                     }
                 }
             }
@@ -3921,6 +3951,7 @@ namespace VAdvantage.Model
             {
                 // MessageBox.Show("MInvoiceLine--AfterSave");
             }
+
             return UpdateHeaderTax();
         }
 
@@ -4056,7 +4087,7 @@ namespace VAdvantage.Model
                 {
                     if (!invoice.SetWithholdingAmount(invoice))
                     {
-                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx() , "WrongBackupWithholding"));
+                        log.SaveWarning("Warning", Msg.GetMsg(GetCtx(), "WrongBackupWithholding"));
                     }
                     else
                     {

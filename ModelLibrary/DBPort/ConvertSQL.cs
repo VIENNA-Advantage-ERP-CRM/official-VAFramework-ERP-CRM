@@ -181,6 +181,8 @@ namespace VAdvantage.DBPort
         /// <returns></returns>
         protected virtual String ReplaceQuotedStrings(String inputValue, List<String> retVars)
         {
+            //TODO -- after discussion with Harwinder Sir (15-Dec-2020)
+            return inputValue;
             // save every value  
             // Carlos Ruiz - globalqss - better matching regexp
             retVars.Clear();

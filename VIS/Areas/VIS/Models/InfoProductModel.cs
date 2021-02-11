@@ -202,7 +202,7 @@ namespace VIS.Models
                 sqlWhere = MRole.GetDefault(ctx).AddAccessSQL(sqlWhere, tableName,
                                 MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 //DataSet data = DBase.DB.ExecuteDataset(sql, null, null);
-                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM ( " + sqlWhere + " ) t", null, null));
+                int totalRec = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(p.M_Product_ID) " + sqlWhere.Substring(sqlWhere.IndexOf("FROM")), null, null));
                 int pageSize = 50;
                 PageSetting pSetting = new PageSetting();
                 pSetting.CurrentPage = pageNo;
@@ -218,7 +218,8 @@ namespace VIS.Models
                         LEFT OUTER JOIN C_UOM c ON (p.C_UOM_ID=c.C_UOM_ID)
                         LEFT OUTER JOIN M_Manufacturer mr ON (p.M_Product_ID = mr.M_Product_ID)
                         LEFT OUTER JOIN M_ProductAttributes patr ON (p.M_Product_ID = patr.M_Product_ID)
-                        , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, w.M_Warehouse_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
+                        LEFT OUTER JOIN C_UOM_Conversion uc ON (p.M_Product_ID = uc.M_Product_ID)
+                        , M_Warehouse w " + where + " ORDER BY p.M_Product_ID, M_PriceList_Version_ID, M_AttriButeSetInstance_ID, C_UOM_ID";
                 sqlPaging = MRole.GetDefault(ctx).AddAccessSQL(sqlPaging, tableName, MRole.SQL_FULLYQUALIFIED, MRole.SQL_RO);
                 sqlPaging = @"JOIN (SELECT row_num, M_Product_ID, M_AttriButeSetInstance_ID, C_UOM_ID, M_PriceList_Version_ID, M_Warehouse_ID FROM (SELECT prd.*, row_number() over (order by prd.M_Product_ID) AS row_num FROM 
                         (" + sqlPaging + @") prd) t WHERE row_num BETWEEN " + startPage + " AND " + endPage +
@@ -1955,7 +1956,7 @@ namespace VIS.Models
         {
             List<Dictionary<string, object>> retWare = null;
             string sql = MRole.GetDefault(ctx).AddAccessSQL("SELECT M_Warehouse_ID, Value || ' - ' || Name AS ValueName FROM M_Warehouse WHERE IsActive='Y'",
-                    "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY Value";
+                    "M_Warehouse", MRole.SQL_NOTQUALIFIED, MRole.SQL_RO) + " ORDER BY Name";
             DataSet ds = DB.ExecuteDataset(sql, null, null);
             if (ds != null && ds.Tables[0].Rows.Count > 0)
             {

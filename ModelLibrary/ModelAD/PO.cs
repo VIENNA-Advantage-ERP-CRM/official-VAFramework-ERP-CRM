@@ -2067,6 +2067,7 @@ namespace VAdvantage.Model
 
 
         private Dictionary<String, String> m_custom = null;
+        private static Dictionary<int, StringBuilder> logbatch = new Dictionary<int, StringBuilder>();
 
         private const string TYPE_DATE_TIME = "System.DateTime";
         private const string TYPE_INT32 = "System.Int32";
@@ -2252,23 +2253,52 @@ namespace VAdvantage.Model
             bool ok;
             try
             {
-                string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                StringBuilder adLog = null;
+                //string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                {
+                    adLog = logbatch[session.GetAD_Session_ID()];
+                }
+                else if (session != null)
+                {
+                    adLog = new StringBuilder();
+                    logbatch[session.GetAD_Session_ID()] = adLog;
+                }
+
+
+
+
                 if (p_info.GetTableName() == "AD_ChangeLog")
                 {
-                    if (adLog.Length <= 0)
-                        adLog = "BEGIN ";
+                    if ((adLog == null || adLog.Length <= 0) && !DB.IsPostgreSQL())
+                    {
+                        adLog.Append("BEGIN ");
+                    }
 
-                    p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                    if (DB.IsPostgreSQL())
+                    {
+                        //p_ctx.SetContext("AD_ChangeLogBatch", adLog + " SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                        adLog.Append(" SELECT ExecuteImmediate('" + strSqlInsert.Replace("'", "''") + "');");
+                    }
+                    else
+                        //p_ctx.SetContext("AD_ChangeLogBatch", adLog + "execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
+                        adLog.Append("execute immediate('" + strSqlInsert.ToString().Replace("'", "''") + "');");
                     //no = 1;
                     return true;
                 }
                 else
                 {
-                    if (adLog.Length > 6)
+                    if (adLog != null && adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
-                        p_ctx.SetContext("AD_ChangeLogBatch", "");
-                        no = DB.ExecuteQuery(adLogDB, null, _trx);
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLog.Append( " END; ");
+                        }
+
+                        //p_ctx.SetContext("AD_ChangeLogBatch", "");
+                        adLog.Replace("TO_DATE", "TO_TIMESTAMP");
+                        no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
+                        adLog.Clear();
                     }
                     else
                     {
@@ -2625,12 +2655,25 @@ namespace VAdvantage.Model
                 bool ok;
                 try
                 {
-                    string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
-                    if (adLog.Length > 6)
+                    //string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                    StringBuilder adLog = null;
+                    if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
                     {
-                        string adLogDB = adLog + " END; ";
-                        p_ctx.SetContext("AD_ChangeLogBatch", "");
-                        no = DB.ExecuteQuery(adLogDB, null, _trx);
+                        adLog = logbatch[session.GetAD_Session_ID()];
+                    }
+
+                    if (adLog != null && adLog.Length > 6)
+                    {
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLog.Append(" END; ");
+                        }
+
+                        //p_ctx.SetContext("AD_ChangeLogBatch", "");
+                        //logbatch[session.GetAD_Session_ID()].Clear();
+                        adLog.Replace("TO_DATE", "TO_TIMESTAMP");
+                        no = DB.ExecuteQuery(adLog.ToString(), null, _trx);
+                        adLog.Clear();
                     }
                     else
                     {
@@ -2694,7 +2737,8 @@ namespace VAdvantage.Model
                 // Get Master Data Properties
                 var MasterDetails = GetMasterDetails();
                 // check if Record has any Workflow (Value Type) linked, or Is Immediate save etc
-                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 && MasterDetails.ImmediateSave && !MasterDetails.HasDocValWF)
+                if (MasterDetails != null && MasterDetails.AD_Table_ID > 0 &&
+                    (MasterDetails.ImmediateSave || MasterDetails.IsLatestVersion) && !MasterDetails.HasDocValWF)
                 {
                     // create object of parent table
                     MTable tbl = MTable.Get(p_ctx, MasterDetails.AD_Table_ID);
@@ -2720,14 +2764,14 @@ namespace VAdvantage.Model
                                 if (keyCols[w] != null)
                                     whereCond.Append(keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                             else
                             {
                                 if (keyCols[w] != null)
                                     whereCond.Append(" AND " + keyCols[w] + " = " + Get_Value(keyCols[w]));
                                 else
-                                    whereCond.Append(" AND NVL(" + keyCols[w] + ",0) = 0");
+                                    whereCond.Append(" AND COALESCE(" + keyCols[w] + ",0) = 0");
                             }
                         }
                         po = tbl.GetPO(p_ctx, whereCond.ToString(), _trx);
@@ -3342,101 +3386,121 @@ namespace VAdvantage.Model
                 log.SaveError("CannotDelete", errorMsg);
                 return false;
             }
-
-            errorMsg = ModelValidationEngine.Get().FireModelChange(this, ModalValidatorVariables.CHANGETYPE_DELETE);
-            if (errorMsg != null)
-            {
-                log.SaveError("Error", errorMsg);
-                return false;
-            }
-
             Trx localTrx = null;
             bool isLocalTrx = false;
-            localTrx = _trx;
-            if (_trx == null)
-            {
-                localTrx = Trx.Get("POdel");
-                isLocalTrx = true;
-            }
+
             bool success = false;
-            //// Delete translationa of the record
-            DeleteTranslations(localTrx);
-
-            //	Delete Cascade AD_Table_ID/Record_ID (Attachments, ..)
-            PORecord.DeleteCascade(AD_Table_ID, Record_ID, localTrx);
-
-            //	The Delete Statement
-            StringBuilder sql = new StringBuilder("DELETE FROM ").Append(p_info.GetTableName())
-                .Append(" WHERE ").Append(Get_WhereClause(true));
-            int no = DB.ExecuteQuery(sql.ToString(), null, localTrx);
-            success = no == 1;
-
-            // commit the transaction
-            _idOld = Get_ID();
-
-            if (!success)
+            try
             {
-                log.Warning("Not deleted");
-                if (isLocalTrx)
-                    localTrx.Rollback();
-            }
-            else
-            {
-                if (isLocalTrx)
-                    localTrx.Commit();
-                //	Change Log
-                MSession session = MSession.Get(GetCtx(), false);
-                if (session == null)
+                errorMsg = ModelValidationEngine.Get().FireModelChange(this, ModalValidatorVariables.CHANGETYPE_DELETE);
+                if (errorMsg != null)
                 {
-                    log.Fine("No Session found");
-                }
-                else if (session.IsWebStoreSession()
-                    || MChangeLog.IsLogged(AD_Table_ID, MChangeLog.CHANGELOGTYPE_Delete))
-                {
-                    int AD_ChangeLog_ID = 0;
-                    int size = Get_ColumnCount();
-                    for (int i = 0; i < size; i++)
-                    {
-                        Object value = _mOldValues[i];
-                        if (_mIDs.Length == 1 && value != null
-                           && !p_info.IsEncrypted(i)		//	not encrypted
-                           && !p_info.IsVirtualColumn(i)	//	no virtual column
-                           && !"Password".Equals(p_info.GetColumnName(i))
-                           )
-                        {
-                            Object keyInfo = Get_ID();
-                            if (_mIDs.Length != 1)
-                                keyInfo = Get_WhereClause(true);
-                            MChangeLog cLog = session.ChangeLog(
-                                _trx, AD_ChangeLog_ID,
-                                AD_Table_ID, p_info.GetColumn(i).AD_Column_ID,
-                                keyInfo, GetAD_Client_ID(), GetAD_Org_ID(), value, null,
-                                Get_TableName(), MChangeLog.CHANGELOGTYPE_Delete);
-                            if (cLog != null)
-                                AD_ChangeLog_ID = cLog.GetAD_ChangeLog_ID();
-                        }
-                    }	//   for all fields
+                    log.SaveError("Error", errorMsg);
+                    return false;
                 }
 
-                string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
-                if (adLog.Length > 6)
-                {
-                    string adLogDB = adLog + " END; ";
-                    p_ctx.SetContext("AD_ChangeLogBatch", "");
-                    no = DB.ExecuteQuery(adLogDB, null, null);
-                }
-
-                //	Housekeeping
-                _mIDs[0] = I_ZERO;
+                localTrx = _trx;
                 if (_trx == null)
                 {
-                    log.Fine("complete");
+                    localTrx = Trx.Get("POdel");
+                    isLocalTrx = true;
+                }
+
+                //// Delete translationa of the record
+                DeleteTranslations(localTrx);
+
+                //	Delete Cascade AD_Table_ID/Record_ID (Attachments, ..)
+                PORecord.DeleteCascade(AD_Table_ID, Record_ID, localTrx);
+
+                //	The Delete Statement
+                StringBuilder sql = new StringBuilder("DELETE FROM ").Append(p_info.GetTableName())
+                .Append(" WHERE ").Append(Get_WhereClause(true));
+                int no = DB.ExecuteQuery(sql.ToString(), null, localTrx);
+                success = no == 1;
+
+                // commit the transaction
+                _idOld = Get_ID();
+
+                if (!success)
+                {
+                    log.Warning("Not deleted");
+                    if (isLocalTrx)
+                        localTrx.Rollback();
                 }
                 else
                 {
-                    log.Fine("[" + _trx.GetTrxName() + "] - complete");
+                    if (isLocalTrx)
+                        localTrx.Commit();
+                    //	Change Log
+                    MSession session = MSession.Get(GetCtx(), false);
+                    if (session == null)
+                    {
+                        log.Fine("No Session found");
+                    }
+                    else if (session.IsWebStoreSession()
+                        || MChangeLog.IsLogged(AD_Table_ID, MChangeLog.CHANGELOGTYPE_Delete))
+                    {
+                        int AD_ChangeLog_ID = 0;
+                        int size = Get_ColumnCount();
+                        for (int i = 0; i < size; i++)
+                        {
+                            Object value = _mOldValues[i];
+                            if (_mIDs.Length == 1 && value != null
+                               && !p_info.IsEncrypted(i)        //	not encrypted
+                               && !p_info.IsVirtualColumn(i)    //	no virtual column
+                               && !"Password".Equals(p_info.GetColumnName(i))
+                               )
+                            {
+                                Object keyInfo = Get_ID();
+                                if (_mIDs.Length != 1)
+                                    keyInfo = Get_WhereClause(true);
+                                MChangeLog cLog = session.ChangeLog(
+                                    _trx, AD_ChangeLog_ID,
+                                    AD_Table_ID, p_info.GetColumn(i).AD_Column_ID,
+                                    keyInfo, GetAD_Client_ID(), GetAD_Org_ID(), value, null,
+                                    Get_TableName(), MChangeLog.CHANGELOGTYPE_Delete);
+                                if (cLog != null)
+                                    AD_ChangeLog_ID = cLog.GetAD_ChangeLog_ID();
+                            }
+                        }   //   for all fields
+                    }
+
+                    // string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
+                    StringBuilder adLog = null;
+                    if (session != null && logbatch.ContainsKey(session.GetAD_Session_ID()))
+                    {
+                        adLog = logbatch[session.GetAD_Session_ID()];
+                    }
+                    if (adLog != null && adLog.Length > 6)
+                    {
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLog.Append( " END; ");
+                        }
+                        adLog.Replace("TO_DATE", "TO_TIMESTAMP");
+                        no = DB.ExecuteQuery(adLog.ToString(), null, null);
+                        adLog.Clear();
+
+
+                    }
+
+
+                    //	Housekeeping
+                    _mIDs[0] = I_ZERO;
+                    if (_trx == null)
+                    {
+                        log.Fine("complete");
+                    }
+                    else
+                    {
+                        log.Fine("[" + _trx.GetTrxName() + "] - complete");
+                    }
+                    _attachment = null;
                 }
-                _attachment = null;
+            }
+            catch (Exception ex)
+            {
+
             }
             if (isLocalTrx)
                 localTrx.Close();
@@ -4398,15 +4462,28 @@ namespace VAdvantage.Model
                        po.GetSaveUpdateQueryInfo();
 
                     Ctx p_ctx = new Ctx();
+
                     string adLog = p_ctx.GetContext("AD_ChangeLogBatch");
-                    if (adLog.Length > 6)
+                    if (adLog != null && adLog.Length > 6)
                     {
-                        string adLogDB = adLog + " END; ";
+                        string adLogDB = "";
+                        if (!DB.IsPostgreSQL())
+                        {
+                            adLogDB = adLog + " END; ";
+                        }
+                        else
+                        {
+                            adLogDB = adLog;
+                        }
                         p_ctx.SetContext("AD_ChangeLogBatch", "");
+                        adLogDB= adLogDB.Replace("TO_DATE", "TO_TIMESTAMP");
                         DB.ExecuteQuery(adLogDB, null, null);
                     }
                 }
-                catch { }
+                catch (Exception ex)
+
+                {
+                }
 
                 queries[po] = param;
                 HashSet<PO> pos = null;

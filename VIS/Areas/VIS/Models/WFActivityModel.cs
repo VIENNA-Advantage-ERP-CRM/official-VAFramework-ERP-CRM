@@ -158,6 +158,7 @@ OR
                               INNER JOIN AD_User_Roles ur
                               ON (r.AD_Role_ID            =ur.AD_Role_ID)
                               WHERE a.AD_WF_Responsible_ID=r.AD_WF_Responsible_ID
+                              AND ur.IsActive = 'Y'
                               AND (ur.AD_User_ID          =" + AD_User_ID + @" 
                               OR a.AD_User_ID            IN
                                 (SELECT AD_User_ID
@@ -167,7 +168,7 @@ OR
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
-                              AND r.responsibletype !='H'
+                              AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) ) ";
 
             // if (AD_Window_ID > 0 || (!string.IsNullOrEmpty(searchText) && searchText.Length > 0))
@@ -319,7 +320,7 @@ OR
                                 AND (validfrom  <=sysdate)
                                 AND (sysdate    <=validto )
                                 ))
-                              AND r.responsibletype !='H'
+                              AND r.responsibletype !='H' AND r.responsibletype !='C'
                               ) )";
                     if (whereClause.Length > 7)
                     {
@@ -700,10 +701,15 @@ OR
             {
                 List<int> activitiesID = activityID.Split(',').Select(int.Parse).ToList();
                 activitiesID.Sort();
+                string chkUserTxt = "";
                 for (int i = 0; i < activitiesID.Count; i++)
                 {
+                    chkUserTxt = "";
                     MWFActivity activity = new MWFActivity(ctx, Convert.ToInt32(activitiesID[i]), null);
                     MWFNode node = activity.GetNode();
+                    // Change done to set zoom window from Node
+                    if (node.GetZoomWindow_ID() > 0)
+                        activity.SetAD_Window_ID(node.GetZoomWindow_ID());
                     int approvalLevel = node.GetApprovalLeval();
                     int AD_User_ID = ctx.GetAD_User_ID();
                     MColumn column = node.GetColumn();
@@ -715,7 +721,10 @@ OR
                         {
                             return "";
                         }
-                        if (!activity.ForwardTo(fw, textMsg, true))
+                        //chkUserTxt = CheckUser(fw);
+                        //if (chkUserTxt != "")
+                        //    return chkUserTxt;
+                        if (!activity.ForwardTo(fw, textMsg, true, true))
                         {
                             return "CannotForward";
                         }
@@ -771,11 +780,31 @@ OR
                                                                                 WHERE WFE.AD_WF_Node_ID=" + node.GetAD_WF_Node_ID() + " AND WFA.AD_WF_Activity_ID=" + activity.GetAD_WF_Activity_ID()));
                             if (eventCount < approvalLevel) //Forward Activity
                             {
-                                int superVisiorID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + activity.GetAD_User_ID()));
+                                int AD_WF_Responsible_ID = 0;
+                                if (node.GetAD_WF_Responsible_ID() > 0)
+                                    AD_WF_Responsible_ID = node.GetAD_WF_Responsible_ID();
+                                else if (node.GetWorkflow().GetAD_WF_Responsible_ID() > 0)
+                                    AD_WF_Responsible_ID = node.GetWorkflow().GetAD_WF_Responsible_ID();
+                                MWFResponsible resp = new MWFResponsible(ctx, AD_WF_Responsible_ID, null);
+                                int superVisiorID = 0;
+                                bool setRespOrg = false;
+                                int parentOrg_ID = -1;
+                                if (resp.IsOrganization())
+                                {
+                                    parentOrg_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Parent_Org_Id FROM ad_OrgInfo WHERE AD_Org_ID = " + activity.GetResponsibleOrg_ID()));
+                                    superVisiorID = (new MOrgInfo(ctx, parentOrg_ID, null).GetSupervisor_ID());
+                                    if (superVisiorID > 0)
+                                        setRespOrg = true;                                        
+                                }
+                                else
+                                    superVisiorID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Supervisor_ID FROM AD_User WHERE IsActive='Y' AND AD_User_ID=" + activity.GetAD_User_ID()));
+                                //chkUserTxt = CheckUser(superVisiorID);
+                                //if (chkUserTxt != "")
+                                //    return chkUserTxt;
+                                if(setRespOrg)
+                                    activity.SetResponsibleOrg_ID(parentOrg_ID);
                                 if (superVisiorID == 0)//Approve
                                 {
-                                    //SetUserConfirmation(AD_User_ID, textMsg, activity, node);
-
                                     string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
                                     if (res != "OK")
                                     {
@@ -784,24 +813,14 @@ OR
                                 }
                                 else //forward
                                 {
-
                                     if (!activity.ForwardTo(superVisiorID, textMsg, true))
                                     {
-                                        //Dispatcher.BeginInvoke(delegate
-                                        //{
-                                        //    SetBusy(false);
-                                        //    ShowMessage.Error("CannotForward", true);
-                                        //    return;
-                                        //});
                                         return "CannotForward";
                                     }
                                 }
                             }
                             else //Approve
                             {
-
-                                //SetUserConfirmation(AD_User_ID, textMsg, activity, node);
-
                                 string res = SetUserChoice(AD_User_ID, value, dt, textMsg, activity, node, AD_Window_ID);
                                 if (res != "OK")
                                 {
@@ -849,12 +868,31 @@ OR
             return "";
         }
 
+        /// <summary>
+        /// function to check for non 0 user id and to check whether user is active or not
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="User_ID"></param>
+        /// <returns>string message if user not found or user not active</returns>
+        private string CheckUser(Ctx ctx, int User_ID)
+        {
+            if (User_ID == 0)
+                return Msg.GetMsg(ctx, "ApproverNotFound");
+            else
+            {
+                bool chkActiveUser = Util.GetValueOfString(DB.ExecuteScalar("SELECT IsActive FROM AD_User WHERE AD_User_ID = " + User_ID)).ToLower() == "y";
+                if (!chkActiveUser)
+                    return Msg.GetMsg(ctx, "ApproverNotActive"); ;
+            }
+            return "";
+        }
+
         private string SetUserChoice(int AD_User_ID, string value, int dt, string textMsg, MWFActivity _activity, MWFNode _node, int AD_Window_ID)
         {
             try
             {
                 // Passed AD_Window_ID to process to set windowID at all levels of current activity
-                _activity.SetUserChoice(AD_User_ID, value, dt, textMsg,AD_Window_ID);
+                _activity.SetUserChoice(AD_User_ID, value, dt, textMsg, AD_Window_ID);
                 return "OK";
             }
             catch (Exception ex)

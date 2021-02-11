@@ -92,12 +92,14 @@ namespace VAdvantage.Model
             if (!String.IsNullOrEmpty(GetUPC()) &&
                        Util.GetValueOfString(Get_ValueOld("UPC")) != GetUPC())
             {
-                sql.Append(@"SELECT UPCUNIQUE('a','" + GetUPC() + "') as productID FROM Dual");
-                manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
+                //sql.Append(@"SELECT UPCUNIQUE('a','" + GetUPC() + "') as productID FROM Dual");
+                //manu_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
                 //if (manu_ID != 0 && manu_ID != GetM_Product_ID())
+
+                manu_ID = MProduct.UpcUniqueClientWise(GetAD_Client_ID(), GetUPC());
                 if (manu_ID > 0)
                 {
-                    _log.SaveError(Msg.GetMsg(GetCtx(), "UPCUnique"), "");
+                    _log.SaveError("UPCUnique", "");
                     return false;
                 }
             }
@@ -114,7 +116,7 @@ namespace VAdvantage.Model
                 + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM M_InventoryLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
                 + GetM_AttributeSetInstance_ID() + " UNION SELECT COUNT(*) AS cc FROM C_OrderLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
                 + GetM_AttributeSetInstance_ID() + " UNION  SELECT COUNT(*) AS cc FROM M_InOutLine WHERE M_Product_ID = " + GetM_Product_ID() + " AND M_AttributeSetInstance_ID = "
-                + GetM_AttributeSetInstance_ID() + ")";
+                + GetM_AttributeSetInstance_ID() + ") t";
             int no = Util.GetValueOfInt(DB.ExecuteScalar(uqry));
             if (no > 0)
             {

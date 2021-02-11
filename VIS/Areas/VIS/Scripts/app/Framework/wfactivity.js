@@ -1057,55 +1057,63 @@
             //Add Vtextbox button for User Selection
 
             var liDoit = $("<li>");
-            var aOk = $("<a href='javascript:void(0)' class='vis-btn vis-btn-done vis-icon-doneButton vis-workflowActivityIcons' data-id='" + index + "'>");
+            var aOk = $("<a href='javascript:void(0)' class='vis-btn vis-btn-done vis-icon-doneButton vis-workflowActivityIcons' data-clicked='N' data-id='" + index + "'>");
             //aOk.css("data-id",index);
             aOk.append($("<span class='vis-btn-ico vis-btn-done-bg vis-btn-done-border'>"));
             aOk.append(VIS.Msg.getMsg('Done'));
             liDoit.append(aOk);
             aOk.on(VIS.Events.onTouchStartOrClick, function (e) {
+                if (aOk.data('clicked') == 'Y') {
+                    return;
+                }
+                aOk.data('clicked', 'Y');
+                 // Digital signature work - Apply default sign at default location with selected status
+                    if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
 
-                // Digital signature work - Apply default sign at default location with selected status
-                if (window.VA055 && window.VADMS && info.ColName == 'VADMS_SignStatus') {
+                        var signData = {
+                            documentNo: docnameval[docnameval.length - 1],
+                            defaultReasonKey: $('[name="VADMS_SignStatus"]').children("option:selected").val(),
+                            defaultReason: $('[name="VADMS_SignStatus"]').children("option:selected").text(),
+                            //defaultDigitalSignatureID: $('#pdfsignreason').children("option:selected").data('digitalsignatureid')
+                        };
 
-                    var signData = {
-                        documentNo: docnameval[docnameval.length - 1],
-                        defaultReasonKey: $('[name="VADMS_SignStatus"]').children("option:selected").val(),
-                        defaultReason: $('[name="VADMS_SignStatus"]').children("option:selected").text(),
-                        //defaultDigitalSignatureID: $('#pdfsignreason').children("option:selected").data('digitalsignatureid')
-                    };
+                        if (signData.defaultReasonKey == undefined || signData.defaultReasonKey == '' || signData.defaultReason == undefined || signData.defaultReason == '') {
+                            aOk.data('clicked', 'N');
+                            VIS.ADialog.info('VA055_ChooseStatus');
+                            return;
+                        }
 
-                    if (signData.defaultReasonKey == undefined || signData.defaultReasonKey == '' || signData.defaultReason == undefined || signData.defaultReason == '') {
-                        VIS.ADialog.info('VA055_ChooseStatus');
-                        return;
+                        $.post(VIS.Application.contextUrl + 'VADMS/Document/SignatureUsingWorkflow', signData, function (res) {
+
+                            if (res && res != 'null' && res.result == 'success') {
+
+                                $("#divfeedbsy")[0].style.visibility = "hidden";
+                                divScroll.empty();
+                                adjust_size();
+                                lstDetailCtrls = [];
+                                selectedItems = [];
+                                $busyIndicator.show();
+
+                                window.setTimeout(function () {
+                                    loadWindows(true);
+                                }, 5000);
+                            }
+                            else {
+                                aOk.data('clicked', 'N');
+                                VIS.ADialog.error(res.result);
+                            }
+
+                        }, 'json').fail(function (jqXHR, exception) {
+                            aOk.data('clicked', 'N');
+                            VIS.ADialog.error(exception);
+                        });
                     }
-
-                    $.post(VIS.Application.contextUrl + 'VADMS/Document/SignatureUsingWorkflow', signData, function (res) {
-
-                        if (res && res != 'null' && res.result == 'success') {
-
-                            $("#divfeedbsy")[0].style.visibility = "hidden";
-                            divScroll.empty();
-                            adjust_size();
-                            lstDetailCtrls = [];
-                            selectedItems = [];
-                            $busyIndicator.show();
-
-                            window.setTimeout(function () {
-                                loadWindows(true);
-                            }, 5000);
-                        }
-                        else {
-                            VIS.ADialog.error(res.result);
-                        }
-
-                    }, 'json').fail(function (jqXHR, exception) {
-                        VIS.ADialog.error(exception);
-                    });
-                }
-                else {
-                    var id = $(this).data("id");
-                    approveIt(id);
-                }
+                    else {
+                        var id = $(this).data("id");
+                        approveIt(id, aOk);
+                    }
+               
+             
             });
             ulA.append(liDoit);
 
@@ -1251,8 +1259,8 @@
             */
         };
 
-        var approveIt = function (index) {
-
+        var approveIt = function (index, aOK) {
+            var aOK = aOK;
             $("#divfeedbsy")[0].style.visibility = "visible";
             window.setTimeout(function () {
                 for (var item in lstDetailCtrls) {
@@ -1293,6 +1301,7 @@
                                         //refresh
                                         //alert("Done");
                                         $("#divfeedbsy")[0].style.visibility = "hidden";
+                                        aOK.data('clicked', 'N');
                                         //window.setTimeout(function () {
                                         //    $('#workflowActivity').hide();
                                         //}, 200);
@@ -1308,6 +1317,7 @@
                                     else {
 
                                         alert(VIS.Msg.getMsg(info.result));
+                                        aOK.data('clicked', 'N');
                                         $("#divfeedbsy")[0].style.visibility = "hidden";
                                     }
                                 });
@@ -1317,10 +1327,12 @@
                     catch (e) {
 
                         alert('FillManadatory');
+                        aOK.data('clicked', 'N');
                         $("#divfeedbsy")[0].style.visibility = "hidden";
                     }
 
                 }
+                aOK.data('clicked', 'N');
 
             }, 2);
 

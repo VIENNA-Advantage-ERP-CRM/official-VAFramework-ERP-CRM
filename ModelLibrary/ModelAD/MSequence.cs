@@ -592,6 +592,13 @@ namespace VAdvantage.Model
             int incrementNo = seq.GetIncrementNo();
             String prefix = seq.GetPrefix();
             String suffix = seq.GetSuffix();
+            //get the PrefixAndDocNoSeperator
+            string prefixAndDocNoSeperator = null;
+            //check the column available or not
+            //column index starts from 0
+            if (seq.Get_ColumnIndex("PrefixAndDocNoSeperator") > -1)
+                prefixAndDocNoSeperator = seq.GetPrefixAndDocNoSeperator();
+
             bool isAutoSequence = seq.IsAutoSequence();
 
             String selectSQL = null;
@@ -771,7 +778,13 @@ namespace VAdvantage.Model
                     if (addMonthYear)
                     {
                         // Appended the separator if selected in Year Month Separator.
+                        //if addMonthYear is check then it will add prefixAndDocNoSeperator to separate the date
                         yearmonthPrefix += separator + (docDate.Value.Month.ToString().Length > 1 ? docDate.Value.Month.ToString() : "0" + docDate.Value.Month.ToString());
+                    }
+                    //to separate year/date from sequenceNo adding separtor
+                    if (!string.IsNullOrEmpty(prefixAndDocNoSeperator))
+                    {
+                        yearmonthPrefix += prefixAndDocNoSeperator;
                     }
                 }
             }

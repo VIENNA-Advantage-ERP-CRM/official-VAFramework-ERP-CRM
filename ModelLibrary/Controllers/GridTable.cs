@@ -131,11 +131,14 @@ namespace VAdvantage.Model
         /** Save Abort Error - U	*/
         public const char SAVE_ABORT = 'U';
 
-        /** Save Abort Error - F	*/
+        /** Saved for Future - F	*/
         public const char SAVE_FUTURE = 'F';
 
-        /** Save Abort Error - W	*/
+        /** Sent for WF Approval - W	*/
         public const char SAVE_WFAPPROVAL = 'W';
+
+        /** Back Date Version - B	*/
+        public const char SAVE_BACKDATEVER = 'B';
 
         /* Paging */
         int _currentPage = 1;

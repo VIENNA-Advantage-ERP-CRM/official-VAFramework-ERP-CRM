@@ -873,5 +873,30 @@ namespace VAdvantage.Model
         /// <returns>This checkbox indicates if an invoice is considered as discount invoice while calculating product costing. Also the system will not allow to create return to vendor invoice.</returns>
         public Boolean IsTreatAsDiscount() { Object oo = Get_Value("TreatAsDiscount"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
+        /** C_DocTypePayment_ID AD_Reference_ID=170 */
+        public static int C_DOCTYPEPAYMENT_ID_AD_Reference_ID = 170;
+        /** Set Document Type for Payment.
+            @param C_DocTypePayment_ID Document type used for Payments generated from this sales document */
+        public void SetC_DocTypePayment_ID(int C_DocTypePayment_ID)
+        {
+            if (C_DocTypePayment_ID <= 0) Set_Value("C_DocTypePayment_ID", null);
+            else
+                Set_Value("C_DocTypePayment_ID", C_DocTypePayment_ID);
+        }
+        /** Get Document Type for Payment.
+            @return Document type used for Payments generated from this sales document */
+        public int GetC_DocTypePayment_ID() { Object ii = Get_Value("C_DocTypePayment_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Bank Account.
+            @param C_BankAccount_ID Account at the Bank */
+        public void SetC_BankAccount_ID(int C_BankAccount_ID)
+        {
+            if (C_BankAccount_ID <= 0) Set_Value("C_BankAccount_ID", null);
+            else
+                Set_Value("C_BankAccount_ID", C_BankAccount_ID);
+        }
+        /** Get Bank Account.
+            @return Account at the Bank */
+        public int GetC_BankAccount_ID() { Object ii = Get_Value("C_BankAccount_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
     }
 }

@@ -382,7 +382,23 @@ namespace VAdvantage.Model
             }
             return false;
         }
-
+       
+        /** Set UnProcessed Quantity.
+        @param UnProcessQty 
+        Un Processed quantity for this requisition */
+        public void SetUnProcessQty(Decimal? UnProcessQty) 
+        { 
+            Set_Value("UnProcessQty", (Decimal?)UnProcessQty); 
+        }
+        /** Get UnProcessed Quantity.
+        @return Un Processed quantity for this requisition */
+        public Decimal GetUnProcessQty() 
+        { 
+            Object bd = Get_Value("UnProcessQty"); 
+            if (bd == null) 
+                return Env.ZERO; 
+            return Convert.ToDecimal(bd); 
+        }
     }
 
 }
