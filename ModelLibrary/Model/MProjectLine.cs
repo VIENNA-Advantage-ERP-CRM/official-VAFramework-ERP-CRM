@@ -479,7 +479,7 @@ namespace VAdvantage.Model
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
                             VA077_TotalPurchaseAmt=(SELECT ROUND(Sum(VA077_PurchaseAmt),2) FROM C_ProjectLine 
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y'),
-                            VA077_MarginPercent=(SELECT ROUND(Sum(VA077_MarginPercent),2) FROM C_ProjectLine 
+                            VA077_MarginPercent=(SELECT ROUND(((Sum(PlannedAmt)- Sum(VA077_PurchaseAmt))/Sum(PlannedAmt)*100),2) FROM C_ProjectLine 
                             WHERE C_PROJECT_ID=" + projID + @" AND IsActive='Y') WHERE C_Project_ID=" + projID;
 
                     int no = DB.ExecuteQuery(sql, null, Get_TrxName());
