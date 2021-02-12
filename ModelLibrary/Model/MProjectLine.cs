@@ -184,6 +184,13 @@ namespace VAdvantage.Model
                 GetM_Product_ID(), _parent.GetC_BPartner_ID(), GetPlannedQty(), isSOTrx);
             pp.SetM_PriceList_ID(_parent.GetM_PriceList_ID());
             pp.SetM_PriceList_Version_ID(_parent.GetM_PriceList_Version_ID());
+
+            // Get Price according to Attribute set instance if selected on Project line
+            if (Get_ColumnIndex("M_AttributeSetInstance_ID") >= 0)
+            {
+                pp.SetM_AttributeSetInstance_ID(GetM_AttributeSetInstance_ID());
+            }
+
             pp.SetC_UOM_ID(prd.GetC_UOM_ID());
             if (pp.CalculatePrice())
                 limitPrice = pp.GetPriceLimit();

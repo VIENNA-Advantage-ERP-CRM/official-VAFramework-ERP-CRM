@@ -161,9 +161,10 @@ namespace VAdvantage.Model
                 SetDiscountAmt(discount);
                 SetIsValid(true);
             }
-
-            //	Dates		
-            DateTime dueDate = TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
+                        
+            /** Adhoc Payment - Setting DueDate for an InvoicePaySchedule ** Dt: 18/01/2021 ** Modified By: Kumar **/
+            //	Dates            
+            DateTime? dueDate = (invoice.Get_ColumnIndex("DueDate") >= 0 && invoice.GetDueDate() >= invoice.GetDateInvoiced()) ? invoice.GetDueDate() : TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetNetDays());
             SetDueDate(dueDate);
             DateTime discountDate = TimeUtil.AddDays(invoice.GetDateInvoiced(), paySchedule.GetDiscountDays());
             SetDiscountDate(discountDate);
@@ -212,7 +213,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             if (Is_ValueChanged("DueAmt"))
-            {
+            { 
                 log.Fine("beforeSave");
                 SetIsValid(false);
             }
@@ -317,6 +318,7 @@ namespace VAdvantage.Model
                 SetBackupWithholdingAmount(0);
                 SetWithholdingAmt(0);
             }
+                 
             return true;
         }
 

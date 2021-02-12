@@ -826,8 +826,9 @@ namespace VAdvantage.Model
             if (GetVSS_PAYMENTTYPE() == X_C_CashLine.VSS_PAYMENTTYPE_Payment && GetC_BPartner_ID() > 0)
             {
                 MCash csh = new MCash(GetCtx(), GetC_Cash_ID(), Get_TrxName());
+                //Ned to get conversion based on selected conversion type on Invoice.
                 Decimal amt = MConversionRate.ConvertBase(GetCtx(), GetAmount(),	//	CM adjusted 
-                    GetC_Currency_ID(), csh.GetDateAcct(), 0, GetAD_Client_ID(), GetAD_Org_ID());
+                    GetC_Currency_ID(), csh.GetDateAcct(), GetC_ConversionType_ID(), GetAD_Client_ID(), GetAD_Org_ID());
 
                 MBPartner bp = new MBPartner(GetCtx(), GetC_BPartner_ID(), Get_Trx());
                 string retMsg = "";

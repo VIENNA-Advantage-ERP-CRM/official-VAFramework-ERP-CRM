@@ -112,7 +112,7 @@ namespace ViennaAdvantage.Process
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
-                string str = "SELECT DISTINCT(VA077_DestinationOrg) FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
+                string str = "SELECT DISTINCT(VA077_DestinationOrg), AD_Org_Id FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
                 if (dts != null && dts.Tables[0].Rows.Count > 0)
                 {
@@ -120,8 +120,9 @@ namespace ViennaAdvantage.Process
                     {
                         int destinationorg = Util.GetValueOfInt(dts.Tables[0].Rows[i]["VA077_DestinationOrg"]);
                         // VAdvantage.Model.MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
-                        AddHeader(destinationorg);
-                        Addline(destinationorg, GetAD_Org_ID());
+                        int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
+                        AddHeader(destinationorg, orgId);
+                        Addline(destinationorg, orgId);
                     }
                 }
             }
@@ -218,13 +219,11 @@ namespace ViennaAdvantage.Process
             //+ ": " + newOrder.GetDocumentNo()
             return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName();
         }
-        /// <summary>
-        /// Add Sales Order Header for VA077 Module
-        /// </summary>
-        /// <param name="newOrder">Moder Object</param>
+        /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
+        /// <param name="orgId">Organization Id</param>
         /// <returns>bool</returns>
-        public bool AddHeader(int destinationorg)
+        public bool AddHeader(int destinationorg, int orgId)
         {
             VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _C_DocType_ID);
             MOrder newOrder = new VAdvantage.Model.MOrder(GetCtx(), 0, Get_Trx());
@@ -236,7 +235,7 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                newOrder.SetAD_Org_ID(GetAD_Org_ID());
+                newOrder.SetAD_Org_ID(orgId);
             }
             newOrder.SetC_BPartner_ID(morder.GetC_BPartner_ID());
             newOrder.SetC_BPartner_Location_ID(morder.GetC_BPartner_Location_ID());
@@ -396,7 +395,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        orderLine.SetAD_Org_ID(GetAD_Org_ID());
+                        orderLine.SetAD_Org_ID(org);
                     }
                     orderLine.SetAD_Client_ID(GetAD_Client_ID());
                     orderLine.SetC_Order_ID(newid);
@@ -434,11 +433,12 @@ namespace ViennaAdvantage.Process
                     orderLine.Set_Value("VA077_ShowCNAutodesk", mOrderLine.Get_Value("VA077_ShowCNAutodesk"));
                     orderLine.Set_Value("VA077_CNAutodesk", mOrderLine.Get_Value("VA077_CNAutodesk"));
                     orderLine.Set_Value("VA077_UpdateFromVersn", mOrderLine.Get_Value("VA077_UpdateFromVersn"));
-                    orderLine.Set_Value("VA077_Contract", mOrderLine.Get_Value("VA077_Contract"));
+                    orderLine.Set_Value("VA077_ServiceContract_ID", mOrderLine.Get_Value("VA077_ServiceContract_ID"));
                     orderLine.Set_Value("VA077_MarginPercent", mOrderLine.Get_Value("VA077_MarginPercent"));
                     orderLine.Set_Value("VA077_MarginAmt", mOrderLine.Get_Value("VA077_MarginAmt"));
                     orderLine.Set_Value("VA077_PurchasePrice", mOrderLine.Get_Value("VA077_PurchasePrice"));
                     orderLine.Set_Value("VA077_RegEmail", mOrderLine.Get_Value("VA077_RegEmail"));
+                    orderLine.Set_Value("VA077_IsContract", mOrderLine.Get_Value("VA077_IsContract"));
                     if (!orderLine.Save())
                     {
                         Get_Trx().Rollback();

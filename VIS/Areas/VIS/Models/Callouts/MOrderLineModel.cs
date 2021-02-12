@@ -1023,9 +1023,16 @@ namespace VIS.Models
                 MOrderModel objOrder = new MOrderModel();
                 _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
 
-                MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                StringBuilder sbparams = new StringBuilder();
+                sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
 
+                MPriceListVersionModel objPLV = new MPriceListVersionModel();
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 MBPartnerModel objBPartner = new MBPartnerModel();
                 Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1214,8 +1221,16 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            StringBuilder sbparams = new StringBuilder();
+            sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
+
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             MBPartnerModel objBPartner = new MBPartnerModel();
             Dictionary<String, String> bpartner1 = objBPartner.GetBPartner(ctx, _c_BPartner_Id.ToString());
@@ -1467,8 +1482,16 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             int _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            StringBuilder sbparams = new StringBuilder();
+            sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
+
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            int _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+            int _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             string sql;
             decimal PriceEntered = 0;
@@ -1580,8 +1603,16 @@ namespace VIS.Models
                 MOrderModel objOrder = new MOrderModel();
                 _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _c_Order_ID.ToString());
 
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                StringBuilder sbparams = new StringBuilder();
+                sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_Order_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_c_UOM_To_ID));
+                sbparams.Append(",").Append(Util.GetValueOfInt(_m_AttributeSetInstance_Id));
+
                 MPriceListVersionModel objPLV = new MPriceListVersionModel();
-                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+                _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
                 sql = "SELECT PriceList , PriceStd , PriceLimit FROM M_ProductPrice WHERE Isactive='Y' AND M_Product_ID = " + _m_Product_Id
                                       + " AND M_PriceList_Version_ID = " + _priceListVersion_Id
@@ -1667,8 +1698,16 @@ namespace VIS.Models
             MOrderModel objOrder = new MOrderModel();
             _m_PriceList_ID = objOrder.GetM_PriceList(ctx, _C_Order_Id.ToString());
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            StringBuilder sbparams = new StringBuilder();
+            sbparams.Append(Util.GetValueOfInt(_m_PriceList_ID));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_C_Order_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_m_Product_Id));
+            sbparams.Append(",").Append(Util.GetValueOfInt(_c_Uom_Id));
+            //sbparams.Append(",").Append(Util.GetValueOfInt("0"));
+
             MPriceListVersionModel objPLV = new MPriceListVersionModel();
-            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, _m_PriceList_ID.ToString());
+            _priceListVersion_Id = objPLV.GetM_PriceList_Version_ID(ctx, sbparams.ToString(), ScreenType.Order);
 
             MUOMModel objUOM = new MUOMModel();
             _standardPrecision = objUOM.GetPrecision(ctx, _c_Uom_Id.ToString());

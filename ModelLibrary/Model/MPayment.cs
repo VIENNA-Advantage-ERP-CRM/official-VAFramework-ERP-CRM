@@ -664,10 +664,10 @@ namespace VAdvantage.Model
                 //	Prepayment: No charge and order or project (not as acct dimension)
                 // new change to set prepayment false when payment is for order schedules
                 // done by Vivek Kumar on 05/07/2017 as per discussion with Mandeep sir
-                //if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'")) > 0)
-                if (hasVA009Module && (GetVA009_OrderPaySchedule_ID() > 0))
+                //JID_1469 prepayment should be true in case of order and independent business partner.
+                if ((GetC_BPartner_ID() != 0 && GetC_Invoice_ID() == 0 && GetC_Charge_ID() == 0 && GetC_Project_ID()==0)) 
                 {
-                    SetIsPrepayment(false);
+                    SetIsPrepayment(true);
                 }
                 else
                 {
@@ -4636,6 +4636,17 @@ namespace VAdvantage.Model
                 }
                 return AllocateInvoice();
             }
+
+            //	Create invoice Allocation for Payment incase of prepay Order
+            if (GetC_Order_ID() != 0)
+            {
+                string orderType = Util.GetValueOfString(DB.ExecuteScalar("SELECT DocSubTypeSO FROM C_Order o INNER JOIN C_DocType dt ON o.C_DocTypeTarget_ID = dt.C_DocType_ID WHERE o.IsActive='Y' AND  C_Order_ID = " + GetC_Order_ID(), null, Get_Trx()));
+                if (orderType.Equals(X_C_DocType.DOCSUBTYPESO_PrepayOrder)) 
+                {
+                    return AllocateOrder();
+                }
+            }
+
             //	Invoices of a AP Payment Selection
             if (AllocatePaySelection())
                 return true;
@@ -4827,6 +4838,102 @@ namespace VAdvantage.Model
             {
                 //MessageBox.Show("MPayment-Error in AllocateInvoice");
                 log.Severe(ex.ToString());
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Generate Allocation for Payment incase of PrePay Order
+        /// </summary>
+        /// <returns>if allocation generated it returns true else false</returns>
+        private bool AllocateOrder()
+        {
+            try
+            {
+                //	calculate actual allocation
+                Decimal allocationAmt = GetPaymentAmount();			//	underpayment
+                if (Env.Signum(GetOverUnderAmt()) < 0 && Env.Signum(GetPaymentAmount()) > 0)
+                    allocationAmt = Decimal.Add(allocationAmt, GetOverUnderAmt());	//	overpayment (negative)
+
+                MAllocationHdr alloc = new MAllocationHdr(GetCtx(), false,
+                    GetDateTrx(), GetC_Currency_ID(),
+                    Msg.Translate(GetCtx(), "C_Payment_ID") + ": " + GetDocumentNo() + " [1]", Get_TrxName());
+
+                alloc.SetAD_Org_ID(GetAD_Org_ID());
+                // Update conversion type from payment to view allocation (required for posting)
+                if (alloc.Get_ColumnIndex("C_ConversionType_ID") > 0)
+                {
+                    alloc.SetC_ConversionType_ID(GetC_ConversionType_ID());
+                }
+                /** when trx date not matched with account date, then we have to set dateacct from payment record*/
+                alloc.SetDateAcct(GetDateAcct());
+                if (!alloc.Save())
+                {
+                    //Could not create Allocation Hdr
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "CouldnotCrtAllocHdr"));
+                    return false;
+                }
+                MAllocationLine aLine = null;
+                if (IsReceipt())
+                {
+                    aLine = new MAllocationLine(alloc, allocationAmt,
+                        GetDiscountAmt(), GetWriteOffAmt(), GetOverUnderAmt());
+                    if (aLine.Get_ColumnIndex("WithholdingAmt") > 0)
+                    {
+                        aLine.SetBackupWithholdingAmount(GetBackupWithholdingAmount());
+                        aLine.SetWithholdingAmt(GetWithholdingAmt());
+                    }
+                }
+                aLine.SetDocInfo(GetC_BPartner_ID(), GetC_Order_ID(), 0);
+                aLine.SetC_Payment_ID(GetC_Payment_ID());
+                //aLine.SetC_Order_ID(GetC_Order_ID());
+                if (Env.IsModuleInstalled("VA009_"))
+                {
+                    DataSet _ds = DB.ExecuteDataset(@"SELECT pay.C_InvoicePaySchedule_ID, pay.C_Invoice_ID FROM C_InvoicePaySchedule pay INNER JOIN C_Invoice inv 
+                                        ON pay.C_Invoice_ID=inv.C_Invoice_ID WHERE inv.C_Order_ID=" + GetC_Order_ID(), null, Get_Trx());
+                    if (_ds != null && _ds.Tables.Count > 0 && _ds.Tables[0].Rows.Count > 0)
+                    {
+                        aLine.SetC_InvoicePaySchedule_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_InvoicePaySchedule_ID"]));
+                        aLine.SetC_Invoice_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[0]["C_Invoice_ID"]));
+                    }
+                    else 
+                    {
+                        //not found invoice for this Order
+                        _AllocMsg = Msg.GetMsg(GetCtx(), "NotfoundInv");
+                        return false;
+                    }
+                }
+                if (!aLine.Save(Get_TrxName()))
+                {
+                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "CouldnotCrtAllocLine"));//Could not create Allocation Line
+                    return false;
+                }
+                //	Should start WF
+                alloc.ProcessIt(DocActionVariables.ACTION_COMPLETE);
+                // if view allocation not created or completed the not to complete current Trasaction
+                if (alloc.GetProcessMsg() != null)
+                {
+                    _AllocMsg = alloc.GetProcessMsg();
+                    return false;
+                }
+                alloc.Save(Get_Trx());
+                _processMsg = Msg.GetMsg(GetCtx(), "SucessflyCrtAlloc") + alloc.GetDocumentNo();
+                //	Get Project from Order
+                int C_Project_ID = DataBase.DB.GetSQLValue(Get_Trx(),
+                    "SELECT C_Project_ID FROM C_Order WHERE C_Order_ID=@param1", GetC_Order_ID());
+                if (C_Project_ID > 0 && GetC_Project_ID() == 0)
+                {
+                    SetC_Project_ID(C_Project_ID);
+                }
+                else if (C_Project_ID > 0 && GetC_Project_ID() > 0 && C_Project_ID != GetC_Project_ID())
+                {
+                    log.Warning("Order C_Project_ID=" + C_Project_ID
+                        + " <> Payment C_Project_ID=" + GetC_Project_ID());
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Severe(ex.Message);
             }
             return true;
         }
