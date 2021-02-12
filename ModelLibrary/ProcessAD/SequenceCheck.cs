@@ -94,7 +94,7 @@ namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     String tableName = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
-                    if (MSequence.CreateTableSequence(ctx, tableName, trxName))
+                    if (MSequence.CreateTableSequence(ctx, tableName, trxName, MTable.Get(ctx, tableName)))
                     {
                         if (sp != null)
                         {
@@ -183,90 +183,129 @@ namespace VAdvantage.Process
         /// <param name="sp">server process or null</param>
         private static void CheckTableID(Ctx ctx, SvrProcess sp)
         {
-            int IDRangeEnd = DataBase.DB.GetSQLValue(null,
-                "SELECT IDRangeEnd FROM AD_System");
-            if (IDRangeEnd <= 0)
+            if (MSysConfig.IsNativeSequence(false))
             {
-                IDRangeEnd = DataBase.DB.GetSQLValue(null,
-                    "SELECT MIN(IDRangeStart)-1 FROM AD_Replication");
-            }
-            _log.Info("IDRangeEnd = " + IDRangeEnd);
-            //
-            String sql = "SELECT * FROM AD_Sequence "
-                + "WHERE IsTableID='Y' "
-                + "ORDER BY Name";
-            int counter = 0;
-            //IDataReader idr = null;
-            DataSet ds = null;
-            Trx trxName = null;
-            if (sp != null)
-            {
-                trxName = sp.Get_Trx();
-            }
-            try
-            {
-                //pstmt = DataBase.prepareStatement(sql, trxName);
-                //idr = DataBase.DB.ExecuteReader(sql, null, trxName);
-                ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
-
-                //while (idr.Read())
-                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                String sql = "SELECT * FROM AD_Sequence "
+                       + "WHERE IsTableID='Y' "
+                       + "ORDER BY Name";
+                DataSet ds = null;
+                int counter = 0;
+                Trx trxName = null;
+                if (sp != null)
                 {
-                    MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
-                    int old = seq.GetCurrentNext();
-                    int oldSys = seq.GetCurrentNextSys();
-                    if (seq.ValidateTableIDValue())
+                    trxName = sp.Get_Trx();
+                }
+                try
+                {
+                    ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        if (seq.GetCurrentNext() != old)
-                        {
-                            String msg = seq.GetName() + " ID  "
-                                + old + " -> " + seq.GetCurrentNext();
-                            if (sp != null)
-                            {
-                                sp.AddLog(0, null, null, msg);
-                            }
-                            else
-                            {
-                                _log.Fine(msg);
-                            }
-                        }
-                        if (seq.GetCurrentNextSys() != oldSys)
-                        {
-                            String msg = seq.GetName() + " Sys "
-                                + oldSys + " -> " + seq.GetCurrentNextSys();
-                            if (sp != null)
-                            {
-                                sp.AddLog(0, null, null, msg);
-                            }
-                            else
-                            {
-                                _log.Fine(msg);
-                            }
-                        }
+                        MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
+                        int curVal = DB.GetSQLValue(trxName, "select "+ ds.Tables[0].Rows[i]["Name"].ToString()+ "_SEQ.currval+1 from DUAL");
+                        seq.SetCurrentNext(curVal);
                         if (seq.Save())
                         {
+                            sp.AddLog(0, null, null, "Sequence Updated For :"+ ds.Tables[0].Rows[i]["Name"].ToString());
                             counter++;
                         }
                         else
                         {
-                            _log.Severe("Not updated: " + seq);
+                            _log.Severe("Sequence Not Updated For :" + ds.Tables[0].Rows[i]["Name"].ToString());
                         }
                     }
-                    //	else if (CLogMgt.isLevel(6)) 
-                    //		log.fine("OK - " + tableName);
                 }
-                // idr.Close();
+                catch (Exception ex)
+                {
+                    _log.Log(Level.SEVERE, sql, ex);
+                }
             }
-            catch (Exception e)
+            else
             {
-                //if (idr != null)
-                //{
-                //    idr.Close();
-                //}
-                _log.Log(Level.SEVERE, sql, e);
-            }
+                int IDRangeEnd = DataBase.DB.GetSQLValue(null,
+                    "SELECT IDRangeEnd FROM AD_System");
+                if (IDRangeEnd <= 0)
+                {
+                    IDRangeEnd = DataBase.DB.GetSQLValue(null,
+                        "SELECT MIN(IDRangeStart)-1 FROM AD_Replication");
+                }
+                _log.Info("IDRangeEnd = " + IDRangeEnd);
+                //
+                String sql = "SELECT * FROM AD_Sequence "
+                    + "WHERE IsTableID='Y' "
+                    + "ORDER BY Name";
+                int counter = 0;
+                //IDataReader idr = null;
+                DataSet ds = null;
+                Trx trxName = null;
+                if (sp != null)
+                {
+                    trxName = sp.Get_Trx();
+                }
+                try
+                {
+                    //pstmt = DataBase.prepareStatement(sql, trxName);
+                    //idr = DataBase.DB.ExecuteReader(sql, null, trxName);
+                    ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
 
-            _log.Fine("#" + counter);
+                    //while (idr.Read())
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        MSequence seq = new MSequence(ctx, ds.Tables[0].Rows[i], trxName);
+                        int old = seq.GetCurrentNext();
+                        int oldSys = seq.GetCurrentNextSys();
+                        if (seq.ValidateTableIDValue())
+                        {
+                            if (seq.GetCurrentNext() != old)
+                            {
+                                String msg = seq.GetName() + " ID  "
+                                    + old + " -> " + seq.GetCurrentNext();
+                                if (sp != null)
+                                {
+                                    sp.AddLog(0, null, null, msg);
+                                }
+                                else
+                                {
+                                    _log.Fine(msg);
+                                }
+                            }
+                            if (seq.GetCurrentNextSys() != oldSys)
+                            {
+                                String msg = seq.GetName() + " Sys "
+                                    + oldSys + " -> " + seq.GetCurrentNextSys();
+                                if (sp != null)
+                                {
+                                    sp.AddLog(0, null, null, msg);
+                                }
+                                else
+                                {
+                                    _log.Fine(msg);
+                                }
+                            }
+                            if (seq.Save())
+                            {
+                                counter++;
+                            }
+                            else
+                            {
+                                _log.Severe("Not updated: " + seq);
+                            }
+                        }
+                        //	else if (CLogMgt.isLevel(6)) 
+                        //		log.fine("OK - " + tableName);
+                    }
+                    // idr.Close();
+                }
+                catch (Exception e)
+                {
+                    //if (idr != null)
+                    //{
+                    //    idr.Close();
+                    //}
+                    _log.Log(Level.SEVERE, sql, e);
+                }
+
+                _log.Fine("#" + counter);
+            }
         }	//	checkTableID
 
 

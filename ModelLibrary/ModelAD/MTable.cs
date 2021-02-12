@@ -1004,12 +1004,12 @@ namespace VAdvantage.Model
                 return false;
             //	Sync Table ID
             if (newRecord)
-                MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
+                MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName(),this);
             else
             {
                 MSequence seq = MSequence.Get(GetCtx(), GetTableName(), Get_TrxName());
                 if (seq == null || seq.Get_ID() == 0)
-                    MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName());
+                    MSequence.CreateTableSequence(GetCtx(), GetTableName(), Get_TrxName(), this);
                 else if (!seq.GetName().Equals(GetTableName()))
                 {
                     seq.SetName(GetTableName());

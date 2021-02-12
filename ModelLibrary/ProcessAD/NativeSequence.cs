@@ -48,7 +48,7 @@ namespace VAdvantage.Process
             object result= DB.ExecuteScalar(sql);
             if (result == null || result == DBNull.Value)
             {
-                throw new Exception("Key Not Found");
+                throw new Exception(Msg.GetMsg(GetCtx(), "KeyNotFound"));
             }
 
 
@@ -56,7 +56,7 @@ namespace VAdvantage.Process
             
             if (MSysConfig.IsNativeSequence(false))
             {
-                throw new Exception("Native Sequence is Actived");
+                throw new Exception(Msg.GetMsg(GetCtx(), "NativeSequenceActived"));
             }
 
             SetSystemNativeSequence(true);
@@ -102,7 +102,7 @@ namespace VAdvantage.Process
         {
             if (!table.IsView())
             {
-                if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName,true))
+                if (!MSequence.CreateTableSequence(GetCtx(), table.GetTableName(), trxName, table))
                 {
                     //throw new Exception("Can not create Native Sequence for table " + table.GetTableName());
                     this.AddLog("Can not create Native Sequence for table : " + table.GetTableName());
