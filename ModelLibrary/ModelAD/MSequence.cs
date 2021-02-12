@@ -1647,13 +1647,35 @@ namespace VAdvantage.Model
         /// <returns>true if created</returns>
         public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName)
         {
+            if (MSysConfig.IsNativeSequence(false))
+            {
+                int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
+
+                if (nextid == -1)
+                {
+                    CreateSequence(ctx, TableName, trxName);
+                    nextid = INIT_NO;
+                }
+
+                // Creeate sequence in respective DB.
+                if (!VConnection.Get().GetDatabase().CreateSequence(TableName, 1, INIT_NO, int.MaxValue, nextid, trxName))
+                    return false;
+
+                return true;
+            }
+            
+            return CreateSequence(ctx, TableName, trxName);
+        }	//	createTableSequence
+
+        private static bool CreateSequence(Ctx ctx,string TableName, Trx trxName)
+        {
             MSequence seq = new MSequence(ctx, 0, trxName);
             seq.SetClientOrg(0, 0);
             seq.SetName(TableName);
             seq.SetDescription("Table " + TableName);
             seq.SetIsTableID(true);
             return seq.Save();
-        }	//	createTableSequence
+        }
 
         /// <summary>
         /// Create Table ID Sequence 
@@ -1681,29 +1703,29 @@ namespace VAdvantage.Model
             }
         }
 
-        public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, MTable table)
-        {
-            if (!table.IsView() && MSysConfig.IsNativeSequence(false))
-            {
-                int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
+        //public static Boolean CreateTableSequence(Ctx ctx, String TableName, Trx trxName, MTable table)
+        //{
+        //    if (!table.IsView() && MSysConfig.IsNativeSequence(false))
+        //    {
+        //        int nextid = DB.GetSQLValue(trxName, "SELECT CurrentNext FROM AD_Sequence WHERE Name='" + TableName + "' AND IsActive='Y' AND IsTableID='Y' AND IsAutoSequence='Y'");
 
-                if (nextid == -1)
-                {
-                    MSequence.CreateTableSequence(ctx, TableName, trxName, true);
-                    nextid = INIT_NO;
-                }
+        //        if (nextid == -1)
+        //        {
+        //            MSequence.CreateTableSequence(ctx, TableName, trxName, true);
+        //            nextid = INIT_NO;
+        //        }
 
-                // Creeate sequence in respective DB.
-                if (!VConnection.Get().GetDatabase().CreateSequence(TableName, 1, INIT_NO, int.MaxValue, nextid, trxName))
-                    return false;
+        //        // Creeate sequence in respective DB.
+        //        if (!VConnection.Get().GetDatabase().CreateSequence(TableName, 1, INIT_NO, int.MaxValue, nextid, trxName))
+        //            return false;
 
-                return true;
-            }
-            else if (!table.IsView()) {
-              return  MSequence.CreateTableSequence(ctx, TableName, trxName, true);
-            }
-            return true;
-        }
+        //        return true;
+        //    }
+        //    else if (!table.IsView()) {
+        //      return  MSequence.CreateTableSequence(ctx, TableName, trxName, true);
+        //    }
+        //    return true;
+        //}
 
         /// <summary>
         /// Delete Table ID Sequence

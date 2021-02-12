@@ -94,7 +94,7 @@ namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     String tableName = Utility.Util.GetValueOfString(idr[0]);// rs.getString(1);
-                    if (MSequence.CreateTableSequence(ctx, tableName, trxName, MTable.Get(ctx, tableName)))
+                    if (MSequence.CreateTableSequence(ctx, tableName, trxName))
                     {
                         if (sp != null)
                         {
