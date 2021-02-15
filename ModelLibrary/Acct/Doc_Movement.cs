@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Movement(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MMovement), idr, MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
+            : base(ass, typeof(MMovement), idr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
         }
         public Doc_Movement(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MMovement), dr, MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
+            : base(ass, typeof(MMovement), dr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
         }

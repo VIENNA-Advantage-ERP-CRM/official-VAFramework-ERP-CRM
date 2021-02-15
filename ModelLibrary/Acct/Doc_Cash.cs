@@ -44,12 +44,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public DoVAB_CashBook(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MVABCashJRNL), idr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
+            : base(ass, typeof(MVABCashJRNL), idr, MVABMasterDocType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
         }
         public DoVAB_CashBook(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MVABCashJRNL), dr, MDocBaseType.DOCBASETYPE_CASHJOURNAL, trxName)
+            : base(ass, typeof(MVABCashJRNL), dr, MVABMasterDocType.DOCBASETYPE_CASHJOURNAL, trxName)
         {
 
         }

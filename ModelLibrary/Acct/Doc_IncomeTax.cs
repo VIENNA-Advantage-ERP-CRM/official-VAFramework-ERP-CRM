@@ -108,7 +108,7 @@ namespace ModelLibrary.Acct
         {
             //  create Fact Header
             List<Fact> facts = new List<Fact>();
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_INCOMETAX))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_INCOMETAX))
             {
 
                 //	Decimal grossAmt = getAmount(Doc.AMTTYPE_Gross);                

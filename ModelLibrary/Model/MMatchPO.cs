@@ -544,10 +544,10 @@ namespace VAdvantage.Model
         {
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_MATCHPO, GetVAF_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_MATCHPO, GetVAF_Org_ID()))
                     return false;
                 SetPosted(false);
-                return true;// MFactAcct.Delete(Table_ID, Get_ID(), Get_Trx()) >= 0;
+                return true;// MActualAcctDetail.Delete(Table_ID, Get_ID(), Get_Trx()) >= 0;
             }
 
             //JID_0162: System should allow to delete the Matched PO of PO and MR with complete status only.

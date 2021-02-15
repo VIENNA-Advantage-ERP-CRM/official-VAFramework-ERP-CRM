@@ -22,7 +22,7 @@ namespace VAdvantage.Process
         {
             try
             {
-                MFinRptConfig Report = new MFinRptConfig(GetCtx(), _VAB_FinRptConfig_ID, null );
+                MVABFinRptConfig Report = new MVABFinRptConfig(GetCtx(), _VAB_FinRptConfig_ID, null );
                 _VAB_AccountGroup_ID = Report.GetVAB_AccountGroupBatch_ID();
                 String Query = "Select * from VAB_AccountGroup where VAB_AccountGroupbatch_id=" + _VAB_AccountGroup_ID ;
                 //String _sql="Select * from VAB_AccountGroup g inner join VAB_AccountSubGroup s on (g.VAB_AccountGroup_ID=s.VAB_AccountGroup_ID AND C_AccountBatchGroup_ID="+ _VAB_AccountGroup_ID +" ) ";
@@ -33,7 +33,7 @@ namespace VAdvantage.Process
                 {
                     foreach (DataRow dr in Dt.Rows)
                     {
-                        MFinRptAcctGroup AcctGroup = new MFinRptAcctGroup(GetCtx(), 0, null);
+                        MVABFinRptAcctGroup AcctGroup = new MVABFinRptAcctGroup(GetCtx(), 0, null);
                         AcctGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr["VAF_Client_ID"]));
                         AcctGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr["VAF_Org_ID"]));
                         AcctGroup.SetVAB_AccountGroup_ID(Util.GetValueOfInt(dr["VAB_ACCOUNTGROUP_ID"]));
@@ -47,7 +47,7 @@ namespace VAdvantage.Process
                             DT1.Load(Idr1);
                             foreach (DataRow dr1 in DT1.Rows)
                             {
-                                MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
+                                MVABFinRptAcctSubGroup AcctSubGroup = new MVABFinRptAcctSubGroup(GetCtx(), 0, null);
                                 AcctSubGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr1["VAF_Client_ID"]));
                                 AcctSubGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr1["VAF_Org_ID"]));
                                 AcctSubGroup.SetVAB_AccountSubGroup_ID(Util.GetValueOfInt(dr1["VAB_ACCOUNTSUBGROUP_ID"]));

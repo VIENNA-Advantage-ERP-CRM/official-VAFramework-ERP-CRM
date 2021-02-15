@@ -230,16 +230,16 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Translate System Element.
-@param IsTranslateSystemElement Translate System Element */
-public void SetIsTranslateSystemElement (Boolean IsTranslateSystemElement)
+@param IsTranslateSysteMVABElement Translate System Element */
+public void SetIsTranslateSysteMVABElement (Boolean IsTranslateSysteMVABElement)
 {
-Set_Value ("IsTranslateSystemElement", IsTranslateSystemElement);
+Set_Value ("IsTranslateSysteMVABElement", IsTranslateSysteMVABElement);
 }
 /** Get Translate System Element.
 @return Translate System Element */
-public Boolean IsTranslateSystemElement() 
+public Boolean IsTranslateSysteMVABElement() 
 {
-Object oo = Get_Value("IsTranslateSystemElement");
+Object oo = Get_Value("IsTranslateSysteMVABElement");
 if (oo != null) 
 {
  if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo);

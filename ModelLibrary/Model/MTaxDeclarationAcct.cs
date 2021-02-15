@@ -51,7 +51,7 @@ namespace VAdvantage.Model
          *	@param parent parent
          *	@param fact fact
          */
-        public MTaxDeclarationAcct(MTaxDeclaration parent, MFactAcct fact):base(parent.GetCtx(), 0, parent.Get_TrxName())
+        public MTaxDeclarationAcct(MTaxDeclaration parent, MActualAcctDetail fact):base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //super(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(fact);

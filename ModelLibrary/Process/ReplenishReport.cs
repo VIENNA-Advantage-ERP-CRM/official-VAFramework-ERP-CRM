@@ -115,7 +115,7 @@ namespace VAdvantage.Process
                 return "OK";
             }
             //
-            MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), _VAB_DocTypes_ID);
             if (!dt.GetDocBaseType().Equals(_ReplenishmentCreate))
             {
                 throw new Exception("@VAB_DocTypes_ID@=" + dt.GetName() + " <> " + _ReplenishmentCreate);

@@ -45,12 +45,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Bank(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MVABBankingJRNL), idr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
+            : base(ass, typeof(MVABBankingJRNL), idr, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, trxName)
         {
 
         }
         public Doc_Bank(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MVABBankingJRNL), dr, MDocBaseType.DOCBASETYPE_BANKSTATEMENT, trxName)
+            : base(ass, typeof(MVABBankingJRNL), dr, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, trxName)
         {
 
         }
@@ -103,7 +103,7 @@ namespace VAdvantage.Acct
                     SetDateAcct(line.GetDateAcct());
                 }
                 MPeriod period = MPeriod.Get(GetCtx(), line.GetDateAcct());
-                if (period != null && period.IsOpen(MDocBaseType.DOCBASETYPE_BANKSTATEMENT))
+                if (period != null && period.IsOpen(MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT))
                 {
                     docLine.SetVAB_YearPeriod_ID(period.GetVAB_YearPeriod_ID());
                 }

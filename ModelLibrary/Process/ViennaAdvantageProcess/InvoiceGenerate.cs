@@ -611,7 +611,7 @@ namespace ViennaAdvantage.Process
             //if (_ship == null
             //    || _ship.GetVAM_Inv_InOut_ID() != ship.GetVAM_Inv_InOut_ID())
             //{
-            //    MDocType dt = MDocType.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
+            //    MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
             //    if (_bp == null || _bp.GetVAB_BusinessPartner_ID() != ship.GetVAB_BusinessPartner_ID())
             //    {
             //        _bp = new MBPartner(GetCtx(), ship.GetVAB_BusinessPartner_ID(), Get_TrxName());

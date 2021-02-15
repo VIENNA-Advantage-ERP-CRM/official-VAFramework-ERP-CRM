@@ -264,7 +264,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     //	****	Create/Update ElementValue
                     if (VAB_Acct_Element_ID == 0)		//	New
                     {
-                        MElementValue ev = new MElementValue(impEV);
+                        MVABAcctElement ev = new MVABAcctElement(impEV);
                         if (ev.Save())
                         {
                             noInsert++;
@@ -282,7 +282,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     else							//	Update existing
                     {
-                        MElementValue ev = new MElementValue(GetCtx(), VAB_Acct_Element_ID, null);
+                        MVABAcctElement ev = new MVABAcctElement(GetCtx(), VAB_Acct_Element_ID, null);
                         if (ev.Get_ID() != VAB_Acct_Element_ID)
                         {
                         }

@@ -11939,7 +11939,7 @@
         //    + "WHERE VAB_DocTypes_ID=" + VAB_DocTypes_ID;		//	1
 
         var paramString = VAB_DocTypes_ID.toString();
-        var dr = VIS.dataContext.getJSONRecord("MDocType/GetDocTypeData", paramString);
+        var dr = VIS.dataContext.getJSONRecord("MVABDocTypes/GetDocTypeData", paramString);
 
         try {
             //	Charges - Set Context
@@ -18589,10 +18589,10 @@
         this.log.fine("Payment_DocType - VAB_Invoice_ID=" + VAB_Invoice_ID + ", VAB_DocTypes_ID=" + VAB_DocTypes_ID);
         var paramString = VAB_DocTypes_ID.toString();
 
-        var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", paramString);
+        var dt = VIS.dataContext.getJSONRecord("MVABDocTypes/GetDocType", paramString);
         var isSOTrx = Util.getValueOfBoolean(dt["IsSOTrx"]);
         if (VAB_DocTypes_ID != 0) {
-            // dt = MDocType.Get(ctx, VAB_DocTypes_ID);
+            // dt = MVABDocTypes.Get(ctx, VAB_DocTypes_ID);
 
             // ctx.setIsSOTrx(windowNo, dt["IsSOTrx"]);
             // Change by mohit to set the Sales transaction value in window context according to the selection of document type on payment window- asked by Mukesh Sir- 3 April 2019.
@@ -20976,7 +20976,7 @@
             this.setCalloutActive(true);
             var colName = "";
             if (mTab.getField("VAM_Warehouse_ID") != null) {
-                var warehouse_ID = VIS.dataContext.getJSONRecord("MDocType/GetWarehouse", value.toString());
+                var warehouse_ID = VIS.dataContext.getJSONRecord("MVABDocTypes/GetWarehouse", value.toString());
                 if (warehouse_ID > 0) {
                     if (mTab.getTableName() == "VAM_InventoryTransfer" && mTab.getField("DTD001_MWarehouseSource_ID") != null) {
                         mTab.setValue("DTD001_MWarehouseSource_ID", warehouse_ID);

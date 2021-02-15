@@ -1206,7 +1206,7 @@ namespace VAdvantage.Acct
             //	Prio 3 - get from doc - if not GL
             if (_doc != null && base.GetVAF_Org_ID() == 0)
             {
-                if (MDocBaseType.DOCBASETYPE_GLJOURNAL.Equals(_doc.GetDocumentType()))
+                if (MVABMasterDocType.DOCBASETYPE_GLJOURNAL.Equals(_doc.GetDocumentType()))
                 {
                     SetVAF_Org_ID(_acct.GetVAF_Org_ID()); //	inter-company GL
                     log.Finer("VAF_Org_ID=" + base.GetVAF_Org_ID() + " (3 from Acct)");
@@ -1220,7 +1220,7 @@ namespace VAdvantage.Acct
             //	Prio 4 - get from account - if not GL
             if (_doc != null && base.GetVAF_Org_ID() == 0)
             {
-                if (MDocBaseType.DOCBASETYPE_GLJOURNAL.Equals(_doc.GetDocumentType()))
+                if (MVABMasterDocType.DOCBASETYPE_GLJOURNAL.Equals(_doc.GetDocumentType()))
                 {
                     SetVAF_Org_ID(_doc.GetVAF_Org_ID());
                     log.Finer("VAF_Org_ID=" + base.GetVAF_Org_ID() + " (4 from Document)");
@@ -1395,7 +1395,7 @@ namespace VAdvantage.Acct
 
 
                 //  Revenue Recognition for AR Invoices
-                if (_doc.GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARINVOICE)
+                if (_doc.GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARINVOICE)
                     && _docLine != null
                     && _docLine.GetC_RevenueRecognition_ID() != 0)
                 {
@@ -1554,7 +1554,7 @@ namespace VAdvantage.Acct
 
                 if (idr.Read())
                 {
-                    MFactAcct fact = new MFactAcct(GetCtx(), idr, Get_TrxName());
+                    MActualAcctDetail fact = new MActualAcctDetail(GetCtx(), idr, Get_TrxName());
                     //  Accounted Amounts - reverse
                     Decimal dr = fact.GetAmtAcctDr();
                     Decimal cr = fact.GetAmtAcctCr();

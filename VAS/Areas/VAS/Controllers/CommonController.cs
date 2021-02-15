@@ -2845,7 +2845,7 @@ namespace VIS.Controllers
             if (PostingType == null || PostingType.Length == 0)
             {
                 rm.AddColumn(new RColumn(ctx, "PostingType", DisplayType.List,
-                    MFactAcct.POSTINGTYPE_VAF_Control_Ref_ID));
+                    MActualAcctDetail.POSTINGTYPE_VAF_Control_Ref_ID));
             }
             return rm;
         }

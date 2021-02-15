@@ -419,7 +419,7 @@ namespace VAdvantage.Model
                     {
                         MVABDocAllocation allocHdr = new MVABDocAllocation(GetCtx(), GetVAB_DocAllocation_ID(), Get_Trx());
                         decimal payAmt = 0;
-                        MDocType doctype = null;
+                        MVABDocTypes doctype = null;
                         MVABCurrency currency = new MVABCurrency(GetCtx(), invoice.GetVAB_Currency_ID(), null);
                         if (GetVAB_sched_InvoicePayment_ID() != 0 && !invoice.IsPaid())
                         {
@@ -444,7 +444,7 @@ namespace VAdvantage.Model
                             if (reverse && payment != null)
                             {
                                 #region Handle for Payment & Invoice Allocation
-                                doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
+                                doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
 
                                 // convert (payment amount / Amount from View Allocation) to invoice currency amount then subtract Paid invoice amount to calculated amount
                                 if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
@@ -538,7 +538,7 @@ namespace VAdvantage.Model
                             {
                                 #region Handle fo Cash Journal & Invoice Allocation
 
-                                doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
+                                doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
                                 cashLine = new MVABCashJRNLLine(GetCtx(), VAB_CashJRNLLine_ID, Get_Trx());
 
                                 // convert cash amount to invoice currency amount with allocation date then subtract Paid invoice amount to calculated amount

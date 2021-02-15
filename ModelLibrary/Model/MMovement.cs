@@ -176,7 +176,7 @@ namespace VAdvantage.Model
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -227,7 +227,7 @@ namespace VAdvantage.Model
         {
             if (GetVAB_DocTypes_ID() == 0)
             {
-                MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT);
+                MVABDocTypes[] types = MVABDocTypes.GetOfDocBaseType(GetCtx(), MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT);
                 if (types.Length > 0)	//	Get first
                     SetVAB_DocTypes_ID(types[0].GetVAB_DocTypes_ID());
                 else
@@ -315,7 +315,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
@@ -1859,7 +1859,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -3098,7 +3098,7 @@ namespace VAdvantage.Model
                 _processMsg = "Document Closed: " + GetDocStatus();
                 return false;
             }
-            MDocType doctype = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
+            MVABDocTypes doctype = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             bool InTransit = (bool)doctype.Get_Value("IsInTransit");
             //	Not Processed
             if (DOCSTATUS_Drafted.Equals(GetDocStatus())
@@ -3140,7 +3140,7 @@ namespace VAdvantage.Model
                 }
                 // Added By Arpit on 9th Dec,2016 to set Void the document of Move Confirmation if found on the following conditions
                 //  MMovement InvMove = new MMovement(GetCtx(), Get_ID(), Get_Trx());
-                //  MDocType doctype = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
+                //  MVABDocTypes doctype = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
                 // bool InTransit = (bool)doctype.Get_Value("IsInTransit");
                 if (InTransit == true)
                 {
@@ -3212,7 +3212,7 @@ namespace VAdvantage.Model
             // is used to check Container applicable into system
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -3236,7 +3236,7 @@ namespace VAdvantage.Model
             }
 
             //start Added by Arpit Rai on 9th Dec,2016
-            //  MDocType DocType = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
+            //  MVABDocTypes DocType = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             bool InTransit = (bool)dt.Get_Value("IsInTransit");
             if (InTransit == true)
             {
@@ -3388,7 +3388,7 @@ namespace VAdvantage.Model
             SetProcessed(true);
             Save(Get_Trx());
             ////start Added by Arpit Rai on 9th Dec,2016
-            //MDocType DocType = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
+            //MVABDocTypes DocType = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
             //bool InTransit = (bool)DocType.Get_Value("IsInTransit");
             //if (InTransit == true)
             //{

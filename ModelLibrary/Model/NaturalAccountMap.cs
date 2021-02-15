@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         private Trx m_trx = null;
 
         /** Map of Values and Element	*/
-        private Dictionary<String, MElementValue> m_valueMap = new Dictionary<String, MElementValue>();
+        private Dictionary<String, MVABAcctElement> m_valueMap = new Dictionary<String, MVABAcctElement>();
         /**	Logger			*/
         private static VLogger log = VLogger.GetVLogger(typeof(NaturalAccountMap<K, V>).FullName);
 
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
 
             foreach (string key in s_base.Keys)
             {
-                MElementValue na = (MElementValue)s_base[key];
+                MVABAcctElement na = (MVABAcctElement)s_base[key];
                 na.SetVAF_Client_ID(VAF_Client_ID);
                 na.SetVAF_Org_ID(VAF_Org_ID);
                 na.SetVAB_Element_ID(VAB_Element_ID);
@@ -56,9 +56,9 @@ namespace VAdvantage.Model
 
         public int GetVAB_Acct_Element_ID(String key)
         {
-            MElementValue na = null;
+            MVABAcctElement na = null;
             if (s_base.ContainsKey(key))
-                na = (MElementValue)s_base[key];
+                na = (MVABAcctElement)s_base[key];
             if (na == null)
                 return 0;
             return na.GetVAB_Acct_Element_ID();
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         }   //  parse
 
 
-        private static CCache<string, MElementValue> s_base = new CCache<string, MElementValue>("Default_Value", 10);
+        private static CCache<string, MVABAcctElement> s_base = new CCache<string, MVABAcctElement>("Default_Value", 10);
 
         /// <summary>
         /// Create Account Entry for Default Accounts only.
@@ -216,13 +216,13 @@ namespace VAdvantage.Model
             try
             {
                 //	Try to find - allows to use same natutal account for multiple default accounts 
-                MElementValue na = null;
+                MVABAcctElement na = null;
                 if (m_valueMap.ContainsKey(Value))
-                    na = (MElementValue)m_valueMap[Value];
+                    na = (MVABAcctElement)m_valueMap[Value];
                 if (na == null)
                 {
                     //  Create Account - save later
-                    na = new MElementValue(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
+                    na = new MVABAcctElement(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
                     m_valueMap[Value] = na;
                 }
 
@@ -376,13 +376,13 @@ namespace VAdvantage.Model
             try
             {
                 //	Try to find - allows to use same natutal account for multiple default accounts 
-                MElementValue na = null;
+                MVABAcctElement na = null;
                 if (m_valueMap.ContainsKey(Value))
-                    na = (MElementValue)m_valueMap[Value];
+                    na = (MVABAcctElement)m_valueMap[Value];
                 if (na == null)
                 {
                     //  Create Account - save later
-                    na = new MElementValue(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
+                    na = new MVABAcctElement(m_ctx, Value, Name, Description, AccountType, AccountSign, IsDocControlled.ToUpper().StartsWith("Y"), IsSummary.ToUpper().StartsWith("Y"), m_trx);
                     int refElementID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAB_Acct_Element_ID FROM VAB_Acct_Element
                                                                                     WHERE IsActive='Y' AND VAF_Client_ID=" + na.GetVAF_Client_ID() + " AND Value='" + accountParent + @"'
                                                                                     AND VAB_Element_ID=" + VAB_Element_ID, null, m_trx));

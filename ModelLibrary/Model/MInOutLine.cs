@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
 
             //Checking for conversion of UOM 
             MInOut inO = new MInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
-            MDocType dt = new MDocType(GetCtx(), inO.GetVAB_DocTypes_ID(), Get_TrxName());
+            MVABDocTypes dt = new MVABDocTypes(GetCtx(), inO.GetVAB_DocTypes_ID(), Get_TrxName());
             MProduct _Product = null;
 
             // Check if Product_ID is non zero then only create the object

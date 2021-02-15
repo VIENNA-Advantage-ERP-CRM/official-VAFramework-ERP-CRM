@@ -633,7 +633,7 @@ namespace VAdvantage.Model
             // set target document type for purchase cycle
             if (!ship.IsSOTrx())
             {
-                MDocType dt = MDocType.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
                 if (dt.GetVAB_DocTypesInvoice_ID() != 0)
                     SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), ship.IsSOTrx());
             }
@@ -664,7 +664,7 @@ namespace VAdvantage.Model
                 SetPaymentRule(order.GetPaymentRule());
                 SetVAB_PaymentTerm_ID(order.GetVAB_PaymentTerm_ID());
                 //
-                MDocType dt = MDocType.Get(GetCtx(), order.GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), order.GetVAB_DocTypes_ID());
                 if (dt.GetVAB_DocTypesInvoice_ID() != 0)
                     SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), true);
                 //	Overwrite Invoice Address
@@ -709,7 +709,7 @@ namespace VAdvantage.Model
         //    // set target document type for purchase cycle
         //    if (!ship.IsSOTrx())
         //    {
-        //        MDocType dt = MDocType.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
+        //        MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), ship.GetVAB_DocTypes_ID());
         //        if (dt.GetVAB_DocTypesInvoice_ID() != 0)
         //            SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), ship.IsSOTrx());
         //    }
@@ -740,7 +740,7 @@ namespace VAdvantage.Model
         //        SetPaymentRule(ord.GetPaymentRule());
         //        SetVAB_PaymentTerm_ID(ord.GetVAB_PaymentTerm_ID());
         //        //
-        //        MDocType dt = MDocType.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
+        //        MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
         //        if (dt.GetVAB_DocTypesInvoice_ID() != 0)
         //            SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), true);
         //        //	Overwrite Invoice Address
@@ -752,7 +752,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Set Target Document Type
         /// </summary>
-        /// <param name="DocBaseType">doc type MDocBaseType.DOCBASETYPE_</param>
+        /// <param name="DocBaseType">doc type MVABMasterDocType.DOCBASETYPE_</param>
         public void SetVAB_DocTypesTarget_ID(String DocBaseType)
         {
             //String sql = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
@@ -773,11 +773,11 @@ namespace VAdvantage.Model
             {
                 log.Fine(DocBaseType);
                 SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
-                bool isSOTrx = MDocBaseType.DOCBASETYPE_ARINVOICE.Equals(DocBaseType)
-                    || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(DocBaseType);
+                bool isSOTrx = MVABMasterDocType.DOCBASETYPE_ARINVOICE.Equals(DocBaseType)
+                    || MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(DocBaseType);
                 SetIsSOTrx(isSOTrx);
-                bool isReturnTrx = MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(DocBaseType)
-                    || MDocBaseType.DOCBASETYPE_APCREDITMEMO.Equals(DocBaseType);
+                bool isReturnTrx = MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(DocBaseType)
+                    || MVABMasterDocType.DOCBASETYPE_APCREDITMEMO.Equals(DocBaseType);
                 SetIsReturnTrx(isReturnTrx);
             }
         }
@@ -791,9 +791,9 @@ namespace VAdvantage.Model
             if (GetVAB_DocTypesTarget_ID() > 0)
                 return;
             if (IsSOTrx())
-                SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
+                SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_ARINVOICE);
             else
-                SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);
+                SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_APINVOICE);
         }
 
         /// <summary>
@@ -806,7 +806,7 @@ namespace VAdvantage.Model
             base.SetVAB_DocTypesTarget_ID(VAB_DocTypesTarget_ID);
             if (setReturnTrx)
             {
-                MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypesTarget_ID);
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), VAB_DocTypesTarget_ID);
                 SetIsSOTrx(dt.IsSOTrx());
                 SetIsReturnTrx(dt.IsReturnTrx());
             }
@@ -1186,10 +1186,10 @@ namespace VAdvantage.Model
          */
         public bool IsCreditMemo()
         {
-            MDocType dt = MDocType.Get(GetCtx(),
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(),
                 GetVAB_DocTypes_ID() == 0 ? GetVAB_DocTypesTarget_ID() : GetVAB_DocTypes_ID());
-            return MDocBaseType.DOCBASETYPE_APCREDITMEMO.Equals(dt.GetDocBaseType())
-                || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType());
+            return MVABMasterDocType.DOCBASETYPE_APCREDITMEMO.Equals(dt.GetDocBaseType())
+                || MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType());
         }
 
         /**
@@ -1388,12 +1388,12 @@ namespace VAdvantage.Model
             if (GetVAB_DocTypes_ID() == 0)
                 SetVAB_DocTypes_ID(0);	//	make sure it's set to 0
             if (GetVAB_DocTypesTarget_ID() == 0)
-                SetVAB_DocTypesTarget_ID(IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARINVOICE : MDocBaseType.DOCBASETYPE_APINVOICE);
+                SetVAB_DocTypesTarget_ID(IsSOTrx() ? MVABMasterDocType.DOCBASETYPE_ARINVOICE : MVABMasterDocType.DOCBASETYPE_APINVOICE);
 
             //JID_0244 -- On Invoice, set value of checkbox"Treat As Discount" based on document type. 
             if (Get_ColumnIndex("TreatAsDiscount") >= 0 && !IsSOTrx())
             {
-                SetTreatAsDiscount(MDocType.Get(GetCtx(), GetVAB_DocTypesTarget_ID()).IsTreatAsDiscount());
+                SetTreatAsDiscount(MVABDocTypes.Get(GetCtx(), GetVAB_DocTypesTarget_ID()).IsTreatAsDiscount());
             }
 
             //	Payment Term
@@ -1570,7 +1570,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -2065,7 +2065,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypesTarget_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypesTarget_ID());
             SetIsReturnTrx(dt.IsReturnTrx());
             SetIsSOTrx(dt.IsSOTrx());
 
@@ -2563,7 +2563,7 @@ namespace VAdvantage.Model
 
                 log.Info(ToString());
                 StringBuilder Info = new StringBuilder();
-                MDocType dt = new MDocType(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
+                MVABDocTypes dt = new MVABDocTypes(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
                 //	Create Cash when the invoice againt order and payment method cash and  order is of POS type
                 if ((PAYMENTRULE_Cash.Equals(GetPaymentRule()) || PAYMENTRULE_CashAndCredit.Equals(GetPaymentRule())) && GetVAB_Order_ID() > 0)
                 {
@@ -3343,7 +3343,7 @@ namespace VAdvantage.Model
                                         #region when Ap Credit memo is independent.
                                         // when Ap Credit memo is alone and document type having setting as "Treat As Discount" then we will do a impact on costing.
                                         // this is bcz of giving discount for particular product
-                                        MDocType docType = new MDocType(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                        MVABDocTypes docType = new MVABDocTypes(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
                                         if (docType.GetDocBaseType() == "APC" && line.GetVAB_OrderLine_ID() == 0 &&
                                             line.GetVAM_Inv_InOutLine_ID() == 0 && line.GetVAM_Product_ID() > 0 && docType.IsTreatAsDiscount())
                                         {
@@ -3710,7 +3710,7 @@ namespace VAdvantage.Model
                                     #region when Ap Credit memo is alone then we will do a impact on costing.
                                     // when Ap Credit memo is alone then we will do a impact on costing.
                                     // this is bcz of giving discount for particular product
-                                    MDocType docType = new MDocType(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                    MVABDocTypes docType = new MVABDocTypes(GetCtx(), GetVAB_DocTypesTarget_ID(), Get_Trx());
                                     if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && line.GetVAB_OrderLine_ID() == 0 && line.GetVAM_Inv_InOutLine_ID() == 0 && line.GetVAM_Product_ID() > 0)
                                     {
                                         if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), product1, line.GetVAM_PFeature_SetInstance_ID(),
@@ -4286,11 +4286,11 @@ namespace VAdvantage.Model
                         Allline.SetVAB_Payment_ID(PaymentId);
                         Allline.SetDateTrx(DateTime.Now);
 
-                        MDocType doctype = MDocType.Get(GetCtx(), GetVAB_DocTypesTarget_ID());
+                        MVABDocTypes doctype = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypesTarget_ID());
                         // for reverse record
                         if (invoice.GetRef_VAB_Invoice_ID() > 0)
                         {
-                            if (doctype.GetDocBaseType() == MDocBaseType.DOCBASETYPE_ARCREDITMEMO || doctype.GetDocBaseType() == MDocBaseType.DOCBASETYPE_APINVOICE)
+                            if (doctype.GetDocBaseType() == MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO || doctype.GetDocBaseType() == MVABMasterDocType.DOCBASETYPE_APINVOICE)
                             {
                                 Allline.SetAmount(Util.GetValueOfDecimal(dsPayment.Tables[0].Rows[i]["DueAmt"]));
                             }
@@ -4301,7 +4301,7 @@ namespace VAdvantage.Model
                         }
                         else // for orignal record
                         {
-                            if (doctype.GetDocBaseType() == MDocBaseType.DOCBASETYPE_ARCREDITMEMO || doctype.GetDocBaseType() == MDocBaseType.DOCBASETYPE_APINVOICE)
+                            if (doctype.GetDocBaseType() == MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO || doctype.GetDocBaseType() == MVABMasterDocType.DOCBASETYPE_APINVOICE)
                             {
                                 Allline.SetAmount(Decimal.Negate(Util.GetValueOfDecimal(dsPayment.Tables[0].Rows[i]["DueAmt"])));
                             }
@@ -4385,7 +4385,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -4848,7 +4848,7 @@ namespace VAdvantage.Model
 
             //	Document Type
             int VAB_DocTypesTarget_ID = 0;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
+            MVABInterCompanyDoc counterDT = MVABInterCompanyDoc.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
@@ -5030,7 +5030,7 @@ namespace VAdvantage.Model
 
             }
             log.Info(ToString());
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -5985,10 +5985,10 @@ namespace VAdvantage.Model
                     return "VAB_CashJRNL_ID 0";
                 }
             }
-            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), order.GetVAB_DocTypes_ID());
+            VAdvantage.Model.MVABDocTypes dt = VAdvantage.Model.MVABDocTypes.Get(GetCtx(), order.GetVAB_DocTypes_ID());
             String DocSubTypeSO = dt.GetDocSubTypeSO();
 
-            if (VAdvantage.Model.MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
+            if (VAdvantage.Model.MVABDocTypes.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))
             {
                 //if (order.GetVAPOS_ShiftDetails_ID() == 0)
                 //{

@@ -345,7 +345,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open? - AP (Reimbursement) Invoice
-            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE, GetVAF_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateReport(), VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_APINVOICE, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;

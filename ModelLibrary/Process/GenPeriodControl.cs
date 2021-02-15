@@ -60,7 +60,7 @@ namespace VAdvantage.Process
             MPeriod period = new MPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_Trx());
 
             // Get all Document type related to Tenant
-            MDocType[] types = MDocType.GetOfClient(GetCtx());
+            MVABDocTypes[] types = MVABDocTypes.GetOfClient(GetCtx());
             int count = 0;
             List<String> baseTypes = new List<String>();
             ValueNamePair vp = null;
@@ -74,7 +74,7 @@ namespace VAdvantage.Process
 
             for (int i = 0; i < types.Length; i++)
             {
-                MDocType type = types[i];
+                MVABDocTypes type = types[i];
                 String docBaseType = type.GetDocBaseType();
                 if (baseTypes.Contains(docBaseType))
                     continue;

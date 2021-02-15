@@ -378,7 +378,7 @@ namespace VAdvantage.Process
         {
             // Get system elements against Version Table's Columns
             string VerTableName = Util.GetValueOfString(DB.ExecuteScalar("SELECT TableName FROM VAF_TableView WHERE VAF_TableView_ID = " + Ver_TableID, null, Get_Trx()));
-            GetSystemElements(VerTableName);
+            GetSysteMVABElements(VerTableName);
 
             // Get field Group ID for Versioning
             int VAF_FieldSection_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAF_FieldSection_ID FROM VAF_FieldSection WHERE Name = 'Versioning'", null, Get_Trx()));
@@ -486,7 +486,7 @@ namespace VAdvantage.Process
         /// 
         /// </summary>
         /// <param name="VerTblName"></param>
-        public void GetSystemElements(string VerTblName)
+        public void GetSysteMVABElements(string VerTblName)
         {
             if (_listDefVerElements.Count == listDefVerCols.Count)
                 return;

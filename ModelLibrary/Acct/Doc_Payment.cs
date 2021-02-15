@@ -114,7 +114,7 @@ namespace VAdvantage.Acct
             }
 
             int VAF_Org_ID = GetBank_Org_ID();		//	Bank Account Org	
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARRECEIPT))
             {
                 // Work done by Bharat for the posting of ED008 Module
 
@@ -349,7 +349,7 @@ namespace VAdvantage.Acct
                 }
             }
             //  APP
-            else if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT))
+            else if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APPAYMENT))
             {
                 // Work Done For Ed008 Module
                 bool addPost = false;

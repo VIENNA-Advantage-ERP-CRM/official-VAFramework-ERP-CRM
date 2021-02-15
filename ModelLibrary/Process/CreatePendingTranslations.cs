@@ -163,7 +163,7 @@ namespace VAdvantage.Process
                 {
                     tlField = new X_I_TLField_Trl(GetCtx(), ds.Tables[0].Rows[i], null);
                     isCentrallyMaintained = 'N';
-                    if (tlField.IsTranslateSystemElement())
+                    if (tlField.IsTranslateSysteMVABElement())
                     {
                         isCentrallyMaintained = 'Y';
                         //Translate System Element trl
@@ -178,7 +178,7 @@ namespace VAdvantage.Process
                                             WHERE VAF_COLUMNDIC_ID=" + tlField.GetVAF_ColumnDic_ID()+" AND VAF_LANGUAGE='"+lang+"'");
                        if(DB.ExecuteQuery(sql.ToString(),param,trx)==-1)
                        {
-                           res.Append(tlField.GetVAF_ColumnDic_ID() + " SystemElementNotTranslated.");
+                           res.Append(tlField.GetVAF_ColumnDic_ID() + " SysteMVABElementNotTranslated.");
                            break;
                        }
                     }

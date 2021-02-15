@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Requisition(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MRequisition), idr, MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
+            : base(ass, typeof(MRequisition), idr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
         }
         public Doc_Requisition(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MRequisition), dr, MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
+            : base(ass, typeof(MRequisition), dr, MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, trxName)
         {
 
         }

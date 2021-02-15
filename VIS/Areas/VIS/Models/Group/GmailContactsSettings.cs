@@ -1859,7 +1859,7 @@ namespace VIS.Models
 //                    //});
 //                    return;
 //                }
-//                MGmailConfiguration gSettings = new MGmailConfiguration(ctx, Util.GetValueOfInt(gID), null);
+//                MWSPGmailConfiguration gSettings = new MWSPGmailConfiguration(ctx, Util.GetValueOfInt(gID), null);
 //                CanUpdateExiastingRecord = gSettings.IsWSP_IsUpdateExistingRecord();
 //                username = gSettings.GetWSP_Username();
 //                password = gSettings.GetWSP_Password();

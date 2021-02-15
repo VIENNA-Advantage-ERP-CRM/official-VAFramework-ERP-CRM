@@ -39,18 +39,18 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private bool _IsTest = false;
 
         //	Distribution Run			
-        private MDistributionRun _run = null;
+        private MVAMDistributionRun _run = null;
         //Distribution Run Lines		
-        private MDistributionRunLine[] _runLines = null;
+        private MVAMDistributionRunLine[] _runLines = null;
         // Distribution Run Details	
-        private MDistributionRunDetail[] _details = null;
+        private MVATCirculationDetail[] _details = null;
 
         //	Date Ordered			
         private DateTime? _DateOrdered = null;
         //	Orders Created			
         private int _counter = 0;
         // Document Type			
-        private MDocType _docType = null;
+        private MVABDocTypes _docType = null;
         #endregion
 
         /// <summary>
@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new ArgumentException("No Distribution Run ID");
             }
-            _run = new MDistributionRun(GetCtx(), _VAM_DistributionRun_ID, Get_TrxName());
+            _run = new MVAMDistributionRun(GetCtx(), _VAM_DistributionRun_ID, Get_TrxName());
             if (_run.Get_ID() == 0)
             {
                 throw new Exception("Distribution Run not found -  VAM_DistributionRun_ID=" + _VAM_DistributionRun_ID);
@@ -118,7 +118,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new ArgumentException("No Document Type ID");
             }
-            _docType = new MDocType(GetCtx(), _VAB_DocTypes_ID, null);	//	outside trx
+            _docType = new MVABDocTypes(GetCtx(), _VAB_DocTypes_ID, null);	//	outside trx
             if (_docType.Get_ID() == 0)
             {
                 throw new Exception("Document Type not found -  VAB_DocTypes_ID=" + _VAB_DocTypes_ID);
@@ -138,7 +138,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Order By Distribution Run Line
-            _details = MDistributionRunDetail.Get(GetCtx(), _VAM_DistributionRun_ID, false, Get_TrxName());
+            _details = MVATCirculationDetail.Get(GetCtx(), _VAM_DistributionRun_ID, false, Get_TrxName());
             //	First Run -- Add & Round
             AddAllocations();
 
@@ -155,7 +155,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 
             //	Order By Business Partner
-            _details = MDistributionRunDetail.Get(GetCtx(), _VAM_DistributionRun_ID, true, Get_TrxName());
+            _details = MVATCirculationDetail.Get(GetCtx(), _VAM_DistributionRun_ID, true, Get_TrxName());
             //	Create Orders
             CreateOrders();
 
@@ -235,16 +235,16 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Reset
             for (int j = 0; j < _runLines.Length; j++)
             {
-                MDistributionRunLine runLine = _runLines[j];
+                MVAMDistributionRunLine runLine = _runLines[j];
                 runLine.ResetCalculations();
             }
             //	Add Up
             for (int i = 0; i < _details.Length; i++)
             {
-                MDistributionRunDetail detail = _details[i];
+                MVATCirculationDetail detail = _details[i];
                 for (int j = 0; j < _runLines.Length; j++)
                 {
-                    MDistributionRunLine runLine = _runLines[j];
+                    MVAMDistributionRunLine runLine = _runLines[j];
                     if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         //	Round
@@ -268,7 +268,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Info
             for (int j = 0; j < _runLines.Length; j++)
             {
-                MDistributionRunLine runLine = _runLines[j];
+                MVAMDistributionRunLine runLine = _runLines[j];
                 log.Fine("Run - " + runLine.GetInfo());
             }
         }
@@ -284,7 +284,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	Check total min qty & delta
             for (int j = 0; j < _runLines.Length; j++)
             {
-                MDistributionRunLine runLine = _runLines[j];
+                MVAMDistributionRunLine runLine = _runLines[j];
                 if (runLine.IsActualMinGtTotal())
                     throw new Exception("Line " + runLine.GetLine()
                         + " Sum of Min Qty=" + runLine.GetActualMin()
@@ -314,7 +314,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="index">run line index</param>
         private void AdjustAllocation(int index)
         {
-            MDistributionRunLine runLine = _runLines[index];
+            MVAMDistributionRunLine runLine = _runLines[index];
             Decimal difference = runLine.GetActualAllocationDiff();
             if (difference.CompareTo(Env.ZERO) == 0)
             {
@@ -330,7 +330,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 for (int i = 0; i < _details.Length; i++)
                 {
-                    MDistributionRunDetail detail = _details[i];
+                    MVATCirculationDetail detail = _details[i];
                     if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         log.Fine("Biggest - DetailAllocation=" + detail.GetActualAllocation()
@@ -354,7 +354,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 Decimal ratioTotal = Env.ZERO;
                 for (int i = 0; i < _details.Length; i++)
                 {
-                    MDistributionRunDetail detail = _details[i];
+                    MVATCirculationDetail detail = _details[i];
                     if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         if (detail.IsCanAdjust())
@@ -372,7 +372,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	Distribute
                 for (int i = 0; i < _details.Length; i++)
                 {
-                    MDistributionRunDetail detail = _details[i];
+                    MVATCirculationDetail detail = _details[i];
                     if (runLine.GetVAM_DistributionRunLine_ID() == detail.GetVAM_DistributionRunLine_ID())
                     {
                         if (detail.IsCanAdjust())
@@ -466,7 +466,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	For all lines
             for (int i = 0; i < _details.Length; i++)
             {
-                MDistributionRunDetail detail = _details[i];
+                MVATCirculationDetail detail = _details[i];
 
                 //	Create Order Header
                 if (_run.IsCreateSingleOrder())

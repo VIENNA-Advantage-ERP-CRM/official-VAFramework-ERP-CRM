@@ -3826,7 +3826,7 @@ namespace VAdvantage.Model
             }
 
             MVABOrder Ord = new MVABOrder(Env.GetCtx(), GetVAB_Order_ID(), Get_Trx());
-            MDocType docType = MDocType.Get(Env.GetCtx(), Ord.GetVAB_DocTypesTarget_ID());
+            MVABDocTypes docType = MVABDocTypes.Get(Env.GetCtx(), Ord.GetVAB_DocTypesTarget_ID());
 
             // JID_1850 if product is there when qty delivered / invoicedcant be less than qtyordered
             if ((GetVAM_Product_ID()) > 0)

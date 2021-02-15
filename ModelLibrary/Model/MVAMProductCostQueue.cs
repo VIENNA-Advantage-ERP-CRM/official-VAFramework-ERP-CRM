@@ -3125,7 +3125,7 @@ namespace VAdvantage.Model
                                     {
                                         // in case of independent AP credit memo, accumulation amt reduce and current cost of AV. PO/Invoice will be calculated
                                         // discount is given only when document type having setting as "Treat As Discount" = True
-                                        MDocType docType = new MDocType(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
+                                        MVABDocTypes docType = new MVABDocTypes(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
                                         if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount())
                                         {
                                             result = cd.UpdateProductCost("Invoice(APC)", cd, acctSchema, product, M_ASI_ID, invoiceline.GetVAF_Org_ID(), optionalStrCd: optionalstr);
@@ -3157,7 +3157,7 @@ namespace VAdvantage.Model
                                 // cost element detail not to be calculated when Invoice(Vendor) is alone.
                                 // But in case of APC, we have to calculate Cost Element detail and cost combination both
                                 //discount is given only when document type having setting as "Treat As Discount" = True
-                                MDocType docType = new MDocType(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
+                                MVABDocTypes docType = new MVABDocTypes(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
                                 if (docType.IsTreatAsDiscount() && docType.GetDocBaseType() == "APC" && cd != null)
                                 {
                                     // get costing level
@@ -4700,7 +4700,7 @@ namespace VAdvantage.Model
                                 {
                                     // 20-4-2016
                                     // in case of independent AP credit memo, accumulation amt reduce and current cost of AV. PO/Invoice will be calculated
-                                    MDocType docType = new MDocType(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
+                                    MVABDocTypes docType = new MVABDocTypes(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
                                     if (docType.GetDocBaseType() == "APC")
                                     {
                                         result = cd.UpdateProductCost("Invoice(APC)", cd, acctSchema, product, M_ASI_ID, invoiceline.GetVAF_Org_ID());
@@ -4722,7 +4722,7 @@ namespace VAdvantage.Model
                         {
                             // cost element detail not to be calculated when Invoice(Vendor) is alone.
                             // But in case of APC, we have to calculate Cost Element detail and cost combination both
-                            MDocType docType = new MDocType(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
+                            MVABDocTypes docType = new MVABDocTypes(ctx, invoice.GetVAB_DocTypesTarget_ID(), trxName);
                             if (docType.GetDocBaseType() == "APC" && cd != null)
                             {
                                 cd.CreateCostForCombination(cd, acctSchema, product, M_ASI_ID, 0, windowName);

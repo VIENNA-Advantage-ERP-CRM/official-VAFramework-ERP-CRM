@@ -3485,7 +3485,7 @@ namespace VAdvantage.Model
                     }
 
                     //Added by Bharat to set Discrepancy Amount
-                    MDocType doc = new MDocType(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
+                    MVABDocTypes doc = new MVABDocTypes(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
                     if (!doc.IsReturnTrx())
                     {
                         //int table_ID = MInvoiceLine.Table_ID;
@@ -3881,7 +3881,7 @@ namespace VAdvantage.Model
 
                 //Added by Bharat to set Discrepancy Amount
                 MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
-                MDocType doc = new MDocType(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
+                MVABDocTypes doc = new MVABDocTypes(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
                 if (!inv.IsSOTrx() && !doc.IsReturnTrx())
                 {
                     if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)
@@ -3935,7 +3935,7 @@ namespace VAdvantage.Model
                 return success;
             //Added by Bharat to set Discrepancy Amount
             MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
-            MDocType doc = new MDocType(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
+            MVABDocTypes doc = new MVABDocTypes(GetCtx(), inv.GetVAB_DocTypesTarget_ID(), Get_TrxName());
             if (!inv.IsSOTrx() && !doc.IsReturnTrx())
             {
                 if (inv.Get_ColumnIndex("DiscrepancyAmt") >= 0)

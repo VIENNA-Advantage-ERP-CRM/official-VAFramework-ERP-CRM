@@ -274,24 +274,24 @@ namespace VAdvantage.Process
                             //+ " AND IsActive='Y' AND IsExpenseInvoice = 'Y' "
                             //+ "ORDER BY VAB_DocTypes_ID DESC ,   IsDefault DESC";
                             String qry = "SELECT VAB_DocTypes_ID FROM VAB_DocTypes "
-                      + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + @" AND DocBaseType='" + MDocBaseType.DOCBASETYPE_APINVOICE + @"'"
+                      + "WHERE VAF_Client_ID=" + GetVAF_Client_ID() + @" AND DocBaseType='" + MVABMasterDocType.DOCBASETYPE_APINVOICE + @"'"
                       + " AND IsActive='Y' AND IsExpenseInvoice = 'Y'  AND VAF_Org_ID IN(0," + te.GetVAF_Org_ID() + ") "
                       + " ORDER BY VAF_Org_ID Desc, VAB_DocTypes_ID DESC ,   IsDefault DESC";
 
-                            //int VAB_DocTypes_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MDocBaseType.DOCBASETYPE_APINVOICE);
+                            //int VAB_DocTypes_ID = DB.GetSQLValue(null, qry, GetVAF_Client_ID(), MVABMasterDocType.DOCBASETYPE_APINVOICE);
                             int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry));
                             if (VAB_DocTypes_ID <= 0)
                             {
                                 log.Log(Level.SEVERE, "Not found for AC_Client_ID="
-                                    + GetVAF_Client_ID() + " - " + MDocBaseType.DOCBASETYPE_APINVOICE);
+                                    + GetVAF_Client_ID() + " - " + MVABMasterDocType.DOCBASETYPE_APINVOICE);
                                 return Msg.GetMsg(GetCtx(), "NoDocTypeExpInvoice");
                             }
                             else
                             {
-                                log.Fine(MDocBaseType.DOCBASETYPE_APINVOICE);
+                                log.Fine(MVABMasterDocType.DOCBASETYPE_APINVOICE);
                             }
                             invoice.SetVAB_DocTypesTarget_ID(VAB_DocTypes_ID);
-                            //invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_APINVOICE);	//	API
+                            //invoice.SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_APINVOICE);	//	API
 
                             //commented by Arpit on Jan 4,2015       Mentis issue no.   0000310
                             //invoice.SetDocumentNo(te.GetDocumentNo());

@@ -227,7 +227,7 @@ namespace VAdvantage.Acct
         public static Doc Get(MVABAccountBook[] ass, int VAF_TableView_ID, int Record_ID, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
-            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
+            MVABMasterDocType dbt = MVABMasterDocType.GetForTable(ctx, VAF_TableView_ID);
             if (dbt == null)
             {
                 _log.Log(Level.SEVERE, "No DocType for VAF_TableView_ID=" + VAF_TableView_ID);
@@ -289,7 +289,7 @@ namespace VAdvantage.Acct
         public static Doc Get(MVABAccountBook[] ass, int VAF_TableView_ID, DataRow idr, Trx trxName)
         {
             Ctx ctx = ass[0].GetCtx();
-            MDocBaseType dbt = MDocBaseType.GetForTable(ctx, VAF_TableView_ID);
+            MVABMasterDocType dbt = MVABMasterDocType.GetForTable(ctx, VAF_TableView_ID);
             if (dbt == null)
             {
                 _log.Log(Level.SEVERE, "No DocType for VAF_TableView_ID=" + VAF_TableView_ID);

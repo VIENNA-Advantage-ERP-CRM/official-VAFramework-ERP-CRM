@@ -68,7 +68,7 @@ namespace ViennaAdvantage.Process
         private StringBuilder m_parameterWhere = new StringBuilder();
         private StringBuilder m_datesql = new StringBuilder();
         /**	Account							*/
-       // private MElementValue m_acct = null;
+       // private MVABAcctElement m_acct = null;
         private StringBuilder _msql = new StringBuilder();
         StringBuilder _m_OuterSql = new StringBuilder();
         StringBuilder sql = new StringBuilder();

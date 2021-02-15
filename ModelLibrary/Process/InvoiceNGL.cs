@@ -270,11 +270,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             MVABAccountBook aas = MVABAccountBook.Get(GetCtx(), _VAB_AccountBook_ID);
             MVABAccountBookDefault asDefaultAccts = MVABAccountBookDefault.Get(GetCtx(), _VAB_AccountBook_ID);
-            MGLCategory cat = MGLCategory.GetDefaultSystem(GetCtx());
+            MVAGLGroup cat = MVAGLGroup.GetDefaultSystem(GetCtx());
             if (cat == null)
             {
-                MDocType docType = MDocType.Get(GetCtx(), _VAB_DocTypesReval_ID);
-                cat = MGLCategory.Get(GetCtx(), docType.GetVAGL_Group_ID());
+                MVABDocTypes docType = MVABDocTypes.Get(GetCtx(), _VAB_DocTypesReval_ID);
+                cat = MVAGLGroup.Get(GetCtx(), docType.GetVAGL_Group_ID());
             }
             //
             MJournalBatch batch = new MJournalBatch(GetCtx(), 0, Get_TrxName());
@@ -326,7 +326,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 line.SetLine((i + 1) * 10);
                 line.SetDescription(invoice.GetSummary());
                 //
-                MFactAcct fa = new MFactAcct(GetCtx(), gl.GetActual_Acct_Detail_ID(), null);
+                MActualAcctDetail fa = new MActualAcctDetail(GetCtx(), gl.GetActual_Acct_Detail_ID(), null);
                 line.SetVAB_Acct_ValidParameter_ID(MVABAccount.Get(fa));
                 Decimal? dr = gl.GetAmtRevalDrDiff();
                 Decimal? cr = gl.GetAmtRevalCrDiff();

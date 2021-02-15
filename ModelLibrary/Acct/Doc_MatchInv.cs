@@ -48,12 +48,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_MatchInv(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MMatchInv), idr, MDocBaseType.DOCBASETYPE_MATCHINVOICE, trxName)
+            : base(ass, typeof(MMatchInv), idr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
         }
         public Doc_MatchInv(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MMatchInv), dr, MDocBaseType.DOCBASETYPE_MATCHINVOICE, trxName)
+            : base(ass, typeof(MMatchInv), dr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
         }

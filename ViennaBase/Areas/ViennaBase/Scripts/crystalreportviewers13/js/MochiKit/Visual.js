@@ -61,7 +61,7 @@ MochiKit.Visual.toString = function () {
 //
 //    var color = this.options.color;
 //    var C = MochiKit.Color.Color;
-//    if (this.options.color === "fromElement") {
+//    if (this.options.color === "froMVABElement") {
 //        color = C.fromBackground(e);
 //    } else if (!(color instanceof C)) {
 //        color = C.fromString(color);
@@ -196,7 +196,7 @@ MochiKit.Visual.toString = function () {
 //    _setOptions: function (options) {
 //        this.options = {
 //            corners: "all",
-//            color: "fromElement",
+//            color: "froMVABElement",
 //            bgColor: "fromParent",
 //            blend: true,
 //            border: false,

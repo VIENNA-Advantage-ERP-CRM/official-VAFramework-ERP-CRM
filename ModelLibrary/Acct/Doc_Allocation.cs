@@ -45,12 +45,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Allocation(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MVABDocAllocation), idr, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
+            : base(ass, typeof(MVABDocAllocation), idr, MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
         {
 
         }
         public Doc_Allocation(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MVABDocAllocation), dr, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
+            : base(ass, typeof(MVABDocAllocation), dr, MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
         {
 
         }
@@ -485,7 +485,7 @@ namespace VAdvantage.Acct
                     //	Payment Only
                     if (line.GetVAB_Invoice_ID() == 0 && line.GetVAB_Payment_ID() != 0)
                     {
-                        MDocType dbt = new MDocType(GetCtx(), payment.GetVAB_DocTypes_ID(), GetTrxName());
+                        MVABDocTypes dbt = new MVABDocTypes(GetCtx(), payment.GetVAB_DocTypes_ID(), GetTrxName());
                         if (dbt.GetDocBaseType() == "ARR" && line.GetAmtSource() < 0)
                         {
                             fl = fact.CreateLine(line, GetPaymentAcct(as1, line.GetVAB_Payment_ID()),
@@ -1146,7 +1146,7 @@ namespace VAdvantage.Acct
                 if (idr.Read())
                 {
                     SetVAB_Bank_Acct_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
-                    if (MDocBaseType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
+                    if (MVABMasterDocType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
                     {
                         accountType = Doc.ACCTTYPE_PaymentSelect;
                     }
@@ -1411,7 +1411,7 @@ namespace VAdvantage.Acct
                 idr = DataBase.DB.ExecuteReader(sql, null, GetTrxName());
                 while (idr.Read())
                 {
-                    tax.AddInvoiceFact(new MFactAcct(GetCtx(), idr, fact.Get_TrxName()));
+                    tax.AddInvoiceFact(new MActualAcctDetail(GetCtx(), idr, fact.Get_TrxName()));
                 }
                 idr.Close();
             }
@@ -1497,12 +1497,12 @@ namespace VAdvantage.Acct
 //        /// <param name="idr"></param>
 //        /// <param name="trxName"></param>
 //        public Doc_Allocation(MAcctSchema[] ass, IDataReader idr, String trxName)
-//            : base(ass, typeof(MAllocationHdr), idr, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
+//            : base(ass, typeof(MAllocationHdr), idr, MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
 //        {
 
 //        }
 //        public Doc_Allocation(MAcctSchema[] ass, DataRow dr, String trxName)
-//            : base(ass, typeof(MAllocationHdr), dr, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
+//            : base(ass, typeof(MAllocationHdr), dr, MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, trxName)
 //        {
 
 //        }
@@ -2590,7 +2590,7 @@ namespace VAdvantage.Acct
 //                if (idr.Read())
 //                {
 //                    SetVAB_Bank_Acct_ID(Utility.Util.GetValueOfInt(idr[0]));//.getInt(1));
-//                    if (MDocBaseType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
+//                    if (MVABMasterDocType.DOCBASETYPE_APPAYMENT.Equals(Utility.Util.GetValueOfString(idr[1])))//.getString(2)))
 //                    {
 //                        accountType = Doc.ACCTTYPE_PaymentSelect;
 //                    }
@@ -2832,7 +2832,7 @@ namespace VAdvantage.Acct
 //                idr = DataBase.DB.ExecuteReader(sql, null, GetTrxName());
 //                while (idr.Read())
 //                {
-//                    tax.AddInvoiceFact(new MFactAcct(GetCtx(), idr, fact.Get_TrxName()));
+//                    tax.AddInvoiceFact(new MActualAcctDetail(GetCtx(), idr, fact.Get_TrxName()));
 //                }
 //                idr.Close();
 //            }

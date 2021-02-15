@@ -43,12 +43,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_ProjectIssue(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MProjectIssue), idr, MDocBaseType.DOCBASETYPE_PROJECTISSUE, trxName)
+            : base(ass, typeof(MProjectIssue), idr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
         }
         public Doc_ProjectIssue(MVABAccountBook[] ass,DataRow dr, Trx trxName)
-            : base(ass, typeof(MProjectIssue), dr, MDocBaseType.DOCBASETYPE_PROJECTISSUE, trxName)
+            : base(ass, typeof(MProjectIssue), dr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
         }

@@ -116,7 +116,7 @@ namespace VAdvantage.Process
                 string VerTblName = tbl.GetTableName() + "_Ver";
 
                 // Create/Get System Elements for Version Table Columns
-                string retMsg = GetSystemElements(VerTblName);
+                string retMsg = GetSysteMVABElements(VerTblName);
                 if (retMsg != "")
                     return retMsg;
 
@@ -314,7 +314,7 @@ namespace VAdvantage.Process
         /// Get System Elements for Default Columns
         /// </summary>
         /// <param name="VerTblName">Table Name</param>
-        public string GetSystemElements(string VerTblName)
+        public string GetSysteMVABElements(string VerTblName)
         {
             // check if count in list is equal to default version columns
             if (_listDefVerElements.Count == listDefVerCols.Count)

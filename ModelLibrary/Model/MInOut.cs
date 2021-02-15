@@ -669,7 +669,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -1119,7 +1119,7 @@ namespace VAdvantage.Model
 
         /**
          * 	Set Document Type
-         * 	@param DocBaseType doc type MDocBaseType.DOCBASETYPE_
+         * 	@param DocBaseType doc type MVABMasterDocType.DOCBASETYPE_
          */
         public void SetVAB_DocTypes_ID(String DocBaseType)
         {
@@ -1138,7 +1138,7 @@ namespace VAdvantage.Model
             {
                 log.Fine("DocBaseType=" + DocBaseType + " - VAB_DocTypes_ID=" + VAB_DocTypes_ID);
                 SetVAB_DocTypes_ID(VAB_DocTypes_ID);
-                bool isSOTrx = MDocBaseType.DOCBASETYPE_MATERIALDELIVERY.Equals(DocBaseType);
+                bool isSOTrx = MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY.Equals(DocBaseType);
                 SetIsSOTrx(isSOTrx);
                 SetIsReturnTrx(false);
             }
@@ -1151,9 +1151,9 @@ namespace VAdvantage.Model
         public void SetVAB_DocTypes_ID()
         {
             if (IsSOTrx())
-                SetVAB_DocTypes_ID(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY);
+                SetVAB_DocTypes_ID(MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY);
             else
-                SetVAB_DocTypes_ID(MDocBaseType.DOCBASETYPE_MATERIALRECEIPT);
+                SetVAB_DocTypes_ID(MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT);
         }
 
         /**
@@ -1166,7 +1166,7 @@ namespace VAdvantage.Model
             base.SetVAB_DocTypes_ID(VAB_DocTypes_ID);
             if (setReturnTrx)
             {
-                MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), VAB_DocTypes_ID);
                 SetIsReturnTrx(dt.IsReturnTrx());
                 SetIsSOTrx(dt.IsSOTrx());
             }
@@ -1208,14 +1208,14 @@ namespace VAdvantage.Model
                     String DocBaseType = dr["DocBaseType"].ToString();
                     Boolean IsReturnTrx = "Y".Equals(dr[3].ToString());
 
-                    if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY))		//	Shipments
+                    if (DocBaseType.Equals(MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY))		//	Shipments
                     {
                         if (IsReturnTrx)
                             SetMovementType(MOVEMENTTYPE_CustomerReturns);
                         else
                             SetMovementType(MOVEMENTTYPE_CustomerShipment);
                     }
-                    else if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_MATERIALRECEIPT))	//	Receipts
+                    else if (DocBaseType.Equals(MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT))	//	Receipts
                     {
                         if (IsReturnTrx)
                             SetMovementType(MOVEMENTTYPE_VendorReturns);
@@ -1429,7 +1429,7 @@ namespace VAdvantage.Model
         public void CreateConfirmation(bool _Status = false)
         {
             bool checkDocStatus = _Status;
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             bool pick = dt.IsPickQAConfirm();
             bool ship = dt.IsShipConfirm();
             //	Nothing to do
@@ -1705,7 +1705,7 @@ namespace VAdvantage.Model
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             SetIsReturnTrx(dt.IsReturnTrx());
             SetIsSOTrx(dt.IsSOTrx());
 
@@ -3896,7 +3896,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -4928,7 +4928,7 @@ namespace VAdvantage.Model
             //	Document Type
             int VAB_DocTypesTarget_ID = 0;
             bool isReturnTrx = false;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
+            MVABInterCompanyDoc counterDT = MVABInterCompanyDoc.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
@@ -5141,7 +5141,7 @@ namespace VAdvantage.Model
             log.Info(ToString());
             string reversedDocno = null;
             string ss = ToString();
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -5157,13 +5157,13 @@ namespace VAdvantage.Model
             }
 
             MVABOrder ord = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
-            MDocType dtOrder = MDocType.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
+            MVABDocTypes dtOrder = MVABDocTypes.Get(GetCtx(), ord.GetVAB_DocTypes_ID());
             String DocSubTypeSO = dtOrder.GetDocSubTypeSO();
 
             // if any linked record exist on invoice for PO/SO cycle then not able to reverse this record
-            if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
-                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
+            if (MVABDocTypes.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
+                    || MVABDocTypes.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
+                    || MVABDocTypes.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
             {
                 // when we void SO then system void all transaction which is linked with that inout
             }

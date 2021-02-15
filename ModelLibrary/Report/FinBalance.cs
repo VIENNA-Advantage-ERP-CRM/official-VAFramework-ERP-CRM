@@ -164,17 +164,17 @@ namespace VAdvantage.Report
             long start = CommonFunctions.CurrentTimeMillis();
 
             //List<Object> param = new List<Object>();
-            List<MFactAccumulation> accums = null;
+            List<MActualAccumulation> accums = null;
             int no = 0;
 
             if (Actual_Accumulation_ID == 0)
             {
-                accums = MFactAccumulation.GetAll(ctx, VAB_AccountBook_ID);
+                accums = MActualAccumulation.GetAll(ctx, VAB_AccountBook_ID);
                 if (accums.Count == 0)
                 {
                     // Create a Balance aggregation of type Daily.
 
-                    MFactAccumulation defaultAccum = new MFactAccumulation(ctx, 0, trx);
+                    MActualAccumulation defaultAccum = new MActualAccumulation(ctx, 0, trx);
                     defaultAccum.SetVAF_Client_ID(ctx.GetVAF_Client_ID());
                     defaultAccum.SetVAF_Org_ID(ctx.GetVAF_Org_ID());
                     defaultAccum.SetVAB_AccountBook_ID(VAB_AccountBook_ID);
@@ -214,15 +214,15 @@ namespace VAdvantage.Report
             }
             else
             {
-                MFactAccumulation selectAccum = new MFactAccumulation(ctx, Actual_Accumulation_ID, trx);
-                accums = new List<MFactAccumulation>();
+                MActualAccumulation selectAccum = new MActualAccumulation(ctx, Actual_Accumulation_ID, trx);
+                accums = new List<MActualAccumulation>();
                 accums.Add(selectAccum);
             }
 
-            foreach (MFactAccumulation accum in accums)
+            foreach (MActualAccumulation accum in accums)
             {
 
-                // dateFrom = MFactAccumulation.GetDateFrom(accum, dateFrom);
+                // dateFrom = MActualAccumulation.GetDateFrom(accum, dateFrom);
                 dateFrom = accum.GetDateFrom();
                 String type = accum.GetBALANCEACCUMULATION();
                 //String trunc = null;
@@ -511,7 +511,7 @@ namespace VAdvantage.Report
             return Info.ToString();
         }
 
-        private static Boolean CheckPeriod(MFactAccumulation accum, DateTime? dateFrom)
+        private static Boolean CheckPeriod(MActualAccumulation accum, DateTime? dateFrom)
         {
             Boolean retVal = true;
             String sql = "  SELECT 1 FROM Actual_Acct_Detail a "

@@ -88,7 +88,7 @@ namespace VAdvantage.Process
             //{
             //    throw new ArgumentException("No Order");
             //}
-            //MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
+            //MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), _VAB_DocTypes_ID);
             //if (dt.Get_ID() == 0)
             //{
             //    throw new ArgumentException("No DocType");
@@ -130,7 +130,7 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("No Order");
             }
-            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
+            VAdvantage.Model.MVABDocTypes dt = VAdvantage.Model.MVABDocTypes.Get(GetCtx(), _VAB_DocTypes_ID);
             if (dt.Get_ID() == 0)
             {
                 throw new ArgumentException("No DocType");

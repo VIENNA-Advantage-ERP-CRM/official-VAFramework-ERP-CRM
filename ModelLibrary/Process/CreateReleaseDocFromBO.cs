@@ -46,7 +46,7 @@ namespace VAdvantage.Process
                     return Msg.GetMsg(GetCtx(), "VIS_BlanketNotValid");
                 }
 
-                MDocType dt = MDocType.Get(GetCtx(), from.GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), from.GetVAB_DocTypes_ID());
 
                 //Document Type against Release Order
                 if (dt.GetDocumentTypeforReleases() == 0)
@@ -63,7 +63,7 @@ namespace VAdvantage.Process
                 }
 
                 //Document Type against Release Order
-                //MDocType dtt = MDocType.Get(GetCtx(), dt.GetDocumentTypeforReleases());
+                //MVABDocTypes dtt = MVABDocTypes.Get(GetCtx(), dt.GetDocumentTypeforReleases());
                 //if (dtt == null)
                 //{
                 //    throw new Exception(Msg.GetMsg(GetCtx(), "VIS_ReleaseDocumentnotFound"));

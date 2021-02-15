@@ -58,7 +58,7 @@ namespace VAdvantage.Report
         /**	Parameter Where Clause			*/
         private StringBuilder _parameterWhere = new StringBuilder();
         /**	Account							*/
-        private MElementValue _acct = null;
+        private MVABAcctElement _acct = null;
 
         /**	Start Time						*/
         private long _start = CommonFunctions.CurrentTimeMillis(); //System.currentTimeMillis();
@@ -316,7 +316,7 @@ namespace VAdvantage.Report
             //	Start Beginning of Year
             if (_Account_ID > 0)
             {
-                _acct = new MElementValue(GetCtx(), _Account_ID, Get_TrxName());
+                _acct = new MVABAcctElement(GetCtx(), _Account_ID, Get_TrxName());
                 if (!_acct.IsBalanceSheet())
                 {
                     MPeriod first = MPeriod.GetFirstInYear(GetCtx(), _DateAcct_From);

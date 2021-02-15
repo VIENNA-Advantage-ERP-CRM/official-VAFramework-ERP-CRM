@@ -110,7 +110,7 @@ namespace VAdvantage.Process
                                     int parent_ID = Util.GetValueOfInt(dt.Rows[i]["(Account_Parent)"]);
                                     sql = "select VAB_Acct_Element_id from VAB_Acct_Element where value = '" + parent_ID + "' and vaf_client_id = " + Util.GetValueOfInt(GetVAF_Client_ID());
                                     int VAB_Acct_Element_ID_Parent = Util.GetValueOfInt(DB.ExecuteScalar(sql));
-                                    MElementValue eleValue = new MElementValue(GetCtx(), 0, null);
+                                    MVABAcctElement eleValue = new MVABAcctElement(GetCtx(), 0, null);
                                     int VAB_Acct_Element_ID = DB.GetNextID(GetVAF_Client_ID(), "VAB_Acct_Element", null);
                                     string accSign = Util.GetValueOfString(dt.Rows[i]["(Account_Sign)"]);
                                     if (accSign == "")

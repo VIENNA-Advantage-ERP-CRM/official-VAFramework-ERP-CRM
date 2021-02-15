@@ -143,7 +143,7 @@ namespace VAdvantage.Acct
 
                 DocLine docLine = new DocLine(line, this);
                 Decimal Qty = line.GetMovementQty();
-                docLine.SetQty(Qty, GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY));    //  sets Trx and Storage Qty
+                docLine.SetQty(Qty, GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY));    //  sets Trx and Storage Qty
                 //
                 log.Fine(docLine.ToString());
                 list.Add(docLine);
@@ -193,7 +193,7 @@ namespace VAdvantage.Acct
             FactLine cr = null;
 
             //  *** Sales - Shipment
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_MATERIALDELIVERY))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY))
             {
                 for (int i = 0; i < _lines.Length; i++)
                 {
@@ -320,7 +320,7 @@ namespace VAdvantage.Acct
             }	//	Shipment
 
             //  *** Purchasing - Receipt
-            else if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_MATERIALRECEIPT))
+            else if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT))
             {
                 for (int i = 0; i < _lines.Length; i++)
                 {

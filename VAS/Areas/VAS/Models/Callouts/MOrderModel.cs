@@ -213,7 +213,7 @@ namespace VIS.Models
 
             // when document type is not --  Warehouse Order / Credit Order / POS Order / Prepay order, then true
             // Payment term can't be advance for Customer RMA / Vendor RMA
-            MDocType doctype = MDocType.Get(ctx, documnetType_Id);
+            MVABDocTypes doctype = MVABDocTypes.Get(ctx, documnetType_Id);
             if (!(doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_PrepayOrder ||
                 doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_OnCreditOrder ||
                 doctype.GetDocSubTypeSO() == X_VAB_DocTypes.DOCSUBTYPESO_WarehouseOrder ||

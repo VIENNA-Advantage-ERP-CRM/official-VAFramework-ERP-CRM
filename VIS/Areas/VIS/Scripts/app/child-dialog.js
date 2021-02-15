@@ -109,11 +109,11 @@
                                 {
                                     text: VIS.Msg.getMsg("Ok"),
                                     click: function (evt) {
-                                        var buttonDomElement = evt.target;
+                                        var buttonDoMVABElement = evt.target;
                                         // Disable the button 
-                                        //$(buttonDomElement).css('background-color', 'red');
-                                        //$(buttonDomElement).css('color', 'blue');
-                                        $(buttonDomElement).attr('disabled', true);
+                                        //$(buttonDoMVABElement).css('background-color', 'red');
+                                        //$(buttonDoMVABElement).css('color', 'blue');
+                                        $(buttonDoMVABElement).attr('disabled', true);
 
                                         var res = true;
                                         if (self.onOkClick) {
@@ -124,7 +124,7 @@
                                                 $a.dialog("close");
                                         }
                                         else {
-                                            $(buttonDomElement).attr('disabled', false);
+                                            $(buttonDoMVABElement).attr('disabled', false);
                                         }
                                     },
                                     style: styleOK

@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Inventory(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MInventory), idr, MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
+            : base(ass, typeof(MInventory), idr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
         }
         public Doc_Inventory(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MInventory), dr, MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
+            : base(ass, typeof(MInventory), dr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
         }

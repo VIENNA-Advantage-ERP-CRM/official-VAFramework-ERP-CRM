@@ -4454,9 +4454,9 @@
 
             var obj = new VIS.GenralAttributeForm(VAB_GenFeatureSetInstance_IDWin, VADMS_AttributeSet_ID, self.windowNo, self.isSearch, self.getCanSaveRecord(), self.isFromDMS);
             obj.showDialog();
-            obj.onClose = function (mGenAttributeSetInstanceId, name, instanceIDs) {
-                VIS.Env.getCtx().setContext(windowNop, "VAB_GenFeatureSetInstance_ID", mGenAttributeSetInstanceId);
-                setValueInControl(mGenAttributeSetInstanceId, name);
+            obj.onClose = function (MVABGenFeatureSetInstanceId, name, instanceIDs) {
+                VIS.Env.getCtx().setContext(windowNop, "VAB_GenFeatureSetInstance_ID", MVABGenFeatureSetInstanceId);
+                setValueInControl(MVABGenFeatureSetInstanceId, name);
                 if (instanceIDs != null)
                     self.setInstanceIDs = instanceIDs;
                 self.getControl().val(name);

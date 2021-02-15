@@ -90,7 +90,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new ArgumentException("@InvoiceCreateDocNotCompleted@");
             }
-            MDocType dt = MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), _VAB_DocTypes_ID);
             if (invoice.IsSOTrx() != dt.IsSOTrx()
                 || invoice.IsReturnTrx() != dt.IsReturnTrx())
             {

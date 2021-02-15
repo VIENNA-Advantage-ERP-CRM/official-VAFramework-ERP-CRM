@@ -36,7 +36,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	protected override String DoIt()
     {
 		log.Info("doIt - VAGL_Distribution_ID=" + GetRecord_ID());
-		MDistribution distribution = new MDistribution (GetCtx(), GetRecord_ID(), Get_TrxName());
+		MVAGLDistribution distribution = new MVAGLDistribution (GetCtx(), GetRecord_ID(), Get_TrxName());
         if (distribution.Get_ID() == 0)
         {
             throw new Exception("Not found VAGL_Distribution_ID=" + GetRecord_ID());

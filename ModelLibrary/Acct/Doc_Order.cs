@@ -99,7 +99,7 @@ namespace VAdvantage.Acct
                 //
                 //	Decimal PriceActual = line.getPriceActual();
                 Decimal? PriceCost = null;
-                if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_PURCHASEORDER))	//	PO
+                if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_PURCHASEORDER))	//	PO
                 {
                     PriceCost = line.GetPriceCost();
                 }
@@ -314,7 +314,7 @@ namespace VAdvantage.Acct
             }
             //
             if (Env.Signum(retValue) != 0		//	Sum of Cost(vs. Price) in lines may not add up 
-                && GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_PURCHASEORDER))	//	PO
+                && GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_PURCHASEORDER))	//	PO
             {
                 log.Fine(ToString() + " Balance=" + retValue + sb.ToString() + " (ignored)");
                 retValue = Env.ZERO;
@@ -345,7 +345,7 @@ namespace VAdvantage.Acct
         {
             List<Fact> facts = new List<Fact>();
             //  Purchase Order
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_PURCHASEORDER))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_PURCHASEORDER))
             {
                 UpdateProductPO(as1);
 

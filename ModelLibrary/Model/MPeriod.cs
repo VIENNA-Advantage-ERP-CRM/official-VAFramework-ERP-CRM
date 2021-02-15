@@ -581,12 +581,12 @@ namespace VAdvantage.Model
             if (newRecord)
             {
                 //	SELECT Value FROM VAF_CtrlRef_List WHERE VAF_Control_Ref_ID=183
-                MDocType[] types = MDocType.GetOfClient(GetCtx());
+                MVABDocTypes[] types = MVABDocTypes.GetOfClient(GetCtx());
                 int count = 0;
                 List<String> baseTypes = new List<String>();
                 for (int i = 0; i < types.Length; i++)
                 {
-                    MDocType type = types[i];
+                    MVABDocTypes type = types[i];
                     String docBaseType = type.GetDocBaseType();
                     if (baseTypes.Contains(docBaseType))
                         continue;

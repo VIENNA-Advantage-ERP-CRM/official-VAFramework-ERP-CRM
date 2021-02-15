@@ -33,7 +33,7 @@ namespace VAdvantage.Process
             IDataReader idr = null;
             try
             {
-                MFinRptConfig Report = new MFinRptConfig(GetCtx(), _C_FinRecordConfig_ID, Get_TrxName());
+                MVABFinRptConfig Report = new MVABFinRptConfig(GetCtx(), _C_FinRecordConfig_ID, Get_TrxName());
                 Report.GetVAB_AccountGroupBatch_ID();
                 Report.GetC_ReportType();
 
@@ -65,7 +65,7 @@ namespace VAdvantage.Process
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        MFinRptAcctGroup acctGroup = new MFinRptAcctGroup(GetCtx(), 0, null);
+                        MVABFinRptAcctGroup acctGroup = new MVABFinRptAcctGroup(GetCtx(), 0, null);
                         acctGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr["VAF_Client_ID"]));
                         acctGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr["VAF_Org_ID"]));
                         acctGroup.SetVAB_AccountGroup_ID(Util.GetValueOfInt(dr["VAB_ACCOUNTGROUP_ID"]));
@@ -97,7 +97,7 @@ namespace VAdvantage.Process
                             DT1.Load(Idr1);
                             foreach (DataRow dr1 in DT1.Rows)
                             {
-                                MFinRptAcctSubGroup AcctSubGroup = new MFinRptAcctSubGroup(GetCtx(), 0, null);
+                                MVABFinRptAcctSubGroup AcctSubGroup = new MVABFinRptAcctSubGroup(GetCtx(), 0, null);
                                 AcctSubGroup.SetVAF_Client_ID(Util.GetValueOfInt(dr1["VAF_Client_ID"]));
                                 AcctSubGroup.SetVAF_Org_ID(Util.GetValueOfInt(dr1["VAF_Org_ID"]));
                                 AcctSubGroup.SetVAB_AccountSubGroup_ID(Util.GetValueOfInt(dr1["VAB_ACCOUNTSUBGROUP_ID"]));

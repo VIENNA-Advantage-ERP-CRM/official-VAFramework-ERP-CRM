@@ -146,7 +146,7 @@ namespace ModelLibrary.Acct
             //  create Fact Header
             List<Fact> facts = new List<Fact>();
 
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_PROFITLOSS))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_PROFITLOSS))
             {
                 //Change By mohit 
                 // Get Assigned Accounting Schemas based on organization                

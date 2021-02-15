@@ -48,7 +48,7 @@ namespace VAModelAD.Classes
         "AD_Registration", "VAdvantage.Model.M_Registration",
         "VAF_TreeInfo", "VAdvantage.Model.MTree_Base",
         "VAR_Category", "VAdvantage.Model.MRequestCategory",
-        "VAGL_Group", "VAdvantage.Model.MGLCategory",
+        "VAGL_Group", "VAdvantage.Model.MVAGLGroup",
         "K_Category", "VAdvantage.Model.MKCategory",
         "VAB_Acct_ValidParameter", "VAdvantage.Model.MVABAccount",
         "VAB_Std_Stage", "VAdvantage.Model.MProjectTypePhase",

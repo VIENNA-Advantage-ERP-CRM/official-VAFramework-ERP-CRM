@@ -44,7 +44,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     String name =idr[1].ToString();
                     String value = idr[0].ToString();
                     _log.Config(name + "=" + value);
-                    MDocType dt = new MDocType(ctx, value, name, trxName);
+                    MVABDocTypes dt = new MVABDocTypes(ctx, value, name, trxName);
                     if (dt.Save())
                     {
                         if (sp != null)

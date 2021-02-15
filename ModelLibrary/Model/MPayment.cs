@@ -506,7 +506,7 @@ namespace VAdvantage.Model
         {
             MVABOrder order = null;
             MInvoice invoice = null;
-            MDocType dt1 = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt1 = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             bool hasVA009Module = Env.IsModuleInstalled("VA009_");
 
@@ -744,7 +744,7 @@ namespace VAdvantage.Model
                     SetVAB_DocTypes_ID();
                 else
                 {
-                    MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+                    MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
                     SetIsReceipt(dt.IsSOTrx());
                 }
                 SetDocumentNo();
@@ -1033,14 +1033,14 @@ namespace VAdvantage.Model
                 // if not auto control.
                 if (isAutoControl.Equals("N"))
                 {
-                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetCheckNo() == null)
+                    if (docBaseType.Equals(MVABMasterDocType.DOCBASETYPE_APPAYMENT) && GetCheckNo() == null)
                     {
                         //"Error" not required
                         //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         log.SaveError("", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
                         return false;
                     }
-                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetCheckNo() == null)
+                    else if (docBaseType.Equals(MVABMasterDocType.DOCBASETYPE_ARRECEIPT) && GetCheckNo() == null)
                     {
                         //"Error" not required
                         //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
@@ -1053,7 +1053,7 @@ namespace VAdvantage.Model
                 {
                     autoCheck = false;
                     // if AP Pay and payamt less than 0
-                    if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() < 0 && GetCheckNo() == null)
+                    if (docBaseType.Equals(MVABMasterDocType.DOCBASETYPE_APPAYMENT) && GetPayAmt() < 0 && GetCheckNo() == null)
                     {
                         //"Error" not required
                         //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
@@ -1061,7 +1061,7 @@ namespace VAdvantage.Model
                         return false;
                     }
                     // if AR Rec and payamt greater than 0
-                    else if (docBaseType.Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() >= 0 && GetCheckNo() == null)
+                    else if (docBaseType.Equals(MVABMasterDocType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() >= 0 && GetCheckNo() == null)
                     {
                         //"Error" not required
                         //log.SaveError("Error", Msg.GetMsg(GetCtx(), "EnterCheckNo"));
@@ -1861,11 +1861,11 @@ namespace VAdvantage.Model
                 param[0] = new SqlParameter("@clid", GetVAF_Client_ID());
                 if (isReceipt)
                 {
-                    param[1] = new SqlParameter("@docbs", MDocBaseType.DOCBASETYPE_ARRECEIPT);
+                    param[1] = new SqlParameter("@docbs", MVABMasterDocType.DOCBASETYPE_ARRECEIPT);
                 }
                 else
                 {
-                    param[1] = new SqlParameter("@docbs", MDocBaseType.DOCBASETYPE_APPAYMENT);
+                    param[1] = new SqlParameter("@docbs", MVABMasterDocType.DOCBASETYPE_APPAYMENT);
                 }
 
                 idr = DataBase.DB.ExecuteReader(sql, param);
@@ -2170,10 +2170,10 @@ namespace VAdvantage.Model
             int VAB_Order_ID = GetVAB_Order_ID();
             int VAB_DocTypes_ID = GetVAB_DocTypes_ID();
             log.Fine("VAB_Invoice_ID=" + VAB_Invoice_ID + ", VAB_DocTypes_ID=" + VAB_DocTypes_ID);
-            MDocType dt = null;
+            MVABDocTypes dt = null;
             if (VAB_DocTypes_ID != 0)
             {
-                dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
+                dt = MVABDocTypes.Get(GetCtx(), VAB_DocTypes_ID);
                 SetIsReceipt(dt.IsSOTrx());
                 //p_changeVO.SetContext(GetCtx(), windowNo, "IsSOTrx", dt.IsSOTrx());
                 SetContext(windowNo, "IsSOTrx", dt.IsSOTrx());
@@ -2648,7 +2648,7 @@ namespace VAdvantage.Model
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
-                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
+                IsReceipt() ? MVABMasterDocType.DOCBASETYPE_ARRECEIPT : MVABMasterDocType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -2972,7 +2972,7 @@ namespace VAdvantage.Model
             // change by Amit 27-5-2016 // Letter Of Credit module
             if (Env.IsModuleInstalled("VA026_"))
             {
-                MDocType docType = new MDocType(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
+                MVABDocTypes docType = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
 
                 if (Get_ValueAsInt("VA026_TRLoanApplication_ID") <= 0)
                 {
@@ -3242,7 +3242,7 @@ namespace VAdvantage.Model
                 if (Env.IsModuleInstalled("VA009_"))
                 {
                     //MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
-                    //MDocType doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
+                    //MVABDocTypes doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
                     //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
                     //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
                     //{
@@ -3348,7 +3348,7 @@ namespace VAdvantage.Model
                         //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
                         //paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                         //MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
-                        //MDocType doctype = new MDocType(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
+                        //MVABDocTypes doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
                         //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
                         //{
                         //    if (((-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["writeoffamt"])) + (-1 * Util.GetValueOfDecimal(ds.Tables[0].Rows[i]["discountamt"])) +
@@ -3410,13 +3410,13 @@ namespace VAdvantage.Model
             // Auto check work-Mohit-7 March 2020
 
             MVABBankAcct bnkAct = MVABBankAcct.Get(GetCtx(), GetVAB_Bank_Acct_ID());
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
 
 
             if (GetTenderType().Equals(X_VAB_Payment.TENDERTYPE_Check) && bnkAct.IsChkNoAutoControl() && !IsReversal())
             {
-                if ((dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
+                if ((dt.GetDocBaseType().Equals(MVABMasterDocType.DOCBASETYPE_APPAYMENT) && GetPayAmt() >= 0) || (dt.GetDocBaseType().Equals(MVABMasterDocType.DOCBASETYPE_ARRECEIPT) && GetPayAmt() < 0))
                 {
                     // get Check number
                     string checkNo = GetChecknumber(GetVA009_PaymentMethod_ID(), GetVAB_Bank_Acct_ID(), Get_Trx());
@@ -3461,7 +3461,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -4540,7 +4540,7 @@ namespace VAdvantage.Model
 
             //	Document Type
             int VAB_DocTypesTarGet_ID = 0;
-            MDocTypeCounter counterDT = MDocTypeCounter.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
+            MVABInterCompanyDoc counterDT = MVABInterCompanyDoc.GetCounterDocType(GetCtx(), GetVAB_DocTypes_ID());
             if (counterDT != null)
             {
                 log.Fine(counterDT.ToString());
@@ -5256,7 +5256,7 @@ namespace VAdvantage.Model
             //	Std Period open?
             DateTime? dateAcct = GetDateAcct();
             if (!MPeriod.IsOpen(GetCtx(), dateAcct,
-                IsReceipt() ? MDocBaseType.DOCBASETYPE_ARRECEIPT : MDocBaseType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
+                IsReceipt() ? MVABMasterDocType.DOCBASETYPE_ARRECEIPT : MVABMasterDocType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
                 dateAcct = DateTime.Now;
 
             //	Auto Reconcile if not on Bank Statement
@@ -5730,7 +5730,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 

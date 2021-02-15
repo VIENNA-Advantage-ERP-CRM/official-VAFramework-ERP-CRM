@@ -222,7 +222,7 @@ namespace ViennaAdvantage.Process
                         }
                         else
                         {
-                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO : MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
                         }
                     }
                     invoice.SetIsReturnTrx(ship.IsReturnTrx());
@@ -240,15 +240,15 @@ namespace ViennaAdvantage.Process
                         if (ship.GetVAB_Order_ID() >= 0)
                         {
                             int VAB_DocTypes_ID = Util.GetValueOfInt(DB.ExecuteScalar("Select VAB_DocTypes_ID From VAB_Order Where VAB_Order_ID=" + ship.GetVAB_Order_ID(), null, Get_Trx()));
-                            MDocType dt = MDocType.Get(GetCtx(), VAB_DocTypes_ID);
+                            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), VAB_DocTypes_ID);
                             if (dt.GetVAB_DocTypesInvoice_ID() != 0)
                                 invoice.SetVAB_DocTypesTarget_ID(dt.GetVAB_DocTypesInvoice_ID(), true);
                             else
-                                invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                                invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO : MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
                         }
                         else
                         {
-                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MDocBaseType.DOCBASETYPE_ARCREDITMEMO : MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                            invoice.SetVAB_DocTypesTarget_ID(ship.IsSOTrx() ? MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO : MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
                         }
                     }
                 }

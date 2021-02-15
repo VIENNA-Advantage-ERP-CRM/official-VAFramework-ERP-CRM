@@ -477,7 +477,7 @@ namespace VAdvantage.Model
                 return null;
             }
 
-            // MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
+            // MVABDocTypes dt = MVABDocTypes.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
             X_VAB_DocTypes dt = GetDocType(ctx, VAB_DocTypes_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
@@ -1251,7 +1251,7 @@ namespace VAdvantage.Model
                 s_log.Severe("VAB_DocTypes_ID=0");
                 return null;
             }
-            //MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
+            //MVABDocTypes dt = MVABDocTypes.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
             X_VAB_DocTypes dt = GetDocType(ctx, VAB_DocTypes_ID);
             if (dt != null && !dt.IsDocNoControlled())
             {
@@ -1433,7 +1433,7 @@ namespace VAdvantage.Model
         //        _log.Severe("VAB_DocTypes_ID=0");
         //        return null;
         //    }
-        //    MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
+        //    MVABDocTypes dt = MVABDocTypes.Get(ctx, VAB_DocTypes_ID);	//	wrong for SERVER, but r/o
         //    if (dt != null && !dt.IsDocNoControlled())
         //    {
         //        _log.Finer("DocType_ID=" + VAB_DocTypes_ID + " Not DocNo controlled");

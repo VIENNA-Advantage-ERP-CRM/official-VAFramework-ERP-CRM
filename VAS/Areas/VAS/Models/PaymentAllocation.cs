@@ -2965,7 +2965,7 @@ namespace VIS.Models
         /// <returns>Return Empty if period is OPEN else it will return ErrorMsg</returns>
         public string CheckPeriodState(DateTime DateTrx, int VAF_Org_ID)
         {
-            if (!MPeriod.IsOpen(ctx, DateTrx, MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, VAF_Org_ID))
+            if (!MPeriod.IsOpen(ctx, DateTrx, MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, VAF_Org_ID))
             {
                 return Msg.GetMsg(ctx, "PeriodClosed");
             }
@@ -5032,7 +5032,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             }
 
                             // to set amount -ve on allocation line when AR Credit Memo and AP Invoice 
-                            if (docbasetype.Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) || docbasetype.Equals(MDocBaseType.DOCBASETYPE_APINVOICE))
+                            if (docbasetype.Equals(MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO) || docbasetype.Equals(MVABMasterDocType.DOCBASETYPE_APINVOICE))
                             {
                                 netAmt = Decimal.Negate(netAmt);
                                 overUnderAmt = Decimal.Negate(overUnderAmt);

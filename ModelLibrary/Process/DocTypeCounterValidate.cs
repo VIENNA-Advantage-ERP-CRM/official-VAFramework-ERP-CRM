@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
    /**	Counter Document		*/
 	private int					_VAB_InterCompanyDoc_ID = 0;
 	/**	Document Relationship	*/
-	private MDocTypeCounter		_counter = null;
+	private MVABInterCompanyDoc		_counter = null;
 	/// <summary>
 	///	Prepare
 	/// </summary>
@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	protected override String DoIt()
 	{
 		log.Info("VAB_InterCompanyDoc_ID=" + _VAB_InterCompanyDoc_ID);
-		_counter = new MDocTypeCounter (GetCtx(), _VAB_InterCompanyDoc_ID, Get_TrxName());
+		_counter = new MVABInterCompanyDoc (GetCtx(), _VAB_InterCompanyDoc_ID, Get_TrxName());
         if (_counter == null || _counter.Get_ID() == 0)
         {
             throw new ArgumentException("Not found VAB_InterCompanyDoc_ID=" + _VAB_InterCompanyDoc_ID);

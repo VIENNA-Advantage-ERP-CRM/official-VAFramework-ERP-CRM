@@ -112,23 +112,23 @@ namespace VAdvantage.Process
                 subject = mText.GetMailHeader();
             }
             //
-            MDunningRun run = new MDunningRun(GetCtx(), _VAB_DunningExe_ID, Get_TrxName());
+            MVABDunningExe run = new MVABDunningExe(GetCtx(), _VAB_DunningExe_ID, Get_TrxName());
             if (run.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@: @VAB_DunningExe_ID@ - " + _VAB_DunningExe_ID);
             }
             //	Print Format on Dunning Level
-            MDunningLevel level = new MDunningLevel(GetCtx(), run.GetVAB_DunningStep_ID(), Get_TrxName());
+            MVABDunningStep level = new MVABDunningStep(GetCtx(), run.GetVAB_DunningStep_ID(), Get_TrxName());
             MVAFPrintRptLayout format = MVAFPrintRptLayout.Get(GetCtx(), level.GetDunning_PrintFormat_ID(), false);
 
             MVAFClient client = MVAFClient.Get(GetCtx());
 
             int count = 0;
             int errors = 0;
-            MDunningRunEntry[] entries = run.GetEntries(false);
+            MVABDunningExeEntry[] entries = run.GetEntries(false);
             for (int i = 0; i < entries.Length; i++)
             {
-                MDunningRunEntry entry = entries[i];
+                MVABDunningExeEntry entry = entries[i];
                 if (_IsOnlyIfBPBalance && Env.Signum(entry.GetAmt()) <= 0)
                 {
                     continue;
@@ -281,7 +281,7 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="level"></param>
         /// <param name="entry"></param>
-        private void DunningLevelConsequences(MDunningLevel level, MDunningRunEntry entry)
+        private void DunningLevelConsequences(MVABDunningStep level, MVABDunningExeEntry entry)
         {
             //	Update Business Partner based on Level
             if (level.IsSetCreditStop() || level.IsSetPaymentTerm())
@@ -295,13 +295,13 @@ namespace VAdvantage.Process
                 }
                 thisBPartner.Save();
             }
-            //	Update Invoices if not Statement (Statement is hardcoded -9999 see also MDunningLevel)
+            //	Update Invoices if not Statement (Statement is hardcoded -9999 see also MVABDunningStep)
             if (!level.GetDaysAfterDue().Equals(new Decimal(-9999)) && level.GetInvoiceCollectionType() != null)
             {
-                MDunningRunLine[] lines = entry.GetLines();
+                MVABDunningExeLine[] lines = entry.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MDunningRunLine line = lines[i];
+                    MVABDunningExeLine line = lines[i];
                     if (line.GetVAB_Invoice_ID() != 0 && line.IsActive())
                     {
                         MInvoice invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());

@@ -30,12 +30,12 @@ namespace VAdvantage.Acct
         #endregion
 
         public Doc_CostUpdate(MVABAccountBook[] ass, DataRow dr, Trx trx)
-            : base(ass, typeof(MVAMProductCostUpdate), dr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMProductCostUpdate), dr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 
         public Doc_CostUpdate(MVABAccountBook[] ass, IDataReader idr, Trx trx)
-            : base(ass, typeof(MVAMProductCostUpdate), idr, MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
+            : base(ass, typeof(MVAMProductCostUpdate), idr, MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE, trx)
         {
         }
 

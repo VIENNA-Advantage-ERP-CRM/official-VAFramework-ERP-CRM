@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         /**	Logger						*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MVABAccount).FullName);
         /**	Account Segment				*/
-        private MElementValue _accountEV = null;
+        private MVABAcctElement _accountEV = null;
 
         /// <summary>
         /// Get existing Account or create it 
@@ -762,12 +762,12 @@ namespace VAdvantage.Model
         /// Set Account_ID
         /// </summary>
         /// <returns>element value</returns>
-        public MElementValue GetAccount()
+        public MVABAcctElement GetAccount()
         {
             if (_accountEV == null)
             {
                 if (GetAccount_ID() != 0)
-                    _accountEV = new MElementValue(GetCtx(), GetAccount_ID(), Get_TrxName());
+                    _accountEV = new MVABAcctElement(GetCtx(), GetAccount_ID(), Get_TrxName());
             }
             return _accountEV;
         }
@@ -795,9 +795,9 @@ namespace VAdvantage.Model
         public bool IsBalanceSheet()
         {
             String accountType = GetAccountType();
-            return (MElementValue.ACCOUNTTYPE_Asset.Equals(accountType)
-                || MElementValue.ACCOUNTTYPE_Liability.Equals(accountType)
-                || MElementValue.ACCOUNTTYPE_OwnerSEquity.Equals(accountType));
+            return (MVABAcctElement.ACCOUNTTYPE_Asset.Equals(accountType)
+                || MVABAcctElement.ACCOUNTTYPE_Liability.Equals(accountType)
+                || MVABAcctElement.ACCOUNTTYPE_OwnerSEquity.Equals(accountType));
         }
 
         /// <summary>
@@ -806,7 +806,7 @@ namespace VAdvantage.Model
         /// <returns>bool</returns>
         public bool IsActiva()
         {
-            return MElementValue.ACCOUNTTYPE_Asset.Equals(GetAccountType());
+            return MVABAcctElement.ACCOUNTTYPE_Asset.Equals(GetAccountType());
         }
 
         /// <summary>
@@ -816,8 +816,8 @@ namespace VAdvantage.Model
         public bool IsPassiva()
         {
             String accountType = GetAccountType();
-            return (MElementValue.ACCOUNTTYPE_Liability.Equals(accountType)
-                || MElementValue.ACCOUNTTYPE_OwnerSEquity.Equals(accountType));
+            return (MVABAcctElement.ACCOUNTTYPE_Liability.Equals(accountType)
+                || MVABAcctElement.ACCOUNTTYPE_OwnerSEquity.Equals(accountType));
         }
 
         /// <summary>
@@ -862,7 +862,7 @@ namespace VAdvantage.Model
                     if (GetAccount_ID() != 0)
                     {
                         if (_accountEV == null)
-                            _accountEV = new MElementValue(GetCtx(), GetAccount_ID(), Get_TrxName());
+                            _accountEV = new MVABAcctElement(GetCtx(), GetAccount_ID(), Get_TrxName());
                         combiStr = _accountEV.GetValue();
                         descrStr = _accountEV.GetName();
                     }
@@ -1011,7 +1011,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUser1_ID() != 0)
                     {
-                        MElementValue ev = new MElementValue(GetCtx(), GetUser1_ID(), Get_TrxName());
+                        MVABAcctElement ev = new MVABAcctElement(GetCtx(), GetUser1_ID(), Get_TrxName());
                         combiStr = ev.GetValue();
                         descrStr = ev.GetName();
                     }
@@ -1020,7 +1020,7 @@ namespace VAdvantage.Model
                 {
                     if (GetUser2_ID() != 0)
                     {
-                        MElementValue ev = new MElementValue(GetCtx(), GetUser2_ID(), Get_TrxName());
+                        MVABAcctElement ev = new MVABAcctElement(GetCtx(), GetUser2_ID(), Get_TrxName());
                         combiStr = ev.GetValue();
                         descrStr = ev.GetName();
                     }

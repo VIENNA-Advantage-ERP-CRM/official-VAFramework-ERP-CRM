@@ -12308,7 +12308,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_mouseDrag: function(event) {
-		var i, item, itemElement, intersection,
+		var i, item, iteMVABElement, intersection,
 			o = this.options,
 			scrolled = false;
 
@@ -12373,7 +12373,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 			//Cache variables and intersection, continue if no intersection
 			item = this.items[i];
-			itemElement = item.item[0];
+			iteMVABElement = item.item[0];
 			intersection = this._intersectsWithPointer(item);
 			if (!intersection) {
 				continue;
@@ -12393,10 +12393,10 @@ $.widget("ui.sortable", $.ui.mouse, {
 			// cannot intersect with itself
 			// no useless actions that have been done before
 			// no action if the item moved is the parent of the item checked
-			if (itemElement !== this.currentItem[0] &&
-				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
-				!$.contains(this.placeholder[0], itemElement) &&
-				(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], itemElement) : true)
+			if (iteMVABElement !== this.currentItem[0] &&
+				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== iteMVABElement &&
+				!$.contains(this.placeholder[0], iteMVABElement) &&
+				(this.options.type === "semi-dynamic" ? !$.contains(this.element[0], iteMVABElement) : true)
 			) {
 
 				this.direction = intersection === 1 ? "down" : "up";

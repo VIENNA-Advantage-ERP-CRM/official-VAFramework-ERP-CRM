@@ -636,7 +636,7 @@
 
         // Handled the case of Return, show only Return orders
         if (forInvoice) {
-            var dt = VIS.dataContext.getJSONRecord("MDocType/GetDocType", VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_DocTypesTarget_ID").toString());
+            var dt = VIS.dataContext.getJSONRecord("MVABDocTypes/GetDocType", VIS.Env.getCtx().getContextAsInt(this.windowNo, "VAB_DocTypesTarget_ID").toString());
             isReturnTrx = VIS.Utility.Util.getValueOfBoolean(dt["IsReturnTrx"]);
         }
         else {

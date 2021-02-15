@@ -837,7 +837,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             {
                 return DocActionVariables.STATUS_INVALID;
             }
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
@@ -1024,7 +1024,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -1374,7 +1374,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// <returns>document info (untranslated)</returns>
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }	//	getDocumentInfo
 

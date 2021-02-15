@@ -162,104 +162,104 @@ namespace VAdvantage.Process
             String docBaseType = null;
             if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_Invoice"))
             {
-                docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APINVOICE
-                    + "','" + MDocBaseType.DOCBASETYPE_APCREDITMEMO
-                    + "','" + MDocBaseType.DOCBASETYPE_ARINVOICE
-                    + "','" + MDocBaseType.DOCBASETYPE_ARCREDITMEMO
-                    + "','" + MDocBaseType.DOCBASETYPE_ARPROFORMAINVOICE + "')";
+                docBaseType = "IN ('" + MVABMasterDocType.DOCBASETYPE_APINVOICE
+                    + "','" + MVABMasterDocType.DOCBASETYPE_APCREDITMEMO
+                    + "','" + MVABMasterDocType.DOCBASETYPE_ARINVOICE
+                    + "','" + MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO
+                    + "','" + MVABMasterDocType.DOCBASETYPE_ARPROFORMAINVOICE + "')";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Inv_InOut"))
             {
-                docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_MATERIALDELIVERY
-                    + "','" + MDocBaseType.DOCBASETYPE_MATERIALRECEIPT + "')";
+                docBaseType = "IN ('" + MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY
+                    + "','" + MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT + "')";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_Payment"))
             {
-                docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_APPAYMENT
-                    + "','" + MDocBaseType.DOCBASETYPE_ARRECEIPT + "')";
+                docBaseType = "IN ('" + MVABMasterDocType.DOCBASETYPE_APPAYMENT
+                    + "','" + MVABMasterDocType.DOCBASETYPE_ARRECEIPT + "')";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_Order"))
             {
-                docBaseType = "IN ('" + MDocBaseType.DOCBASETYPE_SALESORDER
-                    + "','" + MDocBaseType.DOCBASETYPE_PURCHASEORDER + "')";
+                docBaseType = "IN ('" + MVABMasterDocType.DOCBASETYPE_SALESORDER
+                    + "','" + MVABMasterDocType.DOCBASETYPE_PURCHASEORDER + "')";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_ProjectSupply"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROJECTISSUE + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_PROJECTISSUE + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_BankingJRNL"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_BANKSTATEMENT + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_CashJRNL"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_CASHJOURNAL + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_CASHJOURNAL + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_DocAllocation"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION + "'";
             }
 
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAGL_JRNL"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_GLJOURNAL + "'";
 
             }
             //	else if (VAF_TableView_ID == M.Table_ID)
             // {
-            //		docBaseType = "= '" + MDocBaseType.DOCBASETYPE_GLDocument + "'";
+            //		docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_GLDocument + "'";
             //  }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_InventoryTransfer"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Requisition"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Inventory"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_Production"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_MATERIALPRODUCTION + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_MatchInvoice"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHINVOICE + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_MATCHINVOICE + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAM_MatchPO"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_MATCHPO + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_MATCHPO + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_IncomeTax"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INCOMETAX + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_INCOMETAX + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAB_ProfitLoss"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_PROFITLOSS + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_PROFITLOSS + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAFAM_AssetDepreciation"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_FIXASSET + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_FIXASSET + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAFAM_AssetImpairEnhance"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_FIXASSETIMPAIRMENT + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_FIXASSETIMPAIRMENT + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VA026_LCDetail"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_LETTEROFCREDIT + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_LETTEROFCREDIT + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VA024_ObsoleteInventory"))
             {
-                docBaseType = "= '" + MDocBaseType.DOCBASETYPE_INVENTORYPOVISION + "'";
+                docBaseType = "= '" + MVABMasterDocType.DOCBASETYPE_INVENTORYPOVISION + "'";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VA027_PostDatedCheck"))
             {
-                docBaseType = " IN ( '" + MDocBaseType.DOCBASETYPE_PDCPAYABLE + "' ,'" + MDocBaseType.DOCBASETYPE_PDCRECEIVABLE + "' )";
+                docBaseType = " IN ( '" + MVABMasterDocType.DOCBASETYPE_PDCPAYABLE + "' ,'" + MVABMasterDocType.DOCBASETYPE_PDCRECEIVABLE + "' )";
             }
             else if (VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_M_WorkOrder") || VAF_TableView_ID == MVAFTableView.Get_Table_ID("VAMFG_M_WrkOdrTransaction"))
             {

@@ -40,8 +40,8 @@ namespace VAdvantage.Process
         private int _VAB_BusinessPartner_ID = 0;
         private int _VAB_BPart_Category_ID = 0;
         private int _VAB_DunningExe_ID = 0;
-        private MDunningRun _run = null;
-        private MDunningLevel _level = null;
+        private MVABDunningExe _run = null;
+        private MVABDunningStep _level = null;
 
         int VAB_Invoice_ID = 0; // Invoice id for dunning creation.
         int VAB_Currency_ID = 0; // Curency id of invoice.
@@ -120,7 +120,7 @@ namespace VAdvantage.Process
                 + ", Dispute=" + _IncludeInDispute
                 + ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID
                 + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
-            _run = new MDunningRun(GetCtx(), _VAB_DunningExe_ID, Get_TrxName());
+            _run = new MVABDunningExe(GetCtx(), _VAB_DunningExe_ID, Get_TrxName());
             if (_run.Get_ID() == 0)
             {
                 throw new ArgumentException(Msg.GetMsg(GetCtx(), "NotFndDunRun"));
@@ -321,7 +321,7 @@ namespace VAdvantage.Process
             if (_level.GetParent().IsCreateLevelsSequentially())
             {
                 // Build a list of all topmost Dunning Levels
-                MDunningLevel[] previousLevels = _level.GetPreviousLevels();
+                MVABDunningStep[] previousLevels = _level.GetPreviousLevels();
                 if (previousLevels != null && previousLevels.Length > 0)
                 {
 
@@ -469,14 +469,14 @@ namespace VAdvantage.Process
             int DaysDue, bool IsInDispute,
             int VAB_BusinessPartner_ID, int timesDunned, int daysAfterLast, int PaySchedule_ID)
         {
-            MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
+            MVABDunningExeEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
             {
                 if (!entry.Save())
                 {
                     // Change by mohit to pick error message from last error in mclass.
-                    //throw new Exception(GetRetrievedError(entry, "Cannot save MDunningRunEntry"));
-                    //throw new Exception("Cannot save MDunningRunEntry");
+                    //throw new Exception(GetRetrievedError(entry, "Cannot save MVABDunningExeEntry"));
+                    //throw new Exception("Cannot save MVABDunningExeEntry");
                     ValueNamePair vp = VLogger.RetrieveError();
                     if (vp != null)
                     {
@@ -490,7 +490,7 @@ namespace VAdvantage.Process
                 }
             }
             //
-            MDunningRunLine line = new MDunningRunLine(entry);
+            MVABDunningExeLine line = new MVABDunningExeLine(entry);
             line.SetInvoice(VAB_Invoice_ID, VAB_Currency_ID, GrandTotal, Open,
                 new Decimal(0), DaysDue, IsInDispute, timesDunned,
                 daysAfterLast);
@@ -498,8 +498,8 @@ namespace VAdvantage.Process
             if (!line.Save())
             {
                 // Change by mohit to pick error message from last error in mclass.
-                //throw new Exception(GetRetrievedError(line, "Cannot save MDunningRunLine"));
-                //throw new Exception("Cannot save MDunningRunLine");
+                //throw new Exception(GetRetrievedError(line, "Cannot save MVABDunningExeLine"));
+                //throw new Exception("Cannot save MVABDunningExeLine");
                 ValueNamePair vp = VLogger.RetrieveError();
                 if (vp != null)
                 {
@@ -630,15 +630,15 @@ namespace VAdvantage.Process
         private bool CreatePaymentLine(int VAB_Payment_ID, int VAB_Currency_ID,
             Decimal PayAmt, Decimal OpenAmt, int VAB_BusinessPartner_ID, int VA027_PostDatedCheck_ID)
         {
-            MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
+            MVABDunningExeEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
             {
                 if (!entry.Save())
                 {
                     // Change by mohit to pick error message from last error in mclass.
-                    //throw new Exception(GetRetrievedError(entry, "Cannot save MDunningRunEntry"));
-                    //throw new Exception("Cannot save MDunningRunEntry");
-                    //log.SaveError("Cannot save MDunningRunEntry", "");
+                    //throw new Exception(GetRetrievedError(entry, "Cannot save MVABDunningExeEntry"));
+                    //throw new Exception("Cannot save MVABDunningExeEntry");
+                    //log.SaveError("Cannot save MVABDunningExeEntry", "");
                     ValueNamePair vp = VLogger.RetrieveError();
                     if (vp != null)
                     {
@@ -653,14 +653,14 @@ namespace VAdvantage.Process
                 }
             }
             //
-            MDunningRunLine line = new MDunningRunLine(entry);
+            MVABDunningExeLine line = new MVABDunningExeLine(entry);
             line.SetPayment(VAB_Payment_ID, VAB_Currency_ID, PayAmt, OpenAmt, VA027_PostDatedCheck_ID);
 
             if (!line.Save())
             {
                 // Change by mohit to pick error message from last error in mclass.
-                //throw new Exception(GetRetrievedError(line, "Cannot save MDunningRunLine"));
-                //throw new Exception("Cannot save MDunningRunLine");
+                //throw new Exception(GetRetrievedError(line, "Cannot save MVABDunningExeLine"));
+                //throw new Exception("Cannot save MVABDunningExeLine");
                 ValueNamePair vp = VLogger.RetrieveError();
                 if (vp != null)
                 {
@@ -684,18 +684,18 @@ namespace VAdvantage.Process
             // Only add a fee if it contains InvoiceLines and is not a statement
             // TODO: Assumes Statement = -9999 and 
             bool onlyInvoices = _level.GetDaysAfterDue().Equals(new Decimal(-9999));
-            MDunningRunEntry[] entries = _run.GetEntries(true, onlyInvoices);
+            MVABDunningExeEntry[] entries = _run.GetEntries(true, onlyInvoices);
             if (entries != null && entries.Length > 0)
             {
                 for (int i = 0; i < entries.Length; i++)
                 {
-                    MDunningRunLine line = new MDunningRunLine(entries[i]);
+                    MVABDunningExeLine line = new MVABDunningExeLine(entries[i]);
                     line.SetFee(_VAB_Currency_ID, _level.GetFeeAmt());
                     if (!line.Save())
                     {
                         // Change by mohit to pick error message from last error in mclass.
-                        //throw new Exception(GetRetrievedError(line, "Cannot save MDunningRunLine"));
-                        //throw new Exception("Cannot save MDunningRunLine");
+                        //throw new Exception(GetRetrievedError(line, "Cannot save MVABDunningExeLine"));
+                        //throw new Exception("Cannot save MVABDunningExeLine");
                         ValueNamePair vp = VLogger.RetrieveError();
                         if (vp != null)
                         {
@@ -835,7 +835,7 @@ namespace VAdvantage.Process
         /// <returns>true/False</returns>
         private bool CreatCashLine(int VAB_CashJRNLLine_ID, Decimal Amount, Decimal OpenAmt, int VAB_Currency_ID, int VAB_BusinessPartner_ID)
         {
-            MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
+            MVABDunningExeEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
             {
                 if (!entry.Save())
@@ -855,7 +855,7 @@ namespace VAdvantage.Process
                 }
             }
             //
-            MDunningRunLine line = new MDunningRunLine(entry);
+            MVABDunningExeLine line = new MVABDunningExeLine(entry);
             line.SetcashLine(VAB_CashJRNLLine_ID, Amount, OpenAmt, VAB_Currency_ID);
 
             if (!line.Save())
@@ -980,7 +980,7 @@ namespace VAdvantage.Process
         /// <returns>true/false</returns>
         private bool CreatGLJournalLine(int VAGL_JRNLLine_ID, int VAB_Currency_ID, int VAB_BusinessPartner_ID, Decimal Amount, Decimal OpenAmt)
         {
-            MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
+            MVABDunningExeEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
             {
                 if (!entry.Save())
@@ -1001,7 +1001,7 @@ namespace VAdvantage.Process
                 }
             }
             //
-            MDunningRunLine line = new MDunningRunLine(entry);
+            MVABDunningExeLine line = new MVABDunningExeLine(entry);
             line.SetJournalLine(VAGL_JRNLLine_ID, VAB_Currency_ID, Amount, OpenAmt);
 
             if (!line.Save())
@@ -1126,7 +1126,7 @@ namespace VAdvantage.Process
         /// <returns>True/False</returns>
         private bool CreatePostDatedCheck(int VA027_PostDatedCheck_ID, Decimal PayAmt, int VAB_Currency_ID, int VAB_BusinessPartner_ID)
         {
-            MDunningRunEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
+            MVABDunningExeEntry entry = _run.GetEntry(VAB_BusinessPartner_ID, _VAB_Currency_ID, _SalesRep_ID);
             if (entry.Get_ID() == 0)
             {
                 if (!entry.Save())
@@ -1145,7 +1145,7 @@ namespace VAdvantage.Process
                 }
             }
             //
-            MDunningRunLine line = new MDunningRunLine(entry);
+            MVABDunningExeLine line = new MVABDunningExeLine(entry);
             line.SetPostDatedCheque(VA027_PostDatedCheck_ID, VAB_Currency_ID, PayAmt);
 
             if (!line.Save())
@@ -1174,14 +1174,14 @@ namespace VAdvantage.Process
             // Check rule 1)
             if (_level.IsShowAllDue())
             {
-                MDunningRunEntry[] entries = _run.GetEntries(true);
+                MVABDunningExeEntry[] entries = _run.GetEntries(true);
                 if (entries != null && entries.Length > 0)
                 {
                     for (int i = 0; i < entries.Length; i++)
                     {
                         // We start with saying we delete this entry as long as we don't find something new
                         bool entryDelete = true;
-                        MDunningRunLine[] lines = entries[i].GetLines(true);
+                        MVABDunningExeLine[] lines = entries[i].GetLines(true);
                         for (int j = 0; j < lines.Length; j++)
                         {
                             if (lines[j].GetTimesDunned() < 0)
@@ -1191,7 +1191,7 @@ namespace VAdvantage.Process
                                 if (!lines[j].Save())
                                 {
                                     // Change by mohit to pick error message from last error in mclass.
-                                    //throw new Exception(GetRetrievedError(lines[j], "Cannot save MDunningRunLine"));
+                                    //throw new Exception(GetRetrievedError(lines[j], "Cannot save MVABDunningExeLine"));
                                     ValueNamePair vp = VLogger.RetrieveError();
                                     if (vp != null)
                                     {

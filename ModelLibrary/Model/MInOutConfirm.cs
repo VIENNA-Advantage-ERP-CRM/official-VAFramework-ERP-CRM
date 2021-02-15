@@ -559,7 +559,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             /***********Compier comment
-            MDocType dt = MDocType.Get(GetCtx(), getVAB_DocTypesTarget_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), getVAB_DocTypesTarget_ID());
 
             //	Std Period open?
             if (!MPeriod.IsOpen(GetCtx(), getDateAcct(), dt.GetDocBaseType()))
@@ -723,7 +723,7 @@ namespace VAdvantage.Model
             //	Check if we need to split Shipment
             if (IsInDispute())
             {
-                MDocType dt = MDocType.Get(GetCtx(), inout.GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), inout.GetVAB_DocTypes_ID());
                 if (dt.IsSplitWhenDifference())
                 {
                     if (dt.GetVAB_DocTypesDifference_ID() == 0)
@@ -1102,7 +1102,7 @@ namespace VAdvantage.Model
                     _creditMemo = new MInvoice(inout, null);
                     _creditMemo.SetDescription(Msg.Translate(GetCtx(),
                         "VAM_Inv_InOutConfirm_ID") + " " + GetDocumentNo());
-                    _creditMemo.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                    _creditMemo.SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
                     if (!_creditMemo.Save(Get_TrxName()))
                     {
                         _processMsg += "Credit Memo not created";
@@ -1148,7 +1148,7 @@ namespace VAdvantage.Model
                     _inventory.SetIsInternalUse(true);
                     if (_inventory.GetVAB_DocTypes_ID() == 0)
                     {
-                        MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
+                        MVABDocTypes[] types = MVABDocTypes.GetOfDocBaseType(GetCtx(), MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
                         if (types.Length > 0)
                         {
                             // Get Internal Use Inv Doc Type

@@ -149,8 +149,8 @@ namespace VAdvantage.Acct
                 DocLine docLine = new DocLine(line, this);
                 //	Qty
                 Decimal Qty = line.GetQtyInvoiced();
-                bool cm = GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO)
-                    || GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+                bool cm = GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO)
+                    || GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
                 docLine.SetQty(cm ? Decimal.Negate(Qty) : Qty, invoice.IsSOTrx());
                 //
                 Decimal LineNetAmt = line.GetLineNetAmt();
@@ -310,8 +310,8 @@ namespace VAdvantage.Acct
             }
 
             //  ** ARI, ARF
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARINVOICE)
-                || GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARPROFORMAINVOICE))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARINVOICE)
+                || GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARPROFORMAINVOICE))
             {
                 bool addPost = false;
                 //Check For Module
@@ -794,7 +794,7 @@ namespace VAdvantage.Acct
 
 
             //  ARC
-            else if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO))
+            else if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO))
             {
                 Decimal grossAmt = GetAmount(Doc.AMTTYPE_Gross).Value;
                 Decimal serviceAmt = Env.ZERO;
@@ -928,7 +928,7 @@ namespace VAdvantage.Acct
             }
 
             //  ** API
-            else if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE))
+            else if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APINVOICE))
             {
                 Decimal grossAmt = GetAmount(Doc.AMTTYPE_Gross).Value;
                 Decimal serviceAmt = Env.ZERO;
@@ -1096,7 +1096,7 @@ namespace VAdvantage.Acct
                 UpdateProductPO(as1);	//	Only API
             }
             //  APC
-            else if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APCREDITMEMO))
+            else if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APCREDITMEMO))
             {
                 Decimal grossAmt = GetAmount(Doc.AMTTYPE_Gross).Value;
                 Decimal serviceAmt = Env.ZERO;
@@ -1279,10 +1279,10 @@ namespace VAdvantage.Acct
         /// <returns>accounted amount</returns>
         public Decimal CreateFactCash(MVABAccountBook as1, Fact fact, Decimal multiplier)
         {
-            bool creditMemo = GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO)
-                || GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
-            bool payables = GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE)
-                || GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_APCREDITMEMO);
+            bool creditMemo = GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO)
+                || GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
+            bool payables = GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APINVOICE)
+                || GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_APCREDITMEMO);
             Decimal acctAmt = Env.ZERO;
             FactLine fl = null;
             //	Revenue/Cost

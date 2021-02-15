@@ -108,7 +108,7 @@ namespace ModelLibrary.Classes
             int VAM_Product_ID = 0;
             DateTime? sDate = null;
             DateTime? eDate = null;
-            if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_PURCHASEORDER.Equals(docBaseType))
+            if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_PURCHASEORDER.Equals(docBaseType))
             {
                 VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), _Record_ID, _trx);
                 if (controlBasis.Equals("A"))
@@ -243,119 +243,119 @@ AND EndDate     >= " + GlobalVariable.TO_DATE(ord.GetDateOrdered(), true) + @" A
                 }
             }
             #region
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_SALESORDER.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_SALESORDER.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_APCREDITMEMO.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_APCREDITMEMO.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_APINVOICE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_APINVOICE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_APPAYMENT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_APPAYMENT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_ARINVOICE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_ARINVOICE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_ARPROFORMAINVOICE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_ARPROFORMAINVOICE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_ARRECEIPT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_ARRECEIPT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_BANKSTATEMENT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_CASHJOURNAL.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_CASHJOURNAL.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_FIXASSET.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_FIXASSET.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_GLDOCUMENT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_GLDOCUMENT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_GLJOURNAL.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_GLJOURNAL.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATCHINVOICE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATCHINVOICE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATCHPO.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATCHPO.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALDELIVERY.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALPICK.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALPICK.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALPRODUCTION.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALPUTAWAY.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALPUTAWAY.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALRECEIPT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_MATERIALREPLENISHMENT.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_MATERIALREPLENISHMENT.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_PROJECTISSUE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_PROJECTISSUE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_STANDARDCOSTUPDATE.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_STANDARDCOSTUPDATE.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_WORKORDER.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_WORKORDER.Equals(docBaseType))
             {
 
             }
-            else if (VAdvantage.Model.MDocBaseType.DOCBASETYPE_WORKORDERTRANSACTION.Equals(docBaseType))
+            else if (VAdvantage.Model.MVABMasterDocType.DOCBASETYPE_WORKORDERTRANSACTION.Equals(docBaseType))
             {
 
             }

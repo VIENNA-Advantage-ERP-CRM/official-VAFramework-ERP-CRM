@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         /**	Account Combination		*/
         private MVABAccount m_account = null;
         /** Account Element			*/
-        private MElementValue m_accountElement = null;
+        private MVABAcctElement m_accountElement = null;
 
         /// <summary>
         /// Set Currency Info
@@ -421,14 +421,14 @@ namespace VAdvantage.Model
         ///	Get Natural Account Element Value
         /// </summary>
         /// <returns> account</returns>
-        public MElementValue GetAccountElementValue()
+        public MVABAcctElement GetAccountElementValue()
         {
             if (m_accountElement == null)
             {
                 MVABAccount vc = GetAccount();
                 if (vc != null && vc.GetAccount_ID() != 0)
                 {
-                    m_accountElement = new MElementValue(GetCtx(), vc.GetAccount_ID(), Get_TrxName());
+                    m_accountElement = new MVABAcctElement(GetCtx(), vc.GetAccount_ID(), Get_TrxName());
                 }
             }
             return m_accountElement;
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
         /// <returns> true if control acct</returns>
         public Boolean IsDocControlled()
         {
-            MElementValue acct = GetAccountElementValue();
+            MVABAcctElement acct = GetAccountElementValue();
             if (acct == null)
             {
                 log.Warning("Account not found for VAB_Acct_ValidParameter_ID=" + GetVAB_Acct_ValidParameter_ID());

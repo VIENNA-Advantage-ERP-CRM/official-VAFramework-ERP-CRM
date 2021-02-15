@@ -207,7 +207,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			//while (rs.next ())
             foreach(DataRow dr in dt.Rows)
 			{
-				MFactAcct fact = new MFactAcct(GetCtx(), dr, null);	//	no lock
+				MActualAcctDetail fact = new MActualAcctDetail(GetCtx(), dr, null);	//	no lock
 				MTaxDeclarationAcct tda = new MTaxDeclarationAcct (_td, fact);
 				tda.SetLine((_noAccts+1) * 10);
 				if (tda.Save())

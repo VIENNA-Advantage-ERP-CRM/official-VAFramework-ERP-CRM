@@ -649,7 +649,7 @@ namespace VAdvantage.Process
                                                                 // when Ap Credit memo is alone then we will do a impact on costing.
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
-                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                                                MVABDocTypes docType = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                                 if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetVAM_Inv_InOutLine_ID() == 0 && invoiceLine.GetVAM_Product_ID() > 0)
                                                                 {
                                                                     if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),
@@ -954,7 +954,7 @@ namespace VAdvantage.Process
                                                             // when Ap Credit memo is alone then we will do a impact on costing.
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
-                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                                            MVABDocTypes docType = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                             if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetVAM_Inv_InOutLine_ID() == 0 && invoiceLine.GetVAM_Product_ID() > 0)
                                                             {
                                                                 if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),
@@ -1790,7 +1790,7 @@ namespace VAdvantage.Process
                                                                 // when Ap Credit memo is alone then we will do a impact on costing.
                                                                 // this is bcz of giving discount for particular product
                                                                 // discount is given only when document type having setting as "Treat As Discount" = True
-                                                                MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                                                MVABDocTypes docType = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                                 if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetVAM_Inv_InOutLine_ID() == 0 && invoiceLine.GetVAM_Product_ID() > 0)
                                                                 {
                                                                     if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),
@@ -2056,7 +2056,7 @@ namespace VAdvantage.Process
                                                             // when Ap Credit memo is alone then we will do a impact on costing.
                                                             // this is bcz of giving discount for particular product
                                                             // discount is given only when document type having setting as "Treat As Discount" = True
-                                                            MDocType docType = new MDocType(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
+                                                            MVABDocTypes docType = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypesTarget_ID(), Get_Trx());
                                                             if (docType.GetDocBaseType() == "APC" && docType.IsTreatAsDiscount() && invoiceLine.GetVAB_OrderLine_ID() == 0 && invoiceLine.GetVAM_Inv_InOutLine_ID() == 0 && invoiceLine.GetVAM_Product_ID() > 0)
                                                             {
                                                                 if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),

@@ -1726,7 +1726,7 @@ intellisense.annotate(jQuery.fn, {
   'map': function() {
     /// <signature>
     ///   <summary>Pass each element in the current matched set through a function, producing a new jQuery object containing the return values.</summary>
-    ///   <param name="callback(index, domElement)" type="Function">A function object that will be invoked for each element in the current set.</param>
+    ///   <param name="callback(index, doMVABElement)" type="Function">A function object that will be invoked for each element in the current set.</param>
     ///   <returns type="jQuery" />
     /// </signature>
   },

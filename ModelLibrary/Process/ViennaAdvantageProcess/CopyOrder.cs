@@ -90,7 +90,7 @@ namespace ViennaAdvantage.Process
             {
                 throw new ArgumentException("No Order");
             }
-            VAdvantage.Model.MDocType dt = VAdvantage.Model.MDocType.Get(GetCtx(), _VAB_DocTypes_ID);
+            VAdvantage.Model.MVABDocTypes dt = VAdvantage.Model.MVABDocTypes.Get(GetCtx(), _VAB_DocTypes_ID);
             if (dt.Get_ID() == 0)
             {
                 throw new ArgumentException("No DocType");
@@ -107,7 +107,7 @@ namespace ViennaAdvantage.Process
             }
             //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
             VAdvantage.Model.MVABOrder newOrder = VAdvantage.Model.MVABOrder.CopyFrom(from, _DateDoc, dt.GetVAB_DocTypes_ID(), false, true, null,
-                dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);		//	copy ASI 
+                dt.GetDocBaseType().Equals(MVABMasterDocType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);		//	copy ASI 
             newOrder.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);
             int VAB_BusinessPartner_ID = newOrder.GetVAB_BusinessPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);

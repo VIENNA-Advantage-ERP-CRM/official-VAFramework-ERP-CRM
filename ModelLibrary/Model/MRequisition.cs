@@ -306,7 +306,7 @@ namespace VAdvantage.Model
 
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, GetVAF_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, GetVAF_Org_ID()))
                 {
                     _processMsg = "@PeriodClosed@";
                     return DocActionVariables.STATUS_INVALID;
@@ -555,7 +555,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void SetCompletedDocumentNo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())

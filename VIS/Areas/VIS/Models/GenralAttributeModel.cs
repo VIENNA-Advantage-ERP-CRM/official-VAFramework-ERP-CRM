@@ -16,7 +16,7 @@ namespace VIS.Models
     {
         private VLogger log = VLogger.GetVLogger(typeof(GenralAttributeModel).FullName);
 
-        Dictionary<MGenAttribute, KeyValuePair<MGenAttributeInstance, MGenAttributeValue[]>> attributesList = new Dictionary<MGenAttribute, KeyValuePair<MGenAttributeInstance, MGenAttributeValue[]>>(4);
+        Dictionary<MVABGenFeature, KeyValuePair<MVABGenFeatureInstance, MVABGenFeatureValue[]>> attributesList = new Dictionary<MVABGenFeature, KeyValuePair<MVABGenFeatureInstance, MVABGenFeatureValue[]>>(4);
 
         /// <summary>
         /// Load genral attribute
@@ -30,11 +30,11 @@ namespace VIS.Models
         {
             AttributesObjects obj = new AttributesObjects();
 
-            MGenAttributeSet aset = null;
-            MGenAttribute[] attributes = null;
+            MVABGenFeatureSet aset = null;
+            MVABGenFeature[] attributes = null;
 
             //	Get Model
-            var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
+            var _masi = new MVABGenFeatureSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
             _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
             if (_masi == null)
             {
@@ -44,7 +44,7 @@ namespace VIS.Models
             /* set context to client side */
             ctx.SetContext(windowNo, "VAB_GenFeatureSet_ID", _masi.GetVAB_GenFeatureSet_ID());
             //	Get Attribute Set
-            aset = _masi.GetMGenAttributeSet();
+            aset = _masi.GetMVABGenFeatureSet();
             //	Product has no Attribute Set
             if (aset == null)
             {
@@ -57,15 +57,15 @@ namespace VIS.Models
 
             for (int i = 0; i < attributes.Length; i++)
             {
-                MGenAttribute a = attributes[i];
-                MGenAttributeInstance ins = a.GetCGenAttributeInstance(MVAMPFeatureSetInstanceId);
-                MGenAttributeValue[] v = null;
+                MVABGenFeature a = attributes[i];
+                MVABGenFeatureInstance ins = a.GetCGenAttributeInstance(MVAMPFeatureSetInstanceId);
+                MVABGenFeatureValue[] v = null;
 
-                if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(a.GetAttributeValueType()))
+                if (MVABGenFeature.ATTRIBUTEVALUETYPE_List.Equals(a.GetAttributeValueType()))
                 {
                     v = a.GetMVAMPFeatureValues();
                 }
-                attributesList[a] = new KeyValuePair<MGenAttributeInstance, MGenAttributeValue[]>(ins, v);
+                attributesList[a] = new KeyValuePair<MVABGenFeatureInstance, MVABGenFeatureValue[]>(ins, v);
             }
 
 
@@ -119,18 +119,18 @@ namespace VIS.Models
         /// <param name="attribute"></param>
         /// <param name="product"></param>
         /// <param name="readOnly"></param>
-        private string AddAttributeLine(MGenAttribute attribute, bool readOnly, int windowNo, AttributesObjects obj, int count)
+        private string AddAttributeLine(MVABGenFeature attribute, bool readOnly, int windowNo, AttributesObjects obj, int count)
         {
             //Column 1
             obj.tableStucture += "<td>";
             obj.tableStucture += "<label style='padding-bottom: 10px; padding-right: 5px;'  class='VIS_Pref_Label_Font' id=" + attribute.GetName().Replace(" ", "") + "_" + windowNo + "  >" + attribute.GetName() + "</label>";
             obj.tableStucture += "</td>";
 
-            MGenAttributeInstance instance = attributesList[attribute].Key;
+            MVABGenFeatureInstance instance = attributesList[attribute].Key;
 
-            if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
+            if (MVABGenFeature.ATTRIBUTEVALUETYPE_List.Equals(attribute.GetAttributeValueType()))
             {
-                MGenAttributeValue[] values = attributesList[attribute].Value;
+                MVABGenFeatureValue[] values = attributesList[attribute].Value;
 
                 //Column 2
                 obj.tableStucture += "<td>";
@@ -195,7 +195,7 @@ namespace VIS.Models
                 obj.tableStucture += "</select>";
                 obj.tableStucture += "</td>";
             }
-            else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
+            else if (MVABGenFeature.ATTRIBUTEVALUETYPE_Number.Equals(attribute.GetAttributeValueType()))
             {
                 //Column 2
                 obj.tableStucture += "<td>";
@@ -263,10 +263,10 @@ namespace VIS.Models
             bool _changed = false;
 
 
-            MGenAttributeSet aset = null;
-            MGenAttribute[] attributes = null;
+            MVABGenFeatureSet aset = null;
+            MVABGenFeature[] attributes = null;
             String mandatory = "";
-            var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
+            var _masi = new MVABGenFeatureSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
 
             //if there is different attribute set then delete old instance
             if (MVAMPFeatureSetInstanceId != 0 && (vadms_AttributeSet_ID != _masi.GetVAB_GenFeatureSet_ID()))
@@ -275,7 +275,7 @@ namespace VIS.Models
             }
 
             _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
-            aset = _masi.GetMGenAttributeSet();
+            aset = _masi.GetMVABGenFeatureSet();
             if (aset == null)
             {
                 return null;
@@ -299,18 +299,18 @@ namespace VIS.Models
             //	Save Instance Attributes
             attributes = aset.GetCGenAttributes(false);
 
-            Dictionary<MGenAttribute, object> lst = new Dictionary<MGenAttribute, object>();
+            Dictionary<MVABGenFeature, object> lst = new Dictionary<MVABGenFeature, object>();
 
             for (int i = 0; i < attributes.Length; i++)
             {
-                if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                if (MVABGenFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i];
-                    //MGenAttributeValue value = (MGenAttributeValue)editor;
-                    MGenAttributeValue value = null;
+                    //MVABGenFeatureValue value = (MVABGenFeatureValue)editor;
+                    MVABGenFeatureValue value = null;
                     if (Convert.ToInt32(editors[i].Key) > 0)
                     {
-                        value = new MGenAttributeValue(ctx, Convert.ToInt32(editors[i].Key), null);
+                        value = new MVABGenFeatureValue(ctx, Convert.ToInt32(editors[i].Key), null);
                         value.SetName(editors[i].Name);
                     }
                     //log.fine(attributes[i].GetName() + "=" + value);
@@ -318,7 +318,7 @@ namespace VIS.Models
                         mandatory += " - " + attributes[i].GetName();
                     lst[attributes[i]] = value;
                 }
-                else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                else if (MVABGenFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                 {
                     object editor = editors[i].Name;
                     decimal value = Convert.ToDecimal(editor);
@@ -345,11 +345,11 @@ namespace VIS.Models
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVABGenFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         var editor = editors[i];
 
-                        MGenAttributeValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MGenAttributeValue : null;
+                        MVABGenFeatureValue value = lst[attributes[i]] != null ? lst[attributes[i]] as MVABGenFeatureValue : null;
                         // Done by Bharat on 14 Sep 2017 to handle the cases of null attributes
                         if (value == null)
                         {
@@ -357,7 +357,7 @@ namespace VIS.Models
                         }
                         attributes[i].SetCGenAttributeInstance(MVAMPFeatureSetInstanceId, value);
                     }
-                    else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVABGenFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         if (Convert.ToDecimal(lst[attributes[i]]) == 0)
                         {
@@ -394,13 +394,13 @@ namespace VIS.Models
             try
             {
                 var editors = values;
-                MGenAttributeSet aset = null;
-                MGenAttribute[] attributes = null;
+                MVABGenFeatureSet aset = null;
+                MVABGenFeature[] attributes = null;
                 String mandatory = "";
 
-                var _masi = new MGenAttributeSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
+                var _masi = new MVABGenFeatureSetInstance(ctx, MVAMPFeatureSetInstanceId, null);
                 _masi.SetVAB_GenFeatureSet_ID(vadms_AttributeSet_ID);
-                aset = _masi.GetMGenAttributeSet();
+                aset = _masi.GetMVABGenFeatureSet();
                 if (aset == null)
                 {
                     return obj;
@@ -414,7 +414,7 @@ namespace VIS.Models
                 }
                 else
                 {
-                    var _masi1 = new MGenAttributeSetInstance(ctx, 0, null);
+                    var _masi1 = new MVABGenFeatureSetInstance(ctx, 0, null);
                     _masi.CopyTo(_masi1);
                     // _masi1.Save();
 
@@ -428,7 +428,7 @@ namespace VIS.Models
                 //	Save Instance Attributes
                 attributes = aset.GetCGenAttributes(false);
 
-                Dictionary<MGenAttribute, object> lst = new Dictionary<MGenAttribute, object>();
+                Dictionary<MVABGenFeature, object> lst = new Dictionary<MVABGenFeature, object>();
 
                 StringBuilder sql = new StringBuilder();
                 StringBuilder where = new StringBuilder();
@@ -436,13 +436,13 @@ namespace VIS.Models
 
                 for (int i = 0; i < attributes.Length; i++)
                 {
-                    if (MGenAttribute.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
+                    if (MVABGenFeature.ATTRIBUTEVALUETYPE_List.Equals(attributes[i].GetAttributeValueType()))
                     {
                         object editor = editors[i];
-                        MGenAttributeValue value = null;
+                        MVABGenFeatureValue value = null;
                         if (Convert.ToInt32(editors[i].Key) > 0)
                         {
-                            value = new MGenAttributeValue(ctx, Convert.ToInt32(editors[i].Key), null);
+                            value = new MVABGenFeatureValue(ctx, Convert.ToInt32(editors[i].Key), null);
                             value.SetName(editors[i].Name);
                         }
 
@@ -483,7 +483,7 @@ namespace VIS.Models
                             }
                         }
                     }
-                    else if (MGenAttribute.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
+                    else if (MVABGenFeature.ATTRIBUTEVALUETYPE_Number.Equals(attributes[i].GetAttributeValueType()))
                     {
                         var editor = editors[i];
                         var value = Convert.ToDecimal(editor.Name);

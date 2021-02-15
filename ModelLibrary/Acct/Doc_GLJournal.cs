@@ -290,7 +290,7 @@ namespace VAdvantage.Acct
                                      VAB_AccountBook_ID = " + as1.GetVAB_AccountBook_ID() + " AND VAGL_JRNL_ID = " + record_Id, null, null));
 
             //  GLJ
-            if (GetDocumentType().Equals(MDocBaseType.DOCBASETYPE_GLJOURNAL))
+            if (GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_GLJOURNAL))
             {
                 //  account     DR      CR
                 for (int i = 0; i < _lines.Length; i++)

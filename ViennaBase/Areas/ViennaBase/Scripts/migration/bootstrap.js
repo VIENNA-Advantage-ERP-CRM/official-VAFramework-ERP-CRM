@@ -138,7 +138,7 @@
 
       return prefix;
     },
-    getSelectorFromElement: function getSelectorFromElement(element) {
+    getSelectorFroMVABElement: function getSelectorFroMVABElement(element) {
       var selector = element.getAttribute('data-target');
 
       if (!selector || selector === '#') {
@@ -152,7 +152,7 @@
         return null;
       }
     },
-    getTransitionDurationFromElement: function getTransitionDurationFromElement(element) {
+    getTransitionDurationFroMVABElement: function getTransitionDurationFroMVABElement(element) {
       if (!element) {
         return 0;
       } // Get transition-duration of the element
@@ -289,7 +289,7 @@
     ;
 
     _proto._getRootElement = function _getRootElement(element) {
-      var selector = Util.getSelectorFromElement(element);
+      var selector = Util.getSelectorFroMVABElement(element);
       var parent = false;
 
       if (selector) {
@@ -320,7 +320,7 @@
         return;
       }
 
-      var transitionDuration = Util.getTransitionDurationFromElement(element);
+      var transitionDuration = Util.getTransitionDurationFroMVABElement(element);
       $(element).one(Util.TRANSITION_END, function (event) {
         return _this._destroyElement(element, event);
       }).emulateTransitionEnd(transitionDuration);
@@ -1013,7 +1013,7 @@
           this._config.interval = this._config.defaultInterval || this._config.interval;
         }
 
-        var transitionDuration = Util.getTransitionDurationFromElement(activeElement);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(activeElement);
         $(activeElement).one(Util.TRANSITION_END, function () {
           $(nextElement).removeClass(directionalClassName + " " + orderClassName).addClass(ClassName$2.ACTIVE);
           $(activeElement).removeClass(ClassName$2.ACTIVE + " " + orderClassName + " " + directionalClassName);
@@ -1068,7 +1068,7 @@
     };
 
     Carousel._dataApiClickHandler = function _dataApiClickHandler(event) {
-      var selector = Util.getSelectorFromElement(this);
+      var selector = Util.getSelectorFroMVABElement(this);
 
       if (!selector) {
         return;
@@ -1202,7 +1202,7 @@
 
       for (var i = 0, len = toggleList.length; i < len; i++) {
         var elem = toggleList[i];
-        var selector = Util.getSelectorFromElement(elem);
+        var selector = Util.getSelectorFroMVABElement(elem);
         var filterElement = [].slice.call(document.querySelectorAll(selector)).filter(function (foundElem) {
           return foundElem === element;
         });
@@ -1306,7 +1306,7 @@
 
       var capitalizedDimension = dimension[0].toUpperCase() + dimension.slice(1);
       var scrollSize = "scroll" + capitalizedDimension;
-      var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+      var transitionDuration = Util.getTransitionDurationFroMVABElement(this._element);
       $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       this._element.style[dimension] = this._element[scrollSize] + "px";
     };
@@ -1335,7 +1335,7 @@
       if (triggerArrayLength > 0) {
         for (var i = 0; i < triggerArrayLength; i++) {
           var trigger = this._triggerArray[i];
-          var selector = Util.getSelectorFromElement(trigger);
+          var selector = Util.getSelectorFroMVABElement(trigger);
 
           if (selector !== null) {
             var $elem = $([].slice.call(document.querySelectorAll(selector)));
@@ -1356,7 +1356,7 @@
       };
 
       this._element.style[dimension] = '';
-      var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+      var transitionDuration = Util.getTransitionDurationFroMVABElement(this._element);
       $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
     };
 
@@ -1405,7 +1405,7 @@
       var selector = "[data-toggle=\"collapse\"][data-parent=\"" + this._config.parent + "\"]";
       var children = [].slice.call(parent.querySelectorAll(selector));
       $(children).each(function (i, element) {
-        _this3._addAriaAndCollapsedClass(Collapse._getTargetFromElement(element), [element]);
+        _this3._addAriaAndCollapsedClass(Collapse._getTargetFroMVABElement(element), [element]);
       });
       return parent;
     };
@@ -1419,8 +1419,8 @@
     } // Static
     ;
 
-    Collapse._getTargetFromElement = function _getTargetFromElement(element) {
-      var selector = Util.getSelectorFromElement(element);
+    Collapse._getTargetFroMVABElement = function _getTargetFroMVABElement(element) {
+      var selector = Util.getSelectorFroMVABElement(element);
       return selector ? document.querySelector(selector) : null;
     };
 
@@ -1478,7 +1478,7 @@
     }
 
     var $trigger = $(this);
-    var selector = Util.getSelectorFromElement(this);
+    var selector = Util.getSelectorFroMVABElement(this);
     var selectors = [].slice.call(document.querySelectorAll(selector));
     $(selectors).each(function () {
       var $target = $(this);
@@ -1607,7 +1607,7 @@
         return;
       }
 
-      var parent = Dropdown._getParentFromElement(this._element);
+      var parent = Dropdown._getParentFroMVABElement(this._element);
 
       var isActive = $(this._menu).hasClass(ClassName$4.SHOW);
 
@@ -1685,7 +1685,7 @@
       };
       var showEvent = $.Event(Event$4.SHOW, relatedTarget);
 
-      var parent = Dropdown._getParentFromElement(this._element);
+      var parent = Dropdown._getParentFroMVABElement(this._element);
 
       $(parent).trigger(showEvent);
 
@@ -1707,7 +1707,7 @@
       };
       var hideEvent = $.Event(Event$4.HIDE, relatedTarget);
 
-      var parent = Dropdown._getParentFromElement(this._element);
+      var parent = Dropdown._getParentFroMVABElement(this._element);
 
       $(parent).trigger(hideEvent);
 
@@ -1760,7 +1760,7 @@
 
     _proto._getMenuElement = function _getMenuElement() {
       if (!this._menu) {
-        var parent = Dropdown._getParentFromElement(this._element);
+        var parent = Dropdown._getParentFroMVABElement(this._element);
 
         if (parent) {
           this._menu = parent.querySelector(Selector$4.MENU);
@@ -1866,7 +1866,7 @@
       var toggles = [].slice.call(document.querySelectorAll(Selector$4.DATA_TOGGLE));
 
       for (var i = 0, len = toggles.length; i < len; i++) {
-        var parent = Dropdown._getParentFromElement(toggles[i]);
+        var parent = Dropdown._getParentFroMVABElement(toggles[i]);
 
         var context = $(toggles[i]).data(DATA_KEY$4);
         var relatedTarget = {
@@ -1910,9 +1910,9 @@
       }
     };
 
-    Dropdown._getParentFromElement = function _getParentFromElement(element) {
+    Dropdown._getParentFroMVABElement = function _getParentFroMVABElement(element) {
       var parent;
-      var selector = Util.getSelectorFromElement(element);
+      var selector = Util.getSelectorFroMVABElement(element);
 
       if (selector) {
         parent = document.querySelector(selector);
@@ -1941,7 +1941,7 @@
         return;
       }
 
-      var parent = Dropdown._getParentFromElement(this);
+      var parent = Dropdown._getParentFroMVABElement(this);
 
       var isActive = $(parent).hasClass(ClassName$4.SHOW);
 
@@ -2196,7 +2196,7 @@
       $(this._dialog).off(Event$5.MOUSEDOWN_DISMISS);
 
       if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(this._element);
         $(this._element).one(Util.TRANSITION_END, function (event) {
           return _this2._hideModal(event);
         }).emulateTransitionEnd(transitionDuration);
@@ -2285,7 +2285,7 @@
       };
 
       if (transition) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._dialog);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(this._dialog);
         $(this._dialog).one(Util.TRANSITION_END, transitionComplete).emulateTransitionEnd(transitionDuration);
       } else {
         transitionComplete();
@@ -2406,7 +2406,7 @@
           return;
         }
 
-        var backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+        var backdropTransitionDuration = Util.getTransitionDurationFroMVABElement(this._backdrop);
         $(this._backdrop).one(Util.TRANSITION_END, callback).emulateTransitionEnd(backdropTransitionDuration);
       } else if (!this._isShown && this._backdrop) {
         $(this._backdrop).removeClass(ClassName$5.SHOW);
@@ -2420,7 +2420,7 @@
         };
 
         if ($(this._element).hasClass(ClassName$5.FADE)) {
-          var _backdropTransitionDuration = Util.getTransitionDurationFromElement(this._backdrop);
+          var _backdropTransitionDuration = Util.getTransitionDurationFroMVABElement(this._backdrop);
 
           $(this._backdrop).one(Util.TRANSITION_END, callbackRemove).emulateTransitionEnd(_backdropTransitionDuration);
         } else {
@@ -2569,7 +2569,7 @@
     var _this10 = this;
 
     var target;
-    var selector = Util.getSelectorFromElement(this);
+    var selector = Util.getSelectorFroMVABElement(this);
 
     if (selector) {
       target = document.querySelector(selector);
@@ -3013,7 +3013,7 @@
         };
 
         if ($(this.tip).hasClass(ClassName$6.FADE)) {
-          var transitionDuration = Util.getTransitionDurationFromElement(this.tip);
+          var transitionDuration = Util.getTransitionDurationFroMVABElement(this.tip);
           $(this.tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
         } else {
           complete();
@@ -3065,7 +3065,7 @@
       this._activeTrigger[Trigger.HOVER] = false;
 
       if ($(this.tip).hasClass(ClassName$6.FADE)) {
-        var transitionDuration = Util.getTransitionDurationFromElement(tip);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(tip);
         $(tip).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
         complete();
@@ -3727,7 +3727,7 @@
       var targets = [].slice.call(document.querySelectorAll(this._selector));
       targets.map(function (element) {
         var target;
-        var targetSelector = Util.getSelectorFromElement(element);
+        var targetSelector = Util.getSelectorFroMVABElement(element);
 
         if (targetSelector) {
           target = document.querySelector(targetSelector);
@@ -4005,7 +4005,7 @@
       var target;
       var previous;
       var listElement = $(this._element).closest(Selector$9.NAV_LIST_GROUP)[0];
-      var selector = Util.getSelectorFromElement(this._element);
+      var selector = Util.getSelectorFroMVABElement(this._element);
 
       if (listElement) {
         var itemSelector = listElement.nodeName === 'UL' || listElement.nodeName === 'OL' ? Selector$9.ACTIVE_UL : Selector$9.ACTIVE;
@@ -4072,7 +4072,7 @@
       };
 
       if (active && isTransitioning) {
-        var transitionDuration = Util.getTransitionDurationFromElement(active);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(active);
         $(active).removeClass(ClassName$9.SHOW).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
         complete();
@@ -4262,7 +4262,7 @@
       this._element.classList.add(ClassName$a.SHOWING);
 
       if (this._config.animation) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(this._element);
         $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
         complete();
@@ -4328,7 +4328,7 @@
       this._element.classList.remove(ClassName$a.SHOW);
 
       if (this._config.animation) {
-        var transitionDuration = Util.getTransitionDurationFromElement(this._element);
+        var transitionDuration = Util.getTransitionDurationFroMVABElement(this._element);
         $(this._element).one(Util.TRANSITION_END, complete).emulateTransitionEnd(transitionDuration);
       } else {
         complete();

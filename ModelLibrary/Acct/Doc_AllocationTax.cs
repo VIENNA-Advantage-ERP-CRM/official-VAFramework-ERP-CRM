@@ -37,7 +37,7 @@ namespace VAdvantage.Acct
         private MVABAccount _WriteOffAccount;
         private Decimal _WriteOffAmt;
 
-        private List<MFactAcct> _facts = new List<MFactAcct>();
+        private List<MActualAcctDetail> _facts = new List<MActualAcctDetail>();
         private int _totalIndex = 0;
         #endregion
 
@@ -64,7 +64,7 @@ namespace VAdvantage.Acct
         /// Add Invoice Fact Line
         /// </summary>
         /// <param name="fact">fact line</param>
-        public void AddInvoiceFact(MFactAcct fact)
+        public void AddInvoiceFact(MActualAcctDetail fact)
         {
             _facts.Add(fact);
         }
@@ -91,7 +91,7 @@ namespace VAdvantage.Acct
             Decimal total = Env.ZERO;
             for (int i = 0; i < _facts.Count; i++)
             {
-                MFactAcct factAcct = (MFactAcct)_facts[i];
+                MActualAcctDetail factAcct = (MActualAcctDetail)_facts[i];
                 if (factAcct.GetAmtSourceDr().CompareTo(total) > 0)
                 {
                     total = factAcct.GetAmtSourceDr();
@@ -104,7 +104,7 @@ namespace VAdvantage.Acct
                 }
             }
 
-            MFactAcct factAcct1 = (MFactAcct)_facts[_totalIndex];
+            MActualAcctDetail factAcct1 = (MActualAcctDetail)_facts[_totalIndex];
             log.Info("Total Invoice = " + total + " - " + factAcct1);
             int precision = as1.GetStdPrecision();
             for (int i = 0; i < _facts.Count; i++)
@@ -115,7 +115,7 @@ namespace VAdvantage.Acct
                     continue;
                 }
 
-                factAcct1 = (MFactAcct)_facts[i];
+                factAcct1 = (MActualAcctDetail)_facts[i];
                 log.Info(i + ": " + factAcct1);
 
                 //	Create Tax Account

@@ -237,7 +237,7 @@ namespace VAdvantage.Process
         private void InvoiceNew(MRequest request)
         {
             _m_invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
-            _m_invoice.SetVAB_DocTypesTarget_ID(MDocBaseType.DOCBASETYPE_ARINVOICE);
+            _m_invoice.SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_ARINVOICE);
             MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
             _m_invoice.SetVAM_PriceList_ID(partner.GetVAM_PriceList_ID());

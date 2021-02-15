@@ -791,7 +791,7 @@ namespace VIS.Helpers
             ////////////////
             ProcessInfo pi = new ProcessInfo(Name, VAF_Job_ID, VAF_TableView_ID, Record_ID, recIDs);
             pi.SetFileType(fileType);
-            TryPrintFromDocType(pi);
+            TryPrintFroMVABDocTypes(pi);
             //if (ret != null)
             //{
             //    return ret;
@@ -856,7 +856,7 @@ namespace VIS.Helpers
         /// if Doctype or targetDocType column exist in window, then check print format attached to that Doc type. and open that one.
         /// </summary>
         /// <param name="_pi"></param>
-        private static void TryPrintFromDocType(ProcessInfo _pi)
+        private static void TryPrintFroMVABDocTypes(ProcessInfo _pi)
         {
             try
             {

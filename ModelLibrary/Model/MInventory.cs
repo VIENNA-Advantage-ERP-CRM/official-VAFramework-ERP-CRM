@@ -208,7 +208,7 @@ namespace VAdvantage.Model
          */
         public String GetDocumentInfo()
         {
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             return dt.GetName() + " " + GetDocumentNo();
         }
 
@@ -273,7 +273,7 @@ namespace VAdvantage.Model
         {
             if (GetVAB_DocTypes_ID() == 0)
             {
-                MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
+                MVABDocTypes[] types = MVABDocTypes.GetOfDocBaseType(GetCtx(), MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
                 if (types.Length > 0)	//	get first
                     SetVAB_DocTypes_ID(types[0].GetVAB_DocTypes_ID());
                 else
@@ -384,7 +384,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, GetVAF_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -862,7 +862,7 @@ namespace VAdvantage.Model
 
             MInventoryLine[] lines = GetLines(false);
             log.Info("total Lines=" + lines.Count());
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //
             log.Info("Lines Loop Started");
@@ -1871,7 +1871,7 @@ namespace VAdvantage.Model
                 return;
             }
 
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             // if Overwrite Date on Complete checkbox is true.
             if (dt.IsOverwriteDateOnComplete())
@@ -2884,7 +2884,7 @@ namespace VAdvantage.Model
         public bool ReverseCorrectIt()
         {
             log.Info(ToString());
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";

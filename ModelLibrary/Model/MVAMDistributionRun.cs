@@ -1,0 +1,104 @@
+﻿/********************************************************
+ * Project Name   : VAdvantage
+ * Class Name     : MVAMDistributionRun
+ * Purpose        :Distribution Run Model
+ * Class Used     : X_VAM_DistributionListLine
+ * Chronological    Development
+ * Raghunandan     03-Nov-2009
+  ******************************************************/
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using VAdvantage.Classes;
+using VAdvantage.Common;
+using VAdvantage.Process;
+using VAdvantage.Model;
+using VAdvantage.DataBase;
+using VAdvantage.SqlExec;
+using VAdvantage.Utility;
+//////using System.Windows.Forms;
+//using VAdvantage.Controls;
+using System.Data;
+using System.Data.SqlClient;
+using VAdvantage.Logging;
+
+namespace VAdvantage.Model
+{
+    public class MVAMDistributionRun : X_VAM_DistributionRun
+    {
+        // Cached Lines					
+        private MVAMDistributionRunLine[] _lines = null;
+
+        /// <summary>
+        /// Standard Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="VAM_DistributionRun_ID">id</param>
+        /// <param name="trxName">transaction</param>
+        public MVAMDistributionRun(Ctx ctx, int VAM_DistributionRun_ID, Trx trxName)
+            : base(ctx, VAM_DistributionRun_ID, trxName)
+        {
+
+        }
+
+        /// <summary>
+        /// Load Constructor
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="dr"></param>
+        /// <param name="trxName"></param>
+        public MVAMDistributionRun(Ctx ctx, DataRow dr, Trx trxName)
+            : base(ctx, dr, trxName)
+        {
+
+        }
+
+        /// <summary>
+        /// Get active, non zero lines
+        /// </summary>
+        /// <param name="reload">true if reload</param>
+        /// <returns>lines</returns>
+        public MVAMDistributionRunLine[] GetLines(bool reload)
+        {
+            if (!reload && _lines != null)
+            {
+                return _lines;
+            }
+            //
+            String sql = "SELECT * FROM VAM_DistributionRunLine "
+                + "WHERE VAM_DistributionRun_ID=" + GetVAM_DistributionRun_ID() + " AND IsActive='Y' AND TotalQty IS NOT NULL AND TotalQty<> 0 ORDER BY Line";
+            List<MVAMDistributionRunLine> list = new List<MVAMDistributionRunLine>();
+            DataTable dt = null;
+            IDataReader idr = null;
+            try
+            {
+                idr = DataBase.DB.ExecuteReader(sql, null, Get_TrxName());
+                dt = new DataTable();
+                dt.Load(idr);
+                idr.Close();
+                foreach (DataRow dr in dt.Rows)
+                {
+                    list.Add(new MVAMDistributionRunLine(GetCtx(), dr, Get_TrxName()));
+                }
+            }
+            catch (Exception e)
+            {
+                if (idr != null)
+                {
+                    idr.Close();
+                }
+                log.Log(Level.SEVERE, sql, e);
+            }
+            finally
+            {
+                dt = null;
+            }
+
+            _lines = new MVAMDistributionRunLine[list.Count];
+            _lines = list.ToArray();
+            return _lines;
+        }
+    }
+}

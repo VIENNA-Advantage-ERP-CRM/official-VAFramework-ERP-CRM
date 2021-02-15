@@ -128,7 +128,7 @@ MochiKit.Base.update(MochiKit.Signal.Event.prototype, {
         var elem = null;
         if (this.type() == 'mouseover') {
             elem = (this._event.relatedTarget ||
-                this._event.fromElement);
+                this._event.froMVABElement);
         } else if (this.type() == 'mouseout') {
             elem = (this._event.relatedTarget ||
                 this._event.toElement);

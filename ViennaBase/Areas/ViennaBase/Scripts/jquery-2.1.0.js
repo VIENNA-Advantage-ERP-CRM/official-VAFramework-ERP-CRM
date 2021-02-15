@@ -2755,7 +2755,7 @@ var rootjQuery,
 				return this.constructor( context ).find( selector );
 			}
 
-		// HANDLE: $(DOMElement)
+		// HANDLE: $(DOMVABElement)
 		} else if ( selector.nodeType ) {
 			this.context = this[0] = selector;
 			this.length = 1;

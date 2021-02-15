@@ -9,7 +9,7 @@ using VIS.DBase;
 
 namespace VIS.Models
 {
-    public class MDocTypeModel
+    public class MVABDocTypesModel
     {
         /// <summary>
         /// Get DocType Detail
@@ -24,7 +24,7 @@ namespace VIS.Models
             //Assign parameter value
             VAB_DocTypes_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter
-            MDocType dt = MDocType.Get(ctx, VAB_DocTypes_ID);
+            MVABDocTypes dt = MVABDocTypes.Get(ctx, VAB_DocTypes_ID);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["IsSOTrx"] = dt.IsSOTrx().ToString();
             result["IsReturnTrx"] = dt.IsReturnTrx().ToString();

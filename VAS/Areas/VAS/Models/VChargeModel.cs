@@ -31,7 +31,7 @@ namespace VIS.Controllers
         /// <returns></returns>
         public int CreateElementValue(Ctx ctx, int m_VAF_Org_ID, String value, String name, Boolean isExpenseType, int m_VAB_Element_ID)
         {
-            MElementValue ev = new MElementValue(ctx, value, name, null,
+            MVABAcctElement ev = new MVABAcctElement(ctx, value, name, null,
                 isExpenseType ? X_VAB_Acct_Element.ACCOUNTTYPE_Expense : X_VAB_Acct_Element.ACCOUNTTYPE_Revenue,
                     X_VAB_Acct_Element.ACCOUNTSIGN_Natural,
                     false, false, null);

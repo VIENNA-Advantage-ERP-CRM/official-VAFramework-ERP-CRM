@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             if (IsPosted())
             {
                 // Check Period Open
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 {
                     log.Warning("Period Closed");
                     return false;
@@ -265,7 +265,7 @@ namespace VAdvantage.Model
                 //}
 
                 SetPosted(false);
-                if (MFactAcct.Delete(Table_ID, Get_ID(), trxName) < 0)
+                if (MActualAcctDetail.Delete(Table_ID, Get_ID(), trxName) < 0)
                     return false;
             }
             //	Mark as Inactive
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -460,7 +460,7 @@ namespace VAdvantage.Model
                         //}
                         MInvoice invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
                         MVABCurrency currency = MVABCurrency.Get(GetCtx(), invoice.GetVAB_Currency_ID());
-                        MDocType doctype = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
+                        MVABDocTypes doctype = MVABDocTypes.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
                         StringBuilder _sql = new StringBuilder();
                         varianceAmount = 0;
 
@@ -534,7 +534,7 @@ namespace VAdvantage.Model
                         // set Backup Withholding amount and withholding Amount
                         if (payment != null && payment.GetVAB_Payment_ID() != 0 && line.Get_ColumnIndex("WithholdingAmt") > 0)
                         {
-                            if (doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_ARCREDITMEMO) || doctype.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_APINVOICE))
+                            if (doctype.GetDocBaseType().Equals(MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO) || doctype.GetDocBaseType().Equals(MVABMasterDocType.DOCBASETYPE_APINVOICE))
                             {
                                 paySch.SetWithholdingAmt(Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetWithholdingAmt()), currencymultiplyRate), currency.GetStdPrecision()));
                                 paySch.SetBackupWithholdingAmount(Decimal.Round(Decimal.Multiply(Decimal.Negate(line.GetBackupWithholdingAmount()), currencymultiplyRate), currency.GetStdPrecision()));
@@ -936,7 +936,7 @@ namespace VAdvantage.Model
                 throw new Exception("Allocation already reversed (not active)");
 
             //	Can we delete posting
-            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
@@ -1161,7 +1161,7 @@ namespace VAdvantage.Model
         /// <param name="currencymultiplyRate"></param>
         /// <param name="doctype"></param>
         /// <param name="currency"></param>
-        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MInvoicePaySchedule paySch, decimal currencymultiplyRate, MDocType doctype, MVABCurrency currency, bool _isDuplicate)
+        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MInvoicePaySchedule paySch, decimal currencymultiplyRate, MVABDocTypes doctype, MVABCurrency currency, bool _isDuplicate)
         {
             varianceAmount = 0;
             ShiftVarianceOnOther = 0;

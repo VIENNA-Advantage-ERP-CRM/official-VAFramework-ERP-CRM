@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         private String m_stdValues;
         private String m_stdValuesOrg;
         //
-        private NaturalAccountMap<String, MElementValue> m_nap = null;
+        private NaturalAccountMap<String, MVABAcctElement> m_nap = null;
         //
         private MVAFClient m_client;
         private MVAFOrg m_org;
@@ -2383,7 +2383,7 @@ namespace VAdvantage.Model
             int VAB_Element_ID = 0;
             if (lstTableName.Contains("VAB_Element")) // Update by Paramjeet Singh
             {
-                MElement element = new MElement(m_client, name, MElement.ELEMENTTYPE_Account, m_VAF_TreeInfo_Account_ID);
+                MVABElement element = new MVABElement(m_client, name, MVABElement.ELEMENTTYPE_Account, m_VAF_TreeInfo_Account_ID);
 
 
 
@@ -2403,7 +2403,7 @@ namespace VAdvantage.Model
                 m_info.Append(Msg.Translate(m_lang, "VAB_Element_ID")).Append("=").Append(name).Append("\n");
 
                 //	Create Account Values
-                m_nap = new NaturalAccountMap<String, MElementValue>(m_ctx, m_trx);
+                m_nap = new NaturalAccountMap<String, MVABAcctElement>(m_ctx, m_trx);
                 MVAFTreeInfo tree = MVAFTreeInfo.Get(m_ctx, m_VAF_TreeInfo_Account_ID, m_trx);
                 String errMsg = m_nap.ParseFile(AccountingFile, GetVAF_Client_ID(), GetVAF_Org_ID(), VAB_Element_ID, tree);
                 if (errMsg.Length != 0)
@@ -2796,19 +2796,19 @@ namespace VAdvantage.Model
             tableName = "VAGL_Group";
             if (lstTableName.Contains(tableName)) // Update by Paramjeet Singh
             {
-                CreateGLCategory("Standard", MGLCategory.CATEGORYTYPE_Manual, true);
-                int GL_None = CreateGLCategory("None", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_GL = CreateGLCategory("Manual", MGLCategory.CATEGORYTYPE_Manual, false);
-                int GL_ARI = CreateGLCategory("AR Invoice", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_ARR = CreateGLCategory("AR Receipt", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_MM = CreateGLCategory("Material Management", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_API = CreateGLCategory("AP Invoice", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_APP = CreateGLCategory("AP Payment", MGLCategory.CATEGORYTYPE_Document, false);
-                int GL_CASH = CreateGLCategory("Cash/Payments", MGLCategory.CATEGORYTYPE_Document, false);
+                CreateGLCategory("Standard", MVAGLGroup.CATEGORYTYPE_Manual, true);
+                int GL_None = CreateGLCategory("None", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_GL = CreateGLCategory("Manual", MVAGLGroup.CATEGORYTYPE_Manual, false);
+                int GL_ARI = CreateGLCategory("AR Invoice", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_ARR = CreateGLCategory("AR Receipt", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_MM = CreateGLCategory("Material Management", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_API = CreateGLCategory("AP Invoice", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_APP = CreateGLCategory("AP Payment", MVAGLGroup.CATEGORYTYPE_Document, false);
+                int GL_CASH = CreateGLCategory("Cash/Payments", MVAGLGroup.CATEGORYTYPE_Document, false);
 
                 //	Base DocumentTypes
                 int ii = CreateDocType("GL Journal", Msg.GetElement(m_ctx, "VAGL_JRNL_ID"),
-                    MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
                     1000, GL_GL);
                 if (ii == 0)
                 {
@@ -2820,121 +2820,121 @@ namespace VAdvantage.Model
                     return false;
                 }
                 CreateDocType("GL Journal Batch", Msg.GetElement(m_ctx, "VAGL_BatchJRNL_ID"),
-                    MDocBaseType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_GLJOURNAL, null, 0, 0,
                     100, GL_GL);
-                //	MDocBaseType.DOCBASETYPE_GLDocument
+                //	MVABMasterDocType.DOCBASETYPE_GLDocument
                 //
                 int DT_I = CreateDocType("AR Invoice", Msg.GetElement(m_ctx, "VAB_Invoice_ID", true),
-                    MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_ARINVOICE, null, 0, 0,
                     100000, GL_ARI);
                 int DT_II = CreateDocType("AR Invoice Indirect", Msg.GetElement(m_ctx, "VAB_Invoice_ID", true),
-                    MDocBaseType.DOCBASETYPE_ARINVOICE, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_ARINVOICE, null, 0, 0,
                     150000, GL_ARI);
                 //int DT_IC = CreateDocType("AR Credit Memo", Msg.GetMsg(m_ctx, "CreditMemo"),
-                //    MDocBaseType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
+                //    MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
                 //    170000, GL_ARI);
                 int DT_IC = CreateDocType("AR Credit Memo", Msg.GetMsg(m_ctx, "CreditMemo"),
-                  MDocBaseType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
+                  MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO, null, 0, 0,
                   170000, GL_ARI, true, false);
-                //	MDocBaseType.DOCBASETYPE_ARProFormaInvoice
+                //	MVABMasterDocType.DOCBASETYPE_ARProFormaInvoice
 
                 CreateDocType("AP Invoice", Msg.GetElement(m_ctx, "VAB_Invoice_ID", false),
-                    MDocBaseType.DOCBASETYPE_APINVOICE, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_APINVOICE, null, 0, 0,
                     0, GL_API);
                 //CreateDocType("AP CreditMemo", Msg.GetMsg(m_ctx, "CreditMemo"),
-                //    MDocBaseType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
+                //    MVABMasterDocType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
                 //    0, GL_API);
                 CreateDocType("AP CreditMemo", Msg.GetMsg(m_ctx, "CreditMemo"),
-                    MDocBaseType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_APCREDITMEMO, null, 0, 0,
                     0, GL_API, true, false);
                 CreateDocType("Match Invoice", Msg.GetElement(m_ctx, "VAM_MatchInvoice_ID", false),
-                    MDocBaseType.DOCBASETYPE_MATCHINVOICE, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, null, 0, 0,
                     390000, GL_API);
 
                 CreateDocType("AR Receipt", Msg.GetElement(m_ctx, "VAB_Payment_ID", true),
-                    MDocBaseType.DOCBASETYPE_ARRECEIPT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_ARRECEIPT, null, 0, 0,
                     0, GL_ARR);
                 CreateDocType("AP Payment", Msg.GetElement(m_ctx, "VAB_Payment_ID", false),
-                    MDocBaseType.DOCBASETYPE_APPAYMENT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_APPAYMENT, null, 0, 0,
                     0, GL_APP);
                 CreateDocType("Allocation", "Allocation",
-                    MDocBaseType.DOCBASETYPE_PAYMENTALLOCATION, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, null, 0, 0,
                     490000, GL_CASH);
 
                 int DT_S = CreateDocType("MM Shipment", "Delivery Note",
-                    MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
                     500000, GL_MM);
                 int DT_SI = CreateDocType("MM Shipment Indirect", "Delivery Note",
-                    MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
                     550000, GL_MM);
                 int DT_SR = CreateDocType("MM Customer Return", "Customer Return",
-                    MDocBaseType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALDELIVERY, null, 0, 0,
                     590000, GL_MM, true, false);
 
                 CreateDocType("MM Receipt", "Vendor Delivery",
-                    MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
                     0, GL_MM);
                 CreateDocType("MM Vendor Return", "Vendor Return",
-                    MDocBaseType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALRECEIPT, null, 0, 0,
                     0, GL_MM, true, false);
 
                 CreateDocType("Purchase Order", Msg.GetElement(m_ctx, "VAB_Order_ID", false),
-                    MDocBaseType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
                     800000, GL_None);
                 CreateDocType("Vendor RMA", "Vendor RMA",
-                    MDocBaseType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_PURCHASEORDER, null, 0, 0,
                     890000, GL_None, true, false);
                 CreateDocType("Match PO", Msg.GetElement(m_ctx, "VAM_MatchPO_ID", false),
-                    MDocBaseType.DOCBASETYPE_MATCHPO, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATCHPO, null, 0, 0,
                     880000, GL_None);
                 CreateDocType("Purchase Requisition", Msg.GetElement(m_ctx, "VAM_Requisition_ID", false),
-                    MDocBaseType.DOCBASETYPE_PURCHASEREQUISITION, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, null, 0, 0,
                     900000, GL_None);
 
                 CreateDocType("Bank Statement", Msg.GetElement(m_ctx, "VAB_BankStatemet_ID", true),
-                    MDocBaseType.DOCBASETYPE_BANKSTATEMENT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, null, 0, 0,
                     700000, GL_CASH);
                 CreateDocType("Cash Journal", Msg.GetElement(m_ctx, "VAB_CashJRNL_ID", true),
-                    MDocBaseType.DOCBASETYPE_CASHJOURNAL, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_CASHJOURNAL, null, 0, 0,
                     750000, GL_CASH);
 
                 CreateDocType("Material Movement", Msg.GetElement(m_ctx, "VAM_InventoryTransfer_ID", false),
-                    MDocBaseType.DOCBASETYPE_MATERIALMOVEMENT, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, null, 0, 0,
                     610000, GL_MM);
                 CreateDocType("Physical Inventory", Msg.GetElement(m_ctx, "VAM_Inventory_ID", false),
-                    MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
                     620000, GL_MM);
                 CreateDocType("Material Production", Msg.GetElement(m_ctx, "VAM_Production_ID", false),
-                    MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_MATERIALPRODUCTION, null, 0, 0,
                     630000, GL_MM);
                 CreateDocType("Project Issue", Msg.GetElement(m_ctx, "VAB_ProjectSupply_ID", false),
-                    MDocBaseType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
                     640000, GL_MM);
 
                 //  Order Entry
                 CreateDocType("Binding offer", "Quotation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_Quotation, 0, 0,
                     10000, GL_None);
                 CreateDocType("Non binding offer", "Proposal",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Proposal, 0, 0,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_Proposal, 0, 0,
                     20000, GL_None);
                 CreateDocType("Prepay Order", "Prepay Order",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_PrepayOrder, DT_S, DT_I,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_PrepayOrder, DT_S, DT_I,
                     30000, GL_None);
                 CreateDocType("Standard Order", "Order Confirmation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_StandardOrder, DT_S, DT_I,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_StandardOrder, DT_S, DT_I,
                     50000, GL_None);
                 CreateDocType("Customer RMA", "Customer RMA",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_StandardOrder, DT_SR, DT_IC,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_StandardOrder, DT_SR, DT_IC,
                     59000, GL_None, true, false);
                 CreateDocType("Credit Order", "Order Confirmation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_OnCreditOrder, DT_SI, DT_I,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_OnCreditOrder, DT_SI, DT_I,
                     60000, GL_None);   //  RE
                 CreateDocType("Warehouse Order", "Order Confirmation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_WarehouseOrder, DT_S, DT_I,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_WarehouseOrder, DT_S, DT_I,
                     70000, GL_None);    //  LS
                 int DT = CreateDocType("POS Order", "Order Confirmation",
-                    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_POSOrder, DT_SI, DT_II,
+                    MVABMasterDocType.DOCBASETYPE_SALESORDER, MVABDocTypes.DOCSUBTYPESO_POSOrder, DT_SI, DT_II,
                     80000, GL_None);    // Bar
                 //	POS As Default for window SO
                 //CreatePreference("VAB_DocTypesTarGet_ID", DT.ToString(), 143);
@@ -3008,12 +3008,12 @@ namespace VAdvantage.Model
         /// Create GL Category
         /// </summary>
         /// <param name="Name">name</param>
-        /// <param name="CategoryType">category type MGLCategory.CATEGORYTYPE_*</param>
+        /// <param name="CategoryType">category type MVAGLGroup.CATEGORYTYPE_*</param>
         /// <param name="isDefault">is default value</param>
         /// <returns>VAGL_Group_ID</returns>
         private int CreateGLCategory(String Name, String CategoryType, bool isDefault)
         {
-            MGLCategory cat = new MGLCategory(m_ctx, 0, m_trx);
+            MVAGLGroup cat = new MVAGLGroup(m_ctx, 0, m_trx);
             cat.SetName(Name);
             cat.SetCategoryType(CategoryType);
             cat.SetIsDefault(isDefault);
@@ -3072,7 +3072,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            MDocType dt = new MDocType(m_ctx, DocBaseType, Name, m_trx);
+            MVABDocTypes dt = new MVABDocTypes(m_ctx, DocBaseType, Name, m_trx);
             if (PrintName != null && PrintName.Length > 0)
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)

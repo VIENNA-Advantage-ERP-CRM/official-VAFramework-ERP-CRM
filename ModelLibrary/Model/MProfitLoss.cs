@@ -98,7 +98,7 @@ namespace VAdvantage.Model
             _processMsg = ModelValidationEngine.Get().FireDocValidate(this, ModalValidatorVariables.DOCTIMING_BEFORE_PREPARE);
             if (_processMsg != null)
                 return DocActionVariables.STATUS_INVALID;
-            MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
             //SetIsReturnTrx(dt.IsReturnTrx());
             //SetIsSOTrx(dt.IsSOTrx());
 
@@ -132,9 +132,9 @@ namespace VAdvantage.Model
             //    //	Cannot change Std to anything else if different warehouses
             //    if (GetVAB_DocTypes_ID() != 0)
             //    {
-            //        MDocType dtOld = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
-            //        if (MDocType.DOCSUBTYPESO_StandardOrder.Equals(dtOld.GetDocSubTypeSO())		//	From SO
-            //            && !MDocType.DOCSUBTYPESO_StandardOrder.Equals(dt.GetDocSubTypeSO()))	//	To !SO
+            //        MVABDocTypes dtOld = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
+            //        if (MVABDocTypes.DOCSUBTYPESO_StandardOrder.Equals(dtOld.GetDocSubTypeSO())		//	From SO
+            //            && !MVABDocTypes.DOCSUBTYPESO_StandardOrder.Equals(dt.GetDocSubTypeSO()))	//	To !SO
             //        {
             //            for (int i = 0; i < lines.Length; i++)
             //            {
@@ -300,7 +300,7 @@ namespace VAdvantage.Model
         {
             try
             {
-                MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
 
                 //	Just prepare
@@ -313,11 +313,11 @@ namespace VAdvantage.Model
                 //if (!IsReturnTrx())
                 //{
                 //    //	Offers
-                //    if (MDocType.DOCSUBTYPESO_Proposal.Equals(DocSubTypeSO)
-                //        || MDocType.DOCSUBTYPESO_Quotation.Equals(DocSubTypeSO))
+                //    if (MVABDocTypes.DOCSUBTYPESO_Proposal.Equals(DocSubTypeSO)
+                //        || MVABDocTypes.DOCSUBTYPESO_Quotation.Equals(DocSubTypeSO))
                 //    {
                 //        //	Binding
-                //        if (MDocType.DOCSUBTYPESO_Quotation.Equals(DocSubTypeSO))
+                //        if (MVABDocTypes.DOCSUBTYPESO_Quotation.Equals(DocSubTypeSO))
                 //            ReserveStock(dt, GetLines(true, "VAM_Product_ID"));
                 //        SetProcessed(true);
                 //        SetDocAction(DOCACTION_Close);
@@ -325,7 +325,7 @@ namespace VAdvantage.Model
                 //    }
                 //    //	Waiting Payment - until we have a payment
                 //    if (!_forceCreation
-                //        && MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO)
+                //        && MVABDocTypes.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO)
                 //        && GetVAB_Payment_ID() == 0 && GetVAB_CashJRNLLine_ID() == 0)
                 //    {
                 //        SetProcessed(true);
@@ -363,10 +363,10 @@ namespace VAdvantage.Model
 
                 ////	Create SO Shipment - Force Shipment
                 //MInOut shipment = null;
-                //if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
-                //    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                //    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO)			//	(W)alkIn(R)eceipt
-                //    || MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
+                //if (MVABDocTypes.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)		//	(W)illCall(I)nvoice
+                //    || MVABDocTypes.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
+                //    || MVABDocTypes.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO)			//	(W)alkIn(R)eceipt
+                //    || MVABDocTypes.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
                 //{
                 //    if (!DELIVERYRULE_Force.Equals(GetDeliveryRule()))
                 //        SetDeliveryRule(DELIVERYRULE_Force);
@@ -382,9 +382,9 @@ namespace VAdvantage.Model
 
 
                 //	Create SO Invoice - Always invoice complete Order
-                //if (MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO)
-                //    || MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)
-                //    || MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
+                //if (MVABDocTypes.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO)
+                //    || MVABDocTypes.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)
+                //    || MVABDocTypes.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
                 //{
                 //    try
                 //    {
@@ -567,18 +567,18 @@ namespace VAdvantage.Model
             {
                 log.Info(ToString());
 
-                MDocType dt = MDocType.Get(GetCtx(), GetVAB_DocTypes_ID());
+                MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
                 String DocSubTypeSO = dt.GetDocSubTypeSO();
 
                 //	Replace Prepay with POS to revert all doc
-                if (MDocType.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
+                if (MVABDocTypes.DOCSUBTYPESO_PrepayOrder.Equals(DocSubTypeSO))
                 {
-                    MDocType newDT = null;
-                    MDocType[] dts = MDocType.GetOfClient(GetCtx());
+                    MVABDocTypes newDT = null;
+                    MVABDocTypes[] dts = MVABDocTypes.GetOfClient(GetCtx());
                     for (int i = 0; i < dts.Length; i++)
                     {
-                        MDocType type = dts[i];
-                        if (MDocType.DOCSUBTYPESO_PrepayOrder.Equals(type.GetDocSubTypeSO()))
+                        MVABDocTypes type = dts[i];
+                        if (MVABDocTypes.DOCSUBTYPESO_PrepayOrder.Equals(type.GetDocSubTypeSO()))
                         {
                             if (type.IsDefault() || newDT == null)
                                 newDT = type;
@@ -599,9 +599,9 @@ namespace VAdvantage.Model
                 //    log.Info("Existing documents not modified - " + dt);
                 //}
                 //	Reverse Direct Documents
-                else if (MDocType.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
-                    || MDocType.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
-                    || MDocType.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
+                else if (MVABDocTypes.DOCSUBTYPESO_OnCreditOrder.Equals(DocSubTypeSO)	//	(W)illCall(I)nvoice
+                    || MVABDocTypes.DOCSUBTYPESO_WarehouseOrder.Equals(DocSubTypeSO)	//	(W)illCall(P)ickup	
+                    || MVABDocTypes.DOCSUBTYPESO_POSOrder.Equals(DocSubTypeSO))			//	(W)alkIn(R)eceipt
                 {
                     if (!CreateReversals())
                         return false;

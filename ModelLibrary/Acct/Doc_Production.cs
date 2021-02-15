@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Production(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(X_VAM_Production), idr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
+            : base(ass, typeof(X_VAM_Production), idr, MVABMasterDocType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
         }
         public Doc_Production(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(X_VAM_Production), dr, MDocBaseType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
+            : base(ass, typeof(X_VAM_Production), dr, MVABMasterDocType.DOCBASETYPE_MATERIALPRODUCTION, trxName)
         {
 
         }

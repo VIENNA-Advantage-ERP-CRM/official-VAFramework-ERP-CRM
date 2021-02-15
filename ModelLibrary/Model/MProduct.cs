@@ -215,7 +215,7 @@ namespace VAdvantage.Model
          * 	Parent Constructor
          *	@param et parent
          */
-        public MProduct(MExpenseType et)
+        public MProduct(MVASChargeType et)
             : this(et.GetCtx(), 0, et.Get_TrxName())
         {
 
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
         *	@param parent expense type
         *	@return true if changed
         */
-        public bool SetExpenseType(MExpenseType parent)
+        public bool SetExpenseType(MVASChargeType parent)
         {
             bool changed = false;
             if (!PRODUCTTYPE_ExpenseType.Equals(GetProductType()))

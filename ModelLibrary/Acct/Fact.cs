@@ -787,7 +787,7 @@ namespace VAdvantage.Acct
                     log.Warning("No Account for " + line);
                     return false;
                 }
-                MElementValue ev = account.GetAccount();
+                MVABAcctElement ev = account.GetAccount();
                 if (ev == null)
                 {
                     log.Warning("No Element Value for " + account
@@ -829,7 +829,7 @@ namespace VAdvantage.Acct
             for (int i = 0; i < _lines.Count; i++)
             {
                 FactLine dLine = (FactLine)_lines[i];
-                MDistribution[] distributions = MDistribution.Get(dLine.GetAccount(),
+                MVAGLDistribution[] distributions = MVAGLDistribution.Get(dLine.GetAccount(),
                     _postingType, _doc.GetVAB_DocTypes_ID());
                 //	No Distribution for this line
                 if (distributions == null || distributions.Length == 0)
@@ -841,17 +841,17 @@ namespace VAdvantage.Acct
                 {
                     log.Warning("More then one Distributiion for " + dLine.GetAccount());
                 }
-                MDistribution distribution = distributions[0];
+                MVAGLDistribution distribution = distributions[0];
                 //	Add Reversal
                 FactLine reversal = dLine.Reverse(distribution.GetName());
                 log.Info("Reversal=" + reversal);
                 newLines.Add(reversal);		//	saved in postCommit
                 //	Prepare
                 distribution.Distribute(dLine.GetAccount(), dLine.GetSourceBalance(), dLine.GetVAB_Currency_ID());
-                MDistributionLine[] lines = distribution.GetLines(false);
+                MVAGLDistributionLine[] lines = distribution.GetLines(false);
                 for (int j = 0; j < lines.Length; j++)
                 {
-                    MDistributionLine dl = lines[j];
+                    MVAGLDistributionLine dl = lines[j];
                     if (!dl.IsActive() || Env.Signum(dl.GetAmt()) == 0)
                     {
                         continue;

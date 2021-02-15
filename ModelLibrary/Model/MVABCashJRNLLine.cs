@@ -126,7 +126,7 @@ namespace VAdvantage.Model
 
             SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             //	Amount
-            MDocType dt = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
             if (invoice.GetRef_VAB_Invoice_ID() > 0)
             {
                 //amt = Decimal.Negate(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT SUM(Al.Amount) FROM VAB_DocAllocationLine al INNER JOIN VAB_DocAllocation alhdr ON alhdr.VAB_DocAllocation_ID=al.VAB_DocAllocation_ID "
@@ -139,8 +139,8 @@ namespace VAdvantage.Model
             {
                 amt = invoice.GetGrandTotal();
             }
-            if (MDocBaseType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
-                || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
+            if (MVABMasterDocType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
+                || MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
             {
                 amt = Decimal.Negate(amt);
                 // set payment type according to invoice document type
@@ -177,9 +177,9 @@ namespace VAdvantage.Model
 
             SetVAB_Currency_ID(invoice.GetVAB_Currency_ID());
             //	Amount
-            MDocType dt = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
-            if (MDocBaseType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
-                || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
+            if (MVABMasterDocType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
+                || MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
             {
                 amt = Decimal.Negate(amt);
                 SetVSS_PAYMENTTYPE("P");
@@ -1041,10 +1041,10 @@ namespace VAdvantage.Model
             SetCashType(CASHTYPE_Invoice);
             SetVAB_Currency_ID(VAB_Currency_ID);
             //	Amount
-            MDocType dt = MDocType.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
+            MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
             Decimal amt = Amt;
-            if (MDocBaseType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
-                || MDocBaseType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
+            if (MVABMasterDocType.DOCBASETYPE_APINVOICE.Equals(dt.GetDocBaseType())
+                || MVABMasterDocType.DOCBASETYPE_ARCREDITMEMO.Equals(dt.GetDocBaseType()))
                 amt = Decimal.Negate(amt);
             SetAmount(amt);
             //
