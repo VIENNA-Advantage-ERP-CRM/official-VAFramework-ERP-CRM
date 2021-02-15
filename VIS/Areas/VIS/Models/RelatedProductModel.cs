@@ -233,6 +233,10 @@ namespace VIS.Models
                 {
                     POLine.SetM_AttributeSetInstance_ID(ReqLines[i].AttributeSetInstance_ID);
                 }
+                if (POLine.Get_ColumnIndex("C_UOM_ID") >= 0)
+                {
+                    POLine.Set_Value("C_UOM_ID", ReqLines[i].UOM_ID);
+                }
                 POLine.SetPlannedQty(ReqLines[i].QtyEntered);
                 POLine.SetLine(LineNo);
 
