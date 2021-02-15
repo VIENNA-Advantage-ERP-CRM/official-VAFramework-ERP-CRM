@@ -134,7 +134,7 @@ namespace VAdvantage.DataBase
                                 + " MINVALUE " + minvalue
                                 + " MAXVALUE " + maxvalue
                                 + " START WITH " + start
-                                + " INCREMENT BY " + increment, null, trxName)
+                                + " INCREMENT BY " + increment+ " NOCACHE", null, trxName)
                                 ;
 
             if (no == -1)
