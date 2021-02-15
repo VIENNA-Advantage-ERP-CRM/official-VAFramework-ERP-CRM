@@ -1645,6 +1645,9 @@ namespace VIS.Controllers
                 MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
                 invoiceLine.SetM_Product_ID(M_Product_ID, C_UOM_ID);	//	Line UOM
                 invoiceLine.SetQty(QtyEntered);							//	Invoiced/Entered
+
+
+
                 //  Info
                 MOrderLine orderLine = null;
                 if (C_OrderLine_ID != 0)
@@ -1797,6 +1800,25 @@ namespace VIS.Controllers
                         orderLine.GetQtyOrdered()),
                         orderLine.GetQtyEntered()), 12, MidpointRounding.AwayFromZero));
                     }
+
+                    if(Env.IsModuleInstalled("VA077_"))
+                    {
+                        invoiceLine.Set_Value("VA077_CNAutodesk", orderLine.Get_Value("VA077_CNAutodesk"));
+                        invoiceLine.Set_Value("VA077_Duration", orderLine.Get_Value("VA077_Duration"));
+                        invoiceLine.Set_Value("VA077_MarginAmt", orderLine.Get_Value("VA077_MarginAmt"));
+                        invoiceLine.Set_Value("VA077_MarginPercent", orderLine.Get_Value("VA077_MarginPercent"));
+                        invoiceLine.Set_Value("VA077_OldSN", orderLine.Get_Value("VA077_OldSN"));
+                        invoiceLine.Set_Value("VA077_ProductInfo", orderLine.Get_Value("VA077_ProductInfo"));
+                        invoiceLine.Set_Value("VA077_PurchasePrice", orderLine.Get_Value("VA077_PurchasePrice"));
+                        invoiceLine.Set_Value("VA077_RegEmail", orderLine.Get_Value("VA077_RegEmail"));
+                        invoiceLine.Set_Value("VA077_SerialNo", orderLine.Get_Value("VA077_SerialNo"));
+                        invoiceLine.Set_Value("VA077_UpdateFromVersn", orderLine.Get_Value("VA077_UpdateFromVersn"));
+                        invoiceLine.Set_Value("VA077_UserRef_ID", orderLine.Get_Value("VA077_UserRef_ID"));
+
+                    }
+
+
+
                     // Change By mohit Amortization proces
                     //int countVA038 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA038_' "));
                     //if (countVA038 > 0)
@@ -1884,6 +1906,25 @@ namespace VIS.Controllers
                     if (inoutLine != null)
                     {
                         invoiceLine.SetClientOrg(inoutLine.GetAD_Client_ID(), inoutLine.GetAD_Org_ID());
+
+
+                        if (Env.IsModuleInstalled("VA077_"))
+                        {
+                            invoiceLine.Set_Value("VA077_CNAutodesk", inoutLine.Get_Value("VA077_CNAutodesk"));
+                            invoiceLine.Set_Value("VA077_Duration", inoutLine.Get_Value("VA077_Duration"));
+                            invoiceLine.Set_Value("VA077_MarginAmt", inoutLine.Get_Value("VA077_MarginAmt"));
+                            invoiceLine.Set_Value("VA077_MarginPercent", inoutLine.Get_Value("VA077_MarginPercent"));
+                            invoiceLine.Set_Value("VA077_OldSN", inoutLine.Get_Value("VA077_OldSN"));
+                            invoiceLine.Set_Value("VA077_ProductInfo", inoutLine.Get_Value("VA077_ProductInfo"));
+                            invoiceLine.Set_Value("VA077_PurchasePrice", inoutLine.Get_Value("VA077_PurchasePrice"));
+                            invoiceLine.Set_Value("VA077_RegEmail", inoutLine.Get_Value("VA077_RegEmail"));
+                            invoiceLine.Set_Value("VA077_SerialNo", inoutLine.Get_Value("VA077_SerialNo"));
+                            invoiceLine.Set_Value("VA077_UpdateFromVersn", inoutLine.Get_Value("VA077_UpdateFromVersn"));
+                            invoiceLine.Set_Value("VA077_UserRef_ID", inoutLine.Get_Value("VA077_UserRef_ID"));
+
+                        }
+
+
                     }
 
                     invoiceLine.SetPrice();
