@@ -19866,8 +19866,11 @@
             var M_PriceList_ID = ctx.getContextAsInt(windowNo, "M_PriceList_ID");
             // pp.SetM_PriceList_ID(M_PriceList_ID);
 
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            var paramFields = M_PriceList_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("StartDate")), ",", //2
+                Util.getValueOfString(mTab.getValue("M_Product_ID")), ",", Util.getValueOfInt(mTab.getValue("C_UOM_ID")), ",", Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")));
             //Get PriceListversion based on Pricelist
-            var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
+            var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID_Contract", paramFields);
 
             /** PLV is only accurate if PL selected in header */
             if (M_PriceList_Version_ID == 0) {
@@ -20091,7 +20094,11 @@
                 //  QtyEntered = QtyEntered;
                 var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
-                var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", M_PriceList_ID.toString());
+                /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+                var paramFields = M_PriceList_ID.toString().concat(",", Util.getValueOfString(mTab.getValue("StartDate")), ",", //2
+                    Util.getValueOfString(mTab.getValue("M_Product_ID")), ",", Util.getValueOfInt(mTab.getValue("C_UOM_ID")), ",", Util.getValueOfInt(mTab.getValue("M_AttributeSetInstance_ID")));
+                //Get PriceListversion based on Pricelist
+                var M_PriceList_Version_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID_Contract", paramFields);
                 if (M_PriceList_Version_ID == 0) {
                     M_PriceList_Version_ID = ctx.getContextAsInt(windowNo, "M_PriceList_Version_ID");
                 }

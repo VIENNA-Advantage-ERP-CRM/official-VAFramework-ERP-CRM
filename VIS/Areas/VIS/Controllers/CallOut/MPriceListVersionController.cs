@@ -41,5 +41,24 @@ namespace VIS.Controllers
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get M_PriceList_Version_ID for Contract
+        /// </summary>
+        /// <param name="fields">fields</param>
+        /// <returns></returns>
+        public JsonResult GetM_PriceList_Version_ID_Contract(string fields)
+        {           
+            string retJSON = string.Empty;
+
+            if (Session["ctx"] != null)
+            {
+                VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
+                MPriceListVersionModel objPriceList = new MPriceListVersionModel();
+                retJSON = JsonConvert.SerializeObject(objPriceList.GetM_PriceList_Version_ID_Contract(ctx, fields));
+            }
+
+            return Json(retJSON, JsonRequestBehavior.AllowGet);
+        }
     }
 }

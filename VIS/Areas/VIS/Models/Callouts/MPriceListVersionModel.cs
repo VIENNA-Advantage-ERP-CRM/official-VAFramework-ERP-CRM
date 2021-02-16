@@ -27,6 +27,7 @@ namespace VIS.Models
         private string _tableName = string.Empty;
         private string _keyColumnName = string.Empty;
         private string _columnName = string.Empty;
+        private DateTime? _transactionDate = null;
         /**	Logger			*/
         protected VLogger log = null;
 
@@ -192,7 +193,7 @@ namespace VIS.Models
                                     + @" AND plv.VALIDFROM <= (SELECT t." + _columnName + " FROM " + _tableName + " t WHERE t.IsActive = 'Y' AND t." + _keyColumnName + "=" + Util.GetValueOfInt(transactionId) + ") "
                                     + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId)
                                     + " AND NVL(pp.M_AttributeSetInstance_ID, 0) = " + Util.GetValueOfInt(attrSetInstId)
-                                    + " AND NVL(pp.C_UOM_ID, 0) = 0"
+                                    //+ " AND NVL(pp.C_UOM_ID, 0) = 0"
                                     + " ORDER BY plv.VALIDFROM DESC, plv.M_PriceList_Version_ID DESC";
                         }
                         else
@@ -203,7 +204,7 @@ namespace VIS.Models
                                     + @" AND plv.VALIDFROM <= (SELECT t." + _columnName + " FROM " + _tableName + " t WHERE t.IsActive = 'Y' AND t." + _keyColumnName + "=" + Util.GetValueOfInt(transactionId) + ") "
                                     + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId)
                                     + " AND NVL(pp.M_AttributeSetInstance_ID, 0) = 0"
-                                    + " AND NVL(pp.C_UOM_ID, 0) = 0"
+                                    //+ " AND NVL(pp.C_UOM_ID, 0) = 0"
                                     + " ORDER BY plv.VALIDFROM DESC, plv.M_PriceList_Version_ID DESC";
                         }
                     }
@@ -238,6 +239,53 @@ namespace VIS.Models
             }
 
             return Util.GetValueOfInt(priceListVersionId);
+        }
+
+        /// <summary>
+        /// Get M_PriceList_Version_ID for Contract
+        /// </summary>
+        /// <param name="ctx">context</param>
+        /// <param name="fields">parameters</param>
+        /// <returns></returns>
+        public int GetM_PriceList_Version_ID_Contract(Ctx ctx, string fields)
+        {
+            /** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **/
+            int M_PriceList_ID = 0, productId = 0, priceListVersionId= 0, uomId = 0, attrSetInstId = 0;
+
+            if (!string.IsNullOrEmpty(fields))
+            {
+                string[] paramValue = fields.Split(',');
+                M_PriceList_ID = Util.GetValueOfInt(paramValue[0].ToString());
+                if (paramValue.Length > 1)
+                    _transactionDate = Util.GetValueOfDateTime(paramValue[1].ToString());
+                if (paramValue.Length > 2)
+                    productId = Util.GetValueOfInt(paramValue[2].ToString());
+                if (paramValue.Length > 3)
+                    uomId = Util.GetValueOfInt(paramValue[3].ToString());
+                if (paramValue.Length > 4)
+                    attrSetInstId = Util.GetValueOfInt(paramValue[4].ToString());
+            }
+
+            if (M_PriceList_ID > 0 && productId > 0 && !string.IsNullOrEmpty(Convert.ToString(_transactionDate)))
+            {
+                sql = "SELECT plv.M_PriceList_Version_ID FROM M_PriceList_Version plv "
+                            + " JOIN M_ProductPrice pp ON plv.M_PriceList_Version_ID = pp.M_PriceList_Version_ID "
+                            + " WHERE plv.IsActive = 'Y' AND pp.IsActive = 'Y' AND plv.M_PriceList_ID = " + M_PriceList_ID
+                            + @" AND plv.VALIDFROM <= " + GlobalVariable.TO_DATE(_transactionDate, true)
+                            + " AND NVL(pp.M_Product_ID, 0) = " + Util.GetValueOfInt(productId);     
+                
+                if (uomId > 0)
+                    sql = sql + " AND NVL(pp.C_UOM_ID, 0) = " + uomId;
+
+                if (attrSetInstId > 0)
+                    sql = sql + " AND NVL(pp.M_AttributeSetInstance_ID, 0) = " + attrSetInstId;
+
+                sql = sql + " ORDER BY plv.VALIDFROM DESC, plv.M_PriceList_Version_ID DESC";
+
+                priceListVersionId = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+            }
+
+            return priceListVersionId;
         }
 
         // Added by Bharat on 12/May/2017
