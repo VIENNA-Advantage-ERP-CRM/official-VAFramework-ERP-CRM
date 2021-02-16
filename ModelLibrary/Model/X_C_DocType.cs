@@ -898,5 +898,12 @@ namespace VAdvantage.Model
         /** Get Bank Account.
             @return Account at the Bank */
         public int GetC_BankAccount_ID() { Object ii = Get_Value("C_BankAccount_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+        /** Set Internal Use.
+        @param IsInternalUse The Record is internal use */
+        public void SetIsInternalUse(Boolean IsInternalUse) { Set_Value("IsInternalUse", IsInternalUse); }/** Get Internal Use.
+        @return The Record is internal use */
+        public Boolean IsInternalUse() { Object oo = Get_Value("IsInternalUse"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Overwrite Date on Complete.
+
     }
 }
