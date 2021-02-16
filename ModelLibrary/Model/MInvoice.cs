@@ -2137,7 +2137,7 @@ namespace VAdvantage.Model
             {
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MPaymentTerm payterm = new MPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
+                    MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
                     if (GetVAB_Order_ID() != 0)
                     {
                         int _countschedule = Util.GetValueOfInt(DB.ExecuteScalar("Select Count(*) From VA009_OrderPaySchedule Where VAB_Order_ID=" + GetVAB_Order_ID()));
@@ -2504,7 +2504,7 @@ namespace VAdvantage.Model
         {
             if (GetVAB_PaymentTerm_ID() == 0)
                 return false;
-            MPaymentTerm pt = new MPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
+            MVABPaymentTerm pt = new MVABPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
             log.Fine(pt.ToString());
             return pt.Apply(this);		//	calls validate pay schedule
         }
@@ -5581,7 +5581,7 @@ namespace VAdvantage.Model
             if (VAB_PaymentTerm_ID == 0 || VAB_Invoice_ID == 0)	//	not saved yet
                 return;
 
-            MPaymentTerm pt = new MPaymentTerm(GetCtx(), VAB_PaymentTerm_ID, null);
+            MVABPaymentTerm pt = new MVABPaymentTerm(GetCtx(), VAB_PaymentTerm_ID, null);
             if (pt.Get_ID() == 0)
             {
                 //addError(Msg.getMsg(GetCtx(), "PaymentTerm not found"));

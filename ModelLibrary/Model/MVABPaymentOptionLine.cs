@@ -16,7 +16,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelectionLine : X_VAB_PaymentOptionLine
+    public class MVABPaymentOptionLine : X_VAB_PaymentOptionLine
     {
         /**
 	     * 	Standard Constructor
@@ -24,7 +24,7 @@ namespace VAdvantage.Model
 	     *	@param VAB_PaymentOptionLine_ID id
 	     *	@param trxName transaction
 	     */
-        public MPaySelectionLine(Ctx ctx, int VAB_PaymentOptionLine_ID, Trx trxName) :
+        public MVABPaymentOptionLine(Ctx ctx, int VAB_PaymentOptionLine_ID, Trx trxName) :
             base(ctx, VAB_PaymentOptionLine_ID, trxName)
         {
 
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
          *	@param rs result Set
          *	@param trxName transaction
          */
-        public MPaySelectionLine(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABPaymentOptionLine(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
          *	@param Line line
          *	@param PaymentRule payment rule
          */
-        public MPaySelectionLine(MPaySelection ps, int Line, String PaymentRule)
+        public MVABPaymentOptionLine(MVABPaymentOption ps, int Line, String PaymentRule)
             : this(ps.GetCtx(), 0, ps.Get_TrxName())
         {
 

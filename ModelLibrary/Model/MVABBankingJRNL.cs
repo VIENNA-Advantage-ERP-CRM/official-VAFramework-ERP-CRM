@@ -513,7 +513,7 @@ namespace VAdvantage.Model
                 transactionAmt += line.GetTrxAmt();
                 if (line.GetVAB_Payment_ID() != 0)
                 {
-                    MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
+                    MVABPayment payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                     payment.SetIsReconciled(true);
                     if (_CountVA034 > 0)
                         payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
@@ -552,7 +552,7 @@ namespace VAdvantage.Model
                     MVABBankingJRNLLine line = STlines[i];
                     if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
+                        MVABPayment payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         payment.SetVA009_ExecutionStatus("R");
                         if (_CountVA034 > 0)
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
@@ -666,7 +666,7 @@ namespace VAdvantage.Model
                     line.Save(Get_TrxName());
                     if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
+                        MVABPayment payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         payment.SetIsReconciled(false);
                         payment.Save(Get_TrxName());
                     }
@@ -687,7 +687,7 @@ namespace VAdvantage.Model
                     MVABBankingJRNLLine line = STlines[i];
                     if (line.GetVAB_Payment_ID() != 0)
                     {
-                        MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
+                        MVABPayment payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_TrxName());
                         string _paymentMethod = Util.GetValueOfString(DB.ExecuteScalar("Select va009_paymentbaseType from va009_paymentmethod where va009_paymentmethod_id=" + payment.GetVA009_PaymentMethod_ID() + " And IsActive = 'Y' AND VAF_Client_ID = " + GetVAF_Client_ID()));
                         if (_paymentMethod == "S") // Check
                             status = "B"; // Bounced

@@ -431,10 +431,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), to_ID, Get_TrxName());
                 if (bp.Get_ID() != 0)
                 {
-                    MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                    MVABPayment[] payments = MVABPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     for (int i = 0; i < payments.Length; i++)
                     {
-                        MPayment payment = payments[i];
+                        MVABPayment payment = payments[i];
                         if (payment.TestAllocation())
                             payment.Save();
                     }

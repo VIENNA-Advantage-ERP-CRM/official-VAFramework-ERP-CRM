@@ -1968,7 +1968,7 @@ namespace VIS.Controllers
                 MVABBankingJRNLLine bsl = new MVABBankingJRNLLine(bs);
                 bsl.SetStatementLineDate(trxDate);
                 //bsl.SetPayment(new MPayment(ctx, VAB_Payment_ID, null));
-                MPayment pmt = new MPayment(ctx, VAB_Payment_ID, null);
+                MVABPayment pmt = new MVABPayment(ctx, VAB_Payment_ID, null);
                 if (type == "P")
                 {
                     bsl.SetVAB_Payment_ID(VAB_Payment_ID);

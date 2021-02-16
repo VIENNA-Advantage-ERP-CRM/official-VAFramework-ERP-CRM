@@ -55,12 +55,12 @@ namespace VIS.Controllers
             string PaymentRule = Util.GetValueOfString(data[3]);
             string checkNo = Util.GetValueOfString(data[4]);
             List<int> check_ID = JsonConvert.DeserializeObject<List<int>>(data[5]);
-            VAdvantage.Model.MPaymentBatch m_batch = new VAdvantage.Model.MPaymentBatch(ctx, Util.GetValueOfInt(data[6]),null);
-            VAdvantage.Model.MPaySelectionCheck[] m_checks = null;
-            List<VAdvantage.Model.MPaySelectionCheck> list = new List<VAdvantage.Model.MPaySelectionCheck>();
+            VAdvantage.Model.MVABPaymentBatch m_batch = new VAdvantage.Model.MVABPaymentBatch(ctx, Util.GetValueOfInt(data[6]),null);
+            VAdvantage.Model.MVABPaymentOptionCheck[] m_checks = null;
+            List<VAdvantage.Model.MVABPaymentOptionCheck> list = new List<VAdvantage.Model.MVABPaymentOptionCheck>();
             for (int i = 0; i <check_ID.Count; i++)
             {
-                list.Add(new VAdvantage.Model.MPaySelectionCheck(ctx, check_ID[i], null));
+                list.Add(new VAdvantage.Model.MVABPaymentOptionCheck(ctx, check_ID[i], null));
             }
             m_checks = list.ToArray();
             VPayPrintModel objVPaySelect = new VPayPrintModel();
@@ -93,12 +93,12 @@ namespace VIS.Controllers
         {
             Ctx ctx = Session["ctx"] as Ctx;
             List<int> check_ID = JsonConvert.DeserializeObject<List<int>>(data[0]);
-            VAdvantage.Model.MPaymentBatch m_batch = new VAdvantage.Model.MPaymentBatch(ctx, Util.GetValueOfInt(data[1]), null);
-            VAdvantage.Model.MPaySelectionCheck[] m_checks = null;
-            List<VAdvantage.Model.MPaySelectionCheck> list = new List<VAdvantage.Model.MPaySelectionCheck>();
+            VAdvantage.Model.MVABPaymentBatch m_batch = new VAdvantage.Model.MVABPaymentBatch(ctx, Util.GetValueOfInt(data[1]), null);
+            VAdvantage.Model.MVABPaymentOptionCheck[] m_checks = null;
+            List<VAdvantage.Model.MVABPaymentOptionCheck> list = new List<VAdvantage.Model.MVABPaymentOptionCheck>();
             for (int i = 0; i < check_ID.Count; i++)
             {
-                list.Add(new VAdvantage.Model.MPaySelectionCheck(ctx, check_ID[i], null));
+                list.Add(new VAdvantage.Model.MVABPaymentOptionCheck(ctx, check_ID[i], null));
             }
             m_checks = list.ToArray();
             VPayPrintModel objVPaySelect = new VPayPrintModel();

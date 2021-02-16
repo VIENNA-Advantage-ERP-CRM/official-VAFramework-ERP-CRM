@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Payment Selection			
         private int _VAB_PaymentOption_ID = 0;
         // The checks					
-        private List<MPaySelectionCheck> _list = new List<MPaySelectionCheck>();
+        private List<MVABPaymentOptionCheck> _list = new List<MVABPaymentOptionCheck>();
 
         /// <summary>
         /// Prepare - e.g., get Parameters.
@@ -71,7 +71,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID
                 + ", PaymentRule=" + _PaymentRule);
 
-            MPaySelection psel = new MPaySelection(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
+            MVABPaymentOption psel = new MVABPaymentOption(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
             if (psel.Get_ID() == 0)
             {
                 throw new ArgumentException("Not found VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID);
@@ -81,10 +81,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new ArgumentException("@Processed@");
             }
             //
-            MPaySelectionLine[] lines = psel.GetLines(false);
+            MVABPaymentOptionLine[] lines = psel.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MPaySelectionLine line = lines[i];
+                MVABPaymentOptionLine line = lines[i];
                 if (!line.IsActive() || line.IsProcessed())
                 {
                     continue;
@@ -102,12 +102,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// Create Check from line
         /// </summary>
         /// <param name="line">line</param>
-        private void CreateCheck(MPaySelectionLine line)
+        private void CreateCheck(MVABPaymentOptionLine line)
         {
             //	Try to find one
             for (int i = 0; i < _list.Count; i++)
             {
-                MPaySelectionCheck check = (MPaySelectionCheck)_list[i];
+                MVABPaymentOptionCheck check = (MVABPaymentOptionCheck)_list[i];
                 //	Add to existing
                 if (check.GetVAB_BusinessPartner_ID() == line.GetInvoice().GetVAB_BusinessPartner_ID())
                 {
@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     PaymentRule = _PaymentRule;
                 }
             }
-            MPaySelectionCheck check1 = new MPaySelectionCheck(line, PaymentRule);
+            MVABPaymentOptionCheck check1 = new MVABPaymentOptionCheck(line, PaymentRule);
             if (!check1.IsValid())
             {
                 int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();

@@ -46,12 +46,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public DoVAB_Payment(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MPayment), idr, null, trxName)
+            : base(ass, typeof(MVABPayment), idr, null, trxName)
         {
 
         }
         public DoVAB_Payment(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MPayment), dr, null, trxName)
+            : base(ass, typeof(MVABPayment), dr, null, trxName)
         {
 
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MPayment pay = (MPayment)GetPO();
+            MVABPayment pay = (MVABPayment)GetPO();
             SetDateDoc(pay.GetDateTrx());
             _TenderType = pay.GetTenderType();
             _Prepayment = pay.IsPrepayment();

@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MVABDunningExeEntry : X_VAB_DunningExeEntry
     {
         //Logger							
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPayment).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABPayment).FullName);
         //Parent				
         private MVABDunningExe m_parent = null;
 

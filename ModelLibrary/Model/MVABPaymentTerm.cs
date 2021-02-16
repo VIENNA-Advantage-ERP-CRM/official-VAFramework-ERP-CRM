@@ -19,13 +19,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaymentTerm : X_VAB_PaymentTerm
+    public class MVABPaymentTerm : X_VAB_PaymentTerm
     {
         /** 100									*/
         private const Decimal HUNDRED = 100.0M;
 
         /**	Payment Schedule children			*/
-        private MPaySchedule[] _schedule;
+        private MVABPaymentSchedule[] _schedule;
 
         /**
 	     * 	Standard Constructor
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
 	     *	@param VAB_PaymentTerm_ID id
 	     *	@param trxName transaction
 	     */
-        public MPaymentTerm(Ctx ctx, int VAB_PaymentTerm_ID, Trx trxName)
+        public MVABPaymentTerm(Ctx ctx, int VAB_PaymentTerm_ID, Trx trxName)
             : base(ctx, VAB_PaymentTerm_ID, trxName)
         {
             if (VAB_PaymentTerm_ID == 0)
@@ -56,7 +56,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MPaymentTerm(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPaymentTerm(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery if true re-query</param>
         /// <returns>array of schedule</returns>
-        public MPaySchedule[] GetSchedule(bool requery)
+        public MVABPaymentSchedule[] GetSchedule(bool requery)
         {
             if (_schedule != null && !requery)
                 return _schedule;
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
             {
                 sql = "SELECT * FROM VAB_PaymentSchedule WHERE IsActive = 'Y' AND VAB_PaymentTerm_ID=" + GetVAB_PaymentTerm_ID() + " ORDER BY NetDays";
             }
-            List<MPaySchedule> list = new List<MPaySchedule>();
+            List<MVABPaymentSchedule> list = new List<MVABPaymentSchedule>();
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_Trx());
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MPaySchedule ps = new MPaySchedule(GetCtx(), dr, Get_Trx());
+                        MVABPaymentSchedule ps = new MVABPaymentSchedule(GetCtx(), dr, Get_Trx());
                         ps.SetParent(this);
                         list.Add(ps);
                     }
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "GetSchedule", e);
             }
 
-            _schedule = new MPaySchedule[list.Count];
+            _schedule = new MVABPaymentSchedule[list.Count];
             _schedule = list.ToArray();
             return _schedule;
         }
@@ -199,8 +199,8 @@ namespace VAdvantage.Model
             DeleteInvoicePaySchedule(invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
             StringBuilder _sql = new StringBuilder();
             MInvoicePaySchedule schedule = null;
-            MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
-            MPaySchedule sched = new MPaySchedule(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
+            MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
+            MVABPaymentSchedule sched = new MVABPaymentSchedule(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
 
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
             Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0 &&
@@ -386,7 +386,7 @@ namespace VAdvantage.Model
                     DateTime? payDueDate = null;
                     for (int i = 0; i < _schedule.Length; i++)
                     {
-                        MPaySchedule _sch = new MPaySchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
+                        MVABPaymentSchedule _sch = new MVABPaymentSchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
                         if (_sch.IsVA009_Advance())
                         {
                             #region IsAdvance true on Payment Schedule
@@ -466,7 +466,7 @@ namespace VAdvantage.Model
 
                             schedule = new MInvoicePaySchedule(invoice, _schedule[i]);
 
-                            MPaySchedule mschedule = new MPaySchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
+                            MVABPaymentSchedule mschedule = new MVABPaymentSchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
 
                             InsertSchedule(invoice, schedule);
 
@@ -895,7 +895,7 @@ namespace VAdvantage.Model
         /// <returns>Datetime, Due Date</returns>
         private DateTime? GetDueDate(MInvoice invoice)
         {
-            MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
+            MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
             String _sql = "SELECT PAYMENTTERMDUEDATE (VAB_PaymentTerm_ID, DateInvoiced) AS DueDate FROM VAB_Invoice WHERE VAB_Invoice_ID=" + invoice.GetVAB_Invoice_ID();
             DateTime? _dueDate = Util.GetValueOfDateTime(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
             if (_dueDate == Util.GetValueOfDateTime("1/1/0001 12:00:00 AM"))
@@ -915,7 +915,7 @@ namespace VAdvantage.Model
             // distribute schedule based on GrandTotalAfterWithholding which is (GrandTotal – WithholdingAmount)
             Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                 && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
-            MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
+            MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
             MInvoicePaySchedule schedule = null;
             StringBuilder _sql = new StringBuilder();
             //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
@@ -948,7 +948,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < _schedule.Length; i++)
                     {
                         schedule = new MInvoicePaySchedule(invoice, _schedule[i]);
-                        MPaySchedule mschedule = new MPaySchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
+                        MVABPaymentSchedule mschedule = new MVABPaymentSchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
 
                         InsertSchedule(invoice, schedule);
 
@@ -1158,7 +1158,7 @@ namespace VAdvantage.Model
         /// <param name="schedule">Invoice Schedule</param>
         private void InsertSchedule(MInvoice invoice, MInvoicePaySchedule schedule)
         {
-            MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
+            MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
             schedule.SetVA009_ExecutionStatus("A");
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
@@ -1217,7 +1217,7 @@ namespace VAdvantage.Model
                 schedule.SetDiscount2((Util.GetValueOfDecimal((invoice.GetGrandTotal() * payterm.GetDiscount2()) / 100)));
             }
 
-            MPaymentTerm paytrm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
+            MVABPaymentTerm paytrm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
             int _graceDay = paytrm.GetGraceDays();
             //DateTime? _followUpDay = GetDueDate(invoice);
             schedule.SetVA009_FollowupDate(schedule.GetDueDate().Value.AddDays(_graceDay));

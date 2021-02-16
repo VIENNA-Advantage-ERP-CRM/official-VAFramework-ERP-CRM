@@ -416,7 +416,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
 
                     //	New Payment
-                    MPayment payment = new MPayment(_ctx, 0, Get_TrxName());
+                    MVABPayment payment = new MVABPayment(_ctx, 0, Get_TrxName());
                     payment.SetVAF_Org_ID(imp.GetVAF_Org_ID());
                     payment.SetDocumentNo(imp.GetDocumentNo());
                     payment.SetPONum(imp.GetPONum());

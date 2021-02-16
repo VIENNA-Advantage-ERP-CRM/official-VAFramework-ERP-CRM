@@ -285,7 +285,7 @@ namespace VIS.Models
             //DateTime? payDate = Util.GetValueOfDateTime(vdtpPayDate.SelectedDate);
 
 
-            MPaySelection m_ps = new MPaySelection(ctx, 0, null);
+            MVABPaymentOption m_ps = new MVABPaymentOption(ctx, 0, null);
             m_ps.SetName(Msg.GetMsg(ctx, "VPaySelect")
                 + " - " + paymentRule
                 + " - " + payDate.Value.Date);
@@ -324,7 +324,7 @@ namespace VIS.Models
                 }
                 pAmt = Decimal.Add(pAmt.Value, Util.GetValueOfDecimal(payAmt[j]));
                 // pAmt = Util.GetValueOfDecimal(payAmt[j]);
-                MPaySelectionLine psl = new MPaySelectionLine(m_ps, line, paymentRule);
+                MVABPaymentOptionLine psl = new MVABPaymentOptionLine(m_ps, line, paymentRule);
                 //psl.SetInvoice(Util.GetValueOfInt(Invoice_ID[j]), isSOTrx, Util.GetValueOfDecimal(openAmt[j]), Util.GetValueOfDecimal(payAmt[j]), Decimal.Subtract(Util.GetValueOfDecimal(openAmt[j]), Util.GetValueOfDecimal(payAmt[j])));
                 if (paymentAmt >= pAmt)
                 {
@@ -357,7 +357,7 @@ namespace VIS.Models
             //}
 
 
-            MPaySelection psel = new MPaySelection(ctx, _VAB_PaymentOption_ID, null);
+            MVABPaymentOption psel = new MVABPaymentOption(ctx, _VAB_PaymentOption_ID, null);
             if (psel.Get_ID() == 0)
             {
                 throw new ArgumentException("Not found VAB_PaymentOption_ID=" + _VAB_PaymentOption_ID);
@@ -367,12 +367,12 @@ namespace VIS.Models
                 throw new ArgumentException("@Processed@");
             }
             //
-            MPaySelectionLine[] lines = psel.GetLines(false);
-            List<MPaySelectionCheck> _list = new List<MPaySelectionCheck>();
+            MVABPaymentOptionLine[] lines = psel.GetLines(false);
+            List<MVABPaymentOptionCheck> _list = new List<MVABPaymentOptionCheck>();
             for (int i = 0; i < lines.Length; i++)
             {
 
-                MPaySelectionLine payLine = lines[i];
+                MVABPaymentOptionLine payLine = lines[i];
                 if (!payLine.IsActive() || payLine.IsProcessed())
                 {
                     continue;
@@ -406,7 +406,7 @@ namespace VIS.Models
         /// <param name="ctx"></param>
         /// <param name="line"></param>
         /// <param name="_list"></param>
-        private void CreateCheck(Ctx ctx, MPaySelectionLine line, List<MPaySelectionCheck> _list)
+        private void CreateCheck(Ctx ctx, MVABPaymentOptionLine line, List<MVABPaymentOptionCheck> _list)
         {
 
             string _PaymentRule = "S";
@@ -415,7 +415,7 @@ namespace VIS.Models
             ////	Try to find one
             for (int i = 0; i < _list.Count; i++)
             {
-                MPaySelectionCheck check = (MPaySelectionCheck)_list[i];
+                MVABPaymentOptionCheck check = (MVABPaymentOptionCheck)_list[i];
                 //	Add to existing
                 if (check.GetVAB_BusinessPartner_ID() == line.GetInvoice().GetVAB_BusinessPartner_ID())
                 {
@@ -442,7 +442,7 @@ namespace VIS.Models
                     PaymentRule = _PaymentRule;
                 }
             }
-            MPaySelectionCheck check1 = new MPaySelectionCheck(line, PaymentRule);
+            MVABPaymentOptionCheck check1 = new MVABPaymentOptionCheck(line, PaymentRule);
             if (!check1.IsValid())
             {
                 int VAB_BusinessPartner_ID = check1.GetVAB_BusinessPartner_ID();

@@ -20,10 +20,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaymentAllocate : X_VAB_PaymentAllotment
+    public class MVABPaymentAllocate : X_VAB_PaymentAllotment
     {
         /**	Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPaymentAllocate).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABPaymentAllocate).FullName);
         /**	The Invoice				*/
         private MInvoice _invoice = null;
 
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_PaymentAllotment_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentAllocate(Ctx ctx, int VAB_PaymentAllotment_ID, Trx trxName)
+        public MVABPaymentAllocate(Ctx ctx, int VAB_PaymentAllotment_ID, Trx trxName)
             : base(ctx, VAB_PaymentAllotment_ID, trxName)
         {
             if (VAB_PaymentAllotment_ID == 0)
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentAllocate(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPaymentAllocate(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -64,9 +64,9 @@ namespace VAdvantage.Model
 	     *	@param parent payment
 	     *	@return array of allocations
 	     */
-        public static MPaymentAllocate[] Get(MPayment parent)
+        public static MVABPaymentAllocate[] Get(MVABPayment parent)
         {
-            List<MPaymentAllocate> list = new List<MPaymentAllocate>();
+            List<MVABPaymentAllocate> list = new List<MVABPaymentAllocate>();
             String sql = "SELECT * FROM VAB_PaymentAllotment WHERE VAB_Payment_ID=" + parent.GetVAB_Payment_ID() + " AND IsActive='Y'";
             try
             {
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MPaymentAllocate(parent.GetCtx(), dr, parent.Get_TrxName()));
+                        list.Add(new MVABPaymentAllocate(parent.GetCtx(), dr, parent.Get_TrxName()));
                     }
                 }
             }
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MPaymentAllocate[] retValue = new MPaymentAllocate[list.Count];
+            MVABPaymentAllocate[] retValue = new MVABPaymentAllocate[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                 return;
             //	Check Payment
             int VAB_Payment_ID = GetVAB_Payment_ID();
-            MPayment payment = new MPayment(GetCtx(), VAB_Payment_ID, null);
+            MVABPayment payment = new MVABPayment(GetCtx(), VAB_Payment_ID, null);
             if (payment.GetVAB_Charge_ID() != 0
                 || payment.GetVAB_Invoice_ID() != 0
                 || payment.GetVAB_Order_ID() != 0)
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
         /// <returns>true, on Save</returns>
         protected override Boolean BeforeSave(Boolean newRecord)
         {
-            MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+            MVABPayment payment = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if ((newRecord || Is_ValueChanged("VAB_Invoice_ID"))
                 && (payment.GetVAB_Charge_ID() != 0
                     || payment.GetVAB_Invoice_ID() != 0
@@ -401,7 +401,7 @@ namespace VAdvantage.Model
         {
             if (!success)
                 return success;
-            MPayment pay = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+            MVABPayment pay = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if (pay.Get_ColumnIndex("IsPaymentAllocate") > 0)
             {
                 string sql = "SELECT Count(VAB_PaymentAllotment_ID) FROM VAB_PaymentAllotment WHERE VAB_Payment_ID = " + GetVAB_Payment_ID();
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                 return success;
 
             // Added by Bharat on 25 July 2017 to set IsPaymentAllocate to True.
-            MPayment pay = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+            MVABPayment pay = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             if (pay.Get_ColumnIndex("IsPaymentAllocate") > 0)
             {
                 String qry = "UPDATE VAB_Payment SET IsPaymentAllocate = 'Y' WHERE VAB_Payment_ID=" + GetVAB_Payment_ID();

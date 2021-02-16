@@ -1774,7 +1774,7 @@ namespace VIS.Models
                         //  loop through all payments until invoice applied
                         int noPayments = 0;
                         MInvoicePaySchedule mpay2 = null;
-                        MPayment objPayment = null;
+                        MVABPayment objPayment = null;
                         for (int j = 0; j < paymentList.Count && Env.Signum(AppliedAmt) != 0; j++)
                         {
                             mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
@@ -1786,7 +1786,7 @@ namespace VIS.Models
                             #region payment match
                             mpay2 = null;
                             int VAB_Payment_ID = Util.GetValueOfInt(paymentList[j]);
-                            objPayment = new MPayment(ctx, VAB_Payment_ID, trx);
+                            objPayment = new MVABPayment(ctx, VAB_Payment_ID, trx);
                             Decimal PaymentAmt = Util.GetValueOfDecimal(amountList[j]);
 
                             // check match receipt with receipt && payment with payment
@@ -2858,7 +2858,7 @@ namespace VIS.Models
                     for (int i = 0; i < paymentList.Count; i++)
                     {
                         int VAB_Payment_ID = Util.GetValueOfInt(paymentList[i]);
-                        MPayment pay = new MPayment(ctx, VAB_Payment_ID, trx);
+                        MVABPayment pay = new MVABPayment(ctx, VAB_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
                             if (!pay.Save())
@@ -4643,7 +4643,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         }
                     }
                 }
-                MPayment objPayment = null;
+                MVABPayment objPayment = null;
                 //create allocation line if payment to payment row selected
                 for (int i = 0; i < rowsPayment.Count; i++)
                 {
@@ -4661,7 +4661,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             if (Util.GetValueOfBool(negList[j]["IsPaid"]))
                                 continue;
 
-                            objPayment = new MPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
+                            objPayment = new MVABPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
 
                             actualAmt = Math.Abs(Util.GetValueOfDecimal(negList[j]["AppliedAmt"])) - Math.Abs(Util.GetValueOfDecimal(negList[j]["paidAmt"]));
                             if (Math.Abs(remainingAmt) >= actualAmt)
@@ -4714,7 +4714,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 return msg;
                             }
 
-                            objPayment = new MPayment(ctx, Util.GetValueOfInt(negList[j]["cpaymentid"]), trx);
+                            objPayment = new MVABPayment(ctx, Util.GetValueOfInt(negList[j]["cpaymentid"]), trx);
 
                             aLine = new MVABDocAllocationLine(alloc, Decimal.Negate(netAmt), Env.ZERO, Env.ZERO, Env.ZERO);
                             aLine.SetDocInfo(VAB_BusinessPartner_ID, 0, 0);
@@ -4778,7 +4778,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     if (Util.GetValueOfBool(rowsPayment[i]["IsPaid"]))
                         continue;
 
-                    objPayment = new MPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
+                    objPayment = new MVABPayment(ctx, Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]), trx);
 
                     for (int j = 0; j < rowsGL.Count; j++)
                     {
@@ -5481,7 +5481,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                     for (int i = 0; i < rowsPayment.Count; i++)
                     {
                         int VAB_Payment_ID = Util.GetValueOfInt(rowsPayment[i]["cpaymentid"]);
-                        MPayment pay = new MPayment(ctx, VAB_Payment_ID, trx);
+                        MVABPayment pay = new MVABPayment(ctx, VAB_Payment_ID, trx);
                         if (pay.TestAllocation())
                         {
                             if (!pay.Save())

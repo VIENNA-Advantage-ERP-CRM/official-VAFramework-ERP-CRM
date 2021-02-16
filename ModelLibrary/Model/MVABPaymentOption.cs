@@ -16,7 +16,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelection : X_VAB_PaymentOption
+    public class MVABPaymentOption : X_VAB_PaymentOption
     {
         /**
          * 	Default Constructor
@@ -24,7 +24,7 @@ namespace VAdvantage.Model
          *	@param VAB_PaymentOption_ID id
          *	@param trxName transaction
          */
-        public MPaySelection(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName):
+        public MVABPaymentOption(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName):
             base(ctx, VAB_PaymentOption_ID, trxName)
         {
             
@@ -46,14 +46,14 @@ namespace VAdvantage.Model
          *	@param dr result Set
          *	@param trxName transaction
          */
-        public MPaySelection(Ctx ctx, DataRow dr, Trx trxName):
+        public MVABPaymentOption(Ctx ctx, DataRow dr, Trx trxName):
             base(ctx, dr, trxName)
         {
             
         }	//	MPaySelection
 
         /**	Lines						*/
-        private MPaySelectionLine[] _lines = null;
+        private MVABPaymentOptionLine[] _lines = null;
         /**	Currency of Bank Account	*/
         private int _VAB_Currency_ID = 0;
 
@@ -62,11 +62,11 @@ namespace VAdvantage.Model
          *	@param requery requery
          *	@return lines
          */
-        public MPaySelectionLine[] GetLines(Boolean requery)
+        public MVABPaymentOptionLine[] GetLines(Boolean requery)
         {
             if (_lines != null && !requery)
                 return _lines;
-            List<MPaySelectionLine> list = new List<MPaySelectionLine>();
+            List<MVABPaymentOptionLine> list = new List<MVABPaymentOptionLine>();
             String sql = "SELECT * FROM VAB_PaymentOptionLine WHERE VAB_PaymentOption_ID=" + GetVAB_PaymentOption_ID() + " ORDER BY Line";
             DataTable dt;
             IDataReader idr = null;
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MPaySelectionLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABPaymentOptionLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
             }
             
             //
-            _lines = new MPaySelectionLine[list.Count];
+            _lines = new MVABPaymentOptionLine[list.Count];
             _lines=list.ToArray();
             return _lines;
         }	//	GetLines

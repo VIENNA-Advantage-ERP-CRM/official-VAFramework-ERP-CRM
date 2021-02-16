@@ -161,10 +161,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //	See also VMerge.postMerge
             int changed = 0;
-            MPayment[] payments = MPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
+            MVABPayment[] payments = MVABPayment.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
             for (int i = 0; i < payments.Length; i++)
             {
-                MPayment payment = payments[i];
+                MVABPayment payment = payments[i];
                 if (payment.TestAllocation())
                 {
                     payment.Save();

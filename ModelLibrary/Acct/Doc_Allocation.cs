@@ -89,7 +89,7 @@ namespace VAdvantage.Acct
                 //	Get Payment Conversion Rate
                 if (line.GetVAB_Payment_ID() != 0)
                 {
-                    MPayment payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
+                    MVABPayment payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
                     int VAB_CurrencyType_ID = payment.GetVAB_CurrencyType_ID();
                     docLine.SetVAB_CurrencyType_ID(VAB_CurrencyType_ID);
                 }
@@ -423,10 +423,10 @@ namespace VAdvantage.Acct
                 FactLine fl = null;
                 MVABAccount bpAcct = null;		//	Liability/Receivables
                 //
-                MPayment payment = null;
+                MVABPayment payment = null;
                 if (line.GetVAB_Payment_ID() != 0)
                 {
-                    payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
+                    payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
                 }
                 if (payment != null)
                 {

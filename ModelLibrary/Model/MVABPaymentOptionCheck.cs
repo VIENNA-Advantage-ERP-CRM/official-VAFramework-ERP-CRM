@@ -17,7 +17,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySelectionCheck : X_VAB_PaymentOptionCheck
+    public class MVABPaymentOptionCheck : X_VAB_PaymentOptionCheck
     {
 
         /**
@@ -27,9 +27,9 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *	@return pay selection check for payment or null
          */
-        public static MPaySelectionCheck GetOfPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
+        public static MVABPaymentOptionCheck GetOfPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
         {
-            MPaySelectionCheck retValue = null;
+            MVABPaymentOptionCheck retValue = null;
             String sql = "SELECT * FROM VAB_PaymentOptionCheck WHERE VAB_Payment_ID=" + VAB_Payment_ID;
             int count = 0;
             DataTable dt = null;
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MPaySelectionCheck psc = new MPaySelectionCheck(ctx, dr, trxName);
+                    MVABPaymentOptionCheck psc = new MVABPaymentOptionCheck(ctx, dr, trxName);
                     if (retValue == null)
                         retValue = psc;
                     else if (!retValue.IsProcessed() && psc.IsProcessed())
@@ -82,11 +82,11 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *	@return pay selection check for payment or null
          */
-        public static MPaySelectionCheck CreateForPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
+        public static MVABPaymentOptionCheck CreateForPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
         {
             if (VAB_Payment_ID == 0)
                 return null;
-            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
+            MVABPayment payment = new MVABPayment(ctx, VAB_Payment_ID, null);
             //	Map Payment Rule <- Tender Type
             String PaymentRule = PAYMENTRULE_Check;
             if (payment.GetTenderType().Equals(X_VAB_Payment.TENDERTYPE_CreditCard))
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
             //		PaymentRule = MPaySelectionCheck.PAYMENTRULE_Check;
 
             //	Create new PaySelection
-            MPaySelection ps = new MPaySelection(ctx, 0, trxName);
+            MVABPaymentOption ps = new MVABPaymentOption(ctx, 0, trxName);
             ps.SetVAB_Bank_Acct_ID(payment.GetVAB_Bank_Acct_ID());
             ps.SetName(Msg.Translate(ctx, "VAB_Payment_ID") + ": " + payment.GetDocumentNo());
             ps.SetDescription(payment.GetDescription());
@@ -109,10 +109,10 @@ namespace VAdvantage.Model
             ps.Save();
 
             //	Create new PaySelection Line
-            MPaySelectionLine psl = null;
+            MVABPaymentOptionLine psl = null;
             if (payment.GetVAB_Invoice_ID() != 0)
             {
-                psl = new MPaySelectionLine(ps, 10, PaymentRule);
+                psl = new MVABPaymentOptionLine(ps, 10, PaymentRule);
                 psl.SetVAB_Invoice_ID(payment.GetVAB_Invoice_ID());
                 psl.SetIsSOTrx(payment.IsReceipt());
                 psl.SetOpenAmt(Decimal.Add(payment.GetPayAmt(), payment.GetDiscountAmt()));
@@ -123,7 +123,7 @@ namespace VAdvantage.Model
             }
 
             //	Create new PaySelection Check
-            MPaySelectionCheck psc = new MPaySelectionCheck(ps, PaymentRule);
+            MVABPaymentOptionCheck psc = new MVABPaymentOptionCheck(ps, PaymentRule);
             psc.SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
             psc.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
             psc.SetIsReceipt(payment.IsReceipt());
@@ -157,12 +157,12 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *  @return array of checks
          */
-        static public MPaySelectionCheck[] Get(int VAB_PaymentOption_ID,
+        static public MVABPaymentOptionCheck[] Get(int VAB_PaymentOption_ID,
             String PaymentRule, int startDocumentNo, Trx trxName)
         {
             _log.Fine("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID
                 + ", PaymentRule=" + PaymentRule + ", startDocumentNo=" + startDocumentNo);
-            List<MPaySelectionCheck> list = new List<MPaySelectionCheck>();
+            List<MVABPaymentOptionCheck> list = new List<MVABPaymentOptionCheck>();
 
             int docNo = startDocumentNo;
             String sql = "SELECT * FROM VAB_PaymentOptionCheck "
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MPaySelectionCheck check = new MPaySelectionCheck(Env.GetContext(), dr, trxName);
+                    MVABPaymentOptionCheck check = new MVABPaymentOptionCheck(Env.GetContext(), dr, trxName);
                     //	Set new Check Document No - saved in confirmPrint
                     check.SetDocumentNo((docNo++).ToString());
                     list.Add(check);
@@ -204,7 +204,7 @@ namespace VAdvantage.Model
             }
 
             //  convert to Array
-            MPaySelectionCheck[] retValue = new MPaySelectionCheck[list.Count];
+            MVABPaymentOptionCheck[] retValue = new MVABPaymentOptionCheck[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -216,7 +216,7 @@ namespace VAdvantage.Model
          *  @param file file to export checks
          *  @return number of lines
          */
-        public static int ExportToFile(MPaySelectionCheck[] checks, File file)
+        public static int ExportToFile(MVABPaymentOptionCheck[] checks, File file)
         {
             if (checks == null || checks.Length == 0)
                 return 0;
@@ -277,7 +277,7 @@ namespace VAdvantage.Model
                 //  write lines
                 for (int i = 0; i < checks.Length; i++)
                 {
-                    MPaySelectionCheck mpp = checks[i];
+                    MVABPaymentOptionCheck mpp = checks[i];
                     if (mpp == null)
                         continue;
                     //  BPartner Info
@@ -287,7 +287,7 @@ namespace VAdvantage.Model
 
                     //  Comment - list of invoice document no
                     StringBuilder comment = new StringBuilder();
-                    MPaySelectionLine[] psls = mpp.GetPaySelectionLines(false);
+                    MVABPaymentOptionLine[] psls = mpp.GetPaySelectionLines(false);
                     for (int l = 0; l < psls.Length; l++)
                     {
                         if (l > 0)
@@ -519,18 +519,18 @@ namespace VAdvantage.Model
         /// <param name="checks">checks</param>
         /// <param name="batch">batch</param>
         /// <returns>last Document number or 0 if nothing printed</returns>
-        public static int ConfirmPrint(MPaySelectionCheck[] checks, MPaymentBatch batch)
+        public static int ConfirmPrint(MVABPaymentOptionCheck[] checks, MVABPaymentBatch batch)
         {
             int lastDocumentNo = 0;
             int VA009_PaymentMethod_ID = 0;
-            MPaySelectionCheck check = null;
-            MPayment payment = null;
-            MPaySelectionLine[] psls = null;
+            MVABPaymentOptionCheck check = null;
+            MVABPayment payment = null;
+            MVABPaymentOptionLine[] psls = null;
             string error = "";
             for (int i = 0; i < checks.Length; i++)
             {
                 check = checks[i];
-                payment = new MPayment(check.GetCtx(), check.GetVAB_Payment_ID(), null);
+                payment = new MVABPayment(check.GetCtx(), check.GetVAB_Payment_ID(), null);
 
                 //	Existing Payment
                 if (check.GetVAB_Payment_ID() != 0)
@@ -558,7 +558,7 @@ namespace VAdvantage.Model
                     {
                         #region IF VA009 (VA Payment management is installed)
 
-                        payment = new MPayment(check.GetCtx(), 0, null);
+                        payment = new MVABPayment(check.GetCtx(), 0, null);
                         payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
                         payment.SetVAB_DocTypes_ID(false);
                         //
@@ -609,7 +609,7 @@ namespace VAdvantage.Model
                         _log.Fine("confirmPrint - " + check + " (#SelectionLines=" + psls.Length + ")");
                         if (check.GetQty() == 1 && psls != null && psls.Length == 1)
                         {
-                            MPaySelectionLine psl = psls[0];
+                            MVABPaymentOptionLine psl = psls[0];
                             _log.Fine("Map to Invoice " + psl);
                             //
                             payment.SetVAB_Invoice_ID(psl.GetVAB_Invoice_ID());
@@ -631,7 +631,7 @@ namespace VAdvantage.Model
 
                         if (psls.Length == 1)
                         {
-                            MPaySelectionLine psl = psls[0];
+                            MVABPaymentOptionLine psl = psls[0];
                             if (psl.Get_ColumnIndex("VAB_sched_InvoicePayment_ID") > 0)
                             {
                                 payment.SetVAB_sched_InvoicePayment_ID(psl.GetVAB_sched_InvoicePayment_ID());
@@ -663,7 +663,7 @@ namespace VAdvantage.Model
                             {
                                 for (int j = 0; j < psls.Length; j++)
                                 {
-                                    MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
+                                    MVABPaymentAllocate PayAlocate = new MVABPaymentAllocate(check.GetCtx(), 0, null);
                                     PayAlocate.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                                     PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
                                     PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
@@ -718,7 +718,7 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        payment = new MPayment(check.GetCtx(), 0, null);
+                        payment = new MVABPayment(check.GetCtx(), 0, null);
                         payment.SetVAF_Org_ID(check.GetVAF_Org_ID());
                         payment.SetVAB_DocTypes_ID(false);
                         //
@@ -754,7 +754,7 @@ namespace VAdvantage.Model
                         _log.Fine("confirmPrint - " + check + " (#SelectionLines=" + psls.Length + ")");
                         if (check.GetQty() == 1 && psls != null && psls.Length == 1)
                         {
-                            MPaySelectionLine psl = psls[0];
+                            MVABPaymentOptionLine psl = psls[0];
                             _log.Fine("Map to Invoice " + psl);
                             //
                             payment.SetVAB_Invoice_ID(psl.GetVAB_Invoice_ID());
@@ -786,7 +786,7 @@ namespace VAdvantage.Model
                             {
                                 for (int j = 0; j < psls.Length; j++)
                                 {
-                                    MPaymentAllocate PayAlocate = new MPaymentAllocate(check.GetCtx(), 0, null);
+                                    MVABPaymentAllocate PayAlocate = new MVABPaymentAllocate(check.GetCtx(), 0, null);
                                     PayAlocate.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                                     PayAlocate.SetVAB_Invoice_ID(psls[j].GetVAB_Invoice_ID());
                                     PayAlocate.SetVAB_sched_InvoicePayment_ID(psls[j].GetVAB_sched_InvoicePayment_ID());
@@ -863,7 +863,7 @@ namespace VAdvantage.Model
         }
 
         /** Logger								*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPaySelectionCheck).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABPaymentOptionCheck).FullName);
         //static private CLogger	s_log = CLogger.GetCLogger (MPaySelectionCheck.class);
 
         /** BPartner Info Index for Value       */
@@ -894,7 +894,7 @@ namespace VAdvantage.Model
          *  @param VAB_PaymentOptionCheck_ID VAB_PaymentOptionCheck_ID
          *	@param trxName transaction
          */
-        public MPaySelectionCheck(Ctx ctx, int VAB_PaymentOptionCheck_ID, Trx trxName) :
+        public MVABPaymentOptionCheck(Ctx ctx, int VAB_PaymentOptionCheck_ID, Trx trxName) :
             base(ctx, VAB_PaymentOptionCheck_ID, trxName)
         {
             if (VAB_PaymentOptionCheck_ID == 0)
@@ -916,7 +916,7 @@ namespace VAdvantage.Model
          *  @param idr result Set
          *	@param trxName transaction
          */
-        public MPaySelectionCheck(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABPaymentOptionCheck(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
         }
@@ -926,7 +926,7 @@ namespace VAdvantage.Model
          *	@param line payment selection
          *	@param PaymentRule payment rule
          */
-        public MPaySelectionCheck(MPaySelectionLine line, String PaymentRule)
+        public MVABPaymentOptionCheck(MVABPaymentOptionLine line, String PaymentRule)
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
             SetClientOrg(line);
@@ -973,7 +973,7 @@ namespace VAdvantage.Model
          *	@param ps payment selection
          *	@param PaymentRule payment rule
          */
-        public MPaySelectionCheck(MPaySelection ps, String PaymentRule)
+        public MVABPaymentOptionCheck(MVABPaymentOption ps, String PaymentRule)
             : this(ps.GetCtx(), 0, ps.Get_TrxName())
         {
             SetClientOrg(ps);
@@ -983,16 +983,16 @@ namespace VAdvantage.Model
 
 
         /**	Parent					*/
-        private MPaySelection _parent = null;
+        private MVABPaymentOption _parent = null;
         /**	Payment Selection lines of this check	*/
-        private MPaySelectionLine[] _lines = null;
+        private MVABPaymentOptionLine[] _lines = null;
 
 
         /**
          * 	Add Payment Selection Line
          *	@param line line
          */
-        public void AddLine(MPaySelectionLine line)
+        public void AddLine(MVABPaymentOptionLine line)
         {
             if (GetVAB_BusinessPartner_ID() != line.GetInvoice().GetVAB_BusinessPartner_ID())
                 throw new ArgumentException("Line for fifferent BPartner");
@@ -1014,10 +1014,10 @@ namespace VAdvantage.Model
          * 	Get Parent
          *	@return parent
          */
-        public MPaySelection GetParent()
+        public MVABPaymentOption GetParent()
         {
             if (_parent == null)
-                _parent = new MPaySelection(GetCtx(), GetVAB_PaymentOption_ID(), Get_TrxName());
+                _parent = new MVABPaymentOption(GetCtx(), GetVAB_PaymentOption_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -1062,11 +1062,11 @@ namespace VAdvantage.Model
          *	@param requery requery
          * 	@return array of peyment selection lines
          */
-        public MPaySelectionLine[] GetPaySelectionLines(Boolean requery)
+        public MVABPaymentOptionLine[] GetPaySelectionLines(Boolean requery)
         {
             if (_lines != null && !requery)
                 return _lines;
-            List<MPaySelectionLine> list = new List<MPaySelectionLine>();
+            List<MVABPaymentOptionLine> list = new List<MVABPaymentOptionLine>();
             String sql = "SELECT * FROM VAB_PaymentOptionLine WHERE VAB_PaymentOptionCheck_ID=" + GetVAB_PaymentOptionCheck_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
@@ -1079,7 +1079,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MPaySelectionLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABPaymentOptionLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -1099,7 +1099,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             //
-            _lines = new MPaySelectionLine[list.Count];
+            _lines = new MVABPaymentOptionLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }

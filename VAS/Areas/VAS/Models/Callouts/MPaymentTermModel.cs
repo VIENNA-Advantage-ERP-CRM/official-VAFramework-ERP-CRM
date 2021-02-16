@@ -26,7 +26,7 @@ namespace VIS.Models
             VAB_Invoice_ID = Util.GetValueOfInt(paramValue[1].ToString());
             //End Assign parameter value
 
-            MPaymentTerm pt = new MPaymentTerm(ctx, VAB_PaymentTerm_ID, null);
+            MVABPaymentTerm pt = new MVABPaymentTerm(ctx, VAB_PaymentTerm_ID, null);
             Dictionary<string, string> retVal = new Dictionary<string, string>();
             retVal["Apply"] = pt.Apply(VAB_Invoice_ID).ToString();
             retVal["Get_ID"] = pt.Get_ID().ToString();
@@ -38,7 +38,7 @@ namespace VIS.Models
         {        
             int VAB_PaymentTerm_ID = 0;            
             VAB_PaymentTerm_ID = Util.GetValueOfInt(fields);            
-            MPaymentTerm pt = new MPaymentTerm(ctx, VAB_PaymentTerm_ID, null);
+            MVABPaymentTerm pt = new MVABPaymentTerm(ctx, VAB_PaymentTerm_ID, null);
             Dictionary<string, string> retVal = new Dictionary<string, string>();
             retVal["DocumentNote"] = pt.GetDocumentNote();            
             return retVal;

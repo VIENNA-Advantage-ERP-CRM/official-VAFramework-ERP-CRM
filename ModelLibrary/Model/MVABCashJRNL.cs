@@ -1254,7 +1254,7 @@ namespace VAdvantage.Model
                 else if (MVABCashJRNLLine.CASHTYPE_BankAccountTransfer.Equals(line.GetCashType()))
                 {
                     //	Payment just as intermediate info
-                    MPayment pay = new MPayment(GetCtx(), 0, Get_TrxName());
+                    MVABPayment pay = new MVABPayment(GetCtx(), 0, Get_TrxName());
                     pay.SetVAF_Org_ID(GetVAF_Org_ID());
                     String documentNo = GetName();
                     pay.SetDocumentNo(documentNo);
@@ -1300,8 +1300,8 @@ namespace VAdvantage.Model
                     pay.Set_Value("VAB_CashJRNLLine_ID", line.Get_ID());
 
                     pay.SetDescription(line.GetDescription());
-                    pay.SetDocStatus(MPayment.DOCSTATUS_Closed);
-                    pay.SetDocAction(MPayment.DOCACTION_None);
+                    pay.SetDocStatus(MVABPayment.DOCSTATUS_Closed);
+                    pay.SetDocAction(MVABPayment.DOCACTION_None);
                     pay.SetPosted(true);
                     pay.SetIsAllocated(true);	//	Has No Allocation!
                     pay.SetProcessed(true);

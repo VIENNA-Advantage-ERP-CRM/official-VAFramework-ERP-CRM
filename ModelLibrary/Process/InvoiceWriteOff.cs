@@ -59,7 +59,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	//	Allocation Hdr			
 	private MVABDocAllocation	_m_alloc = null;
 	//	Payment					
-	private MPayment		_m_payment = null;
+	private MVABPayment		_m_payment = null;
 	
 	/// <summary>
     ///   Prepare - e.g., get Parameters.
@@ -288,10 +288,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 				|| VAB_Currency_ID != _m_payment.GetVAB_Currency_ID()))
 		{
 			ProcessPayment();
-			_m_payment = new MPayment(GetCtx(), 0, Get_TrxName());
+			_m_payment = new MVABPayment(GetCtx(), 0, Get_TrxName());
 			_m_payment.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
 			_m_payment.SetVAB_Bank_Acct_ID(_VAB_Bank_Acct_ID);
-			_m_payment.SetTenderType(MPayment.TENDERTYPE_Check);
+			_m_payment.SetTenderType(MVABPayment.TENDERTYPE_Check);
 			_m_payment.SetDateTrx(_DateAcct);
 			_m_payment.SetDateAcct(_DateAcct);
 			_m_payment.SetDescription(GetProcessInfo().GetTitle() + " #" + GetVAF_JInstance_ID());

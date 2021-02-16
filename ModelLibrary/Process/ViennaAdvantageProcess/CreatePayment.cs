@@ -57,7 +57,7 @@ namespace ViennaAdvantage.Process
                 {
                     return "Order Type must be Prepay Order or Credit Order.";
                 }
-                MPayment payment = new MPayment(GetCtx(), 0, Get_TrxName());
+                MVABPayment payment = new MVABPayment(GetCtx(), 0, Get_TrxName());
                 payment.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 payment.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 //payment.SetDocumentNo(MS

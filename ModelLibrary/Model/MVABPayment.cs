@@ -24,16 +24,16 @@ using VAdvantage.ProcessEngine;
 
 namespace VAdvantage.Model
 {
-    public class MPayment : X_VAB_Payment, DocAction, ProcessCall
+    public class MVABPayment : X_VAB_Payment, DocAction, ProcessCall
     {
         /**	Temporary	Payment Processors		*/
-        private MPaymentProcessor[] _paymentProcessors = null;
+        private MVABPaymentHandler[] _paymentProcessors = null;
         /**	Temporary	Payment Processor		*/
-        private MPaymentProcessor _paymentProcessor = null;
+        private MVABPaymentHandler _paymentProcessor = null;
         /** VVC not stored						*/
         private String _creditCardVV = null;
         // Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPayment).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABPayment).FullName);
         /** Error Message						*/
         private String _errorMessage = null;
 
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Payment_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
+        public MVABPayment(Ctx ctx, int VAB_Payment_ID, Trx trxName)
             : base(ctx, VAB_Payment_ID, trxName)
         {
             //  New
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MPayment(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPayment(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -122,9 +122,9 @@ namespace VAdvantage.Model
 	     *	@param trxName transaction
 	     *	@return array
 	     */
-        public static MPayment[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
+        public static MVABPayment[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
         {
-            List<MPayment> list = new List<MPayment>();
+            List<MVABPayment> list = new List<MVABPayment>();
             String sql = "SELECT * FROM VAB_Payment WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             try
             {
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MPayment(ctx, dr, trxName));
+                        list.Add(new MVABPayment(ctx, dr, trxName));
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
             }
 
             //
-            MPayment[] retValue = new MPayment[list.Count];
+            MVABPayment[] retValue = new MVABPayment[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
          *  @param isReceipt true if receipt
          *  @return true if valid
          */
-        public bool SetBankACH(MPaySelectionCheck preparedPayment)
+        public bool SetBankACH(MVABPaymentOptionCheck preparedPayment)
         {
             //	Our Bank
             SetVAB_Bank_Acct_ID(preparedPayment.GetParent().GetVAB_Bank_Acct_ID());
@@ -800,7 +800,7 @@ namespace VAdvantage.Model
                     // JID_1676 -- set Payment Execution as "In-Progress if not defined
                     if (String.IsNullOrEmpty(GetVA009_ExecutionStatus()))
                     {
-                        SetVA009_ExecutionStatus(MPayment.VA009_EXECUTIONSTATUS_In_Progress);
+                        SetVA009_ExecutionStatus(MVABPayment.VA009_EXECUTIONSTATUS_In_Progress);
                     }
 
 
@@ -1308,7 +1308,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MPayment pay = new MPayment(ctx, dr, trxName);
+                        MVABPayment pay = new MVABPayment(ctx, dr, trxName);
                         if (pay.TestAllocation())
                             if (pay.Save())
                                 counter++;
@@ -1377,11 +1377,11 @@ namespace VAdvantage.Model
             _paymentProcessor = null;
             //	Get Processor List
             if (_paymentProcessors == null || _paymentProcessors.Length == 0)
-                _paymentProcessors = MPaymentProcessor.Find(GetCtx(), tender, CCType, GetVAF_Client_ID(),
+                _paymentProcessors = MVABPaymentHandler.Find(GetCtx(), tender, CCType, GetVAF_Client_ID(),
                     GetVAB_Currency_ID(), GetPayAmt(), Get_Trx());
             //	Relax Amount
             if (_paymentProcessors == null || _paymentProcessors.Length == 0)
-                _paymentProcessors = MPaymentProcessor.Find(GetCtx(), tender, CCType, GetVAF_Client_ID(),
+                _paymentProcessors = MVABPaymentHandler.Find(GetCtx(), tender, CCType, GetVAF_Client_ID(),
                     GetVAB_Currency_ID(), Env.ZERO, Get_Trx());
             if (_paymentProcessors == null || _paymentProcessors.Length == 0)
                 return false;
@@ -1421,7 +1421,7 @@ namespace VAdvantage.Model
             try
             {
                 if (_paymentProcessors == null || _paymentProcessors.Length == 0)
-                    _paymentProcessors = MPaymentProcessor.Find(GetCtx(), null, null,
+                    _paymentProcessors = MVABPaymentHandler.Find(GetCtx(), null, null,
                         GetVAF_Client_ID(), GetVAB_Currency_ID(), amt, Get_Trx());
                 //
                 Dictionary<String, ValueNamePair> map = new Dictionary<String, ValueNamePair>(); //	to eliminate duplicates
@@ -2948,7 +2948,7 @@ namespace VAdvantage.Model
             //}
 
             //	Counter Doc
-            MPayment counter = CreateCounterDoc();
+            MVABPayment counter = CreateCounterDoc();
             if (counter != null)
                 _processMsg += " @CounterDoc@: @VAB_Payment_ID@=" + counter.GetDocumentNo();
 
@@ -3663,7 +3663,7 @@ namespace VAdvantage.Model
         /// <param name="Amt">Amount : Due Amt of new created schedule</param>
         /// <param name="TrxName">current transaction</param>
         /// <returns>True when record created successfully</returns>
-        private bool SpiltOrderSchedule(Ctx ctx, MPayment payment, int VA009_OrderPaySchedule_ID, int BaseCurrency, Decimal Amt, Trx TrxName)
+        private bool SpiltOrderSchedule(Ctx ctx, MVABPayment payment, int VA009_OrderPaySchedule_ID, int BaseCurrency, Decimal Amt, Trx TrxName)
         {
             PO poOrignal = MVAFTableView.GetPO(ctx, "VA009_OrderPaySchedule", VA009_OrderPaySchedule_ID, TrxName);
             if (poOrignal != null && poOrignal.Get_ID() > 0)
@@ -4158,14 +4158,14 @@ namespace VAdvantage.Model
                     }
                     else
                     {
-                        MPaymentAllocate[] pAllocs = MPaymentAllocate.Get(this);
+                        MVABPaymentAllocate[] pAllocs = MVABPaymentAllocate.Get(this);
                         if (pAllocs.Length > 0)
                         {
                             List<int> invoiceList = new List<int>();
                             for (int j = 0; j < pAllocs.Length; j++)
                             {
                                 price = 0;
-                                MPaymentAllocate pa = pAllocs[j];
+                                MVABPaymentAllocate pa = pAllocs[j];
                                 if (!invoiceList.Contains(pa.GetVAB_Invoice_ID()))
                                 {
                                     invoiceList.Add(pa.GetVAB_Invoice_ID());
@@ -4395,9 +4395,9 @@ namespace VAdvantage.Model
         }
 
         // Added By Amit -> 3-Nov-2016
-        public static MPayment CopyFrom(MPayment fromPayment, DateTime? dateDoc, int VAB_DocTypes_ID, Trx trxName)
+        public static MVABPayment CopyFrom(MVABPayment fromPayment, DateTime? dateDoc, int VAB_DocTypes_ID, Trx trxName)
         {
-            MPayment to = new MPayment(fromPayment.GetCtx(), 0, trxName);
+            MVABPayment to = new MVABPayment(fromPayment.GetCtx(), 0, trxName);
             int countLineRecord = 0;
             try
             {
@@ -4448,7 +4448,7 @@ namespace VAdvantage.Model
             return to;
         }
 
-        public int CopyLinesFrom(MPayment otherPayment, Trx trxName)
+        public int CopyLinesFrom(MVABPayment otherPayment, Trx trxName)
         {
             int count = 0;
             try
@@ -4456,11 +4456,11 @@ namespace VAdvantage.Model
                 if (IsProcessed() || IsPosted() || otherPayment == null)
                     return 0;
 
-                MPaymentAllocate[] fromLines = otherPayment.GetLines(null, null);
+                MVABPaymentAllocate[] fromLines = otherPayment.GetLines(null, null);
 
                 for (int i = 0; i < fromLines.Length; i++)
                 {
-                    MPaymentAllocate line = new MPaymentAllocate(otherPayment.GetCtx(), 0, trxName);
+                    MVABPaymentAllocate line = new MVABPaymentAllocate(otherPayment.GetCtx(), 0, trxName);
                     PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                     line.SetVAB_Payment_ID(GetVAB_Payment_ID());
                     line.Set_ValueNoCheck("VAB_PaymentAllotment_ID", I_ZERO);	//	new
@@ -4479,9 +4479,9 @@ namespace VAdvantage.Model
             return count;
         }
 
-        public MPaymentAllocate[] GetLines(String whereClause, String orderClause)
+        public MVABPaymentAllocate[] GetLines(String whereClause, String orderClause)
         {
-            List<MPaymentAllocate> list = new List<MPaymentAllocate>();
+            List<MVABPaymentAllocate> list = new List<MVABPaymentAllocate>();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAB_PaymentAllotment WHERE VAB_Payment_ID =" + GetVAB_Payment_ID() + "");
             if (whereClause != null)
                 sql.Append(whereClause);
@@ -4494,7 +4494,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MPaymentAllocate ol = new MPaymentAllocate(GetCtx(), dr, Get_TrxName());
+                        MVABPaymentAllocate ol = new MVABPaymentAllocate(GetCtx(), dr, Get_TrxName());
                         list.Add(ol);
                     }
                 }
@@ -4504,7 +4504,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
             //
-            MPaymentAllocate[] lines = new MPaymentAllocate[list.Count];
+            MVABPaymentAllocate[] lines = new MVABPaymentAllocate[list.Count];
             lines = list.ToArray();
             return lines;
         }
@@ -4514,7 +4514,7 @@ namespace VAdvantage.Model
          * 	Create Counter Document
          * 	@return payment
          */
-        private MPayment CreateCounterDoc()
+        private MVABPayment CreateCounterDoc()
         {
             //	Is this a counter doc ?
             if (GetRef_Payment_ID() != 0)
@@ -4552,7 +4552,7 @@ namespace VAdvantage.Model
                 return null;
 
             //	Deep Copy
-            MPayment counter = new MPayment(GetCtx(), 0, Get_Trx());
+            MVABPayment counter = new MVABPayment(GetCtx(), 0, Get_Trx());
             counter.SetVAF_Org_ID(counterVAF_Org_ID);
             counter.SetVAB_BusinessPartner_ID(counterBP.GetVAB_BusinessPartner_ID());
             counter.SetIsReceipt(!IsReceipt());
@@ -4647,7 +4647,7 @@ namespace VAdvantage.Model
                 return false;
 
             //	Allocate to multiple Payments based on entry
-            MPaymentAllocate[] pAllocs = MPaymentAllocate.Get(this);
+            MVABPaymentAllocate[] pAllocs = MVABPaymentAllocate.Get(this);
             if (pAllocs.Length == 0)
                 return false;
 
@@ -4690,7 +4690,7 @@ namespace VAdvantage.Model
             //	Lines
             for (int i = 0; i < pAllocs.Length; i++)
             {
-                MPaymentAllocate pa = pAllocs[i];
+                MVABPaymentAllocate pa = pAllocs[i];
 
                 if (Get_ColumnIndex("BackupWithholding_ID") > 0 && (GetVAB_Withholding_ID() > 0 || GetBackupWithholding_ID() > 0) && ds != null)
                 {
@@ -5274,7 +5274,7 @@ namespace VAdvantage.Model
                 }
             }
             //	Create Reversal
-            MPayment reversal = new MPayment(GetCtx(), 0, Get_Trx());
+            MVABPayment reversal = new MVABPayment(GetCtx(), 0, Get_Trx());
             CopyValues(this, reversal);
             reversal.SetClientOrg(this);
             reversal.SetVAB_Order_ID(0);
@@ -5374,8 +5374,8 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MPaymentAllocate originalPaymentAllocate = new MPaymentAllocate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_PaymentAllotment_ID"]), Get_Trx());
-                        MPaymentAllocate reversalPaymentAllocate = new MPaymentAllocate(GetCtx(), 0, Get_Trx());
+                        MVABPaymentAllocate originalPaymentAllocate = new MVABPaymentAllocate(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_PaymentAllotment_ID"]), Get_Trx());
+                        MVABPaymentAllocate reversalPaymentAllocate = new MVABPaymentAllocate(GetCtx(), 0, Get_Trx());
                         reversalPaymentAllocate.SetVAF_Client_ID(originalPaymentAllocate.GetVAF_Client_ID());
                         reversalPaymentAllocate.SetVAF_Org_ID(originalPaymentAllocate.GetVAF_Org_ID());
                         reversalPaymentAllocate.SetVAB_Payment_ID(reversal.GetVAB_Payment_ID());

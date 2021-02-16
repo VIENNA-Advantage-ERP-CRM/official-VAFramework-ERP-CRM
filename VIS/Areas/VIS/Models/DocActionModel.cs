@@ -189,7 +189,7 @@ namespace VIS.Models
             /********************
              *  Payment
              */
-            else if (VAF_TableView_ID == MPayment.Table_ID)
+            else if (VAF_TableView_ID == MVABPayment.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))

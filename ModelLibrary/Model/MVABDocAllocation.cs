@@ -481,9 +481,9 @@ namespace VAdvantage.Model
 
                         #region set Invoice Paid Amount
                         //added check for payment and cash if cash/payment exist than create object otherwise that will be null
-                        MPayment payment = null;
+                        MVABPayment payment = null;
                         if (line.GetVAB_Payment_ID() > 0)
-                            payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_Trx());
+                            payment = new MVABPayment(GetCtx(), line.GetVAB_Payment_ID(), Get_Trx());
 
                         MVABCashJRNLLine cashline = null;
                         if (line.GetVAB_CashJRNLLine_ID() > 0)
@@ -1062,7 +1062,7 @@ namespace VAdvantage.Model
         /// <param name="cashline"></param>
         /// <param name="journalline"></param>
         /// <returns></returns>
-        private decimal GetCurrencyMultiplyRate(MInvoice invoice, MPayment payment, MVABCashJRNLLine cashline, MJournalLine journalline)
+        private decimal GetCurrencyMultiplyRate(MInvoice invoice, MVABPayment payment, MVABCashJRNLLine cashline, MJournalLine journalline)
         {
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();

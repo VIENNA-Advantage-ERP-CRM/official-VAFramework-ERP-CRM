@@ -16,7 +16,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-    public class MPaymentBatch : X_VAB_PaymentBatch
+    public class MVABPaymentBatch : X_VAB_PaymentBatch
     {
        /// <summary>
         /// Standard Constructor
@@ -24,7 +24,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_PaymentBatch_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentBatch(Ctx ctx, int VAB_PaymentBatch_ID, Trx trxName)
+        public MVABPaymentBatch(Ctx ctx, int VAB_PaymentBatch_ID, Trx trxName)
             : base(ctx, VAB_PaymentBatch_ID, trxName)
         {
             if (VAB_PaymentBatch_ID == 0)
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentBatch(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPaymentBatch(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="name">name</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentBatch(Ctx ctx, String name, Trx trxName)
+        public MVABPaymentBatch(Ctx ctx, String name, Trx trxName)
             : this(ctx, 0, trxName)
         {
             SetName(name);
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="ps">Pay Selection</param>
-        public MPaymentBatch(MPaySelection ps)
+        public MVABPaymentBatch(MVABPaymentOption ps)
             : this(ps.GetCtx(), 0, ps.Get_TrxName())
         {
             SetClientOrg(ps);
@@ -76,10 +76,10 @@ namespace VAdvantage.Model
         /// <param name="VAB_PaymentOption_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>payment batch</returns>
-        public static MPaymentBatch GetForPaySelection(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName)
+        public static MVABPaymentBatch GetForPaySelection(Ctx ctx, int VAB_PaymentOption_ID, Trx trxName)
         {
-            MPaySelection ps = new MPaySelection(ctx, VAB_PaymentOption_ID, trxName);
-            MPaymentBatch retValue = new MPaymentBatch(ps);
+            MVABPaymentOption ps = new MVABPaymentOption(ctx, VAB_PaymentOption_ID, trxName);
+            MVABPaymentBatch retValue = new MVABPaymentBatch(ps);
             return retValue;
         }
     }

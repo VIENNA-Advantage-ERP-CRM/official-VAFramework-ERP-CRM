@@ -27,7 +27,7 @@ namespace VIS.Models
             int VAB_Payment_ID;
             //Assign parameter value
             VAB_Payment_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
+            MVABPayment payment = new MVABPayment(ctx, VAB_Payment_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAB_Charge_ID"] = payment.GetVAB_Charge_ID().ToString();
             result["VAB_Invoice_ID"] = payment.GetVAB_Invoice_ID().ToString();
@@ -47,7 +47,7 @@ namespace VIS.Models
             int VAB_Payment_ID;
             //Assign parameter value
             VAB_Payment_ID = Util.GetValueOfInt(fields);
-            MPayment payment = new MPayment(ctx, VAB_Payment_ID, null);
+            MVABPayment payment = new MVABPayment(ctx, VAB_Payment_ID, null);
             return payment.GetPayAmt();
         }
 

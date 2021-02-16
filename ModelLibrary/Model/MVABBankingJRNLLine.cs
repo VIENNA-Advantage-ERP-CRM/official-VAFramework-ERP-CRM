@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         /// Set Payment
         /// </summary>
         /// <param name="payment">Payment</param>
-        public void SetPayment(MPayment payment)
+        public void SetPayment(MVABPayment payment)
         {
             SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
             SetVAB_Currency_ID(payment.GetVAB_Currency_ID());
@@ -352,7 +352,7 @@ namespace VAdvantage.Model
             //	Set References
             if (GetVAB_Payment_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
-                MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+                MVABPayment payment = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
                 SetVAB_BusinessPartner_ID(payment.GetVAB_BusinessPartner_ID());
                 if (payment.GetVAB_Invoice_ID() != 0)
                 {

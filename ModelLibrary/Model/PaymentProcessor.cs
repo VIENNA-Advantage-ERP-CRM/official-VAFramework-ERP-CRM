@@ -46,8 +46,8 @@ namespace VAdvantage.Model
 	    /** Equals					*/
 	    public const char EQ = '='; 
 
-        protected MPaymentProcessor _mpp = null;
-	    protected MPayment _mp = null;
+        protected MVABPaymentHandler _mpp = null;
+	    protected MVABPayment _mp = null;
 	    //
 	    private int _timeout = 30;
 
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
 	     * 	@param mp payment model
 	     *  @return initialized PaymentProcessor or null
 	     */
-	    public static PaymentProcessor Create (MPaymentProcessor mpp, MPayment mp)
+	    public static PaymentProcessor Create (MVABPaymentHandler mpp, MVABPayment mp)
 	    {
 		    _log.Info("create for " + mpp);
 		    String className = mpp.GetPayProcessorClass();

@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         #region   
         private MVABDunningExeEntry _parent = null;
         private MInvoice _invoice = null;
-        private MPayment _payment = null;
+        private MVABPayment _payment = null;
         private int _VAB_CurrencyFrom_ID = 0;
         private int _VAB_CurrencyTo_ID = 0;
 
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
         /// Get Payment
         /// </summary>
         /// <returns>Returns the payment.</returns>
-        public MPayment GetPayment()
+        public MVABPayment GetPayment()
         {
             if (GetVAB_Payment_ID() == 0)
             {
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
             }
             else if (_payment == null)
             {
-                _payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+                _payment = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
             }
             return _payment;
         }
@@ -205,7 +205,7 @@ namespace VAdvantage.Model
         /// Set Payment
         /// </summary>
         /// <param name="payment"></param>
-        public void SetPayment(MPayment payment)
+        public void SetPayment(MVABPayment payment)
         {
             _payment = payment;
             if (payment != null)

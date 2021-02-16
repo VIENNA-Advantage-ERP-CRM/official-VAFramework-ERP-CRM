@@ -58,7 +58,7 @@ namespace ViennaAdvantage.Process
         {
             log.Info("Record_ID=" + GetRecord_ID());
             //	get Payment
-            MPayment pp = new MPayment(GetCtx(), GetRecord_ID(), Get_TrxName());
+            MVABPayment pp = new MVABPayment(GetCtx(), GetRecord_ID(), Get_TrxName());
             //	Validate Number
             String msg = MPaymentValidate.ValidateCreditCardNumber(pp.GetCreditCardNumber(), pp.GetCreditCardType());
             if (msg != null && msg.Length > 0)

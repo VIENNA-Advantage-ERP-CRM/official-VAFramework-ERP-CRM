@@ -127,7 +127,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 + ", PaymentRule=" + _PaymentRule
                 + ", VAB_BPart_Category_ID=" + _VAB_BPart_Category_ID + ", VAB_BusinessPartner_ID=" + _VAB_BusinessPartner_ID);
 
-            MPaySelection psel = new MPaySelection(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
+            MVABPaymentOption psel = new MVABPaymentOption(GetCtx(), _VAB_PaymentOption_ID, Get_TrxName());
             int VAB_CurrencyTo_ID = psel.GetVAB_Currency_ID();
             if (psel.Get_ID() == 0)
             {
@@ -284,7 +284,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     bool isSOTrx = "Y".Equals(Utility.Util.GetValueOfString(idr[4]));//rs.getString(5));
                     //
                     lines++;
-                    MPaySelectionLine pselLine = new MPaySelectionLine(psel, lines * 10, PaymentRule);
+                    MVABPaymentOptionLine pselLine = new MVABPaymentOptionLine(psel, lines * 10, PaymentRule);
                     pselLine.SetInvoice(VAB_Invoice_ID, isSOTrx,
                         PayAmt, Decimal.Subtract(PayAmt, DiscountAmt), DiscountAmt);
                     if (!pselLine.Save())

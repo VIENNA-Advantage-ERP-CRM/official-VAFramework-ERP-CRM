@@ -42,7 +42,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private static String _ONLY_AR = "R";
 
         //	Payments				
-        private MPayment[] _payments = null;
+        private MVABPayment[] _payments = null;
         // Invoices				
         private MInvoice[] _invoices = null;
         //	Allocation				
@@ -289,10 +289,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="_VAB_BusinessPartner_ID"></param>
         /// <returns>unallocated payments</returns>
-        private MPayment[] GetPayments(int _VAB_BusinessPartner_ID)
+        private MVABPayment[] GetPayments(int _VAB_BusinessPartner_ID)
         {
             //ArrayList<MPayment> list = new ArrayList<MPayment>();
-            List<MPayment> list = new List<MPayment>();
+            List<MVABPayment> list = new List<MVABPayment>();
             String sql = "SELECT * FROM VAB_Payment "
                 + "WHERE IsAllocated='N' AND Processed='Y' AND VAB_BusinessPartner_ID=@param1"// + _VAB_BusinessPartner_ID
                 + " AND IsPrepayment='N' AND VAB_Charge_ID IS NULL ";
@@ -318,7 +318,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MPayment _payment = new MPayment(GetCtx(), dr, Get_Trx());
+                    MVABPayment _payment = new MVABPayment(GetCtx(), dr, Get_Trx());
                     Decimal allocated = Utility.Util.GetValueOfDecimal(_payment.GetAllocatedAmt());
                     if (allocated.CompareTo(_payment.GetPayAmt()) == 0)
                     {
@@ -348,7 +348,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
             }
 
-            _payments = new MPayment[list.Count];
+            _payments = new MVABPayment[list.Count];
             _payments = list.ToArray();
             return _payments;
         }
@@ -431,7 +431,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //****	See if there is a direct link (Invoice or Pay Selection)
             for (int p = 0; p < _payments.Length; p++)
             {
-                MPayment _payment = _payments[p];
+                MVABPayment _payment = _payments[p];
                 if (_payment.IsAllocated())
                 {
                     continue;
@@ -490,17 +490,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }	//	_payment has _invoice
                 else	//	No direct _invoice
                 {
-                    MPaySelectionCheck psCheck = MPaySelectionCheck.GetOfPayment(GetCtx(), _payment.GetVAB_Payment_ID(), Get_Trx());
+                    MVABPaymentOptionCheck psCheck = MVABPaymentOptionCheck.GetOfPayment(GetCtx(), _payment.GetVAB_Payment_ID(), Get_Trx());
                     if (psCheck == null)
                     {
                         continue;
                     }
                     //
                     Decimal _totalInvoice = Env.ZERO;
-                    MPaySelectionLine[] _psLines = psCheck.GetPaySelectionLines(false);
+                    MVABPaymentOptionLine[] _psLines = psCheck.GetPaySelectionLines(false);
                     for (int i = 0; i < _psLines.Length; i++)
                     {
-                        MPaySelectionLine _line = _psLines[i];
+                        MVABPaymentOptionLine _line = _psLines[i];
                         MInvoice _invoice = _line.GetInvoice();
                         if (_payment.GetVAB_Currency_ID() == _invoice.GetVAB_Currency_ID())
                         {
@@ -543,7 +543,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int _count = 0;
             for (int p = 0; p < _payments.Length; p++)
             {
-                MPayment _payment = _payments[p];
+                MVABPayment _payment = _payments[p];
                 if (_payment.IsAllocated())
                 {
                     continue;
@@ -620,7 +620,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _totalPayments = Env.ZERO;
             for (int p = 0; p < _payments.Length; p++)
             {
-                MPayment _payment = _payments[p];
+                MVABPayment _payment = _payments[p];
                 if (_payment.IsAllocated())
                 {
                     continue;
@@ -686,7 +686,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 for (int p = 0; p < _payments.Length; p++)
                 {
-                    MPayment _payment = _payments[p];
+                    MVABPayment _payment = _payments[p];
                     if (_payment.IsAllocated())
                     {
                         continue;
@@ -761,7 +761,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _totalPayments = Env.ZERO;
             for (int p = 0; p < _payments.Length; p++)
             {
-                MPayment _payment = _payments[p];
+                MVABPayment _payment = _payments[p];
                 if (_payment.IsAllocated())
                 {
                     continue;
@@ -839,7 +839,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _allocatedPayments = Env.ZERO;
             for (int p = 0; p < _payments.Length; p++)
             {
-                MPayment _payment = _payments[p];
+                MVABPayment _payment = _payments[p];
                 if (_payment.IsAllocated())
                 {
                     continue;

@@ -225,7 +225,7 @@ namespace VAdvantage.Model
             log.Fine("Reverse=" + reverse + " - " + ToString());
             int VAB_Invoice_ID = GetVAB_Invoice_ID();
             MInvoicePaySchedule invoiceSchedule = null;
-            MPayment payment = null;
+            MVABPayment payment = null;
             MVABCashJRNLLine cashLine = null;
             MInvoice invoice = GetInvoice();
             if (invoice != null
@@ -238,7 +238,7 @@ namespace VAdvantage.Model
             //	Update Payment
             if (VAB_Payment_ID != 0)
             {
-                payment = new MPayment(GetCtx(), VAB_Payment_ID, Get_TrxName());
+                payment = new MVABPayment(GetCtx(), VAB_Payment_ID, Get_TrxName());
                 if (GetVAB_BusinessPartner_ID() != payment.GetVAB_BusinessPartner_ID())
                 {
                     log.Warning("VAB_BusinessPartner_ID different - Invoice=" + GetVAB_BusinessPartner_ID() + " - Payment=" + payment.GetVAB_BusinessPartner_ID());

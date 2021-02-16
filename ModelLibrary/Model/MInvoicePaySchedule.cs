@@ -130,7 +130,7 @@ namespace VAdvantage.Model
          *	@param invoice invoice
          *	@param paySchedule payment schedule
          */
-        public MInvoicePaySchedule(MInvoice invoice, MPaySchedule paySchedule)
+        public MInvoicePaySchedule(MInvoice invoice, MVABPaymentSchedule paySchedule)
             : base(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
 
@@ -229,7 +229,7 @@ namespace VAdvantage.Model
                 if (GetVAB_Payment_ID() > 0)
                 {
                     #region for payment
-                    MPayment payment = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_Trx());
+                    MVABPayment payment = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_Trx());
                     SetVA009_PaymentMethod_ID(payment.GetVA009_PaymentMethod_ID());
 
                     // get payment method detail -- update to here 

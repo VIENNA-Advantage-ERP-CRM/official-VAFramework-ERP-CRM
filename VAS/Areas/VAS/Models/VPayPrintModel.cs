@@ -34,9 +34,9 @@ namespace VIS.Models
         //Logger
         private static VLogger log = VLogger.GetVLogger(typeof(VPayPrintModel));
         //Payment Information
-        public VAdvantage.Model.MPaySelectionCheck[] m_checks = null;
+        public VAdvantage.Model.MVABPaymentOptionCheck[] m_checks = null;
         //Payment Batch	
-        public VAdvantage.Model.MPaymentBatch m_batch = null;
+        public VAdvantage.Model.MVABPaymentBatch m_batch = null;
         public List<int> payment_ID = null;
         //VAdvantage.DSProcessWorkflow.ReportInfo rep = null;
 
@@ -228,7 +228,7 @@ namespace VIS.Models
             log.Config("VAB_PaymentOption_ID=" + VAB_PaymentOption_ID + ", PaymentRule=" + PaymentRule + ", DocumentNo=" + startDocumentNo);
 
 
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MVABPaymentOptionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             if (m_checks == null || m_checks.Length == 0)
             {
@@ -240,7 +240,7 @@ namespace VIS.Models
             {
                 res = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
+            m_batch = VAdvantage.Model.MVABPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             if (!m_batch.Save())
             {
 
@@ -253,11 +253,11 @@ namespace VIS.Models
 
             bool somethingPrinted = false;
             bool directPrint = !Ini.IsPropertyBool(Ini.P_PRINTPREVIEW);
-            Dictionary<VAdvantage.Model.MPaySelectionCheck, String> oldCheckValues = new Dictionary<VAdvantage.Model.MPaySelectionCheck, string>();
+            Dictionary<VAdvantage.Model.MVABPaymentOptionCheck, String> oldCheckValues = new Dictionary<VAdvantage.Model.MVABPaymentOptionCheck, string>();
             int checkID = 0;
             int VAB_Payment_ID = 0;
             List<int> check_ID = new List<int>();
-            foreach (VAdvantage.Model.MPaySelectionCheck check in m_checks)
+            foreach (VAdvantage.Model.MVABPaymentOptionCheck check in m_checks)
             {
                 //	ReportCtrl will check BankAccountDoc for PrintFormat
                 oldCheckValues.Add(check, Util.GetValueOfString(check.Get_ValueOld("CheckNo")));
@@ -328,12 +328,12 @@ namespace VIS.Models
         /// <param name="m_batch"></param>
         /// <returns></returns>
         public List<int> ContinueCheckPrint(Ctx ctx, int VAB_PaymentOption_ID, int m_VAB_Bank_Acct_ID, string PaymentRule, string startDocumentNo, List<int> check_ID,
-                                       VAdvantage.Model.MPaySelectionCheck[] m_checks, VAdvantage.Model.MPaymentBatch m_batch)
+                                       VAdvantage.Model.MVABPaymentOptionCheck[] m_checks, VAdvantage.Model.MVABPaymentBatch m_batch)
         {
             int VAB_Payment_ID = 0;
             string sql = string.Empty;
             // int lastDocumentNo = MPaySelectionCheck.ConfirmPrint(m_checks, m_batch);
-            int lastDocumentNo = VAdvantage.Model.MPaySelectionCheck.ConfirmPrint(m_checks, m_batch);
+            int lastDocumentNo = VAdvantage.Model.MVABPaymentOptionCheck.ConfirmPrint(m_checks, m_batch);
             if (lastDocumentNo != 0)
             {
                 StringBuilder sb = new StringBuilder();
@@ -409,7 +409,7 @@ namespace VIS.Models
             string expFile = "Export.txt";
 
 
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MVABPaymentOptionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             //
             if (m_checks == null || m_checks.Length == 0)
@@ -422,18 +422,18 @@ namespace VIS.Models
             {
                 res = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
+            m_batch = VAdvantage.Model.MVABPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             //return true;
             if (!res)
             {
                 return null;
             }
             //  Get File Info
-            Dictionary<VAdvantage.Model.MPaySelectionCheck, String> oldCheckValues = new Dictionary<VAdvantage.Model.MPaySelectionCheck, string>();
+            Dictionary<VAdvantage.Model.MVABPaymentOptionCheck, String> oldCheckValues = new Dictionary<VAdvantage.Model.MVABPaymentOptionCheck, string>();
 
             //  Create File
             List<int> check_ID = new List<int>();
-            foreach (VAdvantage.Model.MPaySelectionCheck check in m_checks)
+            foreach (VAdvantage.Model.MVABPaymentOptionCheck check in m_checks)
             {
                 //oldCheckValues.put(check,(String)check.get_ValueOld("DocumentNo"));
                 oldCheckValues.Add(check, Util.GetValueOfString(check.Get_ValueOld("DocumentNo")));
@@ -451,7 +451,7 @@ namespace VIS.Models
             ////  write lines
             for (int i = 0; i < m_checks.Length; i++)
             {
-                VAdvantage.Model.MPaySelectionCheck mpp = m_checks[i];
+                VAdvantage.Model.MVABPaymentOptionCheck mpp = m_checks[i];
                 if (mpp == null)
                     continue;
                 //  BPartner Info
@@ -462,7 +462,7 @@ namespace VIS.Models
                 bankAcc.Add(bpba);
                 //  Comment - list of invoice document no
                 StringBuilder comment = new StringBuilder();
-                VAdvantage.Model.MPaySelectionLine[] psls = mpp.GetPaySelectionLines(false);
+                VAdvantage.Model.MVABPaymentOptionLine[] psls = mpp.GetPaySelectionLines(false);
                 for (int l = 0; l < psls.Length; l++)
                 {
                     if (l > 0)
@@ -485,7 +485,7 @@ namespace VIS.Models
             return objCmdExport;
         }
 
-        private string Export(VAdvantage.Model.MPaySelectionCheck[] m_checks, string expFile, List<String> comment, List<String[]> Partners, List<String[]> account, List<String> docNo, List<String> payDate, List<String> ISOCode, List<String> payAmt)
+        private string Export(VAdvantage.Model.MVABPaymentOptionCheck[] m_checks, string expFile, List<String> comment, List<String[]> Partners, List<String[]> account, List<String> docNo, List<String> payDate, List<String> ISOCode, List<String> payAmt)
         {
             //StreamWriter sw = null;
             int noLines = 0;
@@ -566,11 +566,11 @@ namespace VIS.Models
             writer.Close();
             return filename;
         }
-        public string VPayPrintSuccess(Ctx ctx, VAdvantage.Model.MPaySelectionCheck[] m_checks, VAdvantage.Model.MPaymentBatch m_batch)
+        public string VPayPrintSuccess(Ctx ctx, VAdvantage.Model.MVABPaymentOptionCheck[] m_checks, VAdvantage.Model.MVABPaymentBatch m_batch)
         {
             if (true)
             {
-                VAdvantage.Model.MPaySelectionCheck.ConfirmPrint(m_checks, m_batch);
+                VAdvantage.Model.MVABPaymentOptionCheck.ConfirmPrint(m_checks, m_batch);
 
             }
             else
@@ -598,7 +598,7 @@ namespace VIS.Models
             //	get Selections
 
             bool result = false;
-            m_checks = VAdvantage.Model.MPaySelectionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
+            m_checks = VAdvantage.Model.MVABPaymentOptionCheck.Get(VAB_PaymentOption_ID, PaymentRule, startDocumentNo, null);
 
             //this.setCursor(Cursor.getDefaultCursor());
             //
@@ -612,7 +612,7 @@ namespace VIS.Models
             {
                 result = true;
             }
-            m_batch = VAdvantage.Model.MPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
+            m_batch = VAdvantage.Model.MVABPaymentBatch.GetForPaySelection(ctx, VAB_PaymentOption_ID, null);
             //return true;
 
 

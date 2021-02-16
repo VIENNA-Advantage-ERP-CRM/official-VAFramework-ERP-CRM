@@ -20,10 +20,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaymentProcessor : X_VAB_PaymentHandler
+    public class MVABPaymentHandler : X_VAB_PaymentHandler
     {
         /**	Static Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPaymentProcessor).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABPaymentHandler).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_PaymentHandler_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentProcessor(Ctx ctx, int VAB_PaymentHandler_ID, Trx trxName)
+        public MVABPaymentHandler(Ctx ctx, int VAB_PaymentHandler_ID, Trx trxName)
             : base(ctx, VAB_PaymentHandler_ID, trxName)
         {
             if (VAB_PaymentHandler_ID == 0)
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MPaymentProcessor(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPaymentHandler(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -77,17 +77,17 @@ namespace VAdvantage.Model
         /// <returns>true if acceptes</returns>
         public bool Accepts(String tenderType, String creditCardType)
         {
-            if ((MPayment.TENDERTYPE_DirectDeposit.Equals(tenderType) && IsAcceptDirectDeposit())
-                || (MPayment.TENDERTYPE_DirectDebit.Equals(tenderType) && IsAcceptDirectDebit())
-                || (MPayment.TENDERTYPE_Check.Equals(tenderType) && IsAcceptCheck())
+            if ((MVABPayment.TENDERTYPE_DirectDeposit.Equals(tenderType) && IsAcceptDirectDeposit())
+                || (MVABPayment.TENDERTYPE_DirectDebit.Equals(tenderType) && IsAcceptDirectDebit())
+                || (MVABPayment.TENDERTYPE_Check.Equals(tenderType) && IsAcceptCheck())
                 //
-                || (MPayment.CREDITCARDTYPE_ATM.Equals(creditCardType) && IsAcceptATM())
-                || (MPayment.CREDITCARDTYPE_Amex.Equals(creditCardType) && IsAcceptAMEX())
-                || (MPayment.CREDITCARDTYPE_PurchaseCard.Equals(creditCardType) && IsAcceptCorporate())
-                || (MPayment.CREDITCARDTYPE_Diners.Equals(creditCardType) && IsAcceptDiners())
-                || (MPayment.CREDITCARDTYPE_Discover.Equals(creditCardType) && IsAcceptDiscover())
-                || (MPayment.CREDITCARDTYPE_MasterCard.Equals(creditCardType) && IsAcceptMC())
-                || (MPayment.CREDITCARDTYPE_Visa.Equals(creditCardType) && IsAcceptVisa()))
+                || (MVABPayment.CREDITCARDTYPE_ATM.Equals(creditCardType) && IsAcceptATM())
+                || (MVABPayment.CREDITCARDTYPE_Amex.Equals(creditCardType) && IsAcceptAMEX())
+                || (MVABPayment.CREDITCARDTYPE_PurchaseCard.Equals(creditCardType) && IsAcceptCorporate())
+                || (MVABPayment.CREDITCARDTYPE_Diners.Equals(creditCardType) && IsAcceptDiners())
+                || (MVABPayment.CREDITCARDTYPE_Discover.Equals(creditCardType) && IsAcceptDiscover())
+                || (MVABPayment.CREDITCARDTYPE_MasterCard.Equals(creditCardType) && IsAcceptMC())
+                || (MVABPayment.CREDITCARDTYPE_Visa.Equals(creditCardType) && IsAcceptVisa()))
                 return true;
             return false;
         }
@@ -115,35 +115,35 @@ namespace VAdvantage.Model
         /// <param name="amt">Amount (ignored)</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of BankAccount[0] & PaymentProcessor[1] or null</returns>
-        public static MPaymentProcessor[] Find(Ctx ctx, String tender, String CCType,
+        public static MVABPaymentHandler[] Find(Ctx ctx, String tender, String CCType,
             int VAF_Client_ID, int VAB_Currency_ID, Decimal amt, Trx trxName)
         {
-            List<MPaymentProcessor> list = new List<MPaymentProcessor>();
+            List<MVABPaymentHandler> list = new List<MVABPaymentHandler>();
             StringBuilder sql = new StringBuilder("SELECT * "
                 + "FROM VAB_PaymentHandler "
                 + "WHERE VAF_Client_ID=@clid AND IsActive='Y'"				//	#1
                 + " AND (VAB_Currency_ID IS NULL OR VAB_Currency_ID=@curid)"		//	#2
                 + " AND (MinimumAmt IS NULL OR MinimumAmt = 0 OR MinimumAmt <= @amot)");	//	#3
-            if (MPayment.TENDERTYPE_DirectDeposit.Equals(tender))
+            if (MVABPayment.TENDERTYPE_DirectDeposit.Equals(tender))
                 sql.Append(" AND AcceptDirectDeposit='Y'");
-            else if (MPayment.TENDERTYPE_DirectDebit.Equals(tender))
+            else if (MVABPayment.TENDERTYPE_DirectDebit.Equals(tender))
                 sql.Append(" AND AcceptDirectDebit='Y'");
-            else if (MPayment.TENDERTYPE_Check.Equals(tender))
+            else if (MVABPayment.TENDERTYPE_Check.Equals(tender))
                 sql.Append(" AND AcceptCheck='Y'");
             //  CreditCards
-            else if (MPayment.CREDITCARDTYPE_ATM.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_ATM.Equals(CCType))
                 sql.Append(" AND AcceptATM='Y'");
-            else if (MPayment.CREDITCARDTYPE_Amex.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_Amex.Equals(CCType))
                 sql.Append(" AND AcceptAMEX='Y'");
-            else if (MPayment.CREDITCARDTYPE_Visa.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_Visa.Equals(CCType))
                 sql.Append(" AND AcceptVISA='Y'");
-            else if (MPayment.CREDITCARDTYPE_MasterCard.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_MasterCard.Equals(CCType))
                 sql.Append(" AND AcceptMC='Y'");
-            else if (MPayment.CREDITCARDTYPE_Diners.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_Diners.Equals(CCType))
                 sql.Append(" AND AcceptDiners='Y'");
-            else if (MPayment.CREDITCARDTYPE_Discover.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_Discover.Equals(CCType))
                 sql.Append(" AND AcceptDiscover='Y'");
-            else if (MPayment.CREDITCARDTYPE_PurchaseCard.Equals(CCType))
+            else if (MVABPayment.CREDITCARDTYPE_PurchaseCard.Equals(CCType))
                 sql.Append(" AND AcceptCORPORATE='Y'");
             //
             try
@@ -157,7 +157,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MPaymentProcessor(ctx, dr, trxName));
+                        list.Add(new MVABPaymentHandler(ctx, dr, trxName));
                     }
                 }
             }
@@ -177,7 +177,7 @@ namespace VAdvantage.Model
                 _log.Fine("find - #" + list.Count + " - VAF_Client_ID=" + VAF_Client_ID
                     + ", VAB_Currency_ID=" + VAB_Currency_ID + ", Amt=" + amt);
             }
-            MPaymentProcessor[] retValue = new MPaymentProcessor[list.Count];
+            MVABPaymentHandler[] retValue = new MVABPaymentHandler[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

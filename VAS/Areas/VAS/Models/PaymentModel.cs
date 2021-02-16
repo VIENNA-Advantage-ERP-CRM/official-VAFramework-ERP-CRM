@@ -50,8 +50,8 @@ namespace VIS.Models
         int _VAF_Org_ID = 0;
         int _VAB_BusinessPartner_ID = 0;
         private Decimal _Amount = Env.ZERO;	//	Payment Amount
-        private MPayment _mPayment = null;
-        private MPayment _mPaymentOriginal = null;
+        private MVABPayment _mPayment = null;
+        private MVABPayment _mPaymentOriginal = null;
         //private static IDictionary<int, KeyNamePair> _Currencies = null;	//	EMU Currencies
         KeyNamePair kp = null;
         PaymentMetohdDetails pDetails = null;
@@ -346,8 +346,8 @@ namespace VIS.Models
             {
                 if (VAB_Payment_ID != 0)
                 {
-                    _mPayment = new MPayment(ctx, VAB_Payment_ID, null);
-                    _mPaymentOriginal = new MPayment(ctx, _VAB_Payment_ID, null);	//	full copy
+                    _mPayment = new MVABPayment(ctx, VAB_Payment_ID, null);
+                    _mPaymentOriginal = new MVABPayment(ctx, _VAB_Payment_ID, null);	//	full copy
                     //  CreditCard
                     pDetails.CCType = _mPayment.GetCreditCardType();
                     pDetails.StrKNumber = _mPayment.GetCreditCardNumber();
@@ -369,7 +369,7 @@ namespace VIS.Models
             }
             if (_mPayment == null)
             {
-                _mPayment = new MPayment(ctx, 0, null);
+                _mPayment = new MVABPayment(ctx, 0, null);
                 _mPayment.SetVAF_Org_ID(_VAF_Org_ID);
                 _mPayment.SetIsReceipt(_isSOTrx);
                 _mPayment.SetAmount(VAB_Currency_ID, _Amount);
@@ -495,18 +495,18 @@ namespace VIS.Models
                 //  find Bank Account if not qualified yet
                 if ("KTSD".IndexOf(newPaymentRule) != -1 && newVAB_Bank_Acct_ID == 0)
                 {
-                    String tender = MPayment.TENDERTYPE_CreditCard;
+                    String tender = MVABPayment.TENDERTYPE_CreditCard;
                     if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDeposit))
                     {
-                        tender = MPayment.TENDERTYPE_DirectDeposit;
+                        tender = MVABPayment.TENDERTYPE_DirectDeposit;
                     }
                     else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDebit))
                     {
-                        tender = MPayment.TENDERTYPE_DirectDebit;
+                        tender = MVABPayment.TENDERTYPE_DirectDebit;
                     }
                     else if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                     {
-                        tender = MPayment.TENDERTYPE_Check;
+                        tender = MVABPayment.TENDERTYPE_Check;
                     }
                 }
 
@@ -722,7 +722,7 @@ namespace VIS.Models
                     _mPayment.SetAmount(inputs._VAB_Currency_ID, payAmount);
                     if (newPaymentRule.Equals(MVABOrder.PAYMENTRULE_CreditCard))
                     {
-                        _mPayment.SetCreditCard(MPayment.TRXTYPE_Sales, newCCType,
+                        _mPayment.SetCreditCard(MVABPayment.TRXTYPE_Sales, newCCType,
                            inputs.txtKNumber, "", inputs.txtKExp);
                         _mPayment.SetPaymentProcessor();
                     }
@@ -743,7 +743,7 @@ namespace VIS.Models
                     _mPayment.Save();
 
                     //  Save/Post
-                    if (MPayment.DOCSTATUS_Drafted.Equals(_mPayment.GetDocStatus()))
+                    if (MVABPayment.DOCSTATUS_Drafted.Equals(_mPayment.GetDocStatus()))
                     {
                         bool ok = _mPayment.ProcessIt(DocActionVariables.ACTION_COMPLETE);
                         _mPayment.Save();
@@ -970,18 +970,18 @@ namespace VIS.Models
                 //  find Bank Account if not qualified yet
                 if ("KTSD".IndexOf(PaymentRule) != -1 && VAB_Bank_Acct_ID == 0)
                 {
-                    String tender = MPayment.TENDERTYPE_CreditCard;
+                    String tender = MVABPayment.TENDERTYPE_CreditCard;
                     if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDeposit))
                     {
-                        tender = MPayment.TENDERTYPE_DirectDeposit;
+                        tender = MVABPayment.TENDERTYPE_DirectDeposit;
                     }
                     else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_DirectDebit))
                     {
-                        tender = MPayment.TENDERTYPE_DirectDebit;
+                        tender = MVABPayment.TENDERTYPE_DirectDebit;
                     }
                     else if (PaymentRule.Equals(MVABOrder.PAYMENTRULE_Check))
                     {
-                        tender = MPayment.TENDERTYPE_Check;
+                        tender = MVABPayment.TENDERTYPE_Check;
                     }
                     //	Check must have a bank account
                     if (VAB_Bank_Acct_ID == 0 && "S".Equals(PaymentRule))

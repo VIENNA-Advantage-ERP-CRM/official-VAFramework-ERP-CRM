@@ -91,8 +91,8 @@ namespace ViennaAdvantageServer.Process
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Payment))
                         {
-                            MPayment from = new MPayment(GetCtx(), Recurring.GetVAB_Payment_ID(), Get_TrxName());
-                            MPayment payment = MPayment.CopyFrom(from, dateDoc,
+                            MVABPayment from = new MVABPayment(GetCtx(), Recurring.GetVAB_Payment_ID(), Get_TrxName());
+                            MVABPayment payment = MVABPayment.CopyFrom(from, dateDoc,
                                 from.GetVAB_DocTypes_ID(), Get_TrxName());
                             run.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                             msg += payment.GetDocumentNo();

@@ -93,7 +93,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("@NotFound@ @VAB_Bank_Acct_ID@");
             }
             //
-            MPayment payment = CreatePayment(ibs.GetVAB_Invoice_ID(), ibs.GetVAB_BusinessPartner_ID(),
+            MVABPayment payment = CreatePayment(ibs.GetVAB_Invoice_ID(), ibs.GetVAB_BusinessPartner_ID(),
                 ibs.GetVAB_Currency_ID(), ibs.GetStmtAmt(), ibs.GetTrxAmt(),
                 ibs.GetVAB_Bank_Acct_ID(),Utility.Util.GetValueOfDateTime(ibs.GetStatementLineDate() == null ? ibs.GetStatementDate() : ibs.GetStatementLineDate()),
                 Utility.Util.GetValueOfDateTime(ibs.GetDateAcct()), ibs.GetDescription(), ibs.GetVAF_Org_ID());
@@ -134,7 +134,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             MVABBankingJRNL bs = new MVABBankingJRNL(GetCtx(), bsl.GetVAB_BankingJRNL_ID(), Get_Trx());
             //
-            MPayment payment = CreatePayment(bsl.GetVAB_Invoice_ID(), bsl.GetVAB_BusinessPartner_ID(),
+            MVABPayment payment = CreatePayment(bsl.GetVAB_Invoice_ID(), bsl.GetVAB_BusinessPartner_ID(),
                 bsl.GetVAB_Currency_ID(), bsl.GetStmtAmt(), bsl.GetTrxAmt(),
                 bs.GetVAB_Bank_Acct_ID(), bsl.GetStatementLineDate(), bsl.GetDateAcct(),
                 bsl.GetDescription(), bsl.GetVAF_Org_ID());
@@ -169,7 +169,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="Description">description</param>
         /// <param name="VAF_Org_ID"></param>
         /// <returns>payment</returns>
-        private MPayment CreatePayment(int VAB_Invoice_ID, int VAB_BusinessPartner_ID,
+        private MVABPayment CreatePayment(int VAB_Invoice_ID, int VAB_BusinessPartner_ID,
             int VAB_Currency_ID, Decimal stmtAmt, Decimal trxAmt,
             int VAB_Bank_Acct_ID, DateTime? dateTrx, DateTime? dateAcct,
             String description, int VAF_Org_ID)
@@ -189,10 +189,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //    payAmt = Env.ZERO;
             //}
             //
-            MPayment payment = new MPayment(GetCtx(), 0, Get_Trx());
+            MVABPayment payment = new MVABPayment(GetCtx(), 0, Get_Trx());
             payment.SetVAF_Org_ID(VAF_Org_ID);
             payment.SetVAB_Bank_Acct_ID(VAB_Bank_Acct_ID);
-            payment.SetTenderType(MPayment.TENDERTYPE_Check);
+            payment.SetTenderType(MVABPayment.TENDERTYPE_Check);
             if (dateTrx != null)
             {
                 payment.SetDateTrx(dateTrx);
@@ -257,7 +257,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             payment.Save();
             //
-            payment.ProcessIt(MPayment.DOCACTION_Complete);
+            payment.ProcessIt(MVABPayment.DOCACTION_Complete);
             payment.Save();
             return payment;
         }

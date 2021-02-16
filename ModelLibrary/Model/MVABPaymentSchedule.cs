@@ -18,10 +18,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPaySchedule : X_VAB_PaymentSchedule
+    public class MVABPaymentSchedule : X_VAB_PaymentSchedule
     {
         /**	Parent					*/
-        public MPaymentTerm _parent = null;
+        public MVABPaymentTerm _parent = null;
 
         /**
 	 * 	Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
 	 *	@param VAB_PaymentSchedule_ID id
 	 *	@param trxName transaction
 	 */
-        public MPaySchedule(Ctx ctx, int VAB_PaymentSchedule_ID, Trx trxName)
+        public MVABPaymentSchedule(Ctx ctx, int VAB_PaymentSchedule_ID, Trx trxName)
             : base(ctx, VAB_PaymentSchedule_ID, trxName)
         {
             if (VAB_PaymentSchedule_ID == 0)
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MPaySchedule(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABPaymentSchedule(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -58,17 +58,17 @@ namespace VAdvantage.Model
         /**
 	     * @return Returns the parent.
 	     */
-        public MPaymentTerm GetParent()
+        public MVABPaymentTerm GetParent()
         {
             if (_parent == null)
-                _parent = new MPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
+                _parent = new MVABPaymentTerm(GetCtx(), GetVAB_PaymentTerm_ID(), Get_TrxName());
             return _parent;
         }
 
         /**
          * @param parent The parent to set.
          */
-        public void SetParent(MPaymentTerm parent)
+        public void SetParent(MVABPaymentTerm parent)
         {
             _parent = parent;
         }

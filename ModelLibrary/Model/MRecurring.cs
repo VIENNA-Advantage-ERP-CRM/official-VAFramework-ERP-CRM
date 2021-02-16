@@ -166,8 +166,8 @@ namespace VAdvantage.Model
                 //End here
                 else if (GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Payment))
                 {
-                    MPayment from = new MPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
-                    MPayment payment = MPayment.CopyFrom(from, dateDoc,
+                    MVABPayment from = new MVABPayment(GetCtx(), GetVAB_Payment_ID(), Get_TrxName());
+                    MVABPayment payment = MVABPayment.CopyFrom(from, dateDoc,
                         from.GetVAB_DocTypes_ID(), Get_TrxName());
                     run.SetVAB_Payment_ID(payment.GetVAB_Payment_ID());
                     msg += payment.GetDocumentNo();
