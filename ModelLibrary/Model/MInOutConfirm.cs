@@ -332,6 +332,12 @@ namespace VAdvantage.Model
             SetClientOrg(ship);
             SetM_InOut_ID(ship.GetM_InOut_ID());
             SetConfirmType(confirmType);
+
+            //Lakhwinder 1Feb2021
+            //Shipment and Inventory Move Module Changes
+            //Solution Proposed Puneed 
+            //STandard changes Analysed in Gull Implementation
+            SetC_DocType_ID(Util.GetValueOfInt(MDocType.Get(GetCtx(), ship.GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID")));
         }
 
 
@@ -878,19 +884,19 @@ namespace VAdvantage.Model
             FreezeQualityControlLines();
 
             //Arpit to complete the internal inventory if found any
-            if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
-            {
-                MInventory intInv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
-                intInv.CompleteIt();
-                intInv.SetDocStatus(DOCSTATUS_Completed);
-                intInv.SetDocAction(DOCACTION_Close);
-                if (!intInv.Save(Get_TrxName()))
-                {
-                    GetCtx().SetContext("DifferenceQty_", "0");
-                    Get_TrxName().Rollback();
-                    return DocActionVariables.STATUS_INVALID;
-                }
-            }
+            //if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
+            //{
+            //    MInventory intInv = new MInventory(GetCtx(), GetM_Inventory_ID(), Get_TrxName());
+            //    intInv.CompleteIt();
+            //    intInv.SetDocStatus(DOCSTATUS_Completed);
+            //    intInv.SetDocAction(DOCACTION_Close);
+            //    if (!intInv.Save(Get_TrxName()))
+            //    {
+            //        GetCtx().SetContext("DifferenceQty_", "0");
+            //        Get_TrxName().Rollback();
+            //        return DocActionVariables.STATUS_INVALID;
+            //    }
+            //}
             //End Here 
             if (_creditMemo != null)
                 _processMsg += " @C_Invoice_ID@=" + _creditMemo.GetDocumentNo();
@@ -1144,8 +1150,14 @@ namespace VAdvantage.Model
                     _inventory = new MInventory(wh);
                     _inventory.SetDescription(Msg.Translate(GetCtx(),
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
+
+                    //Lakhwinder
+                    int doctypeSetting = CheckAssociateDocTypeSetting(inout.GetC_DocType_ID(), false);
+                    if (doctypeSetting == 1)
+                    { _inventory.SetIsInternalUse(true); }
+                    else { _inventory.SetIsInternalUse(false); }
                     //vikas  new 13 jan 2016 1
-                    _inventory.SetIsInternalUse(true);
+                    // _inventory.SetIsInternalUse(true);
                     if (_inventory.GetC_DocType_ID() == 0)
                     {
                         MDocType[] types = MDocType.GetOfDocBaseType(GetCtx(), MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY);
@@ -1225,6 +1237,45 @@ namespace VAdvantage.Model
             }
             return true;
         }
+
+
+        /// <summary>
+        /// return 0,2 for PhysicalInventory
+        /// return 1 for Internal Use inventory
+        /// return 3 for MM Reciept
+        /// </summary>
+        /// <param name="DocTypeID"></param>
+        /// <param name="isDiff"></param>
+        /// <returns></returns>
+        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff)
+        {
+            MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
+            int docTypeAssociate = 0;
+            if (!isDiff)
+            {
+                docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeScrap_ID"));
+                if (docTypeAssociate > 0)
+                {
+                    docType = MDocType.Get(GetCtx(), docTypeAssociate);
+                    if (Util.GetValueOfBool(docType.Get_Value("IsInternalUse"))) //Internal Use Inventory
+                    {
+                        return 1;
+                    }
+                    else { return 2; }//Physical Inventory
+                }
+            }
+            else
+            {
+                if (docType.IsSplitWhenDifference())
+                {
+                    docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeDifference_ID"));
+                    if (docTypeAssociate > 0) { return 3; }
+                }
+            }
+            return 0;
+        }
+
+
 
         /**
          * 	Void Document.

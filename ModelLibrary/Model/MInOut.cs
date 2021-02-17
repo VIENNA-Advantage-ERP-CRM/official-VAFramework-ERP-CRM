@@ -1865,6 +1865,15 @@ namespace VAdvantage.Model
             return DocActionVariables.STATUS_INPROGRESS;
         }
 
+        private string CheckConfimationDocType()
+        {
+            int conDocType = Util.GetValueOfInt(MDocType.Get(GetCtx(), GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID"));
+            if (conDocType == 0)
+            { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+
+            return null;
+        }
+
         /// <summary>
         /// Approve Document
         /// </summary>
@@ -2151,6 +2160,18 @@ namespace VAdvantage.Model
                 tableId1 = Util.GetValueOfInt(DB.ExecuteScalar(sql.ToString(), null, null));
             }
 
+
+            //Lakhwinder 10 Feb 2021
+            if (MDocType.Get(GetCtx(), GetC_DocType_ID()).IsShipConfirm())
+            {
+                string s = CheckConfimationDocType();
+                if (!String.IsNullOrEmpty(s))
+                {
+                    _processMsg = s;
+                    SetProcessMsg(_processMsg);
+                    return DocActionVariables.STATUS_INVALID;
+                }
+            }
 
             // for checking - costing calculate on completion or not
             // IsCostImmediate = true - calculate cost on completion

@@ -247,6 +247,16 @@ namespace VAdvantage.Model
                 }
             }
 
+            //Lakhwinder 1Feb2021
+            //Shipment and Inventory Move Module Changes
+            //Solution Proposed Puneet 
+            //STandard changes Analysed in Gull Implementation
+            if (MDocType.Get(GetCtx(),GetC_DocType_ID()).IsInTransit() &&GetM_Warehouse_ID()==0)
+            {
+                log.SaveError("VIS_ToWarehouseCantNull", "");
+                return false;
+            }
+
             return true;
         }
 
@@ -360,6 +370,16 @@ namespace VAdvantage.Model
                 }
             }
 
+
+            //Lakhwinder 10 Feb 2021
+            string s = CheckConfimationDocType();
+            if (!String.IsNullOrEmpty(s))
+            {
+                _processMsg = s;
+                SetProcessMsg(_processMsg);
+                return DocActionVariables.STATUS_INVALID;
+            }
+
             //	Confirmation
             if (GetDescription() != null)
             {
@@ -374,6 +394,8 @@ namespace VAdvantage.Model
                 if (dt.IsInTransit())
                     CreateConfirmation();
             }
+
+           
 
             _justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
@@ -392,6 +414,15 @@ namespace VAdvantage.Model
 
             //	Create Confirmation
             MMovementConfirm.Create(this, false);
+        }
+
+        private string CheckConfimationDocType()
+        {
+            int conDocType= Util.GetValueOfInt(MDocType.Get(GetCtx(), GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID"));
+            if (conDocType == 0)
+            { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+           
+            return null;
         }
 
         /// <summary>

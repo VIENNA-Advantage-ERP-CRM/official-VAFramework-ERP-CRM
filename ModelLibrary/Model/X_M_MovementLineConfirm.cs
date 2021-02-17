@@ -286,6 +286,17 @@ Object bd =Get_Value("TargetQty");
 if (bd == null) return Env.ZERO;
 return  Convert.ToDecimal(bd);
 }
+
+/** Set UOM.@param C_UOM_ID Unit of Measure */
+public void SetC_UOM_ID(int C_UOM_ID)
+{
+    if (C_UOM_ID <= 0) Set_Value("C_UOM_ID", null);
+    else
+        Set_Value("C_UOM_ID", C_UOM_ID);
 }
+/** Get UOM.@return Unit of Measure */
+public int GetC_UOM_ID() { Object ii = Get_Value("C_UOM_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }
+
+    }
 
 }
