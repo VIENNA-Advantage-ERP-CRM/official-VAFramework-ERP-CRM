@@ -903,7 +903,7 @@ namespace VAdvantage.Model
         @param IsInternalUse The Record is internal use */
         public void SetIsInternalUse(Boolean IsInternalUse) { Set_Value("IsInternalUse", IsInternalUse); }/** Get Internal Use.
         @return The Record is internal use */
-        public Boolean IsInternalUse() { Object oo = Get_Value("IsInternalUse"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }/** Set Overwrite Date on Complete.
+        public Boolean IsInternalUse() { Object oo = Get_Value("IsInternalUse"); if (oo != null) { if (oo.GetType() == typeof(bool)) return Convert.ToBoolean(oo); return "Y".Equals(oo); } return false; }
 
     }
 }
