@@ -124,7 +124,7 @@
 
         // Change Lokesh Chauhan
         this.pi.setCustomHTML(jObject.CustomHTML);
-
+        this.pi.set_AD_PrintFormat_ID(jObject.AD_PrintFormat_ID);
         if (jObject && jObject.ReportProcessInfo) {
             this.pi.setTotalPages(jObject.ReportProcessInfo.TotalPage);
             this.pi.setSupportPaging(jObject.ReportProcessInfo.SupportPaging);

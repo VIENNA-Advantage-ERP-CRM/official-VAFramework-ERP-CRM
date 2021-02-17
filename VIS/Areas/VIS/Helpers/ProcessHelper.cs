@@ -407,7 +407,7 @@ namespace VIS.Helpers
                 // }
                 rep.AD_PInstance_ID = pi.GetAD_PInstance_ID();
                 rep.Result = pi.GetSummary();
-
+                rep.AD_PrintFormat_ID = pi.Get_AD_PrintFormat_ID();
                 ctl.ReportString = null;
                 rep.HTML = ctl.GetRptHtml();
 
