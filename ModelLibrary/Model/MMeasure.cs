@@ -174,10 +174,10 @@ namespace VAdvantage.Model
         {
             if (!MEASURETYPE_Manual.Equals(GetMeasureType()))
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPATarget[] goals = MVAPATarget.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
-                MGoal goal = goals[i];
+                MVAPATarget goal = goals[i];
                 goal.SetMeasureActual(GetManualActual());
                 goal.Save();
             }
@@ -193,19 +193,19 @@ namespace VAdvantage.Model
             if (!MEASURETYPE_Achievements.Equals(GetMeasureType()))
                 return false;
             DateTime today = DateTime.Now;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPATarget[] goals = MVAPATarget.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
-                MGoal goal = goals[i];
+                MVAPATarget goal = goals[i];
                 String MeasureScope = goal.GetMeasureScope();
                 String trunc = TimeUtil.TRUNC_DAY;
-                if (MGoal.MEASUREDISPLAY_Year.Equals(MeasureScope))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(MeasureScope))
                     trunc = TimeUtil.TRUNVAB_YEAR;
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(MeasureScope))
                     trunc = TimeUtil.TRUNC_QUARTER;
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(MeasureScope))
                     trunc = TimeUtil.TRUNC_MONTH;
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(MeasureScope))
                     trunc = TimeUtil.TRUNC_WEEK;
                 DateTime compare = TimeUtil.Trunc(today, trunc);
                 //
@@ -235,10 +235,10 @@ namespace VAdvantage.Model
         {
             if (!MEASURETYPE_Calculated.Equals(GetMeasureType()))
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPATarget[] goals = MVAPATarget.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
-                MGoal goal = goals[i];
+                MVAPATarget goal = goals[i];
                 //	Find Role
                 MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
@@ -312,10 +312,10 @@ namespace VAdvantage.Model
             if (!MEASURETYPE_Request.Equals(GetMeasureType())
                 || GetVAR_Req_Type_ID() == 0)
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPATarget[] goals = MVAPATarget.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
-                MGoal goal = goals[i];
+                MVAPATarget goal = goals[i];
                 //	Find Role
                 MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)
@@ -375,10 +375,10 @@ namespace VAdvantage.Model
             if (!MEASURETYPE_Project.Equals(GetMeasureType())
                 || GetVAB_ProjectType_ID() == 0)
                 return false;
-            MGoal[] goals = MGoal.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPATarget[] goals = MVAPATarget.GetMeasureGoals(GetCtx(), GetVAPA_Evaluate_ID());
             for (int i = 0; i < goals.Length; i++)
             {
-                MGoal goal = goals[i];
+                MVAPATarget goal = goals[i];
                 //	Find Role
                 MVAFRole role = null;
                 if (goal.GetVAF_Role_ID() != 0)

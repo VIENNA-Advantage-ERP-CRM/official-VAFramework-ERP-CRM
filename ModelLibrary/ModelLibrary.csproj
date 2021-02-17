@@ -303,7 +303,7 @@
     <Compile Include="Model\MVAGLGroup.cs" />
     <Compile Include="Model\MWSPGmailConfiguration.cs" />
     <Compile Include="Model\MGmailContactSettings.cs" />
-    <Compile Include="Model\MGoal.cs" />
+    <Compile Include="Model\MVAPATarget.cs" />
     <Compile Include="Model\MGoalRestriction.cs" />
     <Compile Include="Model\MGroup.cs" />
     <Compile Include="Model\MHierarchy.cs" />

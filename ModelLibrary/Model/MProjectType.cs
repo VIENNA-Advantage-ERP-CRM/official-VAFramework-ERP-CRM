@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_Std_Stage_ID">phase</param>
         /// <param name="role">role</param>
         /// <returns>query</returns>
-        public Query GetQuery(MGoalRestriction[] restrictions,
+        public Query GetQuery(MVAPATargetRestriction[] restrictions,
             String measureDisplay, DateTime? date, int VAB_Std_Stage_ID, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -126,15 +126,15 @@ namespace VAdvantage.Model
             else
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(measureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(measureDisplay))
                 //		trunc = "D";
                 where = "TRUNC(" + dateColumn + ",'" + trunc
                     + "')=TRUNC(" + DataBase.DB.TO_DATE(date) + ",'" + trunc + "')";
@@ -156,7 +156,7 @@ namespace VAdvantage.Model
         /// <param name="startDate">optional report start date</param>
         /// <param name="role">role</param>
         /// <returns>sql for Bar Chart</returns>
-        public String GetSqlBarChart(MGoalRestriction[] restrictions, String measureDisplay,
+        public String GetSqlBarChart(MVAPATargetRestriction[] restrictions, String measureDisplay,
             String measureDataType, DateTime? startDate, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -169,18 +169,18 @@ namespace VAdvantage.Model
             String groupBy = null;
             //
             if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(measureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(measureDisplay))
                 //		;
                 orderBy = "TRUNC(" + dateColumn + ",'" + trunc + "')";
                 groupBy = orderBy + ", 0 ";
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                 .Append(" AND VAB_Project.Processed<>'Y'");
             //	Date Restriction
             if (startDate != null
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String dateString = DataBase.DB.TO_DATE(startDate);
                 sb.Append(" AND ").Append(dateColumn)
@@ -224,7 +224,7 @@ namespace VAdvantage.Model
         /// <param name="reportDate">optional report date</param>
         /// <param name="role">role</param>
         /// <returns>sql for performance indicator</returns>
-        public String GetSqlPI(MGoalRestriction[] restrictions,
+        public String GetSqlPI(MVAPATargetRestriction[] restrictions,
             String measureScope, String measureDataType, DateTime? reportDate, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -238,21 +238,21 @@ namespace VAdvantage.Model
             //	Date Restriction
 
             if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureScope))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureScope))
             {
                 if (reportDate == null)
                     reportDate = DateTime.Now;
                 String dateString = DataBase.DB.TO_DATE((DateTime?)reportDate);
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureScope))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureScope))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureScope))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureScope))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureScope))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(MeasureDisplay))
                 //		;
                 sb.Append(" AND TRUNC(")
                     .Append(dateColumn).Append(",'").Append(trunc).Append("')=TRUNC(")

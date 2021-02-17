@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MGoalRestriction
+ * Class Name     : MVAPATargetRestriction
  * Purpose        : Performance Goal Restriction
  * Class Used     : X_VAPA_TargetRestriction
  * Chronological    Development
@@ -17,7 +17,7 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGoalRestriction : X_VAPA_TargetRestriction
+    public class MVAPATargetRestriction : X_VAPA_TargetRestriction
     {
         /**
 	 * 	Standard Constructor
@@ -25,12 +25,12 @@ namespace VAdvantage.Model
 	 *	@param VAPA_TargetRestriction_ID id
 	 *	@param trxName trx
 	 */
-        public MGoalRestriction(Ctx ctx, int VAPA_TargetRestriction_ID,
+        public MVAPATargetRestriction(Ctx ctx, int VAPA_TargetRestriction_ID,
             Trx trxName) :
             base(ctx, VAPA_TargetRestriction_ID, trxName)
         {
             // super();
-        }	//	MGoalRestriction
+        }	//	MVAPATargetRestriction
 
         /**
          * 	Load Constructor
@@ -38,11 +38,11 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName trx
          */
-        public MGoalRestriction(Ctx ctx, DataRow rs, Trx trxName) :
+        public MVAPATargetRestriction(Ctx ctx, DataRow rs, Trx trxName) :
             base(ctx, rs, trxName)
         {
             //super();
-        }	//	MGoalRestriction
+        }	//	MVAPATargetRestriction
 
 
         /**
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MGoalRestriction[");
+            StringBuilder sb = new StringBuilder("MVAPATargetRestriction[");
             sb.Append(Get_ID()).Append("-").Append(GetName()).Append("]");
             return sb.ToString();
         }	//	toString

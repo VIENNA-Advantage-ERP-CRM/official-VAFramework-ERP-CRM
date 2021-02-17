@@ -328,7 +328,7 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return sql for performance indicator
          */
-        public String GetSqlPI(MGoalRestriction[] restrictions, String measureScope, 
+        public String GetSqlPI(MVAPATargetRestriction[] restrictions, String measureScope, 
             String measureDataType, DateTime? reportDate, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -342,21 +342,21 @@ namespace VAdvantage.Model
             //	Date Restriction
 
             if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureScope))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureScope))
             {
                 if (reportDate == null)
                     reportDate = DateTime.Now;
                 String dateString = DataBase.DB.TO_DATE((DateTime?)reportDate);
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureScope))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureScope))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureScope))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureScope))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureScope))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(measureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(measureDisplay))
                 //		;
                 sb.Append(" AND TRUNC(")
                     .Append(dateColumn).Append(",'").Append(trunc).Append("')=TRUNC(")
@@ -379,7 +379,7 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return sql for Bar Chart
          */
-        public String GetSqlBarChart(MGoalRestriction[] restrictions, String measureDisplay, 
+        public String GetSqlBarChart(MVAPATargetRestriction[] restrictions, String measureDisplay, 
             String measureDataType, DateTime? startDate, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -392,18 +392,18 @@ namespace VAdvantage.Model
             String orderBy = null;
             //
             if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(MeasureDisplay))
                 //		;
                 orderBy = "TRUNC(" + dateColumn + ",'" + trunc + "')";
                 //jz 0 is column position in EDB, Oracle doesn't take alias in group by
@@ -425,7 +425,7 @@ namespace VAdvantage.Model
                 .Append(" AND VAR_Request.Processed<>'Y'");
             //	Date Restriction
             if (startDate != null
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String dateString = DataBase.DB.TO_DATE((DateTime?)startDate);
                 sb.Append(" AND ").Append(dateColumn)
@@ -450,7 +450,7 @@ namespace VAdvantage.Model
          * 	@param role role
          *	@return query
          */
-        public Query GetQuery(MGoalRestriction[] restrictions, String measureDisplay, 
+        public Query GetQuery(MVAPATargetRestriction[] restrictions, String measureDisplay, 
             DateTime? date, int VAR_Req_Status_ID, MVAFRole role)
         {
             String dateColumn = "Created";
@@ -467,15 +467,15 @@ namespace VAdvantage.Model
             else
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.equals(MeasureDisplay))
                 //		trunc = "D";
                 where = "TRUNC(" + dateColumn + ",'" + trunc
                     + "')=TRUNC(" + DataBase.DB.TO_DATE(date) + ",'" + trunc + "')";

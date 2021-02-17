@@ -653,8 +653,8 @@
     <Compile Include="Model\X_PA_Benchmark.cs" />
     <Compile Include="Model\X_PA_BenchmarkData.cs" />
     <Compile Include="Model\X_PA_ColorSchema.cs" />
-    <Compile Include="Model\X_PA_Goal.cs" />
-    <Compile Include="Model\X_PA_GoalRestriction.cs" />
+    <Compile Include="Model\X_VAPA_Target.cs" />
+    <Compile Include="Model\X_VAPA_TargetRestriction.cs" />
     <Compile Include="Model\X_PA_Hierarchy.cs" />
     <Compile Include="Model\X_PA_Measure.cs" />
     <Compile Include="Model\X_PA_MeasureCalc.cs" />

@@ -74,7 +74,7 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return sql for performance indicator
          */
-        public String GetSqlPI(MGoalRestriction[] restrictions,
+        public String GetSqlPI(MVAPATargetRestriction[] restrictions,
             String MeasureScope, String MeasureDataType, DateTime? reportDate, MVAFRole role)
         {
             StringBuilder sb = new StringBuilder(GetSelectClause())
@@ -83,22 +83,22 @@ namespace VAdvantage.Model
             //	Date Restriction
             if (GetDateColumn() != null
                 && MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(MeasureDataType)
-                && !MGoal.MEASUREDISPLAY_Total.Equals(MeasureScope))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(MeasureScope))
             {
                 if (reportDate == null)
                     reportDate = Convert.ToDateTime(DateTime.Now);
                 String dateString = DataBase.DB.TO_DATE((DateTime?)reportDate);
                 // http://download-west.oracle.com/docs/cd/B14117_01/server.101/b10759/functions207.htm#i1002084
                 String trunc = "DD";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(MeasureScope))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(MeasureScope))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(MeasureScope))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(MeasureScope))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(MeasureScope))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(MeasureScope))
                     trunc = "D";
-                //	else if (MGoal.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
                 //		;
                 sb.Append(" AND TRUNC(")
                     .Append(GetDateColumn()).Append(",'").Append(trunc).Append("')=TRUNC(")
@@ -118,25 +118,25 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return sql for Bar Chart
          */
-        public String GetSqlBarChart(MGoalRestriction[] restrictions,
+        public String GetSqlBarChart(MVAPATargetRestriction[] restrictions,
             String measureDisplay, DateTime? startDate, MVAFRole role)
         {
             StringBuilder sb = new StringBuilder();
             String dateCol = null;
             String groupBy = null;
             if (GetDateColumn() != null
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
                 //		;
                 dateCol = "TRUNC(" + GetDateColumn() + ",'" + trunc + "') ";
                 groupBy = dateCol;
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
             //	Date Restriction
             if (GetDateColumn() != null
                 && startDate != null
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String dateString = DataBase.DB.TO_DATE((DateTime?)startDate);
                 sb.Append(" AND ").Append(GetDateColumn())
@@ -182,7 +182,7 @@ namespace VAdvantage.Model
          * 	@param role role
          *	@return query
          */
-        public Query GetQuery(MGoalRestriction[] restrictions,
+        public Query GetQuery(MVAPATargetRestriction[] restrictions,
             String measureDisplay, DateTime? date, MVAFRole role)
         {
             Query query = new Query(GetVAF_TableView_ID().ToString());
@@ -196,18 +196,18 @@ namespace VAdvantage.Model
                 .Append(GetWhereClause());
             //	Date Range
             if (GetDateColumn() != null
-                && !MGoal.MEASUREDISPLAY_Total.Equals(measureDisplay))
+                && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String trunc = "D";
-                if (MGoal.MEASUREDISPLAY_Year.Equals(measureDisplay))
+                if (MVAPATarget.MEASUREDISPLAY_Year.Equals(measureDisplay))
                     trunc = "Y";
-                else if (MGoal.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Quarter.Equals(measureDisplay))
                     trunc = "Q";
-                else if (MGoal.MEASUREDISPLAY_Month.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Month.Equals(measureDisplay))
                     trunc = "MM";
-                else if (MGoal.MEASUREDISPLAY_Week.Equals(measureDisplay))
+                else if (MVAPATarget.MEASUREDISPLAY_Week.Equals(measureDisplay))
                     trunc = "W";
-                //	else if (MGoal.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
+                //	else if (MVAPATarget.MEASUREDISPLAY_Day.Equals(MeasureDisplay))
                 //		trunc = "D";
                 sql.Append(" AND TRUNC(").Append(GetDateColumn()).Append(",'").Append(trunc)
                     .Append("')=TRUNC(").Append(DataBase.DB.TO_DATE(date)).Append(",'").Append(trunc).Append("')");
@@ -255,7 +255,7 @@ namespace VAdvantage.Model
          *	@param role role
          *	@return updated sql
          */
-        private String AddRestrictions(String sql, MGoalRestriction[] restrictions, MVAFRole role)
+        private String AddRestrictions(String sql, MVAPATargetRestriction[] restrictions, MVAFRole role)
         {
             return AddRestrictions(sql, false, restrictions, role,
                 GetTableName(), GetOrgColumn(), GetBPartnerColumn(), GetProductColumn(), GetCtx());
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
          *	@return updated sql
          */
         public static String AddRestrictions(String sql, Boolean queryOnly,
-            MGoalRestriction[] restrictions, MVAFRole role,
+            MVAPATargetRestriction[] restrictions, MVAFRole role,
             String tableName, String orgColumn, String bpColumn, String pColumn, Ctx ctx)
         {
             StringBuilder sb = new StringBuilder(sql);
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
                 List<int> list = new List<int>();
                 for (int i = 0; i < restrictions.Length; i++)
                 {
-                    if (MGoalRestriction.GOALRESTRICTIONTYPE_Organization.Equals(restrictions[i].GetGoalRestrictionType()))
+                    if (MVAPATargetRestriction.GOALRESTRICTIONTYPE_Organization.Equals(restrictions[i].GetGoalRestrictionType()))
                         list.Add(restrictions[i].GetOrg_ID());
                     //	Hierarchy comes here
                 }
@@ -312,10 +312,10 @@ namespace VAdvantage.Model
                 List<int> listBPG = new List<int>();
                 for (int i = 0; i < restrictions.Length; i++)
                 {
-                    if (MGoalRestriction.GOALRESTRICTIONTYPE_BusinessPartner.Equals(restrictions[i].GetGoalRestrictionType()))
+                    if (MVAPATargetRestriction.GOALRESTRICTIONTYPE_BusinessPartner.Equals(restrictions[i].GetGoalRestrictionType()))
                         listBP.Add(restrictions[i].GetVAB_BusinessPartner_ID());
                     //	Hierarchy comes here
-                    if (MGoalRestriction.GOALRESTRICTIONTYPE_BusPartnerGroup.Equals(restrictions[i].GetGoalRestrictionType()))
+                    if (MVAPATargetRestriction.GOALRESTRICTIONTYPE_BusPartnerGroup.Equals(restrictions[i].GetGoalRestrictionType()))
                         listBPG.Add(restrictions[i].GetVAB_BPart_Category_ID());
                 }
                 //	BP
@@ -363,10 +363,10 @@ namespace VAdvantage.Model
                 List<int> listPC = new List<int>();
                 for (int i = 0; i < restrictions.Length; i++)
                 {
-                    if (MGoalRestriction.GOALRESTRICTIONTYPE_Product.Equals(restrictions[i].GetGoalRestrictionType()))
+                    if (MVAPATargetRestriction.GOALRESTRICTIONTYPE_Product.Equals(restrictions[i].GetGoalRestrictionType()))
                         listP.Add(restrictions[i].GetVAM_Product_ID());
                     //	Hierarchy comes here
-                    if (MGoalRestriction.GOALRESTRICTIONTYPE_ProductCategory.Equals(restrictions[i].GetGoalRestrictionType()))
+                    if (MVAPATargetRestriction.GOALRESTRICTIONTYPE_ProductCategory.Equals(restrictions[i].GetGoalRestrictionType()))
                         listPC.Add(restrictions[i].GetVAM_ProductCategory_ID());
                 }
                 //	Product

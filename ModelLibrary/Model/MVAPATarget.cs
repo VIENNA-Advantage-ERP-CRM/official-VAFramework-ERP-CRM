@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MGoal
+ * Class Name     : MVAPATarget
  * Purpose        : Performance Goal
  * Class Used     : X_VAPA_Target
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MGoal : X_VAPA_Target
+    public class MVAPATarget : X_VAPA_Target
     {
         /**
          * 	Get User Goals
@@ -32,11 +32,11 @@ namespace VAdvantage.Model
          *	@param VAF_UserContact_ID user
          *	@return array of goals
          */
-        public static MGoal[] GetUserGoals(Ctx ctx, int VAF_UserContact_ID)
+        public static MVAPATarget[] GetUserGoals(Ctx ctx, int VAF_UserContact_ID)
         {
             if (VAF_UserContact_ID < 0)
                 return GetTestGoals(ctx);
-            List<MGoal> list = new List<MGoal>();
+            List<MVAPATarget> list = new List<MVAPATarget>();
             String sql = "SELECT * FROM VAPA_Target g "
                 + "WHERE IsActive='Y'"
                 + " AND VAF_Client_ID=@ADClientID"		//	#1
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MGoal goal = new MGoal(ctx, dr, null);
+                    MVAPATarget goal = new MVAPATarget(ctx, dr, null);
                     goal.UpdateGoal(false);
                     list.Add(goal);
                 }
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
             }
             finally { dt = null; }
 
-            MGoal[] retValue = new MGoal[list.Count];
+            MVAPATarget[] retValue = new MVAPATarget[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -87,9 +87,9 @@ namespace VAdvantage.Model
          *	@param ctx context
          *	@return array of goals
          */
-        public static MGoal[] GetGoals(Ctx ctx)
+        public static MVAPATarget[] GetGoals(Ctx ctx)
         {
-            List<MGoal> list = new List<MGoal>();
+            List<MVAPATarget> list = new List<MVAPATarget>();
             String sql = "SELECT * FROM VAPA_Target WHERE IsActive='Y' "
                 + "ORDER BY SeqNo";
             sql = MVAFRole.GetDefault(ctx, false).AddAccessSQL(sql, "VAPA_Target",
@@ -104,7 +104,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MGoal goal = new MGoal(ctx, dr, null);
+                    MVAPATarget goal = new MVAPATarget(ctx, dr, null);
                     goal.UpdateGoal(false);
                     list.Add(goal);
 
@@ -124,7 +124,7 @@ namespace VAdvantage.Model
             {
                 dt = null;
             }
-            MGoal[] retValue = new MGoal[list.Count];
+            MVAPATarget[] retValue = new MVAPATarget[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -135,16 +135,16 @@ namespace VAdvantage.Model
          *	@param ctx context
          *	@return array of goals
          */
-        public static MGoal[] GetTestGoals(Ctx ctx)
+        public static MVAPATarget[] GetTestGoals(Ctx ctx)
         {
-            MGoal[] retValue = new MGoal[4];
-            retValue[0] = new MGoal(ctx, "Test 1", "Description 1", new Decimal(1000), null);
+            MVAPATarget[] retValue = new MVAPATarget[4];
+            retValue[0] = new MVAPATarget(ctx, "Test 1", "Description 1", new Decimal(1000), null);
             retValue[0].SetMeasureActual(new Decimal(200));
-            retValue[1] = new MGoal(ctx, "Test 2", "Description 2", new Decimal(1000), null);
+            retValue[1] = new MVAPATarget(ctx, "Test 2", "Description 2", new Decimal(1000), null);
             retValue[1].SetMeasureActual(new Decimal(900));
-            retValue[2] = new MGoal(ctx, "Test 3", "Description 3", new Decimal(1000), null);
+            retValue[2] = new MVAPATarget(ctx, "Test 3", "Description 3", new Decimal(1000), null);
             retValue[2].SetMeasureActual(new Decimal(1200));
-            retValue[3] = new MGoal(ctx, "Test 4", "Description 4", new Decimal(1000), null);
+            retValue[3] = new MVAPATarget(ctx, "Test 4", "Description 4", new Decimal(1000), null);
             retValue[3].SetMeasureActual(new Decimal(3200));
             return retValue;
         }
@@ -155,9 +155,9 @@ namespace VAdvantage.Model
          *	@param VAPA_Evaluate_ID measure
          *	@return goals
          */
-        public static MGoal[] GetMeasureGoals(Ctx ctx, int VAPA_Evaluate_ID)
+        public static MVAPATarget[] GetMeasureGoals(Ctx ctx, int VAPA_Evaluate_ID)
         {
-            List<MGoal> list = new List<MGoal>();
+            List<MVAPATarget> list = new List<MVAPATarget>();
             String sql = "SELECT * FROM VAPA_Target WHERE IsActive='Y' AND VAPA_Evaluate_ID= " + VAPA_Evaluate_ID
                 + " ORDER BY SeqNo";
             DataTable dt;
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MGoal(ctx, dr, null));
+                    list.Add(new MVAPATarget(ctx, dr, null));
                 }
 
             }
@@ -184,7 +184,7 @@ namespace VAdvantage.Model
             }
             finally { dt = null; }
 
-            MGoal[] retValue = new MGoal[list.Count];
+            MVAPATarget[] retValue = new MVAPATarget[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -194,7 +194,7 @@ namespace VAdvantage.Model
          *	@param goal goal
          *	@return null if error or multiplier
          */
-        public static Decimal? GetMultiplier(MGoal goal)
+        public static Decimal? GetMultiplier(MVAPATarget goal)
         {
             String MeasureScope = goal.GetMeasureScope();
             String MeasureDisplay = goal.GetMeasureDisplay();
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
         }
 
         /**	Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MGoal).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAPATarget).FullName);
 
         /**************************************************************************
          * 	Standard Constructor
@@ -274,7 +274,7 @@ namespace VAdvantage.Model
          *	@param VAPA_Target_ID id
          *	@param trxName trx
          */
-        public MGoal(Ctx ctx, int VAPA_Target_ID, Trx trxName) :
+        public MVAPATarget(Ctx ctx, int VAPA_Target_ID, Trx trxName) :
             base(ctx, VAPA_Target_ID, trxName)
         {
             //super ();
@@ -299,7 +299,7 @@ namespace VAdvantage.Model
          *	@param dr result Set
          *	@param trxName trx
          */
-        public MGoal(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAPATarget(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -313,7 +313,7 @@ namespace VAdvantage.Model
          *	@param MeasureTarGet tarGet
          *	@param trxName trx
          */
-        public MGoal(Ctx ctx, String Name, String Description,
+        public MVAPATarget(Ctx ctx, String Name, String Description,
             Decimal MeasureTarGet, Trx trxName) :
             base(ctx, 0, trxName)
         {
@@ -325,18 +325,18 @@ namespace VAdvantage.Model
 
 
         /** Restrictions					*/
-        private MGoalRestriction[] _restrictions = null;
+        private MVAPATargetRestriction[] _restrictions = null;
 
         /**
          * 	Get Restriction Lines
          *	@param reload reload data
          *	@return array of lines
          */
-        public MGoalRestriction[] GetRestrictions(Boolean reload)
+        public MVAPATargetRestriction[] GetRestrictions(Boolean reload)
         {
             if (_restrictions != null && !reload)
                 return _restrictions;
-            List<MGoalRestriction> list = new List<MGoalRestriction>();
+            List<MVAPATargetRestriction> list = new List<MVAPATargetRestriction>();
             //
             String sql = "SELECT * FROM VAPA_TargetRestriction "
                 + "WHERE VAPA_Target_ID=@VAPA_Target_ID AND IsActive='Y' "
@@ -351,7 +351,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MGoalRestriction(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAPATargetRestriction(GetCtx(), dr, Get_TrxName()));
                 }
 
             }
@@ -368,7 +368,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             //
-            _restrictions = new MGoalRestriction[list.Count];
+            _restrictions = new MVAPATargetRestriction[list.Count];
             _restrictions = list.ToArray();
             return _restrictions;
         }
@@ -534,7 +534,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MGoal[");
+            StringBuilder sb = new StringBuilder("MVAPATarget[");
             sb.Append(Get_ID())
                 .Append("-").Append(GetName())
                 .Append(",").Append(GetGoalPerformance())
