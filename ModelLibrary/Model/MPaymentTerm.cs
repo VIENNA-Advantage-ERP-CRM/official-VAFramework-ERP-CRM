@@ -1137,13 +1137,13 @@ namespace VAdvantage.Model
                 int dd = GetFixMonthDay();
                 if (dd < 1 || dd > 31)
                 {
-                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@Invalid@ @FixMonthDay@"));
+                    log.SaveError("VIS_InvalidFixMonthDay", string.Empty);
                     return false;
                 }
                 dd = GetFixMonthCutoff();
                 if (dd < 1 || dd > 31)
                 {
-                    log.SaveError("Error", Msg.ParseTranslation(GetCtx(), "@Invalid@ @FixMonthCutoff@"));
+                    log.SaveError("VIS_InvalidFixMonthCutoff", string.Empty);
                     return false;
                 }
 
@@ -1154,6 +1154,12 @@ namespace VAdvantage.Model
                 if (count > 0)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "PayScheduleExist"));
+                    return false;
+                }
+
+                if (GetFixMonthOffset() == 0 && GetFixMonthCutoff() > GetFixMonthDay())
+                {
+                    log.SaveError("VIS_FixMonthDayLessThanFixMonthCutoff", string.Empty);
                     return false;
                 }
             }
