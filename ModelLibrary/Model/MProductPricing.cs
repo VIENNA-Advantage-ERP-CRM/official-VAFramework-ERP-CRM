@@ -205,11 +205,13 @@ namespace VAdvantage.Model
                 Tuple<String, String, String> mInfo1 = null;
                 if (Env.HasModulePrefix("ED011_", out mInfo1))
                 {
-                    //vikas  mantis Issue ( 0000517)
                     string _sql = null;
-                    _sql = "SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
-                    _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
-                    //end
+                    if (_C_UOM_ID == 0)
+                    {
+                        _sql = "SELECT C_UOM_ID FROM M_Product WHERE  M_Product_ID=" + _M_Product_ID;
+                        _C_UOM_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sql));
+                    }
+
                     sql = "SELECT bomPriceStdUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceStd,"	//	1
                        + " bomPriceListUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceList,"		//	2
                        + " bomPriceLimitUOM(p.M_Product_ID,pv.M_PriceList_Version_ID,pp.M_AttributeSetInstance_ID , pp.C_UOM_ID) AS PriceLimit,"	//	3

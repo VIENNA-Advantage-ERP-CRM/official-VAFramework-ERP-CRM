@@ -349,23 +349,23 @@ namespace VAdvantage.Utility
             //{
             //    stream.Write(bytevalue, 0, bytevalue.Length);
 
-                // Get http web response
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            // Get http web response
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            {
+                // Read response stream
+                using (Stream responseStream = response.GetResponseStream())
                 {
-                    // Read response stream
-                    using (Stream responseStream = response.GetResponseStream())
+                    // Get a reader capable of reading the response stream
+                    using (StreamReader myStreamReader = new StreamReader(responseStream, Encoding.UTF8))
                     {
-                        // Get a reader capable of reading the response stream
-                        using (StreamReader myStreamReader = new StreamReader(responseStream, Encoding.UTF8))
-                        {
-                            // Read stream content as string
-                            string responseJSON = myStreamReader.ReadToEnd();
+                        // Read stream content as string
+                        string responseJSON = myStreamReader.ReadToEnd();
 
-                            // Assuming the response is in JSON format, deserialize it, creating an instance of APIFileResponse type (generic type declared before).
-                            apifileres = JsonConvert.DeserializeObject<APIFileResponse>(responseJSON);
-                        }
+                        // Assuming the response is in JSON format, deserialize it, creating an instance of APIFileResponse type (generic type declared before).
+                        apifileres = JsonConvert.DeserializeObject<APIFileResponse>(responseJSON);
                     }
                 }
+            }
             //}
 
             return apifileres.data;
