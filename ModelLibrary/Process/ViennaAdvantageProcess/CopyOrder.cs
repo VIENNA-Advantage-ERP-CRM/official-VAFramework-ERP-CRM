@@ -41,6 +41,7 @@ namespace ViennaAdvantage.Process
         private bool _IsCloseDocument = false;
         int newid = 0;
         int neworg_id = 0;
+        string docNo;
         #endregion
 
         /// <summary>
@@ -215,9 +216,10 @@ namespace ViennaAdvantage.Process
                     original.ProcessIt(VAdvantage.Model.MOrder.DOCACTION_Close);
                     original.Save();
                 }
+                docNo = newOrder.GetDocumentNo();
             }
             //+ ": " + newOrder.GetDocumentNo()
-            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName();
+            return Msg.GetMsg(GetCtx(), "OrderCreatedSuccessfully") + " - " + dt.GetName() + ": " + docNo;
         }
         /// <summary>Add Sales Order Header for VA077 Module</summary>
         /// <param name="destinationorg">Destination Orgnaization id</param>
@@ -251,6 +253,7 @@ namespace ViennaAdvantage.Process
             //newOrder.SetM_Warehouse_ID(morder.GetM_Warehouse_ID());
             newOrder.SetC_PaymentTerm_ID(morder.GetC_PaymentTerm_ID());
             newOrder.SetC_Payment_ID(morder.GetC_Payment_ID());
+            newOrder.SetVA009_PaymentMethod_ID(morder.GetVA009_PaymentMethod_ID());
             newOrder.SetC_IncoTerm_ID(morder.GetC_IncoTerm_ID());
             newOrder.SetC_Campaign_ID(morder.GetC_Campaign_ID());
             newOrder.SetC_ProjectRef_ID(morder.GetC_Campaign_ID());
@@ -272,6 +275,7 @@ namespace ViennaAdvantage.Process
             newOrder.Set_Value("VA077_TotalPurchaseAmt", morder.Get_Value("VA077_TotalPurchaseAmt"));
             newOrder.Set_Value("VA077_TotalSalesAmt", morder.Get_Value("VA077_TotalSalesAmt"));
             newOrder.Set_Value("VA077_MarginPercent", morder.Get_Value("VA077_MarginPercent"));
+            newOrder.Set_Value("VA077_IsLegalEntity", morder.Get_Value("VA077_IsLegalEntity"));
             newOrder.SetC_DocTypeTarget_ID(_C_DocType_ID);
             int C_Bpartner_ID = newOrder.GetC_BPartner_ID();
             newOrder.Set_Value("IsSalesQuotation", false);
@@ -360,6 +364,7 @@ namespace ViennaAdvantage.Process
                 original.Save();
             }
 
+            docNo = newOrder.GetDocumentNo();
             return true;
         }
         /// <summary>
