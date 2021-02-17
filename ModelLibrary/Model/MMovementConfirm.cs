@@ -94,8 +94,11 @@ namespace VAdvantage.Model
             //Shipment and Inventory Move Module Changes
             //Solution Proposed Puneed 
             //STandard changes Analysed in Gull Implementation
-            //SetC_DocType_ID( move.GetC_DocType_ID());
-            SetC_DocType_ID(Util.GetValueOfInt(MDocType.Get(GetCtx(), move.GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID")));
+            MDocType dt = MDocType.Get(GetCtx(), move.GetC_DocType_ID());
+            if (Get_ColumnIndex("C_DocType_ID") > -1 && dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
+            }
             ////////
         }
 
@@ -134,7 +137,10 @@ namespace VAdvantage.Model
                 //Shipment and Inventory Move Module Changes
                 //Solution Proposed Puneed 
                 //STandard changes Analysed in Gull Implementation
-                cLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
+                if (cLine.Get_ColumnIndex("C_UOM_ID") > -1)
+                {
+                    cLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
+                }
                 ///
                 cLine.Save(move.Get_TrxName());
             }
@@ -678,6 +684,7 @@ namespace VAdvantage.Model
                     + ": " + _inventoryInfo);
             }
             //Lakhwinder
+            // Add movement Information in Description
             if (!string.IsNullOrEmpty(_movementInfo))
             {
                 AddDescription(Msg.Translate(GetCtx(), "M_Movement_ID")
@@ -825,7 +832,10 @@ namespace VAdvantage.Model
                         momementDiffrence.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         momementDiffrence.SetDocStatus("DR");
                         if (!momementDiffrence.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDoc"); }
+                        { log.Warning("CreateMaterialMoveDocDifference");
+                            _processMsg += "Inventory Move not created";
+                            return false;
+                        }
                         _movementInfo += momementDiffrence.GetDocumentNo();
                     }
                     log.Info("CreateMaterialMoveDoc - Scrapped=" + confirm.GetScrappedQty());
@@ -853,7 +863,10 @@ namespace VAdvantage.Model
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved"); }
+                    { log.Warning("MovementLineNotSaved");
+                        _processMsg += "Inventory Move Line not created";
+                        return false;
+                    }
                 }
 
                 else
@@ -869,6 +882,8 @@ namespace VAdvantage.Model
                         MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
                         _inventoryFrom = new MInventory(wh);
                         _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
+                        //Lakhwinder
+                        //Create Physical Inventory or Internal Use inventory as Per Settings
                         if (inventorySetting == 1)
                         {
                             _inventoryFrom.SetIsInternalUse(true);
@@ -940,7 +955,10 @@ namespace VAdvantage.Model
                         movementScrap.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         movementScrap.SetDocStatus("DR");
                         if (!movementScrap.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDoc"); }
+                        { log.Warning("CreateMaterialMoveDocScrap");
+                            _processMsg += "Inventory Move not created";
+                            return false;
+                        }
                         _movementInfo += movementScrap.GetDocumentNo();
                     }
                     log.Info("CreateMaterialMoveDoc - Scrapped=" + confirm.GetScrappedQty());
@@ -968,7 +986,10 @@ namespace VAdvantage.Model
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved"); }
+                    { log.Warning("MovementLineNotSaved");
+                        _processMsg += "Inventory Move Line not created";
+                        return false;
+                    }
                 }
 
                 else
@@ -984,6 +1005,9 @@ namespace VAdvantage.Model
                         MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
                         _inventoryTo = new MInventory(wh);
                         _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
+                        
+                        //Lakhwinder
+                        ////Create Physical Inventory or Internal Use inventory as Per Settings
                         if (inventorySetting == 1)
                         { _inventoryTo.SetIsInternalUse(true); }
                         if (!_inventoryTo.Save(Get_TrxName()))
@@ -1009,6 +1033,10 @@ namespace VAdvantage.Model
 
                     //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
                     line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
+
+                    //Lakhwinder 
+                    //Bug Fix Use Scrapped Qty
+                    //line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
                     line.Set_Value("QtyEntered", confirm.GetScrappedQty());
 
 
@@ -1034,16 +1062,21 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
+        /// Check Settings on Document Type Whether we need to create Physical Inventory, Internal User Inventory or Physical Inventory
+        /// </summary>
+        /// <param name="DocTypeID"> Document Type</param>
+        /// <param name="isDiff"> Is Differnece Qty</param>
+        /// <returns>  
         /// return 0,2 for PhysicalInventory
         /// return 1 for Internal Use inventory
-        /// return 3 for inventory Move
-        /// </summary>
-        /// <param name="DocTypeID"></param>
-        /// <param name="isDiff"></param>
-        /// <returns></returns>
+        /// return 3 for Inventory Move
+        /// </returns>
         private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff)
         {
             MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
+            if (docType.Get_ColumnIndex("C_DocTypeScrap_ID") < 0 && docType.Get_ColumnIndex("C_DocTypeDifference_ID") < 0)
+            { return 0; }
+
             int docTypeAssociate = 0;
             if (!isDiff)
             {

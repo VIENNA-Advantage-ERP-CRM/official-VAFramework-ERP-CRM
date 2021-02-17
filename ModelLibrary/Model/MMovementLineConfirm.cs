@@ -108,7 +108,8 @@ namespace VAdvantage.Model
         {
             MMovementLine line = GetLine();
 
-
+            //Lakhwinder
+            //Apply UOM Conversion Logic
             MProduct _Pro = new MProduct(GetCtx(),line.GetM_Product_ID(), Get_TrxName());
             if (GetC_UOM_ID() != _Pro.GetC_UOM_ID())
             {

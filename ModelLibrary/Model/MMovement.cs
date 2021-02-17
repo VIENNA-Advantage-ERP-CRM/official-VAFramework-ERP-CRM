@@ -251,7 +251,7 @@ namespace VAdvantage.Model
             //Shipment and Inventory Move Module Changes
             //Solution Proposed Puneet 
             //STandard changes Analysed in Gull Implementation
-            if (MDocType.Get(GetCtx(),GetC_DocType_ID()).IsInTransit() &&GetM_Warehouse_ID()==0)
+            if (MDocType.Get(GetCtx(), GetC_DocType_ID()).IsInTransit() && GetM_Warehouse_ID() == 0)
             {
                 log.SaveError("VIS_ToWarehouseCantNull", "");
                 return false;
@@ -372,12 +372,16 @@ namespace VAdvantage.Model
 
 
             //Lakhwinder 10 Feb 2021
-            string s = CheckConfimationDocType();
-            if (!String.IsNullOrEmpty(s))
+            //Show Error If Confirmation Doc Type not found.
+            if (dt.IsInTransit())
             {
-                _processMsg = s;
-                SetProcessMsg(_processMsg);
-                return DocActionVariables.STATUS_INVALID;
+                string s = CheckConfimationDocType(dt);
+                if (!String.IsNullOrEmpty(s))
+                {
+                    _processMsg = s;
+                    SetProcessMsg(_processMsg);
+                    return DocActionVariables.STATUS_INVALID;
+                }
             }
 
             //	Confirmation
@@ -395,7 +399,7 @@ namespace VAdvantage.Model
                     CreateConfirmation();
             }
 
-           
+
 
             _justPrepared = true;
             if (!DOCACTION_Complete.Equals(GetDocAction()))
@@ -415,13 +419,19 @@ namespace VAdvantage.Model
             //	Create Confirmation
             MMovementConfirm.Create(this, false);
         }
-
-        private string CheckConfimationDocType()
+        /// <summary>
+        /// Check DocTypeConfimation
+        /// </summary>
+        /// <param name="dt">DocumentType</param>
+        /// <returns>error Message if Confiramtion Doct Tpye not Selected</returns>
+        private string CheckConfimationDocType(MDocType dt)
         {
-            int conDocType= Util.GetValueOfInt(MDocType.Get(GetCtx(), GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID"));
-            if (conDocType == 0)
-            { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
-           
+            if (dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                int conDocType = Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID"));
+                if (conDocType == 0)
+                { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+            }
             return null;
         }
 
@@ -1047,7 +1057,7 @@ namespace VAdvantage.Model
                                 //if (Util.GetValueOfInt(DB.ExecuteScalar(sql)) > 0)
 
                                 // Check Asset ID instead of Asset Group to consider Asset Movement.
-                                if(line.GetA_Asset_ID() > 0)
+                                if (line.GetA_Asset_ID() > 0)
                                 {
                                     isAsset = true;
                                 }

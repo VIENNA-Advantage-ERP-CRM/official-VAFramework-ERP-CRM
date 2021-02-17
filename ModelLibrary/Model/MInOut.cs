@@ -1865,12 +1865,19 @@ namespace VAdvantage.Model
             return DocActionVariables.STATUS_INPROGRESS;
         }
 
-        private string CheckConfimationDocType()
+        /// <summary>
+        /// Check DocTypeConfimation
+        /// </summary>
+        /// <param name="dt">DocumentType</param>
+        /// <returns>error Message if Confiramtion Doct Tpye not Selected</returns>
+        private string CheckConfimationDocType(MDocType dt)
         {
-            int conDocType = Util.GetValueOfInt(MDocType.Get(GetCtx(), GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID"));
-            if (conDocType == 0)
-            { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
-
+            if (dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                int conDocType = Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID"));
+                if (conDocType == 0)
+                { return Msg.GetMsg(GetCtx(), "VIS_ConfirmationDocNotFound"); }
+            }
             return null;
         }
 
@@ -2162,9 +2169,11 @@ namespace VAdvantage.Model
 
 
             //Lakhwinder 10 Feb 2021
-            if (MDocType.Get(GetCtx(), GetC_DocType_ID()).IsShipConfirm())
+            //Show Error if Confiramtion Doct Tpye not Selected on DocType
+            MDocType docType = MDocType.Get(GetCtx(), GetC_DocType_ID());
+            if (docType.IsShipConfirm())
             {
-                string s = CheckConfimationDocType();
+                string s = CheckConfimationDocType(docType);
                 if (!String.IsNullOrEmpty(s))
                 {
                     _processMsg = s;

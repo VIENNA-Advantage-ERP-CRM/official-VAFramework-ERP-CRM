@@ -3175,14 +3175,14 @@ namespace VAdvantage.Model
                                             0,
                                             (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
                                            "+ GlobalVariable.TO_DATE(DateTime.Now, false) + @",
-                                            100,
+                                             " + m_ctx.GetAD_User_ID() + @",
                                             '*** System Maintained ***',
-                                            '"+MDocBaseType.DOCBASETYPE_MoveConfirmation+ @"',
+                                            '" + MDocBaseType.DOCBASETYPE_MoveConfirmation+ @"',
                                             'D',
                                             'Y',
                                             'Move Confirmation',
                                              " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
-                                            100
+                                            " + m_ctx.GetAD_User_ID() + @",
                                         ) ", null,m_trx);
                     
                 
@@ -3200,7 +3200,7 @@ namespace VAdvantage.Model
                                             0,
                                             (SELECT MAX(C_DOCBASETYPE_ID) + 1 FROM C_DocBaseType),
                                              " + GlobalVariable.TO_DATE(DateTime.Now, false) + @",
-                                            100,
+                                            "+m_ctx.GetAD_User_ID()+@",
                                             '*** System Maintained ***',
                                             '" + MDocBaseType.DOCBASETYPE_ShipReceiptConfirmation + @"',
                                             'D',

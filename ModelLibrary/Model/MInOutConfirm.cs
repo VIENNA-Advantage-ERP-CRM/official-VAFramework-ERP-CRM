@@ -337,7 +337,11 @@ namespace VAdvantage.Model
             //Shipment and Inventory Move Module Changes
             //Solution Proposed Puneed 
             //STandard changes Analysed in Gull Implementation
-            SetC_DocType_ID(Util.GetValueOfInt(MDocType.Get(GetCtx(), ship.GetC_DocType_ID()).Get_Value("C_DocTypeConfrimation_ID")));
+            MDocType dt = MDocType.Get(GetCtx(), ship.GetC_DocType_ID());
+            if (Get_ColumnIndex("C_DocType_ID") > -1 && dt.Get_ColumnIndex("C_DocTypeConfrimation_ID") > -1)
+            {
+                SetC_DocType_ID(Util.GetValueOfInt(dt.Get_Value("C_DocTypeConfrimation_ID")));
+            }
         }
 
 
@@ -883,6 +887,8 @@ namespace VAdvantage.Model
             //To freeze Quality Control Lines
             FreezeQualityControlLines();
 
+            //Lakhwinder 17Feb 2021
+            //Stop Inventory to get completed
             //Arpit to complete the internal inventory if found any
             //if (internalInventory && Util.GetValueOfInt(GetM_Inventory_ID()) > 0)
             //{
@@ -1152,6 +1158,7 @@ namespace VAdvantage.Model
                         "M_InOutConfirm_ID") + " " + GetDocumentNo());
 
                     //Lakhwinder
+                    // Set InternalUser true if Internal User Inventory
                     int doctypeSetting = CheckAssociateDocTypeSetting(inout.GetC_DocType_ID(), false);
                     if (doctypeSetting == 1)
                     { _inventory.SetIsInternalUse(true); }
@@ -1240,16 +1247,23 @@ namespace VAdvantage.Model
 
 
         /// <summary>
+        /// Check Settings on Document Type Whether we need to create Physical Inventory, Internal User Inventory or Physical Inventory
+        /// </summary>
+        /// <param name="DocTypeID"> Document Type</param>
+        /// <param name="isDiff"> Is Differnece Qty</param>
+        /// <returns>  
         /// return 0,2 for PhysicalInventory
         /// return 1 for Internal Use inventory
         /// return 3 for MM Reciept
-        /// </summary>
-        /// <param name="DocTypeID"></param>
-        /// <param name="isDiff"></param>
-        /// <returns></returns>
+        /// </returns>
         private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff)
         {
+
+
             MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
+            if (docType.Get_ColumnIndex("C_DocTypeScrap_ID") < 0 && docType.Get_ColumnIndex("C_DocTypeDifference_ID") < 0)
+            { return 0; }
+
             int docTypeAssociate = 0;
             if (!isDiff)
             {
