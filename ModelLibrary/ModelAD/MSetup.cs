@@ -65,6 +65,7 @@ namespace VAdvantage.Model
         private bool m_hasSRegion = false;
         /** Account Creation OK		*/
         private bool m_accountsOK = false;
+        private const string InternalUseInventory = "Internal Use Inventory";
 
 
         /// <summary>
@@ -3117,7 +3118,7 @@ namespace VAdvantage.Model
                     640000, GL_MM, MDocType.POSTINGCODE_PROJECTISSUE);
 
                 //If Change name here, then change at other places also.
-                CreateDocType("Internal Use Inventory", Msg.GetElement(m_ctx, "M_Inventory_ID", false),
+                CreateDocType(InternalUseInventory, Msg.GetElement(m_ctx, "M_Inventory_ID", false),
                     MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
                     620000, GL_MM, MDocType.POSTINGCODE_PHYSICALINVENTORY);
 
@@ -3339,7 +3340,7 @@ namespace VAdvantage.Model
             dt.SetIsCreateCounter(IsCreateCounter);
 
             //Set Is Internal Use checked for Internal Use Inventory 
-            if (Name.Equals("Internal Use Inventory"))
+            if (Name.Equals(InternalUseInventory))
             {
                 dt.SetIsInternalUse(true);
             }
