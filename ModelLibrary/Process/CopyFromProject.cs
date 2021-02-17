@@ -71,8 +71,8 @@ namespace VAdvantage.Process
         {
             throw new ArgumentException("Source VAB_Project_ID == 0");
         }
-		VAdvantage.Model.MProject from = new VAdvantage.Model.MProject (GetCtx(), _VAB_Project_ID, Get_Trx());
-		VAdvantage.Model.MProject to = new VAdvantage.Model.MProject (GetCtx(), To_VAB_Project_ID, Get_Trx());
+		VAdvantage.Model.MVABProject from = new VAdvantage.Model.MVABProject (GetCtx(), _VAB_Project_ID, Get_Trx());
+		VAdvantage.Model.MVABProject to = new VAdvantage.Model.MVABProject (GetCtx(), To_VAB_Project_ID, Get_Trx());
 		//
 		int no = to.CopyDetailsFrom (from);
 

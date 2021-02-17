@@ -62,7 +62,7 @@ namespace ViennaAdvantageServer.Process
             {
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
-            MProject fromProject = new MProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
+            MVABProject fromProject = new MVABProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
             if (fromProject.GetGenerate_Order().Trim() == "Y")
             {
                 throw new ArgumentException("Sales Order already generated");
@@ -207,7 +207,7 @@ namespace ViennaAdvantageServer.Process
                 }
                 //Order Lines
                 int count = 0;
-                MProjectLine[] lines = fromProject.GetLines();
+                MVABProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     ol = new MVABOrderLine(order);

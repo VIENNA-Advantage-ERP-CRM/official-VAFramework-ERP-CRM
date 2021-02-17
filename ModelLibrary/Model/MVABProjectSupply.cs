@@ -18,10 +18,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectIssue : X_VAB_ProjectSupply
+    public class MVABProjectSupply : X_VAB_ProjectSupply
     {
         /**	Parent				*/
-        private MProject _parent = null;
+        private MVABProject _parent = null;
 
         /// <summary>
         /// Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_ProjectSupply_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectIssue(Ctx ctx, int VAB_ProjectSupply_ID, Trx trxName)
+        public MVABProjectSupply(Ctx ctx, int VAB_ProjectSupply_ID, Trx trxName)
             : base(ctx, VAB_ProjectSupply_ID, trxName)
         {
             if (VAB_ProjectSupply_ID == 0)
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MProjectIssue(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProjectSupply(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// New Parent Constructor
         /// </summary>
         /// <param name="project">parent</param>
-        public MProjectIssue(MProject project)
+        public MVABProjectSupply(MVABProject project)
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
             SetClientOrg(project.GetVAF_Client_ID(), project.GetVAF_Org_ID());
@@ -91,10 +91,10 @@ namespace VAdvantage.Model
         /// Get Parent
         /// </summary>
         /// <returns>project</returns>
-        public MProject GetParent()
+        public MVABProject GetParent()
         {
             if (_parent == null && GetVAB_Project_ID() != 0)
-                _parent = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
+                _parent = new MVABProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
             return _parent;
         }
 

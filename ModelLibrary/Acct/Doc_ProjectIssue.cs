@@ -34,7 +34,7 @@ namespace VAdvantage.Acct
         //	Pseudo Line							
         private DocLine _line = null;
         // Issue									
-        private MProjectIssue _issue = null;
+        private MVABProjectSupply _issue = null;
 
         /// <summary>
         /// Constructor
@@ -43,12 +43,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_ProjectIssue(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MProjectIssue), idr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
+            : base(ass, typeof(MVABProjectSupply), idr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
         }
         public Doc_ProjectIssue(MVABAccountBook[] ass,DataRow dr, Trx trxName)
-            : base(ass, typeof(MProjectIssue), dr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
+            : base(ass, typeof(MVABProjectSupply), dr, MVABMasterDocType.DOCBASETYPE_PROJECTISSUE, trxName)
         {
 
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            _issue = (MProjectIssue)GetPO();
+            _issue = (MVABProjectSupply)GetPO();
             SetDateDoc(_issue.GetMovementDate());
             SetDateAcct(_issue.GetMovementDate());
 
@@ -83,7 +83,7 @@ namespace VAdvantage.Acct
         /// <returns>document no</returns>
         public new String GetDocumentNo()
         {
-            MProject p = _issue.GetParent();
+            MVABProject p = _issue.GetParent();
             if (p != null)
             {
                 return p.GetValue() + " #" + _issue.GetLine();
@@ -119,7 +119,7 @@ namespace VAdvantage.Acct
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
             SetVAB_Currency_ID(as1.GetVAB_Currency_ID());
 
-            MProject project = new MProject(GetCtx(), _issue.GetVAB_Project_ID(), null);
+            MVABProject project = new MVABProject(GetCtx(), _issue.GetVAB_Project_ID(), null);
             String ProjectCategory = project.GetProjectCategory();
             MProduct product = MProduct.Get(GetCtx(), _issue.GetVAM_Product_ID());
 
@@ -142,7 +142,7 @@ namespace VAdvantage.Acct
 
             //  Project         DR
             int acctType = ACCTTYPE_ProjectWIP;
-            if (MProject.PROJECTCATEGORY_AssetProject.Equals(ProjectCategory))
+            if (MVABProject.PROJECTCATEGORY_AssetProject.Equals(ProjectCategory))
             {
                 acctType = ACCTTYPE_ProjectAsset;
             }

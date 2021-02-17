@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         /** Request				*/
         private MRequest _request = null;
         /** Project				*/
-        private MProject _project = null;
+        private MVABProject _project = null;
         /** Request Status		*/
         private MStatus _Status = null;
         #endregion
@@ -277,13 +277,13 @@ namespace VAdvantage.Model
          * 	Get Project
          *	@return project or null
          */
-        public MProject GetProject()
+        public MVABProject GetProject()
         {
             if (GetVAB_Project_ID() == 0)
                 _project = null;
             else if (_project == null
                 || _project.GetVAB_Project_ID() != GetVAB_Project_ID())
-                _project = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
+                _project = new MVABProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
             return _project;
         }
 
@@ -575,9 +575,9 @@ namespace VAdvantage.Model
                 if (retValue != null)
                     return retValue;
             }
-            _project = new MProject(GetCtx(), 0, Get_TrxName());
+            _project = new MVABProject(GetCtx(), 0, Get_TrxName());
             _project.SetVAF_Org_ID(GetVAF_Org_ID());
-            _project.SetProjectLineLevel(MProject.PROJECTLINELEVEL_Project);
+            _project.SetProjectLineLevel(MVABProject.PROJECTLINELEVEL_Project);
             _project.SetName(GetName());
             _project.SetDescription(GetDescription());
             _project.SetNote(GetHelp());

@@ -49,7 +49,7 @@ namespace VAdvantage.Process
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
 
-            VAdvantage.Model.MProject fromProject = new VAdvantage.Model.MProject(GetCtx(), _VAB_Project_ID, null);
+            VAdvantage.Model.MVABProject fromProject = new VAdvantage.Model.MVABProject(GetCtx(), _VAB_Project_ID, null);
             VAdvantage.Model.MVABOrder order = new VAdvantage.Model.MVABOrder(GetCtx(), 0, null);
             VAB_BusinessPartner_id = fromProject.GetVAB_BusinessPartner_ID();
             VAB_BPart_Location_id = fromProject.GetVAB_BPart_Location_ID();
@@ -173,7 +173,7 @@ namespace VAdvantage.Process
                 }
                 //Order Lines
                 int count = 0;
-                VAdvantage.Model.MProjectLine[] lines = fromProject.GetLines();
+                VAdvantage.Model.MVABProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     VAdvantage.Model.MVABOrderLine ol = new VAdvantage.Model.MVABOrderLine(order);

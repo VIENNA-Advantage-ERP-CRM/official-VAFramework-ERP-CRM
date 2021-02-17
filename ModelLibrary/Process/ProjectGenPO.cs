@@ -72,18 +72,18 @@ namespace VAdvantage.Process
             log.Info("doIt - VAB_Project_ID=" + m_VAB_Project_ID + " - VAB_ProjectLine_ID=" + m_VAB_ProjectLine_ID + " - Consolidate=" + m_ConsolidateDocument);
             if (m_VAB_ProjectLine_ID != 0)
             {
-                MProjectLine projectLine = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
-                MProject project = new MProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
+                MVABProjectLine projectLine = new MVABProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
+                MVABProject project = new MVABProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
                 CreatePO(project, projectLine);
             }
             else
             {
-                MProject project = new MProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
-                MProjectLine[] lines = project.GetLines();
+                MVABProject project = new MVABProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
+                MVABProjectLine[] lines = project.GetLines();
                 //for (MProjectLine element : lines)
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MProjectLine element = lines[i];
+                    MVABProjectLine element = lines[i];
                     CreatePO(project, element);
                 }
             }
@@ -94,7 +94,7 @@ namespace VAdvantage.Process
 	 * 	Create PO from Planned Amt/Qty
 	 * 	@param projectLine project line
 	 */
-        private void CreatePO(MProject project, MProjectLine projectLine)
+        private void CreatePO(MVABProject project, MVABProjectLine projectLine)
         {
             if (projectLine.GetVAM_Product_ID() == 0)
             {

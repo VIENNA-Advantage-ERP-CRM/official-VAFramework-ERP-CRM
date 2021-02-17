@@ -59,14 +59,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             {
                 throw new ArgumentException("No Project Line");
             }
-            MProjectLine projectLine = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
+            MVABProjectLine projectLine = new MVABProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
             log.Info("doIt - " + projectLine);
             if (projectLine.GetVAM_Product_ID() == 0)
             {
                 throw new ArgumentException("No Product");
             }
             //
-            MProject project = new MProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
+            MVABProject project = new MVABProject(GetCtx(), projectLine.GetVAB_Project_ID(), Get_TrxName());
             if (project.GetVAM_PriceList_ID() == 0)
             {
                 throw new ArgumentException("No PriceList");

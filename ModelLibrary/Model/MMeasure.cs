@@ -394,7 +394,7 @@ namespace VAdvantage.Model
                     role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
                 Decimal? ManualActual = null;
-                MProjectType pt = MProjectType.Get(GetCtx(), GetVAB_ProjectType_ID());
+                MVABProjectType pt = MVABProjectType.Get(GetCtx(), GetVAB_ProjectType_ID());
                 String sql = pt.GetSqlPI(goal.GetRestrictions(false),
                     goal.GetMeasureScope(), GetMeasureDataType(), null, role);
                 IDataReader idr = null;

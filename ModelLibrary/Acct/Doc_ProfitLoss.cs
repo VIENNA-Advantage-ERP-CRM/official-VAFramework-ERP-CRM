@@ -29,12 +29,12 @@ namespace ModelLibrary.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_ProfitLoss(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MProfitLoss), idr, null, trxName)
+            : base(ass, typeof(MVABProfitLoss), idr, null, trxName)
         {
 
         }
         public Doc_ProfitLoss(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MProfitLoss), dr, null, trxName)
+            : base(ass, typeof(MVABProfitLoss), dr, null, trxName)
         {
 
         }
@@ -45,20 +45,20 @@ namespace ModelLibrary.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MProfitLoss pay = (MProfitLoss)GetPO();
+            MVABProfitLoss pay = (MVABProfitLoss)GetPO();
             SetDateDoc(pay.GetDateTrx());
             _lines = LoadLines(pay);
             log.Fine("Lines=" + _lines.Length);
             return null;
         }
-        private DocLine[] LoadLines(MProfitLoss pay)
+        private DocLine[] LoadLines(MVABProfitLoss pay)
         {
             List<DocLine> list = new List<DocLine>();
-            MProfitLossLines[] lines = pay.GetLines(false);
+            MVABProfitLossLines[] lines = pay.GetLines(false);
             //VAB_AccountBook = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_AccountBook1_id FROM VAF_ClientDetail WHERE VAF_Client_ID=" + GetVAF_Client_ID()));
             for (int i = 0; i < lines.Length; i++)
             {
-                MProfitLossLines line = lines[i];
+                MVABProfitLossLines line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 docLine.SetAmount(line.GetVAB_ProfitAndLoss_ID() != 0 ? line.GetAccountDebit() : Math.Abs(line.GetAccountDebit()),
                                 line.GetVAB_ProfitAndLoss_ID() != 0 ? line.GetAccountCredit() : Math.Abs(line.GetAccountCredit()));
@@ -150,8 +150,8 @@ namespace ModelLibrary.Acct
             {
                 //Change By mohit 
                 // Get Assigned Accounting Schemas based on organization                
-                MProfitLossLines PLossline = new MProfitLossLines(GetCtx(), _lines[0].Get_ID(), null);
-                MProfitLoss PLoss = new MProfitLoss(GetCtx(), PLossline.GetVAB_ProfitLoss_ID(), null);
+                MVABProfitLossLines PLossline = new MVABProfitLossLines(GetCtx(), _lines[0].Get_ID(), null);
+                MVABProfitLoss PLoss = new MVABProfitLoss(GetCtx(), PLossline.GetVAB_ProfitLoss_ID(), null);
                 MVABAccountBook HeaderAcctSchema = new MVABAccountBook(GetCtx(), Util.GetValueOfInt(PLoss.Get_Value("VAB_AccountBook_ID")), null);
                 List<int> _ListAcctSch = new List<int>();
                 // Profit & Loss account shall be posted only in accounting schema selected on header (By Ashish - discussed with Mukesh sir)
@@ -177,7 +177,7 @@ namespace ModelLibrary.Acct
                         for (int i = 0; i < _lines.Length; i++)
                         {
                             DocLine dline = _lines[i];
-                            MProfitLossLines line = new MProfitLossLines(GetCtx(), dline.Get_ID(), null);
+                            MVABProfitLossLines line = new MVABProfitLossLines(GetCtx(), dline.Get_ID(), null);
 
                             if (Util.GetValueOfInt(HeaderAcctSchema.GetVAB_Currency_ID()) == Util.GetValueOfInt(AccountingSchema.GetVAB_Currency_ID()))
                             {

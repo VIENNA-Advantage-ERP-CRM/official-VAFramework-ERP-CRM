@@ -18,7 +18,7 @@ using VAdvantage.Logging;
 using VAdvantage.Print;
 namespace VAdvantage.Model
 {
-    public class MProfitLoss:X_VAB_ProfitLoss,DocAction
+    public class MVABProfitLoss:X_VAB_ProfitLoss,DocAction
     {
         #region Variables
         /**	Process Message 			*/
@@ -26,10 +26,10 @@ namespace VAdvantage.Model
         /**	Just Prepared Flag			*/
         private bool _justPrepared = false;
         private bool _forceCreation = false;
-        private MProfitLossLines[] _lines = null;
+        private MVABProfitLossLines[] _lines = null;
         
         #endregion
-        public MProfitLoss(Ctx ctx, int VAB_ProfitLoss_ID, Trx trxName)
+        public MVABProfitLoss(Ctx ctx, int VAB_ProfitLoss_ID, Trx trxName)
             : base(ctx, VAB_ProfitLoss_ID, trxName)
         {
             if (VAB_ProfitLoss_ID == 0)
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
             }
         }
 
-        public MProfitLoss(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProfitLoss(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
 
 
             //	Lines
-            MProfitLossLines[] lines = GetLines(true);
+            MVABProfitLossLines[] lines = GetLines(true);
             if (lines.Length == 0)
             {
                 _processMsg = "@NoLines@";
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
             return DocActionVariables.STATUS_INPROGRESS;
         }
 
-        public MProfitLossLines[] GetLines(bool requery)
+        public MVABProfitLossLines[] GetLines(bool requery)
         {
             try
             {
@@ -255,9 +255,9 @@ namespace VAdvantage.Model
             return _lines;
         }
 
-        public MProfitLossLines[] GetLines(String whereClause)
+        public MVABProfitLossLines[] GetLines(String whereClause)
         {
-            List<MProfitLossLines> list = new List<MProfitLossLines>();
+            List<MVABProfitLossLines> list = new List<MVABProfitLossLines>();
             StringBuilder sql = new StringBuilder("SELECT * FROM VAB_ProfitLossLines WHERE VAB_ProfitLoss_ID=" + GetVAB_ProfitLoss_ID() + "");            
             try
             {
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MProfitLossLines ol = new MProfitLossLines(GetCtx(), dr, Get_TrxName());
+                        MVABProfitLossLines ol = new MVABProfitLossLines(GetCtx(), dr, Get_TrxName());
                         //ol.SetHeaderInfo(this);
                         list.Add(ol);
                     }
@@ -277,7 +277,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql.ToString(), e);
             }
             //
-            MProfitLossLines[] lines = new MProfitLossLines[list.Count];
+            MVABProfitLossLines[] lines = new MVABProfitLossLines[list.Count];
             lines = list.ToArray();
             return lines;
         }
@@ -441,8 +441,8 @@ namespace VAdvantage.Model
 
         private bool CheckForPreviousCompeletedRecords()
         {
-            MProfitLoss PL = new MProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), null);
-            MProfitLoss prof = new MProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), Get_TrxName());
+            MVABProfitLoss PL = new MVABProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), null);
+            MVABProfitLoss prof = new MVABProfitLoss(GetCtx(), GetVAB_ProfitLoss_ID(), Get_TrxName());
             StringBuilder sql = new StringBuilder();
 
             sql.Append("SELECT distinct CP.* FROM VAB_ProfitLoss CP INNER JOIN Actual_Acct_Detail ft ON ft.VAB_AccountBook_ID = Cp.VAB_AccountBook_ID                             "

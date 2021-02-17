@@ -18,10 +18,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectLine : X_VAB_ProjectLine
+    public class MVABProjectLine : X_VAB_ProjectLine
     {
         /** Parent				*/
-        private MProject _parent = null;
+        private MVABProject _parent = null;
 
         /// <summary>
         /// Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_ProjectLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectLine(Ctx ctx, int VAB_ProjectLine_ID, Trx trxName)
+        public MVABProjectLine(Ctx ctx, int VAB_ProjectLine_ID, Trx trxName)
             : base(ctx, VAB_ProjectLine_ID, trxName)
         {
             if (VAB_ProjectLine_ID == 0)
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MProjectLine(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABProjectLine(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="project">parent</param>
-        public MProjectLine(MProject project)
+        public MVABProjectLine(MVABProject project)
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
             SetClientOrg(project);
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
             //	Phase/Task
             if (Is_ValueChanged("VAB_ProjectJob_ID") && GetVAB_ProjectJob_ID() != 0)
             {
-                MProjectTask pt = new MProjectTask(GetCtx(), GetVAB_ProjectJob_ID(), Get_TrxName());
+                MVABProjectJob pt = new MVABProjectJob(GetCtx(), GetVAB_ProjectJob_ID(), Get_TrxName());
                 if (pt == null || pt.Get_ID() == 0)
                 {
                     log.Warning("Project Task Not Found - ID=" + GetVAB_ProjectJob_ID());
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
             }
             if (Is_ValueChanged("VAB_ProjectStage_ID") && GetVAB_ProjectStage_ID() != 0)
             {
-                MProjectPhase pp = new MProjectPhase(GetCtx(), GetVAB_ProjectStage_ID(), Get_TrxName());
+                MVABProjectStage pp = new MVABProjectStage(GetCtx(), GetVAB_ProjectStage_ID(), Get_TrxName());
                 if (pp == null || pp.Get_ID() == 0)
                 {
                     log.Warning("Project Phase Not Found - " + GetVAB_ProjectStage_ID());
@@ -194,11 +194,11 @@ namespace VAdvantage.Model
         /// Get Project
         /// </summary>
         /// <returns>parent</returns>
-        public MProject GetProject()
+        public MVABProject GetProject()
         {
             if (_parent == null && GetVAB_Project_ID() != 0)
             {
-                _parent = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
+                _parent = new MVABProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
                 if (Get_TrxName() != null)
                     _parent.Load(Get_TrxName());
             }
@@ -371,7 +371,7 @@ namespace VAdvantage.Model
         /// Set Product, committed qty, etc.
         /// </summary>
         /// <param name="pi">project issue</param>
-        public void SetMProjectIssue(MProjectIssue pi)
+        public void SetMProjectIssue(MVABProjectSupply pi)
         {
             SetVAB_ProjectSupply_ID(pi.GetVAB_ProjectSupply_ID());
             SetVAM_Product_ID(pi.GetVAM_Product_ID());
@@ -453,7 +453,7 @@ namespace VAdvantage.Model
             if (isOpp.Equals("N") && isCam.Equals("N") && id != 0)
             {
                 // set sum of planned Amount from task line to task
-                MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_Trx());
+                MVABProjectJob tsk = new MVABProjectJob(GetCtx(), id, Get_Trx());
                 decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectJob_ID = " + id));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();
@@ -461,14 +461,14 @@ namespace VAdvantage.Model
             //Amit
             else if (isOpp.Equals("N") && isCam.Equals("N") && id == 0 && GetVAB_ProjectStage_ID() != 0)
             {
-                MProjectPhase projectPhase = new MProjectPhase(GetCtx(), GetVAB_ProjectStage_ID(), null);
+                MVABProjectStage projectPhase = new MVABProjectStage(GetCtx(), GetVAB_ProjectStage_ID(), null);
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectStage_ID = " + GetVAB_ProjectStage_ID() + " AND pl.VAB_Project_ID = " + projID));
                 projectPhase.SetPlannedAmt(plnAmt);
                 projectPhase.Save();
             }
             else if (isOpp.Equals("Y"))                             // Opportunity Window
             {
-                MProject prj = new MProject(GetCtx(), projID, Get_TrxName());
+                MVABProject prj = new MVABProject(GetCtx(), projID, Get_TrxName());
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_Project_ID = " + projID));
                 prj.SetPlannedAmt(plnAmt);
                 prj.Save();
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
             }
             else if (id != 0)
             {
-                MProjectTask tsk = new MProjectTask(GetCtx(), id, Get_TrxName());
+                MVABProjectJob tsk = new MVABProjectJob(GetCtx(), id, Get_TrxName());
                 decimal plannedAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectLine pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectJob_ID = " + id));
                 tsk.SetPlannedAmt(plannedAmt);
                 tsk.Save();

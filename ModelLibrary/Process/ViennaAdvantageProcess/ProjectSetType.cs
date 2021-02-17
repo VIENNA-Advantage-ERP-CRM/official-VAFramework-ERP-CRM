@@ -67,7 +67,7 @@ namespace ViennaAdvantage.Process
             _VAB_Project_ID = GetRecord_ID();
             log.Info("doIt - VAB_Project_ID=" + _VAB_Project_ID + ", VAB_ProjectType_ID=" + _VAB_ProjectType_ID);
             //
-            MProject project = new MProject (GetCtx(), _VAB_Project_ID, Get_Trx());
+            MVABProject project = new MVABProject (GetCtx(), _VAB_Project_ID, Get_Trx());
             if (project.GetVAB_Project_ID() == 0 || project.GetVAB_Project_ID() != _VAB_Project_ID)
             {
                 throw new ArgumentException("Project not found VAB_Project_ID=" + _VAB_Project_ID);
@@ -78,7 +78,7 @@ namespace ViennaAdvantage.Process
                 throw new ArgumentException("Project already has Type (Cannot overwrite) " + project.GetVAB_ProjectType_ID());
             }
             //
-            MProjectType type = new MProjectType (GetCtx(), _VAB_ProjectType_ID, Get_Trx());
+            MVABProjectType type = new MVABProjectType (GetCtx(), _VAB_ProjectType_ID, Get_Trx());
             if (type.GetVAB_ProjectType_ID() == 0 || type.GetVAB_ProjectType_ID() != _VAB_ProjectType_ID)
             {
                 throw new ArgumentException("Project Type not found VAB_ProjectType_ID=" + _VAB_ProjectType_ID);

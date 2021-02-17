@@ -318,7 +318,7 @@ namespace VAdvantage.Process
                 {
                     _order.SetVAB_Project_ID(tel.GetVAB_Project_ID());
                     //	Optionally Overwrite BP Price list from Project
-                    MProject project = new MProject(GetCtx(), tel.GetVAB_Project_ID(), Get_TrxName());
+                    MVABProject project = new MVABProject(GetCtx(), tel.GetVAB_Project_ID(), Get_TrxName());
                     if (project.GetVAM_PriceList_ID() != 0)
                     {
                         //check weather the PriceList is active or not

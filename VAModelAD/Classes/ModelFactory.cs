@@ -51,8 +51,8 @@ namespace VAModelAD.Classes
         "VAGL_Group", "VAdvantage.Model.MVAGLGroup",
         "K_Category", "VAdvantage.Model.MKCategory",
         "VAB_Acct_ValidParameter", "VAdvantage.Model.MVABAccount",
-        "VAB_Std_Stage", "VAdvantage.Model.MProjectTypePhase",
-        "VAB_Std_Task", "VAdvantage.Model.MProjectTypeTask",
+        "VAB_Std_Stage", "VAdvantage.Model.MVABProjectTypeStage",
+        "VAB_Std_Task", "VAdvantage.Model.MVABProjectTypeTask",
         "K_Source", "VAdvantage.Model.X_K_Source",
         "VARC_ViewColumn","VAdvantage.Model.X_VARC_ViewColumn",
 	//	AD_Attribute_Value, VAF_TreeInfoChild

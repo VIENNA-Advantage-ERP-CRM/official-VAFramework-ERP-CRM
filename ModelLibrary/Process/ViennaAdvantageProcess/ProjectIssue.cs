@@ -41,9 +41,9 @@ namespace ViennaAdvantage.Process
         private String m_Description = null;
 
         /**	The Project to be received			*/
-        private MProject m_project = null;
+        private MVABProject m_project = null;
         /**	The Project to be received			*/
-        private MProjectIssue[] m_projectIssues = null;
+        private MVABProjectSupply[] m_projectIssues = null;
         #endregion
 
         protected override void Prepare()
@@ -118,9 +118,9 @@ namespace ViennaAdvantage.Process
         protected override string DoIt()
         {
             //	Check Parameter
-            m_project = new MProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
-            if (!(MProject.PROJECTCATEGORY_WorkOrderJob.Equals(m_project.GetProjectCategory())
-                || MProject.PROJECTCATEGORY_AssetProject.Equals(m_project.GetProjectCategory())))
+            m_project = new MVABProject(GetCtx(), m_VAB_Project_ID, Get_TrxName());
+            if (!(MVABProject.PROJECTCATEGORY_WorkOrderJob.Equals(m_project.GetProjectCategory())
+                || MVABProject.PROJECTCATEGORY_AssetProject.Equals(m_project.GetProjectCategory())))
             {
                 throw new ArgumentException("Project not Work Order or Asset =" + m_project.GetProjectCategory());
             }
@@ -186,7 +186,7 @@ namespace ViennaAdvantage.Process
                 if (ProjectIssueHasReceipt(inOutLines[i].GetVAM_Inv_InOutLine_ID()))
                     continue;
                 //	Create Issue
-                MProjectIssue pi = new MProjectIssue(m_project);
+                MVABProjectSupply pi = new MVABProjectSupply(m_project);
                 pi.SetMandatory(inOutLines[i].GetVAM_Locator_ID(), inOutLines[i].GetVAM_Product_ID(), inOutLines[i].GetMovementQty());
                 if (VAM_InventoryTransferDate != null)		//	default today
                 {
@@ -208,8 +208,8 @@ namespace ViennaAdvantage.Process
                 pi.Process();
 
                 //	Find/Create Project Line
-                MProjectLine pl = null;
-                MProjectLine[] pls = m_project.GetLines();
+                MVABProjectLine pl = null;
+                MVABProjectLine[] pls = m_project.GetLines();
                 for (int ii = 0; ii < pls.Length; ii++)
                 {
                     //	The Order we generated is the same as the Order of the receipt
@@ -222,7 +222,7 @@ namespace ViennaAdvantage.Process
                     }
                 }
                 if (pl == null)
-                    pl = new MProjectLine(m_project);
+                    pl = new MVABProjectLine(m_project);
                 pl.SetMProjectIssue(pi);		//	setIssue
                 pl.Save();
                 AddLog(pi.GetLine(), pi.GetMovementDate(), pi.GetMovementQty(), null);
@@ -275,7 +275,7 @@ namespace ViennaAdvantage.Process
                     VAM_Locator_ID = expense.GetVAM_Locator_ID();
 
                 //	Create Issue
-                MProjectIssue pi = new MProjectIssue(m_project);
+                MVABProjectSupply pi = new MVABProjectSupply(m_project);
                 pi.SetMandatory(VAM_Locator_ID, expenseLines[i].GetVAM_Product_ID(), expenseLines[i].GetQty());
                 if (VAM_InventoryTransferDate != null)		//	default today
                     pi.SetMovementDate(VAM_InventoryTransferDate);
@@ -286,7 +286,7 @@ namespace ViennaAdvantage.Process
                 pi.SetVAS_ExpenseReportLine_ID(expenseLines[i].GetVAS_ExpenseReportLine_ID());
                 pi.Process();
                 //	Find/Create Project Line
-                MProjectLine pl = new MProjectLine(m_project);
+                MVABProjectLine pl = new MVABProjectLine(m_project);
                 pl.SetMProjectIssue(pi);		//	setIssue
                 pl.Save();
                 AddLog(pi.GetLine(), pi.GetMovementDate(), pi.GetMovementQty(), null);
@@ -303,7 +303,7 @@ namespace ViennaAdvantage.Process
          */
         private String IssueProjectLine()
         {
-            MProjectLine pl = new MProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
+            MVABProjectLine pl = new MVABProjectLine(GetCtx(), m_VAB_ProjectLine_ID, Get_TrxName());
             if (pl.GetVAM_Product_ID() == 0)
             {
                 throw new ArgumentException("Projet Line has no Product");
@@ -322,7 +322,7 @@ namespace ViennaAdvantage.Process
                 pl.SetPlannedQty(Env.ONE);
             }
             //
-            MProjectIssue pi = new MProjectIssue(m_project);
+            MVABProjectSupply pi = new MVABProjectSupply(m_project);
             pi.SetMandatory(m_VAM_Locator_ID, pl.GetVAM_Product_ID(), pl.GetPlannedQty());
             if (VAM_InventoryTransferDate != null)		//	default today
             {
@@ -366,7 +366,7 @@ namespace ViennaAdvantage.Process
                 VAM_InventoryTransferQty = Env.ONE;
             }
             //
-            MProjectIssue pi = new MProjectIssue(m_project);
+            MVABProjectSupply pi = new MVABProjectSupply(m_project);
             pi.SetMandatory(m_VAM_Locator_ID, m_VAM_Product_ID, VAM_InventoryTransferQty.Value);
             if (VAM_InventoryTransferDate != null)		//	default today
             {
@@ -379,7 +379,7 @@ namespace ViennaAdvantage.Process
             pi.Process();
 
             //	Create Project Line
-            MProjectLine pl = new MProjectLine(m_project);
+            MVABProjectLine pl = new MVABProjectLine(m_project);
             pl.SetMProjectIssue(pi);
             pl.Save();
             AddLog(pi.GetLine(), pi.GetMovementDate(), pi.GetMovementQty(), null);

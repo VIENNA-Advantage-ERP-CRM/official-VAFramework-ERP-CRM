@@ -121,7 +121,7 @@ namespace VAdvantage.Process
                 sql = "select name from VAB_Promotion where VAB_Promotion_id = (select VAB_Promotion_id from VAB_Project where VAB_Project_ID = (select VAB_Project_ID "
                 + " from VAB_ProjectStage where VAB_ProjectStage_id = (select VAB_ProjectStage_id from VAB_ProjectJob where VAB_ProjectJob_id = " + VAB_ProjectJob_ID + ")))";
                 string name = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_Trx()));
-                VAdvantage.Model.MProjectTask task = new VAdvantage.Model.MProjectTask(GetCtx(), VAB_ProjectJob_ID, Get_Trx());
+                VAdvantage.Model.MVABProjectJob task = new VAdvantage.Model.MVABProjectJob(GetCtx(), VAB_ProjectJob_ID, Get_Trx());
 
                 int AppointmentsInfo_ID = Util.GetValueOfInt(task.GetAppointmentsInfo_ID());
                 sql = "select count(*) from AppointmentsInfo where AppointmentsInfo_ID = " + AppointmentsInfo_ID;

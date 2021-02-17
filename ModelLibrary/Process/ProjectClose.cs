@@ -55,12 +55,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// <returns>Message (translated text)</returns>
 	protected override String DoIt()
 	{
-		MProject project = new MProject (GetCtx(), m_VAB_Project_ID, Get_TrxName());
+		MVABProject project = new MVABProject (GetCtx(), m_VAB_Project_ID, Get_TrxName());
 		log.Info("doIt - " + project);
 
-		MProjectLine[] projectLines = project.GetLines();
-		if (MProject.PROJECTCATEGORY_WorkOrderJob.Equals(project.GetProjectCategory())
-			|| MProject.PROJECTCATEGORY_AssetProject.Equals(project.GetProjectCategory()))
+		MVABProjectLine[] projectLines = project.GetLines();
+		if (MVABProject.PROJECTCATEGORY_WorkOrderJob.Equals(project.GetProjectCategory())
+			|| MVABProject.PROJECTCATEGORY_AssetProject.Equals(project.GetProjectCategory()))
 		{
 			/** @todo Check if we should close it */
 		}

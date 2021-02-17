@@ -73,7 +73,7 @@ namespace ViennaAdvantageServer.Process
                         }
                         else if (Recurring.GetRecurringType().Equals(MRecurring.RECURRINGTYPE_Project))
                         {
-                            MProject project = MProject.CopyFrom(GetCtx(), Recurring.GetVAB_Project_ID(), dateDoc, Get_TrxName());
+                            MVABProject project = MVABProject.CopyFrom(GetCtx(), Recurring.GetVAB_Project_ID(), dateDoc, Get_TrxName());
                             run.SetVAB_Project_ID(project.GetVAB_Project_ID());
                             msg += project.GetValue();
                         }

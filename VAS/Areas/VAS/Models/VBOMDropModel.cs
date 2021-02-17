@@ -327,7 +327,7 @@ namespace VIS.Models
         {
             Decimal qty = 0;
             log.Config("VAB_Invoice_ID=" + VAB_Invoice_ID);
-            MVABInvoice invoice = new MVABInvoice(ctx, VAB_Invoice_ID, null);
+            MInvoice invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
             if (invoice.Get_ID() == 0)
             {
                 log.Log(Level.SEVERE, "Not found - VAB_Invoice_ID=" + VAB_Invoice_ID);
@@ -345,7 +345,7 @@ namespace VIS.Models
                     {
                         int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
-                        MVABInvoiceLine il = new MVABInvoiceLine(invoice);
+                        MInvoiceLine il = new MInvoiceLine(invoice);
                         il.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         il.SetQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         il.SetPrice();
@@ -375,7 +375,7 @@ namespace VIS.Models
         {
             Decimal qty = 0;        
             log.Config("VAB_Project_ID=" + VAB_Project_ID);
-            MProject project = new MProject(ctx, VAB_Project_ID, null);
+            MVABProject project = new MVABProject(ctx, VAB_Project_ID, null);
             if (project.Get_ID() == 0)
             {
                 log.Log(Level.SEVERE, "Not found - VAB_Project_ID=" + VAB_Project_ID);
@@ -393,7 +393,7 @@ namespace VIS.Models
                     {
                         int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
-                        MProjectLine pl = new MProjectLine(project);
+                        MVABProjectLine pl = new MVABProjectLine(project);
                         pl.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         pl.SetPlannedQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         if (pl.Save())

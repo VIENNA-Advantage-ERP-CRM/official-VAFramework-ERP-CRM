@@ -4115,7 +4115,7 @@ namespace VAdvantage.Model
                 //	Update Project
                 if (IsSOTrx() && GetVAB_Project_ID() != 0)
                 {
-                    MProject project = new MProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
+                    MVABProject project = new MVABProject(GetCtx(), GetVAB_Project_ID(), Get_TrxName());
                     Decimal amt = GetGrandTotal(true);
                     int VAB_CurrencyTo_ID = project.GetVAB_Currency_ID();
                     if (VAB_CurrencyTo_ID != GetVAB_Currency_ID())

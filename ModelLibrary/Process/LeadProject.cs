@@ -85,7 +85,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             throw new SystemException(retValue);
         }
 		lead.Save();
-		MProject project = lead.GetProject();
+		MVABProject project = lead.GetProject();
 		//
 		return "@VAB_Project_ID@ " + project.GetName();
 	}	//	doIt

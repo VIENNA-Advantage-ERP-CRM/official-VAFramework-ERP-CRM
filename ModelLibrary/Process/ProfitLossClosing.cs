@@ -20,14 +20,14 @@ namespace VAdvantage.Process
         Decimal ProfitBeforeTax = 0.0M;
         DataSet ds = null;
         DataSet ds1 = null;
-        MProfitLoss prof = null;
+        MVABProfitLoss prof = null;
         int VAB_ProfitLossLines_ID = 0;
         static readonly object lockRecord = new object();
 
         protected override string DoIt()
         {
-            MProfitLoss PL = new MProfitLoss(GetCtx(), GetRecord_ID(), null);
-            prof = new MProfitLoss(GetCtx(), GetRecord_ID(), Get_Trx());
+            MVABProfitLoss PL = new MVABProfitLoss(GetCtx(), GetRecord_ID(), null);
+            prof = new MVABProfitLoss(GetCtx(), GetRecord_ID(), Get_Trx());
 
             stDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.startdate from VAB_YearPeriod p  inner join VAB_Year y on p.VAB_Year_id=y.VAB_Year_id where p.periodno='1' and p.VAB_Year_id= " + prof.GetVAB_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
             eDate = Util.GetValueOfDateTime(DB.ExecuteScalar("select p.enddate from VAB_YearPeriod p  inner join VAB_Year y on p.VAB_Year_id=y.VAB_Year_id where p.periodno='12' and p.VAB_Year_id= " + prof.GetVAB_Year_ID() + " and y.vaf_client_id= " + GetVAF_Client_ID(), null, null));
@@ -141,7 +141,7 @@ namespace VAdvantage.Process
         /// Is used to create line against Income Account summary account -- 
         /// </summary>
         /// <param name="Profit">class object of MProfitLoss </param>
-        private void InsertProfitLossLine(MProfitLoss Profit)
+        private void InsertProfitLossLine(MVABProfitLoss Profit)
         {
             // get consolidated profit amount agsint Organization
             String Sql = @"SELECT VAF_Org_ID , (SUM(AccountDebit) - SUM(AccountCredit)) AS ProfitAmt
@@ -166,7 +166,7 @@ namespace VAdvantage.Process
                     {
                         continue;
                     }
-                    MProfitLossLines profitLossLines = new MProfitLossLines(GetCtx(), 0, Get_Trx());
+                    MVABProfitLossLines profitLossLines = new MVABProfitLossLines(GetCtx(), 0, Get_Trx());
                     profitLossLines.SetVAF_Client_ID(Profit.GetVAF_Client_ID());
                     profitLossLines.SetVAF_Org_ID(Util.GetValueOfInt(dsProfit.Tables[0].Rows[i]["VAF_Org_ID"]));
                     profitLossLines.SetVAB_ProfitLoss_ID(Profit.GetVAB_ProfitLoss_ID());

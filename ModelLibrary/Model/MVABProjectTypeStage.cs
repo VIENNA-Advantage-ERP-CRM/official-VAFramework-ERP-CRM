@@ -21,7 +21,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Project Type Phase Model
     /// </summary>
-    public class MProjectTypePhase : X_VAB_Std_Stage
+    public class MVABProjectTypeStage : X_VAB_Std_Stage
     {
         /// <summary>
         /// Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Std_Stage_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypePhase(Ctx ctx, int VAB_Std_Stage_ID, Trx trxName)
+        public MVABProjectTypeStage(Ctx ctx, int VAB_Std_Stage_ID, Trx trxName)
             : base(ctx, VAB_Std_Stage_ID, trxName)
         {
             if (VAB_Std_Stage_ID == 0)
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypePhase(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProjectTypeStage(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -57,9 +57,9 @@ namespace VAdvantage.Model
         /// Get Project Type Phases
         /// </summary>
         /// <returns>Array of phases</returns>
-        public MProjectTypeTask[] GetTasks()
+        public MVABProjectTypeTask[] GetTasks()
         {
-            List<MProjectTypeTask> list = new List<MProjectTypeTask>();
+            List<MVABProjectTypeTask> list = new List<MVABProjectTypeTask>();
             String sql = "SELECT * FROM VAB_Std_Task WHERE VAB_Std_Stage_ID=" + GetVAB_Std_Stage_ID() + " ORDER BY SeqNo";
             try
             {
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MProjectTypeTask(GetCtx(), dr, Get_TrxName()));
+                        list.Add(new MVABProjectTypeTask(GetCtx(), dr, Get_TrxName()));
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, ex);
             }
             //
-            MProjectTypeTask[] retValue = new MProjectTypeTask[list.Count];
+            MVABProjectTypeTask[] retValue = new MVABProjectTypeTask[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

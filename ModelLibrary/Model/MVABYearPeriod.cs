@@ -21,7 +21,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPeriod : X_VAB_YearPeriod
+    public class MVABYearPeriod : X_VAB_YearPeriod
     {
         //	Cache
         private static CCache<int, MPeriod> cache = new CCache<int, MPeriod>("VAB_YearPeriod", 10);

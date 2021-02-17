@@ -20,7 +20,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Project Phase Task Model
     /// </summary>
-    public class MProjectTask : X_VAB_ProjectJob
+    public class MVABProjectJob : X_VAB_ProjectJob
     {
         /// <summary>
         /// Standard Constructor
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_ProjectJob_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTask(Ctx ctx, int VAB_ProjectJob_ID, Trx trxName)
+        public MVABProjectJob(Ctx ctx, int VAB_ProjectJob_ID, Trx trxName)
             : base(ctx, VAB_ProjectJob_ID, trxName)
         {
             if (VAB_ProjectJob_ID == 0)
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTask(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProjectJob(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="phase">parent</param>
-        public MProjectTask(MProjectPhase phase)
+        public MVABProjectJob(MVABProjectStage phase)
             : this(phase.GetCtx(), 0, phase.Get_TrxName())
         {
             SetClientOrg(phase);
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="phase">parent</param>
         /// <param name="task">type copy</param>
-        public MProjectTask(MProjectPhase phase, MProjectTypeTask task)
+        public MVABProjectJob(MVABProjectStage phase, MVABProjectTypeTask task)
             : this(phase)
         {
             SetVAB_Std_Task_ID(task.GetVAB_Std_Task_ID());			//	FK
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
             }
             if (isCam.Equals("Y"))                             // Campaign Window
             {
-                MProject prj = new MProject(GetCtx(), projID, null);
+                MVABProject prj = new MVABProject(GetCtx(), projID, null);
                 decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0)  FROM VAB_ProjectJob WHERE IsActive = 'Y' AND " +
                     "VAB_ProjectStage_ID in (SELECT VAB_ProjectStage_ID FROM VAB_ProjectStage WHERE VAB_Project_ID = " + projID + ")"));
                 prj.SetPlannedAmt(plnAmt);
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
             else if (isOpp.Equals("N") && isCam.Equals("N"))
             {
                 // set sum of total amount of task tab to phase tab, similalary Commitment amount
-                MProjectPhase phase = new MProjectPhase(GetCtx(), GetVAB_ProjectStage_ID(), null);
+                MVABProjectStage phase = new MVABProjectStage(GetCtx(), GetVAB_ProjectStage_ID(), null);
                 phase.SetPlannedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.PlannedAmt),0)  FROM VAB_ProjectJob pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectStage_ID = " + GetVAB_ProjectStage_ID())));
                 phase.SetCommittedAmt(Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(pl.CommittedAmt),0)  FROM VAB_ProjectJob pl WHERE pl.IsActive = 'Y' AND pl.VAB_ProjectStage_ID = " + GetVAB_ProjectStage_ID())));
                 if (!phase.Save())

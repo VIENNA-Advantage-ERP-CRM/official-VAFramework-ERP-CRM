@@ -20,7 +20,7 @@ namespace VAdvantage.Model
     /// <summary>
     /// Project Type Phase Task Model
     /// </summary>
-    public class MProjectTypeTask : X_VAB_Std_Task
+    public class MVABProjectTypeTask : X_VAB_Std_Task
     {
         /// <summary>
         /// Standard Constructor
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Std_Task_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypeTask(Ctx ctx, int VAB_Std_Task_ID, Trx trxName)
+        public MVABProjectTypeTask(Ctx ctx, int VAB_Std_Task_ID, Trx trxName)
             : base (ctx, VAB_Std_Task_ID, trxName)
         {
             
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MProjectTypeTask(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProjectTypeTask(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }

@@ -50,12 +50,12 @@ namespace ViennaAdvantage.Process
             VAB_PromotionType_ID = Campaign.GetVAB_PromotionType_ID();
             VAdvantage.Model.MVABPromotionType CampaignType = new VAdvantage.Model.MVABPromotionType(GetCtx(), VAB_PromotionType_ID, Get_TrxName());
             //MProjectType type = new MProjectType(GetCtx(), VAB_ProjectType_ID, Get_TrxName());
-            VAdvantage.Model.MProject Project = new VAdvantage.Model.MProject(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.MVABProject Project = new VAdvantage.Model.MVABProject(GetCtx(), 0, Get_TrxName());
             VAdvantage.Model.MVABPromotionPhase CampaignPhase = new VAdvantage.Model.MVABPromotionPhase(GetCtx(), 0, Get_TrxName());
 
 
             // MPhase Phase = new MPhase(GetCtx(), 0, Get_TrxName());
-            VAdvantage.Model.MProjectTypeTask task = new VAdvantage.Model.MProjectTypeTask(GetCtx(), 0, Get_TrxName());
+            VAdvantage.Model.MVABProjectTypeTask task = new VAdvantage.Model.MVABProjectTypeTask(GetCtx(), 0, Get_TrxName());
 
             Project.SetName(CampaignType.GetName());
             Project.SetVAB_Promotion_ID(GetRecord_ID());
@@ -83,7 +83,7 @@ namespace ViennaAdvantage.Process
                 //  int VAB_Std_Stage_ID = Phase1.GetVAB_Std_Stage_ID();
                 if (VAB_PromotionPhase_ID != 0)
                 {
-                    VAdvantage.Model.MProjectPhase ProjectPhase = new VAdvantage.Model.MProjectPhase(GetCtx(), 0, Get_TrxName());
+                    VAdvantage.Model.MVABProjectStage ProjectPhase = new VAdvantage.Model.MVABProjectStage(GetCtx(), 0, Get_TrxName());
                     //ProjectPhase.SetVAF_Client_ID(Phase1.GetVAF_Client_ID());
                     ProjectPhase.SetVAF_Client_ID(CampPhase.GetVAF_Client_ID());
                     //ProjectPhase.SetVAF_Org_ID(Phase1.GetVAF_Org_ID());
@@ -114,7 +114,7 @@ namespace ViennaAdvantage.Process
                         //int VAB_Std_Task_ID = task1.GetVAB_Std_Task_ID();
                         if (VAB_PromotionTask_ID != 0)
                         {
-                            VAdvantage.Model.MProjectTask ProjectTask = new VAdvantage.Model.MProjectTask(GetCtx(), 0, Get_TrxName());
+                            VAdvantage.Model.MVABProjectJob ProjectTask = new VAdvantage.Model.MVABProjectJob(GetCtx(), 0, Get_TrxName());
                             //ProjectTask.SetVAF_Client_ID(task1.GetVAF_Client_ID());
                           //  ProjectTask.SetVAF_Client_ID(CampaignTask.GetVAF_Client_ID());
                             // ProjectTask.SetVAF_Client_ID(task1.GetVAF_Client_ID());

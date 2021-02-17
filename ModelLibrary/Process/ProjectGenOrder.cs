@@ -64,7 +64,7 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("VAB_Project_ID == 0");
             }
-            MProject fromProject = GetProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
+            MVABProject fromProject = GetProject(GetCtx(), _VAB_Project_ID, Get_TrxName());
             GetCtx().SetIsSOTrx(true);	//	Set SO context
 
             /** @todo duplicate invoice prevention */
@@ -120,7 +120,7 @@ namespace VAdvantage.Process
             int count = 0;
 
             //	Service Project	
-            if (MProject.PROJECTCATEGORY_ServiceChargeProject.Equals(fromProject.GetProjectCategory()))
+            if (MVABProject.PROJECTCATEGORY_ServiceChargeProject.Equals(fromProject.GetProjectCategory()))
             {
                 /** @todo service project invoicing */
                 throw new Exception("Service Charge Projects are on the TODO List");
@@ -128,7 +128,7 @@ namespace VAdvantage.Process
 
             else	//	Order Lines
             {
-                MProjectLine[] lines = fromProject.GetLines();
+                MVABProjectLine[] lines = fromProject.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MVABOrderLine ol = new MVABOrderLine(order);
@@ -173,9 +173,9 @@ namespace VAdvantage.Process
         /// <param name="VAB_Project_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>valid project</returns>
-        static internal MProject GetProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
+        static internal MVABProject GetProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
         {
-            MProject fromProject = new MProject(ctx, VAB_Project_ID, trxName);
+            MVABProject fromProject = new MVABProject(ctx, VAB_Project_ID, trxName);
             if (fromProject.GetVAB_Project_ID() == 0)
             {
                 throw new ArgumentException("Project not found VAB_Project_ID=" + VAB_Project_ID);

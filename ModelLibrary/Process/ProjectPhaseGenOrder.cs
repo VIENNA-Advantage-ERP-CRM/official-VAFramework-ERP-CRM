@@ -67,8 +67,8 @@ namespace VAdvantage.Process
             log.Info("doIt - VAB_ProjectStage_ID=" + m_VAB_ProjectStage_ID);
             if (m_VAB_ProjectStage_ID == 0)
                 throw new ArgumentException("VAB_ProjectStage_ID == 0");
-            MProjectPhase fromPhase = new MProjectPhase(GetCtx(), m_VAB_ProjectStage_ID, Get_TrxName());
-            MProject fromProject = ProjectGenOrder.GetProject(GetCtx(), fromPhase.GetVAB_Project_ID(), Get_TrxName());
+            MVABProjectStage fromPhase = new MVABProjectStage(GetCtx(), m_VAB_ProjectStage_ID, Get_TrxName());
+            MVABProject fromProject = ProjectGenOrder.GetProject(GetCtx(), fromPhase.GetVAB_Project_ID(), Get_TrxName());
             MVABOrder order = new MVABOrder(fromProject, true, MVABOrder.DocSubTypeSO_OnCredit);
             order.SetDescription(order.GetDescription() + " - " + fromPhase.GetName());
             if (!order.Save())
@@ -98,8 +98,8 @@ namespace VAdvantage.Process
 
             //	Project Tasks
             int count = 0;
-            MProjectTask[] tasks = fromPhase.GetTasks();
-            foreach (MProjectTask element in tasks)
+            MVABProjectJob[] tasks = fromPhase.GetTasks();
+            foreach (MVABProjectJob element in tasks)
             {
                 MVABOrderLine ol = new MVABOrderLine(order);
                 ol.SetLine(element.GetSeqNo());

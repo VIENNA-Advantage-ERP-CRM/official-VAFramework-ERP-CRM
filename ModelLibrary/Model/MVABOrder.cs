@@ -274,7 +274,7 @@ namespace VAdvantage.Model
         *  @param IsSOTrx sales order
         * 	@param	DocSubTypeSO if SO DocType Target (default DocSubTypeSO_OnCredit)
         */
-        public MVABOrder(MProject project, bool IsSOTrx, String DocSubTypeSO)
+        public MVABOrder(MVABProject project, bool IsSOTrx, String DocSubTypeSO)
             : this(project.GetCtx(), 0, project.Get_TrxName())
         {
 

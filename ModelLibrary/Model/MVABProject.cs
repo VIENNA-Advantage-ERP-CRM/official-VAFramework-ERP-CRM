@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProject : X_VAB_Project
+    public class MVABProject : X_VAB_Project
     {
         /**	Cached PL			*/
         private int _VAM_PriceList_ID = 0;
@@ -37,13 +37,13 @@ namespace VAdvantage.Model
      *	@param trxName transaction
      *	@return Project
      */
-        public static MProject CopyFrom(Ctx ctx, int VAB_Project_ID, DateTime? dateDoc, Trx trxName)
+        public static MVABProject CopyFrom(Ctx ctx, int VAB_Project_ID, DateTime? dateDoc, Trx trxName)
         {
-            MProject from = new MProject(ctx, VAB_Project_ID, trxName);
+            MVABProject from = new MVABProject(ctx, VAB_Project_ID, trxName);
             if (from.GetVAB_Project_ID() == 0)
                 throw new ArgumentException("From Project not found VAB_Project_ID=" + VAB_Project_ID);
             //
-            MProject to = new MProject(ctx, 0, trxName);
+            MVABProject to = new MVABProject(ctx, 0, trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("VAB_Project_ID", I_ZERO);
             //	Set Value with Time
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
          *	@param VAB_Project_ID id
          *	@param trxName transaction
          */
-        public MProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
+        public MVABProject(Ctx ctx, int VAB_Project_ID, Trx trxName)
             : base(ctx, VAB_Project_ID, trxName)
         {
 
@@ -108,7 +108,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MProject(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProject(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -192,9 +192,9 @@ namespace VAdvantage.Model
          * 	Get Project Lines
          *	@return Array of lines
          */
-        public MProjectLine[] GetLines()
+        public MVABProjectLine[] GetLines()
         {
-            List<MProjectLine> list = new List<MProjectLine>();
+            List<MVABProjectLine> list = new List<MVABProjectLine>();
             String sql = "SELECT * FROM VAB_ProjectLine WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
@@ -206,7 +206,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MProjectLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABProjectLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception ex)
@@ -225,7 +225,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MProjectLine[] retValue = new MProjectLine[list.Count];
+            MVABProjectLine[] retValue = new MVABProjectLine[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -234,9 +234,9 @@ namespace VAdvantage.Model
          * 	Get Project Issues
          *	@return Array of issues
          */
-        public MProjectIssue[] GetIssues()
+        public MVABProjectSupply[] GetIssues()
         {
-            List<MProjectIssue> list = new List<MProjectIssue>();
+            List<MVABProjectSupply> list = new List<MVABProjectSupply>();
             String sql = "SELECT * FROM VAB_ProjectSupply WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY Line";
             DataTable dt = null;
             IDataReader idr = null;
@@ -248,7 +248,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MProjectIssue(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABProjectSupply(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception ex)
@@ -266,7 +266,7 @@ namespace VAdvantage.Model
                 }
                 dt = null;
             }
-            MProjectIssue[] retValue = new MProjectIssue[list.Count];
+            MVABProjectSupply[] retValue = new MVABProjectSupply[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -275,9 +275,9 @@ namespace VAdvantage.Model
          * 	Get Project Phases
          *	@return Array of phases
          */
-        public MProjectPhase[] GetPhases()
+        public MVABProjectStage[] GetPhases()
         {
-            List<MProjectPhase> list = new List<MProjectPhase>();
+            List<MVABProjectStage> list = new List<MVABProjectStage>();
             String sql = "SELECT * FROM VAB_ProjectStage WHERE VAB_Project_ID=" + GetVAB_Project_ID() + " ORDER BY SeqNo";
             DataTable dt = null;
             IDataReader idr = null;
@@ -289,7 +289,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MProjectPhase(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABProjectStage(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception ex)
@@ -309,7 +309,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MProjectPhase[] retValue = new MProjectPhase[list.Count];
+            MVABProjectStage[] retValue = new MVABProjectStage[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -320,7 +320,7 @@ namespace VAdvantage.Model
          *	@param project project
          *	@return number of total lines copied
          */
-        public int CopyDetailsFrom(MProject project)
+        public int CopyDetailsFrom(MVABProject project)
         {
             if (IsProcessed() || project == null)
                 return 0;
@@ -334,15 +334,15 @@ namespace VAdvantage.Model
          *	@param project project
          *	@return number of lines copied
          */
-        public int CopyLinesFrom(MProject project)
+        public int CopyLinesFrom(MVABProject project)
         {
             if (IsProcessed() || project == null)
                 return 0;
             int count = 0;
-            MProjectLine[] fromLines = project.GetLines();
+            MVABProjectLine[] fromLines = project.GetLines();
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MProjectLine line = new MProjectLine(GetCtx(), 0, project.Get_TrxName());
+                MVABProjectLine line = new MVABProjectLine(GetCtx(), 0, project.Get_TrxName());
                 PO.CopyValues(fromLines[i], line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 line.SetVAB_Project_ID(GetVAB_Project_ID());
                 line.SetInvoicedAmt(Env.ZERO);
@@ -366,15 +366,15 @@ namespace VAdvantage.Model
          *	@param fromProject project
          *	@return number of items copied
          */
-        public int CopyPhasesFrom(MProject fromProject)
+        public int CopyPhasesFrom(MVABProject fromProject)
         {
             if (IsProcessed() || fromProject == null)
                 return 0;
             int count = 0;
             int taskCount = 0;
             //	Get Phases
-            MProjectPhase[] myPhases = GetPhases();
-            MProjectPhase[] fromPhases = fromProject.GetPhases();
+            MVABProjectStage[] myPhases = GetPhases();
+            MVABProjectStage[] fromPhases = fromProject.GetPhases();
             //	Copy Phases
             for (int i = 0; i < fromPhases.Length; i++)
             {
@@ -401,7 +401,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    MProjectPhase toPhase = new MProjectPhase(GetCtx(), 0, Get_TrxName());
+                    MVABProjectStage toPhase = new MVABProjectStage(GetCtx(), 0, Get_TrxName());
                     PO.CopyValues(fromPhases[i], toPhase, GetVAF_Client_ID(), GetVAF_Org_ID());
                     toPhase.SetVAB_Project_ID(GetVAB_Project_ID());
                     toPhase.SetVAB_Order_ID(0);
@@ -426,7 +426,7 @@ namespace VAdvantage.Model
          * 	If Service Project copy Projet Type Phase/Tasks
          *	@param type project type
          */
-        public void SetProjectType(MProjectType type)
+        public void SetProjectType(MVABProjectType type)
         {
             if (type == null)
                 return;
@@ -442,15 +442,15 @@ namespace VAdvantage.Model
          *	@param type Project Type
          *	@return count
          */
-        public int CopyPhasesFrom(MProjectType type)
+        public int CopyPhasesFrom(MVABProjectType type)
         {
             //	create phases
             int count = 0;
             int taskCount = 0;
-            MProjectTypePhase[] typePhases = type.GetPhases();
+            MVABProjectTypeStage[] typePhases = type.GetPhases();
             for (int i = 0; i < typePhases.Length; i++)
             {
-                MProjectPhase toPhase = new MProjectPhase(this, typePhases[i]);
+                MVABProjectStage toPhase = new MVABProjectStage(this, typePhases[i]);
                 if (toPhase.Save())
                 {
                     count++;
@@ -560,7 +560,7 @@ namespace VAdvantage.Model
             }
 
             //	Value/Name change
-            MProject prjph = null;
+            MVABProject prjph = null;
             if (success && !newRecord
                 && (Is_ValueChanged("Value") || Is_ValueChanged("Name")))
                 MVABAccount.UpdateValueDescription(GetCtx(), "VAB_Project_ID=" + GetVAB_Project_ID(), Get_TrxName());
@@ -573,7 +573,7 @@ namespace VAdvantage.Model
             }
             else
             {                
-                prjph = new MProject(GetCtx(), GetVAB_Project_ID(), Get_Trx());
+                prjph = new MVABProject(GetCtx(), GetVAB_Project_ID(), Get_Trx());
                 if (!prjph.IsOpportunity())
                 {
                     decimal plnAmt = Util.GetValueOfDecimal(DB.ExecuteScalar("SELECT COALESCE(SUM(PlannedAmt),0) FROM VAB_ProjectStage WHERE IsActive= 'Y' AND VAB_Project_ID= " + GetVAB_Project_ID()));

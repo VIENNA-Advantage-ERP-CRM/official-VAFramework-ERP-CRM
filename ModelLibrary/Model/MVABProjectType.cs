@@ -18,11 +18,11 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MProjectType : X_VAB_ProjectType
+    public class MVABProjectType : X_VAB_ProjectType
     {
         /**	Cache						*/
-        private static CCache<int, MProjectType> _cache
-            = new CCache<int, MProjectType>("VAB_ProjectType", 20);
+        private static CCache<int, MVABProjectType> _cache
+            = new CCache<int, MVABProjectType>("VAB_ProjectType", 20);
 
         /// <summary>
         /// Standard Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_ProjectType_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MProjectType(Ctx ctx, int VAB_ProjectType_ID, Trx trxName)
+        public MVABProjectType(Ctx ctx, int VAB_ProjectType_ID, Trx trxName)
             : base(ctx, VAB_ProjectType_ID, trxName)
         {
             /**
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MProjectType(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABProjectType(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -59,13 +59,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_ProjectType_ID">id</param>
         /// <returns>MProjectType</returns>
-        public static MProjectType Get(Ctx ctx, int VAB_ProjectType_ID)
+        public static MVABProjectType Get(Ctx ctx, int VAB_ProjectType_ID)
         {
             int key = VAB_ProjectType_ID;
-            MProjectType retValue = (MProjectType)_cache[key];
+            MVABProjectType retValue = (MVABProjectType)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MProjectType(ctx, VAB_ProjectType_ID, null);
+            retValue = new MVABProjectType(ctx, VAB_ProjectType_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -75,9 +75,9 @@ namespace VAdvantage.Model
         /// Get Project Type Phases
         /// </summary>
         /// <returns>Array of phases</returns>
-        public MProjectTypePhase[] GetPhases()
+        public MVABProjectTypeStage[] GetPhases()
         {
-            List<MProjectTypePhase> list = new List<MProjectTypePhase>();
+            List<MVABProjectTypeStage> list = new List<MVABProjectTypeStage>();
             String sql = "SELECT * FROM VAB_Std_Stage WHERE VAB_ProjectType_ID=" + GetVAB_ProjectType_ID() + " ORDER BY SeqNo";
             try
             {
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MProjectTypePhase(GetCtx(), dr, Get_TrxName()));
+                        list.Add(new MVABProjectTypeStage(GetCtx(), dr, Get_TrxName()));
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, ex);
             }
             //
-            MProjectTypePhase[] retValue = new MProjectTypePhase[list.Count];
+            MVABProjectTypeStage[] retValue = new MVABProjectTypeStage[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
