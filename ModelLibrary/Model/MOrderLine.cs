@@ -4480,12 +4480,12 @@ namespace VAdvantage.Model
 
                 if (GetPriceEntered() != 0)
                 {
-                    margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice")));
-                    marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, GetPriceEntered())
+                    margin = Decimal.Subtract(GetPriceEntered(), Util.GetValueOfDecimal(Get_Value("VA077_PurchasePrice"))) * GetQtyEntered();
+                    marginper = Decimal.Round(Decimal.Multiply(Decimal.Divide(margin, (GetPriceEntered() * GetQtyEntered()))
                         , Env.ONEHUNDRED), GetPrecision(), MidpointRounding.AwayFromZero);
                 }
 
-                Set_Value("VA077_MarginAmt", Decimal.Multiply(margin, GetQtyEntered()));
+                Set_Value("VA077_MarginAmt", margin);
                 Set_Value("VA077_MarginPercent", marginper);
             }
             return true;
@@ -4671,11 +4671,12 @@ namespace VAdvantage.Model
 
                         sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_HistoricContractDate=" + GlobalVariable.TO_DATE(HCDate, true) + @",
                             VA077_ContractCPStartDate = " + GlobalVariable.TO_DATE(StartDate, true) + @", 
@@ -4694,11 +4695,12 @@ namespace VAdvantage.Model
                     {
                         sql = @"UPDATE C_Order  p SET VA077_TotalMarginAmt=(SELECT COALESCE(SUM(pl.VA077_MarginAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalPurchaseAmt=(SELECT COALESCE(SUM(pl.VA077_PurchasePrice),0) FROM C_OrderLine pl 
+                            VA077_TotalPurchaseAmt=(SELECT ROUND(COALESCE(SUM(pl.VA077_PurchasePrice * QtyEntered),0),2) FROM C_OrderLine pl  
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_MarginPercent=(SELECT ROUND(COALESCE(SUM(pl.VA077_MarginPercent),0),2) FROM C_OrderLine pl 
-                            WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
-                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.PriceEntered),0) FROM C_OrderLine pl 
+                            VA077_MarginPercent=(SELECT CASE WHEN Sum(LineNetAmt) > 0 Then 
+                            ROUND(COALESCE(((Sum(LineNetAmt)- Sum(VA077_PurchasePrice * QtyEntered))/Sum(LineNetAmt)*100),0),2) ELSE 0  END 
+                            FROM C_OrderLine pl WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
+                            VA077_TotalSalesAmt=(SELECT COALESCE(SUM(pl.LineNetAmt),0) FROM C_OrderLine pl 
                             WHERE pl.IsActive = 'Y' AND pl.C_Order_ID = " + GetC_Order_ID() + @"),
                             VA077_ChangeStartDate = " + GlobalVariable.TO_DATE(GetStartDate(), true) + @"
                             WHERE p.C_Order_ID=" + GetC_Order_ID();
