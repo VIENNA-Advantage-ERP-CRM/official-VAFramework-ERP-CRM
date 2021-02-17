@@ -186,11 +186,11 @@ namespace VAdvantage.Login
 
 
 
-        static Language()
-        {
-            FillLanguage();
+        //static Language()
+        //{
+        //    FillLanguage();
 
-        }
+        //}
 
         //Default Language            
         private static Language _loginLanguage = null;
