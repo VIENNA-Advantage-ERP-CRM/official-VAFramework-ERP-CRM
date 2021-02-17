@@ -110,7 +110,7 @@ namespace VAdvantage.Model
          *	@param parent parent
          *	@param VAM_ProductCostElement_ID cost element
          */
-        public MLandedCostAllocation(MInvoiceLine parent, int VAM_ProductCostElement_ID)
+        public MLandedCostAllocation(MVABInvoiceLine parent, int VAM_ProductCostElement_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 

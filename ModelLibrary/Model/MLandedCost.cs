@@ -56,7 +56,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="il">invoice line</param>
         /// <returns>array of landed cost lines</returns>
-        public static MLandedCost[] GetLandedCosts(MInvoiceLine il)
+        public static MLandedCost[] GetLandedCosts(MVABInvoiceLine il)
         {
             List<MLandedCost> list = new List<MLandedCost>();
             String sql = "SELECT * FROM VAB_LCost WHERE VAB_InvoiceLine_ID=" + il.GetVAB_InvoiceLine_ID();
@@ -211,7 +211,7 @@ namespace VAdvantage.Model
         /// <returns>error message or ""</returns>
         public String AllocateCosts()
         {
-            MInvoiceLine il = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
+            MVABInvoiceLine il = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
             return il.AllocateLandedCosts();
         }
 

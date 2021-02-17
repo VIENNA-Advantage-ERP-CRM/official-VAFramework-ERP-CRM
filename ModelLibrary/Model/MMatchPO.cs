@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         /** Order Line				*/
         private MVABOrderLine _oLine = null;
         /** Invoice Line			*/
-        private MInvoiceLine _iLine = null;
+        private MVABInvoiceLine _iLine = null;
         /**	Static Logger	*/
         private static VLogger s_log = VLogger.GetVLogger(typeof(MMatchPO).FullName);
 
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
         /// <param name="sLine">shipment line</param>
         /// <param name="dateTrx">optional date</param>
         /// <param name="qty">matched quantity</param>
-        public MMatchPO(MInOutLine sLine, DateTime? dateTrx, Decimal qty)
+        public MMatchPO(MVAMInvInOutLine sLine, DateTime? dateTrx, Decimal qty)
             : this(sLine.GetCtx(), 0, sLine.Get_Trx())
         {
             SetClientOrg(sLine);
@@ -104,7 +104,7 @@ namespace VAdvantage.Model
         /// <param name="iLine">invoice line</param>
         /// <param name="dateTrx">optional date</param>
         /// <param name="qty">matched quantity</param>
-        public MMatchPO(MInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
+        public MMatchPO(MVABInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
             : this(iLine.GetCtx(), 0, iLine.Get_Trx())
         {
             SetClientOrg(iLine);
@@ -204,7 +204,7 @@ namespace VAdvantage.Model
         *	@param qty qty
         *	@return Match Record
         */
-        public static MMatchPO Create(MInvoiceLine iLine, MInOutLine sLine, DateTime? dateTrx, Decimal qty)
+        public static MMatchPO Create(MVABInvoiceLine iLine, MVAMInvInOutLine sLine, DateTime? dateTrx, Decimal qty)
         {
             Trx trxName = null;
             Ctx ctx = null;
@@ -449,7 +449,7 @@ namespace VAdvantage.Model
         protected override bool AfterDelete(bool success)
         {
             //	Order Delivered/Invoiced
-            //	(Reserved in VMatch and MInOut.completeIt)
+            //	(Reserved in VMatch and MVAMInvInOut.completeIt)
             if (success && GetVAB_OrderLine_ID() != 0)
             {
                 MVABOrderLine orderLine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
         protected override bool AfterSave(bool newRecord, bool success)
         {
             //	Purchase Order Delivered/Invoiced
-            //	(Reserved in VMatch and MInOut.completeIt)
+            //	(Reserved in VMatch and MVAMInvInOut.completeIt)
             if (success && GetVAB_OrderLine_ID() != 0)
             {
                 MVABOrderLine orderLine = GetOrderLine();
@@ -527,7 +527,7 @@ namespace VAdvantage.Model
                 //if (orderLine.GetVAM_PFeature_SetInstance_ID() == 0
                 //    && GetVAM_Inv_InOutLine_ID() != 0)
                 //{
-                //    MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                //    MVAMInvInOutLine iol = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
                 //    if (iol.GetMovementQty().CompareTo(orderLine.GetQtyOrdered()) == 0)
                 //        orderLine.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
                 //}
@@ -564,8 +564,8 @@ namespace VAdvantage.Model
 
             if (GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine line = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
-                MInOut ino = new MInOut(GetCtx(), line.GetVAM_Inv_InOut_ID(), Get_TrxName());
+                MVAMInvInOutLine line = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                MVAMInvInOut ino = new MVAMInvInOut(GetCtx(), line.GetVAM_Inv_InOut_ID(), Get_TrxName());
                 if (ino.GetDocStatus() != DocumentEngine.ACTION_COMPLETE)
                 {
                     log.SaveError("Error", Msg.GetMsg(GetCtx(), "Order/ShipmentNotCompleted"));
@@ -596,14 +596,14 @@ namespace VAdvantage.Model
             //	Set ASI from Receipt
             if (GetVAM_PFeature_SetInstance_ID() == 0 && GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                MVAMInvInOutLine iol = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
                 SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
             }
 
             //	Find OrderLine
             if (GetVAB_OrderLine_ID() == 0)
             {
-                MInvoiceLine il = null;
+                MVABInvoiceLine il = null;
                 if (GetVAB_InvoiceLine_ID() != 0)
                 {
                     il = GetInvoiceLine();
@@ -612,7 +612,7 @@ namespace VAdvantage.Model
                 }	//	get from invoice
                 if (GetVAB_OrderLine_ID() == 0 && GetVAM_Inv_InOutLine_ID() != 0)
                 {
-                    MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                    MVAMInvInOutLine iol = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
                     if (iol.GetVAB_OrderLine_ID() != 0)
                     {
                         SetVAB_OrderLine_ID(iol.GetVAB_OrderLine_ID());
@@ -669,10 +669,10 @@ namespace VAdvantage.Model
         /// Get Invoice Line
         /// </summary>
         /// <returns>invoice line or null</returns>
-        public MInvoiceLine GetInvoiceLine()
+        public MVABInvoiceLine GetInvoiceLine()
         {
             if (_iLine == null && GetVAB_InvoiceLine_ID() != 0)
-                _iLine = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                _iLine = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
             return _iLine;
         }
 
@@ -787,7 +787,7 @@ namespace VAdvantage.Model
         /// Set VAB_InvoiceLine_ID
         /// </summary>
         /// <param name="line">line</param>
-        public void SetVAB_InvoiceLine_ID(MInvoiceLine line)
+        public void SetVAB_InvoiceLine_ID(MVABInvoiceLine line)
         {
             _iLine = line;
             if (line == null)

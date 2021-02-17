@@ -108,7 +108,7 @@ namespace VAdvantage.Process
 
             //
             int old_BPartner_ID = -1;
-            MInvoice invoice = null;
+            MVABInvoice invoice = null;
             MTimeExpense te = null;
             //
             //PreparedStatement pstmt = null;
@@ -160,7 +160,7 @@ namespace VAdvantage.Process
                             MVABBusinessPartner bp = new MVABBusinessPartner(GetCtx(), te.GetVAB_BusinessPartner_ID(), Get_TrxName());
 
                             log.Info("New Invoice for " + bp);
-                            invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
+                            invoice = new MVABInvoice(GetCtx(), 0, Get_TrxName());
 
                             invoice.SetBPartner(bp);
                             if (invoice.GetVAB_BPart_Location_ID() == 0)
@@ -364,7 +364,7 @@ namespace VAdvantage.Process
                             }
 
                             //	Create OrderLine
-                            MInvoiceLine il = new MInvoiceLine(invoice);
+                            MVABInvoiceLine il = new MVABInvoiceLine(invoice);
                             //
                             if (line.GetVAM_Product_ID() != 0)
                             {
@@ -498,7 +498,7 @@ namespace VAdvantage.Process
         /// Complete Invoice
         /// </summary>
         /// <param name="invoice">invoice</param>
-        private void CompleteInvoice(MInvoice invoice, MTimeExpense te)
+        private void CompleteInvoice(MVABInvoice invoice, MTimeExpense te)
         {
             if (invoice == null)
             {

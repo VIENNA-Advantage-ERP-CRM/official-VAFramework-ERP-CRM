@@ -1,5 +1,5 @@
 ﻿/********************************************************
- * Class Name     : MInvoice
+ * Class Name     : MVABInvoice
  * Purpose        : Calculate the invoice using VAB_Invoice table
  * Class Used     : X_VAB_Invoice, DocAction
  * Chronological    Development
@@ -29,16 +29,16 @@ using VAdvantage.Print;
 
 namespace VAdvantage.Model
 {
-    public class MInvoice : X_VAB_Invoice, DocAction
+    public class MVABInvoice : X_VAB_Invoice, DocAction
     {
         #region Variables
         //	Open Amount		
         private Decimal? _openAmt = null;
 
         //	Invoice Lines	
-        private MInvoiceLine[] _lines;
+        private MVABInvoiceLine[] _lines;
         //	Invoice Taxes	
-        private MInvoiceTax[] _taxes;
+        private MVABInvoiceTax[] _taxes;
         /**	Process Message 			*/
         private String _processMsg = null;
         /**	Just Prepared Flag			*/
@@ -51,9 +51,9 @@ namespace VAdvantage.Model
         /** Reversal Flag		*/
         private bool _reversal = false;
         //	Cache					
-        private static CCache<int, MInvoice> _cache = new CCache<int, MInvoice>("VAB_Invoice", 20, 2);	//	2 minutes
+        private static CCache<int, MVABInvoice> _cache = new CCache<int, MVABInvoice>("VAB_Invoice", 20, 2);	//	2 minutes
         //	Logger			
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInvoice).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABInvoice).FullName);
 
         private MVABAccountBook acctSchema = null;
 
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         string conversionNotFoundInvoice = "";
         string conversionNotFoundInvoice1 = "";
         string conversionNotFoundInOut = "";
-        MInOutLine sLine = null;
+        MVAMInvInOutLine sLine = null;
 
         #endregion
 
@@ -72,9 +72,9 @@ namespace VAdvantage.Model
         /// <param name="VAB_BusinessPartner_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array</returns>
-        public static MInvoice[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
+        public static MVABInvoice[] GetOfBPartner(Ctx ctx, int VAB_BusinessPartner_ID, Trx trxName)
         {
-            List<MInvoice> list = new List<MInvoice>();
+            List<MVABInvoice> list = new List<MVABInvoice>();
             String sql = "SELECT * FROM VAB_Invoice WHERE VAB_BusinessPartner_ID=" + VAB_BusinessPartner_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInvoice(ctx, dr, trxName));
+                    list.Add(new MVABInvoice(ctx, dr, trxName));
                 }
 
             }
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MInvoice[] retValue = new MInvoice[list.Count];
+            MVABInvoice[] retValue = new MVABInvoice[list.Count];
 
             retValue = list.ToArray();
             return retValue;
@@ -119,10 +119,10 @@ namespace VAdvantage.Model
         /// <param name="trxName">trx</param>
         /// <param name="setOrder">set Order links</param>
         /// <returns></returns>
-        public static MInvoice CopyFrom(MInvoice from, DateTime? dateDoc, int VAB_DocTypesTarget_ID,
+        public static MVABInvoice CopyFrom(MVABInvoice from, DateTime? dateDoc, int VAB_DocTypesTarget_ID,
             Boolean counter, Trx trxName, Boolean setOrder)
         {
-            MInvoice to = new MInvoice(from.GetCtx(), 0, null);
+            MVABInvoice to = new MVABInvoice(from.GetCtx(), 0, null);
             to.Set_TrxName(trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("VAB_Invoice_ID", I_ZERO);
@@ -280,18 +280,18 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Get MInvoice from Cache
+        /// Get MVABInvoice from Cache
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAB_Invoice_ID">id</param>
-        /// <returns>MInvoice</returns>
-        public static MInvoice Get(Ctx ctx, int VAB_Invoice_ID)
+        /// <returns>MVABInvoice</returns>
+        public static MVABInvoice Get(Ctx ctx, int VAB_Invoice_ID)
         {
             int key = VAB_Invoice_ID;
-            MInvoice retValue = (MInvoice)_cache[key];
+            MVABInvoice retValue = (MVABInvoice)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MInvoice(ctx, VAB_Invoice_ID, null);
+            retValue = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -303,7 +303,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Invoice_ID">invoice or 0 for new</param>
         /// <param name="trxName">trx name</param>
-        public MInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName) :
+        public MVABInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName) :
             base(ctx, VAB_Invoice_ID, trxName)
         {
             if (VAB_Invoice_ID == 0)
@@ -344,7 +344,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MInvoice(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABInvoice(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
         /// <param name="order">order</param>
         /// <param name="VAB_DocTypesTarget_ID">target document type</param>
         /// <param name="invoiceDate">date or null</param>
-        public MInvoice(MVABOrder order, int VAB_DocTypesTarget_ID, DateTime? invoiceDate)
+        public MVABInvoice(MVABOrder order, int VAB_DocTypesTarget_ID, DateTime? invoiceDate)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
             try
@@ -387,7 +387,7 @@ namespace VAdvantage.Model
             }
             catch (Exception e)
             {
-                log.Log(Level.SEVERE, "MInvoice", e);
+                log.Log(Level.SEVERE, "MVABInvoice", e);
                 throw new ArgumentException(e.Message);
             }
         }
@@ -397,7 +397,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ship">shipment</param>
         /// <param name="invoiceDate">date or null</param>
-        public MInvoice(MInOut ship, DateTime? invoiceDate)
+        public MVABInvoice(MVAMInvInOut ship, DateTime? invoiceDate)
             : this(ship.GetCtx(), 0, ship.Get_TrxName())
         {
 
@@ -419,7 +419,7 @@ namespace VAdvantage.Model
         /// <param name="ship">shipment</param>
         /// <param name="invoiceDate">date or null</param>
         /// <param name="VAB_Order_ID">Order reference for invoice creation</param>
-        //public MInvoice(MInOut ship, DateTime? invoiceDate, int VAB_Order_ID)
+        //public MVABInvoice(MVAMInvInOut ship, DateTime? invoiceDate, int VAB_Order_ID)
         //    : this(ship.GetCtx(), 0, ship.Get_TrxName())
         //{
 
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="batch">batch</param>
         /// <param name="line">batch line</param>
-        public MInvoice(MInvoiceBatch batch, MInvoiceBatchLine line)
+        public MVABInvoice(MVABInvoiceBatch batch, MVABInvoiceBatchLine line)
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
 
@@ -597,7 +597,7 @@ namespace VAdvantage.Model
         /// Set Shipment References
         /// </summary>
         /// <param name="ship">shipment</param>
-        public void SetShipment(MInOut ship)
+        public void SetShipment(MVAMInvInOut ship)
         {
             // SetShipment(ship, 0);
             if (ship == null)
@@ -677,7 +677,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ship">shipment</param>
         /// <param name="VAB_Order_ID">Order reference for invoice creation</param>
-        //public void SetShipment(MInOut ship, int VAB_Order_ID)
+        //public void SetShipment(MVAMInvInOut ship, int VAB_Order_ID)
         //{
         //    if (ship == null)
         //        return;
@@ -836,9 +836,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="whereClause">starting with AND</param>
         /// <returns>lines</returns>
-        private MInvoiceLine[] GetLines(String whereClause)
+        private MVABInvoiceLine[] GetLines(String whereClause)
         {
-            List<MInvoiceLine> list = new List<MInvoiceLine>();
+            List<MVABInvoiceLine> list = new List<MVABInvoiceLine>();
             String sql = "SELECT * FROM VAB_InvoiceLine WHERE VAB_Invoice_ID= " + GetVAB_Invoice_ID();
             if (whereClause != null)
                 sql += whereClause;
@@ -850,7 +850,7 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MInvoiceLine il = new MInvoiceLine(GetCtx(), dr, Get_TrxName());
+                    MVABInvoiceLine il = new MVABInvoiceLine(GetCtx(), dr, Get_TrxName());
                     il.SetInvoice(this);
                     list.Add(il);
                 }
@@ -861,7 +861,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "getLines", e);
             }
 
-            MInvoiceLine[] lines = new MInvoiceLine[list.Count];
+            MVABInvoiceLine[] lines = new MVABInvoiceLine[list.Count];
             lines = list.ToArray();
             return lines;
         }
@@ -871,7 +871,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>lines</returns>
-        public MInvoiceLine[] GetLines(bool requery)
+        public MVABInvoiceLine[] GetLines(bool requery)
         {
             if (_lines == null || _lines.Length == 0 || requery)
                 _lines = GetLines(null);
@@ -882,7 +882,7 @@ namespace VAdvantage.Model
         /// Get Lines of Invoice
         /// </summary>
         /// <returns>lines</returns>
-        public MInvoiceLine[] GetLines()
+        public MVABInvoiceLine[] GetLines()
         {
             return GetLines(false);
         }
@@ -894,10 +894,10 @@ namespace VAdvantage.Model
         public void RenumberLines(int step)
         {
             int number = step;
-            MInvoiceLine[] lines = GetLines(false);
+            MVABInvoiceLine[] lines = GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInvoiceLine line = lines[i];
+                MVABInvoiceLine line = lines[i];
                 line.SetLine(number);
                 line.Save();
                 number += step;
@@ -912,18 +912,18 @@ namespace VAdvantage.Model
         /// <param name="counter">create counter links</param>
         /// <param name="setOrder">set order links</param>
         /// <returns>number of lines copied</returns>
-        public int CopyLinesFrom(MInvoice otherInvoice, bool counter, bool setOrder)
+        public int CopyLinesFrom(MVABInvoice otherInvoice, bool counter, bool setOrder)
         {
             if (IsProcessed() || IsPosted() || otherInvoice == null)
             {
                 return 0;
             }
-            MInvoiceLine[] fromLines = otherInvoice.GetLines(false);
+            MVABInvoiceLine[] fromLines = otherInvoice.GetLines(false);
             int count = 0;
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MInvoiceLine line = new MInvoiceLine(GetCtx(), 0, Get_TrxName());
-                MInvoiceLine fromLine = fromLines[i];
+                MVABInvoiceLine line = new MVABInvoiceLine(GetCtx(), 0, Get_TrxName());
+                MVABInvoiceLine fromLine = fromLines[i];
                 if (counter)	//	header
                     PO.CopyValues(fromLine, line, GetVAF_Client_ID(), GetVAF_Org_ID());
                 else
@@ -972,7 +972,7 @@ namespace VAdvantage.Model
                     line.SetVAM_Inv_InOutLine_ID(0);
                     if (fromLine.GetVAM_Inv_InOutLine_ID() != 0)
                     {
-                        MInOutLine peer = new MInOutLine(GetCtx(), fromLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                        MVAMInvInOutLine peer = new MVAMInvInOutLine(GetCtx(), fromLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                         if (peer.GetRef_InOutLine_ID() != 0)
                             line.SetVAM_Inv_InOutLine_ID(peer.GetRef_InOutLine_ID());
                     }
@@ -1137,19 +1137,19 @@ namespace VAdvantage.Model
          *	@param requery requery
          *	@return array of taxes
          */
-        public MInvoiceTax[] GetTaxes(bool requery)
+        public MVABInvoiceTax[] GetTaxes(bool requery)
         {
             if (_taxes != null && !requery)
                 return _taxes;
             String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
-            List<MInvoiceTax> list = new List<MInvoiceTax>();
+            List<MVABInvoiceTax> list = new List<MVABInvoiceTax>();
             DataSet ds = null;
             try
             {
                 ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MInvoiceTax(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABInvoiceTax(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -1162,7 +1162,7 @@ namespace VAdvantage.Model
                 ds = null;
             }
 
-            _taxes = new MInvoiceTax[list.Count];
+            _taxes = new MVABInvoiceTax[list.Count];
             _taxes = list.ToArray();
             return _taxes;
         }
@@ -1218,7 +1218,7 @@ namespace VAdvantage.Model
          */
         public bool ValidatePaySchedule()
         {
-            MInvoicePaySchedule[] schedule = MInvoicePaySchedule.GetInvoicePaySchedule
+            MVABInvoicePaySchedule[] schedule = MVABInvoicePaySchedule.GetInvoicePaySchedule
                 (GetCtx(), GetVAB_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
             if (schedule.Length == 0)
@@ -1426,7 +1426,7 @@ namespace VAdvantage.Model
             // those lines are saved as privious pricelist prices or Payment term.. standard sheet issue no : SI_0344 / JID_0564 / JID_1536_1 by Manjot
             if (!newRecord && (Is_ValueChanged("VAM_PriceList_ID") || Is_ValueChanged("VAB_CurrencyType_ID")))
             {
-                MInvoiceLine[] lines = GetLines(true);
+                MVABInvoiceLine[] lines = GetLines(true);
 
                 if (lines.Length > 0)
                 {
@@ -1438,7 +1438,7 @@ namespace VAdvantage.Model
 
             if (!newRecord && Is_ValueChanged("VAB_PaymentTerm_ID") && Env.IsModuleInstalled("VA009_"))
             {
-                MInvoiceLine[] lines = GetLines(true);
+                MVABInvoiceLine[] lines = GetLines(true);
 
                 // check payment term is advance, if advance - and user try to changes payment term then not allowed
                 bool isAdvance = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT SUM( CASE
@@ -1555,7 +1555,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInvoice[")
+            StringBuilder sb = new StringBuilder("MVABInvoice[")
                 .Append(Get_ID()).Append("-").Append(GetDocumentNo())
                 .Append(",GrandTotal=").Append(GetGrandTotal());
             if (_lines != null)
@@ -1826,7 +1826,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MInvoice invoice = new MInvoice(ctx, dr, trxName);
+                    MVABInvoice invoice = new MVABInvoice(ctx, dr, trxName);
                     if (invoice.TestAllocation())
                         if (invoice.Save())
                             counter++;
@@ -2085,7 +2085,7 @@ namespace VAdvantage.Model
             }
 
             //	Lines
-            MInvoiceLine[] lines = GetLines(true);
+            MVABInvoiceLine[] lines = GetLines(true);
             if (lines.Length == 0)
             {
                 _processMsg = "@NoLines@";
@@ -2252,7 +2252,7 @@ namespace VAdvantage.Model
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine line = lines[i];
+                    MVABInvoiceLine line = lines[i];
                     String error = line.AllocateLandedCosts();
                     if (error != null && error.Length > 0)
                     {
@@ -2286,10 +2286,10 @@ namespace VAdvantage.Model
                 RenumberLines(100);
 
                 //	Order Lines with non-stocked BOMs
-                MInvoiceLine[] lines = GetLines(where);
+                MVABInvoiceLine[] lines = GetLines(where);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine line = lines[i];
+                    MVABInvoiceLine line = lines[i];
                     MProduct product = MProduct.Get(GetCtx(), line.GetVAM_Product_ID());
                     log.Fine(product.GetName());
                     //	New Lines
@@ -2298,7 +2298,7 @@ namespace VAdvantage.Model
                     for (int j = 0; j < boms.Length; j++)
                     {
                         MProductBOM bom = boms[j];
-                        MInvoiceLine newLine = new MInvoiceLine(this);
+                        MVABInvoiceLine newLine = new MVABInvoiceLine(this);
                         newLine.SetLine(++lineNo);
                         newLine.SetVAM_Product_ID(bom.GetProduct().GetVAM_Product_ID(),
                             bom.GetProduct().GetVAB_UOM_ID());
@@ -2351,10 +2351,10 @@ namespace VAdvantage.Model
                 Decimal totalLines = Env.ZERO;
                 Decimal totalWithholdingAmt = Env.ZERO;
                 List<int> taxList = new List<int>();
-                MInvoiceLine[] lines = GetLines(false);
+                MVABInvoiceLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine line = lines[i];
+                    MVABInvoiceLine line = lines[i];
                     /**	Sync ownership for SO
                     if (isSOTrx() && line.getVAF_Org_ID() != getVAF_Org_ID())
                     {
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Model
                     int taxID = (int)line.GetVAB_TaxRate_ID();
                     if (!taxList.Contains(taxID))
                     {
-                        MInvoiceTax iTax = MInvoiceTax.Get(line, GetPrecision(),
+                        MVABInvoiceTax iTax = MVABInvoiceTax.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
                         if (iTax != null)
                         {
@@ -2378,7 +2378,7 @@ namespace VAdvantage.Model
                             // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                             if (line.Get_ColumnIndex("SurchargeAmt") > 0)
                             {
-                                iTax = MInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                                iTax = MVABInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                                 if (iTax != null)
                                 {
                                     if (!iTax.CalculateSurchargeFromLines())
@@ -2398,10 +2398,10 @@ namespace VAdvantage.Model
 
                 //	Taxes
                 Decimal grandTotal = totalLines;
-                MInvoiceTax[] taxes = GetTaxes(true);
+                MVABInvoiceTax[] taxes = GetTaxes(true);
                 for (int i = 0; i < taxes.Length; i++)
                 {
-                    MInvoiceTax iTax = taxes[i];
+                    MVABInvoiceTax iTax = taxes[i];
                     MTax tax = iTax.GetTax();
                     if (tax.IsSummary())
                     {
@@ -2419,7 +2419,7 @@ namespace VAdvantage.Model
                                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                                 {
                                     DataRow dr = ds.Tables[0].Rows[0];
-                                    MInvoiceTax newITax = new MInvoiceTax(GetCtx(), dr, Get_TrxName());
+                                    MVABInvoiceTax newITax = new MVABInvoiceTax(GetCtx(), dr, Get_TrxName());
                                     newITax.SetTaxAmt(Decimal.Add(newITax.GetTaxAmt(), taxAmt));
                                     newITax.SetTaxBaseAmt(Decimal.Add(newITax.GetTaxBaseAmt(), iTax.GetTaxBaseAmt()));
                                     if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
@@ -2443,7 +2443,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                MInvoiceTax newITax = new MInvoiceTax(GetCtx(), 0, Get_TrxName());
+                                MVABInvoiceTax newITax = new MVABInvoiceTax(GetCtx(), 0, Get_TrxName());
                                 newITax.SetClientOrg(this);
                                 newITax.SetVAB_Invoice_ID(GetVAB_Invoice_ID());
                                 newITax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());
@@ -2667,7 +2667,7 @@ namespace VAdvantage.Model
                 //decimal AmortizedValue = 0;
                 //DateTime? AmortStartDate = null;
                 //DateTime? AmortEndDate = null;
-                MInvoiceLine[] lines = GetLines(false);
+                MVABInvoiceLine[] lines = GetLines(false);
 
                 // for checking - costing calculate on completion or not
                 // IsCostImmediate = true - calculate cost on completion
@@ -2675,7 +2675,7 @@ namespace VAdvantage.Model
 
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine line = lines[i];
+                    MVABInvoiceLine line = lines[i];
                     MMatchInv inv = null;
                     //	Update Order Line
                     MVABOrderLine ol = null;
@@ -2710,7 +2710,7 @@ namespace VAdvantage.Model
                             && line.GetVAM_Product_ID() != 0
                             && !IsReversal())
                         {
-                            //	MatchPO is created also from MInOut when Invoice exists before Shipment
+                            //	MatchPO is created also from MVAMInvInOut when Invoice exists before Shipment
                             Decimal matchQty = line.GetQtyInvoiced();
                             MMatchPO po = MMatchPO.Create(line, null, GetDateInvoiced(), matchQty);
                             try
@@ -2805,7 +2805,7 @@ namespace VAdvantage.Model
                         && line.GetVAM_Product_ID() != 0
                         && !IsReversal())
                     {
-                        MInOutLine receiptLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                        MVAMInvInOutLine receiptLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                         Decimal matchQty = line.GetQtyInvoiced();
 
                         /////////////////////////
@@ -2876,7 +2876,7 @@ namespace VAdvantage.Model
                         {
                             log.Fine("Asset");
                             Info.Append("@VAA_Asset_ID@: ");
-                            //MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), line.Get_ID(), Get_TrxName());
+                            //MVABInvoiceLine invoiceLine = new MVABInvoiceLine(GetCtx(), line.Get_ID(), Get_TrxName());
                             if (product.IsOneAssetPerUOM())
                             {
                                 for (int j = 0; j < noAssets; j++)
@@ -2941,7 +2941,7 @@ namespace VAdvantage.Model
                         if (!IsSOTrx() && !IsReturnTrx() && line.GetVAM_Inv_InOutLine_ID() > 0) // for Invoice(vendor)
                         {
                             MProduct product1 = new MProduct(GetCtx(), line.GetVAM_Product_ID(), Get_Trx());
-                            MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
+                            MVABInvoice invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
                             if (product1 != null && product1.GetProductType() == "I" && product1.GetVAM_Product_ID() > 0) // for Item Type product
                             {
                                 if (!MVAMProductCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, line, Get_Trx()))
@@ -3197,7 +3197,7 @@ namespace VAdvantage.Model
                                         bool isUpdatePostCurrentcostPriceFromMR = MVAMProductCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), product1.GetVAM_Product_ID(), Get_Trx());
                                         if (line.GetVAM_Inv_InOutLine_ID() > 0)
                                         {
-                                            sLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                            sLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                             // get warehouse refernce from header -- InOut
                                             int VAM_Warehouse_Id = sLine.GetVAM_Warehouse_ID();
                                             if (!sLine.IsCostImmediate())
@@ -3382,7 +3382,7 @@ namespace VAdvantage.Model
                                         {
                                             bool isUpdatePostCurrentcostPriceFromMR = MVAMProductCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), product1.GetVAM_Product_ID(), Get_Trx());
                                             // if qty is reduced through Return to vendor then we reduce amount else not
-                                            sLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                            sLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                             int VAM_Warehouse_Id = sLine.GetVAM_Warehouse_ID();
                                             if (sLine.IsCostImmediate())
                                             {
@@ -3572,7 +3572,7 @@ namespace VAdvantage.Model
                                     int VAM_Warehouse_Id = 0;
                                     if (line.GetVAM_Inv_InOutLine_ID() > 0)
                                     {
-                                        sLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                        sLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                         VAM_Warehouse_Id = sLine.GetVAM_Warehouse_ID();
                                         if (!sLine.IsCostImmediate())
                                         {
@@ -3748,7 +3748,7 @@ namespace VAdvantage.Model
                                     {
                                         bool isUpdatePostCurrentcostPriceFromMR = MVAMProductCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), product1.GetVAM_Product_ID(), Get_Trx());
                                         // if qty is reduced through Return to vendor then we reduce amount else not
-                                        sLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                        sLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                         if (sLine.IsCostImmediate())
                                         {
                                             int VAM_Warehouse_Id = sLine.GetVAM_Warehouse_ID();
@@ -4153,7 +4153,7 @@ namespace VAdvantage.Model
                 try
                 {
                     //	Counter Documents
-                    MInvoice counter = CreateCounterDoc();
+                    MVABInvoice counter = CreateCounterDoc();
                     if (counter != null)
                         Info.Append(" - @CounterDoc@: @VAB_Invoice_ID@=").Append(counter.GetDocumentNo());
                 }
@@ -4193,7 +4193,7 @@ namespace VAdvantage.Model
         ///  Creation of allocation against invoice whose payment is done against order
         /// </summary>
         /// <returns>True, if view Allocation created and completed sucessfully</returns>
-        private bool AllocationAgainstOrderPayment(MInvoice invoice)
+        private bool AllocationAgainstOrderPayment(MVABInvoice invoice)
         {
             MVABDocAllocation AllHdr = null;
             MVABDocAllocationLine Allline = null;
@@ -4426,7 +4426,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoice">invoice refrence</param>
         /// <returns>true, if success</returns>
-        public bool SetWithholdingAmount(MInvoice invoice)
+        public bool SetWithholdingAmount(MVABInvoice invoice)
         {
             Decimal withholdingAmt = 0;
             String sql = "";
@@ -4753,7 +4753,7 @@ namespace VAdvantage.Model
         /// <param name="Info"></param>
         /// <param name="line"></param>
         /// <returns></returns>
-        private bool GenerateAssetForAmortizationCharge(StringBuilder Info, MInvoiceLine line)
+        private bool GenerateAssetForAmortizationCharge(StringBuilder Info, MVABInvoiceLine line)
         {
             try
             {
@@ -4825,7 +4825,7 @@ namespace VAdvantage.Model
         /// Create Counter Document
         /// </summary>
         /// <returns>counter invoice</returns>
-        private MInvoice CreateCounterDoc()
+        private MVABInvoice CreateCounterDoc()
         {
             //	Is this a counter doc ?
             if (GetRef_Invoice_ID() != 0)
@@ -4865,7 +4865,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("Ref_VAB_Invoice_ID") > 0 && GetRef_VAB_Invoice_ID() > 0)
             {
                 int counterInvoiceId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Ref_Invoice_ID FROM VAB_Invoice WHERE VAB_Invoice_ID = " + GetRef_VAB_Invoice_ID(), null, Get_Trx()));
-                MInvoice counterReversed = new MInvoice(GetCtx(), counterInvoiceId, Get_Trx());
+                MVABInvoice counterReversed = new MVABInvoice(GetCtx(), counterInvoiceId, Get_Trx());
                 if (counterReversed != null && counterReversed.GetVAB_Invoice_ID() > 0)
                 {
                     counterReversed.SetDocAction(DOCACTION_Void);
@@ -4880,7 +4880,7 @@ namespace VAdvantage.Model
             SetCounterBPartner(counterBP, counterVAF_Org_ID);
 
             //	Deep Copy
-            MInvoice counter = CopyFrom(this, GetDateInvoiced(),
+            MVABInvoice counter = CopyFrom(this, GetDateInvoiced(),
                 VAB_DocTypesTarget_ID, true, Get_TrxName(), true);
             //	Refernces (Should not be required)
             counter.SetSalesRep_ID(GetSalesRep_ID());
@@ -4889,10 +4889,10 @@ namespace VAdvantage.Model
             counter.Save(Get_TrxName());
 
             //	Update copied lines
-            MInvoiceLine[] counterLines = counter.GetLines(true);
+            MVABInvoiceLine[] counterLines = counter.GetLines(true);
             for (int i = 0; i < counterLines.Length; i++)
             {
-                MInvoiceLine counterLine = counterLines[i];
+                MVABInvoiceLine counterLine = counterLines[i];
                 counterLine.SetClientOrg(counter);
                 counterLine.SetInvoice(counter);	//	copies header values (BP, etc.)
                 counterLine.SetPrice();
@@ -4940,10 +4940,10 @@ namespace VAdvantage.Model
                 || DOCSTATUS_NotApproved.Equals(GetDocStatus()))
             {
                 //	Set lines to 0
-                MInvoiceLine[] lines = GetLines(false);
+                MVABInvoiceLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine line = lines[i];
+                    MVABInvoiceLine line = lines[i];
                     Decimal old = line.GetQtyInvoiced();
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
@@ -4955,7 +4955,7 @@ namespace VAdvantage.Model
                         //	Unlink Shipment
                         if (line.GetVAM_Inv_InOutLine_ID() != 0)
                         {
-                            MInOutLine ioLine = new MInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                            MVAMInvInOutLine ioLine = new MVAMInvInOutLine(GetCtx(), line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                             ioLine.SetIsInvoiced(false);
                             ioLine.Save(Get_TrxName());
                             line.SetVAM_Inv_InOutLine_ID(0);
@@ -5100,7 +5100,7 @@ namespace VAdvantage.Model
             Load(Get_TrxName());	//	reload allocation reversal Info
 
             //	Deep Copy
-            MInvoice reversal = CopyFrom(this, GetDateInvoiced(),
+            MVABInvoice reversal = CopyFrom(this, GetDateInvoiced(),
                 GetVAB_DocTypes_ID(), false, Get_TrxName(), true);
             // set original document reference
             reversal.SetRef_VAB_Invoice_ID(GetVAB_Invoice_ID());
@@ -5134,12 +5134,12 @@ namespace VAdvantage.Model
             reversal.SetReversal(true);
 
             //	Reverse Line Qty
-            MInvoiceLine[] rLines = reversal.GetLines(false);
-            MInvoiceLine[] OldLines = this.GetLines(false);
+            MVABInvoiceLine[] rLines = reversal.GetLines(false);
+            MVABInvoiceLine[] OldLines = this.GetLines(false);
             for (int i = 0; i < rLines.Length; i++)
             {
-                MInvoiceLine rLine = rLines[i];
-                MInvoiceLine oldline = OldLines[i];
+                MVABInvoiceLine rLine = rLines[i];
+                MVABInvoiceLine oldline = OldLines[i];
                 rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
                 rLine.SetQtyInvoiced(Decimal.Negate(rLine.GetQtyInvoiced()));
                 rLine.SetLineNetAmt(Decimal.Negate(rLine.GetLineNetAmt()));
@@ -5258,13 +5258,13 @@ namespace VAdvantage.Model
             SetRef_VAB_Invoice_ID(reversal.GetVAB_Invoice_ID());
 
             //	Clean up Reversed (this)
-            MInvoiceLine[] iLines = GetLines(false);
+            MVABInvoiceLine[] iLines = GetLines(false);
             for (int i = 0; i < iLines.Length; i++)
             {
-                MInvoiceLine iLine = iLines[i];
+                MVABInvoiceLine iLine = iLines[i];
                 if (iLine.GetVAM_Inv_InOutLine_ID() != 0)
                 {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), iLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                    MVAMInvInOutLine ioLine = new MVAMInvInOutLine(GetCtx(), iLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                     ioLine.SetIsInvoiced(false);
                     ioLine.Save(Get_TrxName());
                     //	Reconsiliation
@@ -5354,7 +5354,7 @@ namespace VAdvantage.Model
             return true;
         }
         //update Description
-        private void UpdateDescriptionInOldExpnse(MInvoiceLine oldline, MInvoiceLine rLine)
+        private void UpdateDescriptionInOldExpnse(MVABInvoiceLine oldline, MVABInvoiceLine rLine)
         {
             IDataReader idr = null;
             String Sql_ = "";
@@ -5367,7 +5367,7 @@ namespace VAdvantage.Model
                     while (idr.Read())
                     {
                         PO oldPO = MVAFTableView.GetPO(GetCtx(), "VAFAM_Expense", Util.GetValueOfInt(idr["VAFAM_Expense_ID"]), Get_Trx());
-                        MInvoice iv = new MInvoice(GetCtx(), rLine.GetVAB_Invoice_ID(), Get_TrxName());
+                        MVABInvoice iv = new MVABInvoice(GetCtx(), rLine.GetVAB_Invoice_ID(), Get_TrxName());
                         oldPO.Set_Value("Description", "(" + iv.GetDocumentNo() + "<-)");
                         oldPO.Save(Get_TrxName());
                     }
@@ -5390,7 +5390,7 @@ namespace VAdvantage.Model
         }
 
         //Update Gross Value in Case Asset against Capital Expsnse -Capital Type
-        private void UpdateAssetGrossValue(MInvoiceLine rLine, PO po)
+        private void UpdateAssetGrossValue(MVABInvoiceLine rLine, PO po)
         {
             String CapitalExpense_ = "";
             CapitalExpense_ = Util.GetValueOfString(rLine.Get_Value("VAFAM_CapitalExpense"));
@@ -5411,7 +5411,7 @@ namespace VAdvantage.Model
         }
 
         //Create a new expense against selected asset in Line of Invoice
-        private void CreateExpenseAgainstReverseInvoice(MInvoiceLine rLine, MInvoiceLine oldline, PO po)
+        private void CreateExpenseAgainstReverseInvoice(MVABInvoiceLine rLine, MVABInvoiceLine oldline, PO po)
         {
             po.SetVAF_Client_ID(GetVAF_Client_ID());
             po.SetVAF_Org_ID(GetVAF_Org_ID());

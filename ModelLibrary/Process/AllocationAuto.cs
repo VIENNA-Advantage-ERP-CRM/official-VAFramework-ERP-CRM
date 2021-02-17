@@ -44,7 +44,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	Payments				
         private MVABPayment[] _payments = null;
         // Invoices				
-        private MInvoice[] _invoices = null;
+        private MVABInvoice[] _invoices = null;
         //	Allocation				
         private MVABDocAllocation _allocation = null;
         #endregion
@@ -358,10 +358,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// </summary>
         /// <param name="_VAB_BusinessPartner_ID"></param>
         /// <returns>unallocated Invoices</returns>
-        private MInvoice[] GetInvoices(int _VAB_BusinessPartner_ID)
+        private MVABInvoice[] GetInvoices(int _VAB_BusinessPartner_ID)
         {
-            //ArrayList<MInvoice> list = new ArrayList<MInvoice>();
-            List<MInvoice> list = new List<MInvoice>();
+            //ArrayList<MVABInvoice> list = new ArrayList<MVABInvoice>();
+            List<MVABInvoice> list = new List<MVABInvoice>();
             String sql = "SELECT * FROM VAB_Invoice "
                 + "WHERE IsPaid='N' AND Processed='Y' AND VAB_BusinessPartner_ID=@param1 ";
             if (_ONLY_AP.Equals(_APAR))
@@ -382,7 +382,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MInvoice _invoice = new MInvoice(GetCtx(), dr, Get_Trx());
+                    MVABInvoice _invoice = new MVABInvoice(GetCtx(), dr, Get_Trx());
                     if (Env.Signum(Utility.Util.GetValueOfDecimal(_invoice.GetOpenAmt(false, null))) == 0)
                     {
                         _invoice.SetIsPaid(true);
@@ -412,7 +412,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     idr.Close();
                 }
             }
-            _invoices = new MInvoice[list.Count()];
+            _invoices = new MVABInvoice[list.Count()];
             _invoices = list.ToArray();
             return _invoices;
         }
@@ -455,7 +455,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     for (int i = 0; i < _invoices.Length; i++)
                     {
-                        MInvoice _invoice = _invoices[i];
+                        MVABInvoice _invoice = _invoices[i];
                         if (_invoice.IsPaid())
                         {
                             continue;
@@ -501,7 +501,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     for (int i = 0; i < _psLines.Length; i++)
                     {
                         MVABPaymentOptionLine _line = _psLines[i];
-                        MInvoice _invoice = _line.GetInvoice();
+                        MVABInvoice _invoice = _line.GetInvoice();
                         if (_payment.GetVAB_Currency_ID() == _invoice.GetVAB_Currency_ID())
                         {
                             Decimal _invoiceAmt = Utility.Util.GetValueOfDecimal((_invoice.GetOpenAmt(true, null)));
@@ -565,7 +565,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 log.Fine("Available=" + _availableAmt);
                 for (int i = 0; i < _invoices.Length; i++)
                 {
-                    MInvoice _invoice = _invoices[i];
+                    MVABInvoice _invoice = _invoices[i];
                     if (_invoice == null || _invoice.IsPaid())
                         continue;
                     if (_payment.GetVAB_Currency_ID() == _invoice.GetVAB_Currency_ID())
@@ -653,7 +653,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _totalInvoices = Env.ZERO;
             for (int i = 0; i < _invoices.Length; i++)
             {
-                MInvoice _invoice = _invoices[i];
+                MVABInvoice _invoice = _invoices[i];
                 if (_invoice.IsPaid())
                 {
                     continue;
@@ -719,7 +719,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //
                 for (int i = 0; i < _invoices.Length; i++)
                 {
-                    MInvoice _invoice = _invoices[i];
+                    MVABInvoice _invoice = _invoices[i];
                     if (_invoice.IsPaid())
                     {
                         continue;
@@ -791,7 +791,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _totalInvoices = Env.ZERO;
             for (int i = 0; i < _invoices.Length; i++)
             {
-                MInvoice _invoice = _invoices[i];
+                MVABInvoice _invoice = _invoices[i];
                 if (_invoice.IsPaid())
                 {
                     continue;
@@ -885,7 +885,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal _allocatedInvoices = Env.ZERO;
             for (int i = 0; i < _invoices.Length; i++)
             {
-                MInvoice _invoice = _invoices[i];
+                MVABInvoice _invoice = _invoices[i];
                 if (_invoice.IsPaid())
                 {
                     continue;

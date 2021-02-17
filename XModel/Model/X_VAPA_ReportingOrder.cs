@@ -14,9 +14,9 @@ namespace VAdvantage.Model
     /** Generated Model for VAPA_FinancialReportingOrder
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAPA_FinancialReportingOrder : PO
+    public class X_VAPA_ReportingOrder : PO
     {
-        public X_VAPA_FinancialReportingOrder(Context ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
+        public X_VAPA_ReportingOrder(Context ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
             : base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
             /** if (VAPA_FinancialReportingOrder_ID == 0)
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_VAPA_FinancialReportingOrder(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
+        public X_VAPA_ReportingOrder(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName)
             : base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
             /** if (VAPA_FinancialReportingOrder_ID == 0)
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAPA_FinancialReportingOrder(Context ctx, DataRow rs, Trx trxName)
+        public X_VAPA_ReportingOrder(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAPA_FinancialReportingOrder(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAPA_ReportingOrder(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -75,14 +75,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAPA_FinancialReportingOrder(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAPA_ReportingOrder(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_VAPA_FinancialReportingOrder()
+        static X_VAPA_ReportingOrder()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         // =821;
 
         /** TableName=VAPA_FinancialReportingOrder */
-        public static String Table_Name = "VAPA_FinancialReportingOrder";
+        public static String Table_Name = "VAPA_ReportingOrder";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(2);
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_VAPA_FinancialReportingOrder[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("X_VAPA_ReportingOrder[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
 

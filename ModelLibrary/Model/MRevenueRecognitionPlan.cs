@@ -124,7 +124,7 @@ namespace VAdvantage.Model
         /// <param name="invoice">invoice object</param>
         /// <param name="C_RevenueRecognition_ID">Recognition ID</param>
         /// <param name="ToCurrency">Currency</param>
-        public void SetRecognitionPlan(MInvoiceLine invoiceLine, MInvoice invoice, int C_RevenueRecognition_ID, int ToCurrency)
+        public void SetRecognitionPlan(MVABInvoiceLine invoiceLine, MVABInvoice invoice, int C_RevenueRecognition_ID, int ToCurrency)
         {
 
             SetVAF_Client_ID(invoice.GetVAF_Client_ID());

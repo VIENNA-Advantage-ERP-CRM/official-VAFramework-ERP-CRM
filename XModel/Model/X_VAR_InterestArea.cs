@@ -14,20 +14,9 @@ using System.Data;
 /** Generated Model for VAR_InterestArea
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_InterestArea : PO
+public class X_VAR_InterestArea : PO
 {
-public X_R_InterestArea (Context ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
-{
-/** if (VAR_InterestArea_ID == 0)
-{
-SetIsSelfService (true);	// Y
-SetName (null);
-SetR_InterestArea_ID (0);
-SetValue (null);
-}
- */
-}
-public X_R_InterestArea (Ctx ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
+public X_VAR_InterestArea (Context ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
 {
 /** if (VAR_InterestArea_ID == 0)
 {
@@ -38,12 +27,23 @@ SetValue (null);
 }
  */
 }
+public X_VAR_InterestArea (Ctx ctx, int VAR_InterestArea_ID, Trx trxName) : base (ctx, VAR_InterestArea_ID, trxName)
+{
+/** if (VAR_InterestArea_ID == 0)
+{
+SetIsSelfService (true);	// Y
+SetName (null);
+SetR_InterestArea_ID (0);
+SetValue (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_R_InterestArea (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_InterestArea (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -51,7 +51,7 @@ public X_R_InterestArea (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, t
 @param rs result set 
 @param trxName transaction
 */
-public X_R_InterestArea (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_InterestArea (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -59,13 +59,13 @@ public X_R_InterestArea (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxNa
 @param rs result set 
 @param trxName transaction
 */
-public X_R_InterestArea (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_InterestArea (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_InterestArea()
+static X_VAR_InterestArea()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -113,7 +113,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_InterestArea[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_InterestArea[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.

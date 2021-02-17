@@ -1,9 +1,9 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInterestArea
+ * Class Name     : MVARInterestArea
  * Purpose        : Interest Area.
  *                  manually
- * Class Used     : X_R_InterestArea
+ * Class Used     : VAR_InterestArea
  * Chronological    Development
  * Raghunandan      24-Jun-2009
   ******************************************************/
@@ -28,15 +28,15 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInterestArea : X_R_InterestArea
+    public class MVARInterestArea : X_VAR_InterestArea
     {
         private int _VAF_UserContact_ID = -1;
         private MVARInterestedUser _ci = null;
         /**	Cache						*/
-        private static CCache<int, MInterestArea> _cache =
-            new CCache<int, MInterestArea>("VAR_InterestArea", 5);
+        private static CCache<int, MVARInterestArea> _cache =
+            new CCache<int, MVARInterestArea>("X_VAR_InterestArea", 5);
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInterestArea).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVARInterestArea).FullName);
 
 
         /**
@@ -44,9 +44,9 @@ namespace VAdvantage.Model
         *	@param ctx context
         *	@return interest areas
         */
-        public static MInterestArea[] GetAll(Ctx ctx)
+        public static MVARInterestArea[] GetAll(Ctx ctx)
         {
-            List<MInterestArea> list = new List<MInterestArea>();
+            List<MVARInterestArea> list = new List<MVARInterestArea>();
             String sql = "SELECT * FROM VAR_InterestArea WHERE IsActive='Y'";
             DataTable dt = null;
             IDataReader idr = null;
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MInterestArea ia = new MInterestArea(ctx, dr, null);
+                    MVARInterestArea ia = new MVARInterestArea(ctx, dr, null);
                     list.Add(ia);
                 }
             }
@@ -72,25 +72,25 @@ namespace VAdvantage.Model
             }
             finally { dt = null; }
             
-            MInterestArea[] retValue = new MInterestArea[list.Count];
+            MVARInterestArea[] retValue = new MVARInterestArea[list.Count];
             retValue=list.ToArray();
             return retValue;
         }
 
 
         /**
-         * 	Get MInterestArea from Cache
+         * 	Get MVARInterestArea from Cache
          *	@param ctx context
          *	@param VAR_InterestArea_ID id
-         *	@return MInterestArea
+         *	@return MVARInterestArea
          */
-        public static MInterestArea Get(Ctx ctx, int VAR_InterestArea_ID)
+        public static MVARInterestArea Get(Ctx ctx, int VAR_InterestArea_ID)
         {
             int key = VAR_InterestArea_ID;
-            MInterestArea retValue = (MInterestArea)_cache[key];
+            MVARInterestArea retValue = (MVARInterestArea)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MInterestArea(ctx, VAR_InterestArea_ID, null);
+            retValue = new MVARInterestArea(ctx, VAR_InterestArea_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
          *	@param VAR_InterestArea_ID interest area
          *	@param trxName transaction
          */
-        public MInterestArea(Ctx ctx, int VAR_InterestArea_ID, Trx trxName)
+        public MVARInterestArea(Ctx ctx, int VAR_InterestArea_ID, Trx trxName)
             : base(ctx, VAR_InterestArea_ID, trxName)
         {
             
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MInterestArea(Ctx ctx, DataRow dr, Trx trxName)
+        public MVARInterestArea(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInterestArea[")
+            StringBuilder sb = new StringBuilder("MVARInterestArea[")
                 .Append(Get_ID()).Append(" - ").Append(GetName())
                 .Append("]");
             return sb.ToString();

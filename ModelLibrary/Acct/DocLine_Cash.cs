@@ -84,7 +84,7 @@ namespace VAdvantage.Acct
             //
             if (_VAB_Invoice_ID != 0)
             {
-                MInvoice invoice = MInvoice.Get(line.GetCtx(), _VAB_Invoice_ID);
+                MVABInvoice invoice = MVABInvoice.Get(line.GetCtx(), _VAB_Invoice_ID);
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
 

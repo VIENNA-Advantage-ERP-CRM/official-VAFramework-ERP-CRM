@@ -31,9 +31,9 @@ namespace VAdvantage.Model
         /**	Confirm Lines					*/
         private MMovementLineConfirm[] _lines = null;
         /**	Physical Inventory From	*/
-        private MInventory _inventoryFrom = null;
+        private MVAMInventory _inventoryFrom = null;
         /**	Physical Inventory To	*/
-        private MInventory _inventoryTo = null;
+        private MVAMInventory _inventoryTo = null;
         /**	Physical Inventory Info	*/
         private String _inventoryInfo = null;
         /**	Process Message 			*/
@@ -785,7 +785,7 @@ namespace VAdvantage.Model
                 if (_inventoryFrom == null)
                 {
                     MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
-                    _inventoryFrom = new MInventory(wh);
+                    _inventoryFrom = new MVAMInventory(wh);
                     _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryFrom.Save(Get_TrxName()))
                     {
@@ -804,7 +804,7 @@ namespace VAdvantage.Model
 
                 log.Info("createDifferenceDoc - Difference=" + confirm.GetDifferenceQty());
 
-                MInventoryLine line = new MInventoryLine(_inventoryFrom, mLine.GetVAM_Locator_ID(), mLine.GetVAM_Product_ID(),
+                MVAMInventoryLine line = new MVAMInventoryLine(_inventoryFrom, mLine.GetVAM_Locator_ID(), mLine.GetVAM_Product_ID(),
                         mLine.GetVAM_PFeature_SetInstance_ID(), confirm.GetDifferenceQty(), Env.ZERO);
 
                 line.SetAdjustmentType("D");
@@ -839,7 +839,7 @@ namespace VAdvantage.Model
                 if (_inventoryTo == null)
                 {
                     MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetVAM_Warehouse_ID());
-                    _inventoryTo = new MInventory(wh);
+                    _inventoryTo = new MVAMInventory(wh);
                     _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "VAM_InvTrf_Confirm_ID") + " " + GetDocumentNo());
                     if (!_inventoryTo.Save(Get_TrxName()))
                     {
@@ -857,7 +857,7 @@ namespace VAdvantage.Model
                 }
 
                 log.Info("CreateDifferenceDoc - Scrapped=" + confirm.GetScrappedQty());
-                MInventoryLine line = new MInventoryLine(_inventoryTo,
+                MVAMInventoryLine line = new MVAMInventoryLine(_inventoryTo,
                     mLine.GetVAM_LocatorTo_ID(), mLine.GetVAM_Product_ID(), mLine.GetVAM_PFeature_SetInstance_ID(),
                     confirm.GetScrappedQty(), Env.ZERO);
                 line.SetDescription(Msg.Translate(GetCtx(), "ScrappedQty"));

@@ -31,7 +31,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /**	Delete old Imported				*/
         private bool _deleteOldImported = false;
         /**	Document Action					*/
-        private String _docAction = MInvoice.DOCACTION_Prepare;
+        private String _docAction = MVABInvoice.DOCACTION_Prepare;
 
 
         /** Effective						*/
@@ -581,7 +581,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 int oldVAB_BPart_Location_ID = 0;
                 String oldDocumentNo = "";
                 //
-                MInvoice invoice = null;
+                MVABInvoice invoice = null;
                 int lineNo = 0;
                 while (idr.Read())
                 {
@@ -606,7 +606,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (oldDocumentNo == null)
                             oldDocumentNo = "";
                         //
-                        invoice = new MInvoice(GetCtx(), 0, null);
+                        invoice = new MVABInvoice(GetCtx(), 0, null);
                         invoice.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         invoice.SetVAB_DocTypesTarget_ID(imp.GetVAB_DocTypes_ID(), true);
                         if (imp.GetDocumentNo() != null)
@@ -653,7 +653,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                     imp.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                     //	New InvoiceLine
-                    MInvoiceLine line = new MInvoiceLine(invoice);
+                    MVABInvoiceLine line = new MVABInvoiceLine(invoice);
                     if (imp.GetLineDescription() != null)
                         line.SetDescription(imp.GetLineDescription());
                     line.SetLine(lineNo);

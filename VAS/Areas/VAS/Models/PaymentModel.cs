@@ -591,10 +591,10 @@ namespace VIS.Models
                 }
                 //  Amount sign negative, if ARC (Credit Memo) or API (AP Invoice)
                 bool negateAmt = false;
-                MInvoice invoice = null;
+                MVABInvoice invoice = null;
                 if (inputs.VAB_Invoice_ID != 0)
                 {
-                    invoice = new MInvoice(ctx, inputs.VAB_Invoice_ID, null);
+                    invoice = new MVABInvoice(ctx, inputs.VAB_Invoice_ID, null);
                     negateAmt = invoice.IsCreditMemo();
                 }
                 MVABOrder order = null;

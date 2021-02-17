@@ -33,12 +33,12 @@ namespace ViennaAdvantageServer.Process
         private int _VAM_PFeature_SetInstance_ID = 0;
         private decimal _currentQty = 0;
         VAdvantage.Model.MTransaction transaction = null;
-        //ViennaAdvantage.Model.MInventoryLine inventoryLine = null;
+        //ViennaAdvantage.Model.MVAMInventoryLine inventoryLine = null;
         //ViennaAdvantage.Model.MStorage storage = null;
-        //ViennaAdvantage.Model.MInventory inventory = null;
-        MInventoryLine inventoryLine = null;
+        //ViennaAdvantage.Model.MVAMInventory inventory = null;
+        MVAMInventoryLine inventoryLine = null;
         MStorage storage = null;
-        MInventory inventory = null;
+        MVAMInventory inventory = null;
 
 
         protected override void Prepare()
@@ -102,8 +102,8 @@ namespace ViennaAdvantageServer.Process
                                     Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                                 {
                                     //update Quantity Book at inventory line 
-                                    inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_Trx());
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
+                                    inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(dsTransaction.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_Trx());
+                                    inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                     if (!inventory.IsInternalUse())
                                     {
                                         inventoryLine.SetQtyBook(_currentQty);

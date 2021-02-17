@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MInventoryLineController:Controller
+    public class MVAMInventoryLineController:Controller
     {
         //
         // GET: /VIS/CalloutOrder/
@@ -20,15 +20,15 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetMInventoryLine(string fields)
+        public JsonResult GetMVAMInventoryLine(string fields)
         {
            
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInventoryLineModel objInventoryLine = new MInventoryLineModel();
-                retJSON = JsonConvert.SerializeObject(objInventoryLine.GetMInventoryLine(ctx,fields));
+                MVAMInventoryLineModel objInventoryLine = new MVAMInventoryLineModel();
+                retJSON = JsonConvert.SerializeObject(objInventoryLine.GetMVAMInventoryLine(ctx,fields));
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
            // return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);
@@ -46,7 +46,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInventoryLineModel objInventoryLine = new MInventoryLineModel();
+                MVAMInventoryLineModel objInventoryLine = new MVAMInventoryLineModel();
                 retJSON = JsonConvert.SerializeObject(objInventoryLine.GetproductUOM(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -63,7 +63,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInventoryLineModel objInventoryLine = new MInventoryLineModel();
+                MVAMInventoryLineModel objInventoryLine = new MVAMInventoryLineModel();
                 retJSON = JsonConvert.SerializeObject(objInventoryLine.GetProductAttribute(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

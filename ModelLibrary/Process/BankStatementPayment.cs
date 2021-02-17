@@ -213,7 +213,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //
             if (VAB_Invoice_ID != 0)
             {
-                MInvoice invoice = new MInvoice(GetCtx(), VAB_Invoice_ID, null);
+                MVABInvoice invoice = new MVABInvoice(GetCtx(), VAB_Invoice_ID, null);
                 payment.SetVAB_DocTypes_ID(invoice.IsSOTrx());		//	Receipt
                 payment.SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
                 payment.SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());

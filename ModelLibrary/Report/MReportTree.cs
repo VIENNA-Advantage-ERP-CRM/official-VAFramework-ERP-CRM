@@ -136,7 +136,7 @@ namespace VAdvantage.Report
                 return GetDefaultVAF_TreeInfo_ID();
             }
 
-            MHierarchy hierarchy = MHierarchy.Get(_ctx, _VAPA_FinancialReportingOrder_ID);
+            MVAPAReportingOrder hierarchy = MVAPAReportingOrder.Get(_ctx, _VAPA_FinancialReportingOrder_ID);
             int VAF_TreeInfo_ID = hierarchy.GetVAF_TreeInfo_ID(_TreeType);
 
             if (VAF_TreeInfo_ID == 0)

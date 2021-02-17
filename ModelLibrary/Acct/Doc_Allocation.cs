@@ -190,10 +190,10 @@ namespace VAdvantage.Acct
         //        {
         //            payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
         //        }
-        //        MInvoice invoice = null;
+        //        MVABInvoice invoice = null;
         //        if (line.GetVAB_Invoice_ID() != 0)
         //        {
-        //            invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
+        //            invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
         //        }
 
         //        //	No Invoice
@@ -448,10 +448,10 @@ namespace VAdvantage.Acct
                                   , payment.GetVAB_Currency_ID(), GetVAB_Currency_ID(), null, conversiontype_id, GetVAF_Client_ID(), GetVAF_Org_ID());
                     }
                 }
-                MInvoice invoice = null;
+                MVABInvoice invoice = null;
                 if (line.GetVAB_Invoice_ID() != 0)
                 {
-                    invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
+                    invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
                 }
                 if (invoice != null)
                 {
@@ -1079,7 +1079,7 @@ namespace VAdvantage.Acct
         /// <param name="invoice"></param>
         /// <param name="allocationSource">allocation amount (incl discount, writeoff)</param>
         /// <returns> Accounted Amt</returns>
-        private Decimal? CreateCashBasedAcct(MVABAccountBook as1, Fact fact, MInvoice invoice, Decimal? allocationSource)
+        private Decimal? CreateCashBasedAcct(MVABAccountBook as1, Fact fact, MVABInvoice invoice, Decimal? allocationSource)
         {
             Decimal allocationAccounted = Env.ZERO;
             //	Multiplier
@@ -1093,7 +1093,7 @@ namespace VAdvantage.Acct
 
             //	Get Invoice Postings
             DoVAB_Invoice docInvoice = (DoVAB_Invoice)Doc.Get(new MVABAccountBook[] { as1 },
-                MInvoice.Table_ID, invoice.GetVAB_Invoice_ID(), GetTrxName());
+                MVABInvoice.Table_ID, invoice.GetVAB_Invoice_ID(), GetTrxName());
             docInvoice.LoadDocumentDetails();
             allocationAccounted = docInvoice.CreateFactCash(as1, fact, new Decimal(percent));
             log.Config("Allocation Accounted=" + allocationAccounted);
@@ -1101,7 +1101,7 @@ namespace VAdvantage.Acct
             //	Cash Based Commitment Release 
             if (as1.IsCreateCommitment() && !invoice.IsSOTrx())
             {
-                MInvoiceLine[] lines = invoice.GetLines();
+                MVABInvoiceLine[] lines = invoice.GetLines();
                 for (int i = 0; i < lines.Length; i++)
                 {
                     Fact factC = Doc_Order.GetCommitmentRelease(as1, this,
@@ -1239,7 +1239,7 @@ namespace VAdvantage.Acct
         /// <param name="allocationAccounted">acct amt</param>
         /// <returns>Error Message or null if OK</returns>
         private String CreateRealizedGainLoss(MVABAccountBook as1, Fact fact, MVABAccount acct,
-            MInvoice invoice, Decimal? allocationSource, Decimal? allocationAccounted)
+            MVABInvoice invoice, Decimal? allocationSource, Decimal? allocationAccounted)
         {
             Decimal? invoiceSource = null;
             Decimal? invoiceAccounted = null;
@@ -1658,10 +1658,10 @@ namespace VAdvantage.Acct
 //                {
 //                    payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
 //                }
-//                MInvoice invoice = null;
+//                MVABInvoice invoice = null;
 //                if (line.GetVAB_Invoice_ID() != 0)
 //                {
-//                    invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
+//                    invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
 //                }
 
 //                //	No Invoice
@@ -1733,7 +1733,7 @@ namespace VAdvantage.Acct
 //                    //	AR Invoice Amount	CR//ACCTTYPE_C_Receivable_Services
 //                    if (as1.IsAccrual())
 //                    {
-//                        //MInvoiceLine invLine = new MInvoiceLine(invoice);
+//                        //MVABInvoiceLine invLine = new MVABInvoiceLine(invoice);
 //                        // string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
 
 //                        //string sql = "select sum(cl.linenetamt),prod.producttype  from VAB_InvoiceLine cl inner join" +
@@ -2014,10 +2014,10 @@ namespace VAdvantage.Acct
 //        //        {
 //        //            payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
 //        //        }
-//        //        MInvoice invoice = null;
+//        //        MVABInvoice invoice = null;
 //        //        if (line.GetVAB_Invoice_ID() != 0)
 //        //        {
-//        //            invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
+//        //            invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
 //        //        }
 
 //        //        //	No Invoice
@@ -2266,10 +2266,10 @@ namespace VAdvantage.Acct
 //        //        {
 //        //            payment = new MPayment(GetCtx(), line.GetVAB_Payment_ID(), GetTrxName());
 //        //        }
-//        //        MInvoice invoice = null;
+//        //        MVABInvoice invoice = null;
 //        //        if (line.GetVAB_Invoice_ID() != 0)
 //        //        {
-//        //            invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
+//        //            invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), null);
 //        //        }
 
 //        //        // No Invoice
@@ -2341,7 +2341,7 @@ namespace VAdvantage.Acct
 //        //            // AR Invoice Amount CR//ACCTTYPE_C_Receivable_Services
 //        //            if (as1.IsAccrual())
 //        //            {
-//        //                //MInvoiceLine invLine = new MInvoiceLine(invoice);
+//        //                //MVABInvoiceLine invLine = new MVABInvoiceLine(invoice);
 //        //                // string sql = "select VAM_Product_id from VAB_InvoiceLine WHERE VAB_InvoiceLine_id=" + line.GetVAB_Invoice_ID();// +" and Rownum=" + (i + 1);
 
 //        //                string sql = "select sum(cl.linenetamt),prod.producttype  from VAB_InvoiceLine cl inner join" +
@@ -2529,7 +2529,7 @@ namespace VAdvantage.Acct
 //        /// <param name="invoice"></param>
 //        /// <param name="allocationSource">allocation amount (incl discount, writeoff)</param>
 //        /// <returns> Accounted Amt</returns>
-//        private Decimal? CreateCashBasedAcct(MAcctSchema as1, Fact fact, MInvoice invoice, Decimal? allocationSource)
+//        private Decimal? CreateCashBasedAcct(MAcctSchema as1, Fact fact, MVABInvoice invoice, Decimal? allocationSource)
 //        {
 //            Decimal allocationAccounted = Env.ZERO;
 //            //	Multiplier
@@ -2543,7 +2543,7 @@ namespace VAdvantage.Acct
 
 //            //	Get Invoice Postings
 //            DoVAB_Invoice docInvoice = (DoVAB_Invoice)Doc.Get(new MAcctSchema[] { as1 },
-//                MInvoice.Table_ID, invoice.GetVAB_Invoice_ID(), GetTrxName());
+//                MVABInvoice.Table_ID, invoice.GetVAB_Invoice_ID(), GetTrxName());
 //            docInvoice.LoadDocumentDetails();
 //            allocationAccounted = docInvoice.CreateFactCash(as1, fact, new Decimal(percent));
 //            log.Config("Allocation Accounted=" + allocationAccounted);
@@ -2551,7 +2551,7 @@ namespace VAdvantage.Acct
 //            //	Cash Based Commitment Release 
 //            if (as1.IsCreateCommitment() && !invoice.IsSOTrx())
 //            {
-//                MInvoiceLine[] lines = invoice.GetLines();
+//                MVABInvoiceLine[] lines = invoice.GetLines();
 //                for (int i = 0; i < lines.Length; i++)
 //                {
 //                    Fact factC = Doc_Order.GetCommitmentRelease(as1, this,
@@ -2660,7 +2660,7 @@ namespace VAdvantage.Acct
 //        /// <param name="allocationAccounted">acct amt</param>
 //        /// <returns>Error Message or null if OK</returns>
 //        private String CreateRealizedGainLoss(MAcctSchema as1, Fact fact, MVABAccount acct,
-//            MInvoice invoice, Decimal? allocationSource, Decimal? allocationAccounted)
+//            MVABInvoice invoice, Decimal? allocationSource, Decimal? allocationAccounted)
 //        {
 //            Decimal? invoiceSource = null;
 //            Decimal? invoiceAccounted = null;

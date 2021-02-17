@@ -20,14 +20,14 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInventoryLine : X_VAM_InventoryLine
+    public class MVAMInventoryLine : X_VAM_InventoryLine
     {
         //	Logger				
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInventoryLine).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInventoryLine).FullName);
         /** Manually created				*/
         private bool _isManualEntry = true;
         /** Parent							*/
-        private MInventory _parent = null;
+        private MVAMInventory _parent = null;
         /** Product							*/
         private MProduct _product = null;
         public Decimal? OnHandQty = 0;
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_InventoryLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MInventoryLine(Ctx ctx, int VAM_InventoryLine_ID, Trx trxName)
+        public MVAMInventoryLine(Ctx ctx, int VAM_InventoryLine_ID, Trx trxName)
             : base(ctx, VAM_InventoryLine_ID, trxName)
         {
             if (VAM_InventoryLine_ID == 0)
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MInventoryLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInventoryLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID">instance</param>
         /// <param name="qtyBook">book value</param>
         /// <param name="qtyCount">count value</param>
-        public MInventoryLine(MInventory inventory, int VAM_Locator_ID, int VAM_Product_ID,
+        public MVAMInventoryLine(MVAMInventory inventory, int VAM_Locator_ID, int VAM_Product_ID,
             int VAM_PFeature_SetInstance_ID, Decimal qtyBook, Decimal qtyCount)
             : this(inventory.GetCtx(), 0, inventory.Get_TrxName())
         {
@@ -107,10 +107,10 @@ namespace VAdvantage.Model
         /// <param name="VAM_Product_ID">product</param>
         /// <param name="VAM_PFeature_SetInstance_ID">asi</param>
         /// <returns>line or null</returns>
-        public static MInventoryLine Get(MInventory inventory, int VAM_Locator_ID,
+        public static MVAMInventoryLine Get(MVAMInventory inventory, int VAM_Locator_ID,
             int VAM_Product_ID, int VAM_PFeature_SetInstance_ID)
         {
-            MInventoryLine retValue = null;
+            MVAMInventoryLine retValue = null;
             String sql = "SELECT * FROM VAM_InventoryLine "
                 + "WHERE VAM_Inventory_ID=@invenid AND VAM_Locator_ID=@locid"
                 + " AND VAM_Product_ID=@prodid AND VAM_PFeature_SetInstance_ID=@asiid";
@@ -127,7 +127,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        retValue = new MInventoryLine(inventory.GetCtx(), dr, inventory.Get_TrxName());
+                        retValue = new MVAMInventoryLine(inventory.GetCtx(), dr, inventory.Get_TrxName());
                     }
                 }
             }
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
 
             if (!IsInternalUse())
             {
-                MInventory inv = new MInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
+                MVAMInventory inv = new MVAMInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
                 inv.SetIsAdjusted(false);
                 if (!inv.Save())
                 {
@@ -283,7 +283,7 @@ namespace VAdvantage.Model
             bool isContainrApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             Decimal VA024_ProvisionPrice = 0;
-            MInventory inventory = new MInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
+            MVAMInventory inventory = new MVAMInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
             MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
             if (newRecord && _isManualEntry)
             {
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
             // By Amit for Obsolete Inventory - 25-May-2016
             if (Env.IsModuleInstalled("VA024_"))
             {
-                //MInventory inventory = new MInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
+                //MVAMInventory inventory = new MVAMInventory(GetCtx(), GetVAM_Inventory_ID(), Get_Trx());
                 //shipment and Return to vendor
                 if (inventory.IsInternalUse() || (!inventory.IsInternalUse() && (GetQtyBook() - GetQtyCount()) > 0))
                 {
@@ -549,7 +549,7 @@ namespace VAdvantage.Model
         /// <param name="updateQtyBooked"></param>
         public void CreateMA(bool updateQtyBooked)
         {
-            int delMA = MInventoryLineMA.DeleteInventoryLineMA(GetVAM_InventoryLine_ID(), Get_TrxName());
+            int delMA = MVAMInventoryLineMP.DeleteInventoryLineMA(GetVAM_InventoryLine_ID(), Get_TrxName());
             log.Info("DeletedMA=" + delMA);
 
             MStorage[] storages = MStorage.GetAll(GetCtx(), GetVAM_Product_ID(),
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
             if (allZeroASI)
                 return;
 
-            MInventoryLineMA ma = null;
+            MVAMInventoryLineMP ma = null;
             Decimal sum = Env.ZERO;
             for (int i = 0; i < storages.Length; i++)
             {
@@ -583,7 +583,7 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    ma = new MInventoryLineMA(this,
+                    ma = new MVAMInventoryLineMP(this,
                         storage.GetVAM_PFeature_SetInstance_ID(), storage.GetQtyOnHand());
                 }
                 if (!ma.Save())
@@ -603,10 +603,10 @@ namespace VAdvantage.Model
         /// Get Parent
         /// </summary>
         /// <returns>parent</returns>
-        public MInventory GetParent()
+        public MVAMInventory GetParent()
         {
             if (_parent == null)
-                _parent = new MInventory(GetCtx(), GetVAM_Inventory_ID(), Get_TrxName());
+                _parent = new MVAMInventory(GetCtx(), GetVAM_Inventory_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -714,7 +714,7 @@ namespace VAdvantage.Model
         /// Set Parent
         /// </summary>
         /// <param name="parent">parent</param>
-        public void SetParent(MInventory parent)
+        public void SetParent(MVAMInventory parent)
         {
             _parent = parent;
         }
@@ -779,7 +779,7 @@ namespace VAdvantage.Model
                 }
 
                 log.Log(Level.SEVERE, sql, e);
-                //ErrorLog.FillErrorLog("MInventoryLine.SetQtyBook", DataBase.GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
+                //ErrorLog.FillErrorLog("MVAMInventoryLine.SetQtyBook", DataBase.GlobalVariable.LAST_EXECUTED_QUERY, e.Message, VAdvantage.Framework.Message.MessageType.ERROR);
             }
             SetQtyBook(qtyBook);
             //
@@ -831,7 +831,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInventoryLine[");
+            StringBuilder sb = new StringBuilder("MVAMInventoryLine[");
             sb.Append(Get_ID())
                 .Append("-VAM_Product_ID=").Append(GetVAM_Product_ID())
                 .Append(",QtyCount=").Append(GetQtyCount())

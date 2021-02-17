@@ -836,13 +836,13 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]) > 0)
                         {
-                            MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetVAM_Inventory_ID()), _trx).IsInternalUse())
+                            MVAMInventoryLine MVAMInventoryLine = new MVAMInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]), _trx);
+                            if (!new MVAMInventory(ctx, Util.GetValueOfInt(MVAMInventoryLine.GetVAM_Inventory_ID()), _trx).IsInternalUse())
                             {
-                                minventoryLine.SetQtyBook(qtyMove);
-                                minventoryLine.SetOpeningStock(qtyMove);
-                                minventoryLine.SetDifferenceQty(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["currentqty"])));
-                                if (!minventoryLine.Save())
+                                MVAMInventoryLine.SetQtyBook(qtyMove);
+                                MVAMInventoryLine.SetOpeningStock(qtyMove);
+                                MVAMInventoryLine.SetDifferenceQty(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["currentqty"])));
+                                if (!MVAMInventoryLine.Save())
                                     MTransaction.log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]));
                                 MTransaction mtransaction = new MTransaction(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_Inv_Trx_id"]), _trx);
                                 mtransaction.SetMovementQty(Decimal.Negate(Decimal.Subtract(qtyMove, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["currentqty"]))));
@@ -917,15 +917,15 @@ namespace VAdvantage.Model
                     {
                         if (Util.GetValueOfString(dataSet.Tables[0].Rows[index]["MovementType"]) == "I+" && Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]) > 0)
                         {
-                            MInventoryLine minventoryLine = new MInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]), _trx);
-                            if (!new MInventory(ctx, Util.GetValueOfInt(minventoryLine.GetVAM_Inventory_ID()), (Trx)null).IsInternalUse())
+                            MVAMInventoryLine MVAMInventoryLine = new MVAMInventoryLine(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]), _trx);
+                            if (!new MVAMInventory(ctx, Util.GetValueOfInt(MVAMInventoryLine.GetVAM_Inventory_ID()), (Trx)null).IsInternalUse())
                             {
-                                if (minventoryLine.GetVAM_ProductContainer_ID() == containerId)
+                                if (MVAMInventoryLine.GetVAM_ProductContainer_ID() == containerId)
                                 {
-                                    minventoryLine.SetQtyBook(containerCurrentQty);
-                                    minventoryLine.SetOpeningStock(containerCurrentQty);
-                                    minventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["ContainerCurrentQty"])));
-                                    if (!minventoryLine.Save())
+                                    MVAMInventoryLine.SetQtyBook(containerCurrentQty);
+                                    MVAMInventoryLine.SetOpeningStock(containerCurrentQty);
+                                    MVAMInventoryLine.SetDifferenceQty(Decimal.Subtract(containerCurrentQty, Util.GetValueOfDecimal(dataSet.Tables[0].Rows[index]["ContainerCurrentQty"])));
+                                    if (!MVAMInventoryLine.Save())
                                         log.Info("Quantity Book and Quantity Differenec Not Updated at Inventory Line Tab <===> " + Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_InventoryLine_ID"]));
                                 }
                                 MTransaction mtransaction = new MTransaction(ctx, Util.GetValueOfInt(dataSet.Tables[0].Rows[index]["VAM_Inv_Trx_id"]), _trx);

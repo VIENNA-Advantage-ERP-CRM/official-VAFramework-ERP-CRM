@@ -103,7 +103,7 @@ namespace VAdvantage.Model
             return foreignCurrency;
         }
 
-        public static bool InsertForeignCostAverageInvoice(Ctx ctx, MInvoice invoice, MInvoiceLine invoiceLine, Trx trx)
+        public static bool InsertForeignCostAverageInvoice(Ctx ctx, MVABInvoice invoice, MVABInvoiceLine invoiceLine, Trx trx)
         {
             int acctSchema_ID = 0;
             int VAM_ProductCostElement_ID = 0;
@@ -204,7 +204,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public static bool InsertForeignCostAveragePO(Ctx ctx, MVABOrder order, MVABOrderLine orderLine, MInOutLine inoutLine, Trx trx)
+        public static bool InsertForeignCostAveragePO(Ctx ctx, MVABOrder order, MVABOrderLine orderLine, MVAMInvInOutLine inoutLine, Trx trx)
         {
             int acctSchema_ID = 0;
             int VAM_ProductCostElement_ID = 0;
@@ -306,7 +306,7 @@ namespace VAdvantage.Model
             return true;
         }
 
-        public static bool InsertForeignCostMatchInvoice(Ctx ctx, MInvoiceLine invoiceLine, decimal matchQty, int ASI, Trx trx)
+        public static bool InsertForeignCostMatchInvoice(Ctx ctx, MVABInvoiceLine invoiceLine, decimal matchQty, int ASI, Trx trx)
         {
             int acctSchema_ID = 0;
             int VAM_ProductCostElement_ID = 0;
@@ -317,14 +317,14 @@ namespace VAdvantage.Model
             MVAMProductCostForeignCurrency foreignCost = null;
             dynamic pc = null;
             String cl = null;
-            MInvoice invoice = null;
+            MVABInvoice invoice = null;
             try
             {
                 // if cost is calculated then not to calculate again
                 if (invoiceLine.IsFutureCostCalculated())
                     return true;
 
-                invoice = new MInvoice(ctx, invoiceLine.GetVAB_Invoice_ID(), trx);
+                invoice = new MVABInvoice(ctx, invoiceLine.GetVAB_Invoice_ID(), trx);
 
                 if (!invoice.IsSOTrx() && !invoice.IsReturnTrx())
                 {

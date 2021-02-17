@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : CTreeNode
  * Purpose        : Mutable Tree Node (not a PO).
- * Class Used     : X_VAPA_FinancialReportingOrder
+ * Class Used     : X_VAPA_ReportingOrder
  * Chronological    Development
  * Deepak           11-Jan-2010
   ******************************************************/

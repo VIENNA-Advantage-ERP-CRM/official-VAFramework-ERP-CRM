@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInOutLineMA
+ * Class Name     : MVAMInvInOutLineMP
  * Purpose        : Deletion of records from inout table
  * Class Used     : X_VAM_Inv_InOutLineMP
  * Chronological    Development
@@ -24,10 +24,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInOutLineMA : X_VAM_Inv_InOutLineMP
+    public class MVAMInvInOutLineMP : X_VAM_Inv_InOutLineMP
     {
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInOutLineMA).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInvInOutLineMP).FullName);
 
         /**
         * 	Get Material Allocations for Line
@@ -36,9 +36,9 @@ namespace VAdvantage.Model
         *	@param trxName trx
         *	@return allocations
         */
-        public static MInOutLineMA[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
+        public static MVAMInvInOutLineMP[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
-            List<MInOutLineMA> list = new List<MInOutLineMA>();
+            List<MVAMInvInOutLineMP> list = new List<MVAMInvInOutLineMP>();
             String sql = "SELECT * FROM VAM_Inv_InOutLineMP WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID;
             DataSet ds = null;
             try
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MInOutLineMA(ctx, dr, trxName));
+                    list.Add(new MVAMInvInOutLineMP(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
             {
                 _log.Log(Level.SEVERE, sql, e);
             }
-            MInOutLineMA[] retValue = new MInOutLineMA[list.Count];
+            MVAMInvInOutLineMP[] retValue = new MVAMInvInOutLineMP[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
          *	@param VAM_Inv_InOutLineMP_ID ignored
          *	@param trxName trx
          */
-        public MInOutLineMA(Ctx ctx, int VAM_Inv_InOutLineMP_ID, Trx trxName)
+        public MVAMInvInOutLineMP(Ctx ctx, int VAM_Inv_InOutLineMP_ID, Trx trxName)
             : base(ctx, VAM_Inv_InOutLineMP_ID, trxName)
         {
             if (VAM_Inv_InOutLineMP_ID != 0)
@@ -107,7 +107,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName trx
          */
-        public MInOutLineMA(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvInOutLineMP(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
         *	@param VAM_PFeature_SetInstance_ID asi
         *	@param MovementQty qty
         */
-        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal MovementQty)
+        public MVAMInvInOutLineMP(MVAMInvInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal MovementQty)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="movementQty"></param>
         /// <param name="MMPloicyDate"></param>
-        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+        public MVAMInvInOutLineMP(MVAMInvInOutLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -152,16 +152,16 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Is Used to Get or Create  Instance of MInoutLineMA (Attribute)
+        /// Is Used to Get or Create  Instance of MVAMInvInOutLineMP (Attribute)
         /// </summary>
         /// <param name="line"></param>
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="MovementQty"></param>
         /// <param name="DateMaterialPolicy"></param>
         /// <returns></returns>
-        public static MInOutLineMA GetOrCreate(MInOutLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        public static MVAMInvInOutLineMP GetOrCreate(MVAMInvInOutLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
         {
-            MInOutLineMA retValue = null;
+            MVAMInvInOutLineMP retValue = null;
             String sql = "SELECT * FROM VAM_Inv_InOutLineMP " +
                          @" WHERE  VAM_Inv_InOutLine_ID = " + line.GetVAM_Inv_InOutLine_ID() +
                          @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MInOutLineMA(line.GetCtx(), dr, line.Get_Trx());
+                    retValue = new MVAMInvInOutLineMP(line.GetCtx(), dr, line.Get_Trx());
                 }
             }
             catch (Exception ex)
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MInOutLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
+                retValue = new MVAMInvInOutLineMP(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
             else
                 retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
             return retValue;
@@ -212,9 +212,9 @@ namespace VAdvantage.Model
 	 *	@param trxName trx
 	 *	@return allocations
 	 */
-        public static MInOutLineMA[] getNonReturned(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
+        public static MVAMInvInOutLineMP[] getNonReturned(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
-            List<MInOutLineMA> list = new List<MInOutLineMA>();
+            List<MVAMInvInOutLineMP> list = new List<MVAMInvInOutLineMP>();
             String sql = "SELECT * FROM VAM_Inv_InOutLineMP WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID + " ORDER BY MMPolicyDate ASC";
             DataSet ds = null;
             try
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MInOutLineMA(ctx, dr, trxName));
+                    list.Add(new MVAMInvInOutLineMP(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -231,7 +231,7 @@ namespace VAdvantage.Model
             {
                 _log.Log(Level.SEVERE, sql, e);
             }
-            MInOutLineMA[] retValue = new MInOutLineMA[list.Count];
+            MVAMInvInOutLineMP[] retValue = new MVAMInvInOutLineMP[list.Count];
             retValue = list.ToArray();
             return retValue;
         }	
@@ -242,7 +242,7 @@ namespace VAdvantage.Model
            * @param VAM_PFeature_SetInstance_ID asi
            * @param MovementQty qty
            *  @param QtyAllocated qty*/
-        public MInOutLineMA(MInOutLine parent, int VAM_PFeature_SetInstance_ID,
+        public MVAMInvInOutLineMP(MVAMInvInOutLine parent, int VAM_PFeature_SetInstance_ID,
                                 Decimal MovementQty, Decimal QtyAllocated)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             SetVAM_PFeature_SetInstance_ID(VAM_PFeature_SetInstance_ID);
             SetMovementQty(MovementQty);
             SetQtyAllocated(QtyAllocated);
-        } // MInOutLineMA
+        } // MVAMInvInOutLineMP
         //END
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInOutLineMA[");
+            StringBuilder sb = new StringBuilder("MVAMInvInOutLineMP[");
             sb.Append("VAM_Inv_InOutLine_ID=").Append(GetVAM_Inv_InOutLine_ID())
                 .Append(",VAM_PFeature_SetInstance_ID=").Append(GetVAM_PFeature_SetInstance_ID())
                 .Append(", Qty=").Append(GetMovementQty())

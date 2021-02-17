@@ -189,7 +189,7 @@ namespace VAdvantage.Model
         *	@param shipLine shipment line
         *	@param deliveryCount 0 or number of delivery
         */
-        public MVAAsset(MInOut shipment, MInOutLine shipLine, int deliveryCount)
+        public MVAAsset(MVAMInvInOut shipment, MVAMInvInOutLine shipLine, int deliveryCount)
             : this(shipment.GetCtx(), 0, shipment.Get_TrxName())
         {
 
@@ -276,7 +276,7 @@ namespace VAdvantage.Model
         *	@param line line
         *	@param deliveryCount
         */
-        public void SetValueNameDescription(MInOut shipment, MInOutLine line, int deliveryCount)
+        public void SetValueNameDescription(MVAMInvInOut shipment, MVAMInvInOutLine line, int deliveryCount)
         {
             MProduct product = line.GetProduct();
             MVABBusinessPartner partner = shipment.GetBPartner();
@@ -290,7 +290,7 @@ namespace VAdvantage.Model
         *	@param product product
         *	@param partner partner
         */
-        public void SetValueNameDescription(MInOut shipment,
+        public void SetValueNameDescription(MVAMInvInOut shipment,
             int deliveryCount, MProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + shipment.GetDocumentNo();
@@ -336,7 +336,7 @@ namespace VAdvantage.Model
         *	@param shipLine shipment line
         *	@param deliveryCount 0 or number of delivery
         */
-        public MVAAsset(MInvoice invoice, MInvoiceLine invoiceline, int deliveryCount)
+        public MVAAsset(MVABInvoice invoice, MVABInvoiceLine invoiceline, int deliveryCount)
             : this(invoiceline.GetCtx(), 0, invoiceline.Get_TrxName())
         {
 
@@ -426,7 +426,7 @@ namespace VAdvantage.Model
         *	@param line line
         *	@param deliveryCount
         */
-        public void SetValueNameDescription(MInvoice invoice, MInvoiceLine line, int deliveryCount)
+        public void SetValueNameDescription(MVABInvoice invoice, MVABInvoiceLine line, int deliveryCount)
         {
             MProduct product = line.GetProduct();
             MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), invoice.GetVAB_BusinessPartner_ID(), null);
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
         *	@param product product
         *	@param partner partner
         */
-        public void SetValueNameDescription(MInvoice invoice,
+        public void SetValueNameDescription(MVABInvoice invoice,
             int deliveryCount, MProduct product, MVABBusinessPartner partner)
         {
             String documentNo = "_" + invoice.GetDocumentNo();
@@ -502,7 +502,7 @@ namespace VAdvantage.Model
             Decimal Qty = Env.ONE;
             if (GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine line = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                MVAMInvInOutLine line = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                 Qty = line.GetMovementQty();
             }
             int multiplier = GetProduct().GetSupportUnits();
@@ -888,7 +888,7 @@ namespace VAdvantage.Model
             //                    {
             //                        for (int k = 0; k < _dsAsset.Tables[0].Rows.Count; k++)
             //                        {
-            //                            MInOutLine _inOutLine = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+            //                            MVAMInvInOutLine _inOutLine = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             //                            MProduct _product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
             //                            MVAMProductCostElement _costElement = new MVAMProductCostElement(GetCtx(), Util.GetValueOfInt(_dsAsset.Tables[0].Rows[k]["VAM_ProductCostElement_ID"]), Get_TrxName());
             //                            MAcctSchema _acctsch = null;

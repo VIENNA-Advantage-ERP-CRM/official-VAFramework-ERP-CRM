@@ -21,7 +21,7 @@ namespace VAdvantage.DataBase
         /// <param name="isContainerApplicable">Container Applicable</param>
         /// <param name="trx">Transaction</param>
         /// <returns>Return query as string based on connected Database</returns>
-        public static string InsertInventoryLine(Ctx ctx, MInventory _inventory, DataSet ds, int lineNo, bool isContainerApplicable, Trx trx)
+        public static string InsertInventoryLine(Ctx ctx, MVAMInventory _inventory, DataSet ds, int lineNo, bool isContainerApplicable, Trx trx)
         {
             StringBuilder insertSql = new StringBuilder();
             StringBuilder sql = new StringBuilder();
@@ -42,7 +42,7 @@ namespace VAdvantage.DataBase
                     }
                     currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
                     lineNo = lineNo + 10;
-                    MInventoryLine line = new MInventoryLine(ctx, 0, trx);
+                    MVAMInventoryLine line = new MVAMInventoryLine(ctx, 0, trx);
                     int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
                     string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
                     int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
@@ -117,7 +117,7 @@ namespace VAdvantage.DataBase
                     }
                     currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][3]);
                     lineNo = lineNo + 10;
-                    MInventoryLine line = new MInventoryLine(ctx, 0, trx);
+                    MVAMInventoryLine line = new MVAMInventoryLine(ctx, 0, trx);
                     int line_ID = DB.GetNextID(ctx, "VAM_InventoryLine", trx);
                     string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
                     int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, trx));
@@ -292,7 +292,7 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-        public static string MInOutContainerNotMatched(int VAM_Inv_InOut_ID)
+        public static string MVAMInvInOutContainerNotMatched(int VAM_Inv_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -361,7 +361,7 @@ namespace VAdvantage.DataBase
         }
 
 
-        public static string MInOutContainerNotAvailable(int VAM_Inv_InOut_ID)
+        public static string MVAMInvInOutContainerNotAvailable(int VAM_Inv_InOut_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -394,7 +394,7 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-        public static string ShipConfirmNoActualValue(string mInOutLinesConfirm)
+        public static string ShipConfirmNoActualValue(string MVAMInvInOutLinesConfirm)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -404,7 +404,7 @@ namespace VAdvantage.DataBase
                             FROM ((SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp 
                             INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE ( NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + mInOutLinesConfirm + @"))))
+                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + MVAMInvInOutLinesConfirm + @"))))
                             WHERE rn = cnt START WITH rn = 1 CONNECT BY Rn = Prior Rn + 1");
             }
             else if (DB.IsPostgreSQL())
@@ -413,7 +413,7 @@ namespace VAdvantage.DataBase
                             (SELECT DISTINCT Prod.Name AS Name FROM Va010_Shipconfparameters Shp 
                             INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE NVL(Shp.Va010_Actualvalue,0) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + mInOutLinesConfirm + "))s t");
+                            AND Shp.VAM_Inv_InOutLineConfirm_Id IN (" + MVAMInvInOutLinesConfirm + "))s t");
             }
             return sql.ToString();
         }
@@ -433,7 +433,7 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-        public static string MInventoryContainerNotMatched(int VAM_Inventory_ID)
+        public static string MVAMInventoryContainerNotMatched(int VAM_Inventory_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -462,7 +462,7 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-        public static string MInventoryContainerNotAvailable(int VAM_Inventory_ID)
+        public static string MVAMInventoryContainerNotAvailable(int VAM_Inventory_ID)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())

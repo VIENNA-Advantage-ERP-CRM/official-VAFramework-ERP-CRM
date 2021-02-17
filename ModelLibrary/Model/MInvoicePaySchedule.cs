@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInvoicePaySchedule
+ * Class Name     : MVABInvoicePaySchedule
  * Purpose        : Invoice payment shedule calculations 
  * Class Used     : X_VAB_sched_InvoicePayment
  * Chronological    Development
@@ -26,14 +26,14 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoicePaySchedule : X_VAB_sched_InvoicePayment
+    public class MVABInvoicePaySchedule : X_VAB_sched_InvoicePayment
     {
         // Static Logger					
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInvoicePaySchedule).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABInvoicePaySchedule).FullName);
         // 100								
         private static Decimal HUNDRED = 100.0M;
         /**	Parent						*/
-        private MInvoice _parent = null;
+        private MVABInvoice _parent = null;
 
         private decimal oldDueAmt = 0;
 
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *	@return array of schedule
          */
-        public static MInvoicePaySchedule[] GetInvoicePaySchedule(Ctx Ctx,
+        public static MVABInvoicePaySchedule[] GetInvoicePaySchedule(Ctx Ctx,
             int VAB_Invoice_ID, int VAB_sched_InvoicePayment_ID, Trx trxName)
         {
             String sql = "SELECT * FROM VAB_sched_InvoicePayment ips ";
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
             sql += "ORDER BY duedate";
 
             //
-            List<MInvoicePaySchedule> list = new List<MInvoicePaySchedule>();
+            List<MVABInvoicePaySchedule> list = new List<MVABInvoicePaySchedule>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInvoicePaySchedule(Ctx, dr, trxName));
+                    list.Add(new MVABInvoicePaySchedule(Ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MInvoicePaySchedule[] retValue = new MInvoicePaySchedule[list.Count];
+            MVABInvoicePaySchedule[] retValue = new MVABInvoicePaySchedule[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
          *	@param VAB_sched_InvoicePayment_ID id
          *	@param trxName transaction
          */
-        public MInvoicePaySchedule(Ctx Ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
+        public MVABInvoicePaySchedule(Ctx Ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
             : base(Ctx, VAB_sched_InvoicePayment_ID, trxName)
         {
             if (VAB_sched_InvoicePayment_ID == 0)
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MInvoicePaySchedule(Ctx Ctx, DataRow dr, Trx trxName)
+        public MVABInvoicePaySchedule(Ctx Ctx, DataRow dr, Trx trxName)
             : base(Ctx, dr, trxName)
         {
 
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
          *	@param invoice invoice
          *	@param paySchedule payment schedule
          */
-        public MInvoicePaySchedule(MInvoice invoice, MVABPaymentSchedule paySchedule)
+        public MVABInvoicePaySchedule(MVABInvoice invoice, MVABPaymentSchedule paySchedule)
             : base(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
 
@@ -174,17 +174,17 @@ namespace VAdvantage.Model
         /**
          * @return Returns the parent.
          */
-        public MInvoice GetParent()
+        public MVABInvoice GetParent()
         {
             if (_parent == null)
-                _parent = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                _parent = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _parent;
         }
 
         /**
          * @param parent The parent to set.
          */
-        public void SetParent(MInvoice parent)
+        public void SetParent(MVABInvoice parent)
         {
             _parent = parent;
         }
@@ -195,7 +195,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInvoicePaySchedule[");
+            StringBuilder sb = new StringBuilder("MVABInvoicePaySchedule[");
             sb.Append(Get_ID()).Append("-Due=" + GetDueDate() + "/" + GetDueAmt())
                 .Append(";Discount=").Append(GetDiscountDate() + "/" + GetDiscountAmt())
                 .Append("]");

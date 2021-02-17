@@ -28,7 +28,7 @@ namespace VAdvantage.Model
     {
         #region   
         private MVABDunningExeEntry _parent = null;
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
         private MVABPayment _payment = null;
         private int _VAB_CurrencyFrom_ID = 0;
         private int _VAB_CurrencyTo_ID = 0;
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
         /// Get Invoice
         /// </summary>
         /// <returns>Returns the invoice.</returns>
-        public MInvoice GetInvoice()
+        public MVABInvoice GetInvoice()
         {
             if (GetVAB_Invoice_ID() == 0)
             {
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
             }
             else if (_invoice == null)
             {
-                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                _invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             }
             return _invoice;
         }
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
         /// Set Invoice
         /// </summary>
         /// <param name="invoice">The invoice to set.</param>
-        public void SetInvoice(MInvoice invoice)
+        public void SetInvoice(MVABInvoice invoice)
         {
             _invoice = invoice;
             if (invoice != null)

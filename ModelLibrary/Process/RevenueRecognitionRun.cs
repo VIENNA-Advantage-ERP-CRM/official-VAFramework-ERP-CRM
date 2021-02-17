@@ -113,8 +113,8 @@ namespace VAdvantage.Process
                 MRevenueRecognitionRun[] mRevenueRecognitionRuns = null;
 
                 MRevenueRecognitionPlan revenueRecognitionPlan = null;
-                MInvoiceLine invoiceLine = null;
-                MInvoice invoice = null;
+                MVABInvoiceLine invoiceLine = null;
+                MVABInvoice invoice = null;
 
 
                 mRevenueRecognitionRuns = MRevenueRecognitionRun.GetRecognitionRuns(mRevenueRecognition, _RecognitionDate, _orgId, false);
@@ -125,8 +125,8 @@ namespace VAdvantage.Process
                     {
                         MRevenueRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
                         revenueRecognitionPlan = new MRevenueRecognitionPlan(GetCtx(), revenueRecognitionRun.GetC_RevenueRecognition_Plan_ID(), Get_TrxName());
-                        invoiceLine = new MInvoiceLine(GetCtx(), revenueRecognitionPlan.GetVAB_InvoiceLine_ID(), Get_TrxName());
-                        invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_TrxName());
+                        invoiceLine = new MVABInvoiceLine(GetCtx(), revenueRecognitionPlan.GetVAB_InvoiceLine_ID(), Get_TrxName());
+                        invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_TrxName());
 
                         if (revenueRecognitionPlan.GetVAB_AccountBook_ID() != _AcctSchema_ID || revenueRecognitionPlan.GetVAB_Currency_ID() != _Currency_ID || revenueRecognitionRun.GetRecognitionDate() != _RecognizeDate)
                         {
@@ -291,7 +291,7 @@ namespace VAdvantage.Process
         /// <param name="recognitionType">Recognition type</param>
         /// <param name="k">loop variable</param>
         /// <returns>Journal line object</returns>
-        public MJournalLine GenerateJounalLine(MJournal journal, MInvoice invoice, MInvoiceLine invoiceLine,
+        public MJournalLine GenerateJounalLine(MJournal journal, MVABInvoice invoice, MVABInvoiceLine invoiceLine,
                                             MRevenueRecognitionPlan revenueRecognitionPlan, MRevenueRecognitionRun revenueRecognitionRun, string recognitionType, int k)
         {
             try

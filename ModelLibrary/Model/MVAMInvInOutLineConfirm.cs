@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInOutLineConfirm
+ * Class Name     : MVAMInvInOutLineConfirm
  * Purpose        : For 2nd tab of the shipment window
  * Class Used     : X_VAM_Inv_InOutLineConfirm
  * Chronological    Development
@@ -28,7 +28,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInOutLineConfirm : X_VAM_Inv_InOutLineConfirm
+    public class MVAMInvInOutLineConfirm : X_VAM_Inv_InOutLineConfirm
     {
         /// <summary>
         /// Standard Constructor
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_Inv_InOutLineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MInOutLineConfirm(Ctx ctx, int VAM_Inv_InOutLineConfirm_ID, Trx trxName)
+        public MVAMInvInOutLineConfirm(Ctx ctx, int VAM_Inv_InOutLineConfirm_ID, Trx trxName)
             : base(ctx, VAM_Inv_InOutLineConfirm_ID, trxName)
         {
 
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MInOutLineConfirm(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAMInvInOutLineConfirm(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //super(ctx, dr, trxName);
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
         /// Parent Construvtor
         /// </summary>
         /// <param name="header">parent</param>
-        public MInOutLineConfirm(MInOutConfirm header)
+        public MVAMInvInOutLineConfirm(MVAMInvInOutConfirm header)
             : this(header.GetCtx(), 0, header.Get_TrxName())
         {
             SetClientOrg(header);
@@ -76,13 +76,13 @@ namespace VAdvantage.Model
         }	
 
         //Ship Line				*/
-        private MInOutLine _line = null;
+        private MVAMInvInOutLine _line = null;
 
         /// <summary>
         /// Set Shipment Line
         /// </summary>
         /// <param name="line">shipment line</param>
-        public void SetInOutLine(MInOutLine line)
+        public void SetInOutLine(MVAMInvInOutLine line)
         {
             SetVAM_Inv_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
             SetTargetQty(line.GetMovementQty());	//	Confirmations in Storage UOM	
@@ -94,10 +94,10 @@ namespace VAdvantage.Model
         ///  	Get Shipment Line
         /// </summary>
         /// <returns>line</returns>
-        public MInOutLine GetLine()
+        public MVAMInvInOutLine GetLine()
         {
             if (_line == null)
-                _line = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                _line = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             return _line;
         }	
 
@@ -111,22 +111,22 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         public Boolean ProcessLine(bool isSOTrx, String confirmType)
         {
-            MInOutLine line = GetLine();
+            MVAMInvInOutLine line = GetLine();
 
             //	Customer
-            if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirmType))
+            if (MVAMInvInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirmType))
             {
                 line.SetConfirmedQty(GetConfirmedQty());
             }
 
             //	Drop Ship
-            else if (MInOutConfirm.CONFIRMTYPE_DropShipConfirm.Equals(confirmType))
+            else if (MVAMInvInOutConfirm.CONFIRMTYPE_DropShipConfirm.Equals(confirmType))
             {
 
             }
 
             //	Pick or QA
-            else if (MInOutConfirm.CONFIRMTYPE_PickQAConfirm.Equals(confirmType))
+            else if (MVAMInvInOutConfirm.CONFIRMTYPE_PickQAConfirm.Equals(confirmType))
             {
                 line.SetTargetQty(GetTargetQty());
                 line.SetMovementQty(GetConfirmedQty());	//	Entered NOT changed
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
             }
 
             //	Ship or Receipt
-            else if (MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm.Equals(confirmType))
+            else if (MVAMInvInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm.Equals(confirmType))
             {
                 //Arpit 
                 if (GetDifferenceQty() > 0)
@@ -186,7 +186,7 @@ namespace VAdvantage.Model
                 }
             }
             //	Vendor
-            else if (MInOutConfirm.CONFIRMTYPE_VendorConfirmation.Equals(confirmType))
+            else if (MVAMInvInOutConfirm.CONFIRMTYPE_VendorConfirmation.Equals(confirmType))
             {
                 line.SetConfirmedQty(GetConfirmedQty());
             }

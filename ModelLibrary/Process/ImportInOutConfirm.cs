@@ -142,7 +142,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 while (idr.Read())
                 {
                     X_I_InOutLineConfirm importLine = new X_I_InOutLineConfirm(GetCtx(), idr, Get_TrxName());
-                    MInOutLineConfirm confirmLine = new MInOutLineConfirm(GetCtx(),
+                    MVAMInvInOutLineConfirm confirmLine = new MVAMInvInOutLineConfirm(GetCtx(),
                         importLine.GetVAM_Inv_InOutLineConfirm_ID(), Get_TrxName());
                     if (confirmLine.Get_ID() == 0
                         || confirmLine.Get_ID() != importLine.GetVAM_Inv_InOutLineConfirm_ID())

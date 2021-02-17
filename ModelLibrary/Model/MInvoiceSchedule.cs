@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInvoiceSchedule  
+ * Class Name     : MVABInvoiceSchedule  
  * Purpose        : Invoice Schedule Model
  * Class Used     : X_VAB_sched_Invoice
  * Chronological    Development
@@ -26,24 +26,24 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoiceSchedule : X_VAB_sched_Invoice
+    public class MVABInvoiceSchedule : X_VAB_sched_Invoice
     {
         /**
-	 * 	Get MInvoiceSchedule from Cache
+	 * 	Get MVABInvoiceSchedule from Cache
 	 *	@param ctx context
 	 *	@param VAB_sched_Invoice_ID id
 	 *	@param trxName transaction
-	 *	@return MInvoiceSchedule
+	 *	@return MVABInvoiceSchedule
 	 */
-        public static MInvoiceSchedule Get(Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName)
+        public static MVABInvoiceSchedule Get(Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName)
         {
             int key = Convert.ToInt32((VAB_sched_Invoice_ID));
-            MInvoiceSchedule retValue = (MInvoiceSchedule)s_cache[key];
+            MVABInvoiceSchedule retValue = (MVABInvoiceSchedule)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MInvoiceSchedule(ctx, VAB_sched_Invoice_ID, trxName);
+            retValue = new MVABInvoiceSchedule(ctx, VAB_sched_Invoice_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -52,7 +52,7 @@ namespace VAdvantage.Model
         }
 
         /**	Cache						*/
-        private static CCache<int, MInvoiceSchedule> s_cache = new CCache<int, MInvoiceSchedule>("VAB_sched_Invoice", 5);
+        private static CCache<int, MVABInvoiceSchedule> s_cache = new CCache<int, MVABInvoiceSchedule>("VAB_sched_Invoice", 5);
 
 
         /**************************************************************************
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
          *	@param VAB_sched_Invoice_ID id
          *	@param trxName transaction
          */
-        public MInvoiceSchedule(Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName)
+        public MVABInvoiceSchedule(Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName)
             : base(ctx, VAB_sched_Invoice_ID, trxName)
         {
 
@@ -73,7 +73,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MInvoiceSchedule(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABInvoiceSchedule(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

@@ -196,7 +196,7 @@ namespace ViennaAdvantage.Process
             string docNo = "";
             for (int i = 0; i < invoices.Count; i++)
             {
-                VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
+                VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
                 docNo = docNo + ", " + inv.GetDocumentNo();
             }
             if (docNo != "")
@@ -243,7 +243,7 @@ namespace ViennaAdvantage.Process
                             qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
                         }
 
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetQtyEntered(Decimal.Add(iLine.GetQtyEntered(), qty.Value));
                         iLine.SetQtyInvoiced(Decimal.Add(iLine.GetQtyInvoiced(), qty.Value));
                         // iLine.SetTaxAmt(Decimal.Add(iLine.GetTaxAmt(), tLine.GetTaxAmt()));
@@ -301,7 +301,7 @@ namespace ViennaAdvantage.Process
 
 
 
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
@@ -341,7 +341,7 @@ namespace ViennaAdvantage.Process
                     int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (VAB_InvoiceLine_ID != 0)
                     {
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetPriceEntered(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceEntered()));
                         iLine.SetPriceActual(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceActual()));
                         iLine.SetPriceLimit(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceLimit()));
@@ -357,7 +357,7 @@ namespace ViennaAdvantage.Process
                     else
                     {
                         lineNo = lineNo + 10;
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);

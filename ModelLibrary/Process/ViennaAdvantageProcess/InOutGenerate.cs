@@ -45,7 +45,7 @@ namespace ViennaAdvantage.Process
         // Consolidate				
         private bool _consolidateDocument = true;
         //	The current Shipment	
-        private MInOut _shipment = null;
+        private MVAMInvInOut _shipment = null;
         private MVABOrder order = null;
         // Numner of Shipments		
         private int _created = 0;
@@ -385,7 +385,7 @@ namespace ViennaAdvantage.Process
                         if (_isUnconfirmedInOut && product != null && Env.Signum(toDeliver) != 0)
                         {
                             String where2 = "EXISTS (SELECT * FROM VAM_Inv_InOut io WHERE io.VAM_Inv_InOut_ID=VAM_Inv_InOutLine.VAM_Inv_InOut_ID AND io.DocStatus IN ('IP','WC'))";
-                            MInOutLine[] iols = MInOutLine.GetOfOrderLine(GetCtx(),
+                            MVAMInvInOutLine[] iols = MVAMInvInOutLine.GetOfOrderLine(GetCtx(),
                                 line.GetVAB_OrderLine_ID(), where2, null);
                             for (int j = 0; j < iols.Length; j++)
                             {
@@ -584,7 +584,7 @@ namespace ViennaAdvantage.Process
             //	Create New Shipment
             if (_shipment == null)
             {
-                _shipment = new MInOut(order, 0, _movementDate);
+                _shipment = new MVAMInvInOut(order, 0, _movementDate);
                 _shipment.SetVAM_Warehouse_ID(orderLine.GetVAM_Warehouse_ID());	//	sets Org too
                 if (order.GetVAB_BusinessPartner_ID() != orderLine.GetVAB_BusinessPartner_ID())
                 {
@@ -619,7 +619,7 @@ namespace ViennaAdvantage.Process
             if (storages == null || storages.Count() == 0)
             {
                 #region Non Inventory Lines
-                MInOutLine line = new MInOutLine(_shipment);
+                MVAMInvInOutLine line = new MVAMInvInOutLine(_shipment);
                 line.SetOrderLine(orderLine, 0, Env.ZERO);
                 line.SetQty(qty);	//	Correct UOM
                 if (orderLine.GetQtyEntered().CompareTo(orderLine.GetQtyOrdered()) != 0)
@@ -667,7 +667,7 @@ namespace ViennaAdvantage.Process
             if (isContainerApplicable)
             {
                 #region Container applicable
-                List<MInOutLine> list = new List<MInOutLine>();
+                List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
 
                 // qty to be delivered
                 Decimal toDeliver = qty;
@@ -702,12 +702,12 @@ namespace ViennaAdvantage.Process
                     int VAM_Locator_ID = storage.GetVAM_Locator_ID();
 
                     //
-                    MInOutLine line = null;
+                    MVAMInvInOutLine line = null;
                     if (!linePerASI)	//	find line with Locator, AttributeSetInsatnce and ProductContainer
                     {
                         for (int n = 0; n < list.Count; n++)
                         {
-                            MInOutLine test = (MInOutLine)list[n];
+                            MVAMInvInOutLine test = (MVAMInvInOutLine)list[n];
                             if (test.GetVAM_Locator_ID() == VAM_Locator_ID
                                 && test.GetVAM_ProductContainer_ID() == VAM_ProductContainer_ID
                                 && test.GetVAM_PFeature_SetInstance_ID() == storage.GetVAM_PFeature_SetInstance_ID())
@@ -719,7 +719,7 @@ namespace ViennaAdvantage.Process
                     }
                     if (line == null)	//	new line
                     {
-                        line = new MInOutLine(_shipment);
+                        line = new MVAMInvInOutLine(_shipment);
                         line.SetOrderLine(orderLine, VAM_Locator_ID, order.IsSOTrx() ? deliver : Env.ZERO);
                         line.SetQty(deliver);
                         line.SetVAM_ProductContainer_ID(VAM_ProductContainer_ID);
@@ -775,7 +775,7 @@ namespace ViennaAdvantage.Process
             else
             {
                 #region normal Flow
-                List<MInOutLine> list = new List<MInOutLine>();
+                List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
                 Decimal toDeliver = qty;
                 for (int i = 0; i < storages.Length; i++)
                 {
@@ -796,12 +796,12 @@ namespace ViennaAdvantage.Process
 
                     int VAM_Locator_ID = storage.GetVAM_Locator_ID();
                     //
-                    MInOutLine line = null;
+                    MVAMInvInOutLine line = null;
                     if (!linePerASI)	//	find line with Locator
                     {
                         for (int n = 0; n < list.Count; n++)
                         {
-                            MInOutLine test = (MInOutLine)list[n];
+                            MVAMInvInOutLine test = (MVAMInvInOutLine)list[n];
                             if (test.GetVAM_Locator_ID() == VAM_Locator_ID)
                             {
                                 line = test;
@@ -811,7 +811,7 @@ namespace ViennaAdvantage.Process
                     }
                     if (line == null)	//	new line
                     {
-                        line = new MInOutLine(_shipment);
+                        line = new MVAMInvInOutLine(_shipment);
                         line.SetOrderLine(orderLine, VAM_Locator_ID, order.IsSOTrx() ? deliver : Env.ZERO);
                         line.SetQty(deliver);
                         list.Add(line);

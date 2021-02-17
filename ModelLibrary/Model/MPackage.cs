@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// 
         private static VLogger _log = VLogger.GetVLogger(typeof(MPackage).FullName); //Arpit
 
-        public static MPackage Create(MInOut shipment, MShipper shipper, DateTime? shipDate, Trx trxName)
+        public static MPackage Create(MVAMInvInOut shipment, MShipper shipper, DateTime? shipDate, Trx trxName)
         {
             MPackage retValue = new MPackage(shipment, shipper);
             if (shipDate != null)
@@ -57,10 +57,10 @@ namespace VAdvantage.Model
             }
             //Arpit
             //	Lines
-            MInOutLine[] lines = shipment.GetLines(false);
+            MVAMInvInOutLine[] lines = shipment.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInOutLine sLine = lines[i];
+                MVAMInvInOutLine sLine = lines[i];
                 MPackageLine pLine = new MPackageLine(retValue);
                 //Arpit
                 //pLine.SetInOutLine(sLine);
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="shipment">shipment</param>
         /// <param name="shipper">shipper</param>
-        public MPackage(MInOut shipment, MShipper shipper)
+        public MPackage(MVAMInvInOut shipment, MShipper shipper)
             : this(shipment.GetCtx(), 0, shipment.Get_TrxName())
         {
             SetClientOrg(shipment);

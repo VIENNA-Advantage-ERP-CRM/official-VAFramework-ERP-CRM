@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInvoiceBatch
+ * Class Name     : MVABInvoiceBatch
  * Purpose        : Invoice batch line
  * Class Used     : X_VAB_BatchInvoice
  * Chronological    Development
@@ -24,10 +24,10 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 
 {
-    public class MInvoiceBatch : X_VAB_BatchInvoice
+    public class MVABInvoiceBatch : X_VAB_BatchInvoice
     {
         /**	The Lines						*/
-        private MInvoiceBatchLine[] _lines = null;
+        private MVABInvoiceBatchLine[] _lines = null;
 
         /**
          * 	Standard Constructor
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
          *	@param VAB_BatchInvoice_ID id
          *	@param trxName trx
          */
-        public MInvoiceBatch(Ctx ctx, int VAB_BatchInvoice_ID, Trx trxName) :
+        public MVABInvoiceBatch(Ctx ctx, int VAB_BatchInvoice_ID, Trx trxName) :
             base(ctx, VAB_BatchInvoice_ID, trxName)
         {
 
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName trx
          */
-        public MInvoiceBatch(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABInvoiceBatch(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -69,12 +69,12 @@ namespace VAdvantage.Model
          *	@param reload reload data
          *	@return array of lines
          */
-        public MInvoiceBatchLine[] GetLines(Boolean reload)
+        public MVABInvoiceBatchLine[] GetLines(Boolean reload)
         {
             if (_lines != null && !reload)
                 return _lines;
             String sql = "SELECT * FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=@VAB_BatchInvoice_ID ORDER BY Line";
-            List<MInvoiceBatchLine> list = new List<MInvoiceBatchLine>();
+            List<MVABInvoiceBatchLine> list = new List<MVABInvoiceBatchLine>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInvoiceBatchLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABInvoiceBatchLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
             {
                 dt = null;
             }
-            _lines = new MInvoiceBatchLine[list.Count];
+            _lines = new MVABInvoiceBatchLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }

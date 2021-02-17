@@ -25,7 +25,7 @@ namespace VAdvantage.Model
         /**	Logger	*/
         private static VLogger _log = VLogger.GetVLogger(typeof(MVABPaymentAllocate).FullName);
         /**	The Invoice				*/
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
 
         /// <summary>
         /// Standard Constructor
@@ -104,10 +104,10 @@ namespace VAdvantage.Model
          * 	Get Invoice
          *	@return invoice
          */
-        public MInvoice GetInvoice()
+        public MVABInvoice GetInvoice()
         {
             if (_invoice == null && GetVAB_Invoice_ID() != 0)
-                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                _invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 

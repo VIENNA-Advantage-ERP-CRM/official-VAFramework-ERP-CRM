@@ -558,7 +558,7 @@ namespace VAdvantage.Model
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                        //MVABInvoicePaySchedule inp = new MVABInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus("R");
                         //inp.Save(Get_TrxName());
 
@@ -697,7 +697,7 @@ namespace VAdvantage.Model
                         payment.SetVA009_ExecutionStatus(status);
                         payment.Save(Get_TrxName());
 
-                        //MInvoicePaySchedule inp = new MInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                        //MVABInvoicePaySchedule inp = new MVABInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus(status);
                         //inp.Save(Get_TrxName());
 

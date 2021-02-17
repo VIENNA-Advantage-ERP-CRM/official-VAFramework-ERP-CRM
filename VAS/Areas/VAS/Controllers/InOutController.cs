@@ -29,7 +29,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 //Assign parameter value
                 Orig_InOut_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MInOut io = new MInOut(ctx, Orig_InOut_ID, null);
+                MVAMInvInOut io = new MVAMInvInOut(ctx, Orig_InOut_ID, null);
 
 
                 Dictionary<String, String> retDic = new Dictionary<string, string>();
@@ -70,7 +70,7 @@ namespace ViennaAdvantageWeb.Areas.VIS.Controllers
 
                 //Assign parameter value
                 id = Util.GetValueOfInt(paramValue[0].ToString());
-                MInOutLine Orig_InOutLine = new MInOutLine(ctx, id, null);
+                MVAMInvInOutLine Orig_InOutLine = new MVAMInvInOutLine(ctx, id, null);
                 retDic["MovementQty"] = Orig_InOutLine.GetMovementQty().ToString();
                 retDic["VAB_Project_ID"]= Orig_InOutLine.GetVAB_Project_ID().ToString();
                 retDic["VAB_Promotion_ID"]= Orig_InOutLine.GetVAB_Promotion_ID().ToString();

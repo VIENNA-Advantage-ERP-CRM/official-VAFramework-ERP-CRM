@@ -27,7 +27,7 @@ namespace VAS
 
             //modScript.Include(
             //    "~/Areas/VAS/Scripts/app/forms/vcreatefrom.js",
-            //    "~/Areas/VAS/Scripts/app/forms/vcreatefrominvoice.js",
+            //    "~/Areas/VAS/Scripts/app/forms/vcreatefroMVABInvoice.js",
             //    "~/Areas/VAS/Scripts/app/forms/vcreatefromshipment.js",
             //    "~/Areas/VAS/Scripts/app/forms/vcreatefromstatement.js",
             //    "~/Areas/VAS/Scripts/app/forms/acctviewer.js",

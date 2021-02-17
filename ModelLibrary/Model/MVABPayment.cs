@@ -505,7 +505,7 @@ namespace VAdvantage.Model
         protected override bool BeforeSave(bool newRecord)
         {
             MVABOrder order = null;
-            MInvoice invoice = null;
+            MVABInvoice invoice = null;
             MVABDocTypes dt1 = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             bool hasVA009Module = Env.IsModuleInstalled("VA009_");
@@ -535,7 +535,7 @@ namespace VAdvantage.Model
                 {
                     if (GetVAB_Invoice_ID() > 0)
                     {
-                        invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
+                        invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
                         if (invoice.IsSOTrx() != dt1.IsSOTrx())
                         {
                             return false;
@@ -2181,7 +2181,7 @@ namespace VAdvantage.Model
             //	Invoice
             if (VAB_Invoice_ID != 0)
             {
-                MInvoice inv = new MInvoice(GetCtx(), VAB_Invoice_ID, null);
+                MVABInvoice inv = new MVABInvoice(GetCtx(), VAB_Invoice_ID, null);
                 if (dt != null)
                 {
                     if (inv.IsSOTrx() != dt.IsSOTrx())
@@ -2697,7 +2697,7 @@ namespace VAdvantage.Model
                     /******************Commented By Lakhwinder
                      * //// Payment was Not Completed Against Prepay Order//////////*
                     //	Set Invoice
-                    MInvoice[] invoices = order.GetInvoices(true);
+                    MVABInvoice[] invoices = order.GetInvoices(true);
                     int length = invoices.Length;
                     if (length > 0)		//	Get last invoice
                         SetVAB_Invoice_ID(invoices[length - 1].GetVAB_Invoice_ID());
@@ -3237,11 +3237,11 @@ namespace VAdvantage.Model
             if (GetVAB_sched_InvoicePayment_ID() != 0)
             {
                 // commeted - bcz of rework -- already handled in View Allocation Completion
-                //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                //MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                 //paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    //MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
+                    //MVABInvoice invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
                     //MVABDocTypes doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
                     //paySch.SetVA009_ExecutionStatus(GetVA009_ExecutionStatus());
                     //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
@@ -3345,9 +3345,9 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         // commeted - bcz of rework -- already handled in View Allocation Completion
-                        //MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
+                        //MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
                         //paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
-                        //MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
+                        //MVABInvoice invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
                         //MVABDocTypes doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
                         //if (doctype.GetDocBaseType() == "ARC" || doctype.GetDocBaseType() == "APC")
                         //{
@@ -3388,12 +3388,12 @@ namespace VAdvantage.Model
             }
             else
             {
-                int[] InvoicePaySchedule_ID = MInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
+                int[] InvoicePaySchedule_ID = MVABInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
                     (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN (SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
                     SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_Trx());
                 foreach (int invocePay in InvoicePaySchedule_ID)
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), invocePay, Get_Trx());
+                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), invocePay, Get_Trx());
                     paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                     paySch.Save();
                 }
@@ -3893,7 +3893,7 @@ namespace VAdvantage.Model
                 string sql;
                 decimal price = 0;
                 PO po = null;
-                MInvoice invoice = null;
+                MVABInvoice invoice = null;
                 MVABOrder order = null;
                 int currencyTo = 0;
                 decimal differenceAmount = 0;
@@ -3915,7 +3915,7 @@ namespace VAdvantage.Model
                     if (VAB_Invoice_ID != 0)
                     {
                         #region update Amount on LC Detail
-                        invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
+                        invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
                         sql = @"SELECT aline.Amount, aline.DiscountAmt , aline.WriteOffAmt , aline.OverUnderAmt , aloc.VAB_Currency_ID , 
                                (aline.Amount - (aline.DiscountAmt + aline.WriteOffAmt) ) AS paidinvamount1 , d.DOCBASETYPE , 
                                CASE WHEN d.DOCBASETYPE = 'API' THEN (-1* aline.Amount - ((-1 * aline.DiscountAmt) + (-1 * aline.WriteOffAmt)))
@@ -4173,7 +4173,7 @@ namespace VAdvantage.Model
                                     #region update Amount on LC Detail
                                     if (pa.GetVAB_Invoice_ID() != 0)
                                     {
-                                        invoice = new MInvoice(GetCtx(), pa.GetVAB_Invoice_ID(), Get_Trx());
+                                        invoice = new MVABInvoice(GetCtx(), pa.GetVAB_Invoice_ID(), Get_Trx());
                                         sql = @"SELECT aline.Amount, aline.DiscountAmt , aline.WriteOffAmt , aline.OverUnderAmt , aloc.VAB_Currency_ID , 
                                (aline.Amount - (aline.DiscountAmt + aline.WriteOffAmt) + aline.OverUnderAmt) AS paidinvamount1 , d.DOCBASETYPE, 
                                CASE WHEN d.DOCBASETYPE = 'API' THEN (-1* aline.Amount - ((-1 * aline.DiscountAmt) + (-1 * aline.WriteOffAmt)))
@@ -4616,7 +4616,7 @@ namespace VAdvantage.Model
             {
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     // Added by Bharat on 27 June 2017 to restrict multiple payment against same Invoice Pay Schedule.
                     //23 Ap 2018 By pass for POS Terminal Order
                     if (paySch.IsVA009_IsPaid() && DB.GetSQLValue(Get_Trx(), @"SELECT VAPOS_POSTerminal_ID FROM VAB_ORDER WHERE VAB_Order_ID = (
@@ -5595,7 +5595,7 @@ namespace VAdvantage.Model
             {
                 if (GetVAB_sched_InvoicePayment_ID() > 0)
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     paySch.SetVA009_ExecutionStatus("C");
                     paySch.SetVA009_IsPaid(false);
                     if (!paySch.Save())
@@ -5604,7 +5604,7 @@ namespace VAdvantage.Model
 
                 if (GetVAB_Invoice_ID() > 0)
                 {
-                    MInvoice inv = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
+                    MVABInvoice inv = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_Trx());
                     inv.SetIsPaid(false);
                     if (!inv.Save())
                         log.SaveInfo("Not Saved", "");
@@ -5615,7 +5615,7 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < dsSchedule.Tables[0].Rows.Count; i++)
                     {
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
+                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
                         paySch.SetVA009_ExecutionStatus("C");
                         paySch.SetVA009_IsPaid(false);
                         if (!paySch.Save())

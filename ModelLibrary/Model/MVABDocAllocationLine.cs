@@ -23,7 +23,7 @@ namespace VAdvantage.Model
     public class MVABDocAllocationLine : X_VAB_DocAllocationLine
     {
         /**	Invoice info			*/
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
         /** Allocation Header		*/
         private MVABDocAllocation _parent = null;
 
@@ -147,10 +147,10 @@ namespace VAdvantage.Model
         /// Get Invoice
         /// </summary>
         /// <returns>invoice or null</returns>
-        public MInvoice GetInvoice()
+        public MVABInvoice GetInvoice()
         {
             if (_invoice == null && GetVAB_Invoice_ID() != 0)
-                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                _invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 
@@ -224,10 +224,10 @@ namespace VAdvantage.Model
         {
             log.Fine("Reverse=" + reverse + " - " + ToString());
             int VAB_Invoice_ID = GetVAB_Invoice_ID();
-            MInvoicePaySchedule invoiceSchedule = null;
+            MVABInvoicePaySchedule invoiceSchedule = null;
             MVABPayment payment = null;
             MVABCashJRNLLine cashLine = null;
-            MInvoice invoice = GetInvoice();
+            MVABInvoice invoice = GetInvoice();
             if (invoice != null
                 && GetVAB_BusinessPartner_ID() != invoice.GetVAB_BusinessPartner_ID())
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
@@ -404,7 +404,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            //	Update Balance / Credit used - Counterpart of MInvoice.completeIt
+            //	Update Balance / Credit used - Counterpart of MVABInvoice.completeIt
             if (invoice != null)
             {
                 if (invoice.TestAllocation() && !invoice.Save())
@@ -423,7 +423,7 @@ namespace VAdvantage.Model
                         MVABCurrency currency = new MVABCurrency(GetCtx(), invoice.GetVAB_Currency_ID(), null);
                         if (GetVAB_sched_InvoicePayment_ID() != 0 && !invoice.IsPaid())
                         {
-                            invoiceSchedule = new MInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                            invoiceSchedule = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                             invoiceSchedule.SetVA009_IsPaid(false);
                             // when we update schedule paid as False, then update payment method and related fields on schedule as on Invoice Header
                             if (reverse)

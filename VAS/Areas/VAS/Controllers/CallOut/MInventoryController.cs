@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MInventoryController:Controller
+    public class MVAMInventoryController:Controller
     {
         //
         // GET: /VIS/CalloutOrder/
@@ -20,7 +20,7 @@ namespace VIS.Controllers
             return View();
         }
 
-        public JsonResult GetMInventoryLine(string fields)
+        public JsonResult GetMVAMInventoryLine(string fields)
         {
             
             string retJSON = "";
@@ -32,7 +32,7 @@ namespace VIS.Controllers
 
                 //Assign parameter value
                 VAM_InventoryLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MInventoryLine iLine = new MInventoryLine(ctx, VAM_InventoryLine_ID, null);
+                MVAMInventoryLine iLine = new MVAMInventoryLine(ctx, VAM_InventoryLine_ID, null);
                 int VAM_Product_ID = iLine.GetVAM_Product_ID();
                 int VAM_Locator_ID = iLine.GetVAM_Locator_ID();
 
@@ -48,14 +48,14 @@ namespace VIS.Controllers
            // return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetMInventory(string fields)
+        public JsonResult GetMVAMInventory(string fields)
         {
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInventoryModel objInventoryLine = new MInventoryModel();
-                retJSON = JsonConvert.SerializeObject(objInventoryLine.GetMInventory(ctx, fields));
+                MVAMInventoryModel objInventoryLine = new MVAMInventoryModel();
+                retJSON = JsonConvert.SerializeObject(objInventoryLine.GetMVAMInventory(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);            
         }     

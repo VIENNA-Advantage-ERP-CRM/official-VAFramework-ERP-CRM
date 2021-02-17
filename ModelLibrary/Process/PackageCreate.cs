@@ -83,7 +83,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             string sql = "select VAM_Inv_InOut_ID from VAM_Inv_InOutConfirm where VAM_Inv_InOutConfirm_ID = " + _VAM_Inv_InOut_ID;
             int _M_Shipment_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
 
-            MInOut shipment = new MInOut(GetCtx(), _M_Shipment_ID, null);
+            MVAMInvInOut shipment = new MVAMInvInOut(GetCtx(), _M_Shipment_ID, null);
             if (shipment.Get_ID() != _M_Shipment_ID)
             {
                 throw new Exception("Cannot find Shipment ID=" + _VAM_Inv_InOut_ID);

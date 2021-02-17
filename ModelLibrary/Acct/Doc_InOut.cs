@@ -45,12 +45,12 @@ namespace VAdvantage.Acct
         /// <param name="idr">record</param>
         /// <param name="trxName">trx</param>
         public Doc_InOut(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MInOut), idr, null, trxName)
+            : base(ass, typeof(MVAMInvInOut), idr, null, trxName)
         {
 
         }
         public Doc_InOut(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MInOut), dr, null, trxName)
+            : base(ass, typeof(MVAMInvInOut), dr, null, trxName)
         {
 
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            MInOut inout = (MInOut)GetPO();
+            MVAMInvInOut inout = (MVAMInvInOut)GetPO();
             SetDateDoc(inout.GetMovementDate());
             //
             _MatchRequirementR = X_VAF_ClientDetail.MATCHREQUIREMENTR_None;
@@ -96,13 +96,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="inout">shipment/receipt</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MInOut inout)
+        private DocLine[] LoadLines(MVAMInvInOut inout)
         {
             List<DocLine> list = new List<DocLine>();
-            MInOutLine[] lines = inout.GetLines(false);
+            MVAMInvInOutLine[] lines = inout.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInOutLine line = lines[i];
+                MVAMInvInOutLine line = lines[i];
                 if (line.IsDescription()
                     || line.GetVAM_Product_ID() == 0
                     || Env.Signum(line.GetMovementQty()) == 0)
@@ -198,7 +198,7 @@ namespace VAdvantage.Acct
                 for (int i = 0; i < _lines.Length; i++)
                 {
                     DocLine line = _lines[i];
-                    MInOutLine sLine = new MInOutLine(GetCtx(), line.Get_ID(), null);
+                    MVAMInvInOutLine sLine = new MVAMInvInOutLine(GetCtx(), line.Get_ID(), null);
                     Decimal costs = 0;
                     if (sLine.GetA_Asset_ID() > 0)
                     {

@@ -33,7 +33,7 @@ namespace VAdvantage.Process
         private Boolean _AdjustinventoryCount = false;
         private Boolean _SkipBL = false;
         /** Physical Inventory					*/
-        private MInventory inventory = null;
+        private MVAMInventory inventory = null;
 
         private bool isContainerApplicable = false;
         /// <summary>
@@ -67,7 +67,7 @@ namespace VAdvantage.Process
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             log.Info("VAM_Inventory_ID=" + _VAM_Inventory_ID);
-            inventory = new MInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
+            inventory = new MVAMInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
             if (inventory.Get_ID() == 0)
                 throw new SystemException("Not found: VAM_Inventory_ID=" + _VAM_Inventory_ID);
 
@@ -101,7 +101,7 @@ namespace VAdvantage.Process
             int multiple = DataBase.DB.ExecuteQuery(sql, null, Get_TrxName());
             log.Info("Multiple=" + multiple);
 
-            int delMA = MInventoryLineMA.DeleteInventoryMA(_VAM_Inventory_ID, Get_TrxName());
+            int delMA = MVAMInventoryLineMP.DeleteInventoryMA(_VAM_Inventory_ID, Get_TrxName());
             log.Info("DeletedMA=" + delMA);
 
             //	ASI
@@ -134,13 +134,13 @@ namespace VAdvantage.Process
             }
             if (_AdjustinventoryCount)
             {
-                //                MInventoryLine[] lines = inventory.GetLines(true);
+                //                MVAMInventoryLine[] lines = inventory.GetLines(true);
                 //                for (int i = 0; i < lines.Length; i++)
                 //                {
                 //                    decimal currentQty = 0;
                 //                    string query = "", qry = "";
                 //                    int result = 0;
-                //                    MInventoryLine iLine = lines[i];
+                //                    MVAMInventoryLine iLine = lines[i];
                 //                    int VAM_Product_ID = Utility.Util.GetValueOfInt(iLine.GetVAM_Product_ID());
                 //                    int VAM_Locator_ID = Utility.Util.GetValueOfInt(iLine.GetVAM_Locator_ID());
                 //                    int VAM_PFeature_SetInstance_ID = Util.GetValueOfInt(iLine.GetVAM_PFeature_SetInstance_ID());
@@ -235,7 +235,7 @@ namespace VAdvantage.Process
                                         decimal currentQty = 0;
                                         int line_ID = Util.GetValueOfInt(ds.Tables[0].Rows[j][0]);
                                         currentQty = Util.GetValueOfDecimal(ds.Tables[0].Rows[j][7]);
-                                        MInventoryLine iLine = new MInventoryLine(GetCtx(), line_ID, Get_TrxName());
+                                        MVAMInventoryLine iLine = new MVAMInventoryLine(GetCtx(), line_ID, Get_TrxName());
                                         iLine.SetQtyBook(currentQty);
                                         iLine.SetOpeningStock(currentQty);
                                         if (iLine.GetAdjustmentType() == "A")
@@ -337,10 +337,10 @@ namespace VAdvantage.Process
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, null);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MInventoryLine il = new MInventoryLine(GetCtx(), dr, Get_TrxName());
+                    MVAMInventoryLine il = new MVAMInventoryLine(GetCtx(), dr, Get_TrxName());
                     Decimal onHand = Env.ZERO;
                     MStorage[] storages = MStorage.GetAll(GetCtx(), il.GetVAM_Product_ID(), il.GetVAM_Locator_ID(), Get_TrxName());
-                    MInventoryLineMA ma = null;
+                    MVAMInventoryLineMP ma = null;
                     for (int i = 0; i < storages.Length; i++)
                     {
                         MStorage storage = storages[i];
@@ -352,7 +352,7 @@ namespace VAdvantage.Process
                             && storages.Length == 1)
                             continue;
                         //	Save ASI
-                        ma = new MInventoryLineMA(il,
+                        ma = new MVAMInventoryLineMP(il,
                             storage.GetVAM_PFeature_SetInstance_ID(), storage.GetQtyOnHand());
                         if (!ma.Save())
                             ;

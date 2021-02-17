@@ -262,7 +262,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		}
 		
 		//	Invoice
-		MInvoice invoice = new MInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName());
+		MVABInvoice invoice = new MVABInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName());
         if (!invoice.IsSOTrx())
         {
             OpenAmt =Decimal.Negate( OpenAmt);

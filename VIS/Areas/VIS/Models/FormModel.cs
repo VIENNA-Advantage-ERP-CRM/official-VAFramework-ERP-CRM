@@ -39,7 +39,7 @@ namespace VIS.Models
                 m_where += " OR VAB_Order_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 318)
-            {//MInvoice.Table_ID){
+            {//MVABInvoice.Table_ID){
                 m_where += " OR VAB_Invoice_ID=" + Record_ID;
             }
             else if (VAF_TableView_ID == 335)

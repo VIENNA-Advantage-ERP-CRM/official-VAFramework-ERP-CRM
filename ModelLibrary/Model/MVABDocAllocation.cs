@@ -449,7 +449,7 @@ namespace VAdvantage.Model
                                                    VA009_IsPaid = 'N' AND VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() +
                                                    @" AND VAB_sched_InvoicePayment_ID <> " + line.GetVAB_sched_InvoicePayment_ID(), null, Get_Trx()));
 
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                         if (paySch.IsVA009_IsPaid())
                             continue;
                         //// Added by Bharat on 27 June 2017 to restrict multiple payment against same Invoice Pay Schedule.
@@ -458,7 +458,7 @@ namespace VAdvantage.Model
                         //    _processMsg = "Payment is already done for selected invoice Schedule";
                         //    return DocActionVariables.STATUS_INVALID;
                         //}
-                        MInvoice invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
+                        MVABInvoice invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
                         MVABCurrency currency = MVABCurrency.Get(GetCtx(), invoice.GetVAB_Currency_ID());
                         MVABDocTypes doctype = MVABDocTypes.Get(GetCtx(), invoice.GetVAB_DocTypes_ID());
                         StringBuilder _sql = new StringBuilder();
@@ -609,10 +609,10 @@ namespace VAdvantage.Model
                             paySch.SetVA009_ExecutionStatus("R");
 
                         //back up of Original schedule
-                        MInvoicePaySchedule backupNewPaySch = null;
+                        MVABInvoicePaySchedule backupNewPaySch = null;
                         if (line.GetOverUnderAmt() != 0 && !_isDuplicateLine)
                         {
-                            backupNewPaySch = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+                            backupNewPaySch = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
                             backupNewPaySch.Set_TrxName(Get_Trx());
                             PO.CopyValues(paySch, backupNewPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
                         }
@@ -640,8 +640,8 @@ namespace VAdvantage.Model
                         // Create new invoice schedule with ( over under amount - varaince amount ) as Due Amount rest are same
                         if (line.GetOverUnderAmt() != 0 && !_isDuplicateLine)
                         {
-                            //MInvoicePaySchedule newPaySch = new MInvoicePaySchedule(GetCtx(), 0, Get_Trx());
-                            MInvoicePaySchedule newPaySch = backupNewPaySch;
+                            //MVABInvoicePaySchedule newPaySch = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+                            MVABInvoicePaySchedule newPaySch = backupNewPaySch;
                             newPaySch.Set_TrxName(Get_Trx());
                             //PO.CopyValues(paySch, newPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
 
@@ -733,13 +733,13 @@ namespace VAdvantage.Model
                         // update invoice if all schedule are paid then mark paid as true at invoice
                         if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_sched_InvoicePayment WHERE va009_ispaid = 'N' AND VAB_Invoice_ID = " + Util.GetValueOfInt(line.GetVAB_Invoice_ID()), null, Get_Trx())) == 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
+                            MVABInvoice inv = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
                             inv.SetIsPaid(true);
                             inv.Save(Get_Trx());
                         }
                         else
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
+                            MVABInvoice inv = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
                             inv.SetIsPaid(false);
                             inv.Save(Get_Trx());
                         }
@@ -971,12 +971,12 @@ namespace VAdvantage.Model
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     paySch.SetVA009_IsPaid(false);
                     paySch.SetVA009_ExecutionStatus("A");
                     paySch.Save(Get_Trx());
 
-                    MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
+                    MVABInvoice inv = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_Trx());
                     inv.SetIsPaid(false);
                     inv.Save(Get_Trx());
                 }
@@ -1062,7 +1062,7 @@ namespace VAdvantage.Model
         /// <param name="cashline"></param>
         /// <param name="journalline"></param>
         /// <returns></returns>
-        private decimal GetCurrencyMultiplyRate(MInvoice invoice, MVABPayment payment, MVABCashJRNLLine cashline, MJournalLine journalline)
+        private decimal GetCurrencyMultiplyRate(MVABInvoice invoice, MVABPayment payment, MVABCashJRNLLine cashline, MJournalLine journalline)
         {
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();
@@ -1161,7 +1161,7 @@ namespace VAdvantage.Model
         /// <param name="currencymultiplyRate"></param>
         /// <param name="doctype"></param>
         /// <param name="currency"></param>
-        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MInvoicePaySchedule paySch, decimal currencymultiplyRate, MVABDocTypes doctype, MVABCurrency currency, bool _isDuplicate)
+        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MVABInvoicePaySchedule paySch, decimal currencymultiplyRate, MVABDocTypes doctype, MVABCurrency currency, bool _isDuplicate)
         {
             varianceAmount = 0;
             ShiftVarianceOnOther = 0;

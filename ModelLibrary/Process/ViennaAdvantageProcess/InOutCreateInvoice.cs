@@ -86,7 +86,7 @@ namespace ViennaAdvantage.Process
         {
             StringBuilder invDocumentNo = new StringBuilder();
             int count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT  Count(*)  FROM VAM_Inv_InOut WHERE  ISSOTRX='Y' AND  VAM_Inv_InOut_ID=" + GetRecord_ID()));
-            MInOut ship = null;
+            MVAMInvInOut ship = null;
             bool isAllownonItem = Util.GetValueOfString(GetCtx().GetContext("$AllowNonItem")).Equals("Y");
             if (count > 0)
             {
@@ -95,12 +95,12 @@ namespace ViennaAdvantage.Process
                     throw new ArgumentException("No Shipment");
                 }
                 //
-                ship = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
+                ship = new MVAMInvInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
                 if (ship.Get_ID() == 0)
                 {
                     throw new ArgumentException("Shipment not found");
                 }
-                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
+                if (!MVAMInvInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
                 {
                     // JID_0750: done by Bharat on 05 Feb 2019 if Customer Return document and status is not complete it should give message "Customer Return Not Completed".
                     if (ship.IsReturnTrx())
@@ -120,12 +120,12 @@ namespace ViennaAdvantage.Process
                     throw new ArgumentException("No Material Receipt");
                 }
                 //
-                ship = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
+                ship = new MVAMInvInOut(GetCtx(), _VAM_Inv_InOut_ID, Get_Trx());
                 if (ship.Get_ID() == 0)
                 {
                     throw new ArgumentException("Material Receipt not found");
                 }
-                if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
+                if (!MVAMInvInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
                 {
                     // JID_0750: done by Bharat on 05 Feb 2019 if Return to vendor document and status is not complete it should give message "Return To Vendor Not Completed".
                     if (ship.IsReturnTrx())
@@ -159,7 +159,7 @@ namespace ViennaAdvantage.Process
             }
 
             // Create Invoice Header
-            MInvoice invoice = new MInvoice(ship, null);
+            MVABInvoice invoice = new MVABInvoice(ship, null);
 
             //Payment Management
             int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
@@ -286,7 +286,7 @@ namespace ViennaAdvantage.Process
                     throw new ArgumentException("Cannot save Invoice. " + pp.GetName());
                 throw new ArgumentException("Cannot save Invoice");
             }
-            MInOutLine[] shipLines = ship.GetLines(false);
+            MVAMInvInOutLine[] shipLines = ship.GetLines(false);
             DateTime? AmortStartDate = null;
             DateTime? AmortEndDate = null;
             count = 0;
@@ -295,7 +295,7 @@ namespace ViennaAdvantage.Process
 
             for (int i = 0; i < shipLines.Length; i++)
             {
-                MInOutLine sLine = shipLines[i];
+                MVAMInvInOutLine sLine = shipLines[i];
                 // Changes done by Bharat on 06 July 2017 restrict to create invoice if Invoice already created against that for same quantity
                 string sql = @"SELECT ml.QtyEntered - SUM(COALESCE(li.QtyEntered,0)) as QtyEntered, ml.MovementQty- SUM(COALESCE(li.QtyInvoiced, 0)) as QtyInvoiced" +
                     " FROM VAM_Inv_InOutLine ml INNER JOIN VAB_InvoiceLine li ON li.VAM_Inv_InOutLine_ID = ml.VAM_Inv_InOutLine_ID INNER JOIN VAB_Invoice ci ON ci.VAB_Invoice_ID = li.VAB_Invoice_ID " +
@@ -335,7 +335,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        MInvoiceLine line = new MInvoiceLine(invoice);
+                        MVABInvoiceLine line = new MVABInvoiceLine(invoice);
                         line.SetShipLine(sLine);
                         line.SetQtyEntered(qtyEntered);
                         line.SetQtyInvoiced(qtyInvoiced);
@@ -430,7 +430,7 @@ namespace ViennaAdvantage.Process
                 }
                 else
                 {
-                    MInvoiceLine line = new MInvoiceLine(invoice);
+                    MVABInvoiceLine line = new MVABInvoiceLine(invoice);
                     // JID_1850 Avoid the duplicate charge line 
                     if (sLine.GetVAB_Charge_ID() > 0 && (!isAllownonItem || _GenerateCharges))
                     {
@@ -583,7 +583,7 @@ namespace ViennaAdvantage.Process
                         {
                             for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
-                                MInvoiceLine line = new MInvoiceLine(invoice);
+                                MVABInvoiceLine line = new MVABInvoiceLine(invoice);
                                 line.SetQty(1);
                                 line.SetQtyEntered(1);
                                 line.SetQtyInvoiced(1);

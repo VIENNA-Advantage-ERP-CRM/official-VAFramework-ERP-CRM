@@ -438,10 +438,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         if (payment.TestAllocation())
                             payment.Save();
                     }
-                    MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
+                    MVABInvoice[] invoices = MVABInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_TrxName());
                     for (int i = 0; i < invoices.Length; i++)
                     {
-                        MInvoice invoice = invoices[i];
+                        MVABInvoice invoice = invoices[i];
                         if (invoice.TestAllocation())
                             invoice.Save();
                     }

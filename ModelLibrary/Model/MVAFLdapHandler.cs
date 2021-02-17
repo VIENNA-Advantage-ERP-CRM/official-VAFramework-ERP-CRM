@@ -96,7 +96,7 @@ namespace VAdvantage.Model
         /** Array of Clients		*/
         private MVAFClient[] _clients = null;
         /** Array of Interest Areas	*/
-        private MInterestArea[] _interests = null;
+        private MVARInterestArea[] _interests = null;
 
         private int _auth = 0;
         private int _ok = 0;
@@ -657,7 +657,7 @@ namespace VAdvantage.Model
         {
             if (_interests == null)
             {
-                _interests = MInterestArea.GetAll(GetCtx());
+                _interests = MVARInterestArea.GetAll(GetCtx());
             }
             for (int i = 0; i < _interests.Length; i++)
             {

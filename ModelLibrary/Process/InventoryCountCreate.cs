@@ -29,7 +29,7 @@ namespace VAdvantage.Process
         /** Physical Inventory Parameter		*/
         private int _VAM_Inventory_ID = 0;
         /** Physical Inventory					*/
-        private MInventory _inventory = null;
+        private MVAMInventory _inventory = null;
         /** Locator Parameter			*/
         private int _VAM_Locator_ID = 0;
         /** Locator Parameter			*/
@@ -46,7 +46,7 @@ namespace VAdvantage.Process
         private Boolean _deleteOld = false;
         private Boolean _SkipBL = false;
         /** Inventory Line				*/
-        private MInventoryLine _line = null;
+        private MVAMInventoryLine _line = null;
         /** Is Container Applicable*/
         private bool isContainerApplicable = false;
         /// <summary>
@@ -94,7 +94,7 @@ namespace VAdvantage.Process
                 + ", ProductValue=" + _productValue
                 + ", VAM_ProductCategory_ID=" + _VAM_ProductCategory_ID
                 + ", QtyRange=" + _qtyRange + ", DeleteOld=" + _deleteOld);
-            _inventory = new MInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
+            _inventory = new MVAMInventory(GetCtx(), _VAM_Inventory_ID, Get_TrxName());
             if (_inventory.Get_ID() == 0)
                 throw new SystemException("Not found: VAM_Inventory_ID=" + _VAM_Inventory_ID);
             if (_inventory.IsProcessed())
@@ -281,7 +281,7 @@ namespace VAdvantage.Process
             if (_inventoryCountSetZero)
             {
                 String sql1 = "";
-                MInventoryLine inv = new MInventoryLine(GetCtx(), 0, null);
+                MVAMInventoryLine inv = new MVAMInventoryLine(GetCtx(), 0, null);
                 if (inv.Get_ColumnIndex("IsFromProcess") >= 0)
                 {
                     sql1 = "UPDATE VAM_InventoryLine l "
@@ -321,7 +321,7 @@ namespace VAdvantage.Process
             }
             if (oneLinePerASI)
             {
-                MInventoryLine line = new MInventoryLine(_inventory, VAM_Locator_ID,
+                MVAMInventoryLine line = new MVAMInventoryLine(_inventory, VAM_Locator_ID,
                     VAM_Product_ID, VAM_PFeature_SetInstance_ID,
                     qtyOnHand, qtyOnHand);		//	book/count
                 line.SetOpeningStock(currentQty);
@@ -397,7 +397,7 @@ namespace VAdvantage.Process
                 //{
                 //if (!isContainerApplicable)
                 //{
-                //    MInventoryLineMA ma = new MInventoryLineMA(_line,
+                //    MVAMInventoryLineMP ma = new MVAMInventoryLineMP(_line,
                 //        _line.GetVAM_PFeature_SetInstance_ID(), _line.GetQtyBook());
                 //    if (!ma.Save())
                 //        ;
@@ -434,14 +434,14 @@ namespace VAdvantage.Process
                 // not require to create entry here, will do it on completion
                 //if (!isContainerApplicable)
                 //{
-                //    MInventoryLineMA ma1 = new MInventoryLineMA(_line, VAM_PFeature_SetInstance_ID, qtyOnHand);
+                //    MVAMInventoryLineMP ma1 = new MVAMInventoryLineMP(_line, VAM_PFeature_SetInstance_ID, qtyOnHand);
                 //    if (!ma1.Save())
                 //        ;
                 //}
                 return 0;
             }
             //	new line
-            _line = new MInventoryLine(_inventory, VAM_Locator_ID, VAM_Product_ID,
+            _line = new MVAMInventoryLine(_inventory, VAM_Locator_ID, VAM_Product_ID,
                 VAM_PFeature_SetInstance_ID, qtyOnHand, qtyOnHand);		//	book/count
             _line.SetOpeningStock(currentQty);
             _line.SetAsOnDateCount(_line.GetQtyCount());
@@ -483,7 +483,7 @@ namespace VAdvantage.Process
         private string InsertInventoryLine(int VAM_Locator_ID, int VAM_Product_ID, int lineNo,
             int VAM_PFeature_SetInstance_ID, Decimal qtyOnHand, int VAM_PFeature_Set_ID, int container_ID)
         {
-            MInventoryLine line = new MInventoryLine(GetCtx(), 0, Get_Trx());
+            MVAMInventoryLine line = new MVAMInventoryLine(GetCtx(), 0, Get_Trx());
             int line_ID = DB.GetNextID(GetCtx(), "VAM_InventoryLine", Get_Trx());
             string qry = "select VAM_Warehouse_id from VAM_Locator where VAM_Locator_id=" + VAM_Locator_ID;
             int VAM_Warehouse_ID = Util.GetValueOfInt(DB.ExecuteScalar(qry, null, Get_Trx()));

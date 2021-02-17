@@ -235,7 +235,7 @@ namespace VAdvantage.Model
         *	@param dateTrx optional date
         *	@param qty matched quantity
         */
-        public MMatchInv(MInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
+        public MMatchInv(MVABInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
             : this(iLine.GetCtx(), 0, iLine.Get_TrxName())
         {
             SetClientOrg(iLine);
@@ -269,7 +269,7 @@ namespace VAdvantage.Model
             }
             if (GetVAM_PFeature_SetInstance_ID() == 0 && GetVAM_Inv_InOutLine_ID() != 0)
             {
-                MInOutLine iol = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                MVAMInvInOutLine iol = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                 SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
             }
             return true;
@@ -404,11 +404,11 @@ namespace VAdvantage.Model
             if (success)
             {
                 //	Get Order and decrease invoices
-                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
+                MVABInvoiceLine iLine = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
                 int VAB_OrderLine_ID = iLine.GetVAB_OrderLine_ID();
                 if (VAB_OrderLine_ID == 0)
                 {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                    MVAMInvInOutLine ioLine = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                     VAB_OrderLine_ID = ioLine.GetVAB_OrderLine_ID();
                 }
                 //	No Order Found

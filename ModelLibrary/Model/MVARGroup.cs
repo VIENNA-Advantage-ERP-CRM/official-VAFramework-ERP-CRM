@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MGroup
+ * Class Name     : MVARGroup
  * Purpose        : Request Group Model
- * Class Used     : X_R_Group
+ * Class Used     : X_VAR_Group
  * Chronological    Development
  * Raghunandan     17-Jun-2009
   ******************************************************/
@@ -17,28 +17,28 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MGroup : X_R_Group
+    public class MVARGroup : X_VAR_Group
     {
         /**
-         * 	Get MGroup from Cache
+         * 	Get MVARGroup from Cache
          *	@param ctx context
          *	@param VAR_Group_ID id
-         *	@return MGroup
+         *	@return MVARGroup
          */
-        public static MGroup Get(Ctx ctx, int VAR_Group_ID)
+        public static MVARGroup Get(Ctx ctx, int VAR_Group_ID)
         {
             int key = VAR_Group_ID;
-            MGroup retValue = (MGroup)_cache[key];
+            MVARGroup retValue = (MVARGroup)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MGroup(ctx, VAR_Group_ID, null);
+            retValue = new MVARGroup(ctx, VAR_Group_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         } //	get
 
         /**	Cache						*/
-        private static CCache<int, MGroup> _cache = new CCache<int, MGroup>("VAR_Group", 20);
+        private static CCache<int, MVARGroup> _cache = new CCache<int, MVARGroup>("VAR_Group", 20);
 
 
         /**************************************************************************
@@ -47,11 +47,11 @@ namespace VAdvantage.Model
          *	@param VAR_Group_ID group
          *	@param trxName trx
          */
-        public MGroup(Ctx ctx, int VAR_Group_ID, Trx trxName) :
+        public MVARGroup(Ctx ctx, int VAR_Group_ID, Trx trxName) :
             base(ctx, VAR_Group_ID, trxName)
         {
             //super(ctx, VAR_Group_ID, trxName);
-        }	//	MGroup
+        }	//	MVARGroup
 
         /**
          * 	Load Constructor
@@ -59,11 +59,11 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName trx
          */
-        public MGroup(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVARGroup(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //super(ctx, rs, trxName);
-        }	//	MGroup
+        }	//	MVARGroup
 
     }
 }

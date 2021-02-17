@@ -71,21 +71,21 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.info("VAM_Inv_InOut_ID=" + _VAM_Inv_InOut_ID + ", Type=" + _ConfirmType);
-            MInOut shipment = new MInOut(GetCtx(), _VAM_Inv_InOut_ID, null);
+            MVAMInvInOut shipment = new MVAMInvInOut(GetCtx(), _VAM_Inv_InOut_ID, null);
             if (shipment.Get_ID() == 0)
             {
                 throw new ArgumentException("Not found VAM_Inv_InOut_ID=" + _VAM_Inv_InOut_ID);
             }
 
-            MInOutLine[] lines = shipment.GetLines();
+            MVAMInvInOutLine[] lines = shipment.GetLines();
             if (lines == null || lines.Length == 0)
             {
                 _processMsg = Msg.GetMsg(GetCtx(), "NoLines"); //Return Msg in Process Message
                 throw new ArgumentException(_processMsg);
             }
             //
-            MInOutConfirm[] confirmations = shipment.GetConfirmations(false);
-            MInOutConfirm confirm = null;
+            MVAMInvInOutConfirm[] confirmations = shipment.GetConfirmations(false);
+            MVAMInvInOutConfirm confirm = null;
             int count = 0;
             if (confirmations != null && confirmations.Length > 0)
             {
@@ -98,19 +98,19 @@ namespace VAdvantage.Process
                     {
                         if (count == confirmations.Length)
                         {
-                            confirm = MInOutConfirm.Create(shipment, _ConfirmType, false);
+                            confirm = MVAMInvInOutConfirm.Create(shipment, _ConfirmType, false);
                             break;
                         }
                     }
                     if (confirm.GetDocStatus() == "DR")
                     {
-                        confirm = MInOutConfirm.Create(shipment, _ConfirmType, true);
+                        confirm = MVAMInvInOutConfirm.Create(shipment, _ConfirmType, true);
                         break;
                     }
                 }
             }
             else
-                confirm = MInOutConfirm.Create(shipment, _ConfirmType, true);
+                confirm = MVAMInvInOutConfirm.Create(shipment, _ConfirmType, true);
             //throw new Exception("Cannot create Confirmation for " + shipment.GetDocumentNo());
 
             if (confirm == null)

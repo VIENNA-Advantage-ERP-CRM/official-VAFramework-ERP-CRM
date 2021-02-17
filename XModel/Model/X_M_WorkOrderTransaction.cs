@@ -934,7 +934,7 @@
         /** Assembly Completion to Inventory = AI */
         public static String WORKORDERTXNTYPE_AssemblyCompletionToInventory = "AI";
         /** Assembly Return from Inventory = AR */
-        public static String WORKORDERTXNTYPE_AssemblyReturnFromInventory = "AR";
+        public static String WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory = "AR";
         /** Component Issue to Work Order = CI */
         public static String WORKORDERTXNTYPE_ComponentIssueToWorkOrder = "CI";
         /** Component Return from Work Order = CR */

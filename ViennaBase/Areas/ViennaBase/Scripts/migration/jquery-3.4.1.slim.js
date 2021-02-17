@@ -2487,7 +2487,7 @@ function matcherFromTokens( tokens ) {
 	return elementMatcher( matchers );
 }
 
-function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
+function matcherFroMVARGroupMatchers( elementMatchers, setMatchers ) {
 	var bySet = setMatchers.length > 0,
 		byElement = elementMatchers.length > 0,
 		superMatcher = function( seed, context, xml, results, outermost ) {
@@ -2620,7 +2620,7 @@ compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
 		}
 
 		// Cache the compiled function
-		cached = compilerCache( selector, matcherFromGroupMatchers( elementMatchers, setMatchers ) );
+		cached = compilerCache( selector, matcherFroMVARGroupMatchers( elementMatchers, setMatchers ) );
 
 		// Save selector and tokenization
 		cached.selector = selector;

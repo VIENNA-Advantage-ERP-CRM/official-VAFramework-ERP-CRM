@@ -113,8 +113,8 @@ namespace VAdvantage.Model
         /// <param name="VAM_Warehouse_ID">Optional parameter -- Warehouse ID</param>
         /// <returns>MVAMProductCostDetail Object</returns>
         public static MVAMProductCostDetail CreateCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID,
-            int VAM_PFeature_SetInstance_ID, string WindowName, MInventoryLine inventoryLine, MInOutLine inoutline, MMovementLine movementline,
-            MInvoiceLine invoiceline, PO po, int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int VAM_Warehouse_ID = 0)
+            int VAM_PFeature_SetInstance_ID, string WindowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MMovementLine movementline,
+            MVABInvoiceLine invoiceline, PO po, int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int VAM_Warehouse_ID = 0)
         {
             try
             {
@@ -389,10 +389,10 @@ namespace VAdvantage.Model
                                 string windowName, MVAMProductCostDetail cd, string costingMethod = "", int costCominationelement = 0, int VAM_Warehouse_ID = 0)
         {
             MVAMProductCost cost = null;
-            MInOutLine inoutline = null;
-            MInOut inout = null;
-            MInvoice invoice = null;
-            MInvoiceLine invoiceline = null;
+            MVAMInvInOutLine inoutline = null;
+            MVAMInvInOut inout = null;
+            MVABInvoice invoice = null;
+            MVABInvoiceLine invoiceline = null;
             MMovement movement = null;
             MMovementLine movementline = null;
             MVAMProductCost costFrom = null;
@@ -431,8 +431,8 @@ namespace VAdvantage.Model
             //Decimal amt = 0;
             //if (ce.IsWeightedAverageCost() && ((GetVAB_InvoiceLine_ID() != 0 && windowName != "Material Receipt") || (windowName == "Product Cost IV") || (windowName == "Product Cost IV Form")))
             //{
-            //    invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
-            //    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
+            //    invoiceline = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+            //    invoice = new MVABInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
             //    if (GetVAB_InvoiceLine_ID() > 0 && ((invoice.GetDescription() != null && !invoice.GetDescription().Contains("{->")) || (invoice.GetDescription() == null)))
             //    {
             //        amt = Decimal.Divide(GetAmt(), GetQty());
@@ -624,8 +624,8 @@ namespace VAdvantage.Model
                     //cost.SetCumulatedQty(Decimal.Add(cost.GetCumulatedQty(), qty));
                     if (GetVAB_InvoiceLine_ID() > 0)
                     {
-                        invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
-                        invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
+                        invoiceline = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                        invoice = new MVABInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                         if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                         {
                             // this check is used to get previous invoice price from cost element detail 
@@ -920,10 +920,10 @@ namespace VAdvantage.Model
             //                int invLineId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, cd.Get_Trx()));
             //                if (invLineId > 0)
             //                {
-            //                    invoiceline = new MInvoiceLine(GetCtx(), invLineId, cd.Get_Trx());
-            //                    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), cd.Get_Trx());
-            //                    inoutline = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
-            //                    inout = new MInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
+            //                    invoiceline = new MVABInvoiceLine(GetCtx(), invLineId, cd.Get_Trx());
+            //                    invoice = new MVABInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), cd.Get_Trx());
+            //                    inoutline = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+            //                    inout = new MVAMInvInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
             //                    string IsCostCalculated = Util.GetValueOfString(DB.ExecuteScalar(@"SELECT IsCostCalculated FROM VAM_MatchInvoice WHERE VAB_InvoiceLine_ID = " + invLineId +
             //                        @" AND VAM_Inv_InOutLine_ID = " + GetVAM_Inv_InOutLine_ID(), null, cd.Get_Trx()));
             //                    if (IsCostCalculated == "N" && inout != null && ((inout.GetDescription() != null && !inout.GetDescription().Contains("{->")) || inout.GetDescription() == null))
@@ -966,8 +966,8 @@ namespace VAdvantage.Model
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 log.Fine(" ");
 
-                inoutline = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                inout = new MInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
+                inoutline = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                inout = new MVAMInvInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
                 if (ce.IsCostingMethod() && isReturnTrx && inout != null && inout.GetDescription() != null && !inout.GetDescription().Contains("{->")) // -ve Entry on completion of MR
                 {
                     if (Decimal.Add(cost.GetCurrentQty(), qty) < 0)
@@ -1157,8 +1157,8 @@ namespace VAdvantage.Model
                 bool isReturnTrx = Env.Signum(qty) < 0;
                 if (GetVAM_Inv_InOutLine_ID() > 0 || GetVAB_OrderLine_ID() > 0)
                 {
-                    invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
-                    invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
+                    invoiceline = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                    invoice = new MVABInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                     // checking invoice contain reverse invoice ref or not
                 }
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(*) FROM VAB_LCostDistribution WHERE  VAB_InvoiceLine_ID = " + GetVAB_InvoiceLine_ID(), null, Get_Trx())) <= 0)
@@ -1465,8 +1465,8 @@ namespace VAdvantage.Model
                             // this block is executed for reverse record
                             if (GetVAB_InvoiceLine_ID() > 0 && isReturnTrx)
                             {
-                                invoiceline = new MInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
-                                invoice = new MInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
+                                invoiceline = new MVABInvoiceLine(GetCtx(), GetVAB_InvoiceLine_ID(), Get_Trx());
+                                invoice = new MVABInvoice(GetCtx(), invoiceline.GetVAB_Invoice_ID(), Get_Trx());
                                 if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
                                 {
                                     string sql = @"select * from (
@@ -1640,8 +1640,8 @@ namespace VAdvantage.Model
                 bool addition = Env.Signum(qty) > 0;
                 if (GetVAM_Inv_InOutLine_ID() > 0)
                 {
-                    inoutline = new MInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                    inout = new MInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
+                    inoutline = new MVAMInvInOutLine(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                    inout = new MVAMInvInOut(GetCtx(), inoutline.GetVAM_Inv_InOut_ID(), Get_Trx());
                 }
                 if (GetVAM_InvTrf_Line_ID() > 0)
                 {
@@ -4792,7 +4792,7 @@ namespace VAdvantage.Model
 
         /// <summary>
         /// Create New Shipment Cost Detail for SO Shipments.
-        ///	Called from Doc_MInOut - for SO Shipments
+        ///	Called from Doc_MVAMInvInOut - for SO Shipments
         /// </summary>
         /// <param name="mas">accounting schema</param>
         /// <param name="VAF_Org_ID">org</param>

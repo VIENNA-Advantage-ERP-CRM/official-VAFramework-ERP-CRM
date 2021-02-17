@@ -11,7 +11,7 @@ using System.Globalization;
 
 namespace VIS.Controllers
 {
-    public class MInOutController:Controller
+    public class MVAMInvInOutController:Controller
     {
         //
         // GET: /VIS/InOut/
@@ -27,7 +27,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 retJSON = JsonConvert.SerializeObject(objInOut.GetInOut(ctx,fields));
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -41,7 +41,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 PAttributesModel pMod = new PAttributesModel();
 
                 string[] vals = null;
@@ -114,7 +114,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 retJSON = JsonConvert.SerializeObject(objInOut.GetDocumentTypeData(fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -126,7 +126,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 retJSON = JsonConvert.SerializeObject(objInOut.GetWarehouseLocator(fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -139,7 +139,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 objInOut.GetUOMConversion(ctx, fields);
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -154,7 +154,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutModel objInOut = new MInOutModel();
+                MVAMInvInOutModel objInOut = new MVAMInvInOutModel();
                 retJSON = JsonConvert.SerializeObject(objInOut.GetWarehouse(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

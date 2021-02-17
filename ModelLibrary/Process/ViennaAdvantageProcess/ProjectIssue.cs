@@ -154,9 +154,9 @@ namespace ViennaAdvantage.Process
 	 */
         private String IssueReceipt()
         {
-            MInOut inOut = new MInOut(GetCtx(), m_VAM_Inv_InOut_ID, null);
+            MVAMInvInOut inOut = new MVAMInvInOut(GetCtx(), m_VAM_Inv_InOut_ID, null);
             if (inOut.IsSOTrx() || !inOut.IsProcessed()
-                || !(MInOut.DOCSTATUS_Completed.Equals(inOut.GetDocStatus()) || MInOut.DOCSTATUS_Closed.Equals(inOut.GetDocStatus())))
+                || !(MVAMInvInOut.DOCSTATUS_Completed.Equals(inOut.GetDocStatus()) || MVAMInvInOut.DOCSTATUS_Closed.Equals(inOut.GetDocStatus())))
             {
                 throw new ArgumentException("Receipt not valid - " + inOut);
             }
@@ -172,7 +172,7 @@ namespace ViennaAdvantage.Process
                 throw new ArgumentException("Receipt for other Project (" + inOut.GetVAB_Project_ID() + ")");
             }
 
-            MInOutLine[] inOutLines = inOut.GetLines(false);
+            MVAMInvInOutLine[] inOutLines = inOut.GetLines(false);
             int counter = 0;
             for (int i = 0; i < inOutLines.Length; i++)
             {

@@ -399,7 +399,7 @@ namespace VAdvantage.Process
                     }
                     if (Utility.Util.GetValueOfInt(dr[4]) > 0)
                     {
-                        MInvoiceLine _invline = new MInvoiceLine(GetCtx(), Utility.Util.GetValueOfInt(dr[4]), Get_TrxName());
+                        MVABInvoiceLine _invline = new MVABInvoiceLine(GetCtx(), Utility.Util.GetValueOfInt(dr[4]), Get_TrxName());
                         _invline.SetIsCommissionCalculated(true);
                         _invline.Save();
                     }

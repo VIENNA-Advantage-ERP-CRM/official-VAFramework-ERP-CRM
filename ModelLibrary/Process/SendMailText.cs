@@ -48,7 +48,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //	To Subscribers 			
         private int _R_InterestArea_ID = -1;
         // Interest Area		
-        private MInterestArea _ia = null;
+        private MVARInterestArea _ia = null;
         // To Customer Type		
         private int _VAB_BPart_Category_ID = -1;
         // To Purchaser of Product
@@ -144,7 +144,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private void SendInterestArea()
         {
             log.Info("VAR_InterestArea_ID=" + _R_InterestArea_ID);
-            _ia = MInterestArea.Get(GetCtx(), _R_InterestArea_ID);
+            _ia = MVARInterestArea.Get(GetCtx(), _R_InterestArea_ID);
             String unsubscribe = null;
             if (_ia.IsSelfService())
             {

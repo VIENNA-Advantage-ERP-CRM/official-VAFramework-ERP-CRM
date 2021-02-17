@@ -405,7 +405,7 @@ namespace VIS.Models
                 }
                 else if (keyColName.ToUpper().Trim() == "VAB_INVOICE_ID")
                 {
-                    MInvoice inv = new MInvoice(ctx, recordID, null);
+                    MVABInvoice inv = new MVABInvoice(ctx, recordID, null);
                     _Version_ID = GetPLVID(inv.GetVAM_PriceList_ID());
                     VAF_Client_ID = inv.GetVAF_Client_ID();
                     VAF_Org_ID = inv.GetVAF_Org_ID();
@@ -538,7 +538,7 @@ namespace VIS.Models
             else if (keyColName.ToUpper().Trim() == "VAB_INVOICE_ID")
             {
                 tbl = new MVAFTableView(ctx, 333, null);
-                MInvoice inv = new MInvoice(ctx, recordID, null);
+                MVABInvoice inv = new MVABInvoice(ctx, recordID, null);
 
                 for (int i = 0; i < product.Count; i++)
                 {
@@ -600,7 +600,7 @@ namespace VIS.Models
                 int ordID = 0;
 
                 bool saved = true;
-                MInOut io = new MInOut(ctx, recordID, null);
+                MVAMInvInOut io = new MVAMInvInOut(ctx, recordID, null);
 
                 if (Locator_ID <= 0)
                 {
@@ -889,7 +889,7 @@ namespace VIS.Models
             else if (keyColName.ToUpper().Trim() == "VAM_Inventory_ID")
             {
                 tbl = new MVAFTableView(ctx, 322, null);
-                MInventory inv = new MInventory(ctx, recordID, null);
+                MVAMInventory inv = new MVAMInventory(ctx, recordID, null);
 
                 if (Locator_ID <= 0)
                 {
@@ -1002,7 +1002,7 @@ namespace VIS.Models
                             po.Set_Value("QtyEntered", Util.GetValueOfDecimal(qty[i]));
 
                             // JID_1700: when saving Product from Cart, UOM Conversion was not working 
-                            po.Set_Value("AdjustmentType", MInventoryLine.ADJUSTMENTTYPE_AsOnDateCount);
+                            po.Set_Value("AdjustmentType", MVAMInventoryLine.ADJUSTMENTTYPE_AsOnDateCount);
 
                             if (WindowID == Util.GetValueOfInt(Windows.PhysicalInventory))
                             {
@@ -1486,7 +1486,7 @@ namespace VIS.Models
         //                int Asset_ID = Util.GetValueOfInt(DB.ExecuteScalar(_sqlQuery.ToString()));
 
         //                tbl = new MVAFTableView(ctx, 322, null);
-        //                MInventory inv = new MInventory(ctx, recordID, null);
+        //                MVAMInventory inv = new MVAMInventory(ctx, recordID, null);
 
         //                if (Locator_ID <= 0)
         //                {

@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Inventory(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MInventory), idr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
+            : base(ass, typeof(MVAMInventory), idr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
         }
         public Doc_Inventory(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MInventory), dr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
+            : base(ass, typeof(MVAMInventory), dr, MVABMasterDocType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, trxName)
         {
 
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            MInventory inventory = (MInventory)GetPO();
+            MVAMInventory inventory = (MVAMInventory)GetPO();
             SetDateDoc(inventory.GetMovementDate());
             SetDateAcct(inventory.GetMovementDate());
             //	Contained Objects
@@ -70,13 +70,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="inventory"></param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MInventory inventory)
+        private DocLine[] LoadLines(MVAMInventory inventory)
         {
             List<DocLine> list = new List<DocLine>();
-            MInventoryLine[] lines = inventory.GetLines(false);
+            MVAMInventoryLine[] lines = inventory.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInventoryLine line = lines[i];
+                MVAMInventoryLine line = lines[i];
                 //	nothing to post
                 if (line.GetQtyBook().CompareTo(line.GetQtyCount()) == 0
                     && Env.Signum(line.GetQtyInternalUse()) == 0)

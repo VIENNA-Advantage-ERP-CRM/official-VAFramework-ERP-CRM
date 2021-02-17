@@ -42,7 +42,7 @@ namespace VAdvantage.Process
         private int _VAM_Product_ID = 0;
 
         // The invoice					
-        private MInvoice _m_invoice = null;
+        private MVABInvoice _m_invoice = null;
         //	Line Count				
         private int _m_linecount = 0;
         // Return Msg
@@ -221,7 +221,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    //_m_invoice.ProcessIt(MInvoice.ACTION_Prepare);
+                    //_m_invoice.ProcessIt(MVABInvoice.ACTION_Prepare);
                     _m_invoice.ProcessIt(DocActionVariables.ACTION_PREPARE);
                     _m_invoice.Save();
                     AddLog(0, null, _m_invoice.GetGrandTotal(), _m_invoice.GetDocumentNo());
@@ -236,7 +236,7 @@ namespace VAdvantage.Process
         /// <param name="request">request</param>
         private void InvoiceNew(MRequest request)
         {
-            _m_invoice = new MInvoice(GetCtx(), 0, Get_TrxName());
+            _m_invoice = new MVABInvoice(GetCtx(), 0, Get_TrxName());
             _m_invoice.SetVAB_DocTypesTarget_ID(MVABMasterDocType.DOCBASETYPE_ARINVOICE);
             MVABBusinessPartner partner = new MVABBusinessPartner(GetCtx(), request.GetVAB_BusinessPartner_ID(), Get_TrxName());
             _m_invoice.SetBPartner(partner);
@@ -275,7 +275,7 @@ namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MInvoiceLine il = new MInvoiceLine(_m_invoice);
+                MVABInvoiceLine il = new MVABInvoiceLine(_m_invoice);
                 _m_linecount++;
                 il.SetLine(_m_linecount * 10);
                 //

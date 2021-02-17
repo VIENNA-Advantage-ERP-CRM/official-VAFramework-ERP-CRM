@@ -49,7 +49,7 @@ namespace VAdvantage.Model
          *	@param request request
          *	@param group request group
          */
-        public MVAMChangeRequest(MRequest request, MGroup group)
+        public MVAMChangeRequest(MRequest request, MVARGroup group)
             : this(request.GetCtx(), 0, request.Get_Trx())
         {
 

@@ -10,7 +10,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MInOutModel
+    public class MVAMInvInOutModel
     {
         /// <summary>
         /// GetInOut
@@ -25,7 +25,7 @@ namespace VIS.Models
 
             //Assign parameter value
             Orig_InOut_ID = Util.GetValueOfInt(paramValue[0].ToString());
-            MInOut io = new MInOut(ctx, Orig_InOut_ID, null);
+            MVAMInvInOut io = new MVAMInvInOut(ctx, Orig_InOut_ID, null);
             //End Assign parameter
 
             Dictionary<String, String> retDic = new Dictionary<string, string>();
@@ -103,7 +103,7 @@ namespace VIS.Models
         {
             Dictionary<string, object> retValue = null;
             string[] paramString = fields.Split(',');
-            MInOut inout = new MInOut(ctx, Util.GetValueOfInt(paramString[0]), null);
+            MVAMInvInOut inout = new MVAMInvInOut(ctx, Util.GetValueOfInt(paramString[0]), null);
             int VAM_Product_ID = Util.GetValueOfInt(paramString[1]);
             int VAB_UOM_ID = Util.GetValueOfInt(paramString[2]);
             try

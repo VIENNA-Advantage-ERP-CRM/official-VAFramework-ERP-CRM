@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MInvoiceController:Controller
+    public class MVABInvoiceController:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel objInvoice = new MInvoiceModel();
+                MVABInvoiceModel objInvoice = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(objInvoice.GetInvoice(ctx,fields));
             }          
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -36,7 +36,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel obj = new MInvoiceModel();
+                MVABInvoiceModel obj = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(obj.GetTaxId(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -49,7 +49,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel obj = new MInvoiceModel();                
+                MVABInvoiceModel obj = new MVABInvoiceModel();                
                 retJSON = JsonConvert.SerializeObject(obj.GetInvPaySchedDetail(fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -62,7 +62,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel obj = new MInvoiceModel();
+                MVABInvoiceModel obj = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(obj.GetInvoiceDetails(fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -75,7 +75,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel obj = new MInvoiceModel();
+                MVABInvoiceModel obj = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(obj.GetInvoiceAmount(fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -93,7 +93,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel objInvoice = new MInvoiceModel();
+                MVABInvoiceModel objInvoice = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(objInvoice.GetPrices(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -111,7 +111,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInvoiceModel objInvoice = new MInvoiceModel();
+                MVABInvoiceModel objInvoice = new MVABInvoiceModel();
                 retJSON = JsonConvert.SerializeObject(objInvoice.GetPrecision(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

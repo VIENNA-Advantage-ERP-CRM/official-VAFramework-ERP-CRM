@@ -1392,9 +1392,9 @@ namespace VAdvantage.Model
 
         /*	Set Original Shipment for RMA
         * 	SOTrx should be set.
-        * 	@param origInOut MInOut
+        * 	@param origInOut MVAMInvInOut
         */
-        public void SetOrigInOut(MInOut origInOut)
+        public void SetOrigInOut(MVAMInvInOut origInOut)
         {
             try
             {
@@ -1435,7 +1435,7 @@ namespace VAdvantage.Model
                 if (Orig_InOut_ID == 0)
                     return;
                 //		Get Details
-                //MInOut origInOut = new MInOut(GetCtx(), Orig_InOut_ID, null);
+                //MVAMInvInOut origInOut = new MVAMInvInOut(GetCtx(), Orig_InOut_ID, null);
                 //if (origInOut.Get_ID() != 0)
                 //    SetOrigInOut(origInOut);
             }
@@ -1672,10 +1672,10 @@ namespace VAdvantage.Model
         * 	@param hearderLinkOnly shipments based on header only
         * 	@return invoices
         */
-        //public MInvoice[] GetInvoices(bool hearderLinkOnly)
+        //public MVABInvoice[] GetInvoices(bool hearderLinkOnly)
         //{
         //    //	TODO get invoiced which are linked on line level
-        //    List<MInvoice> list = new List<MInvoice>();
+        //    List<MVABInvoice> list = new List<MVABInvoice>();
         //    String sql = "SELECT * FROM VAB_Invoice WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
@@ -1686,7 +1686,7 @@ namespace VAdvantage.Model
         //        idr.Close();
         //        foreach (DataRow dr in dt.Rows)
         //        {
-        //            list.Add(new MInvoice(GetCtx(), dr, Get_TrxName()));
+        //            list.Add(new MVABInvoice(GetCtx(), dr, Get_TrxName()));
         //        }
         //        dt = null;
         //    }
@@ -1696,7 +1696,7 @@ namespace VAdvantage.Model
         //    }
         //    finally { dt = null; }
 
-        //    MInvoice[] retValue = new MInvoice[list.Count];
+        //    MVABInvoice[] retValue = new MVABInvoice[list.Count];
         //    retValue = list.ToArray();
         //    return retValue;
         //}
@@ -1735,10 +1735,10 @@ namespace VAdvantage.Model
          * 	@param hearderLinkOnly shipments based on header only
          * 	@return shipments
          */
-        //public MInOut[] GetShipments(bool hearderLinkOnly)
+        //public MVAMInvInOut[] GetShipments(bool hearderLinkOnly)
         //{
         //    //	TODO: getShipment if linked on line
-        //    List<MInOut> list = new List<MInOut>();
+        //    List<MVAMInvInOut> list = new List<MVAMInvInOut>();
         //    String sql = "SELECT * FROM VAM_Inv_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " ORDER BY Created DESC";
         //    DataTable dt = null;
         //    try
@@ -1749,7 +1749,7 @@ namespace VAdvantage.Model
         //        idr.Close();
         //        foreach (DataRow dr in dt.Rows)
         //        {
-        //            list.Add(new MInOut(GetCtx(), dr, Get_TrxName()));
+        //            list.Add(new MVAMInvInOut(GetCtx(), dr, Get_TrxName()));
         //        }
         //    }
         //    catch (Exception e)
@@ -1758,7 +1758,7 @@ namespace VAdvantage.Model
         //    }
         //    finally { dt = null; }
 
-        //    MInOut[] retValue = new MInOut[list.Count];
+        //    MVAMInvInOut[] retValue = new MVAMInvInOut[list.Count];
         //    retValue = list.ToArray();
         //    return retValue;
         //}
@@ -1797,9 +1797,9 @@ namespace VAdvantage.Model
         /*	Get Shipment Lines of Order
         * 	@return shipments newest first
         */
-        //public MInOutLine[] GetShipmentLines()
+        //public MVAMInvInOutLine[] GetShipmentLines()
         //{
-        //    List<MInOutLine> list = new List<MInOutLine>();
+        //    List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
         //    String sql = "SELECT * FROM VAM_Inv_InOutLine iol "
         //        + "WHERE iol.VAB_OrderLine_ID IN "
         //            + "(SELECT VAB_OrderLine_ID FROM VAB_OrderLine WHERE VAB_Order_ID=@VAB_Order_ID) "
@@ -1815,7 +1815,7 @@ namespace VAdvantage.Model
         //        idr.Close();
         //        foreach (DataRow dr in dt.Rows)
         //        {
-        //            list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
+        //            list.Add(new MVAMInvInOutLine(GetCtx(), dr, Get_TrxName()));
         //        }
         //    }
         //    catch (Exception e)
@@ -1824,7 +1824,7 @@ namespace VAdvantage.Model
         //    }
         //    finally { dt = null; }
 
-        //    MInOutLine[] retValue = new MInOutLine[list.Count];
+        //    MVAMInvInOutLine[] retValue = new MVAMInvInOutLine[list.Count];
         //    retValue = list.ToArray();
         //    return retValue;
         //}
@@ -2259,7 +2259,7 @@ namespace VAdvantage.Model
         //}
 
         /* Reserve Inventory.
-        * 	Counterpart: MInOut.completeIt()
+        * 	Counterpart: MVAMInvInOut.completeIt()
         * 	@param dt document type or null
         * 	@param lines order lines (ordered by VAM_Product_ID for deadlock prevention)
         * 	@return true if (un) reserved
@@ -2584,9 +2584,9 @@ namespace VAdvantage.Model
         *	@param movementDate optional movement date (default today)
         *	@return shipment or null
         */
-        //private MInOut CreateShipment(VAdvantage.Model.MVABDocTypes dt, DateTime? movementDate)
+        //private MVAMInvInOut CreateShipment(VAdvantage.Model.MVABDocTypes dt, DateTime? movementDate)
         //{
-        //    MInOut shipment = new MInOut(this, (int)dt.GetVAB_DocTypesShipment_ID(), (DateTime?)movementDate);
+        //    MVAMInvInOut shipment = new MVAMInvInOut(this, (int)dt.GetVAB_DocTypesShipment_ID(), (DateTime?)movementDate);
         //    log.Info("For " + dt);
         //    try
         //    {
@@ -2602,7 +2602,7 @@ namespace VAdvantage.Model
         //        {
         //            MVABOrderLine oLine = oLines[i];
         //            //
-        //            MInOutLine ioLine = new MInOutLine(shipment);
+        //            MVAMInvInOutLine ioLine = new MVAMInvInOutLine(shipment);
         //            //	Qty = Ordered - Delivered
         //            Decimal MovementQty = Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyDelivered());
         //            //	Location
@@ -2657,9 +2657,9 @@ namespace VAdvantage.Model
             *	@param invoiceDate invoice date
             *	@return invoice or null
             */
-        //private MInvoice CreateInvoice(VAdvantage.Model.MVABDocTypes dt, MInOut shipment, DateTime? invoiceDate)
+        //private MVABInvoice CreateInvoice(VAdvantage.Model.MVABDocTypes dt, MVAMInvInOut shipment, DateTime? invoiceDate)
         //{
-        //    MInvoice invoice = new MInvoice(this, dt.GetVAB_DocTypesInvoice_ID(), invoiceDate);
+        //    MVABInvoice invoice = new MVABInvoice(this, dt.GetVAB_DocTypesInvoice_ID(), invoiceDate);
         //    log.Info(dt.ToString());
         //    try
         //    {
@@ -2675,12 +2675,12 @@ namespace VAdvantage.Model
         //            if (!INVOICERULE_AfterDelivery.Equals(GetInvoiceRule()))
         //                SetInvoiceRule(INVOICERULE_AfterDelivery);
         //            //
-        //            MInOutLine[] sLines = shipment.GetLines(false);
+        //            MVAMInvInOutLine[] sLines = shipment.GetLines(false);
         //            for (int i = 0; i < sLines.Length; i++)
         //            {
-        //                MInOutLine sLine = sLines[i];
+        //                MVAMInvInOutLine sLine = sLines[i];
         //                //
-        //                MInvoiceLine iLine = new MInvoiceLine(invoice);
+        //                MVABInvoiceLine iLine = new MVABInvoiceLine(invoice);
         //                iLine.SetShipLine(sLine);
         //                //	Qty = Delivered	
         //                iLine.SetQtyEntered(sLine.GetQtyEntered());
@@ -2708,7 +2708,7 @@ namespace VAdvantage.Model
         //            {
         //                MVABOrderLine oLine = oLines[i];
         //                //
-        //                MInvoiceLine iLine = new MInvoiceLine(invoice);
+        //                MVABInvoiceLine iLine = new MVABInvoiceLine(invoice);
         //                iLine.SetOrderLine(oLine);
         //                //	Qty = Ordered - Invoiced	
         //                iLine.SetQtyInvoiced(Decimal.Subtract(oLine.GetQtyOrdered(), oLine.GetQtyInvoiced()));
@@ -2802,33 +2802,33 @@ namespace VAdvantage.Model
 
                 //	Reverse All *Shipments*
                 Info.Append("@VAM_Inv_InOut_ID@:");
-                //MInOut[] shipments = GetShipments(false);	//	get all (line based)
+                //MVAMInvInOut[] shipments = GetShipments(false);	//	get all (line based)
                 //for (int i = 0; i < shipments.Length; i++)
                 //{
-                //    MInOut ship = shipments[i];
+                //    MVAMInvInOut ship = shipments[i];
                 //    //	if closed - ignore
-                //    if (MInOut.DOCSTATUS_Closed.Equals(ship.GetDocStatus())
-                //        || MInOut.DOCSTATUS_Reversed.Equals(ship.GetDocStatus())
-                //        || MInOut.DOCSTATUS_Voided.Equals(ship.GetDocStatus()))
+                //    if (MVAMInvInOut.DOCSTATUS_Closed.Equals(ship.GetDocStatus())
+                //        || MVAMInvInOut.DOCSTATUS_Reversed.Equals(ship.GetDocStatus())
+                //        || MVAMInvInOut.DOCSTATUS_Voided.Equals(ship.GetDocStatus()))
                 //        continue;
                 //    ship.Set_TrxName(Get_TrxName());
 
                 //    //	If not completed - void - otherwise reverse it
-                //    if (!MInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
+                //    if (!MVAMInvInOut.DOCSTATUS_Completed.Equals(ship.GetDocStatus()))
                 //    {
                 //        if (ship.VoidIt())
-                //            ship.SetDocStatus(MInOut.DOCSTATUS_Voided);
+                //            ship.SetDocStatus(MVAMInvInOut.DOCSTATUS_Voided);
                 //    }
                 //    //	Create new Reversal with only that order
                 //    else if (!ship.IsOnlyForOrder(this))
                 //    {
                 //        ship.ReverseCorrectIt(this);
-                //        //	shipLine.setDocStatus(MInOut.DOCSTATUS_Reversed);
+                //        //	shipLine.setDocStatus(MVAMInvInOut.DOCSTATUS_Reversed);
                 //        Info.Append(" Parial ").Append(ship.GetDocumentNo());
                 //    }
                 //    else if (ship.ReverseCorrectIt()) //	completed shipment
                 //    {
-                //        ship.SetDocStatus(MInOut.DOCSTATUS_Reversed);
+                //        ship.SetDocStatus(MVAMInvInOut.DOCSTATUS_Reversed);
                 //        Info.Append(" ").Append(ship.GetDocumentNo());
                 //    }
                 //    else
@@ -2836,32 +2836,32 @@ namespace VAdvantage.Model
                 //        _processMsg = "Could not reverse Shipment " + ship;
                 //        return false;
                 //    }
-                //    ship.SetDocAction(MInOut.DOCACTION_None);
+                //    ship.SetDocAction(MVAMInvInOut.DOCACTION_None);
                 //    ship.Save(Get_TrxName());
                 //}	//	for all shipments
 
                 //	Reverse All *Invoices*
                 Info.Append(" - @VAB_Invoice_ID@:");
-                //MInvoice[] invoices = GetInvoices(false);	//	get all (line based)
+                //MVABInvoice[] invoices = GetInvoices(false);	//	get all (line based)
                 //for (int i = 0; i < invoices.Length; i++)
                 //{
-                //    MInvoice invoice = invoices[i];
+                //    MVABInvoice invoice = invoices[i];
                 //    //	if closed - ignore
-                //    if (MInvoice.DOCSTATUS_Closed.Equals(invoice.GetDocStatus())
-                //        || MInvoice.DOCSTATUS_Reversed.Equals(invoice.GetDocStatus())
-                //        || MInvoice.DOCSTATUS_Voided.Equals(invoice.GetDocStatus()))
+                //    if (MVABInvoice.DOCSTATUS_Closed.Equals(invoice.GetDocStatus())
+                //        || MVABInvoice.DOCSTATUS_Reversed.Equals(invoice.GetDocStatus())
+                //        || MVABInvoice.DOCSTATUS_Voided.Equals(invoice.GetDocStatus()))
                 //        continue;
                 //    invoice.Set_TrxName(Get_TrxName());
 
                 //    //	If not completed - void - otherwise reverse it
-                //    if (!MInvoice.DOCSTATUS_Completed.Equals(invoice.GetDocStatus()))
+                //    if (!MVABInvoice.DOCSTATUS_Completed.Equals(invoice.GetDocStatus()))
                 //    {
                 //        if (invoice.VoidIt())
-                //            invoice.SetDocStatus(MInvoice.DOCSTATUS_Voided);
+                //            invoice.SetDocStatus(MVABInvoice.DOCSTATUS_Voided);
                 //    }
                 //    else if (invoice.ReverseCorrectIt())	//	completed invoice
                 //    {
-                //        invoice.SetDocStatus(MInvoice.DOCSTATUS_Reversed);
+                //        invoice.SetDocStatus(MVABInvoice.DOCSTATUS_Reversed);
                 //        Info.Append(" ").Append(invoice.GetDocumentNo());
                 //    }
                 //    else
@@ -2869,7 +2869,7 @@ namespace VAdvantage.Model
                 //        _processMsg = "Could not reverse Invoice " + invoice;
                 //        return false;
                 //    }
-                //    invoice.SetDocAction(MInvoice.DOCACTION_None);
+                //    invoice.SetDocAction(MVABInvoice.DOCACTION_None);
                 //    invoice.Save(Get_TrxName());
                 //}	//	for all shipments
 
@@ -2890,7 +2890,7 @@ namespace VAdvantage.Model
                 //    if (!MOrder.DOCSTATUS_Completed.Equals(rma.GetDocStatus()))
                 //    {
                 //        if (rma.VoidIt())
-                //            rma.SetDocStatus(MInOut.DOCSTATUS_Voided);
+                //            rma.SetDocStatus(MVAMInvInOut.DOCSTATUS_Voided);
                 //    }
                 //    //	Create new Reversal with only that order
                 //    else if (rma.ReverseCorrectIt()) //	completed shipment
@@ -2903,7 +2903,7 @@ namespace VAdvantage.Model
                 //        _processMsg = "Could not reverse RMA " + rma;
                 //        return false;
                 //    }
-                //    rma.SetDocAction(MInOut.DOCACTION_None);
+                //    rma.SetDocAction(MVAMInvInOut.DOCACTION_None);
                 //    rma.Save(Get_TrxName());
                 //}	//	for all shipments
 
@@ -3092,10 +3092,10 @@ namespace VAdvantage.Model
         ///// <param name="VAB_BusinessPartner_ID"></param>
         ///// <param name="VAB_BPart_Location_ID"></param>
         ///// <returns>latest shipment</returns>
-        //public MInOut GetOpenInOut(int VAB_DocTypes_ID, int VAM_Warehouse_ID, int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID)
+        //public MVAMInvInOut GetOpenInOut(int VAB_DocTypes_ID, int VAM_Warehouse_ID, int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID)
         //{
         //    //	TODO: getShipment if linked on line
-        //    MInOut inout = null;
+        //    MVAMInvInOut inout = null;
         //    String sql = "SELECT VAM_Inv_InOut_ID " +
         //    "FROM VAM_Inv_InOut WHERE VAB_Order_ID=" + GetVAB_Order_ID()
         //   + " AND VAM_Warehouse_ID=" + VAM_Warehouse_ID
@@ -3110,7 +3110,7 @@ namespace VAdvantage.Model
         //        idr = DB.ExecuteReader(sql, null, Get_TrxName());
         //        if (idr.Read())
         //        {
-        //            inout = new MInOut(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
+        //            inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(idr[0]), Get_TrxName());
         //        }
         //    }
         //    catch (Exception e)

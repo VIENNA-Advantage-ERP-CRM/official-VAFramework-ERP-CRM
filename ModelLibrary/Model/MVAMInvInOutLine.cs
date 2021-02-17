@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInOutLine
+ * Class Name     : MVAMInvInOutLine
  * Purpose        : For 2nd tab of the shipment window
  * Class Used     : X_VAM_Inv_InOutLine
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInOutLine : X_VAM_Inv_InOutLine
+    public class MVAMInvInOutLine : X_VAM_Inv_InOutLine
     {
         #region variables
         //	Product					
@@ -32,13 +32,13 @@ namespace VAdvantage.Model
         // Warehouse			
         private int _VAM_Warehouse_ID = 0;
         //Parent				
-        private MInOut _parent = null;
+        private MVAMInvInOut _parent = null;
         // Matched Invoices		
         private MMatchInv[] _matchInv = null;
         // Matched Purchase Orders	
         private MMatchPO[] _matchPO = null;
         //	Static Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInOutLine).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInvInOutLine).FullName);
         public Decimal? OnHandQty = 0;
         private Decimal? containerQty = 0;
         #endregion
@@ -50,10 +50,10 @@ namespace VAdvantage.Model
         *  @param trxName transaction
         *	@return array of receipt lines
         */
-        public static MInOutLine[] GetOfOrderLine(Ctx ctx,
+        public static MVAMInvInOutLine[] GetOfOrderLine(Ctx ctx,
             int VAB_OrderLine_ID, String where, Trx trxName)
         {
-            List<MInOutLine> list = new List<MInOutLine>();
+            List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
 
 
             //String sql = "SELECT * FROM VAM_Inv_InOutLine WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;    //// Commented and added following query, by SUkhwinder on 16-Nov-2017, for taking into COMPLETED/CLOSED lines only.
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInOutLine(ctx, dr, trxName));
+                    list.Add(new MVAMInvInOutLine(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -94,7 +94,7 @@ namespace VAdvantage.Model
             }
 
 
-            MInOutLine[] retValue = new MInOutLine[list.Count];
+            MVAMInvInOutLine[] retValue = new MVAMInvInOutLine[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -106,9 +106,9 @@ namespace VAdvantage.Model
          *  @param trxName transaction
          *	@return array of receipt lines2
          */
-        public static MInOutLine[] Get(Ctx ctx, int VAB_OrderLine_ID, Trx trxName)
+        public static MVAMInvInOutLine[] Get(Ctx ctx, int VAB_OrderLine_ID, Trx trxName)
         {
-            List<MInOutLine> list = new List<MInOutLine>();
+            List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
             String sql = "SELECT * FROM VAM_Inv_InOutLine WHERE VAB_OrderLine_ID=" + VAB_OrderLine_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -120,7 +120,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInOutLine(ctx, dr, trxName));
+                    list.Add(new MVAMInvInOutLine(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MInOutLine[] retValue = new MInOutLine[list.Count];
+            MVAMInvInOutLine[] retValue = new MVAMInvInOutLine[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
      *	@param VAM_Inv_InOutLine_ID id
      *	@param trxName trx name
      */
-        public MInOutLine(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
+        public MVAMInvInOutLine(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
             : base(ctx, VAM_Inv_InOutLine_ID, trxName)
         {
             try
@@ -172,7 +172,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                //MessageBox.Show("MInOutLine--Standard Constructor",ex.Message);
+                //MessageBox.Show("MVAMInvInOutLine--Standard Constructor",ex.Message);
             }
         }
 
@@ -180,7 +180,7 @@ namespace VAdvantage.Model
         *  Parent Constructor
         *  @param inout parent
         */
-        public MInOutLine(MInOut inout)
+        public MVAMInvInOutLine(MVAMInvInOut inout)
             : this(inout.GetCtx(), 0, inout.Get_TrxName())
         {
 
@@ -197,7 +197,7 @@ namespace VAdvantage.Model
         *  @param dr result set record
         *  @param trxName transaction
         */
-        public MInOutLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvInOutLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -206,10 +206,10 @@ namespace VAdvantage.Model
         /* 	Get Parent
         *	@return parent
         */
-        public MInOut GetParent()
+        public MVAMInvInOut GetParent()
         {
             if (_parent == null)
-                _parent = new MInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
+                _parent = new MVAMInvInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -293,7 +293,7 @@ namespace VAdvantage.Model
 
                 if (ol.GetParent().IsReturnTrx())
                 {
-                    MInOutLine ioLine = new MInOutLine(GetCtx(), ol.GetOrig_InOutLine_ID(), null);
+                    MVAMInvInOutLine ioLine = new MVAMInvInOutLine(GetCtx(), ol.GetOrig_InOutLine_ID(), null);
                     SetVAM_Locator_ID(ioLine.GetVAM_Locator_ID());
                 }
 
@@ -307,7 +307,7 @@ namespace VAdvantage.Model
          *	@param VAM_Locator_ID locator
          *	@param Qty qty only fo find suitable locator
          */
-        public void SetInvoiceLine(MInvoiceLine iLine, int VAM_Locator_ID, Decimal Qty)
+        public void SetInvoiceLine(MVABInvoiceLine iLine, int VAM_Locator_ID, Decimal Qty)
         {
             SetVAB_OrderLine_ID(iLine.GetVAB_OrderLine_ID());
             SetLine(iLine.GetLine());
@@ -795,7 +795,7 @@ namespace VAdvantage.Model
                     int orig_IOLine_ID = oLine.GetOrig_InOutLine_ID();
                     if (orig_IOLine_ID != 0)
                     {
-                        MInOutLine orig_IOLine = new MInOutLine(GetCtx(), orig_IOLine_ID, null);
+                        MVAMInvInOutLine orig_IOLine = new MVAMInvInOutLine(GetCtx(), orig_IOLine_ID, null);
                         Decimal shippedQty = orig_IOLine.GetMovementQty();
                         MovementQty = GetMovementQty();
                         if (shippedQty.CompareTo(MovementQty) < 0)
@@ -1066,7 +1066,7 @@ namespace VAdvantage.Model
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
             //Checking for conversion of UOM 
-            MInOut inO = new MInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
+            MVAMInvInOut inO = new MVAMInvInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
             MVABDocTypes dt = new MVABDocTypes(GetCtx(), inO.GetVAB_DocTypes_ID(), Get_TrxName());
             MProduct _Product = null;
 
@@ -1249,7 +1249,7 @@ namespace VAdvantage.Model
             //    MVABOrderLine RMALine = new MVABOrderLine(GetCtx(), GetVAB_OrderLine_ID(), Get_Trx());
             //    if (RMALine != null)
             //    {
-            //        MInOutLine origInOutLine = new MInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());
+            //        MVAMInvInOutLine origInOutLine = new MVAMInvInOutLine(GetCtx(), RMALine.GetOrig_InOutLine_ID(), Get_Trx());
             //        if (origInOutLine != null)
             //        {
             //            currentcostprice = origInOutLine.GetCurrentCostPrice();
@@ -1262,7 +1262,7 @@ namespace VAdvantage.Model
             // By Amit for Obsolete Inventory - 25-May-2016
             if (Env.IsModuleInstalled("VA024_"))
             {
-                //MInOut inout = new MInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_Trx());
+                //MVAMInvInOut inout = new MVAMInvInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_Trx());
                 //shipment and Return to vendor
                 if ((!inO.IsSOTrx() && inO.IsReturnTrx()) || (inO.IsSOTrx() && !inO.IsReturnTrx()))
                 {
@@ -1306,7 +1306,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            //MInOut inout = new MInOut(Env.GetCtx(), GetVAM_Inv_InOut_ID(), Get_Trx());
+                            //MVAMInvInOut inout = new MVAMInvInOut(Env.GetCtx(), GetVAM_Inv_InOut_ID(), Get_Trx());
                             if (inO.GetDescription() != "RC" && Util.GetValueOfBool(IsDTD001_IsAttributeNo()) == false)
                             {
                                 if (GetDTD001_Attribute() == "" || GetDTD001_Attribute() == null)
@@ -1371,7 +1371,7 @@ namespace VAdvantage.Model
          */
         protected override bool BeforeDelete()
         {
-            if (GetParent().GetDocStatus().Equals(MInOut.DOCSTATUS_Drafted))
+            if (GetParent().GetDocStatus().Equals(MVAMInvInOut.DOCSTATUS_Drafted))
                 return true;
             log.SaveError("Error", Msg.GetMsg(GetCtx(), "CannotDelete"));
             return false;
@@ -1383,7 +1383,7 @@ namespace VAdvantage.Model
          */
         public String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInOutLine[").Append(Get_ID())
+            StringBuilder sb = new StringBuilder("MVAMInvInOutLine[").Append(Get_ID())
                 .Append(",VAM_Product_ID=").Append(GetVAM_Product_ID())
                 .Append(",QtyEntered=").Append(GetQtyEntered())
                 .Append(",MovementQty=").Append(GetMovementQty())

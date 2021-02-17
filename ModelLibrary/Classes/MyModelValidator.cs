@@ -25,7 +25,7 @@ namespace ViennaAdvantageSvc.Classes
                 {
                 }
             }
-            else if (po is MInvoice)
+            else if (po is MVABInvoice)
             {
             }
             return "";
@@ -60,7 +60,7 @@ namespace ViennaAdvantageSvc.Classes
                     return "error ";
                 }
             }
-            else if (po is MInvoice)
+            else if (po is MVABInvoice)
             { 
 
             }

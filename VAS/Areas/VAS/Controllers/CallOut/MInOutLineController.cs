@@ -10,22 +10,22 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MInOutLineController:Controller
+    public class MVAMInvInOutLineController:Controller
     {
         public ActionResult Index()
         {
             return View();
         }
 
-        public JsonResult GetMInOutLine(string fields)
+        public JsonResult GetMVAMInvInOutLine(string fields)
         {
             
             string retJSON = "";
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MInOutLineModel objInOutLine = new MInOutLineModel();
-                retJSON = JsonConvert.SerializeObject(objInOutLine.GetMInOutLine(ctx,fields));
+                MVAMInvInOutLineModel objInOutLine = new MVAMInvInOutLineModel();
+                retJSON = JsonConvert.SerializeObject(objInOutLine.GetMVAMInvInOutLine(ctx,fields));
             }         
             return Json(retJSON, JsonRequestBehavior.AllowGet);
         }

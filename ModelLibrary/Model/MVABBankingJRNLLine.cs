@@ -361,7 +361,7 @@ namespace VAdvantage.Model
             }
             if (GetVAB_Invoice_ID() != 0 && GetVAB_BusinessPartner_ID() == 0)
             {
-                MInvoice invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                MVABInvoice invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 SetVAB_BusinessPartner_ID(invoice.GetVAB_BusinessPartner_ID());
             }
             //	Calculate Charge = Statement - trx - Interest  

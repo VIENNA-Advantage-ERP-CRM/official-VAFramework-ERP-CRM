@@ -145,10 +145,10 @@ namespace VIS.Models
         /// Unused Function
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="MInOutIDs"></param>
+        /// <param name="MVAMInvInOutIDs"></param>
         /// <param name="isBaseLanguageUmos"></param>
         /// <returns></returns>
-        public List<GetShipmentDatasProperties> GetShipmentDatas(Ctx ctx, string MInOutIDs, string isBaseLanguageUmos)
+        public List<GetShipmentDatasProperties> GetShipmentDatas(Ctx ctx, string MVAMInvInOutIDs, string isBaseLanguageUmos)
         {
             List<GetShipmentDatasProperties> obj = new List<GetShipmentDatasProperties>();
 
@@ -166,7 +166,7 @@ namespace VIS.Models
                 sql += " " + isBaseLanguageUmos + " ";
             }
             sql += " INNER JOIN VAM_Product p ON (l.VAM_Product_ID=p.VAM_Product_ID) " +
-                   "  LEFT OUTER JOIN VAM_MatchInvoice mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) WHERE l.VAM_Inv_InOut_ID=" + MInOutIDs +
+                   "  LEFT OUTER JOIN VAM_MatchInvoice mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) WHERE l.VAM_Inv_InOut_ID=" + MVAMInvInOutIDs +
                    "  GROUP BY l.MovementQty, l.QtyEntered," + "l.VAB_UOM_ID,COALESCE(uom.UOMSymbol,uom.Name)," +
                    "  l.VAM_Product_ID,p.Name, l.VAM_Inv_InOutLine_ID,l.Line,l.VAB_OrderLine_ID ORDER BY l.Line";
 

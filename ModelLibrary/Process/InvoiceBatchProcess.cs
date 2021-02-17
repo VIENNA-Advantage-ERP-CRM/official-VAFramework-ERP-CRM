@@ -26,7 +26,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         private String _DocAction = null;
 
         /** Invoice					*/
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
         /** Old DocumentNo			*/
         private String _oldDocumentNo = null;
         /** Old BPartner			*/
@@ -83,7 +83,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             log.Info("VAB_BatchInvoice_ID=" + _VAB_BatchInvoice_ID + ", DocAction=" + _DocAction);
             if (_VAB_BatchInvoice_ID == 0)
                 throw new Exception("VAB_BatchInvoice_ID = 0");
-            MInvoiceBatch batch = new MInvoiceBatch(GetCtx(), _VAB_BatchInvoice_ID, Get_TrxName());
+            MVABInvoiceBatch batch = new MVABInvoiceBatch(GetCtx(), _VAB_BatchInvoice_ID, Get_TrxName());
             if (batch.Get_ID() == 0)
                 throw new Exception("@NotFound@: @VAB_BatchInvoice_ID@ - " + _VAB_BatchInvoice_ID);
             if (batch.IsProcessed())
@@ -92,10 +92,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (Signum(batch.GetControlAmt()) != 0 && batch.GetControlAmt().CompareTo(batch.GetDocumentAmt()) != 0)
                 throw new Exception("@ControlAmt@ <> @DocumentAmt@");
             //
-            MInvoiceBatchLine[] lines = batch.GetLines(false);
+            MVABInvoiceBatchLine[] lines = batch.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInvoiceBatchLine line = lines[i];
+                MVABInvoiceBatchLine line = lines[i];
                 if (line.GetVAB_Invoice_ID() != 0 || line.GetVAB_InvoiceLine_ID() != 0)
                     continue;
 
@@ -107,7 +107,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //	New Invoice
                 if (_invoice == null)
                 {
-                    _invoice = new MInvoice(batch, line);
+                    _invoice = new MVABInvoice(batch, line);
                     if (!_invoice.Save())
                         return GetRetrievedError(_invoice, "Cannot save Invoice");
                         //throw new Exception("Cannot save Invoice");
@@ -125,7 +125,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 //	Add Line
-                MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
+                MVABInvoiceLine invoiceLine = new MVABInvoiceLine(_invoice);
                 invoiceLine.SetDescription(line.GetDescription());
                 invoiceLine.SetVAB_Charge_ID(line.GetVAB_Charge_ID());
                 invoiceLine.SetQty(line.GetQtyEntered());	// Entered/Invoiced

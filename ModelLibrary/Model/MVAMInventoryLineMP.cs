@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInventoryLineMA
+ * Class Name     : MVAMInventoryLineMP
  * Purpose        : Inventory Material Allocation
  * Class Used     : X_VAM_InventoryLineMP
  * Chronological    Development
@@ -27,11 +27,11 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInventoryLineMA : X_VAM_InventoryLineMP
+    public class MVAMInventoryLineMP : X_VAM_InventoryLineMP
     {
 
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInventoryLineMA).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInventoryLineMP).FullName);
 
         /**
          * 	Get Material Allocations for Line
@@ -40,9 +40,9 @@ namespace VAdvantage.Model
          *	@param trxName trx
          *	@return allocations
          */
-        public static MInventoryLineMA[] Get(Ctx ctx, int VAM_InventoryLine_ID, Trx trxName)
+        public static MVAMInventoryLineMP[] Get(Ctx ctx, int VAM_InventoryLine_ID, Trx trxName)
         {
-            List<MInventoryLineMA> list = new List<MInventoryLineMA>();
+            List<MVAMInventoryLineMP> list = new List<MVAMInventoryLineMP>();
             String sql = "SELECT * FROM VAM_InventoryLineMP WHERE VAM_InventoryLine_ID=" + VAM_InventoryLine_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInventoryLineMA(ctx, dr, trxName));
+                    list.Add(new MVAMInventoryLineMP(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
             finally { dt = null; }
-            MInventoryLineMA[] retValue = new MInventoryLineMA[list.Count];
+            MVAMInventoryLineMP[] retValue = new MVAMInventoryLineMP[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
          *	@param VAM_InventoryLineMP_ID ignored
          *	@param trxName trx
          */
-        public MInventoryLineMA(Ctx ctx, int VAM_InventoryLineMP_ID, Trx trxName)
+        public MVAMInventoryLineMP(Ctx ctx, int VAM_InventoryLineMP_ID, Trx trxName)
             : base(ctx, VAM_InventoryLineMP_ID, trxName)
         {
             if (VAM_InventoryLineMP_ID != 0)
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName trx
          */
-        public MInventoryLineMA(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInventoryLineMP(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -131,7 +131,7 @@ namespace VAdvantage.Model
          *	@param VAM_PFeature_SetInstance_ID asi
          *	@param MovementQty qty
          */
-        public MInventoryLineMA(MInventoryLine parent, int VAM_PFeature_SetInstance_ID, Decimal MovementQty)
+        public MVAMInventoryLineMP(MVAMInventoryLine parent, int VAM_PFeature_SetInstance_ID, Decimal MovementQty)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
@@ -149,7 +149,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="movementQty"></param>
         /// <param name="MMPloicyDate"></param>
-        public MInventoryLineMA(MInventoryLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+        public MVAMInventoryLineMP(MVAMInventoryLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -165,16 +165,16 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Is Used to Get or Create  Instance of MInventoryLineMA (Attribute)
+        /// Is Used to Get or Create  Instance of MVAMInventoryLineMP (Attribute)
         /// </summary>
         /// <param name="line"></param>
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="MovementQty"></param>
         /// <param name="DateMaterialPolicy"></param>
         /// <returns></returns>
-        public static MInventoryLineMA GetOrCreate(MInventoryLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        public static MVAMInventoryLineMP GetOrCreate(MVAMInventoryLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
         {
-            MInventoryLineMA retValue = null;
+            MVAMInventoryLineMP retValue = null;
             String sql = "SELECT * FROM VAM_InventoryLineMP " +
                          @" WHERE  VAM_InventoryLine_ID = " + line.GetVAM_InventoryLine_ID() +
                          @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MInventoryLineMA(line.GetCtx(), dr, line.Get_Trx());
+                    retValue = new MVAMInventoryLineMP(line.GetCtx(), dr, line.Get_Trx());
                 }
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MInventoryLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
+                retValue = new MVAMInventoryLineMP(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
             else
                 retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
             return retValue;
@@ -224,7 +224,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInventoryLineMA[");
+            StringBuilder sb = new StringBuilder("MVAMInventoryLineMP[");
             sb.Append("VAM_InventoryLine_ID=").Append(GetVAM_InventoryLine_ID())
                 .Append(",VAM_PFeature_SetInstance_ID=").Append(GetVAM_PFeature_SetInstance_ID())
                 .Append(", Qty=").Append(GetMovementQty())

@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /// Set Shipment Line
         /// </summary>
         /// <param name="line">line</param>
-        public void SetInOutLine(MInOutLine line, DateTime? moveDate, String DocumentNo, Int32 Client_ID, Int32 Org_ID)
+        public void SetInOutLine(MVAMInvInOutLine line, DateTime? moveDate, String DocumentNo, Int32 Client_ID, Int32 Org_ID)
         {
             SetVAM_Inv_InOutLine_ID(line.GetVAM_Inv_InOutLine_ID());
             SetQty(line.GetMovementQty());
@@ -115,7 +115,7 @@ namespace VAdvantage.Model
             }
             return _count;
         }
-        public Decimal SetInoutLine(VAdvantage.Model.MInOutLine line)
+        public Decimal SetInoutLine(VAdvantage.Model.MVAMInvInOutLine line)
         {
             int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_'"));
             if (_CountDTD001 > 0)

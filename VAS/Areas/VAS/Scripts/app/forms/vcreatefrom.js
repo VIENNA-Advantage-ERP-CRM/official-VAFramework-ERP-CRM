@@ -105,7 +105,7 @@
         this.AuthCode = null;
         this.CheckNo = null;
 
-        this.fromInvoice = false;
+        this.froMVABInvoice = false;
         this.deliveryDate = null;
         this.cmbOrder = new VIS.Controls.VComboBox('', false, false, true);
         this.cmbInvoice = new VIS.Controls.VComboBox('', false, false, true);
@@ -151,7 +151,7 @@
                     VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, 1);
                 }
                 else if (VAM_Inv_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
+                    VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
                 }
                 else {
                     $self.setBusy(false);
@@ -242,7 +242,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, 1);
                     }
                     else if (VAM_Inv_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
+                        VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
                     }
                     else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -290,7 +290,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     else if (VAM_Inv_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) - 1);
+                        VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) - 1);
                     }
                     else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -338,7 +338,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     else if (VAM_Inv_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) + 1);
+                        VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.val()) + 1);
                     }
                     else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -386,7 +386,7 @@
                         VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     else if (VAM_Inv_InOut_ID != null) {
-                        VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
+                        VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, parseInt($self.cmbPage.find("Option:last").val()));
                     }
                     else if (VAB_Bank_Acct_ID != null) {
                         var trxDate = $self.Date.getValue();
@@ -433,7 +433,7 @@
                     VIS.VCreateFromShipment.prototype.loadInvoices(VAB_Invoice_ID, VAM_Product_ID, $self.cmbPage.val());
                 }
                 else if (VAM_Inv_InOut_ID != null) {
-                    VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, $self.cmbPage.val());
+                    VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, $self.cmbPage.val());
                 }
                 else if (VAB_Bank_Acct_ID != null) {
                     var trxDate = $self.Date.getValue();
@@ -594,7 +594,7 @@
         }
         else if (VAF_TableView_ID == 318)        //  VAB_Invoice
         {
-            retValue = new VIS.VCreateFromInvoice(mTab);
+            retValue = new VIS.VCreateFroMVABInvoice(mTab);
         }
         else if (VAF_TableView_ID == 319)        //  VAM_Inv_InOut
         {
@@ -1380,7 +1380,7 @@
                 }
                 // Change By Mohit 30/06/2016
                 $self.MergeItemsForSave();
-                VIS.VCreateFromShipment.prototype.saveMInOut(false);
+                VIS.VCreateFromShipment.prototype.saveMVAMInvInOut(false);
             }
             else if ($self.cmbBankAccount != null) {
                 if ($self.dGrid != null) {
@@ -1443,7 +1443,7 @@
                     }
                 }
 
-                VIS.VCreateFromInvoice.prototype.saveInvoice();
+                VIS.VCreateFroMVABInvoice.prototype.saveInvoice();
             }
             //$self.setBusy(false);
             //if (output == false) {
@@ -1507,7 +1507,7 @@
                 }
                 // Change By Mohit 30/06/2016
                 $self.MergeItemsForSave();
-                VIS.VCreateFromShipment.prototype.saveMInOut(true);
+                VIS.VCreateFromShipment.prototype.saveMVAMInvInOut(true);
             }
             else if ($self.cmbBankAccount != null) {
                 if ($self.dGrid != null) {
@@ -1568,7 +1568,7 @@
                         }
                     }
                 }
-                VIS.VCreateFromInvoice.prototype.saveInvoice();
+                VIS.VCreateFroMVABInvoice.prototype.saveInvoice();
             }
         });
 
@@ -1936,7 +1936,7 @@
                 //$self.AuthCode.setVisible = false;
                 $self.lblDeliveryDate.setVisible(false);
                 $self.deliveryDate.setVisible(false);
-                VIS.VCreateFromInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
+                VIS.VCreateFroMVABInvoice.prototype.loadShipments(VAM_Inv_InOut_ID, VAM_Product_ID, 1);
                 //$self.setBusy(false);
             });
         }
@@ -2881,7 +2881,7 @@
             CreateNonEditableRecord();
             if ($self.dGrid.columns[e.column].field == "QuantityEntered") {
                 var _val = format.GetConvertedNumber(e.value_new, dotFormatter);
-                if ($self.fromInvoice) {
+                if ($self.froMVABInvoice) {
                     if ($self.dGrid.records[e.index]["QuantityPending"] < _val.toFixed(4)) {
                         VIS.ADialog.error("InvoiceQtyGreater");
                         e.value_new = e.value_original;

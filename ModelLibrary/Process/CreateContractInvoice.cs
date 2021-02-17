@@ -35,7 +35,7 @@ namespace ViennaAdvantageServer.Process
         //Neha--Declare X-Class or MClass object publically for further use in class--11 Sep,2018
         VAdvantage.Model.X_VAB_Contract cont = null;
         VAdvantage.Model.X_VAB_ContractSchedule contSchedule = null;
-        VAdvantage.Model.MInvoice inv = null;
+        VAdvantage.Model.MVABInvoice inv = null;
         MVABBusinessPartner bp = null;
         #endregion
 
@@ -207,7 +207,7 @@ namespace ViennaAdvantageServer.Process
 
                 price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
-                inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, Get_TrxName());
+                inv = new VAdvantage.Model.MVABInvoice(GetCtx(), 0, Get_TrxName());
                 inv.SetVAF_Client_ID(cont.GetVAF_Client_ID());
                 inv.SetVAF_Org_ID(cont.GetVAF_Org_ID());
                 inv.SetVAB_BusinessPartner_ID(cont.GetVAB_BusinessPartner_ID());
@@ -250,7 +250,7 @@ namespace ViennaAdvantageServer.Process
 
                 else
                 {
-                    VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, Get_TrxName());
+                    VAdvantage.Model.MVABInvoiceLine invLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, Get_TrxName());
                     invLine.SetVAF_Client_ID(inv.GetVAF_Client_ID());
                     invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
                     invLine.SetVAB_Promotion_ID(inv.GetVAB_Promotion_ID());

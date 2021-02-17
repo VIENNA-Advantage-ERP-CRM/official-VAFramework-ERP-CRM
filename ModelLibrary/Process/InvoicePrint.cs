@@ -150,7 +150,7 @@ namespace VAdvantage.Process
 		//	Get Info
 		StringBuilder sql = new StringBuilder (
 			"SELECT i.VAB_Invoice_ID,bp.VAF_Language,c.IsMultiLingualDocument,"		//	1..3
-			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MInvoice
+			//	Prio: 1. BPartner 2. DocType, 3. PrintFormat (Org)	//	see ReportCtl+MVABInvoice
 			+ " COALESCE(bp.Invoice_PrintFormat_ID, dt.VAF_Print_Rpt_Layout_ID, pf.Invoice_PrintFormat_ID),"	//	4 
 			+ " dt.DocumentCopies+bp.DocumentCopies,"								//	5
 			+ " bpc.VAF_UserContact_ID, i.DocumentNo,"										//	6..7
@@ -337,7 +337,7 @@ namespace VAdvantage.Process
                     }
                     mText.SetUser(to);					//	Context
                     mText.SetBPartner(VAB_BusinessPartner_ID);	//	Context
-                    mText.SetPO(new MInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName()));
+                    mText.SetPO(new MVABInvoice(GetCtx(), VAB_Invoice_ID, Get_TrxName()));
                     String message = mText.GetMailText(true);
                     if (mText.IsHtml())
                     {
@@ -353,8 +353,8 @@ namespace VAdvantage.Process
                     FileInfo invoice = null;
                     if (!Ini.IsClient())
                     {
-                        //invoice = new File(MInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
-                        invoice = new FileInfo(MInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
+                        //invoice = new File(MVABInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
+                        invoice = new FileInfo(MVABInvoice.GetPDFFileName(documentDir, VAB_Invoice_ID));
                     }
                     //File attachment = re.getPDF(invoice);
                     //FileInfo attachment = re.GetPDF(invoice);

@@ -300,7 +300,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 {
                     continue;
                 }
-                MInvoice invoice = new MInvoice(GetCtx(), gl.GetVAB_Invoice_ID(), null);
+                MVABInvoice invoice = new MVABInvoice(GetCtx(), gl.GetVAB_Invoice_ID(), null);
                 if (invoice.GetVAB_Currency_ID() == aas.GetVAB_Currency_ID())
                 {
                     continue;

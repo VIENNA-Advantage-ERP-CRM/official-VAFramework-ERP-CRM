@@ -123,7 +123,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 			//while (rs.next ())
             foreach(DataRow dr in dt.Rows)
 			{
-				Create (new MInvoice (GetCtx(), dr, null));	//	no lock
+				Create (new MVABInvoice (GetCtx(), dr, null));	//	no lock
 				noInvoices++;
 			}
 		}
@@ -153,13 +153,13 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	/// Create Data
 	/// </summary>
 	/// <param name="invoice">invoice</param>
-	private void Create (MInvoice invoice)
+	private void Create (MVABInvoice invoice)
 	{
 		/**	Lines					**
-		MInvoiceLine[] lines = invoice.getLines();
+		MVABInvoiceLine[] lines = invoice.getLines();
 		for (int i = 0; i < lines.length; i++)
 		{
-			MInvoiceLine line = lines[i];
+			MVABInvoiceLine line = lines[i];
 			if (line.isDescription())
 				continue;
 			//
@@ -171,10 +171,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		/** **/
 
 		/** Invoice Tax				**/
-		MInvoiceTax[] taxes = invoice.GetTaxes(false);
+		MVABInvoiceTax[] taxes = invoice.GetTaxes(false);
 		for (int i = 0; i < taxes.Length; i++)
 		{
-			MInvoiceTax tLine = taxes[i];
+			MVABInvoiceTax tLine = taxes[i];
 			//
 			MTaxDeclarationLine tdl = new MTaxDeclarationLine (_td, invoice, tLine);
 			tdl.SetLine((_noLines+1) * 10);
@@ -195,8 +195,8 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		{
 			//pstmt = DataBase.prepareStatement (sql, null);
 
-			//pstmt.setInt (1, MInvoice.Table_ID);
-            Param[0]=new SqlParameter("@Param1",MInvoice.Table_ID);
+			//pstmt.setInt (1, MVABInvoice.Table_ID);
+            Param[0]=new SqlParameter("@Param1",MVABInvoice.Table_ID);
 			//pstmt.setInt (2, invoice.getVAB_Invoice_ID());
             Param[1]=new SqlParameter("@Param2",invoice.GetVAB_Invoice_ID());
 			//ResultSet rs = pstmt.executeQuery ();

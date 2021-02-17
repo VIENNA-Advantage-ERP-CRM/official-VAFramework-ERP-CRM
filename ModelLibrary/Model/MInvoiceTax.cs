@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInvoiceTax
+ * Class Name     : MVABInvoiceTax
  * Purpose        : Invoice tex calculation
  * Class Used     : X_VAB_Tax_Invoice
  * Chronological    Development
@@ -19,7 +19,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MInvoiceTax : X_VAB_Tax_Invoice
+    public class MVABInvoiceTax : X_VAB_Tax_Invoice
     {
         /**
 	     * 	Get Tax Line for Invoice Line
@@ -29,10 +29,10 @@ namespace VAdvantage.Model
 	     *	@param trxName transaction name
 	     *	@return existing or new tax
 	     */
-        public static MInvoiceTax Get(MInvoiceLine line, int precision,
+        public static MVABInvoiceTax Get(MVABInvoiceLine line, int precision,
             Boolean oldTax, Trx trxName)
         {
-            MInvoiceTax retValue = null;
+            MVABInvoiceTax retValue = null;
             try
             {
                 if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            retValue = new MInvoiceTax(line.GetCtx(), dr, trxName);
+                            retValue = new MVABInvoiceTax(line.GetCtx(), dr, trxName);
                         }
                     }
                 }
@@ -84,7 +84,7 @@ namespace VAdvantage.Model
                 }
 
                 //	Create New
-                retValue = new MInvoiceTax(line.GetCtx(), 0, trxName);
+                retValue = new MVABInvoiceTax(line.GetCtx(), 0, trxName);
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
                 retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
@@ -97,7 +97,7 @@ namespace VAdvantage.Model
             }
             catch
             {
-                // MessageBox.Show("MInvoiceTax--Get");
+                // MessageBox.Show("MVABInvoiceTax--Get");
             }
             return retValue;
         }
@@ -110,9 +110,9 @@ namespace VAdvantage.Model
         /// <param name="oldTax">get old tax</param>
         /// <param name="trxName">transaction</param>
         /// <returns>existing or new tax</returns>
-        public static MInvoiceTax GetSurcharge(MInvoiceLine line, int precision, bool oldTax, Trx trxName)
+        public static MVABInvoiceTax GetSurcharge(MVABInvoiceLine line, int precision, bool oldTax, Trx trxName)
         {
-            MInvoiceTax retValue = null;
+            MVABInvoiceTax retValue = null;
             try
             {
                 if (line == null || line.GetVAB_Invoice_ID() == 0 || line.IsDescription())
@@ -143,7 +143,7 @@ namespace VAdvantage.Model
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            retValue = new MInvoiceTax(line.GetCtx(), dr, trxName);
+                            retValue = new MVABInvoiceTax(line.GetCtx(), dr, trxName);
                         }
                     }
                 }
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
                 }
 
                 //	Create New
-                retValue = new MInvoiceTax(line.GetCtx(), 0, trxName);
+                retValue = new MVABInvoiceTax(line.GetCtx(), 0, trxName);
                 retValue.Set_TrxName(trxName);
                 retValue.SetClientOrg(line);
                 retValue.SetVAB_Invoice_ID(line.GetVAB_Invoice_ID());
@@ -177,13 +177,13 @@ namespace VAdvantage.Model
             }
             catch
             {
-                // MessageBox.Show("MInvoiceTax--Get");
+                // MessageBox.Show("MVABInvoiceTax--Get");
             }
             return retValue;
         }
 
         //	Static Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInvoiceTax).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABInvoiceTax).FullName);
 
 
         /**************************************************************************
@@ -192,7 +192,7 @@ namespace VAdvantage.Model
          *	@param ignored ignored
          *	@param trxName transaction
          */
-        public MInvoiceTax(Ctx ctx, int ignored, Trx trxName)
+        public MVABInvoiceTax(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
             if (ignored != 0)
@@ -209,7 +209,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MInvoiceTax(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABInvoiceTax(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -461,7 +461,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInvoiceTax[");
+            StringBuilder sb = new StringBuilder("MVABInvoiceTax[");
             sb.Append("VAB_Invoice_ID=").Append(GetVAB_Invoice_ID())
                 .Append(",VAB_TaxRate_ID=").Append(GetVAB_TaxRate_ID())
                 .Append(", Base=").Append(GetTaxBaseAmt()).Append(",Tax=").Append(GetTaxAmt())

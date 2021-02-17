@@ -90,15 +90,15 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             if (_VAB_Invoice_ID != 0)
             {
-                MInvoice invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, null);
+                MVABInvoice invoice = new MVABInvoice(GetCtx(), _VAB_Invoice_ID, null);
                 Decimal oldPrice = invoice.GetGrandTotal();
-                MInvoiceLine[] lines = invoice.GetLines(false);
+                MVABInvoiceLine[] lines = invoice.GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
                     lines[i].SetPrice(invoice.GetVAM_PriceList_ID(), invoice.GetVAB_BusinessPartner_ID());
                     lines[i].Save();
                 }
-                invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, null);
+                invoice = new MVABInvoice(GetCtx(), _VAB_Invoice_ID, null);
                 Decimal newPrice = invoice.GetGrandTotal();
                 if (retValue.Length > 0)
                 {

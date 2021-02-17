@@ -177,7 +177,7 @@
 
     VIS.Utility.inheritPrototype(VCreateFromShipment, VIS.VCreateFrom);//Inherit from VCreateFrom
 
-    VCreateFromShipment.prototype.saveMInOut = function (fromApply) {
+    VCreateFromShipment.prototype.saveMVAMInvInOut = function (fromApply) {
         debugger;
         if (this.$super.dGrid == null) {
             this.$super.setBusy(false);

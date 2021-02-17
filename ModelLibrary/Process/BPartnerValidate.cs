@@ -186,10 +186,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             //	See also VMerge.postMerge
             int changed = 0;
-            MInvoice[] invoices = MInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
+            MVABInvoice[] invoices = MVABInvoice.GetOfBPartner(GetCtx(), bp.GetVAB_BusinessPartner_ID(), Get_Trx());
             for (int i = 0; i < invoices.Length; i++)
             {
-                MInvoice invoice = invoices[i];
+                MVABInvoice invoice = invoices[i];
                 if (invoice.TestAllocation())
                 {
                     invoice.Save();

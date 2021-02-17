@@ -9,15 +9,15 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MInventoryLineModel
+    public class MVAMInventoryLineModel
     {
         /// <summary>
-        /// GetMInventoryLine
+        /// GetMVAMInventoryLine
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public Dictionary<string, string> GetMInventoryLine(Ctx ctx, string fields)
+        public Dictionary<string, string> GetMVAMInventoryLine(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
             int VAM_InventoryLine_ID;
@@ -25,7 +25,7 @@ namespace VIS.Models
             //Assign parameter value
             VAM_InventoryLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MInventoryLine iLine = new MInventoryLine(ctx, VAM_InventoryLine_ID, null);
+            MVAMInventoryLine iLine = new MVAMInventoryLine(ctx, VAM_InventoryLine_ID, null);
             int VAM_Product_ID = iLine.GetVAM_Product_ID();
             int VAM_Locator_ID = iLine.GetVAM_Locator_ID();
 

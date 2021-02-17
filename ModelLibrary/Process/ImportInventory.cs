@@ -219,7 +219,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             /*********************************************************************/
 
-            MInventory inventory = null;
+            MVAMInventory inventory = null;
 
             int noInsert = 0;
             int noInsertLine = 0;
@@ -246,7 +246,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || imp.GetVAM_Warehouse_ID() != x_VAM_Warehouse_ID
                         || !MovementDate.Equals(x_MovementDate))
                     {
-                        inventory = new MInventory(GetCtx(), 0, Get_TrxName());
+                        inventory = new MVAMInventory(GetCtx(), 0, Get_TrxName());
                         inventory.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_Org_ID());
                         inventory.SetDescription("I " + imp.GetVAM_Warehouse_ID() + " " + MovementDate);
                         inventory.SetVAM_Warehouse_ID(imp.GetVAM_Warehouse_ID());
@@ -280,7 +280,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                             VAM_PFeature_SetInstance_ID = masi.GetVAM_PFeature_SetInstance_ID();
                         }
                     }
-                    MInventoryLine line = new MInventoryLine(inventory,
+                    MVAMInventoryLine line = new MVAMInventoryLine(inventory,
                         imp.GetVAM_Locator_ID(), imp.GetVAM_Product_ID(), VAM_PFeature_SetInstance_ID,
                         imp.GetQtyBook(), imp.GetQtyCount());
                     if (line.Save())

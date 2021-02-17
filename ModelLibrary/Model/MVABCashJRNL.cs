@@ -1135,14 +1135,14 @@ namespace VAdvantage.Model
 
             //*****************************END*********************************************************************************//
             MVABCashJRNLLine[] lines = GetLines(false);
-            MInvoice invoice = null; // is created for getting detail from Invoice Header
+            MVABInvoice invoice = null; // is created for getting detail from Invoice Header
             for (int i = 0; i < lines.Length; i++)
             {
                 MVABCashJRNLLine line = lines[i];
 
                 if (Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()) != 0)
                 {
-                    MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()), Get_TrxName());
+                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()), Get_TrxName());
                     if (paySch != null) //if schedule not found or deleted 
                     {
                         paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
@@ -1157,13 +1157,13 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    int[] InvoicePaySchedule_ID = MInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
+                    int[] InvoicePaySchedule_ID = MVABInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
                     (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN (SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
                     SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_TrxName());
 
                     foreach (int invocePay in InvoicePaySchedule_ID)
                     {
-                        MInvoicePaySchedule paySch = new MInvoicePaySchedule(GetCtx(), invocePay, Get_TrxName());
+                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), invocePay, Get_TrxName());
                         if (paySch != null)      //if schedule not found or deleted 
                         {
                             paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
@@ -1183,7 +1183,7 @@ namespace VAdvantage.Model
                             Msg.Translate(GetCtx(), "VAB_CashJRNL_ID") + ": " + GetName(), Get_TrxName());
                         hdr.SetVAF_Org_ID(GetVAF_Org_ID());
                         // Update conversion type from invoice to view allocation (required for posting)
-                        invoice = MInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
+                        invoice = MVABInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
                         if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && invoice != null && invoice.Get_ID() > 0)
                         {
                             hdr.SetVAB_CurrencyType_ID(invoice.GetVAB_CurrencyType_ID());
@@ -1201,7 +1201,7 @@ namespace VAdvantage.Model
                     else if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && hdr.GetVAB_CurrencyType_ID() == 0)
                     {
                         // when invoice having same currency as on cash journal then Update conversion type from invoice to view allocation (required for posting)
-                        invoice = MInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
+                        invoice = MVABInvoice.Get(GetCtx(), line.GetVAB_Invoice_ID());
                         if (hdr.Get_ColumnIndex("VAB_CurrencyType_ID") > 0 && invoice != null && invoice.Get_ID() > 0)
                         {
                             hdr.SetVAB_CurrencyType_ID(invoice.GetVAB_CurrencyType_ID());
@@ -1646,7 +1646,7 @@ namespace VAdvantage.Model
                         MVABBPartLocation loc = null;
                         if (line.GetVAB_Invoice_ID() > 0)
                         {
-                            MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
+                            MVABInvoice inv = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                             loc = new MVABBPartLocation(GetCtx(), inv.GetVAB_BPart_Location_ID(), Get_TrxName());
                         }
                         else
@@ -1708,7 +1708,7 @@ namespace VAdvantage.Model
                 /*
                 else
                 {
-                    MInvoice inv = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
+                    MVABInvoice inv = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                     MBPartnerLocation loc = new MBPartnerLocation(GetCtx(), inv.GetVAB_BPart_Location_ID(), Get_TrxName());
                     //Arpit Dated 30th Nov,2017
                     // Commented Code because the amount which is of cash Line is converted into Header currency and then update into Business Partner

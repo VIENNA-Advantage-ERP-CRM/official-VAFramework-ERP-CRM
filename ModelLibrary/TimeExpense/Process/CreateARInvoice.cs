@@ -142,7 +142,7 @@ namespace VAdvantage.Process
                             bool chk = false;
                             for (int i = 0; i < invoices.Count; i++)
                             {
-                                VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
+                                VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
 
                                 if ((inv.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv.GetVAM_PriceList_ID() == ord.GetVAM_PriceList_ID()))
                                 {
@@ -220,7 +220,7 @@ namespace VAdvantage.Process
                                         for (int l = 0; l < invoices.Count; l++)
                                         {
                                             VAdvantage.Model.MVABOrder ord = new VAdvantage.Model.MVABOrder(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[j]["VAB_Order_ID"]), null);
-                                            VAdvantage.Model.MInvoice inv1 = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[l]), null);
+                                            VAdvantage.Model.MVABInvoice inv1 = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[l]), null);
                                             if ((inv1.GetVAB_PaymentTerm_ID() == ord.GetVAB_PaymentTerm_ID()) && (inv1.GetVAB_BusinessPartner_ID() == ord.GetVAB_BusinessPartner_ID())
                                                 && (inv1.GetVAM_PriceList_ID() == ord.GetVAM_PriceList_ID()))
                                             {
@@ -238,8 +238,8 @@ namespace VAdvantage.Process
 
                                     for (int m = 0; m < invoices.Count; m++)
                                     {
-                                        //MInvoice inv = new MInvoice(GetCtx(), Util.GetValueOfInt(pair.Value), null);
-                                        VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[m]), null);
+                                        //MVABInvoice inv = new MVABInvoice(GetCtx(), Util.GetValueOfInt(pair.Value), null);
+                                        VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[m]), null);
                                         if (docAction == "CO")
                                         {
                                             string comp = inv.CompleteIt();
@@ -327,8 +327,8 @@ namespace VAdvantage.Process
                     }
                     for (int m = 0; m < invoices.Count; m++)
                     {
-                        //MInvoice inv = new MInvoice(GetCtx(), Util.GetValueOfInt(pair.Value), null);
-                        VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[m]), null);
+                        //MVABInvoice inv = new MVABInvoice(GetCtx(), Util.GetValueOfInt(pair.Value), null);
+                        VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[m]), null);
                         if (docAction == "CO")
                         {
                             string comp = inv.CompleteIt();
@@ -370,7 +370,7 @@ namespace VAdvantage.Process
             string docNo = "";
             for (int i = 0; i < invoices.Count; i++)
             {
-                VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
+                VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), Util.GetValueOfInt(invoices[i]), null);
                 docNo = docNo + ", " + inv.GetDocumentNo();
             }
             if (docNo != "")
@@ -412,7 +412,7 @@ namespace VAdvantage.Process
                         // qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetARApprovedHrs(), true);
                         qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetQtyEntered(Decimal.Add(iLine.GetQtyEntered(), qty.Value));
                         iLine.SetQtyInvoiced(Decimal.Add(iLine.GetQtyInvoiced(), qty.Value));
                         // iLine.SetTaxAmt(Decimal.Add(iLine.GetTaxAmt(), tLine.GetTaxAmt()));
@@ -439,7 +439,7 @@ namespace VAdvantage.Process
 
                         qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
@@ -485,7 +485,7 @@ namespace VAdvantage.Process
                     int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
                     if (VAB_InvoiceLine_ID != 0)
                     {
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetPriceEntered(Decimal.Add(tLine.GetApprovedARExpenseAmt(), iLine.GetPriceEntered()));
                         iLine.SetPriceActual(Decimal.Add(tLine.GetApprovedARExpenseAmt(), iLine.GetPriceActual()));
                         iLine.SetPriceLimit(Decimal.Add(tLine.GetApprovedARExpenseAmt(), iLine.GetPriceLimit()));
@@ -501,7 +501,7 @@ namespace VAdvantage.Process
                     else
                     {
                         lineNo = lineNo + 10;
-                        VAdvantage.Model.MInvoiceLine iLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
+                        VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                         iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                         iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);
@@ -554,7 +554,7 @@ namespace VAdvantage.Process
                 _DateInvoiced = System.DateTime.Now;
             }
             // X_VAB_Invoice inv = new X_VAB_Invoice(GetCtx(), 0, null);
-            VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, null);
+            VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), 0, null);
             inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
             inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
             inv.SetVAF_UserContact_ID(tExp.GetVAF_UserContact_ID());
@@ -641,7 +641,7 @@ namespace VAdvantage.Process
         //            int VAB_InvoiceLine_ID = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
         //            if (VAB_InvoiceLine_ID != 0)
         //            {
-        //                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+        //                MVABInvoiceLine iLine = new MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
         //                iLine.SetPriceEntered(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceEntered()));
         //                iLine.SetPriceActual(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceActual()));
         //                iLine.SetPriceLimit(Decimal.Add(tLine.GetApprovedExpenseAmt(), iLine.GetPriceLimit()));
@@ -657,7 +657,7 @@ namespace VAdvantage.Process
         //            else
         //            {
         //                lineNo = lineNo + 10;
-        //                MInvoiceLine iLine = new MInvoiceLine(GetCtx(), 0, null);
+        //                MVABInvoiceLine iLine = new MVABInvoiceLine(GetCtx(), 0, null);
         //                iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
         //                iLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
         //                iLine.SetVAB_Invoice_ID(VAB_Invoice_ID);

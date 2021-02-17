@@ -14,18 +14,9 @@ using System.Data;
 /** Generated Model for VAR_Group
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_R_Group : PO
+public class X_VAR_Group : PO
 {
-public X_R_Group (Context ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
-{
-/** if (VAR_Group_ID == 0)
-{
-SetName (null);
-SetR_Group_ID (0);
-}
- */
-}
-public X_R_Group (Ctx ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
+public X_VAR_Group (Context ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
 {
 /** if (VAR_Group_ID == 0)
 {
@@ -34,12 +25,21 @@ SetR_Group_ID (0);
 }
  */
 }
+public X_VAR_Group (Ctx ctx, int VAR_Group_ID, Trx trxName) : base (ctx, VAR_Group_ID, trxName)
+{
+/** if (VAR_Group_ID == 0)
+{
+SetName (null);
+SetR_Group_ID (0);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Group (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Group (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -47,7 +47,7 @@ public X_R_Group (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Group (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAR_Group (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,13 +55,13 @@ public X_R_Group (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 @param rs result set 
 @param trxName transaction
 */
-public X_R_Group (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAR_Group (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_R_Group()
+static X_VAR_Group()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -109,7 +109,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_R_Group[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAR_Group[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Description.

@@ -35,9 +35,9 @@ namespace VAdvantage.Acct
     public class Doc_MatchInv : Doc
     {
         //Invoice Line			
-        private MInvoiceLine _invoiceLine = null;
+        private MVABInvoiceLine _invoiceLine = null;
         // Material Receipt		
-        private MInOutLine _receiptLine = null;
+        private MVAMInvInOutLine _receiptLine = null;
 
         private ProductCost _pc = null;
 
@@ -70,13 +70,13 @@ namespace VAdvantage.Acct
             SetQty(matchInv.GetQty());
             //	Invoice Info
             int VAB_InvoiceLine_ID = matchInv.GetVAB_InvoiceLine_ID();
-            _invoiceLine = new MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
+            _invoiceLine = new MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
             //		BP for NotInvoicedReceipts
             int VAB_BusinessPartner_ID = _invoiceLine.GetParent().GetVAB_BusinessPartner_ID();
             SetVAB_BusinessPartner_ID(VAB_BusinessPartner_ID);
             //
             int VAM_Inv_InOutLine_ID = matchInv.GetVAM_Inv_InOutLine_ID();
-            _receiptLine = new MInOutLine(GetCtx(), VAM_Inv_InOutLine_ID, null);
+            _receiptLine = new MVAMInvInOutLine(GetCtx(), VAM_Inv_InOutLine_ID, null);
             //
             _pc = new ProductCost(GetCtx(),
                 GetVAM_Product_ID(), matchInv.GetVAM_PFeature_SetInstance_ID(), null);
@@ -149,12 +149,12 @@ namespace VAdvantage.Acct
             }
             dr.SetQty(GetQty());
             //	dr.setVAM_Locator_ID(_receiptLine.getVAM_Locator_ID());
-            //	MInOut receipt = _receiptLine.getParent();
+            //	MVAMInvInOut receipt = _receiptLine.getParent();
             //	dr.setLocationFromBPartner(receipt.getVAB_BPart_Location_ID(), true);	//  from Loc
             //	dr.setLocationFromLocator(_receiptLine.getVAM_Locator_ID(), false);		//  to Loc
             Decimal temp = dr.GetAcctBalance();
             //	Set AmtAcctCr/Dr from Receipt (sets also Project)
-            if (!dr.UpdateReverseLine(MInOut.Table_ID, 		//	Amt updated
+            if (!dr.UpdateReverseLine(MVAMInvInOut.Table_ID, 		//	Amt updated
                 _receiptLine.GetVAM_Inv_InOut_ID(), _receiptLine.GetVAM_Inv_InOutLine_ID(),
                 multiplier))
             {
@@ -196,7 +196,7 @@ namespace VAdvantage.Acct
                 cr.SetQty(Decimal.Negate(GetQty().Value));
                 temp = cr.GetAcctBalance();
                 //	Set AmtAcctCr/Dr from Invoice (sets also Project)
-                if (as1.IsAccrual() && !cr.UpdateReverseLine(MInvoice.Table_ID, 		//	Amt updated
+                if (as1.IsAccrual() && !cr.UpdateReverseLine(MVABInvoice.Table_ID, 		//	Amt updated
                     _invoiceLine.GetVAB_Invoice_ID(), _invoiceLine.GetVAB_InvoiceLine_ID(), multiplier))
                 {
                     _error = "Invoice not posted yet";
@@ -207,7 +207,7 @@ namespace VAdvantage.Acct
             }
             else	//	Cash Acct
             {
-                MInvoice invoice = _invoiceLine.GetParent();
+                MVABInvoice invoice = _invoiceLine.GetParent();
                 if (as1.GetVAB_Currency_ID() == invoice.GetVAB_Currency_ID())
                 {
                     LineNetAmt = MVABExchangeRate.Convert(GetCtx(), LineNetAmt,
@@ -244,7 +244,7 @@ namespace VAdvantage.Acct
             }
             log.Fine("IPV=" + ipv + "; Balance=" + fact.GetSourceBalance());
 
-            MInOut inOut = _receiptLine.GetParent();
+            MVAMInvInOut inOut = _receiptLine.GetParent();
             bool isReturnTrx = inOut.IsReturnTrx();
 
             if (!IsPosted())

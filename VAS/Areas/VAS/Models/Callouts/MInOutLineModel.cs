@@ -8,21 +8,21 @@ using VIS.DBase;
 
 namespace VIS.Models
 {
-    public class MInOutLineModel
+    public class MVAMInvInOutLineModel
     {
         /// <summary>
-        /// GetMInOutLine
+        /// GetMVAMInvInOutLine
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public Dictionary<string, string> GetMInOutLine(Ctx ctx, string fields)
+        public Dictionary<string, string> GetMVAMInvInOutLine(Ctx ctx, string fields)
         {
             string[] paramValue = fields.Split(',');
             //Assign parameter value
             int Orig_InOutLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MInOutLine ioLine = new MInOutLine(ctx, Orig_InOutLine_ID, null);
+            MVAMInvInOutLine ioLine = new MVAMInvInOutLine(ctx, Orig_InOutLine_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["VAM_Locator_ID"] = ioLine.GetVAM_Locator_ID().ToString();
             result["MovementQty"] = ioLine.GetMovementQty().ToString();

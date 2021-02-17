@@ -304,7 +304,7 @@ namespace VAdvantage.Process
                     MVABDunningExeLine line = lines[i];
                     if (line.GetVAB_Invoice_ID() != 0 && line.IsActive())
                     {
-                        MInvoice invoice = new MInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
+                        MVABInvoice invoice = new MVABInvoice(GetCtx(), line.GetVAB_Invoice_ID(), Get_TrxName());
                         invoice.SetInvoiceCollectionType(level.GetInvoiceCollectionType());
                         invoice.Save();
                     }

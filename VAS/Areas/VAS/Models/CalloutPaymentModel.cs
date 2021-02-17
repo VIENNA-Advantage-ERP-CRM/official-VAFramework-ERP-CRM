@@ -41,7 +41,7 @@ namespace VIS.Models
         public LcDetails GetLcDetail(int Invoice_ID, Ctx ctx)
         {
             LcDetails lc = new LcDetails();
-            MInvoice inv = new MInvoice(ctx, Invoice_ID, null);
+            MVABInvoice inv = new MVABInvoice(ctx, Invoice_ID, null);
             if (inv.GetVAB_Order_ID() > 0)
             {
                 MVABOrder order = new MVABOrder(ctx, inv.GetVAB_Order_ID(), null);

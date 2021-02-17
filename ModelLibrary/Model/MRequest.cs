@@ -504,11 +504,11 @@ namespace VAdvantage.Model
          * 	Get Request Group
          *	@return group
          */
-        public MGroup GetGroup()
+        public MVARGroup GetGroup()
         {
             if (GetR_Group_ID() == 0)
                 return null;
-            return MGroup.Get(GetCtx(), GetR_Group_ID());
+            return MVARGroup.Get(GetCtx(), GetR_Group_ID());
         }
 
         /**
@@ -517,7 +517,7 @@ namespace VAdvantage.Model
          */
         public String GetGroupName()
         {
-            MGroup grp = GetGroup();
+            MVARGroup grp = GetGroup();
             if (grp == null)
                 return "";
             return grp.GetName();
@@ -1610,8 +1610,8 @@ namespace VAdvantage.Model
                     SetM_ChangeRequest_ID(0);	//	not effective as in afterSave
                 else
                 {
-                    MGroup oldG = MGroup.Get(GetCtx(), oldID);
-                    MGroup newG = MGroup.Get(GetCtx(), GetR_Group_ID());
+                    MVARGroup oldG = MVARGroup.Get(GetCtx(), oldID);
+                    MVARGroup newG = MVARGroup.Get(GetCtx(), GetR_Group_ID());
                     if (oldG.GetVAM_BOM_ID() != newG.GetVAM_BOM_ID()
                         || oldG.GetM_ChangeNotice_ID() != newG.GetM_ChangeNotice_ID())
                     {

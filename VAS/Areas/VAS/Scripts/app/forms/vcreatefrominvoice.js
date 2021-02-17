@@ -2,7 +2,7 @@
 ; (function (VIS, $) {
 
     //form declaretion
-    function VCreateFromInvoice(tab) {
+    function VCreateFroMVABInvoice(tab) {
 
         var baseObj = this.$super;
         baseObj.constructor(tab);
@@ -13,7 +13,7 @@
         var windowNo = tab.getWindowNo();
 
         // create Log
-        this.log = VIS.Logging.VLogger.getVLogger("VCreateFromInvoice");
+        this.log = VIS.Logging.VLogger.getVLogger("VCreateFroMVABInvoice");
 
         function dynInit() {
             //DynInit
@@ -38,7 +38,7 @@
             var VAB_BusinessPartner_ID = baseObj.initBPartner(true);
             baseObj.vBPartner.setReadOnly(true);
             initBPDetails(VAB_BusinessPartner_ID);
-            baseObj.fromInvoice = true;
+            baseObj.froMVABInvoice = true;
             return true;
         }
 
@@ -170,9 +170,9 @@
         };
     };
 
-    VIS.Utility.inheritPrototype(VCreateFromInvoice, VIS.VCreateFrom);//Inherit from VCreateFrom
+    VIS.Utility.inheritPrototype(VCreateFroMVABInvoice, VIS.VCreateFrom);//Inherit from VCreateFrom
 
-    VCreateFromInvoice.prototype.saveInvoice = function () {
+    VCreateFroMVABInvoice.prototype.saveInvoice = function () {
         if (this.$super.dGrid == null) {
             return false;
         }
@@ -203,13 +203,13 @@
 
     //Added by Bharat for new search filters
 
-    VCreateFromInvoice.prototype.loadShipments = function (VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
+    VCreateFroMVABInvoice.prototype.loadShipments = function (VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
         var data = this.getShipmentsData(VIS.Env.getCtx(), VAM_Inv_InOut_ID, VAM_Product_ID, pNo);
         //this.$super.loadGrid(data);
     }
 
     // Create 
-    VCreateFromInvoice.prototype.getShipmentsData = function (ctx, VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
+    VCreateFroMVABInvoice.prototype.getShipmentsData = function (ctx, VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
 
         var data = [];
         var self = this;
@@ -254,7 +254,7 @@
                 recordID: self.$super.record_ID,
                 pageNo: pNo,
 
-                mInOutId: VAM_Inv_InOut_ID,
+                MVAMInvInOutId: VAM_Inv_InOut_ID,
                 isBaseLanguages: isBaseLangage,
                 mProductIDD: mProductIDs,
             },
@@ -284,7 +284,7 @@
 
 
 
-    //VCreateFromInvoice.prototype.getShipmentsData = function (ctx, VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
+    //VCreateFroMVABInvoice.prototype.getShipmentsData = function (ctx, VAM_Inv_InOut_ID, VAM_Product_ID, pNo) {
 
     //    var data = [];
     //    var self = this;
@@ -422,14 +422,14 @@
 
     //End
 
-    VCreateFromInvoice.prototype.loadShipment = function (VAM_Inv_InOut_ID) {
+    VCreateFroMVABInvoice.prototype.loadShipment = function (VAM_Inv_InOut_ID) {
         var data = this.getShipmentData(VIS.Env.getCtx(), VAM_Inv_InOut_ID);
         this.$super.loadGrid(data);
     }
 
 
     /// Unused Function
-    VCreateFromInvoice.prototype.getShipmentData = function (ctx, VAM_Inv_InOut_ID) {
+    VCreateFroMVABInvoice.prototype.getShipmentData = function (ctx, VAM_Inv_InOut_ID) {
 
         var data = [];
 
@@ -447,7 +447,7 @@
             url: VIS.Application.contextUrl + "VCreateFrom/GetShipmentDatas",
             type: 'POST',
             async: false,
-            data: { MInOutIDs: VAM_Inv_InOut_ID, isBaseLanguageUmos: isBaseLanguageUmo },
+            data: { MVAMInvInOutIDs: VAM_Inv_InOut_ID, isBaseLanguageUmos: isBaseLanguageUmo },
             success: function (data) {
                 var ress = JSON.parse(data);
                 if (ress && ress.length > 0) {
@@ -486,7 +486,7 @@
 
 
 
-    //VCreateFromInvoice.prototype.getShipmentData = function (ctx, VAM_Inv_InOut_ID) {
+    //VCreateFroMVABInvoice.prototype.getShipmentData = function (ctx, VAM_Inv_InOut_ID) {
 
     //    var data = [];
     //    var sql = ("SELECT " // QtyEntered                
@@ -548,7 +548,7 @@
     //    return data;
     //}
 
-    VCreateFromInvoice.prototype.saveData = function (model, selectedItems, VAB_Order_ID, VAM_Inv_InOut_id, VAB_Invoice_ID) {
+    VCreateFroMVABInvoice.prototype.saveData = function (model, selectedItems, VAB_Order_ID, VAM_Inv_InOut_id, VAB_Invoice_ID) {
         var obj = this;
         $.ajax({
             type: "POST",
@@ -583,13 +583,13 @@
     }
 
     //dispose call
-    VCreateFromInvoice.prototype.dispose = function () {
+    VCreateFroMVABInvoice.prototype.dispose = function () {
         if (this.disposeComponent != null)
             this.disposeComponent();
     };
 
     //Load form into VIS
-    VIS.VCreateFromInvoice = VCreateFromInvoice;
+    VIS.VCreateFroMVABInvoice = VCreateFroMVABInvoice;
 
 })(VIS, jQuery);
 

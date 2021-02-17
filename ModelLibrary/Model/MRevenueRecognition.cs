@@ -188,7 +188,7 @@ namespace VAdvantage.Model
         /// <param name="C_RevenueRecognition_ID">Revenue Recognition</param>
         /// <param name="Invoice">Invoice</param>
         /// <returns>true, when success</returns>
-        public static bool CreateRevenueRecognitionPlan(int VAB_InvoiceLine_ID, int C_RevenueRecognition_ID, MInvoice Invoice)
+        public static bool CreateRevenueRecognitionPlan(int VAB_InvoiceLine_ID, int C_RevenueRecognition_ID, MVABInvoice Invoice)
         {
             try
             {
@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                 int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetVAF_Client_ID(), Invoice.GetVAF_Org_ID());
                 int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE VAB_AccountBook_ID=" + defaultAccSchemaOrg_ID));
 
-                MInvoiceLine invoiceLine = new MInvoiceLine(Invoice.GetCtx(), VAB_InvoiceLine_ID, Invoice.Get_Trx());
+                MVABInvoiceLine invoiceLine = new MVABInvoiceLine(Invoice.GetCtx(), VAB_InvoiceLine_ID, Invoice.Get_Trx());
                 RecognizationDate = Util.GetValueOfDateTime(invoiceLine.Get_Value("RevenueStartDate"));
 
                 // precision to be handle based on std precision defined on acct schema

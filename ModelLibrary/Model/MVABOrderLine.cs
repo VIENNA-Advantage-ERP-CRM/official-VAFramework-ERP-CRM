@@ -934,7 +934,7 @@ namespace VAdvantage.Model
             }
             catch (Exception ex)
             {
-                // MessageBox.Show("MInvoiceLine--SetTaxAmt");
+                // MessageBox.Show("MVABInvoiceLine--SetTaxAmt");
             }
         }
 
@@ -3294,7 +3294,7 @@ namespace VAdvantage.Model
                 int inOutLine_ID = GetOrig_InOutLine_ID();
                 if (inOutLine_ID != 0)
                 {
-                    MInOutLine inOutLine = new MInOutLine(GetCtx(), inOutLine_ID, null);
+                    MVAMInvInOutLine inOutLine = new MVAMInvInOutLine(GetCtx(), inOutLine_ID, null);
                     Decimal shippedQty = inOutLine.GetMovementQty();
                     qtyOrdered = GetQtyOrdered();
                     if (shippedQty.CompareTo(qtyOrdered) < 0)
@@ -3693,7 +3693,7 @@ namespace VAdvantage.Model
         /// 	Set Original OrderLine for RMA
         /// 	SOTrx should be set.
         /// </summary>
-        /// <param name="origOrderLine"> MInOutLine</param>
+        /// <param name="origOrderLine"> MVAMInvInOutLine</param>
         public void SetOrigOrderLine(MVABOrderLine origOrderLine)
         {
             if (origOrderLine == null || origOrderLine.Get_ID() == 0)
@@ -3741,8 +3741,8 @@ namespace VAdvantage.Model
         /// 	Set Original Shipment Line for RMA
         /// 	SOTrx should be set.
         /// </summary>
-        /// <param name="Orig_InOutLine">MInOutLine</param>
-        public void SetOrigInOutLine(MInOutLine Orig_InOutLine)
+        /// <param name="Orig_InOutLine">MVAMInvInOutLine</param>
+        public void SetOrigInOutLine(MVAMInvInOutLine Orig_InOutLine)
         {
             if (Orig_InOutLine == null || Orig_InOutLine.Get_ID() == 0)
                 return;
@@ -3772,7 +3772,7 @@ namespace VAdvantage.Model
                 return;
 
             //		Get Details
-            MInOutLine ioLine = new MInOutLine(GetCtx(), Orig_InOutLine_ID, null);
+            MVAMInvInOutLine ioLine = new MVAMInvInOutLine(GetCtx(), Orig_InOutLine_ID, null);
             if (ioLine.Get_ID() != 0)
                 SetOrigInOutLine(ioLine);
             SetQty(windowNo, "Orig_InOutLine_ID");
@@ -4292,7 +4292,7 @@ namespace VAdvantage.Model
                 else
                 {
                     ////////////////////////////////////////////////////////////
-                    MInOut origInOut = new MInOut(GetCtx(), order.GetOrig_InOut_ID(), Get_TrxName());
+                    MVAMInvInOut origInOut = new MVAMInvInOut(GetCtx(), order.GetOrig_InOut_ID(), Get_TrxName());
                     MReturnPolicy rpolicy = new MReturnPolicy(GetCtx(), order.GetVAM_ReturnRule_ID(), Get_TrxName());
 
                     log.Fine("RMA Date : " + order.GetDateOrdered() + " Shipment Date : " + origInOut.GetMovementDate());
@@ -4314,7 +4314,7 @@ namespace VAdvantage.Model
 
                 //pratap - Check if Qty > Movement Qty 4/12/15
                 //compare movement qty with ordered qty for UOM handling
-                MInOutLine origInOutLine = new MInOutLine(GetCtx(), GetOrig_InOutLine_ID(), Get_TrxName());
+                MVAMInvInOutLine origInOutLine = new MVAMInvInOutLine(GetCtx(), GetOrig_InOutLine_ID(), Get_TrxName());
                 if (GetQtyOrdered().CompareTo(origInOutLine.GetMovementQty()) > 0)
                 {
                     log.SaveError("VIS_ReturnQtyMoreThnOrder", "");

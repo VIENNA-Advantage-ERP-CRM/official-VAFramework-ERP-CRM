@@ -261,7 +261,7 @@ namespace VIS.Controllers
 
                 //Assign parameter value
                 inOutLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
-                MInOutLine inOutLine = new MInOutLine(ctx, inOutLine_ID, null);
+                MVAMInvInOutLine inOutLine = new MVAMInvInOutLine(ctx, inOutLine_ID, null);
                 var retValue = inOutLine.GetMovementQty();
 
 

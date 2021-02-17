@@ -165,7 +165,7 @@ namespace VIS.Models
             /********************
              *  Shipment
              */
-            else if (VAF_TableView_ID == MInOut.Table_ID)
+            else if (VAF_TableView_ID == MVAMInvInOut.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -177,7 +177,7 @@ namespace VIS.Models
             /********************
              *  Invoice
              */
-            else if (VAF_TableView_ID == MInvoice.Table_ID)
+            else if (VAF_TableView_ID == MVABInvoice.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -237,16 +237,16 @@ namespace VIS.Models
              *  Inventory Movement, Physical Inventory
              */
             else if (VAF_TableView_ID == MMovement.Table_ID
-                || VAF_TableView_ID == MInventory.Table_ID)
+                || VAF_TableView_ID == MVAMInventory.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
                 {
                     // SI_0622 : not to show VOID and REVERSE_CORRECT action on Physical Inventory
                     bool isPhysicalInventory = false;
-                    if (VAF_TableView_ID == MInventory.Table_ID)
+                    if (VAF_TableView_ID == MVAMInventory.Table_ID)
                     {
-                        MInventory inventory = MInventory.Get(ctx, Record_ID);
+                        MVAMInventory inventory = MVAMInventory.Get(ctx, Record_ID);
                         isPhysicalInventory = !inventory.IsInternalUse();
                     }
                     if (!isPhysicalInventory)

@@ -29,12 +29,12 @@ namespace ModelLibrary.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_IncomeTax(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MIncomeTax), idr, null, trxName)
+            : base(ass, typeof(MVABIncomeTax), idr, null, trxName)
         {
 
         }
         public Doc_IncomeTax(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MIncomeTax), dr, null, trxName)
+            : base(ass, typeof(MVABIncomeTax), dr, null, trxName)
         {
 
         }
@@ -45,20 +45,20 @@ namespace ModelLibrary.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MIncomeTax tax = (MIncomeTax)GetPO();
+            MVABIncomeTax tax = (MVABIncomeTax)GetPO();
             SetDateDoc(tax.GetDateTrx());            
             _lines = LoadLines(tax);
             log.Fine("Lines=" + _lines.Length);
             return null;
         }
 
-        private DocLine[] LoadLines(MIncomeTax tax)
+        private DocLine[] LoadLines(MVABIncomeTax tax)
         {
             List<DocLine> list = new List<DocLine>();
-            MIncomeTaxLines[] lines = tax.GetLines(false);            
+            MVABIncomeTaxLines[] lines = tax.GetLines(false);            
             for (int i = 0; i < lines.Length; i++)
             {
-                MIncomeTaxLines line = lines[i];
+                MVABIncomeTaxLines line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 //docLine.SetAmount(line.GetIncomeTaxAmount());           
 
@@ -120,7 +120,7 @@ namespace ModelLibrary.Acct
                 for (int i = 0; i < _lines.Length; i++)
                 {
                     DocLine dline = _lines[i];
-                    MIncomeTaxLines line = new MIncomeTaxLines(GetCtx(), dline.Get_ID(), null);
+                    MVABIncomeTaxLines line = new MVABIncomeTaxLines(GetCtx(), dline.Get_ID(), null);
                     amount = Util.GetValueOfDecimal(line.GetIncomeTaxAmount());
                     if (amount != Env.ZERO)
                     {

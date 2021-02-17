@@ -51,12 +51,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public DoVAB_Invoice(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MInvoice), idr, null, trxName)
+            : base(ass, typeof(MVABInvoice), idr, null, trxName)
         {
 
         }
         public DoVAB_Invoice(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MInvoice), dr, null, trxName)
+            : base(ass, typeof(MVABInvoice), dr, null, trxName)
         {
 
         }
@@ -67,7 +67,7 @@ namespace VAdvantage.Acct
         /// <returns>error message or null</returns>
         public override String LoadDocumentDetails()
         {
-            MInvoice invoice = (MInvoice)GetPO();
+            MVABInvoice invoice = (MVABInvoice)GetPO();
             SetDateDoc(invoice.GetDateInvoiced());
             SetIsTaxIncluded(invoice.IsTaxIncluded());
             //	Amounts
@@ -134,14 +134,14 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="invoice">invoice</param>
         /// <returns>DocLine Array</returns>
-        private DocLine[] LoadLines(MInvoice invoice)
+        private DocLine[] LoadLines(MVABInvoice invoice)
         {
             List<DocLine> list = new List<DocLine>();
             //
-            MInvoiceLine[] lines = invoice.GetLines(false);
+            MVABInvoiceLine[] lines = invoice.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MInvoiceLine line = lines[i];
+                MVABInvoiceLine line = lines[i];
                 if (line.IsDescription())
                 {
                     continue;
@@ -1427,7 +1427,7 @@ namespace VAdvantage.Acct
                 totalBase += Convert.ToDouble(lcas[i].GetBase());//.doubleValue();
 
             //	Create New
-            MInvoiceLine il = new MInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, GetTrxName());
+            MVABInvoiceLine il = new MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, GetTrxName());
             for (int i = 0; i < lcas.Length; i++)
             {
                 MLandedCostAllocation lca = lcas[i];

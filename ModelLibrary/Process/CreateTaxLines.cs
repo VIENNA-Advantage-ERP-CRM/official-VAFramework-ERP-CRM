@@ -17,12 +17,12 @@ namespace VAdvantage.Process
         Decimal rate = 0, taxAmount = 0;
         int acct_Comb = 0;
         DataSet ds = null;
-        MIncomeTax tax = null;
-        MIncomeTaxLines tLine = null;
+        MVABIncomeTax tax = null;
+        MVABIncomeTaxLines tLine = null;
         protected override string DoIt()
         {
             DB.ExecuteQuery("DELETE FROM VAB_IncomeTaxLines WHERE VAB_IncomeTax_ID=" + GetRecord_ID());
-            tax = new MIncomeTax(GetCtx(), GetRecord_ID(), Get_Trx());
+            tax = new MVABIncomeTax(GetCtx(), GetRecord_ID(), Get_Trx());
             //qry = "SELECT ct.Rate,ta.T_Due_Acct,ev.value,ev.name FROM VAB_IncomeTax tx INNER JOIN VAB_TaxRate ct ON (tx.VAB_TaxRate_ID=ct.VAB_TaxRate_ID) INNER JOIN VAB_Tax_Acct ta ON (tx.VAB_TaxRate_ID = ta.VAB_TaxRate_ID) inner join VAB_Acct_ValidParameter ac on(ta.T_Due_Acct=ac.VAB_Acct_ValidParameter_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.VAB_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
             qry = "SELECT ct.Rate,ta.IncomeSummary_Acct,ev.value,ev.name FROM VAB_IncomeTax tx INNER JOIN VAB_TaxRate ct ON (tx.VAB_TaxRate_ID=ct.VAB_TaxRate_ID) INNER JOIN VAB_AccountBook_GL ta ON (tx.VAF_Client_ID = ta.VAF_Client_ID) inner join VAB_Acct_ValidParameter ac on(ta.IncomeSummary_Acct=ac.VAB_Acct_ValidParameter_id) inner join VAB_Acct_Element ev on(ac.Account_ID=ev.VAB_Acct_Element_id) WHERE tx.VAB_IncomeTax_ID=" + GetRecord_ID() + " and tx.vaf_client_id=" + GetVAF_Client_ID();
             ds=DB.ExecuteDataset(qry,null,Get_Trx());
@@ -33,7 +33,7 @@ namespace VAdvantage.Process
                     rate = Util.GetValueOfDecimal(ds.Tables[0].Rows[0]["Rate"]);
                     taxAmount = tax.GetProfitBeforeTax() * rate / 100;
                     acct_Comb = Util.GetValueOfInt(ds.Tables[0].Rows[0]["IncomeSummary_Acct"]);
-                    tLine = new MIncomeTaxLines(GetCtx(), 0, Get_Trx());
+                    tLine = new MVABIncomeTaxLines(GetCtx(), 0, Get_Trx());
                     tLine.SetVAF_Client_ID(GetVAF_Client_ID());
                     tLine.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                     tLine.SetVAB_IncomeTax_ID(GetRecord_ID());

@@ -431,7 +431,7 @@ namespace VAdvantage.Model
                 string sql = "";
                 sql = "SELECT ISDISALLOWNEGATIVEINV FROM VAM_Warehouse WHERE VAM_Warehouse_ID = " + Util.GetValueOfInt(GetDTD001_MWarehouseSource_ID());
                 string disallow = Util.GetValueOfString(DB.ExecuteScalar(sql, null, Get_TrxName()));
-                int[] movementLine = MInOutLine.GetAllIDs("VAM_InvTrf_Line", "VAM_InventoryTransfer_ID = " + GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                int[] movementLine = MVAMInvInOutLine.GetAllIDs("VAM_InvTrf_Line", "VAM_InventoryTransfer_ID = " + GetVAM_InventoryTransfer_ID(), Get_TrxName());
                 if (disallow.ToUpper() == "Y")
                 {
                     int VAM_Locator_id = 0;
@@ -442,7 +442,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < movementLine.Length; i++)
                     {
                         MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
-                        //MInOutLine iol = new MInOutLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        //MVAMInvInOutLine iol = new MVAMInvInOutLine(Env.GetCtx(), movementLine[i], Get_TrxName());
                         VAM_Locator_id = Util.GetValueOfInt(mmLine.GetVAM_Locator_ID());
                         VAM_Product_id = Util.GetValueOfInt(mmLine.GetVAM_Product_ID());
 
@@ -2342,8 +2342,8 @@ namespace VAdvantage.Model
             string sql = "";
             DataSet ds = new DataSet();
             MTransaction trx = null;
-            MInventoryLine inventoryLine = null;
-            MInventory inventory = null;
+            MVAMInventoryLine inventoryLine = null;
+            MVAMInventory inventory = null;
 
             try
             {
@@ -2378,8 +2378,8 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
                                     Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), Get_TrxName());         // Trx used to handle query stuck problem
+                                inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), Get_TrxName());         // Trx used to handle query stuck problem
                                 if (!inventory.IsInternalUse())
                                 {
                                     //break;
@@ -2464,8 +2464,8 @@ namespace VAdvantage.Model
             string errorMessage = null;
             MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
             MTransaction trx = null;
-            MInventoryLine inventoryLine = null;
-            MInventory inventory = null;
+            MVAMInventoryLine inventoryLine = null;
+            MVAMInventory inventory = null;
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
             DataSet ds = new DataSet();
@@ -2500,8 +2500,8 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
+                                inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                 if (!inventory.IsInternalUse())
                                 {
                                     if (inventoryLine.GetVAM_ProductContainer_ID() == containerId)

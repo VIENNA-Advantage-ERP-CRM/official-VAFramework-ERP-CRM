@@ -81,12 +81,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new ArgumentException("@NotFound@ @VAM_Warehouse_ID@");
             }
             //
-            MInvoice invoice = new MInvoice(GetCtx(), _VAB_Invoice_ID, Get_Trx());
+            MVABInvoice invoice = new MVABInvoice(GetCtx(), _VAB_Invoice_ID, Get_Trx());
             if (invoice.Get_ID() == 0)
             {
                 throw new ArgumentException("@NotFound@ @VAB_Invoice_ID@");
             }
-            if (!MInvoice.DOCSTATUS_Completed.Equals(invoice.GetDocStatus()))
+            if (!MVABInvoice.DOCSTATUS_Completed.Equals(invoice.GetDocStatus()))
             {
                 throw new ArgumentException("@InvoiceCreateDocNotCompleted@");
             }
@@ -99,11 +99,11 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //*****************************Vikas  1 Dec 2015  *********************************
             //Case Msg Not Showing Proper
-            MInOut ship = null;
+            MVAMInvInOut ship = null;
             MVABOrder ord = new MVABOrder(GetCtx(), invoice.GetVAB_Order_ID(), null);
             if (ord.GetVAB_BusinessPartner_ID() > 0)
             {
-                ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
+                ship = new MVAMInvInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
                 // Change by Mohit Asked by Amardeep sir 02/03/2016
                 ship.SetPOReference(invoice.GetPOReference());
                 // End
@@ -119,17 +119,17 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //throw new ArgumentException("@InvoiceNotLinkedWithPO@");
             }
             /*
-             MInOut ship = new MInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
+             MVAMInvInOut ship = new MVAMInvInOut(invoice, _VAB_DocTypes_ID, null, _VAM_Warehouse_ID);
                if (!ship.Save())
                {
                    throw new ArgumentException("@SaveError@ Receipt");
                }
             */
             //************************END*****************************************
-            MInvoiceLine[] invoiceLines = invoice.GetLines(false);
+            MVABInvoiceLine[] invoiceLines = invoice.GetLines(false);
             for (int i = 0; i < invoiceLines.Length; i++)
             {
-                MInvoiceLine invoiceLine = invoiceLines[i];
+                MVABInvoiceLine invoiceLine = invoiceLines[i];
 
                 MProduct product = invoiceLine.GetProduct();
                 //	Nothing to Deliver
@@ -141,7 +141,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     continue;
                 }
                 
-                MInOutLine sLine = new MInOutLine(ship);
+                MVAMInvInOutLine sLine = new MVAMInvInOutLine(ship);
                 //JID_1679 Generate Receipt from Invoice(Vendor) for remaining quantity 
                  decimal movementqty = 0;
                 if (invoiceLine.GetVAB_OrderLine_ID() != 0)

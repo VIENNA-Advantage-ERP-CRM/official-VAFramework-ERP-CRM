@@ -68,7 +68,7 @@ namespace VAdvantage.Model
         }
 
         /**	Invoice					*/
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
 
         /**
          * 	Set Invoice Info
@@ -216,10 +216,10 @@ namespace VAdvantage.Model
          * 	Get Invoice
          *	@return invoice
          */
-        public MInvoice GetInvoice()
+        public MVABInvoice GetInvoice()
         {
             if (_invoice == null)
-                _invoice = new MInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                _invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
             return _invoice;
         }
 

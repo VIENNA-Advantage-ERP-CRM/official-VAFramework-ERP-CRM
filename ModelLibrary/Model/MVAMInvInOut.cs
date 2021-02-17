@@ -1,7 +1,7 @@
 ﻿
 /********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInOut
+ * Class Name     : MVAMInvInOut
  * Purpose        : Class linked with the shipment,invoice window
  * Class Used     : X_VAM_Inv_InOut, DocAction
  * Chronological    Development
@@ -28,7 +28,7 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MInOut : X_VAM_Inv_InOut, DocAction
+    public class MVAMInvInOut : X_VAM_Inv_InOut, DocAction
     {
         #region variable
         //	Process Message 			
@@ -36,9 +36,9 @@ namespace VAdvantage.Model
         //	Just Prepared Flag			
         private bool _justPrepared = false;
         //	Lines					
-        private MInOutLine[] _lines = null;
+        private MVAMInvInOutLine[] _lines = null;
         // Confirmations			
-        private MInOutConfirm[] _confirms = null;
+        private MVAMInvInOutConfirm[] _confirms = null;
         // BPartner				
         private MVABBusinessPartner _partner = null;
         // Reversal Flag		
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         string conversionNotFoundInOut1 = "";
         string conversionNotFoundInvoice = "";
 
-        private static VLogger _log = VLogger.GetVLogger(typeof(MInOut).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInvInOut).FullName);
 
         private int tableId1 = 0;
         private int tableId = 0;
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_Inv_InOut_ID"></param>
         /// <param name="trxName">rx name</param>
-        public MInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
+        public MVAMInvInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
             : base(ctx, VAM_Inv_InOut_ID, trxName)
         {
 
@@ -121,7 +121,7 @@ namespace VAdvantage.Model
         *	@param trxName transaction  
         *	@return Shipment or null
         */
-        public static MInOut CreateFrom(MVABOrder order, DateTime? movementDate,
+        public static MVAMInvInOut CreateFrom(MVABOrder order, DateTime? movementDate,
             bool forceDelivery, bool allAttributeInstances, DateTime? minGuaranteeDate,
             bool complete, Trx trxName)
         {
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
             }
 
             //	Create Meader
-            MInOut retValue = new MInOut(order, 0, movementDate);
+            MVAMInvInOut retValue = new MVAMInvInOut(order, 0, movementDate);
             retValue.SetDocAction(complete ? DOCACTION_Complete : DOCACTION_Prepare);
 
             //	Check if we can create the lines
@@ -193,7 +193,7 @@ namespace VAdvantage.Model
                     Decimal lineQty = storages[ll].GetQtyOnHand();
                     if (lineQty.CompareTo(qty) > 0)
                         lineQty = qty;
-                    MInOutLine line = new MInOutLine(retValue);
+                    MVAMInvInOutLine line = new MVAMInvInOutLine(retValue);
                     line.SetOrderLine(oLines[i], storages[ll].GetVAM_Locator_ID(),
                         order.IsSOTrx() ? lineQty : Env.ZERO);
                     line.SetQty(lineQty);	//	Correct UOM for QtyEntered
@@ -233,7 +233,7 @@ namespace VAdvantage.Model
         *	@param trxName transaction  
         *	@return Shipment or null
         */
-        public static MInOut CreateShipment(MVABOrder order, MInOut inout, DateTime? movementDate, bool forceDelivery,
+        public static MVAMInvInOut CreateShipment(MVABOrder order, MVAMInvInOut inout, DateTime? movementDate, bool forceDelivery,
                     bool allAttributeInstances, int VAM_Warehouse_ID, DateTime? minGuaranteeDate, Trx trxName)
         {
             if (order == null)
@@ -242,11 +242,11 @@ namespace VAdvantage.Model
             }
 
             //	Create Meader
-            MInOut retValue = new MInOut(order, 0, movementDate);
+            MVAMInvInOut retValue = new MVAMInvInOut(order, 0, movementDate);
             retValue.SetVAM_Warehouse_ID(VAM_Warehouse_ID);
             retValue.SetIsDropShip(true);
             //	Check if we can create the lines
-            MInOutLine[] iolines = inout.GetLines(false);
+            MVAMInvInOutLine[] iolines = inout.GetLines(false);
 
             //MVABOrderLine[] oLines = order.GetLines('
             for (int i = 0; i < iolines.Length; i++)
@@ -302,7 +302,7 @@ namespace VAdvantage.Model
                     Decimal lineQty = storages[ll].GetQtyOnHand();
                     if (lineQty.CompareTo(qty) > 0)
                         lineQty = qty;
-                    MInOutLine line = new MInOutLine(retValue);
+                    MVAMInvInOutLine line = new MVAMInvInOutLine(retValue);
                     line.SetIsDropShip(true);
 
                     line.SetOrderLine(olines, storages[ll].GetVAM_Locator_ID(),
@@ -344,11 +344,11 @@ namespace VAdvantage.Model
          * 	@param setOrder set the order link
          *	@return Shipment
          */
-        public static MInOut CopyFrom(MInOut from, DateTime? dateDoc,
+        public static MVAMInvInOut CopyFrom(MVAMInvInOut from, DateTime? dateDoc,
             int VAB_DocTypes_ID, bool isSOTrx, bool isReturnTrx,
             bool counter, Trx trxName, bool setOrder)
         {
-            MInOut to = new MInOut(from.GetCtx(), 0, null);
+            MVAMInvInOut to = new MVAMInvInOut(from.GetCtx(), 0, null);
             to.Set_TrxName(trxName);
             CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("VAM_Inv_InOut_ID", I_ZERO);
@@ -405,7 +405,7 @@ namespace VAdvantage.Model
                 }
                 if (from.GetVAB_Invoice_ID() != 0)
                 {
-                    MInvoice peer = new MInvoice(from.GetCtx(), from.GetVAB_Invoice_ID(), from.Get_TrxName());
+                    MVABInvoice peer = new MVABInvoice(from.GetCtx(), from.GetVAB_Invoice_ID(), from.Get_TrxName());
                     if (peer.GetRef_Invoice_ID() != 0)
                         to.SetVAB_Invoice_ID(peer.GetRef_Invoice_ID());
                 }
@@ -469,7 +469,7 @@ namespace VAdvantage.Model
          *  @param dr result set record
          *	@param trxName transaction  
          */
-        public MInOut(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvInOut(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -481,7 +481,7 @@ namespace VAdvantage.Model
          *	@param movementDate optional movement date (default today)
          *	@param VAB_DocTypesShipment_ID document type or 0
          */
-        public MInOut(MVABOrder order, int VAB_DocTypesShipment_ID, DateTime? movementDate)
+        public MVAMInvInOut(MVABOrder order, int VAB_DocTypesShipment_ID, DateTime? movementDate)
             : this(order.GetCtx(), 0, order.Get_TrxName())
         {
 
@@ -511,7 +511,7 @@ namespace VAdvantage.Model
          *	@param movementDate optional movement date (default today)
          *	@param VAM_Warehouse_ID warehouse
          */
-        public MInOut(MInvoice invoice, int VAB_DocTypesShipment_ID,
+        public MVAMInvInOut(MVABInvoice invoice, int VAB_DocTypesShipment_ID,
             DateTime? movementDate, int VAM_Warehouse_ID)
             : this(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
@@ -579,7 +579,7 @@ namespace VAdvantage.Model
          *	@param movementDate optional movement date (default today)
          *	@param VAB_DocTypesShipment_ID document type or 0
          */
-        public MInOut(MInOut original, int VAB_DocTypesShipment_ID, DateTime? movementDate)
+        public MVAMInvInOut(MVAMInvInOut original, int VAB_DocTypesShipment_ID, DateTime? movementDate)
             : this(original.GetCtx(), 0, original.Get_TrxName())
         {
 
@@ -656,7 +656,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MInOut[")
+            StringBuilder sb = new StringBuilder("MVAMInvInOut[")
                 .Append(Get_ID()).Append("-").Append(GetDocumentNo())
                 .Append(",DocStatus=").Append(GetDocStatus())
                 .Append("]");
@@ -732,11 +732,11 @@ namespace VAdvantage.Model
          * 	@param requery refresh from db
          * 	@return lines
          */
-        public MInOutLine[] GetLines(bool requery)
+        public MVAMInvInOutLine[] GetLines(bool requery)
         {
             if (_lines != null && !requery)
                 return _lines;
-            List<MInOutLine> list = new List<MInOutLine>();
+            List<MVAMInvInOutLine> list = new List<MVAMInvInOutLine>();
             String sql = "SELECT * FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOut_ID=" + GetVAM_Inv_InOut_ID() + " ORDER BY Line";
             DataSet ds = null;
             DataRow dr = null;
@@ -746,7 +746,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     dr = ds.Tables[0].Rows[i];
-                    list.Add(new MInOutLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMInvInOutLine(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -759,7 +759,7 @@ namespace VAdvantage.Model
             //
             if (list == null)
                 return null;
-            _lines = new MInOutLine[list.Count];
+            _lines = new MVAMInvInOutLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }
@@ -768,7 +768,7 @@ namespace VAdvantage.Model
          * 	Get Lines of Shipment
          * 	@return lines
          */
-        public MInOutLine[] GetLines()
+        public MVAMInvInOutLine[] GetLines()
         {
             return GetLines(false);
         }
@@ -778,12 +778,12 @@ namespace VAdvantage.Model
          * 	@param requery requery
          *	@return array of Confirmations
          */
-        public MInOutConfirm[] GetConfirmations(bool requery)
+        public MVAMInvInOutConfirm[] GetConfirmations(bool requery)
         {
             if (_confirms != null && !requery)
                 return _confirms;
 
-            List<MInOutConfirm> list = new List<MInOutConfirm>();
+            List<MVAMInvInOutConfirm> list = new List<MVAMInvInOutConfirm>();
             String sql = "SELECT * FROM VAM_Inv_InOutConfirm WHERE VAM_Inv_InOut_ID=" + GetVAM_Inv_InOut_ID();
             DataTable dt = null;
             IDataReader idr = null;
@@ -795,7 +795,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MInOutConfirm(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMInvInOutConfirm(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -810,7 +810,7 @@ namespace VAdvantage.Model
             {
                 dt = null;
             }
-            _confirms = new MInOutConfirm[list.Count];
+            _confirms = new MVAMInvInOutConfirm[list.Count];
             _confirms = list.ToArray();
             return _confirms;
         }
@@ -845,16 +845,16 @@ namespace VAdvantage.Model
                 //pstmt.setInt(1, getVAB_Order_ID());
                 //pstmt.setInt(2, getVAM_Inv_InOut_ID());
                 //rs = pstmt.executeQuery();
-                ArrayList serviceLines = new ArrayList();// ArrayList<MInOutLine> serviceLines = new ArrayList<MInOutLine>();
+                ArrayList serviceLines = new ArrayList();// ArrayList<MVAMInvInOutLine> serviceLines = new ArrayList<MVAMInvInOutLine>();
                 ////while (rs.next())
                 ////{
-                ////    //list.add(new MInOutLine(getCtx(), rs, get_Trx()));
+                ////    //list.add(new MVAMInvInOutLine(getCtx(), rs, get_Trx()));
                 while (idr.Read())
                 {
                     // int VAB_OrderLine_ID = rs.getInt(1);
                     int VAB_OrderLine_ID = VAdvantage.Utility.Util.GetValueOfInt(idr[0]);
                     MVABOrderLine oLine = new MVABOrderLine(GetCtx(), VAB_OrderLine_ID, Get_TrxName());
-                    MInOutLine line = new MInOutLine(this);
+                    MVAMInvInOutLine line = new MVAMInvInOutLine(this);
                     line.SetOrderLine(oLine, 0, Env.ZERO);
                     // BigDecimal qty = oLine.getQtyOrdered().subtract(oLine.getQtyDelivered());
                     Decimal qty = Decimal.Subtract(oLine.GetQtyOrdered(), (oLine.GetQtyDelivered()));
@@ -923,16 +923,16 @@ namespace VAdvantage.Model
          *	@param setOrder set order link
          *	@return number of lines copied
          */
-        public int CopyLinesFrom(MInOut otherShipment, bool counter, bool setOrder)
+        public int CopyLinesFrom(MVAMInvInOut otherShipment, bool counter, bool setOrder)
         {
             if (IsProcessed() || IsPosted() || otherShipment == null)
                 return 0;
-            MInOutLine[] fromLines = otherShipment.GetLines(false);
+            MVAMInvInOutLine[] fromLines = otherShipment.GetLines(false);
             int count = 0;
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MInOutLine line = new MInOutLine(this);
-                MInOutLine fromLine = fromLines[i];
+                MVAMInvInOutLine line = new MVAMInvInOutLine(this);
+                MVAMInvInOutLine fromLine = fromLines[i];
                 line.Set_TrxName(Get_TrxName());
                 if (counter)	//	header
                     PO.CopyValues(fromLine, line, GetVAF_Client_ID(), GetVAF_Org_ID());
@@ -1444,11 +1444,11 @@ namespace VAdvantage.Model
             {
                 bool havePick = false;
                 bool haveShip = false;
-                MInOutConfirm[] confirmations = GetConfirmations(false);
+                MVAMInvInOutConfirm[] confirmations = GetConfirmations(false);
                 for (int i = 0; i < confirmations.Length; i++)
                 {
-                    MInOutConfirm confirm = confirmations[i];
-                    if (MInOutConfirm.CONFIRMTYPE_PickQAConfirm.Equals(confirm.GetConfirmType()))
+                    MVAMInvInOutConfirm confirm = confirmations[i];
+                    if (MVAMInvInOutConfirm.CONFIRMTYPE_PickQAConfirm.Equals(confirm.GetConfirmType()))
                     {
                         if (!confirm.IsProcessed())		//	wait until done
                         {
@@ -1457,32 +1457,32 @@ namespace VAdvantage.Model
                         }
                         havePick = true;
                     }
-                    else if (MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm.Equals(confirm.GetConfirmType()))
+                    else if (MVAMInvInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm.Equals(confirm.GetConfirmType()))
                         haveShip = true;
                 }
                 //	Create Pick
                 if (!havePick)
                 {
-                    MInOutConfirm.Create(this, MInOutConfirm.CONFIRMTYPE_PickQAConfirm, false);
+                    MVAMInvInOutConfirm.Create(this, MVAMInvInOutConfirm.CONFIRMTYPE_PickQAConfirm, false);
                     return;
                 }
                 //	Create Ship
                 if (!haveShip)
                 {
-                    MInOutConfirm.Create(this, MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, false);
+                    MVAMInvInOutConfirm.Create(this, MVAMInvInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, false);
                     return;
                 }
                 return;
             }
             //	Create just one
             if (pick)
-                MInOutConfirm.Create(this, MInOutConfirm.CONFIRMTYPE_PickQAConfirm, true);
+                MVAMInvInOutConfirm.Create(this, MVAMInvInOutConfirm.CONFIRMTYPE_PickQAConfirm, true);
             else if (ship)
             {
                 if (!checkDocStatus)
-                    MInOutConfirm.Create(this, MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, true);
+                    MVAMInvInOutConfirm.Create(this, MVAMInvInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, true);
                 else
-                    MInOutConfirm.Create(this, MInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, false);
+                    MVAMInvInOutConfirm.Create(this, MVAMInvInOutConfirm.CONFIRMTYPE_ShipReceiptConfirm, false);
             }
         }
 
@@ -1806,7 +1806,7 @@ namespace VAdvantage.Model
             }
 
             //	Lines
-            MInOutLine[] lines = GetLines(true);
+            MVAMInvInOutLine[] lines = GetLines(true);
             if (lines == null || lines.Length == 0)
             {
                 _processMsg = "@NoLines@";
@@ -1818,7 +1818,7 @@ namespace VAdvantage.Model
             //	Mandatory Attributes
             for (int i = 0; i < lines.Length; i++)
             {
-                MInOutLine line = lines[i];
+                MVAMInvInOutLine line = lines[i];
                 MProduct product = line.GetProduct();
                 if (product != null)
                 {
@@ -1898,7 +1898,7 @@ namespace VAdvantage.Model
             // Will not complete.
             StringBuilder sql = new StringBuilder();
             //MProduct pro = null;
-            //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
+            //Dictionary<int, MVAMInvInOutLineMP[]> lineAttributes = null;
             //if (IsSOTrx())
             //{
 
@@ -1924,7 +1924,7 @@ namespace VAdvantage.Model
                         string whereClause = "VAM_Inv_InOut_ID = " + GetVAM_Inv_InOut_ID() + @" AND VAB_Charge_ID IS NULL AND VAM_Product_ID NOT IN 
                             (SELECT VAM_Inv_InOutLine.VAM_Product_ID FROM VAM_Inv_InOutLine INNER JOIN VAM_Product ON VAM_Inv_InOutLine.VAM_Product_ID = VAM_Product.VAM_Product_ID 
                             WHERE VAM_Product.IsStocked = 'N' AND VAM_Inv_InOutLine.VAM_Inv_InOut_ID  = " + GetVAM_Inv_InOut_ID() + " ) ";
-                        int[] ioLine = MInOutLine.GetAllIDs("VAM_Inv_InOutLine", whereClause, Get_TrxName());
+                        int[] ioLine = MVAMInvInOutLine.GetAllIDs("VAM_Inv_InOutLine", whereClause, Get_TrxName());
                         int VAM_Locator_id = 0;
                         int VAM_Product_id = 0;
                         StringBuilder products = new StringBuilder();   // Added by sukhwinder for storing product aand locators IDs. on 19Dec, 2017
@@ -1932,7 +1932,7 @@ namespace VAdvantage.Model
                         bool check = false;
                         for (int i = 0; i < ioLine.Length; i++)
                         {
-                            MInOutLine iol = new MInOutLine(Env.GetCtx(), ioLine[i], Get_TrxName());
+                            MVAMInvInOutLine iol = new MVAMInvInOutLine(Env.GetCtx(), ioLine[i], Get_TrxName());
                             VAM_Locator_id = Util.GetValueOfInt(iol.GetVAM_Locator_ID());
                             VAM_Product_id = Util.GetValueOfInt(iol.GetVAM_Product_ID());
 
@@ -2013,9 +2013,9 @@ namespace VAdvantage.Model
             //if (Env.HasModulePrefix("VAMRP_", out mInfo))
             //{
             //    IDataReader idr;
-            //    //Dictionary<int, MInOutLineMA[]> lineAttributes = null;
+            //    //Dictionary<int, MVAMInvInOutLineMP[]> lineAttributes = null;
             //    //MProduct pro = null;
-            //    lineAttributes = new Dictionary<int, MInOutLineMA[]>();
+            //    lineAttributes = new Dictionary<int, MVAMInvInOutLineMP[]>();
             //    sql = "select VAM_Inv_InOutLine_id,qtyentered,line,VAM_Product_id from VAM_Inv_InOutLine where VAM_Inv_InOut_id=" + GetVAM_Inv_InOut_ID();
             //    idr = DB.ExecuteReader(sql);
             //    while (idr.Read())
@@ -2023,7 +2023,7 @@ namespace VAdvantage.Model
             //        pro = new MProduct(GetCtx(), Util.GetValueOfInt(idr["VAM_Product_id"]), null);
             //        if (pro.GetVAM_PFeature_SetInstance_ID() != 0)
             //        {
-            //            MInOutLineMA[] attrib = MInOutLineMA.Get(GetCtx(), Util.GetValueOfInt(idr[0]), Get_Trx());
+            //            MVAMInvInOutLineMP[] attrib = MVAMInvInOutLineMP.Get(GetCtx(), Util.GetValueOfInt(idr[0]), Get_Trx());
             //            if (Util.GetValueOfInt(idr[1]) != attrib.Length)
             //            {
             //                _processMsg = "Number of lines on Attribute Tab not equal to quantity" +
@@ -2092,7 +2092,7 @@ namespace VAdvantage.Model
                 // if container avialble on line is belongs to same warehouse and locator
                 // if not then not to complete this record
                 sql.Clear();
-                sql.Append(DBFunctionCollection.MInOutContainerNotMatched(GetVAM_Inv_InOut_ID()));
+                sql.Append(DBFunctionCollection.MVAMInvInOutContainerNotMatched(GetVAM_Inv_InOut_ID()));
                 string containerNotMatched = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(containerNotMatched))
                 {
@@ -2105,7 +2105,7 @@ namespace VAdvantage.Model
                 // If User try to complete the Transactions if Movement Date is lesser than Last MovementDate on Product Container
                 // then we need to stop that transaction to Complete.
                 sql.Clear();
-                sql.Append(DBFunctionCollection.MInOutContainerNotAvailable(GetVAM_Inv_InOut_ID()));
+                sql.Append(DBFunctionCollection.MVAMInvInOutContainerNotAvailable(GetVAM_Inv_InOut_ID()));
                 string misMatch = Util.GetValueOfString(DB.ExecuteScalar(sql.ToString(), null, Get_Trx()));
                 if (!String.IsNullOrEmpty(misMatch))
                 {
@@ -2154,17 +2154,17 @@ namespace VAdvantage.Model
             MVAFClient client = MVAFClient.Get(GetCtx(), GetVAF_Client_ID());
 
             //	Outstanding (not processed) Incoming Confirmations ?
-            MInOutConfirm[] confirmations = GetConfirmations(true);
+            MVAMInvInOutConfirm[] confirmations = GetConfirmations(true);
             Int32 confirmationCount = 0;
             for (int i = 0; i < confirmations.Length; i++)
             {
-                MInOutConfirm confirm = confirmations[i];
+                MVAMInvInOutConfirm confirm = confirmations[i];
                 //New Code added Here 
                 confirmationCount += 1;
                 //Arpit to check docStatus on of confirm doc 
                 if (!confirm.IsProcessed())
                 {
-                    if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
+                    if (MVAMInvInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                         continue;
                     if (confirm.GetDocStatus() == DOCSTATUS_Voided)
                     {
@@ -2174,7 +2174,7 @@ namespace VAdvantage.Model
                             //  _processMsg = Msg.GetMsg(GetCtx(),"NoConfirmationFoundForMR") + GetDocumentNo();
                             //Message-No Confirmation found for Material Receipt No: Key -->NoConfirmationFoundForMR
                             //  return _processMsg;
-                            if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
+                            if (MVAMInvInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                                 continue;
                             //
                             _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
@@ -2192,7 +2192,7 @@ namespace VAdvantage.Model
                         //  _processMsg = Msg.GetMsg(GetCtx(),"NoConfirmationFoundForMR") + GetDocumentNo();
                         //Message-No Confirmation found for Material Receipt No: Key -->NoConfirmationFoundForMR
                         //  return _processMsg;
-                        if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
+                        if (MVAMInvInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                             continue;
                         //
                         _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
@@ -2205,7 +2205,7 @@ namespace VAdvantage.Model
                 // Old Code Commented Here 
                 //if (!confirm.IsProcessed())
                 //{
-                //    if (MInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
+                //    if (MVAMInvInOutConfirm.CONFIRMTYPE_CustomerConfirmation.Equals(confirm.GetConfirmType()))
                 //        continue;
                 //    //
                 //    _processMsg = "Open @VAM_Inv_InOutConfirm_ID@: " +
@@ -2221,12 +2221,12 @@ namespace VAdvantage.Model
             StringBuilder Info = new StringBuilder();
 
             //	For all lines
-            MInOutLine[] lines = GetLines(false);
+            MVAMInvInOutLine[] lines = GetLines(false);
             if (!(VAPOS_POSTerminal_ID > 0))
             {
                 for (int Index = 0; Index < lines.Length; Index++)
                 {
-                    MInOutLine Line = lines[Index];
+                    MVAMInvInOutLine Line = lines[Index];
                     // Change done by mohit as discussed by ravikant and mukesh sir - do not check locator if there is charge on shipment line- 01/06/2017 (PMS TaskID=3893)
                     if (Line.GetVAM_Locator_ID() == 0 && Line.GetVAM_Product_ID() != 0)
                     {
@@ -2241,7 +2241,7 @@ namespace VAdvantage.Model
             #region [Process All Lines]
             for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {
-                MInOutLine sLine = lines[lineIndex];
+                MVAMInvInOutLine sLine = lines[lineIndex];
                 MProduct product = sLine.GetProduct();
                 ////Pratap- For Asset Cost
                 //_assetList.Clear();
@@ -2362,10 +2362,10 @@ namespace VAdvantage.Model
                     ////attribute stirage update logic
                     //if (IsSOTrx() && attribCheck)
                     //{
-                    //    MInOutLineMA[] mas = lineAttributes[sLine.GetVAM_Inv_InOutLine_ID()];
+                    //    MVAMInvInOutLineMP[] mas = lineAttributes[sLine.GetVAM_Inv_InOutLine_ID()];
                     //    for (int j = 0; j < mas.Length; j++)
                     //    {
-                    //        MInOutLineMA ma = mas[j];
+                    //        MVAMInvInOutLineMP ma = mas[j];
                     //        Decimal QtyMA = ma.GetMovementQty();
                     //        //if (MovementType.charAt(1) == '-')	//	C- Customer Shipment - V- Vendor Return
                     //        if (MovementType.IndexOf('-') == 1)	//	C- Customer Shipment - V- Vendor Return
@@ -2394,7 +2394,7 @@ namespace VAdvantage.Model
                     //        string sqty = "SELECT qtyentered FROM VAM_Inv_InOutLine WHERE VAM_Inv_InOutLine_id=" + sLine.GetVAM_Inv_InOutLine_ID();
                     //        int quantity = Util.GetValueOfInt(DB.ExecuteScalar(sqty, null, null));
 
-                    //        //MInOutLine minline = new MInOutLine(GetCtx(), VAM_Inv_InOutLine_id, Get_TrxName());
+                    //        //MVAMInvInOutLine minline = new MVAMInvInOutLine(GetCtx(), VAM_Inv_InOutLine_id, Get_TrxName());
                     //        if (totalmovqty == quantity)
                     //        {
 
@@ -2445,12 +2445,12 @@ namespace VAdvantage.Model
                     //
                     if (sLine.GetVAM_PFeature_SetInstance_ID() == 0 || sLine.GetVAM_PFeature_SetInstance_ID() != 0)
                     {
-                        MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(),
+                        MVAMInvInOutLineMP[] mas = MVAMInvInOutLineMP.Get(GetCtx(),
                             sLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                         for (int j = 0; j < mas.Length; j++)
                         {
                             Decimal? containerCurrentQty = 0;
-                            MInOutLineMA ma = mas[j];
+                            MVAMInvInOutLineMP ma = mas[j];
                             Decimal QtyMA = ma.GetMovementQty();
                             //if (MovementType.charAt(1) == '-')	//	C- Customer Shipment - V- Vendor Return
                             if (MovementType.IndexOf('-') == 1)	//	C- Customer Shipment - V- Vendor Return
@@ -3016,7 +3016,7 @@ namespace VAdvantage.Model
                 {
                     Decimal matchQty = sLine.GetMovementQty();
                     //	Invoice - Receipt Match (requires Product)
-                    MInvoiceLine iLine = MInvoiceLine.GetOfInOutLine(sLine);
+                    MVABInvoiceLine iLine = MVABInvoiceLine.GetOfInOutLine(sLine);
 
                     if (iLine != null && iLine.GetVAM_Product_ID() != 0)
                     {
@@ -3304,7 +3304,7 @@ namespace VAdvantage.Model
                                             }
 
                                             // calculate invoice line costing after calculating costing of linked MR line 
-                                            MInvoiceLine invoiceLine = new MInvoiceLine(GetCtx(), matchedInvoice[mi].GetVAB_InvoiceLine_ID(), Get_Trx());
+                                            MVABInvoiceLine invoiceLine = new MVABInvoiceLine(GetCtx(), matchedInvoice[mi].GetVAB_InvoiceLine_ID(), Get_Trx());
                                             Decimal ProductLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                             if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), GetVAF_Org_ID(), productCQ, matchedInvoice[mi].GetVAM_PFeature_SetInstance_ID(),
                                                   "Invoice(Vendor)", null, sLine, null, invoiceLine, null,
@@ -3794,7 +3794,7 @@ namespace VAdvantage.Model
             //	Counter Documents
             try
             {
-                MInOut counter = CreateCounterDoc();
+                MVAMInvInOut counter = CreateCounterDoc();
                 if (counter != null)
                     Info.Append(" - @CounterDoc@: @VAM_Inv_InOut_ID@=").Append(counter.GetDocumentNo());
             }
@@ -3859,7 +3859,7 @@ namespace VAdvantage.Model
                     {
                         MVABOrder order = new MVABOrder(GetCtx(), GetVAB_Order_ID(), Get_Trx());
                         MVABOrder ref_order = new MVABOrder(GetCtx(), order.GetRef_Order_ID(), Get_Trx());
-                        MInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
+                        MVAMInvInOut ret_Shipment = CreateShipment(ref_order, this, GetMovementDate(),
                                     true, false, GetVAM_Warehouse_ID(), GetMovementDate(), Get_Trx());
                         if (ret_Shipment.CompleteIt() == "CO")
                         {
@@ -3992,13 +3992,13 @@ namespace VAdvantage.Model
         /// <param name="sLine"></param>
         /// <param name="mtrx"></param>
         /// <param name="Qty"></param>
-        private String UpdateTransactionContainer(MInOutLine sLine, MTransaction mtrx, decimal Qty)
+        private String UpdateTransactionContainer(MVAMInvInOutLine sLine, MTransaction mtrx, decimal Qty)
         {
             string errorMessage = null;
             MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
             MTransaction trx = null;
-            MInventoryLine inventoryLine = null;
-            MInventory inventory = null;
+            MVAMInventoryLine inventoryLine = null;
+            MVAMInventory inventory = null;
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
             DataSet ds = new DataSet();
@@ -4030,8 +4030,8 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
+                                inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                 if (!inventory.IsInternalUse())
                                 {
                                     #region update Physical Inventory
@@ -4209,12 +4209,12 @@ namespace VAdvantage.Model
         /// <param name="sLine"></param>
         /// <param name="mtrx"></param>
         /// <param name="Qty"></param>
-        private void UpdateTransaction(MInOutLine sLine, MTransaction mtrx, decimal Qty)
+        private void UpdateTransaction(MVAMInvInOutLine sLine, MTransaction mtrx, decimal Qty)
         {
             MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
             MTransaction trx = null;
-            MInventoryLine inventoryLine = null;
-            MInventory inventory = null;
+            MVAMInventoryLine inventoryLine = null;
+            MVAMInventory inventory = null;
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
             string sql = "";
             DataSet ds = new DataSet();
@@ -4248,8 +4248,8 @@ namespace VAdvantage.Model
                             if (Util.GetValueOfString(ds.Tables[0].Rows[i]["MovementType"]) == "I+" &&
                                  Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]) > 0)
                             {
-                                inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
-                                inventory = new MInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
+                                inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InventoryLine_ID"]), Get_TrxName());
+                                inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(inventoryLine.GetVAM_Inventory_ID()), null);
                                 if (!inventory.IsInternalUse())
                                 {
                                     //break;
@@ -4329,7 +4329,7 @@ namespace VAdvantage.Model
             }
         }
 
-        private void UpdateCurrentRecord(MInOutLine line, MTransaction trxM, decimal qtyDiffer)
+        private void UpdateCurrentRecord(MVAMInvInOutLine line, MTransaction trxM, decimal qtyDiffer)
         {
             MProduct pro = new MProduct(Env.GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
@@ -4425,7 +4425,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="sLine"></param>
         /// <returns></returns>
-        private decimal? GetProductQtyFromStorage(MInOutLine sLine)
+        private decimal? GetProductQtyFromStorage(MVAMInvInOutLine sLine)
         {
             return 0;
             //    MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
@@ -4451,7 +4451,7 @@ namespace VAdvantage.Model
         /// <param name="movementDate"></param>
         /// <param name="isAttribute"></param>
         /// <returns></returns>
-        private decimal? GetProductQtyFromTransaction(MInOutLine line, DateTime? movementDate, bool isAttribute)
+        private decimal? GetProductQtyFromTransaction(MVAMInvInOutLine line, DateTime? movementDate, bool isAttribute)
         {
             decimal result = 0;
             string sql = "";
@@ -4509,7 +4509,7 @@ namespace VAdvantage.Model
         /// <param name="line"></param>
         /// <param name="movementDate"></param>
         /// <returns></returns>
-        private Decimal? GetContainerQtyFromTransaction(MInOutLine line, DateTime? movementDate)
+        private Decimal? GetContainerQtyFromTransaction(MVAMInvInOutLine line, DateTime? movementDate)
         {
             Decimal result = 0;
             string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, t.VAM_PFeature_SetInstance_ID ORDER BY t.MovementDate DESC, t.VAM_Inv_Trx_ID DESC) AS ContainerCurrentQty                           FROM VAM_Inv_Trx t
@@ -4527,9 +4527,9 @@ namespace VAdvantage.Model
         /// Check Material Policy
         /// </summary>
         /// <param name="line">Sets line ASI</param>
-        private void CheckMaterialPolicy(MInOutLine line)
+        private void CheckMaterialPolicy(MVAMInvInOutLine line)
         {
-            int no = MInOutLineMA.DeleteInOutLineMA(line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+            int no = MVAMInvInOutLineMP.DeleteInOutLineMA(line.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             if (no > 0)
             {
                 log.Config("Delete old #" + no);
@@ -4567,7 +4567,7 @@ namespace VAdvantage.Model
 
             if (product != null)
             {
-                if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 && line.GetMovementQty() > 0)
+                if (GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 && line.GetMovementQty() > 0)
                 {
                     #region VendorReceipts
                     Decimal qtyToReceive = line.GetMovementQty();
@@ -4580,7 +4580,7 @@ namespace VAdvantage.Model
                     //Allocate remaining qty.
                     if (qtyToReceive.CompareTo(Env.ZERO) > 0)
                     {
-                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReceive, GetMovementDate());
+                        MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReceive, GetMovementDate());
                         if (!ma.Save(line.Get_Trx()))
                         {
                             // Handle exception
@@ -4593,7 +4593,7 @@ namespace VAdvantage.Model
                     }
                     #endregion
                 }
-                else if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_CustomerReturns) == 0)
+                else if (GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_CustomerReturns) == 0)
                 {
                     #region CustomerReturns
                     Decimal qtyToReturn = line.GetMovementQty();
@@ -4610,18 +4610,18 @@ namespace VAdvantage.Model
                             if (rmaLine.GetOrig_InOutLine_ID() > 0)
                             {
                                 //retrieving ASI which is not already returned
-                                MInOutLineMA[] shipmentMAS = MInOutLineMA.getNonReturned(GetCtx(), rmaLine.GetOrig_InOutLine_ID(), Get_Trx());
+                                MVAMInvInOutLineMP[] shipmentMAS = MVAMInvInOutLineMP.getNonReturned(GetCtx(), rmaLine.GetOrig_InOutLine_ID(), Get_Trx());
 
                                 for (int ii = 0; ii < shipmentMAS.Length; ii++)
                                 {
-                                    MInOutLineMA sMA = shipmentMAS[ii];
+                                    MVAMInvInOutLineMP sMA = shipmentMAS[ii];
                                     Decimal lineMAQty = sMA.GetMovementQty();
                                     if (lineMAQty.CompareTo(qtyToReturn) > 0)
                                     {
                                         lineMAQty = qtyToReturn;
                                     }
 
-                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
+                                    MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
                                     if (!ma.Save(line.Get_Trx()))
                                     {
                                         // Handle exception
@@ -4641,7 +4641,7 @@ namespace VAdvantage.Model
                         if (qtyToReturn.CompareTo(Env.ZERO) > 0)
                         {
                             //Use movement data for  Material policy if no linkage found to Shipment.
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
+                            MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
                             if (ma.Save(line.Get_Trx()))
                             {
                                 // Handle exception
@@ -4655,7 +4655,7 @@ namespace VAdvantage.Model
                     }
                     #endregion
                 }
-                else if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReturns) == 0 && line.GetVAB_OrderLine_ID() != 0)
+                else if (GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReturns) == 0 && line.GetVAB_OrderLine_ID() != 0)
                 {
                     #region Vendor Return with respect to PO
                     Decimal qtyToReturn = line.GetMovementQty();
@@ -4667,18 +4667,18 @@ namespace VAdvantage.Model
                             if (rmaLine.GetOrig_InOutLine_ID() > 0)
                             {
                                 //retrieving ASI which is not already returned
-                                MInOutLineMA[] shipmentMAS = MInOutLineMA.getNonReturned(GetCtx(), rmaLine.GetOrig_InOutLine_ID(), Get_Trx());
+                                MVAMInvInOutLineMP[] shipmentMAS = MVAMInvInOutLineMP.getNonReturned(GetCtx(), rmaLine.GetOrig_InOutLine_ID(), Get_Trx());
 
                                 for (int ii = 0; ii < shipmentMAS.Length; ii++)
                                 {
-                                    MInOutLineMA sMA = shipmentMAS[ii];
+                                    MVAMInvInOutLineMP sMA = shipmentMAS[ii];
                                     Decimal lineMAQty = sMA.GetMovementQty();
                                     if (lineMAQty.CompareTo(qtyToReturn) > 0)
                                     {
                                         lineMAQty = qtyToReturn;
                                     }
 
-                                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
+                                    MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, sMA.GetVAM_PFeature_SetInstance_ID(), lineMAQty, sMA.GetMMPolicyDate());
                                     if (!ma.Save(line.Get_Trx()))
                                     {
                                         // Handle exception
@@ -4698,7 +4698,7 @@ namespace VAdvantage.Model
                         if (qtyToReturn.CompareTo(Env.ZERO) > 0)
                         {
                             //Use movement data for  Material policy if no linkage found to MR.
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
+                            MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToReturn, GetMovementDate());
                             if (ma.Save(line.Get_Trx()))
                             {
                                 // Handle exception
@@ -4713,9 +4713,9 @@ namespace VAdvantage.Model
                     #endregion
                 }
                 // Create - consume the Product using policy FIFO/LIFO
-                else if (GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReturns) == 0 ||
-                         GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_CustomerShipment) == 0 ||
-                    GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 && line.GetMovementQty() < 0)
+                else if (GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReturns) == 0 ||
+                         GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_CustomerShipment) == 0 ||
+                    GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 && line.GetMovementQty() < 0)
                 {
                     #region VendorReturns / CustomerShipment
                     //bool isLifoChecked = false;
@@ -4746,7 +4746,7 @@ namespace VAdvantage.Model
 
                     // qty which is need to handle
                     // In Case of Vendor Receipt - need to negate movement qty
-                    Decimal qtyToDeliver = GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(line.GetMovementQty()) : line.GetMovementQty();
+                    Decimal qtyToDeliver = GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(line.GetMovementQty()) : line.GetMovementQty();
 
                     //LIFOManage:
                     // Create Attribute Tab entry 
@@ -4760,9 +4760,9 @@ namespace VAdvantage.Model
 
                         if ((isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()).CompareTo(qtyToDeliver) >= 0)
                         {
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line,
+                            MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line,
                                     storage.GetVAM_PFeature_SetInstance_ID(),
-                                    GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver,
+                                    GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver,
                                     isContainrApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
                             //ma.SetIsPhysicalInventory(storage.IsPhysicalInventory());
                             if (!ma.Save(line.Get_Trx()))
@@ -4779,9 +4779,9 @@ namespace VAdvantage.Model
                         else
                         {
                             log.Config("Split - " + line);
-                            MInOutLineMA ma = MInOutLineMA.GetOrCreate(line,
+                            MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line,
                                     storage.GetVAM_PFeature_SetInstance_ID(),
-                                    GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ?
+                                    GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 ?
                                     Decimal.Negate(isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()) :
                                     (isContainrApplicable ? storage.GetQty() : storage.GetQtyOnHand()),
                                     isContainrApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
@@ -4827,8 +4827,8 @@ namespace VAdvantage.Model
                     if (qtyToDeliver != 0)
                     {
                         //Over Delivery
-                        MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(),
-                            GetMovementType().CompareTo(MInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver, GetMovementDate());
+                        MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(),
+                            GetMovementType().CompareTo(MVAMInvInOut.MOVEMENTTYPE_VendorReceipts) == 0 ? Decimal.Negate(qtyToDeliver) : qtyToDeliver, GetMovementDate());
                         if (!ma.Save(line.Get_Trx()))
                         {
                             // Handle exception
@@ -4857,7 +4857,7 @@ namespace VAdvantage.Model
         /// <param name="product"></param>
         /// <param name="qtyToReceive"></param>
         /// <returns></returns>
-        protected Decimal autoBalanceNegative(MInOutLine line, MProduct product, Decimal qtyToReceive)
+        protected Decimal autoBalanceNegative(MVAMInvInOutLine line, MProduct product, Decimal qtyToReceive)
         {
             // Is Used to get Material Policy
             MProductCategory pc = MProductCategory.Get(GetCtx(), product.GetVAM_ProductCategory_ID());
@@ -4880,7 +4880,7 @@ namespace VAdvantage.Model
                         lineMAQty = Decimal.Negate(storage.GetQty());
 
                     //Using ASI from storage record
-                    MInOutLineMA ma = MInOutLineMA.GetOrCreate(line, storage.GetVAM_PFeature_SetInstance_ID(), lineMAQty, dateMPolicy);
+                    MVAMInvInOutLineMP ma = MVAMInvInOutLineMP.GetOrCreate(line, storage.GetVAM_PFeature_SetInstance_ID(), lineMAQty, dateMPolicy);
                     //ma.SetIsPhysicalInventory(storage.IsPhysicalInventory());
                     if (!ma.Save(line.Get_Trx()))
                     {
@@ -4901,7 +4901,7 @@ namespace VAdvantage.Model
         /// Create Counter Document
         /// </summary>
         /// <returns>InOut</returns>
-        private MInOut CreateCounterDoc()
+        private MVAMInvInOut CreateCounterDoc()
         {
             //	Is this a counter doc ?
             if (GetRef_InOut_ID() != 0)
@@ -4946,7 +4946,7 @@ namespace VAdvantage.Model
             if (Get_ColumnIndex("ReversalDoc_ID") > 0 && GetReversalDoc_ID() > 0)
             {
                 int counterOrderId = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Ref_InOut_ID FROM VAM_Inv_InOut WHERE VAM_Inv_InOut_ID = " + GetReversalDoc_ID(), null, Get_Trx()));
-                MInOut counterReversed = new MInOut(GetCtx(), counterOrderId, Get_Trx());
+                MVAMInvInOut counterReversed = new MVAMInvInOut(GetCtx(), counterOrderId, Get_Trx());
                 if (counterReversed != null && counterReversed.GetVAM_Inv_InOut_ID() > 0)
                 {
                     counterReversed.SetDocAction(DOCACTION_Void);
@@ -4958,7 +4958,7 @@ namespace VAdvantage.Model
             }
 
             //	Deep Copy
-            MInOut counter = CopyFrom(this, GetMovementDate(),
+            MVAMInvInOut counter = CopyFrom(this, GetMovementDate(),
                 VAB_DocTypesTarget_ID, !IsSOTrx(), isReturnTrx, true, Get_TrxName(), true);
 
             //
@@ -4989,10 +4989,10 @@ namespace VAdvantage.Model
             bool inTrx = MovementType.IndexOf('+') == 1;	//	V+ Vendor Receipt
 
             //	Update copied lines
-            MInOutLine[] counterLines = counter.GetLines(true);
+            MVAMInvInOutLine[] counterLines = counter.GetLines(true);
             for (int i = 0; i < counterLines.Length; i++)
             {
-                MInOutLine counterLine = counterLines[i];
+                MVAMInvInOutLine counterLine = counterLines[i];
                 counterLine.SetClientOrg(counter);
                 counterLine.SetVAM_Warehouse_ID(counter.GetVAM_Warehouse_ID());
                 counterLine.SetVAM_Locator_ID(0);
@@ -5052,11 +5052,11 @@ namespace VAdvantage.Model
                 || DOCSTATUS_NotApproved.Equals(GetDocStatus()))
             {
                 //	Set lines to 0
-                MInOutLine[] lines = GetLines(false);
+                MVAMInvInOutLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
                     Asset_ID = 0;
-                    MInOutLine line = lines[i];
+                    MVAMInvInOutLine line = lines[i];
                     Decimal old = line.GetMovementQty();
                     if (old != 0)
                     {
@@ -5081,7 +5081,7 @@ namespace VAdvantage.Model
                     }
                 }
                 //Arpit to set void the Confirmation if confirmation is there
-                MInOutConfirm[] confirmations = GetConfirmations(false);
+                MVAMInvInOutConfirm[] confirmations = GetConfirmations(false);
                 if (confirmations.Length > 0)
                 {
                     for (Int32 i = 0; i < confirmations.Length; i++)
@@ -5190,7 +5190,7 @@ namespace VAdvantage.Model
             // Stopped voiding manually for drop ship type of shipment
             if (IsSOTrx() && !IsReturnTrx() && IsDropShip())
             {
-                MInOut _inout = new MInOut(GetCtx(), GetRef_ShipMR_ID(), Get_TrxName());
+                MVAMInvInOut _inout = new MVAMInvInOut(GetCtx(), GetRef_ShipMR_ID(), Get_TrxName());
                 if (_inout.GetDocStatus() != "VO" && _inout.GetDocStatus() != "RE")
                 {
                     _processMsg = Msg.GetMsg(GetCtx(), "VIS_ShipmentRevStop");
@@ -5218,7 +5218,7 @@ namespace VAdvantage.Model
             }
 
             //	Deep Copy
-            MInOut reversal = CopyFrom(this, GetMovementDate(),
+            MVAMInvInOut reversal = CopyFrom(this, GetMovementDate(),
                 GetVAB_DocTypes_ID(), IsSOTrx(), dt.IsReturnTrx(), false, Get_TrxName(), true);
             if (reversal.Get_ColumnIndex("IsFutureCostCalculated") > 0)
             {
@@ -5256,11 +5256,11 @@ namespace VAdvantage.Model
             reversedDocno = reversal.GetDocumentNo();
 
             //	Reverse Line Qty
-            MInOutLine[] sLines = GetLines(false);
-            MInOutLine[] rLines = reversal.GetLines(false);
+            MVAMInvInOutLine[] sLines = GetLines(false);
+            MVAMInvInOutLine[] rLines = reversal.GetLines(false);
             for (int i = 0; i < rLines.Length; i++)
             {
-                MInOutLine rLine = rLines[i];
+                MVAMInvInOutLine rLine = rLines[i];
                 //rLine.SetQtyEntered(Decimal.Negate(rLine.GetQtyEntered()));
                 //rLine.SetMovementQty(Decimal.Negate(rLine.GetMovementQty()));
                 rLine.SetVAM_PFeature_SetInstance_ID(sLines[i].GetVAM_PFeature_SetInstance_ID());
@@ -5278,10 +5278,10 @@ namespace VAdvantage.Model
                     return false;
                 }
                 //	We need to copy MA (bcz want to copy of material policy line from the actual record)
-                MInOutLineMA[] mas = MInOutLineMA.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
+                MVAMInvInOutLineMP[] mas = MVAMInvInOutLineMP.Get(GetCtx(), rLine.GetReversalDoc_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
-                    MInOutLineMA ma = new MInOutLineMA(rLine, mas[j].GetVAM_PFeature_SetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
+                    MVAMInvInOutLineMP ma = new MVAMInvInOutLineMP(rLine, mas[j].GetVAM_PFeature_SetInstance_ID(), Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
                     if (!ma.Save(rLine.Get_Trx()))
                     {
                         pp = VLogger.RetrieveError();
@@ -5335,15 +5335,15 @@ namespace VAdvantage.Model
             if (reversal.Save(Get_TrxName()))
             {
                 //Make void --confirmation void
-                MInOutConfirm[] confirmations = GetConfirmations(false);
+                MVAMInvInOutConfirm[] confirmations = GetConfirmations(false);
                 for (int i = 0; i < confirmations.Length; i++)
                 {
-                    MInOutConfirm confirm = confirmations[i];
+                    MVAMInvInOutConfirm confirm = confirmations[i];
                     if (confirm.GetDocStatus() == DOCSTATUS_Completed)
                     {
                         if (confirm.GetVAM_Inventory_ID() > 0)
                         {   //For inventory reversal 
-                            MInventory _Inventory = new MInventory(GetCtx(), confirm.GetVAM_Inventory_ID(), Get_TrxName());
+                            MVAMInventory _Inventory = new MVAMInventory(GetCtx(), confirm.GetVAM_Inventory_ID(), Get_TrxName());
 
                             //JID_1163: If Internal Use is void and we try to void  Material Recipt System will void Material Recipt and Confirmation
                             if (_Inventory.GetDocStatus() != DOCSTATUS_Voided && _Inventory.GetDocStatus() != DOCSTATUS_Reversed)
@@ -5390,7 +5390,7 @@ namespace VAdvantage.Model
             {
                 // Not getting DocAction and Docstatus values during reversal in case of shipment reversal
                 Save(Get_TrxName());
-                MInOut ino = new MInOut(GetCtx(), GetRef_ShipMR_ID(), Get_Trx());
+                MVAMInvInOut ino = new MVAMInvInOut(GetCtx(), GetRef_ShipMR_ID(), Get_Trx());
                 ino.VoidIt();
                 ino.SetProcessed(true);
                 ino.SetDocStatus(DOCSTATUS_Reversed);
@@ -5562,7 +5562,7 @@ namespace VAdvantage.Model
             {
                 if (GetDocStatus() == DOCSTATUS_InProgress)
                 {
-                    MInOutLine[] lines = GetLines();
+                    MVAMInvInOutLine[] lines = GetLines();
                     for (Int32 i = 0; i < lines.Length; i++)
                     {
                         lines[i].SetProcessed(true);

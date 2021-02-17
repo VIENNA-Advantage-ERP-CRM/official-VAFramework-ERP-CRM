@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MInvoiceBatchLine
+ * Class Name     : MVABInvoiceBatchLine
  * Purpose        : Invoice batch line setting
  * Class Used     : X_VAB_BatchInvoiceLine
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 //using java.math;
 namespace VAdvantage.Model
 {
-    public class MInvoiceBatchLine : X_VAB_BatchInvoiceLine
+    public class MVABInvoiceBatchLine : X_VAB_BatchInvoiceLine
     {
         /**
 	 * 	Standard Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
 	 *	@param VAB_BatchInvoiceLine_ID id
 	 *	@param trxName trx
 	 */
-        public MInvoiceBatchLine(Ctx ctx, int VAB_BatchInvoiceLine_ID,
+        public MVABInvoiceBatchLine(Ctx ctx, int VAB_BatchInvoiceLine_ID,
             Trx trxName) :
             base(ctx, VAB_BatchInvoiceLine_ID, trxName)
         {
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName trx
          */
-        public MInvoiceBatchLine(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABInvoiceBatchLine(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
         }
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
             int VAB_BatchInvoiceLine_ID = DataBase.DB.GetSQLValue(null, sql);
             if (VAB_BatchInvoiceLine_ID == 0)
                 return;
-            MInvoiceBatchLine last = new MInvoiceBatchLine(GetCtx(), VAB_BatchInvoiceLine_ID, null);
+            MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(GetCtx(), VAB_BatchInvoiceLine_ID, null);
 
             //	Need to Increase when different DocType or BP
             int VAB_DocTypes_ID = GetVAB_DocTypes_ID();

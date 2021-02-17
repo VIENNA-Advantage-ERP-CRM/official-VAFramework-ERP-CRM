@@ -11,7 +11,7 @@ using VIS.DBase;
 
 namespace VIS.Models
 {
-    public class MInvoiceModel
+    public class MVABInvoiceModel
     {
         /// <summary>
         /// GetInvoice
@@ -26,7 +26,7 @@ namespace VIS.Models
             //Assign parameter value
             VAB_Invoice_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
-            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
+            MVABInvoice inv = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             Dictionary<string, string> result = new Dictionary<string, string>();
             result["IsSOTrx"] = inv.IsSOTrx().ToString();
             //Added By amit
@@ -62,7 +62,7 @@ namespace VIS.Models
                 return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
+            MVABInvoice inv = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {
@@ -586,7 +586,7 @@ namespace VIS.Models
                 return VAB_TaxRate_ID;
             }
             DataSet dsLoc = null;
-            MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
+            MVABInvoice inv = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             MVABBusinessPartner bp = new MVABBusinessPartner(ctx, inv.GetVAB_BusinessPartner_ID(), null);
             if (bp.IsTaxExempt())
             {

@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MHierarchy
+ * Class Name     : MVAPAReportingOrder
  * Purpose        : Reporting Hierarchy Model
- * Class Used     : X_VAPA_FinancialReportingOrder
+ * Class Used     : X_VAPA_ReportingOrder
  * Chronological    Development
  * Deepak           11-Jan-2010
   ******************************************************/
@@ -22,23 +22,23 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MHierarchy:X_VAPA_FinancialReportingOrder
+    public class MVAPAReportingOrder:X_VAPA_ReportingOrder
     {
         /// <summary>
-        /// Get MHierarchy from Cache
+        /// Get MVAPAReportingOrder from Cache
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAPA_FinancialReportingOrder_ID">id</param>
-        /// <returns>MHierarchy</returns>
-        public static MHierarchy Get(Ctx ctx, int VAPA_FinancialReportingOrder_ID)
+        /// <returns>MVAPAReportingOrder</returns>
+        public static MVAPAReportingOrder Get(Ctx ctx, int VAPA_FinancialReportingOrder_ID)
         {
             int key =VAPA_FinancialReportingOrder_ID;
-            MHierarchy retValue = (MHierarchy)s_cache[key];//.get(key);
+            MVAPAReportingOrder retValue = (MVAPAReportingOrder)s_cache[key];//.get(key);
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MHierarchy(ctx, VAPA_FinancialReportingOrder_ID, null);
+            retValue = new MVAPAReportingOrder(ctx, VAPA_FinancialReportingOrder_ID, null);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);// .put(key, retValue);
@@ -47,8 +47,8 @@ namespace VAdvantage.Model
         } //	get
 
         /**	Cache						*/
-        private static CCache<int, MHierarchy> s_cache
-            = new CCache<int, MHierarchy>("VAPA_FinancialReportingOrder_ID", 20);
+        private static CCache<int, MVAPAReportingOrder> s_cache
+            = new CCache<int, MVAPAReportingOrder>("VAPA_FinancialReportingOrder_ID", 20);
 
         /// <summary>
         /// Default Constructor
@@ -56,10 +56,10 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAPA_FinancialReportingOrder_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MHierarchy(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName):base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
+        public MVAPAReportingOrder(Ctx ctx, int VAPA_FinancialReportingOrder_ID, Trx trxName):base(ctx, VAPA_FinancialReportingOrder_ID, trxName)
         {
             //super(ctx, VAPA_FinancialReportingOrder_ID, trxName);
-        }	//	MHierarchy
+        }	//	MVAPAReportingOrder
 
         /// <summary>
         /// Load Constructor
@@ -67,10 +67,10 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">trx</param>
-        public MHierarchy(Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
+        public MVAPAReportingOrder(Ctx ctx,DataRow dr, Trx trxName):base(ctx,dr, trxName)
         {
             //super(ctx, rs, trxName);
-        }	//	MHierarchy
+        }	//	MVAPAReportingOrder
 
         /// <summary>
         /// Get VAF_TreeInfo_ID based on tree type
@@ -116,6 +116,6 @@ namespace VAdvantage.Model
             return 0;
         }	//	getVAF_TreeInfo_ID
 
-    }	//	MHierarchy
+    }	//	MVAPAReportingOrder
 
 }

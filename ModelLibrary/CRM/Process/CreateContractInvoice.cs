@@ -178,7 +178,7 @@ namespace VAdvantage.Process
 
                 price = Decimal.Round(price.Value, 2, MidpointRounding.AwayFromZero);
 
-                VAdvantage.Model.MInvoice inv = new VAdvantage.Model.MInvoice(GetCtx(), 0, null);
+                VAdvantage.Model.MVABInvoice inv = new VAdvantage.Model.MVABInvoice(GetCtx(), 0, null);
                 inv.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());
                 inv.SetVAF_Org_ID(GetCtx().GetVAF_Org_ID());
                 inv.SetVAB_BusinessPartner_ID(cont.GetVAB_BusinessPartner_ID());
@@ -203,7 +203,7 @@ namespace VAdvantage.Process
 
                 if (inv.GetVAB_Invoice_ID() != 0)
                 {
-                    VAdvantage.Model.MInvoiceLine invLine = new VAdvantage.Model.MInvoiceLine(GetCtx(), 0, null);
+                    VAdvantage.Model.MVABInvoiceLine invLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                     invLine.SetVAF_Client_ID(inv.GetVAF_Client_ID());
                     invLine.SetVAF_Org_ID(inv.GetVAF_Org_ID());
                     invLine.SetVAB_Promotion_ID(inv.GetVAB_Promotion_ID());

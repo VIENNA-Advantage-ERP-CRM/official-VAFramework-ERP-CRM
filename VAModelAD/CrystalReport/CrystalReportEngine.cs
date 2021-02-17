@@ -1544,7 +1544,7 @@ namespace VAdvantage.CrystalReport
 
     //public class HierarchyValues
     //{
-    //    public string GetParametersFromHierarchy(string columnName, int ID)
+    //    public string GetParametersFroMVAPAReportingOrder(string columnName, int ID)
     //    {
 
 

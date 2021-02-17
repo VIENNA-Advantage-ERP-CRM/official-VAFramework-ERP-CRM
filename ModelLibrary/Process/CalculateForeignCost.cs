@@ -29,11 +29,11 @@ namespace VAdvantage.Process
 
         private string sql = string.Empty;
         private DataSet ds = null;
-        MInvoice invoice = null;
-        MInvoiceLine invoiceLine = null;
+        MVABInvoice invoice = null;
+        MVABInvoiceLine invoiceLine = null;
         MVABOrder order = null;
         MVABOrderLine orderLine = null;
-        MInOutLine inoutLine = null;
+        MVAMInvInOutLine inoutLine = null;
 
         protected override void Prepare()
         {
@@ -60,8 +60,8 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_id"]), Get_Trx());
-                            invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_InvoiceLine_id"]), Get_Trx());
+                            invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Invoice_id"]), Get_Trx());
+                            invoiceLine = new MVABInvoiceLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_InvoiceLine_id"]), Get_Trx());
                             if (!MVAMProductCostForeignCurrency.InsertForeignCostAverageInvoice(GetCtx(), invoice, invoiceLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();
@@ -99,7 +99,7 @@ namespace VAdvantage.Process
                         {
                             orderLine = new MVABOrderLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Orderline_id"]), Get_Trx());
                             order = new MVABOrder(GetCtx(), orderLine.GetVAB_Order_ID(), Get_Trx());
-                            inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_InOutLine_id"]), Get_Trx());
+                            inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_Inv_InOutLine_id"]), Get_Trx());
                             if (!MVAMProductCostForeignCurrency.InsertForeignCostAveragePO(GetCtx(), order, orderLine, inoutLine, Get_Trx()))
                             {
                                 Get_Trx().Rollback();

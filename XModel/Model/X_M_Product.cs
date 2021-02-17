@@ -299,18 +299,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set UOM Group.
-        @param VAB_UOMGroup_ID Group for managing sets of Unit of Measure */
-        public void SetVAB_UOMGroup_ID(int VAB_UOMGroup_ID)
+        @param VAB_UOMVARGroup_ID Group for managing sets of Unit of Measure */
+        public void SetVAB_UOMVARGroup_ID(int VAB_UOMVARGroup_ID)
         {
-            if (VAB_UOMGroup_ID <= 0) Set_Value("VAB_UOMGroup_ID", null);
+            if (VAB_UOMVARGroup_ID <= 0) Set_Value("VAB_UOMVARGroup_ID", null);
             else
-                Set_Value("VAB_UOMGroup_ID", VAB_UOMGroup_ID);
+                Set_Value("VAB_UOMVARGroup_ID", VAB_UOMVARGroup_ID);
         }
         /** Get UOM Group.
         @return Group for managing sets of Unit of Measure */
-        public int GetVAB_UOMGroup_ID()
+        public int GetVAB_UOMVARGroup_ID()
         {
-            Object ii = Get_Value("VAB_UOMGroup_ID");
+            Object ii = Get_Value("VAB_UOMVARGroup_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

@@ -67,13 +67,13 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
 
-            MInvoice obj = new MInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
+            MVABInvoice obj = new MVABInvoice(GetCtx(), GetRecord_ID(), Get_Trx());
 
             // get Precision for rounding
             MVABCurrency currency = new MVABCurrency(GetCtx(), obj.GetVAB_Currency_ID(), Get_Trx());
             precision = currency.GetStdPrecision();
 
-            MInvoiceLine[] lines = obj.GetLines();
+            MVABInvoiceLine[] lines = obj.GetLines();
 
             if (_IsCLearDiscount == "N")
             {
@@ -95,7 +95,7 @@ namespace VAdvantage.Process
 
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine ln = lines[i];
+                    MVABInvoiceLine ln = lines[i];
                     // this value represent discount on line net amount
                     discountAmountOnTotal = GetDiscountAmountOnTotal(ln.GetLineNetAmt(), discountPercentageOnTotalAmount != 0 ? discountPercentageOnTotalAmount : _DiscountPercent);
 
@@ -121,7 +121,7 @@ namespace VAdvantage.Process
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MInvoiceLine ln = lines[i];
+                    MVABInvoiceLine ln = lines[i];
                     ln.SetPriceEntered(Decimal.Add(ln.GetPriceEntered(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetPriceActual(Decimal.Add(ln.GetPriceActual(), ln.GetAmountAfterApplyDiscount()));
                     ln.SetAmountAfterApplyDiscount(0);

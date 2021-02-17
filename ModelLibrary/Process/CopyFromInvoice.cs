@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : CopyFromInvoice
+ * Class Name     : CopyFroMVABInvoice
  * Purpose        : Copy Invoice Lines
  * Class Used     : SvrProcess
  * Chronological    Development
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 using VAdvantage.ProcessEngine;
 namespace VAdvantage.Process
 {
-  public class CopyFromInvoice:SvrProcess
+  public class CopyFroMVABInvoice:SvrProcess
     {
    private int		_VAB_Invoice_ID = 0;
 
@@ -72,14 +72,14 @@ namespace VAdvantage.Process
         {
             throw new Exception("Source VAB_Invoice_ID == 0");
         }
-		VAdvantage.Model.MInvoice from = new VAdvantage.Model.MInvoice (GetCtx(), _VAB_Invoice_ID, null);
-		VAdvantage.Model.MInvoice to = new VAdvantage.Model.MInvoice (GetCtx(), To_VAB_Invoice_ID, null);
+		VAdvantage.Model.MVABInvoice from = new VAdvantage.Model.MVABInvoice (GetCtx(), _VAB_Invoice_ID, null);
+		VAdvantage.Model.MVABInvoice to = new VAdvantage.Model.MVABInvoice (GetCtx(), To_VAB_Invoice_ID, null);
 		//
 		int no = to.CopyLinesFrom (from, false, false);
 		//
 		return "@Copied@=" + no;
 	}	//	doIt
 
-}	//	CopyFromInvoice
+}	//	CopyFroMVABInvoice
 
 }

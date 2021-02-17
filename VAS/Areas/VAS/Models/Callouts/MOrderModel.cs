@@ -175,7 +175,7 @@ namespace VIS.Models
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "VAM_Inv_InOut_ID")
                 {
-                    MInOut inOut = new MInOut(ctx, referenceID, null);
+                    MVAMInvInOut inOut = new MVAMInvInOut(ctx, referenceID, null);
                     incoTerm_ID = inOut.GetVAB_IncoTerm_ID();
                 }
             }
@@ -193,7 +193,7 @@ namespace VIS.Models
                 }
                 else if (!isSOTrx && referenceID > 0 && refColumn == "VAB_Invoice_ID")
                 {
-                    MInvoice inv = new MInvoice(ctx, referenceID, null);
+                    MVABInvoice inv = new MVABInvoice(ctx, referenceID, null);
                     incoTerm_ID = inv.GetVAB_IncoTerm_ID();
                 }
             }

@@ -88,7 +88,7 @@ namespace VAdvantage.Process
             }
 
             //	Create Expense Invoice 
-            MInvoice invoice = new MInvoice(GetCtx(), 0, null);
+            MVABInvoice invoice = new MVABInvoice(GetCtx(), 0, null);
             invoice.SetClientOrg(com.GetVAF_Client_ID(), com.GetVAF_Org_ID());
             invoice.SetVAB_DocTypesTarget_ID(_VAB_DocTypes_ID);   //	API
             invoice.SetIsExpenseInvoice(true);
@@ -132,7 +132,7 @@ namespace VAdvantage.Process
             }
 
             //	Create Invoice Line
-            MInvoiceLine iLine = new MInvoiceLine(invoice);
+            MVABInvoiceLine iLine = new MVABInvoiceLine(invoice);
             iLine.SetVAB_Charge_ID(com.GetVAB_Charge_ID());
             iLine.SetQty(1);
             iLine.SetPrice(comRun.GetGrandTotal());

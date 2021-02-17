@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         // Bank Account			
         private MVABBankAcct _bankAccount = null;
         // Invoice				
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
         // old Vlaues
         decimal old_sdAmt = 0, old_ebAmt = 0, new_sdAmt = 0, new_ebAmt = 0;
 
@@ -114,7 +114,7 @@ namespace VAdvantage.Model
         /// Set Invoice - no discount
         /// </summary>
         /// <param name="invoice">Invoice</param>
-        public void SetInvoice(MInvoice invoice)
+        public void SetInvoice(MVABInvoice invoice)
         {
             Decimal amt = 0;
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
@@ -165,7 +165,7 @@ namespace VAdvantage.Model
         /// <param name="invoice">Invoice</param>
         /// <param name="VAB_sched_InvoicePayment_ID">Invoice Payemt Schedule</param>
         /// <param name="amt">Amount</param>
-        public void CreateCashLine(MInvoice invoice, int VAB_sched_InvoicePayment_ID, decimal amt)
+        public void CreateCashLine(MVABInvoice invoice, int VAB_sched_InvoicePayment_ID, decimal amt)
         {
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetVAB_sched_InvoicePayment_ID(VAB_sched_InvoicePayment_ID);
@@ -278,7 +278,7 @@ namespace VAdvantage.Model
                 order.ProcessIt(DocActionVariables.ACTION_WAITCOMPLETE);
                 order.Save(trxName);
                 //	Set Invoice
-                MInvoice[] invoices = order.GetInvoices(true);
+                MVABInvoice[] invoices = order.GetInvoices(true);
                 int length = invoices.Length;
                 if (length > 0)		//	get last invoice
                 {
@@ -473,10 +473,10 @@ namespace VAdvantage.Model
          * 	Get Invoice
          *	@return invoice
          */
-        public MInvoice GetInvoice()
+        public MVABInvoice GetInvoice()
         {
             if (_invoice == null && GetVAB_Invoice_ID() != 0)
-                _invoice = MInvoice.Get(GetCtx(), GetVAB_Invoice_ID());
+                _invoice = MVABInvoice.Get(GetCtx(), GetVAB_Invoice_ID());
             return _invoice;
         }
 
@@ -1035,7 +1035,7 @@ namespace VAdvantage.Model
         * 	Set Invoice - no discount
         *	@param invoice invoice
         */
-        public void SetInvoiceMultiCurrency(MInvoice invoice, Decimal Amt, int VAB_Currency_ID)
+        public void SetInvoiceMultiCurrency(MVABInvoice invoice, Decimal Amt, int VAB_Currency_ID)
         {
             SetVAB_Invoice_ID(invoice.GetVAB_Invoice_ID());
             SetCashType(CASHTYPE_Invoice);

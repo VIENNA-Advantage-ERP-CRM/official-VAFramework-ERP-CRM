@@ -430,26 +430,26 @@ namespace VIS.Controllers
         /// <param name="tableName"></param>
         /// <param name="recordID"></param>
         /// <param name="pageNo"></param>
-        /// <param name="mInOutId"></param>
+        /// <param name="MVAMInvInOutId"></param>
         /// <param name="isBaseLanguages"></param>
         /// <param name="mProductIDD"></param>
         /// <returns></returns>
-        public JsonResult GetDataVCreateFrom(string keyColumnName, string tableName, int recordID, int pageNo, string mInOutId, string isBaseLanguages, string mProductIDD)
+        public JsonResult GetDataVCreateFrom(string keyColumnName, string tableName, int recordID, int pageNo, string MVAMInvInOutId, string isBaseLanguages, string mProductIDD)
         {
             var ctx = Session["ctx"] as Ctx;
             CommonModel obj = new CommonModel();
-            var sql = GetDataSqlQueries(mInOutId, isBaseLanguages, mProductIDD);
+            var sql = GetDataSqlQueries(MVAMInvInOutId, isBaseLanguages, mProductIDD);
             var stValue = obj.GetData(sql, keyColumnName, tableName, recordID, pageNo, ctx);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
         /// <summary>
         /// create sql qry for GetData function
         /// </summary>
-        /// <param name="mInOutId"></param>
+        /// <param name="MVAMInvInOutId"></param>
         /// <param name="isBaseLanguages"></param>
         /// <param name="mProductIDD"></param>
         /// <returns></returns>
-        private string GetDataSqlQueries(string mInOutId, string isBaseLanguages, string mProductIDD)
+        private string GetDataSqlQueries(string MVAMInvInOutId, string isBaseLanguages, string mProductIDD)
         {
             var ctx = Session["ctx"] as Ctx;
             bool isAllownonItem = Util.GetValueOfString(ctx.GetContext("$AllowNonItem")).Equals("Y");
@@ -490,7 +490,7 @@ namespace VIS.Controllers
                 + "LEFT JOIN (SELECT il.QtyInvoiced, il.VAM_Inv_InOutLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice I ON I.VAB_INVOICE_ID = il.VAB_INVOICE_ID "
                 + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) "
                 + "LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
-                + "WHERE l.VAM_Inv_InOut_ID=" + mInOutId; // #1
+                + "WHERE l.VAM_Inv_InOut_ID=" + MVAMInvInOutId; // #1
             if (mProductIDD != "")
             {
                 sql += mProductIDD + " ";
@@ -538,7 +538,7 @@ namespace VIS.Controllers
                     + "LEFT JOIN (SELECT il.QtyInvoiced, il.VAM_Inv_InOutLine_ID FROM VAB_InvoiceLine il INNER JOIN VAB_Invoice I ON I.VAB_INVOICE_ID = il.VAB_INVOICE_ID "
                     + "WHERE i.DocStatus NOT IN ('VO','RE')) mi ON (l.VAM_Inv_InOutLine_ID=mi.VAM_Inv_InOutLine_ID) "
                     + "LEFT OUTER JOIN VAM_PFeature_SetInstance ins ON (ins.VAM_PFeature_SetInstance_ID =l.VAM_PFeature_SetInstance_ID) "
-                    + "WHERE l.VAM_Inv_InOut_ID=" + mInOutId; // #1
+                    + "WHERE l.VAM_Inv_InOut_ID=" + MVAMInvInOutId; // #1
                 if (mProductIDD != "")
                 {
                     sql += mProductIDD + " ";
@@ -564,14 +564,14 @@ namespace VIS.Controllers
         /// <summary>
         /// Unused Function
         /// </summary>
-        /// <param name="MInOutIDs"></param>
+        /// <param name="MVAMInvInOutIDs"></param>
         /// <param name="isBaseLanguageUmos"></param>
         /// <returns></returns>
-        public JsonResult GetShipmentDatas(string MInOutIDs, string isBaseLanguageUmos)
+        public JsonResult GetShipmentDatas(string MVAMInvInOutIDs, string isBaseLanguageUmos)
         {
             var ctx = Session["ctx"] as Ctx;
             VCreateFromModel obj = new VCreateFromModel();
-            var stValue = obj.GetShipmentDatas(ctx, MInOutIDs, isBaseLanguageUmos);
+            var stValue = obj.GetShipmentDatas(ctx, MVAMInvInOutIDs, isBaseLanguageUmos);
             return Json(JsonConvert.SerializeObject(stValue), JsonRequestBehavior.AllowGet);
         }
 

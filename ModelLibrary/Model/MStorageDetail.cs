@@ -899,15 +899,15 @@ namespace VAdvantage.Model
         /// <summary>
         /// Trace back from storage record to original receipt line.
         /// </summary>
-        /// <returns>MInOutLine or null</returns>
-        public MInOutLine GetInOutLineOf()
+        /// <returns>MVAMInvInOutLine or null</returns>
+        public MVAMInvInOutLine GetInOutLineOf()
         {
             // Don't try to trace back to receipt line for ASI=0 records
             if (GetVAM_PFeature_SetInstance_ID() == 0)
             {
                 return null;
             }
-            MInOutLine retValue = null;
+            MVAMInvInOutLine retValue = null;
             String sql = "SELECT * FROM VAM_Inv_InOutLine line "
                 + "WHERE VAM_PFeature_SetInstance_ID=" + GetVAM_PFeature_SetInstance_ID()
                 + "OR EXISTS (SELECT 1 FROM "
@@ -923,7 +923,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 if (dt.Rows.Count > 0)//idr.Read())
                 {
-                    retValue = new MInOutLine(GetCtx(), dt.Rows[0], Get_TrxName());
+                    retValue = new MVAMInvInOutLine(GetCtx(), dt.Rows[0], Get_TrxName());
                 }
             }
             catch (Exception ex)

@@ -46,9 +46,9 @@ namespace ViennaAdvantage.Process
         private String _docAction = DocActionVariables.ACTION_COMPLETE;
 
         /**	The current Invoice	*/
-        private MInvoice _invoice = null;
+        private MVABInvoice _invoice = null;
         /**	The current Shipment	*/
-        private MInOut _ship = null;
+        private MVAMInvInOut _ship = null;
         /** Numner of Invoices		*/
         private int _created = 0;
         /**	Line Number				*/
@@ -299,7 +299,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        MInvoiceSchedule ins = MInvoiceSchedule.Get(GetCtx(), _bp.GetVAB_sched_Invoice_ID(), Get_TrxName());
+                        MVABInvoiceSchedule ins = MVABInvoiceSchedule.Get(GetCtx(), _bp.GetVAB_sched_Invoice_ID(), Get_TrxName());
                         if (ins.CanInvoice(order.GetDateOrdered(), order.GetGrandTotal()))
                         {
                             doInvoice = true;
@@ -314,12 +314,12 @@ namespace ViennaAdvantage.Process
                 //	After Delivery
                 if (doInvoice || MVABOrder.INVOICERULE_AfterDelivery.Equals(order.GetInvoiceRule()))
                 {
-                    MInOut shipment = null;
-                    MInOutLine[] shipmentLines = order.GetShipmentLines();
+                    MVAMInvInOut shipment = null;
+                    MVAMInvInOutLine[] shipmentLines = order.GetShipmentLines();
                     MVABOrderLine[] oLines = order.GetLines(true, null);
                     for (int i = 0; i < shipmentLines.Length; i++)
                     {
-                        MInOutLine shipLine = shipmentLines[i];
+                        MVAMInvInOutLine shipLine = shipmentLines[i];
                         if (shipLine.IsInvoiced())
                         {
                             continue;
@@ -327,10 +327,10 @@ namespace ViennaAdvantage.Process
                         if (shipment == null
                             || shipment.GetVAM_Inv_InOut_ID() != shipLine.GetVAM_Inv_InOut_ID())
                         {
-                            shipment = new MInOut(GetCtx(), shipLine.GetVAM_Inv_InOut_ID(), Get_TrxName());
+                            shipment = new MVAMInvInOut(GetCtx(), shipLine.GetVAM_Inv_InOut_ID(), Get_TrxName());
                         }
                         if (!shipment.IsComplete()		//	ignore incomplete or reversals 
-                            || shipment.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
+                            || shipment.GetDocStatus().Equals(MVAMInvInOut.DOCSTATUS_Reversed))
                         {
                             continue;
                         }
@@ -448,19 +448,19 @@ namespace ViennaAdvantage.Process
                 //	Complete Order successful
                 if (completeOrder && MVABOrder.INVOICERULE_AfterOrderDelivered.Equals(order.GetInvoiceRule()))
                 {
-                    MInOut[] shipments = order.GetShipments(true);
+                    MVAMInvInOut[] shipments = order.GetShipments(true);
                     for (int i = 0; i < shipments.Length; i++)
                     {
-                        MInOut ship = shipments[i];
+                        MVAMInvInOut ship = shipments[i];
                         if (!ship.IsComplete()		//	ignore incomplete or reversals 
-                            || ship.GetDocStatus().Equals(MInOut.DOCSTATUS_Reversed))
+                            || ship.GetDocStatus().Equals(MVAMInvInOut.DOCSTATUS_Reversed))
                         {
                             continue;
                         }
-                        MInOutLine[] shipLines = ship.GetLines(false);
+                        MVAMInvInOutLine[] shipLines = ship.GetLines(false);
                         for (int j = 0; j < shipLines.Length; j++)
                         {
-                            MInOutLine shipLine = shipLines[j];
+                            MVAMInvInOutLine shipLine = shipLines[j];
                             if (!order.IsOrderLine(shipLine.GetVAB_OrderLine_ID()))
                             {
                                 continue;
@@ -492,7 +492,7 @@ namespace ViennaAdvantage.Process
         {
             if (_invoice == null)
             {
-                _invoice = new MInvoice(order, 0, _DateInvoiced);
+                _invoice = new MVABInvoice(order, 0, _DateInvoiced);
                 int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
                 if (_CountVA009 > 0)
                 {
@@ -535,7 +535,7 @@ namespace ViennaAdvantage.Process
                 }
             }
             //	
-            MInvoiceLine line = new MInvoiceLine(_invoice);
+            MVABInvoiceLine line = new MVABInvoiceLine(_invoice);
             line.SetOrderLine(orderLine);
             line.SetQtyInvoiced(qtyInvoiced);
             // if drop ship line true 
@@ -560,11 +560,11 @@ namespace ViennaAdvantage.Process
         /// <param name="order">order</param>
         /// <param name="ship">shipment header</param>
         /// <param name="sLine">shipment line</param>
-        private void CreateLine(MVABOrder order, MInOut ship, MInOutLine sLine)
+        private void CreateLine(MVABOrder order, MVAMInvInOut ship, MVAMInvInOutLine sLine)
         {
             if (_invoice == null)
             {
-                _invoice = new MInvoice(order, 0, _DateInvoiced);
+                _invoice = new MVABInvoice(order, 0, _DateInvoiced);
                 int _CountVA009 = Env.IsModuleInstalled("VA009_") ? 1 : 0;
                 if (_CountVA009 > 0)
                 {
@@ -640,7 +640,7 @@ namespace ViennaAdvantage.Process
             //        + " - " + ship.GetMovementDate();
             //    _ship = ship;
             //    //
-            //    MInvoiceLine line = new MInvoiceLine(_invoice);
+            //    MVABInvoiceLine line = new MVABInvoiceLine(_invoice);
             //    line.SetIsDescription(true);
             //    line.SetDescription(reference);
             //    line.SetLine(_line + sLine.GetLine() - 2);
@@ -652,7 +652,7 @@ namespace ViennaAdvantage.Process
             //    if (order.GetBill_Location_ID() != ship.GetVAB_BPart_Location_ID())
             //    {
             //        MLocation addr = MLocation.GetBPLocation(GetCtx(), ship.GetVAB_BPart_Location_ID(), null);
-            //        line = new MInvoiceLine(_invoice);
+            //        line = new MVABInvoiceLine(_invoice);
             //        line.SetIsDescription(true);
             //        line.SetDescription(addr.ToString());
             //        line.SetLine(_line + sLine.GetLine() - 1);
@@ -664,7 +664,7 @@ namespace ViennaAdvantage.Process
             //}
             #endregion
             //	
-            MInvoiceLine line1 = new MInvoiceLine(_invoice);
+            MVABInvoiceLine line1 = new MVABInvoiceLine(_invoice);
             line1.SetShipLine(sLine);
             line1.SetQtyEntered(sLine.GetQtyEntered());
             line1.SetQtyInvoiced(sLine.GetMovementQty());

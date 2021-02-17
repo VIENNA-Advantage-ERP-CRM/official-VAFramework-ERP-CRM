@@ -53,8 +53,8 @@ namespace VAdvantage.Process
         Decimal ProductInvoiceLineCost = 0;
         Decimal ProductInvoicePriceActual = 0;
 
-        MInventory inventory = null;
-        MInventoryLine inventoryLine = null;
+        MVAMInventory inventory = null;
+        MVAMInventoryLine inventoryLine = null;
 
         MMovement movement = null;
         MMovementLine movementLine = null;
@@ -62,13 +62,13 @@ namespace VAdvantage.Process
         MLocator locatorTo = null; // is used to get "to warehouse" reference and "to org" reference for getting cost from prodyc costs 
         Decimal toCurrentCostPrice = 0; // is used to maintain cost of "move to" 
 
-        MInOut inout = null;
-        MInOutLine inoutLine = null;
+        MVAMInvInOut inout = null;
+        MVAMInvInOutLine inoutLine = null;
         MVABOrderLine orderLine = null;
         MVABOrder order = null;
 
-        MInvoice invoice = null;
-        MInvoiceLine invoiceLine = null;
+        MVABInvoice invoice = null;
+        MVABInvoiceLine invoiceLine = null;
         bool isCostAdjustableOnLost = false;
 
         MProduct product = null;
@@ -253,7 +253,7 @@ namespace VAdvantage.Process
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -273,7 +273,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -502,7 +502,7 @@ namespace VAdvantage.Process
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
-                                    invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
@@ -523,7 +523,7 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MVABInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.Get_ID() > 0)
                                                 {
                                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
@@ -680,7 +680,7 @@ namespace VAdvantage.Process
                                                                 // calculate cost of MR first if not calculate which is linked with that invoice line
                                                                 if (invoiceLine.GetVAM_Inv_InOutLine_ID() > 0)
                                                                 {
-                                                                    inoutLine = new MInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                                                    inoutLine = new MVAMInvInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                                                     if (!inoutLine.IsCostCalculated())
                                                                     {
                                                                         if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), inoutLine.GetVAF_Client_ID(), inoutLine.GetVAF_Org_ID(), product, inoutLine.GetVAM_PFeature_SetInstance_ID(),
@@ -989,7 +989,7 @@ namespace VAdvantage.Process
                                                             // calculate cost of MR first if not calculate which is linked with that invoice line
                                                             if (invoiceLine.GetVAM_Inv_InOutLine_ID() > 0)
                                                             {
-                                                                inoutLine = new MInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                                                inoutLine = new MVAMInvInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                                                 if (!inoutLine.IsCostCalculated())
                                                                 {
                                                                     if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), GetVAF_Client_ID(), inoutLine.GetVAF_Org_ID(), product, inoutLine.GetVAM_PFeature_SetInstance_ID(),
@@ -1202,9 +1202,9 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "N"))
                                 {
                                     matchInvoice = new MMatchInv(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
-                                    inoutLine = new MInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                                    invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
-                                    invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
+                                    inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                    invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
                                     product = new MProduct(GetCtx(), invoiceLine.GetVAM_Product_ID(), Get_Trx());
                                     int VAM_Warehouse_ID = inoutLine.GetVAM_Warehouse_ID();
                                     if (inoutLine.GetVAB_OrderLine_ID() > 0)
@@ -1373,7 +1373,7 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL") &&
                                     Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["IsInternalUse"]) == "N")
                                 {
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     sql.Clear();
                                     if (inventory.GetDescription() != null && inventory.GetDescription().Contains("{->"))
                                     {
@@ -1391,7 +1391,7 @@ namespace VAdvantage.Process
                                         for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                                         {
                                             product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                            inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
+                                            inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
                                             if (product.GetProductType() == "I") // for Item Type product
                                             {
                                                 quantity = 0;
@@ -1577,7 +1577,7 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL") &&
                                     Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["IsInternalUse"]) == "Y")
                                 {
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     sql.Clear();
                                     if (inventory.GetDescription() != null && inventory.GetDescription().Contains("{->"))
                                     {
@@ -1595,7 +1595,7 @@ namespace VAdvantage.Process
                                         for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                                         {
                                             product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                            inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
+                                            inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
                                             if (product.GetProductType() == "I") // for Item Type product
                                             {
                                                 quantity = 0;
@@ -2037,7 +2037,7 @@ namespace VAdvantage.Process
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -2057,7 +2057,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -2245,9 +2245,9 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "Y"))
                                 {
                                     matchInvoice = new MMatchInv(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
-                                    inoutLine = new MInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                                    invoiceLine = new MInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
-                                    invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
+                                    inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                    invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
                                     product = new MProduct(GetCtx(), invoiceLine.GetVAM_Product_ID(), Get_Trx());
                                     bool isUpdatePostCurrentcostPriceFromMR = MVAMProductCostElement.IsPOCostingmethod(GetCtx(), GetVAF_Client_ID(), product.GetVAM_Product_ID(), Get_Trx());
                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
@@ -2346,7 +2346,7 @@ namespace VAdvantage.Process
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -2366,7 +2366,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -2497,7 +2497,7 @@ namespace VAdvantage.Process
                                     (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CO" ||
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "CL"))
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -2517,7 +2517,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["M_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -2680,7 +2680,7 @@ namespace VAdvantage.Process
                                                     // get price from VAM_ProductCost (Current Cost Price)
                                                     if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0 &&
                                                         !(woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
-                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)))
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory)))
                                                     {
                                                         currentCostPrice = 0;
                                                         currentCostPrice = MVAMProductCost.GetproductCosts(Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Client_ID")), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Org_ID")),
@@ -2695,7 +2695,7 @@ namespace VAdvantage.Process
                                                         }
                                                     }
                                                     else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)
-                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory))
                                                     {
                                                         // when product having checkbox "IsBAsedOnRollup" then not to calculate cot of finished Good
                                                         if (product.IsBasedOnRollup())
@@ -2717,15 +2717,15 @@ namespace VAdvantage.Process
                                                     }
                                                     #endregion
 
-                                                    // ComponentIssueToWorkOrder / AssemblyReturnFromInventory
+                                                    // ComponentIssueToWorkOrder / AssemblyReturnFroMVAMInventory
                                                     if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
-                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory))
                                                     {
                                                         if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Org_ID")), product, 0,
-                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? "PE-FinishGood" : "Production Execution",
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory) ? "PE-FinishGood" : "Production Execution",
                                                             null, null, null, null, po_WrkOdrTrnsctionLine,
-                                                             woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? currentCostPrice : 0,
+                                                             woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity"))) :
                                                             Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered"))),
                                                             Get_Trx(), out conversionNotFoundInOut))
@@ -2883,7 +2883,7 @@ namespace VAdvantage.Process
                                                     #region get price from VAM_ProductCost (Current Cost Price)
                                                     // get price from VAM_ProductCost (Current Cost Price)
                                                     if (Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("CurrentCostPrice")) == 0 &&
-                                                        !(woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)
+                                                        !(woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory)
                                                         || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore)))
                                                     {
                                                         currentCostPrice = 0;
@@ -2898,7 +2898,7 @@ namespace VAdvantage.Process
                                                             Get_Trx().Rollback();
                                                         }
                                                     }
-                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory)
+                                                    else if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory)
                                                         || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_3_TransferAssemblyToStore))
                                                     {
                                                         // when product having checkbox "IsBAsedOnRollup" then not to calculate cot of finished Good
@@ -2922,13 +2922,13 @@ namespace VAdvantage.Process
                                                     #endregion
 
                                                     if (woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_1_ComponentIssueToWorkOrder)
-                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory))
+                                                        || woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory))
                                                     {
                                                         if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Client_ID")),
                                                             Util.GetValueOfInt(po_WrkOdrTrnsctionLine.Get_Value("VAF_Org_ID")), product, 0,
-                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? "PE-FinishGood" : "Production Execution",
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory) ? "PE-FinishGood" : "Production Execution",
                                                             null, null, null, null, po_WrkOdrTrnsctionLine,
-                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFromInventory) ? currentCostPrice : 0,
+                                                            woTrxType.Equals(ViennaAdvantage.Model.X_VAMFG_M_WrkOdrTransaction.VAMFG_WORKORDERTXNTYPE_AssemblyReturnFroMVAMInventory) ? currentCostPrice : 0,
                                                             countGOM01 > 0 ? Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("GOM01_ActualQuantity"))) :
                                                             Decimal.Negate(Util.GetValueOfDecimal(po_WrkOdrTrnsctionLine.Get_Value("VAMFG_QtyEntered"))), Get_Trx(), out conversionNotFoundInOut))
                                                         {
@@ -3050,7 +3050,7 @@ namespace VAdvantage.Process
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "Y" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -3070,7 +3070,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 // when we void order then we set qty Ordered as 0
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
@@ -3192,7 +3192,7 @@ namespace VAdvantage.Process
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "N" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -3212,7 +3212,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -3334,9 +3334,9 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "Y"))
                                 {
                                     matchInvCostReverse = new X_VAM_MatchInvoiceoiceCostTrack(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
-                                    inoutLine = new MInOutLine(GetCtx(), matchInvCostReverse.GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                                    invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
-                                    invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
+                                    inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvCostReverse.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                    invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
 
                                     product = new MProduct(GetCtx(), invoiceLine.GetVAM_Product_ID(), Get_Trx());
@@ -3412,7 +3412,7 @@ namespace VAdvantage.Process
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "Y" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -3432,7 +3432,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -3730,7 +3730,7 @@ namespace VAdvantage.Process
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["IsInternalUse"]) == "Y")
                                 {
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     sql.Clear();
                                     if (inventory.GetDescription() != null && inventory.GetDescription().Contains("{->"))
                                     {
@@ -3748,7 +3748,7 @@ namespace VAdvantage.Process
                                         for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                                         {
                                             product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                            inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
+                                            inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
                                             if (product.GetProductType() == "I") // for Item Type product
                                             {
                                                 quantity = 0;
@@ -3914,7 +3914,7 @@ namespace VAdvantage.Process
                                   Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE" &&
                                   Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["IsInternalUse"]) == "N")
                                 {
-                                    inventory = new MInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inventory = new MVAMInventory(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                     sql.Clear();
                                     if (inventory.GetDescription() != null && inventory.GetDescription().Contains("{->"))
                                     {
@@ -3932,7 +3932,7 @@ namespace VAdvantage.Process
                                         for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                                         {
                                             product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                            inventoryLine = new MInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
+                                            inventoryLine = new MVAMInventoryLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InventoryLine_ID"]), Get_Trx());
                                             if (product.GetProductType() == "I") // for Item Type product
                                             {
                                                 quantity = 0;
@@ -4099,9 +4099,9 @@ namespace VAdvantage.Process
                                      Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "N"))
                                 {
                                     matchInvCostReverse = new X_VAM_MatchInvoiceoiceCostTrack(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
-                                    inoutLine = new MInOutLine(GetCtx(), matchInvCostReverse.GetVAM_Inv_InOutLine_ID(), Get_Trx());
-                                    invoiceLine = new MInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
-                                    invoice = new MInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
+                                    inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvCostReverse.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                    invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvCostReverse.GetRev_VAB_InvoiceLine_ID(), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
                                     ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
 
                                     product = new MProduct(GetCtx(), invoiceLine.GetVAM_Product_ID(), Get_Trx());
@@ -4179,7 +4179,7 @@ namespace VAdvantage.Process
                                 if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "VAB_Invoice" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
-                                    invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (invoice.GetDescription() != null && invoice.GetDescription().Contains("{->"))
@@ -4200,7 +4200,7 @@ namespace VAdvantage.Process
                                             try
                                             {
                                                 product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                                                invoiceLine = new MInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
+                                                invoiceLine = new MVABInvoiceLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAB_InvoiceLine_ID"]), Get_Trx());
                                                 if (invoiceLine != null && invoiceLine.GetVAB_Invoice_ID() > 0 && invoiceLine.GetQtyInvoiced() == 0)
                                                     continue;
 
@@ -4351,7 +4351,7 @@ namespace VAdvantage.Process
                                                                 // when isCostAdjustableOnLost = true on product and movement qty on MR is less than invoice qty then consider MR qty else invoice qty
                                                                 if (invoiceLine.GetVAM_Inv_InOutLine_ID() > 0)
                                                                 {
-                                                                    inoutLine = new MInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                                                    inoutLine = new MVAMInvInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                                                 }
                                                                 if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),
                                                                       "Invoice(Vendor)", null, null, null, invoiceLine, null, ProductInvoiceLineCost,
@@ -4617,7 +4617,7 @@ namespace VAdvantage.Process
                                                         {
                                                             if (invoiceLine.GetVAM_Inv_InOutLine_ID() > 0)
                                                             {
-                                                                inoutLine = new MInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
+                                                                inoutLine = new MVAMInvInOutLine(GetCtx(), invoiceLine.GetVAM_Inv_InOutLine_ID(), Get_Trx());
                                                             }
                                                             if (!MVAMProductCostQueue.CreateProductCostsDetails(GetCtx(), invoice.GetVAF_Client_ID(), invoice.GetVAF_Org_ID(), product, invoiceLine.GetVAM_PFeature_SetInstance_ID(),
                                                                   "Invoice(Vendor)", null, null, null, invoiceLine, null, ProductInvoiceLineCost,
@@ -4792,7 +4792,7 @@ namespace VAdvantage.Process
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["isreturntrx"]) == "N" &&
                                    Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["docstatus"]) == "RE")
                                 {
-                                    inout = new MInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                    inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
 
                                     sql.Clear();
                                     if (inout.GetDescription() != null && inout.GetDescription().Contains("{->"))
@@ -4812,7 +4812,7 @@ namespace VAdvantage.Process
                                         {
                                             try
                                             {
-                                                inoutLine = new MInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
+                                                inoutLine = new MVAMInvInOutLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Inv_InOutLine_ID"]), Get_Trx());
                                                 orderLine = new MVABOrderLine(GetCtx(), inoutLine.GetVAB_OrderLine_ID(), null);
                                                 if (orderLine != null && orderLine.GetVAB_Order_ID() > 0)
                                                 {
@@ -5006,7 +5006,7 @@ namespace VAdvantage.Process
             {
                 if (!string.IsNullOrEmpty(conversionNotFoundInOut1))
                 {
-                    conversionNotFoundInOut = Msg.GetMsg(GetCtx(), "ConvNotForMinout") + conversionNotFoundInOut1;
+                    conversionNotFoundInOut = Msg.GetMsg(GetCtx(), "ConvNotForMVAMInvInOut") + conversionNotFoundInOut1;
                 }
                 if (!string.IsNullOrEmpty(conversionNotFoundInvoice1))
                 {

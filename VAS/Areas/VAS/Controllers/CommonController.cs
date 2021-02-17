@@ -968,17 +968,17 @@ namespace VIS.Controllers
                 _order = new MVABOrder(ctx, VAB_Order_ID, null);
             }
 
-            MInvoice _invoice = null;
+            MVABInvoice _invoice = null;
             if (VAB_Invoice_ID > 0)
             {
-                _invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
+                _invoice = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             }
 
 
-            MInOut inout = null;
+            MVAMInvInOut inout = null;
             if (VAM_Inv_InOut_ID > 0)
             {
-                inout = new MInOut(ctx, VAM_Inv_InOut_ID, null);
+                inout = new MVAMInvInOut(ctx, VAM_Inv_InOut_ID, null);
             }
             // Added By Bharat for ViennaAdvantage Compatiability. Code not called from ViennaAdvantage.
             MVAFTableView tbl = null;
@@ -1169,10 +1169,10 @@ namespace VIS.Controllers
                         VAM_PFeature_SetInstance_ID = Convert.ToInt32((model[i]["VAM_PFeature_SetInstance_ID"]));   //  6-InvoiceLine
                 }
 
-                MInvoiceLine il = null;
+                MVABInvoiceLine il = null;
                 if (VAB_InvoiceLine_ID != 0)
                 {
-                    il = new MInvoiceLine(ctx, VAB_InvoiceLine_ID, null);
+                    il = new MVABInvoiceLine(ctx, VAB_InvoiceLine_ID, null);
                 }
                 bool isInvoiced = (VAB_InvoiceLine_ID != 0);
                 //	Precision of Qty UOM
@@ -1189,7 +1189,7 @@ namespace VIS.Controllers
                     continue;
 
                 //	Create new InOut Line
-                //MInOutLine iol = new MInOutLine(inout);
+                //MVAMInvInOutLine iol = new MVAMInvInOutLine(inout);
                 // Added By Bharat for ViennaAdvantage Compatiability. Code not called from ViennaAdvantage.
                 po = tbl.GetPO(ctx, 0, null);
                 po.Set_ValueNoCheck("VAM_Inv_InOut_ID", VAM_Inv_InOut_ID);
@@ -1508,17 +1508,17 @@ namespace VIS.Controllers
                 _order = new MVABOrder(ctx, VAB_Order_ID, null);
             }
 
-            MInvoice _invoice = null;
+            MVABInvoice _invoice = null;
             if (VAB_Invoice_ID > 0)
             {
-                _invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
+                _invoice = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             }
 
 
-            MInOut _inout = null;
+            MVAMInvInOut _inout = null;
             if (VAM_Inv_InOut_ID > 0)
             {
-                _inout = new MInOut(ctx, VAM_Inv_InOut_ID, null);
+                _inout = new MVAMInvInOut(ctx, VAM_Inv_InOut_ID, null);
                 // Chnage by Mohit Asked by Amardeep Sir 02/03/2016
                 _invoice.SetPOReference(_inout.GetPOReference());
 
@@ -1600,17 +1600,17 @@ namespace VIS.Controllers
                 //    + ", OrderLine_ID=" + VAB_OrderLine_ID + ", InOutLine_ID=" + VAM_Inv_InOutLine_ID);
 
                 //	Create new Invoice Line
-                MInvoiceLine invoiceLine = new MInvoiceLine(_invoice);
+                MVABInvoiceLine invoiceLine = new MVABInvoiceLine(_invoice);
                 invoiceLine.SetVAM_Product_ID(VAM_Product_ID, VAB_UOM_ID);	//	Line UOM
                 invoiceLine.SetQty(QtyEntered);							//	Invoiced/Entered
                 //  Info
                 MVABOrderLine orderLine = null;
                 if (VAB_OrderLine_ID != 0)
                     orderLine = new MVABOrderLine(ctx, VAB_OrderLine_ID, null);
-                MInOutLine inoutLine = null;
+                MVAMInvInOutLine inoutLine = null;
                 if (VAM_Inv_InOutLine_ID != 0)
                 {
-                    inoutLine = new MInOutLine(ctx, VAM_Inv_InOutLine_ID, null);
+                    inoutLine = new MVAMInvInOutLine(ctx, VAM_Inv_InOutLine_ID, null);
                     if (orderLine == null && inoutLine.GetVAB_OrderLine_ID() != 0)
                     {
                         VAB_OrderLine_ID = inoutLine.GetVAB_OrderLine_ID();
@@ -1619,13 +1619,13 @@ namespace VIS.Controllers
                 }
                 else
                 {
-                    MInOutLine[] lines = MInOutLine.GetOfOrderLine(ctx, VAB_OrderLine_ID, null, null);
+                    MVAMInvInOutLine[] lines = MVAMInvInOutLine.GetOfOrderLine(ctx, VAB_OrderLine_ID, null, null);
                     //s_log.fine ("Receipt Lines with OrderLine = #" + lines.length);
                     if (lines.Length > 0)
                     {
                         for (int j = 0; j < lines.Length; j++)
                         {
-                            MInOutLine line = lines[j];
+                            MVAMInvInOutLine line = lines[j];
                             if (line.GetQtyEntered().CompareTo(QtyEntered) == 0)
                             {
                                 inoutLine = line;
@@ -2406,13 +2406,13 @@ namespace VIS.Controllers
                         Line_ID = LineMatched;
                     }
 
-                    MInOutLine sLine = new MInOutLine(ctx, VAM_Inv_InOutLine_ID, trx);
-                    MInOut ship = new MInOut(ctx, sLine.GetVAM_Inv_InOut_ID(), trx);
+                    MVAMInvInOutLine sLine = new MVAMInvInOutLine(ctx, VAM_Inv_InOutLine_ID, trx);
+                    MVAMInvInOut ship = new MVAMInvInOut(ctx, sLine.GetVAM_Inv_InOut_ID(), trx);
                     if (invoice)	//	Shipment - Invoice
                     {
                         //	Update Invoice Line
-                        MInvoiceLine iLine = new MInvoiceLine(ctx, Line_ID, trx);
-                        MInvoice inv = new MInvoice(ctx, iLine.GetVAB_Invoice_ID(), trx);
+                        MVABInvoiceLine iLine = new MVABInvoiceLine(ctx, Line_ID, trx);
+                        MVABInvoice inv = new MVABInvoice(ctx, iLine.GetVAB_Invoice_ID(), trx);
                         iLine.SetVAM_Inv_InOutLine_ID(VAM_Inv_InOutLine_ID);
                         if (sLine.GetVAB_OrderLine_ID() != 0)
                             iLine.SetVAB_OrderLine_ID(sLine.GetVAB_OrderLine_ID());
@@ -2504,7 +2504,7 @@ namespace VIS.Controllers
                         {
                             //	Update Order Line
                             MVABOrderLine oLine = new MVABOrderLine(ctx, Line_ID, trx);
-                            if (oLine.Get_ID() != 0)	//	other in MInOut.completeIt
+                            if (oLine.Get_ID() != 0)	//	other in MVAMInvInOut.completeIt
                             {
                                 //oLine.SetQtyReserved(oLine.GetQtyReserved().subtract(qty));
                                 oLine.SetQtyReserved(Decimal.Subtract(oLine.GetQtyReserved(), qty));
@@ -2556,7 +2556,7 @@ namespace VIS.Controllers
                                         }
                                     }
 
-                                    //	Correct Ordered Qty for Stocked Products (see MOrder.reserveStock / MInOut.processIt)
+                                    //	Correct Ordered Qty for Stocked Products (see MOrder.reserveStock / MVAMInvInOut.processIt)
                                     if (success && sLine.GetProduct() != null && sLine.GetProduct().IsStocked())
                                         success = MStorage.Add(ctx, sLine.GetVAM_Warehouse_ID(),
                                             sLine.GetVAM_Locator_ID(),

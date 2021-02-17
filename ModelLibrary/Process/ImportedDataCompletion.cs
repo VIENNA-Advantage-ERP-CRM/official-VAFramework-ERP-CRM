@@ -28,7 +28,7 @@ namespace VAdvantage.Process
         DataSet dsInOut = new DataSet();
         DataSet dsRecord = new DataSet();
         DataRow[] dataRow = null;
-        MInOut inout = null;
+        MVAMInvInOut inout = null;
 
         protected override void Prepare()
         {
@@ -92,12 +92,12 @@ namespace VAdvantage.Process
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "dateacct");
                 if (dataRow != null && dataRow.Length > 0)
                 {
-                    MInvoice invoice = null;
+                    MVABInvoice invoice = null;
                     for (int i = 0; i < dataRow.Length; i++)
                     {
                         try
                         {
-                            invoice = new MInvoice(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Invoice_ID"]), Get_Trx());
+                            invoice = new MVABInvoice(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAB_Invoice_ID"]), Get_Trx());
                             invoice.CompleteIt();
                             if (invoice.GetDocAction() == "CL")
                             {
@@ -134,7 +134,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
+                            inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -211,7 +211,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
+                            inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -247,7 +247,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
+                            inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {
@@ -283,7 +283,7 @@ namespace VAdvantage.Process
                     {
                         try
                         {
-                            inout = new MInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
+                            inout = new MVAMInvInOut(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_Inv_InOut_ID"]), Get_Trx());
                             inout.CompleteIt();
                             if (inout.GetDocAction() == "CL")
                             {

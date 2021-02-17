@@ -230,7 +230,7 @@ namespace VAdvantage.Model
         {
             if (success && newRecord && IsSubscribed())
             {
-                MInterestArea ia = MInterestArea.Get(GetCtx(), GetR_InterestArea_ID());
+                MVARInterestArea ia = MVARInterestArea.Get(GetCtx(), GetR_InterestArea_ID());
                 if (ia.GetVAR_Source_ID() != 0)
                 {
                     String summary = "Subscribe: " + ia.GetName();

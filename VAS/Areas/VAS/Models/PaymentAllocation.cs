@@ -234,8 +234,8 @@ namespace VIS.Models
             //	For all invoices
             int invoiceLines = 0;
             //for (int i = 0; i < rowsCash.Count; i++)
-            MInvoicePaySchedule mpay = null;
-            MInvoice invoice = null;
+            MVABInvoicePaySchedule mpay = null;
+            MVABInvoice invoice = null;
             int VAB_sched_InvoicePayment_ID = 0;
             int Neg_VAB_sched_InvoicePayment_Id = 0;
             bool isScheduleAllocated = false;
@@ -249,9 +249,9 @@ namespace VIS.Models
                 isScheduleAllocated = false;
                 // if (boolValue)
                 {
-                    //mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                    //mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
 
-                    //invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                    //invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                     //invoiceLines++;
                     //  Invoice variables
                     /// int VAB_Invoice_ID = Util.GetValueOfInt(((BindableObject)rowsInvoice[i]).GetValue("VAB_INVOICE_ID"));
@@ -273,12 +273,12 @@ namespace VIS.Models
                     //CashLines settelment************
                     //  loop through all payments until invoice applied
                     int noCashlines = 0;
-                    MInvoicePaySchedule mpay2 = null;
+                    MVABInvoicePaySchedule mpay2 = null;
                     MVABCashJRNLLine objCashline = null;
                     for (int j = 0; j < cashList.Count && Env.Signum(AppliedAmt) != 0; j++)
                     {
-                        mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                        invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                        mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                        invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                         invoiceLines++;
                         ////  Invoice variables
                         VAB_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -374,7 +374,7 @@ namespace VIS.Models
                             // Create New schedule with split 
                             else if (isScheduleAllocated)
                             {
-                                mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                 PO.CopyValues(mpay, mpay2);
                                 //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                 mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -411,7 +411,7 @@ namespace VIS.Models
                             VAB_sched_InvoicePayment_ID = Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]);
 
                             //if (isInterBPartner) {
-                            //    MInvoicePaySchedule invPay = new MInvoicePaySchedule(ctx, VAB_sched_InvoicePayment_ID, trx);
+                            //    MVABInvoicePaySchedule invPay = new MVABInvoicePaySchedule(ctx, VAB_sched_InvoicePayment_ID, trx);
                             //    VAB_BusinessPartner_ID = invPay.GetVAB_BusinessPartner_ID();
                             //}
                             //	Allocation Line // Changed PaymentAmt to AppliedAmt 17/4/18
@@ -494,11 +494,11 @@ namespace VIS.Models
                             MVABDocAllocationLine aLine;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                                invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                                invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                 Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
-                                MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                MVABInvoice Neg_invoice = new MVABInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
                                 Decimal amount;
                                 mpay2 = null;
@@ -559,7 +559,7 @@ namespace VIS.Models
                                 // Create New schedule with split 
                                 else if (isScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -631,7 +631,7 @@ namespace VIS.Models
                                 }
                                 int aLine_ID = aLine.GetVAB_DocAllocationLine_ID();
                                 // when 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -685,7 +685,7 @@ namespace VIS.Models
                                 // Create New schedule with split 
                                 else if (is_NegScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -834,11 +834,11 @@ namespace VIS.Models
                             MVABDocAllocationLine aLine = null;
                             for (int c = 0; c < negInvList.Count; c++)
                             {
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                                invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                                invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                 Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount]);
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff]);
-                                MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                MVABInvoice Neg_invoice = new MVABInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
                                 Decimal amount = Env.ZERO;
                                 mpay2 = null;
@@ -900,7 +900,7 @@ namespace VIS.Models
                                 // Create New schedule with split 
                                 else if (isScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -972,7 +972,7 @@ namespace VIS.Models
                                 }
                                 int aLine_ID = aLine.GetVAB_DocAllocationLine_ID();//get the ID and initialize to aLine_ID
                                 // when 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
                                 mpay2 = null;
 
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -1025,7 +1025,7 @@ namespace VIS.Models
                                 // Create New schedule with split 
                                 else if (is_NegScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -1460,7 +1460,7 @@ namespace VIS.Models
         /// <param name="DateTrx"></param>
         /// <param name="trx"></param>
         /// <returns></returns>
-        public string InvAlloc(int invoicePaySchedule_ID, MInvoicePaySchedule mpay2, MVABDocAllocationLine aLine, DateTime DateTrx, Trx trx)
+        public string InvAlloc(int invoicePaySchedule_ID, MVABInvoicePaySchedule mpay2, MVABDocAllocationLine aLine, DateTime DateTrx, Trx trx)
         {
             //change for Schedule Management
             if (Env.IsModuleInstalled("VA009_"))
@@ -1521,7 +1521,7 @@ namespace VIS.Models
         /// <param name="invoice">MClass of Invoice which is holding Invocie Record Details.</param>
         /// <param name="trx">Currenct Transection</param>
         /// <returns>DueAmount</returns>
-        public Decimal GetDifference(MInvoice invoice, Trx trx)
+        public Decimal GetDifference(MVABInvoice invoice, Trx trx)
         {
             string sql = "SELECT (CASE "
                 + "WHEN i.GrandTotalAfterWithHolding != 0 THEN i.GrandTotalAfterWithHolding "
@@ -1713,8 +1713,8 @@ namespace VIS.Models
 
                 //	For all invoices
                 int invoiceLines = 0;
-                MInvoicePaySchedule mpay = null;
-                MInvoice invoice = null;
+                MVABInvoicePaySchedule mpay = null;
+                MVABInvoice invoice = null;
                 bool isScheduleAllocated = false;
                 bool is_NegScheduleAllocated = false;
 
@@ -1755,8 +1755,8 @@ namespace VIS.Models
                     //  Invoice line is selected
                     isScheduleAllocated = false;
                     {
-                        //mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                        //invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                        //mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                        //invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                         //invoiceLines++;
                         ////  Invoice variables
                         int VAB_Invoice_ID = 0;// Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -1773,12 +1773,12 @@ namespace VIS.Models
                         //Payment Settelment**********
                         //  loop through all payments until invoice applied
                         int noPayments = 0;
-                        MInvoicePaySchedule mpay2 = null;
+                        MVABInvoicePaySchedule mpay2 = null;
                         MVABPayment objPayment = null;
                         for (int j = 0; j < paymentList.Count && Env.Signum(AppliedAmt) != 0; j++)
                         {
-                            mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                            invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                            mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                            invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                             invoiceLines++;
                             ////  Invoice variables
                             VAB_Invoice_ID = Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]);
@@ -1862,7 +1862,7 @@ namespace VIS.Models
                                 // Create New schedule with split 
                                 else if (isScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -1934,7 +1934,7 @@ namespace VIS.Models
 
                                 //if (isInterBPartner)
                                 //{
-                                //    MInvoicePaySchedule invPay = new MInvoicePaySchedule(ctx, VAB_sched_InvoicePayment_ID, trx);
+                                //    MVABInvoicePaySchedule invPay = new MVABInvoicePaySchedule(ctx, VAB_sched_InvoicePayment_ID, trx);
                                 //    aLine.SetVAB_BusinessPartner_ID(invPay.GetVAB_BusinessPartner_ID());
                                 //}
                                 //aLine.SetPaymentInfo(VAB_Payment_ID, VAB_CashJRNLLine_ID);
@@ -2017,13 +2017,13 @@ namespace VIS.Models
                                 MVABDocAllocationLine aLine = null;
                                 for (int c = 0; c < negInvList.Count; c++)
                                 {
-                                    mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                                    mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
 
 
-                                    invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                    invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                     Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount.ToLower()]);
                                     Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff.ToLower()]);
-                                    MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                    MVABInvoice Neg_invoice = new MVABInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
 
                                     Decimal amount = Env.ZERO;
@@ -2086,7 +2086,7 @@ namespace VIS.Models
                                     // Create New schedule with split 
                                     else if (isScheduleAllocated)
                                     {
-                                        mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                        mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                         PO.CopyValues(mpay, mpay2);
                                         //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                         mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -2157,7 +2157,7 @@ namespace VIS.Models
                                     }
                                     int aLine_ID = aLine.GetVAB_DocAllocationLine_ID();
                                     // when 
-                                    mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
+                                    mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
                                     mpay2 = null;
 
                                     //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -2210,7 +2210,7 @@ namespace VIS.Models
                                     // Create New schedule with split 
                                     else if (is_NegScheduleAllocated)
                                     {
-                                        mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                        mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                         PO.CopyValues(mpay, mpay2);
                                         //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                         mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -2360,11 +2360,11 @@ namespace VIS.Models
                                 MVABDocAllocationLine aLine = null;
                                 for (int c = 0; c < negInvList.Count; c++)
                                 {
-                                    mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                                    invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                    mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                                    invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                     Decimal NDiscountAmt = Util.GetValueOfDecimal(negInvList[c][discount.ToLower()]);
                                     Decimal NWriteOffAmt = Util.GetValueOfDecimal(negInvList[c][writeOff.ToLower()]);
-                                    MInvoice Neg_invoice = new MInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
+                                    MVABInvoice Neg_invoice = new MVABInvoice(ctx, Util.GetValueOfInt(negInvList[c]["cinvoiceid"]), trx);
 
                                     Decimal amount = Env.ZERO;
                                     mpay2 = null;
@@ -2427,7 +2427,7 @@ namespace VIS.Models
                                     // Create New schedule with split 
                                     else if (isScheduleAllocated)
                                     {
-                                        mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                        mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                         PO.CopyValues(mpay, mpay2);
                                         //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                         mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -2503,7 +2503,7 @@ namespace VIS.Models
                                     int aLine_ID = aLine.GetVAB_DocAllocationLine_ID();
 
                                     // when 
-                                    mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
+                                    mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(negInvList[c]["VAB_sched_InvoicePayment_id"]), trx);
                                     mpay2 = null;
 
                                     //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
@@ -2558,7 +2558,7 @@ namespace VIS.Models
                                     // Create New schedule with split 
                                     else if (is_NegScheduleAllocated)
                                     {
-                                        mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                        mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                         PO.CopyValues(mpay, mpay2);
                                         //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                         mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -4468,8 +4468,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
             //	For all invoices
             //int invoiceLines = 0;
-            MInvoicePaySchedule mpay = null;
-            MInvoice invoice = null;
+            MVABInvoicePaySchedule mpay = null;
+            MVABInvoice invoice = null;
             bool isScheduleAllocated = false;
             bool is_NegScheduleAllocated = false;
 
@@ -4884,7 +4884,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         continue;
 
                     MVABDocAllocationLine aLine = null;
-                    MInvoicePaySchedule mpay2 = null;
+                    MVABInvoicePaySchedule mpay2 = null;
                     Decimal diffAmt = Env.ZERO;
 
                     #region GL to Invoice -- create allocation line 
@@ -4903,8 +4903,8 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         for (int j = 0; j < rowsGL.Count; j++)
 
                         {
-                            mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                            invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                            mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                            invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                             MJournalLine journalLine = new MJournalLine(ctx, Util.GetValueOfInt(rowsGL[j]["VAGL_JRNLLine_ID"]), trx);
 
                             if (Util.GetValueOfBool(rowsGL[j]["IsPaid"]))
@@ -5000,7 +5000,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                             // Create New schedule with split 
                             else if (isScheduleAllocated)
                             {
-                                mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                 PO.CopyValues(mpay, mpay2);
                                 //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                 mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -5095,7 +5095,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                         }
 
 
-                        //MInvoice neg_InvoiceObj = null;
+                        //MVABInvoice neg_InvoiceObj = null;
                         //only when the invoice is have + ve AppliedAmt
                         if (remainingAmt > 0 && Util.GetValueOfDecimal(rowsInvoice[i]["AppliedAmt"]) > 0)
                         {
@@ -5105,11 +5105,11 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
 
                             {
 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
-                                invoice = new MInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(rowsInvoice[i]["VAB_sched_InvoicePayment_id"]), trx);
+                                invoice = new MVABInvoice(ctx, Util.GetValueOfInt(rowsInvoice[i]["cinvoiceid"]), trx);
                                 Decimal NDiscountAmt = Util.GetValueOfDecimal(negList[j][discount]);
                                 Decimal NWriteOffAmt = Util.GetValueOfDecimal(negList[j][writeOff]);
-                                MInvoice neg_InvoiceObj = new MInvoice(ctx, Util.GetValueOfInt(negList[j]["cinvoiceid"]), trx);
+                                MVABInvoice neg_InvoiceObj = new MVABInvoice(ctx, Util.GetValueOfInt(negList[j]["cinvoiceid"]), trx);
 
                                 if (Util.GetValueOfBool(negList[j]["IsPaid"]))
                                     continue;
@@ -5170,7 +5170,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 // Create New schedule with split 
                                 else if (isScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -5246,7 +5246,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 int aLine_ID = aLine.GetVAB_DocAllocationLine_ID();
 
                                 // when 
-                                mpay = new MInvoicePaySchedule(ctx, Util.GetValueOfInt(negList[j]["VAB_sched_InvoicePayment_id"]), trx);
+                                mpay = new MVABInvoicePaySchedule(ctx, Util.GetValueOfInt(negList[j]["VAB_sched_InvoicePayment_id"]), trx);
                                 mpay2 = null;
                                 //if the invoice id for -ve amount will contain in this list the overunderamt set as Zero.
                                 if (!neg_Invoice_IDs.Contains(Util.GetValueOfInt(negList[j]["VAB_sched_InvoicePayment_id"])))
@@ -5307,7 +5307,7 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
                                 // Create New schedule with split 
                                 else if (is_NegScheduleAllocated)
                                 {
-                                    mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+                                    mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
                                     PO.CopyValues(mpay, mpay2);
                                     //Set VAF_Org_ID and VAF_Client_ID when we split the schedule
                                     mpay2.SetVAF_Client_ID(mpay.GetVAF_Client_ID());
@@ -5694,9 +5694,9 @@ currencyConvert(invoiceOpen * MultiplierAP, VAB_Currency_ID, " + _VAB_Currency_I
         /// <param name="amount">Amount to create schedule</param>
         /// <param name="trx">Transaction Object</param>
         /// <returns>Return new schedule object</returns>
-        public MInvoicePaySchedule CreateNewSchedule(MInvoicePaySchedule mpay, MInvoice invoice, MJournalLine journalLine, MVABDocAllocationLine aLine, Decimal amount, Trx trx)
+        public MVABInvoicePaySchedule CreateNewSchedule(MVABInvoicePaySchedule mpay, MVABInvoice invoice, MJournalLine journalLine, MVABDocAllocationLine aLine, Decimal amount, Trx trx)
         {
-            MInvoicePaySchedule mpay2 = new MInvoicePaySchedule(ctx, 0, trx);
+            MVABInvoicePaySchedule mpay2 = new MVABInvoicePaySchedule(ctx, 0, trx);
             MJournal journal = new MJournal(ctx, journalLine.GetVAGL_JRNL_ID(), trx);
             PO.CopyValues(mpay, mpay2);
             //Set VAF_Org_ID and VAF_Client_ID when we split the schedule

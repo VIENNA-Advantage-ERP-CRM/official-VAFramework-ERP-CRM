@@ -3217,7 +3217,7 @@
                 var inOutLine_ID = Util.getValueOfInt(mTab.getValue("Orig_InOutLine_ID"));
                 if (inOutLine_ID != 0) {
                     paramStr = inOutLine_ID.toString();
-                    var dr = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", paramStr);
+                    var dr = VIS.dataContext.getJSONRecord("MVAMInvInOutLine/GetMVAMInvInOutLine", paramStr);
                     var mq = dr["MovementQty"];
                     var shippedQty = Util.getValueOfDecimal(mq);
 
@@ -3796,8 +3796,8 @@
                 return "";
             this.setCalloutActive(true);
             //	Get Details from Original Shipment
-            //MInOut io = new MInOut(ctx, Orig_InOut_ID, null);
-            var io = VIS.dataContext.getJSONRecord("MInOut/GetInOut", Orig_InOut_ID.toString());
+            //MVAMInvInOut io = new MVAMInvInOut(ctx, Orig_InOut_ID, null);
+            var io = VIS.dataContext.getJSONRecord("MVAMInvInOut/GetInOut", Orig_InOut_ID.toString());
             //mTab.setValue("ShipDate", Util.getValueOfDate(io.MovementDate));
             mTab.setValue("VAB_Project_ID", Util.getValueOfInt(io.VAB_Project_ID));
             mTab.setValue("VAB_Promotion_ID", Util.getValueOfInt(io.VAB_Promotion_ID));
@@ -3906,8 +3906,8 @@
 
             this.setCalloutActive(true);
             //	Get Details
-            var Orig_InOutLine = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", Orig_InOutLine_ID.toString())
-            //MInOutLine Orig_InOutLine = new MInOutLine(ctx, Orig_InOutLine_ID, null);
+            var Orig_InOutLine = VIS.dataContext.getJSONRecord("MVAMInvInOutLine/GetMVAMInvInOutLine", Orig_InOutLine_ID.toString())
+            //MVAMInvInOutLine Orig_InOutLine = new MVAMInvInOutLine(ctx, Orig_InOutLine_ID, null);
 
             if (Orig_InOutLine != null) {
                 mTab.setValue("VAB_Project_ID", Util.getValueOfInt(Orig_InOutLine["VAB_Project_ID"]));
@@ -4232,7 +4232,7 @@
         //+ " ORDER BY ips.duedate ASC  ) WHERE rownum=1";
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
+            drAmt = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
             if (drAmt != null) {
                 VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
                 mTab.setValue("VAB_sched_InvoicePayment_ID", VAB_sched_InvoicePayment_ID);
@@ -4277,7 +4277,7 @@
         //    + " ) as paymentTermDiscount,VAB_DocTypesTarget_ID FROM VAB_Invoice WHERE VAB_Invoice_ID=" + VAB_Invoice_ID;
         var data = null;
         try {
-            data = VIS.dataContext.getJSONRecord("MInvoice/GetInvoiceDetails", paramString);
+            data = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoiceDetails", paramString);
 
             //idr = CalloutDB.executeCalloutReader(sql, null, null);
             //pstmt.setTimestamp(1, ts);
@@ -4909,7 +4909,7 @@
                 else if (AttrCode.indexOf("(01)") >= 0) {
                     var paramString = AttrCode + "," + Util.getValueOfInt(value) + "," + windowNo;
 
-                    var ASI_ID = VIS.dataContext.getJSONRecord("MInOut/GetASIID", paramString);
+                    var ASI_ID = VIS.dataContext.getJSONRecord("MVAMInvInOut/GetASIID", paramString);
                     if (ASI_ID != 0) {
                         mTab.setValue("VAM_PFeature_SetInstance_ID", ASI_ID);
                     }
@@ -4979,7 +4979,7 @@
          * Also checks the old asi and removes it if product has been change.
          */
 
-        //Get MInventoryLine Information
+        //Get MVAMInventoryLine Information
         //Get product price information
         var dr = null;
         dr = VIS.dataContext.getJSONRecord("MProductCategory/GetProductCategory", paramString);
@@ -11257,14 +11257,14 @@
             //Removed client side query
             // Mohit  21 May 2019
             var paramString = value.toString() + ',' + AttrCode.toString();
-            Attribute_ID = VIS.dataContext.getJSONRecord("MInventoryLine/GetProductAttribute", paramString);
+            Attribute_ID = VIS.dataContext.getJSONRecord("MVAMInventoryLine/GetProductAttribute", paramString);
 
         }
         var inventoryLine = Util.getValueOfInt(mTab.getValue("VAM_InventoryLine_ID"));
         var VAM_Inventory_ID = Util.getValueOfInt(mTab.getValue("VAM_Inventory_ID"));
         var dr1 = null;
-        var paramInventory = VAM_Inventory_ID.toString();
-        dr1 = VIS.dataContext.getJSONRecord("MInventory/GetMInventory", paramInventory);
+        var paraMVAMInventory = VAM_Inventory_ID.toString();
+        dr1 = VIS.dataContext.getJSONRecord("MVAMInventory/GetMVAMInventory", paraMVAMInventory);
         var MovementDate = dr1["MovementDate"];
         var VAF_Org_ID = dr1["VAF_Org_ID"];
 
@@ -11274,7 +11274,7 @@
         // JID_0855 :On change of locator and Attribute set instance sytem is removing the UOM of product.-
         // Mohit - 21 May 2019.
         if (mField.getColumnName() == "VAM_Product_ID") {
-            Uom = VIS.dataContext.getJSONRecord("MInventoryLine/GetProductUOM", value.toString());
+            Uom = VIS.dataContext.getJSONRecord("MVAMInventoryLine/GetProductUOM", value.toString());
             mTab.setValue("VAB_UOM_ID", Util.getValueOfInt(Uom));
         }
 
@@ -11286,17 +11286,17 @@
          * Also checks the old asi and removes it if product has been change.
          */
         if (inventoryLine != null && inventoryLine != 0) {
-            //Get MInventoryLine Information
+            //Get MVAMInventoryLine Information
             //Get product price information
             var dr = null;
-            dr = VIS.dataContext.getJSONRecord("MInventoryLine/GetMInventoryLine", paramString);
+            dr = VIS.dataContext.getJSONRecord("MVAMInventoryLine/GetMVAMInventoryLine", paramString);
 
             var VAM_Product_ID = dr["VAM_Product_ID"];//dr.VAM_Product_ID;//getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetI
             var VAM_Locator_ID = dr["VAM_Locator_ID"];//dr.VAM_Locator_ID;
 
 
 
-            // MInventoryLine iLine = new MInventoryLine(ctx, inventoryLine.Value, null);  
+            // MVAMInventoryLine iLine = new MVAMInventoryLine(ctx, inventoryLine.Value, null);  
             var VAM_Product_ID1 = Util.getValueOfInt(mTab.getValue("VAM_Product_ID"));
             var VAM_Locator_ID1 = Util.getValueOfInt(mTab.getValue("VAM_Locator_ID"));
             // get product Container
@@ -11411,8 +11411,8 @@
         var inventoryLine = Util.getValueOfInt(mTab.getValue("VAM_InventoryLine_ID"));
         var VAM_Inventory_ID = Util.getValueOfInt(mTab.getValue("VAM_Inventory_ID"));
         var dr1 = null;
-        var paramInventory = VAM_Inventory_ID.toString();
-        dr1 = VIS.dataContext.getJSONRecord("MInventory/GetMInventory", paramInventory);
+        var paraMVAMInventory = VAM_Inventory_ID.toString();
+        dr1 = VIS.dataContext.getJSONRecord("MVAMInventory/GetMVAMInventory", paraMVAMInventory);
         var MovementDate = dr1["MovementDate"];
         var VAF_Org_ID = dr1["VAF_Org_ID"];
 
@@ -12392,7 +12392,7 @@
             /***** Amit ****/
             sql = "SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'";
             countEd011 = Util.getValueOfInt(VIS.DB.executeScalar(sql));
-            var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", mTab.getValue("VAB_Invoice_ID").toString());
+            var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", mTab.getValue("VAB_Invoice_ID").toString());
 
             var purchasingUom = 0;
             if (countEd011 > 0) {
@@ -12857,7 +12857,7 @@
 
             //JID_1744 The precision should be as per Currenct Precision
             //JID_1744 The precision should be as per Currenct Precision
-            var stdPrecision = VIS.dataContext.getJSONRecord("MInvoice/GetPercision", mTab.getValue("VAB_Invoice_ID").toString());
+            var stdPrecision = VIS.dataContext.getJSONRecord("MVABInvoice/GetPercision", mTab.getValue("VAB_Invoice_ID").toString());
 
             dr = VIS.DB.executeReader(sql, null, null);
             if (dr.read()) {
@@ -12923,7 +12923,7 @@
             // JID_1449: Tax is not working in case of charge on invoice line
             var params = Util.getValueOfString(mTab.getValue("VAB_Invoice_ID")).concat(",", Util.getValueOfString(mTab.getValue("VAM_Product_ID")) +
                 "," + Util.getValueOfString(mTab.getValue("VAB_Charge_ID")));
-            var recDic = VIS.dataContext.getJSONRecord("MInvoice/GetTax", params);
+            var recDic = VIS.dataContext.getJSONRecord("MVABInvoice/GetTax", params);
 
             //var _CountVATAX = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX IN ('VATAX_' )"));
             var _CountVATAX = Util.getValueOfInt(recDic["_CountVATAX"]);
@@ -12931,7 +12931,7 @@
             var isSOTrx = ctx.getWindowContext(windowNo, "IsSOTrx", true) == "Y";
 
             //paramString = mTab.getValue("VAB_Invoice_ID").toString();
-            //var invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+            //var invoice = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
             //sql = "SELECT VATAX_TaxRule FROM VAF_OrgDetail WHERE VAF_Org_ID=" + Util.getValueOfInt(invoice["VAF_Org_ID"]) + " AND IsActive ='Y' AND VAF_Client_ID =" + ctx.getVAF_Client_ID();
 
@@ -12947,7 +12947,7 @@
                 //if (Util.getValueOfInt(VIS.DB.executeScalar(sql)) > 0) {
                 //    paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString() + "," + Util.getValueOfInt(mTab.getValue("VAM_Product_ID")).toString() +
                 //        "," + Util.getValueOfInt(mTab.getValue("VAB_Charge_ID")).toString();
-                //    taxid = VIS.dataContext.getJSONRecord("MInvoice/GetTax", paramString);
+                //    taxid = VIS.dataContext.getJSONRecord("MVABInvoice/GetTax", paramString);
                 //}
                 //else {
                 //    sql = "select vatax_taxtype_id from VAB_BPart_Location where VAB_BusinessPartner_id =" + util.getvalueofint(invoice["VAB_BusinessPartner_id"]) +
@@ -13128,7 +13128,7 @@
                         "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                         "," + VAB_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                         "," + QtyEntered.toString());
-                    var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramStr);
+                    var prices = VIS.dataContext.getJSONRecord("MVABInvoice/GetPrices", paramStr);
 
                     if (prices != null) {
                         PriceList = prices["PriceList"];
@@ -13143,7 +13143,7 @@
 
                 // Get Price List From SO/PO Header
                 //paramString = (mTab.getValue("VAB_Invoice_ID")).toString();
-                //var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+                //var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                 ////Get PriceListversion based on Pricelist
                 //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
@@ -13308,7 +13308,7 @@
 
                 countEd011 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='ED011_'"));
 
-                var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("VAB_Invoice_ID")).toString());
+                var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", (mTab.getValue("VAB_Invoice_ID")).toString());
 
                 //Get PriceListversion based on Pricelist
                 var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
@@ -13351,7 +13351,7 @@
                             "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                             "," + VAB_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                             "," + QtyEntered.toString());
-                        var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramString);
+                        var prices = VIS.dataContext.getJSONRecord("MVABInvoice/GetPrices", paramString);
 
                         if (prices != null) {
                             PriceList = prices["PriceList"];
@@ -13362,7 +13362,7 @@
 
                         //Start Amit Uom Conversion
                         //paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
-                        //var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+                        //var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                         ////Get PriceListversion based on Pricelist
                         //var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
@@ -13571,7 +13571,7 @@
             // change by amit 15-10-2015
             if (epl == "") {
                 var paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
-                var VAB_Invoice = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+                var VAB_Invoice = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
                 var sql = "SELECT EnforcePriceLimit FROM VAM_PriceList WHERE IsActive = 'Y' AND VAM_PriceList_ID = " + VAB_Invoice["VAM_PriceList_ID"];
                 epl = VIS.DB.executeScalar(sql);
                 enforce = (VAB_Invoice["IsSOTrx"] && epl != null && epl == "Y");
@@ -13753,7 +13753,7 @@
                     "," + Util.getValueOfString(mTab.getValue("VAM_PFeature_SetInstance_ID")) +
                     "," + VAB_UOM_To_ID.toString() + "," + ctx.getVAF_Client_ID().toString() + "," + VAB_BusinessPartner_ID.toString() +
                     "," + QtyEntered.toString());
-                var prices = VIS.dataContext.getJSONRecord("MInvoice/GetPrices", paramStr);
+                var prices = VIS.dataContext.getJSONRecord("MVABInvoice/GetPrices", paramStr);
 
                 if (prices != null) {
                     countEd011 = prices["countEd011"];
@@ -13850,7 +13850,7 @@
                 //if (countEd011 > 0) {
                 //    //Get priceList From SO/PO
                 //    paramString = Util.getValueOfInt(mTab.getValue("VAB_Invoice_ID")).toString();
-                //    var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
+                //    var invoiceRecord = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
 
                 //    //Get PriceListversion based on Pricelist
                 //    var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetVAM_PriceListVersion_ID", invoiceRecord["VAM_PriceList_ID"].toString());
@@ -14409,14 +14409,14 @@
 
         //Get product price information
         var dr = null;
-        dr = VIS.dataContext.getJSONRecord("MInvoiceBatchLine/GetInvoiceBatchLine", paramString);
+        dr = VIS.dataContext.getJSONRecord("MVABInvoiceBatchLine/GetInvoiceBatchLine", paramString);
 
 
 
 
 
-        //MInvoiceBatchLine last = new MInvoiceBatchLine(Env.GetCtx(), VAB_BatchInvoiceLine_ID, null);
-        //MInvoiceBatchLine last = new MInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
+        //MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(Env.GetCtx(), VAB_BatchInvoiceLine_ID, null);
+        //MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
         //	Need to Increase when different DocType or BP
         var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
         var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
@@ -17428,7 +17428,7 @@
                 if (Util.getValueOfBoolean(dr["IsReturnTrx"])) {
                     mTab.setValue("Orig_OrderLine_ID", Util.getValueOfInt(dr["Orig_OrderLine_ID"]));
                     var paramString = dr["Orig_InOutLine_ID"];
-                    var line = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", paramString);
+                    var line = VIS.dataContext.getJSONRecord("MVAMInvInOutLine/GetMVAMInvInOutLine", paramString);
 
                     // JID_1656: locator sholud select manually
                     //mTab.setValue("VAM_Locator_ID", line["VAM_Locator_ID"]);
@@ -17698,9 +17698,9 @@
                     var orig_IOLine_ID = oLine["Orig_InOutLine_ID"];
                     if (orig_IOLine_ID != 0) {
                         var paramString = orig_IOLine_ID.toString();
-                        var orig_IOLine = VIS.dataContext.getJSONRecord("MInOutLine/GetMInOutLine", paramString);
+                        var orig_IOLine = VIS.dataContext.getJSONRecord("MVAMInvInOutLine/GetMVAMInvInOutLine", paramString);
 
-                        // MInOutLine orig_IOLine = new MInOutLine(ctx, orig_IOLine_ID, null);
+                        // MVAMInvInOutLine orig_IOLine = new MVAMInvInOutLine(ctx, orig_IOLine_ID, null);
                         var shippedQty = orig_IOLine["MovementQty"];
                         movementQty = Util.getValueOfDecimal(mTab.getValue("MovementQty"));
                         if (shippedQty.toString().compareTo(movementQty) < 0) {
@@ -17769,7 +17769,7 @@
                 var VAM_Warehouse_ID = ctx.getContextAsInt(windowNo, "VAM_Warehouse_ID");
 
                 var param = VAM_Warehouse_ID.toString();
-                var VAM_Locator_ID = VIS.dataContext.getJSONRecord("MInOut/GetDefaultLocatorID", param);
+                var VAM_Locator_ID = VIS.dataContext.getJSONRecord("MVAMInvInOut/GetDefaultLocatorID", param);
                 //var VAM_Locator_ID = VIS.DB.executeScalar("SELECT MIN(VAM_Locator_ID) FROM VAM_Locator WHERE IsActive = 'Y' AND VAM_Warehouse_ID = " + VAM_Warehouse_ID);
                 ctx.setContext(windowNo, "VAM_Locator_ID", VAM_Locator_ID);
                 this.log.fine("VAM_Product_ID=" + VAM_Product_ID
@@ -17863,7 +17863,7 @@
 
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID);
+            drAmt = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvPaySchedDetail", VAB_Invoice_ID);
             if (drAmt != null) {
                 VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
                 dueAmount = Util.getValueOfDecimal(drAmt["dueAmount"]);
@@ -18197,7 +18197,7 @@
 
         var drAmt = null;
         try {
-            drAmt = VIS.dataContext.getJSONRecord("MInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
+            drAmt = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvPaySchedDetail", VAB_Invoice_ID.toString());
             if (drAmt != null) {
                 VAB_sched_InvoicePayment_ID = Util.getValueOfInt(drAmt["VAB_sched_InvoicePayment_ID"]);
                 dueAmount = Util.getValueOfDecimal(drAmt["dueAmount"]);
@@ -18604,8 +18604,8 @@
         if (VAB_Invoice_ID != 0) {
 
             paramString = VAB_Invoice_ID.toString();
-            var inv = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", paramString);
-            //  MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
+            var inv = VIS.dataContext.getJSONRecord("MVABInvoice/GetInvoice", paramString);
+            //  MVABInvoice inv = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             if (dt != null) {
                 if (Util.getValueOfBoolean(inv["IsSOTrx"]) != isSOTrx) {
                     return VIS.Msg.getMsg("DocTypeInvInconsistent");
@@ -18617,7 +18617,7 @@
             // Edited by Vivek assigned by Mukesh sir on 05/10/2017
             paramString = VAB_Order_ID.toString();
             var Ord = VIS.dataContext.getJSONRecord("MOrder/GetOrder", paramString);
-            //  MInvoice inv = new MInvoice(ctx, VAB_Invoice_ID, null);
+            //  MVABInvoice inv = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             if (dt != null) {
                 if (Util.getValueOfBoolean(Ord["IsSOTrx"]) != isSOTrx) {
                     return VIS.Msg.getMsg("DocTypeOrdInconsistent");
