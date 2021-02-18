@@ -50,7 +50,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRecurring rec = new MRecurring(GetCtx(), GetRecord_ID(), Get_TrxName());
+            MVABRecurring rec = new MVABRecurring(GetCtx(), GetRecord_ID(), Get_TrxName());
             log.Info(rec.ToString());
             return rec.ExecuteRun();
         }	//	doIt

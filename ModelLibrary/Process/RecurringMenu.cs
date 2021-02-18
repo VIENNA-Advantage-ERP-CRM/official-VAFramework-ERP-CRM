@@ -59,7 +59,7 @@ namespace VAdvantage.Process
         {
             if (_VAB_Recurring_ID > 0)
             {
-                MRecurring rec = new MRecurring(GetCtx(), _VAB_Recurring_ID, Get_TrxName());
+                MVABRecurring rec = new MVABRecurring(GetCtx(), _VAB_Recurring_ID, Get_TrxName());
                 log.Info(rec.ToString());
                 return rec.ExecuteRun();
             }

@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         //	Cache						
         private static CCache<int, MVABAddress> s_cache = new CCache<int, MVABAddress>("VAB_Address", 100, 30);
         private MVABCountry _country = null;
-        private MRegion _region = null;
+        private MVABRegionState _region = null;
         //	Static Logger				
         private static VLogger _log = VLogger.GetVLogger(typeof(MVABAddress).FullName);
         #endregion
@@ -110,7 +110,7 @@ namespace VAdvantage.Model
             {
                 MVABCountry defaultCountry = MVABCountry.GetDefault(GetCtx());
                 SetCountry(defaultCountry);
-                MRegion defaultRegion = MRegion.GetDefault(GetCtx());
+                MVABRegionState defaultRegion = MVABRegionState.GetDefault(GetCtx());
                 if (defaultRegion != null
                     && defaultRegion.GetVAB_Country_ID() == defaultCountry.GetVAB_Country_ID())
                     SetRegion(defaultRegion);
@@ -122,7 +122,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="country">mandatory country</param>
         /// <param name="region">optional region</param>
-        public MVABAddress(MVABCountry country, MRegion region)
+        public MVABAddress(MVABCountry country, MVABRegionState region)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
             SetCountry(country);
@@ -229,7 +229,7 @@ namespace VAdvantage.Model
          * 	Set Region
          *	@param region
          */
-        public void SetRegion(MRegion region)
+        public void SetRegion(MVABRegionState region)
         {
             _region = region;
             if (region == null)
@@ -264,17 +264,17 @@ namespace VAdvantage.Model
                     SetRegion(null);
             }
             else
-                SetRegion(MRegion.Get(GetCtx(), VAB_RegionState_ID));
+                SetRegion(MVABRegionState.Get(GetCtx(), VAB_RegionState_ID));
         }
 
         /**
          * 	Get Region
          *	@return region
          */
-        public MRegion GetRegion()
+        public MVABRegionState GetRegion()
         {
             if (_region == null && GetVAB_RegionState_ID() != 0)
-                _region = MRegion.Get(GetCtx(), GetVAB_RegionState_ID());
+                _region = MVABRegionState.Get(GetCtx(), GetVAB_RegionState_ID());
             return _region;
         }
 

@@ -7,15 +7,15 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MRevenueRecognitionRun : X_VAB_Rev_RecognitionRun
+    public class MVABRevRecognitionRun : X_VAB_Rev_RecognitionRun
     {
-        private static VLogger _log = VLogger.GetVLogger(typeof(MRevenueRecognitionRun).FullName);
-        public MRevenueRecognitionRun(Ctx ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName)
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABRevRecognitionRun).FullName);
+        public MVABRevRecognitionRun(Ctx ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName)
             : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
         {
 
         }
-        public MRevenueRecognitionRun(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABRevRecognitionRun(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
@@ -29,12 +29,12 @@ namespace VAdvantage.Model
         /// <param name="_orgId">Org ID</param>
         /// <param name="reverse">is reverse or not</param>
         /// <returns>array of MRevenueRecognitionRun</returns>
-        public static MRevenueRecognitionRun[] GetRecognitionRuns(MRevenueRecognition revenueRecognition, DateTime? recognitionDate, int _orgId, bool reverse)
+        public static MVABRevRecognitionRun[] GetRecognitionRuns(MVABRevRecognition revenueRecognition, DateTime? recognitionDate, int _orgId, bool reverse)
         {
-            List<MRevenueRecognitionRun> list = new List<MRevenueRecognitionRun>();
+            List<MVABRevRecognitionRun> list = new List<MVABRevRecognitionRun>();
             string sql = "Select  rn.* from VAB_Rev_RecognitionRun rn " +
-                        " JOIN c_revenuerecognition_plan pl ON pl.c_revenuerecognition_plan_id = rn.c_revenuerecognition_plan_id " +
-                        " WHERE pl.c_revenuerecognition_id =" + revenueRecognition.GetC_RevenueRecognition_ID();
+                        " JOIN VAB_Rev_RecognitionStrtgy pl ON pl.VAB_Rev_RecognitionStrtgy_id = rn.VAB_Rev_RecognitionStrtgy_id " +
+                        " WHERE pl.VAB_Rev_Recognition_id =" + revenueRecognition.GetVAB_Rev_Recognition_ID();
             if (!reverse)
             {
                 sql += " And RecognitionDate <=" + GlobalVariable.TO_DATE(recognitionDate, true);
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRevenueRecognitionRun(revenueRecognition.GetCtx(), dr, revenueRecognition.Get_Trx()));
+                    list.Add(new MVABRevRecognitionRun(revenueRecognition.GetCtx(), dr, revenueRecognition.Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MRevenueRecognitionRun[] retValue = new MRevenueRecognitionRun[list.Count];
+            MVABRevRecognitionRun[] retValue = new MVABRevRecognitionRun[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -80,11 +80,11 @@ namespace VAdvantage.Model
         /// This function is used to set the values
         /// </summary>
         /// <param name="revenueRecognitionPlan">Revenue Recognnition plan ID</param>
-        public void SetRecognitionRun(MRevenueRecognitionPlan revenueRecognitionPlan)
+        public void SetRecognitionRun(MVABRevRecognitionStrtgy revenueRecognitionPlan)
         {
             SetVAF_Client_ID(revenueRecognitionPlan.GetVAF_Client_ID());
             SetVAF_Org_ID(revenueRecognitionPlan.GetVAF_Org_ID());
-            SetC_RevenueRecognition_Plan_ID(revenueRecognitionPlan.GetC_RevenueRecognition_Plan_ID());
+            SetVAB_Rev_RecognitionStrtgy_ID(revenueRecognitionPlan.GetVAB_Rev_RecognitionStrtgy_ID());
         }
     }
 }

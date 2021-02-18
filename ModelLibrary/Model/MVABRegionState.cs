@@ -26,14 +26,14 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     [Serializable]
-    public class MRegion : X_VAB_RegionState, IComparer<PO>
+    public class MVABRegionState : X_VAB_RegionState, IComparer<PO>
     {
         /* 	Load Regions (cached)
          *	@param ctx context
          */
         private static void LoadAllRegions(Ctx ctx)
         {
-            s_regions = new CCache<String, MRegion>("VAB_RegionState", 100);
+            s_regions = new CCache<String, MVABRegionState>("VAB_RegionState", 100);
             String sql = "SELECT * FROM VAB_RegionState WHERE IsActive='Y'";
             try
             {
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < stmt.Tables[0].Rows.Count; i++)
                 {
                     DataRow rs = stmt.Tables[0].Rows[i];
-                    MRegion r = new MRegion(ctx, rs, null);
+                    MVABRegionState r = new MVABRegionState(ctx, rs, null);
                     s_regions.Add(r.GetVAB_RegionState_ID().ToString(), r);
                     if (r.IsDefault())
                         s_default = r;
@@ -60,15 +60,15 @@ namespace VAdvantage.Model
          *	@param VAB_RegionState_ID ID
          *	@return Country
          */
-        public static MRegion Get(Ctx ctx, int VAB_RegionState_ID)
+        public static MVABRegionState Get(Ctx ctx, int VAB_RegionState_ID)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
             String key = VAB_RegionState_ID.ToString();
-            MRegion r = (MRegion)s_regions[key];
+            MVABRegionState r = (MVABRegionState)s_regions[key];
             if (r != null)
                 return r;
-            r = new MRegion(ctx, VAB_RegionState_ID, null);
+            r = new MVABRegionState(ctx, VAB_RegionState_ID, null);
             if (r.GetVAB_RegionState_ID() == VAB_RegionState_ID)
             {
                 s_regions.Add(key, r);
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
          * 	@param ctx context
          *	@return Region or null
          */
-        public static MRegion GetDefault(Ctx ctx)
+        public static MVABRegionState GetDefault(Ctx ctx)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
@@ -95,13 +95,13 @@ namespace VAdvantage.Model
          *  @return MCountry Array
          */
         //@SuppressWarnings("unchecked")
-        public static MRegion[] GetRegions(Ctx ctx)
+        public static MVABRegionState[] GetRegions(Ctx ctx)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
-            MRegion[] retValue = new MRegion[s_regions.Count];
+            MVABRegionState[] retValue = new MVABRegionState[s_regions.Count];
             retValue = s_regions.Values.ToArray();
-            Array.Sort(retValue, new MRegion(ctx, 0, null));
+            Array.Sort(retValue, new MVABRegionState(ctx, 0, null));
             return retValue;
         }
 
@@ -112,32 +112,32 @@ namespace VAdvantage.Model
          *  @return MRegion Array
          */
         //@SuppressWarnings("unchecked")
-        public static MRegion[] GetRegions(Ctx ctx, int VAB_Country_ID)
+        public static MVABRegionState[] GetRegions(Ctx ctx, int VAB_Country_ID)
         {
             if (s_regions == null || s_regions.Count == 0)
                 LoadAllRegions(ctx);
-            List<MRegion> list = new List<MRegion>();
+            List<MVABRegionState> list = new List<MVABRegionState>();
             //iterator it = s_regions.Values.iterator();
             IEnumerator it = s_regions.Values.GetEnumerator();
             while (it.MoveNext())
             {
-                MRegion r = (MRegion)it.Current;
+                MVABRegionState r = (MVABRegionState)it.Current;
                 if (r.GetVAB_Country_ID() == VAB_Country_ID)
                     list.Add(r);
             }
             //  Sort it
-            MRegion[] retValue = new MRegion[list.Count];
+            MVABRegionState[] retValue = new MVABRegionState[list.Count];
             retValue = list.ToArray();
-            Array.Sort(retValue, new MRegion(ctx, 0, null));
+            Array.Sort(retValue, new MVABRegionState(ctx, 0, null));
             return retValue;
         }
 
         /**	Region Cache				*/
-        private static CCache<String, MRegion> s_regions = null;
+        private static CCache<String, MVABRegionState> s_regions = null;
         /** Default Region				*/
-        private static MRegion s_default = null;
+        private static MVABRegionState s_default = null;
         //	Static Logger				
-        private static VLogger _log = VLogger.GetVLogger(typeof(MRegion).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABRegionState).FullName);
 
 
         /**************************************************************************
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
          * 	@param VAB_RegionState_ID id
          *	@param trxName transaction
          */
-        public MRegion(Ctx ctx, int VAB_RegionState_ID, Trx trxName)
+        public MVABRegionState(Ctx ctx, int VAB_RegionState_ID, Trx trxName)
             : base(ctx, VAB_RegionState_ID, trxName)
         {
 
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
          *  @param rs result set
          *	@param trxName transaction
          */
-        public MRegion(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABRegionState(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
@@ -172,7 +172,7 @@ namespace VAdvantage.Model
          *	@param country country
          *	@param regionName Region Name
          */
-        public MRegion(MVABCountry country, String regionName)
+        public MVABRegionState(MVABCountry country, String regionName)
             : base(country.GetCtx(), 0, country.Get_TrxName())
         {
             SetVAB_Country_ID(country.GetVAB_Country_ID());

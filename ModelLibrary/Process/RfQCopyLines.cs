@@ -66,12 +66,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         {
             log.Info("doIt - From_RfQ_ID=" + _From_RfQ_ID + ", To_RfQ_ID=" + p_To_RfQ_ID);
             //
-            MRfQ to = new MRfQ(GetCtx(), p_To_RfQ_ID, Get_TrxName());
+            MVABRfQ to = new MVABRfQ(GetCtx(), p_To_RfQ_ID, Get_TrxName());
             if (to.Get_ID() == 0)
             {
                 throw new ArgumentException("No To RfQ found");
             }
-            MRfQ from = new MRfQ(GetCtx(), _From_RfQ_ID, Get_TrxName());
+            MVABRfQ from = new MVABRfQ(GetCtx(), _From_RfQ_ID, Get_TrxName());
             if (from.Get_ID() == 0)
             {
                 throw new ArgumentException("No From RfQ found");
@@ -79,10 +79,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
             //	Copy Lines
             int counter = 0;
-            MRfQLine[] lines = from.GetLines();
+            MVABRfQLine[] lines = from.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MRfQLine newLine = new MRfQLine(to);
+                MVABRfQLine newLine = new MVABRfQLine(to);
                 newLine.SetLine(lines[i].GetLine());
                 newLine.SetDescription(lines[i].GetDescription());
                 newLine.SetHelp(lines[i].GetHelp());
@@ -93,10 +93,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 newLine.SetDeliveryDays(lines[i].GetDeliveryDays());
                 newLine.Save();
                 //	Copy Qtys
-                MRfQLineQty[] qtys = lines[i].GetQtys();
+                MVABRfQLineQty[] qtys = lines[i].GetQtys();
                 for (int j = 0; j < qtys.Length; j++)
                 {
-                    MRfQLineQty newQty = new MRfQLineQty(newLine);
+                    MVABRfQLineQty newQty = new MVABRfQLineQty(newLine);
                     newQty.SetVAB_UOM_ID(qtys[j].GetVAB_UOM_ID());
                     newQty.SetQty(qtys[j].GetQty());
                     newQty.SetIsOfferQty(qtys[j].IsOfferQty());

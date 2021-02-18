@@ -26,13 +26,13 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQResponseLine : X_VAB_RFQReplyLine
+    public class MVABRFQReplyLine : X_VAB_RFQReplyLine
     {
 
         //	RfQ Line				
-        private MRfQLine _rfqLine = null;
+        private MVABRfQLine _rfqLine = null;
         //	Quantities				
-        private MRfQResponseLineQty[] _qtys = null;
+        private MVABRFQReplyLineQty[] _qtys = null;
 
         /// <summary>
         /// Persistency Constructor
@@ -40,7 +40,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="ignored"></param>
         /// <param name="trxName"></param>
-        public MRfQResponseLine(Ctx ctx, int ignored, Trx trxName)
+        public MVABRFQReplyLine(Ctx ctx, int ignored, Trx trxName)
             : base(ctx, 0, trxName)
         {
             if (ignored != 0)
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQResponseLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQReplyLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="response">response</param>
         /// <param name="line">line</param>
-        public MRfQResponseLine(MRfQResponse response, MRfQLine line)
+        public MVABRFQReplyLine(MVABRFQReply response, MVABRfQLine line)
             : base(response.GetCtx(), 0, response.Get_TrxName())
         {
             SetClientOrg(response);
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
             SetIsSelectedWinner(false);
             SetIsSelfService(false);
             //
-            MRfQLineQty[] qtys = line.GetQtys();
+            MVABRfQLineQty[] qtys = line.GetQtys();
             for (int i = 0; i < qtys.Length; i++)
             {
                 if (qtys[i].IsActive() && qtys[i].IsRfQQty())
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                     {
                         Save();
                     }
-                    MRfQResponseLineQty qty = new MRfQResponseLineQty(this, qtys[i]);
+                    MVABRFQReplyLineQty qty = new MVABRFQReplyLineQty(this, qtys[i]);
                     qty.Save();
                 }
             }
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
         /// Get Quantities
         /// </summary>
         /// <returns>array of quantities</returns>
-        public MRfQResponseLineQty[] GetQtys()
+        public MVABRFQReplyLineQty[] GetQtys()
         {
             return GetQtys(false);
         }
@@ -108,14 +108,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>array of quantities</returns>
-        public MRfQResponseLineQty[] GetQtys(bool requery)
+        public MVABRFQReplyLineQty[] GetQtys(bool requery)
         {
             if (_qtys != null && !requery)
             {
                 return _qtys;
             }
 
-            List<MRfQResponseLineQty> list = new List<MRfQResponseLineQty>();
+            List<MVABRFQReplyLineQty> list = new List<MVABRFQReplyLineQty>();
             String sql = "SELECT * FROM VAB_RFQReplyLineQty "
                 + "WHERE VAB_RFQReplyLine_ID=" + GetVAB_RFQReplyLine_ID() + " AND IsActive='Y'";
             DataTable dt = null;
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRfQResponseLineQty(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRFQReplyLineQty(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -148,7 +148,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            _qtys = new MRfQResponseLineQty[list.Count];
+            _qtys = new MVABRFQReplyLineQty[list.Count];
             _qtys = list.ToArray();
             return _qtys;
         }
@@ -157,11 +157,11 @@ namespace VAdvantage.Model
         /// Get RfQ Line 
         /// </summary>
         /// <returns>rfq line</returns>
-        public MRfQLine GetRfQLine()
+        public MVABRfQLine GetRfQLine()
         {
             if (_rfqLine == null)
             {
-                _rfqLine = MRfQLine.Get(GetCtx(), GetVAB_RFQLine_ID(), Get_TrxName());
+                _rfqLine = MVABRfQLine.Get(GetCtx(), GetVAB_RFQLine_ID(), Get_TrxName());
             }
             return _rfqLine;
         }
@@ -229,7 +229,7 @@ namespace VAdvantage.Model
                 GetQtys(false);
                 for (int i = 0; i < _qtys.Length; i++)
                 {
-                    MRfQResponseLineQty qty = _qtys[i];
+                    MVABRFQReplyLineQty qty = _qtys[i];
                     if (qty.IsActive())
                     {
                         qty.SetIsActive(false);

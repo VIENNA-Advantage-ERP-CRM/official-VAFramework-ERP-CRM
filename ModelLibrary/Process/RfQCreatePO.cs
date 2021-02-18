@@ -74,7 +74,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
+            MVABRfQ rfq = new MVABRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -82,7 +82,7 @@ namespace VAdvantage.Process
             log.Info(rfq.ToString());
 
             //	Complete 
-            MRfQResponse[] responses = rfq.GetResponses(true, true);
+            MVABRFQReply[] responses = rfq.GetResponses(true, true);
             log.Config("#Responses=" + responses.Length);
             if (responses.Length == 0)
             {
@@ -92,7 +92,7 @@ namespace VAdvantage.Process
             //	Winner for entire RfQ
             for (int i = 0; i < responses.Length; i++)
             {
-                MRfQResponse response = responses[i];
+                MVABRFQReply response = responses[i];
                 if (!response.IsSelectedWinner())
                 {
                     continue;
@@ -140,20 +140,20 @@ namespace VAdvantage.Process
                 }
                 order.Save();
                 //
-                MRfQResponseLine[] lines = response.GetLines(false);
+                MVABRFQReplyLine[] lines = response.GetLines(false);
                 for (int j = 0; j < lines.Length; j++)
                 {
                     //	Respones Line
-                    MRfQResponseLine line = lines[j];
+                    MVABRFQReplyLine line = lines[j];
                     if (!line.IsActive())
                     {
                         continue;
                     }
-                    MRfQResponseLineQty[] qtys = line.GetQtys(false);
+                    MVABRFQReplyLineQty[] qtys = line.GetQtys(false);
                     //	Response Line Qty
                     for (int k = 0; k < qtys.Length; k++)
                     {
-                        MRfQResponseLineQty qty = qtys[k];
+                        MVABRFQReplyLineQty qty = qtys[k];
                         //	Create PO Lline for all Purchase Line Qtys
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
@@ -165,7 +165,7 @@ namespace VAdvantage.Process
                             Decimal? price = qty.GetNetAmt();
                             ol.SetPrice(price == null ? Env.ZERO : price.Value);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
-                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
+                            MVABRfQLine Rfqline = new MVABRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
                             ol.SetVAM_PFeature_SetInstance_ID(Rfqline.GetVAM_PFeature_SetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);
@@ -185,14 +185,14 @@ namespace VAdvantage.Process
             int noOrders = 0;
             for (int i = 0; i < responses.Length; i++)
             {
-                MRfQResponse response = responses[i];
+                MVABRFQReply response = responses[i];
                 MVABBusinessPartner bp = null;
                 MVABOrder order = null;
                 //	For all Response Lines
-                MRfQResponseLine[] lines = response.GetLines(false);
+                MVABRFQReplyLine[] lines = response.GetLines(false);
                 for (int j = 0; j < lines.Length; j++)
                 {
-                    MRfQResponseLine line = lines[j];
+                    MVABRFQReplyLine line = lines[j];
                     if (!line.IsActive() || !line.IsSelectedWinner())
                         continue;
                     //	New/different BP
@@ -244,10 +244,10 @@ namespace VAdvantage.Process
                         AddLog(0, DateTime.Now, null, order.GetDocumentNo());
                     }
                     //	For all Qtys
-                    MRfQResponseLineQty[] qtys = line.GetQtys(false);
+                    MVABRFQReplyLineQty[] qtys = line.GetQtys(false);
                     for (int k = 0; k < qtys.Length; k++)
                     {
-                        MRfQResponseLineQty qty = qtys[k];
+                        MVABRFQReplyLineQty qty = qtys[k];
                         if (qty.GetRfQLineQty().IsActive() && qty.GetRfQLineQty().IsPurchaseQty())
                         {
                             MVABOrderLine ol = new MVABOrderLine(order);
@@ -258,7 +258,7 @@ namespace VAdvantage.Process
                             Decimal? price = qty.GetNetAmt();
                             ol.SetPriceActual(price);
                             // Work done to set prices on purchase order and attributesetinstance from rfq line. Done by mohit asked by pradeep- 11 January 2019
-                            MRfQLine Rfqline = new MRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
+                            MVABRfQLine Rfqline = new MVABRfQLine(GetCtx(), line.GetVAB_RFQLine_ID(), null);
                             ol.SetVAM_PFeature_SetInstance_ID(Rfqline.GetVAM_PFeature_SetInstance_ID());
                             ol.SetPriceActual(price);
                             ol.SetPriceEntered(price);

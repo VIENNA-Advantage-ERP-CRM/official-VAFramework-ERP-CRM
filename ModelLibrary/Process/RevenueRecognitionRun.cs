@@ -50,7 +50,7 @@ namespace VAdvantage.Process
                 {
                     _RecognitionDate = Util.GetValueOfDateTime(para[i].GetParameter());
                 }
-                else if (name.Equals("C_RevenueRecognition_ID"))
+                else if (name.Equals("VAB_Rev_Recognition_ID"))
                 {
                     _RevenueRecognition_ID = Util.GetValueOfInt(para[i].GetParameter());
                 }
@@ -72,17 +72,17 @@ namespace VAdvantage.Process
                 return Msg.GetMsg(GetCtx(), "InstallFinancialManagement");
             }
             String msg = "";
-            MRevenueRecognition mRevenueRecognition = null;
+            MVABRevRecognition mRevenueRecognition = null;
             if (_RecognitionDate <= DateTime.Now)
             {
                 if (_RevenueRecognition_ID > 0)
                 {
-                    mRevenueRecognition = new MRevenueRecognition(GetCtx(), _RevenueRecognition_ID, Get_TrxName());
+                    mRevenueRecognition = new MVABRevRecognition(GetCtx(), _RevenueRecognition_ID, Get_TrxName());
                     msg = CreateJournals(mRevenueRecognition);
                 }
                 else
                 {
-                    MRevenueRecognition[] RevenueRecognitions = MRevenueRecognition.GetRecognitions(GetCtx(), Get_TrxName());
+                    MVABRevRecognition[] RevenueRecognitions = MVABRevRecognition.GetRecognitions(GetCtx(), Get_TrxName());
                     if (RevenueRecognitions != null && RevenueRecognitions.Length > 0)
                     {
                         for (int i = 0; i < RevenueRecognitions.Length; i++)
@@ -105,26 +105,26 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="mRevenueRecognition">Revenue Recognition</param>
         /// <returns>Message</returns>
-        public string CreateJournals(MRevenueRecognition mRevenueRecognition)
+        public string CreateJournals(MVABRevRecognition mRevenueRecognition)
         {
 
             try
             {
-                MRevenueRecognitionRun[] mRevenueRecognitionRuns = null;
+                MVABRevRecognitionRun[] mRevenueRecognitionRuns = null;
 
-                MRevenueRecognitionPlan revenueRecognitionPlan = null;
+                MVABRevRecognitionStrtgy revenueRecognitionPlan = null;
                 MVABInvoiceLine invoiceLine = null;
                 MVABInvoice invoice = null;
 
 
-                mRevenueRecognitionRuns = MRevenueRecognitionRun.GetRecognitionRuns(mRevenueRecognition, _RecognitionDate, _orgId, false);
+                mRevenueRecognitionRuns = MVABRevRecognitionRun.GetRecognitionRuns(mRevenueRecognition, _RecognitionDate, _orgId, false);
                 journal_ID = new int[mRevenueRecognitionRuns.Length];
                 if (mRevenueRecognitionRuns.Length > 0)
                 {
                     for (int j = 0; j < mRevenueRecognitionRuns.Length; j++)
                     {
-                        MRevenueRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
-                        revenueRecognitionPlan = new MRevenueRecognitionPlan(GetCtx(), revenueRecognitionRun.GetC_RevenueRecognition_Plan_ID(), Get_TrxName());
+                        MVABRevRecognitionRun revenueRecognitionRun = mRevenueRecognitionRuns[j];
+                        revenueRecognitionPlan = new MVABRevRecognitionStrtgy(GetCtx(), revenueRecognitionRun.GetVAB_Rev_RecognitionStrtgy_ID(), Get_TrxName());
                         invoiceLine = new MVABInvoiceLine(GetCtx(), revenueRecognitionPlan.GetVAB_InvoiceLine_ID(), Get_TrxName());
                         invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_TrxName());
 
@@ -292,14 +292,14 @@ namespace VAdvantage.Process
         /// <param name="k">loop variable</param>
         /// <returns>Journal line object</returns>
         public MJournalLine GenerateJounalLine(MJournal journal, MVABInvoice invoice, MVABInvoiceLine invoiceLine,
-                                            MRevenueRecognitionPlan revenueRecognitionPlan, MRevenueRecognitionRun revenueRecognitionRun, string recognitionType, int k)
+                                            MVABRevRecognitionStrtgy revenueRecognitionPlan, MVABRevRecognitionRun revenueRecognitionRun, string recognitionType, int k)
         {
             try
             {
                 int combination_ID = 0;
                 if (k == 0)
                 {
-                    combination_ID = GetCombinationID(invoiceLine.GetVAM_Product_ID(), invoiceLine.GetVAB_Charge_ID(), journal.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetC_RevenueRecognition_ID());
+                    combination_ID = GetCombinationID(invoiceLine.GetVAM_Product_ID(), invoiceLine.GetVAB_Charge_ID(), journal.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(),revenueRecognitionPlan.GetVAB_Rev_Recognition_ID());
                     journalLine.SetLine(lineno);
                     if (recognitionType.Equals("E") && revenueRecognitionRun.GetRecognizedAmt() > 0)
                     {
@@ -341,7 +341,7 @@ namespace VAdvantage.Process
                 }
                 else
                 {
-                    combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetC_RevenueRecognition_ID());
+                    combination_ID = GetCombinationID(0, 0, revenueRecognitionPlan.GetVAB_AccountBook_ID(), invoice.IsSOTrx(), invoice.IsReturnTrx(), revenueRecognitionRun.GetRecognizedAmt(), revenueRecognitionPlan.GetVAB_Rev_Recognition_ID());
                     int account_ID = Util.GetValueOfInt(DB.ExecuteScalar("SELECT Account_ID From VAB_Acct_ValidParameter Where VAB_Acct_ValidParameter_ID=" + combination_ID));
 
                     journalLine = GetOrCreate(journal, journalLine, invoiceLine.GetVAM_Product_ID(), invoiceLine.GetVAB_Charge_ID(),
@@ -395,7 +395,7 @@ namespace VAdvantage.Process
         /// <param name="revenurecognitionRun">Revenue Recognition Run</param>
         /// <param name="recFrequency">Frequency</param>
         /// <returns>Journal object</returns>
-        public MJournal CreateJournalHDR(MRevenueRecognitionPlan revenueRecognitionPlan, MRevenueRecognitionRun revenurecognitionRun, string recFrequency)
+        public MJournal CreateJournalHDR(MVABRevRecognitionStrtgy revenueRecognitionPlan, MVABRevRecognitionRun revenurecognitionRun, string recFrequency)
         {
             journal.SetClientOrg(revenueRecognitionPlan.GetVAF_Client_ID(), revenueRecognitionPlan.GetVAF_Org_ID());
             journal.SetVAB_AccountBook_ID(revenueRecognitionPlan.GetVAB_AccountBook_ID());
@@ -464,7 +464,7 @@ namespace VAdvantage.Process
             }
             else
             {
-                sql += "FRPT_RevenueRecognition_Acct WHERE C_RevenueRecognition_ID= "+ RevenueRecognition_ID;
+                sql += "FRPT_RevenueRecognition_Acct WHERE VAB_Rev_Recognition_ID= "+ RevenueRecognition_ID;
             }
             sql += " AND  VAB_AccountBook_ID=" + AcctSchema_ID + " AND FRPT_AcctDefault_ID = (SELECT FRPT_AcctDefault_ID FROM FRPT_AcctDefault WHERE " +
             "FRPT_RecognizeType= (CASE WHEN " + Product_ID + "> 0 AND " + amount + ">0 AND (('" + isSoTrx + "'='N' AND '" + isReturnTrx + "'='N') OR ('" + isSoTrx + "'='Y' AND '" + isReturnTrx + "'='Y'))  THEN 'IE' " + //Ap/ARC

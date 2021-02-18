@@ -25,12 +25,12 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQLine : X_VAB_RFQLine
+    public class MVABRfQLine : X_VAB_RFQLine
     {
         //Cache		
-        private static CCache<int, MRfQLine> s_cache = new CCache<int, MRfQLine>("VAB_RFQLine", 20);
+        private static CCache<int, MVABRfQLine> s_cache = new CCache<int, MVABRfQLine>("VAB_RFQLine", 20);
         //Qyantities	
-        private MRfQLineQty[] _qtys = null;
+        private MVABRfQLineQty[] _qtys = null;
 
         /// <summary>
         /// Get MRfQLine from Cache
@@ -39,15 +39,15 @@ namespace VAdvantage.Model
         /// <param name="VAB_RFQLine_ID">ID</param>
         /// <param name="trxName">Transaction</param>
         /// <returns>MRFQLINE</returns>
-        public static MRfQLine Get(Ctx ctx, int VAB_RFQLine_ID, Trx trxName)
+        public static MVABRfQLine Get(Ctx ctx, int VAB_RFQLine_ID, Trx trxName)
         {
             int key = VAB_RFQLine_ID;
-            MRfQLine retValue = (MRfQLine)s_cache[key];
+            MVABRfQLine retValue = (MVABRfQLine)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MRfQLine(ctx, VAB_RFQLine_ID, trxName);
+            retValue = new MVABRfQLine(ctx, VAB_RFQLine_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_RFQLine_ID">id</param>
         /// <param name="trxName">transction</param>
-        public MRfQLine(Ctx ctx, int VAB_RFQLine_ID, Trx trxName)
+        public MVABRfQLine(Ctx ctx, int VAB_RFQLine_ID, Trx trxName)
             : base(ctx, VAB_RFQLine_ID, trxName)
         {
             if (VAB_RFQLine_ID == 0)
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transction</param>
-        public MRfQLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRfQLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             if (Get_ID() > 0)
@@ -89,7 +89,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="rfq">RFQ</param>
-        public MRfQLine(MRfQ rfq)
+        public MVABRfQLine(MVABRfQ rfq)
             : this(rfq.GetCtx(), 0, rfq.Get_TrxName())
         {
 
@@ -101,7 +101,7 @@ namespace VAdvantage.Model
         /// Get Quantities
         /// </summary>
         /// <returns>array of quantities</returns>
-        public MRfQLineQty[] GetQtys()
+        public MVABRfQLineQty[] GetQtys()
         {
             return GetQtys(false);
         }
@@ -111,13 +111,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>array of quantities</returns>
-        public MRfQLineQty[] GetQtys(bool requery)
+        public MVABRfQLineQty[] GetQtys(bool requery)
         {
             if (_qtys != null && !requery)
             {
                 return _qtys;
             }
-            List<MRfQLineQty> list = new List<MRfQLineQty>();
+            List<MVABRfQLineQty> list = new List<MVABRfQLineQty>();
             String sql = "SELECT * FROM VAB_RFQLine_Qty "
                 + "WHERE VAB_RFQLine_ID=@param1 AND IsActive='Y' "
                 + "ORDER BY Qty";
@@ -134,7 +134,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)// while (dr.next())
                 {
-                    list.Add(new MRfQLineQty(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRfQLineQty(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -157,12 +157,12 @@ namespace VAdvantage.Model
             //	Create Default (1)
             if (list.Count == 0)
             {
-                MRfQLineQty qty = new MRfQLineQty(this);
+                MVABRfQLineQty qty = new MVABRfQLineQty(this);
                 qty.Save();
                 list.Add(qty);
             }
 
-            _qtys = new MRfQLineQty[list.Count];
+            _qtys = new MVABRfQLineQty[list.Count];
             _qtys = list.ToArray();
             return _qtys;
         }

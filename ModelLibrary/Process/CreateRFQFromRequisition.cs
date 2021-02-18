@@ -205,7 +205,7 @@ namespace VAdvantage.Process
         /// <returns></returns> returns the final message.
         private string CreateRfQ(DataSet _ds)
         {
-            MRfQ rfq = null;
+            MVABRfQ rfq = null;
             int Requisition_ID = 0, LineNo = 0;
             string message = "";
             for (int i = 0; i < _ds.Tables[0].Rows.Count; i++)
@@ -218,7 +218,7 @@ namespace VAdvantage.Process
                     {
                         LineNo = 0;
                         Requisition_ID = Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_Requisition_ID"]);
-                        rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
+                        rfq = new MVABRfQ(GetCtx(), 0, Get_TrxName());
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
@@ -276,7 +276,7 @@ namespace VAdvantage.Process
                 {
                     if (rfq == null)
                     {
-                        rfq = new MRfQ(GetCtx(), 0, Get_TrxName());
+                        rfq = new MVABRfQ(GetCtx(), 0, Get_TrxName());
                         rfq.SetVAF_Org_ID(VAF_Org_ID);
                         rfq.SetName("Name");
                         rfq.SetSalesRep_ID(GetCtx().GetVAF_UserContact_ID());
@@ -323,7 +323,7 @@ namespace VAdvantage.Process
                 }
                 LineNo = LineNo + 10;
                 // Create RfQ line
-                MRfQLine RfqLine = new MRfQLine(rfq);
+                MVABRfQLine RfqLine = new MVABRfQLine(rfq);
                 RfqLine.SetLine(LineNo);
                 RfqLine.SetVAM_RequisitionLine_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_RequisitionLine_ID"]));
                 RfqLine.SetVAM_Product_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAM_Product_ID"]));
@@ -335,7 +335,7 @@ namespace VAdvantage.Process
                 if (RfqLine.Save())
                 {
                     // Create RfQ Qty
-                    MRfQLineQty RfQLineQty = new MRfQLineQty(RfqLine);
+                    MVABRfQLineQty RfQLineQty = new MVABRfQLineQty(RfqLine);
                     RfQLineQty.SetVAB_UOM_ID(Util.GetValueOfInt(_ds.Tables[0].Rows[i]["VAB_UOM_ID"]));
                     RfQLineQty.SetQty(Util.GetValueOfDecimal(_ds.Tables[0].Rows[i]["Qty"]));
                     RfQLineQty.SetIsPurchaseQty(true);

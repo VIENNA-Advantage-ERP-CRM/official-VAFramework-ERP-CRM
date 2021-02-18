@@ -25,12 +25,12 @@ using System.IO;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MRfQResponse : X_VAB_RFQReply
+    public class MVABRFQReply : X_VAB_RFQReply
     {
         //	underlying RfQ				
-        private MRfQ _rfq = null;
+        private MVABRfQ _rfq = null;
         // Lines						
-        private MRfQResponseLine[] _lines = null;
+        private MVABRFQReplyLine[] _lines = null;
 
         /// <summary>
         /// Standard Constructor
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_RFQReply_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQResponse(Ctx ctx, int VAB_RFQReply_ID, Trx trxName)
+        public MVABRFQReply(Ctx ctx, int VAB_RFQReply_ID, Trx trxName)
             : base(ctx, VAB_RFQReply_ID, trxName)
         {
             if (VAB_RFQReply_ID == 0)
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQResponse(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQReply(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="rfq"></param>
         /// <param name="subscriber"></param>
-        public MRfQResponse(MRfQ rfq, MRfQTopicSubscriber subscriber)
+        public MVABRFQReply(MVABRfQ rfq, MVABRFQSubjectMember subscriber)
             : this(rfq, subscriber,
                 subscriber.GetVAB_BusinessPartner_ID(),
                 subscriber.GetVAB_BPart_Location_ID(),
@@ -83,7 +83,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="rfq">rfq</param>
         /// <param name="partner">web response</param>
-        public MRfQResponse(MRfQ rfq, MVABBusinessPartner partner)
+        public MVABRFQReply(MVABRfQ rfq, MVABBusinessPartner partner)
             : this(rfq, null,
                 partner.GetVAB_BusinessPartner_ID(),
                 partner.GetPrimaryVAB_BPart_Location_ID(),
@@ -103,7 +103,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_BusinessPartner_ID">bpartner</param>
         /// <param name="VAB_BPart_Location_ID">bpartner location</param>
         /// <param name="VAF_UserContact_ID">bpartner user</param>
-        public MRfQResponse(MRfQ rfq, MRfQTopicSubscriber subscriber,
+        public MVABRFQReply(MVABRfQ rfq, MVABRFQSubjectMember subscriber,
             int VAB_BusinessPartner_ID, int VAB_BPart_Location_ID, int VAF_UserContact_ID)
             : this(rfq.GetCtx(), 0, rfq.Get_TrxName())
         {
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
             SetVAF_UserContact_ID(VAF_UserContact_ID);
 
             //	Create Lines
-            MRfQLine[] lines = rfq.GetLines();
+            MVABRfQLine[] lines = rfq.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
                 if (!lines[i].IsActive())
@@ -137,7 +137,7 @@ namespace VAdvantage.Model
                     Save();
                 }
 
-                MRfQResponseLine line = new MRfQResponseLine(this, lines[i]);
+                MVABRFQReplyLine line = new MVABRFQReplyLine(this, lines[i]);
                 //	line is not saved (dumped) if there are no Qtys 
             }
         }
@@ -147,13 +147,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>array of Response Lines</returns>
-        public MRfQResponseLine[] GetLines(bool requery)
+        public MVABRFQReplyLine[] GetLines(bool requery)
         {
             if (_lines != null && !requery)
             {
                 return _lines;
             }
-            List<MRfQResponseLine> list = new List<MRfQResponseLine>();
+            List<MVABRFQReplyLine> list = new List<MVABRFQReplyLine>();
             String sql = "SELECT * FROM VAB_RFQReplyLine "
                 + "WHERE VAB_RFQReply_ID=" + GetVAB_RFQReply_ID() + " AND IsActive='Y'";
             DataTable dt = null;
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRfQResponseLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRFQReplyLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -187,7 +187,7 @@ namespace VAdvantage.Model
                 idr.Close();
             }
 
-            _lines = new MRfQResponseLine[list.Count];
+            _lines = new MVABRFQReplyLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }
@@ -196,7 +196,7 @@ namespace VAdvantage.Model
         /// Get Response Lines (no requery)
         /// </summary>
         /// <returns>array of Response Lines</returns>
-        public MRfQResponseLine[] GetLines()
+        public MVABRFQReplyLine[] GetLines()
         {
             return GetLines(false);
         }
@@ -205,11 +205,11 @@ namespace VAdvantage.Model
         /// 	Get RfQ
         /// </summary>
         /// <returns>rfq</returns>
-        public MRfQ GetRfQ()
+        public MVABRfQ GetRfQ()
         {
             if (_rfq == null)
             {
-                _rfq = MRfQ.Get(GetCtx(), GetVAB_RFQ_ID(), Get_TrxName());
+                _rfq = MVABRfQ.Get(GetCtx(), GetVAB_RFQ_ID(), Get_TrxName());
             }
             return _rfq;
         }
@@ -249,7 +249,7 @@ namespace VAdvantage.Model
                 // Check if mail template is set for RfQ window, if not then get from RfQ Topic window.
                 if (mtext.GetVAR_MailTemplate_ID() == 0)
                 {
-                    MRfQTopic mRfQTopic = new MRfQTopic(GetCtx(), GetRfQ().GetVAB_RFQ_Subject_ID(), Get_TrxName());
+                    MVABRFQSubject mRfQTopic = new MVABRFQSubject(GetCtx(), GetRfQ().GetVAB_RFQ_Subject_ID(), Get_TrxName());
                     if (mRfQTopic.GetVAB_RFQ_Subject_ID() > 0)
                     {
                         mtext = new MMailText(GetCtx(), mRfQTopic.GetVAR_MailTemplate_ID(), Get_TrxName());
@@ -318,7 +318,7 @@ namespace VAdvantage.Model
             {
                 SetIsComplete(false);
             }
-            MRfQ rfq = GetRfQ();
+            MVABRfQ rfq = GetRfQ();
 
             //	Is RfQ Total valid
             String error = rfq.CheckQuoteTotalAmtOnly();
@@ -340,18 +340,18 @@ namespace VAdvantage.Model
             //	Do we have an amount/qty for all lines
             if (rfq.IsQuoteAllLines())
             {
-                MRfQResponseLine[] lines = GetLines(false);
+                MVABRFQReplyLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MRfQResponseLine line = lines[i];
+                    MVABRFQReplyLine line = lines[i];
                     if (!line.IsActive())
                         return "Line " + line.GetRfQLine().GetLine()
                             + ": Not Active";
                     bool validAmt = false;
-                    MRfQResponseLineQty[] qtys = line.GetQtys(false);
+                    MVABRFQReplyLineQty[] qtys = line.GetQtys(false);
                     for (int j = 0; j < qtys.Length; j++)
                     {
-                        MRfQResponseLineQty qty = qtys[j];
+                        MVABRFQReplyLineQty qty = qtys[j];
                         if (!qty.IsActive())
                         {
                             continue;
@@ -374,14 +374,14 @@ namespace VAdvantage.Model
             //	Do we have an amount for all line qtys
             if (rfq.IsQuoteAllQty())
             {
-                MRfQResponseLine[] lines = GetLines(false);
+                MVABRFQReplyLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MRfQResponseLine line = lines[i];
-                    MRfQResponseLineQty[] qtys = line.GetQtys(false);
+                    MVABRFQReplyLine line = lines[i];
+                    MVABRFQReplyLineQty[] qtys = line.GetQtys(false);
                     for (int j = 0; j < qtys.Length; j++)
                     {
-                        MRfQResponseLineQty qty = qtys[j];
+                        MVABRFQReplyLineQty qty = qtys[j];
                         if (!qty.IsActive())
                             return "Line " + line.GetRfQLine().GetLine()
                             + " Qty=" + qty.GetRfQLineQty().GetQty()

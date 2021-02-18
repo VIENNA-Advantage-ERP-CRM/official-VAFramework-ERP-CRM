@@ -20,7 +20,7 @@ public X_VAB_SLevelCriteria (Context ctx, int VAB_SLevelCriteria_ID, Trx trxName
 {
 /** if (VAB_SLevelCriteria_ID == 0)
 {
-SetC_RevenueRecognition_Plan_ID (0);
+SetVAB_Rev_RecognitionStrtgy_ID (0);
 SetVAB_SLevelCriteria_ID (0);
 SetVAM_Product_ID (0);
 SetServiceLevelInvoiced (0.0);
@@ -32,7 +32,7 @@ public X_VAB_SLevelCriteria (Ctx ctx, int VAB_SLevelCriteria_ID, Trx trxName) : 
 {
 /** if (VAB_SLevelCriteria_ID == 0)
 {
-SetC_RevenueRecognition_Plan_ID (0);
+SetVAB_Rev_RecognitionStrtgy_ID (0);
 SetVAB_SLevelCriteria_ID (0);
 SetVAM_Product_ID (0);
 SetServiceLevelInvoiced (0.0);
@@ -119,17 +119,17 @@ StringBuilder sb = new StringBuilder ("X_VAB_SLevelCriteria[").Append(Get_ID()).
 return sb.ToString();
 }
 /** Set Revenue Recognition Plan.
-@param C_RevenueRecognition_Plan_ID Plan for recognizing or recording revenue */
-public void SetC_RevenueRecognition_Plan_ID (int C_RevenueRecognition_Plan_ID)
+@param VAB_Rev_RecognitionStrtgy_ID Plan for recognizing or recording revenue */
+public void SetVAB_Rev_RecognitionStrtgy_ID (int VAB_Rev_RecognitionStrtgy_ID)
 {
-if (C_RevenueRecognition_Plan_ID < 1) throw new ArgumentException ("C_RevenueRecognition_Plan_ID is mandatory.");
-Set_ValueNoCheck ("C_RevenueRecognition_Plan_ID", C_RevenueRecognition_Plan_ID);
+if (VAB_Rev_RecognitionStrtgy_ID < 1) throw new ArgumentException ("VAB_Rev_RecognitionStrtgy_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Rev_RecognitionStrtgy_ID", VAB_Rev_RecognitionStrtgy_ID);
 }
 /** Get Revenue Recognition Plan.
 @return Plan for recognizing or recording revenue */
-public int GetC_RevenueRecognition_Plan_ID() 
+public int GetVAB_Rev_RecognitionStrtgy_ID() 
 {
-Object ii = Get_Value("C_RevenueRecognition_Plan_ID");
+Object ii = Get_Value("VAB_Rev_RecognitionStrtgy_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

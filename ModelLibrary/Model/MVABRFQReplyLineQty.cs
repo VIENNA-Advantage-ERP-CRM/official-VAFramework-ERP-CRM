@@ -25,10 +25,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQResponseLineQty : X_VAB_RFQReplyLineQty,IComparer<PO>
+    public class MVABRFQReplyLineQty : X_VAB_RFQReplyLineQty,IComparer<PO>
     {
         //	RfQ Line Qty	
-        private MRfQLineQty _rfqQty = null;
+        private MVABRfQLineQty _rfqQty = null;
         //100
         private const Decimal ONEHUNDRED = 100;
 
@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_RFQReplyLineQty_ID">ID</param>
         /// <param name="trxName">Transaction</param>
-        public MRfQResponseLineQty(Ctx ctx, int VAB_RFQReplyLineQty_ID, Trx trxName)
+        public MVABRFQReplyLineQty(Ctx ctx, int VAB_RFQReplyLineQty_ID, Trx trxName)
             : base(ctx, VAB_RFQReplyLineQty_ID, trxName)
         {
             if (VAB_RFQReplyLineQty_ID == 0)
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQResponseLineQty(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQReplyLineQty(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="line"></param>
         /// <param name="qty"></param>
-        public MRfQResponseLineQty(MRfQResponseLine line, MRfQLineQty qty)
+        public MVABRFQReplyLineQty(MVABRFQReplyLine line, MVABRfQLineQty qty)
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
             SetClientOrg(line);
@@ -82,11 +82,11 @@ namespace VAdvantage.Model
         /// Get RfQ Line Qty
         /// </summary>
         /// <returns>RfQ Line Qty</returns>
-        public MRfQLineQty GetRfQLineQty()
+        public MVABRfQLineQty GetRfQLineQty()
         {
             if (_rfqQty == null)
             {
-                _rfqQty = MRfQLineQty.Get(GetCtx(), GetVAB_RFQLine_Qty_ID(), Get_TrxName());
+                _rfqQty = MVABRfQLineQty.Get(GetCtx(), GetVAB_RFQLine_Qty_ID(), Get_TrxName());
             }
             return _rfqQty;
         }
@@ -185,19 +185,19 @@ namespace VAdvantage.Model
             {
                 throw new ArgumentException("o2 = null");
             }
-            MRfQResponseLineQty q1 = null;
-            MRfQResponseLineQty q2 = null;
-            if (o1 is MRfQResponseLineQty)//instanceof
+            MVABRFQReplyLineQty q1 = null;
+            MVABRFQReplyLineQty q2 = null;
+            if (o1 is MVABRFQReplyLineQty)//instanceof
             {
-                q1 = (MRfQResponseLineQty)o1;
+                q1 = (MVABRFQReplyLineQty)o1;
             }
             else
             {
                 throw new Exception("ClassCast--o1");
             }
-            if (o2 is MRfQResponseLineQty)//instanceof
+            if (o2 is MVABRFQReplyLineQty)//instanceof
             {
-                q2 = (MRfQResponseLineQty)o2;
+                q2 = (MVABRFQReplyLineQty)o2;
             }
             else
             {
@@ -232,9 +232,9 @@ namespace VAdvantage.Model
         /// <returns>true if Net Amount equal</returns>
         public override bool Equals(Object obj)
         {
-            if (obj is MRfQResponseLineQty)
+            if (obj is MVABRFQReplyLineQty)
             {
-                MRfQResponseLineQty cmp = (MRfQResponseLineQty)obj;
+                MVABRFQReplyLineQty cmp = (MVABRFQReplyLineQty)obj;
                 if (!cmp.IsValidAmt() || !IsValidAmt())
                 {
                     return false;

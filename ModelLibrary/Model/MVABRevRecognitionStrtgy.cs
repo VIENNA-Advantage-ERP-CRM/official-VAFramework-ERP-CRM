@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRevenueRecognitionPlan
  * Purpose        : Revenue Recognition Plan.
- * Class Used     : X_C_RevenueRecognition_Plan
+ * Class Used     : X_VAB_Rev_RecognitionStrtgy
  * Chronological    Development
  * Raghunandan      19-Jan-2010
   ******************************************************/
@@ -29,27 +29,27 @@ namespace VAdvantage.Model
     /// <summary>
     /// Revenue Recognition Plan
     /// </summary>
-    public class MRevenueRecognitionPlan : X_C_RevenueRecognition_Plan
+    public class MVABRevRecognitionStrtgy : X_VAB_Rev_RecognitionStrtgy
     {
 
-        private static VLogger _log = VLogger.GetVLogger(typeof(MRevenueRecognitionPlan).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABRevRecognitionStrtgy).FullName);
 
         /// <summary>
         /// 	Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_RevenueRecognition_Plan_ID"></param>
+        /// <param name="VAB_Rev_RecognitionStrtgy_ID"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognitionPlan(Ctx ctx, int C_RevenueRecognition_Plan_ID, Trx trxName)
-            : base(ctx, C_RevenueRecognition_Plan_ID, trxName)
+        public MVABRevRecognitionStrtgy(Ctx ctx, int VAB_Rev_RecognitionStrtgy_ID, Trx trxName)
+            : base(ctx, VAB_Rev_RecognitionStrtgy_ID, trxName)
         {
-            if (C_RevenueRecognition_Plan_ID == 0)
+            if (VAB_Rev_RecognitionStrtgy_ID == 0)
             {
                 //	setVAB_AccountBook_ID (0);
                 //	setVAB_Currency_ID (0);
                 //	setVAB_InvoiceLine_ID (0);
-                //	setC_RevenueRecognition_ID (0);
-                //	setC_RevenueRecognition_Plan_ID (0);
+                //	setVAB_Rev_Recognition_ID (0);
+                //	setVAB_Rev_RecognitionStrtgy_ID (0);
                 //	setP_Revenue_Acct (0);
                 //	setUnEarnedRevenue_Acct (0);
                 SetTotalAmt(Env.ZERO);
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognitionPlan(Ctx ctx, IDataReader idr, Trx trxName)
+        public MVABRevRecognitionStrtgy(Ctx ctx, IDataReader idr, Trx trxName)
             : base(ctx, idr, trxName)
         {
 
@@ -75,7 +75,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognitionPlan(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABRevRecognitionStrtgy(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
         {
             if (newRecord)
             {
-                MRevenueRecognition rr = new MRevenueRecognition(GetCtx(), GetC_RevenueRecognition_ID(), Get_TrxName());
+                MVABRevRecognition rr = new MVABRevRecognition(GetCtx(), GetVAB_Rev_Recognition_ID(), Get_TrxName());
                 if (rr.IsTimeBased())
                 {
                     /**	Get InvoiveQty
@@ -102,12 +102,12 @@ namespace VAdvantage.Model
                     --	Insert
                     VAF_Record_Seq_Next ('VAB_SLevelCriteria', :new.VAF_Client_ID, v_NextNo);
                     INSERT INTO VAB_SLevelCriteria
-                        (VAB_SLevelCriteria_ID, C_RevenueRecognition_Plan_ID,
+                        (VAB_SLevelCriteria_ID, VAB_Rev_RecognitionStrtgy_ID,
                         VAF_Client_ID,VAF_Org_ID,IsActive,Created,CreatedBy,Updated,UpdatedBy,
                         VAM_Product_ID, Description, ServiceLevelInvoiced, ServiceLevelProvided,
                         Processing,Processed)
                     VALUES
-                        (v_NextNo, :new.C_RevenueRecognition_Plan_ID,
+                        (v_NextNo, :new.VAB_Rev_RecognitionStrtgy_ID,
                         :new.VAF_Client_ID,:new.VAF_Org_ID,'Y',SysDate,:new.CreatedBy,SysDate,:new.UpdatedBy,
                         v_VAM_Product_ID, NULL, v_Qty, 0,
                         'N', 'N');
@@ -122,16 +122,16 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoiceLine">invoice line object </param>
         /// <param name="invoice">invoice object</param>
-        /// <param name="C_RevenueRecognition_ID">Recognition ID</param>
+        /// <param name="VAB_Rev_Recognition_ID">Recognition ID</param>
         /// <param name="ToCurrency">Currency</param>
-        public void SetRecognitionPlan(MVABInvoiceLine invoiceLine, MVABInvoice invoice, int C_RevenueRecognition_ID, int ToCurrency)
+        public void SetRecognitionPlan(MVABInvoiceLine invoiceLine, MVABInvoice invoice, int VAB_Rev_Recognition_ID, int ToCurrency)
         {
 
             SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             SetVAF_Org_ID(invoice.GetVAF_Org_ID());
             SetVAB_Currency_ID(ToCurrency);
             SetVAB_InvoiceLine_ID(invoiceLine.GetVAB_InvoiceLine_ID());
-            SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
+            SetVAB_Rev_Recognition_ID(VAB_Rev_Recognition_ID);
             // when tax include into price list, then reduce tax from Line Net Amount
             bool isTaxIncide = (new MPriceList(invoice.GetCtx(), invoice.GetVAM_PriceList_ID(), invoice.Get_Trx())).IsTaxIncluded();
             Decimal Amount = invoiceLine.GetLineNetAmt() - (isTaxIncide ? (invoiceLine.GetTaxAmt() + invoiceLine.GetSurchargeAmt()) : 0);
@@ -150,19 +150,19 @@ namespace VAdvantage.Model
         /// <param name="InvoiceLine_ID">Invoice Line Reference</param>
         /// <param name="OrgId">Org ID</param>
         /// <returns>Array of MRevenueRecognitionPlan</returns>
-        public static MRevenueRecognitionPlan[] GetRecognitionPlans(MRevenueRecognition RevenueRecognition, int InvoiceLine_ID, int OrgId)
+        public static MVABRevRecognitionStrtgy[] GetRecognitionPlans(MVABRevRecognition RevenueRecognition, int InvoiceLine_ID, int OrgId)
         {
-            List<MRevenueRecognitionPlan> list = new List<MRevenueRecognitionPlan>();
-            string sql = "SELECT * FROM C_RevenueRecognition_Plan pl";
+            List<MVABRevRecognitionStrtgy> list = new List<MVABRevRecognitionStrtgy>();
+            string sql = "SELECT * FROM VAB_Rev_RecognitionStrtgy pl";
             if (InvoiceLine_ID > 0)
             {
                 sql += @" INNER  JOIN VAB_InvoiceLine invl ON invl.VAB_InvoiceLine_id = pl.VAB_InvoiceLine_id 
-                            WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() +
+                            WHERE pl.VAB_Rev_Recognition_ID=" + RevenueRecognition.GetVAB_Rev_Recognition_ID() +
                         " AND invl.VAB_InvoiceLine_id=" + InvoiceLine_ID + " AND invl.vaf_org_id=" + OrgId;
             }
             else
             {
-                sql += " WHERE pl.C_RevenueRecognition_ID=" + RevenueRecognition.GetC_RevenueRecognition_ID() + " AND pl.vaf_org_id=" + OrgId;
+                sql += " WHERE pl.VAB_Rev_Recognition_ID=" + RevenueRecognition.GetVAB_Rev_Recognition_ID() + " AND pl.vaf_org_id=" + OrgId;
             }
             DataTable dt = null;
             IDataReader idr = null;
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRevenueRecognitionPlan(RevenueRecognition.GetCtx(), dr, RevenueRecognition.Get_Trx()));
+                    list.Add(new MVABRevRecognitionStrtgy(RevenueRecognition.GetCtx(), dr, RevenueRecognition.Get_Trx()));
                 }
             }
             catch (Exception e)
@@ -190,7 +190,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MRevenueRecognitionPlan[] retValue = new MRevenueRecognitionPlan[list.Count];
+            MVABRevRecognitionStrtgy[] retValue = new MVABRevRecognitionStrtgy[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

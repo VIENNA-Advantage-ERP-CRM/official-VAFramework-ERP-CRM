@@ -955,7 +955,7 @@ namespace VAdvantage.Model
                 {
                     if (GetVAB_SalesRegionState_ID() != 0)
                     {
-                        MSalesRegion loc = new MSalesRegion(GetCtx(), GetVAB_SalesRegionState_ID(), Get_TrxName());
+                        MVABSalesRegionState loc = new MVABSalesRegionState(GetCtx(), GetVAB_SalesRegionState_ID(), Get_TrxName());
                         combiStr = loc.GetValue();
                         descrStr = loc.GetName();
                     }

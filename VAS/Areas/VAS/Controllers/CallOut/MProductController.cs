@@ -80,10 +80,10 @@ namespace VIS.Controllers
         //End
 
         /// <summary>
-        /// Get C_REVENUERECOGNITION_ID
+        /// Get VAB_Rev_Recognition_ID
         /// </summary>
         /// <param name="fields">C_Product_ID</param>
-        /// <returns>C_REVENUERECOGNITION_ID</returns>
+        /// <returns>VAB_Rev_Recognition_ID</returns>
         public JsonResult GetRevenuRecognition(string fields)
         {
             string retJSON = "";

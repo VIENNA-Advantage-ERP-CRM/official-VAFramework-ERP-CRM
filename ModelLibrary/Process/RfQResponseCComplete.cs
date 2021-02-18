@@ -58,7 +58,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQResponse response = new MRfQResponse(GetCtx(), _VAB_RFQReply_ID, Get_TrxName());
+            MVABRFQReply response = new MVABRFQReply(GetCtx(), _VAB_RFQReply_ID, Get_TrxName());
             log.Info("doIt - " + response);
             //
             String error = response.CheckComplete();

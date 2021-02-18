@@ -866,13 +866,13 @@ namespace VAdvantage.Acct
         /// <summary>
         /// Get Revenue Recognition
         /// </summary>
-        /// <returns>C_RevenueRecognition_ID or 0</returns>
-        public int GetC_RevenueRecognition_ID()
+        /// <returns>VAB_Rev_Recognition_ID or 0</returns>
+        public int GetVAB_Rev_Recognition_ID()
         {
             MProduct product = GetProduct();
             if (product != null)
             {
-                return product.GetC_RevenueRecognition_ID();
+                return product.GetVAB_Rev_Recognition_ID();
             }
             return 0;
         }

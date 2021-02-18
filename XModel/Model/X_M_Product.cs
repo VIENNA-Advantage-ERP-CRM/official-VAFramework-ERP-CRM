@@ -227,18 +227,18 @@ namespace VAdvantage.Model
             return Convert.ToInt32(ii);
         }
         /** Set Revenue Recognition.
-        @param C_RevenueRecognition_ID Method for recording revenue */
-        public void SetC_RevenueRecognition_ID(int C_RevenueRecognition_ID)
+        @param VAB_Rev_Recognition_ID Method for recording revenue */
+        public void SetVAB_Rev_Recognition_ID(int VAB_Rev_Recognition_ID)
         {
-            if (C_RevenueRecognition_ID <= 0) Set_Value("C_RevenueRecognition_ID", null);
+            if (VAB_Rev_Recognition_ID <= 0) Set_Value("VAB_Rev_Recognition_ID", null);
             else
-                Set_Value("C_RevenueRecognition_ID", C_RevenueRecognition_ID);
+                Set_Value("VAB_Rev_Recognition_ID", VAB_Rev_Recognition_ID);
         }
         /** Get Revenue Recognition.
         @return Method for recording revenue */
-        public int GetC_RevenueRecognition_ID()
+        public int GetVAB_Rev_Recognition_ID()
         {
-            Object ii = Get_Value("C_RevenueRecognition_ID");
+            Object ii = Get_Value("VAB_Rev_Recognition_ID");
             if (ii == null) return 0;
             return Convert.ToInt32(ii);
         }

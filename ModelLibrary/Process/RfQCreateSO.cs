@@ -76,7 +76,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
+            MVABRfQ rfq = new MVABRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -126,14 +126,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
             order.Save();
 
-            MRfQLine[] lines = rfq.GetLines();
+            MVABRfQLine[] lines = rfq.GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MRfQLine line = lines[i];
-                MRfQLineQty[] qtys = line.GetQtys();
+                MVABRfQLine line = lines[i];
+                MVABRfQLineQty[] qtys = line.GetQtys();
                 for (int j = 0; j < qtys.Length; j++)
                 {
-                    MRfQLineQty qty = qtys[j];
+                    MVABRfQLineQty qty = qtys[j];
                     if (qty.IsActive() && qty.IsOfferQty())
                     {
                         MVABOrderLine ol = new MVABOrderLine(order);

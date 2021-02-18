@@ -66,7 +66,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
+            MVABRfQ rfq = new MVABRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -79,7 +79,7 @@ namespace VAdvantage.Process
             }
 
             //	Get Completed, Active Responses
-            MRfQResponse[] responses = rfq.GetResponses(true, true);
+            MVABRFQReply[] responses = rfq.GetResponses(true, true);
             log.Fine("doIt - #Responses=" + responses.Length);
             if (responses.Length == 0)
             {
@@ -110,9 +110,9 @@ namespace VAdvantage.Process
         /// <param name="rfq">RfQ</param>
         /// <param name="responses">responses</param>
         /// @SuppressWarnings("unchecked")
-        private void RankLines(MRfQ rfq, MRfQResponse[] responses)
+        private void RankLines(MVABRfQ rfq, MVABRFQReply[] responses)
         {
-            MRfQLine[] rfqLines = rfq.GetLines();
+            MVABRfQLine[] rfqLines = rfq.GetLines();
             if (rfqLines.Length == 0)
             {
                 throw new ArgumentException("No RfQ Lines found");
@@ -122,28 +122,28 @@ namespace VAdvantage.Process
             for (int i = 0; i < rfqLines.Length; i++)
             {
                 //	RfQ Line
-                MRfQLine rfqLine = rfqLines[i];
+                MVABRfQLine rfqLine = rfqLines[i];
                 if (!rfqLine.IsActive())
                 {
                     continue;
                 }
                 log.Fine("rankLines - " + rfqLine);
-                MRfQLineQty[] rfqQtys = rfqLine.GetQtys();
+                MVABRfQLineQty[] rfqQtys = rfqLine.GetQtys();
                 for (int j = 0; j < rfqQtys.Length; j++)
                 {
                     //	RfQ Line Qty
-                    MRfQLineQty rfqQty = rfqQtys[j];
+                    MVABRfQLineQty rfqQty = rfqQtys[j];
                     if (!rfqQty.IsActive() || !rfqQty.IsRfQQty())
                     {
                         continue;
                     }
                     log.Fine("rankLines Qty - " + rfqQty);
                     //genrate rank for product
-                    MRfQResponseLineQty[] respQtys = rfqQty.GetResponseQtys(false);
+                    MVABRFQReplyLineQty[] respQtys = rfqQty.GetResponseQtys(false);
                     for (int kk = 0; kk < respQtys.Length; kk++)
                     {
                         //	Response Line Qty
-                        MRfQResponseLineQty respQty = respQtys[kk];
+                        MVABRFQReplyLineQty respQty = respQtys[kk];
                         if (!respQty.IsActive() || !respQty.IsValidAmt())
                         {
                             respQty.SetRanking(999);
@@ -172,7 +172,7 @@ namespace VAdvantage.Process
                         for (int rank = 0; rank < respQtys.Length; rank++)
                         {
                             //get the quantity of first record in the sorded array
-                            MRfQResponseLineQty qty = respQtys[rank];
+                            MVABRFQReplyLineQty qty = respQtys[rank];
                             if (!qty.IsActive() || qty.GetRanking() == 999)
                             {
                                 continue;
@@ -211,31 +211,31 @@ namespace VAdvantage.Process
             }	//	 for all rfq lines
 
             //	Select Winner based on line ranking
-            MRfQResponse winner = null;
+            MVABRFQReply winner = null;
             for (int ii = 0; ii < responses.Length; ii++)
             {
-                MRfQResponse response = responses[ii];
+                MVABRFQReply response = responses[ii];
                 if (response.IsSelectedWinner())
                 {
                     response.SetIsSelectedWinner(false);
                 }
                 int ranking = 0;
-                MRfQResponseLine[] respLines = response.GetLines(false);
+                MVABRFQReplyLine[] respLines = response.GetLines(false);
                 for (int jj = 0; jj < respLines.Length; jj++)
                 {
                     //	Response Line
-                    MRfQResponseLine respLine = respLines[jj];
+                    MVABRFQReplyLine respLine = respLines[jj];
                     if (!respLine.IsActive())
                     {
                         continue;
                     }
                     if (respLine.IsSelectedWinner())
                         respLine.SetIsSelectedWinner(false);
-                    MRfQResponseLineQty[] respQtys = respLine.GetQtys(false);
+                    MVABRFQReplyLineQty[] respQtys = respLine.GetQtys(false);
                     for (int kk = 0; kk < respQtys.Length; kk++)
                     {
                         //	Response Line Qty
-                        MRfQResponseLineQty respQty = respQtys[kk];
+                        MVABRFQReplyLineQty respQty = respQtys[kk];
                         if (!respQty.IsActive())
                             continue;
                         ranking += respQty.GetRanking();
@@ -278,13 +278,13 @@ namespace VAdvantage.Process
         /// </summary>
         /// <param name="rfq">RfQ</param>
         /// <param name="responses">responses</param>
-        private void RankResponses(MRfQ rfq, MRfQResponse[] responses)
+        private void RankResponses(MVABRfQ rfq, MVABRFQReply[] responses)
         {
             int ranking = 1;
             //	Responses Ordered by Price
             for (int ii = 0; ii < responses.Length; ii++)
             {
-                MRfQResponse response = responses[ii];
+                MVABRFQReply response = responses[ii];
                 if (response.GetPrice().CompareTo(Env.ZERO) > 0)
                 {
                     if (response.IsSelectedWinner() != (ranking == 1))

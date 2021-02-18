@@ -12409,10 +12409,10 @@
                 }
             }
 
-            //set C_REVENUERECOGNITION_ID if InvoiceLine Tab Contains REVENUERECOGNITION field
-            if (mTab.findColumn("C_REVENUERECOGNITION_ID") > -1) {
+            //set VAB_Rev_Recognition_ID if InvoiceLine Tab Contains REVENUERECOGNITION field
+            if (mTab.findColumn("VAB_Rev_Recognition_ID") > -1) {
                 var revReg_ID = VIS.dataContext.getJSONRecord("MProduct/GetRevenuRecognition", VAM_Product_ID);
-                mTab.setValue("C_REVENUERECOGNITION_ID", revReg_ID);
+                mTab.setValue("VAB_Rev_Recognition_ID", revReg_ID);
             }
 
             /*****Amit done *******/

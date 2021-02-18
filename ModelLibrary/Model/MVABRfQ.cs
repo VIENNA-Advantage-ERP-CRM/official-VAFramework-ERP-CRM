@@ -25,11 +25,11 @@ using System.Data.SqlClient;
 
 namespace VAdvantage.Model
 {
-    public class MRfQ : X_VAB_RFQ
+    public class MVABRfQ : X_VAB_RFQ
     {
 
         //Cache	
-        private static CCache<int, MRfQ> s_cache = new CCache<int, MRfQ>("VAB_RFQ", 10);
+        private static CCache<int, MVABRfQ> s_cache = new CCache<int, MVABRfQ>("VAB_RFQ", 10);
 
         /// <summary>
         /// Get MRfQ from Cache
@@ -38,15 +38,15 @@ namespace VAdvantage.Model
         /// <param name="VAB_RFQ_ID">ID</param>
         /// <param name="trxName">transction</param>
         /// <returns>MRFQ</returns>
-        public static MRfQ Get(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
+        public static MVABRfQ Get(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
         {
             int key = VAB_RFQ_ID;
-            MRfQ retValue = (MRfQ)s_cache[key];
+            MVABRfQ retValue = (MVABRfQ)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MRfQ(ctx, VAB_RFQ_ID, trxName);
+            retValue = new MVABRfQ(ctx, VAB_RFQ_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_RFQ_ID">ID</param>
         /// <param name="trxName">transaction</param>
-        public MRfQ(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
+        public MVABRfQ(Ctx ctx, int VAB_RFQ_ID, Trx trxName)
             :base(ctx, VAB_RFQ_ID, trxName)
         {
             if (VAB_RFQ_ID == 0)
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">Ctx</param>
         /// <param name="dr">dataroe</param>
         /// <param name="trxName">transaction</param>
-        public MRfQ(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRfQ(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -98,9 +98,9 @@ namespace VAdvantage.Model
         /// Get active Lines
         /// </summary>
         /// <returns>array of lines</returns>
-        public MRfQLine[] GetLines()
+        public MVABRfQLine[] GetLines()
         {
-            List<MRfQLine> list = new List<MRfQLine>();
+            List<MVABRfQLine> list = new List<MVABRfQLine>();
             String sql = "SELECT * FROM VAB_RFQLine "
                 + "WHERE VAB_RFQ_ID=@param1 AND IsActive='Y' "
                 + "ORDER BY Line";
@@ -117,7 +117,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)// while (dr.next())
                 {
-                    list.Add(new MRfQLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRfQLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                 idr.Close();
             }
 
-            MRfQLine[] retValue = new MRfQLine[list.Count];
+            MVABRfQLine[] retValue = new MVABRfQLine[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -141,9 +141,9 @@ namespace VAdvantage.Model
         /// <param name="activeOnly">active responses only</param>
         /// <param name="completedOnly">complete responses only</param>
         /// <returns>array of lines</returns>
-        public MRfQResponse[] GetResponses(bool activeOnly, bool completedOnly)
+        public MVABRFQReply[] GetResponses(bool activeOnly, bool completedOnly)
         {
-            List<MRfQResponse> list = new List<MRfQResponse>();
+            List<MVABRFQReply> list = new List<MVABRFQReply>();
             String sql = "SELECT * FROM VAB_RFQReply "
                 + "WHERE VAB_RFQ_ID=@param1";
             if (activeOnly)
@@ -168,7 +168,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)// while (dr.next())
                 {
-                    list.Add(new MRfQResponse(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRFQReply(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch 
@@ -181,7 +181,7 @@ namespace VAdvantage.Model
                 idr.Close();
             }
 
-            MRfQResponse[] retValue = new MRfQResponse[list.Count];
+            MVABRFQReply[] retValue = new MVABRFQReply[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -237,11 +237,11 @@ namespace VAdvantage.Model
                 return null;
             }
             //	Need to check Line Qty
-            MRfQLine[] lines = GetLines();
+            MVABRfQLine[] lines = GetLines();
             for (int i = 0; i < lines.Length; i++)
             {
-                MRfQLine line = lines[i];
-                MRfQLineQty[] qtys = line.GetQtys();
+                MVABRfQLine line = lines[i];
+                MVABRfQLineQty[] qtys = line.GetQtys();
                 if (qtys.Length > 1)
                 {
                     log.Warning("isQuoteTotalAmtOnlyValid - #" + qtys.Length + " - " + line);

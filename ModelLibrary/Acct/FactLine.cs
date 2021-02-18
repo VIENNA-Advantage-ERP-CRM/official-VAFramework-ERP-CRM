@@ -1397,12 +1397,12 @@ namespace VAdvantage.Acct
                 //  Revenue Recognition for AR Invoices
                 if (_doc.GetDocumentType().Equals(MVABMasterDocType.DOCBASETYPE_ARINVOICE)
                     && _docLine != null
-                    && _docLine.GetC_RevenueRecognition_ID() != 0)
+                    && _docLine.GetVAB_Rev_Recognition_ID() != 0)
                 {
                     int VAF_UserContact_ID = 0;
                     SetAccount_ID(
                         CreateRevenueRecognition(
-                            _docLine.GetC_RevenueRecognition_ID(), _docLine.Get_ID(),
+                            _docLine.GetVAB_Rev_Recognition_ID(), _docLine.Get_ID(),
                             GetVAF_Client_ID(), GetVAF_Org_ID(), VAF_UserContact_ID,
                             GetAccount_ID(), GetVAB_SubAcct_ID(),
                             GetVAM_Product_ID(), GetVAB_BusinessPartner_ID(), GetVAF_OrgTrx_ID(),
@@ -1425,7 +1425,7 @@ namespace VAdvantage.Acct
         /// to be used instead of Revenue Account. If not found, it returns
         /// the revenue account.
         /// </summary>
-        /// <param name="C_RevenueRecognition_ID">revenue recognition</param>
+        /// <param name="VAB_Rev_Recognition_ID">revenue recognition</param>
         /// <param name="VAB_InvoiceLine_ID">invoice line</param>
         /// <param name="VAF_Client_ID">client</param>
         /// <param name="VAF_Org_ID">Org</param>
@@ -1447,7 +1447,7 @@ namespace VAdvantage.Acct
         /// <param name="UserElement2_ID">user element 2</param>
         /// <returns></returns>
         private int CreateRevenueRecognition(
-            int C_RevenueRecognition_ID, int VAB_InvoiceLine_ID,
+            int VAB_Rev_Recognition_ID, int VAB_InvoiceLine_ID,
             int VAF_Client_ID, int VAF_Org_ID, int VAF_UserContact_ID,
             int Account_ID, int VAB_SubAcct_ID,
             int VAM_Product_ID, int VAB_BusinessPartner_ID, int VAF_OrgTrx_ID,
@@ -1505,8 +1505,8 @@ namespace VAdvantage.Acct
                 return Account_ID;
             }
 
-            MRevenueRecognitionPlan plan = new MRevenueRecognitionPlan(GetCtx(), 0, null);
-            plan.SetC_RevenueRecognition_ID(C_RevenueRecognition_ID);
+            MVABRevRecognitionStrtgy plan = new MVABRevRecognitionStrtgy(GetCtx(), 0, null);
+            plan.SetVAB_Rev_Recognition_ID(VAB_Rev_Recognition_ID);
             plan.SetVAB_AccountBook_ID(GetVAB_AccountBook_ID());
             plan.SetVAB_InvoiceLine_ID(VAB_InvoiceLine_ID);
             plan.SetUnEarnedRevenue_Acct(unearnedRevenue_Acct);

@@ -94,14 +94,14 @@ namespace VIS.Models
         //End
 
         /// <summary>
-        /// Get C_RevenueRecognition_ID
+        /// Get VAB_Rev_Recognition_ID
         /// </summary>
         /// <param name="ctx">Context</param>
         /// <param name="fields">VAM_Product_ID</param>
-        /// <returns>C_RevenueRecognition_ID</returns>
+        /// <returns>VAB_Rev_Recognition_ID</returns>
         public int GetRevenuRecognition(Ctx ctx, string fields)
         {
-            string sql = "SELECT C_RevenueRecognition_ID FROM VAM_Product WHERE IsActive = 'Y' AND VAM_Product_ID = " + Util.GetValueOfInt(fields);
+            string sql = "SELECT VAB_Rev_Recognition_ID FROM VAM_Product WHERE IsActive = 'Y' AND VAM_Product_ID = " + Util.GetValueOfInt(fields);
             return Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
         }
     }

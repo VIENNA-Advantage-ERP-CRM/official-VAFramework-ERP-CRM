@@ -293,7 +293,7 @@ namespace VAdvantage.Model
             {
                 return false;
             }
-            MRegion[] regions = MRegion.GetRegions(GetCtx(), GetVAB_Country_ID());
+            MVABRegionState[] regions = MVABRegionState.GetRegions(GetCtx(), GetVAB_Country_ID());
             for (int i = 0; i < regions.Length; i++)
             {
                 if (VAB_RegionState_ID == regions[i].GetVAB_RegionState_ID())

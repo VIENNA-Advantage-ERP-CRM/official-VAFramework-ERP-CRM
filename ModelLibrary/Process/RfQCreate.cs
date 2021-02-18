@@ -63,7 +63,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>Message (translated text)</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
+            MVABRfQ rfq = new MVABRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             log.Info("doIt - " + rfq + ", Send=" + _IsSendRfQ);
             ////ErrorLog.FillErrorLog("", "", "doIt - " + rfq + ", Send=" + _IsSendRfQ, VAdvantage.Framework.Message.MessageType.INFORMATION);
             String error = rfq.CheckQuoteTotalAmtOnly();
@@ -77,14 +77,14 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int notSent = 0;
 
             //	Get all existing responses
-            MRfQResponse[] responses = rfq.GetResponses(false, false);
+            MVABRFQReply[] responses = rfq.GetResponses(false, false);
 
             //	Topic
-            MRfQTopic topic = new MRfQTopic(GetCtx(), rfq.GetVAB_RFQ_Subject_ID(), Get_TrxName());
-            MRfQTopicSubscriber[] subscribers = topic.GetSubscribers();
+            MVABRFQSubject topic = new MVABRFQSubject(GetCtx(), rfq.GetVAB_RFQ_Subject_ID(), Get_TrxName());
+            MVABRFQSubjectMember[] subscribers = topic.GetSubscribers();
             for (int i = 0; i < subscribers.Length; i++)
             {
-                MRfQTopicSubscriber subscriber = subscribers[i];
+                MVABRFQSubjectMember subscriber = subscribers[i];
                 bool skip = false;
                 //	existing response
                 for (int r = 0; r < responses.Length; r++)
@@ -102,7 +102,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 }
 
                 //	Create Response
-                MRfQResponse response = new MRfQResponse(rfq, subscriber);
+                MVABRFQReply response = new MVABRFQReply(rfq, subscriber);
                 if (response.Get_ID() == 0)	//	no lines
                 {
                     continue;

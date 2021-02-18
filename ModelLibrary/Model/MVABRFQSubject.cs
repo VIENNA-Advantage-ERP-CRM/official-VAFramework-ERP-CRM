@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQTopic : X_VAB_RFQ_Subject
+    public class MVABRFQSubject : X_VAB_RFQ_Subject
     {
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_RFQ_Subject_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQTopic(Ctx ctx, int VAB_RFQ_Subject_ID, Trx trxName)
+        public MVABRFQSubject(Ctx ctx, int VAB_RFQ_Subject_ID, Trx trxName)
             : base(ctx, VAB_RFQ_Subject_ID, trxName)
         {
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQTopic(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQSubject(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -56,9 +56,9 @@ namespace VAdvantage.Model
         /// 	Get Current Topic Subscribers
         /// </summary>
         /// <returns>array subscribers</returns>
-        public MRfQTopicSubscriber[] GetSubscribers()
+        public MVABRFQSubjectMember[] GetSubscribers()
         {
-            List<MRfQTopicSubscriber> list = new List<MRfQTopicSubscriber>();
+            List<MVABRFQSubjectMember> list = new List<MVABRFQSubjectMember>();
             String sql = "SELECT * FROM VAB_RFQ_SubjectMember "
                 + "WHERE VAB_RFQ_Subject_ID=" + GetVAB_RFQ_Subject_ID() + " AND IsActive='Y'";
             DataTable dt = null;
@@ -71,7 +71,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRfQTopicSubscriber(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRFQSubjectMember(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -91,7 +91,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            MRfQTopicSubscriber[] retValue = new MRfQTopicSubscriber[list.Count];
+            MVABRFQSubjectMember[] retValue = new MVABRFQSubjectMember[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

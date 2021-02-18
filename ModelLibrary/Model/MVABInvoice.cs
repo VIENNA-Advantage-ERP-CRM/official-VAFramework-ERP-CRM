@@ -3875,9 +3875,9 @@ namespace VAdvantage.Model
                     }
 
                     //Create RecognoitionPlan and RecognitiontionRun
-                    if (Env.IsModuleInstalled("FRPT_") && line.Get_ColumnIndex("C_RevenueRecognition_ID") >= 0 && line.Get_Value("C_RevenueRecognition_ID") != null && !IsReversal())
+                    if (Env.IsModuleInstalled("FRPT_") && line.Get_ColumnIndex("VAB_Rev_Recognition_ID") >= 0 && line.Get_Value("VAB_Rev_Recognition_ID") != null && !IsReversal())
                     {
-                        if (!MRevenueRecognition.CreateRevenueRecognitionPlan(line.GetVAB_InvoiceLine_ID(), Util.GetValueOfInt(line.Get_Value("C_RevenueRecognition_ID")), this))
+                        if (!MVABRevRecognition.CreateRevenueRecognitionPlan(line.GetVAB_InvoiceLine_ID(), Util.GetValueOfInt(line.Get_Value("VAB_Rev_Recognition_ID")), this))
                         {
                             _processMsg = Msg.GetMsg(GetCtx(), "PlaRunNotCreated");
                             return DocActionVariables.STATUS_INVALID;
@@ -5047,8 +5047,8 @@ namespace VAdvantage.Model
 
             // if  Amount is Recoganized then invoice cant be reverse
             string sqlrun = "SELECT COUNT(run.VAB_Rev_RecognitionRun_ID) FROM VAB_Rev_RecognitionRun run " +
-                "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_id WHERE plan.VAB_InvoiceLine_ID IN " +
-                "(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND VAB_Invoice_ID= " + GetVAB_Invoice_ID() + ") AND run.VAGL_JRNL_ID IS not null";
+                "INNER JOIN VAB_Rev_RecognitionStrtgy plan on run.VAB_Rev_RecognitionStrtgy_id = plan.VAB_Rev_RecognitionStrtgy_id WHERE plan.VAB_InvoiceLine_ID IN " +
+                "(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE VAB_Rev_Recognition_ID IS NOT NULL AND VAB_Invoice_ID= " + GetVAB_Invoice_ID() + ") AND run.VAGL_JRNL_ID IS not null";
             if (Util.GetValueOfInt(DB.ExecuteScalar(sqlrun)) > 0)
             {
                 _processMsg = Msg.GetMsg(GetCtx(), "Recoganized");
@@ -5332,11 +5332,11 @@ namespace VAdvantage.Model
 
             //delete revenuerecognition run and plan
             DB.ExecuteQuery("DELETE FROM VAB_Rev_RecognitionRun WHERE VAB_Rev_RecognitionRun_ID IN (SELECT run.VAB_Rev_RecognitionRun_ID FROM VAB_Rev_RecognitionRun run " +
-                           "INNER JOIN c_revenuerecognition_plan plan on run.c_revenuerecognition_plan_id = plan.c_revenuerecognition_plan_ID " +
-                           "WHERE plan.VAB_InvoiceLine_ID IN(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND VAB_Invoice_ID =" + GetVAB_Invoice_ID() + "))");
+                           "INNER JOIN VAB_Rev_RecognitionStrtgy plan on run.VAB_Rev_RecognitionStrtgy_id = plan.VAB_Rev_RecognitionStrtgy_ID " +
+                           "WHERE plan.VAB_InvoiceLine_ID IN(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE VAB_Rev_Recognition_ID IS NOT NULL AND VAB_Invoice_ID =" + GetVAB_Invoice_ID() + "))");
 
-            DB.ExecuteQuery("DELETE FROM C_RevenueRecognition_Plan WHERE C_RevenueRecognition_Plan_ID IN (SELECT C_RevenueRecognition_plan_ID FROM " +
-                "c_revenuerecognition_plan WHERE VAB_InvoiceLine_ID IN(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE C_RevenueRecognition_ID IS NOT NULL AND " +
+            DB.ExecuteQuery("DELETE FROM VAB_Rev_RecognitionStrtgy WHERE VAB_Rev_RecognitionStrtgy_ID IN (SELECT VAB_Rev_RecognitionStrtgy_ID FROM " +
+                "VAB_Rev_RecognitionStrtgy WHERE VAB_InvoiceLine_ID IN(SELECT VAB_InvoiceLine_ID FROM VAB_InvoiceLine WHERE VAB_Rev_Recognition_ID IS NOT NULL AND " +
                 "VAB_Invoice_ID= " + GetVAB_Invoice_ID() + "))");
 
 

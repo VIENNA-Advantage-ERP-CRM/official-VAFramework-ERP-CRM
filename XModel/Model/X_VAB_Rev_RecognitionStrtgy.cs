@@ -11,20 +11,20 @@ using VAdvantage.Process;
 using VAdvantage.Model;
 using VAdvantage.Utility;
 using System.Data;
-/** Generated Model for C_RevenueRecognition_Plan
+/** Generated Model for VAB_Rev_RecognitionStrtgy
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_C_RevenueRecognition_Plan : PO
+public class X_VAB_Rev_RecognitionStrtgy : PO
 {
-public X_C_RevenueRecognition_Plan (Context ctx, int C_RevenueRecognition_Plan_ID, Trx trxName) : base (ctx, C_RevenueRecognition_Plan_ID, trxName)
+public X_VAB_Rev_RecognitionStrtgy (Context ctx, int VAB_Rev_RecognitionStrtgy_ID, Trx trxName) : base (ctx, VAB_Rev_RecognitionStrtgy_ID, trxName)
 {
-/** if (C_RevenueRecognition_Plan_ID == 0)
+/** if (VAB_Rev_RecognitionStrtgy_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_Currency_ID (0);
 SetVAB_InvoiceLine_ID (0);
-SetC_RevenueRecognition_ID (0);
-SetC_RevenueRecognition_Plan_ID (0);
+SetVAB_Rev_Recognition_ID (0);
+SetVAB_Rev_RecognitionStrtgy_ID (0);
 SetP_Revenue_Acct (0);
 SetRecognizedAmt (0.0);
 SetTotalAmt (0.0);
@@ -32,15 +32,15 @@ SetUnEarnedRevenue_Acct (0);
 }
  */
 }
-public X_C_RevenueRecognition_Plan (Ctx ctx, int C_RevenueRecognition_Plan_ID, Trx trxName) : base (ctx, C_RevenueRecognition_Plan_ID, trxName)
+public X_VAB_Rev_RecognitionStrtgy (Ctx ctx, int VAB_Rev_RecognitionStrtgy_ID, Trx trxName) : base (ctx, VAB_Rev_RecognitionStrtgy_ID, trxName)
 {
-/** if (C_RevenueRecognition_Plan_ID == 0)
+/** if (VAB_Rev_RecognitionStrtgy_ID == 0)
 {
 SetVAB_AccountBook_ID (0);
 SetVAB_Currency_ID (0);
 SetVAB_InvoiceLine_ID (0);
-SetC_RevenueRecognition_ID (0);
-SetC_RevenueRecognition_Plan_ID (0);
+SetVAB_Rev_Recognition_ID (0);
+SetVAB_Rev_RecognitionStrtgy_ID (0);
 SetP_Revenue_Acct (0);
 SetRecognizedAmt (0.0);
 SetTotalAmt (0.0);
@@ -53,7 +53,7 @@ SetUnEarnedRevenue_Acct (0);
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RevenueRecognition_Plan (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Rev_RecognitionStrtgy (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -61,7 +61,7 @@ public X_C_RevenueRecognition_Plan (Context ctx, DataRow rs, Trx trxName) : base
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RevenueRecognition_Plan (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Rev_RecognitionStrtgy (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -69,13 +69,13 @@ public X_C_RevenueRecognition_Plan (Ctx ctx, DataRow rs, Trx trxName) : base(ctx
 @param rs result set 
 @param trxName transaction
 */
-public X_C_RevenueRecognition_Plan (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Rev_RecognitionStrtgy (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_C_RevenueRecognition_Plan()
+static X_VAB_Rev_RecognitionStrtgy()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -88,8 +88,8 @@ public static long updatedMS = 1280389057827L;
 public static int Table_ID;
  // =443;
 
-/** TableName=C_RevenueRecognition_Plan */
-public static String Table_Name="C_RevenueRecognition_Plan";
+/** TableName=VAB_Rev_RecognitionStrtgy */
+public static String Table_Name="VAB_Rev_RecognitionStrtgy";
 
 protected static KeyNamePair model;
 protected Decimal accessLevel = new Decimal(1);
@@ -123,7 +123,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_C_RevenueRecognition_Plan[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Rev_RecognitionStrtgy[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Accounting Schema.
@@ -172,17 +172,17 @@ if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
 /** Set Revenue Recognition.
-@param C_RevenueRecognition_ID Method for recording revenue */
-public void SetC_RevenueRecognition_ID (int C_RevenueRecognition_ID)
+@param VAB_Rev_Recognition_ID Method for recording revenue */
+public void SetVAB_Rev_Recognition_ID (int VAB_Rev_Recognition_ID)
 {
-if (C_RevenueRecognition_ID < 1) throw new ArgumentException ("C_RevenueRecognition_ID is mandatory.");
-Set_ValueNoCheck ("C_RevenueRecognition_ID", C_RevenueRecognition_ID);
+if (VAB_Rev_Recognition_ID < 1) throw new ArgumentException ("VAB_Rev_Recognition_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Rev_Recognition_ID", VAB_Rev_Recognition_ID);
 }
 /** Get Revenue Recognition.
 @return Method for recording revenue */
-public int GetC_RevenueRecognition_ID() 
+public int GetVAB_Rev_Recognition_ID() 
 {
-Object ii = Get_Value("C_RevenueRecognition_ID");
+Object ii = Get_Value("VAB_Rev_Recognition_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }
@@ -190,20 +190,20 @@ return Convert.ToInt32(ii);
 @return ID/ColumnName pair */
 public KeyNamePair GetKeyNamePair() 
 {
-return new KeyNamePair(Get_ID(), GetC_RevenueRecognition_ID().ToString());
+return new KeyNamePair(Get_ID(), GetVAB_Rev_Recognition_ID().ToString());
 }
 /** Set Revenue Recognition Plan.
-@param C_RevenueRecognition_Plan_ID Plan for recognizing or recording revenue */
-public void SetC_RevenueRecognition_Plan_ID (int C_RevenueRecognition_Plan_ID)
+@param VAB_Rev_RecognitionStrtgy_ID Plan for recognizing or recording revenue */
+public void SetVAB_Rev_RecognitionStrtgy_ID (int VAB_Rev_RecognitionStrtgy_ID)
 {
-if (C_RevenueRecognition_Plan_ID < 1) throw new ArgumentException ("C_RevenueRecognition_Plan_ID is mandatory.");
-Set_ValueNoCheck ("C_RevenueRecognition_Plan_ID", C_RevenueRecognition_Plan_ID);
+if (VAB_Rev_RecognitionStrtgy_ID < 1) throw new ArgumentException ("VAB_Rev_RecognitionStrtgy_ID is mandatory.");
+Set_ValueNoCheck ("VAB_Rev_RecognitionStrtgy_ID", VAB_Rev_RecognitionStrtgy_ID);
 }
 /** Get Revenue Recognition Plan.
 @return Plan for recognizing or recording revenue */
-public int GetC_RevenueRecognition_Plan_ID() 
+public int GetVAB_Rev_RecognitionStrtgy_ID() 
 {
-Object ii = Get_Value("C_RevenueRecognition_Plan_ID");
+Object ii = Get_Value("VAB_Rev_RecognitionStrtgy_ID");
 if (ii == null) return 0;
 return Convert.ToInt32(ii);
 }

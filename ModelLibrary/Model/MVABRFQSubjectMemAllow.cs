@@ -23,7 +23,7 @@ using System.Data;
 using System.Data.SqlClient;
 namespace VAdvantage.Model
 {
-    public class MRfQTopicSubscriberOnly : X_VAB_RFQ_SubjectMem_Allow
+    public class MVABRFQSubjectMemAllow : X_VAB_RFQ_SubjectMem_Allow
     {
         /// <summary>
         /// Standard Constructor
@@ -31,7 +31,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_RFQ_SubjectMem_Allow_ID"></param>
         /// <param name="trxName"></param>
-        public MRfQTopicSubscriberOnly(Ctx ctx, int VAB_RFQ_SubjectMem_Allow_ID, Trx trxName)
+        public MVABRFQSubjectMemAllow(Ctx ctx, int VAB_RFQ_SubjectMem_Allow_ID, Trx trxName)
             : base(ctx, VAB_RFQ_SubjectMem_Allow_ID, trxName)
         {
 
@@ -43,7 +43,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQTopicSubscriberOnly(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQSubjectMemAllow(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

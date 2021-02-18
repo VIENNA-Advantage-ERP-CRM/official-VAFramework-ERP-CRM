@@ -25,10 +25,10 @@ using System.Data.SqlClient;
 using System.Drawing;
 namespace VAdvantage.Model
 {
-    public class MSalesRegion : X_VAB_SalesRegionState
+    public class MVABSalesRegionState : X_VAB_SalesRegionState
     {
         //Cache						
-        private static CCache<int, MSalesRegion> s_cache = new CCache<int, MSalesRegion>("VAB_SalesRegionState", 10);
+        private static CCache<int, MVABSalesRegionState> s_cache = new CCache<int, MVABSalesRegionState>("VAB_SalesRegionState", 10);
 
         /// <summary>
         /// Get SalesRegion from Cache
@@ -36,13 +36,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_SalesRegionState_ID">id</param>
         /// <returns>MSalesRegion</returns>
-        public static MSalesRegion Get(Ctx ctx, int VAB_SalesRegionState_ID)
+        public static MVABSalesRegionState Get(Ctx ctx, int VAB_SalesRegionState_ID)
         {
             int key = VAB_SalesRegionState_ID;
-            MSalesRegion retValue = (MSalesRegion)s_cache[key];
+            MVABSalesRegionState retValue = (MVABSalesRegionState)s_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MSalesRegion(ctx, VAB_SalesRegionState_ID, null);
+            retValue = new MVABSalesRegionState(ctx, VAB_SalesRegionState_ID, null);
             if (retValue.Get_ID() != 0)
                 s_cache.Add(key, retValue);
             return retValue;
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_SalesRegionState_ID"></param>
         /// <param name="trxName">transaction</param>
-        public MSalesRegion(Ctx ctx, int VAB_SalesRegionState_ID, Trx trxName)
+        public MVABSalesRegionState(Ctx ctx, int VAB_SalesRegionState_ID, Trx trxName)
             : base(ctx, VAB_SalesRegionState_ID, trxName)
         {
             if (VAB_SalesRegionState_ID == 0)
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName">transaction</param>
-        public MSalesRegion(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABSalesRegionState(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 

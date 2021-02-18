@@ -15,10 +15,10 @@ namespace VAdvantage.Model
     public class X_VAB_Rev_RecognitionRun : PO
     {
         public X_VAB_Rev_RecognitionRun(Context ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName) : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
-        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
+        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetVAB_Rev_RecognitionStrtgy_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
         }
         public X_VAB_Rev_RecognitionRun(Ctx ctx, int VAB_Rev_RecognitionRun_ID, Trx trxName) : base(ctx, VAB_Rev_RecognitionRun_ID, trxName)
-        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetC_RevenueRecognition_Plan_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
+        {/** if (VAB_Rev_RecognitionRun_ID == 0){SetVAB_Rev_RecognitionStrtgy_ID (0);SetVAB_Rev_RecognitionRun_ID (0);SetVAGL_JRNL_ID (0);SetRecognizedAmt (0.0);} */
         }/** Load Constructor 
 @param ctx context
 @param rs result set 
@@ -58,12 +58,12 @@ namespace VAdvantage.Model
 @return info
 */
         public override String ToString() { StringBuilder sb = new StringBuilder("X_VAB_Rev_RecognitionRun[").Append(Get_ID()).Append("]"); return sb.ToString(); }/** Set Revenue Recognition Plan.
-@param C_RevenueRecognition_Plan_ID Plan for recognizing or recording revenue */
-        public void SetC_RevenueRecognition_Plan_ID(int C_RevenueRecognition_Plan_ID) { if (C_RevenueRecognition_Plan_ID < 1) throw new ArgumentException("C_RevenueRecognition_Plan_ID is mandatory."); Set_ValueNoCheck("C_RevenueRecognition_Plan_ID", C_RevenueRecognition_Plan_ID); }/** Get Revenue Recognition Plan.
+@param VAB_Rev_RecognitionStrtgy_ID Plan for recognizing or recording revenue */
+        public void SetVAB_Rev_RecognitionStrtgy_ID(int VAB_Rev_RecognitionStrtgy_ID) { if (VAB_Rev_RecognitionStrtgy_ID < 1) throw new ArgumentException("VAB_Rev_RecognitionStrtgy_ID is mandatory."); Set_ValueNoCheck("VAB_Rev_RecognitionStrtgy_ID", VAB_Rev_RecognitionStrtgy_ID); }/** Get Revenue Recognition Plan.
 @return Plan for recognizing or recording revenue */
-        public int GetC_RevenueRecognition_Plan_ID() { Object ii = Get_Value("C_RevenueRecognition_Plan_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
+        public int GetVAB_Rev_RecognitionStrtgy_ID() { Object ii = Get_Value("VAB_Rev_RecognitionStrtgy_ID"); if (ii == null) return 0; return Convert.ToInt32(ii); }/** Get Record ID/ColumnName
 @return ID/ColumnName pair */
-        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetC_RevenueRecognition_Plan_ID().ToString()); }/** Set Revenue Recognition Run.
+        public KeyNamePair GetKeyNamePair() { return new KeyNamePair(Get_ID(), GetVAB_Rev_RecognitionStrtgy_ID().ToString()); }/** Set Revenue Recognition Run.
 @param VAB_Rev_RecognitionRun_ID Revenue Recognition Run or Process */
         public void SetVAB_Rev_RecognitionRun_ID(int VAB_Rev_RecognitionRun_ID) { if (VAB_Rev_RecognitionRun_ID < 1) throw new ArgumentException("VAB_Rev_RecognitionRun_ID is mandatory."); Set_ValueNoCheck("VAB_Rev_RecognitionRun_ID", VAB_Rev_RecognitionRun_ID); }/** Get Revenue Recognition Run.
 @return Revenue Recognition Run or Process */

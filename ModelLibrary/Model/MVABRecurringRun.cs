@@ -24,16 +24,16 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MRecurringRun : X_VAB_RecurringRun
+    public class MVABRecurringRun : X_VAB_RecurringRun
     {
 
-        public MRecurringRun(Ctx ctx, int VAB_RecurringRun_ID, Trx trxName)
+        public MVABRecurringRun(Ctx ctx, int VAB_RecurringRun_ID, Trx trxName)
             : base(ctx, VAB_RecurringRun_ID, trxName)
         {
 
         }	//	MRecurringRun
 
-        public MRecurringRun(Ctx ctx, MRecurring recurring)
+        public MVABRecurringRun(Ctx ctx, MVABRecurring recurring)
             : base(ctx, 0, recurring.Get_TrxName())
         {
 
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
             }
         }	//	MRecurringRun
 
-        public MRecurringRun(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRecurringRun(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

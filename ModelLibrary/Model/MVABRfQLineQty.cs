@@ -25,10 +25,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQLineQty : X_VAB_RFQLine_Qty
+    public class MVABRfQLineQty : X_VAB_RFQLine_Qty
     {
         //	Cache	
-        private static CCache<int, MRfQLineQty> s_cache = new CCache<int, MRfQLineQty>("VAB_RFQLine_Qty", 20);
+        private static CCache<int, MVABRfQLineQty> s_cache = new CCache<int, MVABRfQLineQty>("VAB_RFQLine_Qty", 20);
         //Unit of Measure		
         private MUOM _uom = null;
 
@@ -39,15 +39,15 @@ namespace VAdvantage.Model
         /// <param name="VAB_RFQLine_Qty_ID">ID</param>
         /// <param name="trxName">Transaction</param>
         /// <returns>MRfQLineQty</returns>
-        public static MRfQLineQty Get(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
+        public static MVABRfQLineQty Get(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
         {
             int key = VAB_RFQLine_Qty_ID;
-            MRfQLineQty retValue = (MRfQLineQty)s_cache[key];
+            MVABRfQLineQty retValue = (MVABRfQLineQty)s_cache[key];
             if (retValue != null)
             {
                 return retValue;
             }
-            retValue = new MRfQLineQty(ctx, VAB_RFQLine_Qty_ID, trxName);
+            retValue = new MVABRfQLineQty(ctx, VAB_RFQLine_Qty_ID, trxName);
             if (retValue.Get_ID() != 0)
             {
                 s_cache.Add(key, retValue);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_RFQLine_Qty_ID">ID</param>
         /// <param name="trxName">transction</param>
-        public MRfQLineQty(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
+        public MVABRfQLineQty(Ctx ctx, int VAB_RFQLine_Qty_ID, Trx trxName)
             : base(ctx, VAB_RFQLine_Qty_ID, trxName)
         {
             if (VAB_RFQLine_Qty_ID == 0)
@@ -80,7 +80,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">Ctx</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName"></param>
-        public MRfQLineQty(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRfQLineQty(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             if (Get_ID() > 0)
@@ -93,7 +93,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="line">RfQ line</param>
-        public MRfQLineQty(MRfQLine line)
+        public MVABRfQLineQty(MVABRfQLine line)
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
             
@@ -119,9 +119,9 @@ namespace VAdvantage.Model
        /// </summary>
        /// <param name="onlyValidAmounts">only valid amounts</param>
        /// <returns>array of response line qtys</returns>
-        public MRfQResponseLineQty[] GetResponseQtys(bool onlyValidAmounts)
+        public MVABRFQReplyLineQty[] GetResponseQtys(bool onlyValidAmounts)
         {
-            List<MRfQResponseLineQty> list = new List<MRfQResponseLineQty>();
+            List<MVABRFQReplyLineQty> list = new List<MVABRFQReplyLineQty>();
             DataTable dt = null;
             String sql = "SELECT * FROM VAB_RFQReplyLineQty WHERE VAB_RFQLine_Qty_ID=" + GetVAB_RFQLine_Qty_ID() + " AND IsActive='Y'";
             IDataReader idr = null;
@@ -133,7 +133,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    MRfQResponseLineQty qty = new MRfQResponseLineQty(GetCtx(), dr, Get_TrxName());
+                    MVABRFQReplyLineQty qty = new MVABRFQReplyLineQty(GetCtx(), dr, Get_TrxName());
                     if (onlyValidAmounts && !qty.IsValidAmt())
                     {
                         ;
@@ -161,7 +161,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MRfQResponseLineQty[] retValue = new MRfQResponseLineQty[list.Count];
+            MVABRFQReplyLineQty[] retValue = new MVABRFQReplyLineQty[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

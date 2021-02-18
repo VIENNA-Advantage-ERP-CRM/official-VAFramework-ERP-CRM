@@ -57,7 +57,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MRfQ rfq = new MRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
+            MVABRfQ rfq = new MVABRfQ(GetCtx(), _VAB_RFQ_ID, Get_TrxName());
             if (rfq.Get_ID() == 0)
             {
                 throw new ArgumentException("No RfQ found");
@@ -67,7 +67,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             rfq.Save();
             //
             int counter = 0;
-            MRfQResponse[] responses = rfq.GetResponses(false, false);
+            MVABRFQReply[] responses = rfq.GetResponses(false, false);
             for (int i = 0; i < responses.Length; i++)
             {
                 responses[i].SetProcessed(false);

@@ -2,7 +2,7 @@
  * Project Name   : VAdvantage
  * Class Name     : MRevenueRecognition
  * Purpose        : Revenue Recognition Model
- * Class Used     : X_C_RevenueRecognition
+ * Class Used     : X_VAB_Rev_Recognition
  * Chronological    Development
  * Raghunandan      19-Jan-2010
   ******************************************************/
@@ -29,18 +29,18 @@ namespace VAdvantage.Model
     /// <summary>
     /// Revenue Recognition Model
     /// </summary>
-    public class MRevenueRecognition : X_C_RevenueRecognition
+    public class MVABRevRecognition : X_VAB_Rev_Recognition
     {
-        private static VLogger _log = VLogger.GetVLogger(typeof(MRevenueRecognition).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABRevRecognition).FullName);
 
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx"></param>
-        /// <param name="C_RevenueRecognition_ID"></param>
+        /// <param name="VAB_Rev_Recognition_ID"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognition(Ctx ctx, int C_RevenueRecognition_ID, Trx trxName)
-            : base(ctx, C_RevenueRecognition_ID, trxName)
+        public MVABRevRecognition(Ctx ctx, int VAB_Rev_Recognition_ID, Trx trxName)
+            : base(ctx, VAB_Rev_Recognition_ID, trxName)
         {
 
         }
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognition(Ctx ctx, IDataReader idr, Trx trxName)
+        public MVABRevRecognition(Ctx ctx, IDataReader idr, Trx trxName)
             : base(ctx, idr, trxName)
         {
 
@@ -63,7 +63,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRevenueRecognition(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRevRecognition(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -109,18 +109,18 @@ namespace VAdvantage.Model
                                 if (!_relatedTo.Equals("") && _relatedTo.Equals(relatedtoProduct))
                                 {
                                     _sql.Clear();
-                                    _sql.Append(@"Select count(*) From C_RevenueRecognition Bp
-                                                       Left Join FRPT_RevenueRecognition_Acct  ca On Bp.C_RevenueRecognition_ID=ca.C_RevenueRecognition_ID 
+                                    _sql.Append(@"Select count(*) From VAB_Rev_Recognition Bp
+                                                       Left Join FRPT_RevenueRecognition_Acct  ca On Bp.VAB_Rev_Recognition_ID=ca.VAB_Rev_Recognition_ID 
                                                         And ca.Frpt_Acctdefault_Id=" + ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]
                                                    + " WHERE Bp.IsActive='Y' AND Bp.VAF_Client_ID=" + GetVAF_Client_ID() +
                                                    " AND ca.VAB_Acct_ValidParameter_Id = " + Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]) +
-                                                   " AND Bp.C_RevenueRecognition_ID = " + GetC_RevenueRecognition_ID());
+                                                   " AND Bp.VAB_Rev_Recognition_ID = " + GetVAB_Rev_Recognition_ID());
                                     int recordFound = Convert.ToInt32(DB.ExecuteScalar(_sql.ToString(), null, Get_Trx()));
                                     if (recordFound == 0)
                                     {
                                         assetGroupAcct = MVAFTableView.GetPO(GetCtx(), "FRPT_RevenueRecognition_Acct", 0, null);
                                         assetGroupAcct.Set_ValueNoCheck("VAF_Org_ID", 0);
-                                        assetGroupAcct.Set_ValueNoCheck("C_RevenueRecognition_ID", Util.GetValueOfInt(GetC_RevenueRecognition_ID()));
+                                        assetGroupAcct.Set_ValueNoCheck("VAB_Rev_Recognition_ID", Util.GetValueOfInt(GetVAB_Rev_Recognition_ID()));
                                         assetGroupAcct.Set_ValueNoCheck("FRPT_AcctDefault_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["FRPT_AcctDefault_ID"]));
                                         assetGroupAcct.Set_ValueNoCheck("VAB_Acct_ValidParameter_ID", Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_Acct_ValidParameter_Id"]));
                                         assetGroupAcct.Set_ValueNoCheck("VAB_AccountBook_ID", _AcctSchema_ID);
@@ -145,10 +145,10 @@ namespace VAdvantage.Model
         /// <param name="ctx">ctx</param>
         /// <param name="trx">trx</param>
         /// <returns>Array of MRevenueRecognition</returns>
-        public static MRevenueRecognition[] GetRecognitions(Ctx ctx, Trx trx)
+        public static MVABRevRecognition[] GetRecognitions(Ctx ctx, Trx trx)
         {
-            List<MRevenueRecognition> list = new List<MRevenueRecognition>();
-            string sql = "Select * From C_RevenueRecognition Where VAF_Client_ID=" + ctx.GetVAF_Client_ID();
+            List<MVABRevRecognition> list = new List<MVABRevRecognition>();
+            string sql = "Select * From VAB_Rev_Recognition Where VAF_Client_ID=" + ctx.GetVAF_Client_ID();
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -160,7 +160,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRevenueRecognition(ctx, dr, trx));
+                    list.Add(new MVABRevRecognition(ctx, dr, trx));
                 }
             }
             catch (Exception e)
@@ -176,7 +176,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MRevenueRecognition[] retValue = new MRevenueRecognition[list.Count];
+            MVABRevRecognition[] retValue = new MVABRevRecognition[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -185,17 +185,17 @@ namespace VAdvantage.Model
         /// This function is used to create Recognition plan and run
         /// </summary>
         /// <param name="VAB_InvoiceLine_ID">invoice line</param>
-        /// <param name="C_RevenueRecognition_ID">Revenue Recognition</param>
+        /// <param name="VAB_Rev_Recognition_ID">Revenue Recognition</param>
         /// <param name="Invoice">Invoice</param>
         /// <returns>true, when success</returns>
-        public static bool CreateRevenueRecognitionPlan(int VAB_InvoiceLine_ID, int C_RevenueRecognition_ID, MVABInvoice Invoice)
+        public static bool CreateRevenueRecognitionPlan(int VAB_InvoiceLine_ID, int VAB_Rev_Recognition_ID, MVABInvoice Invoice)
         {
             try
             {
-                MRevenueRecognitionRun revenueRecognitionRun = null;
+                MVABRevRecognitionRun revenueRecognitionRun = null;
                 DateTime? RecognizationDate = null;
                 int NoofMonths = 0;
-                MRevenueRecognition revenueRecognition = new MRevenueRecognition(Invoice.GetCtx(), C_RevenueRecognition_ID, Invoice.Get_Trx());
+                MVABRevRecognition revenueRecognition = new MVABRevRecognition(Invoice.GetCtx(), VAB_Rev_Recognition_ID, Invoice.Get_Trx());
                 int defaultAccSchemaOrg_ID = GetDefaultActSchema(Invoice.GetCtx(), Invoice.GetVAF_Client_ID(), Invoice.GetVAF_Org_ID());
                 int ToCurrency = Util.GetValueOfInt(DB.ExecuteScalar("SELECT VAB_Currency_ID FROM VAB_AccountBook WHERE VAB_AccountBook_ID=" + defaultAccSchemaOrg_ID));
 
@@ -217,8 +217,8 @@ namespace VAdvantage.Model
                     //if start date is the first day of the month
                     NoofMonths = revenueRecognition.GetNoMonths();
                 }
-                MRevenueRecognitionPlan revenueRecognitionPlan = new MRevenueRecognitionPlan(Invoice.GetCtx(), 0, Invoice.Get_Trx());
-                revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, Invoice, C_RevenueRecognition_ID, ToCurrency);
+                MVABRevRecognitionStrtgy revenueRecognitionPlan = new MVABRevRecognitionStrtgy(Invoice.GetCtx(), 0, Invoice.Get_Trx());
+                revenueRecognitionPlan.SetRecognitionPlan(invoiceLine, Invoice, VAB_Rev_Recognition_ID, ToCurrency);
                 revenueRecognitionPlan.SetVAB_AccountBook_ID(defaultAccSchemaOrg_ID);
                 revenueRecognitionPlan.SetRecognizedAmt(0);
                 if (!revenueRecognitionPlan.Save())
@@ -284,7 +284,7 @@ namespace VAdvantage.Model
                                     lastdate = startDate.AddDays(days - 1);
                                 }
                                 recognizedAmt = Math.Round(days * perdayAmt, stdPrecision);
-                                revenueRecognitionRun = new MRevenueRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
+                                revenueRecognitionRun = new MVABRevRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                                 revenueRecognitionRun.SetRecognitionRun(revenueRecognitionPlan);
                                 revenueRecognitionRun.SetRecognizedAmt(recognizedAmt);
                                 revenueRecognitionRun.SetRecognitionDate(lastdate);
@@ -311,7 +311,7 @@ namespace VAdvantage.Model
                             int days = 0;
                             for (int i = 0; i < revenueRecognition.GetNoMonths(); i++)
                             {
-                                revenueRecognitionRun = new MRevenueRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
+                                revenueRecognitionRun = new MVABRevRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                                 revenueRecognitionRun.SetRecognitionRun(revenueRecognitionPlan);
                                 revenueRecognitionRun.SetRecognizedAmt(recognizedAmt);
                                 revenueRecognitionRun.SetRecognitionDate(RecognizationDate.Value.AddDays(days));
@@ -389,7 +389,7 @@ namespace VAdvantage.Model
                                     days += 1;
                                 }
                                 recognizedAmt = Math.Round(days * perdayAmt, stdPrecision);
-                                revenueRecognitionRun = new MRevenueRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
+                                revenueRecognitionRun = new MVABRevRecognitionRun(Invoice.GetCtx(), 0, Invoice.Get_Trx());
                                 revenueRecognitionRun.SetRecognitionRun(revenueRecognitionPlan);
                                 revenueRecognitionRun.SetRecognizedAmt(recognizedAmt);
                                 revenueRecognitionRun.SetRecognitionDate(lastdate);

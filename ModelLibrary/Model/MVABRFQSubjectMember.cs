@@ -25,10 +25,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MRfQTopicSubscriber : X_VAB_RFQ_SubjectMember
+    public class MVABRFQSubjectMember : X_VAB_RFQ_SubjectMember
     {
         //Restrictions					
-        private MRfQTopicSubscriberOnly[] _restrictions = null;
+        private MVABRFQSubjectMemAllow[] _restrictions = null;
 
         /// <summary>
         /// Standard Constructor
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_RFQ_SubjectMember_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MRfQTopicSubscriber(Ctx ctx, int VAB_RFQ_SubjectMember_ID, Trx trxName)
+        public MVABRFQSubjectMember(Ctx ctx, int VAB_RFQ_SubjectMember_ID, Trx trxName)
             : base(ctx, VAB_RFQ_SubjectMember_ID, trxName)
         {
 
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MRfQTopicSubscriber(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABRFQSubjectMember(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -59,14 +59,14 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>arry of onlys</returns>
-        public MRfQTopicSubscriberOnly[] GetRestrictions(bool requery)
+        public MVABRFQSubjectMemAllow[] GetRestrictions(bool requery)
         {
             if (_restrictions != null && !requery)
             {
                 return _restrictions;
             }
 
-            List<MRfQTopicSubscriberOnly> list = new List<MRfQTopicSubscriberOnly>();
+            List<MVABRFQSubjectMemAllow> list = new List<MVABRFQSubjectMemAllow>();
             String sql = "SELECT * FROM VAB_RFQ_SubjectMem_Allow WHERE VAB_RFQ_SubjectMember_ID=" + GetVAB_RFQ_SubjectMember_ID();
             DataTable dt = null;
             IDataReader idr = null;
@@ -78,7 +78,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MRfQTopicSubscriberOnly(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABRFQSubjectMemAllow(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                 }
             }
 
-            _restrictions = new MRfQTopicSubscriberOnly[list.Count];
+            _restrictions = new MVABRFQSubjectMemAllow[list.Count];
             _restrictions = list.ToArray();
             return _restrictions;
         }
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
 
             for (int i = 0; i < _restrictions.Length; i++)
             {
-                MRfQTopicSubscriberOnly restriction = _restrictions[i];
+                MVABRFQSubjectMemAllow restriction = _restrictions[i];
                 if (!restriction.IsActive())
                 {
                     continue;
