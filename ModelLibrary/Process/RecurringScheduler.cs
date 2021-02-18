@@ -79,13 +79,13 @@ namespace ViennaAdvantageServer.Process
                         }
                         else if (Recurring.GetRecurringType().Equals(MVABRecurring.RECURRINGTYPE_GLJournalBatch))
                         {
-                            MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), Recurring.GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
+                            MVAGLBatchJRNL journal = MVAGLBatchJRNL.CopyFrom(GetCtx(), Recurring.GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
                             run.SetVAGL_BatchJRNL_ID(journal.GetVAGL_BatchJRNL_ID());
                             msg += journal.GetDocumentNo();
                         }
                         else if (Recurring.GetRecurringType().Equals(MVABRecurring.RECURRINGTYPE_GLJournal))
                         {
-                            MJournal Journal = MJournal.CopyFrom(GetCtx(), Recurring.GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
+                            MVAGLJRNL Journal = MVAGLJRNL.CopyFrom(GetCtx(), Recurring.GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
                             run.SetVAGL_JRNL_ID(Journal.GetVAGL_JRNL_ID());
                             msg += Journal.GetDocumentNo();
                         }

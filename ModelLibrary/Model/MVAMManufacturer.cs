@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MManufacturer
+ * Class Name     : MVAMManufacturer
  * Purpose        : Product Manufacturer setting using x-classes
  * Class Used     : X_VAM_Manufacturer
  * Chronological    Development
@@ -26,7 +26,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MManufacturer : X_VAM_Manufacturer
+    public class MVAMManufacturer : X_VAM_Manufacturer
     {
         #region variable
 
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MManufacturer(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMManufacturer(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MManufacturer(Ctx ctx, int VAM_Manufacturer_ID, Trx trxName)
+        public MVAMManufacturer(Ctx ctx, int VAM_Manufacturer_ID, Trx trxName)
             : base(ctx, VAM_Manufacturer_ID, trxName)
         {
         }

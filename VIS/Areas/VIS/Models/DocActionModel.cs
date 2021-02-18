@@ -201,7 +201,7 @@ namespace VIS.Models
             /********************
              *  GL Journal
              */
-            else if (VAF_TableView_ID == MJournal.Table_ID || VAF_TableView_ID == MJournalBatch.Table_ID)
+            else if (VAF_TableView_ID == MVAGLJRNL.Table_ID || VAF_TableView_ID == MVAGLBatchJRNL.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))
@@ -236,7 +236,7 @@ namespace VIS.Models
             /********************
              *  Inventory Movement, Physical Inventory
              */
-            else if (VAF_TableView_ID == MMovement.Table_ID
+            else if (VAF_TableView_ID == MVAMInventoryTransfer.Table_ID
                 || VAF_TableView_ID == MVAMInventory.Table_ID)
             {
                 //	Complete                    ..  CO
@@ -258,7 +258,7 @@ namespace VIS.Models
             }
 
             // Added By Arpit
-            else if (VAF_TableView_ID == MMovementConfirm.Table_ID)
+            else if (VAF_TableView_ID == MVAMInvTrfConfirm.Table_ID)
             {
                 //	Complete                    ..  CO
                 if (docStatus.Equals(DocumentEngine.STATUS_COMPLETED))

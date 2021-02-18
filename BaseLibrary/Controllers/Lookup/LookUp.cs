@@ -1,6 +1,6 @@
 ﻿/********************************************************
 // Module Name    : Show field 
-// Purpose        : Base Class for MLookup, MLocator.
+// Purpose        : Base Class for MLookup, MVAMLocator.
                     as well as for MLocation, MVABAccount (only single value)
                     Maintains selectable data as NamePairs in ArrayList
                     The objects itself may be shared by the lookup implementation (ususally HashMap)
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
       ********************************************************************************/
 
     /// <summary>
-    ///  Base Class for MLookup, MLocator.
+    ///  Base Class for MLookup, MVAMLocator.
     ///  as well as for MLocation, MVABAccount (only single value)
     ///  Maintains selectable data as NamePairs in ArrayList
     ///  The objects itself may be shared by the lookup implementation (ususally HashMap)

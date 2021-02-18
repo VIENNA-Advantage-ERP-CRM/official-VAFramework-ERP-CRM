@@ -562,7 +562,7 @@ namespace VAdvantage.Model
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), getVAB_DocTypesTarget_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), getDateAcct(), dt.GetDocBaseType()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), getDateAcct(), dt.GetDocBaseType()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;

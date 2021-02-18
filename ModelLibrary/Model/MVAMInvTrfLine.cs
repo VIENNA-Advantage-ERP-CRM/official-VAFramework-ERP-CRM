@@ -24,10 +24,10 @@ namespace VAdvantage.Model
     /// <summary>
     /// Inventory Move Line Model
     /// </summary>
-    public class MMovementLine : X_VAM_InvTrf_Line
+    public class MVAMInvTrfLine : X_VAM_InvTrf_Line
     {
         /** Parent							*/
-        private MMovement _parent = null;
+        private MVAMInventoryTransfer _parent = null;
         public Decimal? OnHandQty = 0;
         private Decimal? OnHandQtyTo = 0;
         private Decimal? containerQty = 0;
@@ -42,7 +42,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_InvTrf_Line_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMovementLine(Ctx ctx, int VAM_InvTrf_Line_ID, Trx trxName)
+        public MVAMInvTrfLine(Ctx ctx, int VAM_InvTrf_Line_ID, Trx trxName)
             : base(ctx, VAM_InvTrf_Line_ID, trxName)
         {
             if (VAM_InvTrf_Line_ID == 0)
@@ -68,7 +68,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transation</param>
-        public MMovementLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvTrfLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         /// Parent constructor
         /// </summary>
         /// <param name="parent">parent</param>
-        public MMovementLine(MMovement parent)
+        public MVAMInvTrfLine(MVAMInventoryTransfer parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -184,10 +184,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// 
         /// <returns>Parent Movement</returns>
-        public MMovement GetParent()
+        public MVAMInventoryTransfer GetParent()
         {
             if (_parent == null)
-                _parent = new MMovement(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                _parent = new MVAMInventoryTransfer(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_TrxName());
             return _parent;
         }
 
@@ -231,8 +231,8 @@ namespace VAdvantage.Model
             }
 
             // Check Locator For Header Warehouse
-            MMovement mov = new MMovement(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_TrxName());
-            MLocator loc = new MLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
+            MVAMInventoryTransfer mov = new MVAMInventoryTransfer(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_TrxName());
+            MVAMLocator loc = new MVAMLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
             Tuple<string, string, string> aInfo = null;
             if (Env.HasModulePrefix("DTD001_", out aInfo))
             {
@@ -296,7 +296,7 @@ namespace VAdvantage.Model
                 }
             }
             // IF Doc Status = InProgress then No record Save
-            MMovement move = new MMovement(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_Trx());        // Trx used to handle query stuck problem
+            MVAMInventoryTransfer move = new MVAMInventoryTransfer(GetCtx(), GetVAM_InventoryTransfer_ID(), Get_Trx());        // Trx used to handle query stuck problem
             if (newRecord && move.GetDocStatus() == "IP")
             {
                 log.SaveError("Message", Msg.GetMsg(GetCtx(), "DTD001_CannotCreate"));
@@ -326,7 +326,7 @@ namespace VAdvantage.Model
             {
                 MWarehouse wh = null; MWarehouse whTo = null;
                 wh = MWarehouse.Get(GetCtx(), mov.GetDTD001_MWarehouseSource_ID());
-                whTo = MWarehouse.Get(GetCtx(), MLocator.Get(GetCtx(), GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID());
+                whTo = MWarehouse.Get(GetCtx(), MVAMLocator.Get(GetCtx(), GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID());
 
                 qry = "SELECT NVL(SUM(NVL(QtyOnHand,0)),0) AS QtyOnHand FROM VAM_Storage where VAM_Locator_id=" + GetVAM_Locator_ID() + " and VAM_Product_id=" + GetVAM_Product_ID();
                 if (GetDTD001_AttributeNumber() == null || GetVAM_PFeature_SetInstance_ID() > 0)
@@ -716,17 +716,17 @@ namespace VAdvantage.Model
         /// <returns>base number</returns>
         public Decimal GetBase(String CostDistribution)
         {
-            if (MLandedCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
+            if (MVABLCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
             {
                 //	TODO Costs!
                 log.Severe("Not Implemented yet - Cost");
                 return Env.ZERO;
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
                 return Env.ONE;
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
                 return GetMovementQty();
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)
@@ -736,7 +736,7 @@ namespace VAdvantage.Model
                 }
                 return Decimal.Multiply(GetMovementQty(), (Decimal)product.GetVolume());
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)

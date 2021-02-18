@@ -1,5 +1,5 @@
 ﻿/********************************************************
- * Class Name     : MJournal
+ * Class Name     : MVAGLJRNL
  * Purpose        : GL Journal Model
  * Class Used     : X_VAGL_JRNL,DocAction 
  * Chronological    Development
@@ -26,7 +26,7 @@ using BaseLibrary.Engine;
 
 namespace VAdvantage.Model
 {
-    public class MJournal : X_VAGL_JRNL, DocAction
+    public class MVAGLJRNL : X_VAGL_JRNL, DocAction
     {
 
         /** Is record save from GL Voucher form **/
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAGL_JRNL_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MJournal(Ctx ctx, int VAGL_JRNL_ID, Trx trxName)
+        public MVAGLJRNL(Ctx ctx, int VAGL_JRNL_ID, Trx trxName)
             : base(ctx, VAGL_JRNL_ID, trxName)
         {
             //super (ctx, VAGL_JRNL_ID, trxName);
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
                 SetPosted(false);
                 SetProcessed(false);
             }
-        }	//	MJournal
+        }	//	MVAGLJRNL
 
         /// <summary>
         /// Load Constructor
@@ -78,14 +78,14 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MJournal(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAGLJRNL(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             //super(ctx, rs, trxName);
-        }	//	MJournal
+        }	//	MVAGLJRNL
 
 
-        public MJournal(Ctx ctx, IDataReader dr, Trx trxName)
+        public MVAGLJRNL(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             //super(ctx, rs, trxName);
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         /// Parent Constructor.
         /// </summary>
         /// <param name="parent">parent batch</param>
-        public MJournal(MJournalBatch parent)
+        public MVAGLJRNL(MVAGLBatchJRNL parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //this (parent.getCtx(), 0, parent.get_TrxName());
@@ -108,13 +108,13 @@ namespace VAdvantage.Model
             SetVAB_YearPeriod_ID(parent.GetVAB_YearPeriod_ID());
             SetDateAcct(parent.GetDateAcct());
             SetVAB_Currency_ID(parent.GetVAB_Currency_ID());
-        }	//	MJournal
+        }	//	MVAGLJRNL
 
         /// <summary>
         /// Copy Constructor.Dos not copy: Dates/Period
         /// </summary>
         /// <param name="original">original</param>
-        public MJournal(MJournal original)
+        public MVAGLJRNL(MVAGLJRNL original)
             : this(original.GetCtx(), 0, original.Get_TrxName())
         {
             //this (original.GetCtx(), 0, original.get_TrxName())
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
             //	setDateDoc(original.getDateDoc());
             //	setDateAcct(original.getDateAcct());
             //	setVAB_YearPeriod_ID(original.getVAB_YearPeriod_ID());
-        }	//	MJournal
+        }	//	MVAGLJRNL
 
 
         /// <summary>
@@ -154,12 +154,12 @@ namespace VAdvantage.Model
         /// Get Period
         /// </summary>
         /// <returns>period or null</returns>
-        public MPeriod GetPeriod()
+        public MVABYearPeriod GetPeriod()
         {
             int VAB_YearPeriod_ID = GetVAB_YearPeriod_ID();
             if (VAB_YearPeriod_ID != 0)
             {
-                return MPeriod.Get(GetCtx(), VAB_YearPeriod_ID);
+                return MVABYearPeriod.Get(GetCtx(), VAB_YearPeriod_ID);
             }
             return null;
         }	//	getPeriod
@@ -241,7 +241,7 @@ namespace VAdvantage.Model
                 SetRate();
                 return;
             }
-            int VAB_YearPeriod_ID = MPeriod.GetVAB_YearPeriod_ID(GetCtx(), DateAcct);
+            int VAB_YearPeriod_ID = MVABYearPeriod.GetVAB_YearPeriod_ID(GetCtx(), DateAcct);
             if (VAB_YearPeriod_ID == 0)
             {
                 log.Warning("Period not found");
@@ -267,7 +267,7 @@ namespace VAdvantage.Model
             }
             DateTime? dateAcct = GetDateAcct();
             //
-            MPeriod period = GetPeriod();
+            MVABYearPeriod period = GetPeriod();
             if (period != null)
             {
                 if (period.IsStandardPeriod()
@@ -382,10 +382,10 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>Array of lines</returns>
-        public MJournalLine[] GetLines(Boolean requery)
+        public MVAGLJRNLLine[] GetLines(Boolean requery)
         {
-            //ArrayList<MJournalLine> list = new ArrayList<MJournalLine>();
-            List<MJournalLine> list = new List<MJournalLine>();
+            //ArrayList<MVAGLJRNLLine> list = new ArrayList<MVAGLJRNLLine>();
+            List<MVAGLJRNLLine> list = new List<MVAGLJRNLLine>();
             String sql = "SELECT * FROM VAGL_JRNLLine WHERE VAGL_JRNL_ID=@Param1 ORDER BY Line";
             //PreparedStatement pstmt = null;
             SqlParameter[] Param = new SqlParameter[1];
@@ -404,7 +404,7 @@ namespace VAdvantage.Model
                 //while (rs.next())
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MJournalLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAGLJRNLLine(GetCtx(), dr, Get_TrxName()));
                 }
                 dt = null;
             }
@@ -421,7 +421,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "getLines", ex);
             }
             //
-            MJournalLine[] retValue = new MJournalLine[list.Count];
+            MVAGLJRNLLine[] retValue = new MVAGLJRNLLine[list.Count];
             //list.toArray(retValue);
             retValue = list.ToArray();
             return retValue;
@@ -430,23 +430,23 @@ namespace VAdvantage.Model
         /// <summary>
         /// Copy Lines from other Journal
         /// </summary>
-        /// <param name="fromJournal">Journal</param>
+        /// <param name="froMVAGLJRNL">Journal</param>
         /// <param name="dateAcct">date used - if null original</param>
         /// <param name="typeCR">type of copying (C)orrect=negate - (R)everse=flip dr/cr - otherwise just copy</param>
         /// <returns>number of lines copied</returns>
-        public int CopyLinesFrom(MJournal fromJournal, DateTime? dateAcct, char typeCR)
+        public int CopyLinesFrom(MVAGLJRNL froMVAGLJRNL, DateTime? dateAcct, char typeCR)
         {
-            if (IsProcessed() || fromJournal == null)
+            if (IsProcessed() || froMVAGLJRNL == null)
             {
                 return 0;
             }
             int count = 0;
             int lineCount = 0;
 
-            MJournalLine[] fromLines = fromJournal.GetLines(false);
+            MVAGLJRNLLine[] fromLines = froMVAGLJRNL.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
+                MVAGLJRNLLine toLine = new MVAGLJRNLLine(GetCtx(), 0, froMVAGLJRNL.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 //
@@ -494,20 +494,20 @@ namespace VAdvantage.Model
 
 
         // Mainsh 18/7/2016...
-        public int CopyLines(MJournal fromJournal, char typeCR)
+        public int CopyLines(MVAGLJRNL froMVAGLJRNL, char typeCR)
         {
             DateTime? dateAcct = GetDateAcct();
-            if (IsProcessed() || fromJournal == null)
+            if (IsProcessed() || froMVAGLJRNL == null)
             {
                 return 0;
             }
             int count = 0;
             int lineCount = 0;
 
-            MJournalLine[] fromLines = fromJournal.GetLines(false);
+            MVAGLJRNLLine[] fromLines = froMVAGLJRNL.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
+                MVAGLJRNLLine toLine = new MVAGLJRNLLine(GetCtx(), 0, froMVAGLJRNL.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 //
@@ -536,7 +536,7 @@ namespace VAdvantage.Model
                 toLine.SetElementType(fromLines[i].GetElementType());
 
 
-                if (toLine.Save(fromJournal.Get_TrxName()))
+                if (toLine.Save(froMVAGLJRNL.Get_TrxName()))
                 {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetVAGL_JRNLLine_ID());
@@ -552,20 +552,20 @@ namespace VAdvantage.Model
         //end
 
         //added by To Create Journal Lines Arpit Rai 15th Dec,2016
-        public int CopyJLines(MJournal fromJournal, DateTime? dateAcct)
+        public int CopyJLines(MVAGLJRNL froMVAGLJRNL, DateTime? dateAcct)
         {
 
-            if (IsProcessed() || fromJournal == null)
+            if (IsProcessed() || froMVAGLJRNL == null)
             {
                 return 0;
             }
             int count = 0;
             int lineCount = 0;
 
-            MJournalLine[] fromLines = fromJournal.GetLines(false);
+            MVAGLJRNLLine[] fromLines = froMVAGLJRNL.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MJournalLine toLine = new MJournalLine(GetCtx(), 0, fromJournal.Get_TrxName());
+                MVAGLJRNLLine toLine = new MVAGLJRNLLine(GetCtx(), 0, froMVAGLJRNL.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toLine.SetVAGL_JRNL_ID(GetVAGL_JRNL_ID());
                 if (dateAcct != null)
@@ -584,7 +584,7 @@ namespace VAdvantage.Model
                 toLine.SetProcessed(false);
                 toLine.SetQty(fromLines[i].GetQty());
                 toLine.SetElementType(fromLines[i].GetElementType());
-                if (toLine.Save(fromJournal.Get_TrxName()))
+                if (toLine.Save(froMVAGLJRNL.Get_TrxName()))
                 {
                     count++;
                     lineCount += toLine.CopyLinesFrom(fromLines[i], toLine.GetVAGL_JRNLLine_ID());
@@ -840,7 +840,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -854,7 +854,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             }
 
             //	Lines
-            MJournalLine[] lines = GetLines(true);
+            MVAGLJRNLLine[] lines = GetLines(true);
             if (lines.Length == 0)
             {
                 m_processMsg = "@NoLines@";
@@ -909,7 +909,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             Decimal AmtSourceCr = Env.ZERO;
             for (int i = 0; i < lines.Length; i++)
             {
-                MJournalLine line = lines[i];
+                MVAGLJRNLLine line = lines[i];
                 if (!IsActive())
                 {
                     continue;
@@ -1035,7 +1035,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                    if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -1120,7 +1120,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// </summary>
         /// <param name="VAGL_BatchJRNL_ID">batch</param>
         /// <returns>reversed journal or null</returns>
-        public MJournal ReverseCorrectIt(int VAGL_BatchJRNL_ID)
+        public MVAGLJRNL ReverseCorrectIt(int VAGL_BatchJRNL_ID)
         {
             log.Info(ToString());
             //If any journal line is allocated then the Journal will not Reverted
@@ -1131,7 +1131,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
                 return null;
             }
             //	Journal
-            MJournal reverse = new MJournal(this);
+            MVAGLJRNL reverse = new MVAGLJRNL(this);
             reverse.SetVAGL_BatchJRNL_ID(VAGL_BatchJRNL_ID);
             reverse.SetDateDoc(GetDateDoc());
             reverse.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
@@ -1287,11 +1287,11 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// </summary>
         /// <param name="VAGL_BatchJRNL_ID">reversal batch</param>
         /// <returns> journal or null </returns>
-        public MJournal ReverseAccrualIt(int VAGL_BatchJRNL_ID)
+        public MVAGLJRNL ReverseAccrualIt(int VAGL_BatchJRNL_ID)
         {
             log.Info(ToString());
             //	Journal
-            MJournal reverse = new MJournal(this);
+            MVAGLJRNL reverse = new MVAGLJRNL(this);
             reverse.SetVAGL_BatchJRNL_ID(VAGL_BatchJRNL_ID);
             reverse.SetDateDoc(DateTime.Now);
             reverse.Set_ValueNoCheck("VAB_YearPeriod_ID", null);		//	reset
@@ -1359,7 +1359,7 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
         /// <returns> info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MJournal[");
+            StringBuilder sb = new StringBuilder("MVAGLJRNL[");
             sb.Append(Get_ID()).Append(",").Append(GetDescription())
                 .Append(",DR=").Append(GetTotalDr())
                 .Append(",CR=").Append(GetTotalCr())
@@ -1471,15 +1471,15 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
 
         #endregion
         //Added by Arpit on 15th Dec,2016
-        public static MJournal CopyFrom(Ctx ctx, int VAGL_JRNL_ID, DateTime? dateDoc, Trx trxName)
+        public static MVAGLJRNL CopyFrom(Ctx ctx, int VAGL_JRNL_ID, DateTime? dateDoc, Trx trxName)
         {
-            MJournal from = new MJournal(ctx, VAGL_JRNL_ID, trxName);
+            MVAGLJRNL from = new MVAGLJRNL(ctx, VAGL_JRNL_ID, trxName);
             if (from.GetVAGL_JRNL_ID() == 0)
             {
                 throw new ArgumentException("From Journal Batch not found VAGL_BatchJRNL_ID=" + VAGL_JRNL_ID);
             }
             //
-            MJournal to = new MJournal(ctx, 0, trxName);
+            MVAGLJRNL to = new MVAGLJRNL(ctx, 0, trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("DocumentNo", null);
             // to.Set_ValueNoCheck("VAB_YearPeriod_ID", null);
@@ -1504,6 +1504,6 @@ AND CA.VAB_AccountBook_ID != " + GetVAB_AccountBook_ID();
             return to;
         }	//	copyFrom
         //End Here
-    }	//	MJournal
+    }	//	MVAGLJRNL
 
 }

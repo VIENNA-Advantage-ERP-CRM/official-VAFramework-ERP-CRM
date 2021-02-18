@@ -60,10 +60,10 @@ namespace VAdvantage.Process
         MVAMInventory inventory = null;
         MVAMInventoryLine inventoryLine = null;
 
-        MMovement movement = null;
-        MMovementLine movementLine = null;
+        MVAMInventoryTransfer movement = null;
+        MVAMInvTrfLine movementLine = null;
         //MWarehouse warehouse = null;
-        MLocator locatorTo = null; // is used to get "to warehouse" reference and "to org" reference for getting cost from prodyc costs 
+        MVAMLocator locatorTo = null; // is used to get "to warehouse" reference and "to org" reference for getting cost from prodyc costs 
         Decimal toCurrentCostPrice = 0; // is used to maintain cost of "move to" 
 
         MVAMInvInOut inout = null;
@@ -74,11 +74,11 @@ namespace VAdvantage.Process
         MVABInvoice invoice = null;
         MVABInvoiceLine invoiceLine = null;
         bool isCostAdjustableOnLost = false;
-        MLandedCostAllocation landedCostAllocation = null;
+        MVABLCostDistribution landedCostAllocation = null;
 
         MProduct product = null;
 
-        MMatchInv matchInvoice = null;
+        MVAMMatchInvoice matchInvoice = null;
         X_VAM_MatchInvoiceoiceCostTrack matchInvCostReverse = null;
 
         int table_WrkOdrTrnsctionLine = 0;
@@ -1045,7 +1045,7 @@ namespace VAdvantage.Process
                             #region Cost Calculation for Landed cost Allocation
                             if (Util.GetValueOfString(dsRecord.Tables[0].Rows[z]["TableName"]) == "LandedCost")
                             {
-                                landedCostAllocation = new MLandedCostAllocation(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
+                                landedCostAllocation = new MVABLCostDistribution(GetCtx(), Util.GetValueOfInt(dsRecord.Tables[0].Rows[z]["Record_Id"]), Get_Trx());
                                 MVABInvoiceLine invoiceLine = new MVABInvoiceLine(GetCtx(), landedCostAllocation.GetVAB_InvoiceLine_ID(), Get_Trx());
                                 ProductInvoiceLineCost = invoiceLine.GetProductLineCost(invoiceLine);
                                 MProduct product = MProduct.Get(GetCtx(), landedCostAllocation.GetVAM_Product_ID());
@@ -3661,7 +3661,7 @@ namespace VAdvantage.Process
         /// <param name="VAM_MatchInvoice_ID">match invoice reference</param>
         private void CalculateCostForMatchInvoiced(int VAM_MatchInvoice_ID)
         {
-            matchInvoice = new MMatchInv(GetCtx(), VAM_MatchInvoice_ID, Get_Trx());
+            matchInvoice = new MVAMMatchInvoice(GetCtx(), VAM_MatchInvoice_ID, Get_Trx());
             inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
             invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
             invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());
@@ -4181,7 +4181,7 @@ namespace VAdvantage.Process
         /// <param name="VAM_InventoryTransfer_ID">Movement id reference</param>
         private void CalculateCostForMovement(int VAM_InventoryTransfer_ID)
         {
-            movement = new MMovement(GetCtx(), VAM_InventoryTransfer_ID, Get_Trx());
+            movement = new MVAMInventoryTransfer(GetCtx(), VAM_InventoryTransfer_ID, Get_Trx());
 
             sql.Clear();
             if (movement.GetDescription() != null && movement.GetDescription().Contains("{->"))
@@ -4218,8 +4218,8 @@ namespace VAdvantage.Process
                 for (int j = 0; j < dsChildRecord.Tables[0].Rows.Count; j++)
                 {
                     product = new MProduct(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_Product_ID"]), Get_Trx());
-                    movementLine = new MMovementLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InvTrf_Line_ID"]), Get_Trx());
-                    locatorTo = MLocator.Get(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_LocatorTo_ID"]));
+                    movementLine = new MVAMInvTrfLine(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_InvTrf_Line_ID"]), Get_Trx());
+                    locatorTo = MVAMLocator.Get(GetCtx(), Util.GetValueOfInt(dsChildRecord.Tables[0].Rows[j]["VAM_LocatorTo_ID"]));
 
                     #region get price from VAM_ProductCost (Current Cost Price)
                     if (!client.IsCostImmediate() || movementLine.GetCurrentCostPrice() == 0 || movementLine.GetToCurrentCostPrice() == 0)
@@ -4690,7 +4690,7 @@ namespace VAdvantage.Process
         /// <param name="VAM_MatchInvoice_ID">Match Invoice reference</param>
         private void CalculationCostCreditMemo(int VAM_MatchInvoice_ID)
         {
-            matchInvoice = new MMatchInv(GetCtx(), VAM_MatchInvoice_ID, Get_Trx());
+            matchInvoice = new MVAMMatchInvoice(GetCtx(), VAM_MatchInvoice_ID, Get_Trx());
             inoutLine = new MVAMInvInOutLine(GetCtx(), matchInvoice.GetVAM_Inv_InOutLine_ID(), Get_Trx());
             invoiceLine = new MVABInvoiceLine(GetCtx(), matchInvoice.GetVAB_InvoiceLine_ID(), Get_Trx());
             invoice = new MVABInvoice(GetCtx(), invoiceLine.GetVAB_Invoice_ID(), Get_Trx());

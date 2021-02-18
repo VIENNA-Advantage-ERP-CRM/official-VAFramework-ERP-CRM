@@ -1110,8 +1110,8 @@
 
 
 
-    //3. MLocatorLookup
-    function MLocatorLookup(ctx, windowNo) {
+    //3. MVAMLocatorLookup
+    function MVAMLocatorLookup(ctx, windowNo) {
         Lookup.call(this, null, null, ctx, windowNo, VIS.DisplayType.TableDir);
 
         this.C_Locator_ID = 0;
@@ -1130,7 +1130,7 @@
 
         this.defaultID = "";
 
-        this.log = VIS.Logging.VLogger.getVLogger("MLocatorLookup");
+        this.log = VIS.Logging.VLogger.getVLogger("MVAMLocatorLookup");
 
         this.load(false);
 
@@ -1140,32 +1140,32 @@
         };
     };
     //inherit lookup class
-    VIS.Utility.inheritPrototype(MLocatorLookup, Lookup);
-    MLocatorLookup.prototype.getDefault = function () {
+    VIS.Utility.inheritPrototype(MVAMLocatorLookup, Lookup);
+    MVAMLocatorLookup.prototype.getDefault = function () {
         return this.defaultID;
     };
-    MLocatorLookup.prototype.getOnlyOrgID = function () {
+    MVAMLocatorLookup.prototype.getOnlyOrgID = function () {
         return this.OnlyOrgID;
     };
-    MLocatorLookup.prototype.getOnlyWarehouseID = function () {
+    MVAMLocatorLookup.prototype.getOnlyWarehouseID = function () {
         return this.onlyWarehouseID;
     };
-    MLocatorLookup.prototype.getOnlyProductId = function () {
+    MVAMLocatorLookup.prototype.getOnlyProductId = function () {
         return this.onlyProductID;
     };
-    MLocatorLookup.prototype.getIsOnlyOutgoing = function () {
+    MVAMLocatorLookup.prototype.getIsOnlyOutgoing = function () {
         return this.onlyOutgoing;
     };
-    MLocatorLookup.prototype.setOnlyOrgID = function (OnlyOrgID) {
+    MVAMLocatorLookup.prototype.setOnlyOrgID = function (OnlyOrgID) {
         this.OnlyOrgID = OnlyOrgID;
     };
-    MLocatorLookup.prototype.setOnlyWarehouseID = function (onlyWarehouseID) {
+    MVAMLocatorLookup.prototype.setOnlyWarehouseID = function (onlyWarehouseID) {
         this.onlyWarehouseID = onlyWarehouseID;
     };
-    MLocatorLookup.prototype.setOnlyProductID = function (onlyProductID) {
+    MVAMLocatorLookup.prototype.setOnlyProductID = function (onlyProductID) {
         this.onlyProductID = onlyProductID;
     };
-    MLocatorLookup.prototype.setOnlyOutgoing = function (isOutgoing) {
+    MVAMLocatorLookup.prototype.setOnlyOutgoing = function (isOutgoing) {
         this.onlyOutgoing = isOutgoing;
     };
     /**
@@ -1179,7 +1179,7 @@
      *            transaction
      * @return Object directly loaded
      */
-    MLocatorLookup.prototype.getDirect = function (keyValue, saveInCache, trxName) {
+    MVAMLocatorLookup.prototype.getDirect = function (keyValue, saveInCache, trxName) {
         if (keyValue == null) {
             return null;;
         }
@@ -1208,7 +1208,7 @@
      *            key
      * @return true if valid
      */
-    MLocatorLookup.prototype.getIsValid = function (key) {
+    MVAMLocatorLookup.prototype.getIsValid = function (key) {
         if (key == null)
             return true;
         // try cache
@@ -1216,7 +1216,7 @@
         return pp != null;
     };// isValid
     //Override functions
-    MLocatorLookup.prototype.load = function (sync) {
+    MVAMLocatorLookup.prototype.load = function (sync) {
         var param = [];
         var sqlParaCount = 0;
         var rows = 0;
@@ -1420,7 +1420,7 @@
             this.log.Finer(finalSql);
         }
     };
-    MLocatorLookup.prototype.get = function (key) {
+    MVAMLocatorLookup.prototype.get = function (key) {
         if (key == null) {
             return null;
         }
@@ -1433,7 +1433,7 @@
         //	Try to get it directly
         return this.getDirect(key, true, null);
     };
-    MLocatorLookup.prototype.getDisplay = function (value) {
+    MVAMLocatorLookup.prototype.getDisplay = function (value) {
         if (value == null) {
             return "";
         }
@@ -1442,7 +1442,7 @@
             return "<" + value.toString() + ">";
         return display.Name;
     };
-    MLocatorLookup.prototype.getData = function (mandatory, onlyValidated, onlyActive, temporary) {
+    MVAMLocatorLookup.prototype.getData = function (mandatory, onlyValidated, onlyActive, temporary) {
         var collection = this.lookup; //valuestodo
 
         var arr = $.map(this.lookup, function (v) {
@@ -1450,7 +1450,7 @@
         })
         return arr;
     };
-    MLocatorLookup.prototype.refresh = function () {
+    MVAMLocatorLookup.prototype.refresh = function () {
 
         this.log.fine("start");
         try {
@@ -1462,7 +1462,7 @@
         this.log.info("#" + this.lookup.Count);
         return this.lookup.length;
     };
-    MLocatorLookup.prototype.getColumnName = function () {
+    MVAMLocatorLookup.prototype.getColumnName = function () {
         return "VAM_Locator.VAM_Locator_ID";
     };
 
@@ -1471,7 +1471,7 @@
     * 
     * @return Zoom VAF_Screen_ID
     */
-    MLocatorLookup.prototype.getZoomWindow = function () {
+    MVAMLocatorLookup.prototype.getZoomWindow = function () {
         if (arguments.length == 0) {
             return this.info.zoomWindow;
         }
@@ -1490,7 +1490,7 @@
     }; // getZoomWindow
 
 
-    MLocatorLookup.prototype.dispose = function () {
+    MVAMLocatorLookup.prototype.dispose = function () {
         this.disposeLocal();
         this.$super.dispose.call(this);
         this.lookupDirect = null;
@@ -2490,7 +2490,7 @@
     VIS.MVABAccountLookup = MVABAccountLookup;
     VIS.MPAttributeLookup = MPAttributeLookup;
     VIS.MGAttributeLookup = MGAttributeLookup;
-    VIS.MLocatorLookup = MLocatorLookup;
+    VIS.MVAMLocatorLookup = MVAMLocatorLookup;
     VIS.MAmtDivLookup = MAmtDivLookup;
     VIS.MProductContainerLookup = MProductContainerLookup;
 

@@ -48,12 +48,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_MatchInv(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MMatchInv), idr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
+            : base(ass, typeof(MVAMMatchInvoice), idr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
         }
         public Doc_MatchInv(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MMatchInv), dr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
+            : base(ass, typeof(MVAMMatchInvoice), dr, MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, trxName)
         {
 
         }
@@ -65,7 +65,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(Doc.NO_CURRENCY);
-            MMatchInv matchInv = (MMatchInv)GetPO();
+            MVAMMatchInvoice matchInv = (MVAMMatchInvoice)GetPO();
             SetDateDoc(matchInv.GetDateTrx());
             SetQty(matchInv.GetQty());
             //	Invoice Info
@@ -121,7 +121,7 @@ namespace VAdvantage.Acct
                     + ",Qty=" + GetQty() + ",InOutQty=" + _receiptLine.GetMovementQty());
                 return facts;
             }
-            MMatchInv matchInv = (MMatchInv)GetPO();
+            MVAMMatchInvoice matchInv = (MVAMMatchInvoice)GetPO();
 
             //  create Fact Header
             Fact fact = new Fact(this, as1, Fact.POST_Actual);
@@ -151,7 +151,7 @@ namespace VAdvantage.Acct
             //	dr.setVAM_Locator_ID(_receiptLine.getVAM_Locator_ID());
             //	MVAMInvInOut receipt = _receiptLine.getParent();
             //	dr.setLocationFromBPartner(receipt.getVAB_BPart_Location_ID(), true);	//  from Loc
-            //	dr.setLocationFromLocator(_receiptLine.getVAM_Locator_ID(), false);		//  to Loc
+            //	dr.setLocationFroMVAMLocator(_receiptLine.getVAM_Locator_ID(), false);		//  to Loc
             Decimal temp = dr.GetAcctBalance();
             //	Set AmtAcctCr/Dr from Receipt (sets also Project)
             if (!dr.UpdateReverseLine(MVAMInvInOut.Table_ID, 		//	Amt updated

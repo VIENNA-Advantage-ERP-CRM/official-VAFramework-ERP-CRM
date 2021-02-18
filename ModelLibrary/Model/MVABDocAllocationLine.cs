@@ -224,7 +224,7 @@ namespace VAdvantage.Model
         {
             log.Fine("Reverse=" + reverse + " - " + ToString());
             int VAB_Invoice_ID = GetVAB_Invoice_ID();
-            MVABInvoicePaySchedule invoiceSchedule = null;
+            MVABSchedInvoicePayment invoiceSchedule = null;
             MVABPayment payment = null;
             MVABCashJRNLLine cashLine = null;
             MVABInvoice invoice = GetInvoice();
@@ -423,7 +423,7 @@ namespace VAdvantage.Model
                         MVABCurrency currency = new MVABCurrency(GetCtx(), invoice.GetVAB_Currency_ID(), null);
                         if (GetVAB_sched_InvoicePayment_ID() != 0 && !invoice.IsPaid())
                         {
-                            invoiceSchedule = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                            invoiceSchedule = new MVABSchedInvoicePayment(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                             invoiceSchedule.SetVA009_IsPaid(false);
                             // when we update schedule paid as False, then update payment method and related fields on schedule as on Invoice Header
                             if (reverse)

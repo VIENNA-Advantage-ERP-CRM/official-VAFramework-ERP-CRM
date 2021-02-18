@@ -7,7 +7,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MVABInvoiceBatchLineModel
+    public class MVABBatchInvoiceLineModel
     {
         /// <summary>
         /// GetInvoiceBatchLine
@@ -26,7 +26,7 @@ namespace VIS.Models
             VAB_BatchInvoiceLine_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value
 
-            MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
+            MVABBatchInvoiceLine last = new MVABBatchInvoiceLine(ctx, VAB_BatchInvoiceLine_ID, null);
             //	Need to Increase when different DocType or BP
             retDic["VAB_DocTypes_ID"] = last.GetVAB_DocTypes_ID().ToString();
             retDic["VAB_BusinessPartner_ID"] = last.GetVAB_BusinessPartner_ID().ToString();

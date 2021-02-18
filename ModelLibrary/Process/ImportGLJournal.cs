@@ -565,9 +565,9 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             int noInsertJournal = 0;
             int noInsertLine = 0;
 
-            MJournalBatch batch = null;		//	Change Batch per Batch DocumentNo
+            MVAGLBatchJRNL batch = null;		//	Change Batch per Batch DocumentNo
             String BatchDocumentNo = "";
-            MJournal journal = null;
+            MVAGLJRNL journal = null;
             String JournalDocumentNo = "";
             DateTime? DateAcct = null;
 
@@ -594,7 +594,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                         || !BatchDocumentNo.Equals(impBatchDocumentNo))
                     {
                         BatchDocumentNo = impBatchDocumentNo;	//	cannot compare real DocumentNo
-                        batch = new MJournalBatch(GetCtx(), 0, null);
+                        batch = new MVAGLBatchJRNL(GetCtx(), 0, null);
                         batch.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_OrgDoc_ID());
                         if (imp.GetBatchDocumentNo() != null
                             && imp.GetBatchDocumentNo().Length > 0)
@@ -643,7 +643,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         JournalDocumentNo = impJournalDocumentNo;	//	cannot compare real DocumentNo
                         DateAcct = impDateAcct.Value;
-                        journal = new MJournal(GetCtx(), 0, Get_TrxName());
+                        journal = new MVAGLJRNL(GetCtx(), 0, Get_TrxName());
                         journal.SetVAGL_BatchJRNL_ID(batch.GetVAGL_BatchJRNL_ID());
                         journal.SetClientOrg(imp.GetVAF_Client_ID(), imp.GetVAF_OrgDoc_ID());
                         //
@@ -685,7 +685,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
 
                     //	Lines
-                    MJournalLine line = new MJournalLine(journal);
+                    MVAGLJRNLLine line = new MVAGLJRNLLine(journal);
                     //
                     line.SetDescription(imp.GetDescription());
                     line.SetCurrency(imp.GetVAB_Currency_ID(), imp.GetVAB_CurrencyType_ID(), imp.GetCurrencyRate());

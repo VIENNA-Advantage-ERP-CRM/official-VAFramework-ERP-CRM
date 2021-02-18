@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                 Decimal.Negate(GetMovementQty()), GetMovementDate(), Get_TrxName());
             mTrx.SetVAB_ProjectSupply_ID(GetVAB_ProjectSupply_ID());
             //
-            MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+            MVAMLocator loc = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
             if (MStorage.Add(GetCtx(), loc.GetVAM_Warehouse_ID(), GetVAM_Locator_ID(),
                     GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(), GetVAM_PFeature_SetInstance_ID(),
                     Decimal.Negate(GetMovementQty()), null, null, Get_TrxName()))

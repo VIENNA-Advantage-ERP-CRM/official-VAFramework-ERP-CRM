@@ -11,7 +11,7 @@ using VAdvantage.Utility;
 
 namespace VIS.Models
 {
-    public class MPeriodModel
+    public class MVABYearPeriodModel
     {
         /// <summary>
         /// Get Period
@@ -28,7 +28,7 @@ namespace VIS.Models
             DateTime? dateAcct = Util.GetValueOfDateTime(paramValue[1]);
             int VAF_Org_ID = Util.GetValueOfInt(paramValue[2]);
 
-            period_ID = MPeriod.GetVAB_YearPeriod_ID(ctx, dateAcct, VAF_Org_ID);
+            period_ID = MVABYearPeriod.GetVAB_YearPeriod_ID(ctx, dateAcct, VAF_Org_ID);
             return period_ID;
         }
 

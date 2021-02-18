@@ -137,7 +137,7 @@ namespace VIS.Controllers
             if (Session["Ctx"] != null)
             {
                 var ctx = Session["ctx"] as Ctx;
-                MMatchPO.Consolidate(ctx);
+                MVAMMatchPO.Consolidate(ctx);
             }
             return Json(new { result = "ok" }, JsonRequestBehavior.AllowGet);
         }
@@ -2429,7 +2429,7 @@ namespace VIS.Controllers
                             //	Create Shipment - Invoice Link
                             if (iLine.GetVAM_Product_ID() != 0)
                             {
-                                MMatchInv match = new MMatchInv(iLine, inv.GetDateInvoiced(), qty);
+                                MVAMMatchInvoice match = new MVAMMatchInvoice(iLine, inv.GetDateInvoiced(), qty);
                                 match.Set_ValueNoCheck("VAB_BusinessPartner_ID", inv.GetVAB_BusinessPartner_ID());
                                 match.SetVAM_Inv_InOutLine_ID(VAM_Inv_InOutLine_ID);
                                 if (match.Save())
@@ -2464,7 +2464,7 @@ namespace VIS.Controllers
                             //	Create PO - Invoice Link = corrects PO
                             if (iLine.GetVAB_OrderLine_ID() != 0 && iLine.GetVAM_Product_ID() != 0)
                             {
-                                MMatchPO matchPO = MMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
+                                MVAMMatchPO matchPO = MVAMMatchPO.Create(iLine, sLine, inv.GetDateInvoiced(), qty);
                                 matchPO.Set_ValueNoCheck("VAB_BusinessPartner_ID", inv.GetVAB_BusinessPartner_ID());
                                 matchPO.SetVAB_InvoiceLine_ID(iLine);
                                 matchPO.SetVAM_Inv_InOutLine_ID(VAM_Inv_InOutLine_ID);
@@ -2522,7 +2522,7 @@ namespace VIS.Controllers
                             //	Create PO - Shipment Link
                             if (sLine.GetVAM_Product_ID() != 0)
                             {
-                                MMatchPO match = new MMatchPO(sLine, ship.GetMovementDate(), qty);
+                                MVAMMatchPO match = new MVAMMatchPO(sLine, ship.GetMovementDate(), qty);
                                 match.Set_ValueNoCheck("VAB_BusinessPartner_ID", ship.GetVAB_BusinessPartner_ID());
                                 if (Util.GetValueOfInt(DB.ExecuteScalar("select count(*) from vaf_column where columnname like 'IsMatchPOForm'", null, trx)) > 0)
                                     match.SetIsMatchPOForm(true);

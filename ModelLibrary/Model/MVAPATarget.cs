@@ -377,10 +377,10 @@ namespace VAdvantage.Model
          * 	Get Measure
          *	@return measure or null
          */
-        public MMeasure GetMeasure()
+        public MVAPAEvaluate GetMeasure()
         {
             if (GetVAPA_Evaluate_ID() != 0)
-                return MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
+                return MVAPAEvaluate.Get(GetCtx(), GetVAPA_Evaluate_ID());
             return null;
         }
 
@@ -393,7 +393,7 @@ namespace VAdvantage.Model
         public Boolean UpdateGoal(Boolean force)
         {
            log.Config("Force=" + force);
-            MMeasure measure = MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPAEvaluate measure = MVAPAEvaluate.Get(GetCtx(), GetVAPA_Evaluate_ID());
             if (force
                 || GetDateLastRun() == null
                 || !TimeUtil.IsSameHour(GetDateLastRun(), null))
@@ -505,13 +505,13 @@ namespace VAdvantage.Model
          */
         public String GetXAxisText()
         {
-            MMeasure measure = GetMeasure();
+            MVAPAEvaluate measure = GetMeasure();
             if (measure != null
-                && MMeasure.MEASUREDATATYPE_StatusQtyAmount.Equals(measure.GetMeasureDataType()))
+                && MVAPAEvaluate.MEASUREDATATYPE_StatusQtyAmount.Equals(measure.GetMeasureDataType()))
             {
-                if (MMeasure.MEASURETYPE_Request.Equals(measure.GetMeasureType()))
+                if (MVAPAEvaluate.MEASURETYPE_Request.Equals(measure.GetMeasureType()))
                     return Msg.GetElement(GetCtx(), "VAR_Req_Status_ID");
-                if (MMeasure.MEASURETYPE_Project.Equals(measure.GetMeasureType()))
+                if (MVAPAEvaluate.MEASURETYPE_Project.Equals(measure.GetMeasureType()))
                     return Msg.GetElement(GetCtx(), "VAB_Std_Stage_ID");
             }
             String value = GetMeasureDisplay();

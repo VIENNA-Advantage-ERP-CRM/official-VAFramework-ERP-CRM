@@ -45,7 +45,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("VAM_MatchPO_ID=" + _VAM_MatchPO_ID);
-            MMatchPO po = new MMatchPO(GetCtx(), _VAM_MatchPO_ID, Get_TrxName());
+            MVAMMatchPO po = new MVAMMatchPO(GetCtx(), _VAM_MatchPO_ID, Get_TrxName());
             if (po.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @VAM_MatchPO_ID@ " + _VAM_MatchPO_ID);

@@ -133,7 +133,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             Decimal qty = Decimal.Negate(target.GetQtyOnHand());//.negate();
 
             //	Create Movement
-            MMovement mh = new MMovement(GetCtx(), 0, Get_Trx());
+            MVAMInventoryTransfer mh = new MVAMInventoryTransfer(GetCtx(), 0, Get_Trx());
             mh.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
             mh.SetDescription(GetName());
             if (!mh.Save())
@@ -148,7 +148,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 MStorage source = sources[i];
 
                 //	Movement Line
-                MMovementLine ml = new MMovementLine(mh);
+                MVAMInvTrfLine ml = new MVAMInvTrfLine(mh);
                 ml.SetVAM_Product_ID(target.GetVAM_Product_ID());
                 ml.SetVAM_LocatorTo_ID(target.GetVAM_Locator_ID());
                 ml.SetVAM_PFeature_SetInstanceTo_ID(target.GetVAM_PFeature_SetInstance_ID());
@@ -178,12 +178,12 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }	//	for all movements
 
             //	Process
-            //mh.ProcessIt(MMovement.ACTION_Complete);
+            //mh.ProcessIt(MVAMInventoryTransfer.ACTION_Complete);
             mh.ProcessIt(DocActionVariables.ACTION_COMPLETE);
             mh.Save();
 
             AddLog(0, null, new Decimal(lines), "@VAM_InventoryTransfer_ID@ " + mh.GetDocumentNo() + " ("
-                + MVAFCtrlRefList.Get(GetCtx(), MMovement.DOCSTATUS_VAF_Control_Ref_ID,
+                + MVAFCtrlRefList.Get(GetCtx(), MVAMInventoryTransfer.DOCSTATUS_VAF_Control_Ref_ID,
                     mh.GetDocStatus(), Get_Trx()) + ")");
 
             EliminateReservation(target);
@@ -204,7 +204,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     target.GetVAM_Product_ID(), 0, Get_Trx());
                 if (storage0 == null)
                 {
-                    MLocator defaultLoc = MLocator.GetDefault(GetCtx(), VAM_Locator_ID);
+                    MVAMLocator defaultLoc = MVAMLocator.GetDefault(GetCtx(), VAM_Locator_ID);
                     if (VAM_Locator_ID != defaultLoc.GetVAM_Locator_ID())
                     {
                         VAM_Locator_ID = defaultLoc.GetVAM_Locator_ID();

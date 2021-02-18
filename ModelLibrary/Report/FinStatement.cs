@@ -319,7 +319,7 @@ namespace VAdvantage.Report
                 _acct = new MVABAcctElement(GetCtx(), _Account_ID, Get_TrxName());
                 if (!_acct.IsBalanceSheet())
                 {
-                    MPeriod first = MPeriod.GetFirstInYear(GetCtx(), _DateAcct_From);
+                    MVABYearPeriod first = MVABYearPeriod.GetFirstInYear(GetCtx(), _DateAcct_From);
                     if (first != null)
                     {
                         sb.Append(" AND DateAcct >= ").Append(DataBase.DB.TO_DATE(first.GetStartDate()));

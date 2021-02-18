@@ -9,7 +9,7 @@
 
         var windowNo = VIS.Env.getWindowNo();
         var MVAMPFeatureSetInstanceId = null;
-        var mLocatorId = null;
+        var MVAMLocatorId = null;
         var MVAMPFeatureSetInstanceName = null;
         var mProductId = null;
         var cBPartnerId = null;
@@ -42,7 +42,7 @@
         productWindow = proWindow;
         adColumnId = VAF_Column_ID;
         windowNoParent = pwindowNo;
-        mLocatorId = VAM_Locator_ID;
+        MVAMLocatorId = VAM_Locator_ID;
         if (windowNoParent != -1) {
             //winQry = "SELECT VAF_Screen_ID FROM VAF_Tab WHERE VAF_Tab_ID = " + VIS.Utility.Util.getValueOfInt(VIS.context.getWindowTabContext(windowNoParent, 0, "VAF_Tab_ID"));
             //window_ID = VIS.Utility.Util.getValueOfInt(VIS.DB.executeScalar(winQry, null, null));
@@ -245,7 +245,7 @@
                 flag = false;
                 VIS.Env.getCtx().setContext(windowNoParent, "AttrCode", attrCode);
                 if ($self.onClose)
-                    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, mLocatorId);
+                    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, MVAMLocatorId);
                 setBusy(false);
                 $root.dialog('close');
             }
@@ -319,7 +319,7 @@
                         else {
                             VIS.Env.getCtx().setContext(windowNoParent, "AttrCode", returnValue.attrCode);
                             if ($self.onClose)
-                                $self.onClose(returnValue.VAM_PFeature_SetInstance_ID, returnValue.VAM_PFeature_SetInstanceName, mLocatorId);
+                                $self.onClose(returnValue.VAM_PFeature_SetInstance_ID, returnValue.VAM_PFeature_SetInstanceName, MVAMLocatorId);
                             setBusy(false);
                             $root.dialog('close');
                         }
@@ -371,7 +371,7 @@
             var AttributeSetInstance_ID = -1;
             //open new form
             // Added by Manjot To implement Search Functionality on Grid 10 May 2018 google Sheet ID SI_0607
-            var obj = new VIS.PAttributeInstance(title, VAM_Warehouse_ID, mLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
+            var obj = new VIS.PAttributeInstance(title, VAM_Warehouse_ID, MVAMLocatorId, mProductId, cBPartnerId, txtSerNo.val(), txtLotString.val(), dtGuaranteeDate.val(), IsSOTrx);
             obj.showDialog();
 
             //JID_1140: On OK of select existing record  pop up system should not close the control Of ASI should only close the Select existing record control.
@@ -379,7 +379,7 @@
                 if (attributeSetInstanceID != -1) {
                     MVAMPFeatureSetInstanceId = attributeSetInstanceID;
                     MVAMPFeatureSetInstanceName = name;
-                    mLocatorId = VAM_Locator_ID;
+                    MVAMLocatorId = VAM_Locator_ID;
                     attrCode = AttrCode;
                     changed = true;
                     setBusy(true);
@@ -397,7 +397,7 @@
                     lblEdit.show();
                     chkEdit.show();
                     //if ($self.onClose) {
-                    //    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, mLocatorId);
+                    //    $self.onClose(MVAMPFeatureSetInstanceId, MVAMPFeatureSetInstanceName, MVAMLocatorId);
                     //    $root.dialog('close');
                     //}
                 }
@@ -819,9 +819,9 @@
                 cancelbtn.off("click");
             VIS.Env.clearWinContext(VIS.Env.getCtx(), windowNo);
             VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_PFeature_SetInstance_ID", MVAMPFeatureSetInstanceId);
-            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_Locator_ID", mLocatorId);
+            VIS.Env.getCtx().setContext(VIS.Env.WINDOW_INFO, VIS.Env.TAB_INFO, "VAM_Locator_ID", MVAMLocatorId);
 
-            mLocatorId = null;
+            MVAMLocatorId = null;
             MVAMPFeatureSetInstanceName = null;
             mProductId = null;
             cBPartnerId = null;

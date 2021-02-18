@@ -200,7 +200,7 @@
 
             Okbtn = null;
             cancelbtn = null;
-            mLocatorId = null;
+            MVAMLocatorId = null;
             MVAMPFeatureSetInstanceName = null;
             mProductId = null;
             cBPartnerId = null;

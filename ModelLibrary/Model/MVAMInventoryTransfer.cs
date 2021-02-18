@@ -27,12 +27,12 @@ namespace VAdvantage.Model
     /// <summary>
     /// Inventory Movement Model
     /// </summary>
-    public class MMovement : X_VAM_InventoryTransfer, DocAction
+    public class MVAMInventoryTransfer : X_VAM_InventoryTransfer, DocAction
     {
         /**	Lines						*/
-        private MMovementLine[] _lines = null;
+        private MVAMInvTrfLine[] _lines = null;
         /** Confirmations				*/
-        private MMovementConfirm[] _confirms = null;
+        private MVAMInvTrfConfirm[] _confirms = null;
         /**	Process Message 			*/
         private String _processMsg = null;
         /**	Just Prepared Flag			*/
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_InventoryTransfer_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMovement(Ctx ctx, int VAM_InventoryTransfer_ID, Trx trxName)
+        public MVAMInventoryTransfer(Ctx ctx, int VAM_InventoryTransfer_ID, Trx trxName)
             : base(ctx, VAM_InventoryTransfer_ID, trxName)
         {
             if (VAM_InventoryTransfer_ID == 0)
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transation</param>
-        public MMovement(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInventoryTransfer(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -96,12 +96,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>array of lines</returns>
-        public MMovementLine[] GetLines(Boolean requery)
+        public MVAMInvTrfLine[] GetLines(Boolean requery)
         {
             if (_lines != null && !requery)
                 return _lines;
             //
-            List<MMovementLine> list = new List<MMovementLine>();
+            List<MVAMInvTrfLine> list = new List<MVAMInvTrfLine>();
             String sql = "SELECT * FROM VAM_InvTrf_Line WHERE VAM_InventoryTransfer_ID=@moveid ORDER BY Line";
             try
             {
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MMovementLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMInvTrfLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "GetLines", e);
             }
 
-            _lines = new MMovementLine[list.Count];
+            _lines = new MVAMInvTrfLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }
@@ -129,12 +129,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>array of confirmations</returns>
-        public MMovementConfirm[] GetConfirmations(Boolean requery)
+        public MVAMInvTrfConfirm[] GetConfirmations(Boolean requery)
         {
             if (_confirms != null && !requery)
                 return _confirms;
 
-            List<MMovementConfirm> list = new List<MMovementConfirm>();
+            List<MVAMInvTrfConfirm> list = new List<MVAMInvTrfConfirm>();
             String sql = "SELECT * FROM VAM_InvTrf_Confirm WHERE VAM_InventoryTransfer_ID=@moveid";
             try
             {
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MMovementConfirm(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAMInvTrfConfirm(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -152,7 +152,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "GetConfirmations", e);
             }
 
-            _confirms = new MMovementConfirm[list.Count];
+            _confirms = new MVAMInvTrfConfirm[list.Count];
             _confirms = list.ToArray();
             return _confirms;
         }
@@ -318,7 +318,7 @@ namespace VAdvantage.Model
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -332,7 +332,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            MMovementLine[] lines = GetLines(false);
+            MVAMInvTrfLine[] lines = GetLines(false);
             if (lines.Length == 0)
             {
                 _processMsg = "@NoLines@";
@@ -386,12 +386,12 @@ namespace VAdvantage.Model
         /// </summary>
         private void CreateConfirmation()
         {
-            MMovementConfirm[] confirmations = GetConfirmations(false);
+            MVAMInvTrfConfirm[] confirmations = GetConfirmations(false);
             if (confirmations.Length > 0)
                 return;
 
             //	Create Confirmation
-            MMovementConfirm.Create(this, false);
+            MVAMInvTrfConfirm.Create(this, false);
         }
 
         /// <summary>
@@ -441,7 +441,7 @@ namespace VAdvantage.Model
                     bool check = false;
                     for (int i = 0; i < movementLine.Length; i++)
                     {
-                        MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        MVAMInvTrfLine mmLine = new MVAMInvTrfLine(Env.GetCtx(), movementLine[i], Get_TrxName());
                         //MVAMInvInOutLine iol = new MVAMInvInOutLine(Env.GetCtx(), movementLine[i], Get_TrxName());
                         VAM_Locator_id = Util.GetValueOfInt(mmLine.GetVAM_Locator_ID());
                         VAM_Product_id = Util.GetValueOfInt(mmLine.GetVAM_Product_ID());
@@ -521,7 +521,7 @@ namespace VAdvantage.Model
                     bool delivered = false;
                     for (int i = 0; i < movementLine.Length; i++)
                     {
-                        MMovementLine mmLine = new MMovementLine(Env.GetCtx(), movementLine[i], Get_TrxName());
+                        MVAMInvTrfLine mmLine = new MVAMInvTrfLine(Env.GetCtx(), movementLine[i], Get_TrxName());
                         if (mmLine.GetVAM_RequisitionLine_ID() != 0)
                         {
                             MRequisitionLine reqLine = new MRequisitionLine(GetCtx(), mmLine.GetVAM_RequisitionLine_ID(), Get_TrxName());
@@ -642,11 +642,11 @@ namespace VAdvantage.Model
             int _count = Util.GetValueOfInt(DB.ExecuteScalar(" SELECT Count(*) FROM VAF_Column WHERE columnname = 'DTD001_SourceReserve' "));
 
             //	Outstanding (not processed) Incoming Confirmations ?
-            MMovementConfirm[] confirmations = GetConfirmations(true);
+            MVAMInvTrfConfirm[] confirmations = GetConfirmations(true);
             for (int i = 0; i < confirmations.Length; i++)
             {
                 #region Outstanding (not processed) Incoming Confirmations
-                MMovementConfirm confirm = confirmations[i];
+                MVAMInvTrfConfirm confirm = confirmations[i];
                 if (!confirm.IsProcessed())
                 {
                     //SI_0630.1 :  Check status of confimation, if voided then we need to create confirmation again
@@ -659,7 +659,7 @@ namespace VAdvantage.Model
                         else
                         {
                             //SI_0630.1 : create confirmation
-                            confirm = MMovementConfirm.Create(this, false);
+                            confirm = MVAMInvTrfConfirm.Create(this, false);
                         }
                         _processMsg = "Open: @VAM_InvTrf_Confirm_ID@ - "
                             + confirm.GetDocumentNo();
@@ -721,10 +721,10 @@ namespace VAdvantage.Model
                 }
             }
 
-            MMovementLine[] lines = GetLines(false);
+            MVAMInvTrfLine[] lines = GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MMovementLine line = lines[i];
+                MVAMInvTrfLine line = lines[i];
 
                 /* nnayak - Bug 1750251 : If you have multiple lines for the same product
                 in the same Sales Order, or if the generate shipment process was generating
@@ -740,12 +740,12 @@ namespace VAdvantage.Model
                 MTransaction trxFrom = null;
                 if (line.GetVAM_PFeature_SetInstance_ID() == 0 || line.GetVAM_PFeature_SetInstance_ID() != 0)
                 {
-                    MMovementLineMA[] mas = MMovementLineMA.Get(GetCtx(),
+                    MVAMInvTrfLineMA[] mas = MVAMInvTrfLineMA.Get(GetCtx(),
                         line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
                     for (int j = 0; j < mas.Length; j++)
                     {
                         Decimal? containerCurrentQty = 0;
-                        MMovementLineMA ma = mas[j];
+                        MVAMInvTrfLineMA ma = mas[j];
                         //
                         MStorage storageFrom = MStorage.Get(GetCtx(), line.GetVAM_Locator_ID(),
                             line.GetVAM_Product_ID(), ma.GetVAM_PFeature_SetInstance_ID(), Get_TrxName());
@@ -1759,7 +1759,7 @@ namespace VAdvantage.Model
                     #region Costing Calculation
 
                     // create object of To Locator where we are moving products
-                    MLocator locatorTo = MLocator.Get(GetCtx(), line.GetVAM_LocatorTo_ID());
+                    MVAMLocator locatorTo = MVAMLocator.Get(GetCtx(), line.GetVAM_LocatorTo_ID());
 
                     // is used to maintain cost of "move to" 
                     Decimal toCurrentCostPrice = 0;
@@ -1796,7 +1796,7 @@ namespace VAdvantage.Model
 
                     //query = "SELECT VAF_Org_ID FROM VAM_Warehouse WHERE IsActive = 'Y' AND VAM_Warehouse_ID = " + GetVAM_Warehouse_ID();
                     // Get Org of "To Warehouse"
-                    //int ToWarehouseOrg = MLocator.Get(GetCtx(), line.GetVAM_LocatorTo_ID()).GetVAF_Org_ID();
+                    //int ToWarehouseOrg = MVAMLocator.Get(GetCtx(), line.GetVAM_LocatorTo_ID()).GetVAF_Org_ID();
                     //if (GetVAF_Org_ID() != ToWarehouseOrg)
                     //{
                     product1 = new MProduct(GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
@@ -1867,7 +1867,7 @@ namespace VAdvantage.Model
                 SetMovementDate(DateTime.Now.Date);
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                 {
                     throw new Exception("@PeriodClosed@");
                 }
@@ -2005,7 +2005,7 @@ namespace VAdvantage.Model
                 {
                     // check to warehouse id defined on movement header or not
                     int warehouseTo = Util.GetValueOfInt(listParentChildContainer[i].VAM_WarehouseTo_ID);
-                    MLocator locator = MLocator.Get(GetCtx(), Util.GetValueOfInt(listParentChildContainer[i].VAM_LocatorTo_ID));
+                    MVAMLocator locator = MVAMLocator.Get(GetCtx(), Util.GetValueOfInt(listParentChildContainer[i].VAM_LocatorTo_ID));
                     if (warehouseTo == 0)
                     {
                         // if to warehouse not defined on header then get warehouse id on behalf of "To Locator"
@@ -2335,7 +2335,7 @@ namespace VAdvantage.Model
         /// <param name="line"></param>
         /// <param name="trxFrom"></param>
         /// <param name="qtyMove"></param>
-        private void UpdateTransaction(MMovementLine line, MTransaction trxFrom, decimal qtyMove, int loc_ID)
+        private void UpdateTransaction(MVAMInvTrfLine line, MTransaction trxFrom, decimal qtyMove, int loc_ID)
         {
             MProduct pro = new MProduct(Env.GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
@@ -2459,7 +2459,7 @@ namespace VAdvantage.Model
             }
         }
 
-        private string UpdateTransactionContainer(MMovementLine sLine, MTransaction mtrx, decimal Qty, int loc_ID, int containerId)
+        private string UpdateTransactionContainer(MVAMInvTrfLine sLine, MTransaction mtrx, decimal Qty, int loc_ID, int containerId)
         {
             string errorMessage = null;
             MProduct pro = new MProduct(Env.GetCtx(), sLine.GetVAM_Product_ID(), Get_TrxName());
@@ -2648,7 +2648,7 @@ namespace VAdvantage.Model
             return errorMessage;
         }
 
-        private void UpdateCurrentRecord(MMovementLine line, MTransaction trxM, decimal qtyDiffer, int loc_ID)
+        private void UpdateCurrentRecord(MVAMInvTrfLine line, MTransaction trxM, decimal qtyDiffer, int loc_ID)
         {
             MProduct pro = new MProduct(Env.GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
             int attribSet_ID = pro.GetVAM_PFeature_Set_ID();
@@ -2745,7 +2745,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        private decimal? GetProductQtyFromStorage(MMovementLine line, int loc_ID)
+        private decimal? GetProductQtyFromStorage(MVAMInvTrfLine line, int loc_ID)
         {
             return 0;
             //MProduct pro = new MProduct(Env.GetCtx(), line.GetVAM_Product_ID(), Get_TrxName());
@@ -2771,7 +2771,7 @@ namespace VAdvantage.Model
         /// <param name="movementDate"></param>
         /// <param name="isAttribute"></param>
         /// <returns></returns>
-        private decimal? GetProductQtyFromTransaction(MMovementLine line, DateTime? movementDate, bool isAttribute, int locatorId)
+        private decimal? GetProductQtyFromTransaction(MVAMInvTrfLine line, DateTime? movementDate, bool isAttribute, int locatorId)
         {
             decimal result = 0;
             string sql = "";
@@ -2829,7 +2829,7 @@ namespace VAdvantage.Model
         /// <param name="line"></param>
         /// <param name="movementDate"></param>
         /// <returns></returns>
-        private Decimal? GetContainerQtyFromTransaction(MMovementLine line, DateTime? movementDate, int locatorId, int containerId)
+        private Decimal? GetContainerQtyFromTransaction(MVAMInvTrfLine line, DateTime? movementDate, int locatorId, int containerId)
         {
             Decimal result = 0;
             string sql = @"SELECT DISTINCT First_VALUE(t.ContainerCurrentQty) OVER (PARTITION BY t.VAM_Product_ID, 
@@ -2850,17 +2850,17 @@ namespace VAdvantage.Model
         /// </summary>
         private void CheckMaterialPolicy()
         {
-            int no = MMovementLineMA.DeleteMovementMA(GetVAM_InventoryTransfer_ID(), Get_TrxName());
+            int no = MVAMInvTrfLineMA.DeleteMovementMA(GetVAM_InventoryTransfer_ID(), Get_TrxName());
             if (no > 0)
                 log.Config("Delete old #" + no);
-            MMovementLine[] lines = GetLines(false);
+            MVAMInvTrfLine[] lines = GetLines(false);
 
             MVAFClient client = MVAFClient.Get(GetCtx());
 
             //	Check Lines
             for (int i = 0; i < lines.Length; i++)
             {
-                MMovementLine line = lines[i];
+                MVAMInvTrfLine line = lines[i];
 
                 Boolean needSave = false;
 
@@ -2892,7 +2892,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 log.Config("Split - " + line);
-                                MMovementLineMA ma = new MMovementLineMA(line,
+                                MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
                                     storage.GetVAM_PFeature_SetInstance_ID(),
                                     storage.GetQtyOnHand());
                                 if (!ma.Save())
@@ -2903,7 +2903,7 @@ namespace VAdvantage.Model
                         }
                         else	//	 create Addl material allocation
                         {
-                            MMovementLineMA ma = new MMovementLineMA(line,
+                            MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
                                 storage.GetVAM_PFeature_SetInstance_ID(),
                                 qtyToDeliver);
                             if (storage.GetQtyOnHand().CompareTo(qtyToDeliver) >= 0)
@@ -2924,7 +2924,7 @@ namespace VAdvantage.Model
                     //	No AttributeSetInstance found for remainder
                     if (Env.Signum(qtyToDeliver) != 0)
                     {
-                        MMovementLineMA ma = new MMovementLineMA(line,
+                        MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
                             0, qtyToDeliver);
                         if (!ma.Save())
                             ;
@@ -2942,9 +2942,9 @@ namespace VAdvantage.Model
         /// Check Material Policy
         /// </summary>
         /// <param name="line">movement line</param>
-        private void CheckMaterialPolicy(MMovementLine line)
+        private void CheckMaterialPolicy(MVAMInvTrfLine line)
         {
-            int no = MMovementLineMA.DeleteMovementLineMA(line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
+            int no = MVAMInvTrfLineMA.DeleteMovementLineMA(line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
             if (no > 0)
                 log.Config("Delete old #" + no);
 
@@ -3003,7 +3003,7 @@ namespace VAdvantage.Model
 
                 if ((isContainerApplicable ? storage.GetQty() : storage.GetQtyOnHand()).CompareTo(qtyToDeliver) >= 0)
                 {
-                    MMovementLineMA ma = MMovementLineMA.GetOrCreate(line,
+                    MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line,
                     storage.GetVAM_PFeature_SetInstance_ID(),
                     qtyToDeliver, isContainerApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
                     if (!ma.Save(line.Get_Trx()))
@@ -3021,7 +3021,7 @@ namespace VAdvantage.Model
                 else
                 {
                     log.Config("Split - " + line);
-                    MMovementLineMA ma = MMovementLineMA.GetOrCreate(line,
+                    MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line,
                                 storage.GetVAM_PFeature_SetInstance_ID(),
                             isContainerApplicable ? storage.GetQty() : storage.GetQtyOnHand(),
                             isContainerApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
@@ -3064,7 +3064,7 @@ namespace VAdvantage.Model
 
             if (Env.Signum(qtyToDeliver) != 0)
             {
-                MMovementLineMA ma = MMovementLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToDeliver, GetMovementDate());
+                MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToDeliver, GetMovementDate());
                 if (!ma.Save(line.Get_Trx()))
                 {
                     // Handle exception
@@ -3108,10 +3108,10 @@ namespace VAdvantage.Model
                 || DOCSTATUS_NotApproved.Equals(GetDocStatus()))
             {
                 //	Set lines to 0
-                MMovementLine[] lines = GetLines(false);
+                MVAMInvTrfLine[] lines = GetLines(false);
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    MMovementLine line = lines[i];
+                    MVAMInvTrfLine line = lines[i];
                     Decimal old = line.GetMovementQty();
                     if (old.CompareTo(Env.ZERO) != 0)
                     {
@@ -3139,7 +3139,7 @@ namespace VAdvantage.Model
 
                 }
                 // Added By Arpit on 9th Dec,2016 to set Void the document of Move Confirmation if found on the following conditions
-                //  MMovement InvMove = new MMovement(GetCtx(), Get_ID(), Get_Trx());
+                //  MVAMInventoryTransfer InvMove = new MVAMInventoryTransfer(GetCtx(), Get_ID(), Get_Trx());
                 //  MVABDocTypes doctype = new MVABDocTypes(GetCtx(), GetVAB_DocTypes_ID(), Get_Trx());
                 // bool InTransit = (bool)doctype.Get_Value("IsInTransit");
                 if (InTransit == true)
@@ -3148,7 +3148,7 @@ namespace VAdvantage.Model
                     int MoveConf_ID = Convert.ToInt32(DB.ExecuteScalar(Qry));
                     if (MoveConf_ID > 0)
                     {
-                        MMovementConfirm MoveConfirm = new MMovementConfirm(GetCtx(), MoveConf_ID, Get_Trx());
+                        MVAMInvTrfConfirm MoveConfirm = new MVAMInvTrfConfirm(GetCtx(), MoveConf_ID, Get_Trx());
                         MoveConfirm.SetDocStatus(DOCACTION_Void);
                         MoveConfirm.SetDocAction(DOCACTION_Void);
                         MoveConfirm.SetProcessed(true);
@@ -3164,11 +3164,11 @@ namespace VAdvantage.Model
                         DataSet ds = DB.ExecuteDataset(Qry);
                         if (ds != null && ds.Tables[0].Rows.Count > 0)
                         {
-                            MMovementLineConfirm lineMoveConf = null;
+                            MVAMInvTrfLineConfirm lineMoveConf = null;
                             for (Int32 i = 0; i < ds.Tables[0].Rows.Count; i++)
                             {
                                 lineMoveConf = null;
-                                lineMoveConf = new MMovementLineConfirm(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InvTrf_LineConfirm_ID"]), Get_Trx());
+                                lineMoveConf = new MVAMInvTrfLineConfirm(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAM_InvTrf_LineConfirm_ID"]), Get_Trx());
                                 lineMoveConf.SetProcessed(true);
                                 lineMoveConf.Save(Get_Trx());
                             }
@@ -3213,7 +3213,7 @@ namespace VAdvantage.Model
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetMovementDate(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -3244,7 +3244,7 @@ namespace VAdvantage.Model
                 int MoveConf_ID = Convert.ToInt32(DB.ExecuteScalar(Qry));
                 if (MoveConf_ID > 0)
                 {
-                    MMovementConfirm MoveConfirm = new MMovementConfirm(GetCtx(), MoveConf_ID, Get_Trx());
+                    MVAMInvTrfConfirm MoveConfirm = new MVAMInvTrfConfirm(GetCtx(), MoveConf_ID, Get_Trx());
                     if (!MoveConfirm.ReverseCorrectIt())
                     {
                         Get_Trx().Rollback();
@@ -3257,7 +3257,7 @@ namespace VAdvantage.Model
             //end Arpit
             //	Deep Copy
 
-            MMovement reversal = new MMovement(GetCtx(), 0, Get_TrxName());
+            MVAMInventoryTransfer reversal = new MVAMInventoryTransfer(GetCtx(), 0, Get_TrxName());
             CopyValues(this, reversal, GetVAF_Client_ID(), GetVAF_Org_ID());
 
             reversal.SetDocumentNo(GetDocumentNo() + REVERSE_INDICATOR);	//	indicate reversals
@@ -3294,11 +3294,11 @@ namespace VAdvantage.Model
             }
 
             //	Reverse Line Qty
-            MMovementLine[] oLines = GetLines(true);
+            MVAMInvTrfLine[] oLines = GetLines(true);
             for (int i = 0; i < oLines.Length; i++)
             {
-                MMovementLine oLine = oLines[i];
-                MMovementLine rLine = new MMovementLine(GetCtx(), 0, Get_TrxName());
+                MVAMInvTrfLine oLine = oLines[i];
+                MVAMInvTrfLine rLine = new MVAMInvTrfLine(GetCtx(), 0, Get_TrxName());
                 CopyValues(oLine, rLine, oLine.GetVAF_Client_ID(), oLine.GetVAF_Org_ID());
                 rLine.SetVAM_InventoryTransfer_ID(reversal.GetVAM_InventoryTransfer_ID());
                 //
@@ -3325,11 +3325,11 @@ namespace VAdvantage.Model
                 }
 
                 //We need to copy Attribute MA
-                MMovementLineMA[] mas = MMovementLineMA.Get(GetCtx(),
+                MVAMInvTrfLineMA[] mas = MVAMInvTrfLineMA.Get(GetCtx(),
                         oLine.GetVAM_InvTrf_Line_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
-                    MMovementLineMA ma = new MMovementLineMA(rLine,
+                    MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(rLine,
                             mas[j].GetVAM_PFeature_SetInstance_ID(),
                             Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
                     if (!ma.Save(rLine.Get_TrxName()))
@@ -3349,10 +3349,10 @@ namespace VAdvantage.Model
                 _processMsg = "Reversal ERROR: " + reversal.GetProcessMsg();
                 return false;
             }
-            MMovementLine[] mlines = GetLines(true);
+            MVAMInvTrfLine[] mlines = GetLines(true);
             for (int i = 0; i < mlines.Length; i++)
             {
-                MMovementLine mline = mlines[i];
+                MVAMInvTrfLine mline = mlines[i];
                 if (mline.GetA_Asset_ID() > 0)
                 {
                     ast = new MVAAsset(GetCtx(), mline.GetA_Asset_ID(), Get_Trx());
@@ -3396,7 +3396,7 @@ namespace VAdvantage.Model
             //    int MoveConf_ID = Convert.ToInt32(DB.ExecuteScalar(Qry));
             //    if (MoveConf_ID > 0)
             //    {
-            //        MMovementConfirm MoveConfirm = new MMovementConfirm(GetCtx(), MoveConf_ID, Get_Trx());
+            //        MVAMInvTrfConfirm MoveConfirm = new MVAMInvTrfConfirm(GetCtx(), MoveConf_ID, Get_Trx());
             //        if (!MoveConfirm.ReverseCorrectIt()) {
             //            _processMsg = "Reversal ERROR: " + MoveConfirm.GetProcessMsg();
             //            return false;
@@ -3452,7 +3452,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MMovement[");
+            StringBuilder sb = new StringBuilder("MVAMInventoryTransfer[");
             sb.Append(Get_ID())
                 .Append("-").Append(GetDocumentNo())
                 .Append("]");

@@ -306,7 +306,7 @@ namespace VAdvantage.Model
 
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateDoc(), MVABMasterDocType.DOCBASETYPE_PURCHASEREQUISITION, GetVAF_Org_ID()))
                 {
                     _processMsg = "@PeriodClosed@";
                     return DocActionVariables.STATUS_INVALID;
@@ -563,7 +563,7 @@ namespace VAdvantage.Model
                 SetDateDoc(DateTime.Now.Date);
 
                 //	Std Period open?
-                if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                 {
                     throw new Exception("@PeriodClosed@");
                 }

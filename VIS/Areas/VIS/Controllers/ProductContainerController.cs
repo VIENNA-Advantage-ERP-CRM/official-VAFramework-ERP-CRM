@@ -187,7 +187,7 @@ namespace VIS.Controllers
         {
             var labelInfo = "";
             Ctx ctx = Session["ctx"] as Ctx;
-            VAdvantage.Model.MLocator loc = VAdvantage.Model.MLocator.Get(ctx, Util.GetValueOfInt(fields));
+            VAdvantage.Model.MVAMLocator loc = VAdvantage.Model.MVAMLocator.Get(ctx, Util.GetValueOfInt(fields));
             if (loc != null && loc.GetVAM_Locator_ID() > 0)
             {
                 labelInfo = Msg.GetMsg(ctx, "VAM_Warehouse_ID") + " : " + loc.GetWarehouseName() + " , " + Msg.GetMsg(ctx, "VAM_Locator_ID") + " : " + loc.GetValue();

@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_Product_ID"></param>
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="type"></param>
-        public MStorageDetail(MLocator locator, int VAM_Product_ID,
+        public MStorageDetail(MVAMLocator locator, int VAM_Product_ID,
                 int VAM_PFeature_SetInstance_ID, String type)
             : this(locator.GetCtx(), 0, locator.Get_TrxName())
         {
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
                 return retValue;
             }
             // Insert row based on locator
-            MLocator locator = new MLocator(ctx, VAM_Locator_ID, trx);
+            MVAMLocator locator = new MVAMLocator(ctx, VAM_Locator_ID, trx);
             if (locator.Get_ID() != VAM_Locator_ID)
             {
                 throw new ArgumentException("Not found VAM_Locator_ID="
@@ -740,7 +740,7 @@ namespace VAdvantage.Model
         {
             if (_VAM_Warehouse_ID == 0)
             {
-                MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+                MVAMLocator loc = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
                 _VAM_Warehouse_ID = loc.GetVAM_Warehouse_ID();
             }
             return _VAM_Warehouse_ID;

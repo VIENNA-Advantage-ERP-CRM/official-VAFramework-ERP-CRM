@@ -39,12 +39,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_Movement(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MMovement), idr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
+            : base(ass, typeof(MVAMInventoryTransfer), idr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
         }
         public Doc_Movement(MVABAccountBook[] ass, DataRow dr, Trx trxName)
-            : base(ass, typeof(MMovement), dr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
+            : base(ass, typeof(MVAMInventoryTransfer), dr, MVABMasterDocType.DOCBASETYPE_MATERIALMOVEMENT, trxName)
         {
 
         }
@@ -56,7 +56,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(NO_CURRENCY);
-            MMovement move = (MMovement)GetPO();
+            MVAMInventoryTransfer move = (MVAMInventoryTransfer)GetPO();
             SetDateDoc(move.GetMovementDate());
             SetDateAcct(move.GetMovementDate());
             //	Contained Objects
@@ -70,13 +70,13 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="move"></param>
         /// <returns>document lines (DocLine_Material)</returns>
-        private DocLine[] LoadLines(MMovement move)
+        private DocLine[] LoadLines(MVAMInventoryTransfer move)
         {
             List<DocLine> list = new List<DocLine>();
-            MMovementLine[] lines = move.GetLines(false);
+            MVAMInvTrfLine[] lines = move.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MMovementLine line = lines[i];
+                MVAMInvTrfLine line = lines[i];
                 DocLine docLine = new DocLine(line, this);
                 docLine.SetQty(line.GetMovementQty(), false);
                 //

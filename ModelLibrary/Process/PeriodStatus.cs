@@ -76,21 +76,21 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.info("VAB_YearPeriod_ID=" + _VAB_YearPeriod_ID + ", PeriodAction=" + _PeriodAction);
-            MPeriod period = new MPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_TrxName());
+            MVABYearPeriod period = new MVABYearPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_TrxName());
             if (period.Get_ID() == 0)
                 throw new Exception("@NotFound@  @VAB_YearPeriod_ID@=" + _VAB_YearPeriod_ID);
 
             StringBuilder sql = new StringBuilder("UPDATE VAB_YearPeriodControl ");
             sql.Append("SET PeriodStatus='");
             //	Open
-            if (MPeriodControl.PERIODACTION_OpenPeriod.Equals(_PeriodAction))
-                sql.Append(MPeriodControl.PERIODSTATUS_Open);
+            if (MVABYearPeriodControl.PERIODACTION_OpenPeriod.Equals(_PeriodAction))
+                sql.Append(MVABYearPeriodControl.PERIODSTATUS_Open);
             //	Close
-            else if (MPeriodControl.PERIODACTION_ClosePeriod.Equals(_PeriodAction))
-                sql.Append(MPeriodControl.PERIODSTATUS_Closed);
+            else if (MVABYearPeriodControl.PERIODACTION_ClosePeriod.Equals(_PeriodAction))
+                sql.Append(MVABYearPeriodControl.PERIODSTATUS_Closed);
             //	Close Permanently
-            else if (MPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(_PeriodAction))
-                sql.Append(MPeriodControl.PERIODSTATUS_PermanentlyClosed);
+            else if (MVABYearPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(_PeriodAction))
+                sql.Append(MVABYearPeriodControl.PERIODSTATUS_PermanentlyClosed);
             else
                 return "-";
             //
@@ -119,7 +119,7 @@ namespace VAdvantage.Process
               For Fact Account Balance updation */
             if (no >= 0)
             {
-                if (MPeriodControl.PERIODACTION_ClosePeriod.Equals(_PeriodAction))
+                if (MVABYearPeriodControl.PERIODACTION_ClosePeriod.Equals(_PeriodAction))
                 {
                     try
                     {

@@ -20,7 +20,7 @@
         var onlyWarehouseId = warehouseId;
         var warehouseId = 0;
         var windowNo = windowNum;
-        var mLocator = lookup;
+        var MVAMLocator = lookup;
 
         //controlls
 
@@ -95,7 +95,7 @@
             onlyWarehouseId = null;
             warehouseId = null;
             windowNo = null;
-            mLocator = null;
+            MVAMLocator = null;
 
             divCreateNew = null;
             divWarehouseInfo = null;
@@ -156,17 +156,17 @@
             }
 
             //fill locator in the control
-            mLocator.refresh();
-            mLocator.fillCombobox(mandatory, true, true, false);
+            MVAMLocator.refresh();
+            MVAMLocator.fillCombobox(mandatory, true, true, false);
 
             // commented code because we added autocomplte control
 
             //var selectedIndex = 0;
             //commented because of autocomplete control now we added autocomplte control.
             //load locator and set selected locator into the combo
-            //for (var i = 0; i < mLocator.data.length; i++) {
-            //    cmbLocator.append(" <option value=" + mLocator.data[i].Key + ">" + mLocator.data[i].Name + "</option>");
-            //    if (locatorId == mLocator.data[i].Key) {
+            //for (var i = 0; i < MVAMLocator.data.length; i++) {
+            //    cmbLocator.append(" <option value=" + MVAMLocator.data[i].Key + ">" + MVAMLocator.data[i].Name + "</option>");
+            //    if (locatorId == MVAMLocator.data[i].Key) {
             //        selectedIndex = i;
             //    }
             //};
@@ -195,8 +195,8 @@
             cmbWarehouse.prop('selectedIndex', 0);
 
             //When we are opening locator form first time OR locator ID is 0 then we have to set first locator into autocomplete control
-            if (mLocator.data.length > 0 && locatorId == 0) {
-                locatorId = mLocator.data[0].Key;
+            if (MVAMLocator.data.length > 0 && locatorId == 0) {
+                locatorId = MVAMLocator.data[0].Key;
             }
             //fill all textboxes on bases of selected locatorId
             displayLocator(ds);
@@ -208,8 +208,8 @@
                             return;
                     }
                     //send matched items into reponse
-                    if (mLocator.data.length > 0) {
-                        response($.map(mLocator.data, function (item) {
+                    if (MVAMLocator.data.length > 0) {
+                        response($.map(MVAMLocator.data, function (item) {
                             if (item.Name.toUpperCase().contains(request.term.trim().toUpperCase())) {
                                 return {
                                     label: item.Name,
@@ -237,7 +237,7 @@
             //end
 
             //show and hide controls
-            if (mLocator.getIsOnlyOutgoing()) {
+            if (MVAMLocator.getIsOnlyOutgoing()) {
                 divCreateNew.hide();
             }
 
@@ -321,7 +321,7 @@
                 srchLocator.on("click", function () {
                     if (locators_lst.val() == "") {
                         locators_lst.autocomplete({
-                            source: $.map(mLocator.data, function (item) {
+                            source: $.map(MVAMLocator.data, function (item) {
                                 return {
                                     label: item.Name,
                                     value: item.Name,
@@ -398,7 +398,7 @@
                         success: function (data) {
                             returnValue = data.locatorId;
                             locatorId = returnValue;
-                            mLocator.refresh();
+                            MVAMLocator.refresh();
                         }
                     });
                 }

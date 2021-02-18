@@ -179,7 +179,7 @@ namespace ViennaAdvantage.Process
                         }
                         DateTime end = new DateTime(DateTime.Now.Year, month, day).Date;
                         //
-                        MPeriod period = new MPeriod(year, month, name, start, end);
+                        MVABYearPeriod period = new MVABYearPeriod(year, month, name, start, end);
                         if (!period.Save(trx))	//	Creates Period Control
                             status= "PeriodNotSaved";
                         //if (EntireYear.Equals('Y'))//open Period for Entire Year
@@ -237,7 +237,7 @@ namespace ViennaAdvantage.Process
                         }
                         DateTime end = new DateTime(DateTime.Now.Year, month, day).Date;
                         //
-                        MPeriod period = new MPeriod(year, month, name, start, end);
+                        MVABYearPeriod period = new MVABYearPeriod(year, month, name, start, end);
                         if (!period.Save(trx))	//	Creates Period Control
                             status = "PeriodNotSaved";
                         //if (EntireYear.Equals('Y'))//open Period for Entire Year
@@ -289,7 +289,7 @@ namespace ViennaAdvantage.Process
                         }
                         DateTime end = new DateTime(DateTime.Now.Year+1, month, day).Date;
                         //
-                        MPeriod period = new MPeriod(year, month, name, start, end);
+                        MVABYearPeriod period = new MVABYearPeriod(year, month, name, start, end);
                         if (!period.Save(trx))	//	Creates Period Control
                             status= "PeriodNotSaved";
                         //if (EntireYear.Equals('Y'))//open Period for Entire Year
@@ -337,13 +337,13 @@ namespace ViennaAdvantage.Process
 //                ds=null;
 //                ds=new DataSet();
 //                ds=DB.ExecuteDataset(sql.ToString());
-//                MPeriod period=null;
+//                MVABYearPeriod period=null;
 //                if (ds != null)
 //                {
 //                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
 //                    {
 //                        int periodID = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
-//                        period = new MPeriod(GetCtx(), periodID, trx);
+//                        period = new MVABYearPeriod(GetCtx(), periodID, trx);
 //                        if (!OpenPeriod(period, trx))
 //                        {
 //                            status = "PeriodNotOpened";
@@ -376,13 +376,13 @@ namespace ViennaAdvantage.Process
 //                ds = null;
 //                ds = new DataSet();
 //                ds = DB.ExecuteDataset(sql.ToString());
-//                MPeriod period = null;
+//                MVABYearPeriod period = null;
 //                if (ds != null)
 //                {
 //                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
 //                    {
 //                        int periodID = Convert.ToInt32(ds.Tables[0].Rows[i][0]);
-//                        period = new MPeriod(GetCtx(), periodID, trx);
+//                        period = new MVABYearPeriod(GetCtx(), periodID, trx);
 //                        if (!OpenPeriod(period, trx))
 //                        {
 //                            status = "PeriodNotOpened";
@@ -405,7 +405,7 @@ namespace ViennaAdvantage.Process
             trx.Close();
             return status;
         }
-        private bool OpenPeriod(MPeriod period,Trx trx)
+        private bool OpenPeriod(MVABYearPeriod period,Trx trx)
         {
             if (period.Get_ID() == 0)
             {
@@ -416,7 +416,7 @@ namespace ViennaAdvantage.Process
             sql = new StringBuilder("UPDATE VAB_YearPeriodControl ");
             sql.Append("SET PeriodStatus='");
             //	Open                          
-            sql.Append(MPeriodControl.PERIODSTATUS_Open);
+            sql.Append(MVABYearPeriodControl.PERIODSTATUS_Open);
 
             sql.Append("', PeriodAction='N', Updated=SysDate,UpdatedBy=").Append(GetVAF_UserContact_ID());
             //	WHERE

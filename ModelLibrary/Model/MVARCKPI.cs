@@ -12,15 +12,15 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-   public class MKPI : X_VARC_KPI
+   public class MVARCKPI : X_VARC_KPI
     {
 
-        public MKPI(Context ctx, int VARC_KPI_ID, Trx trxName)
+        public MVARCKPI(Context ctx, int VARC_KPI_ID, Trx trxName)
             : base(ctx, VARC_KPI_ID, trxName)
         {
 
         }
-        public MKPI(Ctx ctx, int VARC_KPI_ID, Trx trxName)
+        public MVARCKPI(Ctx ctx, int VARC_KPI_ID, Trx trxName)
             : base(ctx, VARC_KPI_ID, trxName)
         {
         }

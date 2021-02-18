@@ -1,5 +1,5 @@
 ﻿/********************************************************
- * Class Name     : MJournalLine
+ * Class Name     : MVAGLJRNLLine
  * Purpose        : Journal Line Model
  * Class Used     : X_VAGL_JRNLLine
  * Chronological    Development
@@ -25,7 +25,7 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-    public class MJournalLine : X_VAGL_JRNLLine
+    public class MVAGLJRNLLine : X_VAGL_JRNLLine
     {
         /// <summary>
         /// Standard Constructor
@@ -33,7 +33,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAGL_JRNLLine_ID">id</param>
         /// <param name="trxName"> transaction</param>
-        public MJournalLine(Ctx ctx, int VAGL_JRNLLine_ID, Trx trxName)
+        public MVAGLJRNLLine(Ctx ctx, int VAGL_JRNLLine_ID, Trx trxName)
             : base(ctx, VAGL_JRNLLine_ID, trxName)
         {
             //super (ctx, VAGL_JRNLLine_ID, trxName);
@@ -54,7 +54,7 @@ namespace VAdvantage.Model
                 SetDateAcct(DateTime.Now);
                 SetIsGenerated(true);
             }
-        }	//	MJournalLine
+        }	//	MVAGLJRNLLine
 
         /// <summary>
         /// Load Constructor
@@ -62,17 +62,17 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MJournalLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAGLJRNLLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             //super(ctx, rs, trxName);
-        }	//	MJournalLine
+        }	//	MVAGLJRNLLine
 
         /// <summary>
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">journal</param>
-        public MJournalLine(MJournal parent)
+        public MVAGLJRNLLine(MVAGLJRNL parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //this (parent.getCtx(), 0, parent.get_TrxName());
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
             SetVAB_CurrencyType_ID(parent.GetVAB_CurrencyType_ID());
             SetDateAcct(parent.GetDateAcct());
 
-        }	//	MJournalLine
+        }	//	MVAGLJRNLLine
 
         /**	Currency Precision		*/
         private int m_precision = 2;
@@ -606,7 +606,7 @@ namespace VAdvantage.Model
                             || Is_ValueChanged("VAB_Promotion_ID")
                             || Is_ValueChanged("VAB_BillingCode_ID"))))
             {
-                MJournal gl = new MJournal(GetCtx(), GetVAGL_JRNL_ID(), Get_TrxName());
+                MVAGLJRNL gl = new MVAGLJRNL(GetCtx(), GetVAGL_JRNL_ID(), Get_TrxName());
 
                 // Validate all mandatory combinations are set
                 MVABAccountBook asc = MVABAccountBook.Get(GetCtx(), gl.GetVAB_AccountBook_ID());
@@ -761,22 +761,22 @@ namespace VAdvantage.Model
         /// <summary>
         /// This functionis used to create Line Dimension Line
         /// </summary>
-        /// <param name="fromJournal">object of old GL Journal Line from where we need to pick lines</param>
+        /// <param name="froMVAGLJRNL">object of old GL Journal Line from where we need to pick lines</param>
         /// <param name="newlineID">GL Journal Line ID - new record agsint which we copy lines</param>
         /// <param name="typeCR">Optional Parameter - When 'C' - its means Reverse record - amount to be negate in this case</param>
         /// <returns>count of line - which is created</returns>
-        public int CopyLinesFrom(MJournalLine fromJournal, int newlineID, char typeCR = 'X')
+        public int CopyLinesFrom(MVAGLJRNLLine froMVAGLJRNL, int newlineID, char typeCR = 'X')
         {
-            if (IsProcessed() || fromJournal == null)
+            if (IsProcessed() || froMVAGLJRNL == null)
             {
                 return 0;
             }
             int count = 0;
             int lineCount = 0;
-            MLineDimension[] fromLines = fromJournal.GetLines(false);
+            MVAGLLineDimension[] fromLines = froMVAGLJRNL.GetLines(false);
             for (int i = 0; i < fromLines.Length; i++)
             {
-                MLineDimension toLine = new MLineDimension(GetCtx(), 0, fromJournal.Get_TrxName());
+                MVAGLLineDimension toLine = new MVAGLLineDimension(GetCtx(), 0, froMVAGLJRNL.Get_TrxName());
                 PO.CopyValues(fromLines[i], toLine, GetVAF_Client_ID(), GetVAF_Org_ID());
 
                 toLine.SetVAB_BusinessPartner_ID(fromLines[i].GetVAB_BusinessPartner_ID());
@@ -802,7 +802,7 @@ namespace VAdvantage.Model
                 }
                 toLine.SetLine(fromLines[i].GetLine());
 
-                if (toLine.Save(fromJournal.Get_TrxName()))
+                if (toLine.Save(froMVAGLJRNL.Get_TrxName()))
                 {
                     count++;
                 }
@@ -818,10 +818,10 @@ namespace VAdvantage.Model
 
 
 
-        public MLineDimension[] GetLines(Boolean requery)
+        public MVAGLLineDimension[] GetLines(Boolean requery)
         {
-            //ArrayList<MJournalLine> list = new ArrayList<MJournalLine>();
-            List<MLineDimension> list = new List<MLineDimension>();
+            //ArrayList<MVAGLJRNLLine> list = new ArrayList<MVAGLJRNLLine>();
+            List<MVAGLLineDimension> list = new List<MVAGLLineDimension>();
             String sql = "SELECT * FROM VAGL_LineDimension WHERE VAGL_JRNLLine_ID=@Param1 ORDER BY Line";
             //PreparedStatement pstmt = null;
             SqlParameter[] Param = new SqlParameter[1];
@@ -840,7 +840,7 @@ namespace VAdvantage.Model
                 //while (rs.next())
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MLineDimension(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVAGLLineDimension(GetCtx(), dr, Get_TrxName()));
                 }
                 dt = null;
             }
@@ -857,7 +857,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, "getLines", ex);
             }
             //
-            MLineDimension[] retValue = new MLineDimension[list.Count];
+            MVAGLLineDimension[] retValue = new MVAGLLineDimension[list.Count];
             //list.toArray(retValue);
             retValue = list.ToArray();
             return retValue;
@@ -870,6 +870,6 @@ namespace VAdvantage.Model
 
 
 
-    }	//	MJournalLine
+    }	//	MVAGLJRNLLine
 
 }

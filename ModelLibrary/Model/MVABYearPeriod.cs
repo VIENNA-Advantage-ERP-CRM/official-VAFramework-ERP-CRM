@@ -24,12 +24,12 @@ namespace VAdvantage.Model
     public class MVABYearPeriod : X_VAB_YearPeriod
     {
         //	Cache
-        private static CCache<int, MPeriod> cache = new CCache<int, MPeriod>("VAB_YearPeriod", 10);
+        private static CCache<int, MVABYearPeriod> cache = new CCache<int, MVABYearPeriod>("VAB_YearPeriod", 10);
         //	Logger
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPeriod).FullName);
-        //private static CLogger s_log = CLogger.getCLogger (MPeriod.class);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABYearPeriod).FullName);
+        //private static CLogger s_log = CLogger.getCLogger (MVABYearPeriod.class);
         //	Period Controls
-        private MPeriodControl[] _controls = null;
+        private MVABYearPeriodControl[] _controls = null;
 
         /// <summary>
         /// Standard Constructor
@@ -37,7 +37,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_YearPeriod_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPeriod(Ctx ctx, int VAB_YearPeriod_ID, Trx trxName)
+        public MVABYearPeriod(Ctx ctx, int VAB_YearPeriod_ID, Trx trxName)
             : base(ctx, VAB_YearPeriod_ID, trxName)
         {
             if (VAB_YearPeriod_ID == 0)
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MPeriod(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABYearPeriod(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /// <param name="name">name</param>
         /// <param name="startDate">start</param>
         /// <param name="endDate">end</param>
-        public MPeriod(MYear year, int periodNo, String name, DateTime? startDate, DateTime? endDate)
+        public MVABYearPeriod(MYear year, int periodNo, String name, DateTime? startDate, DateTime? endDate)
             : this(year.GetCtx(), 0, year.Get_TrxName())
         {
             SetClientOrg(year);
@@ -86,15 +86,15 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAB_YearPeriod_ID">id</param>
-        /// <returns>MPeriod</returns>
-        public static MPeriod Get(Ctx ctx, int VAB_YearPeriod_ID)
+        /// <returns>MVABYearPeriod</returns>
+        public static MVABYearPeriod Get(Ctx ctx, int VAB_YearPeriod_ID)
         {
             int key = VAB_YearPeriod_ID;
-            MPeriod retValue = (MPeriod)cache[key];
+            MVABYearPeriod retValue = (MVABYearPeriod)cache[key];
             if (retValue != null)
                 return retValue;
             //
-            retValue = new MPeriod(ctx, VAB_YearPeriod_ID, null);
+            retValue = new MVABYearPeriod(ctx, VAB_YearPeriod_ID, null);
             if (retValue.Get_ID() != 0)
                 cache.Add(key, retValue);
             return retValue;
@@ -106,22 +106,22 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
         /// <returns>active Period or null</returns>
-        public static MPeriod Get(Ctx ctx, DateTime? dateAcct)
+        public static MVABYearPeriod Get(Ctx ctx, DateTime? dateAcct)
         {
             //if (dateAcct == null)
             //    return null;
             ////	Search in Cache first
-            //IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
+            //IEnumerator<MVABYearPeriod> it = cache.Values.GetEnumerator();
             //it.Reset();
             //while (it.MoveNext())
             //{
-            //    MPeriod period = it.Current;
+            //    MVABYearPeriod period = it.Current;
             //    if (period.GetVAF_Client_ID() == ctx.GetVAF_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
             //        return period;
             //}
 
             ////	Get it from DB
-            //MPeriod retValue = null;
+            //MVABYearPeriod retValue = null;
             //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
             //    + "FROM VAB_YearPeriod "
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
             //    {
             //        foreach (DataRow dr in ds.Tables[0].Rows)
             //        {
-            //            MPeriod period = new MPeriod(ctx, dr, null);
+            //            MVABYearPeriod period = new MVABYearPeriod(ctx, dr, null);
             //            int key = period.GetVAB_YearPeriod_ID();
             //            cache.Add(key, period);
             //            if (period.IsStandardPeriod())
@@ -173,16 +173,16 @@ namespace VAdvantage.Model
         /// <param name="dateAcct">date</param>
         /// <param name="VAF_Org_ID">organization</param>
         /// <returns>active Period or null</returns>
-        public static MPeriod Get(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
+        public static MVABYearPeriod Get(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
             if (dateAcct == null)
                 return null;
             //	Search in Cache first
-            //IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
+            //IEnumerator<MVABYearPeriod> it = cache.Values.GetEnumerator();
             //it.Reset();
             //while (it.MoveNext())
             //{
-            //    MPeriod period = it.Current;
+            //    MVABYearPeriod period = it.Current;
             //    if (period.GetVAF_Client_ID() == ctx.GetVAF_Client_ID() && period.IsStandardPeriod() && period.IsInPeriod((DateTime?)dateAcct))
             //        return period;
             //}
@@ -213,7 +213,7 @@ namespace VAdvantage.Model
             }
 
             //	Get it from DB   
-            MPeriod retValue = null;
+            MVABYearPeriod retValue = null;
             String sql = "SELECT * "
             + "FROM VAB_YearPeriod "
             + "WHERE VAB_Year_ID IN "
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        MPeriod period = new MPeriod(ctx, dr, null);
+                        MVABYearPeriod period = new MVABYearPeriod(ctx, dr, null);
                         int key = period.GetVAB_YearPeriod_ID();
                         //cache.Add(key, period);
                         if (period.IsStandardPeriod())
@@ -264,7 +264,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_YearPeriod_ID or 0</returns>
         public static int GetVAB_YearPeriod_ID(Ctx ctx, DateTime? dateAcct)
         {
-            //MPeriod period = Get(ctx, dateAcct);
+            //MVABYearPeriod period = Get(ctx, dateAcct);
             //if (period == null)
             //    return 0;
             //return period.GetVAB_YearPeriod_ID();
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
         /// <returns>VAB_YearPeriod_ID or 0</returns>
         public static int GetVAB_YearPeriod_ID(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
-            MPeriod period = Get(ctx, dateAcct, VAF_Org_ID);
+            MVABYearPeriod period = Get(ctx, dateAcct, VAF_Org_ID);
             if (period == null)
                 return 0;
             return period.GetVAB_YearPeriod_ID();
@@ -294,9 +294,9 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dateAcct">date</param>
         /// <returns>active first Period</returns>
-        public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct)
+        public static MVABYearPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct)
         {
-            //MPeriod retValue = null;
+            //MVABYearPeriod retValue = null;
             //int VAF_Client_ID = ctx.GetVAF_Client_ID();
             //String sql = "SELECT * "
             //    + "FROM VAB_YearPeriod "
@@ -319,7 +319,7 @@ namespace VAdvantage.Model
             //    if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             //    {
             //        DataRow dr = ds.Tables[0].Rows[0];  //	first only
-            //        retValue = new MPeriod(ctx, dr, null);
+            //        retValue = new MVABYearPeriod(ctx, dr, null);
             //    }
             //}
             //catch (Exception e)
@@ -338,9 +338,9 @@ namespace VAdvantage.Model
         /// <param name="dateAcct">date</param>
         /// <param name="VAF_Org_ID">Organization</param>
         /// <returns>active first Period</returns>
-        public static MPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
+        public static MVABYearPeriod GetFirstInYear(Ctx ctx, DateTime? dateAcct, int VAF_Org_ID)
         {
-            MPeriod retValue = null;
+            MVABYearPeriod retValue = null;
 
             // Get Calender ID
             string qry;
@@ -384,7 +384,7 @@ namespace VAdvantage.Model
                 if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
                     DataRow dr = ds.Tables[0].Rows[0]; 	//	first only
-                    retValue = new MPeriod(ctx, dr, null);
+                    retValue = new MVABYearPeriod(ctx, dr, null);
                 }
             }
             catch (Exception e)
@@ -399,12 +399,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>period controls</returns>
-        public MPeriodControl[] GetPeriodControls(bool requery)
+        public MVABYearPeriodControl[] GetPeriodControls(bool requery)
         {
             //if (_controls != null && !requery)
             //    return _controls;
             ////
-            //List<MPeriodControl> list = new List<MPeriodControl>();
+            //List<MVABYearPeriodControl> list = new List<MVABYearPeriodControl>();
             //String sql = "SELECT * FROM VAB_YearPeriodControl "
             //    + "WHERE VAB_YearPeriod_ID=" + GetVAB_YearPeriod_ID();
             //try
@@ -414,7 +414,7 @@ namespace VAdvantage.Model
             //    {
             //        foreach (DataRow dr in ds.Tables[0].Rows)
             //        {
-            //            list.Add(new MPeriodControl(GetCtx(), dr, null));
+            //            list.Add(new MVABYearPeriodControl(GetCtx(), dr, null));
             //        }
             //    }
             //}
@@ -423,7 +423,7 @@ namespace VAdvantage.Model
             //    log.Log(Level.SEVERE, sql, e);
             //}
             ////
-            //_controls = new MPeriodControl[list.Count];
+            //_controls = new MVABYearPeriodControl[list.Count];
             //_controls = list.ToArray();
             //return _controls;
 
@@ -435,12 +435,12 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns>period controls</returns>
-        public MPeriodControl[] GetPeriodControls(bool requery, int VAF_Org_ID)
+        public MVABYearPeriodControl[] GetPeriodControls(bool requery, int VAF_Org_ID)
         {
             if (_controls != null && !requery)
                 return _controls;
             //
-            List<MPeriodControl> list = new List<MPeriodControl>();
+            List<MVABYearPeriodControl> list = new List<MVABYearPeriodControl>();
             String sql = "SELECT * FROM VAB_YearPeriodControl "
                 + "WHERE IsActive = 'Y' AND VAB_YearPeriod_ID=" + GetVAB_YearPeriod_ID();
 
@@ -456,7 +456,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MPeriodControl(GetCtx(), dr, null));
+                        list.Add(new MVABYearPeriodControl(GetCtx(), dr, null));
                     }
                 }
             }
@@ -465,7 +465,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
             //
-            _controls = new MPeriodControl[list.Count];
+            _controls = new MVABYearPeriodControl[list.Count];
             _controls = list.ToArray();
             return _controls;
         }
@@ -475,7 +475,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="docBaseType">Document Base Type</param>
         /// <returns>period control or null</returns>
-        public MPeriodControl GetPeriodControl(String docBaseType)
+        public MVABYearPeriodControl GetPeriodControl(String docBaseType)
         {
             //if (docBaseType == null)
             //    return null;
@@ -495,7 +495,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="docBaseType">Document Base Type</param>
         /// <returns>period control or null</returns>
-        public MPeriodControl GetPeriodControl(String docBaseType, int VAF_Org_ID)
+        public MVABYearPeriodControl GetPeriodControl(String docBaseType, int VAF_Org_ID)
         {
             if (docBaseType == null)
                 return null;
@@ -590,7 +590,7 @@ namespace VAdvantage.Model
                     String docBaseType = type.GetDocBaseType();
                     if (baseTypes.Contains(docBaseType))
                         continue;
-                    MPeriodControl pc = new MPeriodControl(this, docBaseType);
+                    MVABYearPeriodControl pc = new MVABYearPeriodControl(this, docBaseType);
                     pc.SetVAF_Org_ID(GetVAF_Org_ID());
                     if (pc.Save())
                         count++;
@@ -607,7 +607,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MPeriod[");
+            StringBuilder sb = new StringBuilder("MVABYearPeriod[");
             sb.Append(Get_ID())
                 .Append("-").Append(GetName())
                 .Append(", ").Append(GetStartDate()).Append("-").Append(GetEndDate())
@@ -623,7 +623,7 @@ namespace VAdvantage.Model
         /// <returns> active Period or null</returns> 
         /// <date>07-March-2011</date>
         /// <writer>raghu</writer>
-        public static MPeriod GetOfCalendar(Ctx ctx, int VAB_Calender_ID, DateTime? DateAcct)
+        public static MVABYearPeriod GetOfCalendar(Ctx ctx, int VAB_Calender_ID, DateTime? DateAcct)
         {
             if (DateAcct == null)
             {
@@ -636,10 +636,10 @@ namespace VAdvantage.Model
                 return null;
             }
             //	Search in Cache first
-            IEnumerator<MPeriod> it = cache.Values.GetEnumerator();
+            IEnumerator<MVABYearPeriod> it = cache.Values.GetEnumerator();
             while (it.MoveNext())
             {
-                MPeriod period = it.Current;
+                MVABYearPeriod period = it.Current;
                 if (period.GetVAB_Calender_ID() == VAB_Calender_ID
                         && period.IsStandardPeriod()
                         && period.IsInPeriod(DateAcct))
@@ -647,7 +647,7 @@ namespace VAdvantage.Model
             }
 
             //	Get it from DB
-            MPeriod retValue = null;
+            MVABYearPeriod retValue = null;
             // mohit 28-9-2015
             //String sql = "SELECT * FROM VAB_YearPeriod "
             //    + "WHERE VAB_Year_ID IN "
@@ -668,7 +668,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    MPeriod period = new MPeriod(ctx, dt.Rows[i], null);
+                    MVABYearPeriod period = new MVABYearPeriod(ctx, dt.Rows[i], null);
                     int key = Util.GetValueOfInt(period.GetVAB_YearPeriod_ID());
 
                     cache[key] = period;
@@ -715,7 +715,7 @@ namespace VAdvantage.Model
             //    _log.Warning("No DocBaseType");
             //    return false;
             //}
-            //MPeriod period = MPeriod.Get(ctx, dateAcct);
+            //MVABYearPeriod period = MVABYearPeriod.Get(ctx, dateAcct);
             //if (period == null)
             //{
             //    _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
@@ -752,7 +752,7 @@ namespace VAdvantage.Model
                 return false;
             }
 
-            MPeriod period = MPeriod.Get(ctx, dateAcct, VAF_Org_ID);
+            MVABYearPeriod period = MVABYearPeriod.Get(ctx, dateAcct, VAF_Org_ID);
             if (period == null)
             {
                 _log.Warning("No Period for " + dateAcct + " (" + docBaseType + ")");
@@ -816,7 +816,7 @@ namespace VAdvantage.Model
                 log.Warning(GetName() + " - No DocBaseType");
                 return false;
             }
-            MPeriodControl pc = GetPeriodControl(docBaseType);
+            MVABYearPeriodControl pc = GetPeriodControl(docBaseType);
             if (pc == null)
             {
                 log.Warning(GetName() + " - Period Control not found for " + docBaseType);
@@ -827,10 +827,10 @@ namespace VAdvantage.Model
         }
 
         //Added By Amit 4-8-2015 VAMRP
-        public static MPeriod GetPreviousPeriod(MPeriod period, Ctx ctx, Trx trx)
+        public static MVABYearPeriod GetPreviousPeriod(MVABYearPeriod period, Ctx ctx, Trx trx)
         {
 
-            MPeriod newPeriod = null;
+            MVABYearPeriod newPeriod = null;
             String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
             "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
             "AND VAB_YearPeriod.VAB_Year_ID IN " +
@@ -856,7 +856,7 @@ namespace VAdvantage.Model
                 }
                 if (dt.Rows.Count > 0)
                 {
-                    newPeriod = new MPeriod(ctx, dt.Rows[0], trx);
+                    newPeriod = new MVABYearPeriod(ctx, dt.Rows[0], trx);
                 }
             }
             catch (Exception e)
@@ -871,10 +871,10 @@ namespace VAdvantage.Model
             return newPeriod;
         }
 
-        public static MPeriod GetNextPeriod(MPeriod period, Ctx ctx, Trx trx)
+        public static MVABYearPeriod GetNextPeriod(MVABYearPeriod period, Ctx ctx, Trx trx)
         {
 
-            MPeriod newPeriod = null;
+            MVABYearPeriod newPeriod = null;
             String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
             "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
             "AND VAB_YearPeriod.VAB_Year_ID IN " +
@@ -900,7 +900,7 @@ namespace VAdvantage.Model
                 }
                 if (dt.Rows.Count > 0)
                 {
-                    newPeriod = new MPeriod(ctx, dt.Rows[0], trx);
+                    newPeriod = new MVABYearPeriod(ctx, dt.Rows[0], trx);
                 }
             }
             catch (Exception e)
@@ -915,7 +915,7 @@ namespace VAdvantage.Model
             return newPeriod;
         }
 
-        public static MPeriod[] GetAllPeriodsInRange(MPeriod startPeriod, MPeriod endPeriod, int calendar_ID, Ctx ctx, Trx trx)
+        public static MVABYearPeriod[] GetAllPeriodsInRange(MVABYearPeriod startPeriod, MVABYearPeriod endPeriod, int calendar_ID, Ctx ctx, Trx trx)
         {
             if ((startPeriod.GetVAB_Calender_ID() != calendar_ID) ||
                     (endPeriod.GetVAB_Calender_ID() != calendar_ID))
@@ -923,7 +923,7 @@ namespace VAdvantage.Model
                 _log.SaveError("Error", "Periods do not belong to the calendar");
                 return null;
             }
-            List<MPeriod> periods = new List<MPeriod>();
+            List<MVABYearPeriod> periods = new List<MVABYearPeriod>();
             String sql = "SELECT * FROM VAB_YearPeriod WHERE " +
             "VAB_YearPeriod.IsActive='Y' AND PeriodType='S' " +
             "AND VAB_YearPeriod.VAB_Year_ID IN " +
@@ -954,7 +954,7 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        periods.Add(new MPeriod(ctx, dt.Rows[i], trx));
+                        periods.Add(new MVABYearPeriod(ctx, dt.Rows[i], trx));
                     }
                 }
             }
@@ -968,7 +968,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MPeriod[] retValue = new MPeriod[periods.Count];
+            MVABYearPeriod[] retValue = new MVABYearPeriod[periods.Count];
             retValue = periods.ToArray();
             return retValue;
         }
@@ -1054,7 +1054,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < calendars.Count; i++)
             {
                 int VAB_Calender_ID = calendars[i];
-                MPeriod period = MPeriod.GetOfCalendar(ctx, VAB_Calender_ID, DateAcct);
+                MVABYearPeriod period = MVABYearPeriod.GetOfCalendar(ctx, VAB_Calender_ID, DateAcct);
                 //	First Org for Calendar
                 int VAF_Org_ID = 0;
                 for (int j = 0; j < orgCalendars.Count; j++)
@@ -1124,7 +1124,7 @@ namespace VAdvantage.Model
             //    log.Warning(GetName() + " - No DocBaseType");
             //    return "@NotFound@ @DocBaseType@";
             //}
-            //MPeriodControl pc = GetPeriodControl(DocBaseType);
+            //MVABYearPeriodControl pc = GetPeriodControl(DocBaseType);
             //if (pc == null)
             //{
             //    log.Warning(GetName() + " - Period Control not found for " + DocBaseType);
@@ -1185,7 +1185,7 @@ namespace VAdvantage.Model
                 log.Warning(GetName() + " - No DocBaseType");
                 return "@NotFound@ @DocBaseType@";
             }
-            MPeriodControl pc = GetPeriodControl(DocBaseType, VAF_Org_ID);
+            MVABYearPeriodControl pc = GetPeriodControl(DocBaseType, VAF_Org_ID);
             if (pc == null)
             {
                 log.Warning(GetName() + " - Period Control not found for " + DocBaseType);

@@ -849,7 +849,7 @@ namespace VAdvantage.Acct
         /// </summary>
         /// <param name="VAM_Locator_ID"></param>
         /// <param name="isFrom"></param>
-        public void SetLocationFromLocator(int VAM_Locator_ID, bool isFrom)
+        public void SetLocationFroMVAMLocator(int VAM_Locator_ID, bool isFrom)
         {
             if (VAM_Locator_ID == 0)
             {

@@ -35,7 +35,7 @@ namespace VIS.Models
         /// <returns></returns>
         public int LocatorSave(Ctx ctx, string warehouseId, string tValue, string tX, string tY, string tZ)
         {
-            var loc = MLocator.Get(ctx, Convert.ToInt32(warehouseId), tValue, tX, tY, tZ);
+            var loc = MVAMLocator.Get(ctx, Convert.ToInt32(warehouseId), tValue, tX, tY, tZ);
             return loc.GetVAM_Locator_ID();
         }
 

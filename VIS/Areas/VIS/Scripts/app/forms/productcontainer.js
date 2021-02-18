@@ -173,7 +173,7 @@
         // Locator Control Load
         function loadControlLocator() {
             //_ReqLookUpLocator = VIS.MLookupFactory.get(VIS.Env.getCtx(), $self.windowNo, 3537, VIS.DisplayType.Locator, "VAM_Locator_ID", 0, false, null); //ctx, windowNo, column_ID, VAF_Control_Ref_ID, columnName, VAF_Control_Ref_Value_ID, isParent, validationCode
-            _ReqLookUpLocator = new VIS.MLocatorLookup(VIS.Env.getCtx(), $self.windowNo);
+            _ReqLookUpLocator = new VIS.MVAMLocatorLookup(VIS.Env.getCtx(), $self.windowNo);
             this.$ReqControlLocator = new VIS.Controls.VLocator("VAM_Locator_ID", true, true, true, VIS.DisplayType.Locator, _ReqLookUpLocator); // columnName, isMandatory, isReadOnly, isUpdateable, displayType, lookup
             this.$ReqControlLocator.getControl().css("width", "55%");
             this.$ReqControlLocator.getBtn(0).css("height", "29px");

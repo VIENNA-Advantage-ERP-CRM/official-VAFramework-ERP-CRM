@@ -1710,7 +1710,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -3008,7 +3008,7 @@ namespace VAdvantage.Model
                     }
                 }
 
-                List<MMatchInv> matchedInvoice = new List<MMatchInv>();
+                List<MVAMMatchInvoice> matchedInvoice = new List<MVAMMatchInvoice>();
                 //	Matching
                 if (!IsSOTrx()
                     && sLine.GetVAM_Product_ID() != 0
@@ -3032,11 +3032,11 @@ namespace VAdvantage.Model
                             matchQty = iLine.GetQtyInvoiced() - alreadyMatchedQty;
                         }
 
-                        MMatchInv[] matches = MMatchInv.Get(GetCtx(),
+                        MVAMMatchInvoice[] matches = MVAMMatchInvoice.Get(GetCtx(),
                             sLine.GetVAM_Inv_InOutLine_ID(), iLine.GetVAB_InvoiceLine_ID(), Get_TrxName());
                         if (matches == null || matches.Length == 0)
                         {
-                            MMatchInv inv = new MMatchInv(iLine, GetMovementDate(), matchQty);
+                            MVAMMatchInvoice inv = new MVAMMatchInvoice(iLine, GetMovementDate(), matchQty);
                             if (sLine.GetVAM_PFeature_SetInstance_ID() != iLine.GetVAM_PFeature_SetInstance_ID())
                             {
                                 iLine.SetVAM_PFeature_SetInstance_ID(sLine.GetVAM_PFeature_SetInstance_ID());
@@ -3069,7 +3069,7 @@ namespace VAdvantage.Model
                     {
                         log.Fine("PO Matching");
                         //	Ship - PO
-                        MMatchPO po = MMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
+                        MVAMMatchPO po = MVAMMatchPO.Create(null, sLine, GetMovementDate(), matchQty);
                         try
                         {
                             po.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
@@ -3095,7 +3095,7 @@ namespace VAdvantage.Model
                             //	Invoice is created before  Shipment
                             log.Fine("PO(Inv) Matching");
                             //	Ship - Invoice
-                            MMatchPO po = MMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
+                            MVAMMatchPO po = MVAMMatchPO.Create(iLine, sLine, GetMovementDate(), matchQty);
                             try
                             {
                                 po.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
@@ -3907,7 +3907,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetMovementDate());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                    if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -5142,7 +5142,7 @@ namespace VAdvantage.Model
             string reversedDocno = null;
             string ss = ToString();
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -5201,10 +5201,10 @@ namespace VAdvantage.Model
             //	Reverse/Delete Matching
             if (!IsSOTrx())
             {
-                MMatchInv[] mInv = MMatchInv.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
+                MVAMMatchInvoice[] mInv = MVAMMatchInvoice.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
                 for (int i = 0; i < mInv.Length; i++)
                     mInv[i].Delete(true);
-                MMatchPO[] mPO = MMatchPO.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
+                MVAMMatchPO[] mPO = MVAMMatchPO.GetInOut(GetCtx(), GetVAM_Inv_InOut_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetVAB_InvoiceLine_ID() == 0)

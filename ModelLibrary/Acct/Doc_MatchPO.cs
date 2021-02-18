@@ -47,12 +47,12 @@ namespace VAdvantage.Acct
         /// <param name="idr"></param>
         /// <param name="trxName"></param>
         public Doc_MatchPO(MVABAccountBook[] ass, IDataReader idr, Trx trxName)
-            : base(ass, typeof(MMatchPO), idr, MVABMasterDocType.DOCBASETYPE_MATCHPO, trxName)
+            : base(ass, typeof(MVAMMatchPO), idr, MVABMasterDocType.DOCBASETYPE_MATCHPO, trxName)
         {
 
         }
         public Doc_MatchPO(MVABAccountBook[] ass,DataRow dr, Trx trxName)
-            : base(ass, typeof(MMatchPO), dr, MVABMasterDocType.DOCBASETYPE_MATCHPO, trxName)
+            : base(ass, typeof(MVAMMatchPO), dr, MVABMasterDocType.DOCBASETYPE_MATCHPO, trxName)
         {
 
         }
@@ -65,7 +65,7 @@ namespace VAdvantage.Acct
         public override String LoadDocumentDetails()
         {
             SetVAB_Currency_ID(Doc.NO_CURRENCY);
-            MMatchPO matchPO = (MMatchPO)GetPO();
+            MVAMMatchPO matchPO = (MVAMMatchPO)GetPO();
             SetDateDoc(matchPO.GetDateTrx());
             //
             _VAM_PFeature_SetInstance_ID = matchPO.GetVAM_PFeature_SetInstance_ID();

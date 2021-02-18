@@ -391,7 +391,7 @@ namespace VAdvantage.Model
         //Created by amit
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool CreateProductCostsDetails(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, MProduct product, int M_ASI_ID,
-                     string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MMovementLine movementline,
+                     string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MVAMInvTrfLine movementline,
                      MVABInvoiceLine invoiceline, PO po, Decimal Price, Decimal Qty, Trx trxName, out string conversionNotFound,
                      string optionalstr = "process")
         {
@@ -403,7 +403,7 @@ namespace VAdvantage.Model
             MVABOrderLine orderline = null;
             MVABOrder order = null;
             MVABInvoice invoice = null;
-            MMovement movement = null;
+            MVAMInventoryTransfer movement = null;
             MVAMInventory inventory = null;
             MVAMInvInOutLine matchInoutLine = inoutline;
             MVAMProductCostDetail cd = null;
@@ -434,7 +434,7 @@ namespace VAdvantage.Model
             string costQueuseIds = null;
             int VAM_Warehouse_Id = 0; // is used to manage costing at warehouse level
             int SourceVAM_Warehouse_Id = 0; // is used to manage costing at warehouse level during Inventory Move
-            MLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
+            MVAMLocator loc = null; // is used to get warehouse id to manager costing levelev - Warehouse + Batch 
             String costLevel = null; // is used to check costing level binded for calculation of costing
             try
             {
@@ -524,13 +524,13 @@ namespace VAdvantage.Model
                         {
                             if (windowName != "AssetDisposal")
                             {
-                                loc = MLocator.Get(ctx, (inoutline != null ? inoutline.GetVAM_Locator_ID() : inventoryLine.GetVAM_Locator_ID()));
+                                loc = MVAMLocator.Get(ctx, (inoutline != null ? inoutline.GetVAM_Locator_ID() : inventoryLine.GetVAM_Locator_ID()));
                             }
                             else
                             {
                                 if (loc == null)
                                 {
-                                    loc = MLocator.Get(ctx, Util.GetValueOfInt(po.Get_Value("VAM_Locator_ID")));
+                                    loc = MVAMLocator.Get(ctx, Util.GetValueOfInt(po.Get_Value("VAM_Locator_ID")));
                                 }
                             }
                             decimal productCostsQty = MVAMProductCostQueue.CheckQtyAvailablity(ctx, acctSchema, VAF_Client_ID, VAF_Org_ID, product, M_ASI_ID, loc.GetVAM_Warehouse_ID());
@@ -545,16 +545,16 @@ namespace VAdvantage.Model
                             // when costing level is Warehouse wise and "From AND To" warehouse is same then not require to calculate cost
                             if (costLevel == MProductCategory.COSTINGLEVEL_Warehouse || costLevel == MProductCategory.COSTINGLEVEL_WarehousePlusBatch)
                             {
-                                if (MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0)).GetVAM_Warehouse_ID() ==
-                                    MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0)).GetVAM_Warehouse_ID())
+                                if (MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0)).GetVAM_Warehouse_ID() ==
+                                    MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0)).GetVAM_Warehouse_ID())
                                 {
                                     return true;
                                 }
                             }
                             else
                             {
-                                if (MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0)).GetVAF_Org_ID() ==
-                                       MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0)).GetVAF_Org_ID())
+                                if (MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0)).GetVAF_Org_ID() ==
+                                       MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0)).GetVAF_Org_ID())
                                 {
                                     return true;
                                 }
@@ -563,12 +563,12 @@ namespace VAdvantage.Model
                             // when qty is positive -- we are reducing stock from "Source Warehouse"
                             if (Qty > 0)
                             {
-                                loc = MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0));
+                                loc = MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_Locator_ID() : 0));
                             }
                             // when qty is negative -- we are reducing stock from "To Warehouse"
                             else
                             {
-                                loc = MLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0));
+                                loc = MVAMLocator.Get(ctx, (movementline != null ? movementline.GetVAM_LocatorTo_ID() : 0));
                             }
                             decimal productCostsQty = MVAMProductCostQueue.CheckQtyAvailablity(ctx, acctSchema, VAF_Client_ID, (Qty > 0 ? VAF_Org_ID : loc.GetVAF_Org_ID()), product, M_ASI_ID, loc.GetVAM_Warehouse_ID());
                             if (productCostsQty < Math.Abs(Qty))
@@ -2113,7 +2113,7 @@ namespace VAdvantage.Model
                                 }
                                 else if (windowName == "Inventory Move")
                                 {
-                                    movement = new MMovement(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
+                                    movement = new MVAMInventoryTransfer(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
                                     conversionNotFound = movement.GetDocumentNo();
                                 }
                                 else if (windowName.Equals("AssetDisposal"))
@@ -2164,7 +2164,7 @@ namespace VAdvantage.Model
 
                             //else if (isPriceFromProductPrice && windowName == "Inventory Move")
                             //{
-                            //    movement = new MMovement(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
+                            //    movement = new MVAMInventoryTransfer(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
                             //    if (VAB_Currency_ID != 0 && VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                             //    {
                             //        Price = MConversionRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
@@ -2273,7 +2273,7 @@ namespace VAdvantage.Model
                             VAM_Warehouse_Id = Util.GetValueOfInt(DB.ExecuteScalar(query.ToString(), null, trxName));
                             if (VAM_Warehouse_Id == 0)
                             {
-                                VAM_Warehouse_Id = MLocator.Get(ctx, movementline.GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID();
+                                VAM_Warehouse_Id = MVAMLocator.Get(ctx, movementline.GetVAM_LocatorTo_ID()).GetVAM_Warehouse_ID();
                             }
                             VAF_Org_ID = (MWarehouse.Get(ctx, VAM_Warehouse_Id)).GetVAF_Org_ID();
                             #endregion
@@ -3206,7 +3206,7 @@ namespace VAdvantage.Model
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         public static bool CreateProductCostsDetails(Ctx ctx, int VAF_Client_ID, int VAF_Org_ID, MProduct product, int M_ASI_ID,
-                     string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MMovementLine movementline,
+                     string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MVAMInvTrfLine movementline,
                      MVABInvoiceLine invoiceline, Decimal Price, Decimal Qty, Trx trxName, int[] acctSchemaRecord, out string conversionNotFound)
         {
             MVABAccountBook acctSchema = null;
@@ -3216,7 +3216,7 @@ namespace VAdvantage.Model
             MVABOrderLine orderline = null;
             MVABOrder order = null;
             MVABInvoice invoice = null;
-            MMovement movement = null;
+            MVAMInventoryTransfer movement = null;
             MVAMInventory inventory = null;
             MVAMProductCostDetail cd = null;
             MVAMProductCostDetail cdSourceWarehouse = null;
@@ -4320,7 +4320,7 @@ namespace VAdvantage.Model
                             }
                             else if (isPriceFromProductPrice && windowName == "Inventory Move")
                             {
-                                movement = new MMovement(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
+                                movement = new MVAMInventoryTransfer(ctx, movementline.GetVAM_InventoryTransfer_ID(), trxName);
                                 if (VAB_Currency_ID != 0 && VAB_Currency_ID != acctSchema.GetVAB_Currency_ID())
                                 {
                                     Price = MVABExchangeRate.Convert(ctx, Price, VAB_Currency_ID, acctSchema.GetVAB_Currency_ID(),
@@ -5290,7 +5290,7 @@ namespace VAdvantage.Model
         }
 
         private static bool CreateCostQueue(Ctx ctx, MVABAccountBook acctSchema, MProduct product, int M_ASI_ID, int VAF_Client_ID, int VAF_Org_ID, Decimal Price, Decimal Qty,
-                               string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MMovementLine movementline,
+                               string windowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MVAMInvTrfLine movementline,
                                MVABInvoiceLine invoiceline, MVAMProductCostDetail cd, Trx trxName, out string costQueueIds)
         {
             costQueueIds = null;

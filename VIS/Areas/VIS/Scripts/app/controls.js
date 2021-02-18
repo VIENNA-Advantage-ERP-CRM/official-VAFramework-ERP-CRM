@@ -4526,8 +4526,8 @@
                 if (obj.hasAttribute) {
                     obj.showDialog();
                 }
-                obj.onClose = function (MVAMPFeatureSetInstanceId, name, mLocatorId) {
-                    this.VAM_Locator_ID = mLocatorId;
+                obj.onClose = function (MVAMPFeatureSetInstanceId, name, MVAMLocatorId) {
+                    this.VAM_Locator_ID = MVAMLocatorId;
                     setValueInControl(MVAMPFeatureSetInstanceId, name);
                 };
             }
@@ -5992,9 +5992,9 @@
             evt = null;
         };
 
-        this.openForm = function (warehouseID, mLocator, text, validation) {
+        this.openForm = function (warehouseID, MVAMLocator, text, validation) {
             self.oldValue = self.value;
-            var obj = new VIS.productContainerTree(warehouseID, mLocator, text, validation);
+            var obj = new VIS.productContainerTree(warehouseID, MVAMLocator, text, validation);
             if (obj != null) {
                 obj.showDialog();
                 obj.onClosing = function (containerId) {

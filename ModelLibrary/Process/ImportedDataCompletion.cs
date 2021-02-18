@@ -170,12 +170,12 @@ namespace VAdvantage.Process
                 dataRow = dsRecord.Tables[0].Select("DocStatus = 'DR' ", "movementdate");
                 if (dataRow != null && dataRow.Length > 0)
                 {
-                    MMovement movement = null;
+                    MVAMInventoryTransfer movement = null;
                     for (int i = 0; i < dataRow.Length; i++)
                     {
                         try
                         {
-                            movement = new MMovement(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_InventoryTransfer_ID"]), Get_Trx());
+                            movement = new MVAMInventoryTransfer(GetCtx(), Util.GetValueOfInt(dataRow[i]["VAM_InventoryTransfer_ID"]), Get_Trx());
                             movement.CompleteIt();
                             if (movement.GetDocAction() == "CL")
                             {

@@ -260,8 +260,8 @@ namespace VAdvantage.Model
             int VAM_LotControl_ID = GetMVAMPFeatureSet().GetVAM_LotControl_ID();
             if (VAM_LotControl_ID != 0)
             {
-                MLotCtl ctl = new MLotCtl(GetCtx(), VAM_LotControl_ID, null);
-                MLot lot = ctl.CreateLot(VAM_Product_ID);
+                MVAMLotControl ctl = new MVAMLotControl(GetCtx(), VAM_LotControl_ID, null);
+                MVAMLot lot = ctl.CreateLot(VAM_Product_ID);
                 SetVAM_Lot_ID(lot.GetVAM_Lot_ID());
                 SetLot(lot.GetName());
                 retValue = new KeyNamePair(lot.GetVAM_Lot_ID(), lot.GetName());
@@ -277,9 +277,9 @@ namespace VAdvantage.Model
         public void SetLot(String Lot, int VAM_Product_ID)
         {
             //	Try to find it
-            MLot mLot = MLot.GetProductLot(GetCtx(), VAM_Product_ID, Lot, Get_TrxName());
-            if (mLot != null)
-                SetVAM_Lot_ID(mLot.GetVAM_Lot_ID());
+            MVAMLot MVAMLot = MVAMLot.GetProductLot(GetCtx(), VAM_Product_ID, Lot, Get_TrxName());
+            if (MVAMLot != null)
+                SetVAM_Lot_ID(MVAMLot.GetVAM_Lot_ID());
             SetLot(Lot);
         }
 

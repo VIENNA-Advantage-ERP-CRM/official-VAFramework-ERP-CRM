@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MLandedCostAllocation
+ * Class Name     : MVABLCostDistribution
  * Purpose        : For landed cost allocation
  * Class Used     : X_VAB_LCostDistribution
  * Chronological    Development
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MLandedCostAllocation : X_VAB_LCostDistribution
+    public class MVABLCostDistribution : X_VAB_LCostDistribution
     {
         /**
 	 * 	Get Cost Allocations for invoice Line
@@ -34,10 +34,10 @@ namespace VAdvantage.Model
 	 *	@param trxName trx
 	 *	@return landed cost alloc
 	 */
-        public static MLandedCostAllocation[] GetOfInvoiceLine(Ctx ctx,
+        public static MVABLCostDistribution[] GetOfInvoiceLine(Ctx ctx,
             int VAB_InvoiceLine_ID, Trx trxName)
         {
-            List<MLandedCostAllocation> list = new List<MLandedCostAllocation>();
+            List<MVABLCostDistribution> list = new List<MVABLCostDistribution>();
             String sql = "SELECT * FROM VAB_LCostDistribution WHERE VAB_InvoiceLine_ID= " + VAB_InvoiceLine_ID;
             DataTable dt = null;
             IDataReader idr = null;
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MLandedCostAllocation(ctx, dr, trxName));
+                    list.Add(new MVABLCostDistribution(ctx, dr, trxName));
                 }
 
             }
@@ -64,13 +64,13 @@ namespace VAdvantage.Model
             finally { dt = null; }
 
 
-            MLandedCostAllocation[] retValue = new MLandedCostAllocation[list.Count];
+            MVABLCostDistribution[] retValue = new MVABLCostDistribution[list.Count];
             retValue = list.ToArray();
             return retValue;
         }	//	getOfInvliceLine
 
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MLandedCostAllocation).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABLCostDistribution).FullName);
 
 
         /***************************************************************************
@@ -79,7 +79,7 @@ namespace VAdvantage.Model
          *	@param VAB_LCostDistribution_ID id
          *	@param trxName trx
          */
-        public MLandedCostAllocation(Ctx ctx, int VAB_LCostDistribution_ID, Trx trxName) :
+        public MVABLCostDistribution(Ctx ctx, int VAB_LCostDistribution_ID, Trx trxName) :
             base(ctx, VAB_LCostDistribution_ID, trxName)
         {
 
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
                 SetQty(Env.ZERO);
                 SetBase(Env.ZERO);
             }
-        }	//	MLandedCostAllocation
+        }	//	MVABLCostDistribution
 
         /**
          * 	Load Constructor
@@ -98,11 +98,11 @@ namespace VAdvantage.Model
          *	@param dr result name
          *	@param trxName trx
          */
-        public MLandedCostAllocation(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABLCostDistribution(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
             //super ();
-        }	//	MLandedCostAllocation
+        }	//	MVABLCostDistribution
 
 
         /**
@@ -110,14 +110,14 @@ namespace VAdvantage.Model
          *	@param parent parent
          *	@param VAM_ProductCostElement_ID cost element
          */
-        public MLandedCostAllocation(MVABInvoiceLine parent, int VAM_ProductCostElement_ID)
+        public MVABLCostDistribution(MVABInvoiceLine parent, int VAM_ProductCostElement_ID)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
 
             SetClientOrg(parent);
             SetVAB_InvoiceLine_ID(parent.GetVAB_InvoiceLine_ID());
             SetVAM_ProductCostElement_ID(VAM_ProductCostElement_ID);
-        }	//	MLandedCostAllocation
+        }	//	MVABLCostDistribution
 
         /**
          * 	Set Amt

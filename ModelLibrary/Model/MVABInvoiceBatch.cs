@@ -27,7 +27,7 @@ namespace VAdvantage.Model
     public class MVABInvoiceBatch : X_VAB_BatchInvoice
     {
         /**	The Lines						*/
-        private MVABInvoiceBatchLine[] _lines = null;
+        private MVABBatchInvoiceLine[] _lines = null;
 
         /**
          * 	Standard Constructor
@@ -69,12 +69,12 @@ namespace VAdvantage.Model
          *	@param reload reload data
          *	@return array of lines
          */
-        public MVABInvoiceBatchLine[] GetLines(Boolean reload)
+        public MVABBatchInvoiceLine[] GetLines(Boolean reload)
         {
             if (_lines != null && !reload)
                 return _lines;
             String sql = "SELECT * FROM VAB_BatchInvoiceLine WHERE VAB_BatchInvoice_ID=@VAB_BatchInvoice_ID ORDER BY Line";
-            List<MVABInvoiceBatchLine> list = new List<MVABInvoiceBatchLine>();
+            List<MVABBatchInvoiceLine> list = new List<MVABBatchInvoiceLine>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MVABInvoiceBatchLine(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABBatchInvoiceLine(GetCtx(), dr, Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -102,7 +102,7 @@ namespace VAdvantage.Model
             {
                 dt = null;
             }
-            _lines = new MVABInvoiceBatchLine[list.Count];
+            _lines = new MVABBatchInvoiceLine[list.Count];
             _lines = list.ToArray();
             return _lines;
         }

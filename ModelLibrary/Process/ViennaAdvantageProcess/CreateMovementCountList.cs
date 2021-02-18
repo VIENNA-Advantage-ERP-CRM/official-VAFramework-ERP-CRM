@@ -29,7 +29,7 @@ namespace ViennaAdvantage.Process
         /** Inventory Movement Parameter		*/
         private int _VAM_InventoryTransfer_ID = 0;
         /** Physical Inventory					*/
-        private MMovement _movement = null;
+        private MVAMInventoryTransfer _movement = null;
         /** From Locator Parameter			*/
         private int _VAM_Locator_ID = 0;
         /** To Locator Parameter			*/
@@ -44,7 +44,7 @@ namespace ViennaAdvantage.Process
         private Boolean _deleteOld = false;
 
         /** Movement Line				*/
-        private MMovementLine _line = null;
+        private MVAMInvTrfLine _line = null;
         /**is container applicable */
         private bool isContainerApplicable = false;
 
@@ -88,7 +88,7 @@ namespace ViennaAdvantage.Process
                 + ", VAM_Product_ID=" + _VAM_Product_ID
                 + ", VAM_ProductCategory_ID=" + _VAM_ProductCategory_ID
                 + ", QtyRange=" + _qtyRange + ", DeleteOld=" + _deleteOld);
-            _movement = new MMovement(GetCtx(), _VAM_InventoryTransfer_ID, Get_Trx());
+            _movement = new MVAMInventoryTransfer(GetCtx(), _VAM_InventoryTransfer_ID, Get_Trx());
             if (_movement.Get_ID() == 0)
                 throw new SystemException("Not found: VAM_InventoryTransfer_ID=" + _VAM_InventoryTransfer_ID);
             if (_movement.IsProcessed())
@@ -226,7 +226,7 @@ ORDER BY s.VAM_Locator_ID, s.VAM_Product_ID, s.Qty DESC, s.VAM_PFeature_SetInsta
                         || (_qtyRange.Equals("N") && compare != 0))
                     {
                         //Save data on Movement Line
-                        _line = new MMovementLine(GetCtx(), 0, Get_Trx());
+                        _line = new MVAMInvTrfLine(GetCtx(), 0, Get_Trx());
                         _line.SetVAF_Client_ID(_movement.GetVAF_Client_ID());
                         _line.SetVAF_Org_ID(_movement.GetVAF_Org_ID());
                         _line.SetVAM_InventoryTransfer_ID(_VAM_InventoryTransfer_ID);

@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MVABInvoiceBatchLineController:Controller
+    public class MVABBatchInvoiceLineController:Controller
     {
 
         public ActionResult Index()
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MVABInvoiceBatchLineModel objInvoiceBatchLine = new MVABInvoiceBatchLineModel();
+                MVABBatchInvoiceLineModel objInvoiceBatchLine = new MVABBatchInvoiceLineModel();
                 retJSON = JsonConvert.SerializeObject(objInvoiceBatchLine.GetInvoiceBatchLine(ctx,fields));
             }          
             //return Json(new { result = retJSON, error = retError }, JsonRequestBehavior.AllowGet);

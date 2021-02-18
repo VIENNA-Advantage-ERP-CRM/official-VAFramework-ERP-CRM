@@ -8,7 +8,7 @@
         var $busyDiv = $('<div class="vis-busyindicatorouterwrap"><div class="vis-busyindicatorinnerwrap"><i class="vis-busyindicatordiv"></i></div></div>');
 
         var mWarehouseID = VAM_Warehouse_ID;
-        var mLocatorID = VAM_Locator_ID;
+        var MVAMLocatorID = VAM_Locator_ID;
         var mProductID = VAM_Product_ID;
         var mCBPartnerID = VAB_BusinessPartner_ID;
         var mtitle = title;
@@ -136,8 +136,8 @@
             sql = sql.concat(" FROM ").concat(from);
             sql = sql.concat(" WHERE ").concat(where);
 
-            //if (mLocatorID != 0) {
-            //    sql = sql.concat(" AND s.VAM_Locator_ID = " + mLocatorID);
+            //if (MVAMLocatorID != 0) {
+            //    sql = sql.concat(" AND s.VAM_Locator_ID = " + MVAMLocatorID);
             //}
             if (mWarehouseID != 0) {
                 sql = sql.concat(" AND NVL(l.VAM_Warehouse_ID,0) IN (0," + mWarehouseID + ")");
@@ -300,14 +300,14 @@
                 recid = Number($self.dGrid.getSelection().toString());
                 MVAMPFeatureSetInstanceID = -1;
                 MVAMPFeatureSetInstanceName = null;
-                mLocatorID = 0;
+                MVAMLocatorID = 0;
                 enabled = recid != -1;
                 if (enabled && recid > 0) {
                     var id = $self.dGrid.get(recid).VAM_PFeature_SetInstance_ID;
                     if (id > 0) {
                         MVAMPFeatureSetInstanceID = id;
                         MVAMPFeatureSetInstanceName = $self.dGrid.get(recid).Description;
-                        mLocatorID = $self.dGrid.get(recid).VAM_Locator_ID;
+                        MVAMLocatorID = $self.dGrid.get(recid).VAM_Locator_ID;
                         attrCode = $self.dGrid.get(recid).AttrCode;
                     }
                 }
@@ -318,7 +318,7 @@
                 btnOk.removeAttr("disabled");
             }
 
-            $self.log.fine("VAM_PFeature_SetInstance_ID=" + MVAMPFeatureSetInstanceID + " - " + MVAMPFeatureSetInstanceName + "; VAM_Locator_ID=" + mLocatorID);
+            $self.log.fine("VAM_PFeature_SetInstance_ID=" + MVAMPFeatureSetInstanceID + " - " + MVAMPFeatureSetInstanceName + "; VAM_Locator_ID=" + MVAMLocatorID);
         }
 
         function events() {
@@ -327,7 +327,7 @@
                 btnOk.on(VIS.Events.onTouchStartOrClick, function () {
                     enableButtons();
                     if ($self.onClose)
-                        $self.onClose(MVAMPFeatureSetInstanceID, MVAMPFeatureSetInstanceName, mLocatorID, attrCode);
+                        $self.onClose(MVAMPFeatureSetInstanceID, MVAMPFeatureSetInstanceName, MVAMLocatorID, attrCode);
                     $root.dialog('close');
                 });
 
@@ -386,7 +386,7 @@
             $busyDiv = null;
 
             mWarehouseID = null;
-            mLocatorID = null;
+            MVAMLocatorID = null;
             mProductID = null;
             mCBPartnerID = null;
             mtitle = null;

@@ -299,7 +299,7 @@ namespace ViennaAdvantage.Process
                     }
                     else
                     {
-                        MVABInvoiceSchedule ins = MVABInvoiceSchedule.Get(GetCtx(), _bp.GetVAB_sched_Invoice_ID(), Get_TrxName());
+                        MVABSchedInvoice ins = MVABSchedInvoice.Get(GetCtx(), _bp.GetVAB_sched_Invoice_ID(), Get_TrxName());
                         if (ins.CanInvoice(order.GetDateOrdered(), order.GetGrandTotal()))
                         {
                             doInvoice = true;

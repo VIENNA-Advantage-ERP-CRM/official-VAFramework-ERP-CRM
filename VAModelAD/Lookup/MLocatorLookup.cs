@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MLocatorLookup
+ * Class Name     : MVAMLocatorLookup
  * Purpose        : Warehouse Locator Lookup model.
  * Chronological    Development
  * Harwinder      :  30-Jun-2009
@@ -27,7 +27,7 @@ using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
     [Serializable]
-    public class MLocatorLookup : Lookup
+    public class MVAMLocatorLookup : Lookup
     {
         #region Variables
         protected int C_Locator_ID;
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="WindowNo"></param>
-        public MLocatorLookup(Ctx ctx, int windowNo)
+        public MVAMLocatorLookup(Ctx ctx, int windowNo)
             : base(ctx, windowNo, DisplayType.TableDir)
         {
             //_loader = new Thread(new ThreadStart(Load));
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
            // Load();
         }
 
-        //public MLocatorLookup Initialize()
+        //public MVAMLocatorLookup Initialize()
         //{
         //    _loader = new Thread(new ThreadStart(Load));
         //    _loader.IsBackground = true;
@@ -231,7 +231,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public NamePair GetDirect(Object keyValue, bool saveInCache, Trx trxName)
         {
-            X_VAM_Locator loc = GetMLocator(keyValue, trxName);
+            X_VAM_Locator loc = GetMVAMLocator(keyValue, trxName);
             if (loc == null)
                 return null;
             //
@@ -248,9 +248,9 @@ namespace VAdvantage.Model
         /// <param name="keyValue"></param>
         /// <param name="trxName"></param>
         /// <returns></returns>
-        public X_VAM_Locator GetMLocator(Object keyValue, Trx trxName)
+        public X_VAM_Locator GetMVAMLocator(Object keyValue, Trx trxName)
         {
-            //	log.fine( "MLocatorLookup.getDirect " + keyValue.getClass() + "=" + keyValue);
+            //	log.fine( "MVAMLocatorLookup.getDirect " + keyValue.getClass() + "=" + keyValue);
             int VAM_Locator_ID = -1;
             try
             {
@@ -272,7 +272,7 @@ namespace VAdvantage.Model
         /// <returns></returns>
         public override String ToString()
         {
-            return "MLocatorLookup[Size=" + _lookup.Count + "]";
+            return "MVAMLocatorLookup[Size=" + _lookup.Count + "]";
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace VAdvantage.Model
      /// </summary>
         private void Load()
         {
-            //	log.config("MLocatorLookup Loader.run " + m_VAF_Column_ID);
+            //	log.config("MVAMLocatorLookup Loader.run " + m_VAF_Column_ID);
             //	Set Info	- see VLocator.actionText
 
             int only_Warehouse_ID = GetOnly_Warehouse_ID();
@@ -429,7 +429,7 @@ namespace VAdvantage.Model
             }
 
             /**	Sort Data
-            MLocator l = new MLocator (m_ctx, 0);
+            MVAMLocator l = new MVAMLocator (m_ctx, 0);
             if (!mandatory)
                 list.add (l);
             Collections.sort (list, l);

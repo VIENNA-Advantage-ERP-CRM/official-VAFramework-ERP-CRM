@@ -199,7 +199,7 @@ namespace VAdvantage.Model
                 int day = TimeUtil.GetMonthLastDay(new DateTime(year, month, 1)).Day;
                 DateTime end = new DateTime(year, month, day).Date;
                 //
-                MPeriod period = new MPeriod(this, month, name, start, end);
+                MVABYearPeriod period = new MVABYearPeriod(this, month, name, start, end);
                 if (!period.Save(Get_TrxName()))	//	Creates Period Control
                     return false;
             }
@@ -222,7 +222,7 @@ namespace VAdvantage.Model
             //    cal.add(Calendar.DAY_OF_YEAR, -1);
             //    Timestamp end = new Timestamp(cal.getTimeInMillis());
             //    //
-            //    MPeriod period = new MPeriod(this, month + 1, name, start, end);
+            //    MVABYearPeriod period = new MVABYearPeriod(this, month + 1, name, start, end);
             //    if (!period.Save(Get_TrxName()))	//	Creates Period Control
             //        return false;
             //}
@@ -279,7 +279,7 @@ namespace VAdvantage.Model
                 DateTime end = new DateTime(year, month, day).Date;
                 //
 
-                MPeriod period = new MPeriod(this, count, name, start, end);
+                MVABYearPeriod period = new MVABYearPeriod(this, count, name, start, end);
                 if (!period.Save(Get_TrxName())) // Creates Period Control
                 {
                     return false;
@@ -295,7 +295,7 @@ namespace VAdvantage.Model
                 int day = TimeUtil.GetMonthLastDay(new DateTime(year + 1, month, 1)).Day;
                 DateTime end = new DateTime(year + 1, month, day).Date;
                 //
-                MPeriod period = new MPeriod(this, count, name, start, end);
+                MVABYearPeriod period = new MVABYearPeriod(this, count, name, start, end);
                 if (!period.Save(Get_TrxName())) // Creates Period Control
                 {
                     return false;

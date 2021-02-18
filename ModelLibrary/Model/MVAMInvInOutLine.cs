@@ -34,9 +34,9 @@ namespace VAdvantage.Model
         //Parent				
         private MVAMInvInOut _parent = null;
         // Matched Invoices		
-        private MMatchInv[] _matchInv = null;
+        private MVAMMatchInvoice[] _matchInv = null;
         // Matched Purchase Orders	
-        private MMatchPO[] _matchPO = null;
+        private MVAMMatchPO[] _matchPO = null;
         //	Static Logger	
         private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInvInOutLine).FullName);
         public Decimal? OnHandQty = 0;
@@ -915,10 +915,10 @@ namespace VAdvantage.Model
          * 	Get Match POs
          *	@return matched purchase orders
          */
-        public MMatchPO[] GetMatchPO()
+        public MVAMMatchPO[] GetMatchPO()
         {
             if (_matchPO == null)
-                _matchPO = MMatchPO.Get(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                _matchPO = MVAMMatchPO.Get(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             return _matchPO;
         }
 
@@ -931,10 +931,10 @@ namespace VAdvantage.Model
             if (IsDescription())
                 return Env.ZERO;
             Decimal retValue = GetMovementQty();
-            MMatchPO[] po = GetMatchPO();
+            MVAMMatchPO[] po = GetMatchPO();
             for (int i = 0; i < po.Length; i++)
             {
-                MMatchPO matchPO = po[i];
+                MVAMMatchPO matchPO = po[i];
                 retValue = Decimal.Subtract(retValue, matchPO.GetQty());
             }
             log.Finer("#" + retValue);
@@ -947,10 +947,10 @@ namespace VAdvantage.Model
          */
         public bool IsMatchPOPosted()
         {
-            MMatchPO[] po = GetMatchPO();
+            MVAMMatchPO[] po = GetMatchPO();
             for (int i = 0; i < po.Length; i++)
             {
-                MMatchPO matchPO = po[i];
+                MVAMMatchPO matchPO = po[i];
                 if (!matchPO.IsPosted())
                     return false;
             }
@@ -961,10 +961,10 @@ namespace VAdvantage.Model
          * 	Get Match Inv
          *	@return matched invoices
          */
-        public MMatchInv[] GetMatchInv()
+        public MVAMMatchInvoice[] GetMatchInv()
         {
             if (_matchInv == null)
-                _matchInv = MMatchInv.Get(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                _matchInv = MVAMMatchInvoice.Get(GetCtx(), GetVAM_Inv_InOutLine_ID(), Get_TrxName());
             return _matchInv;
         }
 
@@ -977,10 +977,10 @@ namespace VAdvantage.Model
             if (IsDescription())
                 return Env.ZERO;
             Decimal retValue = GetMovementQty();
-            MMatchInv[] inv = GetMatchInv();
+            MVAMMatchInvoice[] inv = GetMatchInv();
             for (int i = 0; i < inv.Length; i++)
             {
-                MMatchInv matchInv = inv[i];
+                MVAMMatchInvoice matchInv = inv[i];
                 //retValue = retValue.subtract(matchInv.getQty());
                 retValue = Decimal.Subtract(retValue, matchInv.GetQty());
             }
@@ -994,10 +994,10 @@ namespace VAdvantage.Model
          */
         public bool IsMatchInvPosted()
         {
-            MMatchInv[] inv = GetMatchInv();
+            MVAMMatchInvoice[] inv = GetMatchInv();
             for (int i = 0; i < inv.Length; i++)
             {
-                MMatchInv matchInv = inv[i];
+                MVAMMatchInvoice matchInv = inv[i];
                 if (!matchInv.IsPosted())
                     return false;
             }
@@ -1399,17 +1399,17 @@ namespace VAdvantage.Model
          */
         public Decimal GetBase(String CostDistribution)
         {
-            if (MLandedCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
+            if (MVABLCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
             {
                 //	TODO Costs!
                 log.Severe("Not Implemented yet - Cost");
                 return Decimal.Multiply(GetMovementQty(), (GetPostCurrentCostPrice() != 0 ? GetPostCurrentCostPrice() : GetCurrentCostPrice()));
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
                 return Env.ONE;
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
                 return GetMovementQty();
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)
@@ -1419,7 +1419,7 @@ namespace VAdvantage.Model
                 }
                 return Decimal.Multiply(GetMovementQty(), (Decimal)product.GetVolume());
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)

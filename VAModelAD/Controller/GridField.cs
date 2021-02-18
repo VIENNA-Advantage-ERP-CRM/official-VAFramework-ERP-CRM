@@ -117,7 +117,7 @@ namespace VAdvantage.Model
             //}
             //else if (_vo.displayType == DisplayType.Locator)
             //{
-            //    MLocatorLookup ml = new MLocatorLookup(_vo.GetCtx(), _vo.windowNo);
+            //    MVAMLocatorLookup ml = new MVAMLocatorLookup(_vo.GetCtx(), _vo.windowNo);
             //    _lookup = ml;
             //}
             //else if (_vo.displayType == DisplayType.Account)    //  not cached

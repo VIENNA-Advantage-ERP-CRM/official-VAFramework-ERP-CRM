@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MMeasure
+ * Class Name     : MVAPAEvaluate
  * Purpose        : Performance Measure
  * Class Used     : X_VAPA_Evaluate
  * Chronological    Development
@@ -23,29 +23,29 @@ using System.Data;
 using VAdvantage.Logging;
 namespace VAdvantage.Model
 {
-    public class MMeasure : X_VAPA_Evaluate
+    public class MVAPAEvaluate : X_VAPA_Evaluate
     {
         /**
-	 * 	Get MMeasure from Cache
+	 * 	Get MVAPAEvaluate from Cache
 	 *	@param ctx context
 	 *	@param VAPA_Evaluate_ID id
-	 *	@return MMeasure
+	 *	@return MVAPAEvaluate
 	 */
-        public static MMeasure Get(Ctx ctx, int VAPA_Evaluate_ID)
+        public static MVAPAEvaluate Get(Ctx ctx, int VAPA_Evaluate_ID)
         {
             int key = VAPA_Evaluate_ID;
-            MMeasure retValue = (MMeasure)_cache[key];
+            MVAPAEvaluate retValue = (MVAPAEvaluate)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MMeasure(ctx, VAPA_Evaluate_ID, null);
+            retValue = new MVAPAEvaluate(ctx, VAPA_Evaluate_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         }
 
         /**	Cache						*/
-        private static CCache<int, MMeasure> _cache
-            = new CCache<int, MMeasure>("VAPA_Evaluate", 10);
+        private static CCache<int, MVAPAEvaluate> _cache
+            = new CCache<int, MVAPAEvaluate>("VAPA_Evaluate", 10);
 
         /**
          * 	Standard Constructor
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
          *	@param VAPA_Evaluate_ID id
          *	@param trxName trx
          */
-        public MMeasure(Ctx ctx, int VAPA_Evaluate_ID, Trx trxName) :
+        public MVAPAEvaluate(Ctx ctx, int VAPA_Evaluate_ID, Trx trxName) :
             base(ctx, VAPA_Evaluate_ID, trxName)
         {
         }
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
          *	@param rs result Set
          *	@param trxName trx
          */
-        public MMeasure(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAPAEvaluate(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
         }
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MMeasure[");
+            StringBuilder sb = new StringBuilder("MVAPAEvaluate[");
             sb.Append(Get_ID()).Append("-").Append(GetName()).Append("]");
             return sb.ToString();
         }	//	toString
@@ -253,7 +253,7 @@ namespace VAdvantage.Model
                 if (role == null)
                     role = MVAFRole.GetDefault(GetCtx(), false);	//	could result in wrong data
                 //
-                MMeasureCalc mc = MMeasureCalc.Get(GetCtx(), GetVAPA_EvaluateCalc_ID());
+                MVAPAEvaluateCalc mc = MVAPAEvaluateCalc.Get(GetCtx(), GetVAPA_EvaluateCalc_ID());
                 if (mc == null || mc.Get_ID() == 0 || mc.Get_ID() != GetVAPA_EvaluateCalc_ID())
                 {
                     log.Log(Level.SEVERE, "Not found VAPA_EvaluateCalc_ID=" + GetVAPA_EvaluateCalc_ID());

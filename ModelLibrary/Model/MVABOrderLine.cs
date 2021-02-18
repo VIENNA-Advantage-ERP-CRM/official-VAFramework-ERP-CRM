@@ -2715,15 +2715,15 @@ namespace VAdvantage.Model
         /// <returns>base number</returns>
         public Decimal GetBase(String CostDistribution)
         {
-            if (MLandedCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
+            if (MVABLCost.LANDEDCOSTDISTRIBUTION_Costs.Equals(CostDistribution))
             {
                 return GetProductLineCost(this);
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Line.Equals(CostDistribution))
                 return Env.ONE;
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Quantity.Equals(CostDistribution))
                 return GetQtyOrdered();
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Volume.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)
@@ -2733,7 +2733,7 @@ namespace VAdvantage.Model
                 }
                 return Decimal.Multiply(GetQtyOrdered(), (Decimal)product.GetVolume());
             }
-            else if (MLandedCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
+            else if (MVABLCost.LANDEDCOSTDISTRIBUTION_Weight.Equals(CostDistribution))
             {
                 MProduct product = GetProduct();
                 if (product == null)
@@ -4789,7 +4789,7 @@ namespace VAdvantage.Model
             wh.SetVAB_Address_ID(_Location_ID);
             if (wh.Save())
             {
-                MLocator mLoc = new MLocator(wh, "Drop Ship Locator");
+                MVAMLocator mLoc = new MVAMLocator(wh, "Drop Ship Locator");
                 mLoc.SetIsDefault(true);
                 mLoc.SetPriorityNo(50);
                 mLoc.Save();

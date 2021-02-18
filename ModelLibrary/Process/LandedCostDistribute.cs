@@ -32,7 +32,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         //Parameter		
         private int _VAB_LCost_ID = 0;
         //LC					
-        private MLandedCost _lc = null;
+        private MVABLCost _lc = null;
 
         /// <summary>
         /// Prepare
@@ -48,7 +48,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <returns>info</returns>
         protected override String DoIt()
         {
-            _lc = new MLandedCost(GetCtx(), _VAB_LCost_ID, Get_TrxName());
+            _lc = new MVABLCost(GetCtx(), _VAB_LCost_ID, Get_TrxName());
             log.Info(_lc.ToString());
             if (_lc.Get_ID() == 0)
             {

@@ -90,7 +90,7 @@ namespace VAdvantage.Model
         /// <param name="parent">parent</param>
         /// <param name="invoice">invoice</param>
         /// <param name="tLine">tax line</param>
-        public MTaxDeclarationLine(MTaxDeclaration parent, MVABInvoice invoice, MVABInvoiceTax tLine):this(parent.GetCtx(), 0, parent.Get_TrxName())
+        public MTaxDeclarationLine(MTaxDeclaration parent, MVABInvoice invoice, MVABTaxInvoice tLine):this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(invoice);

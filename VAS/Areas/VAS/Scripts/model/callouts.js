@@ -5067,12 +5067,12 @@
             return "";
         }
         var dr = null;
-        dr = VIS.dataContext.getJSONRecord("MLocator/GetLocator", paramString);
+        dr = VIS.dataContext.getJSONRecord("MVAMLocator/GetLocator", paramString);
 
         var Default_Locator_ID = dr["Default_Locator_ID"];//getQtyAvailable(VAM_Warehouse_ID, VAM_Product_ID, VAM_PFeature_SetI
 
 
-        // MLocator defaultLocator = MLocator.GetDefaultLocatorOfOrg(ctx, VAF_Org_ID);
+        // MVAMLocator defaultLocator = MVAMLocator.GetDefaultLocatorOfOrg(ctx, VAF_Org_ID);
         // if (defaultLocator != null)
         // {
         mTab.setValue("VAM_Locator_ID", Default_Locator_ID);
@@ -14409,14 +14409,14 @@
 
         //Get product price information
         var dr = null;
-        dr = VIS.dataContext.getJSONRecord("MVABInvoiceBatchLine/GetInvoiceBatchLine", paramString);
+        dr = VIS.dataContext.getJSONRecord("MVABBatchInvoiceLine/GetInvoiceBatchLine", paramString);
 
 
 
 
 
-        //MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(Env.GetCtx(), VAB_BatchInvoiceLine_ID, null);
-        //MVABInvoiceBatchLine last = new MVABInvoiceBatchLine(ctx, VAB_BatchInvoiceLine_ID, null);
+        //MVABBatchInvoiceLine last = new MVABBatchInvoiceLine(Env.GetCtx(), VAB_BatchInvoiceLine_ID, null);
+        //MVABBatchInvoiceLine last = new MVABBatchInvoiceLine(ctx, VAB_BatchInvoiceLine_ID, null);
         //	Need to Increase when different DocType or BP
         var VAB_DocTypes_ID = ctx.getContextAsInt(windowNo, "VAB_DocTypes_ID");
         var VAB_BusinessPartner_ID = ctx.getContextAsInt(windowNo, "VAB_BusinessPartner_ID");
@@ -15048,7 +15048,7 @@
             //}
 
             var paramStr = VAF_Client_ID + "," + DateAcct + "," + VAF_Org_ID;
-            VAB_YearPeriod_ID = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MPeriod/GetPeriod", paramStr));
+            VAB_YearPeriod_ID = Util.getValueOfInt(VIS.dataContext.getJSONRecord("MVABYearPeriod/GetPeriod", paramStr));
 
             if (VAB_YearPeriod_ID != 0) {
                 mTab.setValue("VAB_YearPeriod_ID", VAB_YearPeriod_ID);
@@ -15090,7 +15090,7 @@
             //    return e.message;
             //}
 
-            var dr = VIS.dataContext.getJSONRecord("MPeriod/GetPeriodDetail", VAB_YearPeriod_ID.toString());
+            var dr = VIS.dataContext.getJSONRecord("MVABYearPeriod/GetPeriodDetail", VAB_YearPeriod_ID.toString());
             if (dr != null) {
                 var PeriodType = dr["PeriodType"];
                 var StartDate = dr["StartDate"];

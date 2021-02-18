@@ -1,5 +1,5 @@
 ﻿/********************************************************
- * Class Name     : MJournalBatch
+ * Class Name     : MVAGLBatchJRNL
  * Purpose        :  Journal Batch Model
  * Class Used     : X_VAGL_BatchJRNL,DocAction
  * Chronological    Development
@@ -25,7 +25,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MJournalBatch : X_VAGL_BatchJRNL, DocAction
+    public class MVAGLBatchJRNL : X_VAGL_BatchJRNL, DocAction
     {
         /// <summary>
         ///	Create new Journal Batch by copying
@@ -36,16 +36,16 @@ namespace VAdvantage.Model
         /// <param name="trxName">transaction</param>
         /// <returns>Journal Batch</returns>
 
-        public static MJournalBatch CopyFrom(Ctx ctx, int VAGL_BatchJRNL_ID,
+        public static MVAGLBatchJRNL CopyFrom(Ctx ctx, int VAGL_BatchJRNL_ID,
             DateTime? dateDoc, Trx trxName)
         {
-            MJournalBatch from = new MJournalBatch(ctx, VAGL_BatchJRNL_ID, trxName);
+            MVAGLBatchJRNL from = new MVAGLBatchJRNL(ctx, VAGL_BatchJRNL_ID, trxName);
             if (from.GetVAGL_BatchJRNL_ID() == 0)
             {
                 throw new ArgumentException("From Journal Batch not found VAGL_BatchJRNL_ID=" + VAGL_BatchJRNL_ID);
             }
             //
-            MJournalBatch to = new MJournalBatch(ctx, 0, trxName);
+            MVAGLBatchJRNL to = new MVAGLBatchJRNL(ctx, 0, trxName);
             PO.CopyValues(from, to, from.GetVAF_Client_ID(), from.GetVAF_Org_ID());
             to.Set_ValueNoCheck("DocumentNo", null);
             to.Set_ValueNoCheck("VAB_YearPeriod_ID", null);
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAGL_BatchJRNL_ID">id if 0 - create actual batch</param>
         /// <param name="trxName">transaction</param>
-        public MJournalBatch(Ctx ctx, int VAGL_BatchJRNL_ID, Trx trxName)
+        public MVAGLBatchJRNL(Ctx ctx, int VAGL_BatchJRNL_ID, Trx trxName)
             : base(ctx, VAGL_BatchJRNL_ID, trxName)
         {
             //super (ctx, VAGL_BatchJRNL_ID, trxName);
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
                 SetProcessing(false);
                 SetIsApproved(false);
             }
-        }	//	MJournalBatch
+        }	//	MVAGLBatchJRNL
 
         /// <summary>
         /// Load Constructor
@@ -103,17 +103,17 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MJournalBatch(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAGLBatchJRNL(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
             //super(ctx, dr, trxName);
-        }	//	MJournalBatch
+        }	//	MVAGLBatchJRNL
 
         /// <summary>
         /// Copy Constructor.Dos not copy: Dates/Period
         /// </summary>
         /// <param name="original">original</param>
-        public MJournalBatch(MJournalBatch original)
+        public MVAGLBatchJRNL(MVAGLBatchJRNL original)
             : this(original.GetCtx(), 0, original.Get_TrxName())
         {
             //this (original.getCtx(), 0, original.Get_TrxName());
@@ -135,7 +135,7 @@ namespace VAdvantage.Model
             //	SetDateDoc(original.getDateDoc());
             //	setDateAcct(original.getDateAcct());
             //	setVAB_YearPeriod_ID(original.getVAB_YearPeriod_ID());
-        }	//	MJournal
+        }	//	MVAGLJRNL
 
 
 
@@ -156,9 +156,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns> Array of lines</returns>
-        public MJournal[] GetJournals(Boolean requery)
+        public MVAGLJRNL[] GetJournals(Boolean requery)
         {
-            List<MJournal> list = new List<MJournal>();
+            List<MVAGLJRNL> list = new List<MVAGLJRNL>();
             String sql = "SELECT * FROM VAGL_JRNL WHERE VAGL_BatchJRNL_ID=@param ORDER BY DocumentNo";
             IDataReader idr = null;
             SqlParameter[] param = new SqlParameter[1];
@@ -170,7 +170,7 @@ namespace VAdvantage.Model
                 idr = DataBase.DB.ExecuteReader(sql, param, Get_TrxName());
                 while (idr.Read())
                 {
-                    list.Add(new MJournal(GetCtx(), idr, Get_TrxName()));
+                    list.Add(new MVAGLJRNL(GetCtx(), idr, Get_TrxName()));
                 }
                 idr.Close();
             }
@@ -179,7 +179,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, ex);
             }
             //
-            MJournal[] retValue = new MJournal[list.Count];
+            MVAGLJRNL[] retValue = new MVAGLJRNL[list.Count];
             retValue = list.ToArray();
             return retValue;
         }	//	getJournals
@@ -189,7 +189,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="jb">Journal Batch</param>
         /// <returns>number of journals + lines copied</returns>
-        public int CopyDetailsFrom(MJournalBatch jb)
+        public int CopyDetailsFrom(MVAGLBatchJRNL jb)
         {
             if (IsProcessed() || jb == null)
             {
@@ -197,21 +197,21 @@ namespace VAdvantage.Model
             }
             int count = 0;
             int lineCount = 0;
-            MJournal[] fromJournals = jb.GetJournals(false);
-            for (int i = 0; i < fromJournals.Length; i++)
+            MVAGLJRNL[] froMVAGLJRNLs = jb.GetJournals(false);
+            for (int i = 0; i < froMVAGLJRNLs.Length; i++)
             {
-                MJournal toJournal = new MJournal(GetCtx(), 0, jb.Get_TrxName());
-                PO.CopyValues(fromJournals[i], toJournal, GetVAF_Client_ID(), GetVAF_Org_ID());
+                MVAGLJRNL toJournal = new MVAGLJRNL(GetCtx(), 0, jb.Get_TrxName());
+                PO.CopyValues(froMVAGLJRNLs[i], toJournal, GetVAF_Client_ID(), GetVAF_Org_ID());
                 toJournal.SetVAGL_BatchJRNL_ID(GetVAGL_BatchJRNL_ID());
                 toJournal.Set_ValueNoCheck("DocumentNo", null);	//	create new
 
                 //Manish 18/7/2016. VAB_YearPeriod_ID was Null.. But column is mandatory in database so value can't be null.
-                toJournal.Set_ValueNoCheck("VAB_YearPeriod_ID", fromJournals[i].GetVAB_YearPeriod_ID());
+                toJournal.Set_ValueNoCheck("VAB_YearPeriod_ID", froMVAGLJRNLs[i].GetVAB_YearPeriod_ID());
                 // end
                 toJournal.SetDateDoc(GetDateDoc());		//	dates from this Batch
                 toJournal.SetDateAcct(GetDateAcct());
-                toJournal.SetDocStatus(MJournal.DOCSTATUS_Drafted);
-                toJournal.SetDocAction(MJournal.DOCACTION_Complete);
+                toJournal.SetDocStatus(MVAGLJRNL.DOCSTATUS_Drafted);
+                toJournal.SetDocAction(MVAGLJRNL.DOCACTION_Complete);
                 toJournal.SetTotalCr(Env.ZERO);
                 toJournal.SetTotalDr(Env.ZERO);
                 toJournal.SetIsApproved(false);
@@ -221,12 +221,12 @@ namespace VAdvantage.Model
                 if (toJournal.Save())
                 {
                     count++;
-                    lineCount += toJournal.CopyLinesFrom(fromJournals[i], GetDateAcct(), 'x');
+                    lineCount += toJournal.CopyLinesFrom(froMVAGLJRNLs[i], GetDateAcct(), 'x');
                 }
             }
-            if (fromJournals.Length != count)
+            if (froMVAGLJRNLs.Length != count)
             {
-                log.Log(Level.SEVERE, "Line difference - Journals=" + fromJournals.Length + " <> Saved=" + count);
+                log.Log(Level.SEVERE, "Line difference - Journals=" + froMVAGLJRNLs.Length + " <> Saved=" + count);
             }
 
             return count + lineCount;
@@ -236,12 +236,12 @@ namespace VAdvantage.Model
         /// Get Period
         /// </summary>
         /// <returns>period or null</returns>
-        public MPeriod GetPeriod()
+        public MVABYearPeriod GetPeriod()
         {
             int VAB_YearPeriod_ID = GetVAB_YearPeriod_ID();
             if (VAB_YearPeriod_ID != 0)
             {
-                return MPeriod.Get(GetCtx(), VAB_YearPeriod_ID);
+                return MVABYearPeriod.Get(GetCtx(), VAB_YearPeriod_ID);
             }
             return null;
         }	//	getPeriod
@@ -327,7 +327,7 @@ namespace VAdvantage.Model
             {
                 return;
             }
-            int VAB_YearPeriod_ID = MPeriod.GetVAB_YearPeriod_ID(GetCtx(), DateAcct);
+            int VAB_YearPeriod_ID = MVABYearPeriod.GetVAB_YearPeriod_ID(GetCtx(), DateAcct);
             if (VAB_YearPeriod_ID == 0)
             {
                 log.Warning("Period not found");
@@ -351,7 +351,7 @@ namespace VAdvantage.Model
             }
             DateTime? dateAcct = GetDateAcct();
             //
-            MPeriod period = GetPeriod();
+            MVABYearPeriod period = GetPeriod();
             if (period != null && period.IsStandardPeriod())
             {
                 if (!period.IsInPeriod(dateAcct))
@@ -414,7 +414,7 @@ namespace VAdvantage.Model
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -436,7 +436,7 @@ namespace VAdvantage.Model
             }
 
             //	Add up Amounts & prepare them
-            MJournal[] journals = GetJournals(false);
+            MVAGLJRNL[] journals = GetJournals(false);
             if (journals.Length == 0)
             {
                 m_processMsg = "@NoLines@";
@@ -447,7 +447,7 @@ namespace VAdvantage.Model
             Decimal TotalCr = Env.ZERO;
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     continue;
@@ -540,12 +540,12 @@ namespace VAdvantage.Model
             ApproveIt();
 
             //	Add up Amounts & complete them
-            MJournal[] journals = GetJournals(true);
+            MVAGLJRNL[] journals = GetJournals(true);
             Decimal? TotalDr = Env.ZERO;
             Decimal? TotalCr = Env.ZERO;
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     journal.SetProcessed(true);
@@ -617,7 +617,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateDoc());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                    if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateDoc(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -659,10 +659,10 @@ namespace VAdvantage.Model
         public Boolean CloseIt()
         {
             log.Info("closeIt - " + ToString());
-            MJournal[] journals = GetJournals(true);
+            MVAGLJRNL[] journals = GetJournals(true);
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive() && !journal.IsProcessed())
                 {
                     journal.SetProcessed(true);
@@ -706,11 +706,11 @@ namespace VAdvantage.Model
         public Boolean ReverseCorrectIt()
         {
             log.Info("reverseCorrectIt - " + ToString());
-            MJournal[] journals = GetJournals(true);
+            MVAGLJRNL[] journals = GetJournals(true);
             //	check prerequisites
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     continue;
@@ -728,7 +728,7 @@ namespace VAdvantage.Model
             }
 
             //	Reverse it
-            MJournalBatch reverse = new MJournalBatch(this);
+            MVAGLBatchJRNL reverse = new MVAGLBatchJRNL(this);
             reverse.SetDateDoc(GetDateDoc());
             reverse.SetVAB_YearPeriod_ID(GetVAB_YearPeriod_ID());
             reverse.SetDateAcct(GetDateAcct());
@@ -777,7 +777,7 @@ namespace VAdvantage.Model
             //	Reverse Journals
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     continue;
@@ -799,11 +799,11 @@ namespace VAdvantage.Model
         public Boolean ReverseAccrualIt()
         {
             log.Info("ReverseCorrectIt - " + ToString());
-            MJournal[] journals = GetJournals(true);
+            MVAGLJRNL[] journals = GetJournals(true);
             //	check prerequisites
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     continue;
@@ -820,7 +820,7 @@ namespace VAdvantage.Model
                 }
             }
             //	Reverse it
-            MJournalBatch reverse = new MJournalBatch(this);
+            MVAGLBatchJRNL reverse = new MVAGLBatchJRNL(this);
             reverse.SetVAB_YearPeriod_ID(0);
             //reverse.SetDateDoc(new Timestamp(System.currentTimeMillis()));
             reverse.SetDateDoc(DateTime.Now);
@@ -841,7 +841,7 @@ namespace VAdvantage.Model
             //	Reverse Journals
             for (int i = 0; i < journals.Length; i++)
             {
-                MJournal journal = journals[i];
+                MVAGLJRNL journal = journals[i];
                 if (!journal.IsActive())
                 {
                     continue;
@@ -901,7 +901,7 @@ namespace VAdvantage.Model
         /// <returns> info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MJournalBatch[");
+            StringBuilder sb = new StringBuilder("MVAGLBatchJRNL[");
             sb.Append(Get_ID()).Append(",").Append(GetDescription())
                 .Append(",DR=").Append(GetTotalDr())
                 .Append(",CR=").Append(GetTotalCr())

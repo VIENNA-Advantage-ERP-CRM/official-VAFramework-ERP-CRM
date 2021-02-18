@@ -170,12 +170,7 @@ namespace VAdvantage.Model
 					break;
 			}
 			SetErrorTrace(error.ToString());
-			//	Stack
-        			//CharArrayWriter cWriter = new CharArrayWriter();
-			//PrintWriter pWriter = new PrintWriter(cWriter);
-			//t.printStackTrace(pWriter);
-			//setStackTrace(cWriter.toString());
-		
+					
 		//if (summary == null || summary.length() == 0)
 			//summary = "??";
 		//setIssueSummary(summary);
@@ -227,8 +222,7 @@ namespace VAdvantage.Model
 	{
 		if (IssueSummary == null)
 			return;
-		IssueSummary = IssueSummary.Replace("java.lang.", "");
-		IssueSummary = IssueSummary.Replace("java.sql.", "");
+		
 		if (IssueSummary.Length > INFOLENGTH)
 			IssueSummary = IssueSummary.Substring(0,INFOLENGTH-1);
 		base.SetIssueSummary (IssueSummary);
@@ -242,8 +236,7 @@ namespace VAdvantage.Model
 	{
 		if (StackTrace == null)
 			return;
-		StackTrace = StackTrace.Replace("java.lang.", "");
-		StackTrace = StackTrace.Replace("java.sql.", "");
+		
 		if (StackTrace.Length > INFOLENGTH)
 			StackTrace = StackTrace.Substring(0,INFOLENGTH-1);
 		base.SetStackTrace (StackTrace);
@@ -258,8 +251,7 @@ namespace VAdvantage.Model
 	{
 		if (ErrorTrace == null)
 			return;
-		ErrorTrace = ErrorTrace.Replace("java.lang.", "");
-		ErrorTrace = ErrorTrace.Replace("java.sql.", "");
+		
 		if (ErrorTrace.Length > INFOLENGTH)
 			ErrorTrace = ErrorTrace.Substring(0,INFOLENGTH-1);
 		base.SetErrorTrace (ErrorTrace);
@@ -313,9 +305,9 @@ namespace VAdvantage.Model
 	/// <returns>answer</returns>
 	public String Process()
 	{
-		MVAFIssueProject.Get(this);	//	sets also Asset
-		MVAFIssueSystem.Get(this);
-		MVAFIssueUser.Get(this);
+		//MVAFIssueProject.Get(this);	//	sets also Asset
+		//MVAFIssueSystem.Get(this);
+		//MVAFIssueUser.Get(this);
 		//
 	//	setR_IssueKnown_ID(0);
 	//	setVAR_Request_ID(0);

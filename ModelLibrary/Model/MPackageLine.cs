@@ -95,7 +95,7 @@ namespace VAdvantage.Model
         /// <summary>
         /// Edited :  Abhishek , 17/10/2014
         Decimal _count = 0;
-        public Decimal SetMovementLine(VAdvantage.Model.MMovementLine line)
+        public Decimal SetMovementLine(VAdvantage.Model.MVAMInvTrfLine line)
         {
 
             int _CountDTD001 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='DTD001_' AND IsActive='Y'"));

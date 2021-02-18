@@ -1398,8 +1398,8 @@
                         //if (obj.hasAttribute) {
                         //    obj.showDialog();
                         //}
-                        //obj.onClose = function (MVAMPFeatureSetInstanceId, name, mLocatorId) {
-                        //    this.VAM_Locator_ID = mLocatorId;
+                        //obj.onClose = function (MVAMPFeatureSetInstanceId, name, MVAMLocatorId) {
+                        //    this.VAM_Locator_ID = MVAMLocatorId;
                         //    savedProduct[event.recid - 1].AttributeName = name;
                         //    savedProduct[event.recid - 1].Attribute = MVAMPFeatureSetInstanceId;
                         //    infoLines[event.recid - 1]._Attribute = MVAMPFeatureSetInstanceId;

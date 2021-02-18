@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MMatchInv
+ * Class Name     : MVAMMatchInvoice
  * Purpose        : 
  * Class Used     : 
  * Chronological    Development
@@ -24,10 +24,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MMatchInv : X_VAM_MatchInvoice
+    public class MVAMMatchInvoice : X_VAM_MatchInvoice
     {
         /**	Static Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MMatchInv).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMMatchInvoice).FullName);
         /**
        * 	Get InOut-Invoice Matches
        *	@param ctx context
@@ -36,13 +36,13 @@ namespace VAdvantage.Model
        *	@param trxName transaction
        *	@return array of matches
        */
-        public static MMatchInv[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, int VAB_InvoiceLine_ID, Trx trxName)
+        public static MVAMMatchInvoice[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, int VAB_InvoiceLine_ID, Trx trxName)
         {
             if (VAM_Inv_InOutLine_ID == 0 || VAB_InvoiceLine_ID == 0)
-                return new MMatchInv[] { };
+                return new MVAMMatchInvoice[] { };
             //
             String sql = "SELECT * FROM VAM_MatchInvoice WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID + " AND VAB_InvoiceLine_ID=" + VAB_InvoiceLine_ID;
-            List<MMatchInv> list = new List<MMatchInv>();
+            List<MVAMMatchInvoice> list = new List<MVAMMatchInvoice>();
             DataSet ds = new DataSet();
             try
             {
@@ -50,7 +50,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    list.Add(new MMatchInv(ctx, dr, trxName));
+                    list.Add(new MVAMMatchInvoice(ctx, dr, trxName));
                 }
                 ds = null;
             }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
             {
                 _log.Log(Level.SEVERE, sql, e);
             }
-            MMatchInv[] retValue = new MMatchInv[list.Count];
+            MVAMMatchInvoice[] retValue = new MVAMMatchInvoice[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -69,13 +69,13 @@ namespace VAdvantage.Model
         *	@param trxName transaction
         *	@return array of matches
         */
-        public static MMatchInv[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
+        public static MVAMMatchInvoice[] Get(Ctx ctx, int VAM_Inv_InOutLine_ID, Trx trxName)
         {
             if (VAM_Inv_InOutLine_ID == 0)
-                return new MMatchInv[] { };
+                return new MVAMMatchInvoice[] { };
             //
             String sql = "SELECT * FROM VAM_MatchInvoice WHERE VAM_Inv_InOutLine_ID=" + VAM_Inv_InOutLine_ID;
-            List<MMatchInv> list = new List<MMatchInv>();
+            List<MVAMMatchInvoice> list = new List<MVAMMatchInvoice>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -86,7 +86,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MMatchInv(ctx, dr, trxName));
+                    list.Add(new MVAMMatchInvoice(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -98,7 +98,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
             finally { dt = null; }
-            MMatchInv[] retValue = new MMatchInv[list.Count];
+            MVAMMatchInvoice[] retValue = new MVAMMatchInvoice[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -110,15 +110,15 @@ namespace VAdvantage.Model
        *	@param trxName transaction
        *	@return array of matches
        */
-        public static MMatchInv[] GetInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
+        public static MVAMMatchInvoice[] GetInOut(Ctx ctx, int VAM_Inv_InOut_ID, Trx trxName)
         {
             if (VAM_Inv_InOut_ID == 0)
-                return new MMatchInv[] { };
+                return new MVAMMatchInvoice[] { };
             //
             String sql = "SELECT * FROM VAM_MatchInvoice m"
                 + " INNER JOIN VAM_Inv_InOutLine l ON (m.VAM_Inv_InOutLine_ID=l.VAM_Inv_InOutLine_ID) "
                 + "WHERE l.VAM_Inv_InOut_ID=" + VAM_Inv_InOut_ID;
-            List<MMatchInv> list = new List<MMatchInv>();
+            List<MVAMMatchInvoice> list = new List<MVAMMatchInvoice>();
             IDataReader idr = null;
             DataTable dt = null;
             try
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MMatchInv(ctx, dr, trxName));
+                    list.Add(new MVAMMatchInvoice(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -144,7 +144,7 @@ namespace VAdvantage.Model
             finally
             { dt = null; }
 
-            MMatchInv[] retValue = new MMatchInv[list.Count];
+            MVAMMatchInvoice[] retValue = new MVAMMatchInvoice[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -155,15 +155,15 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *	@return array of matches
          */
-        public static MMatchInv[] GetInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName)
+        public static MVAMMatchInvoice[] GetInvoice(Ctx ctx, int VAB_Invoice_ID, Trx trxName)
         {
             if (VAB_Invoice_ID == 0)
-                return new MMatchInv[] { };
+                return new MVAMMatchInvoice[] { };
             //
             String sql = "SELECT * FROM VAM_MatchInvoice mi"
                 + " INNER JOIN VAB_InvoiceLine il ON (mi.VAB_InvoiceLine_ID=il.VAB_InvoiceLine_ID) "
                 + "WHERE il.VAB_Invoice_ID=" + VAB_Invoice_ID;
-            List<MMatchInv> list = new List<MMatchInv>();
+            List<MVAMMatchInvoice> list = new List<MVAMMatchInvoice>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MMatchInv(ctx, dr, trxName));
+                    list.Add(new MVAMMatchInvoice(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -188,7 +188,7 @@ namespace VAdvantage.Model
             finally
             { dt = null; }
 
-            MMatchInv[] retValue = new MMatchInv[list.Count];
+            MVAMMatchInvoice[] retValue = new MVAMMatchInvoice[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -200,7 +200,7 @@ namespace VAdvantage.Model
          *	@param VAM_MatchInvoice_ID id
          *	@param trxName transaction
          */
-        public MMatchInv(Ctx ctx, int VAM_MatchInvoice_ID, Trx trxName)
+        public MVAMMatchInvoice(Ctx ctx, int VAM_MatchInvoice_ID, Trx trxName)
             : base(ctx, VAM_MatchInvoice_ID, trxName)
         {
             if (VAM_MatchInvoice_ID == 0)
@@ -223,7 +223,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MMatchInv(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMMatchInvoice(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -235,7 +235,7 @@ namespace VAdvantage.Model
         *	@param dateTrx optional date
         *	@param qty matched quantity
         */
-        public MMatchInv(MVABInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
+        public MVAMMatchInvoice(MVABInvoiceLine iLine, DateTime? dateTrx, Decimal qty)
             : this(iLine.GetCtx(), 0, iLine.Get_TrxName())
         {
             SetClientOrg(iLine);
@@ -386,7 +386,7 @@ namespace VAdvantage.Model
         {
             if (IsPosted())
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_MATCHINVOICE, GetVAF_Org_ID()))
                     return false;
                 SetPosted(false);
                 return MActualAcctDetail.Delete(Table_ID, Get_ID(), Get_TrxName()) >= 0;
@@ -415,7 +415,7 @@ namespace VAdvantage.Model
                 if (VAB_OrderLine_ID == 0)
                     return success;
                 //	Find MatchPO
-                MMatchPO[] mPO = MMatchPO.Get(GetCtx(), VAB_OrderLine_ID, GetVAB_InvoiceLine_ID(), Get_TrxName());
+                MVAMMatchPO[] mPO = MVAMMatchPO.Get(GetCtx(), VAB_OrderLine_ID, GetVAB_InvoiceLine_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetVAM_Inv_InOutLine_ID() == 0)

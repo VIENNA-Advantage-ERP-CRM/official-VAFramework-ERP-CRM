@@ -1406,7 +1406,7 @@ namespace VAdvantage.Acct
         private bool LandedCost(MVABAccountBook as1, Fact fact, DocLine line, bool dr)
         {
             int VAB_InvoiceLine_ID = line.Get_ID();
-            MLandedCostAllocation[] lcas = MLandedCostAllocation.GetOfInvoiceLine(
+            MVABLCostDistribution[] lcas = MVABLCostDistribution.GetOfInvoiceLine(
                 GetCtx(), VAB_InvoiceLine_ID, GetTrxName());
             if (lcas.Length == 0)
             {
@@ -1430,7 +1430,7 @@ namespace VAdvantage.Acct
             MVABInvoiceLine il = new MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, GetTrxName());
             for (int i = 0; i < lcas.Length; i++)
             {
-                MLandedCostAllocation lca = lcas[i];
+                MVABLCostDistribution lca = lcas[i];
                 if (Env.Signum(lca.GetBase()) == 0)
                 {
                     continue;

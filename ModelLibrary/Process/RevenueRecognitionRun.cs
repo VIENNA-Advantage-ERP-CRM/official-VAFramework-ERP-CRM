@@ -15,8 +15,8 @@ namespace VAdvantage.Process
         private int _DocType = 0;
         private DateTime? _RecognitionDate = null;
         private int _RevenueRecognition_ID = 0;
-        private MJournal journal = null;
-        private MJournalLine journalLine = null;
+        private MVAGLJRNL journal = null;
+        private MVAGLJRNLLine journalLine = null;
         private int _AcctSchema_ID = 0;
         private int _Currency_ID = 0;
         private int VAB_YearPeriod_ID = 0;
@@ -145,7 +145,7 @@ namespace VAdvantage.Process
                                 journal_ID[j - 1] = journal.GetVAGL_JRNL_ID();
 
                             }
-                            journal = new MJournal(GetCtx(), 0, Get_TrxName());
+                            journal = new MVAGLJRNL(GetCtx(), 0, Get_TrxName());
 
                             journal.SetVAB_DocTypes_ID(_DocType);
                             journal = CreateJournalHDR(revenueRecognitionPlan, revenueRecognitionRun, mRevenueRecognition.GetRecognitionFrequency());
@@ -180,7 +180,7 @@ namespace VAdvantage.Process
                         }
                         for (int k = 0; k < 2; k++)
                         {
-                            journalLine = new MJournalLine(journal);
+                            journalLine = new MVAGLJRNLLine(journal);
                             journalLine = GenerateJounalLine(journal, invoice, invoiceLine, revenueRecognitionPlan, revenueRecognitionRun, mRevenueRecognition.GetRecognitionType(), k);
                             if (journalLine.Save())
                             {
@@ -291,7 +291,7 @@ namespace VAdvantage.Process
         /// <param name="recognitionType">Recognition type</param>
         /// <param name="k">loop variable</param>
         /// <returns>Journal line object</returns>
-        public MJournalLine GenerateJounalLine(MJournal journal, MVABInvoice invoice, MVABInvoiceLine invoiceLine,
+        public MVAGLJRNLLine GenerateJounalLine(MVAGLJRNL journal, MVABInvoice invoice, MVABInvoiceLine invoiceLine,
                                             MVABRevRecognitionStrtgy revenueRecognitionPlan, MVABRevRecognitionRun revenueRecognitionRun, string recognitionType, int k)
         {
             try
@@ -395,12 +395,12 @@ namespace VAdvantage.Process
         /// <param name="revenurecognitionRun">Revenue Recognition Run</param>
         /// <param name="recFrequency">Frequency</param>
         /// <returns>Journal object</returns>
-        public MJournal CreateJournalHDR(MVABRevRecognitionStrtgy revenueRecognitionPlan, MVABRevRecognitionRun revenurecognitionRun, string recFrequency)
+        public MVAGLJRNL CreateJournalHDR(MVABRevRecognitionStrtgy revenueRecognitionPlan, MVABRevRecognitionRun revenurecognitionRun, string recFrequency)
         {
             journal.SetClientOrg(revenueRecognitionPlan.GetVAF_Client_ID(), revenueRecognitionPlan.GetVAF_Org_ID());
             journal.SetVAB_AccountBook_ID(revenueRecognitionPlan.GetVAB_AccountBook_ID());
             journal.SetDescription("Revenue Recognition Run");
-            journal.SetPostingType(MJournal.POSTINGTYPE_Actual);
+            journal.SetPostingType(MVAGLJRNL.POSTINGTYPE_Actual);
 
             int VAGL_Group_ID = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT VAGL_Group_ID From VAGL_Group Where CategoryType='M' 
             AND  VAF_Client_ID= " + revenueRecognitionPlan.GetVAF_Client_ID() + " Order by VAGL_Group_ID desc"));
@@ -501,9 +501,9 @@ namespace VAdvantage.Process
         /// <param name="Org_Id">Organization</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>journal line object</returns>
-        public MJournalLine GetOrCreate(MJournal Journal, MJournalLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
+        public MVAGLJRNLLine GetOrCreate(MVAGLJRNL Journal, MVAGLJRNLLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int Org_Id, int trxOrg_ID)
         {
-            MJournalLine retValue = null;
+            MVAGLJRNLLine retValue = null;
             String sql = "SELECT * FROM VAGL_JRNLLine " +
                          " WHERE  VAGL_JRNL_ID = " + Journal.GetVAGL_JRNL_ID() +
                          " AND NVL(VAM_Product_ID,0)=" + VAM_Product_ID +                        
@@ -526,7 +526,7 @@ namespace VAdvantage.Process
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MJournalLine(Journal.GetCtx(), dr, Get_TrxName());
+                    retValue = new MVAGLJRNLLine(Journal.GetCtx(), dr, Get_TrxName());
                 }
             }
             catch (Exception ex)
@@ -566,9 +566,9 @@ namespace VAdvantage.Process
         /// <param name="BPartner_ID">Business Partner</param>
         /// <param name="trxOrg_ID">Transaction Organization</param>
         /// <returns>object of journal line</returns>
-        public MJournalLine CreateJournalLine(MJournal Journal, MJournalLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
+        public MVAGLJRNLLine CreateJournalLine(MVAGLJRNL Journal, MVAGLJRNLLine Line, int VAM_Product_ID, int VAB_Charge_ID, int Campaign_ID, int Account_ID, int Opprtunity_ID, int Activity_ID, int BPartner_ID, int trxOrg_ID)
         {
-            Line = new MJournalLine(Journal);
+            Line = new MVAGLJRNLLine(Journal);
             Line.SetLine(lineno);
             Line.Set_ValueNoCheck("Account_ID", Account_ID);
             Line.Set_ValueNoCheck("VAB_BusinessPartner_ID", BPartner_ID);

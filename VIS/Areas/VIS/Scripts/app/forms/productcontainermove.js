@@ -27,8 +27,8 @@
         var $lblToWarehouse = null;
         var $cmbToWarehouse = null;
 
-        var $lblFromLocator = null;
-        var $cmbFromLocator = null;
+        var $lblFroMVAMLocator = null;
+        var $cmbFroMVAMLocator = null;
         var $lblToLocator = null;
         var $cmbToLocator = null;
         var $btnFromContainerTree = null;
@@ -127,10 +127,10 @@
 
             $formData = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataCtrlWrp = $('<div class="vis-control-wrap">');
-            $lblFromLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Locator_ID") + '</label>');
-            $cmbFromLocator = $('<select>');
+            $lblFroMVAMLocator = $('<label>' + VIS.Msg.translate(VIS.Env.getCtx(), "VAM_Locator_ID") + '</label>');
+            $cmbFroMVAMLocator = $('<select>');
             $formData.append($formDataCtrlWrp);
-            $formDataCtrlWrp.append($cmbFromLocator).append($lblFromLocator);
+            $formDataCtrlWrp.append($cmbFroMVAMLocator).append($lblFroMVAMLocator);
 
             $formDataR = $('<div class="VIS_form-col input-group vis-input-wrap">');
             var $formDataRCtrlWrp = $('<div class="vis-control-wrap">');
@@ -293,7 +293,7 @@
             LoadFromWarehouse();
 
             // Load From Locator
-            loadFromLocator();
+            loadFroMVAMLocator();
 
             // load To warehouse
             loadToWarehouse();
@@ -302,10 +302,10 @@
             loadToLocator();
 
             // on selection of "From Locator" -- load "From Container"
-            $cmbFromLocator.on('change', function () {
+            $cmbFroMVAMLocator.on('change', function () {
                 busyDiv('visible');
                 $cmbFromContainer.empty();
-                if ($cmbFromLocator.val() == "0") {
+                if ($cmbFroMVAMLocator.val() == "0") {
                     $btnFromContainerTree.addClass("VIS_Tree-Container-disabled");
                 }
                 else {
@@ -347,8 +347,8 @@
                     VIS.ADialog.error("VIS_ToWarehouseNotSelected", true, "", "");
                     return false;
                 };
-                if ($cmbFromLocator.val() == "0") {
-                    VIS.ADialog.error("VIS_FromLocatorNotSelected", true, "", "");
+                if ($cmbFroMVAMLocator.val() == "0") {
+                    VIS.ADialog.error("VIS_FroMVAMLocatorNotSelected", true, "", "");
                     return false;
                 };
                 if ($cmbToLocator.val() == "0") {
@@ -390,7 +390,7 @@
                 //config.gridFromContainer();
                 if ($btnFromContainerTree.hasClass("VIS_Tree-Container-disabled")) { return; };
                 var warehouse = ($cmbFromWarehouse.val() == "0" || $cmbFromWarehouse.val() == null) ? 0 : parseInt($cmbFromWarehouse.val());
-                var locator = ($cmbFromLocator.val() == "0" || $cmbFromLocator.val() == null) ? 0 : parseInt($cmbFromLocator.val());
+                var locator = ($cmbFroMVAMLocator.val() == "0" || $cmbFroMVAMLocator.val() == null) ? 0 : parseInt($cmbFroMVAMLocator.val());
 
                 var obj = new VIS.productContainerTree(warehouse, locator, null, null);
                 if (obj != null) {
@@ -507,7 +507,7 @@
         };
 
         // load from Locator
-        function loadFromLocator() {
+        function loadFroMVAMLocator() {
             // get from warehouse id from the context
             var fromWarehouse_ID = VIS.context.getWindowContext($self.windowNo, "DTD001_MWarehouseSource_ID", true); // windowNo, context, onlyWindow
             $.ajax({
@@ -518,18 +518,18 @@
                 success: function (data) {
                     var result = JSON.parse(data);
                     if (result) {
-                        $cmbFromLocator.empty();
-                        $cmbFromLocator.append("<option value= 0 >Select</option>");
+                        $cmbFroMVAMLocator.empty();
+                        $cmbFroMVAMLocator.append("<option value= 0 >Select</option>");
                         for (var i = 0; i < result.length; i++) {
                             key = VIS.Utility.Util.getValueOfInt(result[i].ID);
                             value = VIS.Utility.Util.getValueOfString(result[i].Name);
-                            $cmbFromLocator.append(" <option value=" + key + ">" + value + "</option>");
+                            $cmbFroMVAMLocator.append(" <option value=" + key + ">" + value + "</option>");
                         }
                     }
                     else {
-                        $cmbFromLocator.append("<option value= 0 >Select</option>");
+                        $cmbFroMVAMLocator.append("<option value= 0 >Select</option>");
                     }
-                    $cmbFromLocator.prop('selectedIndex', 0);
+                    $cmbFroMVAMLocator.prop('selectedIndex', 0);
                 },
                 error: function (er) {
                     busyDiv('hidden');
@@ -604,7 +604,7 @@
             //var container = ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val());
             var VAF_Org_ID = parseInt(VIS.context.getWindowContext($self.windowNo, "VAF_Org_ID", true)); // windowNo, context, onlyWindow
             var date = VIS.context.getWindowContext($self.windowNo, "MovementDate", true); // windowNo, context, onlyWindow
-            var locator = ($cmbFromLocator.val() == "0" || $cmbFromLocator.val() == null) ? 0 : parseInt($cmbFromLocator.val());
+            var locator = ($cmbFroMVAMLocator.val() == "0" || $cmbFroMVAMLocator.val() == null) ? 0 : parseInt($cmbFroMVAMLocator.val());
             //if grid is reloading than store the value of page combo in pageNoContainer
             if (isReload) {
                 pageNoContainer = parseInt(cmbPage.val());
@@ -821,7 +821,7 @@
                             VAM_Product_ID: row.VAM_Product_ID,
                             VAM_PFeature_SetInstance_ID: row.VAM_PFeature_SetInstance_ID,
                             VAB_UOM_ID: row.VAB_UOM_ID,
-                            FromLocator: parseInt($cmbFromLocator.val()),
+                            FroMVAMLocator: parseInt($cmbFroMVAMLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                             ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
@@ -839,7 +839,7 @@
                             VAM_Product_ID: 0,
                             VAM_PFeature_SetInstance_ID: 0,
                             VAB_UOM_ID: 0,
-                            FromLocator: parseInt($cmbFromLocator.val()),
+                            FroMVAMLocator: parseInt($cmbFroMVAMLocator.val()),
                             ToLocator: parseInt($cmbToLocator.val()),
                             FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                             ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
@@ -901,7 +901,7 @@
                     VAM_Product_ID: row.VAM_Product_ID,
                     VAM_PFeature_SetInstance_ID: row.VAM_PFeature_SetInstance_ID,
                     VAB_UOM_ID: row.VAB_UOM_ID,
-                    FromLocator: parseInt($cmbFromLocator.val()),
+                    FroMVAMLocator: parseInt($cmbFroMVAMLocator.val()),
                     ToLocator: parseInt($cmbToLocator.val()),
                     FromContainer: ($cmbFromContainer.val() == "0" || $cmbFromContainer.val() == null) ? 0 : parseInt($cmbFromContainer.val()),
                     ToContainer: ($cmbToContainer.val() == "0" || $cmbToContainer.val() == null) ? 0 : parseInt($cmbToContainer.val()),
@@ -935,8 +935,8 @@
             $lblToWarehouse = null;
             $cmbToWarehouse = null;
 
-            $lblFromLocator = null;
-            $cmbFromLocator = null;
+            $lblFroMVAMLocator = null;
+            $cmbFroMVAMLocator = null;
             $lblToLocator = null;
             $cmbToLocator = null;
 

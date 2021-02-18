@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MMatchPO
+ * Class Name     : MVAMMatchPO
  * Purpose        : Used for invoice window's 2nd tab with VAB_InvoiceLine table
  * Class Used     : X_VAB_InvoiceLine
  * Chronological    Development
@@ -3855,7 +3855,7 @@ namespace VAdvantage.Model
                 if (!newRecord && Is_ValueChanged("VAB_TaxRate_ID"))
                 {
                     //	Recalculate Tax for old Tax
-                    MVABInvoiceTax tax = MVABInvoiceTax.Get(this, GetPrecision(),
+                    MVABTaxInvoice tax = MVABTaxInvoice.Get(this, GetPrecision(),
                         true, Get_TrxName());	//	old Tax
                     if (tax != null)
                     {
@@ -3868,7 +3868,7 @@ namespace VAdvantage.Model
                     // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                     if (Get_ColumnIndex("SurchargeAmt") > 0)
                     {
-                        tax = MVABInvoiceTax.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
+                        tax = MVABTaxInvoice.GetSurcharge(this, GetPrecision(), true, Get_TrxName());  //	old Tax
                         if (tax != null)
                         {
                             if (!tax.CalculateSurchargeFromLines())
@@ -3980,7 +3980,7 @@ namespace VAdvantage.Model
             {
                 //	Recalculate Tax for this Tax
 
-                MVABInvoiceTax tax = MVABInvoiceTax.Get(this, GetPrecision(),
+                MVABTaxInvoice tax = MVABTaxInvoice.Get(this, GetPrecision(),
                     false, Get_TrxName());	//	current Tax
                 if (tax != null)
                 {
@@ -4003,7 +4003,7 @@ namespace VAdvantage.Model
                 // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                 else if (Get_ColumnIndex("SurchargeAmt") > 0 && taxRate.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && taxRate.GetSurcharge_Tax_ID() > 0)
                 {
-                    tax = MVABInvoiceTax.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
+                    tax = MVABTaxInvoice.GetSurcharge(this, GetPrecision(), false, Get_TrxName());  //	current Tax
                     if (!tax.CalculateSurchargeFromLines())
                         return false;
                     if (!tax.Save(Get_TrxName()))
@@ -4199,12 +4199,12 @@ namespace VAdvantage.Model
         }
 
         // Create or Update Child Tax
-        private bool CalculateChildTax(MVABInvoice invoice, MVABInvoiceTax iTax, MTax tax, Trx trxName)
+        private bool CalculateChildTax(MVABInvoice invoice, MVABTaxInvoice iTax, MTax tax, Trx trxName)
         {
             MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
             for (int j = 0; j < cTaxes.Length; j++)
             {
-                MVABInvoiceTax newITax = null;
+                MVABTaxInvoice newITax = null;
                 MTax cTax = cTaxes[j];
                 Decimal taxAmt = cTax.CalculateTax(iTax.GetTaxBaseAmt(), false, GetPrecision());
 
@@ -4218,7 +4218,7 @@ namespace VAdvantage.Model
                     {
                         foreach (DataRow dr in ds.Tables[0].Rows)
                         {
-                            newITax = new MVABInvoiceTax(GetCtx(), dr, trxName);
+                            newITax = new MVABTaxInvoice(GetCtx(), dr, trxName);
                         }
                     }
                 }
@@ -4235,7 +4235,7 @@ namespace VAdvantage.Model
                 // Create New
                 if (newITax == null)
                 {
-                    newITax = new MVABInvoiceTax(GetCtx(), 0, Get_TrxName());
+                    newITax = new MVABTaxInvoice(GetCtx(), 0, Get_TrxName());
                     newITax.SetClientOrg(this);
                     newITax.SetVAB_Invoice_ID(GetVAB_Invoice_ID());
                     newITax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());
@@ -4284,7 +4284,7 @@ namespace VAdvantage.Model
                     return "Processed";
                 }
 
-                MLandedCost[] lcs = MLandedCost.GetLandedCosts(this);
+                MVABLCost[] lcs = MVABLCost.GetLandedCosts(this);
                 if (lcs.Length == 0)
                 {
                     return "";
@@ -4310,10 +4310,10 @@ namespace VAdvantage.Model
                 //	*** Single Criteria ***
                 if (lcs.Length == 1)
                 {
-                    MLandedCost lc = lcs[0];
+                    MVABLCost lc = lcs[0];
                     #region Landed Cost Distrinution based on Import Value (Invoice)
 
-                    if (lc.GetLandedCostDistribution() == MLandedCost.LANDEDCOSTDISTRIBUTION_ImportValue)
+                    if (lc.GetLandedCostDistribution() == MVABLCost.LANDEDCOSTDISTRIBUTION_ImportValue)
                     {
                         // All Invoice Lines
                         if (lc.GetRef_Invoice_ID() != 0)
@@ -4397,7 +4397,7 @@ namespace VAdvantage.Model
 
                                 //	Create Allocations
                                 MVABInvoiceLine iol = null;
-                                MLandedCostAllocation lca = null;
+                                MVABLCostDistribution lca = null;
                                 Decimal base1 = 0;
                                 double result = 0;
 
@@ -4406,7 +4406,7 @@ namespace VAdvantage.Model
                                     mrPrice = Util.GetValueOfDecimal(dr[i]["LineNetAmt"]);
 
                                     //iol = (MVABInvoiceLine)list[i];
-                                    lca = new MLandedCostAllocation(this,
+                                    lca = new MVABLCostDistribution(this,
                                         lc.GetVAM_ProductCostElement_ID());
                                     lca.SetVAM_Product_ID(Util.GetValueOfInt(dr[i]["VAM_Product_ID"]));
                                     lca.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(dr[i]["VAM_PFeature_SetInstance_ID"]));
@@ -4461,7 +4461,7 @@ namespace VAdvantage.Model
                         else if (lc.GetVAM_Product_ID() != 0)
                         {
                             // create landed cost allocation
-                            MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetVAM_ProductCostElement_ID());
+                            MVABLCostDistribution lca = new MVABLCostDistribution(this, lc.GetVAM_ProductCostElement_ID());
                             lca.SetVAM_Product_ID(lc.GetVAM_Product_ID());	//	No ASI
                             //lca.SetAmt(GetLineNetAmt());
                             lca.SetAmt(GetProductLineCost(this));
@@ -4511,7 +4511,7 @@ namespace VAdvantage.Model
                             }
 
                             // create landed cost allocation
-                            MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetVAM_ProductCostElement_ID());
+                            MVABLCostDistribution lca = new MVABLCostDistribution(this, lc.GetVAM_ProductCostElement_ID());
                             lca.SetVAM_Product_ID(iol.GetVAM_Product_ID());
                             lca.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
                             //lca.SetAmt(GetLineNetAmt());
@@ -4620,7 +4620,7 @@ namespace VAdvantage.Model
 
                             //	Create Allocations
                             MVAMInvInOutLine iol = null;
-                            MLandedCostAllocation lca = null;
+                            MVABLCostDistribution lca = null;
                             Decimal base1 = 0;
                             double result = 0;
                             Decimal diffrenceAmt = 0;
@@ -4629,7 +4629,7 @@ namespace VAdvantage.Model
                             for (int i = 0; i < list.Count; i++)
                             {
                                 iol = (MVAMInvInOutLine)list[i];
-                                lca = new MLandedCostAllocation(this,
+                                lca = new MVABLCostDistribution(this,
                                     lc.GetVAM_ProductCostElement_ID());
                                 lca.SetVAM_Product_ID(iol.GetVAM_Product_ID());
                                 lca.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
@@ -4693,9 +4693,9 @@ namespace VAdvantage.Model
                         //	Single Movement Line
                         else if (hasMovement > 0 && lc.GetVAM_InvTrf_Line_ID() != 0)
                         {
-                            MMovement mov = new MMovement(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
-                            MMovementLine iol = new MMovementLine(GetCtx(), lc.GetVAM_InvTrf_Line_ID(), Get_TrxName());
-                            MLocator loc = new MLocator(GetCtx(), iol.GetVAM_LocatorTo_ID(), Get_TrxName());
+                            MVAMInventoryTransfer mov = new MVAMInventoryTransfer(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                            MVAMInvTrfLine iol = new MVAMInvTrfLine(GetCtx(), lc.GetVAM_InvTrf_Line_ID(), Get_TrxName());
+                            MVAMLocator loc = new MVAMLocator(GetCtx(), iol.GetVAM_LocatorTo_ID(), Get_TrxName());
 
                             // if line is without Product then it is invalid
                             if (iol.GetVAM_Product_ID() == 0)
@@ -4704,7 +4704,7 @@ namespace VAdvantage.Model
                             }
 
                             // create landed cost allocation
-                            MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetVAM_ProductCostElement_ID());
+                            MVABLCostDistribution lca = new MVABLCostDistribution(this, lc.GetVAM_ProductCostElement_ID());
                             lca.SetVAM_Product_ID(iol.GetVAM_Product_ID());
                             lca.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
                             //lca.SetAmt(GetLineNetAmt());
@@ -4741,10 +4741,10 @@ namespace VAdvantage.Model
                         else if (hasMovement > 0 && lc.GetVAM_InventoryTransfer_ID() != 0)
                         {
                             //	Create List
-                            List<MMovementLine> list = new List<MMovementLine>();
-                            MMovement mov = new MMovement(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
-                            MMovementLine[] lines = mov.GetLines(true);
-                            MLocator loc = null;
+                            List<MVAMInvTrfLine> list = new List<MVAMInvTrfLine>();
+                            MVAMInventoryTransfer mov = new MVAMInventoryTransfer(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                            MVAMInvTrfLine[] lines = mov.GetLines(true);
+                            MVAMLocator loc = null;
                             Decimal total = Env.ZERO;
 
                             for (int i = 0; i < lines.Length; i++)
@@ -4784,7 +4784,7 @@ namespace VAdvantage.Model
                             //Decimal total = Env.ZERO;
                             //for (int i = 0; i < list.Count; i++)
                             //{
-                            //    MMovementLine iol = (MMovementLine)list[i];
+                            //    MVAMInvTrfLine iol = (MVAMInvTrfLine)list[i];
                             //    total = Decimal.Add(total, iol.GetBase(lc.GetLandedCostDistribution()));
                             //}
 
@@ -4795,16 +4795,16 @@ namespace VAdvantage.Model
                             }
 
                             //	Create Allocations
-                            MMovementLine iol = null;
-                            MLandedCostAllocation lca = null;
+                            MVAMInvTrfLine iol = null;
+                            MVABLCostDistribution lca = null;
                             Decimal base1 = 0;
                             double result = 0;
 
                             for (int i = 0; i < list.Count; i++)
                             {
-                                iol = (MMovementLine)list[i];
-                                loc = new MLocator(GetCtx(), iol.GetVAM_LocatorTo_ID(), Get_TrxName());
-                                lca = new MLandedCostAllocation(this,
+                                iol = (MVAMInvTrfLine)list[i];
+                                loc = new MVAMLocator(GetCtx(), iol.GetVAM_LocatorTo_ID(), Get_TrxName());
+                                lca = new MVABLCostDistribution(this,
                                     lc.GetVAM_ProductCostElement_ID());
                                 lca.SetVAM_Product_ID(iol.GetVAM_Product_ID());
                                 lca.SetVAM_PFeature_SetInstance_ID(iol.GetVAM_PFeature_SetInstance_ID());
@@ -4851,7 +4851,7 @@ namespace VAdvantage.Model
                         else if (lc.GetVAM_Product_ID() != 0)
                         {
                             // Craete landed cost allocation
-                            MLandedCostAllocation lca = new MLandedCostAllocation(this, lc.GetVAM_ProductCostElement_ID());
+                            MVABLCostDistribution lca = new MVABLCostDistribution(this, lc.GetVAM_ProductCostElement_ID());
                             lca.SetVAM_Product_ID(lc.GetVAM_Product_ID());	//	No ASI
                             //lca.SetAmt(GetLineNetAmt());
                             lca.SetAmt(GetProductLineCost(this));
@@ -4894,7 +4894,7 @@ namespace VAdvantage.Model
                 int VAM_InventoryTransfer_ID = hasMovement > 0 ? lcs[0].GetVAM_InventoryTransfer_ID() : 0;
                 for (int i = 0; i < lcs.Length; i++)
                 {
-                    MLandedCost lc = lcs[i];
+                    MVABLCost lc = lcs[i];
 
                     // Multiple Landed Cost Rules must have consistent Landed Cost Distribution
                     if (!LandedCostDistribution.Equals(lc.GetLandedCostDistribution()))
@@ -4903,7 +4903,7 @@ namespace VAdvantage.Model
                     }
 
                     // Multiple Landed Cost Rules cannot directly allocate to a Product
-                    if (LandedCostDistribution.Equals(MLandedCost.LANDEDCOSTDISTRIBUTION_ImportValue))
+                    if (LandedCostDistribution.Equals(MVABLCost.LANDEDCOSTDISTRIBUTION_ImportValue))
                     {
                         if (lc.GetVAM_Product_ID() != 0 && lc.GetRef_Invoice_ID() == 0 && lc.GetRef_InvoiceLine_ID() == 0)
                         {
@@ -4931,7 +4931,7 @@ namespace VAdvantage.Model
                     }
 
                     // Multiple Landed Cost Rules must have consistent Reference like (Receipt, Movement)
-                    if (hasMovement > 0 && !LandedCostDistribution.Equals(MLandedCost.LANDEDCOSTDISTRIBUTION_ImportValue))
+                    if (hasMovement > 0 && !LandedCostDistribution.Equals(MVABLCost.LANDEDCOSTDISTRIBUTION_ImportValue))
                     {
                         if (VAM_Inv_InOut_ID > 0 && lc.GetVAM_Inv_InOut_ID() == 0)
                         {
@@ -4947,7 +4947,7 @@ namespace VAdvantage.Model
 
                 //	Create List
                 #region if Landed cost Distribution is - Import Value
-                if (LandedCostDistribution == MLandedCost.LANDEDCOSTDISTRIBUTION_ImportValue)
+                if (LandedCostDistribution == MVABLCost.LANDEDCOSTDISTRIBUTION_ImportValue)
                 {
                     List<MVABInvoiceLine> list1 = new List<MVABInvoiceLine>();
                     //MVABInvoice inv = null;
@@ -4959,7 +4959,7 @@ namespace VAdvantage.Model
 
                     for (int ii = 0; ii < lcs.Length; ii++)
                     {
-                        MLandedCost lc = lcs[ii];
+                        MVABLCost lc = lcs[ii];
 
                         qry.Clear();
                         qry.Append(@"SELECT il.VAM_Product_ID, il.VAM_PFeature_SetInstance_ID, sum(mi.Qty) as Qty, ");
@@ -5031,7 +5031,7 @@ namespace VAdvantage.Model
 
                     //	Create Allocations
                     //MVABInvoiceLine inl = null;
-                    MLandedCostAllocation lca = null;
+                    MVABLCostDistribution lca = null;
                     Decimal base1 = 0;
                     double result = 0;
 
@@ -5040,7 +5040,7 @@ namespace VAdvantage.Model
                         mrPrice = Util.GetValueOfDecimal(dr[i]["LineNetAmt"]);
 
                         //inl = (MVABInvoiceLine)list1[i];
-                        lca = new MLandedCostAllocation(this, lcs[0].GetVAM_ProductCostElement_ID());
+                        lca = new MVABLCostDistribution(this, lcs[0].GetVAM_ProductCostElement_ID());
                         lca.SetVAM_Product_ID(Util.GetValueOfInt(dr[i]["VAM_Product_ID"]));
                         lca.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(dr[i]["VAM_PFeature_SetInstance_ID"]));
                         base1 = Util.GetValueOfDecimal(dr[i]["Qty"]);
@@ -5092,7 +5092,7 @@ namespace VAdvantage.Model
 
                     for (int ii = 0; ii < lcs.Length; ii++)
                     {
-                        MLandedCost lc = lcs[ii];
+                        MVABLCost lc = lcs[ii];
                         if (lc.GetVAM_Inv_InOut_ID() != 0 && lc.GetVAM_Inv_InOutLine_ID() == 0)		//	entire receipt
                         {
                             ship = new MVAMInvInOut(GetCtx(), lc.GetVAM_Inv_InOut_ID(), Get_TrxName());
@@ -5160,7 +5160,7 @@ namespace VAdvantage.Model
                     //	Create Allocations
                     MVAMInvInOut ino = null;
                     MVAMInvInOutLine inl = null;
-                    MLandedCostAllocation lca = null;
+                    MVABLCostDistribution lca = null;
                     Decimal base1 = 0;
                     double result = 0;
 
@@ -5168,7 +5168,7 @@ namespace VAdvantage.Model
                     {
                         inl = (MVAMInvInOutLine)list1[i];
                         ino = new MVAMInvInOut(GetCtx(), inl.GetVAM_Inv_InOut_ID(), Get_TrxName());
-                        lca = new MLandedCostAllocation(this, lcs[0].GetVAM_ProductCostElement_ID());
+                        lca = new MVABLCostDistribution(this, lcs[0].GetVAM_ProductCostElement_ID());
                         lca.SetVAM_Product_ID(inl.GetVAM_Product_ID());
                         lca.SetVAM_PFeature_SetInstance_ID(inl.GetVAM_PFeature_SetInstance_ID());
                         base1 = inl.GetBase(LandedCostDistribution);                   // Get Base value for Cost Distribution
@@ -5232,18 +5232,18 @@ namespace VAdvantage.Model
                 #region  if Landed cost is distributed based on Movement .
                 else if (VAM_InventoryTransfer_ID > 0)
                 {
-                    List<MMovementLine> list1 = new List<MMovementLine>();
-                    MMovement mov = null;
-                    MMovementLine[] lines = null;
-                    MMovementLine iol = null;
+                    List<MVAMInvTrfLine> list1 = new List<MVAMInvTrfLine>();
+                    MVAMInventoryTransfer mov = null;
+                    MVAMInvTrfLine[] lines = null;
+                    MVAMInvTrfLine iol = null;
                     Decimal total1 = Env.ZERO;
 
                     for (int ii = 0; ii < lcs.Length; ii++)
                     {
-                        MLandedCost lc = lcs[ii];
+                        MVABLCost lc = lcs[ii];
                         if (lc.GetVAM_InventoryTransfer_ID() != 0 && lc.GetVAM_InvTrf_Line_ID() == 0)		//	entire receipt
                         {
-                            mov = new MMovement(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                            mov = new MVAMInventoryTransfer(GetCtx(), lc.GetVAM_InventoryTransfer_ID(), Get_TrxName());
                             lines = mov.GetLines(true);
                             for (int i = 0; i < lines.Length; i++)
                             {
@@ -5274,7 +5274,7 @@ namespace VAdvantage.Model
                         }
                         else if (lc.GetVAM_InvTrf_Line_ID() != 0)	//	receipt line
                         {
-                            iol = new MMovementLine(GetCtx(), lc.GetVAM_InvTrf_Line_ID(), Get_TrxName());
+                            iol = new MVAMInvTrfLine(GetCtx(), lc.GetVAM_InvTrf_Line_ID(), Get_TrxName());
 
                             // if line is without Product then skip the line
                             if (iol.GetVAM_Product_ID() != 0)
@@ -5295,7 +5295,7 @@ namespace VAdvantage.Model
 
                     //for (int i = 0; i < list1.Count; i++)
                     //{
-                    //    MMovementLine iol = (MMovementLine)list1[i];
+                    //    MVAMInvTrfLine iol = (MVAMInvTrfLine)list1[i];
                     //    total1 = Decimal.Add(total1, iol.GetBase(LandedCostDistribution));
                     //}
 
@@ -5306,18 +5306,18 @@ namespace VAdvantage.Model
                     }
 
                     //	Create Allocations
-                    MMovementLine iml = null;
-                    MLocator loc = null;
-                    MLandedCostAllocation lca = null;
+                    MVAMInvTrfLine iml = null;
+                    MVAMLocator loc = null;
+                    MVABLCostDistribution lca = null;
                     Decimal base1 = 0;
                     double result = 0;
 
                     for (int i = 0; i < list1.Count; i++)
                     {
-                        iml = (MMovementLine)list1[i];
-                        mov = new MMovement(GetCtx(), iml.GetVAM_InventoryTransfer_ID(), Get_TrxName());
-                        loc = new MLocator(GetCtx(), iml.GetVAM_LocatorTo_ID(), Get_TrxName());
-                        lca = new MLandedCostAllocation(this, lcs[0].GetVAM_ProductCostElement_ID());
+                        iml = (MVAMInvTrfLine)list1[i];
+                        mov = new MVAMInventoryTransfer(GetCtx(), iml.GetVAM_InventoryTransfer_ID(), Get_TrxName());
+                        loc = new MVAMLocator(GetCtx(), iml.GetVAM_LocatorTo_ID(), Get_TrxName());
+                        lca = new MVABLCostDistribution(this, lcs[0].GetVAM_ProductCostElement_ID());
                         lca.SetVAM_Product_ID(iml.GetVAM_Product_ID());
                         lca.SetVAM_PFeature_SetInstance_ID(iml.GetVAM_PFeature_SetInstance_ID());
                         base1 = iml.GetBase(LandedCostDistribution);                            // Get Base value for Cost Distribution
@@ -5377,7 +5377,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_ExpectedCost_ID">expecetde landed cost</param>
         /// <param name="precision">standard precison</param>
         /// <returns>diffrence value</returns>
-        private Decimal GetLandedCostDifferenceAmt(MLandedCost lc, int VAM_Inv_InOutLine_ID, Decimal Quantity, Decimal ActualLandeCost, int VAB_ExpectedCost_ID, int precision)
+        private Decimal GetLandedCostDifferenceAmt(MVABLCost lc, int VAM_Inv_InOutLine_ID, Decimal Quantity, Decimal ActualLandeCost, int VAB_ExpectedCost_ID, int precision)
         {
             Decimal differenceAmt = 0.0M;
             // get expected freight amount of each (round upto 15 in query only) 
@@ -5419,7 +5419,7 @@ namespace VAdvantage.Model
         /// <param name="lc">landedc cost reference</param>
         /// <param name="VAB_OrderLine_ID">order line reference</param>
         /// <returns>VAB_ExpectedCost_ID</returns>
-        private int GetExpectedLandedCostId(MLandedCost lc, int VAB_OrderLine_ID)
+        private int GetExpectedLandedCostId(MVABLCost lc, int VAB_OrderLine_ID)
         {
             int VAB_ExpectedCost_ID = 0;
             String sql = @"Select Distinct VAB_ExpectedCost.VAB_ExpectedCost_ID From VAB_ExpectedCost 
@@ -5439,13 +5439,13 @@ namespace VAdvantage.Model
         {
             try
             {
-                MLandedCostAllocation[] allocations = MLandedCostAllocation.GetOfInvoiceLine(
+                MVABLCostDistribution[] allocations = MVABLCostDistribution.GetOfInvoiceLine(
                     GetCtx(), GetVAB_InvoiceLine_ID(), Get_TrxName());
-                MLandedCostAllocation largestAmtAllocation = null;
+                MVABLCostDistribution largestAmtAllocation = null;
                 Decimal allocationAmt = Env.ZERO;
                 for (int i = 0; i < allocations.Length; i++)
                 {
-                    MLandedCostAllocation allocation = allocations[i];
+                    MVABLCostDistribution allocation = allocations[i];
                     if (largestAmtAllocation == null
                         || allocation.GetAmt().CompareTo(largestAmtAllocation.GetAmt()) > 0)
                         largestAmtAllocation = allocation;

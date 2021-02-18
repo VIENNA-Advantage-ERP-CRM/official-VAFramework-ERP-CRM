@@ -2647,7 +2647,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(),
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(),
                 IsReceipt() ? MVABMasterDocType.DOCBASETYPE_ARRECEIPT : MVABMasterDocType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
@@ -3237,7 +3237,7 @@ namespace VAdvantage.Model
             if (GetVAB_sched_InvoicePayment_ID() != 0)
             {
                 // commeted - bcz of rework -- already handled in View Allocation Completion
-                //MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                //MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                 //paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                 if (Env.IsModuleInstalled("VA009_"))
                 {
@@ -3345,7 +3345,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
                         // commeted - bcz of rework -- already handled in View Allocation Completion
-                        //MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
+                        //MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
                         //paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                         //MVABInvoice invoice = new MVABInvoice(GetCtx(), GetVAB_Invoice_ID(), null);
                         //MVABDocTypes doctype = new MVABDocTypes(GetCtx(), invoice.GetVAB_DocTypes_ID(), null);
@@ -3388,12 +3388,12 @@ namespace VAdvantage.Model
             }
             else
             {
-                int[] InvoicePaySchedule_ID = MVABInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
+                int[] InvoicePaySchedule_ID = MVABSchedInvoicePayment.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
                     (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN (SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
                     SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_Trx());
                 foreach (int invocePay in InvoicePaySchedule_ID)
                 {
-                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), invocePay, Get_Trx());
+                    MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), invocePay, Get_Trx());
                     paySch.SetVAB_Payment_ID(GetVAB_Payment_ID());
                     paySch.Save();
                 }
@@ -3472,7 +3472,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateTrx());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                    if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -4616,7 +4616,7 @@ namespace VAdvantage.Model
             {
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     // Added by Bharat on 27 June 2017 to restrict multiple payment against same Invoice Pay Schedule.
                     //23 Ap 2018 By pass for POS Terminal Order
                     if (paySch.IsVA009_IsPaid() && DB.GetSQLValue(Get_Trx(), @"SELECT VAPOS_POSTerminal_ID FROM VAB_ORDER WHERE VAB_Order_ID = (
@@ -5255,7 +5255,7 @@ namespace VAdvantage.Model
 
             //	Std Period open?
             DateTime? dateAcct = GetDateAcct();
-            if (!MPeriod.IsOpen(GetCtx(), dateAcct,
+            if (!MVABYearPeriod.IsOpen(GetCtx(), dateAcct,
                 IsReceipt() ? MVABMasterDocType.DOCBASETYPE_ARRECEIPT : MVABMasterDocType.DOCBASETYPE_APPAYMENT, GetVAF_Org_ID()))
                 dateAcct = DateTime.Now;
 
@@ -5595,7 +5595,7 @@ namespace VAdvantage.Model
             {
                 if (GetVAB_sched_InvoicePayment_ID() > 0)
                 {
-                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     paySch.SetVA009_ExecutionStatus("C");
                     paySch.SetVA009_IsPaid(false);
                     if (!paySch.Save())
@@ -5615,7 +5615,7 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < dsSchedule.Tables[0].Rows.Count; i++)
                     {
-                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
+                        MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), Util.GetValueOfInt(dsSchedule.Tables[0].Rows[i]["VAB_sched_InvoicePayment_ID"]), Get_Trx());
                         paySch.SetVA009_ExecutionStatus("C");
                         paySch.SetVA009_IsPaid(false);
                         if (!paySch.Save())

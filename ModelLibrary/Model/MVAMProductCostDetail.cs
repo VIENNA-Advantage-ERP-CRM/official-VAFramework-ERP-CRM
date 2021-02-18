@@ -113,7 +113,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_Warehouse_ID">Optional parameter -- Warehouse ID</param>
         /// <returns>MVAMProductCostDetail Object</returns>
         public static MVAMProductCostDetail CreateCostDetail(MVABAccountBook mas, int VAF_Org_ID, int VAM_Product_ID,
-            int VAM_PFeature_SetInstance_ID, string WindowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MMovementLine movementline,
+            int VAM_PFeature_SetInstance_ID, string WindowName, MVAMInventoryLine inventoryLine, MVAMInvInOutLine inoutline, MVAMInvTrfLine movementline,
             MVABInvoiceLine invoiceline, PO po, int VAM_ProductCostElement_ID, Decimal Amt, Decimal Qty, String Description, Trx trxName, int VAM_Warehouse_ID = 0)
         {
             try
@@ -393,8 +393,8 @@ namespace VAdvantage.Model
             MVAMInvInOut inout = null;
             MVABInvoice invoice = null;
             MVABInvoiceLine invoiceline = null;
-            MMovement movement = null;
-            MMovementLine movementline = null;
+            MVAMInventoryTransfer movement = null;
+            MVAMInvTrfLine movementline = null;
             MVAMProductCost costFrom = null;
             decimal amtWithSurcharge = 0;
 
@@ -407,11 +407,11 @@ namespace VAdvantage.Model
                     if (cd.GetVAM_InvTrf_Line_ID() > 0)
                     {
                         int M_SourceWarehouse_ID = 0;
-                        MMovementLine movementlineFrom = new MMovementLine(GetCtx(), cd.GetVAM_InvTrf_Line_ID(), Get_TrxName());
+                        MVAMInvTrfLine movementlineFrom = new MVAMInvTrfLine(GetCtx(), cd.GetVAM_InvTrf_Line_ID(), Get_TrxName());
                         // when costing level is warehouse then need to get source warehouse
                         if (VAM_Warehouse_ID > 0)
                         {
-                            M_SourceWarehouse_ID = MLocator.Get(GetCtx(), movementlineFrom.GetVAM_Locator_ID()).GetVAM_Warehouse_ID();
+                            M_SourceWarehouse_ID = MVAMLocator.Get(GetCtx(), movementlineFrom.GetVAM_Locator_ID()).GetVAM_Warehouse_ID();
                         }
                         costFrom = MVAMProductCost.Get(product, M_ASI_ID, mas, movementlineFrom.GetVAF_Org_ID(), ce.GetVAM_ProductCostElement_ID(), M_SourceWarehouse_ID);
                     }
@@ -1645,8 +1645,8 @@ namespace VAdvantage.Model
                 }
                 if (GetVAM_InvTrf_Line_ID() > 0)
                 {
-                    movementline = new MMovementLine(GetCtx(), GetVAM_InvTrf_Line_ID(), Get_Trx());
-                    movement = new MMovement(GetCtx(), movementline.GetVAM_InventoryTransfer_ID(), Get_Trx());
+                    movementline = new MVAMInvTrfLine(GetCtx(), GetVAM_InvTrf_Line_ID(), Get_Trx());
+                    movement = new MVAMInventoryTransfer(GetCtx(), movementline.GetVAM_InventoryTransfer_ID(), Get_Trx());
                 }
 
                 // if current cost price avialble then add that amount else the same scenario
@@ -3857,7 +3857,7 @@ namespace VAdvantage.Model
 
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
                 {
-                    MMovementLine moveline = null;
+                    MVAMInvTrfLine moveline = null;
                     // Cost combination not calculate for this Transaction
                     if (windowName.Equals("Return To Vendor") || windowName.Equals("Shipment") ||
                         windowName.Equals("Internal Use Inventory") || windowName.Equals("Production Execution") || windowName.Equals("AssetDisposal"))
@@ -3867,7 +3867,7 @@ namespace VAdvantage.Model
                     else if (windowName.Equals("Inventory Move"))
                     {
                         // cost combination not calculated when Transaction is Origna (not reverse transaction) and for which org we are reducing product
-                        moveline = new MMovementLine(GetCtx(), cd.GetVAM_InvTrf_Line_ID(), Get_Trx());
+                        moveline = new MVAMInvTrfLine(GetCtx(), cd.GetVAM_InvTrf_Line_ID(), Get_Trx());
                         if (moveline.Get_ColumnIndex("ReversalDoc_ID") > 0 && moveline.GetReversalDoc_ID() == 0 && cd.GetQty() < 0)
                             isCurrentCostprice = false;
                     }

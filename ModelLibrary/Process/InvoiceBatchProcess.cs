@@ -92,10 +92,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             if (Signum(batch.GetControlAmt()) != 0 && batch.GetControlAmt().CompareTo(batch.GetDocumentAmt()) != 0)
                 throw new Exception("@ControlAmt@ <> @DocumentAmt@");
             //
-            MVABInvoiceBatchLine[] lines = batch.GetLines(false);
+            MVABBatchInvoiceLine[] lines = batch.GetLines(false);
             for (int i = 0; i < lines.Length; i++)
             {
-                MVABInvoiceBatchLine line = lines[i];
+                MVABBatchInvoiceLine line = lines[i];
                 if (line.GetVAB_Invoice_ID() != 0 || line.GetVAB_InvoiceLine_ID() != 0)
                     continue;
 

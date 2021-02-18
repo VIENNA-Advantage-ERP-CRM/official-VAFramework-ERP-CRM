@@ -51,7 +51,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="measure">Measure</param>
         /// <returns>array of Achievements</returns>
-        public static MVAPAAccomplishment[] Get(MMeasure measure)
+        public static MVAPAAccomplishment[] Get(MVAPAEvaluate measure)
         {
             return GetOfMeasure(measure.GetCtx(), measure.GetVAPA_Evaluate_ID());
         }
@@ -136,7 +136,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void UpdateAchievementGoals()
         {
-            MMeasure measure = MMeasure.Get(GetCtx(), GetVAPA_Evaluate_ID());
+            MVAPAEvaluate measure = MVAPAEvaluate.Get(GetCtx(), GetVAPA_Evaluate_ID());
             measure.UpdateGoals();
         }
 

@@ -9,23 +9,23 @@ using ViennaAdvantage.Model;
 
 namespace VAdvantage.Model
 {
-    public class MLineDimension : X_VAGL_LineDimension
+    public class MVAGLLineDimension : X_VAGL_LineDimension
     {
         /** Is record save from GL Voucher form **/
         private bool _isSaveFromForm;
-        public MLineDimension(Ctx ctx, int VAGL_LineDimension_ID, Trx trxName)
+        public MVAGLLineDimension(Ctx ctx, int VAGL_LineDimension_ID, Trx trxName)
              : base(ctx, VAGL_LineDimension_ID, trxName)
         {
         }
 
-        public MLineDimension(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAGLLineDimension(Ctx ctx, DataRow dr, Trx trxName)
              : base(ctx, dr, trxName)
         {
         }
 
         protected override bool BeforeSave(bool newRecord)
         {
-            MJournalLine obj = new MJournalLine(GetCtx(), GetVAGL_JRNLLine_ID(), Get_Trx());
+            MVAGLJRNLLine obj = new MVAGLJRNLLine(GetCtx(), GetVAGL_JRNLLine_ID(), Get_Trx());
 
             // In Case of reversal and form data, bypass this condition
             if (!(obj.Get_ColumnIndex("ReversalDoc_ID") > 0 && obj.GetReversalDoc_ID() > 0) && !GetIsFormData())

@@ -10,7 +10,7 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MLocatorContoller:Controller
+    public class MVAMLocatorContoller:Controller
     {
         public ActionResult Index()
         {
@@ -24,7 +24,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MLocatorModel objLocator = new MLocatorModel();
+                MVAMLocatorModel objLocator = new MVAMLocatorModel();
                 retJSON = JsonConvert.SerializeObject(objLocator.GetLocator(ctx,fields));
             }         
             return Json(retJSON, JsonRequestBehavior.AllowGet);

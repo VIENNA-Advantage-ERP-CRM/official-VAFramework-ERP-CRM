@@ -190,7 +190,7 @@ namespace VIS.Models
         {
             if (warehouse == 0 && locator > 0)
             {
-                MLocator VAM_Locator = MLocator.Get(_ctx, locator);
+                MVAMLocator VAM_Locator = MVAMLocator.Get(_ctx, locator);
                 warehouse = VAM_Locator.GetVAM_Warehouse_ID();
             }
             List<TreeContainer> keyVal = new List<TreeContainer>();
@@ -438,7 +438,7 @@ namespace VIS.Models
                 {
                     error.Clear();
                     error.Append(SaveMoveLinewithFullContainer(Util.GetValueOfInt(mData[0]["VAM_InventoryTransfer_ID"]),
-                                                   Util.GetValueOfInt(mData[0]["FromLocator"]),
+                                                   Util.GetValueOfInt(mData[0]["FroMVAMLocator"]),
                                                    Util.GetValueOfInt(mData[0]["FromContainer"]),
                                                    Util.GetValueOfInt(mData[0]["ToLocator"]),
                                                    Util.GetValueOfInt(mData[0]["ToContainer"]),
@@ -449,19 +449,19 @@ namespace VIS.Models
                 }
 
             moveFullContainer:
-                MMovementLine moveline = null;
+                MVAMInvTrfLine moveline = null;
                 MProduct product = null;
                 int moveId = 0;
                 for (int i = 0; i < mData.Count; i++)
                 {
                     #region Quantity Only
-                    MMovement move = new MMovement(_ctx, Util.GetValueOfInt(mData[i]["VAM_InventoryTransfer_ID"]), null);
+                    MVAMInventoryTransfer move = new MVAMInventoryTransfer(_ctx, Util.GetValueOfInt(mData[i]["VAM_InventoryTransfer_ID"]), null);
 
                     moveId = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT NVL(VAM_InvTrf_Line_ID, 0) AS VAM_InventoryTransfer_ID FROM VAM_InvTrf_Line WHERE 
                              VAM_InventoryTransfer_ID = " + Util.GetValueOfInt(mData[i]["VAM_InventoryTransfer_ID"]) +
                              @" AND VAM_Product_ID = " + Util.GetValueOfInt(mData[i]["VAM_Product_ID"]) +
                              @" AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + Util.GetValueOfInt(mData[i]["VAM_PFeature_SetInstance_ID"]) +
-                             @" AND VAM_Locator_ID = " + Util.GetValueOfInt(mData[i]["FromLocator"]) +
+                             @" AND VAM_Locator_ID = " + Util.GetValueOfInt(mData[i]["FroMVAMLocator"]) +
                              @" AND NVL(VAM_ProductContainer_ID, 0) = " + Util.GetValueOfInt(mData[i]["FromContainer"]) +
                              @" AND VAM_LocatorTo_ID = " + Util.GetValueOfInt(mData[i]["ToLocator"]) +
                              @" AND NVL(Ref_VAM_ProductContainerTo_ID, 0) = " + Util.GetValueOfInt(mData[i]["ToContainer"]) +
@@ -469,11 +469,11 @@ namespace VIS.Models
 
                     if (moveId > 0)
                     {
-                        moveline = new MMovementLine(_ctx, moveId, trx);
+                        moveline = new MVAMInvTrfLine(_ctx, moveId, trx);
                     }
                     else
                     {
-                        moveline = new MMovementLine(_ctx, 0, trx);
+                        moveline = new MVAMInvTrfLine(_ctx, 0, trx);
                     }
                     if (moveId == 0)
                     {
@@ -486,7 +486,7 @@ namespace VIS.Models
                         moveline.SetVAM_Product_ID(Util.GetValueOfInt(mData[i]["VAM_Product_ID"]));
                         moveline.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(mData[i]["VAM_PFeature_SetInstance_ID"]));
                         moveline.SetVAB_UOM_ID(Util.GetValueOfInt(mData[i]["VAB_UOM_ID"]));
-                        moveline.SetVAM_Locator_ID(Util.GetValueOfInt(mData[i]["FromLocator"]));
+                        moveline.SetVAM_Locator_ID(Util.GetValueOfInt(mData[i]["FroMVAMLocator"]));
                         moveline.SetVAM_LocatorTo_ID(Util.GetValueOfInt(mData[i]["ToLocator"]));
                         moveline.SetVAM_ProductContainer_ID(Util.GetValueOfInt(mData[i]["FromContainer"]));
                         moveline.SetRef_VAM_ProductContainerTo_ID(Util.GetValueOfInt(mData[i]["ToContainer"]));
@@ -539,7 +539,7 @@ namespace VIS.Models
         /// is used to save data in case of Full move container / full qty move
         /// </summary>
         /// <param name="movementId">movement header refernce</param>
-        /// <param name="fromLocatorId">From Locator - from where we have to move product</param>
+        /// <param name="froMVAMLocatorId">From Locator - from where we have to move product</param>
         /// <param name="fromContainerId">From Container - from which container, we have to move product</param>
         /// <param name="toLocatorId">To Locator - where we are moving product</param>
         /// <param name="toContainerId">To container - in which container we are moving product</param>
@@ -547,9 +547,9 @@ namespace VIS.Models
         /// <param name="isMoveFullContainerQty">Is Container also move with Product</param>
         /// <param name="trx">Self created Trx</param>
         /// <returns>Message : lines inserted or not</returns>
-        public String SaveMoveLinewithFullContainer(int movementId, int fromLocatorId, int fromContainerId, int toLocatorId, int toContainerId, int lineNo, bool isMoveFullContainerQty, Trx trx)
+        public String SaveMoveLinewithFullContainer(int movementId, int froMVAMLocatorId, int fromContainerId, int toLocatorId, int toContainerId, int lineNo, bool isMoveFullContainerQty, Trx trx)
         {
-            MMovement movement = new MMovement(_ctx, movementId, trx);
+            MVAMInventoryTransfer movement = new MVAMInventoryTransfer(_ctx, movementId, trx);
             string childContainerId = null;
             StringBuilder error = new StringBuilder();
             bool ispostgerSql = DatabaseType.IsPostgre;
@@ -654,14 +654,14 @@ namespace VIS.Models
                             INNER JOIN VAB_UOM u ON u.VAB_UOM_ID = p.VAB_UOM_ID
                             WHERE t.IsActive = 'Y' AND NVL(t.VAM_ProductContainer_ID, 0) IN ( " + childContainerId +
                            @" ) AND t.MovementDate <=" + GlobalVariable.TO_DATE(movement.GetMovementDate(), true) + @" 
-                               AND t.VAM_Locator_ID  = " + fromLocatorId + @"
+                               AND t.VAM_Locator_ID  = " + froMVAMLocatorId + @"
                                AND t.VAF_Client_ID  = " + movement.GetVAF_Client_ID() + @"
                           ) t WHERE ContainerCurrentQty <> 0 ";
             DataSet dsRecords = DB.ExecuteDataset(sql, null, trx);
             if (dsRecords != null && dsRecords.Tables.Count > 0 && dsRecords.Tables[0].Rows.Count > 0)
             {
                 int movementlineId = 0;
-                MMovementLine moveline = null;
+                MVAMInvTrfLine moveline = null;
                 MProduct product = null;
                 for (int i = 0; i < dsRecords.Tables[0].Rows.Count; i++)
                 {
@@ -669,7 +669,7 @@ namespace VIS.Models
                              VAM_InventoryTransfer_ID = " + Util.GetValueOfInt(movementId) +
                             @" AND VAM_Product_ID = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]) +
                             @" AND NVL(VAM_PFeature_SetInstance_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]) +
-                            @" AND VAM_Locator_ID = " + Util.GetValueOfInt(fromLocatorId) +
+                            @" AND VAM_Locator_ID = " + Util.GetValueOfInt(froMVAMLocatorId) +
                             @" AND NVL(VAM_ProductContainer_ID, 0) = " + Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_ProductContainer_ID"]) +
                             @" AND VAM_LocatorTo_ID = " + Util.GetValueOfInt(toLocatorId) +
                             @" AND NVL(Ref_VAM_ProductContainerTo_ID, 0) = " + toContainerId +
@@ -677,11 +677,11 @@ namespace VIS.Models
 
                     if (movementlineId > 0)
                     {
-                        moveline = new MMovementLine(_ctx, movementlineId, trx);
+                        moveline = new MVAMInvTrfLine(_ctx, movementlineId, trx);
                     }
                     else
                     {
-                        moveline = new MMovementLine(_ctx, 0, trx);
+                        moveline = new MVAMInvTrfLine(_ctx, 0, trx);
                     }
                     if (movementlineId == 0)
                     {
@@ -694,7 +694,7 @@ namespace VIS.Models
                         moveline.SetVAM_Product_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_Product_ID"]));
                         moveline.SetVAM_PFeature_SetInstance_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_PFeature_SetInstance_ID"]));
                         moveline.SetVAB_UOM_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAB_UOM_ID"]));
-                        moveline.SetVAM_Locator_ID(fromLocatorId);
+                        moveline.SetVAM_Locator_ID(froMVAMLocatorId);
                         moveline.SetVAM_LocatorTo_ID(toLocatorId);
                         moveline.SetVAM_ProductContainer_ID(Util.GetValueOfInt(dsRecords.Tables[0].Rows[i]["VAM_ProductContainer_ID"]));
                         moveline.SetRef_VAM_ProductContainerTo_ID(toContainerId);
@@ -866,13 +866,13 @@ namespace VIS.Models
         /// <writer>Amit Bansal</writer>
         public string SaveProductContainer(int warehouseId, int locatorId, string value, string name, Decimal height, Decimal width, int parentContainerId)
         {
-            MLocator VAM_Locator = null;
+            MVAMLocator VAM_Locator = null;
             MWarehouse VAM_Warehouse = null;
 
             // when warehouse ID is ZERO, then extract it from Locator
             if (warehouseId == 0 && locatorId > 0)
             {
-                VAM_Locator = MLocator.Get(_ctx, locatorId);
+                VAM_Locator = MVAMLocator.Get(_ctx, locatorId);
                 warehouseId = VAM_Locator.GetVAM_Warehouse_ID();
             }
             // when locator ID is ZERO, then extract it either from Parent Conatiner or from Warehouse
@@ -891,7 +891,7 @@ namespace VIS.Models
 
             // need to check warehouse and locator shoyld be active during ceation of Product Container
             VAM_Warehouse = MWarehouse.Get(_ctx, warehouseId);
-            VAM_Locator = MLocator.Get(_ctx, locatorId);
+            VAM_Locator = MVAMLocator.Get(_ctx, locatorId);
             if (!VAM_Warehouse.IsActive())
             {
                 return Msg.GetMsg(_ctx, "VIS_WarehouseNotActive");

@@ -1,8 +1,8 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MVABInvoicePaySchedule
+ * Class Name     : MVABSchedInvoicePayment
  * Purpose        : Invoice payment shedule calculations 
- * Class Used     : X_VAB_sched_InvoicePayment
+ * Class Used     : MVABSchedInvoicePayment
  * Chronological    Development
  * Raghunandan     22-Jun-2009
   ******************************************************/
@@ -26,10 +26,10 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MVABInvoicePaySchedule : X_VAB_sched_InvoicePayment
+    public class MVABSchedInvoicePayment : X_VAB_Sched_InvoicePayment
     {
         // Static Logger					
-        private static VLogger _log = VLogger.GetVLogger(typeof(MVABInvoicePaySchedule).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABSchedInvoicePayment).FullName);
         // 100								
         private static Decimal HUNDRED = 100.0M;
         /**	Parent						*/
@@ -45,7 +45,7 @@ namespace VAdvantage.Model
          *	@param trxName transaction
          *	@return array of schedule
          */
-        public static MVABInvoicePaySchedule[] GetInvoicePaySchedule(Ctx Ctx,
+        public static MVABSchedInvoicePayment[] GetInvoicePaySchedule(Ctx Ctx,
             int VAB_Invoice_ID, int VAB_sched_InvoicePayment_ID, Trx trxName)
         {
             String sql = "SELECT * FROM VAB_sched_InvoicePayment ips ";
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
             sql += "ORDER BY duedate";
 
             //
-            List<MVABInvoicePaySchedule> list = new List<MVABInvoicePaySchedule>();
+            List<MVABSchedInvoicePayment> list = new List<MVABSchedInvoicePayment>();
             DataTable dt = null;
             IDataReader idr = null;
             try
@@ -72,7 +72,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MVABInvoicePaySchedule(Ctx, dr, trxName));
+                    list.Add(new MVABSchedInvoicePayment(Ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -88,7 +88,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
 
-            MVABInvoicePaySchedule[] retValue = new MVABInvoicePaySchedule[list.Count];
+            MVABSchedInvoicePayment[] retValue = new MVABSchedInvoicePayment[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -99,7 +99,7 @@ namespace VAdvantage.Model
          *	@param VAB_sched_InvoicePayment_ID id
          *	@param trxName transaction
          */
-        public MVABInvoicePaySchedule(Ctx Ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
+        public MVABSchedInvoicePayment(Ctx Ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
             : base(Ctx, VAB_sched_InvoicePayment_ID, trxName)
         {
             if (VAB_sched_InvoicePayment_ID == 0)
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
          *	@param dr result set
          *	@param trxName transaction
          */
-        public MVABInvoicePaySchedule(Ctx Ctx, DataRow dr, Trx trxName)
+        public MVABSchedInvoicePayment(Ctx Ctx, DataRow dr, Trx trxName)
             : base(Ctx, dr, trxName)
         {
 
@@ -130,7 +130,7 @@ namespace VAdvantage.Model
          *	@param invoice invoice
          *	@param paySchedule payment schedule
          */
-        public MVABInvoicePaySchedule(MVABInvoice invoice, MVABPaymentSchedule paySchedule)
+        public MVABSchedInvoicePayment(MVABInvoice invoice, MVABPaymentSchedule paySchedule)
             : base(invoice.GetCtx(), 0, invoice.Get_TrxName())
         {
 
@@ -195,7 +195,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MVABInvoicePaySchedule[");
+            StringBuilder sb = new StringBuilder("MVABSchedInvoicePayment[");
             sb.Append(Get_ID()).Append("-Due=" + GetDueDate() + "/" + GetDueAmt())
                 .Append(";Discount=").Append(GetDiscountDate() + "/" + GetDiscountAmt())
                 .Append("]");

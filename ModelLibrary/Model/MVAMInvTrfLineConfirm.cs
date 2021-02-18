@@ -25,10 +25,10 @@ namespace VAdvantage.Model
     /// <summary>
     /// Inventory Movement Confirmation Line
     /// </summary>
-    public class MMovementLineConfirm : X_VAM_InvTrf_LineConfirm
+    public class MVAMInvTrfLineConfirm : X_VAM_InvTrf_LineConfirm
     {
         /**	Movement Line			*/
-        private MMovementLine _line = null;
+        private MVAMInvTrfLine _line = null;
 
         /// <summary>
         /// Standard Constructor
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_InvTrf_LineConfirm_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MMovementLineConfirm(Ctx ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName)
+        public MVAMInvTrfLineConfirm(Ctx ctx, int VAM_InvTrf_LineConfirm_ID, Trx trxName)
             : base(ctx, VAM_InvTrf_LineConfirm_ID, trxName)
 	    {
             if (VAM_InvTrf_LineConfirm_ID == 0)
@@ -57,7 +57,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transation</param>
-        public MMovementLineConfirm(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvTrfLineConfirm(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -66,7 +66,7 @@ namespace VAdvantage.Model
 	    /// Parent constructor
 	    /// </summary>
 	    /// <param name="parent">parent</param>
-	    public MMovementLineConfirm (MMovementConfirm parent)
+	    public MVAMInvTrfLineConfirm (MVAMInvTrfConfirm parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
 	    {
             SetClientOrg(parent);
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         /// Set Movement Line
         /// </summary>
         /// <param name="line">line</param>
-        public void SetMovementLine(MMovementLine line)
+        public void SetMovementLine(MVAMInvTrfLine line)
         {
             SetVAM_InvTrf_Line_ID(line.GetVAM_InvTrf_Line_ID());
             SetTargetQty(line.GetMovementQty());
@@ -92,10 +92,10 @@ namespace VAdvantage.Model
         /// Get Movement Line
         /// </summary>
         /// <returns>line</returns>
-        public MMovementLine GetLine()
+        public MVAMInvTrfLine GetLine()
         {
             if (_line == null)
-                _line = new MMovementLine(GetCtx(), GetVAM_InvTrf_Line_ID(), Get_TrxName());
+                _line = new MVAMInvTrfLine(GetCtx(), GetVAM_InvTrf_Line_ID(), Get_TrxName());
             return _line;
         }
 
@@ -106,7 +106,7 @@ namespace VAdvantage.Model
         /// <returns>success</returns>
         public Boolean ProcessLine()
         {
-            MMovementLine line = GetLine();
+            MVAMInvTrfLine line = GetLine();
 
             line.SetTargetQty(GetTargetQty());
             line.SetMovementQty(GetConfirmedQty());
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
         //Handle Reverse case
         public Boolean ProcessLineReverse()
         {
-            MMovementLine line = GetLine();
+            MVAMInvTrfLine line = GetLine();
 
             line.SetTargetQty(line.GetQtyEntered());
             line.SetMovementQty(line.GetQtyEntered());

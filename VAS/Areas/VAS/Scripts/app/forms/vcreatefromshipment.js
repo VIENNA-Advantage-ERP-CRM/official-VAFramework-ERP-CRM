@@ -29,7 +29,7 @@
             if (baseObj.Applybtn)
                 baseObj.Applybtn.css("display", "block");
             var VAF_Column_ID = 3537;            //  VAM_Inv_InOut.VAM_Locator_ID
-            var lookup = new VIS.MLocatorLookup(VIS.Env.getCtx(), baseObj.windowNo);
+            var lookup = new VIS.MVAMLocatorLookup(VIS.Env.getCtx(), baseObj.windowNo);
             baseObj.locatorField = new VIS.Controls.VLocator("VAM_Locator_ID", true, false, true, VIS.DisplayType.Locator, lookup);
             baseObj.deliveryDate = new VIS.Controls.VDate("DeliveryDate", false, false, true, VIS.DisplayType.Date, "DeliveryDate");
             var lookupProd = VIS.MLookupFactory.getMLookUp(VIS.Env.getCtx(), baseObj.windowNo, 2221, VIS.DisplayType.Search);

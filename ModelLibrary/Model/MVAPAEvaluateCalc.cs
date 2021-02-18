@@ -16,29 +16,29 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MMeasureCalc : X_VAPA_EvaluateCalc
+    public class MVAPAEvaluateCalc : X_VAPA_EvaluateCalc
     {
         /**
-         * 	Get MMeasureCalc from Cache
+         * 	Get MVAPAEvaluateCalc from Cache
          *	@param ctx Ctx
          *	@param VAPA_EvaluateCalc_ID id
-         *	@return MMeasureCalc
+         *	@return MVAPAEvaluateCalc
          */
-        public static MMeasureCalc Get(Ctx ctx, int VAPA_EvaluateCalc_ID)
+        public static MVAPAEvaluateCalc Get(Ctx ctx, int VAPA_EvaluateCalc_ID)
         {
             int key = VAPA_EvaluateCalc_ID;
-            MMeasureCalc retValue = (MMeasureCalc)_cache[key];
+            MVAPAEvaluateCalc retValue = (MVAPAEvaluateCalc)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MMeasureCalc(ctx, VAPA_EvaluateCalc_ID, null);
+            retValue = new MVAPAEvaluateCalc(ctx, VAPA_EvaluateCalc_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
         }
 
         /**	Cache						*/
-        private static CCache<int, MMeasureCalc> _cache
-            = new CCache<int, MMeasureCalc>("VAPA_EvaluateCalc", 10);
+        private static CCache<int, MVAPAEvaluateCalc> _cache
+            = new CCache<int, MVAPAEvaluateCalc>("VAPA_EvaluateCalc", 10);
 
         /**
          * 	Standard Constructor
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
          *	@param VAPA_EvaluateCalc_ID id
          *	@param trxName trx
          */
-        public MMeasureCalc(Ctx ctx, int VAPA_EvaluateCalc_ID, Trx trxName) :
+        public MVAPAEvaluateCalc(Ctx ctx, int VAPA_EvaluateCalc_ID, Trx trxName) :
             base(ctx, VAPA_EvaluateCalc_ID, trxName)
         {
 
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName trx
          */
-        public MMeasureCalc(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVAPAEvaluateCalc(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -82,7 +82,7 @@ namespace VAdvantage.Model
                 .Append(GetWhereClause());
             //	Date Restriction
             if (GetDateColumn() != null
-                && MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(MeasureDataType)
+                && MVAPAEvaluate.MEASUREDATATYPE_QtyAmountInTime.Equals(MeasureDataType)
                 && !MVAPATarget.MEASUREDISPLAY_Total.Equals(MeasureScope))
             {
                 if (reportDate == null)
@@ -430,7 +430,7 @@ namespace VAdvantage.Model
          */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MMeasureCalc[");
+            StringBuilder sb = new StringBuilder("MVAPAEvaluateCalc[");
             sb.Append(Get_ID()).Append("-").Append(GetName()).Append("]");
             return sb.ToString();
         }

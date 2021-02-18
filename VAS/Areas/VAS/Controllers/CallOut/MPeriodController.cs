@@ -10,9 +10,9 @@ using VIS.Models;
 
 namespace VIS.Controllers
 {
-    public class MPeriodController : Controller
+    public class MVABYearPeriodController : Controller
     {
-        // GET: VIS/MPeriod
+        // GET: VIS/MVABYearPeriod
         public ActionResult Index()
         {
             return View();
@@ -29,7 +29,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPeriodModel objDocType = new MPeriodModel();
+                MVABYearPeriodModel objDocType = new MVABYearPeriodModel();
                 retJSON = JsonConvert.SerializeObject(objDocType.GetPeriod(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);
@@ -46,7 +46,7 @@ namespace VIS.Controllers
             if (Session["ctx"] != null)
             {
                 VAdvantage.Utility.Ctx ctx = Session["ctx"] as Ctx;
-                MPeriodModel objDocType = new MPeriodModel();
+                MVABYearPeriodModel objDocType = new MVABYearPeriodModel();
                 retJSON = JsonConvert.SerializeObject(objDocType.GetPeriodDetail(ctx, fields));
             }
             return Json(retJSON, JsonRequestBehavior.AllowGet);

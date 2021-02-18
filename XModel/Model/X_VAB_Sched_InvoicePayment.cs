@@ -14,9 +14,9 @@ namespace VAdvantage.Model
     /** Generated Model for VAB_sched_InvoicePayment
      *  @author Jagmohan Bhatt (generated) 
      *  @version Vienna Framework 1.1.1 - $Id$ */
-    public class X_VAB_sched_InvoicePayment : PO
+    public class X_VAB_Sched_InvoicePayment : PO
     {
-        public X_VAB_sched_InvoicePayment(Context ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
+        public X_VAB_Sched_InvoicePayment(Context ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
             : base(ctx, VAB_sched_InvoicePayment_ID, trxName)
         {
             /** if (VAB_sched_InvoicePayment_ID == 0)
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
             }
              */
         }
-        public X_VAB_sched_InvoicePayment(Ctx ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
+        public X_VAB_Sched_InvoicePayment(Ctx ctx, int VAB_sched_InvoicePayment_ID, Trx trxName)
             : base(ctx, VAB_sched_InvoicePayment_ID, trxName)
         {
             /** if (VAB_sched_InvoicePayment_ID == 0)
@@ -53,7 +53,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAB_sched_InvoicePayment(Context ctx, DataRow rs, Trx trxName)
+        public X_VAB_Sched_InvoicePayment(Context ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -62,7 +62,7 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAB_sched_InvoicePayment(Ctx ctx, DataRow rs, Trx trxName)
+        public X_VAB_Sched_InvoicePayment(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -71,14 +71,14 @@ namespace VAdvantage.Model
         @param rs result set 
         @param trxName transaction
         */
-        public X_VAB_sched_InvoicePayment(Ctx ctx, IDataReader dr, Trx trxName)
+        public X_VAB_Sched_InvoicePayment(Ctx ctx, IDataReader dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
         /** Static Constructor 
          Set Table ID By Table Name
          added by ->Harwinder */
-        static X_VAB_sched_InvoicePayment()
+        static X_VAB_Sched_InvoicePayment()
         {
             Table_ID = Get_Table_ID(Table_Name);
             model = new KeyNamePair(Table_ID, Table_Name);
@@ -92,7 +92,7 @@ namespace VAdvantage.Model
         // =551;
 
         /** TableName=VAB_sched_InvoicePayment */
-        public static String Table_Name = "VAB_sched_InvoicePayment";
+        public static String Table_Name = "VAB_Sched_InvoicePayment";
 
         protected static KeyNamePair model;
         protected Decimal accessLevel = new Decimal(1);
@@ -126,7 +126,7 @@ namespace VAdvantage.Model
         */
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("X_VAB_sched_InvoicePayment[").Append(Get_ID()).Append("]");
+            StringBuilder sb = new StringBuilder("MVABSchedInvoicePayment[").Append(Get_ID()).Append("]");
             return sb.ToString();
         }
         /** Set Invoice Payment Schedule.

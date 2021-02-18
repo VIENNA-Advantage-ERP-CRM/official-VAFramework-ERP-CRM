@@ -327,7 +327,7 @@ namespace VIS.Models
         {
             Decimal qty = 0;
             log.Config("VAB_Invoice_ID=" + VAB_Invoice_ID);
-            MInvoice invoice = new MInvoice(ctx, VAB_Invoice_ID, null);
+            MVABInvoice invoice = new MVABInvoice(ctx, VAB_Invoice_ID, null);
             if (invoice.Get_ID() == 0)
             {
                 log.Log(Level.SEVERE, "Not found - VAB_Invoice_ID=" + VAB_Invoice_ID);
@@ -345,7 +345,7 @@ namespace VIS.Models
                     {
                         int VAM_Product_ID = Util.GetValueOfInt(_selectionList[i].ProductID);//.intValue();
                         //	Create Line
-                        MInvoiceLine il = new MInvoiceLine(invoice);
+                        MVABInvoiceLine il = new MVABInvoiceLine(invoice);
                         il.SetVAM_Product_ID(Util.GetValueOfInt(_selectionList[i].ProductID));
                         il.SetQty(Util.GetValueOfInt(_selectionList[i].BOMQty));
                         il.SetPrice();

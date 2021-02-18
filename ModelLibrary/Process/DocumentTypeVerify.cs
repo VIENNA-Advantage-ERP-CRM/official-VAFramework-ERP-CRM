@@ -129,7 +129,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                    _log.Config("VAF_Client_ID=" + Client_ID
                         + ", VAB_YearPeriod_ID=" + VAB_YearPeriod_ID + ", DocBaseType=" + DocBaseType);
                     //
-                    MPeriodControl pc = new MPeriodControl(ctx, Client_ID, VAB_YearPeriod_ID, DocBaseType, trxName);
+                    MVABYearPeriodControl pc = new MVABYearPeriodControl(ctx, Client_ID, VAB_YearPeriod_ID, DocBaseType, trxName);
                     pc.SetVAF_Org_ID(Org_ID);                // Set Organization of Period, on Period Control.
                     if (pc.Save())
                     {

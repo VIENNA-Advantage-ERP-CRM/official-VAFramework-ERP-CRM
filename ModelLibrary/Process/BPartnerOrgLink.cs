@@ -154,10 +154,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             }
 		}
 		//	Create Locator
-		MLocator mLoc = wh.GetDefaultLocator();
+		MVAMLocator mLoc = wh.GetDefaultLocator();
 		if (mLoc == null)
 		{
-			mLoc = new MLocator (wh, "Standard");
+			mLoc = new MVAMLocator (wh, "Standard");
 			mLoc.SetIsDefault(true);
 			mLoc.Save();
 		}

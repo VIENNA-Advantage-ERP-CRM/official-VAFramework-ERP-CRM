@@ -58,37 +58,37 @@ namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.info("VAB_YearPeriodControl_ID=" + _VAB_YearPeriodControl_ID);
-            MPeriodControl pc = new MPeriodControl(GetCtx(), _VAB_YearPeriodControl_ID, Get_TrxName());
+            MVABYearPeriodControl pc = new MVABYearPeriodControl(GetCtx(), _VAB_YearPeriodControl_ID, Get_TrxName());
             if (pc.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@  @VAB_YearPeriodControl_ID@=" + _VAB_YearPeriodControl_ID);
             }
             //	Permanently closed
-            if (MPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(pc.GetPeriodStatus()))
+            if (MVABYearPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(pc.GetPeriodStatus()))
             {
                 throw new Exception("@PeriodStatus@ = " + pc.GetPeriodStatus());
             }
             //	No Action
-            if (MPeriodControl.PERIODACTION_NoAction.Equals(pc.GetPeriodAction()))
+            if (MVABYearPeriodControl.PERIODACTION_NoAction.Equals(pc.GetPeriodAction()))
             {
                 return "@OK@";
             }
             //	Open
-            if (MPeriodControl.PERIODACTION_OpenPeriod.Equals(pc.GetPeriodAction()))
+            if (MVABYearPeriodControl.PERIODACTION_OpenPeriod.Equals(pc.GetPeriodAction()))
             {
-                pc.SetPeriodStatus(MPeriodControl.PERIODSTATUS_Open);
+                pc.SetPeriodStatus(MVABYearPeriodControl.PERIODSTATUS_Open);
             }
             //	Close
-            if (MPeriodControl.PERIODACTION_ClosePeriod.Equals(pc.GetPeriodAction()))
+            if (MVABYearPeriodControl.PERIODACTION_ClosePeriod.Equals(pc.GetPeriodAction()))
             {
-                pc.SetPeriodStatus(MPeriodControl.PERIODSTATUS_Closed);
+                pc.SetPeriodStatus(MVABYearPeriodControl.PERIODSTATUS_Closed);
             }
             //	Close Permanently
-            if (MPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(pc.GetPeriodAction()))
+            if (MVABYearPeriodControl.PERIODACTION_PermanentlyClosePeriod.Equals(pc.GetPeriodAction()))
             {
-                pc.SetPeriodStatus(MPeriodControl.PERIODSTATUS_PermanentlyClosed);
+                pc.SetPeriodStatus(MVABYearPeriodControl.PERIODSTATUS_PermanentlyClosed);
             }
-            pc.SetPeriodAction(MPeriodControl.PERIODACTION_NoAction);
+            pc.SetPeriodAction(MVABYearPeriodControl.PERIODACTION_NoAction);
             Boolean ok = pc.Save();
             //	Reset Cache
             CacheMgt.Get().Reset("VAB_YearPeriodControl", 0);

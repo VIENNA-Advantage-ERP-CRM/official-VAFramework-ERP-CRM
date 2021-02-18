@@ -160,7 +160,7 @@ namespace VAdvantage.Acct
                 _line.GetAccount(acctType, as1),
                 as1.GetVAB_Currency_ID(), null, cost);
             cr.SetVAM_Locator_ID(_line.GetVAM_Locator_ID());
-            cr.SetLocationFromLocator(_line.GetVAM_Locator_ID(), true);	// from Loc
+            cr.SetLocationFroMVAMLocator(_line.GetVAM_Locator_ID(), true);	// from Loc
             //
             List<Fact> facts = new List<Fact>();
             facts.Add(fact);

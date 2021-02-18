@@ -131,7 +131,7 @@ namespace VAdvantage.Process
                                         + GlobalVariable.TO_DATE(Convert.ToDateTime(_moveDate).AddDays(-1), true) + "," + GetVAF_Client_ID() + "," + GetVAF_Org_ID() + "),0) AS Stock FROM DUAL";
                                     }
                                     OpeningStock = Util.GetValueOfDecimal(DB.ExecuteScalar(Qry));
-                                    MLocator loc = new MLocator(GetCtx(), _VAM_Locator_ID, Get_TrxName());
+                                    MVAMLocator loc = new MVAMLocator(GetCtx(), _VAM_Locator_ID, Get_TrxName());
                                     Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), _VAM_Locator_ID, _VAM_Product_ID, _VAM_PFeature_SetInstance_ID,
                                             OpeningStock, _currentQty, _moveDate, Get_TrxName());
                                 }

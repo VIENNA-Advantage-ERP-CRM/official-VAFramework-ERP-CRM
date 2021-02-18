@@ -252,7 +252,7 @@ namespace VAdvantage.Model
             if (IsPosted())
             {
                 // Check Period Open
-                if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 {
                     log.Warning("Period Closed");
                     return false;
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -449,7 +449,7 @@ namespace VAdvantage.Model
                                                    VA009_IsPaid = 'N' AND VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() +
                                                    @" AND VAB_sched_InvoicePayment_ID <> " + line.GetVAB_sched_InvoicePayment_ID(), null, Get_Trx()));
 
-                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                        MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                         if (paySch.IsVA009_IsPaid())
                             continue;
                         //// Added by Bharat on 27 June 2017 to restrict multiple payment against same Invoice Pay Schedule.
@@ -490,10 +490,10 @@ namespace VAdvantage.Model
                             cashline = new MVABCashJRNLLine(GetCtx(), line.GetVAB_CashJRNLLine_ID(), Get_Trx());
 
                         // in case of GL Allocation if VAGL_JRNLLine_ID is available on Allocation Line
-                        MJournalLine journalline = null;
+                        MVAGLJRNLLine journalline = null;
                         if (Util.GetValueOfInt(line.Get_Value("VAGL_JRNLLine_ID")) > 0)
                         {
-                            journalline = new MJournalLine(GetCtx(), Util.GetValueOfInt(line.Get_Value("VAGL_JRNLLine_ID")), Get_Trx());
+                            journalline = new MVAGLJRNLLine(GetCtx(), Util.GetValueOfInt(line.Get_Value("VAGL_JRNLLine_ID")), Get_Trx());
                         }
 
                         decimal currencymultiplyRate = 1;
@@ -609,10 +609,10 @@ namespace VAdvantage.Model
                             paySch.SetVA009_ExecutionStatus("R");
 
                         //back up of Original schedule
-                        MVABInvoicePaySchedule backupNewPaySch = null;
+                        MVABSchedInvoicePayment backupNewPaySch = null;
                         if (line.GetOverUnderAmt() != 0 && !_isDuplicateLine)
                         {
-                            backupNewPaySch = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+                            backupNewPaySch = new MVABSchedInvoicePayment(GetCtx(), 0, Get_Trx());
                             backupNewPaySch.Set_TrxName(Get_Trx());
                             PO.CopyValues(paySch, backupNewPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
                         }
@@ -640,8 +640,8 @@ namespace VAdvantage.Model
                         // Create new invoice schedule with ( over under amount - varaince amount ) as Due Amount rest are same
                         if (line.GetOverUnderAmt() != 0 && !_isDuplicateLine)
                         {
-                            //MVABInvoicePaySchedule newPaySch = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
-                            MVABInvoicePaySchedule newPaySch = backupNewPaySch;
+                            //MVABSchedInvoicePayment newPaySch = new MVABSchedInvoicePayment(GetCtx(), 0, Get_Trx());
+                            MVABSchedInvoicePayment newPaySch = backupNewPaySch;
                             newPaySch.Set_TrxName(Get_Trx());
                             //PO.CopyValues(paySch, newPaySch, paySch.GetVAF_Client_ID(), paySch.GetVAF_Org_ID());
 
@@ -936,7 +936,7 @@ namespace VAdvantage.Model
                 throw new Exception("Allocation already reversed (not active)");
 
             //	Can we delete posting
-            if (!MPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateTrx(), MVABMasterDocType.DOCBASETYPE_PAYMENTALLOCATION, GetVAF_Org_ID()))
                 throw new Exception("@PeriodClosed@");
             // is Non Business Day?
             // JID_1205: At the trx, need to check any non business day in that org. if not fund then check * org.
@@ -971,7 +971,7 @@ namespace VAdvantage.Model
                 // Added by Amit for Payment Management 5-11-2015   
                 if (Env.IsModuleInstalled("VA009_"))
                 {
-                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
+                    MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), line.GetVAB_sched_InvoicePayment_ID(), Get_Trx());
                     paySch.SetVA009_IsPaid(false);
                     paySch.SetVA009_ExecutionStatus("A");
                     paySch.Save(Get_Trx());
@@ -1062,11 +1062,11 @@ namespace VAdvantage.Model
         /// <param name="cashline"></param>
         /// <param name="journalline"></param>
         /// <returns></returns>
-        private decimal GetCurrencyMultiplyRate(MVABInvoice invoice, MVABPayment payment, MVABCashJRNLLine cashline, MJournalLine journalline)
+        private decimal GetCurrencyMultiplyRate(MVABInvoice invoice, MVABPayment payment, MVABCashJRNLLine cashline, MVAGLJRNLLine journalline)
         {
             decimal currencymultiplyRate = 1;
             StringBuilder _sql = new StringBuilder();
-            MVABCashJRNL cash = null; MJournal journal = null;
+            MVABCashJRNL cash = null; MVAGLJRNL journal = null;
             int currencyTo_ID = 0, VAB_CurrencyType_ID = 0, VAF_Client_ID = 0, VAF_Org_ID = 0;
             DateTime? DateAcct = null;
             DateTime? conversionDate = Get_ColumnIndex("ConversionDate") >= 0 && GetConversionDate() != null ? GetConversionDate() : GetDateAcct();
@@ -1161,7 +1161,7 @@ namespace VAdvantage.Model
         /// <param name="currencymultiplyRate"></param>
         /// <param name="doctype"></param>
         /// <param name="currency"></param>
-        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MVABInvoicePaySchedule paySch, decimal currencymultiplyRate, MVABDocTypes doctype, MVABCurrency currency, bool _isDuplicate)
+        private void SetVariance(MVABDocAllocationLine line, int countUnPaidSchedule, MVABSchedInvoicePayment paySch, decimal currencymultiplyRate, MVABDocTypes doctype, MVABCurrency currency, bool _isDuplicate)
         {
             varianceAmount = 0;
             ShiftVarianceOnOther = 0;

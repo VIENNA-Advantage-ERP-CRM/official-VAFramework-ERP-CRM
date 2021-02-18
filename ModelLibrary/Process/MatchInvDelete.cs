@@ -46,7 +46,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             log.Info("VAM_MatchInvoice_ID=" + _VAM_MatchInvoice_ID);
-            MMatchInv inv = new MMatchInv(GetCtx(), _VAM_MatchInvoice_ID, Get_TrxName());
+            MVAMMatchInvoice inv = new MVAMMatchInvoice(GetCtx(), _VAM_MatchInvoice_ID, Get_TrxName());
             if (inv.Get_ID() == 0)
             {
                 throw new Exception("@NotFound@ @VAM_MatchInvoice_ID@ " + _VAM_MatchInvoice_ID);

@@ -71,7 +71,7 @@ namespace VAdvantage.Model
         public static bool IsNonBusinessDay(Ctx ctx, DateTime? dt, int VAF_Org_ID = 0)
         {
             bool nbDay = false;
-            int VAB_YearPeriod_ID = MPeriod.GetVAB_YearPeriod_ID(ctx, dt, VAF_Org_ID);
+            int VAB_YearPeriod_ID = MVABYearPeriod.GetVAB_YearPeriod_ID(ctx, dt, VAF_Org_ID);
             string sql = "SELECT VAB_Calender_ID FROM VAB_YEAR WHERE VAB_YEAR_ID=(SELECT VAB_YEAR_ID FROM VAB_YEARPERIOD  WHERE VAB_YEARPERIOD_ID=" + VAB_YearPeriod_ID + ")";
             int VAB_Calender_ID = Convert.ToInt32(DataBase.DB.ExecuteScalar(sql, null, null));
 

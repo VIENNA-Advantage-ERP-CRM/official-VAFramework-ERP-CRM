@@ -171,10 +171,10 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		/** **/
 
 		/** Invoice Tax				**/
-		MVABInvoiceTax[] taxes = invoice.GetTaxes(false);
+		MVABTaxInvoice[] taxes = invoice.GetTaxes(false);
 		for (int i = 0; i < taxes.Length; i++)
 		{
-			MVABInvoiceTax tLine = taxes[i];
+			MVABTaxInvoice tLine = taxes[i];
 			//
 			MTaxDeclarationLine tdl = new MTaxDeclarationLine (_td, invoice, tLine);
 			tdl.SetLine((_noLines+1) * 10);

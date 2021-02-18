@@ -57,7 +57,7 @@ namespace VAdvantage.Process
         /// <returns>message</returns>
         protected override String DoIt()
         {
-            MPeriod period = new MPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_Trx());
+            MVABYearPeriod period = new MVABYearPeriod(GetCtx(), _VAB_YearPeriod_ID, Get_Trx());
 
             // Get all Document type related to Tenant
             MVABDocTypes[] types = MVABDocTypes.GetOfClient(GetCtx());
@@ -82,7 +82,7 @@ namespace VAdvantage.Process
                 // loop on multiple selected organizations
                 for (int j = 0; j < _VAF_Org_ID.Length; j++)
                 {
-                    MPeriodControl pc = new MPeriodControl(period, docBaseType);
+                    MVABYearPeriodControl pc = new MVABYearPeriodControl(period, docBaseType);
                     pc.SetVAF_Org_ID(Util.GetValueOfInt(_VAF_Org_ID[j]));
                     if (pc.Save())
                     {

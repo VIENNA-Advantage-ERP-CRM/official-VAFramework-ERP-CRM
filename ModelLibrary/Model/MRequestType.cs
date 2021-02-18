@@ -341,7 +341,7 @@ namespace VAdvantage.Model
                 + " AND Processed<>'Y'");
             //	Date Restriction
 
-            if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
+            if (MVAPAEvaluate.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
                 && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureScope))
             {
                 if (reportDate == null)
@@ -363,7 +363,7 @@ namespace VAdvantage.Model
                     .Append(DataBase.DB.TO_DATE((DateTime?)reportDate)).Append(",'").Append(trunc).Append("')");
             }	//	date
             //
-            String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
+            String sql = MVAPAEvaluateCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
                 "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
 
             log.Fine(sql);
@@ -391,7 +391,7 @@ namespace VAdvantage.Model
             String groupBy = null;
             String orderBy = null;
             //
-            if (MMeasure.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
+            if (MVAPAEvaluate.MEASUREDATATYPE_QtyAmountInTime.Equals(measureDataType)
                 && !MVAPATarget.MEASUREDISPLAY_Total.Equals(measureDisplay))
             {
                 String trunc = "D";
@@ -432,7 +432,7 @@ namespace VAdvantage.Model
                     .Append(">=").Append(dateString);
             }	//	date
             //
-            String sql = MMeasureCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
+            String sql = MVAPAEvaluateCalc.AddRestrictions(sb.ToString(), false, restrictions, role,
                 "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
             if (groupBy != null)
                 sql += " GROUP BY " + groupBy + " ORDER BY " + orderBy;
@@ -480,7 +480,7 @@ namespace VAdvantage.Model
                 where = "TRUNC(" + dateColumn + ",'" + trunc
                     + "')=TRUNC(" + DataBase.DB.TO_DATE(date) + ",'" + trunc + "')";
             }
-            String whereRestriction = MMeasureCalc.AddRestrictions(where + " AND Processed<>'Y' ",
+            String whereRestriction = MVAPAEvaluateCalc.AddRestrictions(where + " AND Processed<>'Y' ",
                 true, restrictions, role,
                 "VAR_Request", orgColumn, bpColumn, pColumn,GetCtx());
             query.AddRestriction(whereRestriction);

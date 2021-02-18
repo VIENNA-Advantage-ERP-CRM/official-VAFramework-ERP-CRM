@@ -38,7 +38,7 @@ namespace VAdvantage.Model
         //	Invoice Lines	
         private MVABInvoiceLine[] _lines;
         //	Invoice Taxes	
-        private MVABInvoiceTax[] _taxes;
+        private MVABTaxInvoice[] _taxes;
         /**	Process Message 			*/
         private String _processMsg = null;
         /**	Just Prepared Flag			*/
@@ -440,7 +440,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="batch">batch</param>
         /// <param name="line">batch line</param>
-        public MVABInvoice(MVABInvoiceBatch batch, MVABInvoiceBatchLine line)
+        public MVABInvoice(MVABInvoiceBatch batch, MVABBatchInvoiceLine line)
             : this(line.GetCtx(), 0, line.Get_TrxName())
         {
 
@@ -1037,7 +1037,7 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MLandedCost lc = new MLandedCost(GetCtx(), 0, Get_Trx());
+                        MVABLCost lc = new MVABLCost(GetCtx(), 0, Get_Trx());
                         lc.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
                         lc.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
                         lc.SetVAB_InvoiceLine_ID(to_VAB_InvoiceLine_ID);
@@ -1075,7 +1075,7 @@ namespace VAdvantage.Model
                 {
                     for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                     {
-                        MLandedCostAllocation lca = new MLandedCostAllocation(GetCtx(), 0, Get_Trx());
+                        MVABLCostDistribution lca = new MVABLCostDistribution(GetCtx(), 0, Get_Trx());
                         lca.SetVAF_Client_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Client_ID"]));
                         lca.SetVAF_Org_ID(Util.GetValueOfInt(ds.Tables[0].Rows[i]["VAF_Org_ID"]));
                         lca.SetVAB_InvoiceLine_ID(to_VAB_InvoiceLine_ID);
@@ -1137,19 +1137,19 @@ namespace VAdvantage.Model
          *	@param requery requery
          *	@return array of taxes
          */
-        public MVABInvoiceTax[] GetTaxes(bool requery)
+        public MVABTaxInvoice[] GetTaxes(bool requery)
         {
             if (_taxes != null && !requery)
                 return _taxes;
             String sql = "SELECT * FROM VAB_Tax_Invoice WHERE VAB_Invoice_ID=" + GetVAB_Invoice_ID();
-            List<MVABInvoiceTax> list = new List<MVABInvoiceTax>();
+            List<MVABTaxInvoice> list = new List<MVABTaxInvoice>();
             DataSet ds = null;
             try
             {
                 ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MVABInvoiceTax(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABTaxInvoice(GetCtx(), dr, Get_TrxName()));
                 }
                 ds = null;
             }
@@ -1162,7 +1162,7 @@ namespace VAdvantage.Model
                 ds = null;
             }
 
-            _taxes = new MVABInvoiceTax[list.Count];
+            _taxes = new MVABTaxInvoice[list.Count];
             _taxes = list.ToArray();
             return _taxes;
         }
@@ -1218,7 +1218,7 @@ namespace VAdvantage.Model
          */
         public bool ValidatePaySchedule()
         {
-            MVABInvoicePaySchedule[] schedule = MVABInvoicePaySchedule.GetInvoicePaySchedule
+            MVABSchedInvoicePayment[] schedule = MVABSchedInvoicePayment.GetInvoicePaySchedule
                 (GetCtx(), GetVAB_Invoice_ID(), 0, Get_Trx());
             log.Fine("#" + schedule.Length);
             if (schedule.Length == 0)
@@ -2070,7 +2070,7 @@ namespace VAdvantage.Model
             SetIsSOTrx(dt.IsSOTrx());
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -2364,7 +2364,7 @@ namespace VAdvantage.Model
                     int taxID = (int)line.GetVAB_TaxRate_ID();
                     if (!taxList.Contains(taxID))
                     {
-                        MVABInvoiceTax iTax = MVABInvoiceTax.Get(line, GetPrecision(),
+                        MVABTaxInvoice iTax = MVABTaxInvoice.Get(line, GetPrecision(),
                             false, Get_TrxName());	//	current Tax
                         if (iTax != null)
                         {
@@ -2378,7 +2378,7 @@ namespace VAdvantage.Model
                             // if Surcharge Tax is selected then calculate Tax for this Surcharge Tax.
                             if (line.Get_ColumnIndex("SurchargeAmt") > 0)
                             {
-                                iTax = MVABInvoiceTax.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
+                                iTax = MVABTaxInvoice.GetSurcharge(line, GetPrecision(), false, Get_TrxName());  //	current Tax
                                 if (iTax != null)
                                 {
                                     if (!iTax.CalculateSurchargeFromLines())
@@ -2398,10 +2398,10 @@ namespace VAdvantage.Model
 
                 //	Taxes
                 Decimal grandTotal = totalLines;
-                MVABInvoiceTax[] taxes = GetTaxes(true);
+                MVABTaxInvoice[] taxes = GetTaxes(true);
                 for (int i = 0; i < taxes.Length; i++)
                 {
-                    MVABInvoiceTax iTax = taxes[i];
+                    MVABTaxInvoice iTax = taxes[i];
                     MTax tax = iTax.GetTax();
                     if (tax.IsSummary())
                     {
@@ -2419,7 +2419,7 @@ namespace VAdvantage.Model
                                 if (ds != null && ds.Tables[0].Rows.Count > 0)
                                 {
                                     DataRow dr = ds.Tables[0].Rows[0];
-                                    MVABInvoiceTax newITax = new MVABInvoiceTax(GetCtx(), dr, Get_TrxName());
+                                    MVABTaxInvoice newITax = new MVABTaxInvoice(GetCtx(), dr, Get_TrxName());
                                     newITax.SetTaxAmt(Decimal.Add(newITax.GetTaxAmt(), taxAmt));
                                     newITax.SetTaxBaseAmt(Decimal.Add(newITax.GetTaxBaseAmt(), iTax.GetTaxBaseAmt()));
                                     if (newITax.Get_ColumnIndex("TaxBaseCurrencyAmt") > 0)
@@ -2443,7 +2443,7 @@ namespace VAdvantage.Model
                             }
                             else
                             {
-                                MVABInvoiceTax newITax = new MVABInvoiceTax(GetCtx(), 0, Get_TrxName());
+                                MVABTaxInvoice newITax = new MVABTaxInvoice(GetCtx(), 0, Get_TrxName());
                                 newITax.SetClientOrg(this);
                                 newITax.SetVAB_Invoice_ID(GetVAB_Invoice_ID());
                                 newITax.SetVAB_TaxRate_ID(cTax.GetVAB_TaxRate_ID());
@@ -2676,7 +2676,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < lines.Length; i++)
                 {
                     MVABInvoiceLine line = lines[i];
-                    MMatchInv inv = null;
+                    MVAMMatchInvoice inv = null;
                     //	Update Order Line
                     MVABOrderLine ol = null;
                     if (line.GetVAB_OrderLine_ID() != 0)
@@ -2712,7 +2712,7 @@ namespace VAdvantage.Model
                         {
                             //	MatchPO is created also from MVAMInvInOut when Invoice exists before Shipment
                             Decimal matchQty = line.GetQtyInvoiced();
-                            MMatchPO po = MMatchPO.Create(line, null, GetDateInvoiced(), matchQty);
+                            MVAMMatchPO po = MVAMMatchPO.Create(line, null, GetDateInvoiced(), matchQty);
                             try
                             {
                                 po.Set_ValueNoCheck("VAB_BusinessPartner_ID", GetVAB_BusinessPartner_ID());
@@ -2812,7 +2812,7 @@ namespace VAdvantage.Model
                         #region[By Sukhwinder on 21-Nov-2017 for Standard Issue #SI_0196 given by Puneet]
                         try
                         {
-                            MMatchInv[] MatchInvoices = MMatchInv.Get(GetCtx(), receiptLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
+                            MVAMMatchInvoice[] MatchInvoices = MVAMMatchInvoice.Get(GetCtx(), receiptLine.GetVAM_Inv_InOutLine_ID(), Get_TrxName());
                             decimal alreadyMatchedQty = 0;
 
                             if (MatchInvoices.Length > 0)
@@ -2838,7 +2838,7 @@ namespace VAdvantage.Model
 
                         if (matchQty != 0)
                         {
-                            inv = new MMatchInv(line, GetDateInvoiced(), matchQty);
+                            inv = new MVAMMatchInvoice(line, GetDateInvoiced(), matchQty);
 
                             try
                             {
@@ -4396,7 +4396,7 @@ namespace VAdvantage.Model
                     SetDateAcct(GetDateInvoiced());
 
                     //	Std Period open?
-                    if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+                    if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
                     {
                         throw new Exception("@PeriodClosed@");
                     }
@@ -5031,7 +5031,7 @@ namespace VAdvantage.Model
             }
             log.Info(ToString());
             MVABDocTypes dt = MVABDocTypes.Get(GetCtx(), GetVAB_DocTypes_ID());
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), dt.GetDocBaseType(), GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return false;
@@ -5073,10 +5073,10 @@ namespace VAdvantage.Model
             //	Reverse/Delete Matching
             if (!IsSOTrx())
             {
-                MMatchInv[] mInv = MMatchInv.GetInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                MVAMMatchInvoice[] mInv = MVAMMatchInvoice.GetInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 for (int i = 0; i < mInv.Length; i++)
                     mInv[i].Delete(true);
-                MMatchPO[] mPO = MMatchPO.GetInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
+                MVAMMatchPO[] mPO = MVAMMatchPO.GetInvoice(GetCtx(), GetVAB_Invoice_ID(), Get_TrxName());
                 for (int i = 0; i < mPO.Length; i++)
                 {
                     if (mPO[i].GetVAM_Inv_InOutLine_ID() == 0)

@@ -57,7 +57,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         protected override String DoIt()
         {
             //log.info ("VAB_sched_InvoicePayment_ID=" + getRecord_ID());
-            MVABInvoicePaySchedule[] schedule = MVABInvoicePaySchedule.GetInvoicePaySchedule(GetCtx(), 0, GetRecord_ID(), null);
+            MVABSchedInvoicePayment[] schedule = MVABSchedInvoicePayment.GetInvoicePaySchedule(GetCtx(), 0, GetRecord_ID(), null);
             if (schedule.Length == 0)
             {
                 throw new ArgumentException("InvoicePayScheduleValidate - No Schedule");

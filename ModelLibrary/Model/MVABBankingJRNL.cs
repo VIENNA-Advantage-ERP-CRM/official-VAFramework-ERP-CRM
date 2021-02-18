@@ -374,7 +374,7 @@ namespace VAdvantage.Model
             }
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetStatementDate(), MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -413,8 +413,8 @@ namespace VAdvantage.Model
             }
             SetStatementDifference(total);
             SetEndingBalance(Decimal.Add(GetBeginningBalance(), total));
-            if (!MPeriod.IsOpen(GetCtx(), minDate, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID())
-                || !MPeriod.IsOpen(GetCtx(), maxDate, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), minDate, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID())
+                || !MVABYearPeriod.IsOpen(GetCtx(), maxDate, MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
             {
                 m_processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -558,7 +558,7 @@ namespace VAdvantage.Model
                             payment.SetVA034_DepositSlipNo(line.GetVA012_VoucherNo());
                         payment.Save(Get_TrxName());
 
-                        //MVABInvoicePaySchedule inp = new MVABInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                        //MVABSchedInvoicePayment inp = new MVABSchedInvoicePayment(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus("R");
                         //inp.Save(Get_TrxName());
 
@@ -613,7 +613,7 @@ namespace VAdvantage.Model
             //	Std Period open?
             else
             {
-                if (!MPeriod.IsOpen(GetCtx(), GetStatementDate(), MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
+                if (!MVABYearPeriod.IsOpen(GetCtx(), GetStatementDate(), MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT, GetVAF_Org_ID()))
                 {
                     m_processMsg = "@PeriodClosed@";
                     return false;
@@ -697,7 +697,7 @@ namespace VAdvantage.Model
                         payment.SetVA009_ExecutionStatus(status);
                         payment.Save(Get_TrxName());
 
-                        //MVABInvoicePaySchedule inp = new MVABInvoicePaySchedule(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
+                        //MVABSchedInvoicePayment inp = new MVABSchedInvoicePayment(GetCtx(), payment.GetVAB_sched_InvoicePayment_ID(), Get_TrxName());
                         //inp.SetVA009_ExecutionStatus(status);
                         //inp.Save(Get_TrxName());
 

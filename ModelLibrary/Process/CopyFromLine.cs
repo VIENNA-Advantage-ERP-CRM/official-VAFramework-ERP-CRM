@@ -45,8 +45,8 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("Source VAGL_BatchJRNL_ID == 0");
             }
-            VAdvantage.Model.MJournal from = new VAdvantage.Model.MJournal(GetCtx(), _VAGL_JRNL_ID, Get_Trx());
-            VAdvantage.Model.MJournal to = new VAdvantage.Model.MJournal(GetCtx(), To_VAGL_JRNL_ID, Get_Trx());
+            VAdvantage.Model.MVAGLJRNL from = new VAdvantage.Model.MVAGLJRNL(GetCtx(), _VAGL_JRNL_ID, Get_Trx());
+            VAdvantage.Model.MVAGLJRNL to = new VAdvantage.Model.MVAGLJRNL(GetCtx(), To_VAGL_JRNL_ID, Get_Trx());
             //
             int no = to.CopyLines(from, 'x');
             //

@@ -249,7 +249,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
-                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
+                        dr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         dr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
@@ -264,7 +264,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
-                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    // from Loc
+                        cr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), true);    // from Loc
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     else // Reverse accounting entries for returns
@@ -280,7 +280,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
-                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
+                        cr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), true);    //  from Loc
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  //  to Loc
                         cr.SetVAF_Org_ID(line.GetOrder_Org_ID());		//	Revenue X-Org
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
@@ -296,7 +296,7 @@ namespace VAdvantage.Acct
                             return null;
                         }
                         dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
-                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), true);    // from Loc
+                        dr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), true);    // from Loc
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), false);  // to Loc
                     }
                     //
@@ -385,7 +385,7 @@ namespace VAdvantage.Acct
                         }
                         dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
-                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   // to Loc
+                        dr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				CR
                         cr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
@@ -398,7 +398,7 @@ namespace VAdvantage.Acct
                         }
                         cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
-                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
+                        cr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
                         cr.SetQty(Decimal.Negate(line.GetQty().Value));
                     }
                     else // reverse accounting entries for returns
@@ -414,7 +414,7 @@ namespace VAdvantage.Acct
                         }
                         cr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         cr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   // from Loc
-                        cr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   // to Loc
+                        cr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), false);   // to Loc
                         //  NotInvoicedReceipt				DR
                         dr = fact.CreateLine(line,
                             GetAccount(Doc.ACCTTYPE_NotInvoicedReceipts, as1),
@@ -427,7 +427,7 @@ namespace VAdvantage.Acct
                         }
                         dr.SetVAM_Locator_ID(line.GetVAM_Locator_ID());
                         dr.SetLocationFromBPartner(GetVAB_BPart_Location_ID(), true);   //  from Loc
-                        dr.SetLocationFromLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
+                        dr.SetLocationFroMVAMLocator(line.GetVAM_Locator_ID(), false);   //  to Loc
                         dr.SetQty(Decimal.Negate(line.GetQty().Value));
 
                     }

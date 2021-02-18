@@ -863,7 +863,7 @@ using VAdvantage.Utility;namespace VAdvantage.Process
                         docOrgs.Add(doc.GetVAF_Org_ID());
                     }
                     // Std Period open?
-                    errorMsg = MPeriod.IsOpen(doc.GetCtx(), doc.GetVAF_Client_ID(), docOrgs,
+                    errorMsg = MVABYearPeriod.IsOpen(doc.GetCtx(), doc.GetVAF_Client_ID(), docOrgs,
                         docDate, docBaseType);
                 }
             }

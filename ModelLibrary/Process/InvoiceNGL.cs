@@ -277,7 +277,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 cat = MVAGLGroup.Get(GetCtx(), docType.GetVAGL_Group_ID());
             }
             //
-            MJournalBatch batch = new MJournalBatch(GetCtx(), 0, Get_TrxName());
+            MVAGLBatchJRNL batch = new MVAGLBatchJRNL(GetCtx(), 0, Get_TrxName());
             batch.SetDescription(GetName());
             batch.SetVAB_DocTypes_ID(_VAB_DocTypesReval_ID);
             batch.SetDateDoc(DateTime.Now);// new Timestamp(System.currentTimeMillis()));
@@ -289,7 +289,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //return " - Could not create Batch";
             }
             //
-            MJournal journal = null;
+            MVAGLJRNL journal = null;
             Decimal? drTotal = Env.ZERO;
             Decimal? crTotal = Env.ZERO;
             int VAF_Org_ID = 0;
@@ -308,7 +308,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 //
                 if (journal == null)
                 {
-                    journal = new MJournal(batch);
+                    journal = new MVAGLJRNL(batch);
                     journal.SetVAB_AccountBook_ID(aas.GetVAB_AccountBook_ID());
                     journal.SetVAB_Currency_ID(aas.GetVAB_Currency_ID());
                     journal.SetVAB_CurrencyType_ID(_VAB_CurrencyTypeReval_ID);
@@ -322,7 +322,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     }
                 }
                 //
-                MJournalLine line = new MJournalLine(journal);
+                MVAGLJRNLLine line = new MVAGLJRNLLine(journal);
                 line.SetLine((i + 1) * 10);
                 line.SetDescription(invoice.GetSummary());
                 //
@@ -367,7 +367,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
         /// <param name="crTotal">cr</param>
         /// <param name="VAF_Org_ID">org</param>
         /// <param name="lineNo">lineno base line no</param>
-        private void CreateBalancing(MVABAccountBookDefault asDefaultAccts, MJournal journal,
+        private void CreateBalancing(MVABAccountBookDefault asDefaultAccts, MVAGLJRNL journal,
             Decimal drTotal, Decimal crTotal, int VAF_Org_ID, int lineNo)
         {
             if (journal == null)
@@ -377,7 +377,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //		CR Entry = Gain
             if (Env.Signum(drTotal) != 0)
             {
-                MJournalLine line = new MJournalLine(journal);
+                MVAGLJRNLLine line = new MVAGLJRNLLine(journal);
                 line.SetLine(lineNo + 1);
                 MVABAccount bas = MVABAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedGain_Acct());
                 MVABAccount acct = MVABAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,
@@ -395,7 +395,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             //	DR Entry = Loss
             if (Env.Signum(crTotal) != 0)
             {
-                MJournalLine line = new MJournalLine(journal);
+                MVAGLJRNLLine line = new MVAGLJRNLLine(journal);
                 line.SetLine(lineNo + 2);
                 MVABAccount bas = MVABAccount.Get(GetCtx(), asDefaultAccts.GetUnrealizedLoss_Acct());
                 MVABAccount acct = MVABAccount.Get(GetCtx(), asDefaultAccts.GetVAF_Client_ID(), VAF_Org_ID,

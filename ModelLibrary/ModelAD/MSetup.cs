@@ -3637,7 +3637,7 @@ namespace VAdvantage.Model
             //   Locator
             if (lstTableName.Contains("VAM_Locator") && bp != null) // Update by Paramjeet Singh
             {
-                MLocator locator = new MLocator(wh, defaultName);
+                MVAMLocator locator = new MVAMLocator(wh, defaultName);
                 locator.SetIsDefault(true);
                 if (!locator.Save())
                     log.Log(Level.SEVERE, "Locator NOT inserted");

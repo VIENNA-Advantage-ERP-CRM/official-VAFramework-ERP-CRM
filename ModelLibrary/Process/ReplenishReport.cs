@@ -577,7 +577,7 @@ namespace VAdvantage.Process
             String info = "";
             //
             MVAFClient client = null;
-            MMovement move = null;
+            MVAMInventoryTransfer move = null;
             int VAM_Warehouse_ID = 0;
             int VAM_WarehouseSource_ID = 0;
             MWarehouse whSource = null;
@@ -616,7 +616,7 @@ namespace VAdvantage.Process
                     VAM_WarehouseSource_ID = replenish.GetVAM_WarehouseSource_ID();
                     VAM_Warehouse_ID = replenish.GetVAM_Warehouse_ID();
 
-                    move = new MMovement(GetCtx(), 0, Get_TrxName());
+                    move = new MVAMInventoryTransfer(GetCtx(), 0, Get_TrxName());
                     move.SetVAB_DocTypes_ID(_VAB_DocTypes_ID);
                     move.SetDescription(Msg.GetMsg(GetCtx(), "Replenishment")
                         + ": " + whSource.GetName() + "->" + whTarget.GetName());
@@ -668,7 +668,7 @@ namespace VAdvantage.Process
                         moveQty = storage.GetQtyOnHand();
                     }
                     //
-                    MMovementLine line = new MMovementLine(move);
+                    MVAMInvTrfLine line = new MVAMInvTrfLine(move);
                     line.SetVAM_Product_ID(replenish.GetVAM_Product_ID());
                     line.SetMovementQty(moveQty);
                     if (replenish.GetQtyToOrder().CompareTo(moveQty) != 0)
@@ -717,10 +717,10 @@ namespace VAdvantage.Process
         {
             int VAM_Locator_ID = MProductLocator.GetFirstVAM_Locator_ID(product, wh.GetVAM_Warehouse_ID());
             /**	
-            MLocator[] locators = MProductLocator.getLocators (product, wh.getVAM_Warehouse_ID());
+            MVAMLocator[] locators = MProductLocator.getLocators (product, wh.getVAM_Warehouse_ID());
             for (int i = 0; i < locators.length; i++)
             {
-                MLocator locator = locators[i];
+                MVAMLocator locator = locators[i];
                 //	Storage/capacity restrictions come here
                 return locator.getVAM_Locator_ID();
             }

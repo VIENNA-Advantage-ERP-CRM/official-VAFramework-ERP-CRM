@@ -23,7 +23,7 @@ namespace VAdvantage.Model
         //	Cache
         private static CCache<int, MWarehouse> cache = new CCache<int, MWarehouse>("MWarehouse", 5);
         //	Warehouse Locators
-        private MLocator[] locators = null;
+        private MVAMLocator[] locators = null;
         //	Default Locator
         private int VAM_Locator_ID = -1;
         //	Static Logger	
@@ -132,13 +132,13 @@ namespace VAdvantage.Model
         /// Get Default Locator
         /// </summary>
         /// <returns>(first) default locator</returns>
-        public MLocator GetDefaultLocator()
+        public MVAMLocator GetDefaultLocator()
         {
-            MLocator[] locators = GetLocators(false);	//	ordered by x,y,z
-            MLocator loc1 = null;
+            MVAMLocator[] locators = GetLocators(false);	//	ordered by x,y,z
+            MVAMLocator loc1 = null;
             for (int i = 0; i < locators.Length; i++)
             {
-                MLocator locIn = locators[i];
+                MVAMLocator locIn = locators[i];
                 if (locIn.IsDefault() && locIn.IsActive())
                     return locIn;
                 if (loc1 == null || loc1.GetPriorityNo() > locIn.GetPriorityNo())
@@ -151,7 +151,7 @@ namespace VAdvantage.Model
                 return loc1;
             }
             //	No Locator - create one
-            MLocator loc = new MLocator(this, "Standard");
+            MVAMLocator loc = new MVAMLocator(this, "Standard");
             loc.SetIsDefault(true);
             loc.Save();
             log.Info("Created default locator for " + GetName());
@@ -174,13 +174,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="reload">if true reload</param>
         /// <returns>array of locators</returns>
-        public MLocator[] GetLocators(bool reload)
+        public MVAMLocator[] GetLocators(bool reload)
         {
             if (!reload && locators != null)
                 return locators;
             //
             String sql = "SELECT * FROM VAM_Locator WHERE VAM_Warehouse_ID=" + GetVAM_Warehouse_ID() + " ORDER BY X,Y,Z";
-            List<MLocator> list = new List<MLocator>();
+            List<MVAMLocator> list = new List<MVAMLocator>();
             try
             {
                 DataSet ds = CoreLibrary.DataBase.DB.ExecuteDataset(sql, null, null);
@@ -191,7 +191,7 @@ namespace VAdvantage.Model
                     for (int i = 0; i < totCount; i++)
                     {
                         dr = ds.Tables[0].Rows[i];
-                        list.Add(new MLocator(GetCtx(), dr, null));
+                        list.Add(new MVAMLocator(GetCtx(), dr, null));
                     }
                 }
             }
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
             }
 
             //
-            locators = new MLocator[list.Count];
+            locators = new MVAMLocator[list.Count];
             locators = list.ToArray();
             return locators;
         }

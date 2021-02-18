@@ -18,10 +18,10 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MLot : X_VAM_Lot
+    public class MVAMLot : X_VAM_Lot
     {
         //	Logger					
-        private static VLogger _log = VLogger.GetVLogger(typeof(MLot).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMLot).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_Lot_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLot(Ctx ctx, int VAM_Lot_ID, Trx trxName)
+        public MVAMLot(Ctx ctx, int VAM_Lot_ID, Trx trxName)
             : base(ctx, VAM_Lot_ID, trxName)
         {
             /** if (VAM_Lot_ID == 0)
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="rs">result set</param>
         /// <param name="trxName">transaction</param>
-        public MLot(Ctx ctx, DataRow rs, Trx trxName)
+        public MVAMLot(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// <param name="ctl">lot control</param>
         /// <param name="VAM_Product_ID">product</param>
         /// <param name="Name">name</param>
-        public MLot(MLotCtl ctl, int VAM_Product_ID, String Name)
+        public MVAMLot(MVAMLotControl ctl, int VAM_Product_ID, String Name)
             : this(ctl.GetCtx(), 0, ctl.Get_TrxName())
         {
             SetClientOrg(ctl);
@@ -74,10 +74,10 @@ namespace VAdvantage.Model
         /// <param name="VAM_Product_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of Lots for Product</returns>
-        public static MLot[] GetProductLots(Ctx ctx, int VAM_Product_ID, Trx trxName)
+        public static MVAMLot[] GetProductLots(Ctx ctx, int VAM_Product_ID, Trx trxName)
         {
             String sql = "SELECT * FROM VAM_Lot WHERE VAM_Product_ID=" + VAM_Product_ID;
-            List<MLot> list = new List<MLot>();
+            List<MVAMLot> list = new List<MVAMLot>();
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -85,7 +85,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow rs in ds.Tables[0].Rows)
                     {
-                        list.Add(new MLot(ctx, rs, trxName));
+                        list.Add(new MVAMLot(ctx, rs, trxName));
                     }
                 }
             }
@@ -95,7 +95,7 @@ namespace VAdvantage.Model
             }
 
             //
-            MLot[] retValue = new MLot[list.Count];
+            MVAMLot[] retValue = new MVAMLot[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -108,10 +108,10 @@ namespace VAdvantage.Model
         /// <param name="lot">lot</param>
         /// <param name="trxName">transaction</param>
         /// <returns>Array of Lots for Product</returns>
-        public static MLot GetProductLot(Ctx ctx, int VAM_Product_ID, String lot, Trx trxName)
+        public static MVAMLot GetProductLot(Ctx ctx, int VAM_Product_ID, String lot, Trx trxName)
         {
             String sql = "SELECT * FROM VAM_Lot WHERE VAM_Product_ID=" + VAM_Product_ID + " AND Name='" + lot + "'";
-            MLot retValue = null;
+            MVAMLot retValue = null;
             try
             {
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, null, trxName);
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow rs in ds.Tables[0].Rows)
                     {
-                        retValue = new MLot(ctx, rs, trxName);
+                        retValue = new MVAMLot(ctx, rs, trxName);
                     }
                 }
             }

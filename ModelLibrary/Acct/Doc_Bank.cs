@@ -102,7 +102,7 @@ namespace VAdvantage.Acct
                 {
                     SetDateAcct(line.GetDateAcct());
                 }
-                MPeriod period = MPeriod.Get(GetCtx(), line.GetDateAcct());
+                MVABYearPeriod period = MVABYearPeriod.Get(GetCtx(), line.GetDateAcct());
                 if (period != null && period.IsOpen(MVABMasterDocType.DOCBASETYPE_BANKSTATEMENT))
                 {
                     docLine.SetVAB_YearPeriod_ID(period.GetVAB_YearPeriod_ID());

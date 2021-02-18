@@ -109,7 +109,7 @@ namespace VAdvantage.Model
             isContainerApplicable = MTransaction.ProductContainerApplicable(GetCtx());
 
             // system will check - if container qty goes negative then not to save Transaction
-            MLocator locator = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+            MVAMLocator locator = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
             MWarehouse warehouse = MWarehouse.Get(GetCtx(), locator.GetVAM_Warehouse_ID());
             if (isContainerApplicable && warehouse.IsDisallowNegativeInv() && Get_ColumnIndex("ContainerCurrentQty") >= 0 && GetContainerCurrentQty() < 0)
             {
@@ -294,7 +294,7 @@ namespace VAdvantage.Model
         /// <writer>Amit Bansal</writer>
         public bool CreateContainerStorage(MTransaction transaction, Decimal qty, DateTime? policyDate, bool IsPhysicalInventory, bool isUpdateActualQty)
         {
-            MLocator locator = MLocator.Get(GetCtx(), transaction.GetVAM_Locator_ID());
+            MVAMLocator locator = MVAMLocator.Get(GetCtx(), transaction.GetVAM_Locator_ID());
             X_VAM_ContainerStorage containerStorage = new X_VAM_ContainerStorage(GetCtx(), 0, transaction.Get_Trx());
             containerStorage.SetVAF_Client_ID(transaction.GetVAF_Client_ID());
             containerStorage.SetVAF_Org_ID(locator.GetVAF_Org_ID());
@@ -463,7 +463,7 @@ namespace VAdvantage.Model
             StringBuilder Qry = new StringBuilder();
             decimal OpeningStock = 0, movementQty = 0;
             MProductStockSummary Trs = null;
-            MLocator loc = new MLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
+            MVAMLocator loc = new MVAMLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
             int VAF_Org_ID = loc.GetVAF_Org_ID();
 
             Qry.Append("SELECT VAM_Prod_StockSummary_ID FROM VAM_Prod_StockSummary WHERE IsActive = 'Y' AND VAM_Product_ID = " + GetVAM_Product_ID() +
@@ -566,7 +566,7 @@ namespace VAdvantage.Model
             else
             {
 
-                MLocator loc = new MLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
+                MVAMLocator loc = new MVAMLocator(GetCtx(), GetVAM_Locator_ID(), Get_TrxName());
                 Trs = new MTransactionSummary(GetCtx(), loc.GetVAF_Org_ID(), GetVAM_Locator_ID(), GetVAM_Product_ID(), GetVAM_PFeature_SetInstance_ID(),
                         OpeningStock, GetCurrentQty(), GetMovementDate(), Get_TrxName());
                 movementQty = GetMovementQty();

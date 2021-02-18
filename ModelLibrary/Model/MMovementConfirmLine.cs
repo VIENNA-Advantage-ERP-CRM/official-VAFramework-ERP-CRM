@@ -5,7 +5,7 @@ using System.Text;
 
 namespace VAdvantage.Model
 {
-    public class MMovementConfirmLine
+    public class MVAMInvTrfConfirmLine
     {
     }
 }

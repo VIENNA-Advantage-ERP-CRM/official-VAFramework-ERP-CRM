@@ -198,7 +198,7 @@ namespace VAdvantage.Model
             UpdateOrderSchedule(invoice.GetRef_VAB_Invoice_ID() > 0 ? invoice.GetRef_VAB_Invoice_ID() : invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
             DeleteInvoicePaySchedule(invoice.GetVAB_Invoice_ID(), invoice.Get_Trx());
             StringBuilder _sql = new StringBuilder();
-            MVABInvoicePaySchedule schedule = null;
+            MVABSchedInvoicePayment schedule = null;
             MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
             MVABPaymentSchedule sched = new MVABPaymentSchedule(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
 
@@ -243,7 +243,7 @@ namespace VAdvantage.Model
                                     // data row - order schedule record
                                     dr = _dsOrderSchedule.Tables[0].Rows[j];
 
-                                    schedule = new MVABInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                                    schedule = new MVABSchedInvoicePayment(GetCtx(), 0, invoice.Get_Trx());
                                     copyorderschedules(schedule, invoice, dr, LineTotalAmt, 100);
 
                                     if (!schedule.Save(invoice.Get_Trx()))
@@ -281,7 +281,7 @@ namespace VAdvantage.Model
                         //schedule.SetDueAmt(Decimal.Add(schedule.GetDueAmt(), remainder));
                         //schedule.Save(invoice.Get_Trx());
 
-                        MVABInvoicePaySchedule newSchedule = new MVABInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                        MVABSchedInvoicePayment newSchedule = new MVABSchedInvoicePayment(GetCtx(), 0, invoice.Get_Trx());
                         PO.CopyValues(schedule, newSchedule, schedule.GetVAF_Client_ID(), schedule.GetVAF_Org_ID());
 
                         // set references
@@ -346,7 +346,7 @@ namespace VAdvantage.Model
                     }
                     else // default
                     {
-                        schedule = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+                        schedule = new MVABSchedInvoicePayment(GetCtx(), 0, Get_Trx());
 
                         InsertSchedule(invoice, schedule);
 
@@ -423,7 +423,7 @@ namespace VAdvantage.Model
                                     {
                                         for (int j = 0; j < _dsOrderSchedule.Tables[0].Rows.Count; j++)
                                         {
-                                            schedule = new MVABInvoicePaySchedule(GetCtx(), 0, invoice.Get_Trx());
+                                            schedule = new MVABSchedInvoicePayment(GetCtx(), 0, invoice.Get_Trx());
                                             // data row - order schedule record
                                             dr = _dsOrderSchedule.Tables[0].Rows[j];
 
@@ -464,7 +464,7 @@ namespace VAdvantage.Model
                             #region IsAdvance false on Payment Schedule
                             //remainder = invoice.GetGrandTotal();
 
-                            schedule = new MVABInvoicePaySchedule(invoice, _schedule[i]);
+                            schedule = new MVABSchedInvoicePayment(invoice, _schedule[i]);
 
                             MVABPaymentSchedule mschedule = new MVABPaymentSchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
 
@@ -807,7 +807,7 @@ namespace VAdvantage.Model
         private bool InsertSchedulePOS(MVABInvoice invoice, int VA009_PaymentMethod_ID, decimal? payAmt, int payCur, int index = 0)
         {
             // MPaymentTerm payterm = new MPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
-            MVABInvoicePaySchedule schedule = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+            MVABSchedInvoicePayment schedule = new MVABSchedInvoicePayment(GetCtx(), 0, Get_Trx());
             schedule.SetVA009_ExecutionStatus("A");
             schedule.SetVAF_Client_ID(invoice.GetVAF_Client_ID());
             schedule.SetVAF_Org_ID(invoice.GetVAF_Org_ID());
@@ -916,14 +916,14 @@ namespace VAdvantage.Model
             Decimal remainder = (invoice.Get_ColumnIndex("GrandTotalAfterWithholding") > 0
                 && invoice.GetGrandTotalAfterWithholding() != 0 ? invoice.GetGrandTotalAfterWithholding() : invoice.GetGrandTotal());
             MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), invoice.Get_Trx());
-            MVABInvoicePaySchedule schedule = null;
+            MVABSchedInvoicePayment schedule = null;
             StringBuilder _sql = new StringBuilder();
             //int _CountVA009 = Util.GetValueOfInt(DB.ExecuteScalar("SELECT COUNT(VAF_MODULEINFO_ID) FROM VAF_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (Env.IsModuleInstalled("VA009_"))
             {
                 if (Util.GetValueOfInt(DB.ExecuteScalar("SELECT Count(VAB_PaymentSchedule_ID) FROM VAB_PaymentSchedule WHERE IsActive = 'Y' AND VAB_PaymentTerm_ID=" + invoice.GetVAB_PaymentTerm_ID())) < 1)
                 {
-                    schedule = new MVABInvoicePaySchedule(GetCtx(), 0, Get_Trx());
+                    schedule = new MVABSchedInvoicePayment(GetCtx(), 0, Get_Trx());
 
                     InsertSchedule(invoice, schedule);
 
@@ -947,7 +947,7 @@ namespace VAdvantage.Model
                     DateTime? payDueDate = null;
                     for (int i = 0; i < _schedule.Length; i++)
                     {
-                        schedule = new MVABInvoicePaySchedule(invoice, _schedule[i]);
+                        schedule = new MVABSchedInvoicePayment(invoice, _schedule[i]);
                         MVABPaymentSchedule mschedule = new MVABPaymentSchedule(GetCtx(), _schedule[i].GetVAB_PaymentSchedule_ID(), Get_Trx());
 
                         InsertSchedule(invoice, schedule);
@@ -1156,7 +1156,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="invoice">invoice</param>
         /// <param name="schedule">Invoice Schedule</param>
-        private void InsertSchedule(MVABInvoice invoice, MVABInvoicePaySchedule schedule)
+        private void InsertSchedule(MVABInvoice invoice, MVABSchedInvoicePayment schedule)
         {
             MVABPaymentTerm payterm = new MVABPaymentTerm(GetCtx(), invoice.GetVAB_PaymentTerm_ID(), Get_Trx());
             schedule.SetVA009_ExecutionStatus("A");
@@ -1275,8 +1275,8 @@ namespace VAdvantage.Model
         /// Convert amount in base currency
         /// </summary>
         /// <param name="invoice">MVABInvoice class object</param>
-        /// <param name="schedule">MVABInvoicePaySchedule class object</param>
-        private void basecurrency(MVABInvoice invoice, MVABInvoicePaySchedule schedule)
+        /// <param name="schedule">MVABSchedInvoicePayment class object</param>
+        private void basecurrency(MVABInvoice invoice, MVABSchedInvoicePayment schedule)
         {
             int BaseCurrency = 0;
             //            StringBuilder _sqlBsCrrncy = new StringBuilder();
@@ -1303,7 +1303,7 @@ namespace VAdvantage.Model
         /// <param name="schedule">invoice pay shedule object in which order schedule to be copied</param>
         /// <param name="invoice">invoice object</param>
         /// <param name="_ds">datarow of orderschedule</param>
-        private void copyorderschedules(MVABInvoicePaySchedule schedule, MVABInvoice invoice, DataRow _ds, Decimal LineTotalAmt, Decimal schedulePercentage)
+        private void copyorderschedules(MVABSchedInvoicePayment schedule, MVABInvoice invoice, DataRow _ds, Decimal LineTotalAmt, Decimal schedulePercentage)
         {
             schedule.SetVAF_Client_ID(Util.GetValueOfInt(_ds["VAF_Client_ID"]));
             schedule.SetVAF_Org_ID(Util.GetValueOfInt(_ds["VAF_Org_ID"]));

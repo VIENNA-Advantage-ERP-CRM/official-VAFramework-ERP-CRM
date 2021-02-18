@@ -935,7 +935,7 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
 
             //	Std Period open?
-            if (!MPeriod.IsOpen(GetCtx(), GetDateAcct(), MVABMasterDocType.DOCBASETYPE_CASHJOURNAL, GetVAF_Org_ID()))
+            if (!MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), MVABMasterDocType.DOCBASETYPE_CASHJOURNAL, GetVAF_Org_ID()))
             {
                 _processMsg = "@PeriodClosed@";
                 return DocActionVariables.STATUS_INVALID;
@@ -1142,7 +1142,7 @@ namespace VAdvantage.Model
 
                 if (Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()) != 0)
                 {
-                    MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()), Get_TrxName());
+                    MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), Util.GetValueOfInt(line.GetVAB_sched_InvoicePayment_ID()), Get_TrxName());
                     if (paySch != null) //if schedule not found or deleted 
                     {
                         paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());
@@ -1157,13 +1157,13 @@ namespace VAdvantage.Model
                 }
                 else
                 {
-                    int[] InvoicePaySchedule_ID = MVABInvoicePaySchedule.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
+                    int[] InvoicePaySchedule_ID = MVABSchedInvoicePayment.GetAllIDs("VAB_sched_InvoicePayment", "VAB_Invoice_ID = " + line.GetVAB_Invoice_ID() + @" AND VAB_sched_InvoicePayment_ID NOT IN 
                     (SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment WHERE VAB_Payment_ID IN (SELECT NVL(VAB_Payment_ID,0) FROM VAB_sched_InvoicePayment) UNION 
                     SELECT NVL(VAB_sched_InvoicePayment_ID,0) FROM VAB_sched_InvoicePayment  WHERE VAB_CashJRNLLine_ID IN (SELECT NVL(VAB_CashJRNLLine_ID,0) FROM VAB_sched_InvoicePayment))", Get_TrxName());
 
                     foreach (int invocePay in InvoicePaySchedule_ID)
                     {
-                        MVABInvoicePaySchedule paySch = new MVABInvoicePaySchedule(GetCtx(), invocePay, Get_TrxName());
+                        MVABSchedInvoicePayment paySch = new MVABSchedInvoicePayment(GetCtx(), invocePay, Get_TrxName());
                         if (paySch != null)      //if schedule not found or deleted 
                         {
                             paySch.SetVAB_CashJRNLLine_ID(line.GetVAB_CashJRNLLine_ID());

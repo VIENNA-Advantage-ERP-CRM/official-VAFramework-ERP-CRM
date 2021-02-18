@@ -18,10 +18,10 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MLandedCost : X_VAB_LCost
+    public class MVABLCost : X_VAB_LCost
     {
         //	Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MLandedCost).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABLCost).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -29,7 +29,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_LCost_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MLandedCost(Ctx ctx, int VAB_LCost_ID, Trx trxName)
+        public MVABLCost(Ctx ctx, int VAB_LCost_ID, Trx trxName)
             : base(ctx, VAB_LCost_ID, trxName)
         {
             if (VAB_LCost_ID == 0)
@@ -46,7 +46,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MLandedCost(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABLCost(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -56,9 +56,9 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="il">invoice line</param>
         /// <returns>array of landed cost lines</returns>
-        public static MLandedCost[] GetLandedCosts(MVABInvoiceLine il)
+        public static MVABLCost[] GetLandedCosts(MVABInvoiceLine il)
         {
-            List<MLandedCost> list = new List<MLandedCost>();
+            List<MVABLCost> list = new List<MVABLCost>();
             String sql = "SELECT * FROM VAB_LCost WHERE VAB_InvoiceLine_ID=" + il.GetVAB_InvoiceLine_ID();
             try
             {
@@ -67,7 +67,7 @@ namespace VAdvantage.Model
                 {
                     foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        list.Add(new MLandedCost(il.GetCtx(), dr, il.Get_TrxName()));
+                        list.Add(new MVABLCost(il.GetCtx(), dr, il.Get_TrxName()));
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
             //
-            MLandedCost[] retValue = new MLandedCost[list.Count];
+            MVABLCost[] retValue = new MVABLCost[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -221,7 +221,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MLandedCost[");
+            StringBuilder sb = new StringBuilder("MVABLCost[");
             sb.Append(Get_ID())
                 .Append(",CostDistribution=").Append(GetLandedCostDistribution())
                 .Append(",VAM_ProductCostElement_ID=").Append(GetVAM_ProductCostElement_ID());

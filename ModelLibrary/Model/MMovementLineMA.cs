@@ -25,10 +25,10 @@ namespace VAdvantage.Model
     /// <summary>
     /// Movement Material Allocation
     /// </summary>
-    public class MMovementLineMA : X_VAM_InvTrf_LineMP
+    public class MVAMInvTrfLineMA : X_VAM_InvTrf_LineMP
     {
         /**	Logger	*/
-        private static VLogger _log = VLogger.GetVLogger(typeof(MMovementLineMA).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMInvTrfLineMA).FullName);
 
         /// <summary>
         /// Standard Constructor
@@ -36,7 +36,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_InvTrf_LineMP_ID">id (ignored)</param>
         /// <param name="trxName">transaction</param>
-        public MMovementLineMA(Ctx ctx, int VAM_InvTrf_LineMP_ID, Trx trxName)
+        public MVAMInvTrfLineMA(Ctx ctx, int VAM_InvTrf_LineMP_ID, Trx trxName)
             : base(ctx, VAM_InvTrf_LineMP_ID, trxName)
         {
             if (VAM_InvTrf_LineMP_ID != 0)
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transation</param>
-        public MMovementLineMA(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMInvTrfLineMA(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -60,7 +60,7 @@ namespace VAdvantage.Model
         /// <param name="parent">parent</param>
         /// <param name="VAM_PFeature_SetInstance_ID">asi</param>
         /// <param name="movementQty">qty</param>
-        public MMovementLineMA(MMovementLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty)
+        public MVAMInvTrfLineMA(MVAMInvTrfLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -77,7 +77,7 @@ namespace VAdvantage.Model
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="movementQty"></param>
         /// <param name="MMPloicyDate"></param>
-        public MMovementLineMA(MMovementLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
+        public MVAMInvTrfLineMA(MVAMInvTrfLine parent, int VAM_PFeature_SetInstance_ID, Decimal movementQty, DateTime? MMPloicyDate)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -94,16 +94,16 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// Is Used to Get or Create  Instance of MMovementLineMA (Attribute)
+        /// Is Used to Get or Create  Instance of MVAMInvTrfLineMA (Attribute)
         /// </summary>
         /// <param name="line"></param>
         /// <param name="VAM_PFeature_SetInstance_ID"></param>
         /// <param name="MovementQty"></param>
         /// <param name="DateMaterialPolicy"></param>
         /// <returns></returns>
-        public static MMovementLineMA GetOrCreate(MMovementLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
+        public static MVAMInvTrfLineMA GetOrCreate(MVAMInvTrfLine line, int VAM_PFeature_SetInstance_ID, Decimal MovementQty, DateTime? DateMaterialPolicy)
         {
-            MMovementLineMA retValue = null;
+            MVAMInvTrfLineMA retValue = null;
             String sql = "SELECT * FROM VAM_InvTrf_LineMP " +
                          @" WHERE  VAM_InvTrf_Line_ID = " + line.GetVAM_InvTrf_Line_ID() +
                          @" AND MMPolicyDate = " + GlobalVariable.TO_DATE(DateMaterialPolicy, true) + @" AND ";
@@ -121,7 +121,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    retValue = new MMovementLineMA(line.GetCtx(), dr, line.Get_Trx());
+                    retValue = new MVAMInvTrfLineMA(line.GetCtx(), dr, line.Get_Trx());
                 }
             }
             catch (Exception ex)
@@ -141,7 +141,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MMovementLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
+                retValue = new MVAMInvTrfLineMA(line, VAM_PFeature_SetInstance_ID, MovementQty, DateMaterialPolicy);
             else
                 retValue.SetMovementQty(Decimal.Add(retValue.GetMovementQty(), MovementQty));
             return retValue;
@@ -154,9 +154,9 @@ namespace VAdvantage.Model
         /// <param name="VAM_InvTrf_Line_ID">id</param>
         /// <param name="trxName">transaction</param>
         /// <returns>allocations</returns>
-        public static MMovementLineMA[] Get(Ctx ctx, int VAM_InvTrf_Line_ID, Trx trxName)
+        public static MVAMInvTrfLineMA[] Get(Ctx ctx, int VAM_InvTrf_Line_ID, Trx trxName)
         {
-            List<MMovementLineMA> list = new List<MMovementLineMA>();
+            List<MVAMInvTrfLineMA> list = new List<MVAMInvTrfLineMA>();
             String sql = "SELECT * FROM VAM_InvTrf_LineMP WHERE VAM_InvTrf_Line_ID=@mlid";
             try
             {
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
                 DataSet ds = DataBase.DB.ExecuteDataset(sql, param, trxName);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MMovementLineMA(ctx, dr, trxName));
+                    list.Add(new MVAMInvTrfLineMA(ctx, dr, trxName));
                 }
             }
             catch (Exception e)
@@ -174,7 +174,7 @@ namespace VAdvantage.Model
                 _log.Log(Level.SEVERE, sql, e);
             }
 
-            MMovementLineMA[] retValue = new MMovementLineMA[list.Count];
+            MVAMInvTrfLineMA[] retValue = new MVAMInvTrfLineMA[list.Count];
             retValue = list.ToArray();
             return retValue;
         }
@@ -213,7 +213,7 @@ namespace VAdvantage.Model
         /// <returns>info</returns>
         public override String ToString()
         {
-            StringBuilder sb = new StringBuilder("MMovementLineMA[");
+            StringBuilder sb = new StringBuilder("MVAMInvTrfLineMA[");
             sb.Append("VAM_InvTrf_Line_ID=").Append(GetVAM_InvTrf_Line_ID())
                 .Append(",VAM_PFeature_SetInstance_ID=").Append(GetVAM_PFeature_SetInstance_ID())
                 .Append(", Qty=").Append(GetMovementQty())

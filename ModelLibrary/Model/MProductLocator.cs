@@ -32,9 +32,9 @@ namespace VAdvantage.Model
          *	@param VAM_Warehouse_ID wh
          *	@return product locators
          */
-        public static MLocator[] GetLocators(MProduct product, int VAM_Warehouse_ID)
+        public static MVAMLocator[] GetLocators(MProduct product, int VAM_Warehouse_ID)
         {
-            List<MLocator> list = new List<MLocator>();
+            List<MVAMLocator> list = new List<MVAMLocator>();
             String sql = "SELECT * FROM VAM_Locator l "
                 + "WHERE l.IsActive='Y'"
                 + " AND (VAM_Locator_ID IN (SELECT VAM_Locator_ID FROM VAM_Product WHERE VAM_Product_ID=" + product.GetVAM_Product_ID() + ")"
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MLocator(product.GetCtx(), dr, product.Get_TrxName()));
+                    list.Add(new MVAMLocator(product.GetCtx(), dr, product.Get_TrxName()));
                 }
             }
             catch (Exception e)
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
                 }
                 dt = null;
             }
-            MLocator[] retValue = new MLocator[list.Count];
+            MVAMLocator[] retValue = new MVAMLocator[list.Count];
             retValue = list.ToArray();
             return retValue;
         }

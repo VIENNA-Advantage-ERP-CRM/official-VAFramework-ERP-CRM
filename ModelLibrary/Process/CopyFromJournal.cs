@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : CopyFromJournal
+ * Class Name     : CopyFroMVAGLJRNL
  * Purpose        : Copy GL Batch Journal/Lines
  * Class Used     : SvrProcess
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Utility;
 using VAdvantage.ProcessEngine;
 namespace VAdvantage.Process
 {
-    public class CopyFromJournal : SvrProcess
+    public class CopyFroMVAGLJRNL : SvrProcess
     {
         private int _VAGL_BatchJRNL_ID = 0;
 
@@ -68,8 +68,8 @@ namespace VAdvantage.Process
             {
                 throw new ArgumentException("Source VAGL_BatchJRNL_ID == 0");
             }
-            VAdvantage.Model.MJournalBatch from = new VAdvantage.Model.MJournalBatch(GetCtx(), _VAGL_BatchJRNL_ID, Get_Trx());
-            VAdvantage.Model.MJournalBatch to = new VAdvantage.Model.MJournalBatch(GetCtx(), To_VAGL_BatchJRNL_ID, Get_Trx());
+            VAdvantage.Model.MVAGLBatchJRNL from = new VAdvantage.Model.MVAGLBatchJRNL(GetCtx(), _VAGL_BatchJRNL_ID, Get_Trx());
+            VAdvantage.Model.MVAGLBatchJRNL to = new VAdvantage.Model.MVAGLBatchJRNL(GetCtx(), To_VAGL_BatchJRNL_ID, Get_Trx());
             //
             int no = to.CopyDetailsFrom(from);
             //

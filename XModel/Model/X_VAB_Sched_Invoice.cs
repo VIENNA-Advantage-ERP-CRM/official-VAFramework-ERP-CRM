@@ -14,22 +14,9 @@ using System.Data;
 /** Generated Model for VAB_sched_Invoice
  *  @author Jagmohan Bhatt (generated) 
  *  @version Vienna Framework 1.1.1 - $Id$ */
-public class X_VAB_sched_Invoice : PO
+public class X_VAB_Sched_Invoice : PO
 {
-public X_VAB_sched_Invoice (Context ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
-{
-/** if (VAB_sched_Invoice_ID == 0)
-{
-SetAmt (0.0);
-SetVAB_sched_Invoice_ID (0);
-SetInvoiceFrequency (null);
-SetIsAmount (false);
-SetIsDefault (false);
-SetName (null);
-}
- */
-}
-public X_VAB_sched_Invoice (Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
+public X_VAB_Sched_Invoice (Context ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
 {
 /** if (VAB_sched_Invoice_ID == 0)
 {
@@ -42,12 +29,25 @@ SetName (null);
 }
  */
 }
+public X_VAB_Sched_Invoice (Ctx ctx, int VAB_sched_Invoice_ID, Trx trxName) : base (ctx, VAB_sched_Invoice_ID, trxName)
+{
+/** if (VAB_sched_Invoice_ID == 0)
+{
+SetAmt (0.0);
+SetVAB_sched_Invoice_ID (0);
+SetInvoiceFrequency (null);
+SetIsAmount (false);
+SetIsDefault (false);
+SetName (null);
+}
+ */
+}
 /** Load Constructor 
 @param ctx context
 @param rs result set 
 @param trxName transaction
 */
-public X_VAB_sched_Invoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Sched_Invoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -55,7 +55,7 @@ public X_VAB_sched_Invoice (Context ctx, DataRow rs, Trx trxName) : base(ctx, rs
 @param rs result set 
 @param trxName transaction
 */
-public X_VAB_sched_Invoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
+public X_VAB_Sched_Invoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, trxName)
 {
 }
 /** Load Constructor 
@@ -63,13 +63,13 @@ public X_VAB_sched_Invoice (Ctx ctx, DataRow rs, Trx trxName) : base(ctx, rs, tr
 @param rs result set 
 @param trxName transaction
 */
-public X_VAB_sched_Invoice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
+public X_VAB_Sched_Invoice (Ctx ctx, IDataReader dr, Trx trxName) : base(ctx, dr, trxName)
 {
 }
 /** Static Constructor 
  Set Table ID By Table Name
  added by ->Harwinder */
-static X_VAB_sched_Invoice()
+static X_VAB_Sched_Invoice()
 {
  Table_ID = Get_Table_ID(Table_Name);
  model = new KeyNamePair(Table_ID,Table_Name);
@@ -117,7 +117,7 @@ return poi;
 */
 public override String ToString()
 {
-StringBuilder sb = new StringBuilder ("X_VAB_sched_Invoice[").Append(Get_ID()).Append("]");
+StringBuilder sb = new StringBuilder ("X_VAB_Sched_Invoice[").Append(Get_ID()).Append("]");
 return sb.ToString();
 }
 /** Set Amount.

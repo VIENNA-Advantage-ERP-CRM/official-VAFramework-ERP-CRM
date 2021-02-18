@@ -744,7 +744,7 @@ namespace VAdvantage.DataBase
             return sql.ToString();
         }
 
-        public static string MoveConfirmNoActualValue(string mMovementLinesConfirm)
+        public static string MoveConfirmNoActualValue(string MVAMInvTrfLinesConfirm)
         {
             StringBuilder sql = new StringBuilder();
             if (DB.IsOracle())
@@ -754,7 +754,7 @@ namespace VAdvantage.DataBase
                             FROM ((SELECT DISTINCT Prod.Name AS Name FROM VA010_MoveConfParameters Shp 
                             INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE ( NVL(Shp.Va010_Actualvalue,0)) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + mMovementLinesConfirm + @"))))
+                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + MVAMInvTrfLinesConfirm + @"))))
                             WHERE rn = cnt START WITH rn = 1 CONNECT BY Rn = Prior Rn + 1");
             }
             else if (DB.IsPostgreSQL())
@@ -763,7 +763,7 @@ namespace VAdvantage.DataBase
                             (SELECT DISTINCT Prod.Name AS Name FROM VA010_MoveConfParameters Shp 
                             INNER JOIN VAM_Product Prod ON prod.VAM_Product_id = shp.VAM_Product_id 
                             WHERE NVL(Shp.Va010_Actualvalue,0) = 0 AND Shp.Isactive = 'Y' 
-                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + mMovementLinesConfirm + "))s t");
+                            AND Shp.VAM_InvTrf_LineConfirm_ID IN (" + MVAMInvTrfLinesConfirm + "))s t");
             }
             return sql.ToString();
         }

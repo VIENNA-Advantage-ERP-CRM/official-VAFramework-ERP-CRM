@@ -556,7 +556,7 @@ namespace VAdvantage.Model
                 return retValue;
 
             //	Insert row based on locator
-            MLocator locator = new MLocator(ctx, VAM_Locator_ID, trxName);
+            MVAMLocator locator = new MVAMLocator(ctx, VAM_Locator_ID, trxName);
             if (locator.Get_ID() != VAM_Locator_ID)
             {
                 throw new ArgumentException("Not found VAM_Locator_ID=" + VAM_Locator_ID);
@@ -1681,7 +1681,7 @@ namespace VAdvantage.Model
          *	@param VAM_Product_ID product
          *	@param VAM_PFeature_SetInstance_ID attribute
          */
-        private MStorage(MLocator locator, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID)
+        private MStorage(MVAMLocator locator, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID)
             : this(locator.GetCtx(), 0, locator.Get_TrxName())
         {
 
@@ -1714,7 +1714,7 @@ namespace VAdvantage.Model
         {
             if (_VAM_Warehouse_ID == 0)
             {
-                MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+                MVAMLocator loc = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
                 _VAM_Warehouse_ID = loc.GetVAM_Warehouse_ID();
             }
             return _VAM_Warehouse_ID;
@@ -2418,7 +2418,7 @@ namespace VAdvantage.Model
     //            return retValue;
 
     //        //	Insert row based on locator
-    //        MLocator locator = new MLocator(ctx, VAM_Locator_ID, trxName);
+    //        MVAMLocator locator = new MVAMLocator(ctx, VAM_Locator_ID, trxName);
     //        if (locator.Get_ID() != VAM_Locator_ID)
     //        {
     //            throw new ArgumentException("Not found VAM_Locator_ID=" + VAM_Locator_ID);
@@ -2681,7 +2681,7 @@ namespace VAdvantage.Model
     //     *	@param VAM_Product_ID product
     //     *	@param VAM_PFeature_SetInstance_ID attribute
     //     */
-    //    private MStorage(MLocator locator, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID)
+    //    private MStorage(MVAMLocator locator, int VAM_Product_ID, int VAM_PFeature_SetInstance_ID)
     //        : this(locator.GetCtx(), 0, locator.Get_TrxName())
     //    {
 
@@ -2714,7 +2714,7 @@ namespace VAdvantage.Model
     //    {
     //        if (_VAM_Warehouse_ID == 0)
     //        {
-    //            MLocator loc = MLocator.Get(GetCtx(), GetVAM_Locator_ID());
+    //            MVAMLocator loc = MVAMLocator.Get(GetCtx(), GetVAM_Locator_ID());
     //            _VAM_Warehouse_ID = loc.GetVAM_Warehouse_ID();
     //        }
     //        return _VAM_Warehouse_ID;

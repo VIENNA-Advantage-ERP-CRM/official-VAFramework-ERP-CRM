@@ -151,14 +151,14 @@ namespace VAdvantage.Model
                 }
                 else if (GetRecurringType().Equals(MVABRecurring.RECURRINGTYPE_GLJournalBatch)) //Changes to GL Journal Batch by Arpit
                 {
-                    MJournalBatch journal = MJournalBatch.CopyFrom(GetCtx(), GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
+                    MVAGLBatchJRNL journal = MVAGLBatchJRNL.CopyFrom(GetCtx(), GetVAGL_BatchJRNL_ID(), dateDoc, Get_TrxName());
                     run.SetVAGL_BatchJRNL_ID(journal.GetVAGL_BatchJRNL_ID());
                     msg += journal.GetDocumentNo();
                 }
                 //Added by Arpit on 14th, Dec,2016
                 else if (GetRecurringType().Equals(MVABRecurring.RECURRINGTYPE_GLJournal))
                 {
-                    MJournal Journal = MJournal.CopyFrom(GetCtx(), GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
+                    MVAGLJRNL Journal = MVAGLJRNL.CopyFrom(GetCtx(), GetVAGL_JRNL_ID(), dateDoc, Get_TrxName());
                     run.SetVAGL_JRNL_ID(Journal.GetVAGL_JRNL_ID());
                     msg += Journal.GetDocumentNo();
                 }

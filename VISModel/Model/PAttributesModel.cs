@@ -231,7 +231,7 @@ namespace VIS.Models
                     //	New Lot Button
                     if (_masi.GetMVAMPFeatureSet().GetVAM_LotControl_ID() != 0)
                     {
-                        if (MVAFRole.GetDefault(ctx).IsTableAccess(MLot.Table_ID, false) && MVAFRole.GetDefault(ctx).IsTableAccess(MLotCtl.Table_ID, false))
+                        if (MVAFRole.GetDefault(ctx).IsTableAccess(MVAMLot.Table_ID, false) && MVAFRole.GetDefault(ctx).IsTableAccess(MVAMLotControl.Table_ID, false))
                         {
                             if (!_masi.IsExcludeLot(VAF_Column_ID, IsSOTrx))//_windowNoParent
                             {

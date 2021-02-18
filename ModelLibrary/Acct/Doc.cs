@@ -71,7 +71,7 @@ namespace VAdvantage.Acct
         // GL Category      		
         private int _VAGL_Group_ID = 0;
         //GL Period					
-        private MPeriod _period = null;
+        private MVABYearPeriod _period = null;
         //Period ID					
         private int _VAB_YearPeriod_ID = 0;
         // Location From			
@@ -1138,15 +1138,15 @@ namespace VAdvantage.Acct
                 int? ii = (int?)_po.Get_Value(index);
                 if (ii != null)
                 {
-                    _period = MPeriod.Get(GetCtx(), Utility.Util.GetValueOfInt(ii));
+                    _period = MVABYearPeriod.Get(GetCtx(), Utility.Util.GetValueOfInt(ii));
                 }
             }
             if (_period == null)
             {
-                _period = MPeriod.Get(GetCtx(), GetDateAcct(), GetVAF_Org_ID());
+                _period = MVABYearPeriod.Get(GetCtx(), GetDateAcct(), GetVAF_Org_ID());
             }
             //	Is Period Open?
-            if (_period != null && MPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetVAF_Org_ID()))
+            if (_period != null && MVABYearPeriod.IsOpen(GetCtx(), GetDateAcct(), GetDocumentType(), GetVAF_Org_ID()))
             {
                 _VAB_YearPeriod_ID = _period.GetVAB_YearPeriod_ID();
             }

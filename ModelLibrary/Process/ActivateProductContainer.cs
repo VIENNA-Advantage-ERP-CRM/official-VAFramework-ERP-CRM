@@ -238,7 +238,7 @@ namespace VAdvantage.Process
             if (containerStorage.Get_ID() <= 0)
             {
                 containerStorage.SetVAF_Client_ID(Convert.ToInt32(dr["VAF_Client_ID"]));
-                containerStorage.SetVAF_Org_ID(MLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["VAM_Locator_ID"])).GetVAF_Org_ID());
+                containerStorage.SetVAF_Org_ID(MVAMLocator.Get(containerStorage.GetCtx(), Convert.ToInt32(dr["VAM_Locator_ID"])).GetVAF_Org_ID());
                 containerStorage.SetVAM_Locator_ID(Convert.ToInt32(dr["VAM_Locator_ID"]));
                 containerStorage.SetVAM_Product_ID(Convert.ToInt32(dr["VAM_Product_ID"]));
                 containerStorage.SetVAM_PFeature_SetInstance_ID(Convert.ToInt32(dr["VAM_PFeature_SetInstance_ID"]));

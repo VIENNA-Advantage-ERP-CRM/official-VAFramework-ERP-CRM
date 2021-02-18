@@ -2449,10 +2449,10 @@ namespace VAdvantage.Model
                         SetValue(dependentField, null);
                     }
                 }
-                if (dependentField != null && dependentField.GetLookup() is MLocatorLookup)
+                if (dependentField != null && dependentField.GetLookup() is MVAMLocatorLookup)
                 {
                     // gwu: invalidate currently selected locator if any dependent fields changed
-                    MLocatorLookup locLookup = (MLocatorLookup)dependentField.GetLookup();
+                    MVAMLocatorLookup locLookup = (MVAMLocatorLookup)dependentField.GetLookup();
                     int valueAsInt = 0;
                     if (changedField.GetValue() != null && changedField.GetValue() is int)// instanceof Number )
                     {

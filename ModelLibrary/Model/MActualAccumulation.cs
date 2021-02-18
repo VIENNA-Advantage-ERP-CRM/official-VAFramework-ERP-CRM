@@ -138,7 +138,7 @@ namespace VAdvantage.Model
             else if (BALANCEACCUMULATION_PeriodOfAViennaCalendar.Equals(GetBALANCEACCUMULATION())
                 && GetVAB_Calender_ID() != 0)
             {
-                MPeriod period = MPeriod.GetOfCalendar(GetCtx(), GetVAB_Calender_ID(), from);
+                MVABYearPeriod period = MVABYearPeriod.GetOfCalendar(GetCtx(), GetVAB_Calender_ID(), from);
                 if (period != null)
                 {
                     return period.GetStartDate();

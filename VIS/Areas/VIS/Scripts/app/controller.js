@@ -2150,7 +2150,7 @@
                     }
                 }
             }
-            if (dependentField != null && dependentField.getLookup() instanceof VIS.MLocatorLookup) {
+            if (dependentField != null && dependentField.getLookup() instanceof VIS.MVAMLocatorLookup) {
 
                 //var locLookup = dependentField.getLookup();
                 //var valueAsInt = 0;
@@ -5319,7 +5319,7 @@
                 m_lookup = new VIS.MLocationLookup(VIS.context, gField._vo.windowNo);
             }
             else if (gField._vo.displayType == VIS.DisplayType.Locator) {
-                m_lookup = new VIS.MLocatorLookup(VIS.context, gField._vo.windowNo);
+                m_lookup = new VIS.MVAMLocatorLookup(VIS.context, gField._vo.windowNo);
                 //this.vo.DefaultValue = m_lookup.getDefault();
             }
             else if (gField._vo.displayType == VIS.DisplayType.Account) {
