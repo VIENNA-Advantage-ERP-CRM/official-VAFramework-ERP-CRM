@@ -1137,13 +1137,13 @@ namespace VAdvantage.Model
                 int dd = GetFixMonthDay();
                 if (dd < 1 || dd > 31)
                 {
-                    log.SaveError("VIS_InvalidFixMonthDay", string.Empty);
+                    log.SaveError(string.Empty, Msg.ParseTranslation(GetCtx(), "@Invalid@ @FixMonthDay@"));
                     return false;
                 }
                 dd = GetFixMonthCutoff();
                 if (dd < 1 || dd > 31)
                 {
-                    log.SaveError("VIS_InvalidFixMonthCutoff", string.Empty);
+                    log.SaveError(string.Empty, Msg.ParseTranslation(GetCtx(), "@Invalid@ @FixMonthCutoff@"));
                     return false;
                 }
 
