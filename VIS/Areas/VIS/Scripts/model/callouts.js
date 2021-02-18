@@ -17480,9 +17480,10 @@
         try {
             //	Get Details
             var paramString = C_OrderLine_ID.toString();
+            var DataPrefix = VIS.dataContext.getJSONRecord("ModulePrefix/GetModulePrefix", "VA077_");
             var dr = VIS.dataContext.getJSONRecord("MOrderLine/GetOrderLine", paramString);
             // MOrderLine ol = new MOrderLine(ctx, C_OrderLine_ID, null);
-
+            
             //	Get Details
             if (Util.getValueOfInt(dr["GetID"]) != 0) {
 
@@ -17528,6 +17529,24 @@
                 else {
                     mTab.setValue("IsDropShip", false);
                 }
+
+                if (DataPrefix["VA077_"])
+                {
+                    mTab.setValue("VA077_CNAutodesk", Util.getValueOfString(dr["VA077_CNAutodesk"]));
+                    mTab.setValue("VA077_Duration", Util.getValueOfString(dr["VA077_Duration"]));
+                    mTab.setValue("VA077_MarginAmt", Util.getValueOfDecimal(dr["VA077_MarginAmt"]));
+                    mTab.setValue("VA077_MarginPercent", Util.getValueOfDecimal(dr["VA077_MarginPercent"]));
+                    mTab.setValue("VA077_OldSN", Util.getValueOfString(dr["VA077_OldSN"]));
+                    mTab.setValue("VA077_ProductInfo", Util.getValueOfString(dr["VA077_ProductInfo"]));
+                    mTab.setValue("VA077_PurchasePrice", Util.getValueOfDecimal(dr["VA077_PurchasePrice"]));
+                    mTab.setValue("VA077_RegEmail", Util.getValueOfString(dr["VA077_RegEmail"]));
+                    mTab.setValue("VA077_SerialNo", Util.getValueOfString(dr["VA077_SerialNo"]));
+                    mTab.setValue("VA077_UpdateFromVersn", Util.getValueOfString(dr["VA077_UpdateFromVersn"]));
+                    mTab.setValue("VA077_UserRef_ID", Util.getValueOfInt(dr["VA077_UserRef_ID"]));
+                    mTab.setValue("VA077_ServiceContract_ID", Util.getValueOfInt(dr["VA077_ServiceContract_ID"]));
+
+                }
+
             }
         }
         catch (err) {
