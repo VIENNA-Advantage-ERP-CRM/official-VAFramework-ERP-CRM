@@ -654,7 +654,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = 0;
             var isvendor = 'N';
             var isCustomer = 'N';
@@ -702,7 +701,11 @@
                     //        mTab.setValue("M_PriceList_ID", i1);
                     //}
                 }
-
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(isSOTrx ? dr["C_IncoTerm_ID"] : dr["C_IncoTermPO_ID"]);
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                }
                 //	Bill-To BPartner
                 mTab.setValue("Bill_BPartner_ID", C_BPartner_ID);
                 var bill_Location_ID = Util.getValueOfInt(dr["Bill_Location_ID"]);
@@ -739,7 +742,6 @@
                     var _PO_PaymentMethod_ID = 0;
                     var _PO_PAYMENTBASETYPE = "T";
                     if (C_Order_Blanket <= 0) {
-
 
                         var bpdtl = VIS.dataContext.getJSONRecord("MBPartner/GetBPDetails", C_BPartner_ID);
                         if (bpdtl != null) {
@@ -11974,8 +11976,8 @@
 
             //set isreturntrx
             if (mTab.getField("IsReturnTrx") != null)
-            {              
-                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));               
+            {
+                mTab.setValue("IsReturnTrx", Util.getValueOfBoolean(dr["IsReturnTrx"]));
             }
         }
         catch (err) {
@@ -12014,7 +12016,6 @@
             return "";
         }
         try {
-
             var C_BPartner_ID = Util.getValueOfInt(value);//(int)value;
             if (C_BPartner_ID == null || C_BPartner_ID == 0) {
                 return "";
@@ -12036,7 +12037,7 @@
             //-----------------ANuj----Code----------
             var sql = "SELECT p.AD_Language,p.C_PaymentTerm_ID,"
                 + " COALESCE(p.M_PriceList_ID,g.M_PriceList_ID) AS M_PriceList_ID, p.PaymentRule,p.POReference,"
-                + " p.SO_Description,p.IsDiscountPrinted,";
+                + " p.SO_Description,p.IsDiscountPrinted, p.C_IncoTerm_ID,p.C_IncoTermPO_ID, ";
 
             var _CountVA009 = Util.getValueOfInt(VIS.DB.executeScalar("SELECT COUNT(AD_MODULEINFO_ID) FROM AD_MODULEINFO WHERE PREFIX='VA009_'  AND IsActive = 'Y'"));
             if (_CountVA009 > 0) {
@@ -12078,6 +12079,12 @@
                     //}
 
                     //	PaymentRule
+                    //Inco Term
+                    var IncoTerm = Util.getValueOfInt(dr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                    if (IncoTerm > 0) {
+                        mTab.setValue("C_IncoTerm_ID", IncoTerm);
+                    }
+
                     var s = Util.getValueOfString(dr.get(isSOTrx ? "paymentrule" : "paymentrulepo"));
                     if (s != null && s.length != 0) {
                         if (ctx.getContext("DocBaseType").toString().endsWith("C"))	//	Credits are Payment Term
@@ -12372,7 +12379,6 @@
             mTab.setValue("VA038_AmortizationTemplate_ID", 0);
             return "";
         }
-        debugger;
 
         var M_Product_ID = value;
         if (M_Product_ID == null || M_Product_ID == 0)
@@ -13316,8 +13322,16 @@
 
                 var invoiceRecord = VIS.dataContext.getJSONRecord("MInvoice/GetInvoice", (mTab.getValue("C_Invoice_ID")).toString());
 
+            //** Price List - ValidFrom date validation ** Dt:01/02/2021 ** Modified By: Kumar **//
+                var paramsPrice;                
+                paramsPrice = invoiceRecord["M_PriceList_ID"].toString().concat(",", mTab.getValue("C_Invoice_ID").toString(), ",",
+                        M_Product_ID.toString(), ",", 
+                        C_UOM_To_ID.toString(), ",",    
+                        Util.getValueOfString(mTab.getValue("M_AttributeSetInstance_ID")), ",",
+                        "2");
+
                 //Get PriceListversion based on Pricelist
-                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", invoiceRecord["M_PriceList_ID"].toString());
+                var _priceListVersion_ID = VIS.dataContext.getJSONRecord("MPriceListVersion/GetM_PriceList_Version_ID", paramsPrice);
 
                 if (orderline_ID == 0) {
 
@@ -14214,6 +14228,41 @@
             //MessageBox.Show("Callout--PriceList");
         }
         ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    /** Adhoc Payment - Validating DueDate ** Dt: 18/01/2021 ** Modified By: Kumar **/
+    CalloutInvoice.prototype.CheckDueDate = function (ctx, windowNo, mTab, mField, value, oldValue) {
+
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+
+        if (mTab.getValue("DateInvoiced") == null || mTab.getValue("DateInvoiced") == "") {
+            this.setCalloutActive(false);
+            return "";
+        }
+        else {
+            try {
+                this.setCalloutActive(true);
+
+                if (mTab.getValue("DateInvoiced") != null && mTab.getValue("DueDate") != null) {
+                    var invDate = new Date(mTab.getValue("DateInvoiced"));
+                    var dueDate = new Date(mTab.getValue("DueDate"));
+                    if (dueDate < invDate) {
+                        VIS.ADialog.error("DueDateLessThanInvoiceDate");
+                        mTab.setValue("DueDate", "");
+                    }
+                }
+                ctx = windowNo = mTab = mField = value = oldValue = null;
+                this.setCalloutActive(false);
+                //---------------------End---------------------------------------
+            }
+            catch (err) {
+                this.setCalloutActive(false);
+                return err;
+            }
+        }
         return "";
     };
 
@@ -15903,6 +15952,23 @@
         return "";
     };
 
+    //CalloutRequisition.prototype.BPartner = function (ctx, windowNo, mTab, mField, value, oldValue) {
+    //    if (this.isCalloutActive() || value == null || value.toString() == "") {
+    //        return "";
+    //    }
+    //    this.setCalloutActive(true);
+    //    try {
+    //        var C_BPartner_ID = value;
+            
+    //    }
+    //    catch (err) {
+    //        this.log.severe(err.toString());
+    //    };
+    //    this.setCalloutActive(false);
+    //    ctx = windowNo = mTab = mField = value = oldvalue = null;
+    //    return "";
+    //};
+
     VIS.Model.CalloutRequisition = CalloutRequisition;
     //*********** CalloutRequisition End *******
 
@@ -17206,6 +17272,8 @@
             }
 
             var isReturnTrx = mTab.getValue("IsReturnTrx");
+            var isSOTrx = mTab.getValue("IsSOTrx");
+
 
             //	sraval: source forge bug # 1503219
             var order = mTab.getValue("C_Order_ID");
@@ -17219,7 +17287,7 @@
             //    + "WHERE p.C_BPartner_ID=" + C_BPartner_ID;		//	1
             sql = "SELECT p.AD_Language, p.POReference,"
                 + "p.CreditStatusSettingOn,p.SO_CreditLimit, NVL(p.SO_CreditLimit,0) - NVL(p.SO_CreditUsed,0) AS CreditAvailable,"
-                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus "
+                + "l.C_BPartner_Location_ID, c.AD_User_ID , p.SOCreditStatus,p.C_IncoTerm_ID,p.C_IncoTermPO_ID "
                 + "FROM C_BPartner p"
                 + " LEFT OUTER JOIN C_BPartner_Location l ON (p.C_BPartner_ID=l.C_BPartner_ID)"
                 + " LEFT OUTER JOIN AD_User c ON (p.C_BPartner_ID=c.C_BPartner_ID) "
@@ -17248,6 +17316,12 @@
                 }
                 else {
                     mTab.setValue("AD_User_ID", ii);
+                }
+
+                //Inco Term
+                var IncoTerm = Util.getValueOfInt(idr.get(isSOTrx ? "C_IncoTerm_ID" : "C_IncoTermPO_ID"));
+                if (IncoTerm > 0) {
+                    mTab.setValue("C_IncoTerm_ID", IncoTerm);
                 }
 
                 // Skip credit check for returns
@@ -18525,6 +18599,14 @@
                 }
                 mTab.setValue("PaymentAmount", grandTotal);
                 mTab.setValue("PayAmt", grandTotal);
+                //if Payment for PrepayOrder then set PaymentAmount as ReadOnly
+                //other than prepayOrder set as ReadOnly false
+                if (dr["IsPrePayOrder"] == true) {
+                    mTab.getField("PaymentAmount").setReadOnly(true);
+                }
+                else {
+                    mTab.getField("PaymentAmount").setReadOnly(false);
+                }
             }
         }
         catch (err) {
@@ -20636,7 +20718,8 @@
             }
         }
         else if (Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "R" ||
-            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A") { /*Payment Return and Receipt*/
+            Util.getValueOfString(mTab.getValue("VSS_PAYMENTTYPE")) == "A")
+        { /*Payment Return and Receipt*/
             if (Util.getValueOfDecimal(mTab.getValue("amount")) < 0) {
                 mTab.setValue("Amount", (0 - Util.getValueOfDecimal(mTab.getValue("amount"))));
             }
@@ -22454,5 +22537,27 @@
         return "";
     }
     VIS.Model.CalloutRFQ = CalloutRFQ;
+
+    //** clearing WeekDay value when FixDueDate checkbox is true ** Dt: 02/04/2021 ** Modified By: Kumar ** //
+    //*************CalloutPaymentTerm Start**************
+    function CalloutPaymentTerm() {
+        VIS.CalloutEngine.call(this, "VIS.CalloutPaymentTerm");//must call
+    };
+    VIS.Utility.inheritPrototype(CalloutPaymentTerm, VIS.CalloutEngine); //inherit prototype
+    CalloutPaymentTerm.prototype.ClearWeekDay = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        if (this.isCalloutActive() || value == null || value.toString() == "") {
+            return "";
+        }
+        this.setCalloutActive(true);
+        if (value == true) {
+            mTab.setValue("NetDay", "");
+            mTab.setValue("WeekOffset", VIS.Env.ZERO);
+        }
+
+        this.setCalloutActive(false);
+        return "";
+    };
+    VIS.Model.CalloutPaymentTerm = CalloutPaymentTerm;
+    //**************CalloutPaymentTerm End*************
 
 })(VIS, jQuery);

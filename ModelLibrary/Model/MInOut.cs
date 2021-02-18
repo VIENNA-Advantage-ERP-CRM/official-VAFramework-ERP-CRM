@@ -2267,7 +2267,7 @@ namespace VAdvantage.Model
                         }
                         else
                         {
-                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0)
+                            if (IsSOTrx() && !IsReturnTrx() && pc.GetA_Asset_Group_ID() > 0 && sLine.GetA_Asset_ID() == 0 && !Env.IsModuleInstalled("VA077_"))
                             {
                                 _processMsg = "AssetNotSetONShipmentLine: LineNo" + sLine.GetLine() + " :-->" + sLine.GetDescription();
                                 return DocActionVariables.STATUS_INPROGRESS;
@@ -3531,8 +3531,10 @@ namespace VAdvantage.Model
                 {
                     //	Create Asset during receiving
                     // JID_1251:On Material receipt system will generate the asset for Items type product for which asset group linked with Product Category.
-                    if (product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
-                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0)
+                    if ((product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && !IsSOTrx() && sLine.GetA_Asset_ID() == 0) ||
+                       (Env.IsModuleInstalled("VA077_") && product != null && product.GetProductType() == X_M_Product.PRODUCTTYPE_Item && product.IsCreateAsset() && sLine.GetMovementQty() > 0
+                       && !IsReversal() && !IsReturnTrx() && IsSOTrx() && sLine.GetA_Asset_ID() == 0))
                     {
                         log.Fine("Asset");
                         Info.Append("@A_Asset_ID@: ");
@@ -3814,14 +3816,14 @@ namespace VAdvantage.Model
                 return DocActionVariables.STATUS_INVALID;
             }
 
-            _processMsg = Info.ToString();           
+            _processMsg = Info.ToString();
 
 
             #region Added by vikas 29 August 2016 cost sheet
             try
             {
                 if (Env.IsModuleInstalled("VA033_"))
-                {                    
+                {
                     if (GetVA033_CostSheet_ID() > 0 && IsSOTrx() == false && IsReturnTrx() == false)
                     {
                         if (IsReversal())
@@ -3885,7 +3887,7 @@ namespace VAdvantage.Model
             SetDateReceived(GetMovementDate());
             SetPickDate(DateTime.Now);
             SetProcessed(true);
-            SetDocAction(DOCACTION_Close);            
+            SetDocAction(DOCACTION_Close);
             return DocActionVariables.STATUS_COMPLETED;
         }
 

@@ -698,6 +698,20 @@ namespace VAdvantage.Model
         {
             return new KeyNamePair(Get_ID(), GetDocumentNo());
         }
+        
+        /** Adhoc Payment - Adding a new column (DueDate) for Payment Term ** Dt: 18/01/2021 ** Modified By: Kumar **/
+        /** Set Due Date.
+        @param DueDate Date when the payment is due */
+        public void SetDueDate(DateTime? DueDate)
+        {
+            Set_Value("DueDate", (DateTime?)DueDate);
+        }
+        /** Get Due Date.
+        @return Date when the payment is due */
+        public DateTime? GetDueDate()
+        {
+            return (DateTime?)Get_Value("DueDate");
+        }
         /** Set Generate To.
         @param GenerateTo Generate To */
         public void SetGenerateTo(String GenerateTo)

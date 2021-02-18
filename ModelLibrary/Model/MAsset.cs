@@ -268,6 +268,15 @@ namespace VAdvantage.Model
             MAssetGroup ag = MAssetGroup.Get(GetCtx(), GetA_Asset_Group_ID());
             if (!ag.IsCreateAsActive())
                 SetIsActive(false);
+
+            //Check if the Software Industry module installed, update following fields on Asset window
+            if (Env.IsModuleInstalled("VA077_"))
+            {
+                Set_Value("VA077_SerialNo", shipLine.Get_Value("VA077_SerialNo"));
+                Set_Value("VA077_AutodeskContractNumber", shipLine.Get_Value("VA077_CNAutodesk"));                   
+                Set_Value("VA077_RegEmail", shipLine.Get_Value("VA077_RegEmail"));
+                Set_Value("VA077_IsCustAsset", "Y");
+            }
         }
 
         /**
@@ -720,7 +729,7 @@ namespace VAdvantage.Model
         {
             GetQty();		//	set to 1
             MAssetGroup astGrp = new MAssetGroup(GetCtx(), GetA_Asset_Group_ID(), Get_TrxName());
-            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") > 0)
+            if (newRecord && astGrp.Get_ColumnIndex("M_SerNoCtl_ID") >= 0 && astGrp.GetM_SerNoCtl_ID() > 0)
             {
                 string name = "";
                 MSerNoCtl ctl = new MSerNoCtl(GetCtx(), astGrp.GetM_SerNoCtl_ID(), Get_TrxName());

@@ -17,7 +17,7 @@ using VAdvantage.Model;
 
 namespace ViennaAdvantageServer.Process
 {
-    public class GenerateQuotation  : SvrProcess
+    public class GenerateQuotation : SvrProcess
     {
         #region Private Variable
         /**	Project         		*/
@@ -29,7 +29,7 @@ namespace ViennaAdvantageServer.Process
         /**BPartner Prospect        */
         private int C_BPartnerSR_ID = 0;
         /*Order                   	*/
-      //  private int C_Order_ID = 0;
+        //  private int C_Order_ID = 0;
         /**ProjectLine       */
         private int C_ProjectLine_ID = 0;
 
@@ -46,7 +46,7 @@ namespace ViennaAdvantageServer.Process
         /// <returns>Process Message</returns>
         protected override string DoIt()
         {
-           // Int32 value = 0;
+            // Int32 value = 0;
             string msg = "";
             ValueNamePair vp = null;
             MBPartner bp = null;
@@ -58,7 +58,7 @@ namespace ViennaAdvantageServer.Process
                 throw new ArgumentException("C_Project_ID == 0");
             }
 
-           MProject fromProject = new MProject(GetCtx(), _C_Project_ID, Get_TrxName());
+            MProject fromProject = new MProject(GetCtx(), _C_Project_ID, Get_TrxName());
 
             if (fromProject.GetGenerate_Quotation() == null)
             {
@@ -81,13 +81,13 @@ namespace ViennaAdvantageServer.Process
                 return Msg.GetMsg(GetCtx(), "SelectBPLocation");
             }
 
-           MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
+            MOrder order = new MOrder(GetCtx(), 0, Get_TrxName());
             order.SetAD_Client_ID(fromProject.GetAD_Client_ID());
             order.SetAD_Org_ID(fromProject.GetAD_Org_ID());
             C_Bpartner_id = fromProject.GetC_BPartner_ID();
             C_Bpartner_Location_id = fromProject.GetC_BPartner_Location_ID();
             C_BPartnerSR_ID = fromProject.GetC_BPartnerSR_ID();
-            
+
             MBPartnerLocation bpartnerloc = new MBPartnerLocation(GetCtx(), C_Bpartner_Location_id, Get_TrxName());
             //String currentdate = DateTime.Now.ToString();
             String sqlprjln = "SELECT COUNT(C_ProjectLine_ID) FROM C_ProjectLine WHERE C_Project_ID=" + _C_Project_ID;
@@ -111,7 +111,7 @@ namespace ViennaAdvantageServer.Process
                     }
                 }
                 if (C_BPartnerSR_ID != 0)
-                {                    
+                {
 
                     order.SetC_BPartner_ID(fromProject.GetC_BPartnerSR_ID());
                     if (bpartnerloc.IsShipTo() == true)
@@ -131,7 +131,7 @@ namespace ViennaAdvantageServer.Process
                 int Doctype_id = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, Get_TrxName()));
                 int MPriceList_id = fromProject.GetM_PriceList_ID();
                 order.SetM_PriceList_ID(MPriceList_id);
-               
+
                 order.SetC_Project_ID(GetRecord_ID());
                 if (fromProject.GetSalesRep_ID() > 0)
                     order.SetSalesRep_ID(fromProject.GetSalesRep_ID());
@@ -147,6 +147,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                     }
 
                     if (!bp.Save())
@@ -166,6 +167,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                     }
 
                     if (!bp.Save())
@@ -174,7 +176,7 @@ namespace ViennaAdvantageServer.Process
                         return Msg.GetMsg(GetCtx(), "BPartnerNotSaved");
                     }
                 }
-                
+
                 order.SetFreightCostRule("I");
                 if (order.GetC_Campaign_ID() == 0 && fromProject.GetC_Campaign_ID() > 0)
                     order.SetC_Campaign_ID(fromProject.GetC_Campaign_ID());
@@ -183,6 +185,27 @@ namespace ViennaAdvantageServer.Process
                 order.SetC_DocTypeTarget_ID(Doctype_id);
                 order.SetIsSOTrx(true);
                 order.Set_Value("IsSalesQuotation", true);
+
+                //Set VA077 values on header level
+                if (Env.IsModuleInstalled("VA077_"))
+                {
+                    //Get the org count of legal entity org
+                    sql = @"SELECT Count(AD_Org_ID) FROM AD_Org WHERE IsActive='Y' 
+                           AND (IsProfitCenter ='Y' OR IsCostCenter ='Y') AND 
+                           AD_Client_Id=" + fromProject.GetAD_Client_ID() + @" AND LegalEntityOrg = " + fromProject.GetAD_Org_ID();
+                    int result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                    if (result > 0)
+                    {
+                        order.SetVA077_IsLegalEntity(true);
+                    }
+                    order.SetVA077_SalesCoWorker(fromProject.GetVA077_SalesCoWorker());
+                    order.SetVA077_SalesCoWorkerPer(fromProject.GetVA077_SalesCoWorkerPer());
+                    order.Set_Value("VA077_TotalMarginAmt", fromProject.Get_Value("VA077_TotalMarginAmt"));
+                    order.Set_Value("VA077_TotalPurchaseAmt", fromProject.Get_Value("VA077_TotalPurchaseAmt"));
+                    order.Set_Value("VA077_TotalSalesAmt", fromProject.Get_Value("VA077_TotalSalesAmt"));
+                    order.Set_Value("VA077_MarginPercent", fromProject.Get_Value("VA077_MarginPercent"));
+                }
+
                 if (!order.Save())
                 {
                     Get_TrxName().Rollback();
@@ -213,6 +236,14 @@ namespace ViennaAdvantageServer.Process
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());
                     ol.SetPriceActual(lines[i].GetPlannedPrice());
                     ol.SetPriceList(lines[i].GetPriceList());
+                    
+                    //Set VA077 values on line level
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        ol.Set_Value("VA077_MarginPercent", lines[i].Get_Value("VA077_MarginPercent"));
+                        ol.Set_Value("VA077_MarginAmt", lines[i].Get_Value("VA077_MarginAmt"));
+                        ol.Set_Value("VA077_PurchasePrice", lines[i].Get_Value("VA077_PurchasePrice"));
+                    }
                     if (ol.Save())
                     {
                         count++;

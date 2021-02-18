@@ -534,6 +534,23 @@ if (oo != null)
 }
 return false;
 }
-}
+/** Set Attribute Set Instance.
+@param M_AttributeSetInstance_ID Product Attribute Set Instance */
+        public void SetM_AttributeSetInstance_ID(int M_AttributeSetInstance_ID)
+        {
+            if (M_AttributeSetInstance_ID <= 0) Set_Value("M_AttributeSetInstance_ID", null);
+            else
+                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+        }
+ /** Get Attribute Set Instance.
+@return Product Attribute Set Instance */
+        public int GetM_AttributeSetInstance_ID() 
+        { 
+            Object ii = Get_Value("M_AttributeSetInstance_ID"); 
+            if (ii == null) 
+                return 0; 
+            return Convert.ToInt32(ii); 
+        }
+    }
 
 }

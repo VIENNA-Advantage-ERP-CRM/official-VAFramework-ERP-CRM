@@ -2359,7 +2359,7 @@ namespace VAdvantage.Model
                 int no = SaveNew_GetID();
                 if (no <= 0)
                 {
-                    no = MSequence.GetNextID(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx());
+                    no = DB.GetNextID(GetAD_Client_ID(), p_info.GetTableName(), Get_Trx());
 
 
                     //if (DatabaseType.IsOracle)
