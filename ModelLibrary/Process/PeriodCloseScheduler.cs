@@ -63,7 +63,7 @@ namespace VAdvantage.Process
             {                  
                string sql = "UPDATE C_PeriodControl SET PeriodStatus= '" + MPeriodControl.PERIODSTATUS_Closed + "'" +
                     " WHERE C_Period_ID= (SELECT C_Period_ID FROM C_Period p INNER JOIN C_Year y ON y.C_Year_ID = p.C_Year_ID  " +
-                    "WHERE p.IsActive='Y' y.C_Calendar_ID=" + calendar_id + " AND Startdate=" + GlobalVariable.TO_DATE(lastMonth, true)+ ") AND DocBaseType NOT IN ('" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "')"+
+                    "WHERE p.IsActive='Y' AND y.C_Calendar_ID=" + calendar_id + " AND Startdate=" + GlobalVariable.TO_DATE(lastMonth, true)+ ") AND DocBaseType NOT IN ('" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "')"+
                    " AND PeriodStatus<>'"+MPeriodControl.PERIODSTATUS_PermanentlyClosed+"' AND AD_Org_ID IN (" + OrgId + ")";
 
                 sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, true); // fully qualified - RO
