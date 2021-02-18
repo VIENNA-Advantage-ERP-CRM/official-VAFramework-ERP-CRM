@@ -25,8 +25,8 @@ namespace VAdvantage.Model
 
         }
 
-         public MMasterForecastLine(Ctx ctx, DataRow dr, Trx trxName) :
-            base(ctx, dr, trxName)
+        public MMasterForecastLine(Ctx ctx, DataRow dr, Trx trxName) :
+           base(ctx, dr, trxName)
         {
 
         }
@@ -36,41 +36,45 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="Parent">Master Forecast</param>
         /// <param name="M_Product_ID">Product</param>
-        public MMasterForecastLine( X_C_MasterForecast Parent ,int M_Product_ID)
+        public MMasterForecastLine(X_C_MasterForecast Parent, int M_Product_ID, int M_AttributeSetInstance_ID)
             : base(Parent.GetCtx(), 0, Parent.Get_Trx())
         {
-          
-                string sql = "SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + M_Product_ID;
-                SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
-           
-                SetAD_Client_ID(Parent.GetAD_Client_ID());
-                SetAD_Org_ID(Parent.GetAD_Org_ID());
-                SetM_Product_ID(M_Product_ID);
+
+            string sql = "SELECT C_UOM_ID FROM M_Product WHERE M_Product_ID = " + M_Product_ID;
+            SetC_UOM_ID(Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null)));
+
+            SetAD_Client_ID(Parent.GetAD_Client_ID());
+            SetAD_Org_ID(Parent.GetAD_Org_ID());
+            SetM_Product_ID(M_Product_ID);
             if (!Env.IsModuleInstalled("VA073_"))
             {
                 SetProcessed(true);
-            }           
+            }
+            else
+            {
+                Set_Value("M_AttributeSetInstance_ID", M_AttributeSetInstance_ID);
+            }
         }
 
         protected override bool AfterSave(bool newRecord, bool success)
-         {
-             if (!success)
-                 return success;
-             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-             int count = DB.ExecuteQuery(sql,null, null);
-             return true;
-             //return base.AfterSave(newRecord, success);
-         }
+        {
+            if (!success)
+                return success;
+            string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+            int count = DB.ExecuteQuery(sql, null, null);
+            return true;
+            //return base.AfterSave(newRecord, success);
+        }
 
-         protected override bool AfterDelete(bool success)
-         {
-             if (!success)
-                 return success;
-             string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
-             int count = DB.ExecuteQuery(sql, null, null);
-             return true;
+        protected override bool AfterDelete(bool success)
+        {
+            if (!success)
+                return success;
+            string sql = "update C_MasterForecast set GrandTotal = (SELECT COALESCE(SUM(PlannedRevenue),0) FROM C_MasterForecastLine WHERE isactive = 'Y' and C_MasterForecast_ID= " + GetC_MasterForecast_ID() + ") where C_MasterForecast_ID = " + GetC_MasterForecast_ID();
+            int count = DB.ExecuteQuery(sql, null, null);
+            return true;
             // return base.AfterDelete(success);
-         }
+        }
 
         /// <summary>
         /// Is Used to Get or Create  Instance of Master ForecastLine
@@ -78,13 +82,14 @@ namespace VAdvantage.Model
         /// <param name="ForeCast">MasterForecast</param>
         /// <param name="M_Product_ID">Product</param>
         /// <returns>Object</returns>
-        public static MMasterForecastLine GetOrCreate( X_C_MasterForecast ForeCast, int M_Product_ID)
+        public static MMasterForecastLine GetOrCreate(X_C_MasterForecast ForeCast, int M_Product_ID, int M_AttributeSetInstance_ID)
         {
             MMasterForecastLine retValue = null;
             String sql = "SELECT * FROM C_MasterForecastLine " +
-                         " WHERE  M_Product_ID = " + M_Product_ID+
-                         " AND C_MasterForecast_ID =" +ForeCast.GetC_MasterForecast_ID();
-           
+                         " WHERE  M_Product_ID = " + M_Product_ID +
+                         " AND M_AttributeSetInstance_ID=" + M_AttributeSetInstance_ID +
+                         " AND C_MasterForecast_ID =" + ForeCast.GetC_MasterForecast_ID();
+
 
             DataTable dt = null;
             IDataReader idr = null;
@@ -105,7 +110,7 @@ namespace VAdvantage.Model
                 {
                     idr.Close();
                 }
-               log.Log(Level.SEVERE, sql, ex);
+                log.Log(Level.SEVERE, sql, ex);
             }
             finally
             {
@@ -116,7 +121,7 @@ namespace VAdvantage.Model
                 dt = null;
             }
             if (retValue == null)
-                retValue = new MMasterForecastLine(ForeCast, M_Product_ID);
+                retValue = new MMasterForecastLine(ForeCast, M_Product_ID, M_AttributeSetInstance_ID);
 
             return retValue;
         }

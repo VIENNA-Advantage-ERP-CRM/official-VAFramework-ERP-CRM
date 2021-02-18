@@ -16716,6 +16716,7 @@
     VIS.Utility.inheritPrototype(CalloutTeamForcast, VIS.CalloutEngine); //inherit prototype
     CalloutTeamForcast.prototype.ProductInfo = function (ctx, windowNo, mTab, mField, value, oldValue) {
         //  
+        debugger;
         if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
             return "";
         }
@@ -16752,7 +16753,8 @@
         return "";
     };
     CalloutTeamForcast.prototype.CalculatePrice = function (ctx, windowNo, mTab, mField, value, oldValue) {
-        //  
+        // 
+        debugger;
         if (value == null || value.toString() == "" || Util.getValueOfInt(value) <= 0) {
             return "";
         }
@@ -16763,6 +16765,55 @@
         ctx = windowNo = mTab = mField = value = oldValue = null;
         return "";
     };
+    /**
+     * UOM Conversion
+     * @param {any} ctx
+     * @param {any} windowNo
+     * @param {any} mTab
+     * @param {any} mField
+     * @param {any} value
+     * @param {any} oldValue
+     */
+    CalloutTeamForcast.prototype.Qty = function (ctx, windowNo, mTab, mField, value, oldValue) {  
+        debugger;
+        if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            return "";
+        }
+        var C_UOM_ID = mTab.getValue("C_UOM_ID");
+        var M_Product_ID = mTab.getValue("M_Product_ID");
+        var Qty = mTab.getValue("BaseQty");
+        var paramStr = M_Product_ID.toString().concat(",", C_UOM_ID.toString(), ",", //2
+            Qty.toString()); //3
+        var pc = VIS.dataContext.getJSONRecord("MUOMConversion/ConvertProductFrom", paramStr);
+        if (pc != null) {
+            mTab.setValue("QtyEntered", pc);
+        }
+        else {
+            mTab.setValue("QtyEntered", Qty);
+        }
+ 
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+    CalloutTeamForcast.prototype.Currency = function (ctx, windowNo, mTab, mField, value, oldValue) {
+        debugger;
+        if (value == null || value.toString() == "" || Util.getValueOfInt(value) == 0) {
+            mTab.setValue("C_Currency_ID", ctx.getContextAsInt(windowNo, "C_Currency_ID"));
+            return "";
+        }
+
+        var pricelist = VIS.dataContext.getJSONRecord("MPriceList/GetPriceListData", Util.getValueOfString( mTab.getValue("M_PriceList_ID")));
+        if (pricelist["C_Currency_ID"] != null) {
+            mTab.setValue("C_Currency_ID", pricelist["C_Currency_ID"]);
+        }
+      
+        ctx = windowNo = mTab = mField = value = oldValue = null;
+        return "";
+    };
+
+
+   
     VIS.Model.CalloutTeamForcast = CalloutTeamForcast;
     //************CalloutTeamForcast End****************
 

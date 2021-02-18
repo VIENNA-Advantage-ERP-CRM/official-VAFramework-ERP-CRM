@@ -28,18 +28,22 @@ namespace ViennaAdvantageServer.Process
     public class MasterForecast : SvrProcess
     {
         #region Private Variables
-        string msg = "";
-        string sql = "";
-        int C_Period_ID = 0;
-        X_C_MasterForecast mf = null;
-        DataSet dsOrder = null;
-        DataSet dsForecast = null;
-        DataSet dsOpp = null;
-        MMasterForecastLine mfLine = null;
-        int Count = 0;
-        int tableId = 0;
-        MTable tbl = null;
-        PO po = null;
+        private string msg = "";
+        private string sql = "";
+        private int C_Period_ID = 0;
+        private X_C_MasterForecast mf = null;
+        private DataSet dsOrder = null;
+        private DataSet dsForecast = null;
+        private DataSet dsOpp = null;
+        private MMasterForecastLine mfLine = null;
+        private int Count = 0;
+        private int LineNo = 0;
+        private MTable tbl = null;
+        private PO po = null;
+        private int Currency = 0;
+        int StdPrecision = 0;
+        private Decimal? ConvertedAmt = null;
+        private Decimal? OppQty = null;
         #endregion
         protected override void Prepare()
         {
@@ -53,12 +57,21 @@ namespace ViennaAdvantageServer.Process
         protected override string DoIt()
         {
             mf = new X_C_MasterForecast(GetCtx(), GetRecord_ID(), Get_Trx());
+            if (Util.GetValueOfInt(mf.Get_Value("M_PriceList_ID")) > 0)
+            {
+                log.Warning(Msg.GetMsg(mf.GetCtx(), "CreatelinesManually"));
+            }
             C_Period_ID = mf.GetC_Period_ID();
+            Currency = Util.GetValueOfInt(mf.Get_Value("C_Currency_ID"));
+            
+
+            StdPrecision= Util.GetValueOfInt(DB.ExecuteScalar("SELECT StdPrecision FROM C_Currency WHERE C_Currency_ID="+Currency, null, null));
 
             //Get Table_Id to create PO Object
-            sql = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA073_MasterForecastLineDetail' AND IsActive = 'Y'";
-            tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
-            tbl = new MTable(GetCtx(), tableId, null);
+            // sql = @"SELECT AD_TABLE_ID  FROM AD_TABLE WHERE tablename LIKE 'VA073_MasterForecastLineDetail' AND IsActive = 'Y'";
+            // tableId = Util.GetValueOfInt(DB.ExecuteScalar(sql, null, null));
+            // tbl = new MTable(GetCtx(), tableId, null);
+            tbl = MTable.Get(GetCtx(), "VA073_MasterForecastLineDetail");
 
 
             // sql = "delete from c_masterforecastline where c_masterforecast_id = " + mf.GetC_MasterForecast_ID();
@@ -129,7 +142,7 @@ namespace ViennaAdvantageServer.Process
                                 Decimal? avgPrice = Decimal.Divide(totalPrice.Value, totalQty.Value);
                                 avgPrice = Decimal.Round(avgPrice.Value, 2, MidpointRounding.AwayFromZero);
 
-                                mfLine = GenerateMasterForecast(Util.GetValueOfInt(idr[0]), totalQtyTeam, totalQtyOpp, avgPrice);
+                                mfLine = GenerateMasterForecast(Util.GetValueOfInt(idr[0]), 0, totalQtyTeam, totalQtyOpp, avgPrice);
                                 if (!mfLine.Save())
                                 {
                                     ValueNamePair vp = VLogger.RetrieveError();
@@ -178,14 +191,14 @@ namespace ViennaAdvantageServer.Process
                 else
                 {
                     //VA073 module installed -- Consolidate from Sales order , opportunity , Team Forecast
-                    Count = TeamForecastProduct();
+                    TeamForecastProduct();
                     if (mf.IsIncludeOpp())
                     {
-                        Count = OnlyOpportunityProducts();
+                        OnlyOpportunityProducts();
                     }
                     if (Util.GetValueOfBool(mf.Get_Value("VA073_IsIncludeOpenSO")))
                     {
-                        Count = SalesOrderProducts();
+                        SalesOrderProducts();
                     }
                     if (Count == 0)
                     {
@@ -251,7 +264,7 @@ namespace ViennaAdvantageServer.Process
                             Decimal? avgPrice = Decimal.Divide(totalPriceOpp.Value, totalQtyOpp.Value);
                             avgPrice = Decimal.Round(avgPrice.Value, 2, MidpointRounding.AwayFromZero);
 
-                            mfLine = GenerateMasterForecast(Util.GetValueOfInt(idr[0]), Util.GetValueOfDecimal(Decimal.Zero), totalQtyOpp, avgPrice);
+                            mfLine = GenerateMasterForecast(Util.GetValueOfInt(idr[0]), 0, Util.GetValueOfDecimal(Decimal.Zero), totalQtyOpp, avgPrice);
                             if (!mfLine.Save())
                             {
                                 ValueNamePair vp = VLogger.RetrieveError();
@@ -284,9 +297,13 @@ namespace ViennaAdvantageServer.Process
             }
             else
             {
-                sql = "SELECT pl.m_product_id, p.c_project_id, pl.c_projectline_id, pl.plannedqty,(NVL(pl.plannedqty,0) * NVL(pl.plannedprice,0)) AS Price,pl.M_AttributeSetInstance_ID FROM c_projectline pl " +
-                    "INNER JOIN c_project p ON p.c_project_id = pl.c_project_id" +
+                sql = "SELECT pl.m_product_id, p.c_project_id,p.C_Currency_ID,pl.c_projectline_id, pl.plannedqty,pl.C_UOM_ID," +
+                    "(NVL(pl.plannedqty,0) * NVL(pl.plannedprice,0)) AS Price,pl.M_AttributeSetInstance_ID " +
+                    " FROM C_Project p " +
+                    "INNER JOIN C_ProjectLine pl ON p.C_Project_ID = pl.C_Project_ID" +
                     " WHERE p.c_order_id IS NULL AND p.ref_order_id IS NULL AND c_period_id = " + C_Period_ID;
+
+                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_Project", true, true); // fully qualified - RO
 
                 dsOpp = new DataSet();
                 dsOpp = DB.ExecuteDataset(sql, null, mf.Get_Trx());
@@ -294,45 +311,8 @@ namespace ViennaAdvantageServer.Process
                 {
                     for (int i = 0; i < dsOpp.Tables[0].Rows.Count; i++)
                     {
-                        mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]), 0, 0, 0);
-                        if (mfLine.Save())
-                        {
-                            po = GenerateProductLineDetails(mfLine, 0, 0, Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_Project_ID"]), Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_ProjectLine_ID"]), 0, 0,
-                                   C_Period_ID, 0, Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[i]["plannedqty"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
-                            if (!po.Save())
-                            {
-                                ValueNamePair vp = VLogger.RetrieveError();
-                                if (vp != null)
-                                {
-                                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + vp.GetValue() + " - " + vp.GetName());
-                                }
-                                else
-                                {
-                                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved"));
-                                }
-
-                            }
-                            else
-                            {
-                                Count++;
-
-                                //Update quantity and price at Product line 
-                                String Sql = "UPDATE c_masterforecastline SET " +
-                                     "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                      "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
-                                    "Price= (Round((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "),2)), " +
-                                    "PlannedRevenue =(ROUND((((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + ")),2))" +
-                                    "WHERE c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID();
-
-                                DB.ExecuteQuery(Sql, null, mf.Get_Trx());
-                            }
-                        }
-                        else
+                        mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), 0, 0, 0);
+                        if (!mfLine.Save())
                         {
                             ValueNamePair vp = VLogger.RetrieveError();
                             if (vp != null)
@@ -345,6 +325,61 @@ namespace ViennaAdvantageServer.Process
                             }
 
                         }
+                        else
+                        {
+                            OppQty = MUOMConversion.ConvertProductFrom(mf.GetCtx(), Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]),
+                                Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_UOM_ID"]), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[i]["plannedqty"]));
+                            if (OppQty == null)
+                            {
+                                OppQty = Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[i]["plannedqty"]);
+                            }
+
+                           //Convert Line Amount as per Currency Defined on  Master Forecast 
+                            ConvertedAmt = MConversionRate.Convert(mf.GetCtx(), Util.GetValueOfDecimal(dsOpp.Tables[0].Rows[i]["Price"]),
+                            Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_Currency_ID"]), Currency,
+                            Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
+                            Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
+
+                            //Create Product Line Details
+                            po = GenerateProductLineDetails(mfLine, 0, 0, Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_Project_ID"]),
+                                Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_ProjectLine_ID"]), 0, 0,
+                                C_Period_ID, Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_UOM_ID"]), Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_Product_ID"]),
+                                OppQty, ConvertedAmt,
+                                Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                            if (!po.Save())
+                            {
+                                ValueNamePair vp = VLogger.RetrieveError();
+                                if (vp != null)
+                                {
+                                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + " for ProjectLine " + Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_ProjectLine_ID"]) + vp.GetValue() + " - " + vp.GetName());
+                                }
+                                else
+                                {
+                                    log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + " for ProjectLine " + Util.GetValueOfInt(dsOpp.Tables[0].Rows[i]["C_ProjectLine_ID"]));
+                                }
+
+                            }
+                            else
+                            {
+                                Count++;
+
+                                //Update quantity and price at Product line 
+                                String Sql = "UPDATE c_masterforecastline SET " +
+                                     "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                     "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                     "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                     "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
+                                     "Price= (Round((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                     "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + "),"+ StdPrecision + ")), " +
+                                     "PlannedRevenue =(ROUND((((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                     "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
+                                     "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))," + StdPrecision + "))" +
+                                     "WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID();
+
+                                DB.ExecuteQuery(Sql, null, mf.Get_Trx());
+                            }
+                        }
+
                     }
                 }
             }
@@ -357,14 +392,17 @@ namespace ViennaAdvantageServer.Process
         /// <returns>No of lines created</returns>
         private int SalesOrderProducts()
         {
-            sql = "SELECT ol.m_product_id,ol.QtyOrdered,M_AttributeSetInstance_ID ,ol.QtyOrdered,ol.C_UOM_ID,ol.C_OrderLine_ID,o.C_Order_ID,(NVL(PriceEntered,0) * NVL(QtyOrdered,0)) AS Price FROM C_orderLine ol " +
-            "Inner Join C_Order o on o.C_Order_ID = ol.C_Order_ID " +
-            "INNER JOIN C_Doctype d on o.c_doctypetarget_ID = d.c_DOCTYPE_ID   " +
-            " WHERE d.DocBaseType='" + MDocBaseType.DOCBASETYPE_SALESORDER + "' " +
-            "AND d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
-            " AND o.IsSOTrx='Y' AND o.IsReturnTrx='N' AND o.AD_Client_ID=" + mf.GetAD_Client_ID() +
-            " AND o.DateOrdered BETWEEN (SELECT startdate FROM c_period WHERE c_period_id = " + C_Period_ID + ")  " +
-            " AND (SELECT enddate FROM c_period WHERE c_period_id = " + C_Period_ID + ") AND ol.QtyOrdered > ol.QtyDelivered ";
+            sql = "SELECT ol.m_product_id,ol.QtyOrdered,M_AttributeSetInstance_ID,ol.C_UOM_ID," +
+                 " ol.C_OrderLine_ID,o.C_Order_ID,(NVL(PriceEntered,0) * NVL(QtyOrdered,0)) AS Price,o.C_Currency_ID FROM C_Order o " +
+                 " INNER JOIN C_OrderLine ol on o.C_Order_ID = ol.C_Order_ID " +
+                 " INNER JOIN C_Doctype d on o.c_DocTypeTarget_ID = d.C_Doctype_ID   " +
+                 " WHERE d.DocBaseType='" + MDocBaseType.DOCBASETYPE_SALESORDER + "' " +
+                 " AND d.DocSubTypeSo NOT IN ('" + MDocType.DOCSUBTYPESO_BlanketOrder + "','" + MDocType.DOCSUBTYPESO_Proposal + "')" +
+                 " AND o.IsSOTrx='Y' AND o.IsReturnTrx='N'" +
+                 " AND o.DateOrdered BETWEEN (SELECT startdate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ")  " +
+                 " AND (SELECT enddate FROM C_Period WHERE C_Period_ID = " + C_Period_ID + ") AND ol.QtyOrdered > ol.QtyDelivered ";
+
+            sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_Order", true, true); // fully qualified - RO
 
             dsOrder = new DataSet();
             dsOrder = DB.ExecuteDataset(sql, null, mf.Get_Trx());
@@ -372,46 +410,9 @@ namespace ViennaAdvantageServer.Process
             {
                 for (int i = 0; i < dsOrder.Tables[0].Rows.Count; i++)
                 {
-                    mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_Product_ID"]), 0, 0, 0);
-                    if (mfLine.Save())
-                    {
-                        po = GenerateProductLineDetails(mfLine, Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_Order_ID"]), Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
-                               C_Period_ID, Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_UOM_ID"]), Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_Product_ID"]),
-                               Util.GetValueOfDecimal(dsOrder.Tables[0].Rows[i]["QtyOrdered"]), Util.GetValueOfDecimal(dsOrder.Tables[0].Rows[i]["Price"]), Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
-                        if (!po.Save())
-                        {
-                            ValueNamePair vp = VLogger.RetrieveError();
-                            if (vp != null)
-                            {
-                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + vp.GetValue() + " - " + vp.GetName());
-                            }
-                            else
-                            {
-                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved"));
-                            }
-
-                        }
-                        else
-                        {
-                            Count++;
-
-                            //Update quantity and price at Product line 
-                            String Sql = "UPDATE c_masterforecastline SET " +
-                                     "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                      "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
-                                    "Price= (Round((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "),2)), " +
-                                    "PlannedRevenue =(ROUND((((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + ")),2))" +
-                                    "WHERE c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID();
-                            DB.ExecuteQuery(Sql, null, mf.Get_Trx());
-
-                        }
-                    }
-                    else
+                    mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_Product_ID"]),
+                             Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), 0, 0, 0);
+                    if (!mfLine.Save())
                     {
                         ValueNamePair vp = VLogger.RetrieveError();
                         if (vp != null)
@@ -424,6 +425,56 @@ namespace ViennaAdvantageServer.Process
                         }
 
                     }
+                    else
+                    {
+                        //Convert Line Amount as per Currency Defined on  Master Forecast 
+                           ConvertedAmt = MConversionRate.Convert(mf.GetCtx(), Util.GetValueOfDecimal(dsOrder.Tables[0].Rows[i]["Price"]),
+                            Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_Currency_ID"]), Currency,
+                            Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
+                            Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
+
+                        //Create Product Line Details
+                        po = GenerateProductLineDetails(mfLine, Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_Order_ID"]),
+                               Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_OrderLine_ID"]), 0, 0, 0, 0,
+                               C_Period_ID, Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_UOM_ID"]), Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_Product_ID"]),
+                               Util.GetValueOfDecimal(dsOrder.Tables[0].Rows[i]["QtyOrdered"]), ConvertedAmt,
+                               Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                        if (!po.Save())
+                        {
+                            ValueNamePair vp = VLogger.RetrieveError();
+                            if (vp != null)
+                            {
+                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + "for OrderLine" + Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_OrderLine_ID"])
+                                    + vp.GetValue() + " - " + vp.GetName());
+                            }
+                            else
+                            {
+                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + "for OrderLine" + Util.GetValueOfInt(dsOrder.Tables[0].Rows[i]["C_OrderLine_ID"]));
+                            }
+
+                        }
+                        else
+                        {
+                            Count++;
+
+                            //Update quantity and price at Product line 
+                            String Sql = "UPDATE C_MasterForecastLine SET " +
+                                      "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                      "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                      "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                      "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
+                                      "Price= (Round((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                      "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")," + StdPrecision + ")), " +
+                                      "PlannedRevenue =(ROUND((((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                      "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
+                                      "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))," + StdPrecision + "))" +
+                                      "WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID();
+
+                            DB.ExecuteQuery(Sql, null, mf.Get_Trx());
+
+                        }
+                    }
+
                 }
             }
             return Count;
@@ -436,11 +487,14 @@ namespace ViennaAdvantageServer.Process
         private int TeamForecastProduct()
         {
 
-            sql = "SELECT fl.M_Product_ID,fl.qtyentered,f.C_Forecast_ID,C_ForecastLine_ID,f.C_Period_ID,fl.C_UOM_ID,NVL(pricestd,0) AS Price  FROM c_forecastline fl " +
-                "INNER JOIN c_forecast f ON (fl.c_forecast_id = f.c_forecast_id) " +
-                "WHERE f.c_period_id = " + C_Period_ID + " and " +
-                "f.ad_client_id = " + GetCtx().GetAD_Client_ID() + "" +
-                " and f.isactive = 'Y' and f.processed = 'Y'";
+            sql = @"SELECT fl.M_Product_ID,fl.M_AttributeSetInstance_ID,fl.qtyentered,f.C_Forecast_ID,
+                    C_ForecastLine_ID,f.C_Period_ID,fl.C_UOM_ID,NVL(pricestd,0) AS Price,f.C_Currency_ID
+                    FROM C_Forecast f " +
+                    " INNER JOIN C_Forecastline fl ON fl.c_forecast_id = f.c_forecast_id " +
+                    " WHERE f.c_period_id = " + C_Period_ID + " AND " +
+                    " f.isactive = 'Y' AND f.processed = 'Y'";
+
+            sql = MRole.GetDefault(mf.GetCtx()).AddAccessSQL(sql, "C_Forecast", true, true); // fully qualified - RO
 
             dsForecast = new DataSet();
             dsForecast = DB.ExecuteDataset(sql, null, mf.Get_Trx());
@@ -448,47 +502,8 @@ namespace ViennaAdvantageServer.Process
             {
                 for (int i = 0; i < dsForecast.Tables[0].Rows.Count; i++)
                 {
-                    mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]), 0, 0, 0);
-                    if (mfLine.Save())
-                    {
-                        po = GenerateProductLineDetails(mfLine, 0, 0, 0, 0, Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_Forecast_ID"]), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_ForecastLine_ID"]),
-                               Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_Period_ID"]), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_UOM_ID"]),
-                               Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfDecimal(dsForecast.Tables[0].Rows[i]["qtyentered"]), Util.GetValueOfDecimal(dsForecast.Tables[0].Rows[i]["Price"]), 0);
-                        if (!po.Save())
-                        {
-                            ValueNamePair vp = VLogger.RetrieveError();
-                            if (vp != null)
-                            {
-                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + vp.GetValue() + " - " + vp.GetName());
-                            }
-                            else
-                            {
-                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved"));
-                            }
-
-                        }
-                        else
-                        {
-                            //update quantity and Price at Product line
-                            Count++;
-
-                            String Sql = "UPDATE c_masterforecastline SET " +
-                                     "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                      "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
-                                     "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
-                                    "Price= (Round((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "),2)), " +
-                                    "PlannedRevenue =(ROUND((((SELECT NVL(SUM(Price),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
-                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE c_masterforecastline_ID = " + mfLine.GetC_MasterForecastLine_ID() + ")),2))" +
-                                    "WHERE c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID();
-
-                            DB.ExecuteQuery(Sql, null, mf.Get_Trx());
-
-                        }
-                    }
-                    else
+                    mfLine = GenerateMasterForecast(Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]), 0, 0, 0);
+                    if (!mfLine.Save())
                     {
                         ValueNamePair vp = VLogger.RetrieveError();
                         if (vp != null)
@@ -501,6 +516,55 @@ namespace ViennaAdvantageServer.Process
                         }
 
                     }
+                    else
+                    {
+                        //Convert Line Amount as per Currency Defined on  Master Forecast 
+                        ConvertedAmt = MConversionRate.Convert(mf.GetCtx(), Util.GetValueOfDecimal(dsForecast.Tables[0].Rows[i]["Price"]), 
+                            Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_Currency_ID"]),Currency,
+                            Util.GetValueOfDateTime(mf.Get_Value("TRXDATE")),
+                            Util.GetValueOfInt(mf.Get_Value("C_ConversionType_ID")), mf.GetAD_Client_ID(), mf.GetAD_Org_ID());
+
+                        //Create Product Line Details
+                        po = GenerateProductLineDetails(mfLine, 0, 0, 0, 0, Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_Forecast_ID"]),
+                               Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_ForecastLine_ID"]),
+                               Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_Period_ID"]), Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_UOM_ID"]),
+                               Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_Product_ID"]), Util.GetValueOfDecimal(dsForecast.Tables[0].Rows[i]["qtyentered"]),
+                               ConvertedAmt, Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["M_AttributeSetInstance_ID"]));
+                        if (!po.Save())
+                        {
+                            ValueNamePair vp = VLogger.RetrieveError();
+                            if (vp != null)
+                            {
+                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + "for ForecastLine " + Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_ForecastLine_ID"]) + vp.GetValue() + " - " + vp.GetName());
+                            }
+                            else
+                            {
+                                log.Log(Level.SEVERE, Msg.GetMsg(GetCtx(), "ProductLineDetailNotSaved") + "for ForecastLine " + Util.GetValueOfInt(dsForecast.Tables[0].Rows[i]["C_ForecastLine_ID"]));
+                            }
+
+                        }
+                        else
+                        {
+                            //update quantity and Price at Product line
+                            Count++;
+
+                            String Sql = "UPDATE C_MasterForecastLine SET " +
+                                     "ForcastQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Forecast_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                     "OppQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Project_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                    "VA073_SalesOrderQty =(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE NVL(C_Order_ID,0)>0 AND c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + "), " +
+                                    "TotalQty=(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  c_masterforecastline_ID=" + mfLine.GetC_MasterForecastLine_ID() + ") , " +
+                                    "Price= (Round((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                    "(SELECT NVL(SUM(QtyEntered),0) FROM VA073_MasterForecastLineDetail WHERE  C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")," + StdPrecision + ")), " +
+                                    "PlannedRevenue =(ROUND((((SELECT SUM(qtyentered * price) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID() + ")/ " +
+                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))*" +
+                                    "(SELECT NVL(SUM(QtyEntered), 0) FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID = " + mfLine.GetC_MasterForecastLine_ID() + "))," + StdPrecision + "))" +
+                                    "WHERE C_MasterForecastLine_ID=" + mfLine.GetC_MasterForecastLine_ID();
+
+                            DB.ExecuteQuery(Sql, null, mf.Get_Trx());
+
+                        }
+                    }
+
                 }
             }
             return Count;
@@ -515,17 +579,17 @@ namespace ViennaAdvantageServer.Process
         /// <param name="avgPrice">Price</param>
         /// <param name="totalQtySO">Total </param>
         /// <returns>odject</returns>
-        private MMasterForecastLine GenerateMasterForecast(int M_Product_ID, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
+        private MMasterForecastLine GenerateMasterForecast(int M_Product_ID, int M_AttributeSetInstance, decimal? totalQtyTeam, Decimal? totalQtyOpp, decimal? avgPrice)
         {
-            //   MMasterForecastLine mfLine = new MMasterForecastLine(GetCtx(), 0, Get_Trx());
-            MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf, M_Product_ID);
+            MMasterForecastLine mfLine = MMasterForecastLine.GetOrCreate(mf, M_Product_ID, M_AttributeSetInstance);
             mfLine.SetC_MasterForecast_ID(mf.GetC_MasterForecast_ID());
             mfLine.SetForcastQty(totalQtyTeam);
             mfLine.SetOppQty(totalQtyOpp + mfLine.GetOppQty());
             Decimal? total = Decimal.Add(totalQtyOpp.Value, totalQtyTeam.Value);
             mfLine.SetTotalQty(total + mfLine.GetTotalQty());
             mfLine.SetPrice(avgPrice + mfLine.GetPrice());
-            Decimal? planRevenue = Decimal.Round(Decimal.Multiply(mfLine.GetPrice(), mfLine.GetTotalQty()), 2, MidpointRounding.AwayFromZero);
+            // to do -- need to be round off based on currency std precison
+            Decimal? planRevenue = Decimal.Round(Decimal.Multiply(mfLine.GetPrice(), mfLine.GetTotalQty()), StdPrecision , MidpointRounding.AwayFromZero);
             mfLine.SetPlannedRevenue(planRevenue);
 
             return mfLine;
@@ -554,8 +618,8 @@ namespace ViennaAdvantageServer.Process
         {
             //object of VA073_MasterForecastLineDetails
             po = tbl.GetPO(mf.GetCtx(), 0, mf.Get_Trx());
-
-            int LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(LineNo), 0) AS DefaultValue FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + Parent.GetC_MasterForecastLine_ID(), null, Get_Trx()));
+            LineNo = Util.GetValueOfInt(DB.ExecuteScalar("SELECT NVL(MAX(LineNo), 0) AS DefaultValue FROM VA073_MasterForecastLineDetail WHERE C_MasterForecastLine_ID=" + Parent.GetC_MasterForecastLine_ID(), null, mf.Get_Trx()));
+            // take it outside the loop
             po.Set_Value("AD_Client_ID", Parent.GetAD_Client_ID());
             po.Set_Value("AD_Org_ID", Parent.GetAD_Org_ID());
             po.Set_Value("LineNo", LineNo + 10);
