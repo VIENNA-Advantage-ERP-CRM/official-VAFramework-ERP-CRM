@@ -81,7 +81,7 @@ namespace VIS.Models
             }
             if (taxCategory > 0)
             {
-                MTaxCategory taxCat = new MTaxCategory(ctx, taxCategory, null);
+                MVABTaxCategory taxCat = new MVABTaxCategory(ctx, taxCategory, null);
                 int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                 string Postal = "", orgPostal = "";
                 sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="
@@ -605,7 +605,7 @@ namespace VIS.Models
             }
             if (taxCategory > 0)
             {
-                MTaxCategory taxCat = new MTaxCategory(ctx, taxCategory, null);
+                MVABTaxCategory taxCat = new MVABTaxCategory(ctx, taxCategory, null);
                 int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                 string Postal = "", orgPostal = "";
                 sql = @"SELECT loc.VAB_Country_ID,loc.VAB_RegionState_ID,loc.Postal FROM VAB_Address loc INNER JOIN VAB_BPart_Location bpl ON loc.VAB_Address_ID = bpl.VAB_Address_ID WHERE bpl.VAB_BPart_Location_ID ="

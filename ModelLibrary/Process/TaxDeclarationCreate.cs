@@ -30,7 +30,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	private Boolean				_DeleteOld = true;
 	
 	/**	Tax Declaration			*/
-	private MTaxDeclaration 	_td = null;
+	private MVABTaxRateComputation 	_td = null;
 	/** TDLines					*/
 	private int					_noLines = 0;
 	/** TDAccts					*/
@@ -68,7 +68,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 	protected override String DoIt() 
 	{
 		log.Info("VAB_TaxRateComputation_ID=" + _VAB_TaxRateComputation_ID);
-		_td = new MTaxDeclaration (GetCtx(), _VAB_TaxRateComputation_ID, Get_Trx());
+		_td = new MVABTaxRateComputation (GetCtx(), _VAB_TaxRateComputation_ID, Get_Trx());
 		if (_td.Get_ID() == 0)
         {
 			throw new Exception("@NotDound@ @VAB_TaxRateComputation_ID@ = " + _VAB_TaxRateComputation_ID);
@@ -176,7 +176,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 		{
 			MVABTaxInvoice tLine = taxes[i];
 			//
-			MTaxDeclarationLine tdl = new MTaxDeclarationLine (_td, invoice, tLine);
+			MVABTaxComputationLine tdl = new MVABTaxComputationLine (_td, invoice, tLine);
 			tdl.SetLine((_noLines+1) * 10);
 			if (tdl.Save())
             {
@@ -208,7 +208,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
             foreach(DataRow dr in dt.Rows)
 			{
 				MActualAcctDetail fact = new MActualAcctDetail(GetCtx(), dr, null);	//	no lock
-				MTaxDeclarationAcct tda = new MTaxDeclarationAcct (_td, fact);
+				MVABTaxComputationAcct tda = new MVABTaxComputationAcct (_td, fact);
 				tda.SetLine((_noAccts+1) * 10);
 				if (tda.Save())
                 {

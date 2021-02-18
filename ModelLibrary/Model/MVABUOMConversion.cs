@@ -26,16 +26,16 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUOMConversion : X_VAB_UOM_Conversion
+    public class MVABUOMConversion : X_VAB_UOM_Conversion
     {
         // Static Logger					
-        private static VLogger _log = VLogger.GetVLogger(typeof(MUOMConversion).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABUOMConversion).FullName);
         //	Indicator for Rate				
         private static Decimal GETRATE = new Decimal(123.456);
         //	Conversion Map: Key=Point(from,to) Value=Decimal	
         private static CCache<Point, Decimal> _conversions = null;
         // Product Conversion Map					
-        private static CCache<int, MUOMConversion[]> _conversionProduct = new CCache<int, MUOMConversion[]>("VAB_UOMConversion", 20);
+        private static CCache<int, MVABUOMConversion[]> _conversionProduct = new CCache<int, MVABUOMConversion[]>("MVABUOMConversion", 20);
 
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace VAdvantage.Model
             Decimal? retValue = GetRate(ctx, VAB_UOM_ID, VAB_UOM_To_ID);
             if (retValue != null)
             {
-                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
+                MVABUOM uom = MVABUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(retValue.Value, qty.Value), true);
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
             {
                 return 0;
             }
-            int VAB_UOM_To_ID = MUOM.GetMinute_UOM_ID(ctx);
+            int VAB_UOM_To_ID = MVABUOM.GetMinute_UOM_ID(ctx);
             if (VAB_UOM_ID == VAB_UOM_To_ID)
             {
                 return Decimal.ToInt32(qty.Value);
@@ -128,7 +128,7 @@ namespace VAdvantage.Model
             DateTime? endDate = new DateTime();
             //endDate.setTime(startDate);
             endDate = startDate;
-            int minutes = MUOMConversion.ConvertToMinutes(ctx, VAB_UOM_ID, qty);
+            int minutes = MVABUOMConversion.ConvertToMinutes(ctx, VAB_UOM_ID, qty);
             //endDate.add(Calendar.MINUTE, minutes);
             //endDate.AddMinutes((Double)minutes);
             endDate = endDate.Value.AddMinutes(minutes);
@@ -250,8 +250,8 @@ namespace VAdvantage.Model
                 return Env.ONE;
             }
             //	get Info
-            MUOM from = MUOM.Get(ctx, VAB_UOM_ID);
-            MUOM to = MUOM.Get(ctx, VAB_UOM_To_ID);
+            MVABUOM from = MVABUOM.Get(ctx, VAB_UOM_ID);
+            MVABUOM to = MVABUOM.Get(ctx, VAB_UOM_To_ID);
             if (from == null || to == null)
             {
                 return null;
@@ -544,7 +544,7 @@ namespace VAdvantage.Model
                 {
                     return qtyPrice;
                 }
-                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
+                MVABUOM uom = MVABUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(Utility.Util.GetValueOfDecimal(retValue), Utility.Util.GetValueOfDecimal(qtyPrice)), true);
@@ -567,7 +567,7 @@ namespace VAdvantage.Model
             {
                 return null;
             }
-            MUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
+            MVABUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
             if (rates.Length == 0)
             {
                 _log.Fine("None found");
@@ -576,7 +576,7 @@ namespace VAdvantage.Model
 
             for (int i = 0; i < rates.Length; i++)
             {
-                MUOMConversion rate = rates[i];
+                MVABUOMConversion rate = rates[i];
                 if (rate.GetVAB_UOM_To_ID() == VAB_UOM_To_ID)
                 {
                     return rate.GetMultiplyRate();
@@ -614,7 +614,7 @@ namespace VAdvantage.Model
                 {
                     return qtyPrice;
                 }
-                MUOM uom = MUOM.Get(ctx, VAB_UOM_To_ID);
+                MVABUOM uom = MVABUOM.Get(ctx, VAB_UOM_To_ID);
                 if (uom != null)
                 {
                     return uom.Round(Decimal.Multiply(retValue.Value, qtyPrice.Value), true);
@@ -636,7 +636,7 @@ namespace VAdvantage.Model
         //public static Decimal? GetProductRateFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID,bool _ProductToConversion=false)
         public static Decimal? GetProductRateFrom(Ctx ctx, int VAM_Product_ID, int VAB_UOM_To_ID)
         {
-            MUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
+            MVABUOMConversion[] rates = GetProductConversions(ctx, VAM_Product_ID);
             if (rates.Length == 0)
             {
                 _log.Fine("getProductRateFrom - none found");
@@ -645,7 +645,7 @@ namespace VAdvantage.Model
 
             for (int i = 0; i < rates.Length; i++)
             {
-                MUOMConversion rate = rates[i];
+                MVABUOMConversion rate = rates[i];
                 if (rate.GetVAB_UOM_To_ID() == VAB_UOM_To_ID)
                 {
                     return rate.GetDivideRate();
@@ -668,20 +668,20 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAM_Product_ID"></param>
         /// <returns>array of conversions</returns>
-        public static MUOMConversion[] GetProductConversions(Ctx ctx, int VAM_Product_ID)
+        public static MVABUOMConversion[] GetProductConversions(Ctx ctx, int VAM_Product_ID)
         {
             if (VAM_Product_ID == 0)
             {
-                return new MUOMConversion[0];
+                return new MVABUOMConversion[0];
             }
             int key = VAM_Product_ID;
-            MUOMConversion[] result = (MUOMConversion[])_conversionProduct[key];
+            MVABUOMConversion[] result = (MVABUOMConversion[])_conversionProduct[key];
             if (result != null)
             {
                 return result;
             }
 
-            List<MUOMConversion> list = new List<MUOMConversion>();
+            List<MVABUOMConversion> list = new List<MVABUOMConversion>();
 
             //
             String sql = "SELECT * FROM VAB_UOM_Conversion c "
@@ -702,7 +702,7 @@ namespace VAdvantage.Model
                 idr.Close();
                 foreach (DataRow dr in dt.Rows)
                 {
-                    list.Add(new MUOMConversion(ctx, dr, null));
+                    list.Add(new MVABUOMConversion(ctx, dr, null));
                 }
 
                 if (list.Count == 0)
@@ -718,7 +718,7 @@ namespace VAdvantage.Model
                     idr1.Close();
                     foreach (DataRow dr1 in dt1.Rows)
                     {
-                        list.Add(new MUOMConversion(ctx, dr1, null));
+                        list.Add(new MVABUOMConversion(ctx, dr1, null));
                     }
                 }
 
@@ -755,12 +755,12 @@ namespace VAdvantage.Model
             //	Add default conversion
             if (list.Count == 0)
             {
-                MUOMConversion defRate = new MUOMConversion(MProduct.Get(ctx, VAM_Product_ID));
+                MVABUOMConversion defRate = new MVABUOMConversion(MProduct.Get(ctx, VAM_Product_ID));
                 list.Add(defRate);
             }
 
             //	Convert & save
-            result = new MUOMConversion[list.Count];
+            result = new MVABUOMConversion[list.Count];
             result = list.ToArray();
             _conversionProduct.Add(key, result);
             _log.Fine("GetProductConversions - VAM_Product_ID=" + VAM_Product_ID + " #" + result.Length);
@@ -773,7 +773,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_UOM_Conversion_ID"></param>
         /// <param name="trxName"></param>
-        public MUOMConversion(Ctx ctx, int VAB_UOM_Conversion_ID, Trx trxName)
+        public MVABUOMConversion(Ctx ctx, int VAB_UOM_Conversion_ID, Trx trxName)
             : base(ctx, VAB_UOM_Conversion_ID, trxName)
         {
 
@@ -785,7 +785,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="dr"></param>
         /// <param name="trxName"></param>
-        public MUOMConversion(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABUOMConversion(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -795,7 +795,7 @@ namespace VAdvantage.Model
         /// 	Parent Constructor
         /// </summary>
         /// <param name="parent"></param>
-        public MUOMConversion(MUOM parent)
+        public MVABUOMConversion(MVABUOM parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -810,7 +810,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent"></param>
-        public MUOMConversion(MProduct parent)
+        public MVABUOMConversion(MProduct parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);
@@ -847,7 +847,7 @@ namespace VAdvantage.Model
                 MProduct product = MProduct.Get(GetCtx(), GetVAM_Product_ID());
                 if (product.GetVAB_UOM_ID() != GetVAB_UOM_ID())
                 {
-                    MUOM uom = MUOM.Get(GetCtx(), product.GetVAB_UOM_ID());
+                    MVABUOM uom = MVABUOM.Get(GetCtx(), product.GetVAB_UOM_ID());
                     log.SaveError("ProductUOMConversionUOMError", uom.GetName());
                     return false;
                 }

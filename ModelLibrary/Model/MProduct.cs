@@ -394,7 +394,7 @@ namespace VAdvantage.Model
                 int VAB_UOM_ID = GetVAB_UOM_ID();
                 if (VAB_UOM_ID == 0)
                     return 0;	//	EA
-                _precision = (int)MUOM.GetPrecision(GetCtx(), VAB_UOM_ID);
+                _precision = (int)MVABUOM.GetPrecision(GetCtx(), VAB_UOM_ID);
             }
             return (int)_precision;
         }
@@ -491,7 +491,7 @@ namespace VAdvantage.Model
             int VAB_UOM_ID = GetVAB_UOM_ID();
             if (VAB_UOM_ID == 0)
                 return "";
-            return MUOM.Get(GetCtx(), VAB_UOM_ID).GetUOMSymbol();
+            return MVABUOM.Get(GetCtx(), VAB_UOM_ID).GetUOMSymbol();
         }
 
         /**

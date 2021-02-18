@@ -240,7 +240,7 @@ namespace ViennaAdvantage.Process
                         if (VAB_UOM_IDTo != 0 && VAB_UOM_ID != 0)
                         {
                             //qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetAPApprovedHrs(), true);
-                            qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
+                            qty = VAdvantage.Model.MVABUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
                         }
 
                         VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
@@ -274,7 +274,7 @@ namespace ViennaAdvantage.Process
 
                         //qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetAPApprovedHrs(), true);
 
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
+                        qty = VAdvantage.Model.MVABUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
                         //Decimal? qty2 = MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetAPApprovedHrs());
                         //Decimal? qty3 = MUOMConversion.GetProductRateTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo);
                         //Decimal? qty4 = MUOMConversion.GetProductRateFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_ID);
@@ -286,7 +286,7 @@ namespace ViennaAdvantage.Process
                         {
                             sql = "select HourlyRate from VAS_Resource where VAS_Resource_ID = " + VAS_Resource_ID;
                             price = Util.GetValueOfDecimal(DB.ExecuteScalar(sql, null, null));
-                            price = VAdvantage.Model.MUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, price.Value);
+                            price = VAdvantage.Model.MVABUOMConversion.ConvertProductFrom(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, price.Value);
                         }
                         else
                         {

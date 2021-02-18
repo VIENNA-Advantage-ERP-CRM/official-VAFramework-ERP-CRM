@@ -1927,7 +1927,7 @@ namespace VAdvantage.Model
             // Currency Object
             MVABCurrency currency = MVABCurrency.Get(GetCtx(), priceList.GetVAB_Currency_ID());
             //Tax Object 
-            MTax tax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_Trx());
+            MVABTaxRate tax = new MVABTaxRate(GetCtx(), GetVAB_TaxRate_ID(), Get_Trx());
 
             Decimal surchargeAmt = Env.ZERO;
             Decimal TaxAmt = Env.ZERO;

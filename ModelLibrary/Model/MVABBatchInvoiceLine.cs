@@ -498,7 +498,7 @@ namespace VAdvantage.Model
                 int VAB_TaxRate_ID = GetVAB_TaxRate_ID();
                 if (VAB_TaxRate_ID != 0)
                 {
-                    MTax tax = new MTax(GetCtx(), VAB_TaxRate_ID, null);
+                    MVABTaxRate tax = new MVABTaxRate(GetCtx(), VAB_TaxRate_ID, null);
                     taxAmt = tax.CalculateTax(lineNetAmt, isTaxIncluded, stdPrecision);
                     SetTaxAmt(Convert.ToDecimal(taxAmt));
                 }

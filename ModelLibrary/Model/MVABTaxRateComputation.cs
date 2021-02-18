@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxDeclaration : X_VAB_TaxRateComputation
+    public class MVABTaxRateComputation : X_VAB_TaxRateComputation
     {
         /// <summary>
         /// Standard Constructors
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_TaxRateComputation_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclaration(Ctx ctx, int VAB_TaxRateComputation_ID, Trx trxName): base(ctx, VAB_TaxRateComputation_ID, trxName)
+        public MVABTaxRateComputation(Ctx ctx, int VAB_TaxRateComputation_ID, Trx trxName): base(ctx, VAB_TaxRateComputation_ID, trxName)
         {
            // super(ctx, VAB_TaxRateComputation_ID, trxName);
         }	//	MTaxDeclaration
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context </param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclaration(Ctx ctx, DataRow dr, Trx trxName):base(ctx,dr, trxName)
+        public MVABTaxRateComputation(Ctx ctx, DataRow dr, Trx trxName):base(ctx,dr, trxName)
         {
             //super(ctx, rs, trxName);
         }	//	MTaxDeclaration

@@ -25,11 +25,11 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MUOM : X_VAB_UOM
+    public class MVABUOM : X_VAB_UOM
     {
         #region Private Variable
         //	UOM Cache				
-        private static CCache<int, MUOM> s_cache = new CCache<int, MUOM>("VAB_UOM", 30);
+        private static CCache<int, MVABUOM> s_cache = new CCache<int, MVABUOM>("MVABUOM", 30);
         // X12 Element 355 Code	Minute	
         static String X12_MINUTE = "MJ";
         // X12 Element 355 Code	Hour	
@@ -48,7 +48,7 @@ namespace VAdvantage.Model
         static String X12_YEAR = "YR";
 
         //Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MUOM).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABUOM).FullName);
         #endregion
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace VAdvantage.Model
                 IEnumerator it = s_cache.Values.GetEnumerator();
                 while (it.MoveNext())
                 {
-                    MUOM uom = (MUOM)it.Current;
+                    MVABUOM uom = (MVABUOM)it.Current;
                     if (uom.IsMinute())
                     {
                         return uom.GetVAB_UOM_ID();
@@ -119,7 +119,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_UOM_ID"></param>
         /// <returns>UOM</returns>
-        public static MUOM Get(Ctx ctx, int VAB_UOM_ID)
+        public static MVABUOM Get(Ctx ctx, int VAB_UOM_ID)
         {
             if (s_cache.Count == 0)
             {
@@ -127,13 +127,13 @@ namespace VAdvantage.Model
             }
             //
             int ii = VAB_UOM_ID;
-            MUOM uom = (MUOM)s_cache[ii];
+            MVABUOM uom = (MVABUOM)s_cache[ii];
             if (uom != null)
             {
                 return uom;
             }
             //
-            uom = new MUOM(ctx, VAB_UOM_ID, null);
+            uom = new MVABUOM(ctx, VAB_UOM_ID, null);
             s_cache.Add(Utility.Util.GetValueOfInt(VAB_UOM_ID), uom);
             return uom;
         }
@@ -146,7 +146,7 @@ namespace VAdvantage.Model
         /// <returns>Precision</returns>
         public static int GetPrecision(Ctx ctx, int VAB_UOM_ID)
         {
-            MUOM uom = Get(ctx, VAB_UOM_ID);
+            MVABUOM uom = Get(ctx, VAB_UOM_ID);
             return uom.GetStdPrecision();
         }
 
@@ -166,7 +166,7 @@ namespace VAdvantage.Model
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
                     DataRow dr = ds.Tables[0].Rows[i];
-                    MUOM uom = new MUOM(ctx, dr, null);
+                    MVABUOM uom = new MVABUOM(ctx, dr, null);
                     s_cache.Add(uom.GetVAB_UOM_ID(), uom);
                 }
                 ds = null;
@@ -183,7 +183,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="VAB_UOM_ID"></param>
         /// <param name="trxName"></param>
-        public MUOM(Ctx ctx, int VAB_UOM_ID, Trx trxName)
+        public MVABUOM(Ctx ctx, int VAB_UOM_ID, Trx trxName)
             : base(ctx, VAB_UOM_ID, trxName)
         {
 
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
         /// <param name="ctx"></param>
         /// <param name="rs"></param>
         /// <param name="trxName"></param>
-        public MUOM(Ctx ctx, DataRow rs, Trx trxName)
+        public MVABUOM(Ctx ctx, DataRow rs, Trx trxName)
             : base(ctx, rs, trxName)
         {
 

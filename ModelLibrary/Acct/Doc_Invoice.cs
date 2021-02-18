@@ -159,7 +159,7 @@ namespace VAdvantage.Acct
                 //	Correct included Tax
                 if (IsTaxIncluded() && VAB_TaxRate_ID != 0)
                 {
-                    MTax tax = MTax.Get(GetCtx(), VAB_TaxRate_ID);
+                    MVABTaxRate tax = MVABTaxRate.Get(GetCtx(), VAB_TaxRate_ID);
                     if (!tax.IsZeroTax())
                     {
                         Decimal LineNetAmtTax = tax.CalculateTax(LineNetAmt, true, GetStdPercision());

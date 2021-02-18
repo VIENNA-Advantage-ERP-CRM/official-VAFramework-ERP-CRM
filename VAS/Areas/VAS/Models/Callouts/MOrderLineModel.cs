@@ -129,7 +129,7 @@ namespace VIS.Models
             }
             if (taxCategory > 0)
             {
-                MTaxCategory taxCat = new MTaxCategory(ctx, taxCategory, null);
+                MVABTaxCategory taxCat = new MVABTaxCategory(ctx, taxCategory, null);
                 int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                 string Postal = "", orgPostal = "";
 
@@ -597,7 +597,7 @@ namespace VIS.Models
             }
             if (taxCategory > 0)
             {
-                MTaxCategory taxCat = new MTaxCategory(ctx, taxCategory, null);
+                MVABTaxCategory taxCat = new MVABTaxCategory(ctx, taxCategory, null);
                 int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                 string Postal = "", orgPostal = "";
 

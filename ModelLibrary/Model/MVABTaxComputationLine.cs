@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxDeclarationLine : X_VAB_TaxComputationLine
+    public class MVABTaxComputationLine : X_VAB_TaxComputationLine
     {
         /// <summary>
         /// Standard Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">Ctx</param>
         /// <param name="VAB_TaxComputationLine_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclarationLine(Ctx ctx, int VAB_TaxComputationLine_ID, Trx trxName):base(ctx, VAB_TaxComputationLine_ID, trxName)
+        public MVABTaxComputationLine(Ctx ctx, int VAB_TaxComputationLine_ID, Trx trxName):base(ctx, VAB_TaxComputationLine_ID, trxName)
         {
             //super(ctx, VAB_TaxComputationLine_ID, trxName);
             if (VAB_TaxComputationLine_ID == 0)
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclarationLine(Ctx ctx, DataRow dr, Trx trxName):base(ctx, dr, trxName)
+        public MVABTaxComputationLine(Ctx ctx, DataRow dr, Trx trxName):base(ctx, dr, trxName)
         {
             //super(ctx, rs, trxName);
         }	//	MTaxDeclarationLine
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// <param name="parent">parent</param>
         /// <param name="invoice">invoice</param>
         /// <param name="iLine">invoice line</param>
-        public MTaxDeclarationLine(MTaxDeclaration parent, MVABInvoice invoice, MVABInvoiceLine iLine): this(parent.GetCtx(), 0, parent.Get_TrxName())
+        public MVABTaxComputationLine(MVABTaxRateComputation parent, MVABInvoice invoice, MVABInvoiceLine iLine): this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
            // this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(invoice);
@@ -90,7 +90,7 @@ namespace VAdvantage.Model
         /// <param name="parent">parent</param>
         /// <param name="invoice">invoice</param>
         /// <param name="tLine">tax line</param>
-        public MTaxDeclarationLine(MTaxDeclaration parent, MVABInvoice invoice, MVABTaxInvoice tLine):this(parent.GetCtx(), 0, parent.Get_TrxName())
+        public MVABTaxComputationLine(MVABTaxRateComputation parent, MVABInvoice invoice, MVABTaxInvoice tLine):this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //this(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(invoice);

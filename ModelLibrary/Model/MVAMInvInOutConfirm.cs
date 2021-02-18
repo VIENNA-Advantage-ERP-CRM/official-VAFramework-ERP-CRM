@@ -1118,7 +1118,7 @@ namespace VAdvantage.Model
                 MProduct _Pro = new MProduct(GetCtx(), iol.GetVAM_Product_ID(), Get_TrxName());
                 if (confirm.GetVAB_UOM_ID() != _Pro.GetVAB_UOM_ID())
                 {
-                    decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), iol.GetVAM_Product_ID(), confirm.GetVAB_UOM_ID(), confirm.GetDifferenceQty());
+                    decimal? pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), iol.GetVAM_Product_ID(), confirm.GetVAB_UOM_ID(), confirm.GetDifferenceQty());
                     line.SetQty(Util.GetValueOfDecimal(pc));	//	Entered/Invoiced
                 }
                 else

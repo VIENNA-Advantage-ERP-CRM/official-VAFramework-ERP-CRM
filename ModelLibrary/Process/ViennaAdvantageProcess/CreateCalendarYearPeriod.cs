@@ -143,7 +143,7 @@ namespace ViennaAdvantage.Process
                     yearID = Convert.ToInt32(DB.ExecuteScalar(sql.ToString()));
                 }
                 catch { }
-                MYear year = new MYear(GetCtx(), yearID, trx);
+                MVABYear year = new MVABYear(GetCtx(), yearID, trx);
                 year.SetVAB_Calender_ID(calendarID);
                 year.SetFiscalYear(YearName);
                 year.SetIsActive(true);

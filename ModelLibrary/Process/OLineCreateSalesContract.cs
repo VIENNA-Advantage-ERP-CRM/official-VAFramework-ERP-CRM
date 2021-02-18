@@ -147,7 +147,7 @@ namespace ViennaAdvantageServer.Process
                 contact.SetLineNetAmt(Decimal.Multiply(line.GetQtyPerCycle(), line.GetPriceActual()));
 
                 // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
-                MTax tax = MTax.Get(GetCtx(), line.GetVAB_TaxRate_ID());
+                MVABTaxRate tax = MVABTaxRate.Get(GetCtx(), line.GetVAB_TaxRate_ID());
                 if (contact.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)
                 {
                     Decimal surchargeAmt = Env.ZERO;

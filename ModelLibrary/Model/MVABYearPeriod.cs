@@ -70,7 +70,7 @@ namespace VAdvantage.Model
         /// <param name="name">name</param>
         /// <param name="startDate">start</param>
         /// <param name="endDate">end</param>
-        public MVABYearPeriod(MYear year, int periodNo, String name, DateTime? startDate, DateTime? endDate)
+        public MVABYearPeriod(MVABYear year, int periodNo, String name, DateTime? startDate, DateTime? endDate)
             : this(year.GetCtx(), 0, year.Get_TrxName())
         {
             SetClientOrg(year);
@@ -986,7 +986,7 @@ namespace VAdvantage.Model
         {
             if (VAB_Calender_ID == 0)
             {
-                MYear year = MYear.Get(GetCtx(), GetVAB_Year_ID());
+                MVABYear year = MVABYear.Get(GetCtx(), GetVAB_Year_ID());
                 if (year != null)
                 {
                     VAB_Calender_ID = year.GetVAB_Calender_ID();

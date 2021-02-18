@@ -28,7 +28,7 @@ namespace VAdvantage.Model
         private static VLogger s_log = VLogger.GetVLogger(typeof(MVABOrderTax).FullName);
 
         /** Tax							*/
-        private MTax _tax = null;
+        private MVABTaxRate _tax = null;
         /** Cached Precision			*/
         private int? _precision = null;
 
@@ -201,7 +201,7 @@ namespace VAdvantage.Model
             Decimal taxAmt = Env.ZERO;
             //
             bool documentLevel = GetTax().IsDocumentLevel();
-            MTax tax = GetTax();
+            MVABTaxRate tax = GetTax();
             
             // Calculate Tax on TaxAble Amount
             String sql = "SELECT TaxAbleAmt FROM VAB_OrderLine WHERE VAB_Order_ID=" + GetVAB_Order_ID() + " AND VAB_TaxRate_ID=" + GetVAB_TaxRate_ID();
@@ -253,7 +253,7 @@ namespace VAdvantage.Model
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //            
-            MTax surTax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
+            MVABTaxRate surTax = new MVABTaxRate(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
 
             //
@@ -271,13 +271,13 @@ namespace VAdvantage.Model
                     string surchargeType = Util.GetValueOfString(idr[2]);
 
                     // for Surcharge Calculation type - Line Amount + Tax Amount
-                    if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
+                    if (surchargeType.Equals(MVABTaxRate.SURCHARGETYPE_LineAmountPlusTax))
                     {
                         baseAmt = Decimal.Add(baseAmt, taxAmt);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Line Amount 
-                    else if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmount))
+                    else if (surchargeType.Equals(MVABTaxRate.SURCHARGETYPE_LineAmount))
                     {
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
@@ -367,10 +367,10 @@ namespace VAdvantage.Model
      * 	Get Tax
      *	@return tax
      */
-        public MTax GetTax()
+        public MVABTaxRate GetTax()
         {
             if (_tax == null)
-                _tax = MTax.Get(GetCtx(), GetVAB_TaxRate_ID());
+                _tax = MVABTaxRate.Get(GetCtx(), GetVAB_TaxRate_ID());
             return _tax;
         }
 

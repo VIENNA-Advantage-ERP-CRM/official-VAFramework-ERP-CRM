@@ -21,18 +21,18 @@ using VAdvantage.DataBase;
 
 namespace VAdvantage.Model
 {
-    public class MYear : X_VAB_Year
+    public class MVABYear : X_VAB_Year
     {
         //Cache						
-        private static CCache<int, MYear> _years = new CCache<int, MYear>("VAB_Year", 10);
-        private static VLogger s_log = VLogger.GetVLogger(typeof(MYear).FullName);
+        private static CCache<int, MVABYear> _years = new CCache<int, MVABYear>("MVABYear", 10);
+        private static VLogger s_log = VLogger.GetVLogger(typeof(MVABYear).FullName);
         /// <summary>
         /// Standard Constructor
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAB_Year_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MYear(Ctx ctx, int VAB_Year_ID, Trx trxName)
+        public MVABYear(Ctx ctx, int VAB_Year_ID, Trx trxName)
             : base(ctx, VAB_Year_ID, trxName)
         {
             if (VAB_Year_ID == 0)
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">data row</param>
         /// <param name="trxName">transaction</param>
-        public MYear(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABYear(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
         }
@@ -58,7 +58,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="calendar">parent</param>
-        public MYear(MVABCalendar calendar)
+        public MVABYear(MVABCalendar calendar)
             : this(calendar.GetCtx(), 0, calendar.Get_TrxName())
         {
             SetClientOrg(calendar);
@@ -328,9 +328,9 @@ namespace VAdvantage.Model
         /// <returns>year or null</returns>
         /// <date>07-march-2011</date>
         /// <writer>raghu</writer>
-        public static MYear Get(Ctx ctx, int VAB_Year_ID)
+        public static MVABYear Get(Ctx ctx, int VAB_Year_ID)
         {
-            MYear year = _years.Get(ctx, VAB_Year_ID);
+            MVABYear year = _years.Get(ctx, VAB_Year_ID);
             if (year != null)
                 return year;
             //
@@ -345,7 +345,7 @@ namespace VAdvantage.Model
 
                 if (dt.Rows.Count > 0)	//	first only
                 {
-                    year = new MYear(ctx, dt.Rows[0], null);
+                    year = new MVABYear(ctx, dt.Rows[0], null);
                 }
             }
             catch (Exception e)

@@ -313,7 +313,7 @@ namespace VAdvantage.Model
                 Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
                 if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                 {
-                    SetMovementQty(MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
+                    SetMovementQty(MVABUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered"))));
                 }
             }
 

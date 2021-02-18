@@ -23,7 +23,7 @@ namespace VIS.Models
             int VAB_UOM_To_ID = Util.GetValueOfInt(paramValue[0].ToString());
             //End Assign parameter value 
 
-            return MUOM.GetPrecision(ctx, VAB_UOM_To_ID);          
+            return MVABUOM.GetPrecision(ctx, VAB_UOM_To_ID);          
         }
         
     }

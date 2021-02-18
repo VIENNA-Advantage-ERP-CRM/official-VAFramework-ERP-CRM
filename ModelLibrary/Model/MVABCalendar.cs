@@ -120,11 +120,11 @@ namespace VAdvantage.Model
         /// <param name="locale">locale</param>
         /// <returns>The Year</returns>
         //public MYear CreateYear(Locale locale)
-        public MYear CreateYear(CultureInfo locale)
+        public MVABYear CreateYear(CultureInfo locale)
         {
             if (Get_ID() == 0)
                 return null;
-            MYear year = new MYear(this);
+            MVABYear year = new MVABYear(this);
             if (year.Save())
                 year.CreateStdPeriods(locale);
             //

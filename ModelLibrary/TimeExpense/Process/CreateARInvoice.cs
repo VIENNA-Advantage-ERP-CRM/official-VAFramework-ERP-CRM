@@ -410,7 +410,7 @@ namespace VAdvantage.Process
                         Decimal? qty = 0;
 
                         // qty = MUOMConversion.Convert(VAB_UOM_ID, VAB_UOM_IDTo, tLine.GetARApprovedHrs(), true);
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
+                        qty = VAdvantage.Model.MVABUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
                         VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), VAB_InvoiceLine_ID, null);
                         iLine.SetQtyEntered(Decimal.Add(iLine.GetQtyEntered(), qty.Value));
@@ -437,7 +437,7 @@ namespace VAdvantage.Process
 
                         Decimal? qty = 0;
 
-                        qty = VAdvantage.Model.MUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
+                        qty = VAdvantage.Model.MVABUOMConversion.ConvertProductTo(GetCtx(), tLine.GetVAM_Product_ID(), VAB_UOM_IDTo, tLine.GetARApprovedHrs());
 
                         VAdvantage.Model.MVABInvoiceLine iLine = new VAdvantage.Model.MVABInvoiceLine(GetCtx(), 0, null);
                         iLine.SetVAF_Client_ID(GetCtx().GetVAF_Client_ID());

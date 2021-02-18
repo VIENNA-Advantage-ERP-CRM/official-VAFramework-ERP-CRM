@@ -3280,7 +3280,7 @@ namespace VAdvantage.Model
                     log.Log(Level.SEVERE, "TaxCategory NOT inserted");
 
                 //  Tax - Zero Rate
-                MTax tax = new MTax(m_ctx, "Standard", Env.ZERO, VAB_TaxCategory_ID, m_trx);
+                MVABTaxRate tax = new MVABTaxRate(m_ctx, "Standard", Env.ZERO, VAB_TaxCategory_ID, m_trx);
                 tax.SetIsDefault(true);
                 if (tax.Save())
                     m_info.Append(Msg.Translate(m_lang, "VAB_TaxRate_ID"))

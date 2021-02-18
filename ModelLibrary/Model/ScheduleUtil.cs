@@ -91,7 +91,7 @@ namespace VAdvantage.Model
 		_startDate = start_Date;
 		_endDate = end_Date;
 		if (_endDate == null)
-			_endDate = MUOMConversion.GetEndDate(_ctx, _startDate, _VAB_UOM_ID, qty);
+			_endDate = MVABUOMConversion.GetEndDate(_ctx, _startDate, _VAB_UOM_ID, qty);
 		log.Fine( "- EndDate=" + _endDate);
 
 
@@ -795,8 +795,8 @@ namespace VAdvantage.Model
                 throw new ArgumentNullException("ResourceTypeName not set");
 
             List<MAssignmentSlot> list = new List<MAssignmentSlot>();
-            MUOM.Get(_ctx, _VAB_UOM_ID);
-            int minutes = MUOMConversion.ConvertToMinutes(_ctx, _VAB_UOM_ID, Env.ONE);
+            MVABUOM.Get(_ctx, _VAB_UOM_ID);
+            int minutes = MVABUOMConversion.ConvertToMinutes(_ctx, _VAB_UOM_ID, Env.ONE);
             log.Config("Minutes=" + minutes);
             //
             if (minutes > 0 && minutes < 60 * 24)

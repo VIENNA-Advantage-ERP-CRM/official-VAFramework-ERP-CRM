@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         //	Cache	
         private static CCache<int, MVABRfQLineQty> s_cache = new CCache<int, MVABRfQLineQty>("VAB_RFQLine_Qty", 20);
         //Unit of Measure		
-        private MUOM _uom = null;
+        private MVABUOM _uom = null;
 
         /// <summary>
         /// Get MRfQLineQty from Cache
@@ -109,7 +109,7 @@ namespace VAdvantage.Model
         {
             if (_uom == null)
             {
-                _uom = MUOM.Get(GetCtx(), GetVAB_UOM_ID());
+                _uom = MVABUOM.Get(GetCtx(), GetVAB_UOM_ID());
             }
             return _uom.GetName();
         }

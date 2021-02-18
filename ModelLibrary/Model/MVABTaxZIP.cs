@@ -8,7 +8,7 @@ using VAdvantage.Utility;
 using VAdvantage.DataBase;
 namespace VAdvantage.Model
 {
-  public  class MTaxPostal : X_VAB_TaxZIP
+  public  class MVABTaxZIP : X_VAB_TaxZIP
     {
         /**
          * 	Standard Constructor
@@ -16,7 +16,7 @@ namespace VAdvantage.Model
          *	@param VAB_TaxZIP_ID id
          *	@param trxName transaction
          */
-        public MTaxPostal(Ctx ctx, int VAB_TaxZIP_ID, Trx trxName):
+        public MVABTaxZIP(Ctx ctx, int VAB_TaxZIP_ID, Trx trxName):
             base(ctx, VAB_TaxZIP_ID, trxName)
         {
             //super(ctx, VAB_TaxZIP_ID, trxName);
@@ -28,7 +28,7 @@ namespace VAdvantage.Model
          *	@param rs result set
          *	@param trxName transaction
          */
-        public MTaxPostal(Ctx ctx, DataRow dr, Trx trxName):
+        public MVABTaxZIP(Ctx ctx, DataRow dr, Trx trxName):
             base(ctx,dr,trxName)
         {
             

@@ -26,7 +26,7 @@ namespace VIS.Models
             //End Assign parameter value  
 
 
-            return MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
+            return MVABUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                     VAB_UOM_To_ID, QtyEntered);
 
         }
@@ -46,7 +46,7 @@ namespace VIS.Models
             Decimal? PriceStd = Util.GetValueOfDecimal(paramValue[2].ToString());
             //End Assign parameter value             
 
-            return MUOMConversion.ConvertProductFrom(ctx, VAM_Product_ID,
+            return MVABUOMConversion.ConvertProductFrom(ctx, VAM_Product_ID,
                     VAB_UOM_To_ID, PriceStd);
 
         }

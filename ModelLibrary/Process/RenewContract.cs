@@ -67,7 +67,7 @@ namespace ViennaAdvantageServer.Process
             DateTime OldStart, Start, endDate;
 
             MPriceList priceList = null;
-            MTax tax = null;
+            MVABTaxRate tax = null;
             X_VAB_Contract contact = null;
             X_VAB_Contract New = null;
             ValueNamePair pp = null;
@@ -193,7 +193,7 @@ namespace ViennaAdvantageServer.Process
                         else
                         {
                             // Calculate Tax Amount
-                            tax = MTax.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
+                            tax = MVABTaxRate.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
                             TotalRate = tax.CalculateTax(New.GetLineNetAmt(), priceList.IsTaxIncluded(), priceList.GetPricePrecision());
                             New.SetTaxAmt(TotalRate);
                         }
@@ -367,7 +367,7 @@ namespace ViennaAdvantageServer.Process
                         New.SetLineNetAmt(Decimal.Multiply(New.GetPriceEntered(), New.GetQtyEntered()));
 
                         // Calculate Tax Amount
-                        tax = MTax.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
+                        tax = MVABTaxRate.Get(GetCtx(), contact.GetVAB_TaxRate_ID());
 
                         // if Surcharge Tax is selected on Tax, then set value in Surcharge Amount
                         if (New.Get_ColumnIndex("SurchargeAmt") > 0 && tax.GetSurcharge_Tax_ID() > 0)

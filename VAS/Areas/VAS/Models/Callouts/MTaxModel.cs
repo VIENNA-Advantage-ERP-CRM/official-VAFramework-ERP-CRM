@@ -29,7 +29,7 @@ namespace VIS.Models
             Boolean IsTaxIncluded = Convert.ToBoolean(paramValue[2]);
             int StdPrecision = Util.GetValueOfInt(paramValue[3].ToString());
             //End Assign parameter value
-            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
+            MVABTaxRate tax = new MVABTaxRate(ctx, VAB_TaxRate_ID, null);
             Decimal? TaxAmt = tax.CalculateTax(LineNetAmt, IsTaxIncluded, StdPrecision);
             return TaxAmt;
 
@@ -91,7 +91,7 @@ namespace VIS.Models
         public Decimal GetTaxRate(Ctx ctx, string fields)
         {
             int VAB_TaxRate_ID = Util.GetValueOfInt(fields);
-            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
+            MVABTaxRate tax = new MVABTaxRate(ctx, VAB_TaxRate_ID, null);
             return tax.GetRate();
         }
 
@@ -118,7 +118,7 @@ namespace VIS.Models
                 IsTaxIncluded = Util.GetValueOfBool(paramValue[3]);
             }
             //End Assign parameter value
-            MTax tax = new MTax(ctx, VAB_TaxRate_ID, null);
+            MVABTaxRate tax = new MVABTaxRate(ctx, VAB_TaxRate_ID, null);
             Decimal surchargeAmt = Env.ZERO;
             Decimal TaxAmt = Env.ZERO;
             if (tax.Get_ColumnIndex("Surcharge_Tax_ID") > 0 && tax.GetSurcharge_Tax_ID() > 0)

@@ -10,11 +10,11 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MWithholding : X_VAB_Withholding
+    public class MVABWithholding : X_VAB_Withholding
     {
         #region private variables
         //	Logger							
-        private static VLogger _log = VLogger.GetVLogger(typeof(MWithholding).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABWithholding).FullName);
         #endregion
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_Withholding_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MWithholding(Ctx ctx, int VAB_Withholding_ID, Trx trxName)
+        public MVABWithholding(Ctx ctx, int VAB_Withholding_ID, Trx trxName)
             : base(ctx, VAB_Withholding_ID, trxName)
         {
 
@@ -35,7 +35,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MWithholding(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABWithholding(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

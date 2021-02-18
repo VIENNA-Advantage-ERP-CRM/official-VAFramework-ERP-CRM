@@ -154,7 +154,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                     {
                         if (product.GetVAB_UOM_ID() != invoiceLine.GetVAB_UOM_ID())
                         {
-                            res = MUOMConversion.ConvertProductTo(GetCtx(), product.GetVAM_Product_ID(), invoiceLine.GetVAB_UOM_ID(), movementqty);
+                            res = MVABUOMConversion.ConvertProductTo(GetCtx(), product.GetVAM_Product_ID(), invoiceLine.GetVAB_UOM_ID(), movementqty);
                         }
                         sLine.SetInvoiceLine(invoiceLine, 0,    //	Locator
                             invoice.IsSOTrx() ? (movementqty) : Env.ZERO);

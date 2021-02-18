@@ -137,7 +137,7 @@ namespace VAdvantage.Model
         /// <param name="VAB_UOM_ID">UOM</param>
         public void SetQty(Decimal? qty, int VAB_UOM_ID)
         {
-            _qty = MUOMConversion.Convert(VAB_UOM_ID, _VAB_UOM_ID, Utility.Util.GetValueOfDecimal(qty), true);    //  StdPrecision
+            _qty = MVABUOMConversion.Convert(VAB_UOM_ID, _VAB_UOM_ID, Utility.Util.GetValueOfDecimal(qty), true);    //  StdPrecision
             if (qty != null && _qty == null)   //  conversion error
             {
                 log.Severe("Conversion error - set to " + qty);

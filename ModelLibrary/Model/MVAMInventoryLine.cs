@@ -328,7 +328,7 @@ namespace VAdvantage.Model
             //JID_0680 set quantity according to precision
             if (Is_ValueChanged("VAB_UOM_ID"))
             {
-                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))));
+                Set_Value("QtyEntered", Math.Round(Util.GetValueOfDecimal(Get_Value("QtyEntered")), MVABUOM.GetPrecision(GetCtx(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))));
             }
 
             // change to set Converted Quantity in Internal Use Qty and AsonDateQty and difference qty if there is differnce in UOM of Base Product and UOM Selected on line
@@ -337,7 +337,7 @@ namespace VAdvantage.Model
                 Decimal? qty = Util.GetValueOfDecimal(Get_Value("QtyEntered"));
                 if (product.GetVAB_UOM_ID() != Util.GetValueOfInt(Get_Value("VAB_UOM_ID")))
                 {
-                    qty = MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered")));
+                    qty = MVABUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), Util.GetValueOfInt(Get_Value("VAB_UOM_ID")), Util.GetValueOfDecimal(Get_Value("QtyEntered")));
                     if (IsInternalUse())
                         SetQtyInternalUse(qty);
                     else

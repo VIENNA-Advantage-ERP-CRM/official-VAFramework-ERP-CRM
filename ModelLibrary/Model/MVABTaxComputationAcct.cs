@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxDeclarationAcct : X_VAB_TaxComputationAcct
+    public class MVABTaxComputationAcct : X_VAB_TaxComputationAcct
     {
         /// <summary>
         /// Standard Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">Context</param>
         /// <param name="VAB_TaxComputationAcct_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclarationAcct(Context ctx, int VAB_TaxComputationAcct_ID, Trx trxName):base(ctx, VAB_TaxComputationAcct_ID, trxName)
+        public MVABTaxComputationAcct(Context ctx, int VAB_TaxComputationAcct_ID, Trx trxName):base(ctx, VAB_TaxComputationAcct_ID, trxName)
         {
            // super(ctx, VAB_TaxComputationAcct_ID, trxName);
         }	//	MTaxDeclarationAcct
@@ -41,7 +41,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">ctx</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">trx</param>
-        public MTaxDeclarationAcct(Context ctx, DataRow dr, Trx trxName): base(ctx, dr, trxName)
+        public MVABTaxComputationAcct(Context ctx, DataRow dr, Trx trxName): base(ctx, dr, trxName)
         {
            // super(ctx, rs, trxName);
         }	//	MTaxDeclarationAcct
@@ -51,7 +51,7 @@ namespace VAdvantage.Model
          *	@param parent parent
          *	@param fact fact
          */
-        public MTaxDeclarationAcct(MTaxDeclaration parent, MActualAcctDetail fact):base(parent.GetCtx(), 0, parent.Get_TrxName())
+        public MVABTaxComputationAcct(MVABTaxRateComputation parent, MActualAcctDetail fact):base(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             //super(parent.getCtx(), 0, parent.get_TrxName());
             SetClientOrg(fact);

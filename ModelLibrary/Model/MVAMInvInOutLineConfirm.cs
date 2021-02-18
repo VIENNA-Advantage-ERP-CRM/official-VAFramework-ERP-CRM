@@ -147,7 +147,7 @@ namespace VAdvantage.Model
                 if (_pro.GetVAB_UOM_ID() != line.GetVAB_UOM_ID())
                 {
                     decimal? pc = null;
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetTargetQty());
+                    pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetTargetQty());
                     line.SetTargetQty(Util.GetValueOfDecimal( pc)); //TargetQty
 
                     Decimal qty = GetConfirmedQty();
@@ -157,13 +157,13 @@ namespace VAdvantage.Model
                      */
                     if ((!isSOTrx && !isReturnTrx) || (isSOTrx && isReturnTrx))
                         qty = Decimal.Add(qty, GetScrappedQty());
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), qty);
+                    pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), qty);
                     line.SetMovementQty(Util.GetValueOfDecimal(pc)); //MovementQty
 
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetScrappedQty());
+                    pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetScrappedQty());
                     line.SetScrappedQty(Util.GetValueOfDecimal(pc));  //ScrappedQty 
 
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetConfirmedQty());
+                    pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), line.GetVAM_Product_ID(), GetVAB_UOM_ID(), GetConfirmedQty());
                     line.SetConfirmedQty(Util.GetValueOfDecimal(pc)); //confirm Qty
 
                 }

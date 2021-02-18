@@ -22,7 +22,7 @@ using VAdvantage.Utility;
 
 namespace VAdvantage.Model
 {
-    public class MTaxCategory : X_VAB_TaxCategory
+    public class MVABTaxCategory : X_VAB_TaxCategory
     {
         /// <summary>
         /// Standard Constructor
@@ -30,7 +30,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_TaxCategory_ID">id</param>
         /// <param name="trxName">trx</param>
-        public MTaxCategory(Ctx ctx, int VAB_TaxCategory_ID, Trx trxName)
+        public MVABTaxCategory(Ctx ctx, int VAB_TaxCategory_ID, Trx trxName)
             : base(ctx, VAB_TaxCategory_ID, trxName)
         {
             //super(ctx, VAB_TaxCategory_ID, trxName);
@@ -47,7 +47,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">trx</param>
-        public MTaxCategory(Ctx ctx, DataRow dr, Trx trxName)
+        public MVABTaxCategory(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 

@@ -389,7 +389,7 @@ namespace VAdvantage.Model
                     }
                     if (taxCategory > 0)
                     {
-                        MTaxCategory taxCat = new MTaxCategory(GetCtx(), taxCategory, Get_TrxName());
+                        MVABTaxCategory taxCat = new MVABTaxCategory(GetCtx(), taxCategory, Get_TrxName());
                         int Country_ID = 0, Region_ID = 0, orgCountry = 0, orgRegion = 0, taxRegion = 0;
                         string Postal = "", orgPostal = "";
 
@@ -903,7 +903,7 @@ namespace VAdvantage.Model
                 if (GetVAB_TaxRate_ID() == 0)
                     return;
                 //	SetLineNetAmt();
-                MTax tax = MTax.Get(GetCtx(), GetVAB_TaxRate_ID());
+                MVABTaxRate tax = MVABTaxRate.Get(GetCtx(), GetVAB_TaxRate_ID());
                 if (tax.IsDocumentLevel() && _IsSOTrx)		//	AR Inv Tax
                     return;
 
@@ -2680,7 +2680,7 @@ namespace VAdvantage.Model
             Decimal amt = orderline.GetTaxAbleAmt();
 
             // create object of tax - for checking tax to be include in cost or not
-            MTax tax = MTax.Get(orderline.GetCtx(), orderline.GetVAB_TaxRate_ID());
+            MVABTaxRate tax = MVABTaxRate.Get(orderline.GetCtx(), orderline.GetVAB_TaxRate_ID());
             if (tax.Get_ColumnIndex("IsIncludeInCost") >= 0)
             {
                 // add Tax amount in product cost
@@ -2692,7 +2692,7 @@ namespace VAdvantage.Model
                 // add Surcharge amount in product cost
                 if (tax.Get_ColumnIndex("Surcharge_Tax_ID") >= 0 && tax.GetSurcharge_Tax_ID() > 0)
                 {
-                    if (MTax.Get(orderline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
+                    if (MVABTaxRate.Get(orderline.GetCtx(), tax.GetSurcharge_Tax_ID()).IsIncludeInCost())
                     {
                         amt += orderline.GetSurchargeAmt();
                     }
@@ -3025,7 +3025,7 @@ namespace VAdvantage.Model
             {
                 int VAB_BusinessPartner_ID = GetVAB_BusinessPartner_ID();
                 if (columnName.Equals("QtyEntered"))
-                    qtyOrdered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
+                    qtyOrdered = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
                 if (qtyOrdered == null)
                     qtyOrdered = qtyEntered;
                 bool IsSOTrx = GetCtx().IsSOTrx(windowNo);
@@ -3037,7 +3037,7 @@ namespace VAdvantage.Model
                 DateTime? date = GetDateOrdered();
                 pp.SetPriceDate(date);
                 //
-                priceEntered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, pp.GetPriceStd());
+                priceEntered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, pp.GetPriceStd());
                 if (priceEntered == null)
                     priceEntered = pp.GetPriceStd();
                 //
@@ -3051,7 +3051,7 @@ namespace VAdvantage.Model
             }
             else if (columnName.Equals("priceActual"))
             {
-                priceEntered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID,
+                priceEntered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID,
                     VAB_UOM_To_ID, priceActual);
                 if (priceEntered == null)
                     priceEntered = priceActual;
@@ -3062,7 +3062,7 @@ namespace VAdvantage.Model
             }
             else if (columnName.Equals("priceEntered"))
             {
-                priceActual = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID,
+                priceActual = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID,
                     VAB_UOM_To_ID, priceEntered);
                 if (priceActual == null)
                     priceActual = priceEntered;
@@ -3081,7 +3081,7 @@ namespace VAdvantage.Model
                 {
                     priceActual = Decimal.Round(priceActual, StdPrecision, MidpointRounding.AwayFromZero);
                 }
-                priceEntered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, priceActual);
+                priceEntered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, priceActual);
                 if (priceEntered == null)
                     priceEntered = priceActual;
                 SetPriceActual(priceActual);
@@ -3116,7 +3116,7 @@ namespace VAdvantage.Model
             if (enforce && (Double)PriceLimit != 0.0 && priceActual.CompareTo(PriceLimit) < 0)
             {
                 priceActual = PriceLimit;
-                priceEntered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, PriceLimit);
+                priceEntered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, PriceLimit);
                 if (priceEntered == null)
                 {
                     priceEntered = PriceLimit;
@@ -3161,7 +3161,7 @@ namespace VAdvantage.Model
                     if (taxID != null)
                     {
                         int VAB_TaxRate_ID = taxID;
-                        MTax tax = new MTax(GetCtx(), VAB_TaxRate_ID, null);
+                        MVABTaxRate tax = new MVABTaxRate(GetCtx(), VAB_TaxRate_ID, null);
                         TaxAmt = tax.CalculateTax(LineNetAmt, IsTaxIncluded(), StdPrecision);
                         SetTaxAmt(TaxAmt);
                     }
@@ -3202,7 +3202,7 @@ namespace VAdvantage.Model
             {
                 qtyEntered = GetQtyEntered();
                 //Decimal QtyEntered1 = qtyEntered.setScale(MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), BigDecimal.ROUND_HALF_UP);
-                Decimal QtyEntered1 = Decimal.Round(qtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
+                Decimal QtyEntered1 = Decimal.Round(qtyEntered, MVABUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (qtyEntered.CompareTo(QtyEntered1) != 0)
                 {
                     log.Fine("Corrected qtyEntered Scale UOM=" + VAB_UOM_To_ID
@@ -3210,14 +3210,14 @@ namespace VAdvantage.Model
                     qtyEntered = QtyEntered1;
                     SetQtyEntered(qtyEntered);
                 }
-                qtyOrdered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
+                qtyOrdered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
                 if (qtyOrdered == null)
                 {
                     qtyOrdered = qtyEntered;
                 }
                 bool conversion = qtyEntered.CompareTo(qtyOrdered) != 0;
                 priceActual = GetPriceActual();
-                priceEntered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, priceActual);
+                priceEntered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, priceActual);
                 if (priceEntered == null)
                 {
                     priceEntered = priceActual;
@@ -3234,7 +3234,7 @@ namespace VAdvantage.Model
             else if (columnName.Equals("QtyEntered"))
             {
                 qtyEntered = GetQtyEntered();
-                Decimal QtyEntered1 = Decimal.Round(qtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
+                Decimal QtyEntered1 = Decimal.Round(qtyEntered, MVABUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (qtyEntered.CompareTo(QtyEntered1) != 0)
                 {
                     log.Fine("Corrected qtyEntered Scale UOM=" + VAB_UOM_To_ID
@@ -3242,7 +3242,7 @@ namespace VAdvantage.Model
                     qtyEntered = QtyEntered1;
                     SetQtyEntered(qtyEntered);
                 }
-                qtyOrdered = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
+                qtyOrdered = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyEntered);
                 if (qtyOrdered == null)
                 {
                     qtyOrdered = qtyEntered;
@@ -3269,7 +3269,7 @@ namespace VAdvantage.Model
                     qtyOrdered = QtyOrdered1;
                     SetQtyOrdered(qtyOrdered);
                 }
-                qtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyOrdered);
+                qtyEntered = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyOrdered);
                 if (qtyEntered == null)
                 {
                     qtyEntered = qtyOrdered;
@@ -3311,7 +3311,7 @@ namespace VAdvantage.Model
                         SetQtyOrdered(shippedQty);
                         qtyOrdered = shippedQty;
 
-                        qtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyOrdered);
+                        qtyEntered = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, qtyOrdered);
                         if (qtyEntered == null)
                         {
                             qtyEntered = qtyOrdered;
@@ -3668,7 +3668,7 @@ namespace VAdvantage.Model
         {
             if (qtyEntered != null && GetVAB_UOM_ID() != 0)
             {
-                int precision = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
+                int precision = MVABUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
                 qtyEntered = Decimal.Round(qtyEntered, precision, MidpointRounding.AwayFromZero);
             }
             base.SetQtyEntered(qtyEntered);
@@ -3966,7 +3966,7 @@ namespace VAdvantage.Model
                     && (GetVAM_Product_ID() != 0 || GetPriceEntered().CompareTo(Env.ZERO) != 0
                         || GetVAB_Charge_ID() != 0))
                 {
-                    int VAB_UOM_ID = MUOM.GetDefault_UOM_ID(GetCtx());
+                    int VAB_UOM_ID = MVABUOM.GetDefault_UOM_ID(GetCtx());
                     if (VAB_UOM_ID > 0)
                         SetVAB_UOM_ID(VAB_UOM_ID);
                 }
@@ -4066,7 +4066,7 @@ namespace VAdvantage.Model
                     QtyReleased = GetQtyReleased();
                     QtyReserved = GetQtyReserved();
 
-                    int gp = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
+                    int gp = MVABUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
                     Decimal? QtyEntered1 = Decimal.Round(QtyEntered.Value, gp, MidpointRounding.AwayFromZero);
                     if (QtyEntered != QtyEntered1)
                     {
@@ -4075,7 +4075,7 @@ namespace VAdvantage.Model
                         QtyEntered = QtyEntered1;
                         SetQtyEntered(QtyEntered);
                     }
-                    Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered);
+                    Decimal? pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered);
                     QtyOrdered = pc;
                     bool conversion = false;
                     if (QtyOrdered != null)
@@ -4096,9 +4096,9 @@ namespace VAdvantage.Model
 
                     //if (conversion)
                     //{
-                    Decimal? qtyRel = MUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyReleased);
-                    Decimal? qtyOrd = MUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyOrdered);
-                    Decimal? qtyRes = MUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyReserved);
+                    Decimal? qtyRel = MVABUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyReleased);
+                    Decimal? qtyOrd = MVABUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyOrdered);
+                    Decimal? qtyRes = MVABUOMConversion.ConvertProductTo(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyReserved);
                     if (qtyRel != null)
                     {
                         QtyReleased = qtyRel;
@@ -4166,7 +4166,7 @@ namespace VAdvantage.Model
                     && (GetVAM_Product_ID() != 0 || GetPriceEntered().CompareTo(Env.ZERO) != 0
                         || GetVAB_Charge_ID() != 0))
                 {
-                    int VAB_UOM_ID = MUOM.GetDefault_UOM_ID(GetCtx());
+                    int VAB_UOM_ID = MVABUOM.GetDefault_UOM_ID(GetCtx());
                     if (VAB_UOM_ID > 0)
                         SetVAB_UOM_ID(VAB_UOM_ID);
                 }
@@ -4632,7 +4632,7 @@ namespace VAdvantage.Model
             if (!tax.Save(Get_TrxName()))
                 return false;
 
-            MTax taxRate = tax.GetTax();
+            MVABTaxRate taxRate = tax.GetTax();
 
             // If Tax selected is Summary Level then Create or Update Child Tax
             if (taxRate.IsSummary())
@@ -4692,13 +4692,13 @@ namespace VAdvantage.Model
         /// <param name="tax">Tax</param>
         /// <param name="trxName">Trx Object</param>
         /// <returns>true, if Tax calculated</returns>
-        private bool CalculateChildTax(MVABOrder order, MVABOrderTax oTax, MTax tax, Trx trxName)
+        private bool CalculateChildTax(MVABOrder order, MVABOrderTax oTax, MVABTaxRate tax, Trx trxName)
         {
-            MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
+            MVABTaxRate[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
             for (int j = 0; j < cTaxes.Length; j++)
             {
                 MVABOrderTax newITax = null;
-                MTax cTax = cTaxes[j];
+                MVABTaxRate cTax = cTaxes[j];
                 Decimal taxAmt = cTax.CalculateTax(oTax.GetTaxBaseAmt(), false, GetPrecision());
 
                 // check child tax record is avialable or not 

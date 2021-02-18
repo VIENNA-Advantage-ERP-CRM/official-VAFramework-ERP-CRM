@@ -3187,7 +3187,7 @@ namespace VAdvantage.Model
                         }	//	stockec
                         //	update line                             
 
-                        Decimal? qtyRel = MUOMConversion.ConvertProductTo(GetCtx(), line.GetVAM_Product_ID(), line.GetVAB_UOM_ID(), difference);
+                        Decimal? qtyRel = MVABUOMConversion.ConvertProductTo(GetCtx(), line.GetVAM_Product_ID(), line.GetVAB_UOM_ID(), difference);
 
                         // Added by Bharat on 03 April 2018 to handle issue to set Blanket Order Quantity only in case of Blanket Order
                         if (dt.GetDocBaseType() == "BOO")
@@ -3299,13 +3299,13 @@ namespace VAdvantage.Model
                 for (int i = 0; i < taxes.Length; i++)
                 {
                     MVABOrderTax oTax = taxes[i];
-                    MTax tax = oTax.GetTax();
+                    MVABTaxRate tax = oTax.GetTax();
                     if (tax.IsSummary())
                     {
-                        MTax[] cTaxes = tax.GetChildTaxes(false);
+                        MVABTaxRate[] cTaxes = tax.GetChildTaxes(false);
                         for (int j = 0; j < cTaxes.Length; j++)
                         {
-                            MTax cTax = cTaxes[j];
+                            MVABTaxRate cTax = cTaxes[j];
                             Decimal taxAmt = cTax.CalculateTax(oTax.GetTaxBaseAmt(), false, GetPrecision());
 
                             // JID_0430: if we add 2 lines with different Taxes. one is Parent and other is child. System showing error on completion that "Error Calculating Tax"
@@ -5865,7 +5865,7 @@ namespace VAdvantage.Model
 
                     for (int i = 0; i < lines.Length; i++)
                     {
-                        Decimal? qtyRel = MUOMConversion.ConvertProductTo(GetCtx(), lines[i].GetVAM_Product_ID(), lines[i].GetVAB_UOM_ID(), lines[i].GetQtyReleased());
+                        Decimal? qtyRel = MVABUOMConversion.ConvertProductTo(GetCtx(), lines[i].GetVAM_Product_ID(), lines[i].GetVAB_UOM_ID(), lines[i].GetQtyReleased());
                         if (qtyRel != null)
                         {
                             if (qtyRel >= lines[i].GetQtyEstimation())

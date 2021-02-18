@@ -215,7 +215,7 @@ namespace VAdvantage.Model
         }
 
         /** Tax							*/
-        private MTax _tax = null;
+        private MVABTaxRate _tax = null;
         /** Cached Precision			*/
         private int _precision = -1;
 
@@ -244,10 +244,10 @@ namespace VAdvantage.Model
          * 	Get Tax
          *	@return tax
          */
-        public MTax GetTax()
+        public MVABTaxRate GetTax()
         {
             if (_tax == null)
-                _tax = MTax.Get(GetCtx(), GetVAB_TaxRate_ID());
+                _tax = MVABTaxRate.Get(GetCtx(), GetVAB_TaxRate_ID());
             return _tax;
         }
 
@@ -262,7 +262,7 @@ namespace VAdvantage.Model
             Decimal taxAmt = Env.ZERO;
             //
             bool documentLevel = GetTax().IsDocumentLevel();
-            MTax tax = GetTax();
+            MVABTaxRate tax = GetTax();
             // Calculate Tax on TaxAble Amount
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID "
                 + "FROM VAB_InvoiceLine il"
@@ -356,7 +356,7 @@ namespace VAdvantage.Model
             Decimal taxBaseAmt = Env.ZERO;
             Decimal surTaxAmt = Env.ZERO;
             //
-            MTax surTax = new MTax(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
+            MVABTaxRate surTax = new MVABTaxRate(GetCtx(), GetVAB_TaxRate_ID(), Get_TrxName());
             bool documentLevel = surTax.IsDocumentLevel();
             //
             String sql = "SELECT il.TaxBaseAmt, COALESCE(il.TaxAmt,0), i.IsSOTrx  , i.VAB_Currency_ID , i.DateAcct , i.VAB_CurrencyType_ID, tax.SurchargeType "
@@ -384,13 +384,13 @@ namespace VAdvantage.Model
                     string surchargeType = Util.GetValueOfString(idr[6]);
 
                     // for Surcharge Calculation type - Line Amount + Tax Amount
-                    if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmountPlusTax))
+                    if (surchargeType.Equals(MVABTaxRate.SURCHARGETYPE_LineAmountPlusTax))
                     {
                         baseAmt = Decimal.Add(baseAmt, taxAmt);
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }
                     // for Surcharge Calculation type - Line Amount 
-                    else if (surchargeType.Equals(MTax.SURCHARGETYPE_LineAmount))
+                    else if (surchargeType.Equals(MVABTaxRate.SURCHARGETYPE_LineAmount))
                     {
                         taxBaseAmt = Decimal.Add(taxBaseAmt, baseAmt);
                     }

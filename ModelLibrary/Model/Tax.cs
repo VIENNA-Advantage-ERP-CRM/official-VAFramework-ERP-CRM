@@ -466,24 +466,24 @@ namespace VAdvantage.Model
                     + ", BillTo=" + billToVAB_Address_ID + ", BillDate=" + billDate);
             }
 
-            MTax[] taxes = MTax.GetAll(ctx);
+            MVABTaxRate[] taxes = MVABTaxRate.GetAll(ctx);
             MVABAddress lFrom = new MVABAddress(ctx, billFromVAB_Address_ID, null);
             MVABAddress lTo = new MVABAddress(ctx, billToVAB_Address_ID, null);
             log.Finer("From=" + lFrom);
             log.Finer("To=" + lTo);
 
-            List<MTax> results = new List<MTax>();
+            List<MVABTaxRate> results = new List<MVABTaxRate>();
             for (int i = 0; i < taxes.Length; i++)
             {
-                MTax tax = taxes[i];
+                MVABTaxRate tax = taxes[i];
                 if (tax.IsTaxExempt()
                     || !tax.IsActive()
                     || tax.GetVAB_TaxCategory_ID() != VAB_TaxCategory_ID
                     || tax.GetParent_Tax_ID() != 0)	//	user parent tax
                     continue;
-                if (IsSOTrx && MTax.SOPOTYPE_PurchaseTax.Equals(tax.GetSOPOType()))
+                if (IsSOTrx && MVABTaxRate.SOPOTYPE_PurchaseTax.Equals(tax.GetSOPOType()))
                     continue;
-                if (!IsSOTrx && MTax.SOPOTYPE_SalesTax.Equals(tax.GetSOPOType()))
+                if (!IsSOTrx && MVABTaxRate.SOPOTYPE_SalesTax.Equals(tax.GetSOPOType()))
                     continue;
 
                // if (CLogMgt.IsLevelFinest())
@@ -524,10 +524,10 @@ namespace VAdvantage.Model
                         continue;
                     }
                     //
-                    MTaxPostal[] postals = tax.GetPostals(false);
+                    MVABTaxZIP[] postals = tax.GetPostals(false);
                     for (int j = 0; j < postals.Length; j++)
                     {
-                        MTaxPostal postal = postals[j];
+                        MVABTaxZIP postal = postals[j];
                         if (postal.IsActive()
                             //	Postal From is mandatory
                             && postal.GetPostal().StartsWith(lFrom.GetPostal())
@@ -551,10 +551,10 @@ namespace VAdvantage.Model
             //	Multiple results - different valid from dates
             if (results.Count > 1)
             {
-                MTax latest = null;
+                MVABTaxRate latest = null;
                 for (int i = 0; i < results.Count; i++)
                 {
-                    MTax tax = results[i];
+                    MVABTaxRate tax = results[i];
                     if (latest == null
                         //|| tax.GetValidFrom().after(latest.GetValidFrom()))
                         || tax.GetValidFrom() > (latest.GetValidFrom()))
@@ -566,13 +566,13 @@ namespace VAdvantage.Model
             //	Default Tax
             for (int i = 0; i < taxes.Length; i++)
             {
-                MTax tax = taxes[i];
+                MVABTaxRate tax = taxes[i];
                 if (!tax.IsDefault() || !tax.IsActive()
                     || tax.GetParent_Tax_ID() != 0)	//	user parent tax
                     continue;
-                if (IsSOTrx && MTax.SOPOTYPE_PurchaseTax.Equals(tax.GetSOPOType()))
+                if (IsSOTrx && MVABTaxRate.SOPOTYPE_PurchaseTax.Equals(tax.GetSOPOType()))
                     continue;
-                if (!IsSOTrx && MTax.SOPOTYPE_SalesTax.Equals(tax.GetSOPOType()))
+                if (!IsSOTrx && MVABTaxRate.SOPOTYPE_SalesTax.Equals(tax.GetSOPOType()))
                     continue;
                 log.Fine("(default) - " + tax);
                 return tax.GetVAB_TaxRate_ID();

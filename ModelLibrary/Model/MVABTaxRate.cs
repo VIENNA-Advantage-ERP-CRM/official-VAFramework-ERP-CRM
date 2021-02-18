@@ -23,21 +23,21 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MTax : X_VAB_TaxRate
+    public class MVABTaxRate : X_VAB_TaxRate
     {
         #region Private Variables
         //	Cache			
-        private static CCache<int, MTax> _cache = new CCache<int, MTax>("VAB_TaxRate", 5);
+        private static CCache<int, MVABTaxRate> _cache = new CCache<int, MVABTaxRate>("MVABTaxRate", 5);
         //	Cache of Client	
-        private static CCache<int, MTax[]> _cacheAll = new CCache<int, MTax[]>("VAB_TaxRate", 5);
+        private static CCache<int, MVABTaxRate[]> _cacheAll = new CCache<int, MVABTaxRate[]>("MVABTaxRate", 5);
         //	Static Logger	
-        private static VLogger _log = VLogger.GetVLogger(typeof(MTax).FullName);
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVABTaxRate).FullName);
         //	100				
         private const Decimal ONEHUNDRED = 100M;
         //	Child Taxes		
-        private MTax[] _childTaxes = null;
+        private MVABTaxRate[] _childTaxes = null;
         // Postal Codes		
-        private MTaxPostal[] _postals = null;
+        private MVABTaxZIP[] _postals = null;
 
         #endregion
 
@@ -46,18 +46,18 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="ctx">context</param>
         /// <returns>array list</returns>
-        public static MTax[] GetAll(Ctx ctx)
+        public static MVABTaxRate[] GetAll(Ctx ctx)
         {
             int VAF_Client_ID = ctx.GetVAF_Client_ID();
             int key = VAF_Client_ID;
-            MTax[] retValue = (MTax[])_cacheAll[key];
+            MVABTaxRate[] retValue = (MVABTaxRate[])_cacheAll[key];
             if (retValue != null)
                 return retValue;
 
             //	Create it
             String sql = "SELECT * FROM VAB_TaxRate WHERE VAF_Client_ID=@VAF_Client_ID"
                 + " ORDER BY VAB_Country_ID, VAB_RegionState_ID, To_Country_ID, To_Region_ID";
-            List<MTax> list = new List<MTax>();
+            List<MVABTaxRate> list = new List<MVABTaxRate>();
             //PreparedStatement pstmt = null;
             DataSet ds;
             try
@@ -69,7 +69,7 @@ namespace VAdvantage.Model
 
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    MTax tax = new MTax(ctx, dr, null);
+                    MVABTaxRate tax = new MVABTaxRate(ctx, dr, null);
                     _cache.Add(tax.GetVAB_TaxRate_ID(), tax);
                     list.Add(tax);
                 }
@@ -87,7 +87,7 @@ namespace VAdvantage.Model
             }
 
             //	Create Array
-            retValue = new MTax[list.Count];
+            retValue = new MVABTaxRate[list.Count];
             retValue = list.ToArray();
             //
             _cacheAll.Add(key, retValue);
@@ -100,13 +100,13 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_TaxRate_ID">id</param>
         /// <returns>MTax</returns>
-        public static MTax Get(Ctx ctx, int VAB_TaxRate_ID)
+        public static MVABTaxRate Get(Ctx ctx, int VAB_TaxRate_ID)
         {
             int key = VAB_TaxRate_ID;
-            MTax retValue = (MTax)_cache[key];
+            MVABTaxRate retValue = (MVABTaxRate)_cache[key];
             if (retValue != null)
                 return retValue;
-            retValue = new MTax(ctx, VAB_TaxRate_ID, null);
+            retValue = new MVABTaxRate(ctx, VAB_TaxRate_ID, null);
             if (retValue.Get_ID() != 0)
                 _cache.Add(key, retValue);
             return retValue;
@@ -118,7 +118,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAB_TaxRate_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MTax(Ctx ctx, int VAB_TaxRate_ID, Trx trxName) :
+        public MVABTaxRate(Ctx ctx, int VAB_TaxRate_ID, Trx trxName) :
             base(ctx, VAB_TaxRate_ID, trxName)
         {
 
@@ -145,7 +145,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">result set</param>
         /// <param name="trxName">transaction</param>
-        public MTax(Ctx ctx, DataRow dr, Trx trxName) :
+        public MVABTaxRate(Ctx ctx, DataRow dr, Trx trxName) :
             base(ctx, dr, trxName)
         {
 
@@ -159,7 +159,7 @@ namespace VAdvantage.Model
         /// <param name="Rate"></param>
         /// <param name="VAB_TaxCategory_ID"></param>
         /// <param name="trxName">transaction</param>
-        public MTax(Ctx ctx, String Name, Decimal Rate, int VAB_TaxCategory_ID, Trx trxName)
+        public MVABTaxRate(Ctx ctx, String Name, Decimal Rate, int VAB_TaxCategory_ID, Trx trxName)
             : this(ctx, 0, trxName)
         {
 
@@ -173,7 +173,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">reload</param>
         /// <returns>array of taxes or null</returns>
-        public MTax[] GetChildTaxes(Boolean requery)
+        public MVABTaxRate[] GetChildTaxes(Boolean requery)
         {
             if (!IsSummary())
                 return null;
@@ -181,14 +181,14 @@ namespace VAdvantage.Model
                 return _childTaxes;
             //
             String sql = "SELECT * FROM VAB_TaxRate WHERE Parent_Tax_ID=" + GetVAB_TaxRate_ID();
-            List<MTax> list = new List<MTax>();
+            List<MVABTaxRate> list = new List<MVABTaxRate>();
             DataSet ds;
             try
             {
                 ds = DataBase.DB.ExecuteDataset(sql, null, Get_TrxName());
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    list.Add(new MTax(GetCtx(), dr, Get_TrxName()));
+                    list.Add(new MVABTaxRate(GetCtx(), dr, Get_TrxName()));
 
                 }
                 ds = null;
@@ -202,7 +202,7 @@ namespace VAdvantage.Model
                 ds = null;
             }
 
-            _childTaxes = new MTax[list.Count];
+            _childTaxes = new MVABTaxRate[list.Count];
             _childTaxes = list.ToArray();
             return _childTaxes;
         }
@@ -212,13 +212,13 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="requery">requery</param>
         /// <returns> array of postal codes</returns>
-        public MTaxPostal[] GetPostals(Boolean requery)
+        public MVABTaxZIP[] GetPostals(Boolean requery)
         {
             if (_postals != null && !requery)
                 return _postals;
 
             String sql = "SELECT * FROM VAB_TaxZIP WHERE VAB_TaxRate_ID=" + GetVAB_TaxRate_ID() + " ORDER BY Postal, Postal_To";
-            List<MTaxPostal> list = new List<MTaxPostal>();
+            List<MVABTaxZIP> list = new List<MVABTaxZIP>();
             IDataReader dr = null;
             try
             {
@@ -237,7 +237,7 @@ namespace VAdvantage.Model
                 log.Log(Level.SEVERE, sql, e);
             }
 
-            _postals = new MTaxPostal[list.Count];
+            _postals = new MVABTaxZIP[list.Count];
             _postals = list.ToArray();
             return _postals;
         }
@@ -338,11 +338,11 @@ namespace VAdvantage.Model
             Decimal multiplier = Env.ZERO;
             Decimal taxBase = amount;
             Decimal taxRate = GetRate();
-            MTax surTax = MTax.Get(GetCtx(), GetSurcharge_Tax_ID());
+            MVABTaxRate surTax = MVABTaxRate.Get(GetCtx(), GetSurcharge_Tax_ID());
             Decimal surRate = surTax.GetRate();
 
             // for Surcharge Calculation type - Line Amount + Tax Amount
-            if (GetSurchargeType() == MTax.SURCHARGETYPE_LineAmountPlusTax)
+            if (GetSurchargeType() == MVABTaxRate.SURCHARGETYPE_LineAmountPlusTax)
             {
 
                 if (!taxIncluded)   //	$100 * 6 / 100 == $6 == $100 * 0.06
@@ -378,7 +378,7 @@ namespace VAdvantage.Model
                 }
             }
             // for Surcharge Calculation type - Line Amount 
-            else if (GetSurchargeType() == MTax.SURCHARGETYPE_LineAmount)
+            else if (GetSurchargeType() == MVABTaxRate.SURCHARGETYPE_LineAmount)
             {
                 if (!taxIncluded)   //	$100 * 6 / 100 == $6 == $100 * 0.06
                 {

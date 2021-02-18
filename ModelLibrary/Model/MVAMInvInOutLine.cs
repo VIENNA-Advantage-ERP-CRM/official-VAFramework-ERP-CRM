@@ -425,7 +425,7 @@ namespace VAdvantage.Model
         {
             if (QtyEntered != 0 && GetVAB_UOM_ID() != 0)
             {
-                int precision = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
+                int precision = MVABUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
                 //QtyEntered = QtyEntered.setScale(precision, Decimal.ROUND_HALF_UP);
                 QtyEntered = Decimal.Round(QtyEntered, precision, MidpointRounding.AwayFromZero);
             }
@@ -704,7 +704,7 @@ namespace VAdvantage.Model
             {
                 QtyEntered = GetQtyEntered();
                 //Decimal QtyEntered1 = QtyEntered.setScale(MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), Decimal.ROUND_HALF_UP);
-                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
+                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MVABUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (QtyEntered.CompareTo(QtyEntered1) != 0)
                 {
                     log.Fine("Corrected QtyEntered Scale UOM=" + VAB_UOM_To_ID
@@ -712,7 +712,7 @@ namespace VAdvantage.Model
                     QtyEntered = QtyEntered1;
                     SetQtyEntered(QtyEntered);
                 }
-                MovementQty = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, QtyEntered);
+                MovementQty = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, QtyEntered);
                 if (MovementQty == null)
                     MovementQty = QtyEntered;
                 bool conversion = QtyEntered.CompareTo(MovementQty) != 0;
@@ -735,7 +735,7 @@ namespace VAdvantage.Model
             else if (columnName.Equals("QtyEntered"))
             {
                 QtyEntered = GetQtyEntered();
-                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
+                Decimal QtyEntered1 = Decimal.Round(QtyEntered, MVABUOM.GetPrecision(GetCtx(), VAB_UOM_To_ID), MidpointRounding.AwayFromZero);
                 if (QtyEntered.CompareTo(QtyEntered1) != 0)
                 {
                     log.Fine("Corrected QtyEntered Scale UOM=" + VAB_UOM_To_ID
@@ -743,7 +743,7 @@ namespace VAdvantage.Model
                     QtyEntered = QtyEntered1;
                     SetQtyEntered(QtyEntered);
                 }
-                MovementQty = (Decimal)MUOMConversion.ConvertProductFrom(GetCtx(),
+                MovementQty = (Decimal)MVABUOMConversion.ConvertProductFrom(GetCtx(),
                     VAM_Product_ID, VAB_UOM_To_ID, QtyEntered);
                 if (MovementQty == null)
                     MovementQty = QtyEntered;
@@ -771,7 +771,7 @@ namespace VAdvantage.Model
                     MovementQty = MovementQty1;
                     SetMovementQty(MovementQty);
                 }
-                QtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, MovementQty);
+                QtyEntered = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID, VAB_UOM_To_ID, MovementQty);
                 if (QtyEntered == null)
                     QtyEntered = MovementQty;
                 bool conversion = MovementQty.CompareTo(QtyEntered) != 0;
@@ -811,7 +811,7 @@ namespace VAdvantage.Model
 
                             SetMovementQty(shippedQty);
                             MovementQty = shippedQty;
-                            QtyEntered = (Decimal)MUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID,
+                            QtyEntered = (Decimal)MVABUOMConversion.ConvertProductTo(GetCtx(), VAM_Product_ID,
                                     VAB_UOM_To_ID, MovementQty);
                             if (QtyEntered == null)
                                 QtyEntered = MovementQty;
@@ -1048,11 +1048,11 @@ namespace VAdvantage.Model
                 SetVAB_UOM_ID(GetCtx().GetContextAsInt("#VAB_UOM_ID"));
             if (GetVAB_UOM_ID() == 0)
             {
-                int VAB_UOM_ID = MUOM.GetDefault_UOM_ID(GetCtx());
+                int VAB_UOM_ID = MVABUOM.GetDefault_UOM_ID(GetCtx());
                 if (VAB_UOM_ID > 0)
                     SetVAB_UOM_ID(VAB_UOM_ID);
             }
-            int gp = MUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
+            int gp = MVABUOM.GetPrecision(GetCtx(), GetVAB_UOM_ID());
             Decimal? QtyEntered1 = Decimal.Round(QtyEntered.Value, gp, MidpointRounding.AwayFromZero);
             if (QtyEntered != QtyEntered1)
             {
@@ -1061,7 +1061,7 @@ namespace VAdvantage.Model
                 QtyEntered = QtyEntered1;
                 SetQtyEntered(QtyEntered);
             }
-            Decimal? pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered);
+            Decimal? pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered);
 
             Decimal newMoveQty = movementQty ?? 0; //Arpit
 
@@ -1082,7 +1082,7 @@ namespace VAdvantage.Model
                 if (differenceQty > 0 && !newRecord && !dt.IsSplitWhenDifference())
                 {
                     //converted qty if found any difference then the Movement qty reduces by the difference amount
-                    pc = MUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered - differenceQty);
+                    pc = MVABUOMConversion.ConvertProductFrom(GetCtx(), GetVAM_Product_ID(), GetVAB_UOM_ID(), QtyEntered - differenceQty);
                 }
             }
             movementQty = pc;

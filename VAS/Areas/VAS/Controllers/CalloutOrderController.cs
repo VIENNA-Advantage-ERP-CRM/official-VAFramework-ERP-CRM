@@ -146,7 +146,7 @@ namespace VIS.Controllers
                 //var VAM_Warehouse_ID = ctx.getContextAsInt(WindowNo, "VAM_Warehouse_ID");
                 //var VAM_PFeature_SetInstance_ID = ctx.getContextAsInt(WindowNo, "VAM_PFeature_SetInstance_ID");
 
-                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
+                Decimal? retValue = (Decimal?)MVABUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                       VAB_UOM_To_ID, QtyEntered);
 
 
@@ -189,7 +189,7 @@ namespace VIS.Controllers
                 //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
-                Decimal? retValue = (Decimal?)MUOMConversion.ConvertProductFrom(ctx, VAM_Product_ID,
+                Decimal? retValue = (Decimal?)MVABUOMConversion.ConvertProductFrom(ctx, VAM_Product_ID,
                VAB_UOM_To_ID, Price);
 
                 List<Decimal?> retlst = new List<Decimal?>();
@@ -231,7 +231,7 @@ namespace VIS.Controllers
                 //Decimal? QtyOrdered = (Decimal?)MUOMConversion.ConvertProductTo(ctx, VAM_Product_ID,
                 //      VAB_UOM_To_ID, QtyEntered);
 
-                int retValue=MUOM.GetPrecision(ctx, VAB_UOM_To_ID);
+                int retValue=MVABUOM.GetPrecision(ctx, VAB_UOM_To_ID);
 
                 List<int> retlst = new List<int>();
 

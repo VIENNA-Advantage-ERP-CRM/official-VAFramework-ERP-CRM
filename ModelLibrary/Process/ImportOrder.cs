@@ -725,7 +725,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
 
                     if (convertUOM)
                     {
-                        Decimal? rateQty = MUOMConversion.GetProductRateFrom(GetCtx(), line.GetVAM_Product_ID(), imp.GetVAB_UOM_ID());
+                        Decimal? rateQty = MVABUOMConversion.GetProductRateFrom(GetCtx(), line.GetVAM_Product_ID(), imp.GetVAB_UOM_ID());
                         if (rateQty == null)
                         {
                             String msg = Msg.Translate(GetCtx(), "NoProductUOMConversion");

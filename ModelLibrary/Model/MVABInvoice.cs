@@ -2402,13 +2402,13 @@ namespace VAdvantage.Model
                 for (int i = 0; i < taxes.Length; i++)
                 {
                     MVABTaxInvoice iTax = taxes[i];
-                    MTax tax = iTax.GetTax();
+                    MVABTaxRate tax = iTax.GetTax();
                     if (tax.IsSummary())
                     {
-                        MTax[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
+                        MVABTaxRate[] cTaxes = tax.GetChildTaxes(false);	//	Multiple taxes
                         for (int j = 0; j < cTaxes.Length; j++)
                         {
-                            MTax cTax = cTaxes[j];
+                            MVABTaxRate cTax = cTaxes[j];
                             Decimal taxAmt = cTax.CalculateTax(iTax.GetTaxBaseAmt(), false, GetPrecision());
                             //
                             // JID_0430: if we add 2 lines with different Taxes. one is Parent and other is child. System showing error on completion that "Error Calculating Tax"

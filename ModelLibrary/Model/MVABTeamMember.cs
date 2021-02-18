@@ -11,16 +11,16 @@ using ViennaAdvantage.Model;
 
 namespace ViennaAdvantage.Model
 {
-    public class MTeamMember : X_VAB_TeamMember
+    public class MVABTeamMember : X_VAB_TeamMember
     {
 
-        public MTeamMember(Ctx ctx, DataRow dr, Trx trx)
+        public MVABTeamMember(Ctx ctx, DataRow dr, Trx trx)
             : base(ctx, dr, trx)
         {
 
         }
 
-        public MTeamMember(Ctx ctx, int VAB_TeamMember_ID, Trx trx)
+        public MVABTeamMember(Ctx ctx, int VAB_TeamMember_ID, Trx trx)
             : base(ctx, VAB_TeamMember_ID, trx)
         {
 
