@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VAdvantage.DataBase;
+using VAdvantage.Logging;
 using VAdvantage.Model;
 using VAdvantage.ProcessEngine;
 using VAdvantage.Utility;
@@ -61,13 +62,14 @@ namespace VAdvantage.Process
             if (currentDay == day)
             {                  
                string sql = "UPDATE C_PeriodControl SET PeriodStatus= '" + MPeriodControl.PERIODSTATUS_Closed + "'" +
-                    " WHERE C_Period_ID= (SELECT C_period_ID FROM C_Period p INNER JOIN C_year y ON y.c_year_ID = p.C_year_ID " +
+                    " WHERE C_Period_ID= (SELECT C_Period_ID FROM C_Period p INNER JOIN C_Year y ON y.C_Year_ID = p.C_Year_ID AND p.IsActive='Y' " +
                     "WHERE y.C_Calendar_ID=" + calendar_id + " AND Startdate=" + GlobalVariable.TO_DATE(lastMonth, true)+ ") AND DocBaseType NOT IN ('" + MDocBaseType.DOCBASETYPE_GLJOURNAL + "')"+
                    " AND PeriodStatus<>'"+MPeriodControl.PERIODSTATUS_PermanentlyClosed+"' AND AD_Org_ID IN (" + OrgId + ")";
 
-                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, false); // fully qualified - RO
+                sql = MRole.GetDefault(GetCtx()).AddAccessSQL(sql, "C_PeriodControl", true, true); // fully qualified - RO
                 if ( Util.GetValueOfInt( DB.ExecuteQuery(sql, null, null)) == 0)
                 {
+                    log.Log(Level.SEVERE, sql);
                     return Msg.GetMsg(GetCtx(), "PeriodNotClosed");
                 }
             }
