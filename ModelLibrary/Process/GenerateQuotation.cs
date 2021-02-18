@@ -147,6 +147,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                     }
 
                     if (!bp.Save())
@@ -166,6 +167,7 @@ namespace ViennaAdvantageServer.Process
                     {
                         order.SetPaymentMethod(bp.GetPaymentRule());
                         order.SetC_PaymentTerm_ID(bp.GetC_PaymentTerm_ID());
+                        order.SetVA009_PaymentMethod_ID(bp.GetVA009_PaymentMethod_ID());
                     }
 
                     if (!bp.Save())
@@ -184,10 +186,24 @@ namespace ViennaAdvantageServer.Process
                 order.SetIsSOTrx(true);
                 order.Set_Value("IsSalesQuotation", true);
 
+                //Set VA077 values on header level
                 if (Env.IsModuleInstalled("VA077_"))
                 {
+                    //Get the org count of legal entity org
+                    sql = @"SELECT Count(AD_Org_ID) FROM AD_Org WHERE IsActive='Y' 
+                           AND (IsProfitCenter ='Y' OR IsCostCenter ='Y') AND 
+                           AD_Client_Id=" + fromProject.GetAD_Client_ID() + @" AND LegalEntityOrg = " + fromProject.GetAD_Org_ID();
+                    int result = Util.GetValueOfInt(DB.ExecuteScalar(sql));
+                    if (result > 0)
+                    {
+                        order.SetVA077_IsLegalEntity(true);
+                    }
                     order.SetVA077_SalesCoWorker(fromProject.GetVA077_SalesCoWorker());
                     order.SetVA077_SalesCoWorkerPer(fromProject.GetVA077_SalesCoWorkerPer());
+                    order.Set_Value("VA077_TotalMarginAmt", fromProject.Get_Value("VA077_TotalMarginAmt"));
+                    order.Set_Value("VA077_TotalPurchaseAmt", fromProject.Get_Value("VA077_TotalPurchaseAmt"));
+                    order.Set_Value("VA077_TotalSalesAmt", fromProject.Get_Value("VA077_TotalSalesAmt"));
+                    order.Set_Value("VA077_MarginPercent", fromProject.Get_Value("VA077_MarginPercent"));
                 }
 
                 if (!order.Save())
@@ -220,6 +236,14 @@ namespace ViennaAdvantageServer.Process
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());
                     ol.SetPriceActual(lines[i].GetPlannedPrice());
                     ol.SetPriceList(lines[i].GetPriceList());
+                    
+                    //Set VA077 values on line level
+                    if (Env.IsModuleInstalled("VA077_"))
+                    {
+                        ol.Set_Value("VA077_MarginPercent", lines[i].Get_Value("VA077_MarginPercent"));
+                        ol.Set_Value("VA077_MarginAmt", lines[i].Get_Value("VA077_MarginAmt"));
+                        ol.Set_Value("VA077_PurchasePrice", lines[i].Get_Value("VA077_PurchasePrice"));
+                    }
                     if (ol.Save())
                     {
                         count++;

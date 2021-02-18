@@ -65,6 +65,7 @@ namespace VAdvantage.Model
         private bool m_hasSRegion = false;
         /** Account Creation OK		*/
         private bool m_accountsOK = false;
+        private const string InternalUseInventory = "Internal Use Inventory";
 
 
         /// <summary>
@@ -3116,6 +3117,11 @@ namespace VAdvantage.Model
                     MDocBaseType.DOCBASETYPE_PROJECTISSUE, null, 0, 0,
                     640000, GL_MM, MDocType.POSTINGCODE_PROJECTISSUE);
 
+                //If Change name here, then change at other places also.
+                CreateDocType(InternalUseInventory, Msg.GetElement(m_ctx, "M_Inventory_ID", false),
+                    MDocBaseType.DOCBASETYPE_MATERIALPHYSICALINVENTORY, null, 0, 0,
+                    620000, GL_MM, MDocType.POSTINGCODE_PHYSICALINVENTORY);
+
                 //  Order Entry
                 //CreateDocType("Binding offer", "Quotation",
                 //    MDocBaseType.DOCBASETYPE_SALESORDER, MDocType.DOCSUBTYPESO_Quotation, 0, 0,
@@ -3304,6 +3310,8 @@ namespace VAdvantage.Model
                 dt.SetPrintName(PrintName);	//	Defaults to Name
             if (DocSubTypeSO != null)
                 dt.SetDocSubTypeSO(DocSubTypeSO);
+
+            
             // For Blanket Order Set Document Type of Release
             if (C_DocTypeShipment_ID != 0)
             {
@@ -3330,6 +3338,12 @@ namespace VAdvantage.Model
             dt.SetIsSOTrx();
             dt.SetIsReturnTrx(isReturnTrx);
             dt.SetIsCreateCounter(IsCreateCounter);
+
+            //Set Is Internal Use checked for Internal Use Inventory 
+            if (Name.Equals(InternalUseInventory))
+            {
+                dt.SetIsInternalUse(true);
+            }
 
             // Set Blanket Transaction for Blanket Order
             if (DocBaseType.Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER))
