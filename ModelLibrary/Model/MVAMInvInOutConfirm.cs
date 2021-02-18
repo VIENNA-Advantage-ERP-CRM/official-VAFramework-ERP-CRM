@@ -710,10 +710,10 @@ namespace VAdvantage.Model
             /* created by sunil 19/9/2016*/
             if (Env.IsModuleInstalled("DTD001_"))
             {
-                MPackage package = new MPackage(GetCtx(), inout.GetVAM_Packaging_ID(), Get_Trx());
+                MVAMPackaging package = new MVAMPackaging(GetCtx(), inout.GetVAM_Packaging_ID(), Get_Trx());
                 if (inout.GetVAM_Packaging_ID() > 0 && !package.IsDTD001_IsPackgConfirm())
                 {
-                    _processMsg = Msg.GetMsg(GetCtx(), "PleaseConfirmPackage");
+                    _processMsg = Msg.GetMsg(GetCtx(), "PleaseConfirMVAMPackaging");
                     return DocActionVariables.STATUS_INVALID;
 
                 }

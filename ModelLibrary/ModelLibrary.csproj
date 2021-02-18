@@ -351,14 +351,14 @@
     <Compile Include="Model\MVAMInvTrfConfirm.cs" />
     <Compile Include="Model\MVAMInvTrfLine.cs" />
     <Compile Include="Model\MVAMInvTrfLineConfirm.cs" />
-    <Compile Include="Model\MMovementLineMA.cs" />
+    <Compile Include="Model\MVAMInvTrfLineMP.cs" />
     <Compile Include="Model\MVABNonBusinessDay.cs" />
     <Compile Include="Model\MVABOrder.cs" />
     <Compile Include="Model\MVABOrderLine.cs" />
     <Compile Include="Model\MVABOrderlineHistory.cs" />
     <Compile Include="Model\MVABOrderTax.cs" />
-    <Compile Include="Model\MPackage.cs" />
-    <Compile Include="Model\MPackageLine.cs" />
+    <Compile Include="Model\MVAMPackaging.cs" />
+    <Compile Include="Model\MVAMPackagingLine.cs" />
     <Compile Include="Model\MVABPayment.cs" />
     <Compile Include="Model\MVABPaymentAllocate.cs" />
     <Compile Include="Model\MVABPaymentBatch.cs" />

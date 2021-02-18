@@ -75,7 +75,7 @@ namespace VAdvantage.Utility
             //step 3
             if (type == null)
             {
-                type= Env.GetTypeFromPackage(fqClassame);
+                type= Env.GetTypeFroMVAMPackaging(fqClassame);
             }
             else
             {

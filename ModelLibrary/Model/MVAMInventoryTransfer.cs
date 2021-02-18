@@ -740,12 +740,12 @@ namespace VAdvantage.Model
                 MTransaction trxFrom = null;
                 if (line.GetVAM_PFeature_SetInstance_ID() == 0 || line.GetVAM_PFeature_SetInstance_ID() != 0)
                 {
-                    MVAMInvTrfLineMA[] mas = MVAMInvTrfLineMA.Get(GetCtx(),
+                    MVAMInvTrfLineMP[] mas = MVAMInvTrfLineMP.Get(GetCtx(),
                         line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
                     for (int j = 0; j < mas.Length; j++)
                     {
                         Decimal? containerCurrentQty = 0;
-                        MVAMInvTrfLineMA ma = mas[j];
+                        MVAMInvTrfLineMP ma = mas[j];
                         //
                         MStorage storageFrom = MStorage.Get(GetCtx(), line.GetVAM_Locator_ID(),
                             line.GetVAM_Product_ID(), ma.GetVAM_PFeature_SetInstance_ID(), Get_TrxName());
@@ -2850,7 +2850,7 @@ namespace VAdvantage.Model
         /// </summary>
         private void CheckMaterialPolicy()
         {
-            int no = MVAMInvTrfLineMA.DeleteMovementMA(GetVAM_InventoryTransfer_ID(), Get_TrxName());
+            int no = MVAMInvTrfLineMP.DeleteMovementMA(GetVAM_InventoryTransfer_ID(), Get_TrxName());
             if (no > 0)
                 log.Config("Delete old #" + no);
             MVAMInvTrfLine[] lines = GetLines(false);
@@ -2892,7 +2892,7 @@ namespace VAdvantage.Model
                             else
                             {
                                 log.Config("Split - " + line);
-                                MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
+                                MVAMInvTrfLineMP ma = new MVAMInvTrfLineMP(line,
                                     storage.GetVAM_PFeature_SetInstance_ID(),
                                     storage.GetQtyOnHand());
                                 if (!ma.Save())
@@ -2903,7 +2903,7 @@ namespace VAdvantage.Model
                         }
                         else	//	 create Addl material allocation
                         {
-                            MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
+                            MVAMInvTrfLineMP ma = new MVAMInvTrfLineMP(line,
                                 storage.GetVAM_PFeature_SetInstance_ID(),
                                 qtyToDeliver);
                             if (storage.GetQtyOnHand().CompareTo(qtyToDeliver) >= 0)
@@ -2924,7 +2924,7 @@ namespace VAdvantage.Model
                     //	No AttributeSetInstance found for remainder
                     if (Env.Signum(qtyToDeliver) != 0)
                     {
-                        MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(line,
+                        MVAMInvTrfLineMP ma = new MVAMInvTrfLineMP(line,
                             0, qtyToDeliver);
                         if (!ma.Save())
                             ;
@@ -2944,7 +2944,7 @@ namespace VAdvantage.Model
         /// <param name="line">movement line</param>
         private void CheckMaterialPolicy(MVAMInvTrfLine line)
         {
-            int no = MVAMInvTrfLineMA.DeleteMovementLineMA(line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
+            int no = MVAMInvTrfLineMP.DeleteMovementLineMA(line.GetVAM_InvTrf_Line_ID(), Get_TrxName());
             if (no > 0)
                 log.Config("Delete old #" + no);
 
@@ -3003,7 +3003,7 @@ namespace VAdvantage.Model
 
                 if ((isContainerApplicable ? storage.GetQty() : storage.GetQtyOnHand()).CompareTo(qtyToDeliver) >= 0)
                 {
-                    MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line,
+                    MVAMInvTrfLineMP ma = MVAMInvTrfLineMP.GetOrCreate(line,
                     storage.GetVAM_PFeature_SetInstance_ID(),
                     qtyToDeliver, isContainerApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
                     if (!ma.Save(line.Get_Trx()))
@@ -3021,7 +3021,7 @@ namespace VAdvantage.Model
                 else
                 {
                     log.Config("Split - " + line);
-                    MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line,
+                    MVAMInvTrfLineMP ma = MVAMInvTrfLineMP.GetOrCreate(line,
                                 storage.GetVAM_PFeature_SetInstance_ID(),
                             isContainerApplicable ? storage.GetQty() : storage.GetQtyOnHand(),
                             isContainerApplicable ? storage.GetMMPolicyDate() : GetMovementDate());
@@ -3064,7 +3064,7 @@ namespace VAdvantage.Model
 
             if (Env.Signum(qtyToDeliver) != 0)
             {
-                MVAMInvTrfLineMA ma = MVAMInvTrfLineMA.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToDeliver, GetMovementDate());
+                MVAMInvTrfLineMP ma = MVAMInvTrfLineMP.GetOrCreate(line, line.GetVAM_PFeature_SetInstance_ID(), qtyToDeliver, GetMovementDate());
                 if (!ma.Save(line.Get_Trx()))
                 {
                     // Handle exception
@@ -3325,11 +3325,11 @@ namespace VAdvantage.Model
                 }
 
                 //We need to copy Attribute MA
-                MVAMInvTrfLineMA[] mas = MVAMInvTrfLineMA.Get(GetCtx(),
+                MVAMInvTrfLineMP[] mas = MVAMInvTrfLineMP.Get(GetCtx(),
                         oLine.GetVAM_InvTrf_Line_ID(), Get_TrxName());
                 for (int j = 0; j < mas.Length; j++)
                 {
-                    MVAMInvTrfLineMA ma = new MVAMInvTrfLineMA(rLine,
+                    MVAMInvTrfLineMP ma = new MVAMInvTrfLineMP(rLine,
                             mas[j].GetVAM_PFeature_SetInstance_ID(),
                             Decimal.Negate(mas[j].GetMovementQty()), mas[j].GetMMPolicyDate());
                     if (!ma.Save(rLine.Get_TrxName()))

@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MPackageLine
+ * Class Name     : MVAMPackagingLine
  * Purpose        : Package Line Model
  * Class Used     : X_VAM_PackagingLine
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPackageLine : X_VAM_PackagingLine
+    public class MVAMPackagingLine : X_VAM_PackagingLine
     {
         /// <summary>
         /// Standard Constructor
@@ -32,7 +32,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="VAM_PackagingLine_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPackageLine(Ctx ctx, int VAM_PackagingLine_ID, Trx trxName)
+        public MVAMPackagingLine(Ctx ctx, int VAM_PackagingLine_ID, Trx trxName)
             : base(ctx, VAM_PackagingLine_ID, trxName)
         {
             if (VAM_PackagingLine_ID == 0)
@@ -49,7 +49,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MPackageLine(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMPackagingLine(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -59,7 +59,7 @@ namespace VAdvantage.Model
         /// Parent Constructor
         /// </summary>
         /// <param name="parent">header</param>
-        public MPackageLine(MPackage parent)
+        public MVAMPackagingLine(MVAMPackaging parent)
             : this(parent.GetCtx(), 0, parent.Get_TrxName())
         {
             SetClientOrg(parent);

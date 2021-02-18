@@ -579,10 +579,10 @@
     <Compile Include="Model\X_VAM_InvTrf_Confirm.cs" />
     <Compile Include="Model\X_VAM_InvTrf_Line.cs" />
     <Compile Include="Model\X_VAM_InvTrf_LineConfirm.cs" />
-    <Compile Include="Model\X_M_MovementLineMA.cs" />
+    <Compile Include="Model\X_VAM_InvTrf_LineMP.cs" />
     <Compile Include="Model\X_M_OperationResource.cs" />
-    <Compile Include="Model\X_M_Package.cs" />
-    <Compile Include="Model\X_M_PackageLine.cs" />
+    <Compile Include="Model\X_VAM_Packaging.cs" />
+    <Compile Include="Model\X_VAM_PackagingLine.cs" />
     <Compile Include="Model\X_M_PerpetualInv.cs" />
     <Compile Include="Model\X_M_PriceList.cs" />
     <Compile Include="Model\X_M_PriceList_Version.cs" />

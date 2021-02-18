@@ -1155,7 +1155,7 @@ namespace VAdvantage.Utility
         /// </summary>
         /// <param name="fqClassame">Fully qualified classname</param>
         /// <returns>Return Type of class</returns>
-        public static Type GetTypeFromPackage(string fqClassame)
+        public static Type GetTypeFroMVAMPackaging(string fqClassame)
         {
             Type type = null;
             foreach (string asm in GlobalVariable.PACKAGES)

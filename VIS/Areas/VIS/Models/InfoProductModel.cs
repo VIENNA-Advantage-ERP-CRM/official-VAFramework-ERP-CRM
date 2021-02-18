@@ -821,7 +821,7 @@ namespace VIS.Models
 
                 tbl = new MVAFTableView(ctx, 663, null);
 
-                MPackage pkg = new MPackage(ctx, recordID, null);
+                MVAMPackaging pkg = new MVAMPackaging(ctx, recordID, null);
                 string RefNo = ReferenceNo[0];
                 if (Util.GetValueOfString(RefNo) != "")
                 {

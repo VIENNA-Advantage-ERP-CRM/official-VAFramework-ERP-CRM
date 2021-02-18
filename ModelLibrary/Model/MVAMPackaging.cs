@@ -1,6 +1,6 @@
 ﻿/********************************************************
  * Project Name   : VAdvantage
- * Class Name     : MPackage
+ * Class Name     : MVAMPackaging
  * Purpose        : Package Model
  * Class Used     : X_VAM_Packaging
  * Chronological    Development
@@ -24,7 +24,7 @@ using VAdvantage.Logging;
 
 namespace VAdvantage.Model
 {
-    public class MPackage : X_VAM_Packaging
+    public class MVAMPackaging : X_VAM_Packaging
     {
         /// <summary>
         /// Create one Package for Shipment 
@@ -34,11 +34,11 @@ namespace VAdvantage.Model
         /// <param name="shipDate">null for today</param>
         /// <returns>package</returns>
         /// 
-        private static VLogger _log = VLogger.GetVLogger(typeof(MPackage).FullName); //Arpit
+        private static VLogger _log = VLogger.GetVLogger(typeof(MVAMPackaging).FullName); //Arpit
 
-        public static MPackage Create(MVAMInvInOut shipment, MShipper shipper, DateTime? shipDate, Trx trxName)
+        public static MVAMPackaging Create(MVAMInvInOut shipment, MShipper shipper, DateTime? shipDate, Trx trxName)
         {
-            MPackage retValue = new MPackage(shipment, shipper);
+            MVAMPackaging retValue = new MVAMPackaging(shipment, shipper);
             if (shipDate != null)
             {
                 retValue.SetShipDate(shipDate);
@@ -61,7 +61,7 @@ namespace VAdvantage.Model
             for (int i = 0; i < lines.Length; i++)
             {
                 MVAMInvInOutLine sLine = lines[i];
-                MPackageLine pLine = new MPackageLine(retValue);
+                MVAMPackagingLine pLine = new MVAMPackagingLine(retValue);
                 //Arpit
                 //pLine.SetInOutLine(sLine);
                 //Changes in Below Method to create Lines and their values from Shipment/MR Lines to Package Lines
@@ -79,12 +79,12 @@ namespace VAdvantage.Model
         }
 
         /// <summary>
-        /// MPackage
+        /// MVAMPackaging
         /// </summary>
         /// <param name="ctx">context</param>
         /// <param name="VAM_Packaging_ID">id</param>
         /// <param name="trxName">transaction</param>
-        public MPackage(Ctx ctx, int VAM_Packaging_ID, Trx trxName)
+        public MVAMPackaging(Ctx ctx, int VAM_Packaging_ID, Trx trxName)
             : base(ctx, VAM_Packaging_ID, trxName)
         {
             if (VAM_Packaging_ID == 0)
@@ -100,7 +100,7 @@ namespace VAdvantage.Model
         /// <param name="ctx">context</param>
         /// <param name="dr">datarow</param>
         /// <param name="trxName">transaction</param>
-        public MPackage(Ctx ctx, DataRow dr, Trx trxName)
+        public MVAMPackaging(Ctx ctx, DataRow dr, Trx trxName)
             : base(ctx, dr, trxName)
         {
 
@@ -111,7 +111,7 @@ namespace VAdvantage.Model
         /// </summary>
         /// <param name="shipment">shipment</param>
         /// <param name="shipper">shipper</param>
-        public MPackage(MVAMInvInOut shipment, MShipper shipper)
+        public MVAMPackaging(MVAMInvInOut shipment, MShipper shipper)
             : this(shipment.GetCtx(), 0, shipment.Get_TrxName())
         {
             SetClientOrg(shipment);

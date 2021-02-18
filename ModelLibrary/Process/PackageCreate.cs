@@ -94,7 +94,7 @@ using VAdvantage.ProcessEngine;namespace VAdvantage.Process
                 throw new Exception("Cannot find Shipper ID=" + _VAM_Inv_InOut_ID);
             }
            
-            MPackage pack = MPackage.Create(shipment, shipper, null, Get_TrxName());
+            MVAMPackaging pack = MVAMPackaging.Create(shipment, shipper, null, Get_TrxName());
 
             return pack.GetDocumentNo();
         }

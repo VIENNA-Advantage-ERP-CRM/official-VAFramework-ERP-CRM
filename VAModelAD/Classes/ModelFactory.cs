@@ -217,7 +217,7 @@ namespace VAModelAD.Classes
                     namspace = _productClasses[i] + tableName;
                 }
 
-                Type clazzsn = Env.GetTypeFromPackage(namspace);
+                Type clazzsn = Env.GetTypeFroMVAMPackaging(namspace);
 
                 //Type clazzsn = GetPOclass(namspace);
                 if (clazzsn != null)
@@ -413,7 +413,7 @@ namespace VAModelAD.Classes
             try
             {
 
-                Type classObject = Env.GetTypeFromPackage(className);//    Type.GetType(className);
+                Type classObject = Env.GetTypeFroMVAMPackaging(className);//    Type.GetType(className);
 
                 Type baseClass = classObject.BaseType;
 
