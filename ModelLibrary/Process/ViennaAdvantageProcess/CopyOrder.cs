@@ -42,7 +42,7 @@ namespace ViennaAdvantage.Process
         int newid = 0;
         int neworg_id = 0;
         string docNo;
-        private String _processMsg = null;
+        
         #endregion
 
         /// <summary>
@@ -111,13 +111,10 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
-            bool crdAll = false;
-            string retMsg = "";
+            
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
-                VAdvantage.Model.MOrder Order = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
-                dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);     //	copy ASI 
-                
+                            
                 //Check Destination Organization in c_orderline
                 string str = "SELECT DISTINCT(VA077_DestinationOrg), AD_Org_Id FROM C_OrderLine WHERE C_Order_ID=" + _C_Order_ID;
                 DataSet dts = DB.ExecuteDataset(str, null, Get_Trx());
@@ -133,7 +130,6 @@ namespace ViennaAdvantage.Process
                     }
                 }
 
-               
             }
             else
             {
@@ -393,7 +389,8 @@ namespace ViennaAdvantage.Process
             }
             else
             {
-                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (VA077_DestinationOrg IS null OR VA077_DestinationOrg=0) AND AD_Org_ID=" + org;
+              
+                str = "SELECT VA077_DestinationOrg,C_OrderLine_ID FROM C_OrderLine WHERE C_Order_ID = " + _C_Order_ID + " AND (NVL(VA077_DestinationOrg,0)=0) AND AD_Org_ID=" + org;
             }
             DataSet st = DB.ExecuteDataset(str, null, Get_Trx());
             if (st != null && st.Tables[0].Rows.Count > 0)
