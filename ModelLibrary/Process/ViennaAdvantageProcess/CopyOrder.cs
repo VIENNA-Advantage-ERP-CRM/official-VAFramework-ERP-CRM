@@ -42,7 +42,7 @@ namespace ViennaAdvantage.Process
         int newid = 0;
         int neworg_id = 0;
         string docNo;
-        
+        private String _processMsg = null;
         #endregion
 
         /// <summary>
@@ -111,7 +111,8 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
-            
+            bool crdAll = false;
+            string retMsg = "";
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                             
@@ -127,6 +128,94 @@ namespace ViennaAdvantage.Process
                         int orgId = Util.GetValueOfInt(dts.Tables[0].Rows[i]["AD_Org_Id"]);
                         AddHeader(destinationorg, orgId);
                         Addline(destinationorg, orgId);
+                    }
+                }
+
+                //added code for creditcheck validity functionality
+               
+                VAdvantage.Model.MOrder OrderCreditCheck = new VAdvantage.Model.MOrder(GetCtx(), _C_Order_ID, Get_Trx());
+                VAdvantage.Model.MBPartner bp = new MBPartner(GetCtx(), OrderCreditCheck.GetC_BPartner_ID(), null);
+                VAdvantage.Model.MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), OrderCreditCheck.GetC_BPartner_Location_ID(), null);
+                DateTime validate = new DateTime();
+                string CreditStatusSettingOn = bp.GetCreditStatusSettingOn();
+                Decimal grandTotal = MConversionRate.ConvertBase(GetCtx(),
+                            OrderCreditCheck.GetGrandTotal(), OrderCreditCheck.GetC_Currency_ID(), OrderCreditCheck.GetDateOrdered(),
+                             OrderCreditCheck.GetC_ConversionType_ID(), OrderCreditCheck.GetAD_Client_ID(), OrderCreditCheck.GetAD_Org_ID());
+
+                if (CreditStatusSettingOn.Contains("CL"))
+                {
+
+                    validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
+                }
+                else
+                {
+                    validate = Util.GetValueOfDateTime(bp.Get_Value("VA077_ValidityDate")).Value;
+
+                }
+                if (validate.Date < DateTime.Now.Date)
+
+                {
+
+                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + OrderCreditCheck.GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
+
+                    if (RecCount > 0)
+                    {
+
+                        crdAll = bp.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                    }
+                    else
+                    {
+                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+
+                        return VAdvantage.Process.DocActionVariables.STATUS_INVALID;
+                    }
+                }
+                else
+                {
+
+                    crdAll = bp.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                }
+
+                if (!crdAll)
+                {
+                    if (bp.ValidateCreditValidation("A,D,E", OrderCreditCheck.GetC_BPartner_Location_ID()))
+                    {
+                        //to set credit fail and credit fail notice true in case of sales order
+                        if ((OrderCreditCheck.IsSOTrx() && !OrderCreditCheck.IsReturnTrx() && !OrderCreditCheck.IsSalesQuotation() && !Util.GetValueOfBool(OrderCreditCheck.Get_Value("IsBlanketTrx"))))
+                        {
+
+                            if ((OrderCreditCheck.Get_ColumnIndex("IsCreditFail") >= 0) && (OrderCreditCheck.Get_ColumnIndex("IsCreditFailNotice") >= 0))
+                            {
+                                /* rolback transaction because we ned to set credit fail checkbox true if credit not alowded if we set status invalid 
+                                then it wil rollback the update query as wel that's why we rollback before update query */
+                                if (Get_Trx() != null)
+                                    Get_Trx().Rollback();
+                                int res = DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='Y', IsCreditFailNotice='Y' WHERE C_Order_ID=" + OrderCreditCheck.GetC_Order_ID(), null, Get_Trx());
+                                if (res <= 0)
+                                {
+                                    log.Info("Credit fail or notice  checkbox not updated ");
+                                }
+                                else
+                                    Get_Trx().Commit();
+                            }
+                        }
+                        _processMsg = retMsg;
+                        return VAdvantage.Process.DocActionVariables.STATUS_INVALID;
+                    }
+                }
+                else
+                {
+                    //to set credit fail and credit fail notice false in case of sales order
+                    if ((OrderCreditCheck.IsSOTrx() && !OrderCreditCheck.IsReturnTrx() && !OrderCreditCheck.IsSalesQuotation() && !Util.GetValueOfBool(OrderCreditCheck.Get_Value("IsBlanketTrx"))))
+                    {
+                        if ((OrderCreditCheck.Get_ColumnIndex("IsCreditFail") >= 0) && (OrderCreditCheck.Get_ColumnIndex("IsCreditFailNotice") >= 0))
+                        {
+                            int res = Util.GetValueOfInt(DB.ExecuteQuery(" UPDATE C_Order SET IsCreditFail='N', IsCreditFailNotice='N' WHERE C_Order_ID=" + OrderCreditCheck.GetC_Order_ID(), null, Get_Trx()));
+                            if (res <= 0)
+                            {
+                                log.Info("Credit fail or notice heckbox not updated ");
+                            }
+                        }
                     }
                 }
 
