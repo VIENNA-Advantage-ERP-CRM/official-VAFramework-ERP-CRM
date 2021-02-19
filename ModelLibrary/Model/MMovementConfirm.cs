@@ -808,13 +808,19 @@ namespace VAdvantage.Model
             }
             //End
 
+
+            //Lakhwinder
+            
+            int differenceDoc = 0;
+            int scrapDoc = 0;
             //	Difference - Create Inventory Difference for Source Location
             if (Env.ZERO.CompareTo(confirm.GetDifferenceQty()) != 0)
             {
 
                 //Lakhwinder
                 //15Feb2021 Create InventoryMove as Per setting on DoctType
-                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), true);
+                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), true,out differenceDoc);
+               
                 if (inventorySetting == 3)
                 {
                     if (momementDiffrence == null)
@@ -822,7 +828,7 @@ namespace VAdvantage.Model
                         momementDiffrence = new MMovement(GetCtx(), 0, Get_Trx());
                         momementDiffrence.SetAD_Client_ID(move.GetAD_Client_ID());
                         momementDiffrence.SetAD_Org_ID(move.GetAD_Org_ID());
-                        momementDiffrence.SetC_DocType_ID(move.GetC_DocType_ID());
+                        momementDiffrence.SetC_DocType_ID(differenceDoc);
                         momementDiffrence.SetMovementDate(move.GetMovementDate());
                         momementDiffrence.SetDescription(move.GetDescription() + "<-->" + move.GetDocumentNo());
                         momementDiffrence.SetDTD001_MWarehouseSource_ID(move.GetDTD001_MWarehouseSource_ID());
@@ -832,7 +838,8 @@ namespace VAdvantage.Model
                         momementDiffrence.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         momementDiffrence.SetDocStatus("DR");
                         if (!momementDiffrence.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDocDifference");
+                        {
+                            log.Warning("CreateMaterialMoveDocDifference");
                             _processMsg += "Inventory Move not created";
                             return false;
                         }
@@ -852,18 +859,18 @@ namespace VAdvantage.Model
                     mmLine.SetQtyEntered(confirm.GetDifferenceQty());
                     mmLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
                     mmLine.SetC_BPartner_ID(mLine.GetC_BPartner_ID());
-                    //mmLine.SetMovementQty(mLine.GetMovementQty());
+                    mmLine.SetMovementQty(mLine.GetMovementQty());
                     mmLine.SetDTD001_AttributeNumber(mLine.GetDTD001_AttributeNumber());
-                    mmLine.SetTargetQty(mLine.GetTargetQty());
-                   // mmLine.SetScrappedQty(confirm.GetDifferenceQty());
-                   // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
-                    mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());    
+                    //mmLine.SetTargetQty(mLine.GetTargetQty());
+                    // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
+                    mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());
                     mmLine.SetToCurrentCostPrice(mLine.GetToCurrentCostPrice());
                     mmLine.SetToPostCurrentCostPrice(mLine.GetToPostCurrentCostPrice());
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved");
+                    {
+                        log.Warning("MovementLineNotSaved");
                         _processMsg += "Inventory Move Line not created";
                         return false;
                     }
@@ -882,8 +889,10 @@ namespace VAdvantage.Model
                         MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
                         _inventoryFrom = new MInventory(wh);
                         _inventoryFrom.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
+
                         //Lakhwinder
                         //Create Physical Inventory or Internal Use inventory as Per Settings
+                        _inventoryFrom.SetC_DocType_ID(differenceDoc);
                         if (inventorySetting == 1)
                         {
                             _inventoryFrom.SetIsInternalUse(true);
@@ -918,7 +927,15 @@ namespace VAdvantage.Model
                     //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
                     line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
                     line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
-
+                    if (_inventoryFrom.IsInternalUse())
+                    {
+                        line.SetIsInternalUse(true);
+                        //line.SetQtyInternalUse(confirm.GetDifferenceQty());
+                        if (Env.IsModuleInstalled("DTD001_"))
+                        {
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0,"+GetAD_Org_ID()+") AND AD_Client_ID="+GetAD_Client_ID(), null, Get_Trx())));
+                        }
+                    }
 
 
                     line.SetDescription(Msg.Translate(GetCtx(), "DifferenceQty"));
@@ -937,7 +954,7 @@ namespace VAdvantage.Model
 
                 //Lakhwinder
                 //15Feb2021 Create InventoryMove as Per setting on DoctType
-                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), false);
+                int inventorySetting = CheckAssociateDocTypeSetting(move.GetC_DocType_ID(), false,out scrapDoc);
                 if (inventorySetting == 3)
                 {
                     if (movementScrap == null)
@@ -945,7 +962,7 @@ namespace VAdvantage.Model
                         movementScrap = new MMovement(GetCtx(), 0, Get_Trx());
                         movementScrap.SetAD_Client_ID(move.GetAD_Client_ID());
                         movementScrap.SetAD_Org_ID(move.GetAD_Org_ID());
-                        movementScrap.SetC_DocType_ID(move.GetC_DocType_ID());
+                        movementScrap.SetC_DocType_ID(scrapDoc);
                         movementScrap.SetMovementDate(move.GetMovementDate());
                         movementScrap.SetDescription(move.GetDescription() + "<-->" + move.GetDocumentNo());
                         movementScrap.SetDTD001_MWarehouseSource_ID(move.GetDTD001_MWarehouseSource_ID());
@@ -955,7 +972,8 @@ namespace VAdvantage.Model
                         movementScrap.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         movementScrap.SetDocStatus("DR");
                         if (!movementScrap.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDocScrap");
+                        {
+                            log.Warning("CreateMaterialMoveDocScrap");
                             _processMsg += "Inventory Move not created";
                             return false;
                         }
@@ -972,21 +990,22 @@ namespace VAdvantage.Model
                     mmLine.SetM_Product_ID(mLine.GetM_Product_ID());
                     mmLine.SetM_RequisitionLine_ID(mLine.GetM_RequisitionLine_ID());
                     mmLine.SetM_AttributeSetInstance_ID(mLine.GetM_AttributeSetInstance_ID());
-                    mmLine.SetQtyEntered(mLine.GetScrappedQty());
+                    mmLine.SetQtyEntered(confirm.GetScrappedQty());
                     mmLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
                     mmLine.SetC_BPartner_ID(mLine.GetC_BPartner_ID());
-                    //mmLine.SetMovementQty(mLine.GetMovementQty());
+                    mmLine.SetMovementQty(mLine.GetMovementQty());
                     mmLine.SetDTD001_AttributeNumber(mLine.GetDTD001_AttributeNumber());
-                   // mmLine.SetTargetQty(mLine.GetTargetQty());
-                   // mmLine.SetScrappedQty(confirm.GetScrappedQty());
-                    mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
+                    //mmLine.SetTargetQty(mLine.GetTargetQty());
+                    // mmLine.SetScrappedQty(confirm.GetScrappedQty());
+                   // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
                     mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());
                     mmLine.SetToCurrentCostPrice(mLine.GetToCurrentCostPrice());
                     mmLine.SetToPostCurrentCostPrice(mLine.GetToPostCurrentCostPrice());
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved");
+                    {
+                        log.Warning("MovementLineNotSaved");
                         _processMsg += "Inventory Move Line not created";
                         return false;
                     }
@@ -1005,11 +1024,15 @@ namespace VAdvantage.Model
                         MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
                         _inventoryTo = new MInventory(wh);
                         _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
-                        
+
                         //Lakhwinder
                         ////Create Physical Inventory or Internal Use inventory as Per Settings
+                        _inventoryTo.SetC_DocType_ID(scrapDoc);
+
                         if (inventorySetting == 1)
-                        { _inventoryTo.SetIsInternalUse(true); }
+                        {
+                            _inventoryTo.SetIsInternalUse(true);
+                       }
                         if (!_inventoryTo.Save(Get_TrxName()))
                         {
                             _processMsg += "Inventory not created";
@@ -1038,7 +1061,15 @@ namespace VAdvantage.Model
                     //Bug Fix Use Scrapped Qty
                     //line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
                     line.Set_Value("QtyEntered", confirm.GetScrappedQty());
-
+                    if (_inventoryTo.IsInternalUse())
+                    {
+                        line.SetIsInternalUse(true);
+                        //line.SetQtyInternalUse(confirm.GetScrappedQty());
+                        if (Env.IsModuleInstalled("DTD001_"))
+                        {
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y'  AND AD_Org_ID IN (0," + GetAD_Org_ID() + ")  AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx())));
+                        }
+                    }
 
 
                     // JID_0804 Ship receipt confirm with scrap Qty
@@ -1071,13 +1102,14 @@ namespace VAdvantage.Model
         /// return 1 for Internal Use inventory
         /// return 3 for Inventory Move
         /// </returns>
-        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff)
+        private int CheckAssociateDocTypeSetting(int DocTypeID, bool isDiff,out int docTypeAssociate)
         {
+            docTypeAssociate = 0;
             MDocType docType = MDocType.Get(GetCtx(), DocTypeID);
             if (docType.Get_ColumnIndex("C_DocTypeScrap_ID") < 0 && docType.Get_ColumnIndex("C_DocTypeDifference_ID") < 0)
             { return 0; }
 
-            int docTypeAssociate = 0;
+            //int docTypeAssociate = 0;
             if (!isDiff)
             {
                 docTypeAssociate = Util.GetValueOfInt(docType.Get_Value("C_DocTypeScrap_ID"));
