@@ -219,6 +219,18 @@ namespace ViennaAdvantageServer.Process
                     ol.SetPriceEntered(lines[i].GetPlannedPrice());
                     ol.SetPriceActual(lines[i].GetPlannedPrice());
                     ol.SetPriceList(lines[i].GetPriceList());
+
+                    // Set Attribute and UOM from Opportunity Lines
+                    if (lines[i].Get_ColumnIndex("M_AttributeSetInstance_ID") >= 0)
+                    {
+                        ol.SetM_AttributeSetInstance_ID(lines[i].GetM_AttributeSetInstance_ID());
+                    }
+
+                    if (lines[i].Get_ColumnIndex("C_UOM_ID") >= 0)
+                    {
+                        ol.SetC_UOM_ID(Util.GetValueOfInt(lines[i].Get_Value("C_UOM_ID")));
+                    }
+
                     if (ol.Save())
                     {
                         count++;
