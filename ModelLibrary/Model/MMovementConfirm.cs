@@ -933,7 +933,7 @@ namespace VAdvantage.Model
                         //line.SetQtyInternalUse(confirm.GetDifferenceQty());
                         if (Env.IsModuleInstalled("DTD001_"))
                         {
-                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Client_ID="+GetAD_Client_ID(), null, Get_Trx())));
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Org_ID IN (0,"+GetAD_Org_ID()+") AND AD_Client_ID="+GetAD_Client_ID(), null, Get_Trx())));
                         }
                     }
 
@@ -1067,7 +1067,7 @@ namespace VAdvantage.Model
                         //line.SetQtyInternalUse(confirm.GetScrappedQty());
                         if (Env.IsModuleInstalled("DTD001_"))
                         {
-                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Client_ID=11", null, Get_Trx())));
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y'  AND AD_Org_ID IN (0," + GetAD_Org_ID() + ")  AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx())));
                         }
                     }
 
