@@ -832,7 +832,8 @@ namespace VAdvantage.Model
                         momementDiffrence.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         momementDiffrence.SetDocStatus("DR");
                         if (!momementDiffrence.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDocDifference");
+                        {
+                            log.Warning("CreateMaterialMoveDocDifference");
                             _processMsg += "Inventory Move not created";
                             return false;
                         }
@@ -852,18 +853,18 @@ namespace VAdvantage.Model
                     mmLine.SetQtyEntered(confirm.GetDifferenceQty());
                     mmLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
                     mmLine.SetC_BPartner_ID(mLine.GetC_BPartner_ID());
-                    //mmLine.SetMovementQty(mLine.GetMovementQty());
+                    mmLine.SetMovementQty(mLine.GetMovementQty());
                     mmLine.SetDTD001_AttributeNumber(mLine.GetDTD001_AttributeNumber());
-                    mmLine.SetTargetQty(mLine.GetTargetQty());
-                   // mmLine.SetScrappedQty(confirm.GetDifferenceQty());
-                   // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
-                    mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());    
+                    //mmLine.SetTargetQty(mLine.GetTargetQty());
+                    // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
+                    mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());
                     mmLine.SetToCurrentCostPrice(mLine.GetToCurrentCostPrice());
                     mmLine.SetToPostCurrentCostPrice(mLine.GetToPostCurrentCostPrice());
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved");
+                    {
+                        log.Warning("MovementLineNotSaved");
                         _processMsg += "Inventory Move Line not created";
                         return false;
                     }
@@ -887,6 +888,7 @@ namespace VAdvantage.Model
                         if (inventorySetting == 1)
                         {
                             _inventoryFrom.SetIsInternalUse(true);
+                            _inventoryFrom.SetC_DocType_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID FROM C_DocType WHERE DocBaseType='MMI' AND isinternaluse='Y' AND IsActive='Y' AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx())));
                         }
                         if (!_inventoryFrom.Save(Get_TrxName()))
                         {
@@ -918,7 +920,15 @@ namespace VAdvantage.Model
                     //JID_1185: System does not update the Qunatity and UoM on Physical Inventory Document. 
                     line.Set_Value("C_UOM_ID", mLine.GetC_UOM_ID());
                     line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
-
+                    if (_inventoryFrom.IsInternalUse())
+                    {
+                        line.SetIsInternalUse(true);
+                        //line.SetQtyInternalUse(confirm.GetDifferenceQty());
+                        if (Env.IsModuleInstalled("DTD001_"))
+                        {
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Client_ID=11", null, Get_Trx())));
+                        }
+                    }
 
 
                     line.SetDescription(Msg.Translate(GetCtx(), "DifferenceQty"));
@@ -955,7 +965,8 @@ namespace VAdvantage.Model
                         movementScrap.SetDTD001_Packing_ID(move.GetDTD001_Packing_ID());
                         movementScrap.SetDocStatus("DR");
                         if (!movementScrap.Save(Get_Trx()))
-                        { log.Warning("CreateMaterialMoveDocScrap");
+                        {
+                            log.Warning("CreateMaterialMoveDocScrap");
                             _processMsg += "Inventory Move not created";
                             return false;
                         }
@@ -972,21 +983,22 @@ namespace VAdvantage.Model
                     mmLine.SetM_Product_ID(mLine.GetM_Product_ID());
                     mmLine.SetM_RequisitionLine_ID(mLine.GetM_RequisitionLine_ID());
                     mmLine.SetM_AttributeSetInstance_ID(mLine.GetM_AttributeSetInstance_ID());
-                    mmLine.SetQtyEntered(mLine.GetScrappedQty());
+                    mmLine.SetQtyEntered(confirm.GetScrappedQty());
                     mmLine.SetC_UOM_ID(mLine.GetC_UOM_ID());
                     mmLine.SetC_BPartner_ID(mLine.GetC_BPartner_ID());
-                    //mmLine.SetMovementQty(mLine.GetMovementQty());
+                    mmLine.SetMovementQty(mLine.GetMovementQty());
                     mmLine.SetDTD001_AttributeNumber(mLine.GetDTD001_AttributeNumber());
-                   // mmLine.SetTargetQty(mLine.GetTargetQty());
-                   // mmLine.SetScrappedQty(confirm.GetScrappedQty());
-                    mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
+                    //mmLine.SetTargetQty(mLine.GetTargetQty());
+                    // mmLine.SetScrappedQty(confirm.GetScrappedQty());
+                   // mmLine.SetConfirmedQty(mLine.GetConfirmedQty());
                     mmLine.SetPostCurrentCostPrice(mLine.GetPostCurrentCostPrice());
                     mmLine.SetToCurrentCostPrice(mLine.GetToCurrentCostPrice());
                     mmLine.SetToPostCurrentCostPrice(mLine.GetToPostCurrentCostPrice());
                     mmLine.SetMoveFullContainer(mLine.IsMoveFullContainer());
                     mmLine.SetIsParentMove(mLine.IsParentMove());
                     if (!mmLine.Save(Get_Trx()))
-                    { log.Warning("MovementLineNotSaved");
+                    {
+                        log.Warning("MovementLineNotSaved");
                         _processMsg += "Inventory Move Line not created";
                         return false;
                     }
@@ -1005,11 +1017,14 @@ namespace VAdvantage.Model
                         MWarehouse wh = MWarehouse.Get(GetCtx(), loc.GetM_Warehouse_ID());
                         _inventoryTo = new MInventory(wh);
                         _inventoryTo.SetDescription(Msg.Translate(GetCtx(), "M_MovementConfirm_ID") + " " + GetDocumentNo());
-                        
+
                         //Lakhwinder
                         ////Create Physical Inventory or Internal Use inventory as Per Settings
                         if (inventorySetting == 1)
-                        { _inventoryTo.SetIsInternalUse(true); }
+                        {
+                            _inventoryTo.SetIsInternalUse(true);
+                            _inventoryTo.SetC_DocType_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT C_DocType_ID FROM C_DocType WHERE DocBaseType='MMI' AND isinternaluse='Y' AND IsActive='Y' AND AD_Client_ID=" + GetAD_Client_ID(), null, Get_Trx())));
+                        }
                         if (!_inventoryTo.Save(Get_TrxName()))
                         {
                             _processMsg += "Inventory not created";
@@ -1038,7 +1053,15 @@ namespace VAdvantage.Model
                     //Bug Fix Use Scrapped Qty
                     //line.Set_Value("QtyEntered", confirm.GetDifferenceQty());
                     line.Set_Value("QtyEntered", confirm.GetScrappedQty());
-
+                    if (_inventoryTo.IsInternalUse())
+                    {
+                        line.SetIsInternalUse(true);
+                        //line.SetQtyInternalUse(confirm.GetScrappedQty());
+                        if (Env.IsModuleInstalled("DTD001_"))
+                        {
+                            line.SetC_Charge_ID(Util.GetValueOfInt(DB.ExecuteScalar("SELECT MAX(C_Charge_ID) FROM C_Charge WHERE DTD001_ChargeType='INV' AND IsActive='Y' AND AD_Client_ID=11", null, Get_Trx())));
+                        }
+                    }
 
 
                     // JID_0804 Ship receipt confirm with scrap Qty
