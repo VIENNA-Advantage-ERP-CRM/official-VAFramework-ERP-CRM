@@ -148,7 +148,8 @@ namespace ViennaAdvantage.Process
                 }
                 if (validate.Date < DateTime.Now.Date)
                 {
-                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Order_ID) FROM C_Order WHERE C_BPartner_ID =" + OrderCreditCheck.GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
+                    
+                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y'AND IsReturnTrx='N'  AND C_BPartner_ID =" + OrderCreditCheck.GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
                     if (RecCount > 0)
                     {
                         crdAll = bpart.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
