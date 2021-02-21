@@ -42,7 +42,6 @@ namespace ViennaAdvantage.Process
         int newid = 0;
         int neworg_id = 0;
         string docNo;
-        private String _processMsg = null;
         #endregion
 
         /// <summary>
@@ -111,12 +110,7 @@ namespace ViennaAdvantage.Process
             }
 
             //Develop by Deekshant For check VA077 Module For spilt the Sales Order
-            bool crdAll = false;
-            string retMsg = "";
-            MOrder OrderCreditCheck = new MOrder(GetCtx(), _C_Order_ID, Get_Trx());
-            MBPartner bpart = new MBPartner(GetCtx(), OrderCreditCheck.GetC_BPartner_ID(), Get_Trx());
-            MBPartnerLocation bpl = new MBPartnerLocation(GetCtx(), OrderCreditCheck.GetC_BPartner_Location_ID(), Get_Trx());
-            Decimal grandTotal = OrderCreditCheck.GetGrandTotal();
+           
             if (VAdvantage.Utility.Env.IsModuleInstalled("VA077_"))
             {
                 //Check Destination Organization in c_orderline
@@ -133,53 +127,10 @@ namespace ViennaAdvantage.Process
                         Addline(destinationorg, orgId);
                     }
                 }
-
-                //added code for creditcheck validity functionality
-
-                DateTime validate = new DateTime();
-                string CreditStatusSettingOn = bpart.GetCreditStatusSettingOn();
-                if (CreditStatusSettingOn.Contains("CL"))
-                {
-                    validate = Util.GetValueOfDateTime(bpl.Get_Value("VA077_ValidityDate")).Value;
-                }
-                else
-                {
-                    validate = Util.GetValueOfDateTime(bpart.Get_Value("VA077_ValidityDate")).Value;
-                }
-                if (validate.Date < DateTime.Now.Date)
-                {
-                    
-                    int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y'AND IsReturnTrx='N'  AND C_BPartner_ID =" + OrderCreditCheck.GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
-                    if (RecCount > 0)
-                    {
-                        crdAll = bpart.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                    }
-                    else
-                    {
-                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                        return _processMsg;
-                    }
-                }
-                else
-                {
-                    crdAll = bpart.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                    if (!crdAll)
-                    {
-                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                        return _processMsg;
-                    }
-                }
-                
+                               
             }
             else
             {
-                crdAll = bpart.IsCreditAllowed(OrderCreditCheck.GetC_BPartner_Location_ID(), grandTotal, out retMsg);
-                if (!crdAll)
-                {
-                    _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                    return _processMsg;
-                }
-
                 //JID_1799 fromCreateSo is true if DOCBASETYPE='BOO'
                 VAdvantage.Model.MOrder newOrder = VAdvantage.Model.MOrder.CopyFrom(from, _DateDoc, dt.GetC_DocType_ID(), false, true, null,
                 dt.GetDocBaseType().Equals(MDocBaseType.DOCBASETYPE_BLANKETSALESORDER) ? true : false);     //	copy ASI 

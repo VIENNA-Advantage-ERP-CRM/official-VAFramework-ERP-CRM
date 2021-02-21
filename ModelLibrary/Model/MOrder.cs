@@ -2968,7 +2968,7 @@ namespace VAdvantage.Model
 
                                 {
 
-                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y'AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateOrdered BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
+                                int RecCount = Util.GetValueOfInt(DB.ExecuteScalar(@"SELECT COUNT(C_Invoice_ID) FROM C_Invoice WHERE IsSOTrx='Y' AND IsReturnTrx='N' AND C_BPartner_ID =" + GetC_BPartner_ID() + " and DocStatus in('CO','CL') and DateInvoiced BETWEEN " + GlobalVariable.TO_DATE(DateTime.Now.Date.AddDays(-730), true) + " AND " + GlobalVariable.TO_DATE(DateTime.Now.Date, true) + ""));
 
                                 if (RecCount > 0)
                                     {
@@ -2978,16 +2978,20 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                                        return DocActionVariables.STATUS_INVALID;
+                                        return _processMsg;
                                     }
                                 }
 
                                 else
                                 {
                                     crdAll = bp.IsCreditAllowed(GetC_BPartner_Location_ID(), grandTotal, out retMsg);
+                                    if (!crdAll)
+                                    {
+                                        _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
+                                        return _processMsg;
+                                    }
 
-
-                                }
+                            }
                         }
 
                         else
