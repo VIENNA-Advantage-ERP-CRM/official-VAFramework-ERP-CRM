@@ -2978,8 +2978,8 @@ namespace VAdvantage.Model
                                     else
                                     {
                                         _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                                        return _processMsg;
-                                    }
+                                        return DocActionVariables.STATUS_INVALID;
+                                }
                                 }
 
                                 else
@@ -2988,8 +2988,8 @@ namespace VAdvantage.Model
                                     if (!crdAll)
                                     {
                                         _processMsg = Msg.GetMsg(GetCtx(), "VA077_CrChkExpired");
-                                        return _processMsg;
-                                    }
+                                        return DocActionVariables.STATUS_INVALID;
+                                }
 
                             }
                         }
